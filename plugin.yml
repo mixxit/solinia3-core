@@ -1,0 +1,12 @@
+name: Solinia3Core
+main: com.solinia.solinia.Solinia3CorePlugin
+version: 1.0
+commands:
+  trance:
+    description: Displays additional information about Solinia3Core
+    usage: /solinia
+    alias: []
+depend:
+softdepend:
+- Vault
+- Essentials
