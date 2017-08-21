@@ -1,35 +1,59 @@
 package com.solinia.solinia.Managers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 
-import com.solina.solinia.Interfaces.IPlayerManager;
-import com.solina.solinia.Interfaces.IPlayerRepository;
-import com.solina.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
+import com.solinia.solinia.Interfaces.IPlayerManager;
+import com.solinia.solinia.Interfaces.IPlayerRepository;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class PlayerManager implements IPlayerManager {
-	private ConcurrentHashMap<UUID, ISoliniaPlayer> _players = new ConcurrentHashMap<UUID, ISoliniaPlayer>();
-	private IPlayerRepository _repository;
+	private ConcurrentHashMap<UUID, ISoliniaPlayer> players = new ConcurrentHashMap<UUID, ISoliniaPlayer>();
+	private IPlayerRepository repository;
 	
+	@Override
 	public ISoliniaPlayer getPlayer(Player player) {
-		if (!_players.contains(player.getUniqueId()))
-			_players.put(player.getUniqueId(), SoliniaPlayerFactory.CreatePlayer(player));
+		if (!players.contains(player.getUniqueId()))
+			players.put(player.getUniqueId(), SoliniaPlayerFactory.CreatePlayer(player));
 		
-		return _players.get(player.getUniqueId());
+		return players.get(player.getUniqueId());
+	}
+	
+	@Override
+	public int getCachedPlayersCount()
+	{
+		return players.size();
 	}
 
 	@Override
 	public void setRepository(IPlayerRepository repository) {
-		_repository = repository;
+		this.repository = repository;
 	}
 
 	@Override
-	public void Commit() throws Exception {
-		if (_repository == null)
+	public void commit() throws Exception {
+		if (repository == null)
 			throw new Exception("No commitable repository found");
-		_repository.setPlayers(_players);
+		
+		List<ISoliniaPlayer> list = new ArrayList<ISoliniaPlayer>(players.values());
+		repository.setPlayers(list);
+	}
+
+	@Override
+	public void loadFromRepository() throws Exception {
+		if (repository == null)
+			throw new Exception("No commitable repository found");
+		
+		players.clear();
+		for(ISoliniaPlayer player : repository.getPlayers())
+		{
+			players.put(player.getUUID(), player);
+		}
+		System.out.print("* Loaded " + players.size() + " player objects");
 	}
 }

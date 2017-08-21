@@ -21,11 +21,11 @@ import com.solinia.solinia.Managers.StateManager;
 
 public class Solinia3CorePlayerListener implements Listener {
 
-	Solinia3CorePlugin _plugin;
+	Solinia3CorePlugin plugin;
 	
 	public Solinia3CorePlayerListener(Solinia3CorePlugin solinia3CorePlugin) {
 		// TODO Auto-generated constructor stub
-		_plugin = solinia3CorePlugin;
+		plugin = solinia3CorePlugin;
 	}
 	
 	@EventHandler

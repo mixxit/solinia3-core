@@ -1,4 +1,4 @@
-package com.solina.solinia.Interfaces;
+package com.solinia.solinia.Interfaces;
 
 import org.bukkit.entity.Entity;
 

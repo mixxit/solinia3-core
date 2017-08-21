@@ -1,45 +1,47 @@
 package com.solinia.solinia.Managers;
 
-import com.solina.solinia.Interfaces.IPlayerManager;
-import com.solina.solinia.Interfaces.ObjectStreamPlayerRepository;
-import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Timers.StateCommitTimer;
+import com.solinia.solinia.Interfaces.IPlayerManager;
 
 public class CoreState {
-	private boolean _isInitialised = false;
-	private IPlayerManager _playerManager;
+	private boolean isInitialised = false;
+	private IPlayerManager playerManager;
 	
 	public CoreState()
 	{
-		_isInitialised = false;
+		isInitialised = false;
 	}
 	
 	public void Initialise(IPlayerManager playerManager) throws CoreStateInitException
 	{
-		if (_isInitialised == true)
+		if (isInitialised == true)
 			throw new CoreStateInitException("State already initialised");
 		
-		_playerManager = playerManager;
-		_playerManager.setRepository(new ObjectStreamPlayerRepository());
+		this.playerManager = playerManager;
+		try {
+			playerManager.loadFromRepository();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		_isInitialised = true;
+		isInitialised = true;
 	}
 	
 	public IPlayerManager getPlayerManager() throws CoreStateInitException
 	{
-		if (_isInitialised == false)
+		if (isInitialised == false)
 			throw new CoreStateInitException("State not initialised");
 		
-		return _playerManager;
+		return playerManager;
 	}
 
 	public void Commit() throws CoreStateInitException {
-		if (_isInitialised == false)
+		if (isInitialised == false)
 			throw new CoreStateInitException("State not initialised");
 		System.out.println("Commit");
 		try {
-			_playerManager.Commit();
+			playerManager.commit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

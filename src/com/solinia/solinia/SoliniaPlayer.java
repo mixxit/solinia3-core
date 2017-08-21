@@ -2,44 +2,43 @@ package com.solinia.solinia;
 
 import java.util.UUID;
 
-
-import com.solina.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
 
 	private static final long serialVersionUID = 9075039437399478391L;
-	private UUID _uuid;
-	private String _forename;
-	private String _lastname;
+	private UUID uuid;
+	private String forename;
+	private String lastname;
 
 	@Override
 	public UUID getUUID() {
-		return _uuid;
+		return uuid;
 	}
 	
 	@Override
 	public void setUUID(UUID uuid) {
-		_uuid = uuid;
+		this.uuid = uuid;
 	}
 
 	@Override
 	public String getForename() {
-		return _forename;
+		return forename;
 	}
 
 	@Override
-	public void setForename(String _forename) {
-		this._forename = _forename;
+	public void setForename(String forename) {
+		this.forename = forename;
 	}
 
 	@Override
 	public String getLastname() {
-		return _lastname;
+		return lastname;
 	}
 
 	@Override
-	public void setLastname(String _lastname) {
-		this._lastname = _lastname;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 }
