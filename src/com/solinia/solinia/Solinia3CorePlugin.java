@@ -1,5 +1,7 @@
 package com.solinia.solinia;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.solinia.solinia.Commands.CommandSolinia;
@@ -21,5 +23,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	{
 		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerListener(this), this);
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
+	}
+	
+	public static Plugin getInstance()
+	{
+		return Bukkit.getPluginManager().getPlugin("Solinia3CorePlugin");
 	}
 }

@@ -1,11 +1,12 @@
-name: Solinia3Chat
-main: com.solinia.solinia.chat.Solinia3ChatPlugin
+name: Solinia3Core
+main: com.solinia.solinia.Solinia3CorePlugin
 version: 1.0
 commands:
-  trance:
-    description: Displays additional information about Solinia3Chat
-    usage: /soliniachat
+  solinia:
+    description: Displays additional information about Solinia3Core
+    usage: /solinia
     alias: []
 depend:
-- Solinai3Chat
 softdepend:
+- Vault
+- Essentials
