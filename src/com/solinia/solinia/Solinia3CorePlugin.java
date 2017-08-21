@@ -9,6 +9,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	@Override
     public void onEnable() {
 		System.out.println("[Solinia3Core] Plugin Enabled");
+		RegisterEvents();
 	}
 	
 	@Override

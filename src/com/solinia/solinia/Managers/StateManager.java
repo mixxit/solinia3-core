@@ -2,14 +2,14 @@ package com.solinia.solinia.Managers;
 
 public class StateManager {
 
-	private static final SoliniaState state = new SoliniaState();
+	private static final CoreState state = new CoreState();
     
     private StateManager() 
     {
     	
     }
 
-    public static SoliniaState getInstance() {
+    public static CoreState getInstance() {
          return state;	
     }
 }

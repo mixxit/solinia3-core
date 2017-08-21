@@ -1,9 +1,9 @@
 package com.solinia.solinia.Managers;
 
-public class SoliniaState {
+public class CoreState {
 	private PlayerManager _playerManager;
 	
-	public SoliniaState()
+	public CoreState()
 	{
 		_playerManager = new PlayerManager();
 	}
