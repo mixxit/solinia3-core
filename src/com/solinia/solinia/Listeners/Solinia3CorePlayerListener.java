@@ -1,5 +1,6 @@
 package com.solinia.solinia.Listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -14,6 +15,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 
 public class Solinia3CorePlayerListener implements Listener {
@@ -60,7 +63,13 @@ public class Solinia3CorePlayerListener implements Listener {
 	@EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-		StateManager.getInstance().getPlayerManager().RegisterPlayer(event.getPlayer());
+		SoliniaPlayerJoinEvent soliniaevent;
+		try {
+			soliniaevent = new SoliniaPlayerJoinEvent(StateManager.getInstance().getPlayerManager().getPlayer(event.getPlayer()));
+			Bukkit.getPluginManager().callEvent(soliniaevent);
+		} catch (CoreStateInitException e) {
+			event.getPlayer().kickPlayer("Server initialising");
+		}
     }
 	
 	@EventHandler

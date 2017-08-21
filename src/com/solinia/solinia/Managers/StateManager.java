@@ -2,7 +2,7 @@ package com.solinia.solinia.Managers;
 
 public class StateManager {
 
-	private static final CoreState state = new CoreState();
+	private static final CoreState _state = new CoreState();
     
     private StateManager() 
     {
@@ -10,6 +10,6 @@ public class StateManager {
     }
 
     public static CoreState getInstance() {
-         return state;	
+         return _state;	
     }
 }

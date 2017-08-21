@@ -9,6 +9,7 @@ public class CommandSolinia implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		// TODO Auto-generated method stub
+		sender.sendMessage("Solinia Stats:");
 		return false;
 	}
 

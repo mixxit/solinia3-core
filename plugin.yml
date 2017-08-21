@@ -6,6 +6,10 @@ commands:
     description: Displays additional information about Solinia3Core
     usage: /solinia
     alias: []
+  commit:
+    description: Commits Solinia3Core State Data
+    usage: /commit
+    alias: []
 depend:
 softdepend:
 - Vault

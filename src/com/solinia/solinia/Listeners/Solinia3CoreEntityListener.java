@@ -1,5 +1,7 @@
 package com.solinia.solinia.Listeners;
 
-public class Solinia3CoreEntityListener {
+import org.bukkit.event.Listener;
+
+public class Solinia3CoreEntityListener implements Listener {
 
 }
