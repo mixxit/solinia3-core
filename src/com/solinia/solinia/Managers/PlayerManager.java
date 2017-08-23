@@ -32,12 +32,16 @@ public class PlayerManager implements IPlayerManager {
 		if (!isForeNameValid)
 			return false;
 		
-		if (!isLastNameValid)
+		if (!isLastNameValid && !lastname.equals(""))
 			return false;
 		
-		String newname = forename + "_" + lastname;
+		String newname = forename;
+		if (!lastname.equals(""))
+			newname = forename + "_" + lastname;
 		
-		if (repository.query(p ->p.getFullName().toUpperCase().equals(newname.toUpperCase())).size() == 0)
+		final String nametest = newname;
+		
+		if (repository.query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() == 0)
 			return true;
 		
 		return false;
