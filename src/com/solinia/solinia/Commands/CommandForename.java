@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Managers.StateManager;
 
 public class CommandForename implements CommandExecutor {
 	@Override
@@ -23,11 +24,10 @@ public class CommandForename implements CommandExecutor {
 			if (args.length == 0)
 				return false;
 			
-			boolean isNameValid = args[0].matches("[A-Za-z_]{3,7}");
-			if (!isNameValid)
+			if (!StateManager.getInstance().getPlayerManager().IsNewNameValid(args[0], args[0]))
 			{
-				player.sendMessage("Forename must be a-z characters and between 3 and 7 characters long");
-				return true;
+				player.sendMessage("Forename and Lastname must be between 3 and 7 characters each and not in use by other players");
+				return false;
 			}
 				
 			SoliniaPlayerAdapter.Adapt(player).setForename(args[0]);

@@ -24,6 +24,26 @@ public class PlayerManager implements IPlayerManager {
 	}
 	
 	@Override
+	public boolean IsNewNameValid(String forename, String lastname)
+	{
+		boolean isForeNameValid = forename.matches("[A-Za-z_]{3,7}");
+		boolean isLastNameValid = lastname.matches("[A-Za-z_]{3,7}");
+		
+		if (!isForeNameValid)
+			return false;
+		
+		if (!isLastNameValid)
+			return false;
+		
+		String newname = forename + "_" + lastname;
+		
+		if (repository.query(p ->p.getFullName().toUpperCase().equals(newname.toUpperCase())).size() == 0)
+			return true;
+		
+		return false;
+	}
+	
+	@Override
 	public int getCachedPlayersCount()
 	{
 		return repository.query(p ->p.getUUID() != null).size();

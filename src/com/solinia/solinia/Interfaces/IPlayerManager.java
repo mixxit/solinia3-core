@@ -6,4 +6,5 @@ public interface IPlayerManager {
 	public ISoliniaPlayer getPlayer(Player player);
 	public int getCachedPlayersCount();
 	public void commit();
+	boolean IsNewNameValid(String forename, String lastname);
 }
