@@ -1,5 +1,7 @@
 package com.solinia.solinia.Managers;
 
+import java.util.HashSet;
+
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
@@ -26,8 +28,8 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public boolean IsNewNameValid(String forename, String lastname)
 	{
-		boolean isForeNameValid = forename.matches("[A-Za-z_]{3,7}");
-		boolean isLastNameValid = lastname.matches("[A-Za-z_]{3,7}");
+		boolean isForeNameValid = forename.matches("[A-Za-z]");
+		boolean isLastNameValid = lastname.matches("[A-Za-z]");
 		
 		if (!isForeNameValid)
 			return false;
@@ -40,6 +42,9 @@ public class PlayerManager implements IPlayerManager {
 			newname = forename + "_" + lastname;
 		
 		final String nametest = newname;
+		
+		if (nametest.length() < 7 || nametest.length() > 15)
+			return false;
 		
 		if (repository.query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() == 0)
 			return true;
