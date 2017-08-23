@@ -30,9 +30,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private void initialise()
 	{
 		try {
-			PlayerManager playerManager = new PlayerManager();
-			playerManager.setRepository(new ObjectStreamPlayerRepository(getDataFolder() + "/" + "players.obj"));
-			
+			PlayerRepository repo = new PlayerRepository();
+			repo.setJsonFile(getDataFolder() + "/" + "players.obj");
+			repo.reload();
+
+			PlayerManager playerManager = new PlayerManager(repo);
 			StateManager.getInstance().Initialise(playerManager);
 			
 			commitTimer = new StateCommitTimer();

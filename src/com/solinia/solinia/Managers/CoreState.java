@@ -18,13 +18,6 @@ public class CoreState {
 			throw new CoreStateInitException("State already initialised");
 		
 		this.playerManager = playerManager;
-		try {
-			playerManager.loadFromRepository();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		isInitialised = true;
 	}
 	
