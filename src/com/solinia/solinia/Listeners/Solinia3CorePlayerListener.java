@@ -15,9 +15,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Managers.StateManager;
 
 public class Solinia3CorePlayerListener implements Listener {
 
@@ -65,7 +66,8 @@ public class Solinia3CorePlayerListener implements Listener {
     {
 		SoliniaPlayerJoinEvent soliniaevent;
 		try {
-			soliniaevent = new SoliniaPlayerJoinEvent(StateManager.getInstance().getPlayerManager().getPlayer(event.getPlayer()));
+			soliniaevent = new SoliniaPlayerJoinEvent(event, SoliniaPlayerAdapter.Adapt(event.getPlayer()));
+			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateDisplayName();
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");
@@ -101,6 +103,15 @@ public class Solinia3CorePlayerListener implements Listener {
 	{
 		if (event.isCancelled())
 			return;
+		
+		SoliniaAsyncPlayerChatEvent soliniaevent;
+		try {
+			soliniaevent = new SoliniaAsyncPlayerChatEvent(event, SoliniaPlayerAdapter.Adapt(event.getPlayer()), event.getMessage());
+			Bukkit.getPluginManager().callEvent(soliniaevent);
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -17,10 +17,10 @@ public class PlayerManager implements IPlayerManager {
 	
 	@Override
 	public ISoliniaPlayer getPlayer(Player player) {
-		if (repository.query(p ->p.getUUID() == player.getUniqueId()).size() == 0)
+		if (repository.query(p ->p.getUUID().equals(player.getUniqueId())).size() == 0)
 			repository.add(SoliniaPlayerFactory.CreatePlayer(player));
 		
-		return repository.query(p ->p.getUUID() == player.getUniqueId()).get(0);
+		return repository.query(p ->p.getUUID().equals(player.getUniqueId())).get(0);
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
+import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
@@ -38,7 +39,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			repo.reload();
 
 			PlayerManager playerManager = new PlayerManager(repo);
-			StateManager.getInstance().Initialise(playerManager);
+			EntityManager entityManager = new EntityManager();
+			
+			StateManager.getInstance().Initialise(playerManager, entityManager);
 			
 			commitTimer = new StateCommitTimer();
 			commitTimer.runTaskTimer(this, 100L, 5000L);

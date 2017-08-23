@@ -23,12 +23,21 @@ public class CommandForename implements CommandExecutor {
 			if (args.length == 0)
 				return false;
 			
+			boolean isNameValid = args[0].matches("[A-Za-z_]{3,7}");
+			if (!isNameValid)
+			{
+				player.sendMessage("Forename must be a-z characters and between 3 and 7 characters long");
+				return true;
+			}
+				
 			SoliniaPlayerAdapter.Adapt(player).setForename(args[0]);
+			sender.sendMessage("* Forename set");
+			return true;
+			
 		} catch (CoreStateInitException e) {
 			sender.sendMessage(e.getMessage());
 		}
 		
-		sender.sendMessage("* Forename set");
-		return true;
+		return false;
 	}
 }
