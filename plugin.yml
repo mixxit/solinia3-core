@@ -10,6 +10,14 @@ commands:
     description: Commits Solinia3Core State Data
     usage: /commit
     alias: []
+  forename:
+    description: Sets player forename
+    usage: /forename <forename>
+    alias: []
+  lastname:
+    description: Sets player lastname
+    usage: /lastname <lastname>
+    alias: []
 depend:
 softdepend:
 - Vault

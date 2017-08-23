@@ -1,4 +1,4 @@
-package com.solinia.solinia;
+package com.solinia.solinia.Models;
 
 import java.util.UUID;
 

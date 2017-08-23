@@ -3,11 +3,14 @@ package com.solinia.solinia;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.solinia.solinia.Commands.CommandCommit;
+import com.solinia.solinia.Commands.CommandForename;
+import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Timers.StateCommitTimer;
 
 public class Solinia3CorePlugin extends JavaPlugin {
@@ -30,7 +33,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private void initialise()
 	{
 		try {
-			PlayerRepository repo = new PlayerRepository();
+			JsonPlayerRepository repo = new JsonPlayerRepository();
 			repo.setJsonFile(getDataFolder() + "/" + "players.obj");
 			repo.reload();
 
@@ -51,6 +54,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerListener(this), this);
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());
+		this.getCommand("forename").setExecutor(new CommandForename());
+		this.getCommand("lastname").setExecutor(new CommandLastname());
 	}
 	
 	private void createConfigDir() {

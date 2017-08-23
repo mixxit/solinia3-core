@@ -1,4 +1,4 @@
-package com.solinia.solinia;
+package com.solinia.solinia.Repositories;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,8 +18,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.SoliniaPlayer;
 
-public class PlayerRepository implements IRepository<ISoliniaPlayer>  {
+public class JsonPlayerRepository implements IRepository<ISoliniaPlayer>  {
 	private ConcurrentHashMap<UUID, ISoliniaPlayer> players = new ConcurrentHashMap<UUID, ISoliniaPlayer>();
 	private String filePath;
 	

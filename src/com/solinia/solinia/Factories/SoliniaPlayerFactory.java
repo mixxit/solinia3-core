@@ -2,8 +2,8 @@ package com.solinia.solinia.Factories;
 
 import org.bukkit.entity.Player;
 
-import com.solinia.solinia.SoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.SoliniaPlayer;
 
 public class SoliniaPlayerFactory {
 

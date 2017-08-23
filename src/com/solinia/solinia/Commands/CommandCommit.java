@@ -14,7 +14,7 @@ public class CommandCommit implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
 		{
-			sender.sendMessage("This is an Player/Console only command");
+			sender.sendMessage("This is a Player/Console only command");
 			return false;
 		}
 		
