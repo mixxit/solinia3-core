@@ -16,7 +16,7 @@ public class SoliniaPlayerFactory {
 		SoliniaPlayer soliniaPlayer = new SoliniaPlayer();
 		soliniaPlayer.setUUID(player.getUniqueId());
 
-		String forename = getRandomNames(4, 1)[0];
+		String forename = getRandomNames(5, 1)[0];
 		String lastname = "";
 		try {
 			while (StateManager.getInstance().getPlayerManager().IsNewNameValid(forename, lastname) == false) {

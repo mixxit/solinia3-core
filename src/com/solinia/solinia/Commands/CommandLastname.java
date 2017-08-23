@@ -27,7 +27,13 @@ public class CommandLastname implements CommandExecutor {
 			
 			if (!StateManager.getInstance().getPlayerManager().IsNewNameValid(SoliniaPlayerAdapter.Adapt(player).getForename(), args[0]))
 			{
-				player.sendMessage("Forename_Lastname length must be between 6 and 14 characters and not in use by other players");
+				player.sendMessage("Forename + Lastname length must be between 3 and 14 characters and not in use by other players");
+				
+				String newname = SoliniaPlayerAdapter.Adapt(player).getForename();
+				if (!args[0].equals(""))
+					newname = SoliniaPlayerAdapter.Adapt(player).getForename() + "_" + args[0];
+				
+				player.sendMessage("Target name [" + newname + "] length: " + newname.length());
 				return false;
 			}
 			

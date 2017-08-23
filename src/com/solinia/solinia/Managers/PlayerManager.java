@@ -28,14 +28,20 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public boolean IsNewNameValid(String forename, String lastname)
 	{
-		boolean isForeNameValid = forename.matches("[A-Za-z]");
-		boolean isLastNameValid = lastname.matches("[A-Za-z]");
+		boolean isForeNameValid = forename.chars().allMatch(Character::isLetter);
+		boolean isLastNameValid = lastname.chars().allMatch(Character::isLetter);
 		
 		if (!isForeNameValid)
+		{
+			System.out.println("Invalid forename");
 			return false;
+		}
 		
 		if (!isLastNameValid && !lastname.equals(""))
+		{
+			System.out.println("Invalid lastname");
 			return false;
+		}
 		
 		String newname = forename;
 		if (!lastname.equals(""))
@@ -43,13 +49,25 @@ public class PlayerManager implements IPlayerManager {
 		
 		final String nametest = newname;
 		
-		if (nametest.length() < 7 || nametest.length() > 15)
+		if (forename.length() < 3)
+		{
+			System.out.println("Invalid forename length");
 			return false;
+		}
 		
-		if (repository.query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() == 0)
-			return true;
+		if (nametest.length() < 3 || nametest.length() > 15)
+		{
+			System.out.println("Invalid total length");
+			return false;
+		}
 		
-		return false;
+		if (repository.query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() != 0)
+		{
+			System.out.println("Invalid name, already in use");
+			return false;
+		}
+		
+		return true;
 	}
 	
 	@Override

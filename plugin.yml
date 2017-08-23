@@ -13,13 +13,14 @@ commands:
   forename:
     description: Sets player forename
     usage: /forename <forename>
-    alias: []
-  lastname:
-    description: Sets player lastname
-    usage: /lastname <lastname>
     alias:
     - name
     - nick
+  lastname:
+    description: Sets player lastname
+    usage: /lastname <lastname>
+    alias: 
+    - surname
 depend:
 softdepend:
 - Vault
