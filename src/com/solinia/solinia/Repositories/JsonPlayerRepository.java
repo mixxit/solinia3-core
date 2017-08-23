@@ -41,6 +41,8 @@ public class JsonPlayerRepository implements IRepository<ISoliniaPlayer>  {
 		{
 			players.put(player.getUUID(), player);
 		}
+		
+		System.out.println("Reloaded " + players.size() + " players");
 	}
 	
 
@@ -60,6 +62,8 @@ public class JsonPlayerRepository implements IRepository<ISoliniaPlayer>  {
 	        outWriter.append(jsonOutput);
 	        outWriter.close();
 	        fileOut.close();
+	        
+	        System.out.println("Commited " + players.size() + " players");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

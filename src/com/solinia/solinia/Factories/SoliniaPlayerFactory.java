@@ -29,7 +29,10 @@ public class SoliniaPlayerFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		soliniaPlayer.setExperience(0d);
+		soliniaPlayer.setAAExperience(0d);
+		soliniaPlayer.setMana(0);
 		
 		return soliniaPlayer;
 	}

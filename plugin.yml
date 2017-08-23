@@ -21,6 +21,10 @@ commands:
     usage: /lastname <lastname>
     alias: 
     - surname
+  mana:
+    description: Gets player mana
+    usage: /mana
+    alias: []
 depend:
 softdepend:
 - Vault

@@ -1,9 +1,6 @@
 package com.solinia.solinia.Managers;
 
-import java.util.HashSet;
-
 import org.bukkit.entity.Player;
-
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;

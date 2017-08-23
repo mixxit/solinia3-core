@@ -9,6 +9,7 @@ import com.solinia.solinia.Adapters.SoliniaEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
 
@@ -16,6 +17,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID uuid;
 	private String forename;
 	private String lastname;
+	private int mana;
+	private Double experience;
+	private Double aaexperience;
+	private int raceid;
+	private boolean haschosenrace;
 
 	@Override
 	public UUID getUUID() {
@@ -74,5 +80,61 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public ISoliniaEntity getEntity() throws CoreStateInitException
 	{
 		return SoliniaEntityAdapter.Adapt(Bukkit.getPlayer(uuid));
+	}
+
+	@Override
+	public int getMana() {
+		// TODO Auto-generated method stub
+		return this.mana;
+	}
+	
+	@Override
+	public void setMana(int mana)
+	{
+		this.mana = mana;
+	}
+	
+	@Override
+	public Double getAAExperience() {
+		return aaexperience;
+	}
+	
+	@Override
+	public void setAAExperience(Double aaexperience) {
+		this.aaexperience = aaexperience;
+	}
+	
+	@Override
+	public Double getExperience() {
+		return experience;
+	}
+	
+	@Override
+	public void setExperience(Double experience) {
+		this.experience = experience;
+	}
+	
+	@Override
+	public int getLevel()
+	{
+		return Utils.GetLevelFromExperience(this.experience);		
+	}
+
+	@Override
+	public int getRaceId() {
+		// TODO Auto-generated method stub
+		return this.raceid;
+	}
+
+	@Override
+	public boolean hasChosenRace() {
+		// TODO Auto-generated method stub
+		return this.haschosenrace;
+	}
+
+	@Override
+	public void setRace(int raceid) {
+		// TODO Auto-generated method stub
+		this.raceid = raceid;
 	}
 }

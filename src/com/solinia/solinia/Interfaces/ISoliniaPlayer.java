@@ -8,19 +8,39 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 public interface ISoliniaPlayer extends Serializable {
 	public UUID getUUID();
 
-	public void setUUID(UUID uuid);
+	void setUUID(UUID uuid);
 
 	public String getForename();
 
-	public void setForename(String forename);
+	void setForename(String forename);
 
 	public String getLastname();
 
-	public void setLastname(String lastname);
+	void setLastname(String lastname);
 
 	public void updateDisplayName();
 
 	public ISoliniaEntity getEntity() throws CoreStateInitException;
 
-	String getFullName();
+	public String getFullName();
+
+	public int getMana();
+
+	void setMana(int mana);
+
+	public Double getAAExperience();
+
+	void setAAExperience(Double aaexperience);
+
+	public Double getExperience();
+
+	void setExperience(Double experience);
+
+	public int getLevel();
+
+	public int getRaceId();
+
+	public boolean hasChosenRace();
+
+	public void setRace(int raceid);
 }
