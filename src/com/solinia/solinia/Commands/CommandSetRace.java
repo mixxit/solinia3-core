@@ -23,22 +23,7 @@ public class CommandSetRace implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
 			return false;
 		
-		Player player = (Player) sender;
-        ISoliniaPlayer soliniaplayer;
-		try {
-			soliniaplayer = SoliniaPlayerAdapter.Adapt(player);
-		} catch (CoreStateInitException e2) {
-			player.sendMessage("Race command failed. " + e2.getMessage());
-			return false;
-		}
-        
-        if (soliniaplayer.hasChosenRace() == true)
-        {
-        	player.sendMessage("You cannot choose a race as you have already selected one");
-        	return true;            	
-        }
-        
-        String racelist = "";
+		String racelist = "";
         List<ISoliniaRace> races = new ArrayList<ISoliniaRace>();
     	try {
 			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
@@ -50,9 +35,31 @@ public class CommandSetRace implements CommandExecutor {
 				}
 			}
 		} catch (CoreStateInitException e1) {
-			player.sendMessage("Race command failed. " + e1.getMessage());
+			sender.sendMessage("Race command failed. " + e1.getMessage());
 			return false;
 		}
+		
+		if (sender instanceof ConsoleCommandSender)
+		{
+			sender.sendMessage(racelist);
+			return true;
+		}
+		
+		Player player = (Player) sender;
+        ISoliniaPlayer soliniaplayer;
+		try {
+			soliniaplayer = SoliniaPlayerAdapter.Adapt(player);
+		} catch (CoreStateInitException e2) {
+			player.sendMessage("Race command failed. " + e2.getMessage());
+			return false;
+		}
+    	
+    	if (soliniaplayer.hasChosenRace() == true)
+        {
+    		player.sendMessage(racelist);
+        	player.sendMessage("You cannot choose a race as you have already selected one");
+        	return true;            	
+        }
         
         if (args.length == 0)
         {
