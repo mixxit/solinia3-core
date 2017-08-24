@@ -122,7 +122,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		if (classes.getValidRaces() == null)
 			return false;
 		
-		if (classes.getValidRaces().contains(classId))
+		if (classes.getValidRaces().contains(raceId))
 			return true;
 
 		return false;
