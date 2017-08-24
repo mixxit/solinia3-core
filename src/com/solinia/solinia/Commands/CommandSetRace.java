@@ -67,7 +67,10 @@ public class CommandSetRace implements CommandExecutor {
 					return false;
 				}
         		
-            	player.sendMessage("Your current race is: " + solrace.getName());
+				if (solrace == null)
+					player.sendMessage("Your current race is: " + solrace.getName());
+				else
+					player.sendMessage("Your current race is: " + solrace.getName());
         	}
         	return false;
         }
@@ -92,7 +95,7 @@ public class CommandSetRace implements CommandExecutor {
         try {
 			if (StateManager.getInstance().getConfigurationManager().getRace(race) != null)
 			{
-				soliniaplayer.setRace(StateManager.getInstance().getConfigurationManager().getRace(race).getId());
+				soliniaplayer.setRaceId(StateManager.getInstance().getConfigurationManager().getRace(race).getId());
 				soliniaplayer.setChosenRace(true);
 				player.sendMessage("* Race set to " + race);
 				return true;

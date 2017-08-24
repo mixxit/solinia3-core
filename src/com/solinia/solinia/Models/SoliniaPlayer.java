@@ -9,6 +9,8 @@ import com.solinia.solinia.Adapters.SoliniaEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
@@ -137,8 +139,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void setRace(int raceid) {
+	public void setRaceId(int raceid) {
 		// TODO Auto-generated method stub
 		this.raceid = raceid;
+	}
+	
+	@Override
+	public ISoliniaRace getRace()
+	{
+		try {
+			return StateManager.getInstance().getConfigurationManager().getRace(getRaceId());
+		} catch (CoreStateInitException e) {
+			return null;
+		}
 	}
 }

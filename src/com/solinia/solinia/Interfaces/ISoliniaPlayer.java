@@ -42,7 +42,9 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public boolean hasChosenRace();
 
-	public void setRace(int raceid);
-
 	void setChosenRace(boolean chosen);
+
+	void setRaceId(int raceid);
+
+	public ISoliniaRace getRace();
 }
