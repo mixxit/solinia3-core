@@ -29,7 +29,7 @@ public class CommandSetClass implements CommandExecutor {
 			ISoliniaPlayer soliniaplayer = SoliniaPlayerAdapter.Adapt(player);
 			if (soliniaplayer.hasChosenRace() == false)
 	        {
-	        	sender.sendMessage("You cannot pick a profession until you set your race with /race"); 
+	        	sender.sendMessage("You cannot pick a profession until you set your race with /setrace"); 
 	        	return true;
 	        }
 	        
