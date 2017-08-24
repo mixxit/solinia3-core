@@ -68,7 +68,7 @@ public class CommandSetRace implements CommandExecutor {
 				}
         		
 				if (solrace == null)
-					player.sendMessage("Your current race is: " + solrace.getName());
+					player.sendMessage("Your current race is: UNKNOWN");
 				else
 					player.sendMessage("Your current race is: " + solrace.getName());
         	}

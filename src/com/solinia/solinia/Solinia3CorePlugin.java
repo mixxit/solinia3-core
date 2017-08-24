@@ -33,6 +33,12 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	
 	@Override
     public void onDisable() {
+		try {
+			StateManager.getInstance().Commit();
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("[Solinia3Core] Plugin Disabled");
     }
 	
