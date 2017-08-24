@@ -10,12 +10,12 @@ public class SoliniaRaceFactory {
 	public static ISoliniaRace CreateRace(String racename, int strength, int stamina, int agility, int dexterity, int wisdom,
 			int intelligence, int charisma, boolean adminonly) throws CoreStateInitException, SoliniaRaceCreationException {
 		
-		if (StateManager.getInstance().getConfigurationManager().getRace(racename) != null)
+		if (StateManager.getInstance().getConfigurationManager().getRace(racename.toUpperCase()) != null)
 			throw new SoliniaRaceCreationException("Race already exists");
 		
 		SoliniaRace race = new SoliniaRace();
 		race.setId(StateManager.getInstance().getConfigurationManager().getNextRaceId());
-		race.setName(racename);
+		race.setName(racename.toUpperCase());
 		race.setStrength(strength);
 		race.setStamina(stamina);
 		race.setAgility(agility);

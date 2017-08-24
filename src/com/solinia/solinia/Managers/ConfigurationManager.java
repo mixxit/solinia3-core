@@ -24,13 +24,21 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public ISoliniaRace getRace(int raceId) {
 		// TODO Auto-generated method stub
-		return raceRepository.query(q ->q.getId() == raceId).get(0);
+		List<ISoliniaRace> races = raceRepository.query(q ->q.getId() == raceId);
+		if (races.size() > 0)
+			return races.get(0);
+			
+		return null;
 	}
 
 	@Override
 	public ISoliniaRace getRace(String race) {
-		// TODO Auto-generated method stub
-		return raceRepository.query(q ->q.getName().equals(race)).get(0);
+		
+		List<ISoliniaRace> races = raceRepository.query(q ->q.getName().equals(race));
+		if (races.size() > 0)
+			return races.get(0);
+			
+		return null;
 	}
 
 	@Override
