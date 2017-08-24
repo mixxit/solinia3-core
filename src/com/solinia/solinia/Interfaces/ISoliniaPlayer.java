@@ -3,6 +3,8 @@ package com.solinia.solinia.Interfaces;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 
 public interface ISoliniaPlayer extends Serializable {
@@ -19,6 +21,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void setLastname(String lastname);
 
 	public void updateDisplayName();
+	
+	public void updateMaxHp();
 
 	public ISoliniaEntity getEntity() throws CoreStateInitException;
 
@@ -47,4 +51,30 @@ public interface ISoliniaPlayer extends Serializable {
 	void setRaceId(int raceid);
 
 	public ISoliniaRace getRace();
+
+	public boolean hasChosenClass();
+
+	public int getClassId();
+
+	public ISoliniaClass getClassObj();
+	
+	void setClassId(int classid);
+
+	void setChosenClass(boolean haschosenclass);
+
+	Player getBukkitPlayer();
+
+	int getStrength();
+
+	int getStamina();
+	
+	int getAgility();
+	
+	int getDexterity();
+	
+	int getIntelligence();
+	
+	int getWisdom();
+	
+	int getCharisma();
 }

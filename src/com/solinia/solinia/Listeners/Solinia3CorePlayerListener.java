@@ -19,6 +19,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class Solinia3CorePlayerListener implements Listener {
 
@@ -58,7 +59,14 @@ public class Solinia3CorePlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event)
 	{
-		
+		try {
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+			if (solplayer != null)
+				solplayer.updateMaxHp();
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@EventHandler
@@ -68,6 +76,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			soliniaevent = new SoliniaPlayerJoinEvent(event, SoliniaPlayerAdapter.Adapt(event.getPlayer()));
 			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateDisplayName();
+			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateMaxHp();
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");

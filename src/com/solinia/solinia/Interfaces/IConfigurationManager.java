@@ -15,4 +15,18 @@ public interface IConfigurationManager {
 	void addRace(ISoliniaRace race);
 
 	int getNextRaceId();
+
+	List<ISoliniaClass> getClasses();
+
+	ISoliniaClass getClassObj(int classId);
+
+	ISoliniaClass getClassObj(String classname);
+
+	void addClass(ISoliniaClass classobj);
+
+	int getNextClassId();
+
+	boolean isValidRaceClass(int raceId, int classId);
+
+	void AddRaceClass(int raceId, int classId);
 }

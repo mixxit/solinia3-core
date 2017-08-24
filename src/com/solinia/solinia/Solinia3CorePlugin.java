@@ -2,11 +2,14 @@ package com.solinia.solinia;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.solinia.solinia.Commands.CommandAddClass;
 import com.solinia.solinia.Commands.CommandAddRace;
+import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandMana;
+import com.solinia.solinia.Commands.CommandSetClass;
 import com.solinia.solinia.Commands.CommandSetRace;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -15,6 +18,7 @@ import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Timers.StateCommitTimer;
@@ -46,16 +50,20 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	{
 		try {
 			JsonPlayerRepository repo = new JsonPlayerRepository();
-			repo.setJsonFile(getDataFolder() + "/" + "players.obj");
+			repo.setJsonFile(getDataFolder() + "/" + "players.json");
 			repo.reload();
 			
 			JsonRaceRepository racerepo = new JsonRaceRepository();
-			racerepo.setJsonFile(getDataFolder() + "/" + "races.obj");
+			racerepo.setJsonFile(getDataFolder() + "/" + "races.json");
 			racerepo.reload();
 
+			JsonClassRepository classrepo = new JsonClassRepository();
+			classrepo.setJsonFile(getDataFolder() + "/" + "classes.json");
+			classrepo.reload();
+			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager();
-			ConfigurationManager configurationManager = new ConfigurationManager(racerepo);
+			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo);
 			
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager);
 			
@@ -78,6 +86,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("mana").setExecutor(new CommandMana());
 		this.getCommand("addrace").setExecutor(new CommandAddRace());
 		this.getCommand("setrace").setExecutor(new CommandSetRace());
+		this.getCommand("addclass").setExecutor(new CommandAddClass());
+		this.getCommand("setclass").setExecutor(new CommandSetClass());
+		this.getCommand("addraceclass").setExecutor(new CommandAddRaceClass());
 	}
 	
 	private void createConfigDir() {

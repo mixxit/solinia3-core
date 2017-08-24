@@ -5,16 +5,16 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 public class SoliniaRace implements ISoliniaRace {
 
 	private int id;
-	private boolean isadmin;
-	private String name;
+	private boolean isadmin = true;
+	private String name = "";
 	
-	private int strength;
-	private int stamina;
-	private int agility;
-	private int dexterity;
-	private int wisdom;
-	private int intelligence;
-	private int charisma;
+	private int strength = 1;
+	private int stamina = 1;
+	private int agility = 1;
+	private int dexterity = 1;
+	private int wisdom = 1;
+	private int intelligence = 1;
+	private int charisma = 1;
 
 	@Override
 	public String getName() {

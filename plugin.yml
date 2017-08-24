@@ -35,6 +35,20 @@ commands:
     usage: /setrace racename
     alias:
     - race
+  addclass:
+    description: Creates a new class
+    usage: /addclass classname adminonly
+    alias:
+    - createclass
+  setclass:
+    description: Sets a players class
+    usage: /setclass classname
+    alias:
+    - class
+  addraceclass:
+    description: Adds a class to a race
+    usage: /addraceclass racename classname
+    alias: []
 depend:
 softdepend:
 - Vault

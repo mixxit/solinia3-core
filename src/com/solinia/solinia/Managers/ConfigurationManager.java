@@ -1,24 +1,34 @@
 package com.solinia.solinia.Managers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 
 public class ConfigurationManager implements IConfigurationManager {
 
-	IRepository<ISoliniaRace> raceRepository;
+	private IRepository<ISoliniaRace> raceRepository;
+	private IRepository<ISoliniaClass> classRepository;
 	
-	public ConfigurationManager(IRepository<ISoliniaRace> raceContext)
+	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext)
 	{
 		this.raceRepository = raceContext;
+		this.classRepository = classContext;
 	}
 	
 	@Override
 	public List<ISoliniaRace> getRaces() {
 		// TODO Auto-generated method stub
 		return raceRepository.query(q ->q.getName() != null);
+	}
+	
+	@Override
+	public List<ISoliniaClass> getClasses() {
+		// TODO Auto-generated method stub
+		return classRepository.query(q ->q.getName() != null);
 	}
 
 	@Override
@@ -30,11 +40,21 @@ public class ConfigurationManager implements IConfigurationManager {
 			
 		return null;
 	}
+	
+	@Override
+	public ISoliniaClass getClassObj(int classId) {
+		// TODO Auto-generated method stub
+		List<ISoliniaClass> classes = classRepository.query(q ->q.getId() == classId);
+		if (classes.size() > 0)
+			return classes.get(0);
+			
+		return null;
+	}
 
 	@Override
 	public ISoliniaRace getRace(String race) {
 		
-		List<ISoliniaRace> races = raceRepository.query(q ->q.getName().equals(race));
+		List<ISoliniaRace> races = raceRepository.query(q ->q.getName().toUpperCase().equals(race.toUpperCase()));
 		if (races.size() > 0)
 			return races.get(0);
 			
@@ -42,13 +62,30 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
+	public ISoliniaClass getClassObj(String classname) {
+		
+		List<ISoliniaClass> classes = classRepository.query(q ->q.getName().toUpperCase().equals(classname.toUpperCase()));
+		if (classes.size() > 0)
+			return classes.get(0);
+			
+		return null;
+	}
+	
+	@Override
 	public void commit() {
 		this.raceRepository.commit();
+		this.classRepository.commit();
 	}
 
 	@Override
 	public void addRace(ISoliniaRace race) {
 		this.raceRepository.add(race);
+		
+	}
+	
+	@Override
+	public void addClass(ISoliniaClass classobj) {
+		this.classRepository.add(classobj);
 		
 	}
 
@@ -62,5 +99,52 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 		
 		return maxRace + 1;
+	}
+	
+	@Override
+	public int getNextClassId() {
+		int maxClass = 0;
+		for(ISoliniaClass classInstance : getClasses())
+		{
+			if (classInstance.getId() > maxClass)
+				maxClass = classInstance.getId();
+		}
+		
+		return maxClass + 1;
+	}
+
+	@Override
+	public boolean isValidRaceClass(int raceId, int classId) {
+		ISoliniaClass classes = getClassObj(classId);
+		if (classes == null)
+			return false;
+		
+		if (classes.getValidRaces() == null)
+			return false;
+		
+		if (classes.getValidRaces().contains(classId))
+			return true;
+
+		return false;
+	}
+
+	@Override
+	public void AddRaceClass(int raceId, int classId) {
+		if (getClassObj(classId) == null)
+			return;
+		
+		if (getRace(raceId) == null)
+			return;
+		
+		List<Integer> validRaces = getClassObj(classId).getValidRaces();
+		if (validRaces == null)
+			validRaces = new ArrayList<Integer>();
+		
+		if (validRaces.contains(raceId))
+			return;
+		
+		validRaces.add(raceId);
+		getClassObj(classId).setValidRaces(validRaces);
+		
 	}
 }
