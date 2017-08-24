@@ -77,4 +77,16 @@ public interface ISoliniaPlayer extends Serializable {
 	int getWisdom();
 	
 	int getCharisma();
+
+	void increasePlayerExperience(Double experience);
+
+	void increasePlayerNormalExperience(Double experience);
+	
+	void increasePlayerAAExperience(Double experience);
+
+	public void giveMoney(int i);
+
+	int getAAPoints();
+
+	void setAAPoints(int aapoints);
 }

@@ -3,6 +3,8 @@ package com.solinia.solinia.Models;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaEntityAdapter;
@@ -23,6 +25,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int mana = 0;
 	private Double experience = 0d;
 	private Double aaexperience = 0d;
+	private int aapoints = 0;
 	private int raceid = 0;
 	private boolean haschosenrace = false;
 	private boolean haschosenclass = false;
@@ -128,7 +131,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public int getLevel()
 	{
-		return Utils.GetLevelFromExperience(this.experience);		
+		return Utils.getLevelFromExperience(this.experience);		
 	}
 
 	@Override
@@ -198,7 +201,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void updateMaxHp() {
 		if (getBukkitPlayer() != null && getExperience() != null)
 		{		
-			double calculatedhp = Utils.GetStatMaxHP(this);
+			double calculatedhp = Utils.getStatMaxHP(this);
 			getBukkitPlayer().setMaxHealth(calculatedhp);
 			getBukkitPlayer().setHealthScaled(true);
 			getBukkitPlayer().setHealthScale(40D);
@@ -268,4 +271,183 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			stat += getRace().getCharisma();
 		return stat;
 	}
+	
+	@Override
+	public void increasePlayerExperience(Double experience) {
+		if (!isAAOn()) {
+			increasePlayerNormalExperience(experience);
+		} else {
+			increasePlayerAAExperience(experience);
+		}
+	}
+
+	private boolean isAAOn() {
+		// TODO Replace with AA toggle
+		return false;
+	}
+
+	@Override
+	public void increasePlayerNormalExperience(Double experience) {
+		System.out.println("Determing player normal xp from experience value: " + experience);
+		double classxpmodifier = Utils.getClassXPModifier(getClassObj());
+		experience = experience * (classxpmodifier / 100);
+
+		boolean modified = false;
+		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
+		if (modifier > 100) {
+			System.out.println("This is modified experience from a world perk");
+			modified = true;
+		}
+		experience = experience * (modifier / 100);
+
+		Double currentexperience = getExperience();
+		System.out.println("Normal xp would be " + currentexperience);
+
+		// make sure someone never gets more than a level per kill
+		double clevel = Utils.getLevelFromExperience(currentexperience);
+		double nlevel = Utils.getLevelFromExperience((currentexperience + experience));
+
+		if (nlevel > (clevel + 1)) {
+			// xp is way too high, drop to proper amount
+			System.out.println("XP was dropped for being way too high");
+
+			double xp = Utils.getExperienceRequirementForLevel((int) clevel + 1);
+			experience = xp - currentexperience;
+		}
+
+		if (getClassObj() == null) {
+			if (nlevel > 10) {
+				double xp = Utils.getExperienceRequirementForLevel(10);
+				experience = xp - currentexperience;
+			}
+		}
+
+		if ((currentexperience + experience) > Utils.getExperienceRequirementForLevel(Utils.getMaxLevel())) {
+			currentexperience = Utils.getExperienceRequirementForLevel(Utils.getMaxLevel());
+			System.out.println(
+					"XP was higher than than that needed to level, getting minimum for level: " + currentexperience);
+
+		} else {
+			currentexperience = currentexperience + experience;
+			System.out.println(
+					"XP was not higher than level needed so granting normal increase of: " + currentexperience);
+		}
+		setExperience(currentexperience, experience,modified);
+	}
+	
+	public void setExperience(Double experience, Double changeamount, boolean modified) {
+		Double level = (double) getLevel();
+
+		this.experience = experience;
+		
+		Double newlevel = (double) getLevel();
+
+		Double xpneededforcurrentlevel = Utils.getExperienceRequirementForLevel((int) (newlevel + 0));
+		Double xpneededfornextlevel = Utils.getExperienceRequirementForLevel((int) (newlevel + 1));
+		Double totalxpneeded = xpneededfornextlevel - xpneededforcurrentlevel;
+		Double currentxpprogress = experience - xpneededforcurrentlevel;
+
+		Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
+		int ipercenttolevel = percenttolevel.intValue();
+		if (changeamount > 0) {
+			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gain experience (" + ipercenttolevel + "% into level)");
+			if (modified == true)
+				getBukkitPlayer().sendMessage(
+						ChatColor.YELLOW + "* You were given bonus XP from a player donation perk! (/perks)");
+		}
+
+		if (changeamount < 0) {
+			getBukkitPlayer().sendMessage(ChatColor.RED + "* You lost experience (" + ipercenttolevel + "% into level)");
+		}
+		if (Double.compare(newlevel, level) > 0) {
+			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
+			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
+
+            updateMaxHp();
+		}
+
+		if (Double.compare(newlevel, level) < 0) {
+			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You lost a level (" + newlevel + ")!");
+
+            updateMaxHp();
+		}
+	}
+	
+	@Override
+	public void increasePlayerAAExperience(Double experience) {
+
+		boolean modified = false;
+		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
+		if (modifier > 100) {
+			modified = true;
+		}
+		experience = experience * (modifier / 100);
+
+		// Cap at max just under a quarter of an AA experience point
+		if (experience > Utils.getMaxAAXP()) {
+			experience = Utils.getMaxAAXP();
+		}
+
+		Double currentaaexperience = getAAExperience();
+		currentaaexperience = currentaaexperience + experience;
+		setAAExperience(currentaaexperience, modified);
+	}
+	
+	private void setAAExperience(Double aaexperience, Boolean modified) {
+		// One AA level is always equal to the same experience as is needed for
+		// 39 to level 40
+		// AA xp should never be above 2313441000
+		
+		if (getClassObj() == null)
+			return;
+
+		// Max limit on AA points right now is 100
+		if (getAAPoints() > 100) {
+			return;
+		}
+
+		boolean givenaapoint = false;
+		// Every time they get aa xp of 2313441000, give them an AA point
+		if (aaexperience > Utils.getMaxAAXP()) {
+			aaexperience = aaexperience - Utils.getMaxAAXP();
+			setAAPoints(getAAPoints() + 1);
+			givenaapoint = true;
+		}
+
+		setAAExperience(aaexperience);
+
+		Double percenttoaa = Math.floor((aaexperience / Utils.getMaxAAXP()) * 100);
+		int ipercenttoaa = percenttoaa.intValue();
+
+		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gain alternate experience (" + ipercenttoaa + "% into AA)!");
+		if (modified == true)
+			getBukkitPlayer().sendMessage(
+					ChatColor.YELLOW + "* You were given bonus XP from a player donation perk! (/perks)");
+
+		if (givenaapoint) {
+			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gained an Alternate Experience Point!");
+		}
+	}
+
+	@Override
+	public void giveMoney(int i) {
+		try
+		{
+			StateManager.getInstance().giveEssentialsMoney(getBukkitPlayer(),i);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public int getAAPoints() {
+		return aapoints;
+	}
+
+	@Override
+	public void setAAPoints(int aapoints) {
+		this.aapoints = aapoints;
+	}
+	
 }

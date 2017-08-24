@@ -5,7 +5,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class Utils {
 
-	public static int GetLevelFromExperience(Double experience) {
+	public static int getLevelFromExperience(Double experience) {
 		Double classmodifier = 10d;
 		Double racemodifier = 100d;
 		Double levelfactor = 1d;
@@ -15,14 +15,14 @@ public class Utils {
 		return (int) java.lang.Math.floor(level);
 	}
 
-	public static double GetStatMaxHP(ISoliniaPlayer player) {
+	public static double getStatMaxHP(ISoliniaPlayer player) {
 		ISoliniaClass solprofession = player.getClassObj();
 		
 		String profession = "UNSKILLED";
 		if (solprofession != null)
 			profession = solprofession.getName().toUpperCase();
 		
-		double level = GetLevelFromExperience(player.getExperience());
+		double level = getLevelFromExperience(player.getExperience());
 
 		double levelmultiplier = 1;
 		
@@ -64,6 +64,48 @@ public class Utils {
 
 		double calculatedhp = hp + hpmain;
 		return (int) Math.floor(calculatedhp);
+	}
+	
+	public static int getMaxLevel()
+	{
+		return 31;
+	}
+
+	public static Double getExperienceRewardAverageForLevel(int level) {
+		Double experience = (Math.pow(level, 2) * 10) * getMaxLevel() - 1;
+		experience = experience / 2;
+		if (experience < 1)
+		{
+			experience = 1d;
+		}
+		return experience;
+	}
+
+	public static Double getMaxAAXP() {
+		// TODO Auto-generated method stub
+		return 578360000d;
+	}
+
+	public static double getExperienceRequirementForLevel(int level) {
+		Double classmodifier = 10d;
+		Double racemodifier = 100d;
+		Double levelfactor = 1d;
+
+		Double experiencerequired = (java.lang.Math.pow(level - 1, 4)) * classmodifier * racemodifier * levelfactor;
+		return experiencerequired;
+	}
+
+	// TODO - Move this to a value setting on the SoliniaClass object
+	public static double getClassXPModifier(ISoliniaClass soliniaClass) {
+		double percentagemodifier = 100;
+		
+		if (soliniaClass == null)
+			return percentagemodifier;
+
+		if (soliniaClass.getName().equals("CLERIC") || soliniaClass.getName().equals("DRUID") || soliniaClass.getName().equals("SHAMAN"))
+			percentagemodifier = 120;
+
+		return percentagemodifier;
 	}
 	
 }

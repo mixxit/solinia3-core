@@ -5,50 +5,54 @@ commands:
   solinia:
     description: Displays additional information about Solinia3Core
     usage: /solinia
-    alias: []
+    aliases: []
   commit:
     description: Commits Solinia3Core State Data
     usage: /commit
-    alias: []
+    aliases: []
   forename:
     description: Sets player forename
     usage: /forename <forename>
-    alias:
+    aliases:
     - name
     - nick
   lastname:
     description: Sets player lastname
     usage: /lastname <lastname>
-    alias: 
+    aliases: 
     - surname
   mana:
     description: Gets player mana
     usage: /mana
-    alias: []
+    aliases: []
   addrace:
     description: Creates a new race
     usage: /setrace racename strength stamina agility dexterity wisdom intelligence charisma adminonly
-    alias:
+    aliases:
     - createrace
   setrace:
     description: Sets a players race
     usage: /setrace racename
-    alias:
+    aliases:
     - race
   addclass:
     description: Creates a new class
     usage: /addclass classname adminonly
-    alias:
+    aliases:
     - createclass
   setclass:
     description: Sets a players class
     usage: /setclass classname
-    alias:
+    aliases:
     - class
   addraceclass:
     description: Adds a class to a race
     usage: /addraceclass racename classname
-    alias: []
+    aliases: []
+  stats:
+    description: Gets player core stats
+    usage: /stats
+    aliases: []
 depend:
 softdepend:
 - Vault
