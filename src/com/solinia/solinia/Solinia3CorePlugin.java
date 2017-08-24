@@ -2,10 +2,12 @@ package com.solinia.solinia;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandMana;
+import com.solinia.solinia.Commands.CommandSetRace;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
@@ -68,6 +70,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("forename").setExecutor(new CommandForename());
 		this.getCommand("lastname").setExecutor(new CommandLastname());
 		this.getCommand("mana").setExecutor(new CommandMana());
+		this.getCommand("addrace").setExecutor(new CommandAddRace());
+		this.getCommand("setrace").setExecutor(new CommandSetRace());
 	}
 	
 	private void createConfigDir() {

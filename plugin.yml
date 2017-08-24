@@ -25,6 +25,16 @@ commands:
     description: Gets player mana
     usage: /mana
     alias: []
+  addrace:
+    description: Creates a new race
+    usage: /setrace racename strength stamina agility dexterity wisdom intelligence charisma adminonly
+    alias:
+    - createrace
+  setrace:
+    description: Sets a players race
+    usage: /setrace racename
+    alias:
+    - race
 depend:
 softdepend:
 - Vault

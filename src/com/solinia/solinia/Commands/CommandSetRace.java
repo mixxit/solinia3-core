@@ -17,7 +17,7 @@ import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class CommandRace implements CommandExecutor {
+public class CommandSetRace implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
@@ -93,6 +93,7 @@ public class CommandRace implements CommandExecutor {
 			if (StateManager.getInstance().getConfigurationManager().getRace(race) != null)
 			{
 				soliniaplayer.setRace(StateManager.getInstance().getConfigurationManager().getRace(race).getId());
+				soliniaplayer.setChosenRace(true);
 				player.sendMessage("* Race set to " + race);
 				return true;
 			} else {

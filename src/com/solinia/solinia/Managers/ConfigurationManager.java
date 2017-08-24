@@ -37,4 +37,22 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void commit() {
 		this.raceRepository.commit();
 	}
+
+	@Override
+	public void addRace(ISoliniaRace race) {
+		this.raceRepository.add(race);
+		
+	}
+
+	@Override
+	public int getNextRaceId() {
+		int maxRace = 0;
+		for(ISoliniaRace race : getRaces())
+		{
+			if (race.getId() > maxRace)
+				maxRace = race.getId();
+		}
+		
+		return maxRace + 1;
+	}
 }

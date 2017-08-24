@@ -128,8 +128,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean hasChosenRace() {
-		// TODO Auto-generated method stub
 		return this.haschosenrace;
+	}
+	
+	@Override
+	public void setChosenRace(boolean chosen) {
+		this.haschosenrace = chosen;
 	}
 
 	@Override

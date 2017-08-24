@@ -15,7 +15,7 @@ public class SoliniaRace implements ISoliniaRace {
 	private int wisdom;
 	private int intelligence;
 	private int charisma;
-	
+
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -108,5 +108,16 @@ public class SoliniaRace implements ISoliniaRace {
 	@Override
 	public void setCharisma(int charisma) {
 		this.charisma = charisma;
+	}
+
+	@Override
+	public void setId(int id) {
+		this.id = id;
+		
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
 	}
 }

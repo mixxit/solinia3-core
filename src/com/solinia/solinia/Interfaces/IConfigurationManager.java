@@ -11,4 +11,8 @@ public interface IConfigurationManager {
 	ISoliniaRace getRace(String race);
 
 	void commit();
+
+	void addRace(ISoliniaRace race);
+
+	int getNextRaceId();
 }

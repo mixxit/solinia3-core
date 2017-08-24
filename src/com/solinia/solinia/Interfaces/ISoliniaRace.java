@@ -37,4 +37,8 @@ public interface ISoliniaRace {
 	public int getStrength();
 
 	public int getWisdom();
+
+	void setId(int id);
+
+	void setName(String name);
 }
