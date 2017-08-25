@@ -1,5 +1,6 @@
 package com.solinia.solinia.Listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
@@ -13,11 +14,14 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.Utils;
 
+@SuppressWarnings("unused")
 public class Solinia3CoreEntityListener implements Listener {
 	Solinia3CorePlugin plugin;
 	
@@ -42,6 +46,24 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.isCancelled()) 
 			return;
+		
+		if (!(event instanceof EntityDamageByEntityEvent)) {
+			return;
+		}
+		
+		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
+		
+		if (damagecause.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
+						
+			try {
+				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+				soliniaEntity.modifyDamageEvent(SoliniaPlayerAdapter.Adapt((Player)damagecause.getDamager()), damagecause);
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	
 	

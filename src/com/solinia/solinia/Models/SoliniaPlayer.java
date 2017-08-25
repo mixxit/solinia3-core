@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -9,12 +10,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.entity.Player;
 
-import com.solinia.solinia.Adapters.SoliniaEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
-import com.solinia.solinia.Interfaces.ISoliniaEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Interfaces.ISoliniaPlayerSkill;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
@@ -35,7 +33,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int classid = 0;
 	private String language = "UNKNOWN";
 	private String gender = "MALE";
-	private List<ISoliniaPlayerSkill> skills = new ArrayList<ISoliniaPlayerSkill>();
+	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
 
 	@Override
 	public UUID getUUID() {
@@ -94,12 +92,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			displayName = forename + "_" + lastname;
 		
 		return displayName;
-	}
-	
-	@Override
-	public ISoliniaEntity getEntity() throws CoreStateInitException
-	{
-		return SoliniaEntityAdapter.Adapt(Bukkit.getPlayer(uuid));
 	}
 
 	@Override
@@ -482,7 +474,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public List<ISoliniaPlayerSkill> getSkills() {
+	public List<SoliniaPlayerSkill> getSkills() {
 		// TODO Auto-generated method stub
 		return this.skills;
 	}
@@ -493,14 +485,78 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public ISoliniaPlayerSkill getSkill(String skillname) {
-		for(ISoliniaPlayerSkill skill : this.skills)
+	public SoliniaPlayerSkill getSkill(String skillname) {
+		for(SoliniaPlayerSkill skill : this.skills)
 		{
 			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase()))
 				return skill;
 		}
 		
-		return null;
+		// If we got this far the skill doesn't exist, create it with 0
+		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillname.toUpperCase(),0);
+		skills.add(skill);
+		return skill;
 	}
-	
+
+	@Override
+	public void tryIncreaseSkill(String skillname, int skillupamount) {
+		SoliniaPlayerSkill skill = getSkill(skillname);
+		int currentskill = 0;
+		if (skill != null) {
+			currentskill = skill.getValue();
+		}
+
+		int skillcap = getSkillCap(skillname);
+		if ((currentskill + skillupamount) > skillcap) {
+			return;
+		}
+
+		int chance = 10 + ((252 - currentskill) / 20);
+		if (chance < 1) {
+			chance = 1;
+		}
+
+		Random r = new Random();
+		int randomInt = r.nextInt(100) + 1;
+		if (randomInt < chance) {
+			setSkill(skillname, currentskill + skillupamount);
+		}
+		
+	}
+
+	@Override
+	public void setSkill(String skillname, int value) 
+	{
+		if (value > Integer.MAX_VALUE) 
+			return;
+
+		// max skill point
+		if (value > 255)
+			return;
+
+		skillname = skillname.toUpperCase();
+		
+		if (this.skills == null)
+			this.skills = new ArrayList<SoliniaPlayerSkill>();
+
+		boolean updated = false;
+
+		for (SoliniaPlayerSkill skill : this.skills) 
+		{
+			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase())) 
+			{
+				skill.setValue(value);
+				updated = true;
+				getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
+				return;
+			}
+		}
+
+		if (updated == false) {
+			SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillname.toUpperCase(), value);
+			skills.add(skill);
+		}
+		
+		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
+	}
 }

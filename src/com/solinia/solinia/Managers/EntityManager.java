@@ -1,15 +1,15 @@
 package com.solinia.solinia.Managers;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 
 import com.solinia.solinia.Interfaces.IEntityManager;
-import com.solinia.solinia.Interfaces.ISoliniaEntity;
-import com.solinia.solinia.Models.SoliniaEntity;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Models.SoliniaLivingEntity;
 
 public class EntityManager implements IEntityManager {
 	@Override
-	public ISoliniaEntity getEntity(Entity entity)
+	public ISoliniaLivingEntity getLivingEntity(LivingEntity livingentity)
 	{
-		return new SoliniaEntity(entity);
+		return new SoliniaLivingEntity(livingentity);
 	}
 }

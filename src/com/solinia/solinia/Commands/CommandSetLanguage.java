@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Interfaces.ISoliniaPlayerSkill;
+import com.solinia.solinia.Models.SoliniaPlayerSkill;
 
 public class CommandSetLanguage implements CommandExecutor {
 
@@ -53,7 +53,7 @@ public class CommandSetLanguage implements CommandExecutor {
 	                return true;
 	            }
 	            
-	            ISoliniaPlayerSkill soliniaskill = soliniaplayer.getSkill(language);
+	            SoliniaPlayerSkill soliniaskill = soliniaplayer.getSkill(language);
 	            if (soliniaskill != null && soliniaskill.getValue() >= 100)
 	            {
 	            	player.sendMessage("* You will now speak in " + language);

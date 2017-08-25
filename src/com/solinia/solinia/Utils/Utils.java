@@ -7,6 +7,7 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SkillReward;
 
 public class Utils {
 
@@ -18,6 +19,100 @@ public class Utils {
 		Double level = experience / levelfactor / racemodifier / classmodifier;
 		level = java.lang.Math.pow(level, 0.25) + 1;
 		return (int) java.lang.Math.floor(level);
+	}
+	
+	public static SkillReward getSkillForMaterial(String materialstring)
+	{
+		SkillReward reward = null;
+		
+		int xp = 0;
+		String skill = "";
+		
+		switch(materialstring)
+    	{
+    		case "WOOD_SWORD":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "STONE_SWORD":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "IRON_SWORD":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "GOLD_SWORD":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "DIAMOND_SWORD":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "WOOD_AXE":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "STONE_AXE":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "IRON_AXE":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "GOLD_AXE":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;
+    		case "DIAMOND_AXE":
+    			xp = 1;
+    			skill = "SLASHING";
+    			break;    		
+    		case "AIR":
+    			xp = 1;
+    			skill = "CRUSHING";
+    			break;    		
+    		case "STICK":
+    			xp = 1;
+    			skill = "CRUSHING";
+    			break;    		
+    		case "WOOD_SPADE":
+    			xp = 1;
+    			skill = "CRUSHING";
+    			break;    		
+    		case "STONE_SPADE":
+    			xp = 1;
+    			skill = "CRUSHING";
+    			break;    		
+    		case "IRON_SPADE":
+    			xp = 1;
+    			skill = "CRUSHING";
+    			break;    		
+    		case "GOLD_SPADE":
+    			xp = 1;
+    			skill = "CRUSHING";
+    			break;    		
+    		case "DIAMOND_SPADE":
+    			xp = 1;
+    			skill = "CRUSHING";
+    			break;    
+    		case "BOW":
+    			xp = 1;
+    			skill = "ARCHERY";
+    			break;
+    		default:
+    			break;
+    	
+    	}
+		
+		if (xp > 0 && !skill.equals(""))
+		{
+			reward = new SkillReward(skill,xp);
+		}
+		
+		return reward;
 	}
 
 	public static double getStatMaxHP(ISoliniaPlayer player) {

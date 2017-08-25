@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Models.SoliniaPlayerSkill;
 
 public interface ISoliniaPlayer extends Serializable {
 	public UUID getUUID();
@@ -24,8 +24,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public void updateDisplayName();
 	
 	public void updateMaxHp();
-
-	public ISoliniaEntity getEntity() throws CoreStateInitException;
 
 	public String getFullName();
 
@@ -93,7 +91,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public int getSkillCap(String skillName);
 
-	public List<ISoliniaPlayerSkill> getSkills();
+	public List<SoliniaPlayerSkill> getSkills();
 
 	String getLanguage();
 
@@ -105,5 +103,9 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void say(String string);
 
-	public ISoliniaPlayerSkill getSkill(String skillname);
+	public SoliniaPlayerSkill getSkill(String skillname);
+
+	public void tryIncreaseSkill(String skillname, int xp);
+	
+	public void setSkill(String skillname, int value);
 }

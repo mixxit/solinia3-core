@@ -1,7 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 
 public interface IEntityManager {
-	ISoliniaEntity getEntity(Entity entity);
+	ISoliniaLivingEntity getLivingEntity(LivingEntity livingentity);
 }
