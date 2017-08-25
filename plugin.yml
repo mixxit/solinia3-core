@@ -27,7 +27,7 @@ commands:
     aliases: []
   addrace:
     description: Creates a new race
-    usage: /setrace racename strength stamina agility dexterity wisdom intelligence charisma adminonly
+    usage: /addrace racename strength stamina agility dexterity wisdom intelligence charisma adminonly
     aliases:
     - createrace
   setrace:
