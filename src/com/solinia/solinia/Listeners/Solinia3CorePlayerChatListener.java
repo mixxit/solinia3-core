@@ -28,6 +28,6 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		rawEvent.setCancelled(true);
 		
 		// TODO - Support checking channel modes of player
-		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage());
+		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage());
 	}
 }
