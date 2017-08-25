@@ -28,7 +28,7 @@ public class Utils {
 		
 		if (profession != null)
 		{
-			if (profession.equals("UNSKILLED"))
+			if (profession.equals("UNSKILLED") || profession.equals("UNKNOWN"))
 				levelmultiplier = 3;
 			if (profession.equals("MONK") || profession.equals("ROGUE") || profession.equals("BARD"))
 				levelmultiplier = 18;

@@ -53,6 +53,14 @@ commands:
     description: Gets player core stats
     usage: /stats
     aliases: []
+  who:
+    description: Lists online player details
+    usage: /who
+    aliases: []
+  resetplayer:
+    description: Resets players to a default state
+    usage: /resetplayer <mcaccountname>
+    aliases: []
 depend:
 softdepend:
 - Vault

@@ -1,6 +1,9 @@
 package com.solinia.solinia.Managers;
 
 import org.bukkit.entity.Player;
+
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;
@@ -12,6 +15,14 @@ public class PlayerManager implements IPlayerManager {
 	public PlayerManager(IRepository<ISoliniaPlayer> context)
 	{
 		this.repository = context;
+	}
+	
+	@Override
+	public void resetPlayer(Player player) throws CoreStateInitException
+	{
+		repository.update(SoliniaPlayerFactory.CreatePlayer(player));
+		SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
+		SoliniaPlayerAdapter.Adapt(player).updateMaxHp();
 	}
 	
 	@Override
@@ -30,13 +41,11 @@ public class PlayerManager implements IPlayerManager {
 		
 		if (!isForeNameValid)
 		{
-			System.out.println("Invalid forename");
 			return false;
 		}
 		
 		if (!isLastNameValid && !lastname.equals(""))
 		{
-			System.out.println("Invalid lastname");
 			return false;
 		}
 		
@@ -48,19 +57,16 @@ public class PlayerManager implements IPlayerManager {
 		
 		if (forename.length() < 3)
 		{
-			System.out.println("Invalid forename length");
 			return false;
 		}
 		
 		if (nametest.length() < 3 || nametest.length() > 15)
 		{
-			System.out.println("Invalid total length");
 			return false;
 		}
 		
 		if (repository.query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() != 0)
 		{
-			System.out.println("Invalid name, already in use");
 			return false;
 		}
 		

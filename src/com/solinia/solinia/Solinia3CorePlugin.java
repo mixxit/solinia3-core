@@ -13,10 +13,12 @@ import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandMana;
+import com.solinia.solinia.Commands.CommandResetPlayer;
 import com.solinia.solinia.Commands.CommandSetClass;
 import com.solinia.solinia.Commands.CommandSetRace;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Commands.CommandStats;
+import com.solinia.solinia.Commands.CommandWho;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
@@ -124,6 +126,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("setclass").setExecutor(new CommandSetClass());
 		this.getCommand("addraceclass").setExecutor(new CommandAddRaceClass());
 		this.getCommand("stats").setExecutor(new CommandStats());
+		this.getCommand("resetplayer").setExecutor(new CommandResetPlayer());
+		this.getCommand("who").setExecutor(new CommandWho());
 	}
 	
 	private void createConfigDir() {
