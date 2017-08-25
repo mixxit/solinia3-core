@@ -10,18 +10,26 @@ import com.solinia.solinia.Commands.CommandAddClass;
 import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
+import com.solinia.solinia.Commands.CommandEmote;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandResetPlayer;
+import com.solinia.solinia.Commands.CommandRoll;
 import com.solinia.solinia.Commands.CommandSetClass;
+import com.solinia.solinia.Commands.CommandSetGender;
+import com.solinia.solinia.Commands.CommandSetLanguage;
 import com.solinia.solinia.Commands.CommandSetRace;
+import com.solinia.solinia.Commands.CommandSkills;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Commands.CommandStats;
+import com.solinia.solinia.Commands.CommandTarot;
 import com.solinia.solinia.Commands.CommandWho;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
+import com.solinia.solinia.Listeners.Solinia3CorePlayerChatListener;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
+import com.solinia.solinia.Managers.ChannelManager;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
@@ -100,7 +108,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			EntityManager entityManager = new EntityManager();
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo);
 			
-			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager);
+			ChannelManager channelManager = new ChannelManager();
+			
+			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager);
 			
 			commitTimer = new StateCommitTimer();
 			commitTimer.runTaskTimer(this, 100L, 5000L);
@@ -115,6 +125,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	{
 		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreEntityListener(this), this);
+		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerChatListener(this), this);
+		
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());
 		this.getCommand("forename").setExecutor(new CommandForename());
@@ -128,6 +140,12 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("stats").setExecutor(new CommandStats());
 		this.getCommand("resetplayer").setExecutor(new CommandResetPlayer());
 		this.getCommand("who").setExecutor(new CommandWho());
+		this.getCommand("emote").setExecutor(new CommandEmote());
+		this.getCommand("roll").setExecutor(new CommandRoll());
+		this.getCommand("setgender").setExecutor(new CommandSetGender());
+		this.getCommand("setlanguage").setExecutor(new CommandSetLanguage());
+		this.getCommand("tarot").setExecutor(new CommandTarot());
+		this.getCommand("skills").setExecutor(new CommandSkills());
 	}
 	
 	private void createConfigDir() {

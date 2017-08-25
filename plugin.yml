@@ -61,6 +61,33 @@ commands:
     description: Resets players to a default state
     usage: /resetplayer <mcaccountname>
     aliases: []
+  setgender:
+    description: Sets players gender
+    usage: /setgender male/female
+    aliases: []
+  emote:
+    description: Emotes a message
+    usage: /emote action
+    aliases:
+    - me
+  roll:
+    description: Rolls a dice
+    usage: /roll sides
+    aliases:
+    - random
+    - dice
+  setlanguage:
+    description: Sets players language
+    usage: /setgender language
+    aliases: []
+  tarot:
+    description: Deals a tarot card
+    usage: /tarot
+    aliases: []
+  skills:
+    description: Lists player skills
+    usage: /skills
+    aliases: []
 depend:
 softdepend:
 - Vault

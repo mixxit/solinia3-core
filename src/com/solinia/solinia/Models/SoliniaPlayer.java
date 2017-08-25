@@ -1,5 +1,7 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -12,6 +14,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaPlayerSkill;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
@@ -30,6 +33,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean haschosenrace = false;
 	private boolean haschosenclass = false;
 	private int classid = 0;
+	private String language = "UNKNOWN";
+	private String gender = "MALE";
+	private List<ISoliniaPlayerSkill> skills = new ArrayList<ISoliniaPlayerSkill>();
 
 	@Override
 	public UUID getUUID() {
@@ -448,6 +454,53 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setAAPoints(int aapoints) {
 		this.aapoints = aapoints;
+	}
+
+	@Override
+	public String getLanguage() {
+		return language;
+	}
+
+	@Override
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	@Override
+	public String getGender() {
+		return gender;
+	}
+
+	@Override
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	@Override
+	public int getSkillCap(String skillName) {
+		return Utils.getSkillCap(this,skillName);
+	}
+
+	@Override
+	public List<ISoliniaPlayerSkill> getSkills() {
+		// TODO Auto-generated method stub
+		return this.skills;
+	}
+
+	@Override
+	public void say(String string) {
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this,string);
+	}
+
+	@Override
+	public ISoliniaPlayerSkill getSkill(String skillname) {
+		for(ISoliniaPlayerSkill skill : this.skills)
+		{
+			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase()))
+				return skill;
+		}
+		
+		return null;
 	}
 	
 }

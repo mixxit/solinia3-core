@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -89,4 +90,20 @@ public interface ISoliniaPlayer extends Serializable {
 	int getAAPoints();
 
 	void setAAPoints(int aapoints);
+
+	public int getSkillCap(String skillName);
+
+	public List<ISoliniaPlayerSkill> getSkills();
+
+	String getLanguage();
+
+	void setLanguage(String language);
+
+	String getGender();
+
+	void setGender(String gender);
+
+	public void say(String string);
+
+	public ISoliniaPlayerSkill getSkill(String skillname);
 }

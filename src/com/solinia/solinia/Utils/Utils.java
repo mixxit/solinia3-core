@@ -1,7 +1,12 @@
 package com.solinia.solinia.Utils;
 
+import java.util.List;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Managers.StateManager;
 
 public class Utils {
 
@@ -106,6 +111,70 @@ public class Utils {
 			percentagemodifier = 120;
 
 		return percentagemodifier;
+	}
+
+	public static int getSkillCap(ISoliniaPlayer player, String skillname) {
+
+		// If the skill being queried happens to be a race name, the cap for language is always 100
+		try {
+			List<ISoliniaRace> races = StateManager.getInstance().getConfigurationManager().getRaces();
+			for (ISoliniaRace race : races) {
+				if (race.getName().toUpperCase().equals(skillname.toUpperCase())) {
+					return 100;
+				}
+			}
+			
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		ISoliniaClass profession = player.getClassObj();
+
+		// TODO - Move all these skill cap bonuses to the race configuration classes
+		
+		if (skillname.equals("SLASHING")) {
+			if (profession != null)
+			if ((profession.getName().toUpperCase().equals("RANGER") || profession.getName().toUpperCase().equals("PALADIN")
+					|| profession.getName().toUpperCase().equals("WARRIOR") || profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+					|| profession.getName().toUpperCase().equals("HUNTER") || profession.getName().toUpperCase().equals("KNIGHT"))) {
+				int cap = (int) ((5 * player.getLevel()) + 5);
+				return cap;
+			}
+		}
+
+		if (skillname.equals("CRUSHING")) {
+			if (profession != null)
+			if ((profession.getName().toUpperCase().equals("RANGER") || profession.getName().toUpperCase().equals("PALADIN")
+					|| profession.getName().toUpperCase().equals("WARRIOR") || profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+					|| profession.getName().toUpperCase().equals("MONK") || profession.getName().toUpperCase().equals("HUNTER")
+					|| profession.getName().toUpperCase().equals("KNIGHT"))) {
+				int cap = (int) ((5 * player.getLevel()) + 5);
+				return cap;
+			}
+		}
+
+		if (skillname.equals("ARCHERY")) {
+			if (profession != null)
+			if ((profession.getName().toUpperCase().equals("RANGER") || profession.getName().toUpperCase().equals("HUNTER"))) {
+				int cap = (int) ((5 * player.getLevel()) + 5);
+				return cap;
+			}
+		}
+
+		if (skillname.equals("MEDITATION")) {
+			if (profession != null)
+			if ((profession.getName().toUpperCase().equals("DRUID") || profession.getName().toUpperCase().equals("WIZARD")
+					|| profession.getName().toUpperCase().equals("MAGICIAN") || profession.getName().toUpperCase().equals("NECROMANCER")
+					|| profession.getName().toUpperCase().equals("ENCHANTER") || profession.getName().toUpperCase().equals("MONK")
+					|| profession.getName().toUpperCase().equals("ARCANIST") || profession.getName().toUpperCase().equals("EXARCH"))) {
+				int cap = (int) ((5 * player.getLevel()) + 5);
+				return cap;
+			}
+		}
+
+		int cap = (int) ((2 * player.getLevel()) + 2);
+		return cap;
 	}
 	
 }

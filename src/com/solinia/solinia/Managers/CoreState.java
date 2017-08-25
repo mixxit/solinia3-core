@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import com.earth2me.essentials.Essentials;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.IPlayerManager;
@@ -19,6 +20,7 @@ public class CoreState {
 	private IConfigurationManager configurationManager;
 	private Economy economy;
 	private Essentials essentials;
+	private IChannelManager channelManager;
 	
 	public CoreState()
 	{
@@ -44,7 +46,7 @@ public class CoreState {
 		return this.essentials;
 	}
 	
-	public void Initialise(IPlayerManager playerManager, IEntityManager entityManager, IConfigurationManager configurationManager) throws CoreStateInitException
+	public void Initialise(IPlayerManager playerManager, IEntityManager entityManager, IConfigurationManager configurationManager, ChannelManager channelManager) throws CoreStateInitException
 	{
 		if (isInitialised == true)
 			throw new CoreStateInitException("State already initialised");
@@ -52,6 +54,7 @@ public class CoreState {
 		this.playerManager = playerManager;
 		this.entityManager = entityManager;
 		this.configurationManager = configurationManager;
+		this.channelManager = channelManager;
 		isInitialised = true;
 	}
 	
@@ -118,5 +121,10 @@ public class CoreState {
     	
 		return;
 		
+	}
+
+	public IChannelManager getChannelManager() {
+		// TODO Auto-generated method stub
+		return this.channelManager;
 	}
 }
