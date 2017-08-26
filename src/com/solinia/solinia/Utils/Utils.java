@@ -2,14 +2,22 @@ package com.solinia.solinia.Utils;
 
 import java.util.List;
 
+import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SkillReward;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
 
@@ -333,6 +341,46 @@ public class Utils {
 			default:
 				throw new Exception("Unsupported enchantment type for SoliniaItem");
 		}
+	}
+
+	public static void checkArmourEquip(ISoliniaPlayer solplayer, PlayerInteractEvent event) {
+		ItemStack itemstack = event.getItem();
+    	if (itemstack == null)
+    		return;
+		if (!(CraftItemStack.asNMSCopy(itemstack).getItem() instanceof net.minecraft.server.v1_12_R1.ItemArmor))
+		{
+			return;
+		}
+		
+    	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+	    {
+			try {
+				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+				
+				if (soliniaitem.getAllowedClassNames().size() == 0)
+	    			return;
+				
+				if (solplayer.getClassObj() == null)
+				{
+					event.setCancelled(true);
+	    			event.getPlayer().updateInventory();
+	    			event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	    			return;
+				}
+					    		
+	    		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName()))
+	    		{
+	    			event.setCancelled(true);
+	    			event.getPlayer().updateInventory();
+	    			event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	    			return;
+	    		}
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		
+	    }
 	}
 	
 	
