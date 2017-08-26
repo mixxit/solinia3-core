@@ -213,6 +213,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getRace() != null)
 			stat += getRace().getStrength();
 
+		stat += Utils.getTotalItemStat(this,"STRENGTH");
 		return stat;
 	}
 
@@ -222,6 +223,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (getRace() != null)
 			stat += getRace().getStamina();
+		
+		stat += Utils.getTotalItemStat(this,"STAMINA");
 		return stat;
 	}
 
@@ -231,6 +234,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (getRace() != null)
 			stat += getRace().getAgility();
+		
+		stat += Utils.getTotalItemStat(this,"AGILITY");
 		return stat;
 	}
 
@@ -240,6 +245,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (getRace() != null)
 			stat += getRace().getDexterity();
+		
+		stat += Utils.getTotalItemStat(this,"DEXTERITY");
 		return stat;
 	}
 
@@ -249,6 +256,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (getRace() != null)
 			stat += getRace().getIntelligence();
+		
+		stat += Utils.getTotalItemStat(this,"INTELLIGENCE");
 		return stat;
 	}
 
@@ -258,6 +267,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (getRace() != null)
 			stat += getRace().getWisdom();
+		
+		stat += Utils.getTotalItemStat(this,"WISDOM");
 		return stat;
 	}
 	
@@ -267,6 +278,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (getRace() != null)
 			stat += getRace().getCharisma();
+		
+		stat += Utils.getTotalItemStat(this,"CHARISMA");
 		return stat;
 	}
 	

@@ -1,11 +1,15 @@
 package com.solinia.solinia.Listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -15,14 +19,19 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class Solinia3CorePlayerListener implements Listener {
 
@@ -52,6 +61,103 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onInventoryClick(InventoryClickEvent event) {
 		if (event.isCancelled())
 			return;
+		
+		try
+		{
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getView().getPlayer());
+	
+			// If armour slot modified, update MaxHP
+			
+			// Shift clicking
+			if (event.isShiftClick())
+			{
+				ItemStack itemstack = event.getCurrentItem();
+	        	if (itemstack == null)
+	        		return;
+	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+			    {
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		if (soliniaitem.getAllowedClassNames().size() == 0)
+	        			return;
+	        		
+	        		if (solplayer.getClassObj() == null)
+	        		{
+	        			event.setCancelled(true);
+	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	        			return;
+	        		}
+	        		
+	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName()))
+	        		{
+	        			event.setCancelled(true);
+	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	        			return;
+	        		}
+			    }
+	        	
+	        	solplayer.updateMaxHp();
+			}
+			
+			// Actual clicking
+	        if (event.getSlotType().equals(SlotType.ARMOR)) {
+	        	ItemStack itemstack = event.getCursor();
+	        	if (itemstack == null)
+	        		return;
+	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+			    {
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		if (soliniaitem.getAllowedClassNames().size() == 0)
+	        			return;
+	        		
+	        		if (solplayer.getClassObj() == null)
+	        		{
+	        			event.setCancelled(true);
+	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	        			return;
+	        		}
+	        		
+	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName()))
+	        		{
+	        			event.setCancelled(true);
+	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	        			return;
+	        		}
+			    }
+	        	
+	        	solplayer.updateMaxHp();
+	        }
+	        
+	        if (event.getSlot() == 45) {
+	        	ItemStack itemstack = event.getCursor();
+	        	if (itemstack == null)
+	        		return;
+	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+			    {
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		if (soliniaitem.getAllowedClassNames().size() == 0)
+	        			return;
+	        		
+	        		if (solplayer.getClassObj() == null)
+	        		{
+	        			event.setCancelled(true);
+	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	        			return;
+	        		}
+	        		
+	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName()))
+	        		{
+	        			event.setCancelled(true);
+	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	        			return;
+	        		}
+			    }
+	        	
+	        	solplayer.updateMaxHp();
+	        }
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
 	}
 

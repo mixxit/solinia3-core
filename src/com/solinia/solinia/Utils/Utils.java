@@ -1,5 +1,6 @@
 package com.solinia.solinia.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,6 +10,7 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -408,5 +410,77 @@ public class Utils {
 	public static String FormatAsName(String name) {
 		// TODO Auto-generated method stub
 		return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+	}
+
+	public static int getTotalItemStat(ISoliniaPlayer solplayer, String stat) {
+		int total = 0;
+
+		try
+		{
+		List<ItemStack> itemstacks = new ArrayList<ItemStack>();
+		for (ItemStack itemstack : solplayer.getBukkitPlayer().getInventory().getArmorContents()) {
+			if (itemstack == null)
+				continue;
+
+			itemstacks.add(itemstack);
+		}
+
+		if (solplayer.getBukkitPlayer().getInventory().getItemInOffHand() != null)
+			itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInOffHand());
+
+		for (ItemStack itemstack : itemstacks) {
+			if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+					&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				int itemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
+				switch (stat) {
+				case "STRENGTH":
+					if (item.getStrength() > 0) {
+						total += item.getStrength();
+					}
+					break;
+				case "STAMINA":
+					if (item.getStamina() > 0) {
+						total += item.getStamina();
+					}
+					break;
+				case "AGILITY":
+					if (item.getAgility() > 0) {
+						total += item.getAgility();
+					}
+					break;
+				case "DEXTERITY":
+					if (item.getDexterity() > 0) {
+						total += item.getDexterity();
+					}
+					break;
+				case "INTELLIGENCE":
+					if (item.getIntelligence() > 0) {
+						total += item.getIntelligence();
+					}
+					break;
+				case "WISDOM":
+					if (item.getWisdom() > 0) {
+						total += item.getWisdom();
+					}
+					break;
+				case "CHARISMA":
+					if (item.getCharisma() > 0) {
+						total += item.getCharisma();
+					}
+					break;
+				default:
+					break;
+				}
+
+			}
+		}
+		return total;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return total;
+		}
 	}
 }
