@@ -70,7 +70,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	    {
 			try
 			{
-				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(attacker.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.OXYGEN));
+				int itemid = attacker.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.OXYGEN);
+				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000+itemid);
 				if (soliniaitem != null)
 				{
 					if (soliniaitem.getAllowedClassNames().size() > 0)
@@ -97,7 +98,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				e.printStackTrace();
 			}
 	    }
-		
 		double currentdamage = event.getDamage(EntityDamageEvent.DamageModifier.BASE);
 		if (currentdamage < 1)
 		{

@@ -76,7 +76,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        		return;
 	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
-	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000+itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
 	        			return;
 	        		
@@ -87,7 +87,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			return;
 	        		}
 	        		
-	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName()))
+	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
 	        		{
 	        			event.setCancelled(true);
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
@@ -105,7 +105,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        		return;
 	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
-	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000+itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
 	        			return;
 	        		
@@ -116,7 +116,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			return;
 	        		}
 	        		
-	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName()))
+	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
 	        		{
 	        			event.setCancelled(true);
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
@@ -133,7 +133,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        		return;
 	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
-	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000+itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
 	        			return;
 	        		
@@ -144,7 +144,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			return;
 	        		}
 	        		
-	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName()))
+	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
 	        		{
 	        			event.setCancelled(true);
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");

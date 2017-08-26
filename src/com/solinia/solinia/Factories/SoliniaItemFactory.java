@@ -100,7 +100,7 @@ public class SoliniaItemFactory {
 		{
 			// Add a class limit
 			ISoliniaClass classobj = Utils.getRandomItemFromList(StateManager.getInstance().getConfigurationManager().getClasses());
-			item.setAllowedClassNames(new ArrayList<String>() {{ add(classobj.getName()); }});
+			item.setAllowedClassNames(new ArrayList<String>() {{ add(classobj.getName().toUpperCase()); }});
 			classname = classobj.getName().toLowerCase() + "s";
 			classname = Utils.FormatAsName(classname);
 		}
