@@ -28,5 +28,13 @@ public interface IConfigurationManager {
 
 	boolean isValidRaceClass(int raceId, int classId);
 
-	void AddRaceClass(int raceId, int classId);
+	void addRaceClass(int raceId, int classId);
+
+	List<ISoliniaItem> getItems();
+
+	ISoliniaItem getItem(int Id);
+
+	int getNextItemId();
+
+	void addItem(ISoliniaItem item);
 }

@@ -10,9 +10,11 @@ import com.solinia.solinia.Commands.CommandAddClass;
 import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
+import com.solinia.solinia.Commands.CommandCreateItem;
 import com.solinia.solinia.Commands.CommandEmote;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
+import com.solinia.solinia.Commands.CommandListItems;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandResetPlayer;
 import com.solinia.solinia.Commands.CommandRoll;
@@ -22,6 +24,7 @@ import com.solinia.solinia.Commands.CommandSetLanguage;
 import com.solinia.solinia.Commands.CommandSetRace;
 import com.solinia.solinia.Commands.CommandSkills;
 import com.solinia.solinia.Commands.CommandSolinia;
+import com.solinia.solinia.Commands.CommandSpawnItem;
 import com.solinia.solinia.Commands.CommandStats;
 import com.solinia.solinia.Commands.CommandTarot;
 import com.solinia.solinia.Commands.CommandWho;
@@ -35,6 +38,7 @@ import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Repositories.JsonClassRepository;
+import com.solinia.solinia.Repositories.JsonItemRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Timers.StateCommitTimer;
@@ -104,9 +108,13 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			classrepo.setJsonFile(getDataFolder() + "/" + "classes.json");
 			classrepo.reload();
 			
+			JsonItemRepository itemrepo = new JsonItemRepository();
+			itemrepo.setJsonFile(getDataFolder() + "/" + "items.json");
+			itemrepo.reload();
+			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager();
-			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo);
+			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo);
 			
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -146,6 +154,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("setlanguage").setExecutor(new CommandSetLanguage());
 		this.getCommand("tarot").setExecutor(new CommandTarot());
 		this.getCommand("skills").setExecutor(new CommandSkills());
+		this.getCommand("createitem").setExecutor(new CommandCreateItem());
+		this.getCommand("listitems").setExecutor(new CommandListItems());
+		this.getCommand("spawnitem").setExecutor(new CommandSpawnItem());
 	}
 	
 	private void createConfigDir() {

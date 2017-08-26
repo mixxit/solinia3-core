@@ -63,9 +63,9 @@ public interface ISoliniaItem {
 
 	void setTexturebase64(String texturebase64);
 
-	int getQuestitem();
+	boolean getQuestitem();
 
-	void setQuestitem(int questitem);
+	void setQuestitem(boolean questitem);
 
 	int getDamage();
 

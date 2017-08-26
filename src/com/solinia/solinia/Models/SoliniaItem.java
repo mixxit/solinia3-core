@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 
 public class SoliniaItem implements ISoliniaItem {
@@ -12,21 +13,21 @@ public class SoliniaItem implements ISoliniaItem {
 	private int id;
 	private String displayname;
 	private String basename;
-	private int abilityid;
+	private int abilityid = 0;
 	private String lore;
-	private int strength;
-	private int stamina;
-	private int agility;
-	private int dexterity;
-	private int intelligence;
-	private int wisdom;
-	private int charisma;
+	private int strength = 0;
+	private int stamina = 0;
+	private int agility = 0;
+	private int dexterity = 0;
+	private int intelligence = 0;
+	private int wisdom = 0;
+	private int charisma = 0;
 	private List<String> allowedClassNames = new ArrayList<String>();
 	private String texturebase64;
-	private int questitem;
-	private int damage;
-	private int weaponabilityid;
-	private int attackspeed;
+	private boolean questitem = false;
+	private int damage = 0;
+	private int weaponabilityid = 0;
+	private int attackspeed = 0;
 	private String enchantment1;
 	private int enchantment1val;
 	private String enchantment2;
@@ -35,19 +36,18 @@ public class SoliniaItem implements ISoliniaItem {
 	private int enchantment3val;
 	private String enchantment4;
 	private int enchantment4val;
-	private int hpregen;
-	private int mpregen;
-	private int worth;
-	private boolean coreitem;
-	private int fireResist;
-	private int coldResist;
-	private int magicResist;
-	private int poisonResist;
+	private int hpregen = 0;
+	private int mpregen = 0;
+	private int worth = 1;
+	private boolean coreitem = false;
+	private int fireResist = 0;
+	private int coldResist = 0;
+	private int magicResist = 0;
+	private int poisonResist = 0;
 	
 	@Override
 	public ItemStack asItemStack() {
-		// TODO Auto-generated method stub
-		return null;
+		return ItemStackAdapter.Adapt(this);
 	}
 
 	@Override
@@ -191,12 +191,12 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public int getQuestitem() {
+	public boolean getQuestitem() {
 		return questitem;
 	}
 
 	@Override
-	public void setQuestitem(int questitem) {
+	public void setQuestitem(boolean questitem) {
 		this.questitem = questitem;
 	}
 

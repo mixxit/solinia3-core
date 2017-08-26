@@ -60,7 +60,7 @@ public class CommandAddRaceClass implements CommandExecutor {
 				return false;
 			}
 
-			StateManager.getInstance().getConfigurationManager().AddRaceClass(race.getId(),classobj.getId());
+			StateManager.getInstance().getConfigurationManager().addRaceClass(race.getId(),classobj.getId());
 			sender.sendMessage("* Race class combination added");
 			return true;
 		} catch (CoreStateInitException e) {

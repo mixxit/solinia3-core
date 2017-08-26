@@ -88,6 +88,18 @@ commands:
     description: Lists player skills
     usage: /skills
     aliases: []
+  createitem:
+    description: Creates item from the item you are holding
+    usage: /createitem
+    aliases: []
+  listitems:
+    description: Lists items
+    usage: /listitems searchstring
+    aliases: []
+  spawnitem:
+    description: Spawns an item
+    usage: /spawnitem itemid
+    aliases: []
 depend:
 softdepend:
 - Vault

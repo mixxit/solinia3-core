@@ -1,13 +1,20 @@
 package com.solinia.solinia.Adapters;
 
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import com.solinia.solinia.Factories.SoliniaItemFactory;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Managers.StateManager;
 
 public class SoliniaItemAdapter {
-	public ISoliniaItem Adapt(ItemStack itemStack)
+	public static ISoliniaItem Adapt(ItemStack itemStack) throws SoliniaItemException, CoreStateInitException
 	{
-		return SoliniaItemFactory.CreateItem(itemStack);
+		if (!(itemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999))
+			throw new SoliniaItemException("Not a valid solinia item");
+		
+		return StateManager.getInstance().getConfigurationManager().getItem(itemStack.getEnchantmentLevel(Enchantment.OXYGEN));
+		
 	}
 }
