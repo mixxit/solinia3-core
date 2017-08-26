@@ -71,7 +71,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try
 			{
 				int itemid = attacker.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.OXYGEN);
-				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000+itemid);
+				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000-itemid);
 				if (soliniaitem != null)
 				{
 					if (soliniaitem.getAllowedClassNames().size() > 0)

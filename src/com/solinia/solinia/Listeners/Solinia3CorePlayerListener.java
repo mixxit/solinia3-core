@@ -76,7 +76,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        		return;
 	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
-	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000+itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000-itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
 	        			return;
 	        		
@@ -105,7 +105,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        		return;
 	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
-	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000+itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000-itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
 	        			return;
 	        		
@@ -133,7 +133,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        		return;
 	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
-	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000+itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000-itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
 	        			return;
 	        		
