@@ -10,12 +10,16 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
+	private int level = 1;
 
 	public SoliniaLivingEntity(LivingEntity livingentity) {
 		this.livingentity = livingentity;
@@ -193,5 +197,28 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean isPet() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int getLevel() {
+		return level;
+	}
+
+	@Override
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	@Override
+	public void dropLoot() {
+		try {
+			getBukkitLivingEntity().getWorld().dropItem(this.getBukkitLivingEntity().getLocation(),SoliniaItemFactory.GenerateRandomLoot().asItemStack());
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SoliniaItemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

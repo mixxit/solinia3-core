@@ -24,6 +24,7 @@ public class SoliniaRaceFactory {
 		race.setIntelligence(intelligence);
 		race.setCharisma(charisma);
 		race.setAdmin(adminonly);
+		StateManager.getInstance().getConfigurationManager().addRace(race);
 		return race;
 	}
 }

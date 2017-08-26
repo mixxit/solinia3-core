@@ -157,6 +157,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createitem").setExecutor(new CommandCreateItem());
 		this.getCommand("listitems").setExecutor(new CommandListItems());
 		this.getCommand("spawnitem").setExecutor(new CommandSpawnItem());
+		this.getCommand("spawnrandomitem").setExecutor(new CommandSpawnItem());
 	}
 	
 	private void createConfigDir() {

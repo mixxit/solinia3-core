@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
-import com.solinia.solinia.Managers.StateManager;
 
 public class CommandCreateItem implements CommandExecutor {
 	@Override
@@ -44,7 +43,6 @@ public class CommandCreateItem implements CommandExecutor {
         try
         {
         	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack);
-        	StateManager.getInstance().getConfigurationManager().addItem(item);
         	player.sendMessage("New Item Created with ID: " + item.getId());
         } catch (Exception e)
         {

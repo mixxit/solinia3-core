@@ -16,6 +16,7 @@ public class SoliniaClassFactory {
 		classObj.setId(StateManager.getInstance().getConfigurationManager().getNextClassId());
 		classObj.setName(classname.toUpperCase());
 		classObj.setAdmin(adminonly);
+		StateManager.getInstance().getConfigurationManager().addClass(classObj);
 		return classObj;
 	}
 

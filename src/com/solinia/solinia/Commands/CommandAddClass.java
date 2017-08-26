@@ -9,8 +9,6 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaClassCreationException;
 import com.solinia.solinia.Factories.SoliniaClassFactory;
-import com.solinia.solinia.Interfaces.ISoliniaClass;
-import com.solinia.solinia.Managers.StateManager;
 
 public class CommandAddClass implements CommandExecutor {
 
@@ -39,8 +37,7 @@ public class CommandAddClass implements CommandExecutor {
 		boolean adminonly = Boolean.parseBoolean(args[1]);
 		
 		try {
-			ISoliniaClass soliniaClass = SoliniaClassFactory.CreateClass(classname,adminonly);
-			StateManager.getInstance().getConfigurationManager().addClass(soliniaClass);
+			SoliniaClassFactory.CreateClass(classname,adminonly);
 			sender.sendMessage("* Class created");
 		} catch (CoreStateInitException | SoliniaClassCreationException e) {
 			// TODO Auto-generated catch block

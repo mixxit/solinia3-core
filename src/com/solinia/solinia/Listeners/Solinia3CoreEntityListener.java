@@ -99,11 +99,17 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 		
 		try {
-			// TODO - Temporary Level 1 npcs everywhere
+			ISoliniaLivingEntity livingEntity = SoliniaLivingEntityAdapter.Adapt(event.getEntity());
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)damager);
-			Double experience = Utils.getExperienceRewardAverageForLevel(1);
+			Double experience = Utils.getExperienceRewardAverageForLevel(livingEntity.getLevel());
 			player.increasePlayerExperience(experience);
 			player.giveMoney(1);
+			int itemDropMinimum = 95;
+			if (Utils.RandomChance(itemDropMinimum))
+			{
+				System.out.println(player.getFullName() + " gets random loot!");
+				livingEntity.dropLoot();
+			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

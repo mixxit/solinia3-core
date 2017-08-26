@@ -100,6 +100,10 @@ commands:
     description: Spawns an item
     usage: /spawnitem itemid
     aliases: []
+  spawnrandomitem:
+    description: Spawns a random item
+    usage: /spawnrandomitem
+    aliases: []
 depend:
 softdepend:
 - Vault

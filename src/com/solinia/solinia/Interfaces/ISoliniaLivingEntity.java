@@ -10,4 +10,10 @@ public interface ISoliniaLivingEntity
 	public void modifyDamageEvent(ISoliniaPlayer player, EntityDamageByEntityEvent damagecause);
 	
 	public boolean isPet();
+
+	int getLevel();
+
+	void setLevel(int level);
+
+	public void dropLoot();
 }

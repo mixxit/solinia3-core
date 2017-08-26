@@ -1,14 +1,14 @@
 package com.solinia.solinia.Utils;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -29,6 +29,23 @@ public class Utils {
 		Double level = experience / levelfactor / racemodifier / classmodifier;
 		level = java.lang.Math.pow(level, 0.25) + 1;
 		return (int) java.lang.Math.floor(level);
+	}
+	
+	public static boolean RandomChance(int minmum)
+	{
+		Random r = new Random();
+		int randomInt = r.nextInt(100) + 1;
+		if (randomInt > minmum) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public static int RandomBetween(int minnumber, int maxnumber)
+	{
+		Random r = new Random();
+		return r.nextInt((maxnumber - minnumber) + 1) + minnumber;
 	}
 	
 	public static SkillReward getSkillForMaterial(String materialstring)
@@ -342,6 +359,11 @@ public class Utils {
 				throw new Exception("Unsupported enchantment type for SoliniaItem");
 		}
 	}
+	
+	public static <T> T getRandomItemFromList(List<T> list)
+	{
+		return list.get(ThreadLocalRandom.current().nextInt(list.size()));
+	}
 
 	public static void checkArmourEquip(ISoliniaPlayer solplayer, PlayerInteractEvent event) {
 		ItemStack itemstack = event.getItem();
@@ -382,6 +404,9 @@ public class Utils {
     		
 	    }
 	}
-	
-	
+
+	public static String FormatAsName(String name) {
+		// TODO Auto-generated method stub
+		return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+	}
 }
