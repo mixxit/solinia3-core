@@ -1,6 +1,8 @@
 package com.solinia.solinia.Models;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -13,8 +15,10 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
@@ -61,6 +65,38 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			}
 		}
+		
+		if (attacker.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+	    {
+			try
+			{
+				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(attacker.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.OXYGEN));
+				if (soliniaitem != null)
+				{
+					if (soliniaitem.getAllowedClassNames().size() > 0)
+					{
+						if (player.getClassObj() == null)
+						{
+							event.setCancelled(true);
+							player.getBukkitPlayer().updateInventory();
+							player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "Your class cannot use this item");
+			    			return;
+						}
+							    		
+			    		if (!soliniaitem.getAllowedClassNames().contains(player.getClassObj().getName()))
+			    		{
+			    			event.setCancelled(true);
+			    			player.getBukkitPlayer().updateInventory();
+			    			player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "Your class cannot use this item");
+			    			return;
+			    		}
+					}
+				}
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+	    }
 		
 		double currentdamage = event.getDamage(EntityDamageEvent.DamageModifier.BASE);
 		if (currentdamage < 1)
