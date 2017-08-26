@@ -379,7 +379,7 @@ public class Utils {
     	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 	    {
 			try {
-				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000-itemstack.getEnchantmentLevel(Enchantment.OXYGEN));
+				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 				
 				if (soliniaitem.getAllowedClassNames().size() == 0)
 	    			return;
@@ -431,9 +431,8 @@ public class Utils {
 		for (ItemStack itemstack : itemstacks) {
 			if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
 					&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-				int itemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
 
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(1000-itemid);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 				switch (stat) {
 				case "STRENGTH":
 					if (item.getStrength() > 0) {

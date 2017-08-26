@@ -14,7 +14,7 @@ public class SoliniaItemAdapter {
 		if (!(itemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999))
 			throw new SoliniaItemException("Not a valid solinia item");
 		
-		return StateManager.getInstance().getConfigurationManager().getItem(itemStack.getEnchantmentLevel(Enchantment.OXYGEN));
+		return StateManager.getInstance().getConfigurationManager().getItem(itemStack);
 		
 	}
 }

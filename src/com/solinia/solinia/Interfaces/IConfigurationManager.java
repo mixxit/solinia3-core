@@ -3,6 +3,8 @@ package com.solinia.solinia.Interfaces;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.inventory.ItemStack;
+
 public interface IConfigurationManager {
 	
 	public List<String> WeaponMaterials = new ArrayList<String>() {{ 
@@ -76,6 +78,7 @@ public interface IConfigurationManager {
 
 	ISoliniaItem getItem(int Id);
 
+	ISoliniaItem getItem(ItemStack itemStack);
 	int getNextItemId();
 
 	void addItem(ISoliniaItem item);

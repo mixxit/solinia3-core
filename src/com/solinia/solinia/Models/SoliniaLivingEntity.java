@@ -70,14 +70,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	    {
 			try
 			{
-				int itemid = attacker.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.OXYGEN);
-				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(1000-itemid);
+				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(attacker.getInventory().getItemInMainHand());
 				if (soliniaitem != null)
 				{
 					if (soliniaitem.getAllowedClassNames().size() > 0)
 					{
-						if (player.getClassObj() == null)
+										if (player.getClassObj() == null)
 						{
+							System.out.print("Player class was null");
 							event.setCancelled(true);
 							player.getBukkitPlayer().updateInventory();
 							player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "Your class cannot use this item");
@@ -98,6 +98,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				e.printStackTrace();
 			}
 	    }
+
 		double currentdamage = event.getDamage(EntityDamageEvent.DamageModifier.BASE);
 		if (currentdamage < 1)
 		{

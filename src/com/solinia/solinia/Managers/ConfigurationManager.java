@@ -3,6 +3,9 @@ package com.solinia.solinia.Managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -79,6 +82,17 @@ public class ConfigurationManager implements IConfigurationManager {
 			
 		return null;
 	}
+	
+	@Override
+	public ISoliniaItem getItem(ItemStack itemStack) {
+		int Id = (itemStack.getEnchantmentLevel(Enchantment.OXYGEN)-1000);
+		List<ISoliniaItem> items = itemRepository.query(q ->q.getId() == Id);
+		if (items.size() > 0)
+			return items.get(0);
+			
+		return null;
+	}
+	
 	
 	@Override
 	public ISoliniaClass getClassObj(String classname) {
