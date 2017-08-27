@@ -42,10 +42,10 @@ public interface IConfigurationManager {
 		add("diamond_chestplate");
 		add("diamond_leggings");
 		add("diamond_boots");
-		add("golden_helmet");
-		add("golden_chestplate");
-		add("golden_leggings");
-		add("golden_boots");
+		add("gold_helmet");
+		add("gold_chestplate");
+		add("gold_leggings");
+		add("gold_boots");
 		}};
 
 	List<ISoliniaRace> getRaces();
