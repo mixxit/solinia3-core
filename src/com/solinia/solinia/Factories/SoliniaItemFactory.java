@@ -125,7 +125,7 @@ public class SoliniaItemFactory {
 		item.setCharisma(Utils.RandomBetween(0, 5 + rarityBonus));
 
 		// Extra special stuff
-		int special = Utils.RandomBetween(0, 1);
+		int special = Utils.RandomBetween(0, 7);
 		String specialName = "";
 		switch (special) {
 		case 1:

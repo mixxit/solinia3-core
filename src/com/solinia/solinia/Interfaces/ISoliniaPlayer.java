@@ -108,4 +108,8 @@ public interface ISoliniaPlayer extends Serializable {
 	public void tryIncreaseSkill(String skillname, int xp);
 	
 	public void setSkill(String skillname, int value);
+
+	void reducePlayerMana(int mana);
+
+	void increasePlayerMana(int mana);
 }

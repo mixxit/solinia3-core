@@ -572,4 +572,45 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
 	}
+	
+	public int getMaxMP() {
+		String profession = getClassObj().getName().toUpperCase();
+		double level = Utils.getLevelFromExperience(getExperience());
+
+		int wisintagi = 0;
+		if (Utils.getCasterClass(profession).equals("W"))
+			wisintagi = getWisdom();
+		if (Utils.getCasterClass(profession).equals("I"))
+			wisintagi = getIntelligence();
+		if (Utils.getCasterClass(profession).equals("N"))
+			wisintagi = getAgility();
+
+		double maxmana = ((850 * level) + (85 * wisintagi * level)) / 425;
+		return (int) Math.floor(maxmana);
+	}
+	
+	@Override
+	public void reducePlayerMana(int mana) {
+
+		int currentmana = getMana();
+		if ((currentmana - mana) < 1) {
+			currentmana = 0;
+		} else {
+			currentmana = currentmana - mana;
+		}
+		setMana(currentmana);
+	}
+
+	@Override
+	public void increasePlayerMana(int mana) {
+		int currentmana = getMana();
+		int maxmp = getMaxMP();
+
+		if ((currentmana + mana) > maxmp) {
+			currentmana = maxmp;
+		} else {
+			currentmana = currentmana + mana;
+		}
+		setMana(currentmana);
+	}
 }

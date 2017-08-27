@@ -482,4 +482,28 @@ public class Utils {
 			return total;
 		}
 	}
+
+	public static String getCasterClass(String classname) {
+		switch (classname) {
+		case "CLERIC":
+		case "PALADIN":
+		case "RANGER":
+		case "DRUID":
+		case "SHAMAN":
+		case "HUNTER":
+		case "EXARCH":
+		case "KNIGHT":
+			return "W";
+		case "ARCANIST":
+		case "SHADOWKNIGHT":
+		case "BARD":
+		case "NECROMANCER":
+		case "WIZARD":
+		case "MAGICIAN":
+		case "ENCHANTER":
+			return "I";
+		default:
+			return "N";
+		}
+	}
 }
