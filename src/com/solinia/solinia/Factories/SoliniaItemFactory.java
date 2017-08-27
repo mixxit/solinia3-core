@@ -67,16 +67,16 @@ public class SoliniaItemFactory {
 			int damage = 1;
 
 			// Base Damage
-			if (material.contains("AXE")) {
-				itemTypeName += "Axe";
+			if (material.toUpperCase().contains("AXE")) {
+				itemTypeName = "Axe";
 				damage = 9;
 			}
-			if (material.contains("SWORD")) {
-				itemTypeName += "Sword";
+			if (material.toUpperCase().contains("SWORD")) {
+				itemTypeName = "Sword";
 				damage = 7;
 			}
-			if (material.contains("SPADE")) {
-				itemTypeName += "Staff";
+			if (material.toUpperCase().contains("SPADE")) {
+				itemTypeName = "Staff";
 				damage = 5;
 			}
 
@@ -85,17 +85,17 @@ public class SoliniaItemFactory {
 		}
 
 		if (!weapon) {
-			if (material.contains("HELM")) {
-				itemTypeName += "Helm";
+			if (material.toUpperCase().contains("HELM")) {
+				itemTypeName = "Helm";
 			}
-			if (material.contains("CHEST")) {
-				itemTypeName += "Chestguard";
+			if (material.toUpperCase().contains("CHEST")) {
+				itemTypeName = "Chestguard";
 			}
-			if (material.contains("LEGGINGS")) {
-				itemTypeName += "Greaves";
+			if (material.toUpperCase().contains("LEGGINGS")) {
+				itemTypeName = "Greaves";
 			}
-			if (material.contains("BOOTS")) {
-				itemTypeName += "Boots";
+			if (material.toUpperCase().contains("BOOTS")) {
+				itemTypeName = "Boots";
 			}
 		}
 
