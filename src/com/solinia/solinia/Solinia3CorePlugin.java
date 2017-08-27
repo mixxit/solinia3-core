@@ -127,7 +127,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			commitTimer.runTaskTimer(this, 100L, 5000L);
 			
 			playerRegenTimer = new PlayerRegenTickTimer();
-			commitTimer.runTaskTimer(this, 6*20L, 6*20L);
+			playerRegenTimer.runTaskTimer(this, 6*20L, 6*20L);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
