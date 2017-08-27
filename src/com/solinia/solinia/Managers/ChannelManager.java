@@ -15,6 +15,7 @@ import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.ItemStackUtils;
 
+@SuppressWarnings("unused")
 public class ChannelManager implements IChannelManager {
 
 	@Override

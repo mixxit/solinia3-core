@@ -112,4 +112,6 @@ public interface ISoliniaPlayer extends Serializable {
 	void reducePlayerMana(int mana);
 
 	void increasePlayerMana(int mana);
+
+	public int getMaxMP();
 }

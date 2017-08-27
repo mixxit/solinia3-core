@@ -18,7 +18,7 @@ public class CommandStats implements CommandExecutor {
 
 				player.sendMessage("STR: " + solplayer.getStrength() + " STA: " + solplayer.getStamina() + " AGI: " + solplayer.getAgility() + " DEX: " + solplayer.getDexterity() + " INT: " + solplayer.getIntelligence() + " WIS: " + solplayer.getWisdom() + " CHA: " + solplayer.getCharisma());
 	            player.sendMessage("You have a maximum HP of: " + player.getMaxHealth());
-	            //player.sendMessage("You have a maximum MP of: " + solplayer.getMaxMP());
+	            player.sendMessage("You have a maximum MP of: " + solplayer.getMaxMP());
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
