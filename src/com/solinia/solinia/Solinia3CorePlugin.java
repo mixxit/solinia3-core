@@ -42,6 +42,7 @@ import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
+import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 
 import net.milkbowl.vault.economy.Economy;
@@ -49,6 +50,7 @@ import net.milkbowl.vault.economy.Economy;
 public class Solinia3CorePlugin extends JavaPlugin {
 	
 	private StateCommitTimer commitTimer;
+	private PlayerRegenTickTimer playerRegenTimer;
 	private Essentials essentials;
 	private Economy economy;
 	
@@ -123,6 +125,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			
 			commitTimer = new StateCommitTimer();
 			commitTimer.runTaskTimer(this, 100L, 5000L);
+			
+			playerRegenTimer = new PlayerRegenTickTimer();
+			commitTimer.runTaskTimer(this, 6*20L, 6*20L);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

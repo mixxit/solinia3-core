@@ -18,7 +18,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 
-public class PlayerTickTimer extends BukkitRunnable {
+public class PlayerRegenTickTimer extends BukkitRunnable {
 
 	@Override
 	public void run() {
