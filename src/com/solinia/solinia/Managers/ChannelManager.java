@@ -1,10 +1,16 @@
 package com.solinia.solinia.Managers;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.ItemStackUtils;
@@ -26,11 +32,9 @@ public class ChannelManager implements IChannelManager {
 			{			
 				player.sendMessage(message);
 				if (linkitem)
-					sendLinkMessage(source,player,linkitem);
+					sendLinkMessage(source,player);
 			}
 		}
-		
-		
 		
 		System.out.println(message);
 	}
@@ -48,7 +52,7 @@ public class ChannelManager implements IChannelManager {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			player.sendMessage(message);
 			if (linkitem)
-				sendLinkMessage(source,player,linkitem);
+				sendLinkMessage(source,player);
 		}
 
 		
@@ -56,9 +60,10 @@ public class ChannelManager implements IChannelManager {
 		System.out.println(message);
 	}
 
-	private void sendLinkMessage(ISoliniaPlayer source, Player player, boolean linkitem) {
+	private void sendLinkMessage(ISoliniaPlayer source, Player player) {
+		/*
 		ItemStack item = source.getBukkitPlayer().getInventory().getItemInMainHand();
-		String json = "";
+		String tmpjson = "";
 		
 		if (item != null)
 		{
@@ -66,11 +71,25 @@ public class ChannelManager implements IChannelManager {
 			{
 				if (item.getItemMeta().getDisplayName() != null)
 				{
-					json = "{\"text\":\""+player.getDisplayName() + " item link: [" + item.getItemMeta().getDisplayName()+"]\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""+ItemStackUtils.ItemStackAsJsonString(item)+"\"}}";
+					tmpjson = "{\"text\":\""+player.getDisplayName() + " item link: [" + item.getItemMeta().getDisplayName()+"]\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""+ItemStackUtils.ItemStackAsJsonString(item)+"\"}}";
 				}
 			}
 		}
-		
+
+		if (tmpjson.equals(""))
+			return;
+
+		final String json = tmpjson;
+
+		PacketContainer chat = new PacketContainer(PacketType.Play.Server.CHAT);
+		chat.getChatComponents().write(0, WrappedChatComponent.fromJson(json));
+
+		try {
+			ProtocolLibrary.getProtocolManager().sendServerPacket(player, chat);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		*/
 	}
 
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {

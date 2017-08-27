@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
-import net.amoebaman.util.Reflection;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 
 public class ItemStackUtils {
@@ -55,7 +54,9 @@ public class ItemStackUtils {
 		return false;
 	}
 
-	public static String ItemStackAsJsonString(ItemStack itemStack) {
+	public static String ItemStackAsJsonString(ItemStack itemStack) 
+	{
+		/*
 		try {
 			Object nmsItem = Reflection.getMethod(Reflection.getOBCClass("inventory.CraftItemStack"), "asNMSCopy", ItemStack.class).invoke(null, itemStack);
 			String out = Reflection.getMethod(Reflection.getNMSClass("ItemStack"), "save", Reflection.getNMSClass("NBTTagCompound")).invoke(nmsItem, Reflection.getNMSClass("NBTTagCompound").newInstance()).toString();
@@ -67,5 +68,8 @@ public class ItemStackUtils {
 			e.printStackTrace();
 			return "";
 		}
+		*/
+		// this is bugged
+		return "";
 	}
 }

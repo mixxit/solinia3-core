@@ -38,7 +38,7 @@ public class SoliniaItemFactory {
 		
 		String material = Utils.getRandomItemFromList(materialChoice);
 		
-		ItemStack itemStack = new ItemStack(Material.valueOf(material));
+		ItemStack itemStack = new ItemStack(Material.valueOf(material.toUpperCase()));
 		
 		SoliniaItem item = new SoliniaItem();
 		item.setId(StateManager.getInstance().getConfigurationManager().getNextItemId());
