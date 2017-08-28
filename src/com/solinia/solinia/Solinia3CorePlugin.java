@@ -10,12 +10,17 @@ import com.solinia.solinia.Commands.CommandAddClass;
 import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
+import com.solinia.solinia.Commands.CommandCreateFaction;
 import com.solinia.solinia.Commands.CommandCreateItem;
+import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandEmote;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
+import com.solinia.solinia.Commands.CommandListFactions;
 import com.solinia.solinia.Commands.CommandListItems;
 import com.solinia.solinia.Commands.CommandMana;
+import com.solinia.solinia.Commands.CommandRaceInfo;
+import com.solinia.solinia.Commands.CommandRebuildSpellItems;
 import com.solinia.solinia.Commands.CommandResetPlayer;
 import com.solinia.solinia.Commands.CommandRoll;
 import com.solinia.solinia.Commands.CommandSetClass;
@@ -39,9 +44,17 @@ import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Repositories.JsonClassRepository;
+import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
+import com.solinia.solinia.Repositories.JsonLootDropEntryRepository;
+import com.solinia.solinia.Repositories.JsonLootDropRepository;
+import com.solinia.solinia.Repositories.JsonLootTableEntryRepository;
+import com.solinia.solinia.Repositories.JsonLootTableRepository;
+import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
+import com.solinia.solinia.Repositories.JsonNPCRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
+import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 
@@ -115,9 +128,42 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			itemrepo.setJsonFile(getDataFolder() + "/" + "items.json");
 			itemrepo.reload();
 			
+			JsonSpellRepository spellrepo = new JsonSpellRepository();
+			spellrepo.setJsonFile(getDataFolder() + "/" + "spells.json");
+			spellrepo.reload();
+			
+			JsonFactionRepository factionrepo = new JsonFactionRepository();
+			factionrepo.setJsonFile(getDataFolder() + "/" + "factions.json");
+			factionrepo.reload();
+			
+			JsonNPCRepository npcrepo = new JsonNPCRepository();
+			npcrepo.setJsonFile(getDataFolder() + "/" + "npcs.json");
+			npcrepo.reload();
+			
+			JsonNPCMerchantRepository npcmerchantrepo = new JsonNPCMerchantRepository();
+			npcmerchantrepo.setJsonFile(getDataFolder() + "/" + "npcmerchants.json");
+			npcmerchantrepo.reload();
+			
+			JsonLootTableRepository loottablerepo = new JsonLootTableRepository();
+			loottablerepo.setJsonFile(getDataFolder() + "/" + "loottables.json");
+			loottablerepo.reload();
+
+			JsonLootTableEntryRepository loottableentryrepo = new JsonLootTableEntryRepository();
+			loottableentryrepo.setJsonFile(getDataFolder() + "/" + "loottableentries.json");
+			loottableentryrepo.reload();
+			
+			JsonLootDropRepository lootdroprepo = new JsonLootDropRepository();
+			lootdroprepo.setJsonFile(getDataFolder() + "/" + "lootdrops.json");
+			lootdroprepo.reload();
+			
+			JsonLootDropEntryRepository lootdropentryrepo = new JsonLootDropEntryRepository();
+			lootdropentryrepo.setJsonFile(getDataFolder() + "/" + "lootdropentries.json");
+			lootdropentryrepo.reload();
+						
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager();
-			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo);
+						
+			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,loottableentryrepo,lootdroprepo,lootdropentryrepo);
 			
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -164,6 +210,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listitems").setExecutor(new CommandListItems());
 		this.getCommand("spawnitem").setExecutor(new CommandSpawnItem());
 		this.getCommand("spawnrandomitem").setExecutor(new CommandSpawnRandomItem());
+		this.getCommand("raceinfo").setExecutor(new CommandRaceInfo());
+		this.getCommand("rebuildspellitems").setExecutor(new CommandRebuildSpellItems());
+		this.getCommand("createfaction").setExecutor(new CommandCreateFaction());
+		this.getCommand("createnpc").setExecutor(new CommandCreateNpc());
+		this.getCommand("listfactions").setExecutor(new CommandListFactions());
 	}
 	
 	private void createConfigDir() {

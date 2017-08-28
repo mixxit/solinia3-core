@@ -574,6 +574,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	public int getMaxMP() {
+		if (getClassObj() == null)
+			return 1;
+		
 		String profession = getClassObj().getName().toUpperCase();
 		double level = Utils.getLevelFromExperience(getExperience());
 

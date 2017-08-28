@@ -9,7 +9,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
-import com.solinia.solinia.Managers.StateManager;
 
 public class CommandSpawnRandomItem implements CommandExecutor {
 	@Override

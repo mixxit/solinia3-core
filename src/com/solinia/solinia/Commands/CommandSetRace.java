@@ -23,6 +23,8 @@ public class CommandSetRace implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
 			return false;
 		
+		sender.sendMessage("See /raceinfo for more information");
+		
 		String racelist = "";
         List<ISoliniaRace> races = new ArrayList<ISoliniaRace>();
     	try {

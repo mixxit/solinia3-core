@@ -143,4 +143,8 @@ public interface ISoliniaItem {
 
 	void setPoisonResist(int poisonResist);
 
+	boolean isSpellscroll();
+
+	void setSpellscroll(boolean spellscroll);
+
 }

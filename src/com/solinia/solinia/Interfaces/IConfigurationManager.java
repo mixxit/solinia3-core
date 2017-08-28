@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+
 public interface IConfigurationManager {
 	
 	public List<String> WeaponMaterials = new ArrayList<String>() {{ 
@@ -82,4 +85,52 @@ public interface IConfigurationManager {
 	int getNextItemId();
 
 	void addItem(ISoliniaItem item);
+
+	ISoliniaSpell getSpell(int Id);
+
+	List<ISoliniaSpell> getSpells();
+
+	List<ISoliniaItem> getSpellItem(int Id);
+
+	void updateItem(ISoliniaItem item);
+
+	List<ISoliniaFaction> getFactions();
+
+	List<ISoliniaNPC> getNPCs();
+
+	ISoliniaFaction getFaction(int Id);
+
+	ISoliniaNPC getNPC(int Id);
+
+	void editNPC(int npcid, String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException;
+
+	List<ISoliniaNPCMerchant> getNPCMerchants();
+
+	List<ISoliniaLootTable> getLootTables();
+
+	List<ISoliniaLootTableEntry> getLootTableEntrys();
+
+	List<ISoliniaLootDrop> getLootDrops();
+
+	List<ISoliniaLootDropEntry> getLootDropEntrys();
+
+	ISoliniaNPCMerchant getNPCMerchant(int Id);
+
+	ISoliniaLootTable getLootTable(int Id);
+
+	ISoliniaLootTableEntry getLootTableEntry(int Id);
+
+	ISoliniaLootDrop getLootDrop(int Id);
+
+	ISoliniaLootDropEntry getLootDropEntry(int Id);
+
+	void addNPCMerchant(ISoliniaNPCMerchant merchant);
+
+	void addLootTable(ISoliniaLootTable table);
+
+	void addLootTableEntry(ISoliniaLootTableEntry entry);
+
+	void addLootDrop(ISoliniaLootDrop drop);
+
+	void addLootDropEntry(ISoliniaLootDropEntry entry);
 }

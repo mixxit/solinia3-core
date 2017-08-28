@@ -1,21 +1,11 @@
 package com.solinia.solinia.Managers;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Utils.ItemStackUtils;
 
-@SuppressWarnings("unused")
 public class ChannelManager implements IChannelManager {
 
 	@Override

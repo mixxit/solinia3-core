@@ -1,7 +1,9 @@
 package com.solinia.solinia.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -16,6 +18,7 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SkillReward;
 
@@ -505,5 +508,60 @@ public class Utils {
 		default:
 			return "N";
 		}
+	}
+
+	// returns map of class with level
+	public static Map<String, Integer> getLegacyClassesFromSpellData(ISoliniaSpell spell) {
+		Map<String, Integer> returnClasses = new HashMap<String, Integer>();
+		if (spell.getClasses1() != 254 && spell.getClasses1() != 255)
+			returnClasses.put("WARRIOR", spell.getClasses1());
+
+		if (spell.getClasses2() != 254 && spell.getClasses2() != 255)
+			returnClasses.put("CLERIC", spell.getClasses2());
+
+		if (spell.getClasses3() != 254 && spell.getClasses3() != 255)
+			returnClasses.put("PALADIN", spell.getClasses3());
+
+		if (spell.getClasses4() != 254 && spell.getClasses4() != 255)
+			returnClasses.put("RANGER", spell.getClasses4());
+
+		if (spell.getClasses5() != 254 && spell.getClasses5() != 255)
+			returnClasses.put("SHADOWKNIGHT", spell.getClasses5());
+
+		if (spell.getClasses6() != 254 && spell.getClasses6() != 255)
+			returnClasses.put("DRUID", spell.getClasses6());
+
+		if (spell.getClasses7() != 254 && spell.getClasses7() != 255)
+			returnClasses.put("MONK", spell.getClasses7());
+
+		if (spell.getClasses8() != 254 && spell.getClasses8() != 255)
+			returnClasses.put("BARD", spell.getClasses8());
+
+		if (spell.getClasses9() != 254 && spell.getClasses9() != 255)
+			returnClasses.put("ROGUE", spell.getClasses9());
+
+		if (spell.getClasses10() != 254 && spell.getClasses10() != 255)
+			returnClasses.put("SHAMAN", spell.getClasses10());
+
+		if (spell.getClasses11() != 254 && spell.getClasses11() != 255)
+			returnClasses.put("NECROMANCER", spell.getClasses11());
+
+		if (spell.getClasses12() != 254 && spell.getClasses12() != 255)
+			returnClasses.put("WIZARD", spell.getClasses12());
+
+		if (spell.getClasses13() != 254 && spell.getClasses13() != 255)
+			returnClasses.put("MAGICIAN", spell.getClasses13());
+
+		if (spell.getClasses14() != 254 && spell.getClasses14() != 255)
+			returnClasses.put("ENCHANTER", spell.getClasses14());
+
+		if (spell.getClasses15() != 254 && spell.getClasses15() != 255)
+			returnClasses.put("BEASTLORD", spell.getClasses15());
+
+		if (spell.getClasses16() != 254 && spell.getClasses16() != 255)
+			returnClasses.put("BERSERKER", spell.getClasses16());
+
+		
+		return returnClasses;
 	}
 }

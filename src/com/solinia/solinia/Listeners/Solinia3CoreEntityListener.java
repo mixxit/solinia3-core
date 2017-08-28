@@ -1,6 +1,5 @@
 package com.solinia.solinia.Listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
@@ -21,7 +20,6 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.Utils;
 
-@SuppressWarnings("unused")
 public class Solinia3CoreEntityListener implements Listener {
 	Solinia3CorePlugin plugin;
 	

@@ -44,6 +44,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int coldResist = 0;
 	private int magicResist = 0;
 	private int poisonResist = 0;
+	private boolean spellscroll = false;
 	
 	@Override
 	public ItemStack asItemStack() {
@@ -388,6 +389,16 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setPoisonResist(int poisonResist) {
 		this.poisonResist = poisonResist;
+	}
+
+	@Override
+	public boolean isSpellscroll() {
+		return spellscroll;
+	}
+
+	@Override
+	public void setSpellscroll(boolean spellscroll) {
+		this.spellscroll = spellscroll;
 	}
 
 }

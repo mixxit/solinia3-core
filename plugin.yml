@@ -104,6 +104,26 @@ commands:
     description: Spawns a random item
     usage: /spawnrandomitem
     aliases: []
+  raceinfo:
+    description: Lists race info
+    usage: /raceinfo
+    aliases: []
+  rebuildspellitems:
+    description: Rebuilds spell items
+    usage: /rebuildspellitems
+    aliases: []
+  createnpc:
+    description: Creates a new npc
+    usage: /createnpc factionid level npcname
+    aliases: []
+  createfaction:
+    description: Creates a new faction
+    usage: /createfaction basestandingvalue name
+    aliases: []
+  listfactions:
+    description: Lists factions
+    usage: /listfactions filter
+    aliases: []
 depend:
 softdepend:
 - Vault
