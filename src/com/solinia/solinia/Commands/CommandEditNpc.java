@@ -86,7 +86,6 @@ public class CommandEditNpc implements CommandExecutor {
 			}
 
 			StateManager.getInstance().getConfigurationManager().editNPC(npcid,setting,value);
-			sender.sendMessage("NPC setting updated, please run /soliniareload for the npc changes to activate");
 		} catch (InvalidNpcSettingException ne)
 		{
 			sender.sendMessage("Invalid NPC setting");

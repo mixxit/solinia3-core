@@ -21,6 +21,8 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Models.SoliniaFaction;
+import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonLootDropEntryRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
@@ -412,5 +414,39 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public void editNPC(int npcid, String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException {
 		getNPC(npcid).editSetting(setting, value);
+	}
+
+	@Override
+	public int getNextFactionId() {
+		int max = 0;
+		for(ISoliniaFaction entry : getFactions())
+		{
+			if (entry.getId() > max)
+				max = entry.getId();
+		}
+		
+		return max + 1;
+	}
+
+	@Override
+	public void addFaction(SoliniaFaction faction) {
+		this.factionRepository.add(faction);
+	}
+
+	@Override
+	public int getNextNPCId() {
+		int max = 0;
+		for(ISoliniaNPC entry : getNPCs())
+		{
+			if (entry.getId() > max)
+				max = entry.getId();
+		}
+		
+		return max + 1;
+	}
+
+	@Override
+	public void addNPC(SoliniaNPC npc) {
+		this.npcRepository.add(npc);
 	}
 }

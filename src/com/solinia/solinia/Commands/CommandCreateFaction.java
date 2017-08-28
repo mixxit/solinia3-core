@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaFactionFactory;
 import com.solinia.solinia.Managers.StateManager;
 
@@ -61,7 +62,13 @@ public class CommandCreateFaction implements CommandExecutor {
 		
 		factionname.replace(" ", "_");
 		
-		SoliniaFactionFactory.CreateFaction(factionname, base);
+		try {
+			SoliniaFactionFactory.CreateFaction(factionname, base);
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			sender.sendMessage(e.getMessage());
+		}
 		return true;
 	}
 }

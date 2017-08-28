@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Models.SoliniaFaction;
+import com.solinia.solinia.Models.SoliniaNPC;
 
 public interface IConfigurationManager {
 	
@@ -133,4 +135,12 @@ public interface IConfigurationManager {
 	void addLootDrop(ISoliniaLootDrop drop);
 
 	void addLootDropEntry(ISoliniaLootDropEntry entry);
+
+	int getNextFactionId();
+
+	void addFaction(SoliniaFaction faction);
+
+	int getNextNPCId();
+
+	void addNPC(SoliniaNPC npc);
 }
