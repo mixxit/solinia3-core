@@ -134,6 +134,22 @@ commands:
     description: Edits an npc
     usage: /editnpc npcid setting value
     aliases: []
+  createloottable:
+    description: Creates a new loot table
+    usage: /createloottable name
+    aliases: []
+  createlootdrop:
+    description: Creates a new loot drop table
+    usage: /createlootdrop name
+    aliases: []
+  addlootdropitem:
+    description: Adds an item to a loot drop
+    usage: /addlootdropitem lootdropid itemid count always chance
+    aliases: []
+  addloottablelootdrop:
+    description: Adds a loot drop table to a loot table
+    usage: /addloottablelootdrop loottableid lootdropid
+    aliases: []
 depend:
 softdepend:
 - Vault

@@ -7,11 +7,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.earth2me.essentials.Essentials;
 import com.solinia.solinia.Commands.CommandAddClass;
+import com.solinia.solinia.Commands.CommandAddLootDropItem;
+import com.solinia.solinia.Commands.CommandAddLootTableLootDrop;
 import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandCreateFaction;
 import com.solinia.solinia.Commands.CommandCreateItem;
+import com.solinia.solinia.Commands.CommandCreateLootDrop;
+import com.solinia.solinia.Commands.CommandCreateLootTable;
 import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEmote;
@@ -224,6 +228,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listfactions").setExecutor(new CommandListFactions());
 		this.getCommand("listnpcs").setExecutor(new CommandListNPCs());
 		this.getCommand("editnpc").setExecutor(new CommandEditNpc());
+		this.getCommand("createloottable").setExecutor(new CommandCreateLootTable());
+		this.getCommand("createlootdrop").setExecutor(new CommandCreateLootDrop());
+		this.getCommand("addlootdropitem").setExecutor(new CommandAddLootDropItem());
+		this.getCommand("addloottablelootdrop").setExecutor(new CommandAddLootTableLootDrop());
 	}
 	
 	private void createConfigDir() {
