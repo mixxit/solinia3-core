@@ -10,5 +10,9 @@ public interface ISoliniaLootTableEntry {
 
 	void setLootdropid(int lootdropid);
 
+	void setLoottableid(int loottableid);
+
+	int getLoottableid(int loottableid);
+
 
 }

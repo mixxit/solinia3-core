@@ -22,4 +22,8 @@ public interface ISoliniaLootDropEntry {
 
 	void setChance(int chance);
 
+	int getLootdropid();
+
+	void setLootdropid(int lootdropid);
+
 }

@@ -86,6 +86,7 @@ public class CommandEditNpc implements CommandExecutor {
 			}
 
 			StateManager.getInstance().getConfigurationManager().editNPC(npcid,setting,value);
+			sender.sendMessage("Updating setting on npc");
 		} catch (InvalidNpcSettingException ne)
 		{
 			sender.sendMessage("Invalid NPC setting");

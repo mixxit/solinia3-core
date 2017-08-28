@@ -1,5 +1,9 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,12 +16,18 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
+import org.bukkit.metadata.MetadataValue;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
@@ -25,9 +35,43 @@ import com.solinia.solinia.Utils.Utils;
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
 	private int level = 1;
+	private int npcid;
 
 	public SoliniaLivingEntity(LivingEntity livingentity) {
+		
+		System.out.println("NPC Death Data:");
+		
+		String metaid = "";
+		for(MetadataValue val : livingentity.getMetadata("mobname"))
+		{
+			metaid = val.toString();
+		}
+		
 		this.livingentity = livingentity;
+		
+		if (metaid != null)
+			if(!metaid.equals(""))
+				installNpcByMetaName(metaid);
+	}
+
+	private void installNpcByMetaName(String metaid) {
+		if (!metaid.contains("NPCID_"))
+			return;
+		
+		int npcId = Integer.parseInt(metaid.substring(6));
+		try
+		{
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(npcId);
+			
+			if (npc == null)
+				return;
+			
+			setLevel(npc.getLevel());
+			setNpcid(npc.getId());
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -250,8 +294,77 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void dropLoot() {
 		try {
-			if (getBukkitLivingEntity() instanceof Monster)
-				getBukkitLivingEntity().getWorld().dropItem(this.getBukkitLivingEntity().getLocation(),SoliniaItemFactory.GenerateRandomLoot().asItemStack());
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc.getLoottableid() == 0)
+					return;
+
+				ISoliniaLootTable table = StateManager.getInstance().getConfigurationManager().getLootTable(npc.getLoottableid());
+
+				List<ISoliniaLootDropEntry> absoluteitems = new ArrayList<ISoliniaLootDropEntry>();
+				List<ISoliniaLootDropEntry> rollitems = new ArrayList<ISoliniaLootDropEntry>();
+
+				for (ISoliniaLootTableEntry entry : StateManager.getInstance().getConfigurationManager().getLootTableEntrysByLootTableId(table.getId())) {
+					ISoliniaLootDrop droptable = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
+					for (ISoliniaLootDropEntry dropentry : StateManager.getInstance().getConfigurationManager().getLootDropEntrysByLootDropId(droptable.getId())) {
+						if (dropentry.isAlways() == true) {
+							absoluteitems.add(dropentry);
+							continue;
+						}
+
+						rollitems.add(dropentry);
+					}
+				}
+
+				// Now we have prepared our loot list items let's choose which will
+				// drop
+
+				System.out
+						.println("Prepared a Loot List of ABS: " + absoluteitems.size() + " and ROLL: " + rollitems.size());
+
+				if (absoluteitems.size() == 0 && rollitems.size() == 0)
+					return;
+
+				int dropcount = StateManager.getInstance().getWorldPerkDropCountModifier();
+
+				Random r = new Random();
+				int randomInt = r.nextInt(100) + 1;
+
+				if (rollitems.size() > 0) {
+					// Based on the chance attempt to drop this item
+					for (int i = 0; i < dropcount; i++) {
+						ISoliniaLootDropEntry droptableentry = rollitems.get(new Random().nextInt(rollitems.size()));
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(droptableentry.getItemid());
+
+						randomInt = r.nextInt(100) + 1;
+						System.out.println("Rolled a " + randomInt + " against a max of " + droptableentry.getChance()
+								+ " for item: " + item.getDisplayname());
+						if (randomInt <= droptableentry.getChance()) {
+							getBukkitLivingEntity().getLocation().getWorld().dropItem(getBukkitLivingEntity().getLocation(),
+									item.asItemStack());
+						}
+					}
+				}
+
+				// Always drop these items
+				if (absoluteitems.size() > 0) {
+					for (int i = 0; i < absoluteitems.size(); i++) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(absoluteitems.get(i).getItemid());
+						for (int c = 0; c < absoluteitems.get(i).getCount(); c++) {
+							getBukkitLivingEntity().getLocation().getWorld().dropItem(getBukkitLivingEntity().getLocation(),
+									item.asItemStack());
+						}
+					}
+				}
+			} else {
+				int itemDropMinimum = 95;
+				if (Utils.RandomChance(itemDropMinimum))
+				{
+					if (getBukkitLivingEntity() instanceof Monster)
+						getBukkitLivingEntity().getWorld().dropItem(this.getBukkitLivingEntity().getLocation(),SoliniaItemFactory.GenerateRandomLoot().asItemStack());
+				}
+			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -259,5 +372,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public int getNpcid() {
+		return npcid;
+	}
+
+	@Override
+	public void setNpcid(int npcid) {
+		this.npcid = npcid;
 	}
 }

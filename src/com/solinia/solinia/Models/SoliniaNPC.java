@@ -327,11 +327,11 @@ public class SoliniaNPC implements ISoliniaNPC {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
 					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName() + ")");
 			ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid());
-			for (ISoliniaLootTableEntry le : loottable.getEntries()) {
+			for (ISoliniaLootTableEntry le : StateManager.getInstance().getConfigurationManager().getLootTableEntrysByLootTableId(loottable.getId())) {
 				ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager().getLootDrop(le.getLootdropid());
 				sender.sendMessage(
 						"- " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
-				for (ISoliniaLootDropEntry lde : ld.getEntries()) {
+				for (ISoliniaLootDropEntry lde : StateManager.getInstance().getConfigurationManager().getLootDropEntrysByLootDropId(ld.getId())) {
 					ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
 					sender.sendMessage("  - " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - "
 							+ lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());
@@ -399,95 +399,79 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 			if (value.length() > 15)
 				throw new InvalidNpcSettingException("Name is longer than 15 characters");
-			name = value;
+			setName(value);
 			break;
 		case "mctype":
-			mctype = value;
+			setMctype(value);
 			break;
 		case "level":
-			level = Integer.parseInt(value);
+			setLevel(Integer.parseInt(value));
 			break;
 		case "factionid":
 			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(Integer.parseInt(value));
 			if (faction == null)
 				throw new InvalidNpcSettingException("Faction ID does not exist");
-			factionid = Integer.parseInt(value);
+			setFactionid(Integer.parseInt(value));
 			break;
 		case "usedisguise":
-			usedisguise = Boolean.parseBoolean(value);
+			setUsedisguise(Boolean.parseBoolean(value));
 			break;
 		case "disguisetype":
-			disguisetype = value;
+			setDisguisetype(value);
 			break;
 		case "headitem":
-			headitem = value;
+			setHeaditem(value);
 			break;
 		case "chestitem":
-			chestitem = value;
+			setChestitem(value);
 			break;
 		case "legsitem":
-			legsitem = value;
+			setLegsitem(value);
 			break;
 		case "feetitem":
-			feetitem = value;
+			setFeetitem(value);
 			break;
 		case "handitem":
-			handitem = value;
+			setHanditem(value);
 			break;
 		case "offhanditem":
-			offhanditem = value;
+			setOffhanditem(value);
 			break;
 		case "boss":
-			boss = Boolean.parseBoolean(value);
+			setBoss(Boolean.parseBoolean(value));
 			break;
 		case "burning":
-			burning = Boolean.parseBoolean(value);
+			setBurning(Boolean.parseBoolean(value));
 			break;
 		case "invisible":
-			invisible = Boolean.parseBoolean(value);
+			setInvisible(Boolean.parseBoolean(value));
 			break;
 		case "customhead":
-			customhead = Boolean.parseBoolean(value);
+			setCustomhead(Boolean.parseBoolean(value));
 			break;
 		case "customheaddata":
-			customheaddata = value;
+			setCustomheaddata(value);
 			break;
 		case "merchantid":
 			if (StateManager.getInstance().getConfigurationManager().getNPCMerchant(Integer.parseInt(value)) == null)
 				throw new InvalidNpcSettingException("MerchantID does not exist");
-			merchantid = Integer.parseInt(value);
+			setMerchantid(Integer.parseInt(value));
 			break;
 		case "upsidedown":
-			upsidedown = Boolean.parseBoolean(value);
+			setUpsidedown(Boolean.parseBoolean(value));
 			break;
 		case "loottableid":
-			loottableid = Integer.parseInt(value);
+			setLoottableid(Integer.parseInt(value));
 			break;
 		case "raceid":
-			raceid = Integer.parseInt(value);
+			setRaceid(Integer.parseInt(value));
 			break;
 		case "classid":
-			classid = Integer.parseInt(value);
+			setClassid(Integer.parseInt(value));
 			break;
 		default:
 			throw new InvalidNpcSettingException(
 					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid");
 		}
-
-		updateNPC(name, mctype, level, factionid, usedisguise, disguisetype, headitem, chestitem, legsitem,
-				feetitem, handitem, offhanditem, boss, burning, invisible, customhead, customheaddata, merchantid,
-				upsidedown, loottableid, raceid, classid);
-
 	}
-
-	@Override
-	public void updateNPC(String name, String mctype, int level, int factionid, boolean usedisguise,
-			String disguisetype, String headitem, String chestitem, String legsitem, String feetitem,
-			String handitem, String offhanditem, boolean boss, boolean burning, boolean invisible,
-			boolean customhead, String customheaddata, int merchantid, boolean upsidedown, int loottableid,
-			int raceid, int classid) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

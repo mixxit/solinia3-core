@@ -9,6 +9,7 @@ public class SoliniaLootDropEntry implements ISoliniaLootDropEntry {
 	private boolean always;
 	private int count;
 	private int chance;
+	private int lootdropid;
 	
 	@Override
 	public int getId() {
@@ -58,5 +59,15 @@ public class SoliniaLootDropEntry implements ISoliniaLootDropEntry {
 	@Override
 	public void setChance(int chance) {
 		this.chance = chance;
+	}
+
+	@Override
+	public int getLootdropid() {
+		return this.lootdropid;
+	}
+	
+	@Override
+	public void setLootdropid(int lootdropid) {
+		this.lootdropid = lootdropid;
 	}
 }

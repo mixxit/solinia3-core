@@ -22,16 +22,6 @@ public class SoliniaLootTable implements ISoliniaLootTable {
 	}
 
 	@Override
-	public List<ISoliniaLootTableEntry> getEntries() {
-		return entries;
-	}
-
-	@Override
-	public void setEntries(List<ISoliniaLootTableEntry> entries) {
-		this.entries = entries;
-	}
-
-	@Override
 	public String getName() {
 		return name;
 	}

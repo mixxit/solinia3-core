@@ -8,7 +8,6 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 
 public class SoliniaLootDrop implements ISoliniaLootDrop {
 	private int id;
-	private List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();
 	private String name = null;
 	
 	@Override
@@ -19,16 +18,6 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 	@Override
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	@Override
-	public List<ISoliniaLootDropEntry> getEntries() {
-		return entries;
-	}
-	
-	@Override
-	public void setEntries(List<ISoliniaLootDropEntry> entries) {
-		this.entries = entries;
 	}
 
 	@Override

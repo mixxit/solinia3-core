@@ -130,7 +130,12 @@ commands:
     description: Lists npcs
     usage: /listnpcs filter
     aliases: []
+  editnpc:
+    description: Edits an npc
+    usage: /editnpc npcid setting value
+    aliases: []
 depend:
 softdepend:
 - Vault
 - Essentials
+- MythicMobs

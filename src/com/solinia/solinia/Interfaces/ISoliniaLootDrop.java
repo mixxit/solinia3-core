@@ -8,10 +8,6 @@ public interface ISoliniaLootDrop {
 
 	void setId(int id);
 
-	List<ISoliniaLootDropEntry> getEntries();
-
-	void setEntries(List<ISoliniaLootDropEntry> entries);
-
 	String getName();
 
 	void setName(String name);

@@ -107,9 +107,4 @@ public interface ISoliniaNPC {
 
 	int getMaxHP();
 
-	void updateNPC(String name, String mctype, int level, int factionid, boolean usedisguise, String disguisetype,
-			String headitem, String chestitem, String legsitem, String feetitem, String handitem, String offhanditem,
-			boolean boss, boolean burning, boolean invisible, boolean customhead, String customheaddata, int merchantid,
-			boolean upsidedown, int loottableid, int raceid, int classid);
-
 }

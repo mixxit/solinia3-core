@@ -143,4 +143,21 @@ public interface IConfigurationManager {
 	int getNextNPCId();
 
 	void addNPC(SoliniaNPC npc);
+
+	ISoliniaLootDrop getLootDrop(String lootdropname);
+
+	ISoliniaLootTable getLootTable(String loottablename);
+
+	int getNextLootDropId();
+
+	int getNextLootTableId();
+
+	int getNextLootTableEntryId();
+
+	int getNextLootDropEntryId();
+
+	List<ISoliniaLootTableEntry> getLootTableEntrysByLootTableId(int id);
+
+	List<ISoliniaLootDropEntry> getLootDropEntrysByLootDropId(int id);
+
 }

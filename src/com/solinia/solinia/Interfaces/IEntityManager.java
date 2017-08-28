@@ -4,4 +4,6 @@ import org.bukkit.entity.LivingEntity;
 
 public interface IEntityManager {
 	ISoliniaLivingEntity getLivingEntity(LivingEntity livingentity);
+
+	INPCEntityProvider getNPCEntityProvider();
 }

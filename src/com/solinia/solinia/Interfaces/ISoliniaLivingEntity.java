@@ -16,4 +16,8 @@ public interface ISoliniaLivingEntity
 	void setLevel(int level);
 
 	public void dropLoot();
+
+	int getNpcid();
+
+	void setNpcid(int npcid);
 }

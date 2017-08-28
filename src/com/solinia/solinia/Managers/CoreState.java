@@ -127,4 +127,9 @@ public class CoreState {
 		// TODO Auto-generated method stub
 		return this.channelManager;
 	}
+
+	public int getWorldPerkDropCountModifier() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
 }

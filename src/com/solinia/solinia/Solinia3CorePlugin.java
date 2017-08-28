@@ -13,6 +13,7 @@ import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandCreateFaction;
 import com.solinia.solinia.Commands.CommandCreateItem;
 import com.solinia.solinia.Commands.CommandCreateNpc;
+import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEmote;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
@@ -37,6 +38,7 @@ import com.solinia.solinia.Commands.CommandTarot;
 import com.solinia.solinia.Commands.CommandWho;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
+import com.solinia.solinia.Listeners.Solinia3CoreNPCUpdatedListener;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerChatListener;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
 import com.solinia.solinia.Managers.ChannelManager;
@@ -44,6 +46,7 @@ import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
@@ -112,6 +115,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	
 	private void initialise()
 	{
+		// TODO Lets load all this from config settings at some point
+		
 		try {
 			JsonPlayerRepository repo = new JsonPlayerRepository();
 			repo.setJsonFile(getDataFolder() + "/" + "players.json");
@@ -160,10 +165,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonLootDropEntryRepository lootdropentryrepo = new JsonLootDropEntryRepository();
 			lootdropentryrepo.setJsonFile(getDataFolder() + "/" + "lootdropentries.json");
 			lootdropentryrepo.reload();
-						
+			
 			PlayerManager playerManager = new PlayerManager(repo);
-			EntityManager entityManager = new EntityManager();
-						
+			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
+			
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,loottableentryrepo,lootdroprepo,lootdropentryrepo);
 			
 			ChannelManager channelManager = new ChannelManager();
@@ -187,6 +192,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreEntityListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerChatListener(this), this);
+		getServer().getPluginManager().registerEvents(new Solinia3CoreNPCUpdatedListener(this), this);
 		
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());
@@ -217,6 +223,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createnpc").setExecutor(new CommandCreateNpc());
 		this.getCommand("listfactions").setExecutor(new CommandListFactions());
 		this.getCommand("listnpcs").setExecutor(new CommandListNPCs());
+		this.getCommand("editnpc").setExecutor(new CommandEditNpc());
 	}
 	
 	private void createConfigDir() {
