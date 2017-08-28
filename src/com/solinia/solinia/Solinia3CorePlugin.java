@@ -18,6 +18,7 @@ import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandListFactions;
 import com.solinia.solinia.Commands.CommandListItems;
+import com.solinia.solinia.Commands.CommandListNPCs;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandRaceInfo;
 import com.solinia.solinia.Commands.CommandRebuildSpellItems;
@@ -215,6 +216,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createfaction").setExecutor(new CommandCreateFaction());
 		this.getCommand("createnpc").setExecutor(new CommandCreateNpc());
 		this.getCommand("listfactions").setExecutor(new CommandListFactions());
+		this.getCommand("listnpcs").setExecutor(new CommandListNPCs());
 	}
 	
 	private void createConfigDir() {

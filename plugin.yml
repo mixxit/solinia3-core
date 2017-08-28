@@ -115,14 +115,20 @@ commands:
   createnpc:
     description: Creates a new npc
     usage: /createnpc factionid level npcname
-    aliases: []
+    aliases:
+    - addnpc
   createfaction:
     description: Creates a new faction
     usage: /createfaction basestandingvalue name
-    aliases: []
+    aliases:
+    - addfaction
   listfactions:
     description: Lists factions
     usage: /listfactions filter
+    aliases: []
+  listnpcs:
+    description: Lists npcs
+    usage: /listnpcs filter
     aliases: []
 depend:
 softdepend:
