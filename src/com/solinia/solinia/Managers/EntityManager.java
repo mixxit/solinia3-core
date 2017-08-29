@@ -6,7 +6,6 @@ import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
-import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;

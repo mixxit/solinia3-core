@@ -12,5 +12,7 @@ public interface ISoliniaLootTable {
 
 	void setName(String name);
 
-
+	List<ISoliniaLootTableEntry> getEntries();
+	
+	void setEntries(List<ISoliniaLootTableEntry> entries);
 }

@@ -305,9 +305,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				List<ISoliniaLootDropEntry> absoluteitems = new ArrayList<ISoliniaLootDropEntry>();
 				List<ISoliniaLootDropEntry> rollitems = new ArrayList<ISoliniaLootDropEntry>();
 
-				for (ISoliniaLootTableEntry entry : StateManager.getInstance().getConfigurationManager().getLootTableEntrysByLootTableId(table.getId())) {
+				for (ISoliniaLootTableEntry entry : StateManager.getInstance().getConfigurationManager().getLootTable(table.getId()).getEntries()) {
 					ISoliniaLootDrop droptable = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
-					for (ISoliniaLootDropEntry dropentry : StateManager.getInstance().getConfigurationManager().getLootDropEntrysByLootDropId(droptable.getId())) {
+					for (ISoliniaLootDropEntry dropentry : StateManager.getInstance().getConfigurationManager().getLootDrop(droptable.getId()).getEntries()) {
 						if (dropentry.isAlways() == true) {
 							absoluteitems.add(dropentry);
 							continue;

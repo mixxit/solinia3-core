@@ -12,6 +12,8 @@ public interface ISoliniaLootDrop {
 
 	void setName(String name);
 
+	List<ISoliniaLootDropEntry> getEntries();
 	
+	void setEntries(List<ISoliniaLootDropEntry> entries);
 
 }

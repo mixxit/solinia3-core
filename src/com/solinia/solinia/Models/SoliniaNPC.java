@@ -327,11 +327,11 @@ public class SoliniaNPC implements ISoliniaNPC {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
 					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName() + ")");
 			ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid());
-			for (ISoliniaLootTableEntry le : StateManager.getInstance().getConfigurationManager().getLootTableEntrysByLootTableId(loottable.getId())) {
+			for (ISoliniaLootTableEntry le : StateManager.getInstance().getConfigurationManager().getLootTable(loottable.getId()).getEntries()) {
 				ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager().getLootDrop(le.getLootdropid());
 				sender.sendMessage(
 						"- " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
-				for (ISoliniaLootDropEntry lde : StateManager.getInstance().getConfigurationManager().getLootDropEntrysByLootDropId(ld.getId())) {
+				for (ISoliniaLootDropEntry lde : StateManager.getInstance().getConfigurationManager().getLootDrop(ld.getId()).getEntries()) {
 					ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
 					sender.sendMessage("  - " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - "
 							+ lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());

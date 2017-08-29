@@ -110,31 +110,19 @@ public interface IConfigurationManager {
 
 	List<ISoliniaLootTable> getLootTables();
 
-	List<ISoliniaLootTableEntry> getLootTableEntrys();
-
 	List<ISoliniaLootDrop> getLootDrops();
-
-	List<ISoliniaLootDropEntry> getLootDropEntrys();
 
 	ISoliniaNPCMerchant getNPCMerchant(int Id);
 
 	ISoliniaLootTable getLootTable(int Id);
 
-	ISoliniaLootTableEntry getLootTableEntry(int Id);
-
 	ISoliniaLootDrop getLootDrop(int Id);
-
-	ISoliniaLootDropEntry getLootDropEntry(int Id);
 
 	void addNPCMerchant(ISoliniaNPCMerchant merchant);
 
 	void addLootTable(ISoliniaLootTable table);
 
-	void addLootTableEntry(ISoliniaLootTableEntry entry);
-
 	void addLootDrop(ISoliniaLootDrop drop);
-
-	void addLootDropEntry(ISoliniaLootDropEntry entry);
 
 	int getNextFactionId();
 
@@ -151,13 +139,4 @@ public interface IConfigurationManager {
 	int getNextLootDropId();
 
 	int getNextLootTableId();
-
-	int getNextLootTableEntryId();
-
-	int getNextLootDropEntryId();
-
-	List<ISoliniaLootTableEntry> getLootTableEntrysByLootTableId(int id);
-
-	List<ISoliniaLootDropEntry> getLootDropEntrysByLootDropId(int id);
-
 }

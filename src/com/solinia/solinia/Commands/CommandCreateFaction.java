@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaFactionFactory;
-import com.solinia.solinia.Managers.StateManager;
 
 public class CommandCreateFaction implements CommandExecutor {
 	@Override

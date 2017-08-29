@@ -2,7 +2,6 @@ package com.solinia.solinia.Factories;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
 
 public class SoliniaNPCFactory {

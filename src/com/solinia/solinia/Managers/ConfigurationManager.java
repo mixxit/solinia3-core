@@ -7,9 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
-import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
@@ -28,9 +26,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
-import com.solinia.solinia.Repositories.JsonLootDropEntryRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
-import com.solinia.solinia.Repositories.JsonLootTableEntryRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
@@ -45,16 +41,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaNPC> npcRepository;
 	private IRepository<ISoliniaNPCMerchant> npcmerchantRepository;
 	private IRepository<ISoliniaLootTable> loottableRepository;
-	private IRepository<ISoliniaLootTableEntry> loottableentryRepository;
 	private IRepository<ISoliniaLootDrop> lootdropRepository;
-	private IRepository<ISoliniaLootDropEntry> lootdropentryRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootTableEntryRepository loottableentryContext, JsonLootDropRepository lootdropContext,
-			JsonLootDropEntryRepository lootdropentryContext) {
+			JsonLootDropRepository lootdropContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -63,9 +56,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.npcRepository = npcContext;
 		this.npcmerchantRepository = npcmerchantContext;
 		this.loottableRepository = loottableContext;
-		this.loottableentryRepository = loottableentryContext;
 		this.lootdropRepository = lootdropContext;
-		this.lootdropentryRepository = lootdropentryContext;
 	}
 
 	@Override
@@ -81,21 +72,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public List<ISoliniaLootTableEntry> getLootTableEntrys() {
-		// TODO Auto-generated method stub
-		return loottableentryRepository.query(q -> q.getId() > 0);
-	}
-
-	@Override
 	public List<ISoliniaLootDrop> getLootDrops() {
 		// TODO Auto-generated method stub
 		return lootdropRepository.query(q -> q.getId() > 0);
-	}
-
-	@Override
-	public List<ISoliniaLootDropEntry> getLootDropEntrys() {
-		// TODO Auto-generated method stub
-		return lootdropentryRepository.query(q -> q.getId() > 0);
 	}
 
 	@Override
@@ -169,29 +148,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public ISoliniaLootTableEntry getLootTableEntry(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaLootTableEntry> list = loottableentryRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
-	}
-
-	@Override
 	public ISoliniaLootDrop getLootDrop(int Id) {
 		// TODO Auto-generated method stub
 		List<ISoliniaLootDrop> list = lootdropRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
-	}
-
-	@Override
-	public ISoliniaLootDropEntry getLootDropEntry(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaLootDropEntry> list = lootdropentryRepository.query(q -> q.getId() == Id);
 		if (list.size() > 0)
 			return list.get(0);
 
@@ -280,9 +239,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.npcRepository.commit();
 		this.npcmerchantRepository.commit();
 		this.loottableRepository.commit();
-		this.loottableentryRepository.commit();
 		this.lootdropRepository.commit();
-		this.lootdropentryRepository.commit();
 	}
 
 	@Override
@@ -298,20 +255,8 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public void addLootTableEntry(ISoliniaLootTableEntry entry) {
-		this.loottableentryRepository.add(entry);
-
-	}
-
-	@Override
 	public void addLootDrop(ISoliniaLootDrop drop) {
 		this.lootdropRepository.add(drop);
-
-	}
-
-	@Override
-	public void addLootDropEntry(ISoliniaLootDropEntry entry) {
-		this.lootdropentryRepository.add(entry);
 
 	}
 
@@ -500,39 +445,5 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 
 		return max + 1;
-	}
-
-	@Override
-	public int getNextLootTableEntryId() {
-		int max = 0;
-		for (ISoliniaLootTableEntry entry : getLootTableEntrys()) {
-			if (entry.getId() > max)
-				max = entry.getId();
-		}
-
-		return max + 1;
-	}
-
-	@Override
-	public int getNextLootDropEntryId() {
-		int max = 0;
-		for (ISoliniaLootDropEntry entry : getLootDropEntrys()) {
-			if (entry.getId() > max)
-				max = entry.getId();
-		}
-
-		return max + 1;
-	}
-
-	@Override
-	public List<ISoliniaLootTableEntry> getLootTableEntrysByLootTableId(int id) {
-		// TODO Move this to storage inside the loottable repo instead of its own repo
-		return this.loottableentryRepository.query(q -> q.getId() == id);
-	}
-
-	@Override
-	public List<ISoliniaLootDropEntry> getLootDropEntrysByLootDropId(int id) {
-		// TODO Move this to storage inside the lootdrop repo instead of its own repo
-		return lootdropentryRepository.query(q -> q.getId() == id);
 	}
 }

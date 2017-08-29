@@ -54,9 +54,7 @@ import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
-import com.solinia.solinia.Repositories.JsonLootDropEntryRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
-import com.solinia.solinia.Repositories.JsonLootTableEntryRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
@@ -158,22 +156,14 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			loottablerepo.setJsonFile(getDataFolder() + "/" + "loottables.json");
 			loottablerepo.reload();
 
-			JsonLootTableEntryRepository loottableentryrepo = new JsonLootTableEntryRepository();
-			loottableentryrepo.setJsonFile(getDataFolder() + "/" + "loottableentries.json");
-			loottableentryrepo.reload();
-			
 			JsonLootDropRepository lootdroprepo = new JsonLootDropRepository();
 			lootdroprepo.setJsonFile(getDataFolder() + "/" + "lootdrops.json");
 			lootdroprepo.reload();
 			
-			JsonLootDropEntryRepository lootdropentryrepo = new JsonLootDropEntryRepository();
-			lootdropentryrepo.setJsonFile(getDataFolder() + "/" + "lootdropentries.json");
-			lootdropentryrepo.reload();
-			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 			
-			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,loottableentryrepo,lootdroprepo,lootdropentryrepo);
+			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,lootdroprepo);
 			
 			ChannelManager channelManager = new ChannelManager();
 			
