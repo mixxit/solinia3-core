@@ -14,10 +14,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.solinia.solinia.Factories.ISoliniaLootTableEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Models.SoliniaLootTable;
+import com.solinia.solinia.Models.SoliniaLootTableEntry;
 
 public class JsonLootTableRepository implements IRepository<ISoliniaLootTable> {
 
@@ -65,7 +68,9 @@ public class JsonLootTableRepository implements IRepository<ISoliniaLootTable> {
 		List<ISoliniaLootTable> file = new ArrayList<ISoliniaLootTable>();
 		
 		try {
-			Gson gson = new Gson();
+			GsonBuilder gsonbuilder = new GsonBuilder();
+			gsonbuilder.registerTypeAdapterFactory(new ISoliniaLootTableEntryTypeAdapterFactory(SoliniaLootTableEntry.class));
+			Gson gson = gsonbuilder.create();
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 			file = gson.fromJson(br, new TypeToken<List<SoliniaLootTable>>(){}.getType());
 		} catch (FileNotFoundException e) {

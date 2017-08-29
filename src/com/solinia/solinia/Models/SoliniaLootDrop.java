@@ -3,6 +3,7 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonElement;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 
@@ -11,6 +12,12 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 	private String name;
 	private List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();	
 	
+	public SoliniaLootDrop(JsonElement json) {
+	}
+
+	public SoliniaLootDrop() {
+	}
+
 	@Override
 	public int getId() {
 		return id;

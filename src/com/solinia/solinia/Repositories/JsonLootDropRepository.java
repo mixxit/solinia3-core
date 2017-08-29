@@ -14,16 +14,19 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.solinia.solinia.Factories.ISoliniaLootDropEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Models.SoliniaLootDrop;
+import com.solinia.solinia.Models.SoliniaLootDropEntry;
 
 public class JsonLootDropRepository implements IRepository<ISoliniaLootDrop> {
 
 	private String filePath;
 	private ConcurrentHashMap<Integer, ISoliniaLootDrop> lootdrops = new ConcurrentHashMap<Integer, ISoliniaLootDrop>();
-
+	
 	@Override
 	public void add(ISoliniaLootDrop item) {
 		this.lootdrops.put(item.getId(), item);
@@ -65,7 +68,9 @@ public class JsonLootDropRepository implements IRepository<ISoliniaLootDrop> {
 		List<ISoliniaLootDrop> file = new ArrayList<ISoliniaLootDrop>();
 		
 		try {
-			Gson gson = new Gson();
+			GsonBuilder gsonbuilder = new GsonBuilder();
+			gsonbuilder.registerTypeAdapterFactory(new ISoliniaLootDropEntryTypeAdapterFactory(SoliniaLootDropEntry.class));
+			Gson gson = gsonbuilder.create();
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 			file = gson.fromJson(br, new TypeToken<List<SoliniaLootDrop>>(){}.getType());
 		} catch (FileNotFoundException e) {
