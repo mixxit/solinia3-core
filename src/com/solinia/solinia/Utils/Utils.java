@@ -510,6 +510,7 @@ public class Utils {
 		}
 	}
 
+	/*
 	// returns map of class with level
 	public static Map<String, Integer> getLegacyClassesFromSpellData(ISoliniaSpell spell) {
 		Map<String, Integer> returnClasses = new HashMap<String, Integer>();
@@ -564,4 +565,5 @@ public class Utils {
 		
 		return returnClasses;
 	}
+	*/
 }

@@ -1,5 +1,9 @@
 package com.solinia.solinia.Interfaces;
 
+import java.util.List;
+
+import com.solinia.solinia.Models.SoliniaSpellClass;
+
 public interface ISoliniaSpell {
 
 	Integer getId();
@@ -949,5 +953,9 @@ public interface ISoliniaSpell {
 	Integer getField236();
 
 	void setField236(Integer field236);
+
+	List<SoliniaSpellClass> getAllowedClasses();
+
+	void setAllowedClasses(List<SoliniaSpellClass> allowedClasses);
 
 }

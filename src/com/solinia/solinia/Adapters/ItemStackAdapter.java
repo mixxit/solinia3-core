@@ -24,6 +24,7 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -285,20 +286,20 @@ public class ItemStackAdapter {
 			loreTxt.add(ChatColor.WHITE + "Range: " + ChatColor.YELLOW+spell.getRange() + ChatColor.RESET);
 			
 			String classesBuilder = "";
-			Map<String, Integer> allowedSpellClasses = Utils.getLegacyClassesFromSpellData(spell);
+			List<SoliniaSpellClass> allowedSpellClasses = spell.getAllowedClasses();
 			int rowcount = 0;
-			for(ISoliniaClass classinstance : StateManager.getInstance().getConfigurationManager().getClasses())
+			for (SoliniaSpellClass spellclass : allowedSpellClasses)
 			{
-				if (allowedSpellClasses.get(classinstance.getName().toUpperCase()) != null)
+				if (StateManager.getInstance().getConfigurationManager().getClassObj(spellclass.getClassname().toUpperCase()) == null)
+					continue;
+				
+				classesBuilder += ChatColor.WHITE + spellclass.getClassname() + " (" + ChatColor.YELLOW + spellclass.getMinlevel() + ChatColor.WHITE + ") " + ChatColor.RESET;
+				rowcount++;
+				if (rowcount > 2)
 				{
-					classesBuilder += ChatColor.WHITE + classinstance.getName() + " (" + ChatColor.YELLOW + allowedSpellClasses.get(classinstance.getName().toUpperCase()) + ChatColor.WHITE + ") " + ChatColor.RESET;
-					rowcount++;
-					if (rowcount > 2)
-					{
-						loreTxt.add(classesBuilder);
-						classesBuilder = "";
-						
-					}
+					loreTxt.add(classesBuilder);
+					classesBuilder = "";
+					
 				}
 			}
 			

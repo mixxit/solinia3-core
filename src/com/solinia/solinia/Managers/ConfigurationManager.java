@@ -240,6 +240,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.npcmerchantRepository.commit();
 		this.loottableRepository.commit();
 		this.lootdropRepository.commit();
+		this.spellRepository.commit();
 	}
 
 	@Override

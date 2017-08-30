@@ -1,10 +1,14 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 
 public class SoliniaSpell implements ISoliniaSpell {
+	private List<SoliniaSpellClass> allowedClasses = new ArrayList<SoliniaSpellClass>();
 
 	@SerializedName("id")
 	@Expose
@@ -2614,4 +2618,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 		this.field236 = field236;
 	}
 
+	@Override
+	public List<SoliniaSpellClass> getAllowedClasses() {
+		return allowedClasses;
+	}
+
+	@Override
+	public void setAllowedClasses(List<SoliniaSpellClass> allowedClasses) {
+		this.allowedClasses = allowedClasses;
+	}
 }
