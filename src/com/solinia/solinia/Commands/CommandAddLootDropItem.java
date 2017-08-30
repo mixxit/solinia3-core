@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaLootFactory;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Managers.StateManager;
 
 public class CommandAddLootDropItem implements CommandExecutor {
@@ -54,6 +55,15 @@ public class CommandAddLootDropItem implements CommandExecutor {
 			{
 				sender.sendMessage("Item does not exist");
 				return true;
+			}
+			
+			for(ISoliniaLootDropEntry lde : StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid).getEntries())
+			{
+				if (lde.getItemid() == itemid)
+				{
+					sender.sendMessage("Item already exists in lootdrop definition");
+					return true;
+				}
 			}
 			
 			SoliniaLootFactory.CreateLootDropItem(lootdropid, itemid, count, always, chance);

@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
 
@@ -139,4 +140,6 @@ public interface IConfigurationManager {
 	int getNextLootDropId();
 
 	int getNextLootTableId();
+
+	void editSpell(int spellid, String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
 }

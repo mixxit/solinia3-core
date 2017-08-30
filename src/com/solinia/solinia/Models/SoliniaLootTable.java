@@ -3,7 +3,6 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 

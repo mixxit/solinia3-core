@@ -18,12 +18,14 @@ import com.solinia.solinia.Commands.CommandCreateLootDrop;
 import com.solinia.solinia.Commands.CommandCreateLootTable;
 import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandEditNpc;
+import com.solinia.solinia.Commands.CommandEditSpell;
 import com.solinia.solinia.Commands.CommandEmote;
-import com.solinia.solinia.Commands.CommandFixSpells;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandListFactions;
 import com.solinia.solinia.Commands.CommandListItems;
+import com.solinia.solinia.Commands.CommandListLootDrops;
+import com.solinia.solinia.Commands.CommandListLootTables;
 import com.solinia.solinia.Commands.CommandListNPCs;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandRaceInfo;
@@ -223,7 +225,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createlootdrop").setExecutor(new CommandCreateLootDrop());
 		this.getCommand("addlootdropitem").setExecutor(new CommandAddLootDropItem());
 		this.getCommand("addloottablelootdrop").setExecutor(new CommandAddLootTableLootDrop());
-		this.getCommand("fixspells").setExecutor(new CommandFixSpells());
+		this.getCommand("editspell").setExecutor(new CommandEditSpell());
+		this.getCommand("listlootdrops").setExecutor(new CommandListLootDrops());
+		this.getCommand("listloottables").setExecutor(new CommandListLootTables());
 	}
 	
 	private void createConfigDir() {

@@ -2,6 +2,10 @@ package com.solinia.solinia.Interfaces;
 
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 
 public interface ISoliniaSpell {
@@ -957,5 +961,9 @@ public interface ISoliniaSpell {
 	List<SoliniaSpellClass> getAllowedClasses();
 
 	void setAllowedClasses(List<SoliniaSpellClass> allowedClasses);
+
+	void sendSpellSettingsToSender(CommandSender sender);
+
+	void editSetting(String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
 
 }

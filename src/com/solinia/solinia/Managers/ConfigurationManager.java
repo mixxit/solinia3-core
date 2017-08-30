@@ -10,15 +10,14 @@ import org.bukkit.inventory.ItemStack;
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
-import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
-import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -446,5 +445,11 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 
 		return max + 1;
+	}
+
+	@Override
+	public void editSpell(int spellid, String setting, String value) 
+		throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
+			getSpell(spellid).editSetting(setting, value);
 	}
 }

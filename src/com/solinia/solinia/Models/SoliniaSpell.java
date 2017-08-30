@@ -3,9 +3,14 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaSpell implements ISoliniaSpell {
 	private List<SoliniaSpellClass> allowedClasses = new ArrayList<SoliniaSpellClass>();
@@ -2626,5 +2631,33 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public void setAllowedClasses(List<SoliniaSpellClass> allowedClasses) {
 		this.allowedClasses = allowedClasses;
+	}
+
+	@Override
+	public void sendSpellSettingsToSender(CommandSender sender) {
+		// TODO Auto-generated method stub
+		sender.sendMessage(ChatColor.RED + "Spell Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
+		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+	}
+
+	@Override
+	public void editSetting(String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
+		String name = getName();
+
+		switch (setting.toLowerCase()) {
+		case "name":
+			if (value.equals(""))
+				throw new InvalidSpellSettingException("Name is empty");
+
+			if (value.length() > 30)
+				throw new InvalidSpellSettingException("Name is longer than 30 characters");
+			setName(value);
+			break;
+		default:
+			throw new InvalidSpellSettingException(
+					"Invalid Spell setting. Valid Options are: name");
+		}
 	}
 }

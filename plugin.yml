@@ -150,9 +150,17 @@ commands:
     description: Adds a loot drop table to a loot table
     usage: /addloottablelootdrop loottableid lootdropid
     aliases: []
-  fixspells:
-    description: Fixes spells
-    usage: /fixspells
+  editspell:
+    description: Edits a spell
+    usage: /editspell spellid setting value
+    aliases: []
+  listloottables:
+    description: Lists loottables
+    usage: /listloottables filter
+    aliases: []
+  listlootdrops:
+    description: Lists lootdrops
+    usage: /listlootdrops filter
     aliases: []
 depend:
 softdepend:
