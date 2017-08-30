@@ -408,6 +408,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setLevel(Integer.parseInt(value));
 			break;
 		case "factionid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setFactionid(Integer.parseInt(value));
+				break;
+			}
+			
 			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(Integer.parseInt(value));
 			if (faction == null)
 				throw new InvalidNpcSettingException("Faction ID does not exist");

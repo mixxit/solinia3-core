@@ -60,13 +60,18 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "    AlwaysShowName: true\r\n";
 		mob = mob + "  Modules:\r\n";
 		mob = mob + "    ThreatTable: true\r\n";
-		mob = mob + "  AIGoalSelectors:\r\n";
-		mob = mob + "  - 0 clear\r\n";
-		mob = mob + "  - 1 skeletonbowattack\r\n";
-		mob = mob + "  - 2 meleeattack\r\n";
-		mob = mob + "  AITargetSelectors:\r\n";
-		mob = mob + "  - 0 clear\r\n";
-		mob = mob + "  - 1 attacker\r\n";
+		
+		// Act as normal mob if without faction
+		if (npc.getFactionid() > 0)
+		{
+			mob = mob + "  AIGoalSelectors:\r\n";
+			mob = mob + "  - 0 clear\r\n";
+			mob = mob + "  - 1 skeletonbowattack\r\n";
+			mob = mob + "  - 2 meleeattack\r\n";
+			mob = mob + "  AITargetSelectors:\r\n";
+			mob = mob + "  - 0 clear\r\n";
+			mob = mob + "  - 1 attacker\r\n";
+		}
 
 		if (npc.getHeaditem() != null || npc.getChestitem() != null || npc.getLegsitem() != null
 				|| npc.getFeetitem() != null || npc.getHanditem() != null || npc.getOffhanditem() != null) {
