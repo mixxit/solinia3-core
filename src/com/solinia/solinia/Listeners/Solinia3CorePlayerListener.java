@@ -195,9 +195,15 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.isCancelled())
-			return;
-
+		
+		// Right click air is a cancelled event so we have to ignore it when checking iscancelled
+		// We need it for spells
+		if (event.getAction() != Action.RIGHT_CLICK_AIR)
+		{
+			if (event.isCancelled())
+				return;
+		}
+		
 		// Handle changing armour
 		if (event.getHand() == EquipmentSlot.HAND && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			try {

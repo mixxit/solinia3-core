@@ -25,6 +25,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
@@ -114,6 +115,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setMana(int mana)
 	{
 		this.mana = mana;
+		ScoreboardUtils.UpdateScoreboard(this.getBukkitPlayer(), this);
 	}
 	
 	@Override
@@ -704,6 +706,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR)) 
 			    {
 		    		List<LivingEntity> targetmobs = Utils.getLivingEntitiesInCone(event.getPlayer());
+		    		System.out.print("RIGHT_CLICK_AIR found: " + targetmobs.size());
 		    		if (targetmobs.size() > 0)
 		    		{
 		    			LivingEntity targetentity = targetmobs.get(0);

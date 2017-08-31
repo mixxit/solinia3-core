@@ -1,5 +1,9 @@
 package com.solinia.solinia.Managers;
 
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import com.earth2me.essentials.Essentials;
@@ -21,10 +25,20 @@ public class CoreState {
 	private Economy economy;
 	private Essentials essentials;
 	private IChannelManager channelManager;
-	
+	private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
+
 	public CoreState()
 	{
 		isInitialised = false;
+	}
+	
+	public BossBar getBossBar(UUID uuid) {
+		return this.bossbars.get(uuid);
+	}
+
+	public void setBossBar(UUID uuid, BossBar bossbar) {
+		// TODO Auto-generated method stub
+		this.bossbars.put(uuid, bossbar);
 	}
 	
 	public void setEconomy(Economy economy) {
