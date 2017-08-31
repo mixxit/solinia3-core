@@ -162,6 +162,12 @@ commands:
     description: Lists lootdrops
     usage: /listlootdrops filter
     aliases: []
+  local:
+    description: Speaks in local chat
+    usage: /local message
+    aliases:
+    - say
+    - l
 depend:
 softdepend:
 - Vault

@@ -52,7 +52,7 @@ public class CommandEmote implements CommandExecutor
 	    		message = message.replaceAll("(?i)shit", "qaraf");
 	            
 	    		
-	    		solplayer.say(ChatColor.AQUA + "* " + solplayer.getFullName() + " " + message);
+	    		solplayer.emote(ChatColor.AQUA + "* " + solplayer.getFullName() + " " + message);
             } catch (CoreStateInitException e)
             {
             	player.sendMessage(e.getMessage());

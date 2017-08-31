@@ -117,4 +117,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public int getMaxMP();
 
 	public void interact(PlayerInteractEvent event);
+
+	void emote(String string);
 }

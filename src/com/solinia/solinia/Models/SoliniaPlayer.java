@@ -501,10 +501,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void say(String string) {
+	public void emote(String string) {
 		StateManager.getInstance().getChannelManager().sendToLocalChannel(this,string);
 	}
 
+	@Override
+	public void say(String string) {
+		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this,string);
+	}
+	
 	@Override
 	public SoliniaPlayerSkill getSkill(String skillname) {
 		for(SoliniaPlayerSkill skill : this.skills)

@@ -64,7 +64,7 @@ public class CommandTarot implements CommandExecutor {
 	            String future = tarot.get(2);
 	            
 	            String message = ChatColor.AQUA + " * " + solplayer.getFullName() + " shuffles a deck of tarot cards and slowly draws. Drawing the Card of the Past: " + past + ", Card of the Present: " + present + " and finally, Card of the " + future +"." + ChatColor.RESET;
-	            solplayer.say(message);
+	            solplayer.emote(message);
             } catch (CoreStateInitException e)
             {
             	player.sendMessage(e.getMessage());

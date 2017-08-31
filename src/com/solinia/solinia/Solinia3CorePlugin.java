@@ -27,6 +27,7 @@ import com.solinia.solinia.Commands.CommandListItems;
 import com.solinia.solinia.Commands.CommandListLootDrops;
 import com.solinia.solinia.Commands.CommandListLootTables;
 import com.solinia.solinia.Commands.CommandListNPCs;
+import com.solinia.solinia.Commands.CommandLocal;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandRaceInfo;
 import com.solinia.solinia.Commands.CommandRebuildSpellItems;
@@ -228,6 +229,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editspell").setExecutor(new CommandEditSpell());
 		this.getCommand("listlootdrops").setExecutor(new CommandListLootDrops());
 		this.getCommand("listloottables").setExecutor(new CommandListLootTables());
+		this.getCommand("local").setExecutor(new CommandLocal());
 	}
 	
 	private void createConfigDir() {
