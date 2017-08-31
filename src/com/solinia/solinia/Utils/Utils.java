@@ -10,8 +10,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -507,6 +511,40 @@ public class Utils {
 		default:
 			return "N";
 		}
+	}
+
+	public static List<LivingEntity> getLivingEntitiesInCone(Player player) {
+		List<LivingEntity> le = new ArrayList<LivingEntity>();
+		for (Entity e : player.getNearbyEntities(200, 200, 200))
+		{
+			if (e instanceof LivingEntity)
+			{
+				if(isEntityInLineOfSight(player,e))
+				{
+					le.add((LivingEntity)e);
+				}
+			}
+		}
+		return le;
+	}
+	
+	public static boolean isEntityInLineOfSight(LivingEntity entityfrom, Entity entityto)
+	{
+		if (entityto instanceof LivingEntity)
+		{
+			entityto = (LivingEntity) entityto;
+			double x = entityfrom.getLocation().toVector().distance(entityto.getLocation().toVector());
+			Vector direction = entityfrom.getLocation().getDirection().multiply(x);
+			Vector answer = direction.add(entityfrom.getLocation().toVector());
+			if(answer.distance(entityto.getLocation().toVector()) < 1.37){
+				if (entityfrom.hasLineOfSight(entityto))
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	/*

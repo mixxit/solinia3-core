@@ -8,12 +8,22 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -611,5 +621,110 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			currentmana = currentmana + mana;
 		}
 		setMana(currentmana);
+	}
+
+	@Override
+	public void interact(PlayerInteractEvent event) {
+		// TODO Auto-generated method stub
+		ItemStack itemstack = event.getItem();
+	    
+		try
+		{
+		    // this is the item not in offhand
+		    if (event.getHand() == EquipmentSlot.HAND && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
+		    {
+			    if (itemstack == null)
+			    {
+				    return;
+			    }
+			    
+			    // Only applies to spell effects
+			    if (!(itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999) || !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+			    {
+			    	return;
+			    }
+			    
+		    	// We have our custom item id, lets check it exists
+		    	ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+		    	
+		    	if (item == null)
+		    	{
+		    		return;
+		    	}
+		    	
+		    	if (item.getAbilityid() < 1)
+		    	{
+		    		return;
+		    	}
+		    	
+		    	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+		    	
+		    	if (spell.getAllowedClasses().size() > 0)
+		    	{
+		    		if (getClassObj() == null)
+		    		{
+		    			event.getPlayer().sendMessage(ChatColor.GRAY + " * This item cannot be used by your profession");
+		    			return;
+		    		}
+		    		
+		    		boolean foundprofession = false;
+		    		String professions = "";
+		    		int foundlevel = 0;
+		    		for (SoliniaSpellClass spellclass : spell.getAllowedClasses())
+		    		{
+		    			if (spellclass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase()))
+		    			{
+		    				foundprofession = true;
+		    				foundlevel = spellclass.getMinlevel();
+		    				break;
+		    			}
+		    			professions += spellclass.getClassname() + " "; 
+		    		}
+		    		
+		    		if (foundprofession == false)
+		    		{
+		    			event.getPlayer().sendMessage(ChatColor.GRAY + " * This item can only be used by " + professions);
+		    			return;
+		    		} else {
+		    			if (foundlevel >  0)
+		    			{
+		    				Double level = (double) getLevel();
+		    				if (level < foundlevel)
+		    				{
+		    					event.getPlayer().sendMessage(ChatColor.GRAY + " * This item requires level " + foundlevel);
+				    			return;
+		    				}
+		    			}
+		    		}
+		    		
+		    		
+		    	}
+		    	
+		    	// Reroute action depending on target
+		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR)) 
+			    {
+		    		List<LivingEntity> targetmobs = Utils.getLivingEntitiesInCone(event.getPlayer());
+		    		if (targetmobs.size() > 0)
+		    		{
+		    			LivingEntity targetentity = targetmobs.get(0);
+		    			item.useItemOnEntity(event.getPlayer(),item,targetentity);
+		    			return;
+		    		} else {
+		    			item.useItemOnEntity(event.getPlayer(),item,event.getPlayer());
+		    			return;
+		    		}
+			    }
+		    	
+		    	if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+		    	{
+		    		item.useItemOnBlock(event.getPlayer(),item,event.getClickedBlock());
+		    		return;
+		    	}
+			    
+		    }
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

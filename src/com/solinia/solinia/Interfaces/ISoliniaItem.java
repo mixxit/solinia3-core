@@ -2,7 +2,12 @@ package com.solinia.solinia.Interfaces;
 
 import java.util.List;
 
+import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 
 public interface ISoliniaItem {
 	ItemStack asItemStack();
@@ -146,5 +151,9 @@ public interface ISoliniaItem {
 	boolean isSpellscroll();
 
 	void setSpellscroll(boolean spellscroll);
+
+	void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity) throws CoreStateInitException;
+
+	void useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock) throws CoreStateInitException;
 
 }

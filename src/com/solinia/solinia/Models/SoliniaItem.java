@@ -2,11 +2,23 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Adapters.ItemStackAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.StateManager;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaItem implements ISoliniaItem {
 
@@ -399,6 +411,44 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setSpellscroll(boolean spellscroll) {
 		this.spellscroll = spellscroll;
+	}
+
+	@Override
+	public void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity) throws CoreStateInitException {
+		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+		if (spell == null)
+		{
+			return;
+		}
+			
+		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana())
+		{
+			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
+			return;
+		}
+
+		player.sendMessage("This ability seems to be inactive right now");
+		
+		return;
+	}
+
+	@Override
+	public void useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock) throws CoreStateInitException {
+		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+		if (spell == null)
+		{
+			return;
+		}
+			
+		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana())
+		{
+			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
+			return;
+		}
+
+		player.sendMessage("This ability seems to be inactive right now");
+		
+		return;
 	}
 
 }

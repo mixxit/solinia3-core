@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 
@@ -114,4 +115,6 @@ public interface ISoliniaPlayer extends Serializable {
 	void increasePlayerMana(int mana);
 
 	public int getMaxMP();
+
+	public void interact(PlayerInteractEvent event);
 }
