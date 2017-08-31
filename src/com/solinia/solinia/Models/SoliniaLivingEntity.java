@@ -39,16 +39,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	public SoliniaLivingEntity(LivingEntity livingentity) {
 		
-		System.out.println("NPC Death Data:");
-		
 		String metaid = "";
 		for(MetadataValue val : livingentity.getMetadata("mobname"))
 		{
-			metaid = val.toString();
+			metaid = val.asString();
 		}
 		
 		this.livingentity = livingentity;
-		
+
 		if (metaid != null)
 			if(!metaid.equals(""))
 				installNpcByMetaName(metaid);
@@ -294,6 +292,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void dropLoot() {
 		try {
+			System.out.println("Dropping Loot for Living Entity with NPC: " + getNpcid());
 			if (getNpcid() > 0)
 			{
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
@@ -320,8 +319,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				// Now we have prepared our loot list items let's choose which will
 				// drop
 
-				System.out
-						.println("Prepared a Loot List of ABS: " + absoluteitems.size() + " and ROLL: " + rollitems.size());
+				System.out.println("Prepared a Loot List of ABS: " + absoluteitems.size() + " and ROLL: " + rollitems.size());
 
 				if (absoluteitems.size() == 0 && rollitems.size() == 0)
 					return;

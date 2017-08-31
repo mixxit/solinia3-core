@@ -335,13 +335,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if ((currentexperience + experience) > Utils.getExperienceRequirementForLevel(Utils.getMaxLevel())) {
 			currentexperience = Utils.getExperienceRequirementForLevel(Utils.getMaxLevel());
-			System.out.println(
-					"XP was higher than than that needed to level, getting minimum for level: " + currentexperience);
 
 		} else {
 			currentexperience = currentexperience + experience;
-			System.out.println(
-					"XP was not higher than level needed so granting normal increase of: " + currentexperience);
 		}
 		setExperience(currentexperience, experience,modified);
 	}

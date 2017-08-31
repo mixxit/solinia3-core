@@ -108,14 +108,14 @@ public class Solinia3CorePlayerListener implements Listener {
 	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
 	        			return;
-	        		
+
 	        		if (solplayer.getClassObj() == null)
 	        		{
 	        			event.setCancelled(true);
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
-	        		
+
 	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
 	        		{
 	        			event.setCancelled(true);

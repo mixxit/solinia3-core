@@ -40,7 +40,7 @@ public class SoliniaLootFactory {
 		loottable.setId(id);
 		loottable.setLoottableid(loottableid);
 		loottable.setLootdropid(lootdropid);
-		StateManager.getInstance().getConfigurationManager().getLootTable(lootdropid).getEntries().add(loottable);
+		StateManager.getInstance().getConfigurationManager().getLootTable(loottableid).getEntries().add(loottable);
 	}
 
 	public static void CreateLootDropItem(int lootdropid, int itemid, int count, boolean always, int chance) throws CoreStateInitException {
