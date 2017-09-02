@@ -292,7 +292,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void dropLoot() {
 		try {
-			System.out.println("Dropping Loot for Living Entity with NPC: " + getNpcid());
 			if (getNpcid() > 0)
 			{
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());

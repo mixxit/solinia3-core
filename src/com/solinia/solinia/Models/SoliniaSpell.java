@@ -2710,113 +2710,143 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public List<SpellEffectType> getSpellEffectTypes()
 	{
 		List<SpellEffectType> spellEffects = new ArrayList<SpellEffectType>();
-		if (this.getEffectid1() > 0)
+		if (this.getEffectid1() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid1()));
-		if (this.getEffectid2() > 0)
+		if (this.getEffectid2() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid2()));
-		if (this.getEffectid3() > 0)
+		if (this.getEffectid3() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid3()));
-		if (this.getEffectid4() > 0)
+		if (this.getEffectid4() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid4()));
-		if (this.getEffectid5() > 0)
+		if (this.getEffectid5() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid5()));
-		if (this.getEffectid6() > 0)
+		if (this.getEffectid6() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid6()));
-		if (this.getEffectid7() > 0)
+		if (this.getEffectid7() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid7()));
-		if (this.getEffectid8() > 0)
+		if (this.getEffectid8() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid8()));
-		if (this.getEffectid9() > 0)
+		if (this.getEffectid9() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid9()));
-		if (this.getEffectid10() > 0)
+		if (this.getEffectid10() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid10()));
-		if (this.getEffectid11() > 0)
+		if (this.getEffectid11() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid11()));
-		if (this.getEffectid12() > 0)
+		if (this.getEffectid12() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid12()));
 		
 		return spellEffects;
+	}
+	
+	public SpellEffect getSpellEffectByNo(int no)
+	{
+		int effectid;
+		int base;
+		int limit;
+		switch(no)
+		{
+			case 1:
+				effectid = getEffectid1();
+				base = getEffectBaseValue1();
+				limit = getEffectLimitValue1();
+				break;
+			case 2:
+				effectid = getEffectid2();
+				base = getEffectBaseValue2();
+				limit = getEffectLimitValue2();
+				break;
+			case 3:
+				effectid = getEffectid3();
+				base = getEffectBaseValue3();
+				limit = getEffectLimitValue3();
+				break;
+			case 4:
+				effectid = getEffectid4();
+				base = getEffectBaseValue4();
+				limit = getEffectLimitValue4();
+				break;
+			case 5:
+				effectid = getEffectid5();
+				base = getEffectBaseValue5();
+				limit = getEffectLimitValue5();
+				break;
+			case 6:
+				effectid = getEffectid6();
+				base = getEffectBaseValue6();
+				limit = getEffectLimitValue6();
+				break;
+			case 7:
+				effectid = getEffectid7();
+				base = getEffectBaseValue7();
+				limit = getEffectLimitValue7();
+				break;
+			case 8:
+				effectid = getEffectid8();
+				base = getEffectBaseValue8();
+				limit = getEffectLimitValue8();
+				break;
+			case 9:
+				effectid = getEffectid9();
+				base = getEffectBaseValue9();
+				limit = getEffectLimitValue9();
+				break;
+			case 10:
+				effectid = getEffectid10();
+				base = getEffectBaseValue10();
+				limit = getEffectLimitValue10();
+				break;
+			case 11:
+				effectid = getEffectid11();
+				base = getEffectBaseValue11();
+				limit = getEffectLimitValue11();
+				break;
+			case 12:
+				effectid = getEffectid12();
+				base = getEffectBaseValue12();
+				limit = getEffectLimitValue12();
+				break;
+			default:
+				return null;
+			
+		}
+		
+		SpellEffect spellEffect = new SpellEffect();
+		spellEffect.setSpellEffectId(effectid);
+		spellEffect.setSpellEffectType(Utils.getSpellEffectType(effectid));
+		spellEffect.setBase(base);
+		spellEffect.setLimit(limit);
+		return spellEffect;
 	}
 	
 	@Override
 	public List<SpellEffect> getSpellEffects()
 	{
 		List<SpellEffect> spellEffects = new ArrayList<SpellEffect>();
-		SpellEffect spellEffect = new SpellEffect();
-		if (this.getEffectid1() > 0)
-		{
-			spellEffect.setSpellEffectId(getEffectid1());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid1()));
-			spellEffect.setBase(getEffectBaseValue1());
-			spellEffect.setLimit(getEffectLimitValue1());
-			spellEffects.add(spellEffect);
-		}
-		if (this.getEffectid2() > 0)
-			spellEffect.setSpellEffectId(getEffectid2());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid2()));
-			spellEffect.setBase(getEffectBaseValue2());
-			spellEffect.setLimit(getEffectLimitValue2());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid3() > 0)
-			spellEffect.setSpellEffectId(getEffectid3());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid3()));
-			spellEffect.setBase(getEffectBaseValue3());
-			spellEffect.setLimit(getEffectLimitValue3());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid4() > 0)
-			spellEffect.setSpellEffectId(getEffectid4());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid4()));
-			spellEffect.setBase(getEffectBaseValue4());
-			spellEffect.setLimit(getEffectLimitValue4());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid5() > 0)
-			spellEffect.setSpellEffectId(getEffectid5());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid5()));
-			spellEffect.setBase(getEffectBaseValue5());
-			spellEffect.setLimit(getEffectLimitValue5());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid6() > 0)
-			spellEffect.setSpellEffectId(getEffectid6());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid6()));
-			spellEffect.setBase(getEffectBaseValue6());
-			spellEffect.setLimit(getEffectLimitValue6());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid7() > 0)
-			spellEffect.setSpellEffectId(getEffectid7());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid7()));
-			spellEffect.setBase(getEffectBaseValue7());
-			spellEffect.setLimit(getEffectLimitValue7());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid8() > 0)
-			spellEffect.setSpellEffectId(getEffectid8());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid8()));
-			spellEffect.setBase(getEffectBaseValue8());
-			spellEffect.setLimit(getEffectLimitValue8());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid9() > 0)
-			spellEffect.setSpellEffectId(getEffectid9());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid9()));
-			spellEffect.setBase(getEffectBaseValue9());
-			spellEffect.setLimit(getEffectLimitValue9());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid10() > 0)
-			spellEffect.setSpellEffectId(getEffectid10());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid10()));
-			spellEffect.setBase(getEffectBaseValue10());
-			spellEffect.setLimit(getEffectLimitValue10());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid11() > 0)
-			spellEffect.setSpellEffectId(getEffectid11());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid11()));
-			spellEffect.setBase(getEffectBaseValue11());
-			spellEffect.setLimit(getEffectLimitValue11());
-			spellEffects.add(spellEffect);
-		if (this.getEffectid12() > 0)
-			spellEffect.setSpellEffectId(getEffectid12());
-			spellEffect.setSpellEffectType(Utils.getSpellEffectType(getEffectid12()));
-			spellEffect.setBase(getEffectBaseValue12());
-			spellEffect.setLimit(getEffectLimitValue12());
-			spellEffects.add(spellEffect);
+		
+		if (this.getEffectid1() >= 0 && this.getEffectid1() != 254)
+			spellEffects.add(getSpellEffectByNo(1));
+		if (this.getEffectid2() >= 0 && this.getEffectid2() != 254)
+			spellEffects.add(getSpellEffectByNo(2));
+		if (this.getEffectid3() >= 0 && this.getEffectid3() != 254)
+			spellEffects.add(getSpellEffectByNo(3));
+		if (this.getEffectid4() >= 0 && this.getEffectid4() != 254)
+			spellEffects.add(getSpellEffectByNo(4));
+		if (this.getEffectid5() >= 0 && this.getEffectid5() != 254)
+			spellEffects.add(getSpellEffectByNo(5));
+		if (this.getEffectid6() >= 0 && this.getEffectid6() != 254)
+			spellEffects.add(getSpellEffectByNo(6));
+		if (this.getEffectid7() >= 0 && this.getEffectid7() != 254)
+			spellEffects.add(getSpellEffectByNo(7));
+		if (this.getEffectid8() >= 0 && this.getEffectid8() != 254)
+			spellEffects.add(getSpellEffectByNo(8));
+		if (this.getEffectid9() >= 0 && this.getEffectid9() != 254)
+			spellEffects.add(getSpellEffectByNo(9));
+		if (this.getEffectid10() >= 0 && this.getEffectid10() != 254)
+			spellEffects.add(getSpellEffectByNo(10));
+		if (this.getEffectid11() >= 0 && this.getEffectid11() != 254)
+			spellEffects.add(getSpellEffectByNo(11));
+		if (this.getEffectid12() >= 0 && this.getEffectid12() != 254)
+			spellEffects.add(getSpellEffectByNo(12));
 		
 		return spellEffects;
 	}

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -62,7 +63,10 @@ public class SoliniaActiveSpellEffect {
 		try {
 			ISoliniaSpell soliniaSpell = StateManager.getInstance().getConfigurationManager().getSpell(getSpellId());
 			if (soliniaSpell == null)
+			{
+				System.out.print("Spell not found");
 				return;
+			}
 
 			for (SpellEffect spellEffect : soliniaSpell.getSpellEffects()) {
 				applySpellEffect(spellEffect, soliniaSpell);
@@ -74,6 +78,7 @@ public class SoliniaActiveSpellEffect {
 	}
 
 	private void applySpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		
 		switch (spellEffect.getSpellEffectType()) {
 		case CurrentHP:
 			applyCurrentHpSpellEffect(spellEffect,soliniaSpell);
@@ -1027,16 +1032,7 @@ public class SoliniaActiveSpellEffect {
 	}
 
 	private void applyCurrentHpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
-		int hpToRemove = spellEffect.getBase();
-
-		int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToRemove;
-		if (amount > getLivingEntity().getMaxHealth()) {
-			amount = (int) Math.round(getLivingEntity().getMaxHealth());
-		}
-		
-		getLivingEntity().setHealth(amount);
-		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
-
+		applyCurrentHpOnceSpellEffect(spellEffect, soliniaSpell);
 	}
 
 	private LivingEntity getLivingEntity() {
@@ -1056,9 +1052,10 @@ public class SoliniaActiveSpellEffect {
 		if (amount > getLivingEntity().getMaxHealth()) {
 			amount = (int) Math.round(getLivingEntity().getMaxHealth());
 		}
-		
+		System.out.println("Changing HP: " + amount + " on entity " + getLivingEntity().getUniqueId());
 		getLivingEntity().setHealth(amount);
 		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
+		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 	}
 
 	public int getTicksLeft() {

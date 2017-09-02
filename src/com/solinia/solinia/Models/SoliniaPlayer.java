@@ -311,20 +311,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void increasePlayerNormalExperience(Double experience) {
-		System.out.println("Determing player normal xp from experience value: " + experience);
 		double classxpmodifier = Utils.getClassXPModifier(getClassObj());
 		experience = experience * (classxpmodifier / 100);
 
 		boolean modified = false;
 		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
 		if (modifier > 100) {
-			System.out.println("This is modified experience from a world perk");
 			modified = true;
 		}
 		experience = experience * (modifier / 100);
 
 		Double currentexperience = getExperience();
-		System.out.println("Normal xp would be " + currentexperience);
 
 		// make sure someone never gets more than a level per kill
 		double clevel = Utils.getLevelFromExperience(currentexperience);
@@ -332,7 +329,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (nlevel > (clevel + 1)) {
 			// xp is way too high, drop to proper amount
-			System.out.println("XP was dropped for being way too high");
 
 			double xp = Utils.getExperienceRequirementForLevel((int) clevel + 1);
 			experience = xp - currentexperience;

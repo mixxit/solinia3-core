@@ -38,15 +38,12 @@ public class SoliniaEntitySpellEffects {
 
 	public boolean addSpellEffect(SoliniaSpell soliniaSpell, Player player, int duration) {
 		// This spell ID is already active
-		System.out.println("addSpellEffect is checking if the spell is already in place on the entity");
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
-		System.out.println("Does not have spell active... adding");
 		
 		SoliniaActiveSpellEffect activeEffect = new SoliniaActiveSpellEffect(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, player.getUniqueId(), duration);
 		if (duration > 0)
 			activeSpells.put(soliniaSpell.getId(),activeEffect);
-		System.out.println("Applying effect");
 		activeEffect.apply();
 		return true;
 	}

@@ -587,7 +587,8 @@ public class Utils {
 		return false;
 	}
 
-	public static SpellEffectType getSpellEffectType(Integer typeId) {
+	public static SpellEffectType getSpellEffectType(Integer typeId)
+	{
 		switch (typeId) {
 		case 0:
 			return SpellEffectType.CurrentHP;
