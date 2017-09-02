@@ -20,6 +20,7 @@ import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEditSpell;
 import com.solinia.solinia.Commands.CommandEmote;
+import com.solinia.solinia.Commands.CommandForceLevel;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandListFactions;
@@ -66,6 +67,7 @@ import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
+import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 
 import net.milkbowl.vault.economy.Economy;
@@ -74,6 +76,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	
 	private StateCommitTimer commitTimer;
 	private PlayerRegenTickTimer playerRegenTimer;
+	private SpellTickTimer spellTickTimer;
 	private Essentials essentials;
 	private Economy economy;
 	
@@ -179,6 +182,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			playerRegenTimer = new PlayerRegenTickTimer();
 			playerRegenTimer.runTaskTimer(this, 6*20L, 6*20L);
 			
+			spellTickTimer = new SpellTickTimer();
+			spellTickTimer.runTaskTimer(this, 6*20L, 6*20L);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -230,6 +235,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listlootdrops").setExecutor(new CommandListLootDrops());
 		this.getCommand("listloottables").setExecutor(new CommandListLootTables());
 		this.getCommand("local").setExecutor(new CommandLocal());
+		this.getCommand("forcelevel").setExecutor(new CommandForceLevel());
 	}
 	
 	private void createConfigDir() {

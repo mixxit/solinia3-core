@@ -427,9 +427,7 @@ public class SoliniaItem implements ISoliniaItem {
 			return;
 		}
 
-		boolean itemUseSuccess = false;
-		
-		itemUseSuccess = spell.tryApplyOnEntity(player, targetentity);
+		boolean itemUseSuccess = spell.tryApplyOnEntity(player, targetentity);
 		
 		if (itemUseSuccess)
 		{

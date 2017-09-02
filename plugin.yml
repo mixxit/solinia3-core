@@ -168,6 +168,10 @@ commands:
     aliases:
     - say
     - l
+  forcelevel:
+    description: Forces a players level
+    usage: /forcelevel mcplayer level
+    aliases: []
 depend:
 softdepend:
 - Vault

@@ -11,4 +11,6 @@ public interface IEntityManager {
 	INPCEntityProvider getNPCEntityProvider();
 
 	boolean addActiveEntityEffect(LivingEntity targetentity, SoliniaSpell soliniaSpell, Player player);
+
+	void spellTick();
 }

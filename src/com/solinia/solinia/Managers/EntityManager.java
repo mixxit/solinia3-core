@@ -13,6 +13,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Utils.Utils;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
@@ -36,10 +37,22 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public boolean addActiveEntityEffect(LivingEntity targetentity, SoliniaSpell soliniaSpell, Player player) {
-		if (entitySpellEffects.get(targetentity.getUniqueId()) == null)
-			entitySpellEffects.put(targetentity.getUniqueId(), new SoliniaEntitySpellEffects(targetentity.getUniqueId()));
 		
-		return entitySpellEffects.get(targetentity.getUniqueId()).addSpellEffect(soliniaSpell, player);
+		if (entitySpellEffects.get(targetentity.getUniqueId()) == null)
+			entitySpellEffects.put(targetentity.getUniqueId(), new SoliniaEntitySpellEffects(targetentity));
+		
+		int duration = Utils.getDurationFromSpell(soliniaSpell);
+		System.out.println("addActiveEntityEffect: " + soliniaSpell.getName() + " " + " to " + targetentity.getUniqueId() + " for duration " + duration);
+		
+		return entitySpellEffects.get(targetentity.getUniqueId()).addSpellEffect(soliniaSpell, player, duration);
+	}
+
+	@Override
+	public void spellTick() {
+		for(SoliniaEntitySpellEffects entityEffects : entitySpellEffects.values())
+		{
+			entityEffects.run();
+		}
 	}
 
 }

@@ -283,7 +283,7 @@ public class ItemStackAdapter {
 			
 			loreTxt.add(ChatColor.WHITE + "Mana/Power: " + ChatColor.YELLOW+spell.getMana() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Range: " + ChatColor.YELLOW+spell.getRange() + ChatColor.RESET);
-			
+			loreTxt.add(ChatColor.WHITE + "Target Type: " + ChatColor.YELLOW + Utils.getSpellTargetType(spell.getTargettype()).name() + ChatColor.RESET);
 			String classesBuilder = "";
 			List<SoliniaSpellClass> allowedSpellClasses = spell.getAllowedClasses();
 			int rowcount = 0;

@@ -24,6 +24,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SkillReward;
+import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 
 import net.md_5.bungee.api.ChatColor;
@@ -1535,5 +1536,10 @@ public class Utils {
 		default:
 			return SpellEffectType.ERROR;
 		}
+	}
+
+	public static int getDurationFromSpell(SoliniaSpell soliniaSpell) {
+		// TODO Update duration based on type of spell
+		return 0;
 	}
 }

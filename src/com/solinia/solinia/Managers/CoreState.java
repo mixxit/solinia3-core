@@ -153,4 +153,8 @@ public class CoreState {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public void spellTick() {
+		entityManager.spellTick();
+	}
 }

@@ -2,6 +2,11 @@ package com.solinia.solinia.Models;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
@@ -11,6 +16,15 @@ public class SoliniaActiveSpellEffect {
 	private int ticksLeft;
 	private boolean isOwnerPlayer;
 	private UUID sourceUuid;
+	private UUID ownerUuid;
+	
+	public SoliniaActiveSpellEffect(UUID owneruuid, int spellId, boolean isPlayer, UUID sourceuuid, int ticksLeft) {
+		setOwnerUuid(owneruuid);
+		setOwnerPlayer(isPlayer);
+		setSourceUuid(sourceuuid);
+		setSpellId(spellId);
+		setTicksLeft(ticksLeft);
+	}
 
 	public boolean isOwnerPlayer() {
 		return isOwnerPlayer;
@@ -18,6 +32,14 @@ public class SoliniaActiveSpellEffect {
 
 	public void setOwnerPlayer(boolean isOwnerPlayer) {
 		this.isOwnerPlayer = isOwnerPlayer;
+	}
+	
+	public UUID getOwnerUuid() {
+		return ownerUuid;
+	}
+
+	public void setOwnerUuid(UUID ownerUuid) {
+		this.ownerUuid = ownerUuid;
 	}
 
 	public UUID getSourceUuid() {
@@ -1005,11 +1027,38 @@ public class SoliniaActiveSpellEffect {
 	}
 
 	private void applyCurrentHpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		int hpToRemove = spellEffect.getBase();
+
+		int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToRemove;
+		if (amount > getLivingEntity().getMaxHealth()) {
+			amount = (int) Math.round(getLivingEntity().getMaxHealth());
+		}
+		
+		getLivingEntity().setHealth(amount);
+		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
 
 	}
 
-	private void applyCurrentHpOnceSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private LivingEntity getLivingEntity() {
+		if (isOwnerPlayer())
+			return Bukkit.getPlayer(getOwnerUuid());
+		
+		if (Bukkit.getEntity(getOwnerUuid()) instanceof LivingEntity)
+			return (LivingEntity)Bukkit.getEntity(getOwnerUuid());
+		
+		return null;
+	}
 
+	private void applyCurrentHpOnceSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		int hpToRemove = spellEffect.getBase();
+
+		int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToRemove;
+		if (amount > getLivingEntity().getMaxHealth()) {
+			amount = (int) Math.round(getLivingEntity().getMaxHealth());
+		}
+		
+		getLivingEntity().setHealth(amount);
+		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
 	}
 
 	public int getTicksLeft() {
