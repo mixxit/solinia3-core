@@ -427,7 +427,14 @@ public class SoliniaItem implements ISoliniaItem {
 			return;
 		}
 
-		player.sendMessage("This ability seems to be inactive right now");
+		boolean itemUseSuccess = false;
+		
+		itemUseSuccess = spell.tryApplyOnEntity(player, targetentity);
+		
+		if (itemUseSuccess)
+		{
+			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
+		}
 		
 		return;
 	}
@@ -445,8 +452,15 @@ public class SoliniaItem implements ISoliniaItem {
 			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
 			return;
 		}
+		
+		boolean itemUseSuccess = false;
+		
+		itemUseSuccess = spell.tryApplyOnBlock(player,clickedBlock);
 
-		player.sendMessage("This ability seems to be inactive right now");
+		if (itemUseSuccess)
+		{
+			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
+		}
 		
 		return;
 	}

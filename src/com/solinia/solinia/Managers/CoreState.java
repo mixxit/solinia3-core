@@ -3,6 +3,7 @@ package com.solinia.solinia.Managers;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
@@ -12,6 +13,7 @@ import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.IPlayerManager;
+import com.solinia.solinia.Models.SoliniaSpell;
 
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
@@ -145,5 +147,10 @@ public class CoreState {
 	public int getWorldPerkDropCountModifier() {
 		// TODO Auto-generated method stub
 		return 1;
+	}
+
+	public boolean addActiveBlockEffect(Block clickedBlock, SoliniaSpell soliniaSpell, Player player) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

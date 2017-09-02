@@ -2,11 +2,16 @@ package com.solinia.solinia.Interfaces;
 
 import java.util.List;
 
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaSpellClass;
+import com.solinia.solinia.Models.SpellEffect;
+import com.solinia.solinia.Models.SpellEffectType;
 
 public interface ISoliniaSpell {
 
@@ -965,5 +970,41 @@ public interface ISoliniaSpell {
 	void sendSpellSettingsToSender(CommandSender sender);
 
 	void editSetting(String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
+
+	boolean tryApplyOnBlock(Player player, Block clickedBlock);
+
+	boolean tryApplyOnEntity(Player player, LivingEntity targetentity);
+	
+	SpellEffectType getEffectType1();
+
+	SpellEffectType getEffectType2();
+
+	SpellEffectType getEffectType3();
+
+	SpellEffectType getEffectType4();
+
+	SpellEffectType getEffectType5();
+
+	SpellEffectType getEffectType6();
+
+	SpellEffectType getEffectType7();
+
+	SpellEffectType getEffectType8();
+
+	SpellEffectType getEffectType9();
+
+	SpellEffectType getEffectType10();
+
+	SpellEffectType getEffectType11();
+
+	SpellEffectType getEffectType12();
+
+	boolean isBuffSpell();
+
+	boolean isDamageSpell();
+
+	List<SpellEffect> getSpellEffects();
+
+	List<SpellEffectType> getSpellEffectTypes();
 
 }

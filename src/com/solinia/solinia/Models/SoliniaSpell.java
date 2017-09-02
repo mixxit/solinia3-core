@@ -3,13 +3,20 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Utils.Utils;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaSpell implements ISoliniaSpell {
@@ -2659,5 +2666,247 @@ public class SoliniaSpell implements ISoliniaSpell {
 			throw new InvalidSpellSettingException(
 					"Invalid Spell setting. Valid Options are: name");
 		}
+	}
+
+	@Override
+	public boolean tryApplyOnBlock(Player player, Block clickedBlock) {
+		return StateManager.getInstance().addActiveBlockEffect(clickedBlock,this,player);
+	}
+
+	@Override
+	public boolean tryApplyOnEntity(Player player, LivingEntity targetentity) {
+		// Entity was targeted for this spell but is that the final location?
+		try {
+			switch(Utils.getSpellTargetType(getTargettype()))
+			{
+				case Self:
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(player,this,player);
+				case TargetOptional:
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,player);
+				case Target:
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,player);
+				default:
+					return false;
+			
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	@Override
+	public boolean isBuffSpell()
+	{
+		if (getBuffduration() > 0 || getBuffdurationformula() > 0)
+			return true;
+
+		return false;
+	}
+	
+	@Override
+	public List<SpellEffectType> getSpellEffectTypes()
+	{
+		List<SpellEffectType> spellEffects = new ArrayList<SpellEffectType>();
+		if (this.getEffectid1() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid1()));
+		if (this.getEffectid2() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid2()));
+		if (this.getEffectid3() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid3()));
+		if (this.getEffectid4() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid4()));
+		if (this.getEffectid5() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid5()));
+		if (this.getEffectid6() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid6()));
+		if (this.getEffectid7() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid7()));
+		if (this.getEffectid8() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid8()));
+		if (this.getEffectid9() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid9()));
+		if (this.getEffectid10() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid10()));
+		if (this.getEffectid11() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid11()));
+		if (this.getEffectid12() > 0)
+			spellEffects.add(Utils.getSpellEffectType(getEffectid12()));
+		
+		return spellEffects;
+	}
+	
+	@Override
+	public List<SpellEffect> getSpellEffects()
+	{
+		List<SpellEffect> spellEffects = new ArrayList<SpellEffect>();
+		SpellEffect spellEffect = new SpellEffect();
+		if (this.getEffectid1() > 0)
+		{
+			spellEffect.setSpellEffectId(getEffectid1());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid1()));
+			spellEffect.setBase(getEffectBaseValue1());
+			spellEffect.setLimit(getEffectLimitValue1());
+			spellEffects.add(spellEffect);
+		}
+		if (this.getEffectid2() > 0)
+			spellEffect.setSpellEffectId(getEffectid2());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid2()));
+			spellEffect.setBase(getEffectBaseValue2());
+			spellEffect.setLimit(getEffectLimitValue2());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid3() > 0)
+			spellEffect.setSpellEffectId(getEffectid3());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid3()));
+			spellEffect.setBase(getEffectBaseValue3());
+			spellEffect.setLimit(getEffectLimitValue3());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid4() > 0)
+			spellEffect.setSpellEffectId(getEffectid4());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid4()));
+			spellEffect.setBase(getEffectBaseValue4());
+			spellEffect.setLimit(getEffectLimitValue4());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid5() > 0)
+			spellEffect.setSpellEffectId(getEffectid5());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid5()));
+			spellEffect.setBase(getEffectBaseValue5());
+			spellEffect.setLimit(getEffectLimitValue5());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid6() > 0)
+			spellEffect.setSpellEffectId(getEffectid6());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid6()));
+			spellEffect.setBase(getEffectBaseValue6());
+			spellEffect.setLimit(getEffectLimitValue6());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid7() > 0)
+			spellEffect.setSpellEffectId(getEffectid7());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid7()));
+			spellEffect.setBase(getEffectBaseValue7());
+			spellEffect.setLimit(getEffectLimitValue7());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid8() > 0)
+			spellEffect.setSpellEffectId(getEffectid8());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid8()));
+			spellEffect.setBase(getEffectBaseValue8());
+			spellEffect.setLimit(getEffectLimitValue8());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid9() > 0)
+			spellEffect.setSpellEffectId(getEffectid9());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid9()));
+			spellEffect.setBase(getEffectBaseValue9());
+			spellEffect.setLimit(getEffectLimitValue9());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid10() > 0)
+			spellEffect.setSpellEffectId(getEffectid10());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid10()));
+			spellEffect.setBase(getEffectBaseValue10());
+			spellEffect.setLimit(getEffectLimitValue10());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid11() > 0)
+			spellEffect.setSpellEffectId(getEffectid11());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid11()));
+			spellEffect.setBase(getEffectBaseValue11());
+			spellEffect.setLimit(getEffectLimitValue11());
+			spellEffects.add(spellEffect);
+		if (this.getEffectid12() > 0)
+			spellEffect.setSpellEffectId(getEffectid12());
+			spellEffect.setSpellEffectTypeDesc(Utils.getSpellEffectType(getEffectid12()));
+			spellEffect.setBase(getEffectBaseValue12());
+			spellEffect.setLimit(getEffectLimitValue12());
+			spellEffects.add(spellEffect);
+		
+		return spellEffects;
+	}
+
+	@Override
+	public boolean isDamageSpell()
+	{
+		for(SpellEffect spellEffect : getSpellEffects())
+		{
+			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce) || spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP)) &&
+					Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1 
+					// && .base < 0
+					)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType1()
+	{
+		return Utils.getSpellEffectType(this.getEffectid1());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType2()
+	{
+		return Utils.getSpellEffectType(this.getEffectid2());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType3()
+	{
+		return Utils.getSpellEffectType(this.getEffectid3());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType4()
+	{
+		return Utils.getSpellEffectType(this.getEffectid4());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType5()
+	{
+		return Utils.getSpellEffectType(this.getEffectid5());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType6()
+	{
+		return Utils.getSpellEffectType(this.getEffectid6());
+	}
+	
+
+
+@Override 
+	public SpellEffectType getEffectType7()
+	{
+		return Utils.getSpellEffectType(this.getEffectid7());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType8()
+	{
+		return Utils.getSpellEffectType(this.getEffectid8());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType9()
+	{
+		return Utils.getSpellEffectType(this.getEffectid9());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType10()
+	{
+		return Utils.getSpellEffectType(this.getEffectid10());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType11()
+	{
+		return Utils.getSpellEffectType(this.getEffectid11());
+	}
+	
+	@Override 
+	public SpellEffectType getEffectType12()
+	{
+		return Utils.getSpellEffectType(this.getEffectid12());
 	}
 }
