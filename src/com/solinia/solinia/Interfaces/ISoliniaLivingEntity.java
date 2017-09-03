@@ -20,4 +20,6 @@ public interface ISoliniaLivingEntity
 	int getNpcid();
 
 	void setNpcid(int npcid);
+
+	public void emote(String message);
 }

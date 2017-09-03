@@ -380,4 +380,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void setNpcid(int npcid) {
 		this.npcid = npcid;
 	}
+
+	@Override
+	public void emote(String message) {
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this,message);
+	}
 }

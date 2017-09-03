@@ -78,6 +78,9 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			if (amount > player.getMaxHealth()) {
 				amount = (int) Math.round(player.getMaxHealth());
 			}
+			
+			if (amount < 0)
+				amount = 0;
 
 			player.setHealth(amount);
 		}

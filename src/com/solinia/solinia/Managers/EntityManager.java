@@ -46,7 +46,7 @@ public class EntityManager implements IEntityManager {
 			entitySpellEffects.put(targetentity.getUniqueId(), new SoliniaEntitySpellEffects(targetentity));
 		
 		int duration = Utils.getDurationFromSpell(soliniaSpell);
-		System.out.println("addActiveEntityEffect: " + soliniaSpell.getName() + " " + " to " + targetentity.getUniqueId() + " for duration " + duration);
+		System.out.println("addActiveEntityEffect: " + soliniaSpell.getName() + " " + " to " + targetentity.getUniqueId() + " for duration " + duration + " ticks");
 		
 		return entitySpellEffects.get(targetentity.getUniqueId()).addSpellEffect(soliniaSpell, player, duration);
 	}

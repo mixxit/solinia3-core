@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import com.solinia.solinia.Interfaces.IChannelManager;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class ChannelManager implements IChannelManager {
@@ -168,6 +169,14 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
+	}
+
+	@Override
+	public void sendToLocalChannel(ISoliniaLivingEntity source, String message) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
+			player.sendMessage(message);
+		}
 	}
 
 }

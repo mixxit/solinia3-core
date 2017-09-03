@@ -10,11 +10,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaActiveSpellEffect {
 	private int spellId;
@@ -71,7 +74,17 @@ public class SoliniaActiveSpellEffect {
 				System.out.print("Spell not found");
 				return;
 			}
+			
+			if (soliniaSpell.getCastOnYou() != null && !soliniaSpell.getCastOnYou().equals("") && isOwnerPlayer)
+			{
+				Player player = Bukkit.getPlayer(getOwnerUuid());
+				player.sendMessage(" * " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+			}
+				
+			if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals(""))
+				SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(" * " + this.getLivingEntity().getCustomName() + " " + soliniaSpell.getCastOnOther());
 
+				
 			for (SpellEffect spellEffect : soliniaSpell.getSpellEffects()) {
 				applySpellEffect(spellEffect, soliniaSpell);
 			}
@@ -1051,6 +1064,10 @@ public class SoliniaActiveSpellEffect {
 			if (amount > solplayer.getMaxMP()) {
 				amount = (int) Math.round(solplayer.getMaxMP());
 			}
+			
+			if (amount < 0)
+				amount = 0;
+			
 			System.out.println("Changing MP: " + amount + " on player " + getLivingEntity().getUniqueId());
 			solplayer.setMana(amount);
 			getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
@@ -1095,6 +1112,10 @@ public class SoliniaActiveSpellEffect {
 		if (amount > getLivingEntity().getMaxHealth()) {
 			amount = (int) Math.round(getLivingEntity().getMaxHealth());
 		}
+		
+		if (amount < 0)
+			amount = 0;
+		
 		System.out.println("Changing HP: " + amount + " on entity " + getLivingEntity().getUniqueId());
 		getLivingEntity().setHealth(amount);
 		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);

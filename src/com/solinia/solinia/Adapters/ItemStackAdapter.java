@@ -283,9 +283,9 @@ public class ItemStackAdapter {
 			
 			loreTxt.add(ChatColor.WHITE + "Mana/Power: " + ChatColor.YELLOW+spell.getMana() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Range: " + ChatColor.YELLOW+spell.getRange() + ChatColor.RESET);
-			if (spell.isBuffSpell())
+			if (spell.isBuffSpell() && spell.getBuffduration() > 0)
 			{
-				loreTxt.add(ChatColor.WHITE + "Buff Duration: " + ChatColor.YELLOW + spell.getBuffduration() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Buff Duration: " + ChatColor.YELLOW + ((spell.getBuffduration() * 6) / 60) + " minutes" + ChatColor.RESET);
 			}
 			loreTxt.add(ChatColor.WHITE + "Target Type: " + ChatColor.YELLOW + Utils.getSpellTargetType(spell.getTargettype()).name() + ChatColor.RESET);
 			String classesBuilder = "";
