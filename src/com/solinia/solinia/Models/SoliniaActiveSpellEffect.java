@@ -22,14 +22,17 @@ import net.md_5.bungee.api.ChatColor;
 public class SoliniaActiveSpellEffect {
 	private int spellId;
 	private int ticksLeft;
-	private boolean isOwnerPlayer;
+	private boolean isOwnerPlayer = false;
+	private boolean isSourcePlayer = false;
 	private UUID sourceUuid;
 	private UUID ownerUuid;
+	private boolean isFirstRun = true;
 	
-	public SoliniaActiveSpellEffect(UUID owneruuid, int spellId, boolean isPlayer, UUID sourceuuid, int ticksLeft) {
+	public SoliniaActiveSpellEffect(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid, boolean sourceIsPlayer, int ticksLeft) {
 		setOwnerUuid(owneruuid);
-		setOwnerPlayer(isPlayer);
+		setOwnerPlayer(isOwnerPlayer);
 		setSourceUuid(sourceuuid);
+		this.setSourcePlayer(sourceIsPlayer);
 		setSpellId(spellId);
 		setTicksLeft(ticksLeft);
 	}
@@ -75,14 +78,17 @@ public class SoliniaActiveSpellEffect {
 				return;
 			}
 			
-			if (soliniaSpell.getCastOnYou() != null && !soliniaSpell.getCastOnYou().equals("") && isOwnerPlayer)
+			if (isFirstRun)
 			{
-				Player player = Bukkit.getPlayer(getOwnerUuid());
-				player.sendMessage(" * " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+				if (soliniaSpell.getCastOnYou() != null && !soliniaSpell.getCastOnYou().equals("") && isOwnerPlayer)
+				{
+					Player player = Bukkit.getPlayer(getOwnerUuid());
+					player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+				}
+					
+				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals(""))
+					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote("* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther());
 			}
-				
-			if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals(""))
-				SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(" * " + this.getLivingEntity().getCustomName() + " " + soliniaSpell.getCastOnOther());
 
 				
 			for (SpellEffect spellEffect : soliniaSpell.getSpellEffects()) {
@@ -1107,17 +1113,27 @@ public class SoliniaActiveSpellEffect {
 
 	private void applyCurrentHpOnceSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		int hpToRemove = spellEffect.getBase();
-
-		int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToRemove;
-		if (amount > getLivingEntity().getMaxHealth()) {
-			amount = (int) Math.round(getLivingEntity().getMaxHealth());
+		
+		// Damage
+		if (hpToRemove < 0)
+		{
+			getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
+			System.out.println("Changing HP: " + hpToRemove + " on entity " + getLivingEntity().getUniqueId());
+		}
+		// Heal
+		else 
+		{
+			int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToRemove;
+			if (amount > getLivingEntity().getMaxHealth()) {
+				amount = (int) Math.round(getLivingEntity().getMaxHealth());
+			}
+			
+			if (amount < 0)
+				amount = 0;
+			System.out.println("Changing HP: " + amount + " on entity " + getLivingEntity().getUniqueId());
+			getLivingEntity().setHealth(amount);
 		}
 		
-		if (amount < 0)
-			amount = 0;
-		
-		System.out.println("Changing HP: " + amount + " on entity " + getLivingEntity().getUniqueId());
-		getLivingEntity().setHealth(amount);
 		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
 		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 	}
@@ -1128,5 +1144,21 @@ public class SoliniaActiveSpellEffect {
 
 	public void setTicksLeft(int ticksLeft) {
 		this.ticksLeft = ticksLeft;
+	}
+
+	public boolean isFirstRun() {
+		return isFirstRun;
+	}
+
+	public void setFirstRun(boolean isFirstRun) {
+		this.isFirstRun = isFirstRun;
+	}
+
+	public boolean isSourcePlayer() {
+		return isSourcePlayer;
+	}
+
+	public void setSourcePlayer(boolean isSourcePlayer) {
+		this.isSourcePlayer = isSourcePlayer;
 	}
 }

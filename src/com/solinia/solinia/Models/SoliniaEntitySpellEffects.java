@@ -41,10 +41,15 @@ public class SoliniaEntitySpellEffects {
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
 		
-		SoliniaActiveSpellEffect activeEffect = new SoliniaActiveSpellEffect(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, player.getUniqueId(), duration);
+		SoliniaActiveSpellEffect activeEffect = new SoliniaActiveSpellEffect(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, player.getUniqueId(), true, duration);
 		if (duration > 0)
 			activeSpells.put(soliniaSpell.getId(),activeEffect);
+		
+		// Initial run
 		activeEffect.apply();
+		
+		if (duration > 0)
+			activeSpells.get(soliniaSpell.getId()).setFirstRun(false);
 		return true;
 	}
 
