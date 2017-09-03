@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +24,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 
 public class SoliniaItem implements ISoliniaItem {
 
@@ -462,15 +464,24 @@ public class SoliniaItem implements ISoliniaItem {
 		return;
 	}
 
+	private String convertItemStackToJsonRegular() {
+        // First we convert the item stack into an NMS itemstack
+        net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(asItemStack());
+        NBTTagCompound compound = new NBTTagCompound();
+        compound = nmsItemStack.save(compound);
+
+        return compound.toString();
+    }
+	
 	@Override
 	public String asJsonString() {
-		String out = StateManager.getInstance().getChatItem().getJSONFromItem(this.asItemStack());
+		String out = convertItemStackToJsonRegular();
 		return out;
 	}
 
 	@Override
 	public String asJsonStringEscaped() {
-		String out = StateManager.getInstance().getChatItem().getJSONFromItem(this.asItemStack());
+		String out = asJsonString();
 		return out.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "\\r").replace("\n", "\\n");
 	}
 
