@@ -2902,9 +2902,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return Utils.getSpellEffectType(this.getEffectid6());
 	}
 	
-
-
-@Override 
+	@Override 
 	public SpellEffectType getEffectType7()
 	{
 		return Utils.getSpellEffectType(this.getEffectid7());

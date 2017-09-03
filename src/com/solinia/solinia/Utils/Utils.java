@@ -1540,7 +1540,10 @@ public class Utils {
 	}
 
 	public static int getDurationFromSpell(SoliniaSpell soliniaSpell) {
-		// TODO Update duration based on type of spell
+		if (soliniaSpell.isBuffSpell())
+		{
+			return soliniaSpell.getBuffduration();
+		}
 		return 0;
 	}
 }

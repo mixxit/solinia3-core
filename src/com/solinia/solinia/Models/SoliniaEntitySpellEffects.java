@@ -62,7 +62,7 @@ public class SoliniaEntitySpellEffects {
 			{
 				activeSpellEffect.apply();
 				activeSpellEffect.setTicksLeft(activeSpellEffect.getTicksLeft() - 1);
-				updateSpells.add(activeSpellEffect.getSpellId(), activeSpellEffect);
+				updateSpells.add(activeSpellEffect);
 			}
 		}
 		

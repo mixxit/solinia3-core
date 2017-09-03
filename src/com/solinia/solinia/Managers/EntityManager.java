@@ -1,9 +1,13 @@
 package com.solinia.solinia.Managers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -49,6 +53,23 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void spellTick() {
+		List<UUID> uuidRemoval = new ArrayList<UUID>();
+		for (SoliniaEntitySpellEffects entityEffects : entitySpellEffects.values())
+		{
+			Entity entity = Bukkit.getEntity(entityEffects.getLivingEntityUUID());
+			if (entity == null)
+			{
+				uuidRemoval.add(entityEffects.getLivingEntityUUID());
+			}
+		}
+		
+		for(UUID uuid : uuidRemoval)
+		{
+			System.out.println("Cleared Entity Effects for invalid UUID: " + uuid);
+			entitySpellEffects.remove(uuid);
+		}
+		
+		
 		for(SoliniaEntitySpellEffects entityEffects : entitySpellEffects.values())
 		{
 			entityEffects.run();
