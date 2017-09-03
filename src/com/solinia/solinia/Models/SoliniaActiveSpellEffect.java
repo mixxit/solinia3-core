@@ -7,8 +7,12 @@ import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 
@@ -87,7 +91,8 @@ public class SoliniaActiveSpellEffect {
 			return;
 		case ATK: 
 			return;
-		case MovementSpeed: 
+		case MovementSpeed:
+			applyMovementSpeedEffect(spellEffect,soliniaSpell);
 			return;
 		case STR
 			: return;
@@ -111,8 +116,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case WaterBreathing
 			: return;
-		case CurrentMana
-			: return;
+		case CurrentMana:
+			applyCurrentMpSpellEffect(spellEffect,soliniaSpell);
+			return;
 		case NPCFrenzy
 			: return;
 		case NPCAwareness
@@ -1029,6 +1035,43 @@ public class SoliniaActiveSpellEffect {
 		default:
 			return;
 		}
+	}
+
+	private void applyCurrentMpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!isOwnerPlayer())
+			return;
+		
+		int mpToRemove = spellEffect.getBase();
+		
+		try
+		{
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(this.getOwnerUuid()));
+			
+			int amount = (int) Math.round(solplayer.getMana()) + mpToRemove;
+			if (amount > solplayer.getMaxMP()) {
+				amount = (int) Math.round(solplayer.getMaxMP());
+			}
+			System.out.println("Changing MP: " + amount + " on player " + getLivingEntity().getUniqueId());
+			solplayer.setMana(amount);
+			getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
+			getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void applyMovementSpeedEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		int normalize = spellEffect.getBase();
+		// value is a percentage but we range from 1-5 (we can stretch to 10)
+		normalize = normalize / 10;
+		if (spellEffect.getBase() > 0)
+		{
+			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 6 * 20, normalize));
+		} else {
+			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, (normalize * -1)));
+		}
+		
 	}
 
 	private void applyCurrentHpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
