@@ -9,6 +9,7 @@ import com.earth2me.essentials.Essentials;
 import com.solinia.solinia.Commands.CommandAddClass;
 import com.solinia.solinia.Commands.CommandAddLootDropItem;
 import com.solinia.solinia.Commands.CommandAddLootTableLootDrop;
+import com.solinia.solinia.Commands.CommandAddMerchantItem;
 import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
@@ -16,7 +17,9 @@ import com.solinia.solinia.Commands.CommandCreateFaction;
 import com.solinia.solinia.Commands.CommandCreateItem;
 import com.solinia.solinia.Commands.CommandCreateLootDrop;
 import com.solinia.solinia.Commands.CommandCreateLootTable;
+import com.solinia.solinia.Commands.CommandCreateMerchantList;
 import com.solinia.solinia.Commands.CommandCreateNpc;
+import com.solinia.solinia.Commands.CommandEditItem;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEditSpell;
 import com.solinia.solinia.Commands.CommandEmote;
@@ -27,9 +30,12 @@ import com.solinia.solinia.Commands.CommandListFactions;
 import com.solinia.solinia.Commands.CommandListItems;
 import com.solinia.solinia.Commands.CommandListLootDrops;
 import com.solinia.solinia.Commands.CommandListLootTables;
+import com.solinia.solinia.Commands.CommandListMerchantLists;
 import com.solinia.solinia.Commands.CommandListNPCs;
 import com.solinia.solinia.Commands.CommandLocal;
 import com.solinia.solinia.Commands.CommandMana;
+import com.solinia.solinia.Commands.CommandNPCBuy;
+import com.solinia.solinia.Commands.CommandNPCSell;
 import com.solinia.solinia.Commands.CommandRaceInfo;
 import com.solinia.solinia.Commands.CommandRebuildSpellItems;
 import com.solinia.solinia.Commands.CommandResetPlayer;
@@ -66,10 +72,12 @@ import com.solinia.solinia.Repositories.JsonNPCRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
+import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 
+import me.dadus33.chatitem.api.ChatItemAPI;
 import net.milkbowl.vault.economy.Economy;
 
 public class Solinia3CorePlugin extends JavaPlugin {
@@ -77,8 +85,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private StateCommitTimer commitTimer;
 	private PlayerRegenTickTimer playerRegenTimer;
 	private SpellTickTimer spellTickTimer;
+	private PlayerInteractionTimer playerInteractionTimer;
+
 	private Essentials essentials;
 	private Economy economy;
+	private ChatItemAPI ciApi;
 	
 	@Override
     public void onEnable() {
@@ -89,9 +100,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		
 		setupEconomy();
 		setupEssentials();
+		setupChatItem();
 		
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setEssentials(this.essentials);
+		StateManager.getInstance().setChatItem(this.ciApi);
 	}
 	
 	@Override
@@ -104,6 +117,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		}
 		System.out.println("[Solinia3Core] Plugin Disabled");
     }
+	
+	private void setupChatItem()
+	{
+		ciApi = Bukkit.getServicesManager().getRegistration(ChatItemAPI.class).getProvider();
+	}
 	
 	private boolean setupEssentials()
 	{
@@ -184,6 +202,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			
 			spellTickTimer = new SpellTickTimer();
 			spellTickTimer.runTaskTimer(this, 6*20L, 6*20L);
+			
+			playerInteractionTimer = new PlayerInteractionTimer();
+			playerInteractionTimer.runTaskTimer(this, 6*20L, 6*20L);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -236,6 +257,12 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listloottables").setExecutor(new CommandListLootTables());
 		this.getCommand("local").setExecutor(new CommandLocal());
 		this.getCommand("forcelevel").setExecutor(new CommandForceLevel());
+		this.getCommand("createmerchantlist").setExecutor(new CommandCreateMerchantList());
+		this.getCommand("addmerchantitem").setExecutor(new CommandAddMerchantItem());
+		this.getCommand("npcbuy").setExecutor(new CommandNPCBuy());
+		this.getCommand("npcsell").setExecutor(new CommandNPCSell());
+		this.getCommand("listmerchantlists").setExecutor(new CommandListMerchantLists());
+		this.getCommand("edititem").setExecutor(new CommandEditItem());
 	}
 	
 	private void createConfigDir() {

@@ -15,6 +15,7 @@ import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Models.SoliniaSpell;
 
+import me.dadus33.chatitem.api.ChatItemAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -28,6 +29,7 @@ public class CoreState {
 	private Essentials essentials;
 	private IChannelManager channelManager;
 	private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
+	private ChatItemAPI chatitemapi;
 
 	public CoreState()
 	{
@@ -156,5 +158,13 @@ public class CoreState {
 
 	public void spellTick() {
 		entityManager.spellTick();
+	}
+
+	public ChatItemAPI getChatItem() {
+		return chatitemapi;
+	}
+
+	public void setChatItem(ChatItemAPI chatitemapi) {
+		this.chatitemapi = chatitemapi;
 	}
 }

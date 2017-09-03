@@ -3,11 +3,13 @@ package com.solinia.solinia.Interfaces;
 import java.util.List;
 
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 
 public interface ISoliniaItem {
 	ItemStack asItemStack();
@@ -155,5 +157,14 @@ public interface ISoliniaItem {
 	void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity) throws CoreStateInitException;
 
 	void useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock) throws CoreStateInitException;
+
+	String asJsonString();
+
+	String asJsonStringEscaped();
+
+	void sendItemSettingsToSender(CommandSender sender) throws CoreStateInitException;
+
+	void editSetting(String setting, String value)
+			throws InvalidItemSettingException, NumberFormatException, CoreStateInitException;
 
 }

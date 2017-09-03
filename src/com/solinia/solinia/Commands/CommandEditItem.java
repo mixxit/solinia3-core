@@ -7,14 +7,16 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
-import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Exceptions.InvalidItemSettingException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
 
-public class CommandEditSpell implements CommandExecutor {
+public class CommandEditItem implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
 			return false;
 		
@@ -31,7 +33,7 @@ public class CommandEditSpell implements CommandExecutor {
 		}
 		
 		// Args
-		// SPELLID
+		// ITEMID
 		// Setting
 		// NewValue
 		
@@ -40,18 +42,18 @@ public class CommandEditSpell implements CommandExecutor {
 			return false;
 		}
 
-		int spellid = Integer.parseInt(args[0]);
+		int itemid = Integer.parseInt(args[0]);
 		
 		if (args.length == 1)
 		{
 			try
 			{
-				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellid);
-				if (spell != null)
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
+				if (item != null)
 				{
-					spell.sendSpellSettingsToSender(sender);
+					item.sendItemSettingsToSender(sender);
 				} else {
-					sender.sendMessage("SPELL ID doesnt exist");
+					sender.sendMessage("ITEM ID doesnt exist");
 				}
 				return true;
 			} catch (CoreStateInitException e)
@@ -63,7 +65,7 @@ public class CommandEditSpell implements CommandExecutor {
 		
 		if (args.length < 3)
 		{
-			sender.sendMessage("Insufficient arguments: spellid setting value");
+			sender.sendMessage("Insufficient arguments: itemid setting value");
 			return false;
 		}
 		
@@ -71,26 +73,26 @@ public class CommandEditSpell implements CommandExecutor {
 		
 		String value = args[2];
 		
-		if (spellid < 1)
+		if (itemid < 1)
 		{
-			sender.sendMessage("Invalid spellid id");
+			sender.sendMessage("Invalid item id");
 			return false;
 		}
 		
 		try
 		{
 
-			if (StateManager.getInstance().getConfigurationManager().getSpell(spellid) == null)
+			if (StateManager.getInstance().getConfigurationManager().getItem(itemid) == null)
 			{
-				sender.sendMessage("Cannot locate spell id: " + spellid);
+				sender.sendMessage("Cannot locate item id: " + itemid);
 				return false;
 			}
 
-			StateManager.getInstance().getConfigurationManager().editSpell(spellid,setting,value);
-			sender.sendMessage("Updating setting on spell");
-		} catch (InvalidSpellSettingException ne)
+			StateManager.getInstance().getConfigurationManager().editItem(itemid,setting,value);
+			sender.sendMessage("Updating setting on item");
+		} catch (InvalidItemSettingException ne)
 		{
-			sender.sendMessage("Invalid Spell setting");
+			sender.sendMessage("Invalid item setting");
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

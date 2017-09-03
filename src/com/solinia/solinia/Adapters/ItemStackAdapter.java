@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Material;
@@ -193,6 +192,12 @@ public class ItemStackAdapter {
 	    {
 			loretxt.addAll(generateSpellLoreText(soliniaItem));
 	    }
+		
+		if (soliniaItem.getWorth() > 0)
+		{
+			loretxt.add(ChatColor.WHITE + "Worth: " + ChatColor.YELLOW + soliniaItem.getWorth()
+			+ ChatColor.RESET);
+		}
 		
 
 		i.setLore(loretxt);

@@ -2,11 +2,8 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +11,14 @@ import org.bukkit.inventory.ItemStack;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidItemSettingException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 
@@ -57,7 +61,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int magicResist = 0;
 	private int poisonResist = 0;
 	private boolean spellscroll = false;
-	
+
 	@Override
 	public ItemStack asItemStack() {
 		return ItemStackAdapter.Adapt(this);
@@ -414,53 +418,92 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity) throws CoreStateInitException {
+	public void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity)
+			throws CoreStateInitException {
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-		if (spell == null)
-		{
+		if (spell == null) {
 			return;
 		}
-			
-		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana())
-		{
+
+		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
 			return;
 		}
 
 		boolean itemUseSuccess = spell.tryApplyOnEntity(player, targetentity);
-		
-		if (itemUseSuccess)
-		{
+
+		if (itemUseSuccess) {
 			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
 		}
-		
+
 		return;
 	}
 
 	@Override
 	public void useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock) throws CoreStateInitException {
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-		if (spell == null)
-		{
+		if (spell == null) {
 			return;
 		}
-			
-		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana())
-		{
+
+		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
 			return;
 		}
-		
-		boolean itemUseSuccess = false;
-		
-		itemUseSuccess = spell.tryApplyOnBlock(player,clickedBlock);
 
-		if (itemUseSuccess)
-		{
+		boolean itemUseSuccess = false;
+
+		itemUseSuccess = spell.tryApplyOnBlock(player, clickedBlock);
+
+		if (itemUseSuccess) {
 			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
 		}
-		
+
 		return;
+	}
+
+	@Override
+	public String asJsonString() {
+		String out = StateManager.getInstance().getChatItem().getJSONFromItem(this.asItemStack());
+		return out;
+	}
+
+	@Override
+	public String asJsonStringEscaped() {
+		String out = StateManager.getInstance().getChatItem().getJSONFromItem(this.asItemStack());
+		return out.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "\\r").replace("\n", "\\n");
+	}
+
+	@Override
+	public void sendItemSettingsToSender(CommandSender sender) throws CoreStateInitException {
+		sender.sendMessage(ChatColor.RED + "Item Settings for " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
+		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
+		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
+	}
+
+	@Override
+	public void editSetting(String setting, String value)
+			throws InvalidItemSettingException, NumberFormatException, CoreStateInitException {
+		String displayname = getDisplayname();
+		int worth = getWorth();
+
+		switch (setting.toLowerCase()) {
+		case "displayname":
+			if (value.equals(""))
+				throw new InvalidItemSettingException("Name is empty");
+
+			if (value.length() > 15)
+				throw new InvalidItemSettingException("Name is longer than 15 characters");
+			setDisplayname(value);
+			break;
+		case "worth":
+			setWorth(Integer.parseInt(value));
+			break;
+		default:
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth");
+		}
 	}
 
 }

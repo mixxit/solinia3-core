@@ -172,6 +172,31 @@ commands:
     description: Forces a players level
     usage: /forcelevel mcplayer level
     aliases: []
+  createmerchantlist:
+    description: Creates a merchant list
+    usage: /createmerchantlist name
+    aliases: []
+  addmerchantitem:
+    description: adds an item to a merchant list
+    usage: /addmerchantitem merchantid itemid
+    aliases: []
+  npcbuy:
+    description: buys an item from an npc merchant
+    usage: /npcbuy itemid count
+    aliases: []
+  npcsell:
+    description: sells an item to an npc merchant
+    usage: /npcsell itemid count
+    aliases: []
+  listmerchantlists:
+    description: Lists all merchant lists
+    usage: /listmerchantlists
+    aliases:
+    - listmerchants
+  edititem:
+    description: Edits an item
+    usage: /edititem itemid setting value
+    aliases: []
 depend:
 softdepend:
 - Vault

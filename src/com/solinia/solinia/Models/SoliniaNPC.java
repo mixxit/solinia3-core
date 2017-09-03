@@ -1,6 +1,10 @@
 package com.solinia.solinia.Models;
 
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
@@ -11,9 +15,12 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 public class SoliniaNPC implements ISoliniaNPC {
 	private int id;
@@ -271,6 +278,81 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
+	public void sendMerchantItemListToPlayer(Player player) 
+	{
+		String debugLastJson = "";
+		try
+		{
+			for (ISoliniaNPCMerchantEntry merchantitem : StateManager.getInstance().getConfigurationManager()
+					.getNPCMerchant(this.getMerchantid()).getEntries()) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(merchantitem.getItemid());
+				int price = item.getWorth();
+	
+				// Buy 1
+				final String jsonbuy = "{\"text\":\"~ (CLICK-BUY) " + item.getDisplayname() + " x1: $" + price
+						+ "\",\"color\":\"aqua\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcbuy "
+						+ merchantitem.getItemid() + " 1\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
+						+ item.asJsonStringEscaped() + "\"}}";
+				player.spigot().sendMessage(ComponentSerializer.parse(jsonbuy));
+	
+				// Buy 64
+				final String jsonbuy64 = "{\"text\":\"~ (CLICK-BUY) " + item.getDisplayname() + " x64: $" + (price * 64)
+						+ "\",\"color\":\"aqua\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcbuy "
+						+ merchantitem.getItemid() + " 64\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
+						+ item.asJsonStringEscaped() + "\"}}";
+				player.spigot().sendMessage(ComponentSerializer.parse(jsonbuy64));
+	
+			}
+	
+			for (int i = 0; i < 36; i++) {
+				ItemStack itemstack = player.getInventory().getItem(i);
+				if (itemstack == null)
+					continue;
+	
+				if (itemstack.getType().equals(Material.AIR))
+					continue;
+	
+				int ench = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+				if (ench < 1000)
+					continue;
+	
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+				if (item == null)
+					continue;
+	
+				int sellprice = item.getWorth();
+	
+				// List all items sellable by player
+				final String jsonsell = "{\"text\":\"~ (CLICK-SELL) " + item.getDisplayname() + " x1: $" + sellprice
+						+ "\",\"color\":\"yellow\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcsell "
+						+ item.getId() + " 1\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
+						+ item.asJsonStringEscaped() + "\"}}";
+
+				player.spigot().sendMessage(ComponentSerializer.parse(jsonsell));
+
+				if (itemstack.getAmount() > 1) {
+					final String jsonsellmany = "{\"text\":\"~ (CLICK-SELL) " + item.getDisplayname() + " x"
+							+ itemstack.getAmount() + ": $" + (sellprice * itemstack.getAmount())
+							+ "\",\"color\":\"yellow\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcsell "
+							+ item.getId() + " " + itemstack.getAmount()
+							+ "\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
+							+ item.asJsonStringEscaped() + "\"}}";
+					player.spigot().sendMessage(ComponentSerializer.parse(jsonsellmany));
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		} catch (Exception e)
+		{
+			player.sendMessage("* This npc is currently not trading");
+			e.printStackTrace();
+			System.out.println("Last Json Was:");
+			System.out.println(debugLastJson);
+		}
+	}
+
+	@Override
 	public void sendNpcSettingsToSender(CommandSender sender) throws CoreStateInitException {
 		sender.sendMessage(ChatColor.RED + "NPC Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -293,8 +375,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage(ChatColor.RED + "EQUIPMENT" + ChatColor.RESET);
 		if (getLoottableid() != 0) {
 			sender.sendMessage("- loottableid: " + ChatColor.GOLD + getLoottableid() + " ("
-					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName() + ")"
-					+ ChatColor.RESET);
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName()
+					+ ")" + ChatColor.RESET);
 		} else {
 			sender.sendMessage(
 					"- loottableid: " + ChatColor.GOLD + getLoottableid() + " (No Loot Table)" + ChatColor.RESET);
@@ -308,14 +390,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage(ChatColor.RED + "FACTION & MERCHANT" + ChatColor.RESET);
 		if (getFactionid() != 0) {
 			sender.sendMessage("- factionid: " + ChatColor.GOLD + getFactionid() + " ("
-					+ StateManager.getInstance().getConfigurationManager().getFaction(getFactionid()).getName() + ")" + ChatColor.RESET);
+					+ StateManager.getInstance().getConfigurationManager().getFaction(getFactionid()).getName() + ")"
+					+ ChatColor.RESET);
 		} else {
 			sender.sendMessage("- factionid: " + ChatColor.GOLD + getFactionid() + " (No Faction)" + ChatColor.RESET);
 		}
 		if (getMerchantid() != 0) {
 			sender.sendMessage("- merchantid: " + ChatColor.GOLD + getMerchantid() + " ("
-					+ StateManager.getInstance().getConfigurationManager().getNPCMerchant(getMerchantid()).getName() + ")"
-					+ ChatColor.RESET);
+					+ StateManager.getInstance().getConfigurationManager().getNPCMerchant(getMerchantid()).getName()
+					+ ")" + ChatColor.RESET);
 		} else {
 			sender.sendMessage(
 					"- merchantid: " + ChatColor.GOLD + getMerchantid() + " (No Merchant Table)" + ChatColor.RESET);
@@ -325,16 +408,22 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
-					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName() + ")");
-			ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid());
-			for (ISoliniaLootTableEntry le : StateManager.getInstance().getConfigurationManager().getLootTable(loottable.getId()).getEntries()) {
-				ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager().getLootDrop(le.getLootdropid());
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName()
+					+ ")");
+			ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager()
+					.getLootTable(getLoottableid());
+			for (ISoliniaLootTableEntry le : StateManager.getInstance().getConfigurationManager()
+					.getLootTable(loottable.getId()).getEntries()) {
+				ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager()
+						.getLootDrop(le.getLootdropid());
 				sender.sendMessage(
 						"- " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
-				for (ISoliniaLootDropEntry lde : StateManager.getInstance().getConfigurationManager().getLootDrop(ld.getId()).getEntries()) {
+				for (ISoliniaLootDropEntry lde : StateManager.getInstance().getConfigurationManager()
+						.getLootDrop(ld.getId()).getEntries()) {
 					ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
-					sender.sendMessage("  - " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - "
-							+ lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());
+					sender.sendMessage("  - " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId()
+							+ "] - " + lde.getChance() + "% chance Count: " + lde.getCount() + " Always: "
+							+ lde.isAlways());
 				}
 			}
 		}
@@ -368,7 +457,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public void editSetting(String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException {
+	public void editSetting(String setting, String value)
+			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException {
 		String name = getName();
 		String mctype = getMctype();
 		int level = getLevel();
@@ -408,13 +498,13 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setLevel(Integer.parseInt(value));
 			break;
 		case "factionid":
-			if (Integer.parseInt(value) == 0)
-			{
+			if (Integer.parseInt(value) == 0) {
 				setFactionid(Integer.parseInt(value));
 				break;
 			}
-			
-			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(Integer.parseInt(value));
+
+			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
+					.getFaction(Integer.parseInt(value));
 			if (faction == null)
 				throw new InvalidNpcSettingException("Faction ID does not exist");
 			setFactionid(Integer.parseInt(value));

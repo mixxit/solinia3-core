@@ -1,9 +1,7 @@
 package com.solinia.solinia.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,7 +15,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -30,6 +30,99 @@ import com.solinia.solinia.Models.SpellEffectType;
 import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
+	
+	public static int getPlayerTotalCountOfItemId(Player player, int itemid)
+	{
+		int total = 0;
+		
+		for (int i = 0; i < 36; i++)
+		{
+			ItemStack itemstack = player.getInventory().getItem(i);
+    		if(itemstack == null)
+    			continue;
+    		
+    		if (itemstack.getType().equals(Material.AIR))
+	        	continue;
+    		
+    		int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+    		if (tmpitemid < 1000)
+    			continue;
+    		
+    		try {
+				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
+			} catch (SoliniaItemException e) {
+				continue;
+			} catch (CoreStateInitException e) {
+				continue;
+			}
+    		
+    		if (tmpitemid == itemid)
+    		{
+    			total = total + itemstack.getAmount();
+    		}
+    	}
+		
+		return total;
+	}
+	
+	public static int removeItemsFromInventory(Player player, int itemid, int count)
+	{
+		int removed = 0;
+		int remaining = count;
+		for (int i = 0; i < 36; i++)
+		{
+			ItemStack itemstack = player.getInventory().getItem(i);
+			if (itemstack == null)
+				continue;
+			
+			if (itemstack.getType().equals(Material.AIR))
+	        	continue;
+	        
+    		int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+    		if (tmpitemid < 1000)
+    			continue;
+    		
+    		try {
+				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
+			} catch (SoliniaItemException e) {
+				continue;
+			} catch (CoreStateInitException e) {
+				continue;
+			}
+			
+			if (remaining < 1)
+				break;
+			
+			if (remaining <= itemstack.getAmount())
+			{
+				removed = removed + remaining;
+				itemstack.setAmount(itemstack.getAmount() - remaining);
+				remaining = 0;
+				break;
+			}
+			
+			if (remaining > 64)
+			{
+				if (itemstack.getAmount() < 64)
+				{
+					removed = removed + itemstack.getAmount();
+					remaining = remaining - itemstack.getAmount();
+					itemstack.setAmount(0);
+				} else {
+					removed = removed + 64;
+					remaining = remaining - 64;
+					itemstack.setAmount(itemstack.getAmount() - 64);
+				}
+			} else {
+				removed = removed + itemstack.getAmount();
+				remaining = remaining - itemstack.getAmount();
+				itemstack.setAmount(0);
+			}
+		}
+		
+		player.updateInventory();
+		return removed;
+	}
 
 	public static SpellTargetType getSpellTargetType(int spellTargetId) {
 		switch (spellTargetId) {

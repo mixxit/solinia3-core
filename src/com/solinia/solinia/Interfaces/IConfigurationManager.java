@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaFaction;
@@ -142,4 +143,10 @@ public interface IConfigurationManager {
 	int getNextLootTableId();
 
 	void editSpell(int spellid, String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
+
+	int getNextNPCMerchantId();
+
+	ISoliniaNPCMerchant getNPCMerchant(String merchantlistname);
+
+	void editItem(int itemid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidItemSettingException;
 }

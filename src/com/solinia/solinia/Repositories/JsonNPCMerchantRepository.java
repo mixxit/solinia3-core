@@ -14,10 +14,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.solinia.solinia.Factories.ISoliniaNPCMerchantEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Models.SoliniaNPCMerchant;
+import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
 
 public class JsonNPCMerchantRepository implements IRepository<ISoliniaNPCMerchant> {
 
@@ -65,7 +68,9 @@ public class JsonNPCMerchantRepository implements IRepository<ISoliniaNPCMerchan
 		List<ISoliniaNPCMerchant> file = new ArrayList<ISoliniaNPCMerchant>();
 		
 		try {
-			Gson gson = new Gson();
+			GsonBuilder gsonbuilder = new GsonBuilder();
+			gsonbuilder.registerTypeAdapterFactory(new ISoliniaNPCMerchantEntryTypeAdapterFactory(SoliniaNPCMerchantEntry.class));
+			Gson gson = gsonbuilder.create();
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 			file = gson.fromJson(br, new TypeToken<List<SoliniaNPCMerchant>>(){}.getType());
 		} catch (FileNotFoundException e) {

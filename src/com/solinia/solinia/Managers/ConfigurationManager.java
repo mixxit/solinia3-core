@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
@@ -304,6 +305,17 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return maxItem + 1;
 	}
+	
+	@Override
+	public int getNextNPCMerchantId() {
+		int max = 0;
+		for (ISoliniaNPCMerchant merchantInstance : getNPCMerchants()) {
+			if (merchantInstance.getId() > max)
+				max = merchantInstance.getId();
+		}
+
+		return max + 1;
+	}
 
 	@Override
 	public boolean isValidRaceClass(int raceId, int classId) {
@@ -368,6 +380,12 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(npcid));
 		Bukkit.getPluginManager().callEvent(soliniaevent);
+	}
+	
+	@Override
+	public void editItem(int itemid, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidItemSettingException {
+		getItem(itemid).editSetting(setting, value);
 	}
 
 	@Override
@@ -451,5 +469,14 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void editSpell(int spellid, String setting, String value) 
 		throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
 			getSpell(spellid).editSetting(setting, value);
+	}
+
+	@Override
+	public ISoliniaNPCMerchant getNPCMerchant(String merchantlistname) {
+		List<ISoliniaNPCMerchant> list = npcmerchantRepository.query(q -> q.getName().toUpperCase().equals(merchantlistname.toUpperCase()));
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
 	}
 }

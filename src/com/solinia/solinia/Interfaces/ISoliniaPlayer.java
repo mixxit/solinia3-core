@@ -119,4 +119,8 @@ public interface ISoliniaPlayer extends Serializable {
 	public void interact(PlayerInteractEvent event);
 
 	void emote(String string);
+
+	UUID getInteraction();
+
+	void setInteraction(UUID interaction);
 }

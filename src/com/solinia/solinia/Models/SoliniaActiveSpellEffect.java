@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -158,8 +159,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case BindAffinity
 			: return;
-		case Gate
-			: return;
+		case Gate:
+			applyGate(spellEffect,soliniaSpell);
+			return;
 		case CancelMagic
 			: return;
 		case InvisVsUndead
@@ -1054,6 +1056,24 @@ public class SoliniaActiveSpellEffect {
 		default:
 			return;
 		}
+	}
+
+	private void applyGate(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!isOwnerPlayer())
+			return;
+
+		Player player = (Player)getLivingEntity();
+		
+		Location blocation = player.getBedSpawnLocation();
+		if (blocation == null)
+		{
+			player.sendMessage("Could not teleport, you are not bound to a location");
+			return;
+		}
+		
+		player.teleport(blocation);
+		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
+		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 	}
 
 	private void applyCurrentMpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {

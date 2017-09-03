@@ -12,12 +12,16 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
+
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreEntityListener implements Listener {
@@ -72,6 +76,47 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.isCancelled()) 
 			return;
 	}
+	
+	@EventHandler
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event){
+		
+		if (!(event.getRightClicked() instanceof LivingEntity))
+		{
+			return;
+		}
+		
+        if(!(event.getRightClicked() instanceof LivingEntity))
+        {
+        	return;
+        }
+        
+        if(event.getRightClicked() instanceof Player)
+        {
+        	return;
+        }
+        
+        if (event.getHand() != EquipmentSlot.HAND || event.getRightClicked() == null)
+		{
+			return;
+		}
+        
+        try
+        {
+	        ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getRightClicked());
+			if (solentity.getNpcid() > 0)
+			{
+				SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(solentity.getBukkitLivingEntity().getUniqueId());
+				if (StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()).getMerchantid() > 0)
+				{
+					StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()).sendMerchantItemListToPlayer(event.getPlayer());
+				}
+			}
+        } catch (CoreStateInitException e)
+        {
+        	e.printStackTrace();
+        	return;
+        }
+    }
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {

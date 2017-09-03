@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
@@ -106,5 +107,7 @@ public interface ISoliniaNPC {
 	int getMaxDamage();
 
 	int getMaxHP();
+
+	void sendMerchantItemListToPlayer(Player player);
 
 }

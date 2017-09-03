@@ -17,7 +17,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -45,6 +44,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String language = "UNKNOWN";
 	private String gender = "MALE";
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
+	private UUID interaction;
 
 	@Override
 	public UUID getUUID() {
@@ -729,6 +729,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e)
 		{
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public UUID getInteraction() {
+		return interaction;
+	}
+
+	@Override
+	public void setInteraction(UUID interaction) {
+		if (interaction == null)
+		{
+			this.interaction = interaction;
+			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are no longer interacting");
+		} else {
+			this.interaction = interaction;
+			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName());
 		}
 	}
 }
