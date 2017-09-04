@@ -33,7 +33,8 @@ import net.minecraft.server.v1_12_R1.NBTTagString;
 
 public class ItemStackAdapter {
 	public static ItemStack Adapt(ISoliniaItem soliniaItem) {
-		ItemStack stack = new ItemStack(Material.valueOf(soliniaItem.getBasename().toUpperCase()));
+		
+		ItemStack stack = new ItemStack(Material.valueOf(soliniaItem.getBasename().toUpperCase()), 1, soliniaItem.getColor());
 
 		if (soliniaItem.getDamage() > 0) {
 			if (soliniaItem.getBasename().equals("WOOD_SWORD") || soliniaItem.getBasename().equals("STONE_SWORD")

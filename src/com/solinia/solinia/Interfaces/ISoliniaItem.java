@@ -167,4 +167,8 @@ public interface ISoliniaItem {
 	void editSetting(String setting, String value)
 			throws InvalidItemSettingException, NumberFormatException, CoreStateInitException;
 
+	byte getColor();
+
+	void setColor(byte color);
+
 }

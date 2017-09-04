@@ -63,6 +63,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int magicResist = 0;
 	private int poisonResist = 0;
 	private boolean spellscroll = false;
+	private byte color;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -512,9 +513,22 @@ public class SoliniaItem implements ISoliniaItem {
 		case "worth":
 			setWorth(Integer.parseInt(value));
 			break;
+		case "color":
+			setColor((byte)Integer.parseInt(value));
+			break;
 		default:
 			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth");
 		}
+	}
+
+	@Override
+	public byte getColor() {
+		return color;
+	}
+
+	@Override
+	public void setColor(byte color) {
+		this.color = color;
 	}
 
 }

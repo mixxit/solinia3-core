@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Wool;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
@@ -20,7 +21,18 @@ public class SoliniaItemFactory {
 		item.setId(StateManager.getInstance().getConfigurationManager().getNextItemId());
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(itemStack.getType().name());
-
+		
+		if (itemStack.getData() != null)
+		{
+			try
+			{
+				item.setColor(itemStack.getData().getData());
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
 		StateManager.getInstance().getConfigurationManager().addItem(item);
 		System.out.println("New Item Added: " + item.getId() + " - " + item.getDisplayname());
 		return item;
