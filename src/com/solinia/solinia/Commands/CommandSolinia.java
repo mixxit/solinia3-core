@@ -3,9 +3,12 @@ package com.solinia.solinia.Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandSolinia implements CommandExecutor {
 
@@ -19,7 +22,12 @@ public class CommandSolinia implements CommandExecutor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
-	}
+		
+		if (sender instanceof ConsoleCommandSender)
+		{
+			Utils.Patcher();
+		}
 
+		return true;
+	}
 }

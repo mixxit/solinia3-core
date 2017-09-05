@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,6 +32,20 @@ public class CommandLocal implements CommandExecutor {
 				e.printStackTrace();
 			}
             return true;
+		} else {
+			StringBuilder builder = new StringBuilder();
+            for (String value : args) {
+                builder.append(value + " ");
+            }
+            String message = builder.toString();
+            message = message.substring(0, message.length());
+            
+            if (message.equals(""))
+            {
+            	return false;            	
+            }
+			
+			Bukkit.broadcastMessage("Console:" + message);
 		}
 		return false;
 	}
