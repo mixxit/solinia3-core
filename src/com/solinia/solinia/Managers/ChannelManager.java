@@ -14,6 +14,7 @@ public class ChannelManager implements IChannelManager {
 
 	@Override
 	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message) {
+		
 		message = decorateLocalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 100)

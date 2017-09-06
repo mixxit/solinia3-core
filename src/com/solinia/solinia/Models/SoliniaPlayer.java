@@ -469,6 +469,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public String getLanguage() {
+		if (language == null || language.equals("UNKNOWN"))
+				if (getRace() != null)
+					language = getRace().getName();
 		return language;
 	}
 
@@ -505,11 +508,31 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	
 	@Override
 	public void ooc(String string) {
+		if (getLanguage() == null || getLanguage().equals("UNKNOWN"))
+		{
+			if (getRace() == null)
+			{
+				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
+				return;
+			} else {
+				setLanguage(getRace().getName().toUpperCase());
+			}
+		}
 		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this,string);
 	}
 
 	@Override
 	public void say(String string) {
+		if (getLanguage() == null || getLanguage().equals("UNKNOWN"))
+		{
+			if (getRace() == null)
+			{
+				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
+				return;
+			} else {
+				setLanguage(getRace().getName().toUpperCase());
+			}
+		}
 		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this,string);
 	}
 	
@@ -768,8 +791,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean understandsLanguage(String language) {
+		System.out.println("Checking if " + getFullName() + "(with race " + getRace().getName() + " ) understands language " + language.toUpperCase());
 		if (getRace() != null)
-			if (getRace().getName().toUpperCase().equals(language))
+			if (getRace().getName().toUpperCase().equals(language.toUpperCase()))
 				return true;
 		
 		SoliniaPlayerSkill soliniaskill = getSkill(language);
