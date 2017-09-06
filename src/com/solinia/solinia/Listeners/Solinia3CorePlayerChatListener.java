@@ -23,6 +23,17 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
+		if (event.getPlayer().getLanguage() == null || event.getPlayer().getLanguage().equals("UNKNOWN"))
+		{
+			if (event.getPlayer().getRace() == null)
+			{
+				event.getPlayer().getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
+				return;
+			} else {
+				event.getPlayer().setLanguage(event.getPlayer().getRace().getName().toUpperCase());
+			}
+		}
+		
 		if (!(event.getRawEvent() instanceof AsyncPlayerChatEvent))
 			return;
 		

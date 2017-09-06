@@ -41,7 +41,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean haschosenrace = false;
 	private boolean haschosenclass = false;
 	private int classid = 0;
-	private String language = "UNKNOWN";
+	private String language;
 	private String gender = "MALE";
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
 	private UUID interaction;
@@ -165,6 +165,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setRaceId(int raceid) {
 		// TODO Auto-generated method stub
 		this.raceid = raceid;
+		this.language = getRace().getName().toUpperCase();
 		updateMaxHp();
 	}
 	
