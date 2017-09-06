@@ -3,6 +3,7 @@ package com.solinia.solinia.Interfaces;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -149,4 +150,18 @@ public interface IConfigurationManager {
 	ISoliniaNPCMerchant getNPCMerchant(String merchantlistname);
 
 	void editItem(int itemid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidItemSettingException;
+
+	List<ISoliniaSpawnGroup> getSpawnGroups();
+
+	ISoliniaSpawnGroup getSpawnGroup(int Id);
+
+	int getNextSpawnGroupId();
+
+	void addSpawnGroup(ISoliniaSpawnGroup spawngroup);
+
+	void updateSpawnGroup(ISoliniaSpawnGroup spawngroup);
+
+	ISoliniaSpawnGroup getSpawnGroup(String upperCase);
+
+	void updateSpawnGroupLoc(int spawngroupid, Location location);
 }

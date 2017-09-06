@@ -4,14 +4,31 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
+
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
+import com.solinia.solinia.Managers.StateManager;
 
 public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	@Override
 	public void updateNpc(ISoliniaNPC npc) {
 		writeNpcDefinition("plugins/MythicMobs/Mobs/NPC_" + npc.getId() + ".yml", npc);
+		reloadProvider();
+	}
+	
+	@Override
+	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
+		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUP_" + spawngroup.getId() + ".yml", spawngroup);
+		reloadProvider();
+	}
+	
+	@Override
+	public void reloadProvider()
+	{
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm reload");
 	}
 
 	private void writeNpcDefinition(String fileName, ISoliniaNPC npc) {
@@ -29,6 +46,59 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 	}
 	
+	private void writeSpawnerDefinition(String fileName, ISoliniaSpawnGroup spawngroup) {
+		String fileData = createSpawnerFile(spawngroup);
+		try {
+			FileOutputStream fooStream = new FileOutputStream(fileName, false);
+
+			byte[] myBytes = fileData.getBytes();
+			fooStream.write(myBytes);
+			fooStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private String createSpawnerFile(ISoliniaSpawnGroup spawngroup) {
+		String spawner = "";
+
+		String uniquename = "SPAWNGROUPID_" + spawngroup.getId();
+		String mobname = "NPCID_" + spawngroup.getNpcid();
+		String world = spawngroup.getWorld();
+		Double x = spawngroup.getX();
+		Double y = spawngroup.getY();
+		Double z = spawngroup.getZ();
+
+		spawner = uniquename + ":\r\n";
+		spawner += "  MobName: " + mobname + "\r\n";
+		spawner += "  World: " + world + "\r\n";
+		spawner += "  X: " + x + "\r\n";
+		spawner += "  Y: " + y + "\r\n";
+		spawner += "  Z: " + z + "\r\n";
+		spawner += "  Radius: 0\r\n";
+		spawner += "  UseTimer: true\r\n";
+		spawner += "  MaxMobs: 1\r\n";
+		spawner += "  MobLevel: 1\r\n";
+		spawner += "  MobsPerSpawn: 1\r\n";
+		// todo
+		//spawner += "  Cooldown: 0\r\n";
+		//spawner += "  CooldownTimer: 0\r\n";
+		//spawner += "  Warmup: " + spawngroup.respawnseconds + "\r\n";
+		//spawner += "  WarmupTimer: 0\r\n";
+		spawner += "  CheckForPlayers: false\r\n";
+		spawner += "  ActivationRange: 112\r\n";
+		spawner += "  LeashRange: 112\r\n";
+		spawner += "  HealOnLeash: true\r\n";
+		spawner += "  ResetThreatOnLeash: true\r\n";
+		spawner += "  ShowFlames: false\r\n";
+		spawner += "  Breakable: false\r\n";
+		spawner += "  Conditions: []\r\n";
+		spawner += "  ActiveMobs: 0\r\n";
+		return spawner;
+	}
+
 	public static String createNpcFile(ISoliniaNPC npc) {
 		String mob = "";
 

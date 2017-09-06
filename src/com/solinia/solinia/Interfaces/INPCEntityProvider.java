@@ -4,4 +4,8 @@ public interface INPCEntityProvider {
 
 	void updateNpc(ISoliniaNPC npc);
 
+	void updateSpawnGroup(ISoliniaSpawnGroup spawnGroup);
+
+	void reloadProvider();
+
 }

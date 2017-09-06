@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
+import com.solinia.solinia.Events.SoliniaSpawnGroupUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
@@ -22,6 +25,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -30,6 +34,7 @@ import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
+import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 
 public class ConfigurationManager implements IConfigurationManager {
 
@@ -42,12 +47,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaNPCMerchant> npcmerchantRepository;
 	private IRepository<ISoliniaLootTable> loottableRepository;
 	private IRepository<ISoliniaLootDrop> lootdropRepository;
+	private IRepository<ISoliniaSpawnGroup> spawngroupRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -57,6 +63,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.npcmerchantRepository = npcmerchantContext;
 		this.loottableRepository = loottableContext;
 		this.lootdropRepository = lootdropContext;
+		this.spawngroupRepository = spawngroupContext;
 	}
 
 	@Override
@@ -69,6 +76,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	public List<ISoliniaLootTable> getLootTables() {
 		// TODO Auto-generated method stub
 		return loottableRepository.query(q -> q.getId() > 0);
+	}
+	
+	@Override
+	public List<ISoliniaSpawnGroup> getSpawnGroups() {
+		// TODO Auto-generated method stub
+		return spawngroupRepository.query(q -> q.getId() > 0);
 	}
 
 	@Override
@@ -146,6 +159,16 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return null;
 	}
+	
+	@Override
+	public ISoliniaSpawnGroup getSpawnGroup(int Id) {
+		// TODO Auto-generated method stub
+		List<ISoliniaSpawnGroup> list = spawngroupRepository.query(q -> q.getId() == Id);
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
 
 	@Override
 	public ISoliniaLootDrop getLootDrop(int Id) {
@@ -187,6 +210,16 @@ public class ConfigurationManager implements IConfigurationManager {
 		return null;
 	}
 
+	@Override
+	public ISoliniaSpawnGroup getSpawnGroup(String spawngroupname) {
+
+		List<ISoliniaSpawnGroup> spawngroups = spawngroupRepository.query(q -> q.getName().toUpperCase().equals(spawngroupname.toUpperCase()));
+		if (spawngroups.size() > 0)
+			return spawngroups.get(0);
+
+		return null;
+	}
+	
 	@Override
 	public ISoliniaItem getItem(int Id) {
 
@@ -241,6 +274,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.loottableRepository.commit();
 		this.lootdropRepository.commit();
 		this.spellRepository.commit();
+		this.spawngroupRepository.commit();
 	}
 
 	@Override
@@ -316,6 +350,17 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return max + 1;
 	}
+	
+	@Override
+	public int getNextSpawnGroupId() {
+		int max = 0;
+		for (ISoliniaSpawnGroup instance : getSpawnGroups()) {
+			if (instance.getId() > max)
+				max = instance.getId();
+		}
+
+		return max + 1;
+	}
 
 	@Override
 	public boolean isValidRaceClass(int raceId, int classId) {
@@ -356,6 +401,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void addItem(ISoliniaItem item) {
 		this.itemRepository.add(item);
 	}
+	
+	@Override
+	public void addSpawnGroup(ISoliniaSpawnGroup spawngroup) {
+		this.spawngroupRepository.add(spawngroup);
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroup.getId()));
+		Bukkit.getPluginManager().callEvent(soliniaevent);
+	}
 
 	@Override
 	public List<ISoliniaSpell> getSpells() {
@@ -370,7 +422,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public void updateItem(ISoliniaItem item) {
 		this.itemRepository.update(item);
-
+	}
+	
+	@Override
+	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
+		this.spawngroupRepository.update(spawngroup);
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroup.getId()));
+		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 
 	@Override
@@ -478,5 +536,15 @@ public class ConfigurationManager implements IConfigurationManager {
 			return list.get(0);
 
 		return null;
+	}
+
+	@Override
+	public void updateSpawnGroupLoc(int spawngroupid, Location location) {
+		if (getSpawnGroup(spawngroupid) == null)
+			return;
+		
+		getSpawnGroup(spawngroupid).setLocation(location);
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroupid));
+		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 }

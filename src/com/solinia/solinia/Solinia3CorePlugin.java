@@ -71,6 +71,7 @@ import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
+import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
@@ -184,11 +185,15 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonLootDropRepository lootdroprepo = new JsonLootDropRepository();
 			lootdroprepo.setJsonFile(getDataFolder() + "/" + "lootdrops.json");
 			lootdroprepo.reload();
+
+			JsonSpawnGroupRepository spawngrouprepo = new JsonSpawnGroupRepository();
+			spawngrouprepo.setJsonFile(getDataFolder() + "/" + "spawngroups.json");
+			spawngrouprepo.reload();
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 			
-			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,lootdroprepo);
+			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,lootdroprepo, spawngrouprepo);
 			
 			ChannelManager channelManager = new ChannelManager();
 			
