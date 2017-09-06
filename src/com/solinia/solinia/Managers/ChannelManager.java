@@ -3,6 +3,9 @@ package com.solinia.solinia.Managers;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -11,20 +14,24 @@ public class ChannelManager implements IChannelManager {
 
 	@Override
 	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message) {
-		boolean linkitem = false;
-		if (message.contains("$itemlink"))
-		{
-			message = message.replaceAll("$itemlink", "");
-			linkitem = true;
-		}
-		
 		message = decorateLocalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 100)
-			{			
-				player.sendMessage(message);
-				if (linkitem)
-					sendLinkMessage(source,player);
+			{
+				try
+				{
+					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
+					{
+						player.sendMessage(message);
+					} else {
+						player.sendMessage(" * " + source.getFullName() + " says something in a language you do not understand");
+						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+					}
+				} catch (CoreStateInitException e)
+				{
+					player.sendMessage("You could not understand what " + source.getFullName() + " was saying as your character is currently uninitialised");
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -33,55 +40,12 @@ public class ChannelManager implements IChannelManager {
 
 	@Override
 	public void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message) {
-		boolean linkitem = false;
-		if (message.contains("$itemlink"))
-		{
-			message = message.replaceAll("$itemlink", "");
-			linkitem = true;
-		}
-		
 		message = decorateGlobalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			player.sendMessage(message);
-			if (linkitem)
-				sendLinkMessage(source,player);
 		}
-
-		
 		
 		System.out.println(message);
-	}
-
-	private void sendLinkMessage(ISoliniaPlayer source, Player player) {
-		/*
-		ItemStack item = source.getBukkitPlayer().getInventory().getItemInMainHand();
-		String tmpjson = "";
-		
-		if (item != null)
-		{
-			if (item.getItemMeta() != null)
-			{
-				if (item.getItemMeta().getDisplayName() != null)
-				{
-					tmpjson = "{\"text\":\""+player.getDisplayName() + " item link: [" + item.getItemMeta().getDisplayName()+"]\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""+ItemStackUtils.ItemStackAsJsonString(item)+"\"}}";
-				}
-			}
-		}
-
-		if (tmpjson.equals(""))
-			return;
-
-		final String json = tmpjson;
-
-		PacketContainer chat = new PacketContainer(PacketType.Play.Server.CHAT);
-		chat.getChatComponents().write(0, WrappedChatComponent.fromJson(json));
-
-		try {
-			ProtocolLibrary.getProtocolManager().sendServerPacket(player, chat);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		*/
 	}
 
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {

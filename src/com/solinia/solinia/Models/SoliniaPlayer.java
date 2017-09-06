@@ -764,4 +764,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setCurrentChannel(String currentChannel) {
 		this.currentChannel = currentChannel;
 	}
+
+	@Override
+	public boolean understandsLanguage(String language) {
+		SoliniaPlayerSkill soliniaskill = getSkill(language);
+        if (soliniaskill != null && soliniaskill.getValue() >= 100)
+        {
+            return true;
+        }
+		return false;
+	}
+
+	@Override
+	public void tryImproveLanguage(String language) {
+		if (getSkill(language).getValue() >= 100)
+			return;
+		
+		tryIncreaseSkill(language,1);
+	}
 }

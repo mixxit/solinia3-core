@@ -78,7 +78,7 @@ commands:
     - dice
   setlanguage:
     description: Sets players language
-    usage: /setgender language
+    usage: /setlanguage language
     aliases: []
   tarot:
     description: Deals a tarot card
