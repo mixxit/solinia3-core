@@ -767,6 +767,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean understandsLanguage(String language) {
+		if (getRace() != null)
+			if (getRace().getName().toUpperCase().equals(language))
+				return true;
+		
 		SoliniaPlayerSkill soliniaskill = getSkill(language);
         if (soliniaskill != null && soliniaskill.getValue() >= 100)
         {
@@ -777,6 +781,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void tryImproveLanguage(String language) {
+		if (getRace() != null)
+			if (getRace().getName().toUpperCase().equals(language))
+				return;
+		
 		if (getSkill(language).getValue() >= 100)
 			return;
 		
