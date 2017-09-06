@@ -79,7 +79,8 @@ commands:
   setlanguage:
     description: Sets players language
     usage: /setlanguage language
-    aliases: []
+    aliases:
+    - language
   tarot:
     description: Deals a tarot card
     usage: /tarot
@@ -212,7 +213,8 @@ commands:
   setchannel:
     description: Sets current channel
     usage: /setchannel channelname
-    aliases: []
+    aliases:
+    - ch
   ooc:
     description: Sends a message to the ooc channel
     usage: /ooc message

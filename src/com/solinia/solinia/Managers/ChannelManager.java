@@ -25,7 +25,7 @@ public class ChannelManager implements IChannelManager {
 					{
 						player.sendMessage(message);
 					} else {
-						player.sendMessage(" * " + source.getFullName() + " says something in a language you do not understand");
+						player.sendMessage(ChatColor.AQUA + " * " + source.getFullName() + " says something in a language you do not understand" + ChatColor.RESET);
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
 				} catch (CoreStateInitException e)
