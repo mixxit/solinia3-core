@@ -38,10 +38,12 @@ import com.solinia.solinia.Commands.CommandLocal;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandNPCBuy;
 import com.solinia.solinia.Commands.CommandNPCSell;
+import com.solinia.solinia.Commands.CommandOoc;
 import com.solinia.solinia.Commands.CommandRaceInfo;
 import com.solinia.solinia.Commands.CommandRebuildSpellItems;
 import com.solinia.solinia.Commands.CommandResetPlayer;
 import com.solinia.solinia.Commands.CommandRoll;
+import com.solinia.solinia.Commands.CommandSetChannel;
 import com.solinia.solinia.Commands.CommandSetClass;
 import com.solinia.solinia.Commands.CommandSetGender;
 import com.solinia.solinia.Commands.CommandSetLanguage;
@@ -276,6 +278,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createspawngroup").setExecutor(new CommandCreateSpawnGroup());
 		this.getCommand("listspawngroups").setExecutor(new CommandListSpawnGroups());
 		this.getCommand("updatespawngrouploc").setExecutor(new CommandUpdateSpawnGroupLoc());
+		this.getCommand("ooc").setExecutor(new CommandOoc());
+		this.getCommand("setchannel").setExecutor(new CommandSetChannel());
 	}
 	
 	private void createConfigDir() {

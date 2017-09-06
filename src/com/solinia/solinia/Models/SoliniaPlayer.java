@@ -45,6 +45,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String gender = "MALE";
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
 	private UUID interaction;
+	private String currentChannel = "OOC";
 
 	@Override
 	public UUID getUUID() {
@@ -500,6 +501,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void emote(String string) {
 		StateManager.getInstance().getChannelManager().sendToLocalChannel(this,string);
 	}
+	
+	@Override
+	public void ooc(String string) {
+		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this,string);
+	}
 
 	@Override
 	public void say(String string) {
@@ -747,5 +753,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			this.interaction = interaction;
 			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName());
 		}
+	}
+
+	@Override
+	public String getCurrentChannel() {
+		return currentChannel;
+	}
+
+	@Override	
+	public void setCurrentChannel(String currentChannel) {
+		this.currentChannel = currentChannel;
 	}
 }

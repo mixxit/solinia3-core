@@ -5,7 +5,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 
 public class Solinia3CorePlayerChatListener implements Listener {
@@ -28,6 +31,11 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		rawEvent.setCancelled(true);
 		
 		// TODO - Support checking channel modes of player
-		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage());
+		if (event.getPlayer().getCurrentChannel().equals("LOCAL"))
+		{
+			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage());
+		} else {
+			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage());
+		}
 	}
 }

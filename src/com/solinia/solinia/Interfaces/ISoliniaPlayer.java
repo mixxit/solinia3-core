@@ -123,4 +123,10 @@ public interface ISoliniaPlayer extends Serializable {
 	UUID getInteraction();
 
 	void setInteraction(UUID interaction);
+
+	public void ooc(String message);
+
+	String getCurrentChannel();
+
+	void setCurrentChannel(String currentChannel);
 }
