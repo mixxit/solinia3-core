@@ -197,6 +197,18 @@ commands:
     description: Edits an item
     usage: /edititem itemid setting value
     aliases: []
+  createspawngroup:
+    description: Creates a new spawngroup
+    usage: /createspawngroup npcid spawngroupname
+    aliases: []
+  listspawngroups:
+    description: Lists spawngroups
+    usage: /listspawngroups filter
+    aliases: []
+  updatespawngrouploc:
+    description: Updates a spawngroups location
+    usage: /updatespawngrouploc spawngroupid
+    aliases: []
 depend:
 softdepend:
 - Vault

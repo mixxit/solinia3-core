@@ -19,6 +19,7 @@ import com.solinia.solinia.Commands.CommandCreateLootDrop;
 import com.solinia.solinia.Commands.CommandCreateLootTable;
 import com.solinia.solinia.Commands.CommandCreateMerchantList;
 import com.solinia.solinia.Commands.CommandCreateNpc;
+import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
 import com.solinia.solinia.Commands.CommandEditItem;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEditSpell;
@@ -32,6 +33,7 @@ import com.solinia.solinia.Commands.CommandListLootDrops;
 import com.solinia.solinia.Commands.CommandListLootTables;
 import com.solinia.solinia.Commands.CommandListMerchantLists;
 import com.solinia.solinia.Commands.CommandListNPCs;
+import com.solinia.solinia.Commands.CommandListSpawnGroups;
 import com.solinia.solinia.Commands.CommandLocal;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandNPCBuy;
@@ -50,6 +52,7 @@ import com.solinia.solinia.Commands.CommandSpawnItem;
 import com.solinia.solinia.Commands.CommandSpawnRandomItem;
 import com.solinia.solinia.Commands.CommandStats;
 import com.solinia.solinia.Commands.CommandTarot;
+import com.solinia.solinia.Commands.CommandUpdateSpawnGroupLoc;
 import com.solinia.solinia.Commands.CommandWho;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
@@ -268,6 +271,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("npcsell").setExecutor(new CommandNPCSell());
 		this.getCommand("listmerchantlists").setExecutor(new CommandListMerchantLists());
 		this.getCommand("edititem").setExecutor(new CommandEditItem());
+		this.getCommand("createspawngroup").setExecutor(new CommandCreateSpawnGroup());
+		this.getCommand("listspawngroups").setExecutor(new CommandListSpawnGroups());
+		this.getCommand("updatespawngrouploc").setExecutor(new CommandUpdateSpawnGroupLoc());
 	}
 	
 	private void createConfigDir() {
