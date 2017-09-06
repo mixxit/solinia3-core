@@ -15,13 +15,13 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	@Override
 	public void updateNpc(ISoliniaNPC npc) {
-		writeNpcDefinition("plugins/MythicMobs/Mobs/NPC_" + npc.getId() + ".yml", npc);
+		writeNpcDefinition("plugins/MythicMobs/Mobs/NPCID_" + npc.getId() + ".yml", npc);
 		reloadProvider();
 	}
 	
 	@Override
 	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
-		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUP_" + spawngroup.getId() + ".yml", spawngroup);
+		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 		reloadProvider();
 	}
 	
