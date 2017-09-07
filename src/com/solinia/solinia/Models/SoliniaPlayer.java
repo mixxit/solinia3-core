@@ -736,12 +736,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    	// Reroute action depending on target
 		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR)) 
 			    {
-		    		List<LivingEntity> targetmobs = Utils.getLivingEntitiesInCone(event.getPlayer());
-		    		System.out.print("RIGHT_CLICK_AIR found: " + targetmobs.size());
-		    		if (targetmobs.size() > 0)
+		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
+		    		if (targetmob != null)
 		    		{
-		    			LivingEntity targetentity = targetmobs.get(0);
-		    			item.useItemOnEntity(event.getPlayer(),item,targetentity);
+		    			item.useItemOnEntity(event.getPlayer(),item,targetmob);
 		    			return;
 		    		} else {
 		    			item.useItemOnEntity(event.getPlayer(),item,event.getPlayer());
