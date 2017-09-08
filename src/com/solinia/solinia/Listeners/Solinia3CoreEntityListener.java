@@ -1,5 +1,12 @@
 package com.solinia.solinia.Listeners;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
@@ -19,6 +26,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
@@ -145,7 +153,88 @@ public class Solinia3CoreEntityListener implements Listener {
 			ISoliniaLivingEntity livingEntity = SoliniaLivingEntityAdapter.Adapt(event.getEntity());
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)damager);
 			Double experience = Utils.getExperienceRewardAverageForLevel(livingEntity.getLevel());
-			player.increasePlayerExperience(experience);
+			
+			// try to share with group
+			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(player.getUUID());
+			if (group != null) {
+				Integer dhighestlevel = 0;
+
+				List<Integer> levelranges = new ArrayList<Integer>();
+
+				for (UUID member : group.getMembers()) {
+					ISoliniaPlayer playerchecked = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(member));
+					int checkedlevel = playerchecked.getLevel();
+					levelranges.add(checkedlevel);
+				}
+
+				Collections.sort(levelranges);
+
+				// get the highest person in the group
+				dhighestlevel = levelranges.get(levelranges.size() - 1);
+
+				int ihighlvl = (int) Math.floor(dhighestlevel);
+				int ilowlvl = ihighlvl - 7;
+
+				if (ilowlvl < 1) {
+					ilowlvl = 1;
+				}
+
+				System.out.println("Group Min: " + ilowlvl + " Group Max: " + ihighlvl);
+				
+				if (player.getLevel() < ilowlvl)
+				{
+					// Only award player the experience
+					// as they are out of range of the group
+					if (livingEntity.getLevel() >= player.getLevel() - 7) {
+						player.increasePlayerExperience(experience);
+					} else {
+						player.getBukkitPlayer().sendMessage(ChatColor.GRAY
+								+ "* The npc was too low level to gain experience from");
+					}
+					
+				} else {
+					for (UUID member : group.getMembers()) {
+						Player tgtplayer = Bukkit.getPlayer(member);
+						if (tgtplayer != null) {
+							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);
+							int tgtlevel = tgtsolplayer.getLevel();
+
+							if (tgtlevel < ilowlvl) {
+								System.out.println(tgtplayer.getName() + " did not get XP due to out of range");
+								tgtplayer.sendMessage(
+										"You were out of level range to gain experience in this group (Min: "
+												+ ilowlvl + " Max: " + ihighlvl + ")");
+								continue;
+							}
+
+							if (!tgtplayer.getWorld().equals(player.getBukkitPlayer().getWorld())) {
+								tgtplayer.sendMessage("You were out of range for shared group xp (world)");
+								continue;
+							}
+
+							if (tgtplayer.getLocation().distance(player.getBukkitPlayer().getLocation()) <= 100) {
+								if (livingEntity.getLevel() >= (tgtsolplayer.getLevel() - 7)) {
+									tgtsolplayer.increasePlayerExperience(experience);
+								} else {
+									tgtplayer.sendMessage(ChatColor.GRAY
+											+ "* The npc was too low level to gain experience from");
+								}
+
+							} else {
+								tgtplayer.sendMessage("You were out of range for shared group xp (distance)");
+								continue;
+							}
+						}
+					}
+				}
+			} else {
+				if (livingEntity.getLevel() >= (player.getLevel() - 7)) {
+					player.increasePlayerExperience(experience);
+				} else {
+					player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from");
+				}
+			}
+			
 			player.giveMoney(1);
 			livingEntity.dropLoot();
 		} catch (CoreStateInitException e) {
