@@ -492,8 +492,6 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void editSetting(String setting, String value)
 			throws InvalidItemSettingException, NumberFormatException, CoreStateInitException {
-		String displayname = getDisplayname();
-		int worth = getWorth();
 
 		switch (setting.toLowerCase()) {
 		case "displayname":
@@ -510,8 +508,38 @@ public class SoliniaItem implements ISoliniaItem {
 		case "color":
 			setColor((byte)Integer.parseInt(value));
 			break;
+		case "damage":
+			setDamage(Integer.parseInt(value));
+			break;
+		case "hpregen":
+			setHpregen(Integer.parseInt(value));
+			break;
+		case "mpregen":
+			setMpregen(Integer.parseInt(value));
+			break;
+		case "strength":
+			setStrength(Integer.parseInt(value));
+			break;
+		case "stamina":
+			setStamina(Integer.parseInt(value));
+			break;
+		case "agility":
+			setAgility(Integer.parseInt(value));
+			break;
+		case "dexterity":
+			setDexterity(Integer.parseInt(value));
+			break;
+		case "intelligence":
+			setIntelligence(Integer.parseInt(value));
+			break;
+		case "wisdom":
+			setWisdom(Integer.parseInt(value));
+			break;
+		case "charisma":
+			setCharisma(Integer.parseInt(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma");
 		}
 	}
 
