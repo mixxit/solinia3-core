@@ -54,7 +54,8 @@ public class ScoreboardUtils {
 	
 	public static void UpdateGroupScoreboard(UUID uuid, ISoliniaGroup group)
 	{
-		StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("playercard").unregister();
+		if (StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("playercard") != null)
+			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("playercard").unregister();
 		Objective objective = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).registerNewObjective("playercard", "dummy");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		objective.setDisplayName("Party");

@@ -32,6 +32,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -189,6 +190,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateDisplayName();
 			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateMaxHp();
 			Bukkit.getPluginManager().callEvent(soliniaevent);
+			
+			ScoreboardUtils.RemoveScoreboard(event.getPlayer().getUniqueId());
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");
 		}

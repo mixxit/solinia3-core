@@ -87,6 +87,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 			getBukkitPlayer().setDisplayName(getFullName());
 			getBukkitPlayer().setPlayerListName(getFullName());
+			
+			if (this.getGroup() != null) {
+				StateManager.getInstance().removePlayerFromGroup(this.getBukkitPlayer());
+			} else {
+				ScoreboardUtils.RemoveScoreboard(this.getBukkitPlayer().getUniqueId());
+			}
 		}
 	}
 	
