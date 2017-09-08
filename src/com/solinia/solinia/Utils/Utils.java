@@ -39,6 +39,7 @@ public class Utils {
 	{
 		int total = 0;
 		
+		System.out.println("Getting total Count of Item Id: " + itemid + " for player: " + player.getDisplayName());
 		for (int i = 0; i < 36; i++)
 		{
 			ItemStack itemstack = player.getInventory().getItem(i);
@@ -51,6 +52,9 @@ public class Utils {
     		int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
     		if (tmpitemid < 1000)
     			continue;
+    		
+    		if (tmpitemid != itemid)
+				continue;
     		
     		try {
 				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
@@ -66,6 +70,7 @@ public class Utils {
     		}
     	}
 		
+		System.out.println("Total Count of Item Id: " + itemid + " for player: " + player.getDisplayName() + " was " + total);
 		return total;
 	}
 	
@@ -73,6 +78,7 @@ public class Utils {
 	{
 		int removed = 0;
 		int remaining = count;
+		System.out.println("Removing " + count + " of Item Id: " + itemid + " for player: " + player.getDisplayName());
 		for (int i = 0; i < 36; i++)
 		{
 			ItemStack itemstack = player.getInventory().getItem(i);
@@ -96,6 +102,9 @@ public class Utils {
 			
 			if (remaining < 1)
 				break;
+			
+			if (tmpitemid != itemid)
+				continue;
 			
 			if (remaining <= itemstack.getAmount())
 			{
@@ -124,6 +133,8 @@ public class Utils {
 			}
 		}
 		
+		System.out.println("Removed " + removed + " of Item Id: " + itemid + " for player: " + player.getDisplayName());
+
 		player.updateInventory();
 		return removed;
 	}
