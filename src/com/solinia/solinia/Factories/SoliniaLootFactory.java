@@ -35,7 +35,7 @@ public class SoliniaLootFactory {
 		ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(name.toUpperCase());
 		for(ISoliniaNPCMerchantEntry item : merchant.getEntries())
 		{
-			CreateLootDropItem(lootdrop.getId(), item.getId(), count, always, chance);
+			CreateLootDropItem(lootdrop.getId(), item.getItemid(), count, always, chance);
 		}
 	}
 	
