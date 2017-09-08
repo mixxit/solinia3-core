@@ -20,6 +20,7 @@ public class SoliniaSpawnGroupFactory {
 		sg.setName(spawngroupname.toUpperCase());
 		sg.setNpcid(npcid);
 		sg.setLocation(location);
+		sg.setRespawntime(360);
 		
 		StateManager.getInstance().getConfigurationManager().addSpawnGroup(sg);
 	}

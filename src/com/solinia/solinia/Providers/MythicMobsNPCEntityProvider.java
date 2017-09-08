@@ -70,6 +70,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		Double x = spawngroup.getX();
 		Double y = spawngroup.getY();
 		Double z = spawngroup.getZ();
+		int respawnTime = spawngroup.getRespawntime();
 
 		spawner = uniquename + ":\r\n";
 		spawner += "  MobName: " + mobname + "\r\n";
@@ -87,7 +88,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		//spawner += "  CooldownTimer: 0\r\n";
 		//spawner += "  Warmup: " + spawngroup.respawnseconds + "\r\n";
 		//spawner += "  WarmupTimer: 0\r\n";
-		spawner += "  Warmup: 360\r\n";
+		spawner += "  Warmup: " + respawnTime + "\r\n";
 		spawner += "  WarmupTimer: 0\r\n";
 		spawner += "  CheckForPlayers: false\r\n";
 		spawner += "  ActivationRange: 112\r\n";

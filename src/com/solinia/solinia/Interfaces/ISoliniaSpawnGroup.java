@@ -42,4 +42,8 @@ public interface ISoliniaSpawnGroup {
 
 	void setPitch(double pitch);
 
+	int getRespawntime();
+
+	void setRespawntime(int respawntime);
+
 }

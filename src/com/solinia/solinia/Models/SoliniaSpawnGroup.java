@@ -14,6 +14,7 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	private int npcid;
 	private double yaw;
 	private double pitch;
+	private int respawntime = 360;
 	
 	@Override
 	public int getId() {
@@ -99,5 +100,14 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	@Override
 	public void setPitch(double pitch) {
 		this.pitch = pitch;
+	}
+	
+	@Override
+	public int getRespawntime() {
+		return respawntime;
+	}
+	@Override
+	public void setRespawntime(int respawntime) {
+		this.respawntime = respawntime;
 	}
 }

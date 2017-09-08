@@ -24,7 +24,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
 public class SoliniaNPC implements ISoliniaNPC {
 	private int id;
 	private String name;
-	private String mctype;
+	private String mctype = "ZOMBIE";
 	private int level = 1;
 	private int factionid;
 	private boolean usedisguise = false;
