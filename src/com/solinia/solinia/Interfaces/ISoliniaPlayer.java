@@ -133,4 +133,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public boolean understandsLanguage(String language);
 
 	public void tryImproveLanguage(String language);
+
+	public ISoliniaGroup getGroup();
 }

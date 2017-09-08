@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -692,6 +693,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    	
 		    	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
 		    	
+		    	if (spell.isAASpell())
+		    	{
+		    		event.getPlayer().sendMessage("You require the correct AA to use this spell");
+		    		return;
+		    	}
+		    	
 		    	if (spell.getAllowedClasses().size() > 0)
 		    	{
 		    		if (getClassObj() == null)
@@ -811,5 +818,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		
 		tryIncreaseSkill(language,1);
+	}
+
+	@Override
+	public ISoliniaGroup getGroup() {
+		// TODO Auto-generated method stub
+		return StateManager.getInstance().getGroupByMember(this.getBukkitPlayer().getUniqueId());
 	}
 }

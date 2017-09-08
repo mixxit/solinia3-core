@@ -289,6 +289,12 @@ public class ItemStackAdapter {
 			
 			loreTxt.add(ChatColor.WHITE + "Mana/Power: " + ChatColor.YELLOW+spell.getMana() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Range: " + ChatColor.YELLOW+spell.getRange() + ChatColor.RESET);
+			
+			if (spell.isAASpell())
+			{
+				loreTxt.add(ChatColor.WHITE + "This spell is an AA spell" + ChatColor.RESET);
+			}
+			
 			if (spell.isBuffSpell() && spell.getBuffduration() > 0)
 			{
 				loreTxt.add(ChatColor.WHITE + "Buff Duration: " + ChatColor.YELLOW + ((spell.getBuffduration() * 6) / 60) + " minutes" + ChatColor.RESET);

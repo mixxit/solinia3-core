@@ -1007,4 +1007,6 @@ public interface ISoliniaSpell {
 
 	List<SpellEffectType> getSpellEffectTypes();
 
+	boolean isAASpell();
+
 }

@@ -2937,4 +2937,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 	{
 		return Utils.getSpellEffectType(this.getEffectid12());
 	}
+
+	@Override
+	public boolean isAASpell() {
+		if (this.getMana() == 0)
+			return true;
+		return false;
+	}
 }

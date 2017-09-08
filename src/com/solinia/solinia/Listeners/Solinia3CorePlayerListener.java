@@ -1,5 +1,7 @@
 package com.solinia.solinia.Listeners;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -26,6 +28,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
@@ -44,7 +47,12 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-
+		ISoliniaGroup group = StateManager.getInstance().getGroupByMember(event.getPlayer().getUniqueId());
+		if (group != null)
+		{
+			System.out.println("removed a player group a group due to logout");
+			StateManager.getInstance().removePlayerFromGroup(event.getPlayer());
+		}
 	}
 
 	@EventHandler

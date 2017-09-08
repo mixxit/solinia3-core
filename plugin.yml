@@ -219,6 +219,18 @@ commands:
     description: Sends a message to the ooc channel
     usage: /ooc message
     aliases: []
+  group:
+    description: Group control commands
+    usage: /group cmd
+    aliases:
+    - grp
+    - grou
+  groupchat:
+    description: Sends a message to the group channel
+    usage: /groupchat message
+    aliases:
+    - g
+    - gc
 depend:
 softdepend:
 - Vault

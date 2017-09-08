@@ -26,6 +26,8 @@ import com.solinia.solinia.Commands.CommandEditSpell;
 import com.solinia.solinia.Commands.CommandEmote;
 import com.solinia.solinia.Commands.CommandForceLevel;
 import com.solinia.solinia.Commands.CommandForename;
+import com.solinia.solinia.Commands.CommandGroup;
+import com.solinia.solinia.Commands.CommandGroupChat;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandListFactions;
 import com.solinia.solinia.Commands.CommandListItems;
@@ -280,6 +282,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("updatespawngrouploc").setExecutor(new CommandUpdateSpawnGroupLoc());
 		this.getCommand("ooc").setExecutor(new CommandOoc());
 		this.getCommand("setchannel").setExecutor(new CommandSetChannel());
+		this.getCommand("group").setExecutor(new CommandGroup());
+		this.getCommand("groupchat").setExecutor(new CommandGroupChat());
 	}
 	
 	private void createConfigDir() {
