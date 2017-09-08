@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Scoreboard;
 
 import com.earth2me.essentials.Essentials;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -21,6 +22,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Utils.ScoreboardUtils;
 
 import me.dadus33.chatitem.api.ChatItemAPI;
 import net.md_5.bungee.api.ChatColor;
@@ -38,13 +40,26 @@ public class CoreState {
 	private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
-
+	private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
+	
 	private ChatItemAPI chatitemapi;
 
 	public CoreState()
 	{
 		isInitialised = false;
 	}
+	
+	public Scoreboard getScoreboard(Player player)
+	{
+		if (scoreboards.get(player.getUniqueId()) == null)
+		{
+			scoreboards.put(player.getUniqueId(),Bukkit.getScoreboardManager().getNewScoreboard());
+			player.setScoreboard(scoreboards.get(player.getUniqueId()));
+		}
+		
+		return scoreboards.get(player.getUniqueId());
+	}
+	
 	
 	public BossBar getBossBar(UUID uuid) {
 		return this.bossbars.get(uuid);
@@ -231,13 +246,11 @@ public class CoreState {
 		sendGroupMessage(player, "has left the group!");
 		group.getMembers().remove(player.getUniqueId());
 
-		/*
-		RemoveScoreboard(player.getUniqueId());
-		for(UUID uuid : group.members)
+		ScoreboardUtils.RemoveScoreboard(player.getUniqueId());
+		for(UUID uuid : group.getMembers())
 		{
-			updateGroupScoreboard(uuid,group);
+			ScoreboardUtils.UpdateGroupScoreboard(uuid,group);
 		}
-		*/
 
 		if (group.getOwner().equals(player.getUniqueId())) {
 			if (group.getMembers().size() > 0) {
@@ -323,10 +336,10 @@ public class CoreState {
 		group.getMembers().add(player.getUniqueId());
 		System.out.println("group: " + group.getId() + " gained a member: " + player.getDisplayName());
 		
-		/*for(UUID uuid : group.getMembers())
+		for(UUID uuid : group.getMembers())
 		{
-			updateGroupScoreboard(uuid,group);
-		}*/
+			ScoreboardUtils.UpdateGroupScoreboard(uuid,group);
+		}
 		
 		sendGroupMessage(player, "has joined the group!");
 		groups.put(group.getId(), group);
