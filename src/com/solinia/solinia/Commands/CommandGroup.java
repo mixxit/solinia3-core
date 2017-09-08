@@ -52,7 +52,7 @@ public class CommandGroup implements CommandExecutor {
 					{
 						if (!target.equals(player))
 						{
-							solplayer.getGroup().invitePlayer(target);					
+							StateManager.getInstance().invitePlayerToGroup(player,target);					
 						} else {
 							player.sendMessage("You cannot invite yourself to a group");
 						}
@@ -68,11 +68,17 @@ public class CommandGroup implements CommandExecutor {
 			
 			if (args[0].equals("leave"))
 			{
+				if (solplayer.getGroup() == null)
+					return true;
+				
 				solplayer.getGroup().removePlayer(player);
 				return true;
 			}
 			if (args[0].equals("list"))
 			{
+				if (solplayer.getGroup() == null)
+					return true;
+				
 				solplayer.getGroup().sendGroupList(player);
 				return true;
 			}
