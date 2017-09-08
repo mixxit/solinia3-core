@@ -17,6 +17,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -45,6 +46,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int loottableid;
 	private int raceid;
 	private int classid;
+	private boolean isRandomSpawn = false;
 
 	@Override
 	public int getId() {
@@ -368,6 +370,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- usedisguise: " + ChatColor.GOLD + isUsedisguise() + ChatColor.RESET);
 		sender.sendMessage("- disguisetype: " + ChatColor.GOLD + getDisguisetype() + ChatColor.RESET);
 		sender.sendMessage("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET);
+		sender.sendMessage("- customheaddata: " + ChatColor.GOLD + getCustomheaddata() + ChatColor.RESET);
 		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET);
 		sender.sendMessage("- burning: " + ChatColor.GOLD + isBurning() + ChatColor.RESET);
 		sender.sendMessage("- invisible: " + ChatColor.GOLD + isInvisible() + ChatColor.RESET);
@@ -545,7 +548,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setCustomhead(Boolean.parseBoolean(value));
 			break;
 		case "customheaddata":
-			setCustomheaddata(value);
+			// fetches custom head texture by a player name
+			setCustomheaddata(Utils.getTextureFromName(value));
 			break;
 		case "merchantid":
 			if (StateManager.getInstance().getConfigurationManager().getNPCMerchant(Integer.parseInt(value)) == null)
@@ -564,9 +568,22 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "classid":
 			setClassid(Integer.parseInt(value));
 			break;
+		case "randomspawn":
+			setRandomSpawn(Boolean.parseBoolean(value));
+			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn");
 		}
+	}
+
+	@Override
+	public boolean isRandomSpawn() {
+		return isRandomSpawn;
+	}
+
+	@Override
+	public void setRandomSpawn(boolean isRandomSpawn) {
+		this.isRandomSpawn = isRandomSpawn;
 	}
 }

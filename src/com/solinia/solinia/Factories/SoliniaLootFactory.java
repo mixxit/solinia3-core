@@ -5,6 +5,8 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaLootDrop;
 import com.solinia.solinia.Models.SoliniaLootDropEntry;
@@ -20,6 +22,23 @@ public class SoliniaLootFactory {
 		StateManager.getInstance().getConfigurationManager().addLootDrop(lootdrop);
 	}
 
+	public static void CreateLootDropFromMerchant(ISoliniaNPCMerchant merchant, String name, int count, boolean always, int chance) throws CoreStateInitException
+	{
+		if (merchant.getEntries().size() == 0)
+			return;
+
+		if (StateManager.getInstance().getConfigurationManager().getLootDrop(name.toUpperCase()) != null)
+			return;
+		
+		CreateLootDrop(name);
+		
+		ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(name.toUpperCase());
+		for(ISoliniaNPCMerchantEntry item : merchant.getEntries())
+		{
+			CreateLootDropItem(lootdrop.getId(), item.getId(), count, always, chance);
+		}
+	}
+	
 	public static void CreateLootTable(String loottablename) throws CoreStateInitException {
 		SoliniaLootTable loottable = new SoliniaLootTable();
 		loottable.setId(StateManager.getInstance().getConfigurationManager().getNextLootTableId());

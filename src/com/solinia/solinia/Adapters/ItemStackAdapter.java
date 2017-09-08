@@ -1,5 +1,6 @@
 package com.solinia.solinia.Adapters;
 
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -18,6 +19,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -332,9 +335,28 @@ public class ItemStackAdapter {
 		return loreTxt;
 	}
 
-	private static ItemMeta buildSkull(SkullMeta i, UUID skinuuid, String texturebase64, Object object) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ItemMeta buildSkull(SkullMeta meta, UUID skinuuid, String texturebase64, String player) {
+		if (player != null) {
+			meta.setOwner(player);
+		} else if (texturebase64 != null) {
+			GameProfile profile = new GameProfile(skinuuid, null);
+
+			profile.getProperties().put("textures", new Property("textures", texturebase64));
+			Field profileField = null;
+			try {
+				profileField = meta.getClass().getDeclaredField("profile");
+			} catch (NoSuchFieldException | SecurityException e) {
+				e.printStackTrace();
+			}
+			profileField.setAccessible(true);
+			try {
+				profileField.set(meta, profile);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return meta;
 	}
 
 	public static UUID getUUIDFromString(String s) {

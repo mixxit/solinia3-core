@@ -16,6 +16,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 	@Override
 	public void updateNpc(ISoliniaNPC npc) {
 		writeNpcDefinition("plugins/MythicMobs/Mobs/NPCID_" + npc.getId() + ".yml", npc);
+		writeRandomSpawn("plugins/MythicMobs/RandomSpawns/RANDOMSPAWNNPCID_" + npc.getId() + ".yml", npc);
+		writeCustomHead("plugins/MythicMobs/Items/CUSTOMHEADNPCID_" + npc.getId() + ".yml", npc);
 		reloadProvider();
 	}
 	
@@ -46,6 +48,54 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 	}
 	
+	private void writeCustomHead(String fileName, ISoliniaNPC npc) {
+		String fileData = createCustomHeadFile(npc);
+		try {
+			FileOutputStream fooStream = new FileOutputStream(fileName, false);
+
+			byte[] myBytes = fileData.getBytes();
+			fooStream.write(myBytes);
+			fooStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void writeRandomSpawn(String fileName, ISoliniaNPC npc) {
+		String fileData = createRandomSpawnFile(npc);
+		try {
+			FileOutputStream fooStream = new FileOutputStream(fileName, false);
+
+			byte[] myBytes = fileData.getBytes();
+			fooStream.write(myBytes);
+			fooStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private String createRandomSpawnFile(ISoliniaNPC npc) {
+		String spawner = "";
+		
+		if (npc.isRandomSpawn())
+		{
+			String uniquename = "RANDOMNPCID_" + npc.getId();
+			String mobtype = "NPCID_" + npc.getId();
+	
+			spawner = uniquename + ":\r\n";
+			spawner += "  MobType: " + mobtype + "\r\n";
+			spawner += "  Worlds: world\r\n";
+			spawner += "  Chance: 0.05\r\n";
+			spawner += "  Priority: 1\r\n";
+			spawner += "  Action: replace\r\n";
+		}
+		return spawner;
+	}
+
 	private void writeSpawnerDefinition(String fileName, ISoliniaSpawnGroup spawngroup) {
 		String fileData = createSpawnerFile(spawngroup);
 		try {
@@ -100,6 +150,21 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		spawner += "  Conditions: []\r\n";
 		spawner += "  ActiveMobs: 0\r\n";
 		return spawner;
+	}
+	
+	public static String createCustomHeadFile(ISoliniaNPC npc) {
+		String customheaditem = "";
+
+		if (npc.isCustomhead())
+		{
+			customheaditem += "CUSTOMHEADNPCID_" + npc.getId() + ":\r\n";
+			customheaditem += "  Id: 397\r\n";
+			customheaditem += "  Data: 3\r\n";
+			customheaditem += "  Options:\r\n";
+			customheaditem += "    SkinTexture: " + npc.getCustomheaddata() + "\r\n";
+		}
+
+		return customheaditem;
 	}
 
 	public static String createNpcFile(ISoliniaNPC npc) {

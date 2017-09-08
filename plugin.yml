@@ -231,6 +231,11 @@ commands:
     aliases:
     - g
     - gc
+  convertmerchanttolootdrop:
+    description: Sends a message to the ooc channel
+    usage: /convertmerchanttolootdrop merchantid
+    aliases:
+    - convertmerchant
 depend:
 softdepend:
 - Vault

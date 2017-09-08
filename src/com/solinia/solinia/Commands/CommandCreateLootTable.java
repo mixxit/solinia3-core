@@ -46,7 +46,13 @@ public class CommandCreateLootTable implements CommandExecutor {
 			return false;
 		}
 		
-		loottablename.replace(" ", "_");
+		loottablename = loottablename.replace(" ", "_").toUpperCase();
+		
+		if (loottablename.length() > 15)
+		{
+			sender.sendMessage("Loottable name cannot be longer than 15 characters");
+			return true;
+		}
 		
 		try
 		{
@@ -57,7 +63,7 @@ public class CommandCreateLootTable implements CommandExecutor {
 			}
 
 			SoliniaLootFactory.CreateLootTable(loottablename);
-			sender.sendMessage("Loot Table created");
+			sender.sendMessage("Loot Table created as " + StateManager.getInstance().getConfigurationManager().getLootTable(loottablename).getId());
 		} catch (CoreStateInitException e)
 		{
 			sender.sendMessage(e.getMessage());

@@ -1,5 +1,10 @@
 package com.solinia.solinia.Utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,6 +22,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.comphenix.example.Vector3D;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
@@ -34,6 +42,27 @@ import com.solinia.solinia.Models.SpellEffectType;
 import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
+	
+	public static String getTextureFromName(String name) {
+		String texture = "";
+        try {
+            URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
+            InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
+            String uuid = new JsonParser().parse(reader_0).getAsJsonObject().get("id").getAsString();
+     
+            URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
+            InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
+            JsonObject textureProperty = new JsonParser().parse(reader_1).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
+            texture = textureProperty.get("value").getAsString();
+            String signature = textureProperty.get("signature").getAsString();
+        } catch (IOException e) {
+            System.err.println("Could not get skin data from session servers!");
+            e.printStackTrace();
+            return null;
+        }
+        
+        return texture;
+    }
 	
 	public static int getPlayerTotalCountOfItemId(Player player, int itemid)
 	{

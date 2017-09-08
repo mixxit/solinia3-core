@@ -48,7 +48,13 @@ public class CommandCreateLootDrop implements CommandExecutor {
 			return false;
 		}
 		
-		lootdropname.replace(" ", "_");
+		lootdropname = lootdropname.replace(" ", "_").toUpperCase();
+		
+		if (lootdropname.length() > 15)
+		{
+			sender.sendMessage("Lootdrop name cannot be longer than 15 characters");
+			return true;
+		}
 		
 		try
 		{
@@ -59,7 +65,7 @@ public class CommandCreateLootDrop implements CommandExecutor {
 			}
 			
 			SoliniaLootFactory.CreateLootDrop(lootdropname);
-			sender.sendMessage("LootDrop created");
+			sender.sendMessage("LootDrop created as " + StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropname).getId());
 			
 		} catch (CoreStateInitException e)
 		{

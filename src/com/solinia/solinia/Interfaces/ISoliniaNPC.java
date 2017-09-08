@@ -110,4 +110,8 @@ public interface ISoliniaNPC {
 
 	void sendMerchantItemListToPlayer(Player player);
 
+	boolean isRandomSpawn();
+
+	void setRandomSpawn(boolean isRandomSpawn);
+
 }

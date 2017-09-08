@@ -195,9 +195,11 @@ public class Solinia3CoreEntityListener implements Listener {
 				} else {
 					for (UUID member : group.getMembers()) {
 						Player tgtplayer = Bukkit.getPlayer(member);
+						System.out.println("Checking member group xp: " + tgtplayer.getDisplayName());
 						if (tgtplayer != null) {
 							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);
 							int tgtlevel = tgtsolplayer.getLevel();
+							System.out.println(tgtplayer.getDisplayName() + " lvl: " + tgtlevel + " vs lowlevel: " + ilowlvl);
 
 							if (tgtlevel < ilowlvl) {
 								System.out.println(tgtplayer.getName() + " did not get XP due to out of range");
@@ -208,19 +210,23 @@ public class Solinia3CoreEntityListener implements Listener {
 							}
 
 							if (!tgtplayer.getWorld().equals(player.getBukkitPlayer().getWorld())) {
+								System.out.println(tgtplayer.getDisplayName() + " not in same world");
 								tgtplayer.sendMessage("You were out of range for shared group xp (world)");
 								continue;
 							}
 
 							if (tgtplayer.getLocation().distance(player.getBukkitPlayer().getLocation()) <= 100) {
 								if (livingEntity.getLevel() >= (tgtsolplayer.getLevel() - 7)) {
+									System.out.println(tgtplayer.getDisplayName() + " entity lvl " + livingEntity.getLevel() + " vs player " + tgtsolplayer.getLevel());
 									tgtsolplayer.increasePlayerExperience(experience);
 								} else {
+									System.out.println(tgtplayer.getDisplayName() + " entity lvl too low for player");
 									tgtplayer.sendMessage(ChatColor.GRAY
 											+ "* The npc was too low level to gain experience from");
 								}
 
 							} else {
+								System.out.println(tgtplayer.getDisplayName() + " not near enough");
 								tgtplayer.sendMessage("You were out of range for shared group xp (distance)");
 								continue;
 							}

@@ -13,6 +13,7 @@ import com.solinia.solinia.Commands.CommandAddMerchantItem;
 import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
+import com.solinia.solinia.Commands.CommandConvertMerchantToLootDrop;
 import com.solinia.solinia.Commands.CommandCreateFaction;
 import com.solinia.solinia.Commands.CommandCreateItem;
 import com.solinia.solinia.Commands.CommandCreateLootDrop;
@@ -284,6 +285,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("setchannel").setExecutor(new CommandSetChannel());
 		this.getCommand("group").setExecutor(new CommandGroup());
 		this.getCommand("groupchat").setExecutor(new CommandGroupChat());
+		this.getCommand("convertmerchanttolootdrop").setExecutor(new CommandConvertMerchantToLootDrop());
 	}
 	
 	private void createConfigDir() {

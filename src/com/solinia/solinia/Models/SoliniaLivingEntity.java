@@ -355,17 +355,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 				}
 			} else {
+				/*
+				 * This is no longer needed now we have loot drops
 				int itemDropMinimum = 95;
 				if (Utils.RandomChance(itemDropMinimum))
 				{
 					if (getBukkitLivingEntity() instanceof Monster)
 						getBukkitLivingEntity().getWorld().dropItem(this.getBukkitLivingEntity().getLocation(),SoliniaItemFactory.GenerateRandomLoot().asItemStack());
 				}
+				*/
 			}
 		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SoliniaItemException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
