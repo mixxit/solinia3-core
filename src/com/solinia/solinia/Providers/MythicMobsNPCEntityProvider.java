@@ -87,6 +87,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		//spawner += "  CooldownTimer: 0\r\n";
 		//spawner += "  Warmup: " + spawngroup.respawnseconds + "\r\n";
 		//spawner += "  WarmupTimer: 0\r\n";
+		spawner += "  Warmup: 360\r\n";
+		spawner += "  WarmupTimer: 0\r\n";
 		spawner += "  CheckForPlayers: false\r\n";
 		spawner += "  ActivationRange: 112\r\n";
 		spawner += "  LeashRange: 112\r\n";

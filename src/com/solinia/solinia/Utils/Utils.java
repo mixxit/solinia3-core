@@ -53,9 +53,6 @@ public class Utils {
     		if (tmpitemid < 1000)
     			continue;
     		
-    		if (tmpitemid != itemid)
-				continue;
-    		
     		try {
 				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
 			} catch (SoliniaItemException e) {
