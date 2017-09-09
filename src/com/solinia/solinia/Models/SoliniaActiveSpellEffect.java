@@ -157,8 +157,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case Stamina
 			: return;
-		case BindAffinity
-			: return;
+		case BindAffinity: 
+			applyBindAffinty(spellEffect,soliniaSpell);
+			return;
 		case Gate:
 			applyGate(spellEffect,soliniaSpell);
 			return;
@@ -222,8 +223,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case TrueNorth
 			: return;
-		case Levitate
-			: return;
+		case Levitate: 
+			applyLevitateSpellEffect(spellEffect,soliniaSpell);
+			return;
 		case Illusion
 			: return;
 		case DamageShield
@@ -307,8 +309,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case AttackSpeed2
 			: return;
-		case Root
-			: return;
+		case Root: 
+			applyRootSpellEffect(spellEffect,soliniaSpell);
+			return;
 		case HealOverTime
 			: return;
 		case CompleteHeal
@@ -1056,6 +1059,22 @@ public class SoliniaActiveSpellEffect {
 		default:
 			return;
 		}
+	}
+
+	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 6 * 20, 10));
+	}
+
+	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
+	}
+
+	private void applyBindAffinty(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!isOwnerPlayer())
+			return;
+		
+		Player player = (Player)getLivingEntity();
+		player.setBedSpawnLocation(player.getLocation());
 	}
 
 	private void applyGate(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {

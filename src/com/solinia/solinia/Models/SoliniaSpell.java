@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -2685,6 +2686,34 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,player);
 				case Target:
 					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,player);
+				case AETarget:
+					// Get entities around entity and attempt to apply, if any are successful, return true
+					boolean success = false;
+					// TODO - should the ae range be read from a field of the spell?
+					for (Entity e : targetentity.getNearbyEntities(10, 10, 10))
+					{
+						if (!(e instanceof LivingEntity))
+							continue;
+						
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,player);
+						if (loopSuccess == true)
+							success = true;
+					}
+					return success;
+				case AECaster:
+					// Get entities around caster and attempt to apply, if any are successful, return true
+					boolean successCaster = false;
+					// TODO - should the ae range be read from a field of the spell?
+					for (Entity e : player.getNearbyEntities(10, 10, 10))
+					{
+						if (!(e instanceof LivingEntity))
+							continue;
+						
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,player);
+						if (loopSuccess == true)
+							successCaster = true;
+					}
+					return successCaster;
 				default:
 					return false;
 			

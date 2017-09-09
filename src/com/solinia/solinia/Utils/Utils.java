@@ -444,6 +444,7 @@ public class Utils {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("PALADIN")
+						|| profession.getName().toUpperCase().equals("ROGUE")
 						|| profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("HUNTER")
@@ -456,6 +457,7 @@ public class Utils {
 		if (skillname.equals("CRUSHING")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("ROGUE")
 						|| profession.getName().toUpperCase().equals("PALADIN")
 						|| profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
@@ -470,6 +472,7 @@ public class Utils {
 		if (skillname.equals("ARCHERY")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("ROGUE")
 						|| profession.getName().toUpperCase().equals("HUNTER"))) {
 					int cap = (int) ((5 * player.getLevel()) + 5);
 					return cap;
