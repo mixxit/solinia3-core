@@ -51,61 +51,57 @@ public class ScoreboardUtils {
 			}
 		}
 	}
-	
-	public static void UpdateGroupScoreboard(UUID uuid, ISoliniaGroup group)
-	{
+
+	public static void UpdateGroupScoreboard(UUID uuid, ISoliniaGroup group) {
 		if (StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("playercard") != null)
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("playercard").unregister();
-		Objective objective = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).registerNewObjective("playercard", "dummy");
+		Objective objective = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
+				.registerNewObjective("playercard", "dummy");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		objective.setDisplayName("Party");
 		if (StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("health") != null)
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("health").unregister();
-		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).registerNewObjective("health", "health");
+		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
+				.registerNewObjective("health", "health");
 		health.setDisplayName(ChatColor.RED + "❤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
-		
-		for(UUID groupmemberuuid : group.getMembers())
-		{
-			try
-			{
+
+		for (UUID groupmemberuuid : group.getMembers()) {
+			try {
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(groupmemberuuid));
-				if (groupmemberuuid.equals(group.getOwner()))
-				{
+				if (groupmemberuuid.equals(group.getOwner())) {
 					Score score = objective.getScore(ChatColor.GOLD + solplayer.getFullName() + "");
 					score.setScore(solplayer.getLevel());
 				} else {
 					Score score = objective.getScore(ChatColor.WHITE + solplayer.getFullName() + "");
 					score.setScore(solplayer.getLevel());
 				}
-			} catch (CoreStateInitException e)
-			{
+			} catch (CoreStateInitException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	public static void RemoveScoreboard(UUID uuid)
-	{
+
+	public static void RemoveScoreboard(UUID uuid) {
 		if (StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("playercard") != null)
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("playercard").unregister();
 		Bukkit.getPlayer(uuid).setScoreboard(StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)));
-		Objective objective = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).registerNewObjective("playercard", "dummy");
+		Objective objective = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
+				.registerNewObjective("playercard", "dummy");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		objective.setDisplayName("Party");
 		if (StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("showhealth") != null)
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("showhealth").unregister();
-		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).registerNewObjective("showhealth", "health");
+		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
+				.registerNewObjective("showhealth", "health");
 		health.setDisplayName(ChatColor.RED + "❤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
-		try
-		{
-		ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(uuid));
-		Score score = objective.getScore(ChatColor.GOLD + solplayer.getFullName() + "");
-		score.setScore(solplayer.getLevel());
-		} catch (CoreStateInitException e)
-		{
+		try {
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(uuid));
+			Score score = objective.getScore(ChatColor.GOLD + solplayer.getFullName() + "");
+			score.setScore(solplayer.getLevel());
+		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}
 	}

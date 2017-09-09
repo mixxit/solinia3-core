@@ -38,6 +38,7 @@ public class CommandForename implements CommandExecutor {
 				
 			SoliniaPlayerAdapter.Adapt(player).setForename(args[0]);
 			sender.sendMessage("* Forename set");
+			SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
 			return true;
 			
 		} catch (CoreStateInitException e) {

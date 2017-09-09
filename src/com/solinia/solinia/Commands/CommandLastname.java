@@ -39,6 +39,8 @@ public class CommandLastname implements CommandExecutor {
 			
 			SoliniaPlayerAdapter.Adapt(player).setLastname(args[0]);
 			sender.sendMessage("* Lastname set");
+			
+			SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
 			return true;
 			
 		} catch (CoreStateInitException e) {

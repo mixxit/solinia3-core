@@ -66,7 +66,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setForename(String forename) {
 		this.forename = forename;
-		updateDisplayName();
 	}
 
 	@Override
@@ -77,7 +76,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
-		updateDisplayName();
 	}
 	
 	@Override

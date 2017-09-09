@@ -190,8 +190,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateDisplayName();
 			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateMaxHp();
 			Bukkit.getPluginManager().callEvent(soliniaevent);
-			
-			ScoreboardUtils.RemoveScoreboard(event.getPlayer().getUniqueId());
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");
 		}
@@ -244,10 +242,24 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onChat(AsyncPlayerChatEvent event) {
 		if (event.isCancelled())
 			return;
-
+		
 		SoliniaAsyncPlayerChatEvent soliniaevent;
 		try {
-			soliniaevent = new SoliniaAsyncPlayerChatEvent(event, SoliniaPlayerAdapter.Adapt(event.getPlayer()),
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+			
+			if (solplayer.getLanguage() == null || solplayer.getLanguage().equals("UNKNOWN"))
+			{
+				if (solplayer.getRace() == null)
+				{
+					event.getPlayer().sendMessage("You cannot speak until you set a race /setrace");
+					event.setCancelled(true);
+					return;
+				} else {
+					solplayer.setLanguage(solplayer.getRace().getName().toUpperCase());
+				}
+			}
+			
+			soliniaevent = new SoliniaAsyncPlayerChatEvent(event, solplayer,
 					event.getMessage());
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 		} catch (CoreStateInitException e) {
