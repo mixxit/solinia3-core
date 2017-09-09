@@ -93,9 +93,9 @@ public class ScoreboardUtils {
 		Objective objective = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).registerNewObjective("playercard", "dummy");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		objective.setDisplayName("Party");
-		if (StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("health") != null)
-			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("health").unregister();
-		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).registerNewObjective("health", "health");
+		if (StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("showhealth") != null)
+			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("showhealth").unregister();
+		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).registerNewObjective("showhealth", "health");
 		health.setDisplayName(ChatColor.RED + "❤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
