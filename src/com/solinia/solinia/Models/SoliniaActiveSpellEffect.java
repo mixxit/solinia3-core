@@ -130,12 +130,14 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case AttackSpeed
 			: return;
-		case Invisibility
-			: return;
+		case Invisibility: 
+			applyInvisibility(spellEffect,soliniaSpell);
+			return;
 		case SeeInvis
 			: return;
-		case WaterBreathing
-			: return;
+		case WaterBreathing: 
+			applyWaterBreathing(spellEffect,soliniaSpell);
+			return;
 		case CurrentMana:
 			applyCurrentMpSpellEffect(spellEffect,soliniaSpell);
 			return;
@@ -147,8 +149,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case AddFaction
 			: return;
-		case Blind
-			: return;
+		case Blind: 
+			applyBlind(spellEffect,soliniaSpell);
+			return;
 		case Stun
 			: return;
 		case Charm
@@ -177,8 +180,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case SummonPet
 			: return;
-		case Confuse
-			: return;
+		case Confuse: 
+			applyConfusion(spellEffect,soliniaSpell);
+			return;
 		case DiseaseCounter
 			: return;
 		case PoisonCounter
@@ -1061,8 +1065,24 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
+	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 1));
+	}
+
+	private void applyInvisibility(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6 * 20, 1));
+	}
+
+	private void applyWaterBreathing(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 6 * 20, 1));
+	}
+
+	private void applyConfusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
+	}
+
 	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 6 * 20, 10));
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 6 * 20, 1));
 	}
 
 	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
