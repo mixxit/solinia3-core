@@ -164,4 +164,6 @@ public interface IConfigurationManager {
 	ISoliniaSpawnGroup getSpawnGroup(String upperCase);
 
 	void updateSpawnGroupLoc(int spawngroupid, Location location);
+
+	void reloadPerks();
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -29,6 +30,11 @@ public class SoliniaEntitySpellEffects {
 	public void setLivingEntityUUID(UUID livingEntityUUID) {
 		this.livingEntityUUID = livingEntityUUID;
 	}
+	
+	public LivingEntity getLivingEntity()
+	{
+		return (LivingEntity)Bukkit.getEntity(this.getLivingEntityUUID());
+	}
 
 	public Collection<SoliniaActiveSpellEffect> getActiveSpell() {
 		return activeSpells.values();
@@ -37,6 +43,9 @@ public class SoliniaEntitySpellEffects {
 	public boolean addSpellEffect(SoliniaSpell soliniaSpell, Player player, int duration) {
 		// This spell ID is already active
 		if (activeSpells.get(soliniaSpell.getId()) != null)
+			return false;
+		
+		if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),player,soliniaSpell))
 			return false;
 		
 		SoliniaActiveSpellEffect activeEffect = new SoliniaActiveSpellEffect(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, player.getUniqueId(), true, duration);

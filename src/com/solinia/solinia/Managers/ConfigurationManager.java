@@ -29,12 +29,14 @@ import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
+import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
+import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 
 public class ConfigurationManager implements IConfigurationManager {
 
@@ -48,12 +50,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaLootTable> loottableRepository;
 	private IRepository<ISoliniaLootDrop> lootdropRepository;
 	private IRepository<ISoliniaSpawnGroup> spawngroupRepository;
+	private IRepository<WorldWidePerk> perkRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -64,6 +67,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.loottableRepository = loottableContext;
 		this.lootdropRepository = lootdropContext;
 		this.spawngroupRepository = spawngroupContext;
+		this.perkRepository = perkContext;
 	}
 
 	@Override
@@ -546,5 +550,10 @@ public class ConfigurationManager implements IConfigurationManager {
 		getSpawnGroup(spawngroupid).setLocation(location);
 		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroupid));
 		Bukkit.getPluginManager().callEvent(soliniaevent);
+	}
+
+	@Override
+	public void reloadPerks() {
+		perkRepository.reload();
 	}
 }

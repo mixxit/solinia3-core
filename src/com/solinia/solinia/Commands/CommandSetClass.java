@@ -112,6 +112,7 @@ public class CommandSetClass implements CommandExecutor {
 		        }
 		        
 		        soliniaplayer.setClassId(solprofession.getId());
+		        soliniaplayer.setChosenClass(true);
 	        	sender.sendMessage("* Profession set to " + profession);
 	        	
 	            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);

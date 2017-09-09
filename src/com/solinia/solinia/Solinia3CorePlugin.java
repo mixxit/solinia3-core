@@ -82,6 +82,8 @@ import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
+import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
+import com.solinia.solinia.Timers.PerkLoadTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
@@ -100,6 +102,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private Essentials essentials;
 	private Economy economy;
 	private ChatItemAPI ciApi;
+	private PerkLoadTimer perkLoadTimer;
 	
 	@Override
     public void onEnable() {
@@ -199,10 +202,14 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			spawngrouprepo.setJsonFile(getDataFolder() + "/" + "spawngroups.json");
 			spawngrouprepo.reload();
 			
+			JsonWorldWidePerkRepository perkrepo = new JsonWorldWidePerkRepository();
+			perkrepo.setJsonFile(getDataFolder() + "/" + "worldwideperks.json");
+			perkrepo.reload();
+			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 			
-			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,lootdroprepo, spawngrouprepo);
+			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,lootdroprepo, spawngrouprepo, perkrepo);
 			
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -219,6 +226,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			
 			playerInteractionTimer = new PlayerInteractionTimer();
 			playerInteractionTimer.runTaskTimer(this, 6*20L, 6*20L);
+			
+			perkLoadTimer = new PerkLoadTimer();
+			perkLoadTimer.runTaskTimer(this, 100L, 5000L);
+			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

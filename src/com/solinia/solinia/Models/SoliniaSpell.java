@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -2663,6 +2664,29 @@ public class SoliniaSpell implements ISoliniaSpell {
 				throw new InvalidSpellSettingException("Name is longer than 30 characters");
 			setName(value);
 			break;
+		case "mana":
+			if (value.equals(""))
+				throw new InvalidSpellSettingException("mana is empty");
+			
+			int mana = Integer.parseInt(value);
+			setMana(mana);
+			break;
+		case "teleportzone":
+			try
+			{
+				String[] zonedata = value.split(",");
+				// Dissasemble the value to ensure it is correct
+				String world = zonedata[0];
+				double x = Double.parseDouble(zonedata[1]);
+				double y = Double.parseDouble(zonedata[2]);
+				double z = Double.parseDouble(zonedata[3]);
+				
+				setTeleportZone(world+","+x+","+y+","+z);
+				break;
+			} catch (Exception e)
+			{
+				throw new InvalidSpellSettingException("Teleport zone value must be in format: world,x,y,z");
+			}
 		default:
 			throw new InvalidSpellSettingException(
 					"Invalid Spell setting. Valid Options are: name");
@@ -2972,5 +2996,27 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (this.getMana() == 0)
 			return true;
 		return false;
+	}
+
+	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, SoliniaSpell soliniaSpell) {
+		for(SpellEffect effect : soliniaSpell.getSpellEffects())
+		{
+			// Validate spelleffecttype rules
+			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) || effect.getSpellEffectType().equals(SpellEffectType.CurrentHP))
+			{
+				// If the effect is negative standard nuke and on self, cancel out
+				if (effect.getBase() < 0 && target.equals(source))
+					return false;
+			}
+			
+			if (effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2))
+			{
+				// If the effect is teleport and the target is not a player then fail
+				if (!(target instanceof Player))
+					return false;
+			}
+		}
+		
+		return true;
 	}
 }

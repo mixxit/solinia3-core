@@ -451,4 +451,14 @@ public class CoreState {
 		member.sendMessage(
 				"You have been invited to join " + leader.getName() + "'s group - /group accept | /group decline");
 	}
+
+	public void reloadPerks() {
+		try {
+			StateManager.getInstance().getConfigurationManager().reloadPerks();
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }

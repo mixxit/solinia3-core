@@ -186,10 +186,20 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		SoliniaPlayerJoinEvent soliniaevent;
 		try {
-			soliniaevent = new SoliniaPlayerJoinEvent(event, SoliniaPlayerAdapter.Adapt(event.getPlayer()));
-			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateDisplayName();
-			SoliniaPlayerAdapter.Adapt(event.getPlayer()).updateMaxHp();
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+			
+			soliniaevent = new SoliniaPlayerJoinEvent(event, solplayer);
+			solplayer.updateDisplayName();
+			solplayer.updateMaxHp();
 			Bukkit.getPluginManager().callEvent(soliniaevent);
+			
+			// patch
+			if (solplayer.getClass() != null && solplayer.hasChosenClass() == false)
+				solplayer.setChosenClass(true);
+			// patch
+			if (solplayer.getRace() != null && solplayer.hasChosenRace() == false)
+				solplayer.setChosenRace(true);
+			
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");
 		}

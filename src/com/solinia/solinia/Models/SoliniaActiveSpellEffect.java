@@ -281,8 +281,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case SummonPC
 			: return;
-		case Teleport
-			: return;
+		case Teleport: 
+			applyTeleport(spellEffect,soliniaSpell);
+			return;
 		case TossUp
 			: return;
 		case WeaponProc
@@ -1065,6 +1066,20 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
+	private void applyTeleport(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!isOwnerPlayer())
+			return;
+		
+		String[] zonedata = soliniaSpell.getTeleportZone().split(",");
+		// Dissasemble the value to ensure it is correct
+		String world = zonedata[0];
+		double x = Double.parseDouble(zonedata[1]);
+		double y = Double.parseDouble(zonedata[2]);
+		double z = Double.parseDouble(zonedata[3]);
+		Location loc = new Location(Bukkit.getWorld(world),x,y,z);
+		getLivingEntity().teleport(loc);
+	}
+
 	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 1));
 	}
@@ -1094,7 +1109,7 @@ public class SoliniaActiveSpellEffect {
 			return;
 		
 		Player player = (Player)getLivingEntity();
-		player.setBedSpawnLocation(player.getLocation());
+		player.setBedSpawnLocation(player.getLocation(), true);
 	}
 
 	private void applyGate(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {

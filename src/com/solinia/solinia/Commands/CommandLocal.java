@@ -46,7 +46,7 @@ public class CommandLocal implements CommandExecutor {
             }
 			
 			Bukkit.broadcastMessage("Console:" + message);
+			return true;
 		}
-		return false;
 	}
 }
