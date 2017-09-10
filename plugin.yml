@@ -236,6 +236,10 @@ commands:
     usage: /convertmerchanttolootdrop merchantid
     aliases:
     - convertmerchant
+  perks:
+    description: Perk help
+    usage: /perks
+    aliases: []
 depend:
 softdepend:
 - Vault

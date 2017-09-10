@@ -415,7 +415,7 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity)
+	public void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable)
 			throws CoreStateInitException {
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
 		if (spell == null) {
@@ -430,7 +430,8 @@ public class SoliniaItem implements ISoliniaItem {
 		boolean itemUseSuccess = spell.tryApplyOnEntity(player, targetentity);
 
 		if (itemUseSuccess) {
-			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
+			if (!isConsumable)
+				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
 		}
 
 		return;
@@ -552,6 +553,14 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setColor(byte color) {
 		this.color = color;
+	}
+
+	@Override
+	public void consume(Player player) throws CoreStateInitException {
+		if (this.getAbilityid() < 1)
+			return;
+		
+		useItemOnEntity(player,this,player,true);
 	}
 
 }

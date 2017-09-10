@@ -24,10 +24,12 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -245,7 +247,13 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerConsumeEvent(PlayerItemConsumeEvent event) {
 		if (event.isCancelled())
 			return;
-
+		
+		try {
+			ISoliniaItem item = SoliniaItemAdapter.Adapt(event.getItem());
+			item.consume(event.getPlayer());
+		} catch (SoliniaItemException | CoreStateInitException e) {
+			
+		}
 	}
 
 	@EventHandler

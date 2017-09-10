@@ -42,6 +42,7 @@ import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandNPCBuy;
 import com.solinia.solinia.Commands.CommandNPCSell;
 import com.solinia.solinia.Commands.CommandOoc;
+import com.solinia.solinia.Commands.CommandPerks;
 import com.solinia.solinia.Commands.CommandRaceInfo;
 import com.solinia.solinia.Commands.CommandRebuildSpellItems;
 import com.solinia.solinia.Commands.CommandResetPlayer;
@@ -297,6 +298,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("group").setExecutor(new CommandGroup());
 		this.getCommand("groupchat").setExecutor(new CommandGroupChat());
 		this.getCommand("convertmerchanttolootdrop").setExecutor(new CommandConvertMerchantToLootDrop());
+		this.getCommand("perks").setExecutor(new CommandPerks());
 	}
 	
 	private void createConfigDir() {

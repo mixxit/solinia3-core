@@ -750,10 +750,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 		    		if (targetmob != null)
 		    		{
-		    			item.useItemOnEntity(event.getPlayer(),item,targetmob);
+		    			item.useItemOnEntity(event.getPlayer(),item,targetmob,false);
 		    			return;
 		    		} else {
-		    			item.useItemOnEntity(event.getPlayer(),item,event.getPlayer());
+		    			item.useItemOnEntity(event.getPlayer(),item,event.getPlayer(),false);
 		    			return;
 		    		}
 			    }

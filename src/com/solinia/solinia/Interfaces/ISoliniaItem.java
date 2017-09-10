@@ -154,8 +154,6 @@ public interface ISoliniaItem {
 
 	void setSpellscroll(boolean spellscroll);
 
-	void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity) throws CoreStateInitException;
-
 	void useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock) throws CoreStateInitException;
 
 	String asJsonString();
@@ -170,5 +168,9 @@ public interface ISoliniaItem {
 	byte getColor();
 
 	void setColor(byte color);
+
+	void consume(Player player) throws CoreStateInitException;
+
+	void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable) throws CoreStateInitException;
 
 }
