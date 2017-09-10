@@ -1126,8 +1126,6 @@ public class SoliniaActiveSpellEffect {
 		}
 		
 		player.teleport(blocation);
-		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
-		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 	}
 
 	private void applyCurrentMpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
@@ -1150,8 +1148,6 @@ public class SoliniaActiveSpellEffect {
 			
 			System.out.println("Changing MP: " + amount + " on player " + getLivingEntity().getUniqueId());
 			solplayer.setMana(amount);
-			getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
-			getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 		} catch (CoreStateInitException e)
 		{
 			e.printStackTrace();
@@ -1207,9 +1203,6 @@ public class SoliniaActiveSpellEffect {
 			System.out.println("Changing HP: " + amount + " on entity " + getLivingEntity().getUniqueId());
 			getLivingEntity().setHealth(amount);
 		}
-		
-		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 7);
-		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 	}
 
 	public int getTicksLeft() {

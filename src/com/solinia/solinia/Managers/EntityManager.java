@@ -49,6 +49,11 @@ public class EntityManager implements IEntityManager {
 		
 		return entitySpellEffects.get(targetentity.getUniqueId()).addSpellEffect(soliniaSpell, player, duration);
 	}
+	
+	@Override
+	public SoliniaEntitySpellEffects getActiveEntityEffects(LivingEntity entity) {
+		return entitySpellEffects.get(entity.getUniqueId());
+	}
 
 	@Override
 	public void spellTick() {

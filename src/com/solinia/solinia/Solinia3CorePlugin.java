@@ -24,6 +24,7 @@ import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
 import com.solinia.solinia.Commands.CommandEditItem;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEditSpell;
+import com.solinia.solinia.Commands.CommandEffects;
 import com.solinia.solinia.Commands.CommandEmote;
 import com.solinia.solinia.Commands.CommandForceLevel;
 import com.solinia.solinia.Commands.CommandForename;
@@ -299,6 +300,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("groupchat").setExecutor(new CommandGroupChat());
 		this.getCommand("convertmerchanttolootdrop").setExecutor(new CommandConvertMerchantToLootDrop());
 		this.getCommand("perks").setExecutor(new CommandPerks());
+		this.getCommand("effects").setExecutor(new CommandEffects());
 	}
 	
 	private void createConfigDir() {

@@ -240,6 +240,10 @@ commands:
     description: Perk help
     usage: /perks
     aliases: []
+  effects:
+    description: Lists details regarding effects related to your character
+    usage: /effects
+    aliases: []
 depend:
 softdepend:
 - Vault
