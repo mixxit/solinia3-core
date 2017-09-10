@@ -55,16 +55,16 @@ public class CommandCreateArmourSet implements CommandExecutor {
 					continue;
 				}
 
-				partialname += entry;
+				partialname += entry + " ";
 				count++;
 			}
+			
+			partialname = partialname.trim();
 
 			if (partialname.equals("")) {
 				sender.sendMessage("Blank suffix name not allowed when creating armour set");
 				return false;
 			}
-
-			partialname = partialname.replace(" ", "_");
 
 			List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classtype, armourtier, partialname);
 			String itemscreated = "";

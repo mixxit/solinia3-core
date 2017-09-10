@@ -222,7 +222,7 @@ public class SoliniaItemFactory {
 			for(Integer i : items)
 			{
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(i);
-				
+				item.setWorth(armourtier*25);
 				// Randomise the stats of the class armour so we get more unique content in each dungeon
 				int rarityChance = Utils.RandomBetween(1, 100);
 				int rarityBonus = 0;
@@ -243,7 +243,7 @@ public class SoliniaItemFactory {
 					rarityBonus = 5;
 				}
 				
-				item.setDisplayname(rarityName + classtype.getItemArmorTypeName(item.getBasename()) + partialname);
+				item.setDisplayname(rarityName + classtype.getItemArmorTypeName(item.getBasename()) + " " + partialname);
 				
 				int tierMin = 0;
 				int tierMax = armourtier * 5;
