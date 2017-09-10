@@ -168,22 +168,22 @@ public class SoliniaClass implements ISoliniaClass {
 			setName(value);
 			break;
 		case "defaultheadmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toLowerCase()))
+			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultHeadMaterial(value.toLowerCase());
 			break;
 		case "defaultchestmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toLowerCase()))
+			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultChestMaterial(value.toLowerCase());
 			break;
 		case "defaultlegsmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toLowerCase()))
+			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultLegsMaterial(value.toLowerCase());
 			break;
 		case "defaultfeetmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toLowerCase()))
+			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultFeetMaterial(value.toLowerCase());
 			break;
@@ -283,28 +283,28 @@ public class SoliniaClass implements ISoliniaClass {
 
 	@Override
 	public String getItemArmorTypeName(String basename) {
-		switch(basename.toLowerCase())
+		switch(basename.toUpperCase())
 		{
-			case "leather_helmet": return getHelmtypename();
-			case "leather_chestplate": return getChesttypename();
-			case "leather_leggings": return getLegstypename();
-			case "leather_boots": return getBootstypename();
-			case "chainmail_helmet": return getHelmtypename();
-			case "chainmail_chestplate": return getChesttypename();
-			case "chainmail_leggings": return getLegstypename();
-			case "chainmail_boots": return getBootstypename();
-			case "iron_helmet": return getHelmtypename();
-			case "iron_chestplate": return getChesttypename();
-			case "iron_leggings": return getLegstypename();
-			case "iron_boots": return getBootstypename();
-			case "diamond_helmet": return getHelmtypename();
-			case "diamond_chestplate": return getChesttypename();
-			case "diamond_leggings": return getLegstypename();
-			case "diamond_boots": return getBootstypename();
-			case "gold_helmet": return getHelmtypename();
-			case "gold_chestplate": return getChesttypename();
-			case "gold_leggings": return getLegstypename();
-			case "gold_boots": return getBootstypename();
+			case "LEATHER_HELMET": return getHelmtypename();
+			case "LEATHER_CHESTPLATE": return getChesttypename();
+			case "LEATHER_LEGGINGS": return getLegstypename();
+			case "LEATHER_BOOTS": return getBootstypename();
+			case "CHAINMAIL_HELMET": return getHelmtypename();
+			case "CHAINMAIL_CHESTPLATE": return getChesttypename();
+			case "CHAINMAIL_LEGGINGS": return getLegstypename();
+			case "CHAINMAIL_BOOTS": return getBootstypename();
+			case "IRON_HELMET": return getHelmtypename();
+			case "IRON_CHESTPLATE": return getChesttypename();
+			case "IRON_LEGGINGS": return getLegstypename();
+			case "IRON_BOOTS": return getBootstypename();
+			case "DIAMOND_HELMET": return getHelmtypename();
+			case "DIAMOND_CHESTPLATE": return getChesttypename();
+			case "DIAMOND_LEGGINGS": return getLegstypename();
+			case "DIAMOND_BOOTS": return getBootstypename();
+			case "GOLD_HELMET": return getHelmtypename();
+			case "GOLD_CHESTPLATE": return getChesttypename();
+			case "GOLD_LEGGINGS": return getLegstypename();
+			case "GOLD_BOOTS": return getBootstypename();
 			default: return "unknown";
 		}
 	}

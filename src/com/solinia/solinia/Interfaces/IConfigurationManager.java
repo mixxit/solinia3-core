@@ -36,26 +36,26 @@ public interface IConfigurationManager {
 		}};
 		
 	public List<String> ArmourMaterials = new ArrayList<String>() {{ 
-		add("leather_helmet");
-		add("leather_chestplate");
-		add("leather_leggings");
-		add("leather_boots");
-		add("chainmail_helmet");
-		add("chainmail_chestplate");
-		add("chainmail_leggings");
-		add("chainmail_boots");
-		add("iron_helmet");
-		add("iron_chestplate");
-		add("iron_leggings");
-		add("iron_boots");
-		add("diamond_helmet");
-		add("diamond_chestplate");
-		add("diamond_leggings");
-		add("diamond_boots");
-		add("gold_helmet");
-		add("gold_chestplate");
-		add("gold_leggings");
-		add("gold_boots");
+		add("LEATHER_HELMET");
+		add("LEATHER_CHESTPLATE");
+		add("LEATHER_LEGGINGS");
+		add("LEATHER_BOOTS");
+		add("CHAINMAIL_HELMET");
+		add("CHAINMAIL_CHESTPLATE");
+		add("CHAINMAIL_LEGGINGS");
+		add("CHAINMAIL_BOOTS");
+		add("IRON_HELMET");
+		add("IRON_CHESTPLATE");
+		add("IRON_LEGGINGS");
+		add("IRON_BOOTS");
+		add("DIAMOND_HELMET");
+		add("DIAMOND_CHESTPLATE");
+		add("DIAMOND_LEGGINGS");
+		add("DIAMOND_BOOTS");
+		add("GOLD_HELMET");
+		add("GOLD_CHESTPLATE");
+		add("GOLD_LEGGINGS");
+		add("GOLD_BOOTS");
 		}};
 
 	List<ISoliniaRace> getRaces();

@@ -206,13 +206,9 @@ public class SoliniaItemFactory {
 		
 			// Get the appropriate material for the class and generate the base item
 			ISoliniaItem headItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultHeadMaterial())));
-			headItem.setAllowedClassNames(new ArrayList<String>() {{ classtype.getName().toUpperCase(); }} );
 			ISoliniaItem chestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultChestMaterial())));
-			chestItem.setAllowedClassNames(new ArrayList<String>() {{ classtype.getName().toUpperCase(); }} );
 			ISoliniaItem legsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultLegsMaterial())));
-			legsItem.setAllowedClassNames(new ArrayList<String>() {{ classtype.getName().toUpperCase(); }} );
 			ISoliniaItem feetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultFeetMaterial())));
-			feetItem.setAllowedClassNames(new ArrayList<String>() {{ classtype.getName().toUpperCase(); }} );
 			
 			items.add(headItem.getId());
 			items.add(chestItem.getId());
@@ -222,6 +218,10 @@ public class SoliniaItemFactory {
 			for(Integer i : items)
 			{
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(i);
+				List<String> classNames = new ArrayList<String>();
+				classNames.add(classtype.getName().toUpperCase());
+				item.setAllowedClassNames(classNames);
+
 				item.setWorth(armourtier*25);
 				// Randomise the stats of the class armour so we get more unique content in each dungeon
 				int rarityChance = Utils.RandomBetween(1, 100);
@@ -243,7 +243,7 @@ public class SoliniaItemFactory {
 					rarityBonus = 5;
 				}
 				
-				item.setDisplayname(rarityName + classtype.getItemArmorTypeName(item.getBasename()) + " " + partialname);
+				item.setDisplayname(rarityName + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
 				
 				int tierMin = 0;
 				int tierMax = armourtier * 5;
