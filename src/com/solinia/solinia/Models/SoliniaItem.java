@@ -540,8 +540,11 @@ public class SoliniaItem implements ISoliniaItem {
 		case "charisma":
 			setCharisma(Integer.parseInt(value));
 			break;
+		case "abilityid":
+			setAbilityid(Integer.parseInt(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid");
 		}
 	}
 
