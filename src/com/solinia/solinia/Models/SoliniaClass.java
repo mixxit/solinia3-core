@@ -170,22 +170,22 @@ public class SoliniaClass implements ISoliniaClass {
 		case "defaultheadmaterial":
 			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
-			setDefaultHeadMaterial(value.toLowerCase());
+			setDefaultHeadMaterial(value.toUpperCase());
 			break;
 		case "defaultchestmaterial":
 			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
-			setDefaultChestMaterial(value.toLowerCase());
+			setDefaultChestMaterial(value.toUpperCase());
 			break;
 		case "defaultlegsmaterial":
 			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
-			setDefaultLegsMaterial(value.toLowerCase());
+			setDefaultLegsMaterial(value.toUpperCase());
 			break;
 		case "defaultfeetmaterial":
 			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
-			setDefaultFeetMaterial(value.toLowerCase());
+			setDefaultFeetMaterial(value.toUpperCase());
 			break;
 		case "strengthitembonus":
 			this.setStrengthitembonus(Integer.parseInt(value));
