@@ -248,6 +248,11 @@ commands:
     description: Lists details regarding effects related to your character
     usage: /effects
     aliases: []
+  createarmorset:
+    description: Creates a new set of armour for a class
+    usage: /createarmorset classid suffixname
+    aliases: 
+    - createarmourset
 depend:
 softdepend:
 - Vault

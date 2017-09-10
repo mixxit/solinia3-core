@@ -14,6 +14,7 @@ import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandConvertMerchantToLootDrop;
+import com.solinia.solinia.Commands.CommandCreateArmourSet;
 import com.solinia.solinia.Commands.CommandCreateFaction;
 import com.solinia.solinia.Commands.CommandCreateItem;
 import com.solinia.solinia.Commands.CommandCreateLootDrop;
@@ -303,6 +304,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("perks").setExecutor(new CommandPerks());
 		this.getCommand("effects").setExecutor(new CommandEffects());
 		this.getCommand("editclass").setExecutor(new CommandEditClass());
+		this.getCommand("createarmorset").setExecutor(new CommandCreateArmourSet());
+		
 	}
 	
 	private void createConfigDir() {
