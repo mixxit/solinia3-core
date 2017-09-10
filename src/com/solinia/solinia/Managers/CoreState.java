@@ -1,5 +1,7 @@
 package com.solinia.solinia.Managers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +24,9 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Utils.ScoreboardUtils;
+import com.solinia.solinia.Utils.Utils;
 
 import me.dadus33.chatitem.api.ChatItemAPI;
 import net.md_5.bungee.api.ChatColor;
@@ -139,8 +143,7 @@ public class CoreState {
 	}
 
 	public double getWorldPerkXPModifier() {
-		// TODO - Replace with lookups
-		return 100;
+		return Utils.getWorldPerkXPModifier();
 	}
 
 	public void giveEssentialsMoney(Player player, int amount) {
@@ -172,8 +175,7 @@ public class CoreState {
 	}
 
 	public int getWorldPerkDropCountModifier() {
-		// TODO Auto-generated method stub
-		return 1;
+		return Utils.GetWorldPerkDropCountModifier();
 	}
 
 	public boolean addActiveBlockEffect(Block clickedBlock, SoliniaSpell soliniaSpell, Player player) {
@@ -455,10 +457,22 @@ public class CoreState {
 	public void reloadPerks() {
 		try {
 			StateManager.getInstance().getConfigurationManager().reloadPerks();
+			Utils.broadcastPerks();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+	}
+	
+	public List<WorldWidePerk> getWorldWidePerks()
+	{
+		List<WorldWidePerk> perks = new ArrayList<WorldWidePerk>();
+		try {
+			return StateManager.getInstance().getConfigurationManager().getWorldWidePerks();
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return perks;
 	}
 }

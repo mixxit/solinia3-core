@@ -556,4 +556,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void reloadPerks() {
 		perkRepository.reload();
 	}
+
+	@Override
+	public List<WorldWidePerk> getWorldWidePerks() {
+		return perkRepository.query(q -> q.getId() > 0);
+	}
 }

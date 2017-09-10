@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
@@ -38,10 +41,71 @@ import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Models.WorldWidePerk;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
+	
+	public static List<WorldWidePerk> getActiveWorldWidePerks() {
+		List<WorldWidePerk> perks = new ArrayList<WorldWidePerk>();
+
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		Timestamp currenttimestamp = new Timestamp(now.getTime());
+
+		for (WorldWidePerk entity : StateManager.getInstance().getWorldWidePerks()) {
+			//System.out.println("Comparing Perk [" + entity.getId() + "/" + entity.getContributor() + "] time: " + entity.getEndtimeAsTimestamp().toLocaleString() + " against now " + now.toLocaleString());
+			if (entity.getEndtimeAsTimestamp().after(currenttimestamp)) {
+				perks.add(entity);
+			}
+		}
+		return perks;
+	}
+
+	public static int GetWorldPerkDropCountModifier() {
+		int dropcount = 1;
+
+		for (WorldWidePerk perk : getActiveWorldWidePerks()) {
+			if (perk.getPerkname().equals("DROP100")) {
+				dropcount += 1;
+			}
+		}
+
+		return dropcount;
+	}
+
+	public static double getWorldPerkXPModifier() {
+		double xppercent = 100;
+		for (WorldWidePerk perk : getActiveWorldWidePerks()) {
+			if (perk.getPerkname().equals("XPBONUS50")) {
+				xppercent += 50;
+			}
+
+			if (perk.getPerkname().equals("XPBONUS100")) {
+				xppercent += 100;
+			}
+
+			if (perk.getPerkname().equals("XPBONUS150")) {
+				xppercent += 150;
+			}
+
+			if (perk.getPerkname().equals("XPBONUS200")) {
+				xppercent += 200;
+			}
+		}
+
+		return xppercent;
+	}
+
+	public static void broadcastPerks() {
+		for (WorldWidePerk perk : getActiveWorldWidePerks()) {
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				player.sendMessage(
+						"* You are currently receiving " + perk.getPerkname() + " from contributor " + perk.getContributor());
+			}
+		}
+	}
 	
 	public static String getTextureFromName(String name) {
 		String texture = "";

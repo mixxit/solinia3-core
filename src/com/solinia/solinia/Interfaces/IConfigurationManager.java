@@ -12,6 +12,7 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
+import com.solinia.solinia.Models.WorldWidePerk;
 
 public interface IConfigurationManager {
 	
@@ -166,4 +167,6 @@ public interface IConfigurationManager {
 	void updateSpawnGroupLoc(int spawngroupid, Location location);
 
 	void reloadPerks();
+
+	List<WorldWidePerk> getWorldWidePerks();
 }

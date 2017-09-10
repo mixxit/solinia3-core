@@ -1,6 +1,9 @@
 package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class WorldWidePerk {
 	private int id;
@@ -30,5 +33,19 @@ public class WorldWidePerk {
 	}
 	public void setEndtime(String endtime) {
 		this.endtime = endtime;
+	}
+	public Timestamp getEndtimeAsTimestamp()
+	{
+		Timestamp timestamp = null;
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		    Date parsedDate;
+			parsedDate = dateFormat.parse(getEndtime());
+		    timestamp = new java.sql.Timestamp(parsedDate.getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return timestamp;
 	}
 }

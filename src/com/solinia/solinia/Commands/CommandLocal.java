@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandLocal implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -45,7 +47,8 @@ public class CommandLocal implements CommandExecutor {
             	return false;            	
             }
 			
-			Bukkit.broadcastMessage("Console:" + message);
+			Bukkit.broadcastMessage(ChatColor.RED + "Console:" + message + ChatColor.RESET);
+			
 			return true;
 		}
 	}

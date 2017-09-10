@@ -228,7 +228,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			playerInteractionTimer.runTaskTimer(this, 6*20L, 6*20L);
 			
 			perkLoadTimer = new PerkLoadTimer();
-			perkLoadTimer.runTaskTimer(this, 100L, 5000L);
+			perkLoadTimer.runTaskTimer(this, 6*20L, 120*20L);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
