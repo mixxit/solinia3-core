@@ -1146,7 +1146,6 @@ public class SoliniaActiveSpellEffect {
 			if (amount < 0)
 				amount = 0;
 			
-			System.out.println("Changing MP: " + amount + " on player " + getLivingEntity().getUniqueId());
 			solplayer.setMana(amount);
 		} catch (CoreStateInitException e)
 		{
@@ -1188,7 +1187,6 @@ public class SoliniaActiveSpellEffect {
 		if (hpToRemove < 0)
 		{
 			getLivingEntity().damage(hpToRemove * -1, Bukkit.getEntity(getSourceUuid()));
-			System.out.println("Changing HP: " + hpToRemove + " on entity " + getLivingEntity().getUniqueId());
 		}
 		// Heal
 		else 
@@ -1200,7 +1198,6 @@ public class SoliniaActiveSpellEffect {
 			
 			if (amount < 0)
 				amount = 0;
-			System.out.println("Changing HP: " + amount + " on entity " + getLivingEntity().getUniqueId());
 			getLivingEntity().setHealth(amount);
 		}
 	}
