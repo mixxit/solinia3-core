@@ -198,4 +198,71 @@ public class SoliniaItemFactory {
 		return item;
 	}
 
+	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname) throws SoliniaItemException {
+		List<Integer> items = new ArrayList<Integer>();
+		
+		try
+		{
+		
+			// Get the appropriate material for the class and generate the base item
+			ISoliniaItem headItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultHeadMaterial())));
+			headItem.setAllowedClassNames(new ArrayList<String>() {{ classtype.getName().toUpperCase(); }} );
+			ISoliniaItem chestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultChestMaterial())));
+			chestItem.setAllowedClassNames(new ArrayList<String>() {{ classtype.getName().toUpperCase(); }} );
+			ISoliniaItem legsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultLegsMaterial())));
+			legsItem.setAllowedClassNames(new ArrayList<String>() {{ classtype.getName().toUpperCase(); }} );
+			ISoliniaItem feetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultFeetMaterial())));
+			feetItem.setAllowedClassNames(new ArrayList<String>() {{ classtype.getName().toUpperCase(); }} );
+			
+			items.add(headItem.getId());
+			items.add(chestItem.getId());
+			items.add(legsItem.getId());
+			items.add(feetItem.getId());
+			
+			for(Integer i : items)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(i);
+				
+				// Randomise the stats of the class armour so we get more unique content in each dungeon
+				int rarityChance = Utils.RandomBetween(1, 100);
+				int rarityBonus = 0;
+				String rarityName = "";
+
+				if (rarityChance > 80) {
+					rarityName = "Uncommon ";
+					rarityBonus = 1;
+				}
+
+				if (rarityChance > 90) {
+					rarityName = "Rare ";
+					rarityBonus = 3;
+				}
+
+				if (rarityChance > 97) {
+					rarityName = "Legendary ";
+					rarityBonus = 5;
+				}
+				
+				item.setDisplayname(rarityName + classtype.getItemArmorTypeName(item.getBasename()) + partialname);
+				
+				item.setStrength(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("strength"));
+				item.setStamina(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("stamina"));
+				item.setAgility(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("agility"));
+				item.setDexterity(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("dexterity"));
+				item.setIntelligence(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("intelligence"));
+				item.setWisdom(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("wisdom"));
+				item.setCharisma(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("charisma"));
+				
+				// mana regen
+				// hp regen
+				// TODO class procs?
+			}
+		
+		} catch (CoreStateInitException e)
+		{
+			return new ArrayList<Integer>();
+		}
+		
+		return items;
+	}
 }

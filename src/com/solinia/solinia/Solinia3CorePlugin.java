@@ -21,6 +21,7 @@ import com.solinia.solinia.Commands.CommandCreateLootTable;
 import com.solinia.solinia.Commands.CommandCreateMerchantList;
 import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
+import com.solinia.solinia.Commands.CommandEditClass;
 import com.solinia.solinia.Commands.CommandEditItem;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEditSpell;
@@ -301,6 +302,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("convertmerchanttolootdrop").setExecutor(new CommandConvertMerchantToLootDrop());
 		this.getCommand("perks").setExecutor(new CommandPerks());
 		this.getCommand("effects").setExecutor(new CommandEffects());
+		this.getCommand("editclass").setExecutor(new CommandEditClass());
 	}
 	
 	private void createConfigDir() {

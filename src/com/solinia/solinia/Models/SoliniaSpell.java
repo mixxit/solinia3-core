@@ -2,8 +2,6 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;

@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
-import com.solinia.solinia.Managers.StateManager;
 
 public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 

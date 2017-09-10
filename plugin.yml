@@ -198,6 +198,10 @@ commands:
     description: Edits an item
     usage: /edititem itemid setting value
     aliases: []
+  editclass:
+    description: Edits a class
+    usage: /edititem classid setting value
+    aliases: []
   createspawngroup:
     description: Creates a new spawngroup
     usage: /createspawngroup npcid spawngroupname

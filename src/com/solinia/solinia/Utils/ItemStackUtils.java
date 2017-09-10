@@ -1,17 +1,8 @@
 package com.solinia.solinia.Utils;
 
-import java.lang.reflect.Field;
-import java.util.UUID;
-
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 
 public class ItemStackUtils {

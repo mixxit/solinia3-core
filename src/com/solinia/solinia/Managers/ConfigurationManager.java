@@ -6,12 +6,12 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Events.SoliniaSpawnGroupUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
@@ -138,6 +138,16 @@ public class ConfigurationManager implements IConfigurationManager {
 	public ISoliniaFaction getFaction(int Id) {
 		// TODO Auto-generated method stub
 		List<ISoliniaFaction> list = factionRepository.query(q -> q.getId() == Id);
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
+	
+	@Override
+	public ISoliniaFaction getFaction(String faction) {
+		// TODO Auto-generated method stub
+		List<ISoliniaFaction> list = factionRepository.query(q -> q.getName().equals(faction));
 		if (list.size() > 0)
 			return list.get(0);
 
@@ -560,5 +570,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<WorldWidePerk> getWorldWidePerks() {
 		return perkRepository.query(q -> q.getId() > 0);
+	}
+
+	@Override
+	public void editClass(int classid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidClassSettingException 
+	{
+		getClassObj(classid).editSetting(setting, value);
 	}
 }

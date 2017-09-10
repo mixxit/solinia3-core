@@ -13,5 +13,4 @@ public class SoliniaFactionFactory {
 		faction.setBase(base);
 		StateManager.getInstance().getConfigurationManager().addFaction(faction);
 	}
-
 }
