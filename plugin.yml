@@ -250,7 +250,7 @@ commands:
     aliases: []
   createarmorset:
     description: Creates a new set of armour for a class
-    usage: /createarmorset classid suffixname
+    usage: /createarmorset classid tier suffixname
     aliases: 
     - createarmourset
 depend:

@@ -245,13 +245,18 @@ public class SoliniaItemFactory {
 				
 				item.setDisplayname(rarityName + classtype.getItemArmorTypeName(item.getBasename()) + partialname);
 				
-				item.setStrength(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("strength"));
-				item.setStamina(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("stamina"));
-				item.setAgility(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("agility"));
-				item.setDexterity(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("dexterity"));
-				item.setIntelligence(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("intelligence"));
-				item.setWisdom(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("wisdom"));
-				item.setCharisma(Utils.RandomBetween(0, 5 + rarityBonus)+classtype.getItemGenerationBonus("charisma"));
+				int tierMin = 0;
+				int tierMax = armourtier * 5;
+				if (armourtier > 1)
+					tierMin =- 5;
+				
+				item.setStrength(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("strength"));
+				item.setStamina(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("stamina"));
+				item.setAgility(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("agility"));
+				item.setDexterity(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("dexterity"));
+				item.setIntelligence(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("intelligence"));
+				item.setWisdom(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("wisdom"));
+				item.setCharisma(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("charisma"));
 				
 				// mana regen
 				// hp regen
