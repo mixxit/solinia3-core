@@ -261,19 +261,19 @@ public class SoliniaItemFactory {
 				// Unless there is a bonus defined, the class doesnt seem to use that statistic
 				
 				if (classStrBonus > 0)
-					item.setStrength(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classStrBonus);
+					item.setStrength(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus));
 				if (classStaBonus > 0)
-					item.setStamina(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classStaBonus);
+					item.setStamina(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStaBonus));
 				if (classAgiBonus > 0)
-					item.setAgility(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classAgiBonus);
+					item.setAgility(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classAgiBonus));
 				if (classDexBonus > 0)
-					item.setDexterity(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classDexBonus);
+					item.setDexterity(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classDexBonus));
 				if (classIntBonus > 0)
-					item.setIntelligence(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classIntBonus);
+					item.setIntelligence(Utils.RandomBetween(tierMin, tierMax + rarityBonus+classIntBonus));
 				if (classWisBonus > 0)
-					item.setWisdom(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classWisBonus);
+					item.setWisdom(Utils.RandomBetween(tierMin, tierMax + rarityBonus+classWisBonus));
 				if (classChaBonus > 0)
-					item.setCharisma(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classChaBonus);
+					item.setCharisma(Utils.RandomBetween(tierMin, tierMax + rarityBonus+classChaBonus));
 				
 				// mana regen
 				// hp regen
