@@ -250,13 +250,30 @@ public class SoliniaItemFactory {
 				if (armourtier > 1)
 					tierMin =- 5;
 				
-				item.setStrength(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("strength"));
-				item.setStamina(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("stamina"));
-				item.setAgility(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("agility"));
-				item.setDexterity(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("dexterity"));
-				item.setIntelligence(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("intelligence"));
-				item.setWisdom(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("wisdom"));
-				item.setCharisma(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classtype.getItemGenerationBonus("charisma"));
+				int classStrBonus = classtype.getItemGenerationBonus("strength");
+				int classStaBonus = classtype.getItemGenerationBonus("stamina");
+				int classAgiBonus = classtype.getItemGenerationBonus("agility");
+				int classDexBonus = classtype.getItemGenerationBonus("dexterity");
+				int classIntBonus = classtype.getItemGenerationBonus("intelligence");
+				int classWisBonus = classtype.getItemGenerationBonus("wisdom");
+				int classChaBonus = classtype.getItemGenerationBonus("charisma");
+
+				// Unless there is a bonus defined, the class doesnt seem to use that statistic
+				
+				if (classStrBonus > 0)
+					item.setStrength(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classStrBonus);
+				if (classStaBonus > 0)
+					item.setStamina(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classStaBonus);
+				if (classAgiBonus > 0)
+					item.setAgility(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classAgiBonus);
+				if (classDexBonus > 0)
+					item.setDexterity(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classDexBonus);
+				if (classIntBonus > 0)
+					item.setIntelligence(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classIntBonus);
+				if (classWisBonus > 0)
+					item.setWisdom(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classWisBonus);
+				if (classChaBonus > 0)
+					item.setCharisma(Utils.RandomBetween(tierMin, tierMax + rarityBonus)+classChaBonus);
 				
 				// mana regen
 				// hp regen
