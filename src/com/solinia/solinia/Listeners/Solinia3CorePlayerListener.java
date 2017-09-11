@@ -193,11 +193,16 @@ public class Solinia3CorePlayerListener implements Listener {
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			
 			// patch
-			if (solplayer.getClass() != null && solplayer.hasChosenClass() == false)
+			if (solplayer.getClassObj() != null)
 				solplayer.setChosenClass(true);
+			else
+				solplayer.setChosenClass(false);
+				
 			// patch
-			if (solplayer.getRace() != null && solplayer.hasChosenRace() == false)
+			if (solplayer.getRace() != null)
 				solplayer.setChosenRace(true);
+			else
+				solplayer.setChosenRace(false);
 			
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");
