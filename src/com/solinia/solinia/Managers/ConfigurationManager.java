@@ -1,5 +1,6 @@
 package com.solinia.solinia.Managers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -447,7 +448,7 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public void editNPC(int npcid, String setting, String value)
-			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException {
+			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException {
 		getNPC(npcid).editSetting(setting, value);
 
 		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(npcid));
@@ -472,8 +473,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public void addFaction(SoliniaFaction faction) {
+	public ISoliniaFaction addFaction(SoliniaFaction faction) {
 		this.factionRepository.add(faction);
+		return getFaction(faction.getId());
 	}
 
 	@Override
@@ -488,11 +490,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public void addNPC(SoliniaNPC npc) {
+	public ISoliniaNPC addNPC(SoliniaNPC npc) {
 		this.npcRepository.add(npc);
 
 		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
+		return getNPC(npc.getId());
 	}
 
 	@Override

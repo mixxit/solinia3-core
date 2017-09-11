@@ -1,5 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +110,7 @@ public interface IConfigurationManager {
 
 	ISoliniaNPC getNPC(int Id);
 
-	void editNPC(int npcid, String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException;
+	void editNPC(int npcid, String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException;
 
 	List<ISoliniaNPCMerchant> getNPCMerchants();
 
@@ -131,11 +132,11 @@ public interface IConfigurationManager {
 
 	int getNextFactionId();
 
-	void addFaction(SoliniaFaction faction);
+	ISoliniaFaction addFaction(SoliniaFaction faction);
 
 	int getNextNPCId();
 
-	void addNPC(SoliniaNPC npc);
+	ISoliniaNPC addNPC(SoliniaNPC npc);
 
 	ISoliniaLootDrop getLootDrop(String lootdropname);
 

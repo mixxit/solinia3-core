@@ -382,4 +382,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void emote(String message) {
 		StateManager.getInstance().getChannelManager().sendToLocalChannel(this,message);
 	}
+
+	@Override
+	public void doRandomChat() {
+		ISoliniaNPC npc;
+		try {
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.getRandomchatTriggerText().equals(""))
+				return;
+			
+			// 10% chance of saying something
+			int random = Utils.RandomBetween(1, 10);
+			if (random == 1)
+				this.emote(npc.getName() + " says + '" + npc.getRandomchatTriggerText() + "'");
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

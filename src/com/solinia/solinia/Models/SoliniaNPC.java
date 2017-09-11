@@ -47,6 +47,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int raceid;
 	private int classid;
 	private boolean isRandomSpawn = false;
+	private String killTriggerText;
+	private String randomchatTriggerText;
 
 	@Override
 	public int getId() {
@@ -408,6 +410,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage(ChatColor.RED + "MISC" + ChatColor.RESET);
 		sender.sendMessage("- boss: " + ChatColor.GOLD + isBoss());
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
+		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
+		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
 					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName()
@@ -460,7 +465,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 	@Override
 	public void editSetting(String setting, String value)
-			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException {
+			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, java.io.IOException {
 		String name = getName();
 		String mctype = getMctype();
 		int level = getLevel();
@@ -571,6 +576,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "randomspawn":
 			setRandomSpawn(Boolean.parseBoolean(value));
 			break;
+		case "killtriggertext":
+			setKillTriggerText(value);
+			break;
+		case "randomchattriggertext":
+			setRandomchatTriggerText(value);
+			break;
 		default:
 			throw new InvalidNpcSettingException(
 					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn");
@@ -585,5 +596,25 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setRandomSpawn(boolean isRandomSpawn) {
 		this.isRandomSpawn = isRandomSpawn;
+	}
+
+	@Override
+	public String getKillTriggerText() {
+		return killTriggerText;
+	}
+
+	@Override
+	public void setKillTriggerText(String killTriggerText) {
+		this.killTriggerText = killTriggerText;
+	}
+
+	@Override
+	public String getRandomchatTriggerText() {
+		return randomchatTriggerText;
+	}
+
+	@Override
+	public void setRandomchatTriggerText(String randomchatTriggerText) {
+		this.randomchatTriggerText = randomchatTriggerText;
 	}
 }

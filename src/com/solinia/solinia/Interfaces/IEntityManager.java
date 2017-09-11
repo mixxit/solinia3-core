@@ -16,4 +16,6 @@ public interface IEntityManager {
 	void spellTick();
 
 	SoliniaEntitySpellEffects getActiveEntityEffects(LivingEntity entity);
+
+	void doNPCRandomChat();
 }

@@ -70,6 +70,23 @@ public class CommandEditNpc implements CommandExecutor {
 		
 		String value = args[2];
 		
+		// for 'text' based npc settings like trigger texts etc, get the whole thing as a string
+		if (args.length > 3 && setting.toLowerCase().contains("text"))
+		{
+			value = "";
+			int current = 0;
+			for(String entry : args)
+			{
+				current++;
+				if (current <= 2)
+					continue;
+				
+				value = value + entry + " ";
+			}
+			
+			value = value.trim();
+		}
+		
 		if (npcid < 1)
 		{
 			sender.sendMessage("Invalid npc id");
@@ -85,8 +102,15 @@ public class CommandEditNpc implements CommandExecutor {
 				return false;
 			}
 
-			StateManager.getInstance().getConfigurationManager().editNPC(npcid,setting,value);
-			sender.sendMessage("Updating setting on npc");
+			try
+			{
+			
+				StateManager.getInstance().getConfigurationManager().editNPC(npcid,setting,value);
+				sender.sendMessage("Updating setting on npc");
+			} catch (java.io.IOException e)
+			{
+				sender.sendMessage("Failed to update NPC - If this was a request to change custom head data, the mojang servers may be unable to fetch the player skin, try the same command again in a few moments");
+			}
 		} catch (InvalidNpcSettingException ne)
 		{
 			sender.sendMessage("Invalid NPC setting");

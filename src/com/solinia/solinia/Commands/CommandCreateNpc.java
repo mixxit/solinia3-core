@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaNPCFactory;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
 
 public class CommandCreateNpc implements CommandExecutor {
@@ -95,7 +96,8 @@ public class CommandCreateNpc implements CommandExecutor {
 		name = name.replace(" ", "_");
 		
 		try {
-			SoliniaNPCFactory.CreateNPC(name,level, factionid);
+			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level, factionid);
+			sender.sendMessage("Created NPC: " + npc.getId());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

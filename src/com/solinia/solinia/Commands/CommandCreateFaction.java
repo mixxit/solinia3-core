@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaFactionFactory;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Managers.StateManager;
 
 public class CommandCreateFaction implements CommandExecutor {
@@ -63,7 +64,8 @@ public class CommandCreateFaction implements CommandExecutor {
 				return true;
 			}
 
-			SoliniaFactionFactory.CreateFaction(factionname, base);
+			ISoliniaFaction faction = SoliniaFactionFactory.CreateFaction(factionname, base);
+			sender.sendMessage("Created faction: " + faction.getId());
 			return true;
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

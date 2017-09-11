@@ -22,4 +22,6 @@ public interface ISoliniaLivingEntity
 	void setNpcid(int npcid);
 
 	public void emote(String message);
+
+	public void doRandomChat();
 }

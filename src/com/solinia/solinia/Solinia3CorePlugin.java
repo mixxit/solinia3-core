@@ -87,6 +87,7 @@ import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
+import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.PerkLoadTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
@@ -104,6 +105,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private SpellTickTimer spellTickTimer;
 	private PlayerInteractionTimer playerInteractionTimer;
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
+	private NPCRandomChatTimer npcRandomChatTimer;
 
 	private Essentials essentials;
 	private Economy economy;
@@ -239,6 +241,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			playerInventoryValidatorTimer = new PlayerInventoryValidatorTimer();
 			playerInventoryValidatorTimer.runTaskTimer(this, 6*20L, 60*20L);
 
+			npcRandomChatTimer = new NPCRandomChatTimer();
+			npcRandomChatTimer.runTaskTimer(this, 6*20L, 60*20L);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

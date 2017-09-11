@@ -1,5 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
+import java.io.IOException;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,7 +20,7 @@ public interface ISoliniaNPC {
 
 	void sendNpcSettingsToSender(CommandSender sender) throws CoreStateInitException;
 
-	void editSetting(String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException;
+	void editSetting(String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException;
 
 	String getMctype();
 
@@ -113,5 +115,13 @@ public interface ISoliniaNPC {
 	boolean isRandomSpawn();
 
 	void setRandomSpawn(boolean isRandomSpawn);
+
+	String getKillTriggerText();
+
+	void setKillTriggerText(String killTriggerText);
+
+	String getRandomchatTriggerText();
+
+	void setRandomchatTriggerText(String randomchatTriggerText);
 
 }
