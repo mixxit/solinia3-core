@@ -83,42 +83,46 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void doNPCRandomChat() {
+		System.out.println("NPC Random Chat Tick");
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			List<Entity> entity = player.getNearbyEntities(50, 50, 50);
-			if (entity instanceof Player)
-				continue;
-			
-			if (!(entity instanceof LivingEntity))
-				continue;
-			
-			String metaid = "";
-			LivingEntity le = (LivingEntity)entity;
-			for(MetadataValue val : le.getMetadata("mobname"))
+			for(Entity entity : player.getNearbyEntities(50, 50, 50))
 			{
-				metaid = val.asString();
-			}
-			
-			if (metaid.equals(""))
-				continue;
-			
-			if (!metaid.contains("NPCID_"))
-				continue;
-			
-			try {
-				ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
-				if (completedNpcsIds.contains(solle.getNpcid()))
+				if (entity instanceof Player)
 					continue;
 				
-				completedNpcsIds.add(solle.getNpcid());
-				solle.doRandomChat();
+				if (!(entity instanceof LivingEntity))
+					continue;
 				
-			} catch (CoreStateInitException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String metaid = "";
+				LivingEntity le = (LivingEntity)entity;
+				for(MetadataValue val : le.getMetadata("mobname"))
+				{
+					metaid = val.asString();
+				}
+				
+				if (metaid.equals(""))
+					continue;
+				
+				if (!metaid.contains("NPCID_"))
+					continue;
+				
+				try {
+					ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
+					if (completedNpcsIds.contains(solle.getNpcid()))
+						continue;
+					
+					completedNpcsIds.add(solle.getNpcid());
+					solle.doRandomChat();
+					
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
+		System.out.println("NPC Random Chat Tick completed");
 	}
 
 }

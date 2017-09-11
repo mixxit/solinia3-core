@@ -391,10 +391,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc.getRandomchatTriggerText().equals(""))
 				return;
 			
+			System.out.println("Attempt by npc to talk randomly: " + npc.getName());
 			// 10% chance of saying something
 			int random = Utils.RandomBetween(1, 10);
 			if (random == 1)
-				this.emote(npc.getName() + " says + '" + npc.getRandomchatTriggerText() + "'");
+			{
+				System.out.println(ChatColor.AQUA + npc.getName() + " says '" + npc.getRandomchatTriggerText() + "'" + ChatColor.RESET);
+				this.emote(ChatColor.AQUA + npc.getName() + " says '" + npc.getRandomchatTriggerText() + "'" + ChatColor.RESET);
+			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
