@@ -89,6 +89,7 @@ import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 import com.solinia.solinia.Timers.PerkLoadTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
+import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
@@ -102,6 +103,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PlayerRegenTickTimer playerRegenTimer;
 	private SpellTickTimer spellTickTimer;
 	private PlayerInteractionTimer playerInteractionTimer;
+	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 
 	private Essentials essentials;
 	private Economy economy;
@@ -220,7 +222,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager);
 			
 			commitTimer = new StateCommitTimer();
-			commitTimer.runTaskTimer(this, 100L, 5000L);
+			commitTimer.runTaskTimer(this, 6*20L, 300*20L);
 			
 			playerRegenTimer = new PlayerRegenTickTimer();
 			playerRegenTimer.runTaskTimer(this, 6*20L, 6*20L);
@@ -233,6 +235,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			
 			perkLoadTimer = new PerkLoadTimer();
 			perkLoadTimer.runTaskTimer(this, 6*20L, 120*20L);
+
+			playerInventoryValidatorTimer = new PlayerInventoryValidatorTimer();
+			playerInventoryValidatorTimer.runTaskTimer(this, 6*20L, 60*20L);
+
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
