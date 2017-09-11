@@ -58,7 +58,7 @@ public class CommandCreateFaction implements CommandExecutor {
 
 			factionname = factionname.replace(" ", "_").toUpperCase();
 
-			if (StateManager.getInstance().getConfigurationManager().getFaction(factionname) == null) {
+			if (StateManager.getInstance().getConfigurationManager().getFaction(factionname) != null) {
 				sender.sendMessage("Faction already exists");
 				return true;
 			}
