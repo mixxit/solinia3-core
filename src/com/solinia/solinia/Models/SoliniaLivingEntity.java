@@ -388,7 +388,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		ISoliniaNPC npc;
 		try {
 			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.getRandomchatTriggerText().equals(""))
+			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
 				return;
 			
 			System.out.println("Attempt by npc to talk randomly: " + npc.getName());
