@@ -93,7 +93,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			spawner += "  Worlds: world\r\n";
 			spawner += "  Chance: 0.05\r\n";
 			spawner += "  Priority: 1\r\n";
-			spawner += "  Action: replace\r\n";
+			spawner += "  Action: add\r\n";
 		}
 		return spawner;
 	}
