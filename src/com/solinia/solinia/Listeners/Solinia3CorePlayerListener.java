@@ -69,7 +69,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		try
 		{
-			ItemStack itemstack = event.getMainHandItem();
+			ItemStack itemstack = event.getOffHandItem();
 	    	if (itemstack == null)
 	    		return;
 	    	
