@@ -136,7 +136,11 @@ public class Solinia3CorePlayerListener implements Listener {
 	        	solplayer.updateMaxHp();
 	        }
 	        
-	        if (event.getSlot() == 45) {
+	        // debug check
+	        if (event.getView().getPlayer().isOp())
+	        	System.out.println(event.getView().getPlayer().getName() + " inventory click event for slot: " + event.getSlot() + " : type " + event.getSlotType().name());
+	        
+	        if (event.getSlot() == 40) {
 	        	ItemStack itemstack = event.getCursor();
 	        	if (itemstack == null)
 	        		return;

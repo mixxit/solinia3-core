@@ -39,7 +39,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			slots.add(37);
 			slots.add(38);
 			slots.add(39);
-			slots.add(45);
+			slots.add(40);
 			
 			for(Integer slotId : slots)
 			{
