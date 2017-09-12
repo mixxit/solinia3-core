@@ -367,6 +367,10 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
 		sender.sendMessage("  - HP: " + ChatColor.GOLD + getMaxHP() + ChatColor.RESET);
 		sender.sendMessage("  - Damage: " + ChatColor.GOLD + getMaxDamage() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
+		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "APPEARANCE" + ChatColor.RESET);
 		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET);
 		sender.sendMessage("- usedisguise: " + ChatColor.GOLD + isUsedisguise() + ChatColor.RESET);
