@@ -206,9 +206,17 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  - 1 skeletonbowattack\r\n";
 			mob = mob + "  - 2 meleeattack\r\n";
 			mob = mob + "  - 3 lookatplayers\r\n";
+			if (npc.isRoamer())
+			{
+				mob = mob + "  - 4 randomstrol\r\n";
+			}
 			mob = mob + "  AITargetSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 attacker\r\n";
+			if (npc.isGuard())
+			{
+				mob = mob + "  - 2 monsters\r\n";
+			}
 		}
 
 		if (npc.getHeaditem() != null || npc.getChestitem() != null || npc.getLegsitem() != null

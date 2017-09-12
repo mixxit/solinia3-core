@@ -124,4 +124,12 @@ public interface ISoliniaNPC {
 
 	void setRandomchatTriggerText(String randomchatTriggerText);
 
+	boolean isGuard();
+
+	void setGuard(boolean isGuard);
+
+	boolean isRoamer();
+
+	void setRoamer(boolean isRoamer);
+
 }

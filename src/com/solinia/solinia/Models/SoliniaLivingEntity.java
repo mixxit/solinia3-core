@@ -391,14 +391,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
 				return;
 			
-			System.out.println("Attempt by npc to talk randomly: " + npc.getName());
-			// 10% chance of saying something
-			int random = Utils.RandomBetween(1, 10);
-			if (random == 1)
+			// 2% chance of saying something
+			int random = Utils.RandomBetween(1, 100);
+			if (random < 2)
 			{
-				System.out.println(ChatColor.AQUA + npc.getName() + " says '" + npc.getRandomchatTriggerText() + "'" + ChatColor.RESET);
 				this.emote(ChatColor.AQUA + npc.getName() + " says '" + npc.getRandomchatTriggerText() + "'" + ChatColor.RESET);
 			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void doSlayChat() {
+		ISoliniaNPC npc;
+		try {
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.getKillTriggerText() == null || npc.getKillTriggerText().equals(""))
+				return;
+			
+			this.emote(ChatColor.AQUA + npc.getName() + " says '" + npc.getKillTriggerText() + "'" + ChatColor.RESET);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

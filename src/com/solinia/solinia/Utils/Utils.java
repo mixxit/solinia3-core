@@ -20,6 +20,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
 
 import com.comphenix.example.Vector3D;
@@ -1837,5 +1838,21 @@ public class Utils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean isLivingEntityNPC(LivingEntity livingentity) {
+		String metaid = "";
+		for(MetadataValue val : livingentity.getMetadata("mobname"))
+		{
+			metaid = val.asString();
+		}
+		
+		if (metaid.equals(""))
+			return false;
+		
+		if (!metaid.contains("NPCID_"))
+			return false;
+		
+		return true;
 	}
 }

@@ -36,6 +36,7 @@ public class CommandCreateNpc implements CommandExecutor {
 		if (args.length < 3)
 		{
 			sender.sendMessage("Insufficient arguments: factionid level npcname");
+			sender.sendMessage("Note: factionid can be 0 to denote KOS to everything");
 			return false;
 		}
 		
@@ -48,14 +49,14 @@ public class CommandCreateNpc implements CommandExecutor {
 			return false;
 		}
 		
-		if (factionid < 1)
+		if (factionid < 0)
 		{
 			sender.sendMessage("Invalid faction id");
 			return false;
 		}
 
 		try {
-			if (StateManager.getInstance().getConfigurationManager().getFaction(factionid) == null)
+			if (factionid > 0 && StateManager.getInstance().getConfigurationManager().getFaction(factionid) == null)
 			{
 				sender.sendMessage("Cannot locate faction id: " + factionid);
 				return false;

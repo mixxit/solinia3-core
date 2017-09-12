@@ -49,6 +49,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isRandomSpawn = false;
 	private String killTriggerText;
 	private String randomchatTriggerText;
+	private boolean isGuard = false;
+	private boolean isRoamer = false;
 
 	@Override
 	public int getId() {
@@ -371,6 +373,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
 		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
+		sender.sendMessage("- guard: " + ChatColor.GOLD + isGuard() + ChatColor.RESET);
+		sender.sendMessage("- roamer: " + ChatColor.GOLD + isRoamer() + ChatColor.RESET);
+		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
+		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
+		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "APPEARANCE" + ChatColor.RESET);
 		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET);
 		sender.sendMessage("- usedisguise: " + ChatColor.GOLD + isUsedisguise() + ChatColor.RESET);
@@ -413,9 +421,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 		}
 		sender.sendMessage(ChatColor.RED + "MISC" + ChatColor.RESET);
 		sender.sendMessage("- boss: " + ChatColor.GOLD + isBoss());
-		sender.sendMessage("----------------------------");
-		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
-		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
@@ -586,9 +591,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "randomchattriggertext":
 			setRandomchatTriggerText(value);
 			break;
+		case "guard":
+			setGuard(Boolean.parseBoolean(value));
+			break;
+		case "roamer":
+			setRoamer(Boolean.parseBoolean(value));
+			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer");
 		}
 	}
 
@@ -620,5 +631,25 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setRandomchatTriggerText(String randomchatTriggerText) {
 		this.randomchatTriggerText = randomchatTriggerText;
+	}
+
+	@Override
+	public boolean isGuard() {
+		return isGuard;
+	}
+
+	@Override
+	public void setGuard(boolean isGuard) {
+		this.isGuard = isGuard;
+	}
+
+	@Override
+	public boolean isRoamer() {
+		return isRoamer;
+	}
+
+	@Override
+	public void setRoamer(boolean isRoamer) {
+		this.isRoamer = isRoamer;
 	}
 }

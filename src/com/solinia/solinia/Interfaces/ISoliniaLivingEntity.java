@@ -24,4 +24,6 @@ public interface ISoliniaLivingEntity
 	public void emote(String message);
 
 	public void doRandomChat();
+
+	void doSlayChat();
 }

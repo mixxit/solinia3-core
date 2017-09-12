@@ -28,6 +28,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
@@ -129,7 +130,10 @@ public class Solinia3CoreEntityListener implements Listener {
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		// TODO - Temporary reward
-		if (!(event.getEntity() instanceof Monster))
+		if (!(event.getEntity() instanceof LivingEntity))
+			return;
+
+		if (event.getEntity() instanceof Player)
 			return;
 		
 		if (!(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent))
@@ -145,6 +149,19 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		if (!(damager instanceof LivingEntity))
 			return;
+		
+		// If damager is npc, have a chance to trigger its chat text for slaying something
+		if ((!(damager instanceof Player)) && Utils.isLivingEntityNPC((LivingEntity)damager))
+		{
+			ISoliniaLivingEntity solentity;
+			try {
+				solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)damager);
+				solentity.doSlayChat();
+			} catch (CoreStateInitException e) {
+				
+			}
+			
+		}
 		
 		if (!(damager instanceof Player))
 			return;

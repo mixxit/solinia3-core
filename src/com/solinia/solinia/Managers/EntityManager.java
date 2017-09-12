@@ -95,17 +95,8 @@ public class EntityManager implements IEntityManager {
 				if (!(entity instanceof LivingEntity))
 					continue;
 				
-				String metaid = "";
 				LivingEntity le = (LivingEntity)entity;
-				for(MetadataValue val : le.getMetadata("mobname"))
-				{
-					metaid = val.asString();
-				}
-				
-				if (metaid.equals(""))
-					continue;
-				
-				if (!metaid.contains("NPCID_"))
+				if (!Utils.isLivingEntityNPC(le))
 					continue;
 				
 				try {
