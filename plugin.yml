@@ -118,6 +118,11 @@ commands:
     usage: /createnpc factionid level npcname
     aliases:
     - addnpc
+  createnpccopy:
+    description: Creates a new npc from an existing npc
+    usage: /createnpc ncpid npcname
+    aliases:
+    - addnpccopy
   createfaction:
     description: Creates a new faction
     usage: /createfaction basestandingvalue name

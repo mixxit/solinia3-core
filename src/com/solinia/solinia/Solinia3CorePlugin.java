@@ -21,6 +21,7 @@ import com.solinia.solinia.Commands.CommandCreateLootDrop;
 import com.solinia.solinia.Commands.CommandCreateLootTable;
 import com.solinia.solinia.Commands.CommandCreateMerchantList;
 import com.solinia.solinia.Commands.CommandCreateNpc;
+import com.solinia.solinia.Commands.CommandCreateNpcCopy;
 import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
 import com.solinia.solinia.Commands.CommandEditClass;
 import com.solinia.solinia.Commands.CommandEditItem;
@@ -315,6 +316,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("effects").setExecutor(new CommandEffects());
 		this.getCommand("editclass").setExecutor(new CommandEditClass());
 		this.getCommand("createarmorset").setExecutor(new CommandCreateArmourSet());
+		this.getCommand("createnpccopy").setExecutor(new CommandCreateNpcCopy());
 		
 	}
 	

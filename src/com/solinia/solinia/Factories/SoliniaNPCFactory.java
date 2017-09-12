@@ -16,4 +16,39 @@ public class SoliniaNPCFactory {
 		return StateManager.getInstance().getConfigurationManager().addNPC(npc);
 	}
 
+	public static ISoliniaNPC CreateNPCCopy(int npcid, String name) throws CoreStateInitException {
+		ISoliniaNPC sourcenpc = StateManager.getInstance().getConfigurationManager().getNPC(npcid);
+		
+		SoliniaNPC npc = new SoliniaNPC();
+		npc.setId(StateManager.getInstance().getConfigurationManager().getNextNPCId());
+		npc.setName(name);
+		npc.setBoss(sourcenpc.isBoss());
+		npc.setBurning(sourcenpc.isBurning());
+		npc.setChestitem(sourcenpc.getChestitem());
+		npc.setClassid(sourcenpc.getClassid());
+		npc.setCustomhead(sourcenpc.isCustomhead());
+		npc.setCustomheaddata(sourcenpc.getCustomheaddata());
+		npc.setDisguisetype(sourcenpc.getDisguisetype());
+		npc.setFactionid(sourcenpc.getFactionid());
+		npc.setFeetitem(sourcenpc.getFeetitem());
+		npc.setGuard(sourcenpc.isGuard());
+		npc.setHanditem(sourcenpc.getHanditem());
+		npc.setHeaditem(sourcenpc.getHeaditem());
+		npc.setInvisible(sourcenpc.isInvisible());
+		npc.setKillTriggerText(sourcenpc.getKillTriggerText());
+		npc.setLegsitem(sourcenpc.getLegsitem());
+		npc.setLevel(sourcenpc.getLevel());
+		npc.setLoottableid(sourcenpc.getLoottableid());
+		npc.setMctype(sourcenpc.getMctype());
+		npc.setMerchantid(sourcenpc.getMerchantid());
+		npc.setOffhanditem(sourcenpc.getOffhanditem());
+		npc.setRaceid(sourcenpc.getRaceid());
+		npc.setRandomchatTriggerText(sourcenpc.getRandomchatTriggerText());
+		npc.setRandomSpawn(sourcenpc.isRandomSpawn());
+		npc.setRoamer(sourcenpc.isRoamer());
+		npc.setUpsidedown(sourcenpc.isUpsidedown());
+		npc.setUsedisguise(sourcenpc.isUsedisguise());
+		return StateManager.getInstance().getConfigurationManager().addNPC(npc);
+	}
+
 }
