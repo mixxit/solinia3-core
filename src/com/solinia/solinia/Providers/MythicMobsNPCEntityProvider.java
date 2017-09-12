@@ -6,9 +6,12 @@ import java.io.IOException;
 
 import org.bukkit.Bukkit;
 
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
+import com.solinia.solinia.Managers.StateManager;
 
 public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
@@ -197,7 +200,10 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "    AlwaysShowName: true\r\n";
 		mob = mob + "  Modules:\r\n";
 		mob = mob + "    ThreatTable: true\r\n";
+
+		mob = mob + "  Faction: FACTIONID_" + npc.getFactionid() + "\r\n";
 		
+
 		// Act as normal mob if without faction
 		if (npc.getFactionid() > 0)
 		{
@@ -208,14 +214,31 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  - 3 lookatplayers\r\n";
 			if (npc.isRoamer())
 			{
-				mob = mob + "  - 4 randomstrol\r\n";
+				mob = mob + "  - 4 randomstroll\r\n";
 			}
 			mob = mob + "  AITargetSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 attacker\r\n";
 			if (npc.isGuard())
 			{
-				mob = mob + "  - 2 monsters\r\n";
+				// Always attack mobs with factionid 0
+				mob = mob + "  - 2 SpecificFaction FACTIONID_0\r\n";
+				// Attack all mobs with -1500 faction
+				try
+				{
+					int curnum = 3;
+					for(ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions())
+					{
+						if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid())
+						{
+							mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
+							curnum++;
+						}
+					}
+				} catch (CoreStateInitException e)
+				{
+					// skip
+				}
 			}
 		}
 
