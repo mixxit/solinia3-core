@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -60,10 +61,52 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerMove(PlayerMoveEvent event) {
 
 	}
+	
+	@EventHandler
+	public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+		if (event.isCancelled())
+			return;
+		
+		try
+		{
+			ItemStack itemstack = event.getMainHandItem();
+	    	if (itemstack == null)
+	    		return;
+	    	
+	    	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+		    {
+
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getPlayer());
+				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+	    		if (soliniaitem.getAllowedClassNames().size() == 0)
+	    			return;
+	
+	    		if (solplayer.getClassObj() == null)
+	    		{
+	    			event.setCancelled(true);
+	    			event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	    			return;
+	    		}
+	
+	    		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
+	    		{
+	    			event.setCancelled(true);
+	    			event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+	    			return;
+	    		}
+	    		
+	    		solplayer.updateMaxHp();
+		    }
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-
+		
+		
 	}
 
 	@EventHandler
@@ -102,9 +145,8 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
+	        		solplayer.updateMaxHp();
 			    }
-	        	
-	        	solplayer.updateMaxHp();
 			}
 			
 			// Actual clicking
@@ -131,9 +173,9 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
+	        		
+	        		solplayer.updateMaxHp();
 			    }
-	        	
-	        	solplayer.updateMaxHp();
 	        }
 	        
 	        // debug check
@@ -163,9 +205,9 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
+	        		
+	        		solplayer.updateMaxHp();
 			    }
-	        	
-	        	solplayer.updateMaxHp();
 	        }
 		} catch (Exception e)
 		{
