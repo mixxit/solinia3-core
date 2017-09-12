@@ -489,6 +489,17 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET);
+		sender.sendMessage("- stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET);
+		sender.sendMessage("- agility: " + ChatColor.GOLD + getAgility() + ChatColor.RESET);
+		sender.sendMessage("- dexterity: " + ChatColor.GOLD + getDexterity() + ChatColor.RESET);
+		sender.sendMessage("- intelligence: " + ChatColor.GOLD + getIntelligence() + ChatColor.RESET);
+		sender.sendMessage("- wisdom: " + ChatColor.GOLD + getWisdom() + ChatColor.RESET);
+		sender.sendMessage("- charisma: " + ChatColor.GOLD + getCharisma() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpregen() + ChatColor.RESET);
+		sender.sendMessage("- mpregen: " + ChatColor.GOLD + getMpregen() + ChatColor.RESET);
 	}
 
 	@Override
