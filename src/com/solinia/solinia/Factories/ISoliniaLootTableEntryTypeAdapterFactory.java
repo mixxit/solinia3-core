@@ -13,7 +13,6 @@ public class ISoliniaLootTableEntryTypeAdapterFactory implements TypeAdapterFact
 	     this.implementationClass = implementationClass;
 	  }
 
-	  @SuppressWarnings("unchecked")
 	  @Override
 	  public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
 	    if (!ISoliniaLootTableEntry.class.equals(type.getRawType())) return null;
