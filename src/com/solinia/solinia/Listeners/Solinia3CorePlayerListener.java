@@ -178,10 +178,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			    }
 	        }
 	        
-	        // debug check
-	        if (event.getView().getPlayer().isOp())
-	        	System.out.println(event.getView().getPlayer().getName() + " inventory click event for slot: " + event.getSlot() + " : type " + event.getSlotType().name());
-	        
+	        // shield changes to slotid 40
 	        if (event.getSlot() == 40) {
 	        	ItemStack itemstack = event.getCursor();
 	        	if (itemstack == null)
