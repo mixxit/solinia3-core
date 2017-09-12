@@ -511,8 +511,8 @@ public class SoliniaItem implements ISoliniaItem {
 			if (value.equals(""))
 				throw new InvalidItemSettingException("Name is empty");
 
-			if (value.length() > 15)
-				throw new InvalidItemSettingException("Name is longer than 15 characters");
+			if (value.length() > 25)
+				throw new InvalidItemSettingException("Name is longer than 25 characters");
 			setDisplayname(value);
 			break;
 		case "worth":

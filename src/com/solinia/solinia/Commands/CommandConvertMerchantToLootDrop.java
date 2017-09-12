@@ -41,9 +41,9 @@ public class CommandConvertMerchantToLootDrop implements CommandExecutor {
 		boolean always = Boolean.parseBoolean(args[3]);
 		int chance = Integer.parseInt(args[4]);
 		
-		if (name.length() > 15)
+		if (name.length() > 25)
 		{
-			sender.sendMessage("Lootdrop name cannot be longer than 15 characters");
+			sender.sendMessage("Lootdrop name cannot be longer than 25 characters");
 			return true;
 		}
 		
