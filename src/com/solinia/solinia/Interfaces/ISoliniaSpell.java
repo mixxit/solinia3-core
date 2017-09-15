@@ -971,9 +971,9 @@ public interface ISoliniaSpell {
 
 	void editSetting(String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
 
-	boolean tryApplyOnBlock(Player player, Block clickedBlock);
+	boolean tryApplyOnBlock(LivingEntity sourceEntity, Block clickedBlock);
 
-	boolean tryApplyOnEntity(Player player, LivingEntity targetentity);
+	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity);
 	
 	SpellEffectType getEffectType1();
 

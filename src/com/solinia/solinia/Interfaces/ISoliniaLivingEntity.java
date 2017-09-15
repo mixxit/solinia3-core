@@ -26,4 +26,6 @@ public interface ISoliniaLivingEntity
 	public void doRandomChat();
 
 	void doSlayChat();
+
+	public void doSpellCast(LivingEntity livingEntity);
 }

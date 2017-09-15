@@ -30,6 +30,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
+import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
@@ -579,5 +580,70 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void editClass(int classid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidClassSettingException 
 	{
 		getClassObj(classid).editSetting(setting, value);
+	}
+
+	@Override
+	public List<ISoliniaSpell> getSpellsByClassId(int classId) {
+		List<ISoliniaSpell> returnSpells = new ArrayList<ISoliniaSpell>();
+		
+		ISoliniaClass classObj;
+		
+		try {
+			classObj = StateManager.getInstance().getConfigurationManager().getClassObj(classId);
+		} catch (CoreStateInitException e) {
+			return returnSpells;
+		}
+		
+		for (ISoliniaSpell spell : getSpells())
+		{
+			boolean addSpell = false;
+			for (SoliniaSpellClass spellclass : spell.getAllowedClasses())
+			{
+				if (spellclass.getClassname().toUpperCase().equals(classObj.getName().toUpperCase()))
+				{
+					addSpell = true;
+					break;
+				}
+			}
+			
+			if (addSpell == true)
+				returnSpells.add(spell);
+		}
+		
+		return returnSpells;
+	}
+
+	@Override
+	public List<ISoliniaSpell> getSpellsByClassIdAndMaxLevel(int classId, int level) {
+List<ISoliniaSpell> returnSpells = new ArrayList<ISoliniaSpell>();
+		
+		ISoliniaClass classObj;
+		
+		try {
+			classObj = StateManager.getInstance().getConfigurationManager().getClassObj(classId);
+		} catch (CoreStateInitException e) {
+			return returnSpells;
+		}
+		
+		for (ISoliniaSpell spell : getSpells())
+		{
+			boolean addSpell = false;
+			for (SoliniaSpellClass spellclass : spell.getAllowedClasses())
+			{
+				if (spellclass.getMinlevel() > level)
+					continue;
+				
+				if (spellclass.getClassname().toUpperCase().equals(classObj.getName().toUpperCase()))
+				{
+					addSpell = true;
+					break;
+				}
+			}
+			
+			if (addSpell == true)
+				returnSpells.add(spell);
+		}
+		
+		return returnSpells;
 	}
 }

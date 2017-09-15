@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -42,13 +43,13 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public boolean addActiveEntityEffect(LivingEntity targetentity, SoliniaSpell soliniaSpell, Player player) {
+	public boolean addActiveEntityEffect(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		
-		if (entitySpellEffects.get(targetentity.getUniqueId()) == null)
-			entitySpellEffects.put(targetentity.getUniqueId(), new SoliniaEntitySpellEffects(targetentity));
+		if (entitySpellEffects.get(targetEntity.getUniqueId()) == null)
+			entitySpellEffects.put(targetEntity.getUniqueId(), new SoliniaEntitySpellEffects(targetEntity));
 		
 		int duration = Utils.getDurationFromSpell(soliniaSpell);
-		return entitySpellEffects.get(targetentity.getUniqueId()).addSpellEffect(soliniaSpell, player, duration);
+		return entitySpellEffects.get(targetEntity.getUniqueId()).addSpellEffect(soliniaSpell, sourceEntity, duration);
 	}
 	
 	@Override
@@ -106,6 +107,49 @@ public class EntityManager implements IEntityManager {
 					
 					completedNpcsIds.add(solle.getNpcid());
 					solle.doRandomChat();
+					
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		System.out.println("NPC Random Chat Tick completed");
+	}
+
+	@Override
+	public void doNPCSpellCast() {
+		System.out.println("NPC Random Chat Tick");
+		List<Integer> completedNpcsIds = new ArrayList<Integer>();
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			for(Entity entity : player.getNearbyEntities(50, 50, 50))
+			{
+				if (entity instanceof Player)
+					continue;
+				
+				if (!(entity instanceof LivingEntity))
+					continue;
+				
+				LivingEntity le = (LivingEntity)entity;
+				
+				if (!(entity instanceof Creature))
+					continue;
+				
+				Creature c = (Creature)entity;
+				if (c.getTarget() == null)
+					continue;
+				
+				if (!Utils.isLivingEntityNPC(le))
+					continue;
+				
+				try {
+					ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
+					if (completedNpcsIds.contains(solle.getNpcid()))
+						continue;
+					
+					completedNpcsIds.add(solle.getNpcid());
+					solle.doSpellCast(c.getTarget());
 					
 				} catch (CoreStateInitException e) {
 					// TODO Auto-generated catch block

@@ -175,4 +175,8 @@ public interface IConfigurationManager {
 	ISoliniaFaction getFaction(int Id);
 
 	void editClass(int classid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidClassSettingException;
+
+	List<ISoliniaSpell> getSpellsByClassId(int classId);
+
+	List<ISoliniaSpell> getSpellsByClassIdAndMaxLevel(int classId, int level);
 }

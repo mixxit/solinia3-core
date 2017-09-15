@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.metadata.MetadataValue;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
@@ -26,6 +27,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -412,6 +414,34 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			
 			this.emote(ChatColor.AQUA + npc.getName() + " says '" + npc.getKillTriggerText() + "'" + ChatColor.RESET);
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void doSpellCast(LivingEntity livingEntity) {
+		ISoliniaNPC npc;
+		try {
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.getClassid() < 1)
+				return;
+			
+			// TODO move this out of the method, its name implies it will always cast
+			// Randomise chance to cast (5%)
+			int chanceToCast = Utils.RandomBetween(1,100);
+			if (chanceToCast < 90)
+				return;
+			
+			List<ISoliniaSpell> spells = StateManager.getInstance().getConfigurationManager().getSpellsByClassIdAndMaxLevel(npc.getClassid(), npc.getLevel());
+			if (spells.size() == 0)
+				return;
+			
+			ISoliniaSpell spellToCast = Utils.getRandomItemFromList(spells);
+			spellToCast.tryApplyOnEntity(this.livingentity,livingEntity);
+			
+			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

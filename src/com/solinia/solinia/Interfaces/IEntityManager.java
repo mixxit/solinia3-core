@@ -11,11 +11,13 @@ public interface IEntityManager {
 
 	INPCEntityProvider getNPCEntityProvider();
 
-	boolean addActiveEntityEffect(LivingEntity targetentity, SoliniaSpell soliniaSpell, Player player);
+	boolean addActiveEntityEffect(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity);
 
 	void spellTick();
 
 	SoliniaEntitySpellEffects getActiveEntityEffects(LivingEntity entity);
 
 	void doNPCRandomChat();
+
+	void doNPCSpellCast();
 }

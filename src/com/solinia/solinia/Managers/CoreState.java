@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -177,7 +178,7 @@ public class CoreState {
 		return Utils.GetWorldPerkDropCountModifier();
 	}
 
-	public boolean addActiveBlockEffect(Block clickedBlock, SoliniaSpell soliniaSpell, Player player) {
+	public boolean addActiveBlockEffect(Block clickedBlock, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		// TODO Auto-generated method stub
 		return false;
 	}

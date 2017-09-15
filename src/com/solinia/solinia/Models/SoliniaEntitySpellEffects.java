@@ -42,15 +42,15 @@ public class SoliniaEntitySpellEffects {
 		return activeSpells.values();
 	}
 
-	public boolean addSpellEffect(SoliniaSpell soliniaSpell, Player player, int duration) {
+	public boolean addSpellEffect(SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration) {
 		// This spell ID is already active
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
 		
-		if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),player,soliniaSpell))
+		if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),sourceEntity,soliniaSpell))
 			return false;
 		
-		SoliniaActiveSpellEffect activeEffect = new SoliniaActiveSpellEffect(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, player.getUniqueId(), true, duration);
+		SoliniaActiveSpellEffect activeEffect = new SoliniaActiveSpellEffect(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, sourceEntity.getUniqueId(), true, duration);
 		if (duration > 0)
 			activeSpells.put(soliniaSpell.getId(),activeEffect);
 		

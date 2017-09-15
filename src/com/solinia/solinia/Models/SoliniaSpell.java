@@ -2692,22 +2692,22 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	@Override
-	public boolean tryApplyOnBlock(Player player, Block clickedBlock) {
-		return StateManager.getInstance().addActiveBlockEffect(clickedBlock,this,player);
+	public boolean tryApplyOnBlock(LivingEntity sourceEntity, Block clickedBlock) {
+		return StateManager.getInstance().addActiveBlockEffect(clickedBlock,this,sourceEntity);
 	}
 
 	@Override
-	public boolean tryApplyOnEntity(Player player, LivingEntity targetentity) {
+	public boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity) {
 		// Entity was targeted for this spell but is that the final location?
 		try {
 			switch(Utils.getSpellTargetType(getTargettype()))
 			{
 				case Self:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(player,this,player);
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(sourceEntity,this,sourceEntity);
 				case TargetOptional:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,player);
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
 				case Target:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,player);
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
 				case AETarget:
 					// Get entities around entity and attempt to apply, if any are successful, return true
 					boolean success = false;
@@ -2717,7 +2717,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,player);
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,sourceEntity);
 						if (loopSuccess == true)
 							success = true;
 					}
@@ -2726,12 +2726,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 					// Get entities around caster and attempt to apply, if any are successful, return true
 					boolean successCaster = false;
 					// TODO - should the ae range be read from a field of the spell?
-					for (Entity e : player.getNearbyEntities(10, 10, 10))
+					for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10))
 					{
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,player);
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,sourceEntity);
 						if (loopSuccess == true)
 							successCaster = true;
 					}
