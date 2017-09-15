@@ -2997,6 +2997,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, SoliniaSpell soliniaSpell) {
+		if (source == null)
+			return false;
+		
+		if (target == null)
+			return false;
+		
 		for(SpellEffect effect : soliniaSpell.getSpellEffects())
 		{
 			// Validate spelleffecttype rules

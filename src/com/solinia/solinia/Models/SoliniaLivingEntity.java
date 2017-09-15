@@ -39,6 +39,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public SoliniaLivingEntity(LivingEntity livingentity) {
 		
 		String metaid = "";
+		if (livingentity != null)
 		for(MetadataValue val : livingentity.getMetadata("mobname"))
 		{
 			metaid = val.asString();
