@@ -219,26 +219,35 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  AITargetSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 attacker\r\n";
+			
+			// NPC attack players
+			try
+			{
+				ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
+				if (npcfaction.getBase() == -1500)
+				{
+					mob = mob + "  - 2 players\r\n";
+				}
+			} catch (CoreStateInitException e)
+			{
+				// skip
+			}
+			
+			// NPC attack NPCs
 			if (npc.isGuard())
 			{
 				// Always attack mobs with factionid 0
-				mob = mob + "  - 2 SpecificFaction FACTIONID_0\r\n";
+				mob = mob + "  - 3 SpecificFaction FACTIONID_0\r\n";
 				// Attack all mobs with -1500 faction
 				try
 				{
-					int curnum = 3;
+					int curnum = 4;
 					for(ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions())
 					{
 						if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid())
 						{
 							mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
 							curnum++;
-						} else {
-							if (faction.getBase() == -1500 && npc.getFactionid() == faction.getId())
-							{
-								mob = mob + "  - " + curnum + " players\r\n";
-								curnum++;
-							}
 						}
 					}
 				} catch (CoreStateInitException e)
@@ -246,6 +255,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 					// skip
 				}
 			}
+			
+			
 		}
 
 		if (npc.getHeaditem() != null || npc.getChestitem() != null || npc.getLegsitem() != null
