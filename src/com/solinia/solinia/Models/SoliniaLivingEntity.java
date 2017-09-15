@@ -428,17 +428,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc.getClassid() < 1)
 				return;
 			
-			// TODO move this out of the method, its name implies it will always cast
-			// Randomise chance to cast (5%)
-			int chanceToCast = Utils.RandomBetween(1,100);
-			if (chanceToCast < 90)
-				return;
+			System.out.println("Entity would like to cast a spell");
 			
+			// TODO move this out of the method, its name implies it will always cast
+			// Randomise chance to cast (30%)
+			int chanceToCast = Utils.RandomBetween(1,100);
+			if (chanceToCast < 70)
+				return;
+
 			List<ISoliniaSpell> spells = StateManager.getInstance().getConfigurationManager().getSpellsByClassIdAndMaxLevel(npc.getClassid(), npc.getLevel());
 			if (spells.size() == 0)
 				return;
 			
 			ISoliniaSpell spellToCast = Utils.getRandomItemFromList(spells);
+			System.out.println("Entity casting spell: " + spellToCast.getName());
 			spellToCast.tryApplyOnEntity(this.livingentity,livingEntity);
 			
 			

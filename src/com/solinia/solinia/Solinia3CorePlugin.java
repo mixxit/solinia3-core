@@ -89,6 +89,7 @@ import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
+import com.solinia.solinia.Timers.NPCSpellCastTimer;
 import com.solinia.solinia.Timers.PerkLoadTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
@@ -104,6 +105,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private StateCommitTimer commitTimer;
 	private PlayerRegenTickTimer playerRegenTimer;
 	private SpellTickTimer spellTickTimer;
+	private NPCSpellCastTimer npcSpellCastTimer;
 	private PlayerInteractionTimer playerInteractionTimer;
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 	private NPCRandomChatTimer npcRandomChatTimer;
@@ -244,6 +246,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			npcRandomChatTimer = new NPCRandomChatTimer();
 			npcRandomChatTimer.runTaskTimer(this, 6*20L, 60*20L);
+
+			npcSpellCastTimer = new NPCSpellCastTimer();
+			npcSpellCastTimer.runTaskTimer(this, 6*20L, 6*20L);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

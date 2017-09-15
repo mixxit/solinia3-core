@@ -233,6 +233,12 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 						{
 							mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
 							curnum++;
+						} else {
+							if (faction.getBase() == -1500 && npc.getFactionid() == faction.getId())
+							{
+								mob = mob + "  - " + curnum + " players\r\n";
+								curnum++;
+							}
 						}
 					}
 				} catch (CoreStateInitException e)
