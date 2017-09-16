@@ -28,4 +28,8 @@ public interface ISoliniaLivingEntity
 	void doSlayChat();
 
 	public void doSpellCast(LivingEntity livingEntity);
+
+	boolean isPlayer();
+
+	Integer getMana();
 }

@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.metadata.MetadataValue;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -37,6 +38,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private int npcid;
 
 	public SoliniaLivingEntity(LivingEntity livingentity) {
+		this.livingentity = livingentity;
 		
 		String metaid = "";
 		if (livingentity != null)
@@ -44,8 +46,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			metaid = val.asString();
 		}
-		
-		this.livingentity = livingentity;
 
 		if (metaid != null)
 			if(!metaid.equals(""))
@@ -53,6 +53,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private void installNpcByMetaName(String metaid) {
+		if (isPlayer())
+			return;
+		
 		if (!metaid.contains("NPCID_"))
 			return;
 		
@@ -275,22 +278,40 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 	@Override
 	public boolean isPet() {
-		// TODO Auto-generated method stub
+		if (isPlayer())
+			return false;
+		
 		return false;
 	}
 
 	@Override
 	public int getLevel() {
+		if (isPlayer())
+		{
+			try {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+				return solPlayer.getLevel();
+			} catch (CoreStateInitException e) {
+				return 0;
+			}
+		}
+		
 		return level;
 	}
 
 	@Override
 	public void setLevel(int level) {
+		if (isPlayer())
+			return;
+		
 		this.level = level;
 	}
 
 	@Override
 	public void dropLoot() {
+		if (isPlayer())
+			return;
+		
 		try {
 			if (getNpcid() > 0)
 			{
@@ -380,6 +401,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void setNpcid(int npcid) {
 		this.npcid = npcid;
 	}
+	
+	@Override
+	public boolean isPlayer()
+	{
+		if (this.getBukkitLivingEntity() == null)
+			return false;
+		
+		if (this.getBukkitLivingEntity() instanceof Player)
+			return true;
+		
+		return false;
+	}
 
 	@Override
 	public void emote(String message) {
@@ -388,9 +421,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void doRandomChat() {
-		ISoliniaNPC npc;
+		if (isPlayer())
+			return;
+		
 		try {
-			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
 				return;
 			
@@ -408,6 +443,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 	@Override
 	public void doSlayChat() {
+		if (isPlayer())
+			return;
+		
 		ISoliniaNPC npc;
 		try {
 			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
@@ -423,6 +461,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void doSpellCast(LivingEntity livingEntity) {
+		if (isPlayer())
+			return;
+		
+		if (livingEntity == null || this.livingentity == null)
+			return;
+		
 		ISoliniaNPC npc;
 		try {
 			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
@@ -431,31 +475,105 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			// TODO move this out of the method, its name implies it will always cast
 			// Randomise chance to cast (30%)
-			int chanceToCast = Utils.RandomBetween(1,100);
-			if (chanceToCast < 70)
-				return;
+			//int chanceToCast = Utils.RandomBetween(1,100);
+			//if (chanceToCast < 70)
+			//	return;
 
 			List<ISoliniaSpell> spells = StateManager.getInstance().getConfigurationManager().getSpellsByClassIdAndMaxLevel(npc.getClassid(), npc.getLevel());
 			if (spells.size() == 0)
 				return;
 			
 			List<ISoliniaSpell> hostileSpells = new ArrayList<ISoliniaSpell>();
-			
+			List<ISoliniaSpell> beneficialSpells = new ArrayList<ISoliniaSpell>();
+
 			for(ISoliniaSpell spell : spells)
 			{
 				if (!spell.isBeneficial())
+				{
 					hostileSpells.add(spell);
-					
+					continue;
+				}
+				
+				beneficialSpells.add(spell);
 			}
 			
-			ISoliniaSpell spellToCast = Utils.getRandomItemFromList(hostileSpells);
-			System.out.println("Entity casting spell: " + spellToCast.getName());
-			spellToCast.tryApplyOnEntity(this.livingentity,livingEntity);
+			int chanceToCastBeneficial = Utils.RandomBetween(1, 10);
 			
+			boolean success = false;
 			
+			if (chanceToCastBeneficial > 7)
+			{
+				// Cast on self
+				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(beneficialSpells);
+				if (getMana() > spellToCast.getMana())
+				{
+					success = spellToCast.tryApplyOnEntity(this.livingentity,this.livingentity);
+				}
+				if (success)
+				{
+					this.setMana(this.getMana() - spellToCast.getMana());
+				}
+			} else {
+				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(hostileSpells);
+				if (getMana() > spellToCast.getMana())
+				{
+					success = spellToCast.tryApplyOnEntity(this.livingentity,livingEntity);
+				}
+				if (success)
+				{
+					this.setMana(this.getMana() - spellToCast.getMana());
+				}
+			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	private void setMana(int amount) {
+		if (isPlayer())
+			return;
+		
+		if (this.getNpcid() < 1)
+			return;
+		
+		try
+		{
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc == null)
+				return;
+			StateManager.getInstance().getEntityManager().setNPCMana(this.getBukkitLivingEntity(),npc,amount);
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
+		
+	}
+
+	@Override
+	public Integer getMana() {
+		if (isPlayer())
+		{
+			try {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+				return solPlayer.getMana();
+			} catch (CoreStateInitException e) {
+				return 0;
+			}
+		}
+		
+		if (this.getNpcid() < 1)
+			return 0;
+		
+		try
+		{
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc == null)
+				return 0;
+			return StateManager.getInstance().getEntityManager().getNPCMana(this.getBukkitLivingEntity(),npc);
+		} catch (CoreStateInitException e)
+		{
+			return 0;
 		}
 	}
 }

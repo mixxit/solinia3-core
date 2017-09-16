@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
@@ -651,5 +652,77 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setRoamer(boolean isRoamer) {
 		this.isRoamer = isRoamer;
+	}
+	
+	@Override
+	public ISoliniaClass getClassObj()
+	{
+		if (getClassid() < 1)
+			return null;
+		
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().getClassObj(getClassid());
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
+
+	@Override
+	public Integer getMaxMP() {
+		if (getClassObj() == null)
+			return 1;
+		
+		String profession = getClassObj().getName().toUpperCase();
+
+		int wisintagi = 0;
+		if (Utils.getCasterClass(profession).equals("W"))
+			wisintagi = getWisdom();
+		if (Utils.getCasterClass(profession).equals("I"))
+			wisintagi = getIntelligence();
+		if (Utils.getCasterClass(profession).equals("N"))
+			wisintagi = getAgility();
+
+		double maxmana = ((850 * getLevel()) + (85 * wisintagi * getLevel())) / 425;
+		return (int) Math.floor(maxmana);
+	}
+
+	
+	// TODO Calculate these based on level and class
+	
+	@Override
+	public int getStrength() {
+		return 75;
+	}
+
+	@Override
+	public int getStamina() {
+		return 75;
+	}
+	
+	@Override
+	public int getAgility() {
+		return 75;
+	}
+
+	@Override
+	public int getDexterity() {
+		return 75;
+	}
+	
+	@Override
+	public int getIntelligence() {
+		return 75;
+	}
+
+	@Override
+	public int getWisdom() {
+		return 75;
+	}
+
+	@Override
+	public int getCharisma() {
+		return 75;
 	}
 }

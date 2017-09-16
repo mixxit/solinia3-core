@@ -20,4 +20,8 @@ public interface IEntityManager {
 	void doNPCRandomChat();
 
 	void doNPCSpellCast();
+
+	Integer getNPCMana(LivingEntity bukkitLivingEntity, ISoliniaNPC npc);
+
+	void setNPCMana(LivingEntity bukkitLivingEntity, ISoliniaNPC npc, int amount);
 }

@@ -17,6 +17,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaSpell;
@@ -25,6 +26,7 @@ import com.solinia.solinia.Utils.Utils;
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpellEffects> entitySpellEffects = new ConcurrentHashMap<UUID, SoliniaEntitySpellEffects>();
+	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
@@ -156,6 +158,31 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 		}
+	}
+
+	@Override
+	public Integer getNPCMana(LivingEntity bukkitLivingEntity, ISoliniaNPC npc) {
+		if (bukkitLivingEntity instanceof Player)
+			return 0;
+		
+		if (entityManaLevels.get(bukkitLivingEntity.getUniqueId()) == null)
+			entityManaLevels.put(bukkitLivingEntity.getUniqueId(), npc.getMaxMP());
+		
+		return entityManaLevels.get(bukkitLivingEntity.getUniqueId());
+	}
+	
+	@Override
+	public void setNPCMana(LivingEntity bukkitLivingEntity, ISoliniaNPC npc, int amount) {
+		if (bukkitLivingEntity instanceof Player)
+			return;
+		
+		if (amount < 0)
+			amount = 0;
+		
+		if (amount > npc.getMaxMP())
+			amount = npc.getMaxMP();
+		
+		entityManaLevels.put(bukkitLivingEntity.getUniqueId(), amount);
 	}
 
 }
