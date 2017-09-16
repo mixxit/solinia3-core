@@ -119,7 +119,6 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void doNPCSpellCast() {
-		System.out.println("NPC Spell Tick");
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
@@ -157,7 +156,6 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 		}
-		System.out.println("NPC Spell Tick completed");
 	}
 
 }

@@ -2995,6 +2995,65 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return true;
 		return false;
 	}
+	
+	@Override 
+	public boolean isBeneficial() {
+		// Thanks EQEmu!
+		// You'd think just checking goodEffect flag would be enough?
+		if (getGoodEffect() == 1) {
+			// If the target type is Self or Pet and is a CancelMagic spell
+			// it is not Beneficial
+			SpellTargetType tt = Utils.getSpellTargetType(getTargettype());
+			if (tt != SpellTargetType.Self && tt != SpellTargetType.Pet &&
+					isEffectInSpell(SpellEffectType.CancelMagic))
+				return false;
+
+			// When our targettype is Target, AETarget, Aniaml, Undead, or Pet
+			// We need to check more things!
+			if (tt == SpellTargetType.Target || tt == SpellTargetType.AETarget || tt == SpellTargetType.Animal ||
+					tt == SpellTargetType.Undead || tt == SpellTargetType.Pet) {
+				int sai = getSpellAffectIndex();
+
+				// If the resisttype is magic and SpellAffectIndex is Calm/memblur/dispell sight
+				// it's not beneficial
+				if (Utils.getSpellResistType(getResisttype()) == SpellResistType.RESIST_MAGIC) {
+					// checking these SAI cause issues with the rng defensive proc line
+					// So I guess instead of fixing it for real, just a quick hack :P
+					if (Utils.getSpellEffectType(this.getEffectid1()) != SpellEffectType.DefensiveProc &&
+					    (Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm || Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight || Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Memory_Blur ||
+					    		Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm_Song))
+						return false;
+				} else {
+					// If the resisttype is not magic and spell is Bind Sight or Cast Sight
+					// It's not beneficial
+					if (Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight && getSkill() == 18 &&
+							!isEffectInSpell(SpellEffectType.VoiceGraft))
+						return false;
+				}
+			}
+		}
+
+		// And finally, if goodEffect is not 0 or if it's a group spell it's beneficial
+		return getGoodEffect() != 0 || isGroupSpell();
+	}
+
+	private boolean isGroupSpell() {
+		if (Utils.getSpellTargetType(getTargettype()) == SpellTargetType.AEBard ||
+				Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Group ||
+						Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupTeleport)
+			return true;
+
+		return false;
+	}
+
+	private boolean isEffectInSpell(SpellEffectType effecttype) {
+		for(SpellEffect effect : getSpellEffects())
+		{
+			if (effect.getSpellEffectType() == effecttype)
+				return true;
+		}
+		return false;
+	}
 
 	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, SoliniaSpell soliniaSpell) {
 		if (source == null)

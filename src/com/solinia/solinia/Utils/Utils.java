@@ -38,13 +38,15 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
+import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.WorldWidePerk;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
-	
+
 	public static List<WorldWidePerk> getActiveWorldWidePerks() {
 		List<WorldWidePerk> perks = new ArrayList<WorldWidePerk>();
 
@@ -53,7 +55,10 @@ public class Utils {
 		Timestamp currenttimestamp = new Timestamp(now.getTime());
 
 		for (WorldWidePerk entity : StateManager.getInstance().getWorldWidePerks()) {
-			//System.out.println("Comparing Perk [" + entity.getId() + "/" + entity.getContributor() + "] time: " + entity.getEndtimeAsTimestamp().toLocaleString() + " against now " + now.toLocaleString());
+			// System.out.println("Comparing Perk [" + entity.getId() + "/" +
+			// entity.getContributor() + "] time: " +
+			// entity.getEndtimeAsTimestamp().toLocaleString() + " against now " +
+			// now.toLocaleString());
 			if (entity.getEndtimeAsTimestamp().after(currenttimestamp)) {
 				perks.add(entity);
 			}
@@ -99,113 +104,108 @@ public class Utils {
 	public static void broadcastPerks() {
 		for (WorldWidePerk perk : getActiveWorldWidePerks()) {
 			for (Player player : Bukkit.getOnlinePlayers()) {
-				player.sendMessage(
-						"* You are currently receiving " + perk.getPerkname() + " from contributor " + perk.getContributor());
+				player.sendMessage("* You are currently receiving " + perk.getPerkname() + " from contributor "
+						+ perk.getContributor());
 			}
 		}
 	}
-	
+
 	public static String getTextureFromName(String name) {
 		String texture = "";
-        try {
-            URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
-            InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
-            String uuid = new JsonParser().parse(reader_0).getAsJsonObject().get("id").getAsString();
-     
-            URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
-            InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
-            JsonObject textureProperty = new JsonParser().parse(reader_1).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
-            texture = textureProperty.get("value").getAsString();
-            String signature = textureProperty.get("signature").getAsString();
-        } catch (IOException e) {
-            System.err.println("Could not get skin data from session servers!");
-            e.printStackTrace();
-            return null;
-        }
-        
-        return texture;
-    }
-	
-	public static int getPlayerTotalCountOfItemId(Player player, int itemid)
-	{
-		int total = 0;
-		
-		System.out.println("Getting total Count of Item Id: " + itemid + " for player: " + player.getDisplayName());
-		for (int i = 0; i < 36; i++)
-		{
-			ItemStack itemstack = player.getInventory().getItem(i);
-    		if(itemstack == null)
-    			continue;
-    		
-    		if (itemstack.getType().equals(Material.AIR))
-	        	continue;
-    		
-    		int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
-    		if (tmpitemid < 1000)
-    			continue;
-    		
-    		try {
-				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
-			} catch (SoliniaItemException e) {
-				continue;
-			} catch (CoreStateInitException e) {
-				continue;
-			}
-    		
-    		if (tmpitemid == itemid)
-    		{
-    			total = total + itemstack.getAmount();
-    		}
-    	}
-		
-		System.out.println("Total Count of Item Id: " + itemid + " for player: " + player.getDisplayName() + " was " + total);
-		return total;
+		try {
+			URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
+			InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
+			String uuid = new JsonParser().parse(reader_0).getAsJsonObject().get("id").getAsString();
+
+			URL url_1 = new URL(
+					"https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
+			InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
+			JsonObject textureProperty = new JsonParser().parse(reader_1).getAsJsonObject().get("properties")
+					.getAsJsonArray().get(0).getAsJsonObject();
+			texture = textureProperty.get("value").getAsString();
+			String signature = textureProperty.get("signature").getAsString();
+		} catch (IOException e) {
+			System.err.println("Could not get skin data from session servers!");
+			e.printStackTrace();
+			return null;
+		}
+
+		return texture;
 	}
-	
-	public static int removeItemsFromInventory(Player player, int itemid, int count)
-	{
-		int removed = 0;
-		int remaining = count;
-		System.out.println("Removing " + count + " of Item Id: " + itemid + " for player: " + player.getDisplayName());
-		for (int i = 0; i < 36; i++)
-		{
+
+	public static int getPlayerTotalCountOfItemId(Player player, int itemid) {
+		int total = 0;
+
+		System.out.println("Getting total Count of Item Id: " + itemid + " for player: " + player.getDisplayName());
+		for (int i = 0; i < 36; i++) {
 			ItemStack itemstack = player.getInventory().getItem(i);
 			if (itemstack == null)
 				continue;
-			
+
 			if (itemstack.getType().equals(Material.AIR))
-	        	continue;
-	        
-    		int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
-    		if (tmpitemid < 1000)
-    			continue;
-    		
-    		try {
+				continue;
+
+			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+			if (tmpitemid < 1000)
+				continue;
+
+			try {
 				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
 			} catch (SoliniaItemException e) {
 				continue;
 			} catch (CoreStateInitException e) {
 				continue;
 			}
-			
+
+			if (tmpitemid == itemid) {
+				total = total + itemstack.getAmount();
+			}
+		}
+
+		System.out.println(
+				"Total Count of Item Id: " + itemid + " for player: " + player.getDisplayName() + " was " + total);
+		return total;
+	}
+
+	public static int removeItemsFromInventory(Player player, int itemid, int count) {
+		int removed = 0;
+		int remaining = count;
+		System.out.println("Removing " + count + " of Item Id: " + itemid + " for player: " + player.getDisplayName());
+		for (int i = 0; i < 36; i++) {
+			ItemStack itemstack = player.getInventory().getItem(i);
+			if (itemstack == null)
+				continue;
+
+			if (itemstack.getType().equals(Material.AIR))
+				continue;
+
+			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+			if (tmpitemid < 1000)
+				continue;
+
+			try {
+				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
+			} catch (SoliniaItemException e) {
+				continue;
+			} catch (CoreStateInitException e) {
+				continue;
+			}
+
 			if (remaining < 1)
 				break;
-			
+
 			if (tmpitemid != itemid)
 				continue;
-			
-			if (remaining <= itemstack.getAmount())
-			{
+
+			if (remaining <= itemstack.getAmount()) {
 				removed = removed + remaining;
 				itemstack.setAmount(itemstack.getAmount() - remaining);
 				remaining = 0;
 				break;
 			}
-			
-			if (remaining > 64)
-			{
-				if (itemstack.getAmount() < 64)
-				{
+
+			if (remaining > 64) {
+				if (itemstack.getAmount() < 64) {
 					removed = removed + itemstack.getAmount();
 					remaining = remaining - itemstack.getAmount();
 					itemstack.setAmount(0);
@@ -220,7 +220,7 @@ public class Utils {
 				itemstack.setAmount(0);
 			}
 		}
-		
+
 		System.out.println("Removed " + removed + " of Item Id: " + itemid + " for player: " + player.getDisplayName());
 
 		player.updateInventory();
@@ -267,6 +267,36 @@ public class Utils {
 			return SpellTargetType.UndeadAE;
 		case 25:
 			return SpellTargetType.SummonedAE;
+		case 32:
+			return SpellTargetType.AETargetHateList;
+		case 33:
+			return SpellTargetType.HateList;
+		case 36:
+			return SpellTargetType.AreaClientOnly;
+		case 37:
+			return SpellTargetType.AreaNPCOnly;
+		case 38:
+			return SpellTargetType.SummonedPet;
+		case 39:
+			return SpellTargetType.GroupNoPets;
+		case 40:
+			return SpellTargetType.AEBard;
+		case 41:
+			return SpellTargetType.Group;
+		case 42:
+			return SpellTargetType.Directional;
+		case 43:
+			return SpellTargetType.GroupClientAndPet;
+		case 44:
+			return SpellTargetType.Beam;
+		case 45:
+			return SpellTargetType.Ring;
+		case 46:
+			return SpellTargetType.TargetsTarget;
+		case 47:
+			return SpellTargetType.PetMaster;
+		case 50:
+			return SpellTargetType.TargetAENoPlayersPets;
 		default:
 			return SpellTargetType.Error;
 		}
@@ -769,65 +799,63 @@ public class Utils {
 		}
 		return le;
 	}
-	
-	public static LivingEntity getTargettedLivingEntity(LivingEntity observer, int reach)
-	{
-        Location observerPos = observer.getEyeLocation();
-        Vector3D observerDir = new Vector3D(observerPos.getDirection());
 
-        Vector3D observerStart = new Vector3D(observerPos);
-        Vector3D observerEnd = observerStart.add(observerDir.multiply(reach));
+	public static LivingEntity getTargettedLivingEntity(LivingEntity observer, int reach) {
+		Location observerPos = observer.getEyeLocation();
+		Vector3D observerDir = new Vector3D(observerPos.getDirection());
 
-        LivingEntity hit = null;
+		Vector3D observerStart = new Vector3D(observerPos);
+		Vector3D observerEnd = observerStart.add(observerDir.multiply(reach));
 
-        // Get nearby entities
-        for (Entity targetEntity : observer.getNearbyEntities(reach, reach, reach)) {
-        	if (!(targetEntity instanceof LivingEntity))
-        		continue;
-        	
-        	LivingEntity target = (LivingEntity)targetEntity; 	
-            // Bounding box of the given player
-            Vector3D targetPos = new Vector3D(target.getLocation());
-            Vector3D minimum = targetPos.add(-0.5, 0, -0.5);
-            Vector3D maximum = targetPos.add(0.5, 1.67, 0.5);
+		LivingEntity hit = null;
 
-            if (target != observer && hasIntersection(observerStart, observerEnd, minimum, maximum)) {
-                if (hit == null || 
-                        hit.getLocation().distanceSquared(observerPos) > 
-                        target.getLocation().distanceSquared(observerPos)) {
+		// Get nearby entities
+		for (Entity targetEntity : observer.getNearbyEntities(reach, reach, reach)) {
+			if (!(targetEntity instanceof LivingEntity))
+				continue;
 
-                    hit = target;
-                }
-            }
-        }
-        
+			LivingEntity target = (LivingEntity) targetEntity;
+			// Bounding box of the given player
+			Vector3D targetPos = new Vector3D(target.getLocation());
+			Vector3D minimum = targetPos.add(-0.5, 0, -0.5);
+			Vector3D maximum = targetPos.add(0.5, 1.67, 0.5);
+
+			if (target != observer && hasIntersection(observerStart, observerEnd, minimum, maximum)) {
+				if (hit == null || hit.getLocation().distanceSquared(observerPos) > target.getLocation()
+						.distanceSquared(observerPos)) {
+
+					hit = target;
+				}
+			}
+		}
+
 		return hit;
 	}
-	
-    private static boolean hasIntersection(Vector3D p1, Vector3D p2, Vector3D min, Vector3D max) {
-        final double epsilon = 0.0001f;
- 
-        Vector3D d = p2.subtract(p1).multiply(0.5);
-        Vector3D e = max.subtract(min).multiply(0.5);
-        Vector3D c = p1.add(d).subtract(min.add(max).multiply(0.5));
-        Vector3D ad = d.abs();
- 
-        if (Math.abs(c.x) > e.x + ad.x)
-            return false;
-        if (Math.abs(c.y) > e.y + ad.y)
-            return false;
-        if (Math.abs(c.z) > e.z + ad.z)
-            return false;
- 
-        if (Math.abs(d.y * c.z - d.z * c.y) > e.y * ad.z + e.z * ad.y + epsilon)
-            return false;
-        if (Math.abs(d.z * c.x - d.x * c.z) > e.z * ad.x + e.x * ad.z + epsilon)
-            return false;
-        if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon)
-            return false;
- 
-        return true;
-    }
+
+	private static boolean hasIntersection(Vector3D p1, Vector3D p2, Vector3D min, Vector3D max) {
+		final double epsilon = 0.0001f;
+
+		Vector3D d = p2.subtract(p1).multiply(0.5);
+		Vector3D e = max.subtract(min).multiply(0.5);
+		Vector3D c = p1.add(d).subtract(min.add(max).multiply(0.5));
+		Vector3D ad = d.abs();
+
+		if (Math.abs(c.x) > e.x + ad.x)
+			return false;
+		if (Math.abs(c.y) > e.y + ad.y)
+			return false;
+		if (Math.abs(c.z) > e.z + ad.z)
+			return false;
+
+		if (Math.abs(d.y * c.z - d.z * c.y) > e.y * ad.z + e.z * ad.y + epsilon)
+			return false;
+		if (Math.abs(d.z * c.x - d.x * c.z) > e.z * ad.x + e.x * ad.z + epsilon)
+			return false;
+		if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon)
+			return false;
+
+		return true;
+	}
 
 	public static boolean isEntityInLineOfSight(LivingEntity entityfrom, Entity entityto) {
 		if (entityto instanceof LivingEntity) {
@@ -845,8 +873,7 @@ public class Utils {
 		return false;
 	}
 
-	public static SpellEffectType getSpellEffectType(Integer typeId)
-	{
+	public static SpellEffectType getSpellEffectType(Integer typeId) {
 		switch (typeId) {
 		case 0:
 			return SpellEffectType.CurrentHP;
@@ -1798,38 +1825,34 @@ public class Utils {
 	}
 
 	public static int getDurationFromSpell(SoliniaSpell soliniaSpell) {
-		if (soliniaSpell.isBuffSpell())
-		{
+		if (soliniaSpell.isBuffSpell()) {
 			return soliniaSpell.getBuffduration();
 		}
 		return 0;
 	}
 
-	public static void FixSpellItemWorth() throws CoreStateInitException
-	{
+	public static void FixSpellItemWorth() throws CoreStateInitException {
 		System.out.println("Fixing Spell Item Worth");
-		for (ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
-		{
+		for (ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems()) {
 			if (!item.isSpellscroll())
 				continue;
-			
+
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
 			if (spell.getAllowedClasses().size() == 0)
 				continue;
-			
+
 			int spellMinLevel = 50;
-			for(SoliniaSpellClass spellClassEntry : spell.getAllowedClasses())
-			{
+			for (SoliniaSpellClass spellClassEntry : spell.getAllowedClasses()) {
 				if (spellClassEntry.getMinlevel() < spellMinLevel)
 					spellMinLevel = spellClassEntry.getMinlevel();
 			}
-			
+
 			int newWorth = spellMinLevel * 10;
 			System.out.println("Updated Item: " + item.getDisplayname() + " to worth: $" + newWorth);
 			item.setWorth(newWorth);
 		}
 	}
-	
+
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
 		try {
@@ -1842,17 +1865,149 @@ public class Utils {
 
 	public static boolean isLivingEntityNPC(LivingEntity livingentity) {
 		String metaid = "";
-		for(MetadataValue val : livingentity.getMetadata("mobname"))
-		{
+		for (MetadataValue val : livingentity.getMetadata("mobname")) {
 			metaid = val.asString();
 		}
-		
+
 		if (metaid.equals(""))
 			return false;
-		
+
 		if (!metaid.contains("NPCID_"))
 			return false;
-		
+
 		return true;
+	}
+
+	public static SpellResistType getSpellResistType(Integer resisttype) {
+		switch (resisttype) {
+		case 0:
+			return SpellResistType.RESIST_NONE;
+		case 1:
+			return SpellResistType.RESIST_MAGIC;
+		case 2:
+			return SpellResistType.RESIST_FIRE;
+		case 3:
+			return SpellResistType.RESIST_COLD;
+		case 4:
+			return SpellResistType.RESIST_POISON;
+		case 5:
+			return SpellResistType.RESIST_DISEASE;
+		case 6:
+			return SpellResistType.RESIST_CHROMATIC;
+		case 7:
+			return SpellResistType.RESIST_PRISMATIC;
+		case 8:
+			return SpellResistType.RESIST_PHYSICAL;
+		case 9:
+			return SpellResistType.RESIST_CORRUPTION;
+		default:
+			return SpellResistType.RESIST_NONE;
+		}
+	}
+
+	// Graphical effects
+	public static SpellEffectIndex getSpellEffectIndex(int sai) {
+		switch (sai) {
+		case -1:
+			return SpellEffectIndex.Summon_Mount_Unclass;
+		case 0:
+			return SpellEffectIndex.Direct_Damage;
+		case 1:
+			return SpellEffectIndex.Heal_Cure;
+		case 2:
+			return SpellEffectIndex.AC_Buff;
+		case 3:
+			return SpellEffectIndex.AE_Damage;
+		case 4:
+			return SpellEffectIndex.Summon;
+		case 5:
+			return SpellEffectIndex.Sight;
+		case 6:
+			return SpellEffectIndex.Mana_Regen_Resist_Song;
+		case 7:
+			return SpellEffectIndex.Stat_Buff;
+		case 9:
+			return SpellEffectIndex.Vanish;
+		case 10:
+			return SpellEffectIndex.Appearance;
+		case 11:
+			return SpellEffectIndex.Enchanter_Pet;
+		case 12:
+			return SpellEffectIndex.Calm;
+		case 13:
+			return SpellEffectIndex.Fear;
+		case 14:
+			return SpellEffectIndex.Dispell_Sight;
+		case 15:
+			return SpellEffectIndex.Stun;
+		case 16:
+			return SpellEffectIndex.Haste_Runspeed;
+		case 17:
+			return SpellEffectIndex.Combat_Slow;
+		case 18:
+			return SpellEffectIndex.Damage_Shield;
+		case 19:
+			return SpellEffectIndex.Cannibalize_Weapon_Proc;
+		case 20:
+			return SpellEffectIndex.Weaken;
+		case 21:
+			return SpellEffectIndex.Banish;
+		case 22:
+			return SpellEffectIndex.Blind_Poison;
+		case 23:
+			return SpellEffectIndex.Cold_DD;
+		case 24:
+			return SpellEffectIndex.Poison_Disease_DD;
+		case 25:
+			return SpellEffectIndex.Fire_DD;
+		case 27:
+			return SpellEffectIndex.Memory_Blur;
+		case 28:
+			return SpellEffectIndex.Gravity_Fling;
+		case 29:
+			return SpellEffectIndex.Suffocate;
+		case 30:
+			return SpellEffectIndex.Lifetap_Over_Time;
+		case 31:
+			return SpellEffectIndex.Fire_AE;
+		case 33:
+			return SpellEffectIndex.Cold_AE;
+		case 34:
+			return SpellEffectIndex.Poison_Disease_AE;
+		case 40:
+			return SpellEffectIndex.Teleport;
+		case 41:
+			return SpellEffectIndex.Direct_Damage_Song;
+		case 42:
+			return SpellEffectIndex.Combat_Buff_Song;
+		case 43:
+			return SpellEffectIndex.Calm_Song;
+		case 45:
+			return SpellEffectIndex.Firework;
+		case 46:
+			return SpellEffectIndex.Firework_AE;
+		case 47:
+			return SpellEffectIndex.Weather_Rocket;
+		case 50:
+			return SpellEffectIndex.Convert_Vitals;
+		case 60:
+			return SpellEffectIndex.NPC_Special_60;
+		case 61:
+			return SpellEffectIndex.NPC_Special_61;
+		case 62:
+			return SpellEffectIndex.NPC_Special_62;
+		case 63:
+			return SpellEffectIndex.NPC_Special_63;
+		case 70:
+			return SpellEffectIndex.NPC_Special_70;
+		case 71:
+			return SpellEffectIndex.NPC_Special_71;
+		case 80:
+			return SpellEffectIndex.NPC_Special_80;
+		case 88:
+			return SpellEffectIndex.Trap_Lock;
+		}
+
+		return null;
 	}
 }

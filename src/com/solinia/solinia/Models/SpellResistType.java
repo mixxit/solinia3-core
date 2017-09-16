@@ -1,0 +1,14 @@
+package com.solinia.solinia.Models;
+
+public enum SpellResistType {
+		RESIST_NONE,
+		RESIST_MAGIC,
+		RESIST_FIRE,
+		RESIST_COLD,
+		RESIST_POISON,
+		RESIST_DISEASE,
+		RESIST_CHROMATIC,
+		RESIST_PRISMATIC,
+		RESIST_PHYSICAL,
+		RESIST_CORRUPTION
+}
