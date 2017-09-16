@@ -452,7 +452,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		// TODO Auto-generated method stub
 		double basedmg = ((level * 0.45) + 0.8);
 
-		double racestatbonus = 75 + (level * 5);
+		double racestatbonus = getStrength() + (level * 5);
 		double bonus = racestatbonus / 100;
 		double damagemlt = basedmg * bonus;
 		double newdmg = damagemlt;
@@ -466,7 +466,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		double levelmultiplier = 15;
 
 		double hp = level * levelmultiplier;
-		double stamina = 75;
+		double stamina = getStamina();
 		double hpmain = (stamina / 12) * level;
 
 		double calculatedhp = hp + hpmain;
@@ -693,36 +693,36 @@ public class SoliniaNPC implements ISoliniaNPC {
 	
 	@Override
 	public int getStrength() {
-		return 75;
+		return 125;
 	}
 
 	@Override
 	public int getStamina() {
-		return 75;
+		return 125;
 	}
 	
 	@Override
 	public int getAgility() {
-		return 75;
+		return 125;
 	}
 
 	@Override
 	public int getDexterity() {
-		return 75;
+		return 125;
 	}
 	
 	@Override
 	public int getIntelligence() {
-		return 75;
+		return 125;
 	}
 
 	@Override
 	public int getWisdom() {
-		return 75;
+		return 125;
 	}
 
 	@Override
 	public int getCharisma() {
-		return 75;
+		return 125;
 	}
 }
