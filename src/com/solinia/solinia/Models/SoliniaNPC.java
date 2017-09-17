@@ -376,6 +376,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
+		sender.sendMessage("- pet: " + ChatColor.GOLD + isPet() + ChatColor.RESET);
 		sender.sendMessage("- guard: " + ChatColor.GOLD + isGuard() + ChatColor.RESET);
 		sender.sendMessage("- roamer: " + ChatColor.GOLD + isRoamer() + ChatColor.RESET);
 		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());

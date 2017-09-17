@@ -3088,11 +3088,16 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet))
 				{
+					System.out.println("Found pet spell");
 					try
 					{
+						System.out.println("Seeking pet npc: " + soliniaSpell.getTeleportZone());
 						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(soliniaSpell.getTeleportZone());
 						if (npc == null)
+						{
+							System.out.println("Pet npc not found");
 							return false;
+						}
 					} catch (CoreStateInitException e)
 					{
 						return false;

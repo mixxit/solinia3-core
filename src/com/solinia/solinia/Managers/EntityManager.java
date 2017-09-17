@@ -218,6 +218,9 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public LivingEntity getPet(Player player) {
 		UUID entityuuid = this.playerpetsdata.get(player.getUniqueId());
+		if (this.playerpetsdata.get(player.getUniqueId()) == null)
+			return null;
+		
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
 		if (entity != null)
 			return entity;
@@ -228,6 +231,9 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void killPet(Player player) {
 		UUID entityuuid = this.playerpetsdata.get(player.getUniqueId());
+		if (this.playerpetsdata.get(player.getUniqueId()) == null)
+			return;
+
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
 		if (entity != null)
 			entity.remove();
@@ -241,6 +247,9 @@ public class EntityManager implements IEntityManager {
 
 		for (Map.Entry<UUID, UUID> entry : playerpetsdata.entrySet()) {
 			// UUID key = entry.getKey();
+			if (entry.getValue() == null)
+				continue;
+			
 			LivingEntity entity = (LivingEntity) Bukkit.getEntity(entry.getValue());
 			if (entity != null)
 				pets.add(entity);
