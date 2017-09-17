@@ -242,8 +242,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case ItemID
 			: return;
-		case WipeHateList
-			: return;
+		case WipeHateList: 
+			applyWipeHateList(spellEffect,soliniaSpell);
+			return;
 		case SpinTarget
 			: return;
 		case InfraVision
@@ -1104,6 +1105,14 @@ public class SoliniaActiveSpellEffect {
 
 	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
+	}
+
+	private void applyWipeHateList(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+		
+		Creature creature = (Creature)getLivingEntity();
+		creature.setTarget(null);
 	}
 
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
