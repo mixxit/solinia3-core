@@ -199,6 +199,8 @@ public class EntityManager implements IEntityManager {
 		java.util.Date now = calendar.getTime();
 		Timestamp nowtimestamp = new Timestamp(now.getTime());
 		Timestamp expiretimestamp = this.entityMezzed.get(livingEntity.getUniqueId());
+
+		if (expiretimestamp != null)
 		if (nowtimestamp.after(expiretimestamp))
 		{
 			entityMezzed.remove(livingEntity.getUniqueId());
