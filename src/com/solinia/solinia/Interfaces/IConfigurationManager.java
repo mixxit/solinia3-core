@@ -179,4 +179,6 @@ public interface IConfigurationManager {
 	List<ISoliniaSpell> getSpellsByClassId(int classId);
 
 	List<ISoliniaSpell> getSpellsByClassIdAndMaxLevel(int classId, int level);
+
+	ISoliniaNPC getPetNPCByName(String name);
 }

@@ -109,6 +109,15 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
+	public ISoliniaNPC getPetNPCByName(String name) {
+		List<ISoliniaNPC> results = npcRepository.query(q -> q.isPet() == true && q.getName().equals(name));
+		if (results.size() != 1)
+			return null;
+		
+		return results.get(0);
+	}
+	
+	@Override
 	public List<ISoliniaRace> getRaces() {
 		// TODO Auto-generated method stub
 		return raceRepository.query(q -> q.getName() != null);

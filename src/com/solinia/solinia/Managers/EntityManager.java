@@ -4,33 +4,39 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
-
+import org.bukkit.entity.Wolf;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Utils.Utils;
+
+import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_12_R1.GenericAttributes;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpellEffects> entitySpellEffects = new ConcurrentHashMap<UUID, SoliniaEntitySpellEffects>();
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
-
+	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
+	
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
 	}
@@ -209,4 +215,97 @@ public class EntityManager implements IEntityManager {
 		return entityMezzed.get(livingEntity.getUniqueId());
 	}
 	
+	@Override
+	public LivingEntity getPet(Player player) {
+		UUID entityuuid = this.playerpetsdata.get(player.getUniqueId());
+		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
+		if (entity != null)
+			return entity;
+		
+		return null;
+	}
+
+	@Override
+	public void killPet(Player player) {
+		UUID entityuuid = this.playerpetsdata.get(player.getUniqueId());
+		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
+		if (entity != null)
+			entity.remove();
+		this.playerpetsdata.remove(player.getUniqueId());
+		player.sendMessage("Your pet has been removed");
+	}
+
+	@Override
+	public List<LivingEntity> getAllWorldPets() {
+		List<LivingEntity> pets = new ArrayList<LivingEntity>();
+
+		for (Map.Entry<UUID, UUID> entry : playerpetsdata.entrySet()) {
+			// UUID key = entry.getKey();
+			LivingEntity entity = (LivingEntity) Bukkit.getEntity(entry.getValue());
+			if (entity != null)
+				pets.add(entity);
+		}
+
+		return pets;
+	}
+	@Override
+	public LivingEntity SpawnPet(Player owner, ISoliniaSpell spell)
+	{
+		try
+		{
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(owner);
+			if (pet != null)
+			{
+				StateManager.getInstance().getEntityManager().killPet(owner);
+			}
+			
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(spell.getTeleportZone());
+			if (npc == null)
+				return null;
+			
+			Wolf entity = (Wolf) owner.getWorld().spawnEntity(owner.getLocation(), EntityType.WOLF);
+			StateManager.getInstance().getEntityManager().setPet(owner,entity);
+			entity.setAdult();
+			entity.setTamed(true);
+			entity.setOwner(owner);
+			entity.setBreed(false);
+			entity.setCustomName(ChatColor.YELLOW + owner.getDisplayName() + "'s Pet");
+			entity.setCustomNameVisible(true);
+			entity.setCanPickupItems(false);
+	        
+			// TODO Use Illusion here with the npcs type
+			
+			entity.setMaxHealth(npc.getMaxHP());
+			entity.setHealth(npc.getMaxHP());
+			net.minecraft.server.v1_12_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) entity).getHandle();
+			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)npc.getMaxDamage());
+			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + npc.getMaxDamage() + " dmg");
+			
+			return entity;
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
+
+	@Override
+	public void killAllPets() {
+		for (Map.Entry<UUID, UUID> entry : playerpetsdata.entrySet()) {
+			UUID key = entry.getKey();
+			LivingEntity entity = (LivingEntity)Bukkit.getEntity(entry.getValue());
+			if (entity != null)
+				entity.remove();
+			this.playerpetsdata.remove(key);
+		}
+	}
+
+	@Override
+	public LivingEntity setPet(Player player, LivingEntity entity) {
+		if (getPet(player) != null) {
+			killPet(player);
+		}
+		player.sendMessage("You have summoned a new pet");
+		this.playerpetsdata.put(player.getUniqueId(), entity.getUniqueId());
+		return entity;
+	}
 }

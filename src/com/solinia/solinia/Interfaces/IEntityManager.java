@@ -1,6 +1,8 @@
 package com.solinia.solinia.Interfaces;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -30,4 +32,16 @@ public interface IEntityManager {
 	void addMezzed(LivingEntity livingEntity, Timestamp expiretimestamp);
 
 	Timestamp getMezzed(LivingEntity livingEntity);
+
+	LivingEntity getPet(Player player);
+
+	void killPet(Player player);
+
+	void killAllPets();
+
+	LivingEntity setPet(Player player, LivingEntity entity);
+
+	List<LivingEntity> getAllWorldPets();
+
+	LivingEntity SpawnPet(Player owner, ISoliniaSpell spell);
 }

@@ -52,6 +52,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private String randomchatTriggerText;
 	private boolean isGuard = false;
 	private boolean isRoamer = false;
+	private boolean isPet = false;
 
 	@Override
 	public int getId() {
@@ -476,28 +477,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void editSetting(String setting, String value)
 			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, java.io.IOException {
-		String name = getName();
-		String mctype = getMctype();
-		int level = getLevel();
-		int factionid = getFactionid();
-		boolean usedisguise = isUsedisguise();
-		String disguisetype = getDisguisetype();
-		String headitem = getHeaditem();
-		String chestitem = getChestitem();
-		String legsitem = getLegsitem();
-		String feetitem = getFeetitem();
-		String handitem = getHanditem();
-		String offhanditem = getOffhanditem();
-		boolean boss = isBoss();
-		boolean burning = isBurning();
-		boolean invisible = isInvisible();
-		boolean customhead = isCustomhead();
-		String customheaddata = getCustomheaddata();
-		int merchantid = getMerchantid();
-		boolean upsidedown = isUpsidedown();
-		int loottableid = getLoottableid();
-		int raceid = getRaceid();
-		int classid = getClassid();
 
 		switch (setting.toLowerCase()) {
 		case "name":
@@ -594,6 +573,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "guard":
 			setGuard(Boolean.parseBoolean(value));
+			break;
+		case "pet":
+			setPet(Boolean.parseBoolean(value));
 			break;
 		case "roamer":
 			setRoamer(Boolean.parseBoolean(value));
@@ -724,5 +706,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public int getCharisma() {
 		return 125;
+	}
+
+	@Override
+	public boolean isPet() {
+		return isPet;
+	}
+
+	@Override
+	public void setPet(boolean isPet) {
+		this.isPet = isPet;
 	}
 }

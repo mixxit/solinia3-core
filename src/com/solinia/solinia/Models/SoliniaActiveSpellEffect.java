@@ -154,8 +154,9 @@ public class SoliniaActiveSpellEffect {
 		case Blind: 
 			applyBlind(spellEffect,soliniaSpell);
 			return;
-		case Stun
-			: return;
+		case Stun: 
+			applyStunSpellEffect(spellEffect,soliniaSpell);
+			return;
 		case Charm
 			: return;
 		case Fear
@@ -181,8 +182,9 @@ public class SoliniaActiveSpellEffect {
 			return;
 		case SummonItem
 			: return;
-		case SummonPet
-			: return;
+		case SummonPet: 
+			applySummonPet(spellEffect,soliniaSpell);
+			return;
 		case Confuse: 
 			applyConfusion(spellEffect,soliniaSpell);
 			return;
@@ -1077,6 +1079,19 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
+	private void applySummonPet(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!isOwnerPlayer())
+			return;
+		
+		try
+		{
+			StateManager.getInstance().getEntityManager().SpawnPet(Bukkit.getPlayer(getOwnerUuid()), soliniaSpell);
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
+	}
+
 	private void applyTauntSpell(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		if (!isOwnerPlayer())
 			return;
@@ -1137,6 +1152,14 @@ public class SoliniaActiveSpellEffect {
 		creature.setTarget(null);
 	}
 
+	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+		
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
+	}
+	
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		if (!(getLivingEntity() instanceof Creature))
 			return;

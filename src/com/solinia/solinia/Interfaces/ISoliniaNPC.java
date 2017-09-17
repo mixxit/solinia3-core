@@ -149,4 +149,8 @@ public interface ISoliniaNPC {
 	public int getWisdom();
 	
 	public int getCharisma();
+
+	boolean isPet();
+
+	void setPet(boolean isPet);
 }

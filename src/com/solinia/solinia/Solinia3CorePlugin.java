@@ -91,6 +91,7 @@ import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
 import com.solinia.solinia.Timers.PerkLoadTimer;
+import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
@@ -109,7 +110,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PlayerInteractionTimer playerInteractionTimer;
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 	private NPCRandomChatTimer npcRandomChatTimer;
-
+	private PetCheckTickTimer petCheckTickTimer;
+	
 	private Essentials essentials;
 	private Economy economy;
 	private ChatItemAPI ciApi;
@@ -134,6 +136,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	@Override
     public void onDisable() {
 		try {
+			StateManager.getInstance().getEntityManager().killAllPets();
 			StateManager.getInstance().Commit();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -249,6 +252,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			npcSpellCastTimer = new NPCSpellCastTimer();
 			npcSpellCastTimer.runTaskTimer(this, 6*20L, 6*20L);
+
+			petCheckTickTimer = new PetCheckTickTimer();
+			petCheckTickTimer.runTaskTimer(this, 6*20L, 6*20L);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

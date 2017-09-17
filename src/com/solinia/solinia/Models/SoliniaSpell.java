@@ -12,6 +12,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.SpellTargetType;
@@ -3079,11 +3080,24 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return false;
 			}
 			
-			if (effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2))
+			if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2))
 			{
 				// If the effect is teleport and the target is not a player then fail
 				if (!(target instanceof Player))
 					return false;
+				
+				if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet))
+				{
+					try
+					{
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(soliniaSpell.getTeleportZone());
+						if (npc == null)
+							return false;
+					} catch (CoreStateInitException e)
+					{
+						return false;
+					}
+				}
 			}
 		}
 		
