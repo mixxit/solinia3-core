@@ -3071,6 +3071,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effect.getBase() < 0 && target.equals(source))
 					return false;
 			}
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.Mez))
+			{
+				// If the effect is a mez, cancel out
+				if (target.equals(source))
+					return false;
+			}
 			
 			if (effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2))
 			{
