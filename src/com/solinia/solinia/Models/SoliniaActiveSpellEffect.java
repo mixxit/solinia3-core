@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -299,12 +300,14 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case ModelSize
 			: return;
-		case Cloak
-			: return;
+		case Cloak: 
+			applyInvisibility(spellEffect, soliniaSpell);
+			return;
 		case SummonCorpse
 			: return;
-		case InstantHate
-			: return;
+		case InstantHate: 
+			applyTauntSpell(spellEffect, soliniaSpell);
+			return;
 		case StopRain
 			: return;
 		case NegateIfCombat
@@ -410,8 +413,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case LimitCastTimeMax
 			: return;
-		case Teleport2
-			: return;
+		case Teleport2: 
+			applyTeleport(spellEffect, soliniaSpell);
+			return;
 		case ElectricityResist
 			: return;
 		case PercentalHeal
@@ -502,14 +506,17 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case EndurancePool
 			: return;
-		case Amnesia
-			: return;
-		case Hate
-			: return;
+		case Amnesia: 
+			applyWipeHateList(spellEffect, soliniaSpell);
+			return;
+		case Hate:
+			applyTauntSpell(spellEffect, soliniaSpell);
+			return;
 		case SkillAttack
 			: return;
-		case FadingMemories
-			: return;
+		case FadingMemories: 
+			applyWipeHateList(spellEffect, soliniaSpell);
+			return;
 		case StunResist
 			: return;
 		case StrikeThrough
@@ -518,8 +525,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case CurrentEnduranceOnce
 			: return;
-		case Taunt
-			: return;
+		case Taunt: 
+			applyTauntSpell(spellEffect,soliniaSpell);
+			return;
 		case ProcChance
 			: return;
 		case RangedProc
@@ -558,8 +566,8 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case PetCriticalHit
 			: return;
-		case SlayUndead
-			: return;
+		case SlayUndead: 
+			return;
 		case SkillDamageAmount
 			: return;
 		case Packrat
@@ -954,8 +962,8 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case ACv2
 			: return;
-		case ManaRegen_v2
-			: return;
+		case ManaRegen_v2: 
+			return;
 		case SkillDamageAmount2
 			: return;
 		case AddMeleeProc
@@ -1067,6 +1075,20 @@ public class SoliniaActiveSpellEffect {
 		default:
 			return;
 		}
+	}
+
+	private void applyTauntSpell(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!isOwnerPlayer())
+			return;
+		
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+		
+		Creature creature = (Creature)getLivingEntity();
+		
+		Entity source = Bukkit.getEntity(getSourceUuid());
+		if (source instanceof LivingEntity)
+			creature.setTarget((LivingEntity)source);
 	}
 
 	private void applyTeleport(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
