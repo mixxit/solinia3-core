@@ -1,6 +1,8 @@
 package com.solinia.solinia.Managers;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,6 +29,7 @@ public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpellEffects> entitySpellEffects = new ConcurrentHashMap<UUID, SoliniaEntitySpellEffects>();
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
+	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
 
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
@@ -185,4 +188,23 @@ public class EntityManager implements IEntityManager {
 		entityManaLevels.put(bukkitLivingEntity.getUniqueId(), amount);
 	}
 
+	@Override
+	public void addMezzed(LivingEntity livingEntity, Timestamp expiretimestamp) {
+		this.entityMezzed.put(livingEntity.getUniqueId(), expiretimestamp);
+	}
+
+	@Override
+	public Timestamp getMezzed(LivingEntity livingEntity) {
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		Timestamp nowtimestamp = new Timestamp(now.getTime());
+		Timestamp expiretimestamp = this.entityMezzed.get(livingEntity.getUniqueId());
+		if (nowtimestamp.after(expiretimestamp))
+		{
+			entityMezzed.remove(livingEntity.getUniqueId());
+		}
+		
+		return entityMezzed.get(livingEntity.getUniqueId());
+	}
+	
 }

@@ -1,5 +1,6 @@
 package com.solinia.solinia.Listeners;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
@@ -45,6 +47,23 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityTargetEvent(EntityTargetEvent event) {
 		if (event.isCancelled()) 
 			return;
+		
+		if (!(event.getEntity() instanceof Creature))
+			return;
+		
+		try
+		{
+			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity)event.getEntity());
+			
+			if (mezExpiry != null)
+			{
+				event.setCancelled(true);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
 	}
 
 	@EventHandler

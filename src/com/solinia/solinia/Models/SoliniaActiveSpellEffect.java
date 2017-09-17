@@ -1,9 +1,12 @@
 package com.solinia.solinia.Models;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -172,8 +175,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case ChangeFrenzyRad
 			: return;
-		case Mez
-			: return;
+		case Mez: 
+			applyMezSpellEffect(spellEffect,soliniaSpell);
+			return;
 		case SummonItem
 			: return;
 		case SummonPet
@@ -1102,6 +1106,30 @@ public class SoliniaActiveSpellEffect {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
 	}
 
+	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+		
+		try
+		{
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.SECOND, 6);
+			java.util.Date expire = calendar.getTime();
+			Timestamp expiretimestamp = new Timestamp(expire.getTime());
+			
+			Creature creature = (Creature)getLivingEntity();
+			
+			StateManager.getInstance().getEntityManager().addMezzed(getLivingEntity(), expiretimestamp);
+			
+			creature.setTarget(null);
+			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
+			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
+	}
+	
 	private void applyBindAffinty(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		if (!isOwnerPlayer())
 			return;

@@ -1,5 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
+import java.sql.Timestamp;
+
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -24,4 +26,8 @@ public interface IEntityManager {
 	Integer getNPCMana(LivingEntity bukkitLivingEntity, ISoliniaNPC npc);
 
 	void setNPCMana(LivingEntity bukkitLivingEntity, ISoliniaNPC npc, int amount);
+
+	void addMezzed(LivingEntity livingEntity, Timestamp expiretimestamp);
+
+	Timestamp getMezzed(LivingEntity livingEntity);
 }
