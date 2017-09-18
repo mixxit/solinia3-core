@@ -262,8 +262,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case CorpseBomb
 			: return;
-		case NecPet
-			: return;
+		case NecPet: 
+			applySummonPet(spellEffect,soliniaSpell);
+			return;
 		case PreserveCorpse
 			: return;
 		case BindSight
