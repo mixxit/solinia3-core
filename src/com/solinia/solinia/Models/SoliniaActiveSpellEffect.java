@@ -1268,7 +1268,8 @@ public class SoliniaActiveSpellEffect {
 		// Damage
 		if (hpToRemove < 0)
 		{
-			getLivingEntity().damage(hpToRemove * -1, Bukkit.getEntity(getSourceUuid()));
+			hpToRemove = hpToRemove * -1;
+			getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 			if (soliniaSpell.isLifetapSpell())
 			{
 				Entity sourceEntity = Bukkit.getEntity(getSourceUuid());

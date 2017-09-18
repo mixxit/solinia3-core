@@ -27,6 +27,9 @@ import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Utils.Utils;
 
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
 
@@ -289,6 +292,33 @@ public class EntityManager implements IEntityManager {
 			net.minecraft.server.v1_12_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) entity).getHandle();
 			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)npc.getMaxDamage());
 			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + npc.getMaxDamage() + " dmg");
+			
+
+			MobDisguise mob = new MobDisguise(DisguiseType.WOLF);
+			
+			switch(npc.getMctype().toUpperCase())
+			{
+				case "WOLF":
+					mob = new MobDisguise(DisguiseType.WOLF);
+				break;
+				case "SKELETON":
+					mob = new MobDisguise(DisguiseType.SKELETON);
+				break;
+				case "BLAZE":
+					mob = new MobDisguise(DisguiseType.BLAZE);
+				break;
+				case "IRON_GOLEM":
+					mob = new MobDisguise(DisguiseType.IRON_GOLEM);
+				break;
+				case "GUARDIAN":
+					mob = new MobDisguise(DisguiseType.GUARDIAN);
+				break;
+				default:
+					mob = new MobDisguise(DisguiseType.WOLF);
+				break;
+			}
+						
+			DisguiseAPI.disguiseEntity(entity, mob);
 			
 			return entity;
 		} catch (CoreStateInitException e)
