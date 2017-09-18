@@ -300,22 +300,31 @@ public class EntityManager implements IEntityManager {
 			{
 				case "WOLF":
 					mob = new MobDisguise(DisguiseType.WOLF);
-				break;
+					break;
+				case "SQUID":
+					mob = new MobDisguise(DisguiseType.SQUID);
+					break;
+				case "PARROT":
+					mob = new MobDisguise(DisguiseType.PARROT);
+					break;
+				case "AREA_EFFECT_CLOUD":
+					mob = new MobDisguise(DisguiseType.AREA_EFFECT_CLOUD);
+					break;
 				case "SKELETON":
 					mob = new MobDisguise(DisguiseType.SKELETON);
-				break;
+					break;
 				case "BLAZE":
 					mob = new MobDisguise(DisguiseType.BLAZE);
-				break;
+					break;
 				case "IRON_GOLEM":
 					mob = new MobDisguise(DisguiseType.IRON_GOLEM);
-				break;
+					break;
 				case "GUARDIAN":
 					mob = new MobDisguise(DisguiseType.GUARDIAN);
-				break;
+					break;
 				default:
 					mob = new MobDisguise(DisguiseType.WOLF);
-				break;
+					break;
 			}
 						
 			DisguiseAPI.disguiseEntity(entity, mob);

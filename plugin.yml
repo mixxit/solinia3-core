@@ -271,7 +271,6 @@ commands:
     usage: /viewloottable loottableid
     aliases: []
 depend:
-softdepend:
 - Vault
 - Essentials
 - MythicMobs
