@@ -5,6 +5,8 @@ public class SpellEffect {
 	private SpellEffectType spellEffectType;
 	private int base;
 	private int limit;
+	private int spellEffectNo;
+	
 	public SpellEffectType getSpellEffectType() {
 		return spellEffectType;
 	}
@@ -35,5 +37,13 @@ public class SpellEffect {
 	
 	public void setLimit(int limit) {
 		this.limit = limit;
+	}
+
+	public int getSpellEffectNo() {
+		return spellEffectNo;
+	}
+
+	public void setSpellEffectNo(int spellEffectNo) {
+		this.spellEffectNo = spellEffectNo;
 	}
 }

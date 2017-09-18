@@ -2648,6 +2648,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- teleport_zone: " + ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
+		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		for(SpellEffect effect : this.getSpellEffects())
+		{
+			sender.sendMessage("- [" + effect.getSpellEffectId() + "]"  + effect.getSpellEffectType().name() + ": " + ChatColor.GOLD + effect.getBase() + ChatColor.RESET);		
+		}
 	}
 
 	@Override
@@ -2670,6 +2677,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			int mana = Integer.parseInt(value);
 			setMana(mana);
 			break;
+		case "teleport_zone":
 		case "teleportzone":
 			try
 			{
@@ -2795,67 +2803,80 @@ public class SoliniaSpell implements ISoliniaSpell {
 		int effectid;
 		int base;
 		int limit;
+		int effectno;
 		switch(no)
 		{
 			case 1:
 				effectid = getEffectid1();
 				base = getEffectBaseValue1();
 				limit = getEffectLimitValue1();
+				effectno = 1;
 				break;
 			case 2:
 				effectid = getEffectid2();
 				base = getEffectBaseValue2();
 				limit = getEffectLimitValue2();
+				effectno = 2;
 				break;
 			case 3:
 				effectid = getEffectid3();
 				base = getEffectBaseValue3();
 				limit = getEffectLimitValue3();
+				effectno = 3;
 				break;
 			case 4:
 				effectid = getEffectid4();
 				base = getEffectBaseValue4();
 				limit = getEffectLimitValue4();
+				effectno = 4;
 				break;
 			case 5:
 				effectid = getEffectid5();
 				base = getEffectBaseValue5();
 				limit = getEffectLimitValue5();
+				effectno = 5;
 				break;
 			case 6:
 				effectid = getEffectid6();
 				base = getEffectBaseValue6();
 				limit = getEffectLimitValue6();
+				effectno = 6;
 				break;
 			case 7:
 				effectid = getEffectid7();
 				base = getEffectBaseValue7();
 				limit = getEffectLimitValue7();
+				effectno = 7;
 				break;
 			case 8:
 				effectid = getEffectid8();
 				base = getEffectBaseValue8();
 				limit = getEffectLimitValue8();
+				effectno = 8;
 				break;
 			case 9:
 				effectid = getEffectid9();
 				base = getEffectBaseValue9();
 				limit = getEffectLimitValue9();
+				effectno = 9;
 				break;
 			case 10:
 				effectid = getEffectid10();
 				base = getEffectBaseValue10();
 				limit = getEffectLimitValue10();
+				effectno = 10;
 				break;
 			case 11:
 				effectid = getEffectid11();
 				base = getEffectBaseValue11();
 				limit = getEffectLimitValue11();
+				effectno = 11;
 				break;
 			case 12:
 				effectid = getEffectid12();
 				base = getEffectBaseValue12();
 				limit = getEffectLimitValue12();
+				effectno = 12;
 				break;
 			default:
 				return null;
@@ -2867,6 +2888,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		spellEffect.setSpellEffectType(Utils.getSpellEffectType(effectid));
 		spellEffect.setBase(base);
 		spellEffect.setLimit(limit);
+		spellEffect.setSpellEffectNo(effectno);
 		return spellEffect;
 	}
 	
