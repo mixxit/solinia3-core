@@ -307,9 +307,6 @@ public class EntityManager implements IEntityManager {
 				case "PARROT":
 					mob = new MobDisguise(DisguiseType.PARROT);
 					break;
-				case "AREA_EFFECT_CLOUD":
-					mob = new MobDisguise(DisguiseType.AREA_EFFECT_CLOUD);
-					break;
 				case "SKELETON":
 					mob = new MobDisguise(DisguiseType.SKELETON);
 					break;
