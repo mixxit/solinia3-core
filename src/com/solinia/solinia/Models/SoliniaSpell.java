@@ -2717,6 +2717,22 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
 				case Target:
 					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
+				case Tap:
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
+				case TargetAETap:
+					// Get entities around entity and attempt to apply, if any are successful, return true
+					boolean tapsuccess = false;
+					// TODO - should the ae range be read from a field of the spell?
+					for (Entity e : targetentity.getNearbyEntities(10, 10, 10))
+					{
+						if (!(e instanceof LivingEntity))
+							continue;
+						
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,sourceEntity);
+						if (loopSuccess == true)
+							tapsuccess = true;
+					}
+					return tapsuccess;
 				case AETarget:
 					// Get entities around entity and attempt to apply, if any are successful, return true
 					boolean success = false;
@@ -3129,5 +3145,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public boolean isLifetapSpell() {
+		if(Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap || Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap)
+				return true;
+		
+		return false;
 	}
 }

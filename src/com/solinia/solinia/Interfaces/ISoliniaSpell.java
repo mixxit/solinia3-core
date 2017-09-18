@@ -1009,4 +1009,6 @@ public interface ISoliniaSpell {
 
 	boolean isBeneficial();
 
+	boolean isLifetapSpell();
+
 }

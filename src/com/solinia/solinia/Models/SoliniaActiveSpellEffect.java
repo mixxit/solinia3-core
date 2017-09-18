@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender.Spigot;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -1268,6 +1269,26 @@ public class SoliniaActiveSpellEffect {
 		if (hpToRemove < 0)
 		{
 			getLivingEntity().damage(hpToRemove * -1, Bukkit.getEntity(getSourceUuid()));
+			if (soliniaSpell.isLifetapSpell())
+			{
+				Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+				if (sourceEntity == null)
+					return;
+				
+				if (!(sourceEntity instanceof LivingEntity))
+					return;
+				
+				LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
+				
+				int amount = (int) Math.round(sourceLivingEntity.getHealth()) + hpToRemove;
+				if (amount > sourceLivingEntity.getMaxHealth()) {
+					amount = (int) Math.round(sourceLivingEntity.getMaxHealth());
+				}
+				
+				if (amount < 0)
+					amount = 0;
+				sourceLivingEntity.setHealth(amount);
+			}
 		}
 		// Heal
 		else 
