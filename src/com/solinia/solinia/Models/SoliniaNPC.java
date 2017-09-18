@@ -437,14 +437,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 						.getLootDrop(le.getLootdropid());
 				sender.sendMessage(
 						"- " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
-				for (ISoliniaLootDropEntry lde : StateManager.getInstance().getConfigurationManager()
-						.getLootDrop(ld.getId()).getEntries()) {
-					ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
-					sender.sendMessage("  - " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId()
-							+ "] - " + lde.getChance() + "% chance Count: " + lde.getCount() + " Always: "
-							+ lde.isAlways());
 				}
-			}
 		}
 
 	}

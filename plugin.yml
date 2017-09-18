@@ -258,6 +258,18 @@ commands:
     usage: /createarmorset classid tier suffixname
     aliases: 
     - createarmourset
+  listspells:
+    description: Lists spells
+    usage: /listspells searchstring
+    aliases: []
+  viewlootdrop:
+    description: Views a loot drop
+    usage: /viewlootdrop lootdropid
+    aliases: []
+  viewloottable:
+    description: Views a loottable
+    usage: /viewloottable loottableid
+    aliases: []
 depend:
 softdepend:
 - Vault

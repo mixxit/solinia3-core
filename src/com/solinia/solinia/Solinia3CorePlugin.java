@@ -41,6 +41,7 @@ import com.solinia.solinia.Commands.CommandListLootTables;
 import com.solinia.solinia.Commands.CommandListMerchantLists;
 import com.solinia.solinia.Commands.CommandListNPCs;
 import com.solinia.solinia.Commands.CommandListSpawnGroups;
+import com.solinia.solinia.Commands.CommandListSpells;
 import com.solinia.solinia.Commands.CommandLocal;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandNPCBuy;
@@ -63,6 +64,8 @@ import com.solinia.solinia.Commands.CommandSpawnRandomItem;
 import com.solinia.solinia.Commands.CommandStats;
 import com.solinia.solinia.Commands.CommandTarot;
 import com.solinia.solinia.Commands.CommandUpdateSpawnGroupLoc;
+import com.solinia.solinia.Commands.CommandViewLootDrop;
+import com.solinia.solinia.Commands.CommandViewLootTable;
 import com.solinia.solinia.Commands.CommandWho;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
@@ -328,6 +331,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editclass").setExecutor(new CommandEditClass());
 		this.getCommand("createarmorset").setExecutor(new CommandCreateArmourSet());
 		this.getCommand("createnpccopy").setExecutor(new CommandCreateNpcCopy());
+		this.getCommand("listspells").setExecutor(new CommandListSpells());
+		this.getCommand("viewloottable").setExecutor(new CommandViewLootTable());
+		this.getCommand("viewlootdrop").setExecutor(new CommandViewLootDrop());
 		
 	}
 	
