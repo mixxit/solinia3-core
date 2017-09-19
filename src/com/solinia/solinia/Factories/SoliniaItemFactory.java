@@ -252,7 +252,7 @@ public class SoliniaItemFactory {
 				int tierMin = 0;
 				int tierMax = armourtier * 5;
 				if (armourtier > 1)
-					tierMin =- 5;
+					tierMin =+ (5 * armourtier) - 5;
 				
 				int classStrBonus = classtype.getItemGenerationBonus("strength");
 				int classStaBonus = classtype.getItemGenerationBonus("stamina");
@@ -279,8 +279,18 @@ public class SoliniaItemFactory {
 				if (classChaBonus > 0)
 					item.setCharisma(Utils.RandomBetween(tierMin, tierMax + rarityBonus+classChaBonus));
 				
+				// Damage
+				if (StateManager.getInstance().getConfigurationManager().HandMaterials.contains(item.getBasename().toUpperCase()))
+				{
+					item.setDamage(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus));
+				}
+				
 				// mana regen
+				item.setMpregen(Utils.RandomBetween(0,armourtier + rarityBonus));
+								
 				// hp regen
+				item.setHpregen(Utils.RandomBetween(0,armourtier + rarityBonus));
+				
 				// TODO class procs?
 			}
 		
