@@ -24,6 +24,8 @@ public class SoliniaClass implements ISoliniaClass {
 	private String defaultChestMaterial = "LEATHER_CHESTPLATE";
 	private String defaultLegsMaterial = "LEATHER_LEGGINGS";
 	private String defaultFeetMaterial = "LEATHER_BOOTS";
+	private String defaulthandMaterial = "WOOD_SWORD";
+	private String defaultoffHandMaterial = "SHIELD";
 	private int strengthitembonus = 0;
 	private int staminaitembonus = 0;
 	private int agilityitembonus = 0;
@@ -35,6 +37,10 @@ public class SoliniaClass implements ISoliniaClass {
 	private String chesttypename = "Tunic";
 	private String legstypename = "Leggings";
 	private String bootstypename = "Boots";
+	private String swordtypename = "Sword";
+	private String shieldtypename = "Shield";
+	private String axetypename = "Axe";
+	private String spadetypename = "Staff";
 	
 	@Override
 	public String getName() {
@@ -306,6 +312,23 @@ public class SoliniaClass implements ISoliniaClass {
 			case "GOLD_CHESTPLATE": return getChesttypename();
 			case "GOLD_LEGGINGS": return getLegstypename();
 			case "GOLD_BOOTS": return getBootstypename();
+			case "WOOD_SWORD": return getSwordtypename(); 
+			case "STONE_SWORD": return getSwordtypename(); 
+			case "IRON_SWORD": return getSwordtypename(); 
+			case "GOLD_SWORD": return getSwordtypename(); 
+			case "DIAMOND_SWORD": return getSwordtypename(); 
+			case "WOOD_AXE": return getAxetypename(); 
+			case "STONE_AXE": return getAxetypename(); 
+			case "IRON_AXE": return getAxetypename(); 
+			case "GOLD_AXE": return getAxetypename();
+			case "DIAMOND_AXE": return getAxetypename(); 
+			case "WOOD_SPADE": return getSpadetypename(); 
+			case "STONE_SPADE": return getSpadetypename(); 
+			case "IRON_SPADE": return getSpadetypename(); 
+			case "GOLD_SPADE": return getSpadetypename(); 
+			case "DIAMOND_SPADE": return getSpadetypename(); 
+			case "SHIELD": return getShieldtypename();
+			
 			default: return "unknown";
 		}
 	}
@@ -363,5 +386,65 @@ public class SoliniaClass implements ISoliniaClass {
 
 	public void setBootstypename(String bootstypename) {
 		this.bootstypename = bootstypename;
+	}
+
+	@Override
+	public String getDefaulthandMaterial() {
+		return defaulthandMaterial;
+	}
+
+	@Override
+	public void setDefaulthandMaterial(String defaulthandMaterial) {
+		this.defaulthandMaterial = defaulthandMaterial;
+	}
+
+	@Override
+	public String getDefaultoffHandMaterial() {
+		return defaultoffHandMaterial;
+	}
+
+	@Override
+	public void setDefaultoffHandMaterial(String defaultoffHandMaterial) {
+		this.defaultoffHandMaterial = defaultoffHandMaterial;
+	}
+
+	@Override
+	public String getSwordtypename() {
+		return swordtypename;
+	}
+
+	@Override
+	public void setSwordtypename(String swordtypename) {
+		this.swordtypename = swordtypename;
+	}
+
+	@Override
+	public String getShieldtypename() {
+		return shieldtypename;
+	}
+
+	@Override
+	public void setShieldtypename(String shieldtypename) {
+		this.shieldtypename = shieldtypename;
+	}
+
+	@Override
+	public String getAxetypename() {
+		return axetypename;
+	}
+
+	@Override
+	public void setAxetypename(String axetypename) {
+		this.axetypename = axetypename;
+	}
+
+	@Override
+	public String getSpadetypename() {
+		return spadetypename;
+	}
+
+	@Override
+	public void setSpadetypename(String spadetypename) {
+		this.spadetypename = spadetypename;
 	}
 }

@@ -54,4 +54,28 @@ public interface ISoliniaClass {
 
 	public int getItemGenerationBonus(String string);
 
+	String getDefaulthandMaterial();
+
+	void setDefaulthandMaterial(String defaulthandMaterial);
+
+	String getDefaultoffHandMaterial();
+
+	void setDefaultoffHandMaterial(String defaultoffHandMaterial);
+
+	String getSwordtypename();
+
+	void setSwordtypename(String swordtypename);
+
+	String getShieldtypename();
+
+	void setShieldtypename(String shieldtypename);
+
+	String getAxetypename();
+
+	void setAxetypename(String axetypename);
+
+	String getSpadetypename();
+
+	void setSpadetypename(String spadetypename);
+
 }
