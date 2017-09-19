@@ -58,6 +58,27 @@ public interface IConfigurationManager {
 		add("GOLD_LEGGINGS");
 		add("GOLD_BOOTS");
 		}};
+		
+		public List<String> HandMaterials = new ArrayList<String>() {{ 
+			add("WOOD_SWORD");
+			add("STONE_SWORD");
+			add("IRON_SWORD");
+			add("GOLD_SWORD");
+			add("DIAMOND_SWORD");
+			add("WOOD_AXE");
+			add("STONE_AXE");
+			add("IRON_AXE");
+			add("GOLD_AXE");
+			add("DIAMOND_AXE");
+			add("WOOD_SPADE");
+			add("STONE_SPADE");
+			add("IRON_SPADE");
+			add("GOLD_SPADE");
+			add("DIAMOND_SPADE");
+			add("SHIELD");
+			add("BOW");
+		}};
+		
 
 	List<ISoliniaRace> getRaces();
 

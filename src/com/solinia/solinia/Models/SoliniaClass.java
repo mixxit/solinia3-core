@@ -41,6 +41,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private String shieldtypename = "Shield";
 	private String axetypename = "Axe";
 	private String spadetypename = "Staff";
+	private String bowtypename = "Bow";
 	
 	@Override
 	public String getName() {
@@ -146,6 +147,8 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- defaultchestmaterial: " + ChatColor.GOLD + getDefaultChestMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultlegsmaterial: " + ChatColor.GOLD + getDefaultLegsMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultfeetmaterial: " + ChatColor.GOLD + getDefaultFeetMaterial() + ChatColor.RESET);
+		sender.sendMessage("- defaulthandmaterial: " + ChatColor.GOLD + getDefaulthandMaterial() + ChatColor.RESET);
+		sender.sendMessage("- defaultoffhandmaterial: " + ChatColor.GOLD + getDefaultoffHandMaterial() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- strengthitembonus: " + ChatColor.GOLD + getStrengthitembonus() + ChatColor.RESET);
 		sender.sendMessage("- staminaitembonus: " + ChatColor.GOLD + getStaminaitembonus() + ChatColor.RESET);
@@ -159,6 +162,11 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- chesttypename: " + ChatColor.GOLD + getChesttypename() + ChatColor.RESET);
 		sender.sendMessage("- legstypename: " + ChatColor.GOLD + getLegstypename() + ChatColor.RESET);
 		sender.sendMessage("- bootstypename: " + ChatColor.GOLD + getBootstypename() + ChatColor.RESET);
+		sender.sendMessage("- swordtypename: " + ChatColor.GOLD + getSwordtypename() + ChatColor.RESET);
+		sender.sendMessage("- axetypename: " + ChatColor.GOLD + getAxetypename() + ChatColor.RESET);
+		sender.sendMessage("- spadetypename: " + ChatColor.GOLD + getSpadetypename() + ChatColor.RESET);
+		sender.sendMessage("- shieldtypename: " + ChatColor.GOLD + getShieldtypename() + ChatColor.RESET);
+		sender.sendMessage("- bowtypename: " + ChatColor.GOLD + getBowtypename() + ChatColor.RESET);
 	}
 
 	@Override
@@ -194,6 +202,16 @@ public class SoliniaClass implements ISoliniaClass {
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultFeetMaterial(value.toUpperCase());
 			break;
+		case "defaulthandmaterial":
+			if (!StateManager.getInstance().getConfigurationManager().HandMaterials.contains(value.toUpperCase()))
+				throw new InvalidClassSettingException("Invalid material type");
+			setDefaulthandMaterial(value.toUpperCase());
+			break;
+		case "defaultoffhandmaterial":
+			if (!StateManager.getInstance().getConfigurationManager().HandMaterials.contains(value.toUpperCase()))
+				throw new InvalidClassSettingException("Invalid material type");
+			setDefaultoffHandMaterial(value.toUpperCase());
+			break;
 		case "strengthitembonus":
 			this.setStrengthitembonus(Integer.parseInt(value));
 			break;
@@ -226,6 +244,21 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "bootstypename":
 			this.setBootstypename(value);
+			break;
+		case "swordtypename":
+			this.setSwordtypename(value);
+			break;
+		case "axetypename":
+			this.setAxetypename(value);
+			break;
+		case "spadetypename":
+			this.setSpadetypename(value);
+			break;
+		case "shieldtypename":
+			this.setShieldtypename(value);
+			break;
+		case "bowtypename":
+			this.setBowtypename(value);
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial");
@@ -328,6 +361,7 @@ public class SoliniaClass implements ISoliniaClass {
 			case "GOLD_SPADE": return getSpadetypename(); 
 			case "DIAMOND_SPADE": return getSpadetypename(); 
 			case "SHIELD": return getShieldtypename();
+			case "BOW": return getBowtypename();
 			
 			default: return "unknown";
 		}
@@ -446,5 +480,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setSpadetypename(String spadetypename) {
 		this.spadetypename = spadetypename;
+	}
+
+	@Override
+	public String getBowtypename() {
+		return bowtypename;
+	}
+
+	@Override
+	public void setBowtypename(String bowtypename) {
+		this.bowtypename = bowtypename;
 	}
 }

@@ -78,4 +78,8 @@ public interface ISoliniaClass {
 
 	void setSpadetypename(String spadetypename);
 
+	String getBowtypename();
+
+	void setBowtypename(String bowtypename);
+
 }
