@@ -110,42 +110,35 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
-		// NPC damage shield response
-		if (Utils.isLivingEntityNPC(getBukkitLivingEntity()))
+		// damage shield response
+		try
 		{
-			try
-			{
-				SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager().getActiveEntityEffects(getBukkitLivingEntity());
-	            
-	            if (effects != null)
+			SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager().getActiveEntityEffects(getBukkitLivingEntity());
+            
+            if (effects != null && (!(event.getDamager() instanceof Arrow)))
+            {
+	            for(SoliniaActiveSpellEffect effect : effects.getActiveSpell())
 	            {
-		            for(SoliniaActiveSpellEffect effect : effects.getActiveSpell())
-		            {
-		            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
-		            	if (spell.isDamageShield())
-		            	{
-		            		for(SpellEffect spelleffect : spell.getSpellEffects())
-		            		{
-		            			if (spelleffect.getSpellEffectType().equals(SpellEffectType.DamageShield))
-		            			{
-		            				// hurt enemy with damage shield
-		            				if (spelleffect.getBase() > 0)
-		            				attacker.damage(spelleffect.getBase());
-		            				if (attacker instanceof Player)
-		            				{
-		            					Player plds = (Player)attacker;
-		            					if (spell.getCastOnOther() != null && !spell.getCastOnOther().equals(""))
-		            					attacker.sendMessage(ChatColor.GRAY + " * " + spell.getCastOnOther());
-		            				}
-		            			}
-		            		}
-		            	}
-		            }
+	            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
+	            	if (spell.isDamageShield())
+	            	{
+	            		for(SpellEffect spelleffect : spell.getSpellEffects())
+	            		{
+	            			if (spelleffect.getSpellEffectType().equals(SpellEffectType.DamageShield))
+	            			{
+	            				// hurt enemy with damage shield
+	            				if (spelleffect.getBase() < 0)
+	            				attacker.damage(spelleffect.getBase() * -1);
+	            				if (spell.getCastOnOther() != null && !spell.getCastOnOther().equals(""))
+	            					this.emote(ChatColor.GRAY + " * " + attacker.getName() + " is hit by " + getBukkitLivingEntity().getName() + "'s damage shield");
+	            			}
+	            		}
+	            	}
 	            }
-			} catch (CoreStateInitException e)
-			{
-				return;
-			}
+            }
+		} catch (CoreStateInitException e)
+		{
+			return;
 		}
 		
 		// Validate attackers weapon (player only)
