@@ -9,8 +9,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Utils.Utils;
+import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaEntitySpellEffects {
 
@@ -46,9 +53,55 @@ public class SoliniaEntitySpellEffects {
 		// This spell ID is already active
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
-		
+
 		if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),sourceEntity,soliniaSpell))
 			return false;
+
+		// Resist spells!
+		if (soliniaSpell.isResistable())
+		{
+			float effectiveness = 100;
+			
+			// If state is active, try to use spell effectiveness (resists)
+			try {
+				effectiveness = soliniaSpell.getSpellEffectiveness(sourceEntity, getLivingEntity());
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if (effectiveness < 100)
+			{
+				// Check resistances
+				if (this.getLivingEntity() instanceof Player)
+				{
+					Player player = (Player)this.getLivingEntity();
+					player.sendMessage(ChatColor.GRAY + "* You resist " + soliniaSpell.getName());
+					return true;
+				}
+				
+				if (sourceEntity instanceof Player)
+				{
+					Player player = (Player)sourceEntity;
+					player.sendMessage(ChatColor.GRAY + "* " + soliniaSpell.getName() + " was completely resisted");
+					
+					/* TODO - Add hate
+					if (Utils.isLivingEntityNPC((LivingEntity)getLivingEntity()))
+					{
+						try {
+							// Resists should still cause hate
+							ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+							solentity.addHate(sourceEntity,10);
+						} catch (CoreStateInitException e) {
+							
+						}
+					}
+					*/
+					
+					return true;
+				}
+			}
+		}
 		
 		SoliniaActiveSpellEffect activeEffect = new SoliniaActiveSpellEffect(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, sourceEntity.getUniqueId(), true, duration);
 		if (duration > 0)

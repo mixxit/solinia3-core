@@ -291,6 +291,13 @@ public class SoliniaItemFactory {
 				// hp regen
 				item.setHpregen(Utils.RandomBetween(0,armourtier + rarityBonus));
 				
+				// resists
+				item.setColdResist(Utils.RandomBetween(0,armourtier + rarityBonus));
+				item.setFireResist(Utils.RandomBetween(0,armourtier + rarityBonus));
+				item.setMagicResist(Utils.RandomBetween(0,armourtier + rarityBonus));
+				item.setPoisonResist(Utils.RandomBetween(0,armourtier + rarityBonus));
+				item.setDiseaseResist(Utils.RandomBetween(0,armourtier + rarityBonus));
+				
 				// TODO class procs?
 			}
 		

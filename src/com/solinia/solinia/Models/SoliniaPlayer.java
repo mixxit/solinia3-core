@@ -829,4 +829,72 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// TODO Auto-generated method stub
 		return StateManager.getInstance().getGroupByMember(this.getBukkitPlayer().getUniqueId());
 	}
+
+	@Override
+	public int getResist(SpellResistType type) {
+		int resist = 25;
+		// Get sum of all item resists
+		{
+			resist += getTotalResist(type);
+		}
+		return resist;
+	}
+	
+	@Override
+	public int getTotalResist(SpellResistType type) {
+		int total = 0;
+		for (ItemStack itemstack : getBukkitPlayer().getInventory().getArmorContents()) {
+			if (itemstack == null)
+				continue;
+
+			if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+					&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				try
+				{
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					switch (type) {
+					case RESIST_FIRE:
+						if (item.getFireResist() > 0) {
+							total += item.getFireResist();
+						}
+						break;
+					case RESIST_COLD:
+						if (item.getColdResist() > 0) {
+							total += item.getColdResist();
+						}
+						break;
+					case RESIST_MAGIC:
+						if (item.getMagicResist() > 0) {
+							total += item.getMagicResist();
+						}
+						break;
+					case RESIST_POISON:
+						if (item.getPoisonResist() > 0) {
+							total += item.getPoisonResist();
+						}
+						break;
+					case RESIST_DISEASE:
+						if (item.getDiseaseResist() > 0) {
+							total += item.getDiseaseResist();
+						}
+						break;
+					default:
+						break;
+					}
+				} catch (CoreStateInitException initException)
+				{
+					
+				}
+
+			}
+		}
+
+		if (total > 255)
+			return 255;
+
+		if (total < 0)
+			return 0;
+
+		return total;
+	}
 }

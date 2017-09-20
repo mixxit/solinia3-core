@@ -56,6 +56,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int coldResist = 0;
 	private int magicResist = 0;
 	private int poisonResist = 0;
+	private int diseaseResist = 0;
 	private boolean spellscroll = false;
 	private byte color;
 
@@ -575,6 +576,16 @@ public class SoliniaItem implements ISoliniaItem {
 			return;
 		
 		useItemOnEntity(player,this,player,true);
+	}
+
+	@Override
+	public int getDiseaseResist() {
+		return diseaseResist;
+	}
+
+	@Override
+	public void setDiseaseResist(int diseaseResist) {
+		this.diseaseResist = diseaseResist;
 	}
 
 }

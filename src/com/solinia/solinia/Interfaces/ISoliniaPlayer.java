@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Models.SpellResistType;
 
 public interface ISoliniaPlayer extends Serializable {
 	public UUID getUUID();
@@ -135,4 +136,8 @@ public interface ISoliniaPlayer extends Serializable {
 	public void tryImproveLanguage(String language);
 
 	public ISoliniaGroup getGroup();
+
+	public int getResist(SpellResistType type);
+
+	int getTotalResist(SpellResistType type);
 }

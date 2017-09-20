@@ -173,4 +173,8 @@ public interface ISoliniaItem {
 
 	void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable) throws CoreStateInitException;
 
+	int getDiseaseResist();
+
+	void setDiseaseResist(int diseaseResist);
+
 }

@@ -1011,4 +1011,6 @@ public interface ISoliniaSpell {
 
 	boolean isLifetapSpell();
 
+	float getSpellEffectiveness(LivingEntity caster, LivingEntity victim) throws CoreStateInitException;
+
 }
