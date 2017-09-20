@@ -44,4 +44,6 @@ public interface IEntityManager {
 	List<LivingEntity> getAllWorldPets();
 
 	LivingEntity SpawnPet(Player owner, ISoliniaSpell spell);
+
+	void clearEntityEffects(UUID uniqueId);
 }

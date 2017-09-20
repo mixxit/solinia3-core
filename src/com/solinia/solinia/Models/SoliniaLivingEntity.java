@@ -129,8 +129,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	            				// hurt enemy with damage shield
 	            				if (spelleffect.getBase() < 0)
 	            				attacker.damage(spelleffect.getBase() * -1);
-	            				if (spell.getCastOnOther() != null && !spell.getCastOnOther().equals(""))
-	            					this.emote(ChatColor.GRAY + " * " + attacker.getName() + " is hit by " + getBukkitLivingEntity().getName() + "'s damage shield");
 	            			}
 	            		}
 	            	}

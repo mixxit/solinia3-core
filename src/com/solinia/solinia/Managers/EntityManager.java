@@ -281,7 +281,7 @@ public class EntityManager implements IEntityManager {
 			entity.setTamed(true);
 			entity.setOwner(owner);
 			entity.setBreed(false);
-			entity.setCustomName(ChatColor.YELLOW + owner.getDisplayName() + "'s Pet");
+			entity.setCustomName(owner.getDisplayName() + "'s Pet");
 			entity.setCustomNameVisible(true);
 			entity.setCanPickupItems(false);
 	        
@@ -352,5 +352,11 @@ public class EntityManager implements IEntityManager {
 		player.sendMessage("You have summoned a new pet");
 		this.playerpetsdata.put(player.getUniqueId(), entity.getUniqueId());
 		return entity;
+	}
+
+	@Override
+	public void clearEntityEffects(UUID uniqueId) {
+		if (entitySpellEffects.get(uniqueId) != null)
+			entitySpellEffects.remove(uniqueId);
 	}
 }
