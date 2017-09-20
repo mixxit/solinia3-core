@@ -7,7 +7,7 @@ public interface ISoliniaLivingEntity
 {
 	public LivingEntity getBukkitLivingEntity();
 
-	public void modifyDamageEvent(ISoliniaPlayer player, EntityDamageByEntityEvent damagecause);
+	public void modifyDamageEvent(LivingEntity damager, EntityDamageByEntityEvent damagecause);
 	
 	public boolean isPet();
 

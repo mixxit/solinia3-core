@@ -82,11 +82,11 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
 		
-		if (damagecause.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
+		if (damagecause.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
 			
 			try {
 				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-				soliniaEntity.modifyDamageEvent(SoliniaPlayerAdapter.Adapt((Player)damagecause.getDamager()), damagecause);
+				soliniaEntity.modifyDamageEvent((LivingEntity)damagecause.getDamager(), damagecause);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

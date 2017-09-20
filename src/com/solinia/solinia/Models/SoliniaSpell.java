@@ -3307,4 +3307,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 	private boolean isDetrimental() {
 		return !isBeneficial();
 	}
+
+	@Override
+	public boolean isDamageShield() {
+		for(SpellEffect spellEffect : getSpellEffects())
+		{
+			if (spellEffect.getSpellEffectType().equals(SpellEffectType.DamageShield))
+				return true;
+		}
+
+		return false;
+	}
 }

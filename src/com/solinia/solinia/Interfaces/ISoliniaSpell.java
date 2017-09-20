@@ -1013,4 +1013,6 @@ public interface ISoliniaSpell {
 
 	float getSpellEffectiveness(LivingEntity caster, LivingEntity victim) throws CoreStateInitException;
 
+	boolean isDamageShield();
+
 }
