@@ -846,7 +846,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public int getTotalResist(SpellResistType type) {
 		int total = 0;
-		
 		// Get resist total from all active effects
 		try
 		{
@@ -901,12 +900,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			}
 		}
-
+		
 		if (total > 255)
 			return 255;
-
-		if (total < 0)
-			return 0;
 
 		return total;
 	}

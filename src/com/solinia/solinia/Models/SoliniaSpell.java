@@ -3132,6 +3132,20 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return false;
 			}
 
+			if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll) || 
+					effect.getSpellEffectType().equals(SpellEffectType.ResistCold) ||
+					effect.getSpellEffectType().equals(SpellEffectType.ResistFire) ||
+					effect.getSpellEffectType().equals(SpellEffectType.ResistMagic) ||
+					effect.getSpellEffectType().equals(SpellEffectType.ResistPoison) ||
+					effect.getSpellEffectType().equals(SpellEffectType.ResistDisease) ||
+					effect.getSpellEffectType().equals(SpellEffectType.ResistCorruption)
+					)
+			{
+				// If the effect is negative standard resist debuffer and on self, cancel out
+				if (effect.getBase() < 0 && target.equals(source))
+					return false;
+			}
+			
 			if (effect.getSpellEffectType().equals(SpellEffectType.Mez))
 			{
 				// If the effect is a mez, cancel out
