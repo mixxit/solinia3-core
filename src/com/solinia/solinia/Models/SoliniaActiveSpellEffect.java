@@ -1295,7 +1295,7 @@ public class SoliniaActiveSpellEffect {
 			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),SpellEffectType.PoisonCounter);
 			if (isOwnerPlayer())
 			{
-				Player player = (Player)Bukkit.getPlayer(getSourceUuid());
+				Player player = (Player)Bukkit.getPlayer(getOwnerUuid());
 				if (player != null)
 				player.sendMessage(ChatColor.GRAY + "* You have been cured of some poison");
 			}
@@ -1320,7 +1320,7 @@ public class SoliniaActiveSpellEffect {
 			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),SpellEffectType.DiseaseCounter);
 			if (isOwnerPlayer())
 			{
-				Player player = (Player)Bukkit.getPlayer(getSourceUuid());
+				Player player = (Player)Bukkit.getPlayer(getOwnerUuid());
 				if (player != null)
 				player.sendMessage(ChatColor.GRAY + "* You have been cured of some disease");
 			}
