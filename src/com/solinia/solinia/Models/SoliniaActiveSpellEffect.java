@@ -1153,9 +1153,15 @@ public class SoliniaActiveSpellEffect {
 		if (!isOwnerPlayer())
 			return;
 		
-		Block block = getLivingEntity().getTargetBlock(null, soliniaSpell.getRange());
-		if (block != null)
-			getLivingEntity().teleport(block.getLocation());
+		try
+		{
+			Block block = getLivingEntity().getTargetBlock(null, soliniaSpell.getRange());
+			if (block != null)
+				getLivingEntity().teleport(block.getLocation());
+		} catch (Exception e)
+		{
+			// out of world block
+		}
 	}
 
 	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
