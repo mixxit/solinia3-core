@@ -2716,6 +2716,22 @@ public class SoliniaSpell implements ISoliniaSpell {
 			{
 				case Self:
 					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(sourceEntity,this,sourceEntity);
+				case Pet:
+					if (sourceEntity instanceof Player)
+					{
+						Player player = (Player)sourceEntity;
+						try
+						{
+							LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
+							if (pet != null) {
+								return StateManager.getInstance().getEntityManager().addActiveEntityEffect(pet,this,sourceEntity);
+							}
+						} catch (CoreStateInitException e)
+						{
+							e.printStackTrace();
+						}
+					}
+					return false;
 				case TargetOptional:
 					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
 				case Target:

@@ -270,6 +270,10 @@ commands:
     description: Views a loottable
     usage: /viewloottable loottableid
     aliases: []
+  pet:
+    description: Views pet information
+    usage: /pet
+    aliases: []
 depend:
 - Vault
 - Essentials
