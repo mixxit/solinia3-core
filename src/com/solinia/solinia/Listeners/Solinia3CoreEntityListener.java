@@ -149,8 +149,6 @@ public class Solinia3CoreEntityListener implements Listener {
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		// TODO - Temporary reward
-		if (event.getEntity() instanceof Animals)
-			return;
 		
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
@@ -159,6 +157,9 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 		
 		if (!(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent))
+			return;
+
+		if (event.getEntity() instanceof Animals && !Utils.isLivingEntityNPC((LivingEntity)event.getEntity()))
 			return;
 		
 		EntityDamageByEntityEvent entitykiller = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
