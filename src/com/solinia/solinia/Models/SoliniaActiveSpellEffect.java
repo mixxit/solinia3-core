@@ -1297,7 +1297,11 @@ public class SoliniaActiveSpellEffect {
 			{
 				Player player = (Player)Bukkit.getPlayer(getOwnerUuid());
 				if (player != null)
-				player.sendMessage(ChatColor.GRAY + "* You have been cured of some poison");
+				{
+					if (player.hasPotionEffect(PotionEffectType.POISON))
+						player.removePotionEffect(PotionEffectType.POISON);
+					player.sendMessage(ChatColor.GRAY + "* You have been cured of some poison");
+				}
 			}
 			if (isSourcePlayer())
 			{
