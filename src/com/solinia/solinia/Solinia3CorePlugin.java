@@ -64,6 +64,7 @@ import com.solinia.solinia.Commands.CommandSpawnItem;
 import com.solinia.solinia.Commands.CommandSpawnRandomItem;
 import com.solinia.solinia.Commands.CommandStats;
 import com.solinia.solinia.Commands.CommandTarot;
+import com.solinia.solinia.Commands.CommandTrance;
 import com.solinia.solinia.Commands.CommandUpdateSpawnGroupLoc;
 import com.solinia.solinia.Commands.CommandViewLootDrop;
 import com.solinia.solinia.Commands.CommandViewLootTable;
@@ -336,6 +337,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("viewloottable").setExecutor(new CommandViewLootTable());
 		this.getCommand("viewlootdrop").setExecutor(new CommandViewLootDrop());
 		this.getCommand("pet").setExecutor(new CommandPet());
+		this.getCommand("trance").setExecutor(new CommandTrance());
 		
 	}
 	

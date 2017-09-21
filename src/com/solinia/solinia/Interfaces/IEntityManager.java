@@ -49,4 +49,10 @@ public interface IEntityManager {
 	void clearEntityEffects(UUID uniqueId);
 
 	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter);
+
+	void toggleTrance(UUID uniqueId);
+
+	boolean getTrance(UUID uuid);
+
+	void setTrance(UUID uuid, Boolean enabled);
 }

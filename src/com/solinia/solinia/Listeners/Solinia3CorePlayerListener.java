@@ -57,8 +57,19 @@ public class Solinia3CorePlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerMove(PlayerMoveEvent event) 
+	{
+		try
+		{
+			if (StateManager.getInstance().getEntityManager().getTrance(event.getPlayer().getUniqueId()) == true)
+			{
+				StateManager.getInstance().getEntityManager().setTrance(event.getPlayer().getUniqueId(), false);
+			}
 
+		} catch (CoreStateInitException e)
+		{
+			// do nothing
+		}
 	}
 	
 	@EventHandler

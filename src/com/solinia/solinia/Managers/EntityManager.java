@@ -41,6 +41,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
+	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
 	
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
@@ -58,6 +59,40 @@ public class EntityManager implements IEntityManager {
 		return npcEntityProvider;
 	}
 
+	@Override
+	public boolean getTrance(UUID uuid)
+	{
+		if (trance.get(uuid) == null)
+		{
+			return false;
+		} else {
+			return trance.get(uuid);
+		}
+	}
+	
+	@Override
+	public void setTrance(UUID uuid, Boolean enabled)
+	{
+		trance.put(uuid, enabled);
+		if (enabled == true)
+		{
+			Bukkit.getPlayer(uuid).sendMessage("You fall into a deep trance");
+		} else {
+			Bukkit.getPlayer(uuid).sendMessage("You fall out of your trance");
+		}
+	}
+
+	@Override
+	public void toggleTrance(UUID uuid) {
+		Boolean current = getTrance(uuid);
+		if (current == true)
+		{
+			setTrance(uuid, false);
+		} else {
+			setTrance(uuid, true);
+		}
+	}
+	
 	@Override
 	public boolean addActiveEntityEffect(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		

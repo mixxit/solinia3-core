@@ -50,7 +50,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			return;
 		
 		// a players mana regen based on if they are meditating (sneaking)
-		manaregen += getPlayerSneakingManaBonus(solplayer);
+		manaregen += getPlayerMeditatingManaBonus(solplayer);
 		
 		// Hp and Mana Regen from Items
 		int hpregen = 0;
@@ -95,29 +95,35 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		solplayer.increasePlayerMana(manaregen);
 	}
 
-	private int getPlayerSneakingManaBonus(ISoliniaPlayer solplayer) {
+	private int getPlayerMeditatingManaBonus(ISoliniaPlayer solplayer) {
 		int manaregen = 0;
-		if (solplayer.getBukkitPlayer().isSneaking()) {
-			SoliniaPlayerSkill meditationskill = solplayer.getSkill("MEDITATION");
-			int bonusmana = 3 + (meditationskill.getValue() / 15);
-
-			manaregen += bonusmana;
-
-			// apply meditation skill increase
-			Random r = new Random();
-			int randomInt = r.nextInt(100) + 1;
-			if (randomInt > 90) {
-				int currentvalue = 0;
-				SoliniaPlayerSkill skill = solplayer.getSkill("MEDITATION");
-				if (skill != null) {
-					currentvalue = skill.getValue();
+		try
+		{
+			if (solplayer.getBukkitPlayer().isSneaking() || StateManager.getInstance().getEntityManager().getTrance(solplayer.getUUID()) == true) {
+				SoliniaPlayerSkill meditationskill = solplayer.getSkill("MEDITATION");
+				int bonusmana = 3 + (meditationskill.getValue() / 15);
+	
+				manaregen += bonusmana;
+	
+				// apply meditation skill increase
+				Random r = new Random();
+				int randomInt = r.nextInt(100) + 1;
+				if (randomInt > 90) {
+					int currentvalue = 0;
+					SoliniaPlayerSkill skill = solplayer.getSkill("MEDITATION");
+					if (skill != null) {
+						currentvalue = skill.getValue();
+					}
+	
+					if ((currentvalue + 1) <= solplayer.getSkillCap("MEDITATION")) {
+						solplayer.setSkill("MEDITATION", currentvalue + 1);
+					}
+	
 				}
-
-				if ((currentvalue + 1) <= solplayer.getSkillCap("MEDITATION")) {
-					solplayer.setSkill("MEDITATION", currentvalue + 1);
-				}
-
 			}
+		} catch (CoreStateInitException e)
+		{
+			return manaregen;
 		}
 		return manaregen;
 	}

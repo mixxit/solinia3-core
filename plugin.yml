@@ -274,6 +274,12 @@ commands:
     description: Views pet information
     usage: /pet
     aliases: []
+  trance:
+    description: Falls into a meditative trance
+    usage: /trance
+    aliases:
+    - settrance
+    - tran
 depend:
 - Vault
 - Essentials
