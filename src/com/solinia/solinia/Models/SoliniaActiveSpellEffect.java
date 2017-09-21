@@ -1300,6 +1300,8 @@ public class SoliniaActiveSpellEffect {
 				{
 					if (player.hasPotionEffect(PotionEffectType.POISON))
 						player.removePotionEffect(PotionEffectType.POISON);
+					if (player.hasPotionEffect(PotionEffectType.HUNGER))
+						player.removePotionEffect(PotionEffectType.HUNGER);
 					player.sendMessage(ChatColor.GRAY + "* You have been cured of some poison");
 				}
 			}
