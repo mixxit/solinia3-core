@@ -3231,7 +3231,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			{
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)victim);
 				ISoliniaNPC victimnpc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
-				targetresist = 25;
+				targetresist = solentity.getResists(Utils.getSpellResistType(getResisttype()));
 				victimlevel = victimnpc.getLevel();
 				isnpcvictim = true;
 			}
