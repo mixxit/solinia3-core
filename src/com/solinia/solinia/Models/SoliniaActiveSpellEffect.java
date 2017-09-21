@@ -106,7 +106,7 @@ public class SoliniaActiveSpellEffect {
 				}
 					
 				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals(""))
-					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote("* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther());
+					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(ChatColor.GRAY + "* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther());
 			}
 
 				
