@@ -220,8 +220,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case Destroy
 			: return;
-		case ShadowStep
-			: return;
+		case ShadowStep: 
+			applyShadowStep(spellEffect,soliniaSpell);
+			return;
 		case Berserk
 			: return;
 		case Lycanthropy
@@ -914,8 +915,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case SpellEffectResistChance
 			: return;
-		case ShadowStepDirectional
-			: return;
+		case ShadowStepDirectional: 
+			applyShadowStep(spellEffect,soliniaSpell);
+			return;
 		case Knockdown
 			: return;
 		case KnockTowardCaster
@@ -1144,6 +1146,12 @@ public class SoliniaActiveSpellEffect {
 		double z = Double.parseDouble(zonedata[3]);
 		Location loc = new Location(Bukkit.getWorld(world),x,y,z);
 		getLivingEntity().teleport(loc);
+	}
+	
+	private void applyShadowStep(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!isOwnerPlayer())
+			return;
+		getLivingEntity().teleport(getLivingEntity().getLocation());
 	}
 
 	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
