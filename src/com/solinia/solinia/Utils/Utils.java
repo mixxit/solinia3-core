@@ -2010,4 +2010,27 @@ public class Utils {
 
 		return null;
 	}
+
+	public static SpellEffectType getSpellEffectTypeFromResistType(SpellResistType type) {
+		switch(type)
+		{
+			case RESIST_COLD:
+				return SpellEffectType.ResistCold;
+			case RESIST_FIRE:
+				return SpellEffectType.ResistFire;
+			case RESIST_POISON:
+				return SpellEffectType.ResistPoison;
+			case RESIST_DISEASE:
+				return SpellEffectType.ResistDisease;
+			case RESIST_MAGIC:
+				return SpellEffectType.ResistMagic;
+			case RESIST_CORRUPTION:
+				return SpellEffectType.ResistCorruption;
+			case RESIST_NONE:
+				return null;
+			default:
+				return null;
+				
+		}
+	}
 }

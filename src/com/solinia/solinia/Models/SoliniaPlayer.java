@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -17,6 +18,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
@@ -843,6 +846,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public int getTotalResist(SpellResistType type) {
 		int total = 0;
+		
+		// Get resist total from all active effects
+		try
+		{
+			total += SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer()).getResistsFromActiveEffects(type);
+		} catch (CoreStateInitException e)
+		{
+			// Skip
+		}
+		
 		for (ItemStack itemstack : getBukkitPlayer().getInventory().getArmorContents()) {
 			if (itemstack == null)
 				continue;

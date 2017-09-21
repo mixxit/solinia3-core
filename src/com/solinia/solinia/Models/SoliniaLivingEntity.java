@@ -618,4 +618,49 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 0;
 		}
 	}
+
+	@Override
+	public int getResistsFromActiveEffects(SpellResistType type) {
+		int total = 0;
+		SpellEffectType seekSpellEffectType = Utils.getSpellEffectTypeFromResistType(type);
+		
+		if (seekSpellEffectType != null)
+		{
+			try
+			{
+				SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager().getActiveEntityEffects(getBukkitLivingEntity());
+		        
+				for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
+		        {
+		        	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
+		        	for(SpellEffect spelleffect : spell.getSpellEffects())
+		    		{
+		    			if (spelleffect.getSpellEffectType().equals(SpellEffectType.ResistAll) || spelleffect.getSpellEffectType().equals(seekSpellEffectType))
+		    			{
+		    				total += spelleffect.getBase();
+		    			}
+		    		}
+		        }
+			} catch (CoreStateInitException e)
+			{
+				// skip over
+			}
+		}
+		
+		return total;
+	}
+
+	@Override
+	public int getResists(SpellResistType type) {
+		if (isPlayer())
+		{
+			try {
+				return SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity()).getResist(type);
+			} catch (CoreStateInitException e) {
+				return 25;
+			}
+		} else {
+			return 25 + getResistsFromActiveEffects(type);
+		}
+	}
 }
