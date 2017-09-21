@@ -45,7 +45,7 @@ public class SoliniaEntitySpellEffects {
 		return (LivingEntity)Bukkit.getEntity(this.getLivingEntityUUID());
 	}
 
-	public Collection<SoliniaActiveSpellEffect> getActiveSpell() {
+	public Collection<SoliniaActiveSpellEffect> getActiveSpells() {
 		return activeSpells.values();
 	}
 
@@ -54,11 +54,17 @@ public class SoliniaEntitySpellEffects {
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
 
-		if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),sourceEntity,soliniaSpell))
+		try
+		{
+			if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),sourceEntity,soliniaSpell))
+				return false;
+		} catch (CoreStateInitException e)
+		{
 			return false;
+		}
 
 		// Resist spells!
-		if (soliniaSpell.isResistable())
+		if (soliniaSpell.isResistable() && !soliniaSpell.isBeneficial())
 		{
 			float effectiveness = 100;
 			
@@ -121,7 +127,7 @@ public class SoliniaEntitySpellEffects {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		List<SoliniaActiveSpellEffect> updateSpells = new ArrayList<SoliniaActiveSpellEffect>();
 		
-		for(SoliniaActiveSpellEffect activeSpellEffect : getActiveSpell())
+		for(SoliniaActiveSpellEffect activeSpellEffect : getActiveSpells())
 		{
 			if (activeSpellEffect.getTicksLeft() == 0)
 			{
@@ -144,5 +150,34 @@ public class SoliniaEntitySpellEffects {
 		{
 			activeSpells.put(effect.getSpellId(), effect);
 		}
+	}
+	
+	// Mainly used for cures
+	public void removeFirstSpellOfEffectType(SpellEffectType type) {
+		List<Integer> removeSpells = new ArrayList<Integer>();
+		List<SoliniaActiveSpellEffect> updateSpells = new ArrayList<SoliniaActiveSpellEffect>();
+		
+		boolean foundToRemove = false;
+		for(SoliniaActiveSpellEffect activeSpellEffect : getActiveSpells())
+		{
+			if (foundToRemove == false && activeSpellEffect.getSpell().isEffectInSpell(type))
+			{
+				removeSpells.add(activeSpellEffect.getSpellId());
+				foundToRemove = true;
+			} else {
+				updateSpells.add(activeSpellEffect);
+			}
+		}
+		
+		for(Integer spellId : removeSpells)
+		{
+			activeSpells.remove(spellId);
+		}
+		
+		for(SoliniaActiveSpellEffect effect : updateSpells)
+		{
+			activeSpells.put(effect.getSpellId(), effect);
+		}
+		
 	}
 }

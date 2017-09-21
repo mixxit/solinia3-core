@@ -28,10 +28,10 @@ public class CommandEffects implements CommandExecutor {
 	            
 	            player.sendMessage("Active Spell Effects on you:");
 	            
-	            for(SoliniaActiveSpellEffect effect : effects.getActiveSpell())
+	            for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
 	            {
 	            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
-	            	player.sendMessage("- Spell: " + spell.getName() + effect.getTicksLeft() + " ticks left");
+	            	player.sendMessage("- Spell: " + spell.getName() + " " + effect.getTicksLeft() + " ticks left");
 	            }
 	            
             } catch (CoreStateInitException e)

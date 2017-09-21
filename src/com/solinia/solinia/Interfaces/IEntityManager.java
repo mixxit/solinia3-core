@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Models.SpellEffectType;
 
 public interface IEntityManager {
 	ISoliniaLivingEntity getLivingEntity(LivingEntity livingentity);
@@ -46,4 +47,6 @@ public interface IEntityManager {
 	LivingEntity SpawnPet(Player owner, ISoliniaSpell spell);
 
 	void clearEntityEffects(UUID uniqueId);
+
+	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter);
 }

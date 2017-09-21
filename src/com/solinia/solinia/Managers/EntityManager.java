@@ -22,9 +22,11 @@ import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Models.SoliniaActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -358,5 +360,13 @@ public class EntityManager implements IEntityManager {
 	public void clearEntityEffects(UUID uniqueId) {
 		if (entitySpellEffects.get(uniqueId) != null)
 			entitySpellEffects.remove(uniqueId);
+	}
+
+	@Override
+	public void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type) {
+		if (entitySpellEffects.get(livingEntity.getUniqueId()) == null)
+			return;
+		
+		entitySpellEffects.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(type);
 	}
 }

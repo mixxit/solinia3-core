@@ -117,7 +117,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
             
             if (effects != null && (!(event.getDamager() instanceof Arrow)))
             {
-	            for(SoliniaActiveSpellEffect effect : effects.getActiveSpell())
+	            for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
 	            {
 	            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
 	            	if (spell.isDamageShield())

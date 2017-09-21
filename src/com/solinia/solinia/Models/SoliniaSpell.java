@@ -3079,7 +3079,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return getGoodEffect() != 0 || isGroupSpell();
 	}
 
-	private boolean isGroupSpell() {
+	@Override
+	public boolean isGroupSpell() {
 		if (Utils.getSpellTargetType(getTargettype()) == SpellTargetType.AEBard ||
 				Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Group ||
 						Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupTeleport)
@@ -3088,7 +3089,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return false;
 	}
 
-	private boolean isEffectInSpell(SpellEffectType effecttype) {
+	@Override
+	public boolean isEffectInSpell(SpellEffectType effecttype) {
 		for(SpellEffect effect : getSpellEffects())
 		{
 			if (effect.getSpellEffectType() == effecttype)
@@ -3097,7 +3099,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return false;
 	}
 
-	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, SoliniaSpell soliniaSpell) {
+	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, SoliniaSpell soliniaSpell) throws CoreStateInitException {
 		if (source == null)
 			return false;
 		
@@ -3107,7 +3109,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		for(SpellEffect effect : soliniaSpell.getSpellEffects())
 		{
 			// Validate spelleffecttype rules
-			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) || effect.getSpellEffectType().equals(SpellEffectType.CurrentHP))
+			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) || effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce))
 			{
 				// If the effect is negative standard nuke and on self, cancel out
 				if (effect.getBase() < 0 && target.equals(source))
@@ -3115,6 +3117,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 
 			if (effect.getSpellEffectType().equals(SpellEffectType.Mez))
+			{
+				// If the effect is a mez, cancel out
+				if (target.equals(source))
+					return false;
+			}
+			
+			if (effect.getSpellEffectType().equals(SpellEffectType.DamageShield) && !(target instanceof Player) && !SoliniaLivingEntityAdapter.Adapt(target).isPet())
 			{
 				// If the effect is a mez, cancel out
 				if (target.equals(source))
@@ -3318,4 +3327,35 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 		return false;
 	}
+	
+	@Override
+	public boolean isCure()
+	{
+		boolean CureEffect = false;
+
+		if (isEffectInSpell(SpellEffectType.DiseaseCounter) || isEffectInSpell(SpellEffectType.PoisonCounter)
+				|| isEffectInSpell(SpellEffectType.CurseCounter) || isEffectInSpell(SpellEffectType.CorruptionCounter))
+				CureEffect = true;
+
+		if (CureEffect && isBeneficial())
+			return true;
+
+		return false;
+	}
+	
+	@Override
+	public boolean isDot()
+	{
+		boolean CureEffect = false;
+
+		if (isEffectInSpell(SpellEffectType.DiseaseCounter) || isEffectInSpell(SpellEffectType.PoisonCounter)
+				|| isEffectInSpell(SpellEffectType.CurseCounter) || isEffectInSpell(SpellEffectType.CorruptionCounter))
+				CureEffect = true;
+
+		if (CureEffect && !isBeneficial())
+			return true;
+
+		return false;
+	}
+
 }

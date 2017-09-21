@@ -1015,4 +1015,12 @@ public interface ISoliniaSpell {
 
 	boolean isDamageShield();
 
+	boolean isCure();
+
+	boolean isDot();
+
+	boolean isGroupSpell();
+
+	boolean isEffectInSpell(SpellEffectType effecttype);
+
 }

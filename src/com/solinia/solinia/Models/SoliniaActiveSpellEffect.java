@@ -7,8 +7,10 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender.Spigot;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
@@ -66,6 +68,18 @@ public class SoliniaActiveSpellEffect {
 		this.sourceUuid = sourceUuid;
 	}
 
+	public ISoliniaSpell getSpell() {
+		try {
+			ISoliniaSpell soliniaSpell = StateManager.getInstance().getConfigurationManager().getSpell(getSpellId());
+			return soliniaSpell;
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public int getSpellId() {
 		return spellId;
 	}
@@ -190,10 +204,12 @@ public class SoliniaActiveSpellEffect {
 		case Confuse: 
 			applyConfusion(spellEffect,soliniaSpell);
 			return;
-		case DiseaseCounter
-			: return;
-		case PoisonCounter
-			: return;
+		case DiseaseCounter: 
+			applyDiseaseCounter(spellEffect,soliniaSpell);
+			return;
+		case PoisonCounter: 
+			applyPoisonCounter(spellEffect,soliniaSpell);
+			return;
 		case DetectHostile
 			: return;
 		case DetectMagic
@@ -212,16 +228,21 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case Vampirism
 			: return;
-		case ResistFire
-			: return;
-		case ResistCold
-			: return;
-		case ResistPoison
-			: return;
-		case ResistDisease
-			: return;
-		case ResistMagic
-			: return;
+		case ResistFire: 
+			// this is passive
+			return;
+		case ResistCold: 
+			// this is passive
+			return;
+		case ResistPoison: 
+			// this is passive
+			return;
+		case ResistDisease: 
+			// this is passive
+			return;
+		case ResistMagic: 
+			// this is passive
+			return;
 		case DetectTraps
 			: return;
 		case SenseDead
@@ -239,8 +260,9 @@ public class SoliniaActiveSpellEffect {
 			return;
 		case Illusion
 			: return;
-		case DamageShield
-			: return;
+		case DamageShield: 
+			// This is passive
+			return;
 		case TransferItem
 			: return;
 		case Identify
@@ -621,10 +643,10 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case CharmBreakChance
 			: return;
-		case RootBreakChance
-			: return;
-		case TrapCircumvention
-			: return;
+		case RootBreakChance: 
+			return;
+		case TrapCircumvention: 
+			return;
 		case SetBreathLevel
 			: return;
 		case RaiseSkillCap
@@ -641,10 +663,10 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case FrontalBackstabMinDmg
 			: return;
-		case Blank
-			: return;
-		case ShieldDuration
-			: return;
+		case Blank: 
+			return;
+		case ShieldDuration: 
+			return;
 		case ShroudofStealth
 			: return;
 		case PetDiscipline
@@ -849,8 +871,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case FcMute
 			: return;
-		case CurrentManaOnce
-			: return;
+		case CurrentManaOnce: 
+			applyCurrentMpSpellEffect(spellEffect,soliniaSpell);
+			return;
 		case PassiveSenseTrap
 			: return;
 		case ProcOnKillShot
@@ -1261,6 +1284,56 @@ public class SoliniaActiveSpellEffect {
 			return (LivingEntity)Bukkit.getEntity(getOwnerUuid());
 		
 		return null;
+	}
+	
+	private void applyPoisonCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!soliniaSpell.isCure())
+			return;
+		
+		try
+		{
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),SpellEffectType.PoisonCounter);
+			if (isOwnerPlayer())
+			{
+				Player player = (Player)Bukkit.getPlayer(getSourceUuid());
+				if (player != null)
+				player.sendMessage(ChatColor.GRAY + "* You have been cured of some poison");
+			}
+			if (isSourcePlayer())
+			{
+				Player player = (Player)Bukkit.getPlayer(getSourceUuid());
+				if (player != null)
+				player.sendMessage(ChatColor.GRAY + "* You cured your target of some poison");
+			}
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
+	}
+
+	private void applyDiseaseCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (!soliniaSpell.isCure())
+			return;
+
+		try
+		{
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),SpellEffectType.DiseaseCounter);
+			if (isOwnerPlayer())
+			{
+				Player player = (Player)Bukkit.getPlayer(getSourceUuid());
+				if (player != null)
+				player.sendMessage(ChatColor.GRAY + "* You have been cured of some disease");
+			}
+			if (isSourcePlayer())
+			{
+				Player player = (Player)Bukkit.getPlayer(getSourceUuid());
+				if (player != null)
+				player.sendMessage(ChatColor.GRAY + "* You cured your target of some poison");
+			}
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
 	}
 
 	private void applyCurrentHpOnceSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
