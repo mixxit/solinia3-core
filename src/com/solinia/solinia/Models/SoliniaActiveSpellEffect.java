@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender.Spigot;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
@@ -1151,7 +1152,10 @@ public class SoliniaActiveSpellEffect {
 	private void applyShadowStep(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		if (!isOwnerPlayer())
 			return;
-		getLivingEntity().teleport(getLivingEntity().getLocation());
+		
+		Block block = getLivingEntity().getTargetBlock(null, soliniaSpell.getRange());
+		if (block != null)
+			getLivingEntity().teleport(block.getLocation());
 	}
 
 	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
