@@ -30,6 +30,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
@@ -532,11 +533,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			{
 				if (!spell.isBeneficial())
 				{
-					hostileSpells.add(spell);
+					if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target) || Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional))
+						hostileSpells.add(spell);
 					continue;
 				}
 				
-				beneficialSpells.add(spell);
+				if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional))
+					beneficialSpells.add(spell);
 			}
 			
 			int chanceToCastBeneficial = Utils.RandomBetween(1, 10);
