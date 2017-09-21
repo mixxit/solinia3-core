@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -148,6 +149,9 @@ public class Solinia3CoreEntityListener implements Listener {
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		// TODO - Temporary reward
+		if (event.getEntity() instanceof Animals)
+			return;
+		
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
