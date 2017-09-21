@@ -70,6 +70,9 @@ public class EntityManager implements IEntityManager {
 	
 	@Override
 	public SoliniaEntitySpellEffects getActiveEntityEffects(LivingEntity entity) {
+		if (entitySpellEffects.get(entity.getUniqueId()) == null)
+			entitySpellEffects.put(entity.getUniqueId(), new SoliniaEntitySpellEffects(entity));
+		
 		return entitySpellEffects.get(entity.getUniqueId());
 	}
 

@@ -629,7 +629,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try
 			{
 				SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager().getActiveEntityEffects(getBukkitLivingEntity());
-		        
+		        	
 				for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
 		        {
 		        	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
