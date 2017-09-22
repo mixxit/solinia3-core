@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
 import com.solinia.solinia.Factories.ISoliniaLootDropEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Models.SoliniaAARank;
 import com.solinia.solinia.Models.SoliniaLootDrop;
 import com.solinia.solinia.Models.SoliniaLootDropEntry;
 
@@ -89,7 +91,10 @@ public class JsonLootDropRepository implements IRepository<ISoliniaLootDrop> {
 	@Override
 	public void commit() {
 		// TODO Auto-generated method stub
-		Gson gson = new Gson();
+		GsonBuilder gsonbuilder = new GsonBuilder();
+		gsonbuilder.setPrettyPrinting();
+		gsonbuilder.registerTypeAdapterFactory(new ISoliniaLootDropEntryTypeAdapterFactory(SoliniaLootDropEntry.class));
+		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(lootdrops.values(), new TypeToken<List<SoliniaLootDrop>>(){}.getType());
 		try {
 			

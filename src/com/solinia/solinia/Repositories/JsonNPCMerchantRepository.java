@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
 import com.solinia.solinia.Factories.ISoliniaNPCMerchantEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
+import com.solinia.solinia.Models.SoliniaAARank;
 import com.solinia.solinia.Models.SoliniaNPCMerchant;
 import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
 
@@ -89,7 +91,10 @@ public class JsonNPCMerchantRepository implements IRepository<ISoliniaNPCMerchan
 	@Override
 	public void commit() {
 		// TODO Auto-generated method stub
-		Gson gson = new Gson();
+		GsonBuilder gsonbuilder = new GsonBuilder();
+		gsonbuilder.setPrettyPrinting();
+		gsonbuilder.registerTypeAdapterFactory(new ISoliniaNPCMerchantEntryTypeAdapterFactory(SoliniaNPCMerchantEntry.class));
+		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(npcmerchants.values(), new TypeToken<List<SoliniaNPCMerchant>>(){}.getType());
 		try {
 			

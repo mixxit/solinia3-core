@@ -3,6 +3,7 @@ package com.solinia.solinia.Managers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,6 +19,8 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
+import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
+import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -25,6 +28,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
+import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -32,11 +36,13 @@ import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.WorldWidePerk;
+import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
+import com.solinia.solinia.Repositories.JsonPatchRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 
@@ -53,12 +59,15 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaLootDrop> lootdropRepository;
 	private IRepository<ISoliniaSpawnGroup> spawngroupRepository;
 	private IRepository<WorldWidePerk> perkRepository;
+	private IRepository<ISoliniaAAAbility> aaabilitiesRepository;
+	private IRepository<ISoliniaAARank> aarankRepository;
+	private IRepository<ISoliniaPatch> patchesRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -70,8 +79,16 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.lootdropRepository = lootdropContext;
 		this.spawngroupRepository = spawngroupContext;
 		this.perkRepository = perkContext;
+		this.aaabilitiesRepository = aaabilitiesContext;
+		this.patchesRepository = patchesContext;
 	}
 
+	@Override
+	public List<ISoliniaPatch> getPatches() {
+		// TODO Auto-generated method stub
+		return patchesRepository.query(q -> q.getId() > 0);
+	}
+	
 	@Override
 	public List<ISoliniaNPCMerchant> getNPCMerchants() {
 		// TODO Auto-generated method stub
@@ -300,6 +317,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.lootdropRepository.commit();
 		this.spellRepository.commit();
 		this.spawngroupRepository.commit();
+		this.aaabilitiesRepository.commit();
 	}
 
 	@Override
@@ -624,7 +642,7 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public List<ISoliniaSpell> getSpellsByClassIdAndMaxLevel(int classId, int level) {
-List<ISoliniaSpell> returnSpells = new ArrayList<ISoliniaSpell>();
+		List<ISoliniaSpell> returnSpells = new ArrayList<ISoliniaSpell>();
 		
 		ISoliniaClass classObj;
 		
@@ -654,5 +672,40 @@ List<ISoliniaSpell> returnSpells = new ArrayList<ISoliniaSpell>();
 		}
 		
 		return returnSpells;
+	}
+	
+	@Override
+	public ISoliniaAAAbility getAAAbility(int Id) {
+		List<ISoliniaAAAbility> results = aaabilitiesRepository.query(q -> q.getId() == Id);
+		if (results.size() != 1)
+			return null;
+		
+		return results.get(0);
+	}
+	
+	@Override
+	public ISoliniaAARank getAARank(int seekRankId) {
+		ISoliniaAARank aarank = null;
+		try {
+			for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAAbilities())
+			{
+				for(ISoliniaAARank seekRank : ability.getRanks())
+				{
+					if (seekRank.getAbilityid() != seekRankId)
+						continue;
+					
+					aarank = seekRank;
+					break;
+				}
+			}
+		} catch (CoreStateInitException e) {
+			//
+		}
+		return aarank;
+	}
+
+	@Override
+	public List<ISoliniaAAAbility> getAAAbilities() {
+		return aaabilitiesRepository.query(q -> q.getId() > 0);
 	}
 }

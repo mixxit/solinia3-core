@@ -21,6 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
+import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -39,6 +41,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String lastname = "";
 	private int mana = 0;
 	private Double experience = 0d;
+	private int aapct;
 	private Double aaexperience = 0d;
 	private int aapoints = 0;
 	private int raceid = 0;
@@ -50,6 +53,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
 	private UUID interaction;
 	private String currentChannel = "OOC";
+	private List<Integer> ranks = new ArrayList<Integer>();
+	private List<Integer> aas = new ArrayList<Integer>();
 
 	@Override
 	public UUID getUUID() {
@@ -906,4 +911,126 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return total;
 	}
+
+	@Override
+	public int getAapct() {
+		return aapct;
+	}
+
+	@Override
+	public void setAapct(int aapct) {
+		this.aapct = aapct;
+	}
+
+	@Override
+	public List<ISoliniaAARank> getBuyableAARanks() {
+		List<ISoliniaAARank> buyableRanks = new ArrayList<ISoliniaAARank>();
+		if (getLevel() < 20)
+			return buyableRanks;
+		
+		try
+		{
+		for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAAbilities())
+		{
+			for(ISoliniaAARank rank : ability.getRanks())
+			{
+				if (canPurchaseAlternateAdvancementRank(ability, rank))
+				{
+					buyableRanks.add(rank);
+					break;
+				}
+			}
+		}
+		} catch (CoreStateInitException e)
+		{
+			// ignore
+		}
+		return buyableRanks;
+		
+	}
+
+	@Override
+	public boolean canPurchaseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {
+		if (rank.getAbilityid() == 0)
+			return false;
+		
+		if(rank.getCost() > getAAPoints()) 
+			return false;
+		
+		if(!canUseAlternateAdvancementRank(ability, rank)) {
+			return false;
+		}
+
+		if(rank.getLevel_req() > getLevel()) {
+			return false;
+		}
+		
+		if (hasRank(rank))
+			return false;
+
+		if (!hasPreviousRanks(ability, rank))
+			return false;
+		
+		// TODO Prerequisites here
+		if (!hasPrerequisites(ability, rank))
+			return false;
+		
+		return true;
+	}
+	
+	@Override
+	public boolean hasPrerequisites(ISoliniaAAAbility ability, ISoliniaAARank rank) {
+		for(SoliniaAAPrereq prereq : rank.getPrereqs())
+		{
+			if (!hasAAAbility(prereq.getAbilityid()))
+				return false;
+		}
+			
+		return true;
+	}
+
+	@Override
+	public boolean hasAAAbility(int abilityid) {
+		return aas.contains(abilityid);
+	}
+
+	@Override
+	public boolean canUseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {
+		if (!ability.canClassUseAbility(getClassObj()))
+			return false;
+			
+		return true;
+	}
+
+	@Override
+	public boolean hasRank(ISoliniaAARank rank) {
+		return ranks.contains(rank.getId());
+	}
+
+	@Override
+	public boolean hasPreviousRanks(ISoliniaAAAbility ability, ISoliniaAARank rank) {
+		for (ISoliniaAARank curRank : ability.getRanks())
+		{
+			if (curRank.getPosition() >= rank.getPosition())
+				continue;
+			
+			if (!hasRank(curRank))
+				return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public void purchaseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {
+		if(!canPurchaseAlternateAdvancementRank(ability, rank))
+			return;
+		
+		setAAPoints(getAAPoints() - rank.getCost());
+		ranks.add(rank.getId());
+		if (!aas.contains(rank.getAbilityid()))
+			aas.add(rank.getAbilityid());
+		getBukkitPlayer().sendMessage("You have gained the AA " + ability.getName() + " (rank " + rank.getPosition() + ")");
+	}
+
 }

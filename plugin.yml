@@ -280,6 +280,14 @@ commands:
     aliases:
     - settrance
     - tran
+  aa:
+    description: Buy and list AAs
+    usage: /aa
+    aliases: []
+  toggleaa:
+    description: Toggles experience into AA gain
+    usage: /toggleaa
+    aliases: []
 depend:
 - Vault
 - Essentials

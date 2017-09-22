@@ -11,12 +11,6 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 	private int id;
 	private String name;
 	private List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();	
-	
-	public SoliniaLootDrop(JsonElement json) {
-	}
-
-	public SoliniaLootDrop() {
-	}
 
 	@Override
 	public int getId() {

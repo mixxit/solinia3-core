@@ -29,13 +29,17 @@ import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
+import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SkillReward;
+import com.solinia.solinia.Models.SoliniaAAPrereq;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectIndex;
@@ -1831,36 +1835,10 @@ public class Utils {
 		return 0;
 	}
 
-	public static void FixSpellItemWorth() throws CoreStateInitException {
-		System.out.println("Fixing Spell Item Worth");
-		for (ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems()) {
-			if (!item.isSpellscroll())
-				continue;
-
-			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-			if (spell.getAllowedClasses().size() == 0)
-				continue;
-
-			int spellMinLevel = 50;
-			for (SoliniaSpellClass spellClassEntry : spell.getAllowedClasses()) {
-				if (spellClassEntry.getMinlevel() < spellMinLevel)
-					spellMinLevel = spellClassEntry.getMinlevel();
-			}
-
-			int newWorth = spellMinLevel * 10;
-			System.out.println("Updated Item: " + item.getDisplayname() + " to worth: $" + newWorth);
-			item.setWorth(newWorth);
-		}
-	}
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
-		try {
-			FixSpellItemWorth();
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	public static boolean isLivingEntityNPC(LivingEntity livingentity) {

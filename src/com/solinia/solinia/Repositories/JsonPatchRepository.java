@@ -16,72 +16,69 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
-import com.solinia.solinia.Interfaces.ISoliniaSpell;
-import com.solinia.solinia.Models.SoliniaAARank;
-import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Interfaces.ISoliniaPatch;
+import com.solinia.solinia.Models.SoliniaPatch;
 
-public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
-
+public class JsonPatchRepository implements IRepository<ISoliniaPatch> {
 	private String filePath;
-	private ConcurrentHashMap<Integer, ISoliniaSpell> spells = new ConcurrentHashMap<Integer, ISoliniaSpell>();
+	private ConcurrentHashMap<Integer, ISoliniaPatch> patches = new ConcurrentHashMap<Integer, ISoliniaPatch>();
 
 	@Override
-	public void add(ISoliniaSpell item) {
-		this.spells.put(item.getId(), item);
+	public void add(ISoliniaPatch item) {
+		this.patches.put(item.getId(), item);
 	}
 
 	@Override
-	public void add(Iterable<ISoliniaSpell> items) {
-		for(ISoliniaSpell i : items)
+	public void add(Iterable<ISoliniaPatch> items) {
+		for(ISoliniaPatch i : items)
 		{
-			this.spells.put(i.getId(), i);
+			this.patches.put(i.getId(), i);
 		}
 	}
 
 	@Override
-	public void update(ISoliniaSpell item) {
-		this.spells.put(item.getId(), item);
+	public void update(ISoliniaPatch item) {
+		this.patches.put(item.getId(), item);
 	}
 
 	@Override
-	public void remove(ISoliniaSpell item) {
-		this.spells.remove(item.getId());
+	public void remove(ISoliniaPatch item) {
+		this.patches.remove(item.getId());
 	}
 
 	@Override
-	public void remove(Predicate<ISoliniaSpell> filter) {
-		for(ISoliniaSpell i : spells.values().stream().filter(filter).collect(Collectors.toList()))
+	public void remove(Predicate<ISoliniaPatch> filter) {
+		for(ISoliniaPatch i : patches.values().stream().filter(filter).collect(Collectors.toList()))
 		{
-			spells.remove(i.getId());
+			patches.remove(i.getId());
 		}
 	}
 
 	@Override
-	public List<ISoliniaSpell> query(Predicate<ISoliniaSpell> filter) {
-		return spells.values().stream().filter(filter).collect(Collectors.toList());
+	public List<ISoliniaPatch> query(Predicate<ISoliniaPatch> filter) {
+		return patches.values().stream().filter(filter).collect(Collectors.toList());
 	}
 
 	@Override
 	public void reload() {
-		List<ISoliniaSpell> file = new ArrayList<ISoliniaSpell>();
+		List<ISoliniaPatch> file = new ArrayList<ISoliniaPatch>();
 		
 		try {
 			Gson gson = new Gson();
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
-			file = gson.fromJson(br, new TypeToken<List<SoliniaSpell>>(){}.getType());
+			file = gson.fromJson(br, new TypeToken<List<SoliniaPatch>>(){}.getType());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		
-		spells.clear();
-		for(ISoliniaSpell i : file)
+		patches.clear();
+		for(ISoliniaPatch i : file)
 		{
-			spells.put(i.getId(), i);
+			patches.put(i.getId(), i);
 		}
 		
-		System.out.println("Reloaded " + spells.size() + " spells");
+		System.out.println("Reloaded " + patches.size() + " Patchs");
 	}	
 	
 	@Override
@@ -90,7 +87,7 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 		GsonBuilder gsonbuilder = new GsonBuilder();
 		gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
-		String jsonOutput = gson.toJson(spells.values(), new TypeToken<List<SoliniaSpell>>(){}.getType());
+		String jsonOutput = gson.toJson(patches.values(), new TypeToken<List<SoliniaPatch>>(){}.getType());
 		try {
 			
 			File file = new File(filePath);
@@ -103,7 +100,7 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 	        outWriter.close();
 	        fileOut.close();
 	        
-	        System.out.println("Commited " + spells.size() + " spells");
+	        System.out.println("Commited " + patches.size() + " Patchs");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,5 +113,4 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
-
 }

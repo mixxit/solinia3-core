@@ -140,4 +140,25 @@ public interface ISoliniaPlayer extends Serializable {
 	public int getResist(SpellResistType type);
 
 	int getTotalResist(SpellResistType type);
+
+	int getAapct();
+
+	void setAapct(int aapct);
+
+	public List<ISoliniaAARank> getBuyableAARanks();
+
+	boolean canPurchaseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank);
+
+	boolean hasRank(ISoliniaAARank rank);
+
+	boolean hasPreviousRanks(ISoliniaAAAbility ability, ISoliniaAARank rank);
+
+	boolean canUseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank);
+
+	void purchaseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank);
+
+	boolean hasPrerequisites(ISoliniaAAAbility ability, ISoliniaAARank rank);
+
+	boolean hasAAAbility(int abilityid);
+
 }

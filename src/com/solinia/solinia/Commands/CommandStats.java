@@ -32,6 +32,7 @@ public class CommandStats implements CommandExecutor {
 	            Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
 	    		int ipercenttolevel = percenttolevel.intValue();
 	    		player.sendMessage("Level progress: " + ipercenttolevel + "% into level)");
+	    		player.sendMessage("AA points: " + solplayer.getAAPoints());
 	    			
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

@@ -6,6 +6,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.earth2me.essentials.Essentials;
+import com.solinia.solinia.Commands.CommandAA;
 import com.solinia.solinia.Commands.CommandAddClass;
 import com.solinia.solinia.Commands.CommandAddLootDropItem;
 import com.solinia.solinia.Commands.CommandAddLootTableLootDrop;
@@ -64,6 +65,7 @@ import com.solinia.solinia.Commands.CommandSpawnItem;
 import com.solinia.solinia.Commands.CommandSpawnRandomItem;
 import com.solinia.solinia.Commands.CommandStats;
 import com.solinia.solinia.Commands.CommandTarot;
+import com.solinia.solinia.Commands.CommandToggleAA;
 import com.solinia.solinia.Commands.CommandTrance;
 import com.solinia.solinia.Commands.CommandUpdateSpawnGroupLoc;
 import com.solinia.solinia.Commands.CommandViewLootDrop;
@@ -81,6 +83,7 @@ import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
+import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
@@ -88,6 +91,7 @@ import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
+import com.solinia.solinia.Repositories.JsonPatchRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
@@ -225,10 +229,18 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			perkrepo.setJsonFile(getDataFolder() + "/" + "worldwideperks.json");
 			perkrepo.reload();
 			
+			JsonAAAbilityRepository aaabilityrepo = new JsonAAAbilityRepository();
+			aaabilityrepo.setJsonFile(getDataFolder() + "/" + "aaabilities.json");
+			aaabilityrepo.reload();
+
+			JsonPatchRepository patchesrepo = new JsonPatchRepository();
+			patchesrepo.setJsonFile(getDataFolder() + "/" + "patches.json");
+			patchesrepo.reload();
+			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 			
-			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,lootdroprepo, spawngrouprepo, perkrepo);
+			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,lootdroprepo, spawngrouprepo, perkrepo, aaabilityrepo,patchesrepo);
 			
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -338,6 +350,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("viewlootdrop").setExecutor(new CommandViewLootDrop());
 		this.getCommand("pet").setExecutor(new CommandPet());
 		this.getCommand("trance").setExecutor(new CommandTrance());
+		this.getCommand("aa").setExecutor(new CommandAA());
+		this.getCommand("toggleaa").setExecutor(new CommandToggleAA());
 		
 	}
 	

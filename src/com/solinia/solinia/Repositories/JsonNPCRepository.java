@@ -14,9 +14,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Models.SoliniaAARank;
 import com.solinia.solinia.Models.SoliniaNPC;
 
 public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
@@ -83,7 +86,9 @@ public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
 	@Override
 	public void commit() {
 		// TODO Auto-generated method stub
-		Gson gson = new Gson();
+		GsonBuilder gsonbuilder = new GsonBuilder();
+		gsonbuilder.setPrettyPrinting();
+		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(NPCs.values(), new TypeToken<List<SoliniaNPC>>(){}.getType());
 		try {
 			

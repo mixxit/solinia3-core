@@ -202,4 +202,12 @@ public interface IConfigurationManager {
 	List<ISoliniaSpell> getSpellsByClassIdAndMaxLevel(int classId, int level);
 
 	ISoliniaNPC getPetNPCByName(String name);
+
+	List<ISoliniaAAAbility> getAAAbilities();
+
+	ISoliniaAAAbility getAAAbility(int Id);
+
+	ISoliniaAARank getAARank(int seekRankId);
+
+	List<ISoliniaPatch> getPatches();
 }

@@ -17,75 +17,78 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
+import com.solinia.solinia.Factories.ISoliniaLootDropEntryTypeAdapterFactory;
 import com.solinia.solinia.Factories.ISoliniaLootTableEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
-import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
+import com.solinia.solinia.Models.SoliniaAAAbility;
 import com.solinia.solinia.Models.SoliniaAARank;
-import com.solinia.solinia.Models.SoliniaLootTable;
+import com.solinia.solinia.Models.SoliniaLootDrop;
+import com.solinia.solinia.Models.SoliniaLootDropEntry;
 import com.solinia.solinia.Models.SoliniaLootTableEntry;
 
-public class JsonLootTableRepository implements IRepository<ISoliniaLootTable> {
+public class JsonAAAbilityRepository implements IRepository<ISoliniaAAAbility> {
 
 	private String filePath;
-	private ConcurrentHashMap<Integer, ISoliniaLootTable> loottables = new ConcurrentHashMap<Integer, ISoliniaLootTable>();
+	private ConcurrentHashMap<Integer, ISoliniaAAAbility> aaabilities = new ConcurrentHashMap<Integer, ISoliniaAAAbility>();
 
 	@Override
-	public void add(ISoliniaLootTable item) {
-		this.loottables.put(item.getId(), item);
+	public void add(ISoliniaAAAbility item) {
+		this.aaabilities.put(item.getId(), item);
 	}
 
 	@Override
-	public void add(Iterable<ISoliniaLootTable> items) {
-		for(ISoliniaLootTable i : items)
+	public void add(Iterable<ISoliniaAAAbility> items) {
+		for(ISoliniaAAAbility i : items)
 		{
-			this.loottables.put(i.getId(), i);
+			this.aaabilities.put(i.getId(), i);
 		}
 	}
 
 	@Override
-	public void update(ISoliniaLootTable item) {
-		this.loottables.put(item.getId(), item);
+	public void update(ISoliniaAAAbility item) {
+		this.aaabilities.put(item.getId(), item);
 	}
 
 	@Override
-	public void remove(ISoliniaLootTable item) {
-		this.loottables.remove(item.getId());
+	public void remove(ISoliniaAAAbility item) {
+		this.aaabilities.remove(item.getId());
 	}
 
 	@Override
-	public void remove(Predicate<ISoliniaLootTable> filter) {
-		for(ISoliniaLootTable i : loottables.values().stream().filter(filter).collect(Collectors.toList()))
+	public void remove(Predicate<ISoliniaAAAbility> filter) {
+		for(ISoliniaAAAbility i : aaabilities.values().stream().filter(filter).collect(Collectors.toList()))
 		{
-			loottables.remove(i.getId());
+			aaabilities.remove(i.getId());
 		}
 	}
 
 	@Override
-	public List<ISoliniaLootTable> query(Predicate<ISoliniaLootTable> filter) {
-		return loottables.values().stream().filter(filter).collect(Collectors.toList());
+	public List<ISoliniaAAAbility> query(Predicate<ISoliniaAAAbility> filter) {
+		return aaabilities.values().stream().filter(filter).collect(Collectors.toList());
 	}
 
 	@Override
 	public void reload() {
-		List<ISoliniaLootTable> file = new ArrayList<ISoliniaLootTable>();
+		List<ISoliniaAAAbility> file = new ArrayList<ISoliniaAAAbility>();
 		
 		try {
 			GsonBuilder gsonbuilder = new GsonBuilder();
-			gsonbuilder.registerTypeAdapterFactory(new ISoliniaLootTableEntryTypeAdapterFactory(SoliniaLootTableEntry.class));
+			gsonbuilder.registerTypeAdapterFactory(new ISoliniaAARankTypeAdapterFactory(SoliniaAARank.class));
 			Gson gson = gsonbuilder.create();
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
-			file = gson.fromJson(br, new TypeToken<List<SoliniaLootTable>>(){}.getType());
+			file = gson.fromJson(br, new TypeToken<List<SoliniaAAAbility>>(){}.getType());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		
-		loottables.clear();
-		for(ISoliniaLootTable i : file)
+		aaabilities.clear();
+		for(ISoliniaAAAbility i : file)
 		{
-			loottables.put(i.getId(), i);
+			aaabilities.put(i.getId(), i);
 		}
 		
-		System.out.println("Reloaded " + loottables.size() + " loottables");
+		System.out.println("Reloaded " + aaabilities.size() + " AA abilities");
 	}	
 	
 	@Override
@@ -93,9 +96,9 @@ public class JsonLootTableRepository implements IRepository<ISoliniaLootTable> {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
 		gsonbuilder.setPrettyPrinting();
-		gsonbuilder.registerTypeAdapterFactory(new ISoliniaLootTableEntryTypeAdapterFactory(SoliniaLootTableEntry.class));
+		gsonbuilder.registerTypeAdapterFactory(new ISoliniaAARankTypeAdapterFactory(SoliniaAARank.class));
 		Gson gson = gsonbuilder.create();
-		String jsonOutput = gson.toJson(loottables.values(), new TypeToken<List<SoliniaLootTable>>(){}.getType());
+		String jsonOutput = gson.toJson(aaabilities.values(), new TypeToken<List<SoliniaAAAbility>>(){}.getType());
 		try {
 			
 			File file = new File(filePath);
@@ -108,7 +111,7 @@ public class JsonLootTableRepository implements IRepository<ISoliniaLootTable> {
 	        outWriter.close();
 	        fileOut.close();
 	        
-	        System.out.println("Commited " + loottables.size() + " loottables");
+	        System.out.println("Commited " + aaabilities.size() + " AA abilities");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
