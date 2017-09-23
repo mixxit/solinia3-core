@@ -288,6 +288,10 @@ commands:
     description: Toggles experience into AA gain
     usage: /toggleaa
     aliases: []
+  createnpcevent:
+    description: Creates an NPC event
+    usage: /createnpcevent npcid eventtype trigger response
+    aliases: cnpce
 depend:
 - Vault
 - Essentials

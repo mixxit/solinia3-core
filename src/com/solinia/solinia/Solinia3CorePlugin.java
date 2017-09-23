@@ -21,6 +21,7 @@ import com.solinia.solinia.Commands.CommandCreateItem;
 import com.solinia.solinia.Commands.CommandCreateLootDrop;
 import com.solinia.solinia.Commands.CommandCreateLootTable;
 import com.solinia.solinia.Commands.CommandCreateMerchantList;
+import com.solinia.solinia.Commands.CommandCreateNPCEvent;
 import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandCreateNpcCopy;
 import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
@@ -352,7 +353,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("trance").setExecutor(new CommandTrance());
 		this.getCommand("aa").setExecutor(new CommandAA());
 		this.getCommand("toggleaa").setExecutor(new CommandToggleAA());
-		
+		this.getCommand("createnpcevent").setExecutor(new CommandCreateNPCEvent());
 	}
 	
 	private void createConfigDir() {
