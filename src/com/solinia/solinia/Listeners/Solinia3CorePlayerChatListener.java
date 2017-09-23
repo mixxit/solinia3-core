@@ -33,6 +33,15 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		AsyncPlayerChatEvent rawEvent = (AsyncPlayerChatEvent)event.getRawEvent();
 		rawEvent.setCancelled(true);
 		
+		// TODO - Support checking channel modes of player
+		if (event.getPlayer().getCurrentChannel().equals("LOCAL"))
+		{
+			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage());
+		} else {
+			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage());
+		}
+		
+		// NPC responses (if applicable)
 		if (event.getPlayer().getInteraction() != null)
 		{
 			Entity entity = Bukkit.getEntity(event.getPlayer().getInteraction());
@@ -47,14 +56,6 @@ public class Solinia3CorePlayerChatListener implements Listener {
 					// skip
 				}
 			}
-		}
-		
-		// TODO - Support checking channel modes of player
-		if (event.getPlayer().getCurrentChannel().equals("LOCAL"))
-		{
-			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage());
-		} else {
-			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage());
 		}
 	}
 }

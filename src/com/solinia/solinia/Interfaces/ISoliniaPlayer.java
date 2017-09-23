@@ -122,8 +122,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	UUID getInteraction();
 
-	void setInteraction(UUID interaction);
-
 	public void ooc(String message);
 
 	String getCurrentChannel();
@@ -161,5 +159,7 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean hasAAAbility(int abilityid);
 
 	void interact(Plugin plugin, PlayerInteractEvent event);
+
+	void setInteraction(UUID interaction, ISoliniaNPC npc);
 
 }

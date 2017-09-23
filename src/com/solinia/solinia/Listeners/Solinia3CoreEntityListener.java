@@ -175,7 +175,7 @@ public class Solinia3CoreEntityListener implements Listener {
 	        ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getRightClicked());
 			if (solentity.getNpcid() > 0)
 			{
-				SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(solentity.getBukkitLivingEntity().getUniqueId());
+				SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(solentity.getBukkitLivingEntity().getUniqueId(),StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()));
 				solentity.processInteractionEvent(event.getPlayer(),InteractionType.CHAT, "hail");
 			}
         } catch (CoreStateInitException e)

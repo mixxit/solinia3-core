@@ -29,6 +29,7 @@ import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -788,7 +789,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void setInteraction(UUID interaction) {
+	public void setInteraction(UUID interaction, ISoliniaNPC npc) {
 		if (interaction == null)
 		{
 			this.interaction = interaction;
@@ -811,7 +812,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		this.interaction = interaction;
-		this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName());
+		
+		if (npc != null)
+		{
+			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName() + " [" + npc.getId() + "]");
+
+			if (npc.getMerchantid() > 0)
+			{
+				try
+				{
+					StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity)e).say("I have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA + "] available if you are interested in buying or selling something", getBukkitPlayer());
+				} catch (CoreStateInitException cse)
+				{
+					//
+				}
+			}
+		}
+
 	}
 
 	@Override

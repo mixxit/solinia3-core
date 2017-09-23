@@ -21,17 +21,17 @@ public class PlayerInteractionTimer extends BukkitRunnable {
 			if (npcinteraction != null) {
 				if (Bukkit.getEntity(npcinteraction) == null)
 				{
-					SoliniaPlayerAdapter.Adapt(player).setInteraction(null);
+					SoliniaPlayerAdapter.Adapt(player).setInteraction(null,null);
 					continue;
 				}
 				
 				if (player.getWorld().equals(Bukkit.getEntity(npcinteraction).getWorld())) {
 					if (player.getLocation().distance(Bukkit.getEntity(npcinteraction).getLocation()) > 3) {
-						SoliniaPlayerAdapter.Adapt(player).setInteraction(null);
+						SoliniaPlayerAdapter.Adapt(player).setInteraction(null,null);
 						continue;
 					}
 				} else {
-					SoliniaPlayerAdapter.Adapt(player).setInteraction(null);
+					SoliniaPlayerAdapter.Adapt(player).setInteraction(null,null);
 					continue;
 				}
 			}

@@ -39,10 +39,15 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 		int counter = 0;
 		for (String entry : args) {
 			counter++;
-			if (counter < 3)
+			if (counter < 4)
 				continue;
 
-			response += entry;
+			response += entry + " ";
+		}
+		
+		if (response.length() > 0)
+		{
+			response = response.trim();
 		}
 
 		if (response.equals("")) {
