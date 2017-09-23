@@ -1,8 +1,10 @@
 package com.solinia.solinia.Interfaces;
 
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SpellResistType;
 
 public interface ISoliniaLivingEntity 
@@ -38,4 +40,10 @@ public interface ISoliniaLivingEntity
 	public int getResists(SpellResistType type);
 
 	public int getResistsFromActiveEffects(SpellResistType type);
+
+	void say(String message);
+
+	void processInteractionEvent(LivingEntity triggerentity, InteractionType type, String data);
+
+	void say(String message, LivingEntity messageto);
 }

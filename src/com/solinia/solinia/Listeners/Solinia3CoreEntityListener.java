@@ -33,6 +33,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreEntityListener implements Listener {
@@ -134,10 +135,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			if (solentity.getNpcid() > 0)
 			{
 				SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(solentity.getBukkitLivingEntity().getUniqueId());
-				if (StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()).getMerchantid() > 0)
-				{
-					StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()).sendMerchantItemListToPlayer(event.getPlayer());
-				}
+				solentity.processInteractionEvent(event.getPlayer(),InteractionType.CHAT, "hail");
 			}
         } catch (CoreStateInitException e)
         {

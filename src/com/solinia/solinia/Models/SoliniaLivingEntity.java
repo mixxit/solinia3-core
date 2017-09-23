@@ -467,6 +467,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isPlayer())
 			return;
 		
+		if (this.getNpcid() < 1)
+			return;
+		
 		try {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
@@ -478,6 +481,48 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			{
 				this.emote(ChatColor.AQUA + npc.getName() + " says '" + npc.getRandomchatTriggerText() + "'" + ChatColor.RESET);
 			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void say(String message)
+	{
+		if (isPlayer())
+			return;
+		
+		if (this.getNpcid() < 1)
+			return;
+
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
+				return;
+			
+			this.emote(ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET);
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void say(String message, LivingEntity messageto)
+	{
+		if (isPlayer())
+			return;
+		
+		if (this.getNpcid() < 1)
+			return;
+
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
+				return;
+			
+			this.emote(ChatColor.AQUA + npc.getName() + " says to " + messageto.getName() + " '" + message + "'" + ChatColor.RESET);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -666,6 +711,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		} else {
 			return 25 + getResistsFromActiveEffects(type);
+		}
+	}
+
+	@Override
+	public void processInteractionEvent(LivingEntity triggerentity, InteractionType type, String data) {
+		if (this.getNpcid() > 0)
+		{
+			ISoliniaNPC npc;
+			try {
+				npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+				npc.processInteractionEvent(this, triggerentity,type,data);
+			} catch (CoreStateInitException e)
+			{
+				// do nothing
+			}
 		}
 	}
 }

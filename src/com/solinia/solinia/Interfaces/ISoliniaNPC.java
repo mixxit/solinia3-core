@@ -1,12 +1,17 @@
 package com.solinia.solinia.Interfaces;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Models.SoliniaLivingEntity;
+import com.solinia.solinia.Models.SoliniaNPCEventHandler;
 
 public interface ISoliniaNPC {
 
@@ -153,4 +158,15 @@ public interface ISoliniaNPC {
 	boolean isPet();
 
 	void setPet(boolean isPet);
+
+	List<ISoliniaNPCEventHandler> getEventHandlers();
+
+	void setEventHandlers(List<ISoliniaNPCEventHandler> eventHandlers);
+
+	void processInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, InteractionType type,
+			String data);
+
+	void processChatInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, String data);
+
+	void addEventHandler(SoliniaNPCEventHandler eventhandler);
 }

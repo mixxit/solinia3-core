@@ -1,8 +1,12 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +20,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
@@ -53,7 +58,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isGuard = false;
 	private boolean isRoamer = false;
 	private boolean isPet = false;
-
+	private List<ISoliniaNPCEventHandler> eventHandlers = new ArrayList<ISoliniaNPCEventHandler>();
+	
 	@Override
 	public int getId() {
 		return id;
@@ -710,5 +716,64 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setPet(boolean isPet) {
 		this.isPet = isPet;
+	}
+
+	@Override
+	public void processInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, InteractionType type, String data) {
+		switch(type)
+		{
+			case CHAT:
+				processChatInteractionEvent(solentity, triggerentity, data);
+			default:
+				return;
+		}
+	}
+	
+	@Override
+	public void processChatInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, String data)
+	{
+		switch(data.toUpperCase())
+		{
+			case "SHOP":
+				if (triggerentity instanceof Player)
+				if (getMerchantid() > 0)
+				{
+					sendMerchantItemListToPlayer((Player)triggerentity);
+				}
+			// for everything else, seek a chat event handler
+			default:
+				if (getMerchantid() > 0)
+				{
+					solentity.say("I have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.RESET + "] available if you are interested in buying or selling something", triggerentity);
+				}
+				for(ISoliniaNPCEventHandler handler : getEventHandlers())
+				{
+					if (!handler.getInteractiontype().equals(InteractionType.CHAT))
+						continue;
+					
+					if (!data.toUpperCase().contains(handler.getTriggerdata().toUpperCase()))
+						continue;
+					
+					if (handler.getChatresponse() != null && !handler.getChatresponse().equals(""))
+						solentity.say(handler.getChatresponse(),triggerentity);					
+				}
+				return;
+		}
+	}
+
+	@Override
+	public List<ISoliniaNPCEventHandler> getEventHandlers() {
+		return eventHandlers;
+	}
+
+	@Override
+	public void setEventHandlers(List<ISoliniaNPCEventHandler> eventHandlers) {
+		this.eventHandlers = eventHandlers;
+	}
+
+	@Override
+	public void addEventHandler(SoliniaNPCEventHandler eventhandler) {
+		this.getEventHandlers().add(eventhandler);
+		
 	}
 }

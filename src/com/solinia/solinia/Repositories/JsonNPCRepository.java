@@ -17,10 +17,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
+import com.solinia.solinia.Factories.ISoliniaNPCEventHandlerTypeAdapterFactory;
+import com.solinia.solinia.Factories.ISoliniaNPCMerchantEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Models.SoliniaAARank;
 import com.solinia.solinia.Models.SoliniaNPC;
+import com.solinia.solinia.Models.SoliniaNPCEventHandler;
+import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
 
 public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
 	private String filePath;
@@ -67,7 +71,9 @@ public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
 		List<ISoliniaNPC> file = new ArrayList<ISoliniaNPC>();
 		
 		try {
-			Gson gson = new Gson();
+			GsonBuilder gsonbuilder = new GsonBuilder();
+			gsonbuilder.registerTypeAdapterFactory(new ISoliniaNPCEventHandlerTypeAdapterFactory(SoliniaNPCEventHandler.class));
+			Gson gson = gsonbuilder.create();
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 			file = gson.fromJson(br, new TypeToken<List<SoliniaNPC>>(){}.getType());
 		} catch (FileNotFoundException e) {
@@ -88,6 +94,7 @@ public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
 		gsonbuilder.setPrettyPrinting();
+		gsonbuilder.registerTypeAdapterFactory(new ISoliniaNPCEventHandlerTypeAdapterFactory(SoliniaNPCEventHandler.class));
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(NPCs.values(), new TypeToken<List<SoliniaNPC>>(){}.getType());
 		try {
