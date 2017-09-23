@@ -56,20 +56,40 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Skeleton)
 		{
-			if (!(event.getTarget().getLastDamageCause() instanceof Player))
-			{
-				event.setCancelled(true);
-				return;
-			}
-			
 			Wolf w = (Wolf)event.getEntity();
-			if (
-					(event.getTarget().getLastDamageCause() instanceof Player) && 
-					!(w.getOwner().getUniqueId().equals(((Player)event.getTarget().getLastDamageCause()).getUniqueId()))
-					)
+			if (w.getOwner() != null)
 			{
-				event.setCancelled(true);
-				return;
+				if (event.getTarget().getLastDamageCause() == null)
+				{
+					event.setCancelled(true);
+					return;
+				}
+				
+				if(event.getTarget().getLastDamageCause() instanceof EntityDamageByEntityEvent)
+				{
+					EntityDamageByEntityEvent dmgByEntity = (EntityDamageByEntityEvent) event.getTarget().getLastDamageCause();
+					if (dmgByEntity.getDamager() == null)
+					{
+						event.setCancelled(true);
+						return;
+					}
+					
+					if (!(dmgByEntity.getDamager() instanceof Player))
+					{
+						event.setCancelled(true);
+						return;
+					}
+					
+					if (
+							(event.getTarget().getLastDamageCause().getEntity() instanceof Player) && 
+							!(w.getOwner().getUniqueId().equals(dmgByEntity.getDamager().getUniqueId()))
+							)
+					{
+						event.setCancelled(true);
+						return;
+					}
+				}
+
 			}
 		}
 		
