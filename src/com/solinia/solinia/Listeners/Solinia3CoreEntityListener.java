@@ -52,6 +52,35 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		if (!(event.getEntity() instanceof Creature))
 			return;
+
+		if ((event.getEntity() instanceof Creature) && (event.getTarget() instanceof Wolf))
+		{
+			// If this is an npc and a target is a pet
+			if (Utils.isLivingEntityNPC((LivingEntity)event.getEntity()) && Utils.isLivingEntityNPC((LivingEntity)event.getTarget()))
+			{
+				try
+				{
+					ISoliniaLivingEntity pet = StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity)event.getTarget());
+					// If i am an npc and my attack target is a pet
+					if (pet.isPet())
+					{
+						// If i not either 0 (kos) or a -1500 faction then cancel my target of the players pet
+						ISoliniaLivingEntity solentity = StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity)event.getEntity());
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
+						if(npc.getFactionid() != 0 && (StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid())).getBase() > -1500)
+						{
+							event.setCancelled(true);
+							return;
+						}
+					}
+					
+				} catch (CoreStateInitException e)
+				{
+					// carry on
+				}
+			}
+
+		}
 		
 		if ((event.getEntity() instanceof Wolf) && (event.getTarget() instanceof Creature))
 		{
@@ -66,6 +95,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					// If im a pet and my attack target is actively trying to kill something
 					if (pet.isPet() && (letarget.getTarget() != null))
 					{
+						System.out.println("I am a pet who has found an npc target with attack target me: " + letarget.getTarget().getUniqueId().equals(event.getEntity().getUniqueId()) + " and my owner: " + letarget.getTarget().getUniqueId().equals(w.getOwner().getUniqueId()));
 						// If my attack target is not trying to attack either me or my owner directly then refuse to target it
 						if (!letarget.getTarget().getUniqueId().equals(event.getEntity().getUniqueId()) && !letarget.getTarget().getUniqueId().equals(w.getOwner().getUniqueId()))
 						{

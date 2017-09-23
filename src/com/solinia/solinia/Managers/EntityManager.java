@@ -130,7 +130,6 @@ public class EntityManager implements IEntityManager {
 		
 		for(UUID uuid : uuidRemoval)
 		{
-			System.out.println("Cleared Entity Effects for invalid UUID: " + uuid);
 			entitySpellEffects.remove(uuid);
 		}
 		
