@@ -750,11 +750,33 @@ public class SoliniaNPC implements ISoliniaNPC {
 					if (!data.toUpperCase().contains(handler.getTriggerdata().toUpperCase()))
 						continue;
 					
+					
+					
 					if (handler.getChatresponse() != null && !handler.getChatresponse().equals(""))
-						solentity.say(handler.getChatresponse(),triggerentity);					
+					{
+						String response = handler.getChatresponse();
+						solentity.say(replaceChatWordsWithHints(response),triggerentity);					
+					}
 				}
 				return;
 		}
+	}
+	
+	public String replaceChatWordsWithHints(String message)
+	{
+		for(ISoliniaNPCEventHandler handler : getEventHandlers())
+		{
+			if (!handler.getInteractiontype().equals(InteractionType.CHAT))
+				continue;
+			
+			if (!message.toUpperCase().contains(handler.getTriggerdata().toUpperCase()))
+				continue;
+			
+			message = message.toLowerCase().replace(handler.getTriggerdata().toLowerCase(), "["+handler.getTriggerdata().toLowerCase()+"]");
+		}
+		message = message.replace("[", ChatColor.LIGHT_PURPLE + "[");
+		message = message.replace("]", "]" + ChatColor.AQUA);
+		return message.toLowerCase();
 	}
 
 	@Override
