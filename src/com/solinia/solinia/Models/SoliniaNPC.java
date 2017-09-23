@@ -483,8 +483,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			if (value.equals(""))
 				throw new InvalidNpcSettingException("Name is empty");
 
-			if (value.length() > 15)
-				throw new InvalidNpcSettingException("Name is longer than 15 characters");
+			if (value.length() > 25)
+				throw new InvalidNpcSettingException("Name is longer than 25 characters");
 			setName(value);
 			break;
 		case "mctype":

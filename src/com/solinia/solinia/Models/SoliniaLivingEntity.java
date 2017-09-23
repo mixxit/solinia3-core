@@ -9,8 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -45,6 +45,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		String metaid = "";
 		if (livingentity != null)
 		for(MetadataValue val : livingentity.getMetadata("mobname"))
+		{
+			metaid = val.asString();
+		}
+		
+		for(MetadataValue val : livingentity.getMetadata("npcid"))
 		{
 			metaid = val.asString();
 		}

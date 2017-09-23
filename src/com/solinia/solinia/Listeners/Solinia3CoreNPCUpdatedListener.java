@@ -22,6 +22,7 @@ public class Solinia3CoreNPCUpdatedListener implements Listener {
 		
 		try {
 			StateManager.getInstance().getEntityManager().getNPCEntityProvider().updateNpc(event.getNPC());
+			StateManager.getInstance().getEntityManager().getNPCEntityProvider().reloadProvider();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -20,13 +20,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		writeNpcDefinition("plugins/MythicMobs/Mobs/NPCID_" + npc.getId() + ".yml", npc);
 		writeRandomSpawn("plugins/MythicMobs/RandomSpawns/RANDOMSPAWNNPCID_" + npc.getId() + ".yml", npc);
 		writeCustomHead("plugins/MythicMobs/Items/CUSTOMHEADNPCID_" + npc.getId() + ".yml", npc);
-		reloadProvider();
 	}
 	
 	@Override
 	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
-		reloadProvider();
 	}
 	
 	@Override
@@ -201,11 +199,16 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "  Modules:\r\n";
 		mob = mob + "    ThreatTable: true\r\n";
 
-		mob = mob + "  Faction: FACTIONID_" + npc.getFactionid() + "\r\n";
+		if (npc.isPet())
+		{
+			mob = mob + "  Faction: FACTIONID_-1\r\n";
+		} else {
+			mob = mob + "  Faction: FACTIONID_" + npc.getFactionid() + "\r\n";
+		}
 		
 
 		// Act as normal mob if without faction
-		if (npc.getFactionid() > 0)
+		if (npc.getFactionid() > 0 || npc.isPet())
 		{
 			mob = mob + "  AIGoalSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
@@ -221,20 +224,23 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  - 1 attacker\r\n";
 			
 			// NPC attack players
-			try
+			if (!npc.isPet())
 			{
-				ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
-				if (npcfaction.getBase() == -1500)
+				try
 				{
-					mob = mob + "  - 2 players\r\n";
+					ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
+					if (npcfaction.getBase() == -1500)
+					{
+						mob = mob + "  - 2 players\r\n";
+					}
+				} catch (CoreStateInitException e)
+				{
+					// skip
 				}
-			} catch (CoreStateInitException e)
-			{
-				// skip
 			}
 			
 			// NPC attack NPCs
-			if (npc.isGuard())
+			if (npc.isGuard() || npc.isPet())
 			{
 				// Always attack mobs with factionid 0
 				mob = mob + "  - 3 SpecificFaction FACTIONID_0\r\n";

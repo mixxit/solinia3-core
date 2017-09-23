@@ -13,8 +13,8 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 
@@ -317,14 +317,14 @@ public class EntityManager implements IEntityManager {
 			
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(spell.getTeleportZone());
 			
+			if (npc == null)
+				return null;
+
 			if (npc.isPet() == false)
 				return null;
 			
-			if (npc == null)
-				return null;
-			
 			Wolf entity = (Wolf) owner.getWorld().spawnEntity(owner.getLocation(), EntityType.WOLF);
-			entity.setMetadata("mobname", new FixedMetadataValue(plugin, "NPCID_" + npc.getId()));
+			entity.setMetadata("npcid", new FixedMetadataValue(plugin, "NPCID_" + npc.getId()));
 			StateManager.getInstance().getEntityManager().setPet(owner,entity);
 			entity.setAdult();
 			entity.setTamed(true);

@@ -1840,6 +1840,10 @@ public class Utils {
 		for (MetadataValue val : livingentity.getMetadata("mobname")) {
 			metaid = val.asString();
 		}
+		
+		for (MetadataValue val : livingentity.getMetadata("npcid")) {
+			metaid = val.asString();
+		}
 
 		if (metaid.equals(""))
 			return false;
