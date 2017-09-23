@@ -12,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -49,7 +50,7 @@ public class SoliniaEntitySpellEffects {
 		return activeSpells.values();
 	}
 
-	public boolean addSpellEffect(SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration) {
+	public boolean addSpellEffect(Plugin plugin, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration) {
 		// This spell ID is already active
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
@@ -114,7 +115,7 @@ public class SoliniaEntitySpellEffects {
 			activeSpells.put(soliniaSpell.getId(),activeEffect);
 		
 		// Initial run
-		activeEffect.apply();
+		activeEffect.apply(plugin);
 		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 5);
 		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 		
@@ -123,7 +124,7 @@ public class SoliniaEntitySpellEffects {
 		return true;
 	}
 
-	public void run() {
+	public void run(Plugin plugin) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		List<SoliniaActiveSpellEffect> updateSpells = new ArrayList<SoliniaActiveSpellEffect>();
 		
@@ -135,7 +136,7 @@ public class SoliniaEntitySpellEffects {
 			}
 			else
 			{
-				activeSpellEffect.apply();
+				activeSpellEffect.apply(plugin);
 				activeSpellEffect.setTicksLeft(activeSpellEffect.getTicksLeft() - 1);
 				updateSpells.add(activeSpellEffect);
 			}

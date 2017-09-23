@@ -3,6 +3,7 @@ package com.solinia.solinia.Interfaces;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SpellResistType;
@@ -31,8 +32,6 @@ public interface ISoliniaLivingEntity
 
 	void doSlayChat();
 
-	public void doSpellCast(LivingEntity livingEntity);
-
 	boolean isPlayer();
 
 	Integer getMana();
@@ -46,4 +45,6 @@ public interface ISoliniaLivingEntity
 	void processInteractionEvent(LivingEntity triggerentity, InteractionType type, String data);
 
 	void say(String message, LivingEntity messageto);
+
+	void doSpellCast(Plugin plugin, LivingEntity livingEntity);
 }

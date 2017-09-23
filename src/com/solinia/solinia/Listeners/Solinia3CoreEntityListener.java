@@ -14,6 +14,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -171,25 +172,42 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (!(damager instanceof LivingEntity))
 			return;
 		
-		// If damager is npc, have a chance to trigger its chat text for slaying something
-		if ((!(damager instanceof Player)) && Utils.isLivingEntityNPC((LivingEntity)damager))
-		{
-			ISoliniaLivingEntity solentity;
-			try {
-				solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)damager);
-				solentity.doSlayChat();
-			} catch (CoreStateInitException e) {
-				
-			}
+		ISoliniaLivingEntity soldamagerentity = null;
+		try {
+			soldamagerentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)damager);
+		} catch (CoreStateInitException e) {
 			
 		}
 		
-		if (!(damager instanceof Player))
+		// If damager is npc, have a chance to trigger its chat text for slaying something
+		if ((!(damager instanceof Player)) && Utils.isLivingEntityNPC((LivingEntity)damager))
+		{
+			soldamagerentity.doSlayChat();
+		}
+		
+		if (!(damager instanceof Player) && !soldamagerentity.isPet() )
 			return;
 		
 		try {
 			ISoliniaLivingEntity livingEntity = SoliniaLivingEntityAdapter.Adapt(event.getEntity());
-			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)damager);
+			ISoliniaPlayer player = null;
+			if (damager instanceof Player)
+			{
+				player = SoliniaPlayerAdapter.Adapt((Player)damager);
+			}
+			if (soldamagerentity.isPet())
+			{
+				if (damager instanceof Wolf)
+				{
+					Wolf w = (Wolf)damager;
+					player = SoliniaPlayerAdapter.Adapt((Player)w.getOwner());
+				}
+			}
+			if (player == null)
+			{
+				return;
+			}
+			
 			Double experience = Utils.getExperienceRewardAverageForLevel(livingEntity.getLevel());
 			
 			// try to share with group
@@ -233,14 +251,11 @@ public class Solinia3CoreEntityListener implements Listener {
 				} else {
 					for (UUID member : group.getMembers()) {
 						Player tgtplayer = Bukkit.getPlayer(member);
-						System.out.println("Checking member group xp: " + tgtplayer.getDisplayName());
 						if (tgtplayer != null) {
 							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);
 							int tgtlevel = tgtsolplayer.getLevel();
-							System.out.println(tgtplayer.getDisplayName() + " lvl: " + tgtlevel + " vs lowlevel: " + ilowlvl);
 
 							if (tgtlevel < ilowlvl) {
-								System.out.println(tgtplayer.getName() + " did not get XP due to out of range");
 								tgtplayer.sendMessage(
 										"You were out of level range to gain experience in this group (Min: "
 												+ ilowlvl + " Max: " + ihighlvl + ")");
@@ -248,23 +263,19 @@ public class Solinia3CoreEntityListener implements Listener {
 							}
 
 							if (!tgtplayer.getWorld().equals(player.getBukkitPlayer().getWorld())) {
-								System.out.println(tgtplayer.getDisplayName() + " not in same world");
 								tgtplayer.sendMessage("You were out of range for shared group xp (world)");
 								continue;
 							}
 
 							if (tgtplayer.getLocation().distance(player.getBukkitPlayer().getLocation()) <= 100) {
 								if (livingEntity.getLevel() >= (tgtsolplayer.getLevel() - 7)) {
-									System.out.println(tgtplayer.getDisplayName() + " entity lvl " + livingEntity.getLevel() + " vs player " + tgtsolplayer.getLevel());
 									tgtsolplayer.increasePlayerExperience(experience);
 								} else {
-									System.out.println(tgtplayer.getDisplayName() + " entity lvl too low for player");
 									tgtplayer.sendMessage(ChatColor.GRAY
 											+ "* The npc was too low level to gain experience from");
 								}
 
 							} else {
-								System.out.println(tgtplayer.getDisplayName() + " not near enough");
 								tgtplayer.sendMessage("You were out of range for shared group xp (distance)");
 								continue;
 							}

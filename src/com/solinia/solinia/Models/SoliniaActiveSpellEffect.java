@@ -15,6 +15,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -89,7 +90,7 @@ public class SoliniaActiveSpellEffect {
 		this.spellId = spellId;
 	}
 
-	public void apply() {
+	public void apply(Plugin plugin) {
 		try {
 			ISoliniaSpell soliniaSpell = StateManager.getInstance().getConfigurationManager().getSpell(getSpellId());
 			if (soliniaSpell == null)
@@ -112,7 +113,7 @@ public class SoliniaActiveSpellEffect {
 
 				
 			for (SpellEffect spellEffect : soliniaSpell.getSpellEffects()) {
-				applySpellEffect(spellEffect, soliniaSpell);
+				applySpellEffect(plugin, spellEffect, soliniaSpell);
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -120,7 +121,7 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applySpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applySpellEffect(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		
 		switch (spellEffect.getSpellEffectType()) {
 		case CurrentHP:
@@ -200,7 +201,7 @@ public class SoliniaActiveSpellEffect {
 		case SummonItem
 			: return;
 		case SummonPet: 
-			applySummonPet(spellEffect,soliniaSpell);
+			applySummonPet(plugin, spellEffect,soliniaSpell);
 			return;
 		case Confuse: 
 			applyConfusion(spellEffect,soliniaSpell);
@@ -289,7 +290,7 @@ public class SoliniaActiveSpellEffect {
 		case CorpseBomb
 			: return;
 		case NecPet: 
-			applySummonPet(spellEffect,soliniaSpell);
+			applySummonPet(plugin, spellEffect,soliniaSpell);
 			return;
 		case PreserveCorpse
 			: return;
@@ -1108,13 +1109,13 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applySummonPet(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applySummonPet(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		if (!isOwnerPlayer())
 			return;
 		
 		try
 		{
-			StateManager.getInstance().getEntityManager().SpawnPet(Bukkit.getPlayer(getOwnerUuid()), soliniaSpell);
+			StateManager.getInstance().getEntityManager().SpawnPet(plugin, Bukkit.getPlayer(getOwnerUuid()), soliniaSpell);
 		} catch (CoreStateInitException e)
 		{
 			return;

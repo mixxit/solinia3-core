@@ -5,6 +5,8 @@ import java.util.List;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.plugin.Plugin;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaSpellClass;
@@ -971,8 +973,6 @@ public interface ISoliniaSpell {
 
 	boolean tryApplyOnBlock(LivingEntity sourceEntity, Block clickedBlock);
 
-	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity);
-	
 	SpellEffectType getEffectType1();
 
 	SpellEffectType getEffectType2();
@@ -1022,5 +1022,7 @@ public interface ISoliniaSpell {
 	boolean isGroupSpell();
 
 	boolean isEffectInSpell(SpellEffectType effecttype);
+
+	boolean tryApplyOnEntity(Plugin plugin, LivingEntity sourceEntity, LivingEntity targetentity);
 
 }

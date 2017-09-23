@@ -8,6 +8,7 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -416,7 +417,7 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable)
+	public void useItemOnEntity(Plugin plugin, Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable)
 			throws CoreStateInitException {
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
 		if (spell == null) {
@@ -428,7 +429,7 @@ public class SoliniaItem implements ISoliniaItem {
 			return;
 		}
 
-		boolean itemUseSuccess = spell.tryApplyOnEntity(player, targetentity);
+		boolean itemUseSuccess = spell.tryApplyOnEntity(plugin, player, targetentity);
 
 		if (itemUseSuccess) {
 			if (!isConsumable)
@@ -571,11 +572,11 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public void consume(Player player) throws CoreStateInitException {
+	public void consume(Plugin plugin, Player player) throws CoreStateInitException {
 		if (this.getAbilityid() < 1)
 			return;
 		
-		useItemOnEntity(player,this,player,true);
+		useItemOnEntity(plugin, player,this,player,true);
 	}
 
 	@Override

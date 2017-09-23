@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SpellResistType;
@@ -117,8 +118,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public int getMaxMP();
 
-	public void interact(PlayerInteractEvent event);
-
 	void emote(String string);
 
 	UUID getInteraction();
@@ -160,5 +159,7 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean hasPrerequisites(ISoliniaAAAbility ability, ISoliniaAARank rank);
 
 	boolean hasAAAbility(int abilityid);
+
+	void interact(Plugin plugin, PlayerInteractEvent event);
 
 }

@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
@@ -169,12 +170,13 @@ public interface ISoliniaItem {
 
 	void setColor(byte color);
 
-	void consume(Player player) throws CoreStateInitException;
-
-	void useItemOnEntity(Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable) throws CoreStateInitException;
-
 	int getDiseaseResist();
 
 	void setDiseaseResist(int diseaseResist);
+
+	void useItemOnEntity(Plugin plugin, Player player, ISoliniaItem item, LivingEntity targetentity,
+			boolean isConsumable) throws CoreStateInitException;
+
+	void consume(Plugin plugin, Player player) throws CoreStateInitException;
 
 }

@@ -51,7 +51,6 @@ public class Solinia3CorePlayerListener implements Listener {
 		ISoliniaGroup group = StateManager.getInstance().getGroupByMember(event.getPlayer().getUniqueId());
 		if (group != null)
 		{
-			System.out.println("removed a player group a group due to logout");
 			StateManager.getInstance().removePlayerFromGroup(event.getPlayer());
 		}
 	}
@@ -118,7 +117,6 @@ public class Solinia3CorePlayerListener implements Listener {
 		try
 		{
 			StateManager.getInstance().getEntityManager().clearEntityEffects(event.getEntity().getUniqueId());
-			System.out.println("Cleared Entity Effects for dead player UUID: " + event.getEntity().getUniqueId());
 		} catch (CoreStateInitException e)
 		{
 			
@@ -298,7 +296,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 		
 		try {
-			SoliniaPlayerAdapter.Adapt(event.getPlayer()).interact(event);
+			SoliniaPlayerAdapter.Adapt(event.getPlayer()).interact(plugin, event);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -312,7 +310,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		try {
 			ISoliniaItem item = SoliniaItemAdapter.Adapt(event.getItem());
-			item.consume(event.getPlayer());
+			item.consume(plugin, event.getPlayer());
 		} catch (SoliniaItemException | CoreStateInitException e) {
 			
 		}

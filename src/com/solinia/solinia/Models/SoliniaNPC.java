@@ -746,6 +746,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 				{
 					solentity.say("I have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.RESET + "] available if you are interested in buying or selling something", triggerentity);
 				}
+
 				for(ISoliniaNPCEventHandler handler : getEventHandlers())
 				{
 					if (!handler.getInteractiontype().equals(InteractionType.CHAT))

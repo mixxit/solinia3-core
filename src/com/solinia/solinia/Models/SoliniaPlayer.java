@@ -13,10 +13,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -670,7 +672,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void interact(PlayerInteractEvent event) {
+	public void interact(Plugin plugin, PlayerInteractEvent event) {
 		// TODO Auto-generated method stub
 		ItemStack itemstack = event.getItem();
 	    
@@ -758,10 +760,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 		    		if (targetmob != null)
 		    		{
-		    			item.useItemOnEntity(event.getPlayer(),item,targetmob,false);
+		    			item.useItemOnEntity(plugin, event.getPlayer(),item,targetmob,false);
 		    			return;
 		    		} else {
-		    			item.useItemOnEntity(event.getPlayer(),item,event.getPlayer(),false);
+		    			item.useItemOnEntity(plugin, event.getPlayer(),item,event.getPlayer(),false);
 		    			return;
 		    		}
 			    }
@@ -786,6 +788,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void setInteraction(UUID interaction) {
+		if (Bukkit.getEntity(interaction) instanceof Wolf)
+		{
+			Wolf w = (Wolf)Bukkit.getEntity(interaction);
+			if (w.getOwner() != null)
+				return;
+		}
+		
 		if (interaction == null)
 		{
 			this.interaction = interaction;

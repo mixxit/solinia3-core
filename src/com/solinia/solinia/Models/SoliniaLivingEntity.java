@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -324,6 +325,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isPlayer())
 			return false;
 		
+		if (this.getNpcid() < 1)
+			return false;
+		
+		
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.isPet())
+				return true;
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
@@ -498,7 +512,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		try {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
+			if (npc == null)
 				return;
 			
 			this.emote(ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET);
@@ -519,7 +533,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		try {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
+			if (npc == null)
 				return;
 			
 			this.emote(ChatColor.AQUA + npc.getName() + " says to " + messageto.getName() + " '" + message + "'" + ChatColor.RESET);
@@ -548,7 +562,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void doSpellCast(LivingEntity livingEntity) {
+	public void doSpellCast(Plugin plugin, LivingEntity livingEntity) {
 		if (isPlayer())
 			return;
 		
@@ -599,7 +613,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(beneficialSpells);
 				if (getMana() > spellToCast.getMana())
 				{
-					success = spellToCast.tryApplyOnEntity(this.livingentity,this.livingentity);
+					success = spellToCast.tryApplyOnEntity(plugin, this.livingentity,this.livingentity);
 				}
 				if (success)
 				{
@@ -609,7 +623,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(hostileSpells);
 				if (getMana() > spellToCast.getMana())
 				{
-					success = spellToCast.tryApplyOnEntity(this.livingentity,livingEntity);
+					success = spellToCast.tryApplyOnEntity(plugin, this.livingentity,livingEntity);
 				}
 				if (success)
 				{
@@ -724,7 +738,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				npc.processInteractionEvent(this, triggerentity,type,data);
 			} catch (CoreStateInitException e)
 			{
-				// do nothing
+				e.printStackTrace();
 			}
 		}
 	}

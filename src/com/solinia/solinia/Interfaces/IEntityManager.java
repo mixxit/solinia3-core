@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaSpell;
@@ -16,15 +17,9 @@ public interface IEntityManager {
 
 	INPCEntityProvider getNPCEntityProvider();
 
-	boolean addActiveEntityEffect(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity);
-
-	void spellTick();
-
 	SoliniaEntitySpellEffects getActiveEntityEffects(LivingEntity entity);
 
 	void doNPCRandomChat();
-
-	void doNPCSpellCast();
 
 	Integer getNPCMana(LivingEntity bukkitLivingEntity, ISoliniaNPC npc);
 
@@ -44,8 +39,6 @@ public interface IEntityManager {
 
 	List<LivingEntity> getAllWorldPets();
 
-	LivingEntity SpawnPet(Player owner, ISoliniaSpell spell);
-
 	void clearEntityEffects(UUID uniqueId);
 
 	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter);
@@ -55,4 +48,13 @@ public interface IEntityManager {
 	boolean getTrance(UUID uuid);
 
 	void setTrance(UUID uuid, Boolean enabled);
+
+	LivingEntity SpawnPet(Plugin plugin, Player owner, ISoliniaSpell spell);
+
+	void spellTick(Plugin plugin);
+
+	boolean addActiveEntityEffect(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell,
+			LivingEntity sourceEntity);
+
+	void doNPCSpellCast(Plugin plugin);
 }

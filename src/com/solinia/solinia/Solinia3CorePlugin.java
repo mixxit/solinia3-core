@@ -253,7 +253,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			playerRegenTimer = new PlayerRegenTickTimer();
 			playerRegenTimer.runTaskTimer(this, 6*20L, 6*20L);
 			
-			spellTickTimer = new SpellTickTimer();
+			spellTickTimer = new SpellTickTimer(this);
 			spellTickTimer.runTaskTimer(this, 6*20L, 6*20L);
 			
 			playerInteractionTimer = new PlayerInteractionTimer();
@@ -268,7 +268,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			npcRandomChatTimer = new NPCRandomChatTimer();
 			npcRandomChatTimer.runTaskTimer(this, 6*20L, 60*20L);
 
-			npcSpellCastTimer = new NPCSpellCastTimer();
+			npcSpellCastTimer = new NPCSpellCastTimer(this);
 			npcSpellCastTimer.runTaskTimer(this, 6*20L, 6*20L);
 
 			petCheckTickTimer = new PetCheckTickTimer();

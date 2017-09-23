@@ -140,7 +140,6 @@ public class Utils {
 	public static int getPlayerTotalCountOfItemId(Player player, int itemid) {
 		int total = 0;
 
-		System.out.println("Getting total Count of Item Id: " + itemid + " for player: " + player.getDisplayName());
 		for (int i = 0; i < 36; i++) {
 			ItemStack itemstack = player.getInventory().getItem(i);
 			if (itemstack == null)
@@ -166,15 +165,12 @@ public class Utils {
 			}
 		}
 
-		System.out.println(
-				"Total Count of Item Id: " + itemid + " for player: " + player.getDisplayName() + " was " + total);
 		return total;
 	}
 
 	public static int removeItemsFromInventory(Player player, int itemid, int count) {
 		int removed = 0;
 		int remaining = count;
-		System.out.println("Removing " + count + " of Item Id: " + itemid + " for player: " + player.getDisplayName());
 		for (int i = 0; i < 36; i++) {
 			ItemStack itemstack = player.getInventory().getItem(i);
 			if (itemstack == null)
@@ -224,8 +220,6 @@ public class Utils {
 				itemstack.setAmount(0);
 			}
 		}
-
-		System.out.println("Removed " + removed + " of Item Id: " + itemid + " for player: " + player.getDisplayName());
 
 		player.updateInventory();
 		return removed;

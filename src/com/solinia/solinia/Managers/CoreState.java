@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 
 import com.earth2me.essentials.Essentials;
@@ -183,8 +184,8 @@ public class CoreState {
 		return false;
 	}
 
-	public void spellTick() {
-		entityManager.spellTick();
+	public void spellTick(Plugin plugin) {
+		entityManager.spellTick(plugin);
 	}
 
 	public ChatItemAPI getChatItem() {

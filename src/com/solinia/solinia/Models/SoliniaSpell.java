@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -2709,13 +2710,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	@Override
-	public boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity) {
+	public boolean tryApplyOnEntity(Plugin plugin, LivingEntity sourceEntity, LivingEntity targetentity) {
 		// Entity was targeted for this spell but is that the final location?
 		try {
 			switch(Utils.getSpellTargetType(getTargettype()))
 			{
 				case Self:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(sourceEntity,this,sourceEntity);
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, sourceEntity,this,sourceEntity);
 				case Pet:
 					if (sourceEntity instanceof Player)
 					{
@@ -2724,7 +2725,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						{
 							LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
 							if (pet != null) {
-								return StateManager.getInstance().getEntityManager().addActiveEntityEffect(pet,this,sourceEntity);
+								return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, pet,this,sourceEntity);
 							}
 						} catch (CoreStateInitException e)
 						{
@@ -2733,11 +2734,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 					}
 					return false;
 				case TargetOptional:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, targetentity,this,sourceEntity);
 				case Target:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, targetentity,this,sourceEntity);
 				case Tap:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(targetentity,this,sourceEntity);
+					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, targetentity,this,sourceEntity);
 				case TargetAETap:
 					// Get entities around entity and attempt to apply, if any are successful, return true
 					boolean tapsuccess = false;
@@ -2747,7 +2748,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,sourceEntity);
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, (LivingEntity)e,this,sourceEntity);
 						if (loopSuccess == true)
 							tapsuccess = true;
 					}
@@ -2761,7 +2762,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,sourceEntity);
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, (LivingEntity)e,this,sourceEntity);
 						if (loopSuccess == true)
 							success = true;
 					}
@@ -2775,7 +2776,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect((LivingEntity)e,this,sourceEntity);
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, (LivingEntity)e,this,sourceEntity);
 						if (loopSuccess == true)
 							successCaster = true;
 					}
@@ -3160,22 +3161,24 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return false;
 			}
 			
-			if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2))
+			if (effect.getSpellEffectType().equals(SpellEffectType.NecPet) || effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2))
 			{
 				// If the effect is teleport and the target is not a player then fail
 				if (!(target instanceof Player))
 					return false;
 				
-				if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet))
+				if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.NecPet))
 				{
-					System.out.println("Found pet spell");
 					try
 					{
-						System.out.println("Seeking pet npc: " + soliniaSpell.getTeleportZone());
 						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(soliniaSpell.getTeleportZone());
 						if (npc == null)
 						{
-							System.out.println("Pet npc not found");
+							return false;
+						}
+						if (npc.isPet() == false)
+						{
+							System.out.print("NPC " + soliniaSpell.getTeleportZone() + " is not defined as a pet");
 							return false;
 						}
 					} catch (CoreStateInitException e)

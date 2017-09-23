@@ -15,12 +15,17 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.Plugin;
+
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
@@ -94,13 +99,13 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public boolean addActiveEntityEffect(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
+	public boolean addActiveEntityEffect(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		
 		if (entitySpellEffects.get(targetEntity.getUniqueId()) == null)
 			entitySpellEffects.put(targetEntity.getUniqueId(), new SoliniaEntitySpellEffects(targetEntity));
 		
 		int duration = Utils.getDurationFromSpell(soliniaSpell);
-		return entitySpellEffects.get(targetEntity.getUniqueId()).addSpellEffect(soliniaSpell, sourceEntity, duration);
+		return entitySpellEffects.get(targetEntity.getUniqueId()).addSpellEffect(plugin, soliniaSpell, sourceEntity, duration);
 	}
 	
 	@Override
@@ -112,7 +117,7 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void spellTick() {
+	public void spellTick(Plugin plugin) {
 		List<UUID> uuidRemoval = new ArrayList<UUID>();
 		for (SoliniaEntitySpellEffects entityEffects : entitySpellEffects.values())
 		{
@@ -132,7 +137,7 @@ public class EntityManager implements IEntityManager {
 		
 		for(SoliniaEntitySpellEffects entityEffects : entitySpellEffects.values())
 		{
-			entityEffects.run();
+			entityEffects.run(plugin);
 		}
 	}
 
@@ -172,7 +177,7 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void doNPCSpellCast() {
+	public void doNPCSpellCast(Plugin plugin) {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
@@ -202,7 +207,7 @@ public class EntityManager implements IEntityManager {
 						continue;
 					
 					completedNpcsIds.add(solle.getNpcid());
-					solle.doSpellCast(c.getTarget());
+					solle.doSpellCast(plugin, c.getTarget());
 					
 				} catch (CoreStateInitException e) {
 					// TODO Auto-generated catch block
@@ -301,7 +306,7 @@ public class EntityManager implements IEntityManager {
 		return pets;
 	}
 	@Override
-	public LivingEntity SpawnPet(Player owner, ISoliniaSpell spell)
+	public LivingEntity SpawnPet(Plugin plugin, Player owner, ISoliniaSpell spell)
 	{
 		try
 		{
@@ -312,16 +317,22 @@ public class EntityManager implements IEntityManager {
 			}
 			
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(spell.getTeleportZone());
+			
+			if (npc.isPet() == false)
+				return null;
+			
 			if (npc == null)
 				return null;
 			
 			Wolf entity = (Wolf) owner.getWorld().spawnEntity(owner.getLocation(), EntityType.WOLF);
+			entity.setMetadata("mobname", new FixedMetadataValue(plugin, "NPCID_" + npc.getId()));
 			StateManager.getInstance().getEntityManager().setPet(owner,entity);
 			entity.setAdult();
 			entity.setTamed(true);
 			entity.setOwner(owner);
 			entity.setBreed(false);
-			entity.setCustomName(owner.getDisplayName() + "'s Pet");
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(owner);
+			entity.setCustomName(solplayer.getForename() + "'s Pet");
 			entity.setCustomNameVisible(true);
 			entity.setCanPickupItems(false);
 	        
