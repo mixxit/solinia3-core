@@ -53,6 +53,34 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (!(event.getEntity() instanceof Creature))
 			return;
 		
+		if ((event.getEntity() instanceof Wolf) && (event.getTarget() instanceof Creature))
+		{
+			// If this is a player pet and the target is an npc
+			if (Utils.isLivingEntityNPC((LivingEntity)event.getEntity()) && Utils.isLivingEntityNPC((LivingEntity)event.getTarget()))
+			{
+				try
+				{
+					ISoliniaLivingEntity pet = StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity)event.getEntity());
+					Creature letarget = (Creature)event.getTarget();
+					Wolf w = (Wolf)event.getEntity();
+					// If im a pet and my attack target is actively trying to kill something
+					if (pet.isPet() && (letarget.getTarget() != null))
+					{
+						// If my attack target is not trying to attack either me or my owner directly then refuse to target it
+						if (!letarget.getTarget().getUniqueId().equals(event.getEntity().getUniqueId()) && !letarget.getTarget().getUniqueId().equals(w.getOwner().getUniqueId()))
+						{
+							event.setCancelled(true);
+							return;
+						}
+					}
+					
+				} catch (CoreStateInitException e)
+				{
+					// carry on
+				}
+			}
+		}
+		
 		try
 		{
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity)event.getEntity());

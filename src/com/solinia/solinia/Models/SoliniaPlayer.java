@@ -11,6 +11,7 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -788,6 +789,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void setInteraction(UUID interaction) {
+		if (interaction == null)
+		{
+			this.interaction = interaction;
+			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are no longer interacting");
+			return;
+		}
+		
+		Entity e = Bukkit.getEntity(interaction);
+		if (e == null)
+			return;
+		
+		if (!(e instanceof LivingEntity))
+			return;
+		
 		if (Bukkit.getEntity(interaction) instanceof Wolf)
 		{
 			Wolf w = (Wolf)Bukkit.getEntity(interaction);
@@ -795,14 +810,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 		}
 		
-		if (interaction == null)
-		{
-			this.interaction = interaction;
-			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are no longer interacting");
-		} else {
-			this.interaction = interaction;
-			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName());
-		}
+		this.interaction = interaction;
+		this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName());
 	}
 
 	@Override
