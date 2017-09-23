@@ -744,7 +744,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			default:
 				if (getMerchantid() > 0)
 				{
-					solentity.say("I have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.RESET + "] available if you are interested in buying or selling something", triggerentity);
+					solentity.say("I have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA + "] available if you are interested in buying or selling something", triggerentity);
 				}
 
 				for(ISoliniaNPCEventHandler handler : getEventHandlers())
