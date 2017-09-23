@@ -954,6 +954,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (rank.getAbilityid() == 0)
 			return false;
 		
+		if (rank.getCost() == 0)
+			return false;
+		
 		if(rank.getCost() > getAAPoints()) 
 			return false;
 		
@@ -971,7 +974,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (!hasPreviousRanks(ability, rank))
 			return false;
 		
-		// TODO Prerequisites here
 		if (!hasPrerequisites(ability, rank))
 			return false;
 		

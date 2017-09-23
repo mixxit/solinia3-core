@@ -1,5 +1,7 @@
 package com.solinia.solinia.Commands;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,20 +38,40 @@ public class CommandAA implements CommandExecutor {
 
 				switch (args[0]) {
 				case "list":
-					for (ISoliniaAARank aarank : solplayer.getBuyableAARanks()) {
+					int pageno = 1;
+					if (args.length > 1)
+						pageno = Integer.parseInt(args[1]);
+					int sizePerPage = 10;
+					
+					List<ISoliniaAARank> aaranks = solplayer.getBuyableAARanks();
+					int from = Math.max(0,pageno*sizePerPage);
+					int to = Math.min(aaranks.size(),(pageno+1)*sizePerPage);
+
+					int counter = 0;
+					for (ISoliniaAARank aarank : aaranks) {
+						if(counter < from)
+						{
+							counter++;
+							continue;
+						}
+						
+						if (counter > to)
+						{
+							break;
+						}
+						
 						ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 								.getAAAbility(aarank.getAbilityid());
 						if (aaAbility != null)
 							if (aarank.getCost() <= solplayer.getAAPoints()) {
-								player.sendMessage(aaAbility.getName() + " Cost: " + aarank.getCost()
-										+ " AA points /aa buy " + aarank.getId());
-							} else {
-								player.sendMessage(ChatColor.GRAY + aaAbility.getName() + " Cost: " + aarank.getCost()
-										+ " (Insufficient points to buy)");
+								player.sendMessage(ChatColor.LIGHT_PURPLE + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost()
+										+ ChatColor.RESET + " AA points /aa buy " + aarank.getId());
 							}
-
+						
+						counter++;
 					}
-					player.sendMessage("End of available AA points list based on your current stacked up AA points");
+					player.sendMessage("Displayed Page " + ChatColor.GOLD + pageno + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil(aaranks.size() / sizePerPage) + ChatColor.RESET + " (See /aa list <pageno>");
+					player.sendMessage("More items may appear when you have more AA points available to spend");
 					break;
 				case "give":
 					if (args.length < 3) {
