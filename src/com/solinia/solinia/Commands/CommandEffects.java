@@ -48,7 +48,10 @@ public class CommandEffects implements CommandExecutor {
 		            	player.sendMessage("- Spell: " + spellcolor + spell.getName() + ChatColor.RESET + " " + effect.getTicksLeft() + " ticks left - " + removetext);
 		            }
 	            } else {
-	            	int spellid = Integer.parseInt(args[0]);
+	            	if (args.length < 2)
+	            		return true;
+	            	
+	            	int spellid = Integer.parseInt(args[1]);
 	            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellid);
 	            	if (spell == null)
 	            	{

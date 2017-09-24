@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -93,9 +94,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
-	public void modifyDamageEvent(LivingEntity damager, EntityDamageByEntityEvent event) {
-		
-		
+	public void modifyDamageEvent(Plugin plugin, LivingEntity damager, EntityDamageByEntityEvent event) {
 		LivingEntity attacker = damager;
 		
 		// Change attacker to archer
@@ -131,30 +130,84 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	            for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
 	            {
 	            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
-	            	if (spell.isDamageShield())
-	            	{
-	            		for(SpellEffect spelleffect : spell.getSpellEffects())
-	            		{
-	            			if (spelleffect.getSpellEffectType().equals(SpellEffectType.DamageShield))
-	            			{
-	            				// hurt enemy with damage shield
-	            				if (spelleffect.getBase() < 0)
-	            				{
-	            					EntityDamageSource source = new EntityDamageSource("thorns", ((CraftEntity)getBukkitLivingEntity()).getHandle());
-	            					source.setMagic();
-	            					source.ignoresArmor();
-	            					
-	            					((CraftEntity)attacker).getHandle().damageEntity(source, spelleffect.getBase() * -1);
-	            					//attacker.damage(spelleffect.getBase() * -1);
-	            				}
-	            			}
-	            		}
-	            	}
+	            	
+	            	if (spell == null)
+	            		continue;
+	            	
+	            	if (!spell.isDamageShield())
+	            		continue;
+	            	
+	            	for(SpellEffect spelleffect : spell.getSpellEffects())
+            		{
+            			if (spelleffect.getSpellEffectType().equals(SpellEffectType.DamageShield))
+            			{
+            				// hurt enemy with damage shield
+            				if (spelleffect.getBase() < 0)
+            				{
+            					EntityDamageSource source = new EntityDamageSource("thorns", ((CraftEntity)getBukkitLivingEntity()).getHandle());
+            					source.setMagic();
+            					source.ignoresArmor();
+            					
+            					((CraftEntity)attacker).getHandle().damageEntity(source, spelleffect.getBase() * -1);
+            					//attacker.damage(spelleffect.getBase() * -1);
+            				}
+            			}
+            		}
 	            }
             }
 		} catch (CoreStateInitException e)
 		{
 			return;
+		}
+		
+		// WeaponProc Spell Effects
+		try
+		{
+			// Check if attacker has any WeaponProc effects
+			SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager().getActiveEntityEffects(attacker);
+            
+            if (effects != null && (!(event.getDamager() instanceof Arrow)))
+            {
+	            for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
+	            {
+	            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
+	            	if (spell == null)
+	            		continue;
+	            	
+	            	if (!spell.isWeaponProc())
+	            		continue;
+	            	
+	            	for(SpellEffect spelleffect : spell.getSpellEffects())
+            		{
+            			if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc))
+            			{
+            				if (spelleffect.getBase() < 0)
+            					continue;
+            				
+            				ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager().getSpell(spelleffect.getBase());
+            				if (spell == null)
+            					continue;
+            				
+            				// Chance to proc
+            				int procChance = SoliniaLivingEntityAdapter.Adapt(attacker).getProcChancePct();
+            				int roll = Utils.RandomBetween(0, 100);
+            				
+            				if (roll < procChance)
+            				{
+	            				boolean itemUseSuccess = procSpell.tryApplyOnEntity(plugin, attacker, this.getBukkitLivingEntity());
+	            				
+	            				if (procSpell.getMana() > 0)
+	            				if (itemUseSuccess && (attacker instanceof LivingEntity)) {
+	            					SoliniaPlayerAdapter.Adapt((Player)attacker).reducePlayerMana(procSpell.getMana());
+	            				}    
+            				}
+            			}
+            		}
+	            }
+            }		
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 		
 		// Validate attackers weapon (player only)
@@ -757,5 +810,41 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public int getProcChancePct() {
+		// (Dexterity / 35) / 25
+		int dexterity = 75;
+		if (this.getBukkitLivingEntity() instanceof Player)
+		{
+			try {
+				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+				if (player != null)
+					dexterity = player.getDexterity();
+				
+				System.out.println("Player proc dex is: " + dexterity);
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		
+		if (this.getNpcid() > 0)
+		{
+			try {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+				if (npc != null)
+					dexterity = npc.getDexterity();
+				
+				System.out.println("NPC proc dex is: " + dexterity);
+			} catch (CoreStateInitException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		float dexdiv = (dexterity / 35);
+		float fina = ((dexdiv / 25) * 100);
+		return (int)Math.floor(fina);
 	}
 }

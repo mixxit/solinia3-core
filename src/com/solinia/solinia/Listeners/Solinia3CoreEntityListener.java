@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
@@ -141,10 +142,12 @@ public class Solinia3CoreEntityListener implements Listener {
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
 		
 		if (damagecause.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
-			
+			// Never forward magic spell damage (cause thorns) to melee damage calculation code
+			if (event.getCause().equals(DamageCause.THORNS))
+				return;
 			try {
 				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-				soliniaEntity.modifyDamageEvent((LivingEntity)damagecause.getDamager(), damagecause);
+				soliniaEntity.modifyDamageEvent(this.plugin, (LivingEntity)damagecause.getDamager(), damagecause);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

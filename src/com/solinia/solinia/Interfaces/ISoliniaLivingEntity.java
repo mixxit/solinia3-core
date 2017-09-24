@@ -12,7 +12,7 @@ public interface ISoliniaLivingEntity
 {
 	public LivingEntity getBukkitLivingEntity();
 
-	public void modifyDamageEvent(LivingEntity damager, EntityDamageByEntityEvent damagecause);
+	public void modifyDamageEvent(Plugin plugin, LivingEntity damager, EntityDamageByEntityEvent damagecause);
 	
 	public boolean isPet();
 
@@ -47,4 +47,6 @@ public interface ISoliniaLivingEntity
 	void say(String message, LivingEntity messageto);
 
 	void doSpellCast(Plugin plugin, LivingEntity livingEntity);
+
+	public int getProcChancePct();
 }

@@ -60,7 +60,10 @@ public class SoliniaEntitySpellEffects {
 		try
 		{
 			if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),sourceEntity,soliniaSpell))
+			{
+				System.out.println("Spell: " + soliniaSpell.getName() + " found to have invalid target");
 				return false;
+			}
 		} catch (CoreStateInitException e)
 		{
 			return false;

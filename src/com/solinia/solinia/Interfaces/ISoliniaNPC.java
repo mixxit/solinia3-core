@@ -115,8 +115,6 @@ public interface ISoliniaNPC {
 
 	int getMaxHP();
 
-	void sendMerchantItemListToPlayer(Player player);
-
 	boolean isRandomSpawn();
 
 	void setRandomSpawn(boolean isRandomSpawn);
@@ -169,4 +167,6 @@ public interface ISoliniaNPC {
 	void processChatInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, String data);
 
 	void addEventHandler(SoliniaNPCEventHandler eventhandler);
+
+	void sendMerchantItemListToPlayer(Player player, int pageno);
 }

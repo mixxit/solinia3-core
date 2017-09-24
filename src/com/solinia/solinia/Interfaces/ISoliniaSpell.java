@@ -1025,4 +1025,6 @@ public interface ISoliniaSpell {
 
 	boolean tryApplyOnEntity(Plugin plugin, LivingEntity sourceEntity, LivingEntity targetentity);
 
+	boolean isWeaponProc();
+
 }

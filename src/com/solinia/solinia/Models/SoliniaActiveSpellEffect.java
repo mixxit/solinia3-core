@@ -332,8 +332,9 @@ public class SoliniaActiveSpellEffect {
 			return;
 		case TossUp
 			: return;
-		case WeaponProc
-			: return;
+		case WeaponProc: 
+			applyProc(spellEffect, soliniaSpell);
+			return;
 		case Harmony
 			: return;
 		case MagnifyVision
@@ -1125,6 +1126,10 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
+	private void applyProc(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		// do nothing, this occurs during attack events
+	}
+
 	private void applyVision(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6 * 20, 1));
 	}
@@ -1142,7 +1147,7 @@ public class SoliniaActiveSpellEffect {
 			Disguise dis = DisguiseAPI.getDisguise(getLivingEntity());
 			if (dis instanceof PlayerDisguise)
 			{
-				if (disguise.getDisguisedata() != null && !disguise.equals(""))
+				if (disguise.getDisguisedata() != null && !disguise.getDisguisedata().equals(""))
 				{
 					if (((PlayerDisguise)dis).getSkin().equals(disguise.getDisguisedata()))
 						return;

@@ -2,11 +2,15 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.Nameable;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.plugin.Plugin;
 
 import com.google.gson.annotations.Expose;
@@ -15,8 +19,10 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.SpellTargetType;
@@ -2767,6 +2773,35 @@ public class SoliniaSpell implements ISoliniaSpell {
 							success = true;
 					}
 					return success;
+				case Group:
+					boolean successGroup = false;
+					
+					if (!(sourceEntity instanceof Player))
+						return false;
+					
+					ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sourceEntity);
+					ISoliniaGroup group = player.getGroup();
+					
+					boolean selfSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, sourceEntity,this,sourceEntity);
+					if (selfSuccess == true)
+						successGroup = true;
+
+					if (group != null)
+					{
+						for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10))
+						{
+							if (!(e instanceof Player))
+								continue;
+							
+							if (group.getMembers().contains(e.getUniqueId()))
+							{
+								boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, (LivingEntity)e,this,sourceEntity);
+								if (loopSuccess == true)
+									successGroup = true;
+							}
+						}
+					}
+					return successGroup;
 				case AECaster:
 					// Get entities around caster and attempt to apply, if any are successful, return true
 					boolean successCaster = false;
@@ -3123,6 +3158,22 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (target == null)
 			return false;
 		
+		// Try not to kill potentially friendly player tameables with hostile spells
+		if (target instanceof Tameable && target instanceof Creature && !soliniaSpell.isBeneficial())
+		{
+			Tameable t = (Tameable)target;
+			Creature cr = (Creature)target;
+			if (t.getOwner() != null)
+			{
+				if (cr.getTarget() == null) 
+					return false;
+				
+				if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
+					return false;
+			}
+
+		}
+		
 		for(SpellEffect effect : soliniaSpell.getSpellEffects())
 		{
 			// Validate spelleffecttype rules
@@ -3414,6 +3465,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (CureEffect && !isBeneficial())
 			return true;
 
+		return false;
+	}
+
+	@Override
+	public boolean isWeaponProc() {
+		if (isEffectInSpell(SpellEffectType.WeaponProc))
+		{
+			return true;
+		}
 		return false;
 	}
 

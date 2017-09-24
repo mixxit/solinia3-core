@@ -1,6 +1,8 @@
 package com.solinia.solinia.Commands;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -42,24 +44,13 @@ public class CommandAA implements CommandExecutor {
 					if (args.length > 1)
 						pageno = Integer.parseInt(args[1]);
 					int sizePerPage = 10;
+					List<ISoliniaAARank> fullaaranks = solplayer.getBuyableAARanks();
+					List<ISoliniaAARank> aaranks = fullaaranks.stream()
+							  .skip(pageno * sizePerPage)
+							  .limit(sizePerPage)
+							  .collect(Collectors.toCollection(ArrayList::new));
 					
-					List<ISoliniaAARank> aaranks = solplayer.getBuyableAARanks();
-					int from = Math.max(0,pageno*sizePerPage);
-					int to = Math.min(aaranks.size(),(pageno+1)*sizePerPage);
-
-					int counter = 0;
 					for (ISoliniaAARank aarank : aaranks) {
-						if(counter < from)
-						{
-							counter++;
-							continue;
-						}
-						
-						if (counter > to)
-						{
-							break;
-						}
-						
 						ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 								.getAAAbility(aarank.getAbilityid());
 						if (aaAbility != null)
@@ -67,10 +58,8 @@ public class CommandAA implements CommandExecutor {
 								player.sendMessage(ChatColor.LIGHT_PURPLE + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost()
 										+ ChatColor.RESET + " AA points /aa buy " + aarank.getId());
 							}
-						
-						counter++;
 					}
-					player.sendMessage("Displayed Page " + ChatColor.GOLD + pageno + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil(aaranks.size() / sizePerPage) + ChatColor.RESET + " (See /aa list <pageno>");
+					player.sendMessage("Displayed Page " + ChatColor.GOLD + pageno + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil(fullaaranks.size() / sizePerPage) + ChatColor.RESET + " (See /aa list <pageno>");
 					player.sendMessage("More items may appear when you have more AA points available to spend");
 					break;
 				case "give":
@@ -93,6 +82,12 @@ public class CommandAA implements CommandExecutor {
 					}
 					
 					int newpoints = Integer.parseInt(args[2]);
+					
+					if (newpoints < 1)
+					{
+						player.sendMessage("Too few points never give them less than 1");
+						return true;
+					}
 					
 					if (newpoints > 5)
 					{

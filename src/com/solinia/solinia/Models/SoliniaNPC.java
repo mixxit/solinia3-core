@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -291,13 +293,21 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public void sendMerchantItemListToPlayer(Player player) 
+	public void sendMerchantItemListToPlayer(Player player, int pageno) 
 	{
 		String debugLastJson = "";
 		try
 		{
-			for (ISoliniaNPCMerchantEntry merchantitem : StateManager.getInstance().getConfigurationManager()
-					.getNPCMerchant(this.getMerchantid()).getEntries()) {
+			int sizePerPage = 10;
+			
+			List<ISoliniaNPCMerchantEntry> fullmerchantentries = StateManager.getInstance().getConfigurationManager()
+					.getNPCMerchant(this.getMerchantid()).getEntries();
+			List<ISoliniaNPCMerchantEntry> merchantentries = fullmerchantentries.stream()
+					  .skip(pageno * sizePerPage)
+					  .limit(sizePerPage)
+					  .collect(Collectors.toCollection(ArrayList::new));
+			
+			for (ISoliniaNPCMerchantEntry merchantitem : merchantentries) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(merchantitem.getItemid());
 				int price = item.getWorth();
 	
@@ -314,7 +324,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 						+ merchantitem.getItemid() + " 64\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
 						+ item.asJsonStringEscaped() + "\"}}";
 				player.spigot().sendMessage(ComponentSerializer.parse(jsonbuy64));
-	
 			}
 	
 			for (int i = 0; i < 36; i++) {
@@ -353,6 +362,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 					player.spigot().sendMessage(ComponentSerializer.parse(jsonsellmany));
 				}
 			}
+			
+			player.sendMessage("Displayed Page " + ChatColor.GOLD + pageno + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil(fullmerchantentries.size() / sizePerPage) + ChatColor.RESET + " (See SHOP <pageno>");
+
 		} catch (CoreStateInitException e)
 		{
 			e.printStackTrace();
@@ -732,34 +744,59 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void processChatInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, String data)
 	{
-		switch(data.toUpperCase())
+		String words[] = data.split(" ");
+		
+		// Merchant special commands
+		if (words.length > 0)
 		{
-			case "SHOP":
-				if (triggerentity instanceof Player)
-				if (getMerchantid() > 0)
-				{
-					sendMerchantItemListToPlayer((Player)triggerentity);
-				}
-			// for everything else, seek a chat event handler
-			default:
-				for(ISoliniaNPCEventHandler handler : getEventHandlers())
-				{
-					if (!handler.getInteractiontype().equals(InteractionType.CHAT))
-						continue;
-					
-					if (!data.toUpperCase().contains(handler.getTriggerdata().toUpperCase()))
-						continue;
-					
-					
-					
-					if (handler.getChatresponse() != null && !handler.getChatresponse().equals(""))
+			switch(words[0].toUpperCase())
+			{
+				case "SHOP":
+					if (triggerentity instanceof Player)
+					if (getMerchantid() > 0)
 					{
-						String response = handler.getChatresponse();
-						solentity.say(replaceChatWordsWithHints(response),triggerentity);					
+						if (words.length == 1)
+						{
+							sendMerchantItemListToPlayer((Player)triggerentity, 1);
+							return;
+						}
+						
+						int page = 1;
+						try
+						{
+							page = Integer.parseInt(words[1]);
+						} catch (Exception e)
+						{
+							
+						}
+						
+						if (page < 1)
+							page = 1;
+						
+						sendMerchantItemListToPlayer((Player)triggerentity, page);
 					}
-				}
-				return;
+					return;
+				default:
+					break;
+			}
 		}
+		
+		// Normal text matching
+		for(ISoliniaNPCEventHandler handler : getEventHandlers())
+		{
+			if (!handler.getInteractiontype().equals(InteractionType.CHAT))
+				continue;
+			
+			if (!data.toUpperCase().contains(handler.getTriggerdata().toUpperCase()))
+				continue;
+			
+			if (handler.getChatresponse() != null && !handler.getChatresponse().equals(""))
+			{
+				String response = handler.getChatresponse();
+				solentity.say(replaceChatWordsWithHints(response),triggerentity);					
+			}
+		}
+		return;
 	}
 	
 	public String replaceChatWordsWithHints(String message)
