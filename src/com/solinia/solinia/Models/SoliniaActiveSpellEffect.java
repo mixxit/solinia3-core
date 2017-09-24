@@ -1167,7 +1167,7 @@ public class SoliniaActiveSpellEffect {
 			{
 				String disguisename = disguise.getDisguisedata();
 				if (disguisename == null || disguisename.equals(""))
-					disguisename = "AyatoSenpai";
+					disguisename = "RomanPraetor";
 				
 				PlayerDisguise playerdisguise = new PlayerDisguise(getLivingEntity().getName(), disguisename);
 				DisguiseAPI.disguiseEntity(getLivingEntity(), playerdisguise);

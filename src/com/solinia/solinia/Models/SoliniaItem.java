@@ -500,6 +500,12 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- wisdom: " + ChatColor.GOLD + getWisdom() + ChatColor.RESET);
 		sender.sendMessage("- charisma: " + ChatColor.GOLD + getCharisma() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- magicresist: " + ChatColor.GOLD + getMagicResist() + ChatColor.RESET);
+		sender.sendMessage("- coldresist: " + ChatColor.GOLD + getColdResist() + ChatColor.RESET);
+		sender.sendMessage("- fireresist: " + ChatColor.GOLD + getFireResist() + ChatColor.RESET);
+		sender.sendMessage("- diseaseresist: " + ChatColor.GOLD + getDiseaseResist() + ChatColor.RESET);
+		sender.sendMessage("- poisonresist: " + ChatColor.GOLD + getPoisonResist() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
 		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpregen() + ChatColor.RESET);
 		sender.sendMessage("- mpregen: " + ChatColor.GOLD + getMpregen() + ChatColor.RESET);
 	}
@@ -553,8 +559,20 @@ public class SoliniaItem implements ISoliniaItem {
 		case "charisma":
 			setCharisma(Integer.parseInt(value));
 			break;
-		case "abilityid":
-			setAbilityid(Integer.parseInt(value));
+		case "magicresist":
+			setMagicResist(Integer.parseInt(value));
+			break;
+		case "coldresist":
+			setColdResist(Integer.parseInt(value));
+			break;
+		case "fireresist":
+			setFireResist(Integer.parseInt(value));
+			break;
+		case "diseaseresist":
+			setDiseaseResist(Integer.parseInt(value));
+			break;
+		case "poisonresist":
+			setPoisonResist(Integer.parseInt(value));
 			break;
 		default:
 			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid");

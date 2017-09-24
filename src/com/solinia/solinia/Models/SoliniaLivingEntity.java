@@ -822,8 +822,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
 				if (player != null)
 					dexterity = player.getDexterity();
-				
-				System.out.println("Player proc dex is: " + dexterity);
 			} catch (CoreStateInitException e)
 			{
 				
@@ -836,8 +834,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 				if (npc != null)
 					dexterity = npc.getDexterity();
-				
-				System.out.println("NPC proc dex is: " + dexterity);
 			} catch (CoreStateInitException e)
 			{
 				e.printStackTrace();
