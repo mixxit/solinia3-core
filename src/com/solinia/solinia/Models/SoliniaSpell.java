@@ -3128,9 +3128,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 			// Validate spelleffecttype rules
 			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) || effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce))
 			{
-				// If the effect is negative standard nuke and on self, cancel out
-				if (effect.getBase() < 0 && target.equals(source))
-					return false;
+				// Ignore this rule if the spell is self
+				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
+				{
+					// If the effect is negative standard nuke and on self, cancel out
+					if (effect.getBase() < 0 && target.equals(source))
+						return false;
+				}
 			}
 
 			if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll) || 

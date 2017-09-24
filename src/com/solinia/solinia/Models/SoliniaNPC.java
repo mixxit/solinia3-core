@@ -774,8 +774,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			
 			message = message.toLowerCase().replace(handler.getTriggerdata().toLowerCase(), "["+handler.getTriggerdata().toLowerCase()+"]");
 		}
-		message = message.replace("[", ChatColor.LIGHT_PURPLE + "[");
-		message = message.replace("]", "]" + ChatColor.AQUA);
+		message = message.replace("[", "[" + ChatColor.LIGHT_PURPLE);
+		message = message.replace("]", ChatColor.AQUA + "]");
 		return message.toLowerCase();
 	}
 

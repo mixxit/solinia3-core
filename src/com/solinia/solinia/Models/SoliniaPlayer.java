@@ -815,13 +815,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (npc != null)
 		{
-			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName() + " [" + npc.getId() + "]");
+			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName() + " [" + npc.getId() + "] - Anything you type will be heared by the NPC and possibly responded to. Words in pink are trigger words you can type");
 
 			if (npc.getMerchantid() > 0)
 			{
 				try
 				{
-					StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity)e).say("I have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA + "] available if you are interested in buying or selling something", getBukkitPlayer());
+					StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity)e).say("i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA + "] available if you are interested in buying or selling something", getBukkitPlayer());
 				} catch (CoreStateInitException cse)
 				{
 					//

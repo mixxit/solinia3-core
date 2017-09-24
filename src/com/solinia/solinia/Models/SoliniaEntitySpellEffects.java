@@ -18,6 +18,8 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Utils.Utils;
+
+import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaEntitySpellEffects {
@@ -123,11 +125,50 @@ public class SoliniaEntitySpellEffects {
 			activeSpells.get(soliniaSpell.getId()).setFirstRun(false);
 		return true;
 	}
+	
+	public void removeActiveSpell(Integer spellId)
+	{
+		// Effect has worn off
+		SoliniaActiveSpellEffect activeSpellEffect = activeSpells.get(spellId);
+		
+		// Handle any effect removals needed
+		for(SpellEffect effect : activeSpellEffect.getSpell().getSpellEffects())
+		{
+			switch(effect.getSpellEffectType())
+			{
+				case Illusion:
+				case IllusionCopy:
+				case IllusionOther:
+				case IllusionPersistence:
+				case IllusionaryTarget:
+					if (getLivingEntity() != null)
+						DisguiseAPI.undisguiseToAll(getLivingEntity());
+				break;
+			}
+		}
+		
+		activeSpells.remove(spellId);
+	}
+	
+	public void removeAllActiveSpells()
+	{
+		List<Integer> removeSpells = new ArrayList<Integer>();
+		for(SoliniaActiveSpellEffect activeSpellEffect : getActiveSpells())
+		{
+			removeSpells.add(activeSpellEffect.getSpellId());
+		}
+		
+		for(Integer spellId : removeSpells)
+		{
+			removeActiveSpell(spellId);
+		}
+	}
 
 	public void run(Plugin plugin) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		List<SoliniaActiveSpellEffect> updateSpells = new ArrayList<SoliniaActiveSpellEffect>();
 		
+		if (!getLivingEntity().isDead())
 		for(SoliniaActiveSpellEffect activeSpellEffect : getActiveSpells())
 		{
 			if (activeSpellEffect.getTicksLeft() == 0)
@@ -144,7 +185,7 @@ public class SoliniaEntitySpellEffects {
 		
 		for(Integer spellId : removeSpells)
 		{
-			activeSpells.remove(spellId);
+			removeActiveSpell(spellId);
 		}
 		
 		for(SoliniaActiveSpellEffect effect : updateSpells)
@@ -172,7 +213,7 @@ public class SoliniaEntitySpellEffects {
 		
 		for(Integer spellId : removeSpells)
 		{
-			activeSpells.remove(spellId);
+			removeActiveSpell(spellId);
 		}
 		
 		for(SoliniaActiveSpellEffect effect : updateSpells)

@@ -57,4 +57,6 @@ public interface IEntityManager {
 			LivingEntity sourceEntity);
 
 	void doNPCSpellCast(Plugin plugin);
+
+	void removeSpellEffects(UUID uuid);
 }

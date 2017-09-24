@@ -126,11 +126,14 @@ public class EntityManager implements IEntityManager {
 			{
 				uuidRemoval.add(entityEffects.getLivingEntityUUID());
 			}
+			
+			if (entity.isDead())
+				uuidRemoval.add(entityEffects.getLivingEntityUUID());
 		}
 		
 		for(UUID uuid : uuidRemoval)
 		{
-			entitySpellEffects.remove(uuid);
+			removeSpellEffects(uuid);
 		}
 		
 		
@@ -138,6 +141,15 @@ public class EntityManager implements IEntityManager {
 		{
 			entityEffects.run(plugin);
 		}
+	}
+	
+	@Override 
+	public void removeSpellEffects(UUID uuid)
+	{
+		if (entitySpellEffects.get(uuid) != null)
+			entitySpellEffects.get(uuid).removeAllActiveSpells();
+		
+		entitySpellEffects.remove(uuid);
 	}
 
 	@Override
@@ -334,8 +346,6 @@ public class EntityManager implements IEntityManager {
 			entity.setCustomName(solplayer.getForename() + "'s Pet");
 			entity.setCustomNameVisible(true);
 			entity.setCanPickupItems(false);
-	        
-			// TODO Use Illusion here with the npcs type
 			
 			entity.setMaxHealth(npc.getMaxHP());
 			entity.setHealth(npc.getMaxHP());
@@ -407,7 +417,7 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void clearEntityEffects(UUID uniqueId) {
 		if (entitySpellEffects.get(uniqueId) != null)
-			entitySpellEffects.remove(uniqueId);
+			removeSpellEffects(uniqueId);
 	}
 
 	@Override

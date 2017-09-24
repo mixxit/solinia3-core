@@ -25,7 +25,11 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaActiveSpellEffect {
@@ -261,8 +265,9 @@ public class SoliniaActiveSpellEffect {
 		case Levitate: 
 			applyLevitateSpellEffect(spellEffect,soliniaSpell);
 			return;
-		case Illusion
-			: return;
+		case Illusion: 
+			applyIllusion(spellEffect,soliniaSpell);
+			return;
 		case DamageShield: 
 			// This is passive
 			return;
@@ -277,10 +282,12 @@ public class SoliniaActiveSpellEffect {
 			return;
 		case SpinTarget
 			: return;
-		case InfraVision
-			: return;
-		case UltraVision
-			: return;
+		case InfraVision: 
+			applyVision(spellEffect,soliniaSpell);
+			return;
+		case UltraVision: 
+			applyVision(spellEffect,soliniaSpell);
+			return;
 		case EyeOfZomm
 			: return;
 		case ReclaimPet
@@ -466,8 +473,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case SpellCritDmgIncrease
 			: return;
-		case IllusionCopy
-			: return;
+		case IllusionCopy: 
+			applyIllusion(spellEffect,soliniaSpell);
+			return;
 		case SpellDamageShield
 			: return;
 		case Reflect
@@ -562,8 +570,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case RangedProc
 			: return;
-		case IllusionOther
-			: return;
+		case IllusionOther: 
+			applyIllusion(spellEffect,soliniaSpell);
+			return;
 		case MassGroupBuff
 			: return;
 		case GroupFearImmunity
@@ -634,8 +643,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case GivePetGroupTarget
 			: return;
-		case IllusionPersistence
-			: return;
+		case IllusionPersistence: 
+			applyIllusion(spellEffect,soliniaSpell);
+			return;
 		case FeignedCastOnChance
 			: return;
 		case StringUnbreakable
@@ -830,8 +840,9 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case BlockNextSpellFocus
 			: return;
-		case IllusionaryTarget
-			: return;
+		case IllusionaryTarget: 
+			applyIllusion(spellEffect,soliniaSpell);
+			return;
 		case PercentXPIncrease
 			: return;
 		case SummonAndResAllCorpses
@@ -1109,6 +1120,28 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
+	private void applyVision(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6 * 20, 1));
+	}
+
+	private void applyIllusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		DisguisePackage disguise = Utils.getDisguiseTypeFromDisguiseId(spellEffect.getBase());
+		if (disguise.getDisguisetype() == null || disguise.getDisguisetype() == null || disguise.getDisguisetype().equals(DisguiseType.UNKNOWN))
+		{
+			System.out.println("Could not find illusion: " + spellEffect.getBase());
+			return;
+		}
+		
+		if (DisguiseAPI.isDisguised(getLivingEntity()))
+		{
+			// already disguised
+			return;
+		}
+		
+		MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
+		DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
+	}
+
 	private void applySummonPet(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
 		if (!isOwnerPlayer())
 			return;
@@ -1362,6 +1395,9 @@ public class SoliniaActiveSpellEffect {
 	}
 
 	private void applyCurrentHpOnceSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+		if (getLivingEntity().isDead())
+			return;
+		
 		int hpToRemove = spellEffect.getBase();
 		
 		// Damage

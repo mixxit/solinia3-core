@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -65,6 +66,8 @@ public class Solinia3CoreEntityListener implements Listener {
 					return;
 				}
 				
+				// This is where wolves cancel their attacks against all skeletons
+				// If the skeleton in question has hurt their master then it will set its target as normal
 				if(event.getTarget().getLastDamageCause() instanceof EntityDamageByEntityEvent)
 				{
 					EntityDamageByEntityEvent dmgByEntity = (EntityDamageByEntityEvent) event.getTarget().getLastDamageCause();
@@ -74,7 +77,19 @@ public class Solinia3CoreEntityListener implements Listener {
 						return;
 					}
 					
-					if (!(dmgByEntity.getDamager() instanceof Player))
+					Entity attacker = dmgByEntity.getDamager();
+					
+					if (dmgByEntity.getDamager() instanceof Arrow)
+					{
+						Arrow arr = (Arrow)dmgByEntity.getDamager();
+						if (arr.getShooter() instanceof LivingEntity)
+						{
+							attacker = (LivingEntity)arr.getShooter();
+						} else {
+						}
+					} 
+					
+					if (!(attacker instanceof Player))
 					{
 						event.setCancelled(true);
 						return;
@@ -82,7 +97,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					
 					if (
 							(event.getTarget().getLastDamageCause().getEntity() instanceof Player) && 
-							!(w.getOwner().getUniqueId().equals(dmgByEntity.getDamager().getUniqueId()))
+							!(w.getOwner().getUniqueId().equals(attacker.getUniqueId()))
 							)
 					{
 						event.setCancelled(true);

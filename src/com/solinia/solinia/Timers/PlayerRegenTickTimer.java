@@ -35,6 +35,9 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 	}
 
 	private void grantPlayerRegenBonuses(Player player) {
+		if (player.isDead())
+			return;
+		
 		// Apply Crouch Mana Regen Bonus
 		int manaregen = 1;
 		
