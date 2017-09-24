@@ -202,8 +202,6 @@ public class Solinia3CoreEntityListener implements Listener {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		// TODO - Temporary reward
-		
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 

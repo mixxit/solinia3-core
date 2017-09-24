@@ -125,10 +125,10 @@ public class EntityManager implements IEntityManager {
 			if (entity == null)
 			{
 				uuidRemoval.add(entityEffects.getLivingEntityUUID());
+			} else {
+				if (entity.isDead())
+					uuidRemoval.add(entityEffects.getLivingEntityUUID());
 			}
-			
-			if (entity.isDead())
-				uuidRemoval.add(entityEffects.getLivingEntityUUID());
 		}
 		
 		for(UUID uuid : uuidRemoval)
@@ -151,7 +151,14 @@ public class EntityManager implements IEntityManager {
 		
 		entitySpellEffects.remove(uuid);
 	}
-
+	
+	@Override 
+	public void removeSpellEffectsOfSpellId(UUID uuid, int spellId)
+	{
+		if (entitySpellEffects.get(uuid) != null)
+			entitySpellEffects.get(uuid).removeAllActiveSpellsOfId(spellId);
+	}
+	
 	@Override
 	public void doNPCRandomChat() {
 		System.out.println("NPC Random Chat Tick");

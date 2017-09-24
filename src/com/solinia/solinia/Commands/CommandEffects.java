@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandEffects implements CommandExecutor {
 
 	@Override
@@ -26,12 +28,43 @@ public class CommandEffects implements CommandExecutor {
 	            if (effects == null)
 	            	return true;
 	            
-	            player.sendMessage("Active Spell Effects on you:");
-	            
-	            for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
+	            if (args.length == 0)
 	            {
-	            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
-	            	player.sendMessage("- Spell: " + spell.getName() + " " + effect.getTicksLeft() + " ticks left");
+		            player.sendMessage(ChatColor.GOLD + "Active Spell Effects on you:" + ChatColor.WHITE);
+		            
+		            for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
+		            {
+		            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
+		            	String removetext = "";
+		            	ChatColor spellcolor = ChatColor.GREEN;
+		            	if (spell.isBeneficial())
+		            	{
+		            		removetext = "/effects remove " + spell.getId();
+		            	} else {
+		            		removetext = "Unremovable spell";
+		            		spellcolor = ChatColor.RED;
+		            	}
+		            	
+		            	player.sendMessage("- Spell: " + spellcolor + spell.getName() + ChatColor.RESET + " " + effect.getTicksLeft() + " ticks left - " + removetext);
+		            }
+	            } else {
+	            	int spellid = Integer.parseInt(args[0]);
+	            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellid);
+	            	if (spell == null)
+	            	{
+	            		player.sendMessage("That spell does not exist");
+	            		return true;
+	            	}
+	            	
+	            	StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(player.getUniqueId(), spell.getId());
+	            	
+	            	if (!spell.isBeneficial())
+	            	{
+	            		player.sendMessage("Can only remove beneficial spells");
+	            		return true;
+	            	}
+	            	
+	            	player.sendMessage("Spell Effect removed");
 	            }
 	            
             } catch (CoreStateInitException e)

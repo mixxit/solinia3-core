@@ -59,4 +59,6 @@ public interface IEntityManager {
 	void doNPCSpellCast(Plugin plugin);
 
 	void removeSpellEffects(UUID uuid);
+
+	void removeSpellEffectsOfSpellId(UUID uuid, int spellId);
 }

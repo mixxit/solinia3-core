@@ -122,7 +122,10 @@ public class SoliniaEntitySpellEffects {
 		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 		
 		if (duration > 0)
-			activeSpells.get(soliniaSpell.getId()).setFirstRun(false);
+		{
+			if (activeSpells.get(soliniaSpell.getId()) != null)
+				activeSpells.get(soliniaSpell.getId()).setFirstRun(false);
+		}
 		return true;
 	}
 	
@@ -130,6 +133,9 @@ public class SoliniaEntitySpellEffects {
 	{
 		// Effect has worn off
 		SoliniaActiveSpellEffect activeSpellEffect = activeSpells.get(spellId);
+		
+		if (activeSpellEffect == null)
+			return;
 		
 		// Handle any effect removals needed
 		for(SpellEffect effect : activeSpellEffect.getSpell().getSpellEffects())
@@ -221,5 +227,9 @@ public class SoliniaEntitySpellEffects {
 			activeSpells.put(effect.getSpellId(), effect);
 		}
 		
+	}
+
+	public void removeAllActiveSpellsOfId(int spellId) {
+		removeActiveSpell(spellId);
 	}
 }

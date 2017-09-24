@@ -114,6 +114,8 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
+		event.setDeathMessage("");
+
 		try
 		{
 			StateManager.getInstance().getEntityManager().clearEntityEffects(event.getEntity().getUniqueId());

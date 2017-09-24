@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
@@ -33,6 +35,8 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
+
+import net.minecraft.server.v1_12_R1.EntityDamageSource;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -135,7 +139,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	            			{
 	            				// hurt enemy with damage shield
 	            				if (spelleffect.getBase() < 0)
-	            				attacker.damage(spelleffect.getBase() * -1);
+	            				{
+	            					EntityDamageSource source = new EntityDamageSource("thorns", ((CraftEntity)getBukkitLivingEntity()).getHandle());
+	            					source.setMagic();
+	            					source.ignoresArmor();
+	            					
+	            					((CraftEntity)attacker).getHandle().damageEntity(source, spelleffect.getBase() * -1);
+	            					//attacker.damage(spelleffect.getBase() * -1);
+	            				}
 	            			}
 	            		}
 	            	}

@@ -2016,20 +2016,20 @@ public class Utils {
 	public static DisguisePackage getDisguiseTypeFromDisguiseId(int disguiseid) {
 		switch(disguiseid)
 		{
-		case 1:  return new DisguisePackage(DisguiseType.PLAYER,"Human");
-		case 2:  return new DisguisePackage(DisguiseType.PLAYER,"Barbarian");
-		case 3:  return new DisguisePackage(DisguiseType.PLAYER,"Erudite");
-		case 4:  return new DisguisePackage(DisguiseType.PLAYER,"Wood Elf");
-		case 5:  return new DisguisePackage(DisguiseType.PLAYER,"High Elf");
-		case 6:  return new DisguisePackage(DisguiseType.PLAYER,"Dark Elf");
-		case 7:  return new DisguisePackage(DisguiseType.PLAYER,"Half-Elf");
-		case 8:  return new DisguisePackage(DisguiseType.PLAYER,"Dwarf");
-		case 9:  return new DisguisePackage(DisguiseType.PLAYER,"Troll");
-		case 10:  return new DisguisePackage(DisguiseType.PLAYER,"Ogre");
-		case 11:  return new DisguisePackage(DisguiseType.PLAYER,"Halfling");
-		case 12:  return new DisguisePackage(DisguiseType.PLAYER,"Gnome");
-		case 13:  return new DisguisePackage(DisguiseType.PLAYER,"Aviak");
-		case 14:  return new DisguisePackage(DisguiseType.PLAYER,"Were Wolf");
+		case 1:  return new DisguisePackage(DisguiseType.PLAYER,"human","k0h"); // human
+		case 2:  return new DisguisePackage(DisguiseType.PLAYER,"barbarian","Lemoh"); // barbarian
+		case 3:  return new DisguisePackage(DisguiseType.PLAYER,"highhuman","hiccupwindwalker"); // high human
+		case 4:  return new DisguisePackage(DisguiseType.PLAYER,"woodelf","Knogi"); // wood elf
+		case 5:  return new DisguisePackage(DisguiseType.PLAYER,"highelf","MoistWater"); // highelf
+		case 6:  return new DisguisePackage(DisguiseType.PLAYER,"darkelf","Kenzo74_"); // dark elf
+		case 7:  return new DisguisePackage(DisguiseType.PLAYER,"halfelf","Maechu_"); //halfelf
+		case 8:  return new DisguisePackage(DisguiseType.PLAYER,"dwarf","Faenon"); //dwarf
+		case 9:  return new DisguisePackage(DisguiseType.PLAYER,"troll","Gronghk"); // troll
+		case 10:  return new DisguisePackage(DisguiseType.PLAYER,"ogre","theorc"); // ogre
+		case 11:  return new DisguisePackage(DisguiseType.PLAYER,"halfling","Yeus"); // halfling
+		case 12:  return new DisguisePackage(DisguiseType.PLAYER,"gnome","Yeus"); // gnome
+		case 13:  return new DisguisePackage(DisguiseType.PLAYER,"aviak","Titus_Vogel"); //aviak
+		case 14:  return new DisguisePackage(DisguiseType.PLAYER,"werewolf","Apiii"); // werewolf
 		case 15:  return new DisguisePackage(DisguiseType.PLAYER,"Brownie");
 		case 16:  return new DisguisePackage(DisguiseType.PLAYER,"Centaur");
 		case 17:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Golem");
@@ -2046,7 +2046,7 @@ public class Utils {
 		case 28:  return new DisguisePackage(DisguiseType.PLAYER,"Fungusman");
 		case 29:  return new DisguisePackage(DisguiseType.PLAYER,"Gargoyle");
 		case 31:  return new DisguisePackage(DisguiseType.SLIME,"Slime cube");
-		case 32:  return new DisguisePackage(DisguiseType.PLAYER,"Ghost");
+		case 32:  return new DisguisePackage(DisguiseType.PLAYER,"ghost","Orbitly"); // ghost
 		case 33:  return new DisguisePackage(DisguiseType.PLAYER,"Ghoul");
 		case 34:  return new DisguisePackage(DisguiseType.BAT,"Giant Bat");
 		case 35:  return new DisguisePackage(DisguiseType.GUARDIAN,"Giant Eel");
@@ -2062,24 +2062,24 @@ public class Utils {
 		case 45:  return new DisguisePackage(DisguiseType.WITHER_SKELETON,"Demi Lich");
 		case 46:  return new DisguisePackage(DisguiseType.VEX,"Imp");
 		case 47:  return new DisguisePackage(DisguiseType.PLAYER,"Griffin");
-		case 48:  return new DisguisePackage(DisguiseType.PLAYER,"Kobold");
+		case 48:  return new DisguisePackage(DisguiseType.PLAYER,"kobold","PeterPugger");//kobold
 		case 49:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Lava Dragon");
 		case 50:  return new DisguisePackage(DisguiseType.OCELOT,"Lion");
 		case 51:  return new DisguisePackage(DisguiseType.PLAYER,"Lizard Man");
 		case 52:  return new DisguisePackage(DisguiseType.PLAYER,"Mimic");
-		case 53:  return new DisguisePackage(DisguiseType.PLAYER,"Minotaur");
-		case 54:  return new DisguisePackage(DisguiseType.PLAYER,"Orc");
+		case 53:  return new DisguisePackage(DisguiseType.PLAYER,"minotaur","_CrimsonBlade_"); // minotaur
+		case 54:  return new DisguisePackage(DisguiseType.PLAYER,"orc","Jeeorc"); // orc
 		case 55:  return new DisguisePackage(DisguiseType.PLAYER,"Human Beggar");
 		case 56:  return new DisguisePackage(DisguiseType.PLAYER,"Pixie");
 		case 57:  return new DisguisePackage(DisguiseType.SPIDER,"half human spider");
 		case 58:  return new DisguisePackage(DisguiseType.PLAYER,"Fire prince");
-		case 59:  return new DisguisePackage(DisguiseType.PLAYER,"Goblin");
+		case 59:  return new DisguisePackage(DisguiseType.PLAYER,"goblin","AllOgreNow"); // goblin
 		case 60:  return new DisguisePackage(DisguiseType.SKELETON,"Skeleton");
 		case 61:  return new DisguisePackage(DisguiseType.PLAYER,"Shark");
 		case 62:  return new DisguisePackage(DisguiseType.PLAYER,"Elf priestess");
 		case 63:  return new DisguisePackage(DisguiseType.OCELOT,"Tiger");
-		case 64:  return new DisguisePackage(DisguiseType.PLAYER,"Treant");
-		case 65:  return new DisguisePackage(DisguiseType.PLAYER,"Vampire");
+		case 64:  return new DisguisePackage(DisguiseType.PLAYER,"treant","zero_kage"); //treant
+		case 65:  return new DisguisePackage(DisguiseType.PLAYER,"vampire","Kenzo74_"); // vampire
 		case 66:  return new DisguisePackage(DisguiseType.PLAYER,"Iron knight");
 		case 67:  return new DisguisePackage(DisguiseType.PLAYER,"Human Citizen");
 		case 68:  return new DisguisePackage(DisguiseType.PLAYER,"Tentacle");
@@ -2107,13 +2107,13 @@ public class Utils {
 		case 90:  return new DisguisePackage(DisguiseType.PLAYER,"Barbarian Citizen");
 		case 91:  return new DisguisePackage(DisguiseType.PLAYER,"Alligator");
 		case 92:  return new DisguisePackage(DisguiseType.PLAYER,"Troll Citizen");
-		case 93:  return new DisguisePackage(DisguiseType.PLAYER,"Ogre Citizen");
-		case 94:  return new DisguisePackage(DisguiseType.PLAYER,"Dwarf Citizen");
+		case 93:  return new DisguisePackage(DisguiseType.PLAYER,"ogre","theorc"); // ogre
+		case 94:  return new DisguisePackage(DisguiseType.PLAYER,"dwarf","Faenon"); // dwarf
 		case 95:  return new DisguisePackage(DisguiseType.PLAYER,"God of fear");
 		case 96:  return new DisguisePackage(DisguiseType.PLAYER,"Cockatrice");
 		case 97:  return new DisguisePackage(DisguiseType.PLAYER,"Daisy Man");
-		case 98:  return new DisguisePackage(DisguiseType.PLAYER,"Elf Vampire");
-		case 99:  return new DisguisePackage(DisguiseType.PLAYER,"Dark elf");
+		case 98:  return new DisguisePackage(DisguiseType.PLAYER,"elf","Kenzo74_"); // elf vampire
+		case 99:  return new DisguisePackage(DisguiseType.PLAYER,"darkelf","Kenzo74_"); // dark elf
 		case 100:  return new DisguisePackage(DisguiseType.PLAYER,"Dervish");
 		case 101:  return new DisguisePackage(DisguiseType.PLAYER,"Efreeti");
 		case 102:  return new DisguisePackage(DisguiseType.PLAYER,"Tadpole");
@@ -2124,15 +2124,15 @@ public class Utils {
 		case 107:  return new DisguisePackage(DisguiseType.PLAYER,"Mammoth");
 		case 108:  return new DisguisePackage(DisguiseType.ELDER_GUARDIAN,"Floating eye");
 		case 109:  return new DisguisePackage(DisguiseType.PLAYER,"Wasp");
-		case 110:  return new DisguisePackage(DisguiseType.PLAYER,"Mermaid");
+		case 110:  return new DisguisePackage(DisguiseType.PLAYER,"mermaid","Suim67"); // mermaid
 		case 111:  return new DisguisePackage(DisguiseType.PLAYER,"Harpie");
 		case 112:  return new DisguisePackage(DisguiseType.PLAYER,"Pixie guard");
 		case 113:  return new DisguisePackage(DisguiseType.PLAYER,"Drixie");
 		case 114:  return new DisguisePackage(DisguiseType.PLAYER,"Ghost Ship");
 		case 115:  return new DisguisePackage(DisguiseType.PLAYER,"Clam");
 		case 116:  return new DisguisePackage(DisguiseType.PLAYER,"Sea Horse");
-		case 117:  return new DisguisePackage(DisguiseType.WITHER,"Ghost Dwarf");
-		case 118:  return new DisguisePackage(DisguiseType.WITHER,"high human Ghost");
+		case 117:  return new DisguisePackage(DisguiseType.WITHER,"ghost dwarf","Faenon"); // ghost dwarf
+		case 118:  return new DisguisePackage(DisguiseType.WITHER,"ghost high human","Orbitly"); // ghost high human
 		case 119:  return new DisguisePackage(DisguiseType.OCELOT,"Sabertooth Cat");
 		case 120:  return new DisguisePackage(DisguiseType.WOLF,"Wolf Elemental");
 		case 121:  return new DisguisePackage(DisguiseType.PLAYER,"Gorgon");
@@ -2151,13 +2151,13 @@ public class Utils {
 		case 134:  return new DisguisePackage(DisguiseType.PLAYER,"Mosquito");
 		case 135:  return new DisguisePackage(DisguiseType.PLAYER,"Rhino");
 		case 136:  return new DisguisePackage(DisguiseType.PLAYER,"Half human dragon");
-		case 137:  return new DisguisePackage(DisguiseType.PLAYER,"Goblin");
+		case 137:  return new DisguisePackage(DisguiseType.PLAYER,"goblin","AllOgreNow"); // goblin
 		case 138:  return new DisguisePackage(DisguiseType.PLAYER,"Yeti");
 		case 139:  return new DisguisePackage(DisguiseType.PLAYER,"Scaled human Citizen");
 		case 140:  return new DisguisePackage(DisguiseType.GIANT,"Forest Giant");
 		case 141:  return new DisguisePackage(DisguiseType.BOAT,"Boat");
 		case 142:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown 142");
-		case 143:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown 143");
+		case 143:  return new DisguisePackage(DisguiseType.PLAYER,"tree","zero_kage"); // tree
 		case 144:  return new DisguisePackage(DisguiseType.PLAYER,"Badger man");
 		case 145:  return new DisguisePackage(DisguiseType.SLIME,"Goo");
 		case 146:  return new DisguisePackage(DisguiseType.PLAYER,"Spectral Half dragon");
@@ -2195,7 +2195,7 @@ public class Utils {
 		case 178:  return new DisguisePackage(DisguiseType.PLAYER,"Rock-gem Men");
 		case 179:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown");
 		case 180:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown");
-		case 181:  return new DisguisePackage(DisguiseType.PLAYER,"Bull Man");
+		case 181:  return new DisguisePackage(DisguiseType.PLAYER,"bullman","_CrimsonBlade_"); // bullman
 		case 182:  return new DisguisePackage(DisguiseType.PLAYER,"Faun");
 		case 183:  return new DisguisePackage(DisguiseType.PLAYER,"Coldain");
 		case 184:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Dragons");
@@ -2222,7 +2222,7 @@ public class Utils {
 		case 205:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown");
 		case 206:  return new DisguisePackage(DisguiseType.PLAYER,"Owlbear");
 		case 207:  return new DisguisePackage(DisguiseType.PLAYER,"Rhino Beetle");
-		case 208:  return new DisguisePackage(DisguiseType.PLAYER,"Vampyre");
+		case 208:  return new DisguisePackage(DisguiseType.PLAYER,"vampire","Kenzo74_"); // vampyre
 		case 209:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Earth Elemental");
 		case 210:  return new DisguisePackage(DisguiseType.PARROT,"Air Elemental");
 		case 211:  return new DisguisePackage(DisguiseType.GUARDIAN,"Water Elemental");
@@ -2233,16 +2233,16 @@ public class Utils {
 		case 216:  return new DisguisePackage(DisguiseType.HORSE,"Horse");
 		case 217:  return new DisguisePackage(DisguiseType.PLAYER,"Snake person");
 		case 218:  return new DisguisePackage(DisguiseType.PLAYER,"Fungus");
-		case 219:  return new DisguisePackage(DisguiseType.PLAYER,"Vampire");
+		case 219:  return new DisguisePackage(DisguiseType.PLAYER,"vampire","Kenzo74_"); // vampire
 		case 220:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Stone golem");
 		case 221:  return new DisguisePackage(DisguiseType.OCELOT,"Red Cheetah");
 		case 222:  return new DisguisePackage(DisguiseType.PLAYER,"Camel");
 		case 223:  return new DisguisePackage(DisguiseType.PLAYER,"Millipede");
-		case 224:  return new DisguisePackage(DisguiseType.WITHER_SKELETON,"Shade");
+		case 224:  return new DisguisePackage(DisguiseType.PLAYER,"shade","RainbowF"); // shade
 		case 225:  return new DisguisePackage(DisguiseType.PLAYER,"Exotic plant creature");
-		case 226:  return new DisguisePackage(DisguiseType.PLAYER,"Red Assassin");
-		case 227:  return new DisguisePackage(DisguiseType.PLAYER,"Ghost");
-		case 228:  return new DisguisePackage(DisguiseType.PLAYER,"Red ogre");
+		case 226:  return new DisguisePackage(DisguiseType.PLAYER,"assassin","epicafroninja"); // assassin
+		case 227:  return new DisguisePackage(DisguiseType.PLAYER,"ghost","Orbitly"); // ghost
+		case 228:  return new DisguisePackage(DisguiseType.PLAYER,"ogre","theorc"); // ogre
 		case 229:  return new DisguisePackage(DisguiseType.PLAYER,"Alien");
 		case 230:  return new DisguisePackage(DisguiseType.PLAYER,"4 armed human");
 		case 231:  return new DisguisePackage(DisguiseType.WITHER_SKELETON,"Ghost");
@@ -2255,10 +2255,10 @@ public class Utils {
 		case 238:  return new DisguisePackage(DisguiseType.PLAYER,"Catman King");
 		case 239:  return new DisguisePackage(DisguiseType.PLAYER,"Catman Guard");
 		case 240:  return new DisguisePackage(DisguiseType.PLAYER,"Teleporter man");
-		case 241:  return new DisguisePackage(DisguiseType.WOLF,"Werewolf");
-		case 242:  return new DisguisePackage(DisguiseType.PLAYER,"Naiad");
-		case 243:  return new DisguisePackage(DisguiseType.PLAYER,"Nymph");
-		case 244:  return new DisguisePackage(DisguiseType.PLAYER,"Ent");
+		case 241:  return new DisguisePackage(DisguiseType.PLAYER,"werewolf","Apiii"); // were wolf
+		case 242:  return new DisguisePackage(DisguiseType.PLAYER,"naiad","Suim67"); //naiad
+		case 243:  return new DisguisePackage(DisguiseType.PLAYER,"nymph","Suim67"); // nymph
+		case 244:  return new DisguisePackage(DisguiseType.PLAYER,"ent","zero_kage"); // ent
 		case 245:  return new DisguisePackage(DisguiseType.PLAYER,"Fly Man");
 		case 246:  return new DisguisePackage(DisguiseType.PLAYER,"God of water");
 		case 247:  return new DisguisePackage(DisguiseType.PLAYER,"God of fire");
@@ -2277,7 +2277,7 @@ public class Utils {
 		case 274:  return new DisguisePackage(DisguiseType.PLAYER,"Broken Clockwork");
 		case 275:  return new DisguisePackage(DisguiseType.PLAYER,"Giant Clockwork");
 		case 276:  return new DisguisePackage(DisguiseType.PLAYER,"Clockwork Beetle");
-		case 277:  return new DisguisePackage(DisguiseType.PLAYER,"Knives goblin");
+		case 277:  return new DisguisePackage(DisguiseType.PLAYER,"goblin","AllOgreNow"); // goblin
 		case 278:  return new DisguisePackage(DisguiseType.PLAYER,"God of storms");
 		case 279:  return new DisguisePackage(DisguiseType.PLAYER,"Blood Raven");
 		case 280:  return new DisguisePackage(DisguiseType.PLAYER,"Gargoyle");
@@ -2340,7 +2340,7 @@ public class Utils {
 		case 337:  return new DisguisePackage(DisguiseType.PLAYER,"Pirate Officer");
 		case 338:  return new DisguisePackage(DisguiseType.PLAYER,"Gnome Pirate");
 		case 339:  return new DisguisePackage(DisguiseType.PLAYER,"Dark Elf Pirate");
-		case 340:  return new DisguisePackage(DisguiseType.PLAYER,"Ogre Pirate");
+		case 340:  return new DisguisePackage(DisguiseType.PLAYER,"ogre pirate","theorc"); // ogre pirate
 		case 341:  return new DisguisePackage(DisguiseType.PLAYER,"Human Pirate");
 		case 342:  return new DisguisePackage(DisguiseType.PLAYER,"High Human Pirate");
 		case 343:  return new DisguisePackage(DisguiseType.PLAYER,"Poison Dart Frog");
@@ -2352,24 +2352,24 @@ public class Utils {
 		case 349:  return new DisguisePackage(DisguiseType.PLAYER,"Frogman Skeleton");
 		case 350:  return new DisguisePackage(DisguiseType.PLAYER,"Undead Frogman");
 		case 351:  return new DisguisePackage(DisguiseType.PLAYER,"Chosen Warrior");
-		case 352:  return new DisguisePackage(DisguiseType.PLAYER,"Chosen Wizard");
+		case 352:  return new DisguisePackage(DisguiseType.PLAYER,"chosen wizard","Zelinx"); // chosen wizard
 		case 353:  return new DisguisePackage(DisguiseType.PLAYER,"Lizard creature");
 		case 354:  return new DisguisePackage(DisguiseType.PLAYER,"Greater Lizard creature");
 		case 355:  return new DisguisePackage(DisguiseType.PLAYER,"Lizard creature Boss");
 		case 356:  return new DisguisePackage(DisguiseType.PLAYER,"scaled dog");
 		case 357:  return new DisguisePackage(DisguiseType.PLAYER,"Undead scaled dog");
 		case 358:  return new DisguisePackage(DisguiseType.PLAYER,"Undead lizard creature");
-		case 359:  return new DisguisePackage(DisguiseType.PLAYER,"Vampire Lesser");
-		case 360:  return new DisguisePackage(DisguiseType.PLAYER,"Vampire Elite");
-		case 361:  return new DisguisePackage(DisguiseType.PLAYER,"Orc");
+		case 359:  return new DisguisePackage(DisguiseType.PLAYER,"lesser vampire","Kenzo74_"); // vampire lesser
+		case 360:  return new DisguisePackage(DisguiseType.PLAYER,"elite vampire","Kenzo74_"); // vampire elite
+		case 361:  return new DisguisePackage(DisguiseType.PLAYER,"orc","Jeeorc"); // orc
 		case 362:  return new DisguisePackage(DisguiseType.WITHER_SKELETON,"Bone Golem");
 		case 363:  return new DisguisePackage(DisguiseType.PLAYER,"Huge gargoyle");
 		case 364:  return new DisguisePackage(DisguiseType.PLAYER,"Sand Elf");
 		case 365:  return new DisguisePackage(DisguiseType.PLAYER,"Vampire Master");
-		case 366:  return new DisguisePackage(DisguiseType.PLAYER,"Orc Elite");
+		case 366:  return new DisguisePackage(DisguiseType.PLAYER,"orc","Jeeorc"); // orc
 		case 367:  return new DisguisePackage(DisguiseType.SKELETON,"Skeleton New");
-		case 368:  return new DisguisePackage(DisguiseType.ZOMBIE,"Mummy New");
-		case 369:  return new DisguisePackage(DisguiseType.PLAYER,"Goblin");
+		case 368:  return new DisguisePackage(DisguiseType.ZOMBIE,"mummy","Greng"); //mummy
+		case 369:  return new DisguisePackage(DisguiseType.PLAYER,"goblin","AllOgreNow"); // goblin
 		case 370:  return new DisguisePackage(DisguiseType.PLAYER,"Insect");
 		case 371:  return new DisguisePackage(DisguiseType.PLAYER,"Frogman Ghost");
 		case 372:  return new DisguisePackage(DisguiseType.PLAYER,"Spinning Air Elemental");

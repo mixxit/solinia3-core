@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender.Spigot;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -28,9 +29,13 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
+import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_12_R1.DamageSource;
+import net.minecraft.server.v1_12_R1.EntityDamageSource;
 
 public class SoliniaActiveSpellEffect {
 	private int spellId;
@@ -1134,12 +1139,38 @@ public class SoliniaActiveSpellEffect {
 		
 		if (DisguiseAPI.isDisguised(getLivingEntity()))
 		{
-			// already disguised
-			return;
+			Disguise dis = DisguiseAPI.getDisguise(getLivingEntity());
+			if (dis instanceof PlayerDisguise)
+			{
+				if (disguise.getDisguisedata() != null && !disguise.equals(""))
+				{
+					if (((PlayerDisguise)dis).getSkin().equals(disguise.getDisguisedata()))
+						return;
+					
+					// If we get here we can let the player change their skin as it doesnt match their existing player skin name
+				} else {
+					return;
+				}
+			} else {
+				if (dis.getType().equals(disguise.getDisguisetype()))
+					return;
+			}
 		}
 		
-		MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
-		DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
+		
+			if (disguise.getDisguisetype().equals(DisguiseType.PLAYER))
+			{
+				String disguisename = disguise.getDisguisedata();
+				if (disguisename == null || disguisename.equals(""))
+					disguisename = "AyatoSenpai";
+				
+				PlayerDisguise playerdisguise = new PlayerDisguise(getLivingEntity().getName(), disguisename);
+				DisguiseAPI.disguiseEntity(getLivingEntity(), playerdisguise);
+			} else {
+				MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
+				DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
+			}
+		
 	}
 
 	private void applySummonPet(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
@@ -1398,13 +1429,24 @@ public class SoliniaActiveSpellEffect {
 		if (getLivingEntity().isDead())
 			return;
 		
+		if (Bukkit.getEntity(getSourceUuid()) == null)
+			return;
+		
+		if (getLivingEntity() == null)
+			return;
+		
 		int hpToRemove = spellEffect.getBase();
 		
 		// Damage
 		if (hpToRemove < 0)
 		{
 			hpToRemove = hpToRemove * -1;
-			getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
+			EntityDamageSource source = new EntityDamageSource("thorns", ((CraftEntity)Bukkit.getEntity(getSourceUuid())).getHandle());
+			source.setMagic();
+			source.ignoresArmor();
+			
+			((CraftEntity)getLivingEntity()).getHandle().damageEntity(source, hpToRemove);
+			//getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 			if (soliniaSpell.isLifetapSpell())
 			{
 				Entity sourceEntity = Bukkit.getEntity(getSourceUuid());

@@ -3136,7 +3136,29 @@ public class SoliniaSpell implements ISoliniaSpell {
 						return false;
 				}
 			}
-
+			
+			if (effect.getSpellEffectType().equals(SpellEffectType.Illusion) ||
+					effect.getSpellEffectType().equals(SpellEffectType.IllusionaryTarget) ||
+					effect.getSpellEffectType().equals(SpellEffectType.IllusionCopy) ||
+					effect.getSpellEffectType().equals(SpellEffectType.IllusionOther) ||
+					effect.getSpellEffectType().equals(SpellEffectType.IllusionPersistence))
+			{
+				// if target has spell effect of above already then we cant apply another
+				for(SoliniaActiveSpellEffect ase : StateManager.getInstance().getEntityManager().getActiveEntityEffects(target).getActiveSpells())
+				{
+					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.Illusion))
+						return false;				
+					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionaryTarget))
+						return false;				
+					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionCopy))
+						return false;				
+					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionOther))
+						return false;				
+					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionPersistence))
+						return false;				
+				}
+			}
+				
 			if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll) || 
 					effect.getSpellEffectType().equals(SpellEffectType.ResistCold) ||
 					effect.getSpellEffectType().equals(SpellEffectType.ResistFire) ||
