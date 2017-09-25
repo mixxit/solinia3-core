@@ -558,6 +558,11 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setCustomheaddata(Utils.getTextureFromName(value));
 			break;
 		case "merchantid":
+			if (Integer.parseInt(value) == 0) {
+				setMerchantid(Integer.parseInt(value));
+				break;
+			}
+			
 			if (StateManager.getInstance().getConfigurationManager().getNPCMerchant(Integer.parseInt(value)) == null)
 				throw new InvalidNpcSettingException("MerchantID does not exist");
 			setMerchantid(Integer.parseInt(value));
