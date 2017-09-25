@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -21,11 +22,22 @@ public class CommandSolinia implements CommandExecutor {
 			e.printStackTrace();
 		}
 		
+		/*
 		if (sender instanceof ConsoleCommandSender)
 		{
-			Utils.Patcher();
+			try
+			{
+			for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
+			{
+				if (spell.getAllowedClasses().size() == 0)
+				Utils.RepairMissingSpellItems(spell);
+			}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 		}
-
+		 */
 		return true;
 	}
 }

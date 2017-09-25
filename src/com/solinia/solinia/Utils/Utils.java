@@ -29,6 +29,7 @@ import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -73,6 +74,147 @@ public class Utils {
 		return perks;
 	}
 
+	public static void RepairAllowedClasses(ISoliniaSpell spell)
+	{
+		
+		List<SoliniaSpellClass> allowedClasses = new ArrayList<SoliniaSpellClass>();
+		
+		if (spell.getClasses1() != null && spell.getClasses1() != 254 && spell.getClasses1() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("WARRIOR");
+			spellClass.setMinlevel(spell.getClasses1());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses2() != null && spell.getClasses2() != 254 && spell.getClasses2() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("CLERIC");
+			spellClass.setMinlevel(spell.getClasses2());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses3() != null && spell.getClasses3() != 254 && spell.getClasses3() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("PALADIN");
+			spellClass.setMinlevel(spell.getClasses3());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses4() != null && spell.getClasses4() != 254 && spell.getClasses4() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("RANGER");
+			spellClass.setMinlevel(spell.getClasses4());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses5() != null && spell.getClasses5() != 254 && spell.getClasses5() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("SHADOWKNIGHT");
+			spellClass.setMinlevel(spell.getClasses5());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses6() != null && spell.getClasses6() != 254 && spell.getClasses6() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("DRUID");
+			spellClass.setMinlevel(spell.getClasses6());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses7() != null && spell.getClasses7() != 254 && spell.getClasses7() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("MONK");
+			spellClass.setMinlevel(spell.getClasses7());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses8() != null && spell.getClasses8() != 254 && spell.getClasses8() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("BARD");
+			spellClass.setMinlevel(spell.getClasses8());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses9() != null && spell.getClasses9() != 254 && spell.getClasses9() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("ROGUE");
+			spellClass.setMinlevel(spell.getClasses9());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses10() != null && spell.getClasses10() != 254 && spell.getClasses10() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("SHAMAN");
+			spellClass.setMinlevel(spell.getClasses10());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses11() != null && spell.getClasses11() != 254 && spell.getClasses11() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("NECROMANCER");
+			spellClass.setMinlevel(spell.getClasses11());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses12() != null && spell.getClasses12() != 254 && spell.getClasses12() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("WIZARD");
+			spellClass.setMinlevel(spell.getClasses12());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses13() != null && spell.getClasses13() != 254 && spell.getClasses13() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("MAGICIAN");
+			spellClass.setMinlevel(spell.getClasses13());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses14() != null && spell.getClasses14() != 254 && spell.getClasses14() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("ENCHANTER");
+			spellClass.setMinlevel(spell.getClasses14());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses15() != null && spell.getClasses15() != 254 && spell.getClasses15() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("BEASTLORD");
+			spellClass.setMinlevel(spell.getClasses15());
+			allowedClasses.add(spellClass);
+		}
+		
+		if (spell.getClasses16() != null && spell.getClasses16() != 254 && spell.getClasses16() != 255)
+		{
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname("BERSERKER");
+			spellClass.setMinlevel(spell.getClasses16());
+			allowedClasses.add(spellClass);
+		}
+		try {
+			StateManager.getInstance().getConfigurationManager().getSpell(spell.getId()).setAllowedClasses(allowedClasses);
+			System.out.println("Fixed spell " + spell.getName() + " with classe count: " + allowedClasses.size());
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static int GetWorldPerkDropCountModifier() {
 		int dropcount = 1;
 

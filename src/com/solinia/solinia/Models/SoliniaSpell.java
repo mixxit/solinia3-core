@@ -2661,6 +2661,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- teleport_zone: " + ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		for(SoliniaSpellClass spellclass : this.getAllowedClasses())
+		{
+			sender.sendMessage("- " + spellclass.getClassname() + " " + spellclass.getMinlevel());
+		}
+		sender.sendMessage("----------------------------");
 		for(SpellEffect effect : this.getSpellEffects())
 		{
 			sender.sendMessage("- [" + effect.getSpellEffectId() + "]"  + effect.getSpellEffectType().name() + ": " + ChatColor.GOLD + effect.getBase() + ChatColor.RESET);		
