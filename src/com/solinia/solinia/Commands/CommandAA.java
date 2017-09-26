@@ -43,6 +43,8 @@ public class CommandAA implements CommandExecutor {
 					int pageno = 1;
 					if (args.length > 1)
 						pageno = Integer.parseInt(args[1]);
+					
+					pageno = pageno - 1;
 					int sizePerPage = 10;
 					List<ISoliniaAARank> fullaaranks = solplayer.getBuyableAARanks();
 					List<ISoliniaAARank> aaranks = fullaaranks.stream()
@@ -59,7 +61,7 @@ public class CommandAA implements CommandExecutor {
 										+ ChatColor.RESET + " AA points /aa buy " + aarank.getId());
 							}
 					}
-					player.sendMessage("Displayed Page " + ChatColor.GOLD + pageno + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil(fullaaranks.size() / sizePerPage) + ChatColor.RESET + " (See /aa list <pageno>");
+					player.sendMessage("Displayed Page " + ChatColor.GOLD + (pageno + 1) + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil((float)fullaaranks.size() / (float)sizePerPage) + ChatColor.RESET + " (See /aa list <pageno>");
 					player.sendMessage("More items may appear when you have more AA points available to spend");
 					break;
 				case "give":

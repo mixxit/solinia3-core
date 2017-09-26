@@ -145,6 +145,7 @@ public class CommandNPCBuy implements CommandExecutor {
 					}
 				}
 				
+				System.out.println("Removing temporary item id: " + itemid + " qty: " + temporaryQtyToRemove);
 				if (temporaryQtyToRemove > 0)
 				{
 					try {

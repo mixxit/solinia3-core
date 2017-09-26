@@ -298,10 +298,13 @@ public class SoliniaNPC implements ISoliniaNPC {
 		String debugLastJson = "";
 		try
 		{
+			pageno = pageno - 1;
+			
 			int sizePerPage = 10;
 			
 			List<ISoliniaNPCMerchantEntry> fullmerchantentries = StateManager.getInstance().getEntityManager()
 					.getNPCMerchantCombinedEntries(this);
+			
 			List<ISoliniaNPCMerchantEntry> merchantentries = fullmerchantentries.stream()
 					  .skip(pageno * sizePerPage)
 					  .limit(sizePerPage)
@@ -312,18 +315,34 @@ public class SoliniaNPC implements ISoliniaNPC {
 				int price = item.getWorth();
 	
 				// Buy 1
-				final String jsonbuy = "{\"text\":\"~ (CLICK-BUY) " + item.getDisplayname() + " x1: $" + price
-						+ "\",\"color\":\"aqua\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcbuy "
-						+ merchantitem.getItemid() + " 1\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
-						+ item.asJsonStringEscaped() + "\"}}";
-				player.spigot().sendMessage(ComponentSerializer.parse(jsonbuy));
+				if (merchantitem.getId() != 0 && merchantitem.getTemporaryquantitylimit() == 0)
+				{
+					final String jsonbuy = "{\"text\":\"~ (CLICK-BUY) " + item.getDisplayname() + " x1: $" + price
+							+ "\",\"color\":\"aqua\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcbuy "
+							+ merchantitem.getItemid() + " 1\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
+							+ item.asJsonStringEscaped() + "\"}}";
+					player.spigot().sendMessage(ComponentSerializer.parse(jsonbuy));
+				}
+				
+				// Buy 1 (temporary items)
+				if (merchantitem.getId() == 0 && merchantitem.getTemporaryquantitylimit() > 0)
+				{
+					final String jsonbuy = "{\"text\":\"~ (CLICK-BUYBACK) " + item.getDisplayname() + " (Reset) x1: $" + price
+							+ "\",\"color\":\"green\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcbuy "
+							+ merchantitem.getItemid() + " 1\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
+							+ item.asJsonStringEscaped() + "\"}}";
+					player.spigot().sendMessage(ComponentSerializer.parse(jsonbuy));
+				}
 	
 				// Buy 64
-				final String jsonbuy64 = "{\"text\":\"~ (CLICK-BUY) " + item.getDisplayname() + " x64: $" + (price * 64)
-						+ "\",\"color\":\"aqua\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcbuy "
-						+ merchantitem.getItemid() + " 64\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
-						+ item.asJsonStringEscaped() + "\"}}";
-				player.spigot().sendMessage(ComponentSerializer.parse(jsonbuy64));
+				if (merchantitem.getId() != 0 && merchantitem.getTemporaryquantitylimit() == 0)
+				{
+					final String jsonbuy64 = "{\"text\":\"~ (CLICK-BUY) " + item.getDisplayname() + " x64: $" + (price * 64)
+							+ "\",\"color\":\"aqua\",\"underlined\":false,\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/npcbuy "
+							+ merchantitem.getItemid() + " 64\"},\"hoverEvent\":{\"action\":\"show_item\",\"value\":\""
+							+ item.asJsonStringEscaped() + "\"}}";
+					player.spigot().sendMessage(ComponentSerializer.parse(jsonbuy64));
+				}
 			}
 	
 			for (int i = 0; i < 36; i++) {
@@ -363,7 +382,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 				}
 			}
 			
-			player.sendMessage("Displayed Page " + ChatColor.GOLD + pageno + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil(fullmerchantentries.size() / sizePerPage) + ChatColor.RESET + " (See SHOP <pageno>");
+			player.sendMessage("Displayed Page " + ChatColor.GOLD + (pageno + 1) + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil((float)fullmerchantentries.size() / (float)sizePerPage) + ChatColor.RESET + " (See SHOP <pageno>");
 
 		} catch (CoreStateInitException e)
 		{

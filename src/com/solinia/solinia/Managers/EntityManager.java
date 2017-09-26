@@ -460,11 +460,15 @@ public class EntityManager implements IEntityManager {
 		List<ISoliniaNPCMerchantEntry> entries = new ArrayList<ISoliniaNPCMerchantEntry>();
 		for(Integer key : temporaryMerchantItems.get(npc.getId()).keySet())
 		{
+			if (temporaryMerchantItems.get(npc.getId()).get(key) < 1)
+				continue;
+			
 			ISoliniaNPCMerchantEntry entry = new SoliniaNPCMerchantEntry();
 			entry.setId(0);
 			entry.setItemid(key);
 			entry.setMerchantid(npc.getMerchantid());
 			entry.setTemporaryquantitylimit(temporaryMerchantItems.get(npc.getId()).get(key));
+			entries.add(entry);
 		}
 		return entries;
 	}
@@ -487,7 +491,7 @@ public class EntityManager implements IEntityManager {
 	
 			List<ISoliniaNPCMerchantEntry> tempItems = getTemporaryMerchantItems(npc);
 			if (tempItems.size() > 0)
-				combinedEntries.addAll(getTemporaryMerchantItems(npc));
+				combinedEntries.addAll(tempItems);
 		} catch (CoreStateInitException e)
 		{
 			return new ArrayList<ISoliniaNPCMerchantEntry>();
