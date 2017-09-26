@@ -3,6 +3,7 @@ package com.solinia.solinia.Managers;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,15 +22,19 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InsufficientTemporaryMerchantItemException;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
+import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
@@ -47,7 +52,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
-	
+	private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
 	}
@@ -433,5 +438,81 @@ public class EntityManager implements IEntityManager {
 			return;
 		
 		entitySpellEffects.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(type);
+	}
+
+	@Override
+	public void addTemporaryMerchantItem(int npcid, int itemid, int amount) {
+		if (temporaryMerchantItems.get(npcid) == null)
+			temporaryMerchantItems.put(npcid, new ConcurrentHashMap<Integer, Integer>());
+		
+		if (temporaryMerchantItems.get(npcid).get(itemid) == null)
+			temporaryMerchantItems.get(npcid).put(itemid, 0);
+		
+		int currentCount = temporaryMerchantItems.get(npcid).get(itemid);
+		temporaryMerchantItems.get(npcid).put(itemid, currentCount + amount);
+	}
+	
+	@Override
+	public List<ISoliniaNPCMerchantEntry> getTemporaryMerchantItems(ISoliniaNPC npc) {
+		if (temporaryMerchantItems.get(npc.getId()) == null)
+			temporaryMerchantItems.put(npc.getId(), new ConcurrentHashMap<Integer, Integer>());
+		
+		List<ISoliniaNPCMerchantEntry> entries = new ArrayList<ISoliniaNPCMerchantEntry>();
+		for(Integer key : temporaryMerchantItems.get(npc.getId()).keySet())
+		{
+			ISoliniaNPCMerchantEntry entry = new SoliniaNPCMerchantEntry();
+			entry.setId(0);
+			entry.setItemid(key);
+			entry.setMerchantid(npc.getMerchantid());
+			entry.setTemporaryquantitylimit(temporaryMerchantItems.get(npc.getId()).get(key));
+		}
+		return entries;
+	}
+	
+	@Override
+	public List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc) {
+		List<ISoliniaNPCMerchantEntry> combinedEntries = new ArrayList<ISoliniaNPCMerchantEntry>();
+		if (npc.getMerchantid() < 1)
+			return combinedEntries;
+			
+		try
+		{
+			ISoliniaNPCMerchant merchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(npc.getMerchantid());
+			
+			if (merchant == null)
+				return combinedEntries;
+	
+			if (merchant.getEntries().size() > 0)
+				combinedEntries.addAll(merchant.getEntries());
+	
+			List<ISoliniaNPCMerchantEntry> tempItems = getTemporaryMerchantItems(npc);
+			if (tempItems.size() > 0)
+				combinedEntries.addAll(getTemporaryMerchantItems(npc));
+		} catch (CoreStateInitException e)
+		{
+			return new ArrayList<ISoliniaNPCMerchantEntry>();
+		}
+		return combinedEntries;
+		
+	}
+	
+	@Override
+	public void removeTemporaryMerchantItem(int npcid, int itemid, int amount) throws InsufficientTemporaryMerchantItemException {
+		if (temporaryMerchantItems.get(npcid) == null)
+			temporaryMerchantItems.put(npcid, new ConcurrentHashMap<Integer, Integer>());
+		
+		if (temporaryMerchantItems.get(npcid).get(itemid) == null)
+			temporaryMerchantItems.get(npcid).put(itemid, 0);
+		
+		int currentCount = temporaryMerchantItems.get(npcid).get(itemid);
+		
+		if (currentCount < amount)
+			throw new InsufficientTemporaryMerchantItemException("Vendor does not have sufficient items");
+		
+		int newCount = currentCount - amount;
+		if (newCount < 0)
+			newCount = 0;
+		
+		temporaryMerchantItems.get(npcid).put(itemid, newCount);
 	}
 }

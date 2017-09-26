@@ -100,6 +100,8 @@ public class CommandNPCSell implements CommandExecutor {
 
 			EconomyResponse responsedeposit = StateManager.getInstance().getEconomy().depositPlayer(player, price);
 			if (responsedeposit.transactionSuccess()) {
+				// Add to buy back list
+				StateManager.getInstance().getEntityManager().addTemporaryMerchantItem(solnpc.getId(), itemid, amount);
 				// Take players item
 				Utils.removeItemsFromInventory(player, itemid, amount);
 				player.sendMessage(ChatColor.YELLOW + "* You recieve $" + price + " as payment");

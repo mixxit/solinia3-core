@@ -14,4 +14,8 @@ public interface ISoliniaNPCMerchantEntry {
 
 	void setMerchantid(int merchantid);
 
+	int getTemporaryquantitylimit();
+
+	void setTemporaryquantitylimit(int temporaryquantitylimit);
+
 }

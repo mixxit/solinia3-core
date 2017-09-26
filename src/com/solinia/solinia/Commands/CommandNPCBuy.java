@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InsufficientTemporaryMerchantItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
@@ -81,8 +82,8 @@ public class CommandNPCBuy implements CommandExecutor {
 				return true;
 			}
 
-			List<ISoliniaNPCMerchantEntry> items = StateManager.getInstance().getConfigurationManager()
-					.getNPCMerchant(solnpc.getMerchantid()).getEntries();
+			List<ISoliniaNPCMerchantEntry> items = StateManager.getInstance().getEntityManager()
+					.getNPCMerchantCombinedEntries(solnpc);
 			if (items.size() < 1) {
 				player.sendMessage(ChatColor.GRAY + "* This NPC is not interested in this item");
 				return true;
@@ -119,6 +120,43 @@ public class CommandNPCBuy implements CommandExecutor {
 			EconomyResponse responsewithdraw = StateManager.getInstance().getEconomy()
 					.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), price);
 			if (responsewithdraw.transactionSuccess()) {
+				
+				// If the item is in the temporary list, remove the qty from the temporary list
+				int temporaryQtyToRemove = 0;
+				int temporaryQtyAvailable = 0;
+				for (ISoliniaNPCMerchantEntry tmpItem : items) {
+					if (tmpItem.getItemid() != itemid)
+						continue;
+
+					if (tmpItem.getTemporaryquantitylimit() < 1)
+						continue;
+					
+					temporaryQtyAvailable += tmpItem.getTemporaryquantitylimit();
+				}
+				
+				if (temporaryQtyAvailable > 0)
+				{
+					if (amount > temporaryQtyAvailable)
+					{
+						// Remove the amount we have available
+						temporaryQtyToRemove = temporaryQtyAvailable;
+					} else {
+						temporaryQtyToRemove = amount;
+					}
+				}
+				
+				if (temporaryQtyToRemove > 0)
+				{
+					try {
+						StateManager.getInstance().getEntityManager().removeTemporaryMerchantItem(solnpc.getId(), item.getId(), temporaryQtyToRemove);
+					} catch (InsufficientTemporaryMerchantItemException e) {
+						// TODO - Give user their money back
+						// This should never happen
+						e.printStackTrace();
+						return false;
+					}
+				}
+				
 				// Give player item
 
 				int amountleft = amount;

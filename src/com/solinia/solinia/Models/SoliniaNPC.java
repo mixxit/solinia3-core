@@ -300,8 +300,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 		{
 			int sizePerPage = 10;
 			
-			List<ISoliniaNPCMerchantEntry> fullmerchantentries = StateManager.getInstance().getConfigurationManager()
-					.getNPCMerchant(this.getMerchantid()).getEntries();
+			List<ISoliniaNPCMerchantEntry> fullmerchantentries = StateManager.getInstance().getEntityManager()
+					.getNPCMerchantCombinedEntries(this);
 			List<ISoliniaNPCMerchantEntry> merchantentries = fullmerchantentries.stream()
 					  .skip(pageno * sizePerPage)
 					  .limit(sizePerPage)

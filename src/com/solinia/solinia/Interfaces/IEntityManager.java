@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Exceptions.InsufficientTemporaryMerchantItemException;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
@@ -61,4 +62,12 @@ public interface IEntityManager {
 	void removeSpellEffects(UUID uuid);
 
 	void removeSpellEffectsOfSpellId(UUID uuid, int spellId);
+
+	void addTemporaryMerchantItem(int npcid, int itemid, int amount);
+
+	void removeTemporaryMerchantItem(int npcid, int itemid, int amount) throws InsufficientTemporaryMerchantItemException;
+
+	List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc);
+
+	List<ISoliniaNPCMerchantEntry> getTemporaryMerchantItems(ISoliniaNPC npc);
 }

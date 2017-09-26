@@ -6,6 +6,7 @@ public class SoliniaNPCMerchantEntry implements ISoliniaNPCMerchantEntry {
 	private int id;
 	private int itemid;
 	private int merchantid;
+	private int temporaryquantitylimit;
 	
 	@Override
 	public int getId() {
@@ -35,5 +36,15 @@ public class SoliniaNPCMerchantEntry implements ISoliniaNPCMerchantEntry {
 	@Override
 	public void setMerchantid(int merchantid) {
 		this.merchantid = merchantid;
+	}
+
+	@Override
+	public int getTemporaryquantitylimit() {
+		return temporaryquantitylimit;
+	}
+
+	@Override
+	public void setTemporaryquantitylimit(int temporaryquantitylimit) {
+		this.temporaryquantitylimit = temporaryquantitylimit;
 	}
 }

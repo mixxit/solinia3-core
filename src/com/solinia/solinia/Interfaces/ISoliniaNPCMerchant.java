@@ -15,5 +15,4 @@ public interface ISoliniaNPCMerchant {
 	List<ISoliniaNPCMerchantEntry> getEntries();
 
 	void setEntries(List<ISoliniaNPCMerchantEntry> entries);
-
 }
