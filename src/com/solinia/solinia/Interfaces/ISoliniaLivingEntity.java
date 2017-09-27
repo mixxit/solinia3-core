@@ -49,4 +49,10 @@ public interface ISoliniaLivingEntity
 	void doSpellCast(Plugin plugin, LivingEntity livingEntity);
 
 	public int getProcChancePct();
+
+	boolean getDodgeCheck();
+
+	boolean getDoubleAttackCheck();
+
+	boolean getRiposteCheck();
 }

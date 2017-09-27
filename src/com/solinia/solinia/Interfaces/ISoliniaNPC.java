@@ -169,4 +169,16 @@ public interface ISoliniaNPC {
 	void addEventHandler(SoliniaNPCEventHandler eventhandler);
 
 	void sendMerchantItemListToPlayer(Player player, int pageno);
+
+	boolean canDodge();
+
+	boolean canRiposte();
+
+	boolean canDoubleAttack();
+
+	boolean getDodgeCheck();
+
+	boolean getRiposteCheck();
+
+	boolean getDoubleAttackCheck();
 }

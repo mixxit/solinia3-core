@@ -82,4 +82,22 @@ public interface ISoliniaClass {
 
 	void setBowtypename(String bowtypename);
 
+	public boolean canDodge();
+
+	public boolean canDoubleAttack();
+
+	int getDodgelevel();
+
+	void setDodgelevel(int dodgelevel);
+
+	int getRipostelevel();
+
+	void setRipostelevel(int ripostelevel);
+
+	int getDoubleattacklevel();
+
+	void setDoubleattacklevel(int doubleattacklevel);
+
+	boolean canRiposte();
+
 }

@@ -855,4 +855,93 @@ public class SoliniaNPC implements ISoliniaNPC {
 		this.getEventHandlers().add(eventhandler);
 		
 	}
+
+	@Override
+	public boolean canDodge() {
+		if (getClassObj() == null)
+			return false;
+		
+		if (getClassObj().canDodge() == false)
+			return false;
+		
+		if (getClassObj().getDodgelevel() > getLevel())
+			return false;
+		
+		return false;
+	}
+
+	@Override
+	public boolean canRiposte() {
+		if (getClassObj() == null)
+			return false;
+
+		if (getClassObj().canRiposte() == false)
+			return false;
+
+		if (getClassObj().getRipostelevel() > getLevel())
+			return false;
+		
+		return false;
+	}
+
+	@Override
+	public boolean canDoubleAttack() {
+		if (getClassObj() == null)
+			return false;
+
+		if (getClassObj().canDoubleAttack() == false)
+			return false;
+		
+		if (getClassObj().getDoubleattacklevel() > getLevel())
+			return false;
+
+		return false;
+	}
+	
+	@Override 
+	public boolean getDodgeCheck()
+	{
+		if (canDodge() == false)
+			return false;
+		
+		int chance = getLevel();
+		if (chance < 1)
+			chance = 1;
+
+		chance += chance * 1 / 100;
+		chance /= 45;
+
+		return Utils.RandomBetween(1, 500) <= chance;
+	}
+	
+	@Override 
+	public boolean getRiposteCheck()
+	{
+		if (canRiposte() == false)
+			return false;
+		
+		int chance = getLevel();
+		if (chance < 1)
+			chance = 1;
+
+		chance += chance * 1 / 100;
+		chance /= 50;
+
+		return Utils.RandomBetween(1, 500) <= chance;
+	}
+	
+	@Override 
+	public boolean getDoubleAttackCheck()
+	{
+		if (canDoubleAttack() == false)
+			return false;
+		
+		int chance = getLevel();
+		if (chance < 1)
+			chance = 1;
+		
+		chance += chance * 1 / 100;
+
+		return Utils.RandomBetween(1, 500) <= chance;
+	}
 }

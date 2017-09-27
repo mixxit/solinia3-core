@@ -162,4 +162,15 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setInteraction(UUID interaction, ISoliniaNPC npc);
 
+	public boolean canDodge();
+
+	public boolean canRiposte();
+
+	public boolean canDoubleAttack();
+
+	boolean getDoubleAttackCheck();
+
+	boolean getDodgeCheck();
+
+	boolean getRiposteCheck();
 }

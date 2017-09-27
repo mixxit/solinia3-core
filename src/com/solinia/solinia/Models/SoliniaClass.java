@@ -42,6 +42,9 @@ public class SoliniaClass implements ISoliniaClass {
 	private String axetypename = "Axe";
 	private String spadetypename = "Staff";
 	private String bowtypename = "Bow";
+	private int dodgelevel = 0;
+	private int ripostelevel = 0;
+	private int doubleattacklevel = 0;
 	
 	@Override
 	public String getName() {
@@ -167,6 +170,11 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- spadetypename: " + ChatColor.GOLD + getSpadetypename() + ChatColor.RESET);
 		sender.sendMessage("- shieldtypename: " + ChatColor.GOLD + getShieldtypename() + ChatColor.RESET);
 		sender.sendMessage("- bowtypename: " + ChatColor.GOLD + getBowtypename() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- dodgelevel: " + ChatColor.GOLD + getDodgelevel() + ChatColor.RESET);
+		sender.sendMessage("- ripostelevel: " + ChatColor.GOLD + getRipostelevel() + ChatColor.RESET);
+		sender.sendMessage("- doubleattacklevel: " + ChatColor.GOLD + getDoubleattacklevel() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
 	}
 
 	@Override
@@ -259,6 +267,15 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "bowtypename":
 			this.setBowtypename(value);
+			break;
+		case "ripostelevel":
+			this.setRipostelevel(Integer.parseInt(value));
+			break;
+		case "dodgelevel":
+			this.setDodgelevel(Integer.parseInt(value));
+			break;
+		case "doubleattacklevel":
+			this.setDoubleattacklevel(Integer.parseInt(value));
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial");
@@ -490,5 +507,59 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setBowtypename(String bowtypename) {
 		this.bowtypename = bowtypename;
+	}
+
+	@Override
+	public boolean canDodge() {
+		if (getDodgelevel() < 1)
+			return false;
+		
+		return true;
+	}
+
+	@Override
+	public boolean canRiposte() {
+		if (getRipostelevel() < 1)
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public boolean canDoubleAttack() {
+		if (getDoubleattacklevel() < 1)
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public int getDodgelevel() {
+		return dodgelevel;
+	}
+
+	@Override
+	public void setDodgelevel(int dodgelevel) {
+		this.dodgelevel = dodgelevel;
+	}
+
+	@Override
+	public int getRipostelevel() {
+		return ripostelevel;
+	}
+
+	@Override
+	public void setRipostelevel(int ripostelevel) {
+		this.ripostelevel = ripostelevel;
+	}
+
+	@Override
+	public int getDoubleattacklevel() {
+		return doubleattacklevel;
+	}
+
+	@Override
+	public void setDoubleattacklevel(int doubleattacklevel) {
+		this.doubleattacklevel = doubleattacklevel;
 	}
 }
