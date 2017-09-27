@@ -89,7 +89,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			spawner = uniquename + ":\r\n";
 			spawner += "  MobType: " + mobtype + "\r\n";
 			spawner += "  Worlds: world\r\n";
-			spawner += "  Chance: 0.05\r\n";
+			spawner += "  Chance: 1\r\n";
 			spawner += "  Priority: 1\r\n";
 			spawner += "  Action: add\r\n";
 		}
@@ -325,6 +325,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			}
 		}
 
+		mob = mob + "  Skills:\r\n";
 		if (npc.isInvisible() == true) {
 			mob = mob + "  - potion{t=INVISIBILITY;d=2147483647;l=1} @self ~onSpawn\r\n";
 		}
