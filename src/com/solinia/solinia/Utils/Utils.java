@@ -703,6 +703,51 @@ public class Utils {
 					return cap;
 				}
 		}
+		
+		if (skillname.equals("DODGE")) {
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("ROGUE")
+						|| profession.getName().toUpperCase().equals("PALADIN")
+						|| profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("MONK")
+						|| profession.getName().toUpperCase().equals("HUNTER")
+						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
+					int cap = (int) ((5 * player.getLevel()) + 5);
+					return cap;
+				}
+		}
+		
+		if (skillname.equals("RIPOSTE")) {
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("ROGUE")
+						|| profession.getName().toUpperCase().equals("PALADIN")
+						|| profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("MONK")
+						|| profession.getName().toUpperCase().equals("HUNTER")
+						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
+					int cap = (int) ((5 * player.getLevel()) + 5);
+					return cap;
+				}
+		}
+		
+		if (skillname.equals("DOUBLEATTACK")) {
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("ROGUE")
+						|| profession.getName().toUpperCase().equals("PALADIN")
+						|| profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("MONK")
+						|| profession.getName().toUpperCase().equals("HUNTER")
+						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
+					int cap = (int) ((5 * player.getLevel()) + 5);
+					return cap;
+				}
+		}
 
 		if (skillname.equals("ARCHERY")) {
 			if (profession != null)

@@ -365,18 +365,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 					event.setDamage(DamageModifier.BASE, newdmg);
 
-					if (getDoubleAttackCheck()) {
-						if(attacker instanceof Player)
-						{
-							((Player)attacker).sendMessage(ChatColor.GRAY + "* You double attack!");
-							try {
-								SoliniaPlayerAdapter.Adapt((Player)attacker).tryIncreaseSkill("DOUBLEATTACK", 1);
-							} catch (CoreStateInitException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+					try
+					{
+						ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(attacker);
+						if (solle != null)
+						if (solle.getDoubleAttackCheck()) {
+							if(attacker instanceof Player)
+							{
+								((Player)attacker).sendMessage(ChatColor.GRAY + "* You double attack!");
+								try {
+									SoliniaPlayerAdapter.Adapt((Player)attacker).tryIncreaseSkill("DOUBLEATTACK", 1);
+								} catch (CoreStateInitException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							}
+							getBukkitLivingEntity().damage(newdmg, attacker);
 						}
-						getBukkitLivingEntity().damage(newdmg, attacker);
+					} catch (CoreStateInitException e)
+					{
+						//
 					}
 
 					event.setDamage(DamageModifier.BASE, newdmg);
@@ -421,18 +429,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 					event.setDamage(DamageModifier.BASE, newdmg);
 
-					if (getDoubleAttackCheck()) {
-						if(attacker instanceof Player)
-						{
-							((Player)attacker).sendMessage(ChatColor.GRAY + "* You double attack!");
-							try {
-								SoliniaPlayerAdapter.Adapt((Player)attacker).tryIncreaseSkill("DOUBLEATTACK", 1);
-							} catch (CoreStateInitException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+					try
+					{
+						ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(attacker);
+						if (solle != null)
+						if (solle.getDoubleAttackCheck()) {
+							if(attacker instanceof Player)
+							{
+								((Player)attacker).sendMessage(ChatColor.GRAY + "* You double attack!");
+								try {
+									SoliniaPlayerAdapter.Adapt((Player)attacker).tryIncreaseSkill("DOUBLEATTACK", 1);
+								} catch (CoreStateInitException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							}
+							getBukkitLivingEntity().damage(newdmg, attacker);
 						}
-						getBukkitLivingEntity().damage(newdmg, attacker);
+					} catch (CoreStateInitException e)
+					{
+						//
 					}
 
 					event.setDamage(DamageModifier.BASE, newdmg);
@@ -890,6 +906,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean getDodgeCheck() {
+		
 		if (getNpcid() < 1 && !isPlayer())
 			return false;
 		
@@ -901,7 +918,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc == null)
 					return false;
 				
-				return npc.getDodgeCheck();
+				boolean result = npc.getDodgeCheck();
+				
+				return result;
 			}
 			
 			if (isPlayer())
@@ -909,6 +928,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
 				if (solplayer == null)
 					return false;
+
+				boolean result = solplayer.getDodgeCheck();
 
 				return solplayer.getDodgeCheck();
 			}

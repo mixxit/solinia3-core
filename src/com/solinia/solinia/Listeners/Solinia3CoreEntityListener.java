@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -205,6 +206,11 @@ public class Solinia3CoreEntityListener implements Listener {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
+		if ((event.getEntity() instanceof ArmorStand))
+		{
+			return;
+		}
+		
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
@@ -348,11 +354,13 @@ public class Solinia3CoreEntityListener implements Listener {
 			
 			player.giveMoney(1);
 			livingEntity.dropLoot();
+
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+
 		
 	}
 }

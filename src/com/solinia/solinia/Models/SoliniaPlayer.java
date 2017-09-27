@@ -96,6 +96,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getBukkitPlayer() != null)
 		{
 			getBukkitPlayer().setDisplayName(getFullName());
+			getBukkitPlayer().setCustomName(getFullName());
 			getBukkitPlayer().setPlayerListName(getFullName());
 			
 			if (this.getGroup() != null) {
@@ -1081,7 +1082,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getClassObj().getDodgelevel() > getLevel())
 			return false;
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -1095,7 +1096,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getClassObj().getRipostelevel() > getLevel())
 			return false;
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -1118,15 +1119,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (canDodge() == false)
 			return false;
 		
+		
 		int chance = getSkill("DODGE").getValue();
 		if (chance < 1)
 			chance = 1;
-
+		
 		if (getLevel() > 35)
 			chance += getLevel();
-		
+
+
 		chance += chance * 1 / 100;
-		chance /= 45;
+		chance /= 40;
+		chance += 10;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -1138,6 +1142,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return false;
 		
 		int chance = getSkill("RIPOSTE").getValue();
+
 		if (chance < 1)
 			chance = 1;
 
@@ -1145,7 +1150,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			chance += getLevel();
 		
 		chance += chance * 1 / 100;
-		chance /= 50;
+		chance /= 40;
+		chance += 10;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -1164,6 +1170,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			chance += getLevel();
 		
 		chance += chance * 1 / 100;
+		chance /= 40;
+		chance += 10;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}

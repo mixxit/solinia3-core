@@ -867,7 +867,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		if (getClassObj().getDodgelevel() > getLevel())
 			return false;
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -881,7 +881,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		if (getClassObj().getRipostelevel() > getLevel())
 			return false;
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -895,7 +895,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		if (getClassObj().getDoubleattacklevel() > getLevel())
 			return false;
 
-		return false;
+		return true;
 	}
 	
 	@Override 
@@ -909,7 +909,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			chance = 1;
 
 		chance += chance * 1 / 100;
-		chance /= 45;
+		chance /= 40;
+		chance += 10;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -925,7 +926,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			chance = 1;
 
 		chance += chance * 1 / 100;
-		chance /= 50;
+		chance /= 40;
+		chance += 10;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -941,6 +943,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			chance = 1;
 		
 		chance += chance * 1 / 100;
+		chance /= 40;
+		chance += 10;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
