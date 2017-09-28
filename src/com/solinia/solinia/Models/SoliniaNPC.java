@@ -590,6 +590,11 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setUpsidedown(Boolean.parseBoolean(value));
 			break;
 		case "loottableid":
+			ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable == null)
+				throw new InvalidNpcSettingException("Loottable ID does not exist");
+			
 			setLoottableid(Integer.parseInt(value));
 			break;
 		case "raceid":
