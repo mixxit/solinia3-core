@@ -905,12 +905,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			return false;
 		
 		int chance = getLevel();
-		if (chance < 1)
-			chance = 1;
-
-		chance += chance * 1 / 100;
-		chance /= 40;
-		chance += 10;
+		chance += 100;
+		chance /= 45;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -922,12 +918,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			return false;
 		
 		int chance = getLevel();
-		if (chance < 1)
-			chance = 1;
-
-		chance += chance * 1 / 100;
-		chance /= 40;
-		chance += 10;
+		chance += 100;
+		chance /= 50;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -939,12 +931,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 			return false;
 		
 		int chance = getLevel();
-		if (chance < 1)
-			chance = 1;
-		
-		chance += chance * 1 / 100;
-		chance /= 40;
-		chance += 10;
+		chance += getLevel();
+		if (getLevel() > 35)
+		{
+			chance += getLevel();
+		}
+		chance /= 5;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}

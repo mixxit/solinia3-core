@@ -1119,18 +1119,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (canDodge() == false)
 			return false;
 		
-		
 		int chance = getSkill("DODGE").getValue();
-		if (chance < 1)
-			chance = 1;
-		
-		if (getLevel() > 35)
-			chance += getLevel();
-
-
-		chance += chance * 1 / 100;
+		chance += 100;
 		chance /= 40;
-		chance += 10;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -1142,16 +1133,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return false;
 		
 		int chance = getSkill("RIPOSTE").getValue();
-
-		if (chance < 1)
-			chance = 1;
-
-		if (getLevel() > 35)
-			chance += getLevel();
-		
-		chance += chance * 1 / 100;
-		chance /= 40;
-		chance += 10;
+		chance += 100;
+		chance /= 50;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -1163,15 +1146,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return false;
 		
 		int chance = getSkill("DOUBLEATTACK").getValue();
-		if (chance < 1)
-			chance = 1;
-
 		if (getLevel() > 35)
+		{
 			chance += getLevel();
-		
-		chance += chance * 1 / 100;
-		chance /= 40;
-		chance += 10;
+		}
+		chance /= 5;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
