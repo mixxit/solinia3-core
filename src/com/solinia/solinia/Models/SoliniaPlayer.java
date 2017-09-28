@@ -1162,6 +1162,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		int chance = getSkill("SAFEFALL").getValue();
 		chance += 10;
+		chance += getLevel();
 		
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
