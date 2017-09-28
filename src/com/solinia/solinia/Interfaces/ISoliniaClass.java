@@ -100,4 +100,10 @@ public interface ISoliniaClass {
 
 	boolean canRiposte();
 
+	int getSafefalllevel();
+
+	void setSafefalllevel(int safefalllevel);
+
+	boolean canSafeFall();
+
 }

@@ -173,4 +173,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean getDodgeCheck();
 
 	boolean getRiposteCheck();
+
+	public boolean getSafefallCheck();
 }

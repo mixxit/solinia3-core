@@ -1154,4 +1154,28 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
+
+	@Override
+	public boolean getSafefallCheck() {
+		if (canSafefall() == false)
+			return false;
+		
+		int chance = getSkill("SAFEFALL").getValue();
+		chance += 10;
+		
+		return Utils.RandomBetween(1, 500) <= chance;
+	}
+
+	private boolean canSafefall() {
+		if (getClassObj() == null)
+			return false;
+		
+		if (getClassObj().canSafeFall() == false)
+			return false;
+		
+		if (getClassObj().getSafefalllevel() > getLevel())
+			return false;
+		
+		return true;
+	}
 }

@@ -45,6 +45,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int dodgelevel = 0;
 	private int ripostelevel = 0;
 	private int doubleattacklevel = 0;
+	private int safefalllevel = 0;
 	
 	@Override
 	public String getName() {
@@ -174,6 +175,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- dodgelevel: " + ChatColor.GOLD + getDodgelevel() + ChatColor.RESET);
 		sender.sendMessage("- ripostelevel: " + ChatColor.GOLD + getRipostelevel() + ChatColor.RESET);
 		sender.sendMessage("- doubleattacklevel: " + ChatColor.GOLD + getDoubleattacklevel() + ChatColor.RESET);
+		sender.sendMessage("- safefalllevel: " + ChatColor.GOLD + getSafefalllevel() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 	}
 
@@ -276,6 +278,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "doubleattacklevel":
 			this.setDoubleattacklevel(Integer.parseInt(value));
+			break;
+		case "safefalllevel":
+			this.setSafefalllevel(Integer.parseInt(value));
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial");
@@ -561,5 +566,23 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setDoubleattacklevel(int doubleattacklevel) {
 		this.doubleattacklevel = doubleattacklevel;
+	}
+
+	@Override
+	public int getSafefalllevel() {
+		return safefalllevel;
+	}
+
+	@Override
+	public void setSafefalllevel(int safefalllevel) {
+		this.safefalllevel = safefalllevel;
+	}
+	
+	@Override
+	public boolean canSafeFall() {
+		if (getSafefalllevel() < 1)
+			return false;
+
+		return true;
 	}
 }

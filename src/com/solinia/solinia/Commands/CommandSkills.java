@@ -29,11 +29,13 @@ public class CommandSkills implements CommandExecutor
 	            if (soliniaplayer.getClassObj() != null)
 	            {
 	            	if (soliniaplayer.getClassObj().getDodgelevel() > 0)
-	            	player.sendMessage(ChatColor.GRAY + "You gain Dodge Skill at: " + soliniaplayer.getClassObj().getDodgelevel());	            	
+	            	player.sendMessage(ChatColor.GRAY + "You gain the Dodge Skill at: " + soliniaplayer.getClassObj().getDodgelevel());	            	
 	            	if (soliniaplayer.getClassObj().getRipostelevel() > 0)
-	            	player.sendMessage(ChatColor.GRAY + "You gain Riposte Skill at: " + soliniaplayer.getClassObj().getRipostelevel());	            	
+	            	player.sendMessage(ChatColor.GRAY + "You gain the Riposte Skill at: " + soliniaplayer.getClassObj().getRipostelevel());	            	
 	            	if (soliniaplayer.getClassObj().getDoubleattacklevel() > 0)
-	            	player.sendMessage(ChatColor.GRAY + "You gain Double Attack Skill at: " + soliniaplayer.getClassObj().getDoubleattacklevel());	            	
+	            	player.sendMessage(ChatColor.GRAY + "You gain the Double Attack Skill at: " + soliniaplayer.getClassObj().getDoubleattacklevel());	            	
+	            	if (soliniaplayer.getClassObj().getSafefalllevel() > 0)
+	            	player.sendMessage(ChatColor.GRAY + "You gain the Safefall Skill at: " + soliniaplayer.getClassObj().getSafefalllevel());	            	
 	            }
 	            
 	            for(SoliniaPlayerSkill skill : soliniaplayer.getSkills())

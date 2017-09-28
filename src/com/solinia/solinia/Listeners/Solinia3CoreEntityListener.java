@@ -129,6 +129,29 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityDamageEvent(EntityDamageEvent event) {
 		if (event.isCancelled()) 
 			return;
+		
+		if ((event.getEntity() instanceof Player)) {
+			if (!(event.getCause().equals(EntityDamageEvent.DamageCause.FALL))) 
+				return;
+			
+			Player player = (Player) event.getEntity();
+			ISoliniaPlayer solplayer;
+			try {
+				solplayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solplayer == null)
+					return;
+				
+				boolean cancelFall = solplayer.getSafefallCheck();
+				if (cancelFall == true)
+				{
+					event.setCancelled(true);
+					solplayer.tryIncreaseSkill("SAFEFALL", 1);
+					return;
+				}
+			} catch (CoreStateInitException e) {
+				return;
+			}
+		}
 	}
 
 	@EventHandler
