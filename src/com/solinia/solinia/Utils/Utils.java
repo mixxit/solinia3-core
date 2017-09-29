@@ -27,6 +27,7 @@ import com.comphenix.example.Vector3D;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
@@ -34,6 +35,7 @@ import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -42,8 +44,11 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SoliniaAAPrereq;
+import com.solinia.solinia.Models.SoliniaActiveSpellEffect;
+import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
+import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
@@ -2575,5 +2580,77 @@ public class Utils {
 			default:
 				return new DisguisePackage(DisguiseType.UNKNOWN,"Unknown");
 		}
+	}
+
+	public static int getTotalEffectStat(LivingEntity livingEntity, String stat) {
+		int statTotal = 0;
+
+		try
+		{
+			SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager()
+				.getActiveEntityEffects(livingEntity);
+		
+			for(SoliniaActiveSpellEffect active : effects.getActiveSpells())
+			{
+				for(SpellEffect effect : active.getSpell().getSpellEffects())
+				{
+					if (
+							!(effect.getSpellEffectType().equals(SpellEffectType.STR)) && 
+							!(effect.getSpellEffectType().equals(SpellEffectType.STA)) && 
+							!(effect.getSpellEffectType().equals(SpellEffectType.AGI)) && 
+							!(effect.getSpellEffectType().equals(SpellEffectType.DEX)) && 
+							!(effect.getSpellEffectType().equals(SpellEffectType.INT)) && 
+							!(effect.getSpellEffectType().equals(SpellEffectType.WIS)) && 
+							!(effect.getSpellEffectType().equals(SpellEffectType.CHA))
+							)
+						continue;
+					
+					switch (stat) {
+						case "STRENGTH":
+							if (!(effect.getSpellEffectType().equals(SpellEffectType.STR)))
+								break;
+							statTotal += effect.getBase();
+							break;
+						case "STAMINA":
+							if (!(effect.getSpellEffectType().equals(SpellEffectType.STA)))
+								break;
+							statTotal += effect.getBase();
+							break;
+						case "AGILITY":
+							if (!(effect.getSpellEffectType().equals(SpellEffectType.AGI)))
+								break;
+							statTotal += effect.getBase();
+							break;
+						case "DEXTERITY":
+							if (!(effect.getSpellEffectType().equals(SpellEffectType.DEX)))
+								break;
+							statTotal += effect.getBase();
+							break;
+						case "INTELLIGENCE":
+							if (!(effect.getSpellEffectType().equals(SpellEffectType.INT)))
+								break;
+							statTotal += effect.getBase();
+							break;
+						case "WISDOM":
+							if (!(effect.getSpellEffectType().equals(SpellEffectType.WIS)))
+								break;
+							statTotal += effect.getBase();
+							break;
+						case "CHARISMA":
+							if (!(effect.getSpellEffectType().equals(SpellEffectType.CHA)))
+								break;
+							statTotal += effect.getBase();
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		
+		} catch (CoreStateInitException e)
+		{
+			return 0;
+		}
+		return statTotal;
 	}
 }
