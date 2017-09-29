@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
@@ -1331,10 +1332,11 @@ public class SoliniaActiveSpellEffect {
 		try
 		{
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(this.getOwnerUuid()));
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(Bukkit.getPlayer(this.getOwnerUuid()));
 			
 			int amount = (int) Math.round(solplayer.getMana()) + mpToRemove;
-			if (amount > solplayer.getMaxMP()) {
-				amount = (int) Math.round(solplayer.getMaxMP());
+			if (amount > solentity.getMaxMP()) {
+				amount = (int) Math.round(solentity.getMaxMP());
 			}
 			
 			if (amount < 0)

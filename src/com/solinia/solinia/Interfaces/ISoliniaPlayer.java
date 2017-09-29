@@ -66,20 +66,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	Player getBukkitPlayer();
 
-	int getStrength();
-
-	int getStamina();
-	
-	int getAgility();
-	
-	int getDexterity();
-	
-	int getIntelligence();
-	
-	int getWisdom();
-	
-	int getCharisma();
-
 	void increasePlayerExperience(Double experience);
 
 	void increasePlayerNormalExperience(Double experience);
@@ -115,8 +101,6 @@ public interface ISoliniaPlayer extends Serializable {
 	void reducePlayerMana(int mana);
 
 	void increasePlayerMana(int mana);
-
-	public int getMaxMP();
 
 	void emote(String string);
 

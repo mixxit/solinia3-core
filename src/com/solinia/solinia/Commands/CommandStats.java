@@ -5,8 +5,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.Utils;
@@ -17,10 +19,11 @@ public class CommandStats implements CommandExecutor {
 			try {
 	            Player player = (Player) sender;
 	            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+	            ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
 
-				player.sendMessage("STR: " + solplayer.getStrength() + " STA: " + solplayer.getStamina() + " AGI: " + solplayer.getAgility() + " DEX: " + solplayer.getDexterity() + " INT: " + solplayer.getIntelligence() + " WIS: " + solplayer.getWisdom() + " CHA: " + solplayer.getCharisma());
+				player.sendMessage("STR: " + solentity.getStrength() + " STA: " + solentity.getStamina() + " AGI: " + solentity.getAgility() + " DEX: " + solentity.getDexterity() + " INT: " + solentity.getIntelligence() + " WIS: " + solentity.getWisdom() + " CHA: " + solentity.getCharisma());
 	            player.sendMessage("You have a maximum HP of: " + player.getMaxHealth());
-	            player.sendMessage("You have a maximum MP of: " + solplayer.getMaxMP());
+	            player.sendMessage("You have a maximum MP of: " + solentity.getMaxMP());
 	            player.sendMessage("FR: " + solplayer.getResist(SpellResistType.RESIST_FIRE) + " CR: " + solplayer.getResist(SpellResistType.RESIST_COLD) + " MR: " + solplayer.getResist(SpellResistType.RESIST_MAGIC) + " PR: " + solplayer.getResist(SpellResistType.RESIST_POISON) + " DR: " + solplayer.getResist(SpellResistType.RESIST_DISEASE));
 
 	            Double newlevel = (double) solplayer.getLevel();

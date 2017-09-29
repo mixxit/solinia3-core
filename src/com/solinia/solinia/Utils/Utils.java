@@ -567,56 +567,6 @@ public class Utils {
 		return reward;
 	}
 
-	public static double getStatMaxHP(ISoliniaPlayer player) {
-		ISoliniaClass solprofession = player.getClassObj();
-
-		String profession = "UNSKILLED";
-		if (solprofession != null)
-			profession = solprofession.getName().toUpperCase();
-
-		double level = getLevelFromExperience(player.getExperience());
-
-		double levelmultiplier = 1;
-
-		if (profession != null) {
-			if (profession.equals("UNSKILLED") || profession.equals("UNKNOWN"))
-				levelmultiplier = 3;
-			if (profession.equals("MONK") || profession.equals("ROGUE") || profession.equals("BARD"))
-				levelmultiplier = 18;
-			if (profession.equals("CLERIC") || profession.equals("DRUID") || profession.equals("SHAMAN")
-					|| profession.equals("EXARCH"))
-				levelmultiplier = 15;
-			if (profession.equals("MAGICIAN") || profession.equals("NECROMANCER") || profession.equals("ENCHANTER")
-					|| profession.equals("WIZARD") || profession.equals("ARCANIST"))
-				levelmultiplier = 12;
-			if (profession.equals("RANGER") || profession.equals("HUNTER"))
-				levelmultiplier = 20;
-			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
-					&& level <= 34)
-				levelmultiplier = 21;
-			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
-					&& level >= 35)
-				levelmultiplier = 22;
-			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
-					&& level >= 45)
-				levelmultiplier = 23;
-			if (profession.equals("WARRIOR") && level <= 19)
-				levelmultiplier = 22;
-			if (profession.equals("WARRIOR") && level >= 20)
-				levelmultiplier = 23;
-			if (profession.equals("WARRIOR") && level >= 30)
-				levelmultiplier = 25;
-			if (profession.equals("WARRIOR") && level >= 40)
-				levelmultiplier = 27;
-		}
-
-		double hp = level * levelmultiplier;
-		double hpmain = (player.getStamina() / 12) * level;
-
-		double calculatedhp = hp + hpmain;
-		return (int) Math.floor(calculatedhp);
-	}
-
 	public static int getMaxLevel() {
 		return 31;
 	}
@@ -2652,5 +2602,64 @@ public class Utils {
 			return 0;
 		}
 		return statTotal;
+	}
+
+	public static double getStatMaxHP(ISoliniaClass classObj, int level, int stamina) {
+		double levelmultiplier = 1;
+		
+		String profession = "UNSKILLED";
+		if (classObj != null)
+			profession = classObj.getName().toUpperCase();
+		
+		if (profession != null) {
+			if (profession.equals("UNSKILLED") || profession.equals("UNKNOWN"))
+				levelmultiplier = 3;
+			if (profession.equals("MONK") || profession.equals("ROGUE") || profession.equals("BARD"))
+				levelmultiplier = 18;
+			if (profession.equals("CLERIC") || profession.equals("DRUID") || profession.equals("SHAMAN")
+					|| profession.equals("EXARCH"))
+				levelmultiplier = 15;
+			if (profession.equals("MAGICIAN") || profession.equals("NECROMANCER") || profession.equals("ENCHANTER")
+					|| profession.equals("WIZARD") || profession.equals("ARCANIST"))
+				levelmultiplier = 12;
+			if (profession.equals("RANGER") || profession.equals("HUNTER"))
+				levelmultiplier = 20;
+			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
+					&& level <= 34)
+				levelmultiplier = 21;
+			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
+					&& level >= 35)
+				levelmultiplier = 22;
+			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
+					&& level >= 45)
+				levelmultiplier = 23;
+			if (profession.equals("WARRIOR") && level <= 19)
+				levelmultiplier = 22;
+			if (profession.equals("WARRIOR") && level >= 20)
+				levelmultiplier = 23;
+			if (profession.equals("WARRIOR") && level >= 30)
+				levelmultiplier = 25;
+			if (profession.equals("WARRIOR") && level >= 40)
+				levelmultiplier = 27;
+		}
+		
+		double hp = level * levelmultiplier;
+		double hpmain = (stamina / 12) * level;
+
+		double calculatedhp = hp + hpmain;
+		return (int) Math.floor(calculatedhp);
+	}
+
+	public static int getMaxDamage(int level, int strength) {
+		// TODO Auto-generated method stub
+		double basedmg = ((level * 0.45) + 0.8);
+
+		double racestatbonus = strength + (level * 5);
+		double bonus = racestatbonus / 100;
+		double damagemlt = basedmg * bonus;
+		double newdmg = damagemlt;
+		double damagepct = newdmg / basedmg;
+
+		return (int) Math.floor(basedmg * damagepct);
 	}
 }

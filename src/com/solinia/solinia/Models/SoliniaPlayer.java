@@ -29,6 +29,7 @@ import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -231,100 +232,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void updateMaxHp() {
 		if (getBukkitPlayer() != null && getExperience() != null)
 		{		
-			double calculatedhp = Utils.getStatMaxHP(this);
-			getBukkitPlayer().setMaxHealth(calculatedhp);
-			getBukkitPlayer().setHealthScaled(true);
-			getBukkitPlayer().setHealthScale(40D);
+			try
+			{
+				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
+				double calculatedhp = solentity.getMaxHP();
+				getBukkitPlayer().setMaxHealth(calculatedhp);
+				getBukkitPlayer().setHealthScaled(true);
+				getBukkitPlayer().setHealthScale(40D);
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 		}
 	}
-	
-	@Override
-	public int getStrength() {
-		int stat = 1;
 		
-		if (getRace() != null)
-			stat += getRace().getStrength();
-
-		stat += Utils.getTotalItemStat(this,"STRENGTH");
-		stat += Utils.getTotalEffectStat(this.getBukkitPlayer(), "STRENGTH");
-		return stat;
-	}
-
-	@Override
-	public int getStamina() {
-		int stat = 1;
-		
-		if (getRace() != null)
-			stat += getRace().getStamina();
-		
-		stat += Utils.getTotalItemStat(this,"STAMINA");
-		stat += Utils.getTotalEffectStat(this.getBukkitPlayer(), "STAMINA");
-		return stat;
-	}
-
-	@Override
-	public int getAgility() {
-		int stat = 1;
-		
-		if (getRace() != null)
-			stat += getRace().getAgility();
-		
-		stat += Utils.getTotalItemStat(this,"AGILITY");
-		stat += Utils.getTotalEffectStat(this.getBukkitPlayer(), "AGILITY");
-		return stat;
-	}
-
-	@Override
-	public int getDexterity() {
-		int stat = 1;
-		
-		if (getRace() != null)
-			stat += getRace().getDexterity();
-		
-		stat += Utils.getTotalItemStat(this,"DEXTERITY");
-		stat += Utils.getTotalEffectStat(this.getBukkitPlayer(), "DEXTERITY");
-		return stat;
-	}
-
-	@Override
-	public int getIntelligence() {
-		int stat = 1;
-		
-		if (getRace() != null)
-			stat += getRace().getIntelligence();
-		
-		stat += Utils.getTotalItemStat(this,"INTELLIGENCE");
-		stat += Utils.getTotalEffectStat(this.getBukkitPlayer(), "INTELLIGENCE");
-
-		return stat;
-	}
-
-	@Override
-	public int getWisdom() {
-		int stat = 1;
-		
-		if (getRace() != null)
-			stat += getRace().getWisdom();
-		
-		stat += Utils.getTotalItemStat(this,"WISDOM");
-		stat += Utils.getTotalEffectStat(this.getBukkitPlayer(), "WISDOM");
-
-		return stat;
-	}
-	
-	@Override
-	public int getCharisma() {
-		int stat = 1;
-		
-		if (getRace() != null)
-			stat += getRace().getCharisma();
-		
-		stat += Utils.getTotalItemStat(this,"CHARISMA");
-		stat += Utils.getTotalEffectStat(this.getBukkitPlayer(), "CHARISMA");
-
-		return stat;
-	}
-	
 	@Override
 	public void increasePlayerExperience(Double experience) {
 		if (!isAAOn()) {
@@ -640,25 +561,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
 	}
 	
-	public int getMaxMP() {
-		if (getClassObj() == null)
-			return 1;
-		
-		String profession = getClassObj().getName().toUpperCase();
-		double level = Utils.getLevelFromExperience(getExperience());
-
-		int wisintagi = 0;
-		if (Utils.getCasterClass(profession).equals("W"))
-			wisintagi = getWisdom();
-		if (Utils.getCasterClass(profession).equals("I"))
-			wisintagi = getIntelligence();
-		if (Utils.getCasterClass(profession).equals("N"))
-			wisintagi = getAgility();
-
-		double maxmana = ((850 * level) + (85 * wisintagi * level)) / 425;
-		return (int) Math.floor(maxmana);
-	}
-	
 	@Override
 	public void reducePlayerMana(int mana) {
 
@@ -674,7 +576,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void increasePlayerMana(int mana) {
 		int currentmana = getMana();
-		int maxmp = getMaxMP();
+		int maxmp = 1;
+		try
+		{
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitPlayer());
+			maxmp = solentity.getMaxMP();
+		} catch (CoreStateInitException e)
+		{
+			// do nothing
+		}
 
 		if ((currentmana + mana) > maxmp) {
 			currentmana = maxmp;

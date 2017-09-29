@@ -12,6 +12,7 @@ import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
 public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
@@ -182,8 +183,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		} else {
 			mob = mob + "  Display: " + npc.getName() + "\r\n";
 		}
-		mob = mob + "  Health: " + npc.getMaxHP() + "\r\n";
-		mob = mob + "  Damage: " + npc.getMaxDamage() + "\r\n";
+		mob = mob + "  Health: " + Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75) + "\r\n";
+		mob = mob + "  Damage: " + Utils.getMaxDamage(npc.getLevel(), 75) + "\r\n";
 		mob = mob + "  MovementSpeed: 0.2\r\n";
 		mob = mob + "  MaxCombatDistance: 25\r\n";
 		mob = mob + "  PreventOtherDrops: true\r\n";

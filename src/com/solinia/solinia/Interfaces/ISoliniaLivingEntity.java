@@ -55,4 +55,26 @@ public interface ISoliniaLivingEntity
 	boolean getDoubleAttackCheck();
 
 	boolean getRiposteCheck();
+
+	int getMaxDamage();
+
+	int getStrength();
+
+	int getStamina();
+
+	int getAgility();
+
+	int getDexterity();
+
+	int getIntelligence();
+
+	int getWisdom();
+
+	int getCharisma();
+
+	public int getMaxMP();
+
+	ISoliniaClass getClassObj();
+
+	public double getMaxHP();
 }

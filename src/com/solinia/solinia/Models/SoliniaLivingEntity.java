@@ -293,35 +293,43 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (event.getDamager() instanceof Arrow) {
 				Arrow arr = (Arrow) event.getDamager();
 				if (arr.getShooter() instanceof Player) {
-					// Apply archery modifier
-					SoliniaPlayerSkill skill = solplayer.getSkill("ARCHERY");
-					double racestatbonus = solplayer.getDexterity() + skill.getValue();
-					double bonus = racestatbonus / 100;
-					double damagemlt = currentdamage * bonus;
-					double newdmg = damagemlt;
-					double damagepct = newdmg / event.getDamage(EntityDamageEvent.DamageModifier.BASE);
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.ARMOR,
-								event.getDamage(EntityDamageEvent.DamageModifier.ARMOR) * damagepct);
-					} catch (Exception e1) {
+					try
+					{
+						// Apply archery modifier
+						SoliniaPlayerSkill skill = solplayer.getSkill("ARCHERY");
+						ISoliniaLivingEntity solplayerentity = SoliniaLivingEntityAdapter.Adapt(solplayer.getBukkitPlayer());
+						double racestatbonus = solplayerentity.getDexterity() + skill.getValue();
+						double bonus = racestatbonus / 100;
+						double damagemlt = currentdamage * bonus;
+						double newdmg = damagemlt;
+						double damagepct = newdmg / event.getDamage(EntityDamageEvent.DamageModifier.BASE);
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.ARMOR,
+									event.getDamage(EntityDamageEvent.DamageModifier.ARMOR) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.MAGIC,
+									event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE,
+									event.getDamage(EntityDamageEvent.DamageModifier.RESISTANCE) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.BLOCKING,
+									event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) * damagepct);
+						} catch (Exception e1) {
+						}
+	
+						event.setDamage(DamageModifier.BASE, newdmg);
 					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.MAGIC,
-								event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) * damagepct);
-					} catch (Exception e1) {
+					catch (CoreStateInitException e)
+					{
+						
 					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE,
-								event.getDamage(EntityDamageEvent.DamageModifier.RESISTANCE) * damagepct);
-					} catch (Exception e1) {
-					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.BLOCKING,
-								event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) * damagepct);
-					} catch (Exception e1) {
-					}
-
-					event.setDamage(DamageModifier.BASE, newdmg);
 				}
 			}
 
@@ -336,37 +344,38 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						|| materialinhand.equals(Material.DIAMOND_SWORD)
 						|| materialinhand.equals(Material.DIAMOND_AXE)) {
 					// Apply slashing modifier
-					SoliniaPlayerSkill skill = solplayer.getSkill("SLASHING");
-					double racestatbonus = solplayer.getStrength() + skill.getValue();
-					double bonus = racestatbonus / 100;
-					double damagemlt = currentdamage * bonus;
-					double newdmg = damagemlt;
-					double damagepct = newdmg / event.getDamage(EntityDamageEvent.DamageModifier.BASE);
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.ARMOR,
-								event.getDamage(EntityDamageEvent.DamageModifier.ARMOR) * damagepct);
-					} catch (Exception e1) {
-					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.MAGIC,
-								event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) * damagepct);
-					} catch (Exception e1) {
-					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE,
-								event.getDamage(EntityDamageEvent.DamageModifier.RESISTANCE) * damagepct);
-					} catch (Exception e1) {
-					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.BLOCKING,
-								event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) * damagepct);
-					} catch (Exception e1) {
-					}
-
-					event.setDamage(DamageModifier.BASE, newdmg);
-
 					try
 					{
+						SoliniaPlayerSkill skill = solplayer.getSkill("SLASHING");
+						ISoliniaLivingEntity solplayerentity = SoliniaLivingEntityAdapter.Adapt(solplayer.getBukkitPlayer());
+						double racestatbonus = solplayerentity.getStrength() + skill.getValue();
+						double bonus = racestatbonus / 100;
+						double damagemlt = currentdamage * bonus;
+						double newdmg = damagemlt;
+						double damagepct = newdmg / event.getDamage(EntityDamageEvent.DamageModifier.BASE);
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.ARMOR,
+									event.getDamage(EntityDamageEvent.DamageModifier.ARMOR) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.MAGIC,
+									event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE,
+									event.getDamage(EntityDamageEvent.DamageModifier.RESISTANCE) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.BLOCKING,
+									event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) * damagepct);
+						} catch (Exception e1) {
+						}
+
+						event.setDamage(DamageModifier.BASE, newdmg);
+					
 						ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(attacker);
 						if (solle != null)
 						if (solle.getDoubleAttackCheck()) {
@@ -382,12 +391,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							}
 							getBukkitLivingEntity().damage(newdmg, attacker);
 						}
+						
+						event.setDamage(DamageModifier.BASE, newdmg);
+
 					} catch (CoreStateInitException e)
 					{
 						//
 					}
 
-					event.setDamage(DamageModifier.BASE, newdmg);
 				}
 			}
 
@@ -399,38 +410,40 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						|| materialinhand.equals(Material.STONE_SPADE) || materialinhand.equals(Material.IRON_SPADE)
 						|| materialinhand.equals(Material.GOLD_SPADE) || materialinhand.equals(Material.DIAMOND_SPADE)
 						|| materialinhand.equals(Material.AIR)) {
-					// Apply crushing modifier
-					SoliniaPlayerSkill skill = solplayer.getSkill("CRUSHING");
-					double racestatbonus = solplayer.getStrength() + skill.getValue();
-					double bonus = racestatbonus / 100;
-					double damagemlt = currentdamage * bonus;
-					double newdmg = damagemlt;
-					double damagepct = newdmg / event.getDamage(EntityDamageEvent.DamageModifier.BASE);
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.ARMOR,
-								event.getDamage(EntityDamageEvent.DamageModifier.ARMOR) * damagepct);
-					} catch (Exception e1) {
-					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.MAGIC,
-								event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) * damagepct);
-					} catch (Exception e1) {
-					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE,
-								event.getDamage(EntityDamageEvent.DamageModifier.RESISTANCE) * damagepct);
-					} catch (Exception e1) {
-					}
-					try {
-						event.setDamage(EntityDamageEvent.DamageModifier.BLOCKING,
-								event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) * damagepct);
-					} catch (Exception e1) {
-					}
-
-					event.setDamage(DamageModifier.BASE, newdmg);
-
 					try
 					{
+						// Apply crushing modifier
+						SoliniaPlayerSkill skill = solplayer.getSkill("CRUSHING");
+						ISoliniaLivingEntity solplayerentity = SoliniaLivingEntityAdapter.Adapt(solplayer.getBukkitPlayer());
+	
+						double racestatbonus = solplayerentity.getStrength() + skill.getValue();
+						double bonus = racestatbonus / 100;
+						double damagemlt = currentdamage * bonus;
+						double newdmg = damagemlt;
+						double damagepct = newdmg / event.getDamage(EntityDamageEvent.DamageModifier.BASE);
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.ARMOR,
+									event.getDamage(EntityDamageEvent.DamageModifier.ARMOR) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.MAGIC,
+									event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE,
+									event.getDamage(EntityDamageEvent.DamageModifier.RESISTANCE) * damagepct);
+						} catch (Exception e1) {
+						}
+						try {
+							event.setDamage(EntityDamageEvent.DamageModifier.BLOCKING,
+									event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) * damagepct);
+						} catch (Exception e1) {
+						}
+	
+						event.setDamage(DamageModifier.BASE, newdmg);
+	
 						ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(attacker);
 						if (solle != null)
 						if (solle.getDoubleAttackCheck()) {
@@ -446,12 +459,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							}
 							getBukkitLivingEntity().damage(newdmg, attacker);
 						}
+
+					event.setDamage(DamageModifier.BASE, newdmg);
 					} catch (CoreStateInitException e)
 					{
 						//
 					}
-
-					event.setDamage(DamageModifier.BASE, newdmg);
 				}
 			}
 
@@ -884,25 +897,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
 				if (player != null)
-					dexterity = player.getDexterity();
+					dexterity = getDexterity();
 			} catch (CoreStateInitException e) {
 
 			}
 		}
 
-		if (this.getNpcid() > 0) {
-			try {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-				if (npc != null)
-					dexterity = npc.getDexterity();
-			} catch (CoreStateInitException e) {
-				e.printStackTrace();
-			}
-		}
+		if (this.getNpcid() > 0)
+			dexterity = getDexterity();
+		
 		float dexdiv = (dexterity / 35);
 		float fina = ((dexdiv / 25) * 100);
 		return (int) Math.floor(fina);
 	}
+	
+	@Override
+	public int getMaxDamage() {
+		return Utils.getMaxDamage(getLevel(), getStrength());
+	}
+
+	@Override
+	public double getMaxHP() {
+		return Utils.getStatMaxHP(getClassObj(), getLevel(), getStamina());
+	}
+
 
 	@Override
 	public boolean getDodgeCheck() {
@@ -940,7 +958,315 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		return false;
 	}
+	
+	@Override
+	public int getStrength() {
+		
+		if (getNpcid() < 1 && !isPlayer())
+			return 1;
+		
+		try
+		{
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return 1;
+				
+				int stat = npc.getLevel() * 5;
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
+				
+				return stat;
+			}
+			
+			if (isPlayer())
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if (solplayer == null)
+					return 1;
+				
+				int stat = 1;
 
+				if (solplayer.getRace() != null)
+					stat += solplayer.getRace().getStrength();
+
+				stat += Utils.getTotalItemStat(solplayer,"STRENGTH");
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
+				
+				return stat;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public int getStamina() {
+		
+		if (getNpcid() < 1 && !isPlayer())
+			return 1;
+		
+		try
+		{
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return 1;
+				
+				int stat = npc.getLevel() * 5;
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				
+				return stat;
+			}
+			
+			if (isPlayer())
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if (solplayer == null)
+					return 1;
+				
+				int stat = 1;
+
+				if (solplayer.getRace() != null)
+					stat += solplayer.getRace().getStamina();
+
+				stat += Utils.getTotalItemStat(solplayer,"STAMINA");
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				
+				return stat;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public int getAgility() {
+		
+		if (getNpcid() < 1 && !isPlayer())
+			return 1;
+		
+		try
+		{
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return 1;
+				
+				int stat = npc.getLevel() * 5;
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "AGILITY");
+				
+				return stat;
+			}
+			
+			if (isPlayer())
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if (solplayer == null)
+					return 1;
+				
+				int stat = 1;
+
+				if (solplayer.getRace() != null)
+					stat += solplayer.getRace().getAgility();
+
+				stat += Utils.getTotalItemStat(solplayer,"AGILITY");
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "AGILITY");
+				
+				return stat;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public int getDexterity() {
+		
+		if (getNpcid() < 1 && !isPlayer())
+			return 1;
+		
+		try
+		{
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return 1;
+				
+				int stat = npc.getLevel() * 5;
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
+				
+				return stat;
+			}
+			
+			if (isPlayer())
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if (solplayer == null)
+					return 1;
+				
+				int stat = 1;
+
+				if (solplayer.getRace() != null)
+					stat += solplayer.getRace().getDexterity();
+
+				stat += Utils.getTotalItemStat(solplayer,"DEXTERITY");
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
+				
+				return stat;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public int getIntelligence() {
+		
+		if (getNpcid() < 1 && !isPlayer())
+			return 1;
+		
+		try
+		{
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return 1;
+				
+				int stat = npc.getLevel() * 5;
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
+				
+				return stat;
+			}
+			
+			if (isPlayer())
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if (solplayer == null)
+					return 1;
+				
+				int stat = 1;
+
+				if (solplayer.getRace() != null)
+					stat += solplayer.getRace().getIntelligence();
+
+				stat += Utils.getTotalItemStat(solplayer,"INTELLIGENCE");
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
+				
+				return stat;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public int getWisdom() {
+		
+		if (getNpcid() < 1 && !isPlayer())
+			return 1;
+		
+		try
+		{
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return 1;
+				
+				int stat = npc.getLevel() * 5;
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "WISDOM");
+				
+				return stat;
+			}
+			
+			if (isPlayer())
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if (solplayer == null)
+					return 1;
+				
+				int stat = 1;
+
+				if (solplayer.getRace() != null)
+					stat += solplayer.getRace().getWisdom();
+
+				stat += Utils.getTotalItemStat(solplayer,"WISDOM");
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "WISDOM");
+				
+				return stat;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public int getCharisma() {
+		
+		if (getNpcid() < 1 && !isPlayer())
+			return 1;
+		
+		try
+		{
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return 1;
+				
+				int stat = npc.getLevel() * 5;
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
+				
+				return stat;
+			}
+			
+			if (isPlayer())
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if (solplayer == null)
+					return 1;
+				
+				int stat = 1;
+
+				if (solplayer.getRace() != null)
+					stat += solplayer.getRace().getCharisma();
+
+				stat += Utils.getTotalItemStat(solplayer,"CHARISMA");
+				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
+				
+				return stat;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return 1;
+		}
+		
+		return 1;
+	}
+	
 	@Override
 	public boolean getRiposteCheck() {
 		if (getNpcid() < 1 && !isPlayer())
@@ -1002,5 +1328,45 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public int getMaxMP() {
+		if (getClassObj() == null)
+			return 1;
+		
+		String profession = getClassObj().getName().toUpperCase();
+
+		int wisintagi = 0;
+		if (Utils.getCasterClass(profession).equals("W"))
+			wisintagi = getWisdom();
+		if (Utils.getCasterClass(profession).equals("I"))
+			wisintagi = getIntelligence();
+		if (Utils.getCasterClass(profession).equals("N"))
+			wisintagi = getAgility();
+
+		double maxmana = ((850 * getLevel()) + (85 * wisintagi * getLevel())) / 425;
+		return (int) Math.floor(maxmana);
+	}
+
+	@Override
+	public ISoliniaClass getClassObj() 
+	{
+		try
+		{
+			if (isPlayer())
+			{
+				return SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity()).getClassObj();
+			}
+			
+			if (this.getNpcid() > 0)
+			{
+				StateManager.getInstance().getConfigurationManager().getNPC(getNpcid()).getClassObj();
+			}
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+		return null;
 	}
 }

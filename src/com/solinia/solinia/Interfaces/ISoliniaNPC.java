@@ -111,10 +111,6 @@ public interface ISoliniaNPC {
 
 	void setClassid(int classid);
 
-	int getMaxDamage();
-
-	int getMaxHP();
-
 	boolean isRandomSpawn();
 
 	void setRandomSpawn(boolean isRandomSpawn);
@@ -135,24 +131,8 @@ public interface ISoliniaNPC {
 
 	void setRoamer(boolean isRoamer);
 
-	Integer getMaxMP();
-
 	ISoliniaClass getClassObj();
 	
-	public int getStrength();
-
-	public int getStamina();
-	
-	public int getAgility();
-	
-	public int getDexterity();
-	
-	public int getIntelligence();
-	
-	public int getWisdom();
-	
-	public int getCharisma();
-
 	boolean isPet();
 
 	void setPet(boolean isPet);

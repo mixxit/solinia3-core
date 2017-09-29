@@ -246,7 +246,18 @@ public class EntityManager implements IEntityManager {
 			return 0;
 		
 		if (entityManaLevels.get(bukkitLivingEntity.getUniqueId()) == null)
-			entityManaLevels.put(bukkitLivingEntity.getUniqueId(), npc.getMaxMP());
+		{
+			try
+			{
+				ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(bukkitLivingEntity);
+				entityManaLevels.put(bukkitLivingEntity.getUniqueId(), soliniaLivingEntity.getMaxMP());
+			} catch (CoreStateInitException e)
+			{
+				entityManaLevels.put(bukkitLivingEntity.getUniqueId(), 1);
+			}
+		} else {
+			
+		}
 		
 		return entityManaLevels.get(bukkitLivingEntity.getUniqueId());
 	}
@@ -259,8 +270,15 @@ public class EntityManager implements IEntityManager {
 		if (amount < 0)
 			amount = 0;
 		
-		if (amount > npc.getMaxMP())
-			amount = npc.getMaxMP();
+		try
+		{
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(bukkitLivingEntity);
+			if (amount > solLivingEntity.getMaxMP())
+				amount = solLivingEntity.getMaxMP();
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 		
 		entityManaLevels.put(bukkitLivingEntity.getUniqueId(), amount);
 	}
@@ -359,11 +377,12 @@ public class EntityManager implements IEntityManager {
 			entity.setCustomNameVisible(true);
 			entity.setCanPickupItems(false);
 			
-			entity.setMaxHealth(npc.getMaxHP());
-			entity.setHealth(npc.getMaxHP());
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(entity);
+			entity.setMaxHealth(solentity.getMaxHP());
+			entity.setHealth(solentity.getMaxHP());
 			net.minecraft.server.v1_12_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) entity).getHandle();
-			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)npc.getMaxDamage());
-			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + npc.getMaxDamage() + " dmg");
+			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solentity.getMaxDamage());
+			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + solentity.getMaxDamage() + " dmg");
 			
 
 			MobDisguise mob = new MobDisguise(DisguiseType.WOLF);

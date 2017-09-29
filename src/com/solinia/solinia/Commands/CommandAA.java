@@ -10,10 +10,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
@@ -128,9 +130,17 @@ public class CommandAA implements CommandExecutor {
 					}
 
 					solplayer.purchaseAlternateAdvancementRank(aa, aarank);
+					
+					try
+					{
+						ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
 
-					if (player.getMaxHealth() < Utils.getStatMaxHP(solplayer)) {
-						solplayer.updateMaxHp();
+						if (player.getMaxHealth() < solentity.getMaxHP()) {
+							solplayer.updateMaxHp();
+						}
+					} catch (CoreStateInitException e)
+					{
+						
 					}
 
 				default:

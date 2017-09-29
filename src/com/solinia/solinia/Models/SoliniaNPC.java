@@ -406,8 +406,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- professionid: " + ChatColor.GOLD + getClassid() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "STATS" + ChatColor.RESET);
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
-		sender.sendMessage("  - HP: " + ChatColor.GOLD + getMaxHP() + ChatColor.RESET);
-		sender.sendMessage("  - Damage: " + ChatColor.GOLD + getMaxDamage() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
 		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET);
@@ -477,32 +475,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 				}
 		}
 
-	}
-
-	@Override
-	public int getMaxDamage() {
-		// TODO Auto-generated method stub
-		double basedmg = ((level * 0.45) + 0.8);
-
-		double racestatbonus = getStrength() + (level * 5);
-		double bonus = racestatbonus / 100;
-		double damagemlt = basedmg * bonus;
-		double newdmg = damagemlt;
-		double damagepct = newdmg / basedmg;
-
-		return (int) Math.floor(basedmg * damagepct);
-	}
-
-	@Override
-	public int getMaxHP() {
-		double levelmultiplier = 15;
-
-		double hp = level * levelmultiplier;
-		double stamina = getStamina();
-		double hpmain = (stamina / 12) * level;
-
-		double calculatedhp = hp + hpmain;
-		return (int) Math.floor(calculatedhp);
 	}
 
 	@Override
@@ -691,64 +663,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			return null;
 		}
 	}
-
-	@Override
-	public Integer getMaxMP() {
-		if (getClassObj() == null)
-			return 1;
-		
-		String profession = getClassObj().getName().toUpperCase();
-
-		int wisintagi = 0;
-		if (Utils.getCasterClass(profession).equals("W"))
-			wisintagi = getWisdom();
-		if (Utils.getCasterClass(profession).equals("I"))
-			wisintagi = getIntelligence();
-		if (Utils.getCasterClass(profession).equals("N"))
-			wisintagi = getAgility();
-
-		double maxmana = ((850 * getLevel()) + (85 * wisintagi * getLevel())) / 425;
-		return (int) Math.floor(maxmana);
-	}
-
 	
-	// TODO Calculate these based on level and class
-	
-	@Override
-	public int getStrength() {
-		return 125;
-	}
-
-	@Override
-	public int getStamina() {
-		return 125;
-	}
-	
-	@Override
-	public int getAgility() {
-		return 125;
-	}
-
-	@Override
-	public int getDexterity() {
-		return 125;
-	}
-	
-	@Override
-	public int getIntelligence() {
-		return 125;
-	}
-
-	@Override
-	public int getWisdom() {
-		return 125;
-	}
-
-	@Override
-	public int getCharisma() {
-		return 125;
-	}
-
 	@Override
 	public boolean isPet() {
 		return isPet;
