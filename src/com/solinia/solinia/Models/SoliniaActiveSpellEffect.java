@@ -150,8 +150,20 @@ public class SoliniaActiveSpellEffect {
 			: return;
 		case AGI
 			: return;
-		case STA
-			: return;
+		case STA: 
+			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player)
+			{
+				try
+				{
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+					if (solplayer != null)
+					solplayer.updateMaxHp();
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			return;
 		case INT
 			: return;
 		case WIS

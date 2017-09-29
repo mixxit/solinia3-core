@@ -15,8 +15,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -145,6 +147,19 @@ public class SoliniaEntitySpellEffects {
 		{
 			switch(effect.getSpellEffectType())
 			{
+				case STA:
+					if (getLivingEntity() != null && getLivingEntity() instanceof Player)
+					{
+						try
+						{
+							ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+							if (solplayer != null)
+							solplayer.updateMaxHp();
+						} catch (CoreStateInitException e)
+						{
+							
+						}
+					}
 				case Illusion:
 				case IllusionCopy:
 				case IllusionOther:
