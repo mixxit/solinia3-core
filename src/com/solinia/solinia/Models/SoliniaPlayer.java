@@ -135,7 +135,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setMana(int mana)
 	{
 		this.mana = mana;
-		ScoreboardUtils.UpdateScoreboard(this.getBukkitPlayer(), this);
+		try
+		{
+			ScoreboardUtils.UpdateScoreboard(this.getBukkitPlayer(), SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer()).getMaxMP(), mana);
+		} catch (CoreStateInitException e)
+		{
+			//
+		}
 	}
 	
 	@Override

@@ -22,41 +22,33 @@ import com.solinia.solinia.Managers.StateManager;
 import net.md_5.bungee.api.ChatColor;
 
 public class ScoreboardUtils {
-	public static void UpdateScoreboard(Player player, ISoliniaPlayer soliniaplayer) {
+	public static void UpdateScoreboard(Player player, int maxmp, int mana) {
 
-		if (player != null && soliniaplayer != null) {
-			try
-			{
-				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
-				
-				BossBar bossbar = StateManager.getInstance().getBossBar(player.getUniqueId());
-				if (bossbar == null) {
-					bossbar = Bukkit.createBossBar(player.getUniqueId().toString(), BarColor.BLUE, BarStyle.SOLID);
-					bossbar.addPlayer(player);
-					StateManager.getInstance().setBossBar(player.getUniqueId(), bossbar);
-				}
-	
-				try {
-					boolean found = false;
-					for (Player bossbarplayer : bossbar.getPlayers()) {
-						if (bossbarplayer == player) {
-							found = true;
-						}
+		if (player != null) {
+			BossBar bossbar = StateManager.getInstance().getBossBar(player.getUniqueId());
+			if (bossbar == null) {
+				bossbar = Bukkit.createBossBar(player.getUniqueId().toString(), BarColor.BLUE, BarStyle.SOLID);
+				bossbar.addPlayer(player);
+				StateManager.getInstance().setBossBar(player.getUniqueId(), bossbar);
+			}
+
+			try {
+				boolean found = false;
+				for (Player bossbarplayer : bossbar.getPlayers()) {
+					if (bossbarplayer == player) {
+						found = true;
 					}
-	
-					if (found == false)
-						bossbar.addPlayer(player);
-	
-					double maxmana = solentity.getMaxMP();
-					bossbar.setTitle("MANA: " + soliniaplayer.getMana());
-					bossbar.setProgress((double) ((double) soliniaplayer.getMana() / (double) maxmana));
-	
-				} catch (Exception e) {
-					System.out.println(e.getMessage() + " " + e.getStackTrace());
 				}
-			} catch (CoreStateInitException e)
-			{
-				
+
+				if (found == false)
+					bossbar.addPlayer(player);
+
+				double maxmana = maxmp;
+				bossbar.setTitle("MANA: " + mana);
+				bossbar.setProgress((double) ((double) mana / (double) maxmana));
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage() + " " + e.getStackTrace());
 			}
 		}
 	}

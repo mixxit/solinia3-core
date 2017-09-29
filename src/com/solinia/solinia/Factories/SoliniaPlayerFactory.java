@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
@@ -11,9 +12,9 @@ import com.solinia.solinia.Models.SoliniaPlayer;
 
 public class SoliniaPlayerFactory {
 
-	public static ISoliniaPlayer CreatePlayer(Player player) {
+	public static ISoliniaPlayer CreatePlayer(Player player) throws CoreStateInitException {
 		// A player is different to a players entity
-		SoliniaPlayer soliniaPlayer = new SoliniaPlayer();
+		ISoliniaPlayer soliniaPlayer = new SoliniaPlayer();
 		soliniaPlayer.setUUID(player.getUniqueId());
 
 		String forename = getRandomNames(5, 1)[0];
@@ -30,6 +31,8 @@ public class SoliniaPlayerFactory {
 			e.printStackTrace();
 		}
 		
+		StateManager.getInstance().getPlayerManager().addPlayer(soliniaPlayer);
+		soliniaPlayer = SoliniaPlayerAdapter.Adapt(player);
 		soliniaPlayer.setExperience(0d);
 		soliniaPlayer.setAAExperience(0d);
 		soliniaPlayer.setMana(0);

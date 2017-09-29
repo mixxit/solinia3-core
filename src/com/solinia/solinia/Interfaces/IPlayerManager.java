@@ -10,4 +10,5 @@ public interface IPlayerManager {
 	public void commit();
 	boolean IsNewNameValid(String forename, String lastname);
 	void resetPlayer(Player player) throws CoreStateInitException;
+	void addPlayer(ISoliniaPlayer player);
 }
