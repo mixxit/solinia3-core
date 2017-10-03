@@ -2659,6 +2659,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- teleport_zone: " + ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
+		sender.sendMessage("- mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
+		sender.sendMessage("- range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
+		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		for(SoliniaSpellClass spellclass : this.getAllowedClasses())
