@@ -3054,8 +3054,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			updownsign = 1;
 		}
 
-		System.out.println("CSEV: spell " + getId() + ", formula " + spellEffect.getFormula() + ", base " + spellEffect.getBase() + ", max " + spellEffect.getMax()
-				+ ", lvl " + sourceLevel + ". Up/Down " + updownsign);
+		//System.out.println("CSEV: spell " + getId() + ", formula " + spellEffect.getFormula() + ", base " + spellEffect.getBase() + ", max " + spellEffect.getMax() + ", lvl " + sourceLevel + ". Up/Down " + updownsign);
 
 		switch (spellEffect.getFormula()) {
 		case 60:
@@ -3297,6 +3296,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (spellEffect.getBase() < 0 && result > 0)
 			result *= -1;
 
+		//System.out.println("Spell effect calculated from formula as " + result + " from base " + spellEffect.getBase());
 		return result;
 	}
 
