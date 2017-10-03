@@ -6,6 +6,8 @@ public class SpellEffect {
 	private int base;
 	private int limit;
 	private int spellEffectNo;
+	private int formula;
+	private int max;
 	
 	public SpellEffectType getSpellEffectType() {
 		return spellEffectType;
@@ -45,5 +47,21 @@ public class SpellEffect {
 
 	public void setSpellEffectNo(int spellEffectNo) {
 		this.spellEffectNo = spellEffectNo;
+	}
+
+	public int getFormula() {
+		return formula;
+	}
+
+	public void setFormula(int formula) {
+		this.formula = formula;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
 	}
 }

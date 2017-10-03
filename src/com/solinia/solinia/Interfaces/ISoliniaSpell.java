@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.Plugin;
 
@@ -1027,4 +1028,11 @@ public interface ISoliniaSpell {
 
 	boolean isWeaponProc();
 
+	int calcSpellEffectValueFormula(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
+			int sourceLevel, int ticksLeft);
+
+	int calcBuffDurationFormula(int level, int formula, int duration);
+
+	int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
+			int sourceLevel, int ticksleft);
 }

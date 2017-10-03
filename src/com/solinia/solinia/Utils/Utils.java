@@ -43,6 +43,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.SkillReward;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAAPrereq;
 import com.solinia.solinia.Models.SoliniaActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
@@ -2661,5 +2662,92 @@ public class Utils {
 		double damagepct = newdmg / basedmg;
 
 		return (int) Math.floor(basedmg * damagepct);
+	}
+	
+	public static SkillType getSkillType(Integer skill) {
+		switch(skill)
+		{
+			case 0: return SkillType.OneHandBlunt;
+			case 1: return SkillType.OneHandSlashing;
+			case 2: return SkillType.TwoHandBlunt;
+			case 3: return SkillType.TwoHandSlashing;
+			case 4: return SkillType.Abjuration;
+			case 5: return SkillType.Alteration;
+			case 6: return SkillType.ApplyPoison;
+			case 7: return SkillType.Archery;
+			case 8: return SkillType.Backstab;
+			case 9: return SkillType.BindWound;
+			case 10: return SkillType.Bash;
+			case 11: return SkillType.Block;
+			case 12: return SkillType.BrassInstruments;
+			case 13: return SkillType.Channeling;
+			case 14: return SkillType.Conjuration;
+			case 15: return SkillType.Defense;
+			case 16: return SkillType.Disarm;
+			case 17: return SkillType.DisarmTraps;
+			case 18: return SkillType.Divination;
+			case 19: return SkillType.Dodge;
+			case 20: return SkillType.DoubleAttack;
+			case 21: return SkillType.DragonPunch;
+			case 22: return SkillType.DualWield;
+			case 23: return SkillType.EagleStrike;
+			case 24: return SkillType.Evocation;
+			case 25: return SkillType.FeignDeath;
+			case 26: return SkillType.FlyingKick;
+			case 27: return SkillType.Forage;
+			case 28: return SkillType.HandtoHand;
+			case 29: return SkillType.Hide;
+			case 30: return SkillType.Kick;
+			case 31: return SkillType.Meditate;
+			case 32: return SkillType.Mend;
+			case 33: return SkillType.Offense;
+			case 34: return SkillType.Parry;
+			case 35: return SkillType.PickLock;
+			case 36: return SkillType.OneHandPiercing;
+			case 37: return SkillType.Riposte;
+			case 38: return SkillType.RoundKick;
+			case 39: return SkillType.SafeFall;
+			case 40: return SkillType.SenseHeading;
+			case 41: return SkillType.Singing;
+			case 42: return SkillType.Sneak;
+			case 43: return SkillType.SpecializeAbjure;
+			case 44: return SkillType.SpecializeAlteration;
+			case 45: return SkillType.SpecializeConjuration;
+			case 46: return SkillType.SpecializeDivination;
+			case 47: return SkillType.SpecializeEvocation;
+			case 48: return SkillType.PickPockets;
+			case 49: return SkillType.StringedInstruments;
+			case 50: return SkillType.Swimming;
+			case 51: return SkillType.Throwing;
+			case 52: return SkillType.TigerClaw;
+			case 53: return SkillType.Tracking;
+			case 54: return SkillType.WindInstruments;
+			case 55: return SkillType.Fishing;
+			case 56: return SkillType.MakePoison;
+			case 57: return SkillType.Tinkering;
+			case 58: return SkillType.Research;
+			case 59: return SkillType.Alchemy;
+			case 60: return SkillType.Baking;
+			case 61: return SkillType.Tailoring;
+			case 62: return SkillType.SenseTraps;
+			case 63: return SkillType.Blacksmithing;
+			case 64: return SkillType.Fletching;
+			case 65: return SkillType.Brewing;
+			case 66: return SkillType.AlcoholTolerance;
+			case 67: return SkillType.Begging;
+			case 68: return SkillType.JewelryMaking;
+			case 69: return SkillType.Pottery;
+			case 70: return SkillType.PercussionInstruments;
+			case 71: return SkillType.Intimidation;
+			case 72: return SkillType.Berserking;
+			case 73: return SkillType.Taunt;
+			case 74: return SkillType.Frenzy;
+			case 75: return SkillType.RemoveTraps;
+			case 76: return SkillType.TripleAttack;
+			case 77: return SkillType.TwoHandPiercing;
+			case 78: return SkillType.None;
+			case 79: return SkillType.Count;
+			default: return SkillType.None;
+		}
 	}
 }

@@ -108,6 +108,14 @@ public class SoliniaActiveSpellEffect {
 				System.out.print("Spell not found");
 				return;
 			}
+
+			Entity sourceEntity = Bukkit.getEntity(this.getSourceUuid());
+			if (sourceEntity == null || (!(sourceEntity instanceof LivingEntity)))
+				return;
+			
+			ISoliniaLivingEntity solsource = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sourceEntity);
+			if (solsource == null)
+				return;
 			
 			if (isFirstRun)
 			{
@@ -120,10 +128,9 @@ public class SoliniaActiveSpellEffect {
 				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals(""))
 					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(ChatColor.GRAY + "* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther());
 			}
-
 				
 			for (SpellEffect spellEffect : soliniaSpell.getSpellEffects()) {
-				applySpellEffect(plugin, spellEffect, soliniaSpell);
+				applySpellEffect(plugin, spellEffect, soliniaSpell, isFirstRun, solsource.getLevel());
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -131,18 +138,18 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applySpellEffect(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applySpellEffect(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, boolean isFirstRun, int casterLevel) {
 		
 		switch (spellEffect.getSpellEffectType()) {
 		case CurrentHP:
-			applyCurrentHpSpellEffect(spellEffect,soliniaSpell);
+			applyCurrentHpSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case ArmorClass: 
 			return;
 		case ATK: 
 			return;
 		case MovementSpeed:
-			applyMovementSpeedEffect(spellEffect,soliniaSpell);
+			applyMovementSpeedEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case STR
 			: return;
@@ -173,15 +180,15 @@ public class SoliniaActiveSpellEffect {
 		case AttackSpeed
 			: return;
 		case Invisibility: 
-			applyInvisibility(spellEffect,soliniaSpell);
+			applyInvisibility(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case SeeInvis
 			: return;
 		case WaterBreathing: 
-			applyWaterBreathing(spellEffect,soliniaSpell);
+			applyWaterBreathing(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case CurrentMana:
-			applyCurrentMpSpellEffect(spellEffect,soliniaSpell);
+			applyCurrentMpSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case NPCFrenzy
 			: return;
@@ -192,10 +199,10 @@ public class SoliniaActiveSpellEffect {
 		case AddFaction
 			: return;
 		case Blind: 
-			applyBlind(spellEffect,soliniaSpell);
+			applyBlind(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Stun: 
-			applyStunSpellEffect(spellEffect,soliniaSpell);
+			applyStunSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Charm
 			: return;
@@ -204,10 +211,10 @@ public class SoliniaActiveSpellEffect {
 		case Stamina
 			: return;
 		case BindAffinity: 
-			applyBindAffinty(spellEffect,soliniaSpell);
+			applyBindAffinty(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Gate:
-			applyGate(spellEffect,soliniaSpell);
+			applyGate(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case CancelMagic
 			: return;
@@ -218,21 +225,21 @@ public class SoliniaActiveSpellEffect {
 		case ChangeFrenzyRad
 			: return;
 		case Mez: 
-			applyMezSpellEffect(spellEffect,soliniaSpell);
+			applyMezSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case SummonItem
 			: return;
 		case SummonPet: 
-			applySummonPet(plugin, spellEffect,soliniaSpell);
+			applySummonPet(plugin, spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Confuse: 
-			applyConfusion(spellEffect,soliniaSpell);
+			applyConfusion(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case DiseaseCounter: 
-			applyDiseaseCounter(spellEffect,soliniaSpell);
+			applyDiseaseCounter(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case PoisonCounter: 
-			applyPoisonCounter(spellEffect,soliniaSpell);
+			applyPoisonCounter(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case DetectHostile
 			: return;
@@ -245,7 +252,7 @@ public class SoliniaActiveSpellEffect {
 		case Destroy
 			: return;
 		case ShadowStep: 
-			applyShadowStep(spellEffect,soliniaSpell);
+			applyShadowStep(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Berserk
 			: return;
@@ -281,10 +288,10 @@ public class SoliniaActiveSpellEffect {
 		case TrueNorth
 			: return;
 		case Levitate: 
-			applyLevitateSpellEffect(spellEffect,soliniaSpell);
+			applyLevitateSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Illusion: 
-			applyIllusion(spellEffect,soliniaSpell);
+			applyConfusion(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case DamageShield: 
 			// This is passive
@@ -296,15 +303,15 @@ public class SoliniaActiveSpellEffect {
 		case ItemID
 			: return;
 		case WipeHateList: 
-			applyWipeHateList(spellEffect,soliniaSpell);
+			applyWipeHateList(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case SpinTarget
 			: return;
 		case InfraVision: 
-			applyVision(spellEffect,soliniaSpell);
+			applyVision(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case UltraVision: 
-			applyVision(spellEffect,soliniaSpell);
+			applyVision(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case EyeOfZomm
 			: return;
@@ -315,7 +322,7 @@ public class SoliniaActiveSpellEffect {
 		case CorpseBomb
 			: return;
 		case NecPet: 
-			applySummonPet(plugin, spellEffect,soliniaSpell);
+			applySummonPet(plugin, spellEffect,soliniaSpell,casterLevel);
 			return;
 		case PreserveCorpse
 			: return;
@@ -332,7 +339,7 @@ public class SoliniaActiveSpellEffect {
 		case AbsorbMagicAtt
 			: return;
 		case CurrentHPOnce:
-			applyCurrentHpOnceSpellEffect(spellEffect,soliniaSpell);
+			applyCurrentHpOnceSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case EnchantLight
 			: return;
@@ -341,12 +348,12 @@ public class SoliniaActiveSpellEffect {
 		case SummonPC
 			: return;
 		case Teleport: 
-			applyTeleport(spellEffect,soliniaSpell);
+			applyTeleport(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case TossUp
 			: return;
 		case WeaponProc: 
-			applyProc(spellEffect, soliniaSpell);
+			applyProc(spellEffect, soliniaSpell,casterLevel);
 			return;
 		case Harmony
 			: return;
@@ -357,12 +364,12 @@ public class SoliniaActiveSpellEffect {
 		case ModelSize
 			: return;
 		case Cloak: 
-			applyInvisibility(spellEffect, soliniaSpell);
+			applyInvisibility(spellEffect, soliniaSpell,casterLevel);
 			return;
 		case SummonCorpse
 			: return;
 		case InstantHate: 
-			applyTauntSpell(spellEffect, soliniaSpell);
+			applyTauntSpell(spellEffect, soliniaSpell,casterLevel);
 			return;
 		case StopRain
 			: return;
@@ -377,7 +384,7 @@ public class SoliniaActiveSpellEffect {
 		case AttackSpeed2
 			: return;
 		case Root: 
-			applyRootSpellEffect(spellEffect,soliniaSpell);
+			applyRootSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case HealOverTime
 			: return;
@@ -470,7 +477,7 @@ public class SoliniaActiveSpellEffect {
 		case LimitCastTimeMax
 			: return;
 		case Teleport2: 
-			applyTeleport(spellEffect, soliniaSpell);
+			applyTeleport(spellEffect, soliniaSpell,casterLevel);
 			return;
 		case ElectricityResist
 			: return;
@@ -493,7 +500,7 @@ public class SoliniaActiveSpellEffect {
 		case SpellCritDmgIncrease
 			: return;
 		case IllusionCopy: 
-			applyIllusion(spellEffect,soliniaSpell);
+			applyIllusion(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case SpellDamageShield
 			: return;
@@ -564,15 +571,15 @@ public class SoliniaActiveSpellEffect {
 		case EndurancePool
 			: return;
 		case Amnesia: 
-			applyWipeHateList(spellEffect, soliniaSpell);
+			applyWipeHateList(spellEffect, soliniaSpell,casterLevel);
 			return;
 		case Hate:
-			applyTauntSpell(spellEffect, soliniaSpell);
+			applyTauntSpell(spellEffect, soliniaSpell,casterLevel);
 			return;
 		case SkillAttack
 			: return;
 		case FadingMemories: 
-			applyWipeHateList(spellEffect, soliniaSpell);
+			applyWipeHateList(spellEffect, soliniaSpell,casterLevel);
 			return;
 		case StunResist
 			: return;
@@ -583,14 +590,14 @@ public class SoliniaActiveSpellEffect {
 		case CurrentEnduranceOnce
 			: return;
 		case Taunt: 
-			applyTauntSpell(spellEffect,soliniaSpell);
+			applyTauntSpell(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case ProcChance
 			: return;
 		case RangedProc
 			: return;
 		case IllusionOther: 
-			applyIllusion(spellEffect,soliniaSpell);
+			applyIllusion(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case MassGroupBuff
 			: return;
@@ -663,7 +670,7 @@ public class SoliniaActiveSpellEffect {
 		case GivePetGroupTarget
 			: return;
 		case IllusionPersistence: 
-			applyIllusion(spellEffect,soliniaSpell);
+			applyIllusion(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case FeignedCastOnChance
 			: return;
@@ -860,7 +867,7 @@ public class SoliniaActiveSpellEffect {
 		case BlockNextSpellFocus
 			: return;
 		case IllusionaryTarget: 
-			applyIllusion(spellEffect,soliniaSpell);
+			applyIllusion(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case PercentXPIncrease
 			: return;
@@ -905,7 +912,7 @@ public class SoliniaActiveSpellEffect {
 		case FcMute
 			: return;
 		case CurrentManaOnce: 
-			applyCurrentMpSpellEffect(spellEffect,soliniaSpell);
+			applyCurrentMpSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case PassiveSenseTrap
 			: return;
@@ -948,7 +955,7 @@ public class SoliniaActiveSpellEffect {
 		case SpellEffectResistChance
 			: return;
 		case ShadowStepDirectional: 
-			applyShadowStep(spellEffect,soliniaSpell);
+			applyShadowStep(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Knockdown
 			: return;
@@ -1139,15 +1146,15 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applyProc(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyProc(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		// do nothing, this occurs during attack events
 	}
 
-	private void applyVision(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyVision(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6 * 20, 1));
 	}
 
-	private void applyIllusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyIllusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		DisguisePackage disguise = Utils.getDisguiseTypeFromDisguiseId(spellEffect.getBase());
 		if (disguise.getDisguisetype() == null || disguise.getDisguisetype() == null || disguise.getDisguisetype().equals(DisguiseType.UNKNOWN))
 		{
@@ -1191,7 +1198,7 @@ public class SoliniaActiveSpellEffect {
 		
 	}
 
-	private void applySummonPet(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applySummonPet(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 		
@@ -1204,7 +1211,7 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applyTauntSpell(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyTauntSpell(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 		
@@ -1218,7 +1225,7 @@ public class SoliniaActiveSpellEffect {
 			creature.setTarget((LivingEntity)source);
 	}
 
-	private void applyTeleport(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyTeleport(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 		
@@ -1232,7 +1239,7 @@ public class SoliniaActiveSpellEffect {
 		getLivingEntity().teleport(loc);
 	}
 	
-	private void applyShadowStep(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyShadowStep(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 		
@@ -1247,31 +1254,31 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 1));
 	}
 
-	private void applyInvisibility(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyInvisibility(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6 * 20, 1));
 	}
 
-	private void applyWaterBreathing(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyWaterBreathing(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 6 * 20, 1));
 	}
 
-	private void applyConfusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyConfusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
 	}
 
-	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 6 * 20, 1));
 	}
 
-	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
 	}
 
-	private void applyWipeHateList(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyWipeHateList(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Creature))
 			return;
 		
@@ -1279,7 +1286,7 @@ public class SoliniaActiveSpellEffect {
 		creature.setTarget(null);
 	}
 
-	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Creature))
 			return;
 		
@@ -1287,7 +1294,7 @@ public class SoliniaActiveSpellEffect {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
 	}
 	
-	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Creature))
 			return;
 		
@@ -1311,7 +1318,7 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 	
-	private void applyBindAffinty(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyBindAffinty(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 		
@@ -1319,7 +1326,7 @@ public class SoliniaActiveSpellEffect {
 		player.setBedSpawnLocation(player.getLocation(), true);
 	}
 
-	private void applyGate(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyGate(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 
@@ -1335,7 +1342,7 @@ public class SoliniaActiveSpellEffect {
 		player.teleport(blocation);
 	}
 
-	private void applyCurrentMpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyCurrentMpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 		
@@ -1361,7 +1368,7 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applyMovementSpeedEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyMovementSpeedEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		int normalize = spellEffect.getBase();
 		// value is a percentage but we range from 1-5 (we can stretch to 10)
 		normalize = normalize / 10;
@@ -1374,8 +1381,8 @@ public class SoliniaActiveSpellEffect {
 		
 	}
 
-	private void applyCurrentHpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
-		applyCurrentHpOnceSpellEffect(spellEffect, soliniaSpell);
+	private void applyCurrentHpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		applyCurrentHpOnceSpellEffect(spellEffect, soliniaSpell, casterLevel);
 	}
 
 	private LivingEntity getLivingEntity() {
@@ -1388,7 +1395,7 @@ public class SoliniaActiveSpellEffect {
 		return null;
 	}
 	
-	private void applyPoisonCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyPoisonCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!soliniaSpell.isCure())
 			return;
 		
@@ -1419,7 +1426,7 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applyDiseaseCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyDiseaseCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!soliniaSpell.isCure())
 			return;
 
@@ -1444,17 +1451,24 @@ public class SoliniaActiveSpellEffect {
 		}
 	}
 
-	private void applyCurrentHpOnceSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell) {
+	private void applyCurrentHpOnceSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int caster_level) {
 		if (getLivingEntity().isDead())
 			return;
 		
 		if (Bukkit.getEntity(getSourceUuid()) == null)
 			return;
 		
-		if (getLivingEntity() == null)
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
 			return;
 		
-		int hpToRemove = spellEffect.getBase();
+		if(!(sourceEntity instanceof LivingEntity))
+			return;
+		
+		LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
+		
+		// HP spells also get calculated based on the caster and the recipient
+		int hpToRemove = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), caster_level, getTicksLeft());		
 		
 		// Damage
 		if (hpToRemove < 0)
@@ -1468,14 +1482,10 @@ public class SoliniaActiveSpellEffect {
 			//getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 			if (soliniaSpell.isLifetapSpell())
 			{
-				Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
-				if (sourceEntity == null)
-					return;
+				
 				
 				if (!(sourceEntity instanceof LivingEntity))
 					return;
-				
-				LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
 				
 				int amount = (int) Math.round(sourceLivingEntity.getHealth()) + hpToRemove;
 				if (amount > sourceLivingEntity.getMaxHealth()) {

@@ -2874,98 +2874,495 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return spellEffects;
 	}
 	
-	public SpellEffect getSpellEffectByNo(int no)
-	{
+	public SpellEffect getSpellEffectByNo(int no) {
 		int effectid;
 		int base;
 		int limit;
 		int effectno;
-		switch(no)
-		{
-			case 1:
-				effectid = getEffectid1();
-				base = getEffectBaseValue1();
-				limit = getEffectLimitValue1();
-				effectno = 1;
-				break;
-			case 2:
-				effectid = getEffectid2();
-				base = getEffectBaseValue2();
-				limit = getEffectLimitValue2();
-				effectno = 2;
-				break;
-			case 3:
-				effectid = getEffectid3();
-				base = getEffectBaseValue3();
-				limit = getEffectLimitValue3();
-				effectno = 3;
-				break;
-			case 4:
-				effectid = getEffectid4();
-				base = getEffectBaseValue4();
-				limit = getEffectLimitValue4();
-				effectno = 4;
-				break;
-			case 5:
-				effectid = getEffectid5();
-				base = getEffectBaseValue5();
-				limit = getEffectLimitValue5();
-				effectno = 5;
-				break;
-			case 6:
-				effectid = getEffectid6();
-				base = getEffectBaseValue6();
-				limit = getEffectLimitValue6();
-				effectno = 6;
-				break;
-			case 7:
-				effectid = getEffectid7();
-				base = getEffectBaseValue7();
-				limit = getEffectLimitValue7();
-				effectno = 7;
-				break;
-			case 8:
-				effectid = getEffectid8();
-				base = getEffectBaseValue8();
-				limit = getEffectLimitValue8();
-				effectno = 8;
-				break;
-			case 9:
-				effectid = getEffectid9();
-				base = getEffectBaseValue9();
-				limit = getEffectLimitValue9();
-				effectno = 9;
-				break;
-			case 10:
-				effectid = getEffectid10();
-				base = getEffectBaseValue10();
-				limit = getEffectLimitValue10();
-				effectno = 10;
-				break;
-			case 11:
-				effectid = getEffectid11();
-				base = getEffectBaseValue11();
-				limit = getEffectLimitValue11();
-				effectno = 11;
-				break;
-			case 12:
-				effectid = getEffectid12();
-				base = getEffectBaseValue12();
-				limit = getEffectLimitValue12();
-				effectno = 12;
-				break;
-			default:
-				return null;
-			
+		int formula;
+		int max;
+
+		switch (no) {
+		case 1:
+			effectid = getEffectid1();
+			base = getEffectBaseValue1();
+			limit = getEffectLimitValue1();
+			formula = getFormula1();
+			max = getMax1();
+			effectno = 1;
+			break;
+		case 2:
+			effectid = getEffectid2();
+			base = getEffectBaseValue2();
+			limit = getEffectLimitValue2();
+			formula = getFormula2();
+			max = getMax2();
+			effectno = 2;
+			break;
+		case 3:
+			effectid = getEffectid3();
+			base = getEffectBaseValue3();
+			limit = getEffectLimitValue3();
+			formula = getFormula3();
+			max = getMax3();
+			effectno = 3;
+			break;
+		case 4:
+			effectid = getEffectid4();
+			base = getEffectBaseValue4();
+			limit = getEffectLimitValue4();
+			formula = getFormula4();
+			max = getMax4();
+			effectno = 4;
+			break;
+		case 5:
+			effectid = getEffectid5();
+			base = getEffectBaseValue5();
+			limit = getEffectLimitValue5();
+			formula = getFormula5();
+			max = getMax5();
+			effectno = 5;
+			break;
+		case 6:
+			effectid = getEffectid6();
+			base = getEffectBaseValue6();
+			limit = getEffectLimitValue6();
+			formula = getFormula6();
+			max = getMax6();
+			effectno = 6;
+			break;
+		case 7:
+			effectid = getEffectid7();
+			base = getEffectBaseValue7();
+			limit = getEffectLimitValue7();
+			formula = getFormula7();
+			max = getMax7();
+			effectno = 7;
+			break;
+		case 8:
+			effectid = getEffectid8();
+			base = getEffectBaseValue8();
+			limit = getEffectLimitValue8();
+			formula = getFormula8();
+			max = getMax8();
+			effectno = 8;
+			break;
+		case 9:
+			effectid = getEffectid9();
+			base = getEffectBaseValue9();
+			limit = getEffectLimitValue9();
+			formula = getFormula9();
+			max = getMax9();
+			effectno = 9;
+			break;
+		case 10:
+			effectid = getEffectid10();
+			base = getEffectBaseValue10();
+			limit = getEffectLimitValue10();
+			formula = getFormula10();
+			max = getMax10();
+			effectno = 10;
+			break;
+		case 11:
+			effectid = getEffectid11();
+			base = getEffectBaseValue11();
+			limit = getEffectLimitValue11();
+			formula = getFormula11();
+			max = getMax11();
+			effectno = 11;
+			break;
+		case 12:
+			effectid = getEffectid12();
+			base = getEffectBaseValue12();
+			limit = getEffectLimitValue12();
+			formula = getFormula12();
+			max = getMax12();
+			effectno = 12;
+			break;
+		default:
+			return null;
+
 		}
-		
+
 		SpellEffect spellEffect = new SpellEffect();
 		spellEffect.setSpellEffectId(effectid);
 		spellEffect.setSpellEffectType(Utils.getSpellEffectType(effectid));
 		spellEffect.setBase(base);
 		spellEffect.setLimit(limit);
+		spellEffect.setFormula(formula);
+		spellEffect.setMax(max);
 		spellEffect.setSpellEffectNo(effectno);
 		return spellEffect;
+	}
+	
+	@Override
+	public int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity, int sourceLevel, int ticksleft) {
+		int formula, base, max, effect_value;
+
+		formula = spellEffect.getFormula();
+		base = spellEffect.getBase();
+		max = spellEffect.getMax();
+
+		if (isBlankSpellEffect(spellEffect))
+			return 0;
+
+		effect_value = calcSpellEffectValueFormula(spellEffect, sourceEntity, targetEntity, sourceLevel, ticksleft);
+		effect_value = modEffectValue(effect_value, spellEffect, sourceEntity);
+
+		return effect_value;
+	}
+
+	private int modEffectValue(int effect_value, SpellEffect effect, LivingEntity caster) {
+		// TODO Auto-generated method stub
+		return effect_value;
+	}
+
+	private boolean isBardInstrumentSkill(Integer skillid) {
+		switch (Utils.getSkillType(skill)) {
+		case BrassInstruments:
+		case Singing:
+		case StringedInstruments:
+		case WindInstruments:
+		case PercussionInstruments:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	boolean isBlankSpellEffect(SpellEffect effect) {
+		if (effect.getSpellEffectType() == SpellEffectType.Blank
+				|| (effect.getSpellEffectType() == SpellEffectType.CHA && effect.getBase() == 0
+						&& effect.getFormula() == 100)
+				|| effect.getSpellEffectType() == SpellEffectType.StackingCommand_Block
+				|| effect.getSpellEffectType() == SpellEffectType.StackingCommand_Overwrite)
+			return true;
+
+		return false;
+	}
+
+	@Override
+	public int calcSpellEffectValueFormula(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity, int sourceLevel, int ticksleft) {
+		boolean degeneratingEffects = false;
+		int result = 0, updownsign = 1, ubase = spellEffect.getBase();
+		if (ubase < 0)
+			ubase = 0 - ubase;
+
+		if (spellEffect.getMax() < spellEffect.getBase() && spellEffect.getMax() != 0) {
+			updownsign = -1;
+		} else {
+			updownsign = 1;
+		}
+
+		System.out.println("CSEV: spell " + getId() + ", formula " + spellEffect.getFormula() + ", base " + spellEffect.getBase() + ", max " + spellEffect.getMax()
+				+ ", lvl " + sourceLevel + ". Up/Down " + updownsign);
+
+		switch (spellEffect.getFormula()) {
+		case 60:
+		case 70:
+			result = ubase / 100;
+			break;
+		case 0:
+		case 100:
+			result = ubase;
+			break;
+		case 101:
+			result = updownsign * (ubase + (sourceLevel / 2));
+			break;
+		case 102:
+			result = updownsign * (ubase + sourceLevel);
+			break;
+		case 103:
+			result = updownsign * (ubase + (sourceLevel * 2));
+			break;
+		case 104:
+			result = updownsign * (ubase + (sourceLevel * 3));
+			break;
+		case 105:
+			result = updownsign * (ubase + (sourceLevel * 4));
+			break;
+		case 107: {
+			int ticdif = calcBuffDurationFormula(sourceLevel, getBuffdurationformula(), getBuffduration())
+					- Integer.max((ticksleft - 1), 0);
+			if (ticdif < 0)
+				ticdif = 0;
+			result = updownsign * (ubase - ticdif);
+			degeneratingEffects = true;
+			break;
+		}
+		case 108: {
+			int ticdif = calcBuffDurationFormula(sourceLevel, getBuffdurationformula(), getBuffduration())
+					- Integer.max((ticksleft - 1), 0);
+			if (ticdif < 0)
+				ticdif = 0;
+			result = updownsign * (ubase - (2 * ticdif));
+			degeneratingEffects = true;
+			break;
+		}
+		case 109:
+			result = updownsign * (ubase + (sourceLevel / 4));
+			break;
+
+		case 110:
+			result = ubase + (sourceLevel / 6);
+			break;
+
+		case 111:
+			result = updownsign * (ubase + 6 * (sourceLevel - 16));
+			break;
+		case 112:
+			result = updownsign * (ubase + 8 * (sourceLevel - 24));
+			break;
+		case 113:
+			result = updownsign * (ubase + 10 * (sourceLevel - 34));
+			break;
+		case 114:
+			result = updownsign * (ubase + 15 * (sourceLevel - 44));
+			break;
+
+		case 115:
+			result = ubase;
+			if (sourceLevel > 15)
+				result += 7 * (sourceLevel - 15);
+			break;
+		case 116:
+			result = ubase;
+			if (sourceLevel > 24)
+				result += 10 * (sourceLevel - 24);
+			break;
+		case 117:
+			result = ubase;
+			if (sourceLevel > 34)
+				result += 13 * (sourceLevel - 34);
+			break;
+		case 118:
+			result = ubase;
+			if (sourceLevel > 44)
+				result += 20 * (sourceLevel - 44);
+			break;
+
+		case 119:
+			result = ubase + (sourceLevel / 8);
+			break;
+		case 120: {
+			int ticdif = calcBuffDurationFormula(sourceLevel, getBuffdurationformula(),
+					getBuffduration() - Integer.max((ticksleft - 1), 0));
+			if (ticdif < 0)
+				ticdif = 0;
+			result = updownsign * (ubase - (5 * ticdif));
+			degeneratingEffects = true;
+			break;
+		}
+		case 121:
+			result = ubase + (sourceLevel / 3);
+			break;
+		case 122: {
+			int ticdif = calcBuffDurationFormula(sourceLevel, getBuffdurationformula(),
+					getBuffduration() - Integer.max((ticksleft - 1), 0));
+			if (ticdif < 0)
+				ticdif = 0;
+
+			result = updownsign * (ubase - (12 * ticdif));
+			degeneratingEffects = true;
+			break;
+		}
+		case 123:
+			result = Utils.RandomBetween(ubase, Math.abs(spellEffect.getMax()));
+			break;
+
+		case 124:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * (sourceLevel - 50);
+			break;
+
+		case 125:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * 2 * (sourceLevel - 50);
+			break;
+
+		case 126:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * 3 * (sourceLevel - 50);
+			break;
+
+		case 127:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * 4 * (sourceLevel - 50);
+			break;
+
+		case 128:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * 5 * (sourceLevel - 50);
+			break;
+
+		case 129:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * 10 * (sourceLevel - 50);
+			break;
+
+		case 130:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * 15 * (sourceLevel - 50);
+			break;
+
+		case 131:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * 20 * (sourceLevel - 50);
+			break;
+
+		case 132:
+			result = ubase;
+			if (sourceLevel > 50)
+				result += updownsign * 25 * (sourceLevel - 50);
+			break;
+
+		case 137:
+			result = ubase - (int) ((ubase * (targetEntity.getHealth()/targetEntity.getMaxHealth())));
+			break;
+
+		case 138: {
+			int maxhps = (int) Math.floor(targetEntity.getMaxHealth() / 2);
+			if (targetEntity.getHealth() <= maxhps)
+				result = -(ubase * (int) Math.floor(targetEntity.getHealth() / maxhps));
+			else
+				result = -ubase;
+			break;
+		}
+
+		case 139:
+			result = ubase + (sourceLevel > 30 ? (sourceLevel - 30) / 2 : 0);
+			break;
+
+		case 140:
+			result = ubase + (sourceLevel > 30 ? sourceLevel - 30 : 0);
+			break;
+
+		case 141:
+			result = ubase + (sourceLevel > 30 ? (3 * sourceLevel - 90) / 2 : 0);
+			break;
+
+		case 142:
+			result = ubase + (sourceLevel > 30 ? 2 * sourceLevel - 60 : 0);
+			break;
+
+		case 143:
+			result = ubase + (3 * sourceLevel / 4);
+			break;
+
+		// these are used in stacking effects
+		case 201:
+		case 203:
+			result = spellEffect.getMax();
+			break;
+		default: {
+			if (spellEffect.getFormula() < 100)
+				result = ubase + (sourceLevel * spellEffect.getFormula());
+			else if ((spellEffect.getFormula() > 1000) && (spellEffect.getFormula() < 1999)) {
+				int ticdif = calcBuffDurationFormula(sourceLevel, getBuffdurationformula(), getBuffduration())
+						- Integer.max((ticksleft - 1), 0);
+				if (ticdif < 0)
+					ticdif = 0;
+
+				result = updownsign * (ubase - ((spellEffect.getFormula() - 1000) * ticdif));
+				degeneratingEffects = true;
+			} else if ((spellEffect.getFormula() >= 2000) && (spellEffect.getFormula() <= 2650)) {
+				result = ubase * (sourceLevel * (spellEffect.getFormula() - 2000) + 1);
+			} else
+				System.out.println("Unknown spell effect value formula " + spellEffect.getFormula());
+		}
+		}
+
+		int oresult = result;
+
+		// now check result against the allowed maximum
+		if (spellEffect.getMax() != 0) {
+			if (updownsign == 1) {
+				if (result > spellEffect.getMax())
+					result = spellEffect.getMax();
+			} else {
+				if (result < spellEffect.getMax())
+					result = spellEffect.getMax();
+			}
+		}
+
+		// if base is less than zero, then the result need to be negative too
+		if (spellEffect.getBase() < 0 && result > 0)
+			result *= -1;
+
+		return result;
+	}
+
+	@Override
+	public int calcBuffDurationFormula(int level, int formula, int duration) {
+		int temp;
+
+		switch (formula) {
+		case 1:
+			temp = level > 3 ? level / 2 : 1;
+			break;
+		case 2:
+			temp = level > 3 ? level / 2 + 5 : 6;
+			break;
+		case 3:
+			temp = 30 * level;
+			break;
+		case 4: // only used by 'LowerElement'
+			temp = 50;
+			break;
+		case 5:
+			temp = 2;
+			break;
+		case 6:
+			temp = level / 2 + 2;
+			break;
+		case 7:
+			temp = level;
+			break;
+		case 8:
+			temp = level + 10;
+			break;
+		case 9:
+			temp = 2 * level + 10;
+			break;
+		case 10:
+			temp = 3 * level + 10;
+			break;
+		case 11:
+			temp = 30 * (level + 3);
+			break;
+		case 12:
+			temp = level > 7 ? level / 4 : 1;
+			break;
+		case 13:
+			temp = 4 * level + 10;
+			break;
+		case 14:
+			temp = 5 * (level + 2);
+			break;
+		case 15:
+			temp = 10 * (level + 10);
+			break;
+		case 50:
+			return -1;
+		case 51:
+			return -4;
+		default:
+			if (formula < 200)
+				return 0;
+			temp = formula;
+			break;
+		}
+		if (duration < temp)
+			temp = duration;
+		return temp;
 	}
 	
 	@Override
