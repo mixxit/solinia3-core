@@ -2,9 +2,13 @@ package com.solinia.solinia.Factories;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -12,6 +16,8 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Utils.Utils;
+
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 
 public class SoliniaItemFactory {
 	public static ISoliniaItem CreateItem(ItemStack itemStack) throws SoliniaItemException, CoreStateInitException {
@@ -30,6 +36,17 @@ public class SoliniaItemFactory {
 				e.printStackTrace();
 			}
 		}
+		
+		if (itemStack.getType().name().equals("SKULL_ITEM"))
+	    {
+			net.minecraft.server.v1_12_R1.ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
+			NBTTagCompound tag = stack.hasTag() ? stack.getTag() : new NBTTagCompound();
+
+			tag.getCompound("SkullOwner").getString("Id");
+			String texturevalue = tag.getCompound("SkullOwner").getCompound("Properties").getList("textures", 10).get(0).getString("Value");
+			
+			item.setTexturebase64(texturevalue);
+	    }
 		
 		StateManager.getInstance().getConfigurationManager().addItem(item);
 		System.out.println("New Item Added: " + item.getId() + " - " + item.getDisplayname());

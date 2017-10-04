@@ -22,22 +22,10 @@ public class CommandSolinia implements CommandExecutor {
 			e.printStackTrace();
 		}
 		
-		/*
 		if (sender instanceof ConsoleCommandSender)
 		{
-			try
-			{
-			for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
-			{
-				if (spell.getAllowedClasses().size() == 0)
-				Utils.RepairMissingSpellItems(spell);
-			}
-			} catch (CoreStateInitException e)
-			{
-				
-			}
+			Utils.Patcher();
 		}
-		 */
 		return true;
 	}
 }
