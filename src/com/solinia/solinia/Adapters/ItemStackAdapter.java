@@ -315,30 +315,90 @@ public class ItemStackAdapter {
 		ISoliniaSpell spell;
 		try {
 			spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getAbilityid());
-			if (spell.getEffectid1() != 254 && !Utils.getSpellEffectType(spell.getEffectid1()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid1()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue1() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid1()).name() + "(" + spell.getEffectBaseValue1() + ")" + ChatColor.RESET);
-			if (spell.getEffectid2() != 254 && !Utils.getSpellEffectType(spell.getEffectid2()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid2()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue2() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid2()).name() + "(" + spell.getEffectBaseValue2() + ")" + ChatColor.RESET);
-			if (spell.getEffectid3() != 254 && !Utils.getSpellEffectType(spell.getEffectid3()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid3()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue3() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid3()).name() + "(" + spell.getEffectBaseValue3() + ")" + ChatColor.RESET);
-			if (spell.getEffectid4() != 254 && !Utils.getSpellEffectType(spell.getEffectid4()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid4()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue4() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid4()).name() + "(" + spell.getEffectBaseValue4() + ")" + ChatColor.RESET);
-			if (spell.getEffectid5() != 254 && !Utils.getSpellEffectType(spell.getEffectid5()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid5()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue5() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid5()).name() + "(" + spell.getEffectBaseValue5() + ")" + ChatColor.RESET);
-			if (spell.getEffectid6() != 254 && !Utils.getSpellEffectType(spell.getEffectid6()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid6()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue6() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid6()).name() + "(" + spell.getEffectBaseValue6() + ")" + ChatColor.RESET);
-			if (spell.getEffectid7() != 254 && !Utils.getSpellEffectType(spell.getEffectid7()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid7()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue7() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid7()).name() + "(" + spell.getEffectBaseValue7() + ")" + ChatColor.RESET);
-			if (spell.getEffectid8() != 254 && !Utils.getSpellEffectType(spell.getEffectid8()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid8()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue8() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid8()).name() + "(" + spell.getEffectBaseValue8() + ")" + ChatColor.RESET);
-			if (spell.getEffectid9() != 254 && !Utils.getSpellEffectType(spell.getEffectid9()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid9()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue9() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid9()).name() + "(" + spell.getEffectBaseValue9() + ")" + ChatColor.RESET);
-			if (spell.getEffectid10() != 254 && !Utils.getSpellEffectType(spell.getEffectid10()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid10()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue10() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid10()).name() + "(" + spell.getEffectBaseValue10() + ")" + ChatColor.RESET);
-			if (spell.getEffectid11() != 254 && !Utils.getSpellEffectType(spell.getEffectid11()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid11()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue11() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid11()).name() + "(" + spell.getEffectBaseValue11() + ")" + ChatColor.RESET);
-			if (spell.getEffectid12() != 254 && !Utils.getSpellEffectType(spell.getEffectid12()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid12()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue12() == 0))
-				loreTxt.add(ChatColor.WHITE + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid12()).name() + "(" + spell.getEffectBaseValue12() + ")" + ChatColor.RESET);
+			if (spell.getEffectid1() != 254 && !Utils.getSpellEffectType(spell.getEffectid1()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid1()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue1() == 0) && !Utils.getSpellEffectType(spell.getEffectid1()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue1() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid1()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid2() != 254 && !Utils.getSpellEffectType(spell.getEffectid2()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid2()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue2() == 0) && !Utils.getSpellEffectType(spell.getEffectid2()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue2() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid2()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid3() != 254 && !Utils.getSpellEffectType(spell.getEffectid3()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid3()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue3() == 0) && !Utils.getSpellEffectType(spell.getEffectid3()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue3() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid3()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid4() != 254 && !Utils.getSpellEffectType(spell.getEffectid4()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid4()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue4() == 0) && !Utils.getSpellEffectType(spell.getEffectid4()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue4() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid4()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid5() != 254 && !Utils.getSpellEffectType(spell.getEffectid5()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid5()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue5() == 0) && !Utils.getSpellEffectType(spell.getEffectid5()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue5() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid5()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid6() != 254 && !Utils.getSpellEffectType(spell.getEffectid6()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid6()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue6() == 0) && !Utils.getSpellEffectType(spell.getEffectid6()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue6() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid6()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid7() != 254 && !Utils.getSpellEffectType(spell.getEffectid7()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid7()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue7() == 0) && !Utils.getSpellEffectType(spell.getEffectid7()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue7() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid7()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid8() != 254 && !Utils.getSpellEffectType(spell.getEffectid8()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid8()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue8() == 0) && !Utils.getSpellEffectType(spell.getEffectid8()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue8() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid8()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid9() != 254 && !Utils.getSpellEffectType(spell.getEffectid9()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid9()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue9() == 0) && !Utils.getSpellEffectType(spell.getEffectid9()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue9() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid9()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid10() != 254 && !Utils.getSpellEffectType(spell.getEffectid10()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid10()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue10() == 0) && !Utils.getSpellEffectType(spell.getEffectid10()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue10() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid10()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid11() != 254 && !Utils.getSpellEffectType(spell.getEffectid11()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid11()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue11() == 0) && !Utils.getSpellEffectType(spell.getEffectid11()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue11() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid11()).name() + ChatColor.RESET);
+			}
+			if (spell.getEffectid12() != 254 && !Utils.getSpellEffectType(spell.getEffectid12()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid12()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue12() == 0) && !Utils.getSpellEffectType(spell.getEffectid12()).name().contains("StackingCommand_"))
+			{
+				String pos = "+";
+				if (spell.getEffectBaseValue12() < 0)
+					pos = "-";
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid12()).name() + ChatColor.RESET);
+			}
 			
 			loreTxt.add(ChatColor.WHITE + "Mana/Power: " + ChatColor.YELLOW+spell.getMana() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Range: " + ChatColor.YELLOW+spell.getRange() + ChatColor.RESET);
