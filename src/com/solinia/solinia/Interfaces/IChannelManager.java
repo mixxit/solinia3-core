@@ -12,4 +12,6 @@ public interface IChannelManager {
 
 	void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message);
 
+	void sendToDiscordMC(ISoliniaPlayer source, String message);
+
 }

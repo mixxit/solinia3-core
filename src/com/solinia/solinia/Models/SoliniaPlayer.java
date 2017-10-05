@@ -332,6 +332,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			getBukkitPlayer().sendMessage(ChatColor.RED + "* You lost experience (" + ipercenttolevel + "% into level)");
 		}
 		if (Double.compare(newlevel, level) > 0) {
+			String classname = "Hero";
+			if (getClassObj() != null)
+				classname = getClassObj().getName();
+			
+			StateManager.getInstance().getChannelManager().sendToDiscordMC(null,getFullName() + " has reached new heights as a level " + (int)Math.floor(newlevel) + " " + classname.toLowerCase() + "!");
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
 			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
 

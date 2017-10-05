@@ -41,13 +41,14 @@ public class ChannelManager implements IChannelManager {
 
 	@Override
 	public void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message) {
+		String originalmessage = message;
 		message = decorateGlobalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			player.sendMessage(message);
 		}
 		
 		System.out.println(message);
-		sendToDiscordMC(source,message);
+		sendToDiscordMC(source,source.getFullName() + ": " + originalmessage);
 	}
 
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {
@@ -135,9 +136,10 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
-		sendToDiscordMC(source,message);
+		sendToDiscordMC(source,source.getFullName() + ": " + message);
 	}
 	
+	@Override
 	public void sendToDiscordMC(ISoliniaPlayer source, String message)
 	{
 		System.out.println("sendToDiscordMC called");
