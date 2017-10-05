@@ -47,6 +47,7 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
+		sendToDiscordMC(source,message);
 	}
 
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {
@@ -134,6 +135,17 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
+		sendToDiscordMC(source,message);
+	}
+	
+	public void sendToDiscordMC(ISoliniaPlayer source, String message)
+	{
+		System.out.println("sendToDiscordMC called");
+		if(Bukkit.getServer().getPluginManager().getPlugin("DiscordMC")!=null)
+		{
+			System.out.println("Dispatching OOC message to discord");
+			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "discord send conversations " + message);
+		}
 	}
 
 	@Override
