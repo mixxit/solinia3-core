@@ -46,7 +46,7 @@ import net.minecraft.server.v1_12_R1.GenericAttributes;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
-	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpellEffects = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
+	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
@@ -105,25 +105,25 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public boolean addActiveEntitySpell(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		
-		if (entitySpellEffects.get(targetEntity.getUniqueId()) == null)
-			entitySpellEffects.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
+		if (entitySpells.get(targetEntity.getUniqueId()) == null)
+			entitySpells.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
 		
 		int duration = Utils.getDurationFromSpell(soliniaSpell);
-		return entitySpellEffects.get(targetEntity.getUniqueId()).addSpellEffect(plugin, soliniaSpell, sourceEntity, duration);
+		return entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration);
 	}
 	
 	@Override
 	public SoliniaEntitySpells getActiveEntitySpells(LivingEntity entity) {
-		if (entitySpellEffects.get(entity.getUniqueId()) == null)
-			entitySpellEffects.put(entity.getUniqueId(), new SoliniaEntitySpells(entity));
+		if (entitySpells.get(entity.getUniqueId()) == null)
+			entitySpells.put(entity.getUniqueId(), new SoliniaEntitySpells(entity));
 		
-		return entitySpellEffects.get(entity.getUniqueId());
+		return entitySpells.get(entity.getUniqueId());
 	}
 
 	@Override
 	public void spellTick(Plugin plugin) {
 		List<UUID> uuidRemoval = new ArrayList<UUID>();
-		for (SoliniaEntitySpells entityEffects : entitySpellEffects.values())
+		for (SoliniaEntitySpells entityEffects : entitySpells.values())
 		{
 			Entity entity = Bukkit.getEntity(entityEffects.getLivingEntityUUID());
 			if (entity == null)
@@ -141,7 +141,7 @@ public class EntityManager implements IEntityManager {
 		}
 		
 		
-		for(SoliniaEntitySpells entityEffects : entitySpellEffects.values())
+		for(SoliniaEntitySpells entityEffects : entitySpells.values())
 		{
 			entityEffects.run(plugin);
 		}
@@ -150,17 +150,17 @@ public class EntityManager implements IEntityManager {
 	@Override 
 	public void removeSpellEffects(UUID uuid)
 	{
-		if (entitySpellEffects.get(uuid) != null)
-			entitySpellEffects.get(uuid).removeAllActiveSpells();
+		if (entitySpells.get(uuid) != null)
+			entitySpells.get(uuid).removeAllSpells();
 		
-		entitySpellEffects.remove(uuid);
+		entitySpells.remove(uuid);
 	}
 	
 	@Override 
 	public void removeSpellEffectsOfSpellId(UUID uuid, int spellId)
 	{
-		if (entitySpellEffects.get(uuid) != null)
-			entitySpellEffects.get(uuid).removeAllActiveSpellsOfId(spellId);
+		if (entitySpells.get(uuid) != null)
+			entitySpells.get(uuid).removeAllSpellsOfId(spellId);
 	}
 	
 	@Override
@@ -446,16 +446,16 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void clearEntityEffects(UUID uniqueId) {
-		if (entitySpellEffects.get(uniqueId) != null)
+		if (entitySpells.get(uniqueId) != null)
 			removeSpellEffects(uniqueId);
 	}
 
 	@Override
 	public void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type) {
-		if (entitySpellEffects.get(livingEntity.getUniqueId()) == null)
+		if (entitySpells.get(livingEntity.getUniqueId()) == null)
 			return;
 		
-		entitySpellEffects.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(type);
+		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(type);
 	}
 
 	@Override

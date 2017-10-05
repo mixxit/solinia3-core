@@ -23,16 +23,16 @@ public class CommandEffects implements CommandExecutor {
             
             try
             {
-	            SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager().getActiveEntitySpells(player);
+	            SoliniaEntitySpells spells = StateManager.getInstance().getEntityManager().getActiveEntitySpells(player);
 	            
-	            if (effects == null)
+	            if (spells == null)
 	            	return true;
 	            
 	            if (args.length == 0)
 	            {
 		            player.sendMessage(ChatColor.GOLD + "Active Spell Effects on you:" + ChatColor.WHITE);
 		            
-		            for(SoliniaActiveSpell effect : effects.getActiveSpells())
+		            for(SoliniaActiveSpell effect : spells.getActiveSpells())
 		            {
 		            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
 		            	String removetext = "";

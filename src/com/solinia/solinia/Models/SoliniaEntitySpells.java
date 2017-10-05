@@ -54,7 +54,7 @@ public class SoliniaEntitySpells {
 		return activeSpells.values();
 	}
 
-	public boolean addSpellEffect(Plugin plugin, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration) {
+	public boolean addSpell(Plugin plugin, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration) {
 		// This spell ID is already active
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
@@ -134,7 +134,7 @@ public class SoliniaEntitySpells {
 		return true;
 	}
 	
-	public void removeActiveSpell(Integer spellId)
+	public void removeSpell(Integer spellId)
 	{
 		// Effect has worn off
 		SoliniaActiveSpell activeSpellEffect = activeSpells.get(spellId);
@@ -174,7 +174,7 @@ public class SoliniaEntitySpells {
 		activeSpells.remove(spellId);
 	}
 	
-	public void removeAllActiveSpells()
+	public void removeAllSpells()
 	{
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		for(SoliniaActiveSpell activeSpellEffect : getActiveSpells())
@@ -184,7 +184,7 @@ public class SoliniaEntitySpells {
 		
 		for(Integer spellId : removeSpells)
 		{
-			removeActiveSpell(spellId);
+			removeSpell(spellId);
 		}
 	}
 
@@ -209,7 +209,7 @@ public class SoliniaEntitySpells {
 		
 		for(Integer spellId : removeSpells)
 		{
-			removeActiveSpell(spellId);
+			removeSpell(spellId);
 		}
 		
 		for(SoliniaActiveSpell effect : updateSpells)
@@ -237,7 +237,7 @@ public class SoliniaEntitySpells {
 		
 		for(Integer spellId : removeSpells)
 		{
-			removeActiveSpell(spellId);
+			removeSpell(spellId);
 		}
 		
 		for(SoliniaActiveSpell effect : updateSpells)
@@ -247,7 +247,7 @@ public class SoliniaEntitySpells {
 		
 	}
 
-	public void removeAllActiveSpellsOfId(int spellId) {
-		removeActiveSpell(spellId);
+	public void removeAllSpellsOfId(int spellId) {
+		removeSpell(spellId);
 	}
 }
