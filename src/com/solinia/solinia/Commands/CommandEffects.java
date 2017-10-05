@@ -9,7 +9,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
-import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
+import com.solinia.solinia.Models.SoliniaEntitySpells;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -23,7 +23,7 @@ public class CommandEffects implements CommandExecutor {
             
             try
             {
-	            SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager().getActiveEntityEffects(player);
+	            SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager().getActiveEntitySpells(player);
 	            
 	            if (effects == null)
 	            	return true;

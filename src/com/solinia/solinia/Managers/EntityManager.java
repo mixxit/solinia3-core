@@ -31,7 +31,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
-import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
+import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
@@ -46,7 +46,7 @@ import net.minecraft.server.v1_12_R1.GenericAttributes;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
-	private ConcurrentHashMap<UUID, SoliniaEntitySpellEffects> entitySpellEffects = new ConcurrentHashMap<UUID, SoliniaEntitySpellEffects>();
+	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpellEffects = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
@@ -103,19 +103,19 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public boolean addActiveEntityEffect(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
+	public boolean addActiveEntitySpell(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		
 		if (entitySpellEffects.get(targetEntity.getUniqueId()) == null)
-			entitySpellEffects.put(targetEntity.getUniqueId(), new SoliniaEntitySpellEffects(targetEntity));
+			entitySpellEffects.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
 		
 		int duration = Utils.getDurationFromSpell(soliniaSpell);
 		return entitySpellEffects.get(targetEntity.getUniqueId()).addSpellEffect(plugin, soliniaSpell, sourceEntity, duration);
 	}
 	
 	@Override
-	public SoliniaEntitySpellEffects getActiveEntityEffects(LivingEntity entity) {
+	public SoliniaEntitySpells getActiveEntitySpells(LivingEntity entity) {
 		if (entitySpellEffects.get(entity.getUniqueId()) == null)
-			entitySpellEffects.put(entity.getUniqueId(), new SoliniaEntitySpellEffects(entity));
+			entitySpellEffects.put(entity.getUniqueId(), new SoliniaEntitySpells(entity));
 		
 		return entitySpellEffects.get(entity.getUniqueId());
 	}
@@ -123,7 +123,7 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void spellTick(Plugin plugin) {
 		List<UUID> uuidRemoval = new ArrayList<UUID>();
-		for (SoliniaEntitySpellEffects entityEffects : entitySpellEffects.values())
+		for (SoliniaEntitySpells entityEffects : entitySpellEffects.values())
 		{
 			Entity entity = Bukkit.getEntity(entityEffects.getLivingEntityUUID());
 			if (entity == null)
@@ -141,7 +141,7 @@ public class EntityManager implements IEntityManager {
 		}
 		
 		
-		for(SoliniaEntitySpellEffects entityEffects : entitySpellEffects.values())
+		for(SoliniaEntitySpells entityEffects : entitySpellEffects.values())
 		{
 			entityEffects.run(plugin);
 		}

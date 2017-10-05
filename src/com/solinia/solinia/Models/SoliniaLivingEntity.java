@@ -165,8 +165,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// damage shield response
 		try {
-			SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager()
-					.getActiveEntityEffects(getBukkitLivingEntity());
+			SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
+					.getActiveEntitySpells(getBukkitLivingEntity());
 
 			if (effects != null && (!(event.getDamager() instanceof Arrow))) {
 				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
@@ -202,8 +202,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// WeaponProc Spell Effects
 		try {
 			// Check if attacker has any WeaponProc effects
-			SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager()
-					.getActiveEntityEffects(attacker);
+			SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
+					.getActiveEntitySpells(attacker);
 
 			if (effects != null && (!(event.getDamager() instanceof Arrow))) {
 				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
@@ -842,8 +842,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (seekSpellEffectType != null) {
 			try {
-				SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager()
-						.getActiveEntityEffects(getBukkitLivingEntity());
+				SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
+						.getActiveEntitySpells(getBukkitLivingEntity());
 
 				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
 					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()

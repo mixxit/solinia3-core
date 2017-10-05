@@ -2730,7 +2730,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			switch(Utils.getSpellTargetType(getTargettype()))
 			{
 				case Self:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, sourceEntity,this,sourceEntity);
+					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, sourceEntity,this,sourceEntity);
 				case Pet:
 					if (sourceEntity instanceof Player)
 					{
@@ -2739,7 +2739,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						{
 							LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
 							if (pet != null) {
-								return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, pet,this,sourceEntity);
+								return StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, pet,this,sourceEntity);
 							}
 						} catch (CoreStateInitException e)
 						{
@@ -2748,11 +2748,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 					}
 					return false;
 				case TargetOptional:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, targetentity,this,sourceEntity);
+					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, targetentity,this,sourceEntity);
 				case Target:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, targetentity,this,sourceEntity);
+					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, targetentity,this,sourceEntity);
 				case Tap:
-					return StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, targetentity,this,sourceEntity);
+					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, targetentity,this,sourceEntity);
 				case TargetAETap:
 					// Get entities around entity and attempt to apply, if any are successful, return true
 					boolean tapsuccess = false;
@@ -2762,7 +2762,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, (LivingEntity)e,this,sourceEntity);
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
 						if (loopSuccess == true)
 							tapsuccess = true;
 					}
@@ -2776,7 +2776,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, (LivingEntity)e,this,sourceEntity);
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
 						if (loopSuccess == true)
 							success = true;
 					}
@@ -2790,7 +2790,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sourceEntity);
 					ISoliniaGroup group = player.getGroup();
 					
-					boolean selfSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, sourceEntity,this,sourceEntity);
+					boolean selfSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, sourceEntity,this,sourceEntity);
 					if (selfSuccess == true)
 						successGroup = true;
 
@@ -2803,7 +2803,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 							
 							if (group.getMembers().contains(e.getUniqueId()))
 							{
-								boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, (LivingEntity)e,this,sourceEntity);
+								boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
 								if (loopSuccess == true)
 									successGroup = true;
 							}
@@ -2819,7 +2819,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntityEffect(plugin, (LivingEntity)e,this,sourceEntity);
+						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
 						if (loopSuccess == true)
 							successCaster = true;
 					}
@@ -3600,7 +3600,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					effect.getSpellEffectType().equals(SpellEffectType.IllusionPersistence))
 			{
 				// if target has spell effect of above already then we cant apply another
-				for(SoliniaActiveSpell ase : StateManager.getInstance().getEntityManager().getActiveEntityEffects(target).getActiveSpells())
+				for(SoliniaActiveSpell ase : StateManager.getInstance().getEntityManager().getActiveEntitySpells(target).getActiveSpells())
 				{
 					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.Illusion))
 						return false;				

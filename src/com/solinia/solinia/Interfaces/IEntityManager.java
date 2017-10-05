@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.InsufficientTemporaryMerchantItemException;
-import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
+import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 
@@ -18,7 +18,7 @@ public interface IEntityManager {
 
 	INPCEntityProvider getNPCEntityProvider();
 
-	SoliniaEntitySpellEffects getActiveEntityEffects(LivingEntity entity);
+	SoliniaEntitySpells getActiveEntitySpells(LivingEntity entity);
 
 	void doNPCRandomChat();
 
@@ -54,7 +54,7 @@ public interface IEntityManager {
 
 	void spellTick(Plugin plugin);
 
-	boolean addActiveEntityEffect(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell,
+	boolean addActiveEntitySpell(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell,
 			LivingEntity sourceEntity);
 
 	void doNPCSpellCast(Plugin plugin);

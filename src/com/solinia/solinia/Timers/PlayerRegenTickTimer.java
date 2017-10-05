@@ -18,7 +18,6 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;

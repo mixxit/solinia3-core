@@ -24,14 +24,14 @@ import com.solinia.solinia.Utils.Utils;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
 
-public class SoliniaEntitySpellEffects {
+public class SoliniaEntitySpells {
 
 
 	private UUID livingEntityUUID;
 	private ConcurrentHashMap<Integer, SoliniaActiveSpell> activeSpells = new ConcurrentHashMap<Integer,SoliniaActiveSpell>();
 	private boolean isPlayer;
 	
-	public SoliniaEntitySpellEffects(LivingEntity livingEntity) {
+	public SoliniaEntitySpells(LivingEntity livingEntity) {
 		setLivingEntityUUID(livingEntity.getUniqueId());
 		if (livingEntity instanceof Player)
 			isPlayer = true;
