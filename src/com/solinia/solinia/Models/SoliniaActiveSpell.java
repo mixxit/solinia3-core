@@ -38,7 +38,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_12_R1.DamageSource;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
 
-public class SoliniaActiveSpellEffect {
+public class SoliniaActiveSpell {
 	private int spellId;
 	private int ticksLeft;
 	private boolean isOwnerPlayer = false;
@@ -47,7 +47,7 @@ public class SoliniaActiveSpellEffect {
 	private UUID ownerUuid;
 	private boolean isFirstRun = true;
 	
-	public SoliniaActiveSpellEffect(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid, boolean sourceIsPlayer, int ticksLeft) {
+	public SoliniaActiveSpell(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid, boolean sourceIsPlayer, int ticksLeft) {
 		setOwnerUuid(owneruuid);
 		setOwnerPlayer(isOwnerPlayer);
 		setSourceUuid(sourceuuid);

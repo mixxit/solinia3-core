@@ -45,7 +45,7 @@ import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAAPrereq;
-import com.solinia.solinia.Models.SoliniaActiveSpellEffect;
+import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
@@ -2542,7 +2542,7 @@ public class Utils {
 			SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager()
 				.getActiveEntityEffects(livingEntity);
 		
-			for(SoliniaActiveSpellEffect active : effects.getActiveSpells())
+			for(SoliniaActiveSpell active : effects.getActiveSpells())
 			{
 				for(SpellEffect effect : active.getSpell().getSpellEffects())
 				{

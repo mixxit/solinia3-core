@@ -28,7 +28,7 @@ public class SoliniaEntitySpellEffects {
 
 
 	private UUID livingEntityUUID;
-	private ConcurrentHashMap<Integer, SoliniaActiveSpellEffect> activeSpells = new ConcurrentHashMap<Integer,SoliniaActiveSpellEffect>();
+	private ConcurrentHashMap<Integer, SoliniaActiveSpell> activeSpells = new ConcurrentHashMap<Integer,SoliniaActiveSpell>();
 	private boolean isPlayer;
 	
 	public SoliniaEntitySpellEffects(LivingEntity livingEntity) {
@@ -50,7 +50,7 @@ public class SoliniaEntitySpellEffects {
 		return (LivingEntity)Bukkit.getEntity(this.getLivingEntityUUID());
 	}
 
-	public Collection<SoliniaActiveSpellEffect> getActiveSpells() {
+	public Collection<SoliniaActiveSpell> getActiveSpells() {
 		return activeSpells.values();
 	}
 
@@ -117,7 +117,7 @@ public class SoliniaEntitySpellEffects {
 			}
 		}
 		
-		SoliniaActiveSpellEffect activeEffect = new SoliniaActiveSpellEffect(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, sourceEntity.getUniqueId(), true, duration);
+		SoliniaActiveSpell activeEffect = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, sourceEntity.getUniqueId(), true, duration);
 		if (duration > 0)
 			activeSpells.put(soliniaSpell.getId(),activeEffect);
 		
@@ -137,7 +137,7 @@ public class SoliniaEntitySpellEffects {
 	public void removeActiveSpell(Integer spellId)
 	{
 		// Effect has worn off
-		SoliniaActiveSpellEffect activeSpellEffect = activeSpells.get(spellId);
+		SoliniaActiveSpell activeSpellEffect = activeSpells.get(spellId);
 		
 		if (activeSpellEffect == null)
 			return;
@@ -177,7 +177,7 @@ public class SoliniaEntitySpellEffects {
 	public void removeAllActiveSpells()
 	{
 		List<Integer> removeSpells = new ArrayList<Integer>();
-		for(SoliniaActiveSpellEffect activeSpellEffect : getActiveSpells())
+		for(SoliniaActiveSpell activeSpellEffect : getActiveSpells())
 		{
 			removeSpells.add(activeSpellEffect.getSpellId());
 		}
@@ -190,10 +190,10 @@ public class SoliniaEntitySpellEffects {
 
 	public void run(Plugin plugin) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
-		List<SoliniaActiveSpellEffect> updateSpells = new ArrayList<SoliniaActiveSpellEffect>();
+		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
 		
 		if (!getLivingEntity().isDead())
-		for(SoliniaActiveSpellEffect activeSpellEffect : getActiveSpells())
+		for(SoliniaActiveSpell activeSpellEffect : getActiveSpells())
 		{
 			if (activeSpellEffect.getTicksLeft() == 0)
 			{
@@ -212,7 +212,7 @@ public class SoliniaEntitySpellEffects {
 			removeActiveSpell(spellId);
 		}
 		
-		for(SoliniaActiveSpellEffect effect : updateSpells)
+		for(SoliniaActiveSpell effect : updateSpells)
 		{
 			activeSpells.put(effect.getSpellId(), effect);
 		}
@@ -221,10 +221,10 @@ public class SoliniaEntitySpellEffects {
 	// Mainly used for cures
 	public void removeFirstSpellOfEffectType(SpellEffectType type) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
-		List<SoliniaActiveSpellEffect> updateSpells = new ArrayList<SoliniaActiveSpellEffect>();
+		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
 		
 		boolean foundToRemove = false;
-		for(SoliniaActiveSpellEffect activeSpellEffect : getActiveSpells())
+		for(SoliniaActiveSpell activeSpellEffect : getActiveSpells())
 		{
 			if (foundToRemove == false && activeSpellEffect.getSpell().isEffectInSpell(type))
 			{
@@ -240,7 +240,7 @@ public class SoliniaEntitySpellEffects {
 			removeActiveSpell(spellId);
 		}
 		
-		for(SoliniaActiveSpellEffect effect : updateSpells)
+		for(SoliniaActiveSpell effect : updateSpells)
 		{
 			activeSpells.put(effect.getSpellId(), effect);
 		}

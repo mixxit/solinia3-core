@@ -169,7 +169,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					.getActiveEntityEffects(getBukkitLivingEntity());
 
 			if (effects != null && (!(event.getDamager() instanceof Arrow))) {
-				for (SoliniaActiveSpellEffect effect : effects.getActiveSpells()) {
+				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
 					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
 							.getSpell(effect.getSpellId());
 
@@ -206,7 +206,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					.getActiveEntityEffects(attacker);
 
 			if (effects != null && (!(event.getDamager() instanceof Arrow))) {
-				for (SoliniaActiveSpellEffect effect : effects.getActiveSpells()) {
+				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
 					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
 							.getSpell(effect.getSpellId());
 					if (spell == null)
@@ -845,7 +845,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				SoliniaEntitySpellEffects effects = StateManager.getInstance().getEntityManager()
 						.getActiveEntityEffects(getBukkitLivingEntity());
 
-				for (SoliniaActiveSpellEffect effect : effects.getActiveSpells()) {
+				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
 					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
 							.getSpell(effect.getSpellId());
 					for (SpellEffect spelleffect : spell.getSpellEffects()) {

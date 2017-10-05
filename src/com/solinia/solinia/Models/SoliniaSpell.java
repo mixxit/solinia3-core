@@ -3600,7 +3600,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					effect.getSpellEffectType().equals(SpellEffectType.IllusionPersistence))
 			{
 				// if target has spell effect of above already then we cant apply another
-				for(SoliniaActiveSpellEffect ase : StateManager.getInstance().getEntityManager().getActiveEntityEffects(target).getActiveSpells())
+				for(SoliniaActiveSpell ase : StateManager.getInstance().getEntityManager().getActiveEntityEffects(target).getActiveSpells())
 				{
 					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.Illusion))
 						return false;				

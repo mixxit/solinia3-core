@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaActiveSpellEffect;
+import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpellEffects;
 
 import net.md_5.bungee.api.ChatColor;
@@ -32,7 +32,7 @@ public class CommandEffects implements CommandExecutor {
 	            {
 		            player.sendMessage(ChatColor.GOLD + "Active Spell Effects on you:" + ChatColor.WHITE);
 		            
-		            for(SoliniaActiveSpellEffect effect : effects.getActiveSpells())
+		            for(SoliniaActiveSpell effect : effects.getActiveSpells())
 		            {
 		            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
 		            	String removetext = "";
