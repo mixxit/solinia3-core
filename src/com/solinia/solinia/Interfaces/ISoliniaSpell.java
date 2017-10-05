@@ -1002,7 +1002,7 @@ public interface ISoliniaSpell {
 
 	boolean isDamageSpell();
 
-	List<SpellEffect> getSpellEffects();
+	List<SpellEffect> getBaseSpellEffects();
 
 	List<SpellEffectType> getSpellEffectTypes();
 

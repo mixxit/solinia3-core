@@ -179,16 +179,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (!spell.isDamageShield())
 						continue;
 
-					for (SpellEffect spelleffect : spell.getSpellEffects()) {
+					for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
 						if (spelleffect.getSpellEffectType().equals(SpellEffectType.DamageShield)) {
 							// hurt enemy with damage shield
-							if (spelleffect.getBase() < 0) {
+							if (spelleffect.getCalculatedValue() < 0) {
 								EntityDamageSource source = new EntityDamageSource("thorns",
 										((CraftEntity) getBukkitLivingEntity()).getHandle());
 								source.setMagic();
 								source.ignoresArmor();
 
-								((CraftEntity) attacker).getHandle().damageEntity(source, spelleffect.getBase() * -1);
+								((CraftEntity) attacker).getHandle().damageEntity(source, spelleffect.getCalculatedValue() * -1);
 								// attacker.damage(spelleffect.getBase() * -1);
 							}
 						}
@@ -215,7 +215,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (!spell.isWeaponProc())
 						continue;
 
-					for (SpellEffect spelleffect : spell.getSpellEffects()) {
+					for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
 						if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)) {
 							if (spelleffect.getBase() < 0)
 								continue;
@@ -846,12 +846,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						.getActiveEntitySpells(getBukkitLivingEntity());
 
 				for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
-					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-							.getSpell(activeSpell.getSpellId());
-					for (SpellEffect spelleffect : spell.getSpellEffects()) {
+					for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
 						if (spelleffect.getSpellEffectType().equals(SpellEffectType.ResistAll)
 								|| spelleffect.getSpellEffectType().equals(seekSpellEffectType)) {
-							total += spelleffect.getBase();
+							total += spelleffect.getCalculatedValue();
 						}
 					}
 				}

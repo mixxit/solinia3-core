@@ -1,7 +1,9 @@
 package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -46,6 +48,7 @@ public class SoliniaActiveSpell {
 	private UUID sourceUuid;
 	private UUID ownerUuid;
 	private boolean isFirstRun = true;
+	private List<ActiveSpellEffect> activeSpellEffects = new ArrayList<ActiveSpellEffect>();
 	
 	public SoliniaActiveSpell(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid, boolean sourceIsPlayer, int ticksLeft) {
 		setOwnerUuid(owneruuid);
@@ -54,6 +57,37 @@ public class SoliniaActiveSpell {
 		this.setSourcePlayer(sourceIsPlayer);
 		setSpellId(spellId);
 		setTicksLeft(ticksLeft);
+		setActiveSpellEffects();
+	}
+
+	private void setActiveSpellEffects() {
+		activeSpellEffects = new ArrayList<ActiveSpellEffect>();
+		
+		try
+		{
+			ISoliniaLivingEntity solOwner = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(ownerUuid));
+			ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(sourceUuid));
+			
+			if (solOwner == null)
+				return;
+			
+			if (solSource == null)
+				return;
+			
+			for(SpellEffect spellEffect : getSpell().getBaseSpellEffects())
+			{
+				ActiveSpellEffect activeSpellEffect = new ActiveSpellEffect(getSpell(), spellEffect, solSource.getBukkitLivingEntity(), solOwner.getBukkitLivingEntity(), solSource.getLevel(), getTicksLeft());
+				activeSpellEffects.add(activeSpellEffect);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	public List<ActiveSpellEffect> getActiveSpellEffects()
+	{
+		return activeSpellEffects;
 	}
 
 	public boolean isOwnerPlayer() {
@@ -129,7 +163,7 @@ public class SoliniaActiveSpell {
 					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(ChatColor.GRAY + "* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther());
 			}
 				
-			for (SpellEffect spellEffect : soliniaSpell.getSpellEffects()) {
+			for (ActiveSpellEffect spellEffect : getActiveSpellEffects()) {
 				applySpellEffect(plugin, spellEffect, soliniaSpell, isFirstRun, solsource.getLevel());
 			}
 		} catch (CoreStateInitException e) {

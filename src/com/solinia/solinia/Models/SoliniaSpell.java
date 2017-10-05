@@ -2669,7 +2669,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			sender.sendMessage("- " + spellclass.getClassname() + " " + spellclass.getMinlevel());
 		}
 		sender.sendMessage("----------------------------");
-		for(SpellEffect effect : this.getSpellEffects())
+		for(SpellEffect effect : this.getBaseSpellEffects())
 		{
 			sender.sendMessage("- [" + effect.getSpellEffectId() + "]"  + effect.getSpellEffectType().name() + ": " + ChatColor.GOLD + effect.getBase() + ChatColor.RESET);		
 		}
@@ -3369,7 +3369,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 	
 	@Override
-	public List<SpellEffect> getSpellEffects()
+	public List<SpellEffect> getBaseSpellEffects()
 	{
 		List<SpellEffect> spellEffects = new ArrayList<SpellEffect>();
 		
@@ -3404,7 +3404,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public boolean isDamageSpell()
 	{
-		for(SpellEffect spellEffect : getSpellEffects())
+		for(SpellEffect spellEffect : getBaseSpellEffects())
 		{
 			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce) || spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP)) &&
 					Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1 
@@ -3548,7 +3548,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isEffectInSpell(SpellEffectType effecttype) {
-		for(SpellEffect effect : getSpellEffects())
+		for(SpellEffect effect : getBaseSpellEffects())
 		{
 			if (effect.getSpellEffectType() == effecttype)
 				return true;
@@ -3579,7 +3579,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 		}
 		
-		for(SpellEffect effect : soliniaSpell.getSpellEffects())
+		for(SpellEffect effect : soliniaSpell.getBaseSpellEffects())
 		{
 			// Validate spelleffecttype rules
 			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) || effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce))
@@ -3834,7 +3834,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isDamageShield() {
-		for(SpellEffect spellEffect : getSpellEffects())
+		for(SpellEffect spellEffect : getBaseSpellEffects())
 		{
 			if (spellEffect.getSpellEffectType().equals(SpellEffectType.DamageShield))
 				return true;

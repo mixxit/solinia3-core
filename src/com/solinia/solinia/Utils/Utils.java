@@ -41,6 +41,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
@@ -2544,7 +2545,7 @@ public class Utils {
 		
 			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
 			{
-				for(SpellEffect effect : activeSpell.getSpell().getSpellEffects())
+				for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
 				{
 					if (
 							!(effect.getSpellEffectType().equals(SpellEffectType.STR)) && 
@@ -2561,37 +2562,37 @@ public class Utils {
 						case "STRENGTH":
 							if (!(effect.getSpellEffectType().equals(SpellEffectType.STR)))
 								break;
-							statTotal += effect.getBase();
+							statTotal += effect.getCalculatedValue();
 							break;
 						case "STAMINA":
 							if (!(effect.getSpellEffectType().equals(SpellEffectType.STA)))
 								break;
-							statTotal += effect.getBase();
+							statTotal += effect.getCalculatedValue();
 							break;
 						case "AGILITY":
 							if (!(effect.getSpellEffectType().equals(SpellEffectType.AGI)))
 								break;
-							statTotal += effect.getBase();
+							statTotal += effect.getCalculatedValue();
 							break;
 						case "DEXTERITY":
 							if (!(effect.getSpellEffectType().equals(SpellEffectType.DEX)))
 								break;
-							statTotal += effect.getBase();
+							statTotal += effect.getCalculatedValue();
 							break;
 						case "INTELLIGENCE":
 							if (!(effect.getSpellEffectType().equals(SpellEffectType.INT)))
 								break;
-							statTotal += effect.getBase();
+							statTotal += effect.getCalculatedValue();
 							break;
 						case "WISDOM":
 							if (!(effect.getSpellEffectType().equals(SpellEffectType.WIS)))
 								break;
-							statTotal += effect.getBase();
+							statTotal += effect.getCalculatedValue();
 							break;
 						case "CHARISMA":
 							if (!(effect.getSpellEffectType().equals(SpellEffectType.CHA)))
 								break;
-							statTotal += effect.getBase();
+							statTotal += effect.getCalculatedValue();
 							break;
 						default:
 							break;

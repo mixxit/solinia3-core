@@ -117,12 +117,12 @@ public class SoliniaEntitySpells {
 			}
 		}
 		
-		SoliniaActiveSpell activeEffect = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, sourceEntity.getUniqueId(), true, duration);
+		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, sourceEntity.getUniqueId(), true, duration);
 		if (duration > 0)
-			activeSpells.put(soliniaSpell.getId(),activeEffect);
+			activeSpells.put(soliniaSpell.getId(),activeSpell);
 		
 		// Initial run
-		activeEffect.apply(plugin);
+		activeSpell.apply(plugin);
 		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 5);
 		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
 		
@@ -137,13 +137,13 @@ public class SoliniaEntitySpells {
 	public void removeSpell(Integer spellId)
 	{
 		// Effect has worn off
-		SoliniaActiveSpell activeSpellEffect = activeSpells.get(spellId);
+		SoliniaActiveSpell activeSpell = activeSpells.get(spellId);
 		
-		if (activeSpellEffect == null)
+		if (activeSpell == null)
 			return;
 		
 		// Handle any effect removals needed
-		for(SpellEffect effect : activeSpellEffect.getSpell().getSpellEffects())
+		for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
 		{
 			switch(effect.getSpellEffectType())
 			{
