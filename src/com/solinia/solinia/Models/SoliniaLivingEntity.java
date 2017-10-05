@@ -169,9 +169,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					.getActiveEntitySpells(getBukkitLivingEntity());
 
 			if (effects != null && (!(event.getDamager() instanceof Arrow))) {
-				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
+				for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
 					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-							.getSpell(effect.getSpellId());
+							.getSpell(activeSpell.getSpellId());
 
 					if (spell == null)
 						continue;
@@ -206,9 +206,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					.getActiveEntitySpells(attacker);
 
 			if (effects != null && (!(event.getDamager() instanceof Arrow))) {
-				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
+				for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
 					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-							.getSpell(effect.getSpellId());
+							.getSpell(activeSpell.getSpellId());
 					if (spell == null)
 						continue;
 
@@ -845,9 +845,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
 						.getActiveEntitySpells(getBukkitLivingEntity());
 
-				for (SoliniaActiveSpell effect : effects.getActiveSpells()) {
+				for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
 					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-							.getSpell(effect.getSpellId());
+							.getSpell(activeSpell.getSpellId());
 					for (SpellEffect spelleffect : spell.getSpellEffects()) {
 						if (spelleffect.getSpellEffectType().equals(SpellEffectType.ResistAll)
 								|| spelleffect.getSpellEffectType().equals(seekSpellEffectType)) {

@@ -177,9 +177,9 @@ public class SoliniaEntitySpells {
 	public void removeAllSpells()
 	{
 		List<Integer> removeSpells = new ArrayList<Integer>();
-		for(SoliniaActiveSpell activeSpellEffect : getActiveSpells())
+		for(SoliniaActiveSpell activeSpell : getActiveSpells())
 		{
-			removeSpells.add(activeSpellEffect.getSpellId());
+			removeSpells.add(activeSpell.getSpellId());
 		}
 		
 		for(Integer spellId : removeSpells)
@@ -193,17 +193,17 @@ public class SoliniaEntitySpells {
 		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
 		
 		if (!getLivingEntity().isDead())
-		for(SoliniaActiveSpell activeSpellEffect : getActiveSpells())
+		for(SoliniaActiveSpell activeSpell : getActiveSpells())
 		{
-			if (activeSpellEffect.getTicksLeft() == 0)
+			if (activeSpell.getTicksLeft() == 0)
 			{
-				removeSpells.add(activeSpellEffect.getSpellId());
+				removeSpells.add(activeSpell.getSpellId());
 			}
 			else
 			{
-				activeSpellEffect.apply(plugin);
-				activeSpellEffect.setTicksLeft(activeSpellEffect.getTicksLeft() - 1);
-				updateSpells.add(activeSpellEffect);
+				activeSpell.apply(plugin);
+				activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
+				updateSpells.add(activeSpell);
 			}
 		}
 		
@@ -212,9 +212,9 @@ public class SoliniaEntitySpells {
 			removeSpell(spellId);
 		}
 		
-		for(SoliniaActiveSpell effect : updateSpells)
+		for(SoliniaActiveSpell activeSpell : updateSpells)
 		{
-			activeSpells.put(effect.getSpellId(), effect);
+			activeSpells.put(activeSpell.getSpellId(), activeSpell);
 		}
 	}
 	
@@ -224,14 +224,14 @@ public class SoliniaEntitySpells {
 		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
 		
 		boolean foundToRemove = false;
-		for(SoliniaActiveSpell activeSpellEffect : getActiveSpells())
+		for(SoliniaActiveSpell activeSpell : getActiveSpells())
 		{
-			if (foundToRemove == false && activeSpellEffect.getSpell().isEffectInSpell(type))
+			if (foundToRemove == false && activeSpell.getSpell().isEffectInSpell(type))
 			{
-				removeSpells.add(activeSpellEffect.getSpellId());
+				removeSpells.add(activeSpell.getSpellId());
 				foundToRemove = true;
 			} else {
-				updateSpells.add(activeSpellEffect);
+				updateSpells.add(activeSpell);
 			}
 		}
 		
@@ -240,9 +240,9 @@ public class SoliniaEntitySpells {
 			removeSpell(spellId);
 		}
 		
-		for(SoliniaActiveSpell effect : updateSpells)
+		for(SoliniaActiveSpell activeSpell : updateSpells)
 		{
-			activeSpells.put(effect.getSpellId(), effect);
+			activeSpells.put(activeSpell.getSpellId(), activeSpell);
 		}
 		
 	}

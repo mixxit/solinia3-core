@@ -2542,9 +2542,9 @@ public class Utils {
 			SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
 				.getActiveEntitySpells(livingEntity);
 		
-			for(SoliniaActiveSpell active : effects.getActiveSpells())
+			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
 			{
-				for(SpellEffect effect : active.getSpell().getSpellEffects())
+				for(SpellEffect effect : activeSpell.getSpell().getSpellEffects())
 				{
 					if (
 							!(effect.getSpellEffectType().equals(SpellEffectType.STR)) && 

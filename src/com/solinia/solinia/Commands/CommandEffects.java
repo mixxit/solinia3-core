@@ -32,9 +32,9 @@ public class CommandEffects implements CommandExecutor {
 	            {
 		            player.sendMessage(ChatColor.GOLD + "Active Spell Effects on you:" + ChatColor.WHITE);
 		            
-		            for(SoliniaActiveSpell effect : spells.getActiveSpells())
+		            for(SoliniaActiveSpell activeSpell : spells.getActiveSpells())
 		            {
-		            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getSpellId());
+		            	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(activeSpell.getSpellId());
 		            	String removetext = "";
 		            	ChatColor spellcolor = ChatColor.GREEN;
 		            	if (spell.isBeneficial())
@@ -45,7 +45,7 @@ public class CommandEffects implements CommandExecutor {
 		            		spellcolor = ChatColor.RED;
 		            	}
 		            	
-		            	player.sendMessage("- Spell: " + spellcolor + spell.getName() + ChatColor.RESET + " " + effect.getTicksLeft() + " ticks left - " + removetext);
+		            	player.sendMessage("- Spell: " + spellcolor + spell.getName() + ChatColor.RESET + " " + activeSpell.getTicksLeft() + " ticks left - " + removetext);
 		            }
 	            } else {
 	            	if (args.length < 2)

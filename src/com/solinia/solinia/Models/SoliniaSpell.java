@@ -3600,17 +3600,17 @@ public class SoliniaSpell implements ISoliniaSpell {
 					effect.getSpellEffectType().equals(SpellEffectType.IllusionPersistence))
 			{
 				// if target has spell effect of above already then we cant apply another
-				for(SoliniaActiveSpell ase : StateManager.getInstance().getEntityManager().getActiveEntitySpells(target).getActiveSpells())
+				for(SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(target).getActiveSpells())
 				{
-					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.Illusion))
+					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Illusion))
 						return false;				
-					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionaryTarget))
+					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionaryTarget))
 						return false;				
-					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionCopy))
+					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionCopy))
 						return false;				
-					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionOther))
+					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionOther))
 						return false;				
-					if (ase.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionPersistence))
+					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionPersistence))
 						return false;				
 				}
 			}
