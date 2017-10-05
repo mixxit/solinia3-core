@@ -142,49 +142,53 @@ public class SoliniaEntitySpells {
 		if (activeSpell == null)
 			return;
 		
+		boolean updateMaxHp = false;
+		boolean updateDisguise = false;
+		
 		// Handle any effect removals needed
 		for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
 		{
 			switch(effect.getSpellEffectType())
 			{
 				case TotalHP:
-					if (getLivingEntity() != null && getLivingEntity() instanceof Player)
-					{
-						try
-						{
-							ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
-							if (solplayer != null)
-							solplayer.updateMaxHp();
-						} catch (CoreStateInitException e)
-						{
-							
-						}
-					}
+					updateMaxHp = true;
+					break;
 				case STA:
-					if (getLivingEntity() != null && getLivingEntity() instanceof Player)
-					{
-						try
-						{
-							ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
-							if (solplayer != null)
-							solplayer.updateMaxHp();
-						} catch (CoreStateInitException e)
-						{
-							
-						}
-					}
+					updateMaxHp = true;
+					break;
 				case Illusion:
 				case IllusionCopy:
 				case IllusionOther:
 				case IllusionPersistence:
 				case IllusionaryTarget:
-					if (getLivingEntity() != null)
-						DisguiseAPI.undisguiseToAll(getLivingEntity());
+					updateDisguise = true;
 				break;
 			}
 		}
 		
 		activeSpells.remove(spellId);
+		
+		if (updateMaxHp == true)
+		{
+			if (getLivingEntity() != null && getLivingEntity() instanceof Player)
+			{
+				try
+				{
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+					if (solplayer != null)
+					solplayer.updateMaxHp();
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		}
+		
+		if (updateDisguise == true)
+		{
+			if (getLivingEntity() != null)
+				DisguiseAPI.undisguiseToAll(getLivingEntity());
+		}
 	}
 	
 	public void removeAllSpells()
