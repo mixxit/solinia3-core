@@ -74,6 +74,7 @@ import com.solinia.solinia.Commands.CommandViewLootTable;
 import com.solinia.solinia.Commands.CommandWho;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
+import com.solinia.solinia.Listeners.Solinia3CoreItemPickupListener;
 import com.solinia.solinia.Listeners.Solinia3CoreNPCUpdatedListener;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerChatListener;
 import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
@@ -287,6 +288,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerChatListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreNPCUpdatedListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreSpawnGroupUpdatedListener(this), this);
+		getServer().getPluginManager().registerEvents(new Solinia3CoreItemPickupListener(this), this);
 		
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());
