@@ -351,8 +351,20 @@ public class SoliniaActiveSpell {
 			: return;
 		case ReclaimPet
 			: return;
-		case TotalHP
-			: return;
+		case TotalHP: 
+			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player)
+			{
+				try
+				{
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+					if (solplayer != null)
+					solplayer.updateMaxHp();
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			return;
 		case CorpseBomb
 			: return;
 		case NecPet: 

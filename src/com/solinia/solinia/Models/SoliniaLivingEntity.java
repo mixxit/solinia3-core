@@ -916,7 +916,42 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public double getMaxHP() {
-		return Utils.getStatMaxHP(getClassObj(), getLevel(), getStamina());
+		
+		if (getNpcid() < 1 && !isPlayer())
+			return 1;
+		
+		double statHp = Utils.getStatMaxHP(getClassObj(), getLevel(), getStamina());
+		double totalHp = statHp;
+		
+		try
+		{
+			if (getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return totalHp;
+				
+				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());
+				
+				return totalHp;
+			}
+			
+			if (isPlayer())
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if (solplayer == null)
+					return totalHp;
+
+				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());
+				
+				return totalHp;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return totalHp;
+		}
+		
+		return totalHp;
 	}
 
 

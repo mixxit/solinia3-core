@@ -147,6 +147,19 @@ public class SoliniaEntitySpells {
 		{
 			switch(effect.getSpellEffectType())
 			{
+				case TotalHP:
+					if (getLivingEntity() != null && getLivingEntity() instanceof Player)
+					{
+						try
+						{
+							ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+							if (solplayer != null)
+							solplayer.updateMaxHp();
+						} catch (CoreStateInitException e)
+						{
+							
+						}
+					}
 				case STA:
 					if (getLivingEntity() != null && getLivingEntity() instanceof Player)
 					{

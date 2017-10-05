@@ -2534,6 +2534,33 @@ public class Utils {
 				return new DisguisePackage(DisguiseType.UNKNOWN,"Unknown");
 		}
 	}
+	
+	public static double getTotalEffectTotalHP(LivingEntity livingEntity) {
+		double allTotalHpEffects = 0;
+		try
+		{
+			SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
+				.getActiveEntitySpells(livingEntity);
+		
+			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
+			{
+				for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
+				{
+					if (
+							!(effect.getSpellEffectType().equals(SpellEffectType.TotalHP))
+							)
+						continue;
+					
+					allTotalHpEffects += effect.getCalculatedValue();
+				}
+			}
+		
+		} catch (CoreStateInitException e)
+		{
+			return 0;
+		}
+		return allTotalHpEffects;
+	}
 
 	public static int getTotalEffectStat(LivingEntity livingEntity, String stat) {
 		int statTotal = 0;
