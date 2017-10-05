@@ -294,5 +294,4 @@ commands:
     aliases: cnpce
 depend:
 - Vault
-- Essentials
 - MythicMobs

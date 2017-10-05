@@ -40,7 +40,6 @@ public class CoreState {
 	private IEntityManager entityManager;
 	private IConfigurationManager configurationManager;
 	private Economy economy;
-	private Essentials essentials;
 	private IChannelManager channelManager;
 	private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
@@ -79,19 +78,10 @@ public class CoreState {
 		// TODO Auto-generated method stub
 		this.economy = economy;
 	}
-
-	public void setEssentials(Essentials essentials) {
-		// TODO Auto-generated method stub
-		this.essentials = essentials;
-	}
 	
 	public Economy getEconomy() {
 		// TODO Auto-generated method stub
 		return this.economy;
-	}
-
-	public Essentials getEssentials() {
-		return this.essentials;
 	}
 	
 	public void Initialise(IPlayerManager playerManager, IEntityManager entityManager, IConfigurationManager configurationManager, ChannelManager channelManager) throws CoreStateInitException
@@ -147,23 +137,16 @@ public class CoreState {
 		return Utils.getWorldPerkXPModifier();
 	}
 
-	public void giveEssentialsMoney(Player player, int amount) {
-		if (getEssentials() == null || getEconomy() == null)
+	public void giveMoney(Player player, int amount) {
+		if (getEconomy() == null)
 			return;
 		
-		int balancelimit = getEssentials().getConfig().getInt("max-money");
-    	
-    	if ((getEconomy().getBalance(player) + amount) > balancelimit)
-    	{
-    		return;
-    	}
-        
     	EconomyResponse responsedeposit = getEconomy().depositPlayer(player, amount);
 		if(responsedeposit.transactionSuccess()) 
 		{
 			player.sendMessage(ChatColor.YELLOW + "* You recieve $" + amount);
 		} else {
-			System.out.println("giveEssentialsMoney - Error depositing money to users account " + String.format(responsedeposit.errorMessage));
+			System.out.println("giveMoney - Error depositing money to users account " + String.format(responsedeposit.errorMessage));
 		}
     	
 		return;

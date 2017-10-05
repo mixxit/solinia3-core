@@ -123,7 +123,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private NPCRandomChatTimer npcRandomChatTimer;
 	private PetCheckTickTimer petCheckTickTimer;
 	
-	private Essentials essentials;
 	private Economy economy;
 	private ChatItemAPI ciApi;
 	private PerkLoadTimer perkLoadTimer;
@@ -136,11 +135,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		registerEvents();
 		
 		setupEconomy();
-		setupEssentials();
 		setupChatItem();
 		
 		StateManager.getInstance().setEconomy(this.economy);
-		StateManager.getInstance().setEssentials(this.essentials);
 		StateManager.getInstance().setChatItem(this.ciApi);
 	}
 	
@@ -159,16 +156,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private void setupChatItem()
 	{
 		ciApi = Bukkit.getServicesManager().getRegistration(ChatItemAPI.class).getProvider();
-	}
-	
-	private boolean setupEssentials()
-	{
-	    Plugin essentialsPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
-	    if (essentialsPlugin.isEnabled() && (essentialsPlugin instanceof Essentials)) {
-	            this.essentials = (Essentials) essentialsPlugin;
-	            return true;
-	    }
-	    return false;
 	}
 	
 	private boolean setupEconomy() {

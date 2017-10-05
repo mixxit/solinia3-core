@@ -405,7 +405,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void giveMoney(int i) {
 		try
 		{
-			StateManager.getInstance().giveEssentialsMoney(getBukkitPlayer(),i);
+			StateManager.getInstance().giveMoney(getBukkitPlayer(),i);
 		} catch (Exception e)
 		{
 			e.printStackTrace();

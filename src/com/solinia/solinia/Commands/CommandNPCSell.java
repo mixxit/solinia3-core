@@ -86,13 +86,6 @@ public class CommandNPCSell implements CommandExecutor {
 			// Total price
 			int price = individualprice * amount;
 
-			int balancelimit = StateManager.getInstance().getEssentials().getConfig().getInt("max-money");
-
-			if ((StateManager.getInstance().getEconomy().getBalance(player) + price) > balancelimit) {
-				player.sendMessage("That NPC cannot buy this item right now, as your balance is at its limit");
-				return true;
-			}
-
 			if (Utils.getPlayerTotalCountOfItemId(player, itemid) < amount) {
 				player.sendMessage("Sorry but you do not have the quantity you are trying to sell");
 				return true;
