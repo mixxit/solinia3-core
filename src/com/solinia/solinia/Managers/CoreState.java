@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
@@ -44,13 +45,14 @@ public class CoreState {
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
-	private UUID instanceGuid;
+	private String instanceGuid;
 	private ChatItemAPI chatitemapi;
 
 	public CoreState()
 	{
 		isInitialised = false;
-		this.instanceGuid = java.util.UUID.randomUUID();
+		final int SHORT_ID_LENGTH = 8;
+		this.instanceGuid = RandomStringUtils.random(SHORT_ID_LENGTH);
 	}
 	
 	public Scoreboard getScoreboard(Player player)
@@ -461,6 +463,6 @@ public class CoreState {
 	}
 
 	public String getInstanceGuid() {
-		return this.instanceGuid.toString();
+		return this.instanceGuid;
 	}
 }
