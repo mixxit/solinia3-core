@@ -2695,7 +2695,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 			int mana = Integer.parseInt(value);
 			setMana(mana);
 			break;
-		case "teleport_zone":
 		case "effect":
 			int effectNo = Integer.parseInt(value);
 			if (effectNo < 1 || effectNo > 12)
@@ -2785,7 +2784,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					throw new InvalidSpellSettingException("EffectNo is not valid, must be between 1 and 12"); 
 			}
 			break;
-			
+		case "teleport_zone":
 		case "teleportzone":
 			try
 			{

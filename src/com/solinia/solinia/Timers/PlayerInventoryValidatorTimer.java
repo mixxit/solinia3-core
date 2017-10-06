@@ -14,6 +14,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -40,7 +41,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			slots.add(39);
 			slots.add(40);
 			
-			for(Integer slotId : slots)
+			for (int slotId = 0; slotId < 36; slotId++)
 			{
 				if (player.getInventory().getItem(slotId) == null)
 					continue;
@@ -48,6 +49,33 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 				try
 				{
 					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(slotId));
+					
+					if (i.isTemporary())
+					{
+						boolean foundFadedItem = false;
+						for(String loreLine : player.getInventory().getItem(slotId).getItemMeta().getLore())
+						{
+							if (!loreLine.startsWith("Temporary: "))
+								continue;
+							
+							if (!loreLine.equals("Temporary: " + StateManager.getInstance().getInstanceGuid()))
+							{
+								// Delete temporary item
+								player.sendMessage("Your temporary item has faded from existence");
+								player.getInventory().setItem(slotId, null);
+								player.updateInventory();
+								break;
+							}
+						}
+						
+						if (foundFadedItem)
+							continue;
+					}
+					
+					// Only monitor the defined slots
+					if (!slots.contains(slotId))
+						continue;
+					
 					if (i.getAllowedClassNames().size() < 1)
 						continue;
 					

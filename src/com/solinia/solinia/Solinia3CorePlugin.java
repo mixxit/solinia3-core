@@ -249,8 +249,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			perkLoadTimer = new PerkLoadTimer();
 			perkLoadTimer.runTaskTimer(this, 6*20L, 120*20L);
 
+			// Only validate these things every 2 minutes
 			playerInventoryValidatorTimer = new PlayerInventoryValidatorTimer();
-			playerInventoryValidatorTimer.runTaskTimer(this, 6*20L, 60*20L);
+			playerInventoryValidatorTimer.runTaskTimer(this, 120*20L, 120*20L);
 
 			npcRandomChatTimer = new NPCRandomChatTimer();
 			npcRandomChatTimer.runTaskTimer(this, 6*20L, 60*20L);
