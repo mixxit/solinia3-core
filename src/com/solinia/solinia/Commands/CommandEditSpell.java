@@ -103,7 +103,7 @@ public class CommandEditSpell implements CommandExecutor {
 			sender.sendMessage("Updating setting on spell");
 		} catch (InvalidSpellSettingException ne)
 		{
-			sender.sendMessage("Invalid Spell setting");
+			sender.sendMessage("Invalid Spell setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

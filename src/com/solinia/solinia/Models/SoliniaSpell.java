@@ -2784,6 +2784,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				default:
 					throw new InvalidSpellSettingException("EffectNo is not valid, must be between 1 and 12"); 
 			}
+			break;
 			
 		case "teleportzone":
 			try
