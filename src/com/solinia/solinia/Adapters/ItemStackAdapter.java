@@ -210,6 +210,10 @@ public class ItemStackAdapter {
 			+ ChatColor.RESET);
 		}
 		
+		if (soliniaItem.isTemporary())
+		{
+			loretxt.add("Temporary: " + StateManager.getInstance().getInstanceGuid());
+		}
 
 		i.setLore(loretxt);
 		stack.setItemMeta(i);

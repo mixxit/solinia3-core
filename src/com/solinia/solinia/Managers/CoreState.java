@@ -44,12 +44,13 @@ public class CoreState {
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
-	
+	private UUID instanceGuid;
 	private ChatItemAPI chatitemapi;
 
 	public CoreState()
 	{
 		isInitialised = false;
+		this.instanceGuid = java.util.UUID.randomUUID();
 	}
 	
 	public Scoreboard getScoreboard(Player player)
@@ -457,5 +458,9 @@ public class CoreState {
 			e.printStackTrace();
 		}
 		return perks;
+	}
+
+	public String getInstanceGuid() {
+		return this.instanceGuid.toString();
 	}
 }
