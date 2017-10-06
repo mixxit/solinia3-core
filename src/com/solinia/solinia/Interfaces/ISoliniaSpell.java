@@ -970,7 +970,7 @@ public interface ISoliniaSpell {
 
 	void sendSpellSettingsToSender(CommandSender sender);
 
-	void editSetting(String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
+	void editSetting(String setting, String value, String[] additional) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
 
 	boolean tryApplyOnBlock(LivingEntity sourceEntity, Block clickedBlock);
 

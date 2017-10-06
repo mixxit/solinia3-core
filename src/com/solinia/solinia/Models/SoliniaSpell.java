@@ -2671,12 +2671,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("----------------------------");
 		for(SpellEffect effect : this.getBaseSpellEffects())
 		{
-			sender.sendMessage("- [" + effect.getSpellEffectId() + "]"  + effect.getSpellEffectType().name() + ": " + ChatColor.GOLD + effect.getBase() + ChatColor.RESET);		
+			sender.sendMessage("- [" + effect.getSpellEffectNo() + "]"  + effect.getSpellEffectType().name() + ": BASE: " + ChatColor.GOLD + effect.getBase() + ChatColor.RESET);		
 		}
 	}
 
 	@Override
-	public void editSetting(String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
+	public void editSetting(String setting, String value, String[] additional) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
 		String name = getName();
 
 		switch (setting.toLowerCase()) {
@@ -2696,6 +2696,95 @@ public class SoliniaSpell implements ISoliniaSpell {
 			setMana(mana);
 			break;
 		case "teleport_zone":
+		case "effect":
+			int effectNo = Integer.parseInt(value);
+			if (effectNo < 1 || effectNo > 12)
+				throw new InvalidSpellSettingException("EffectNo is not valid, must be between 1 and 12");
+			
+			if (additional.length < 2)
+				throw new InvalidSpellSettingException("Missing effect setting and value to change, ie BASE 1");
+			
+			String effectSettingType = additional[0];
+			int effectValue = Integer.parseInt(additional[1]);
+			
+			switch (effectNo)
+			{
+				case 1:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue1(effectValue);
+					}
+					break;
+				case 2:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue2(effectValue);
+					}
+					break;
+				case 3:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue3(effectValue);
+					}
+					break;
+				case 4:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue4(effectValue);
+					}
+					break;
+				case 5:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue5(effectValue);
+					}
+					break;
+				case 6:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue6(effectValue);
+					}
+					break;
+				case 7:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue7(effectValue);
+					}
+					break;
+				case 8:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue8(effectValue);
+					}
+					break;
+				case 9:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue9(effectValue);
+					}
+					break;
+				case 10:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue10(effectValue);
+					}
+					break;
+				case 11:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue11(effectValue);
+					}
+					break;
+				case 12:
+					if (effectSettingType.equals("BASE"))
+					{
+						this.setEffectBaseValue12(effectValue);
+					}
+					break;
+				default:
+					throw new InvalidSpellSettingException("EffectNo is not valid, must be between 1 and 12"); 
+			}
+			
 		case "teleportzone":
 			try
 			{

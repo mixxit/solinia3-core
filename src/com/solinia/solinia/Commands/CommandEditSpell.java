@@ -77,6 +77,19 @@ public class CommandEditSpell implements CommandExecutor {
 			return false;
 		}
 		
+		String[] additional = new String[0];
+		if (args.length > 2)
+		{
+			additional = new String[args.length - 2];
+			for(int i = 0; i < args.length; i++)
+			{
+				if (i < 2)
+					continue;
+				
+				additional[i-2] = args[i];
+			}
+		}
+		
 		try
 		{
 
@@ -86,7 +99,7 @@ public class CommandEditSpell implements CommandExecutor {
 				return false;
 			}
 
-			StateManager.getInstance().getConfigurationManager().editSpell(spellid,setting,value);
+			StateManager.getInstance().getConfigurationManager().editSpell(spellid,setting,value,additional);
 			sender.sendMessage("Updating setting on spell");
 		} catch (InvalidSpellSettingException ne)
 		{

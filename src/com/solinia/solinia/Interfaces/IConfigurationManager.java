@@ -167,7 +167,7 @@ public interface IConfigurationManager {
 
 	int getNextLootTableId();
 
-	void editSpell(int spellid, String setting, String value) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
+	void editSpell(int spellid, String setting, String value, String[] additional) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
 
 	int getNextNPCMerchantId();
 

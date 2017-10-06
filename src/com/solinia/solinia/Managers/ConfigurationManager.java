@@ -569,9 +569,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public void editSpell(int spellid, String setting, String value) 
+	public void editSpell(int spellid, String setting, String value, String[] additional) 
 		throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
-			getSpell(spellid).editSetting(setting, value);
+			getSpell(spellid).editSetting(setting, value, additional);
 	}
 
 	@Override
