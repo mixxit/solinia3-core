@@ -179,4 +179,8 @@ public interface ISoliniaItem {
 
 	void consume(Plugin plugin, Player player) throws CoreStateInitException;
 
+	boolean isTemporary();
+
+	void setTemporary(boolean isTemporary);
+
 }

@@ -60,6 +60,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int diseaseResist = 0;
 	private boolean spellscroll = false;
 	private byte color;
+	private boolean isTemporary;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -489,6 +490,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
+		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -574,6 +576,9 @@ public class SoliniaItem implements ISoliniaItem {
 		case "poisonresist":
 			setPoisonResist(Integer.parseInt(value));
 			break;
+		case "temporary":
+			setTemporary(Boolean.parseBoolean(value));
+			break;
 		default:
 			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid");
 		}
@@ -605,6 +610,16 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setDiseaseResist(int diseaseResist) {
 		this.diseaseResist = diseaseResist;
+	}
+
+	@Override
+	public boolean isTemporary() {
+		return isTemporary;
+	}
+
+	@Override
+	public void setTemporary(boolean isTemporary) {
+		this.isTemporary = isTemporary;
 	}
 
 }

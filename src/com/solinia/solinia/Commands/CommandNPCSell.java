@@ -78,9 +78,15 @@ public class CommandNPCSell implements CommandExecutor {
 				player.sendMessage("Amount must be greater than 0");
 				return true;
 			}
-
+			
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
 
+			if (item.isTemporary())
+			{
+				player.sendMessage("Cannot sell temporary items");
+				return true;
+			}
+			
 			int individualprice = item.getWorth();
 
 			// Total price

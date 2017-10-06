@@ -360,6 +360,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 				if (item == null)
 					continue;
+				
+				if (item.isTemporary())
+					continue;
 	
 				int sellprice = item.getWorth();
 	
