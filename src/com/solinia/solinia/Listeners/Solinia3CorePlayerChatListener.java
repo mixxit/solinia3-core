@@ -33,8 +33,16 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		AsyncPlayerChatEvent rawEvent = (AsyncPlayerChatEvent)event.getRawEvent();
 		rawEvent.setCancelled(true);
 		
+		String currentChannel = event.getPlayer().getCurrentChannel();
+		
+		// always redirect npc interactions to local
+		if (event.getPlayer().getInteraction() != null)
+		{
+			currentChannel = "LOCAL";
+		}
+		
 		// TODO - Support checking channel modes of player
-		if (event.getPlayer().getCurrentChannel().equals("LOCAL"))
+		if (currentChannel.equals("LOCAL"))
 		{
 			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage());
 		} else {
