@@ -34,12 +34,9 @@ public class CommandRaceInfo implements CommandExecutor {
 						classBuilder += solclass.getName() + " ";
 				}
 				
-				sender.sendMessage(ChatColor.RED + "RACE: " + ChatColor.GOLD + race.getName().toUpperCase() + ChatColor.RESET + "[" + race.getId() + "]");
-				sender.sendMessage("----------------------------");
-				sender.sendMessage("- Stats: " + ChatColor.GOLD + "STR: " + race.getStrength() + " STA: " + race.getStamina() + " AGI: " + race.getAgility() + " DEX: " + race.getDexterity() + " INT: " + race.getIntelligence() + " WIS: " + race.getWisdom() + " CHA: " + race.getCharisma() + ChatColor.RESET);
+				sender.sendMessage(ChatColor.RED + "RACE: " + ChatColor.GOLD + race.getName().toUpperCase() + ChatColor.RESET + "[" + race.getId() + "] " + ChatColor.GOLD + "STR: " + race.getStrength() + " STA: " + race.getStamina() + " AGI: " + race.getAgility() + " DEX: " + race.getDexterity() + " INT: " + race.getIntelligence() + " WIS: " + race.getWisdom() + " CHA: " + race.getCharisma() + ChatColor.RESET);
 				sender.sendMessage("- Allowed Classes: " + ChatColor.GOLD + classBuilder + ChatColor.RESET);
 				sender.sendMessage("- Description: " + race.getDescription());
-				sender.sendMessage("----------------------------");
 			}
 		
 		} catch (Exception e)
