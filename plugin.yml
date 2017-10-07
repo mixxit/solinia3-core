@@ -205,7 +205,7 @@ commands:
     aliases: []
   editclass:
     description: Edits a class
-    usage: /edititem classid setting value
+    usage: /editclass classid setting value
     aliases: []
   createspawngroup:
     description: Creates a new spawngroup
@@ -292,6 +292,10 @@ commands:
     description: Creates an NPC event
     usage: /createnpcevent npcid eventtype trigger response
     aliases: cnpce
+  editrace:
+    description: Edits a race
+    usage: /editrace raceid setting value
+    aliases: []
 depend:
 - Vault
 - MythicMobs

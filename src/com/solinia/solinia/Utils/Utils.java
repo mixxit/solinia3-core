@@ -36,6 +36,7 @@ import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -1980,7 +1981,66 @@ public class Utils {
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
 		
-		
+	}
+	
+	public static int convertRawClassToClass(int rawClassId)
+	{
+		switch(rawClassId)
+		{
+			case 1: // war
+				return 1;
+			case 2: // cle
+				return 2;
+			case 3: // pal
+				return 6;
+			case 4: // rng
+				return 3;
+			case 5: // shd
+				return 7;
+			case 6: // dru
+				return 9;
+			case 7: //mnk
+				return 12;
+			case 8: // brd
+				return 10;
+			case 9: // rog
+				return 4;
+			case 10: // shm
+				return 8;
+			case 11: //nec
+				return 13;
+			case 12: //wiz
+				return 5;
+			case 13: // mge
+				return 11;
+			case 14: // enc
+				return 14;			
+			default:
+				return 0;
+		}
+	}
+
+	private static void patchNpcClasses() {
+		try
+		{
+			for(ISoliniaPatch patch : StateManager.getInstance().getConfigurationManager().getPatches())
+			{
+				// Lookup npc and edit class
+				String npcName = patch.getClasses().get(0);
+				int rawClassId = Integer.parseInt(patch.getClasses().get(1));
+				int convertedClass = convertRawClassToClass(rawClassId);
+				
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(npcName);
+				if (npc == null)
+					continue;
+				
+				npc.setClassid(convertedClass);
+				System.out.println("Updated NPC: " + npc.getName() + " to class " + convertedClass);
+			}
+		} catch (CoreStateInitException e)
+		{
+			// skip
+		}
 	}
 
 	public static boolean isLivingEntityNPC(LivingEntity livingentity) {

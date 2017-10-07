@@ -1,6 +1,14 @@
 package com.solinia.solinia.Models;
 
+import org.bukkit.command.CommandSender;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Managers.StateManager;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaRace implements ISoliniaRace {
 
@@ -15,6 +23,8 @@ public class SoliniaRace implements ISoliniaRace {
 	private int wisdom = 1;
 	private int intelligence = 1;
 	private int charisma = 1;
+	
+	private String description = "";
 
 	@Override
 	public String getName() {
@@ -120,4 +130,38 @@ public class SoliniaRace implements ISoliniaRace {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@Override
+	public void sendRaceSettingsToSender(CommandSender sender) throws CoreStateInitException {
+		sender.sendMessage(ChatColor.RED + "Race Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
+		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+	}
+
+	@Override
+	public void editSetting(String setting, String value)
+			throws InvalidRaceSettingException, NumberFormatException, CoreStateInitException {
+
+		switch (setting.toLowerCase()) {
+		case "description":
+			setDescription(value);
+			break;
+		default:
+			throw new InvalidRaceSettingException("Invalid Race setting. Valid Options are: description");
+		}
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

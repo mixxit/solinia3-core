@@ -12,6 +12,8 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandRaceInfo implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -25,15 +27,19 @@ public class CommandRaceInfo implements CommandExecutor {
 			List<ISoliniaClass> classes = StateManager.getInstance().getConfigurationManager().getClasses();
 			for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
 			{
-				sender.sendMessage(race.getName().toUpperCase());
-				sender.sendMessage("STR: " + race.getStrength() + " STA: " + race.getStamina() + " AGI: " + race.getAgility() + " DEX: " + race.getDexterity() + " INT: " + race.getIntelligence() + " WIS: " + race.getWisdom() + " CHA: " + race.getCharisma());
 				String classBuilder = "";
 				for(ISoliniaClass solclass : classes)
 				{
 					if (solclass.getValidRaces().contains(race.getId()))
 						classBuilder += solclass.getName() + " ";
 				}
-				sender.sendMessage("Classes: " + race.getName() + ": " + classBuilder);
+				
+				sender.sendMessage(ChatColor.RED + "RACE: " + ChatColor.GOLD + race.getName().toUpperCase() + ChatColor.RESET + "[" + race.getId() + "]");
+				sender.sendMessage("----------------------------");
+				sender.sendMessage("- Stats: " + ChatColor.GOLD + "STR: " + race.getStrength() + " STA: " + race.getStamina() + " AGI: " + race.getAgility() + " DEX: " + race.getDexterity() + " INT: " + race.getIntelligence() + " WIS: " + race.getWisdom() + " CHA: " + race.getCharisma() + ChatColor.RESET);
+				sender.sendMessage("- Allowed Classes: " + ChatColor.GOLD + classBuilder + ChatColor.RESET);
+				sender.sendMessage("- Description: " + race.getDescription());
+				sender.sendMessage("----------------------------");
 			}
 		
 		} catch (Exception e)

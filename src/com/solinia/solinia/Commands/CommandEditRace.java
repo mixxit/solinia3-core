@@ -8,10 +8,12 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 
-public class CommandEditClass implements CommandExecutor {
+public class CommandEditRace implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
@@ -28,7 +30,7 @@ public class CommandEditClass implements CommandExecutor {
 		}
 
 		// Args
-		// CLASSID
+		// RACEID
 		// Setting
 		// NewValue
 
@@ -36,15 +38,15 @@ public class CommandEditClass implements CommandExecutor {
 			return false;
 		}
 
-		int classid = Integer.parseInt(args[0]);
+		int raceid = Integer.parseInt(args[0]);
 
 		if (args.length == 1) {
 			try {
-				ISoliniaClass solclass = StateManager.getInstance().getConfigurationManager().getClassObj(classid);
-				if (solclass != null) {
-					solclass.sendClassSettingsToSender(sender);
+				ISoliniaRace solrace = StateManager.getInstance().getConfigurationManager().getRace(raceid);
+				if (solrace != null) {
+					solrace.sendRaceSettingsToSender(sender);
 				} else {
-					sender.sendMessage("CLASS ID doesnt exist");
+					sender.sendMessage("RACE ID doesnt exist");
 				}
 				return true;
 			} catch (CoreStateInitException e) {
@@ -53,7 +55,7 @@ public class CommandEditClass implements CommandExecutor {
 		}
 
 		if (args.length < 3) {
-			sender.sendMessage("Insufficient arguments: classid setting value");
+			sender.sendMessage("Insufficient arguments: raceid setting value");
 			return false;
 		}
 
@@ -77,22 +79,22 @@ public class CommandEditClass implements CommandExecutor {
 			value = value.trim();
 		}
 
-		if (classid < 1) {
-			sender.sendMessage("Invalid class id");
+		if (raceid < 1) {
+			sender.sendMessage("Invalid race id");
 			return false;
 		}
 
 		try {
 
-			if (StateManager.getInstance().getConfigurationManager().getClassObj(classid) == null) {
-				sender.sendMessage("Cannot locate class id: " + classid);
+			if (StateManager.getInstance().getConfigurationManager().getRace(raceid) == null) {
+				sender.sendMessage("Cannot locate race id: " + raceid);
 				return false;
 			}
 
-			StateManager.getInstance().getConfigurationManager().editClass(classid, setting, value);
-			sender.sendMessage("Updating setting on class");
-		} catch (InvalidClassSettingException ne) {
-			sender.sendMessage("Invalid class setting");
+			StateManager.getInstance().getConfigurationManager().editRace(raceid, setting, value);
+			sender.sendMessage("Updating setting on race");
+		} catch (InvalidRaceSettingException ne) {
+			sender.sendMessage("Invalid race setting");
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

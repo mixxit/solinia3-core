@@ -1,5 +1,10 @@
 package com.solinia.solinia.Interfaces;
 
+import org.bukkit.command.CommandSender;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
+
 public interface ISoliniaRace {
 
 	public String getName();
@@ -41,4 +46,13 @@ public interface ISoliniaRace {
 	void setId(int id);
 
 	void setName(String name);
+
+	void editSetting(String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidRaceSettingException;
+
+	void sendRaceSettingsToSender(CommandSender sender) throws CoreStateInitException;
+
+	String getDescription();
+
+	void setDescription(String description);
 }

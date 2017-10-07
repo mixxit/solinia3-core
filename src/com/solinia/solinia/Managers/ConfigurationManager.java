@@ -16,6 +16,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
@@ -607,6 +608,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void editClass(int classid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidClassSettingException 
 	{
 		getClassObj(classid).editSetting(setting, value);
+	}
+	
+	@Override
+	public void editRace(int raceid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidRaceSettingException 
+	{
+		getRace(raceid).editSetting(setting, value);
 	}
 
 	@Override
