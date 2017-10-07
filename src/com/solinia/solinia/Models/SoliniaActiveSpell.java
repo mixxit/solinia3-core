@@ -25,6 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -261,8 +262,9 @@ public class SoliniaActiveSpell {
 		case Mez: 
 			applyMezSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
-		case SummonItem
-			: return;
+		case SummonItem: 
+			applySummonItem(spellEffect, soliniaSpell, casterLevel);
+			return;
 		case SummonPet: 
 			applySummonPet(plugin, spellEffect,soliniaSpell,casterLevel);
 			return;
@@ -1200,6 +1202,32 @@ public class SoliniaActiveSpell {
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6 * 20, 1));
 	}
 
+	private void applySummonItem(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		int itemId = spellEffect.getBase();
+		try
+		{
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+			if (item == null)
+				return;
+			
+			if (!item.isTemporary())
+				return;
+			
+			Entity ownerEntity = Bukkit.getEntity(this.getOwnerUuid());
+			if (ownerEntity == null)
+				return;
+			
+			if (!(ownerEntity instanceof LivingEntity))
+				return;
+			
+			ownerEntity.getWorld().dropItem(ownerEntity.getLocation(), item.asItemStack());
+			
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
+	}
+	
 	private void applyIllusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		DisguisePackage disguise = Utils.getDisguiseTypeFromDisguiseId(spellEffect.getBase());
 		if (disguise.getDisguisetype() == null || disguise.getDisguisetype() == null || disguise.getDisguisetype().equals(DisguiseType.UNKNOWN))

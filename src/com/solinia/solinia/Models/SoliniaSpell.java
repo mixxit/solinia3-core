@@ -3,6 +3,7 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Nameable;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -20,6 +21,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -3701,6 +3703,27 @@ public class SoliniaSpell implements ISoliniaSpell {
 						return false;				
 					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionPersistence))
 						return false;				
+				}
+			}
+			
+			if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem))
+			{
+				int itemId = effect.getBase();
+				try
+				{
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+					if (item == null)
+						return false;
+					
+					if (!item.isTemporary())
+						return false;
+					
+					if (!(target instanceof LivingEntity))
+						return false;
+					
+				} catch (CoreStateInitException e)
+				{
+					return false;
 				}
 			}
 				
