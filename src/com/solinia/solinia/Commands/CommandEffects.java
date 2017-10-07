@@ -12,6 +12,10 @@ import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandEffects implements CommandExecutor {
 
@@ -45,7 +49,18 @@ public class CommandEffects implements CommandExecutor {
 		            		spellcolor = ChatColor.RED;
 		            	}
 		            	
-		            	player.sendMessage("- Spell: " + spellcolor + spell.getName() + ChatColor.RESET + " " + activeSpell.getTicksLeft() + " ticks left - " + removetext);
+		            	TextComponent tc = new TextComponent();
+						tc.setText("- " + spellcolor + spell.getName() + ChatColor.RESET + " " + activeSpell.getTicksLeft() + " ticks left - ");
+						TextComponent tc2 = new TextComponent();
+						tc2.setText(removetext);
+						if (spell.isBeneficial())
+						{
+							tc2.setText(ChatColor.GRAY + "Click here to remove" + ChatColor.RESET);
+							tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, removetext));
+						}
+						tc.addExtra(tc2);
+						sender.spigot().sendMessage(tc);	
+		            	
 		            }
 	            } else {
 	            	if (args.length < 2)

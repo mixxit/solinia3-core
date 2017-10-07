@@ -25,6 +25,7 @@ public class SoliniaRace implements ISoliniaRace {
 	private int charisma = 1;
 	
 	private String description = "";
+	private String alignment = "NEUTRAL";
 
 	@Override
 	public String getName() {
@@ -138,6 +139,7 @@ public class SoliniaRace implements ISoliniaRace {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
+		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 	}
 
@@ -148,6 +150,11 @@ public class SoliniaRace implements ISoliniaRace {
 		switch (setting.toLowerCase()) {
 		case "description":
 			setDescription(value);
+			break;
+		case "alignment":
+			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
+				throw new InvalidRaceSettingException("Invalid Race Alignment (GOOD,NEUTRAL,EVIL)");
+			setAlignment(value.toUpperCase());
 			break;
 		default:
 			throw new InvalidRaceSettingException("Invalid Race setting. Valid Options are: description");
@@ -162,6 +169,16 @@ public class SoliniaRace implements ISoliniaRace {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public String getAlignment() {
+		return alignment;
+	}
+
+	@Override
+	public void setAlignment(String alignment) {
+		this.alignment = alignment;
 	}
 
 }

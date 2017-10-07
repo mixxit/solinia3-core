@@ -13,6 +13,10 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 public class CommandRaceInfo implements CommandExecutor {
 	@Override
@@ -34,9 +38,14 @@ public class CommandRaceInfo implements CommandExecutor {
 						classBuilder += solclass.getName() + " ";
 				}
 				
-				sender.sendMessage(ChatColor.RED + "RACE: " + ChatColor.GOLD + race.getName().toUpperCase() + ChatColor.RESET + "[" + race.getId() + "] " + ChatColor.GOLD + "STR: " + race.getStrength() + " STA: " + race.getStamina() + " AGI: " + race.getAgility() + " DEX: " + race.getDexterity() + " INT: " + race.getIntelligence() + " WIS: " + race.getWisdom() + " CHA: " + race.getCharisma() + ChatColor.RESET);
-				sender.sendMessage("- Allowed Classes: " + ChatColor.GOLD + classBuilder + ChatColor.RESET);
-				sender.sendMessage("- Description: " + race.getDescription());
+				TextComponent tc = new TextComponent();
+				tc.setText(ChatColor.RED + "~ RACE: " + ChatColor.GOLD + race.getName().toUpperCase() + ChatColor.GRAY + " [" + race.getId() + "] - " + ChatColor.RESET);
+				TextComponent tc2 = new TextComponent();
+				tc2.setText("Hover for more details");
+				String details = ChatColor.GOLD + race.getName() + ChatColor.RESET + "\nRecommended Alignment: " + ChatColor.GOLD + race.getAlignment() + ChatColor.RESET + "\n" + race.getDescription() + "\nSTR: " + ChatColor.GOLD + race.getStrength() + ChatColor.RESET + " STA: " + ChatColor.GOLD + race.getStamina() + ChatColor.RESET + " AGI: " + ChatColor.GOLD + race.getAgility() + ChatColor.RESET + " DEX: " + ChatColor.GOLD + race.getDexterity() + ChatColor.RESET + " INT: " + ChatColor.GOLD + race.getIntelligence() + ChatColor.RESET + " WIS: " + ChatColor.GOLD + race.getWisdom() + ChatColor.RESET + " CHA: " + ChatColor.GOLD + race.getCharisma() + ChatColor.GOLD + " \nClasses: " + ChatColor.RESET + classBuilder;
+				tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+				tc.addExtra(tc2);
+				sender.spigot().sendMessage(tc);	
 			}
 		
 		} catch (Exception e)
