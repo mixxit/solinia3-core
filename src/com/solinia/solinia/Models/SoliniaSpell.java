@@ -3682,6 +3682,24 @@ public class SoliniaSpell implements ISoliniaSpell {
 					if (effect.getBase() < 0 && target.equals(source))
 						return false;
 				}
+				
+				// if the source is a player 
+				// and the target is an AI 
+				// and it isnt a pet
+				// and it is a heal
+				// cancel
+				if (source instanceof Player)
+				{
+					if (!(target instanceof Player))
+					{
+						ISoliniaLivingEntity soltargetentity = SoliniaLivingEntityAdapter.Adapt(target);
+						if (!soltargetentity.isPet())
+						{
+							if (effect.getBase() > 0)
+								return false;
+						}
+					}
+				}
 			}
 			
 			if (effect.getSpellEffectType().equals(SpellEffectType.Illusion) ||
@@ -3750,7 +3768,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			
 			if (effect.getSpellEffectType().equals(SpellEffectType.Stun))
 			{
-				// If the effect is a mez, cancel out
+				// If the effect is a stun, cancel out
 				if (target.equals(source))
 					return false;
 			}
