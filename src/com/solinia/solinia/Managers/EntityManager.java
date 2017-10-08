@@ -250,8 +250,6 @@ public class EntityManager implements IEntityManager {
 					if (completedNpcsIds.contains(solle.getNpcid()))
 						continue;
 					
-					System.out.println("Scheduled npc to cast: "+ solle.getBukkitLivingEntity().getName());
-					
 					completedNpcsIds.add(solle.getNpcid());
 					solle.doSpellCast(plugin, c.getTarget());
 					

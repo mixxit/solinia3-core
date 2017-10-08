@@ -28,6 +28,7 @@ import com.solinia.solinia.Commands.CommandEditClass;
 import com.solinia.solinia.Commands.CommandEditItem;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEditRace;
+import com.solinia.solinia.Commands.CommandEditSpawngroup;
 import com.solinia.solinia.Commands.CommandEditSpell;
 import com.solinia.solinia.Commands.CommandEffects;
 import com.solinia.solinia.Commands.CommandEmote;
@@ -345,6 +346,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("toggleaa").setExecutor(new CommandToggleAA());
 		this.getCommand("createnpcevent").setExecutor(new CommandCreateNPCEvent());
 		this.getCommand("editrace").setExecutor(new CommandEditRace());
+		this.getCommand("editspawngroup").setExecutor(new CommandEditSpawngroup());
 	}
 	
 	private void createConfigDir() {

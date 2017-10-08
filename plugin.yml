@@ -140,6 +140,10 @@ commands:
     description: Edits an npc
     usage: /editnpc npcid setting value
     aliases: []
+  editspawngroup:
+    description: Edits a spawngroup
+    usage: /editspawngroup spawngroupid setting value
+    aliases: []
   createloottable:
     description: Creates a new loot table
     usage: /createloottable name

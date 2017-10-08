@@ -1,6 +1,12 @@
 package com.solinia.solinia.Interfaces;
 
+import java.io.IOException;
+
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 
 public interface ISoliniaSpawnGroup {
 
@@ -45,5 +51,10 @@ public interface ISoliniaSpawnGroup {
 	int getRespawntime();
 
 	void setRespawntime(int respawntime);
+
+	void sendSpawnGroupSettingsToSender(CommandSender sender) throws CoreStateInitException;
+
+	void editSetting(String setting, String value)
+			throws InvalidSpawnGroupSettingException, NumberFormatException, CoreStateInitException, IOException;
 
 }

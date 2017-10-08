@@ -1,8 +1,21 @@
 package com.solinia.solinia.Models;
 
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
+import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	private int id;
@@ -109,5 +122,58 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	@Override
 	public void setRespawntime(int respawntime) {
 		this.respawntime = respawntime;
+	}
+	
+	@Override
+	public void sendSpawnGroupSettingsToSender(CommandSender sender) throws CoreStateInitException {
+		sender.sendMessage(ChatColor.RED + "SpawnGroup Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
+		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- respawntime: " + ChatColor.GOLD + getRespawntime() + ChatColor.RESET);
+		sender.sendMessage("- npcid: " + ChatColor.GOLD + getNpcid() + ChatColor.RESET);
+		sender.sendMessage("- x: " + ChatColor.GOLD + getX() + ChatColor.RESET);
+		sender.sendMessage("- y: " + ChatColor.GOLD + getY() + ChatColor.RESET);
+		sender.sendMessage("- z: " + ChatColor.GOLD + getZ() + ChatColor.RESET);
+
+	}
+
+	@Override
+	public void editSetting(String setting, String value)
+			throws InvalidSpawnGroupSettingException, NumberFormatException, CoreStateInitException, java.io.IOException {
+
+		switch (setting.toLowerCase()) {
+		case "name":
+			if (value.equals(""))
+				throw new InvalidSpawnGroupSettingException("Name is empty");
+
+			if (value.length() > 25)
+				throw new InvalidSpawnGroupSettingException("Name is longer than 25 characters");
+			setName(value);
+			break;
+		case "respawntime":
+			if (Integer.parseInt(value) < 360)
+				throw new InvalidSpawnGroupSettingException("Minimum respawn time is 360 seconds");
+			setRespawntime(Integer.parseInt(value));
+			break;
+		case "x":
+			setX(Integer.parseInt(value));
+			break;
+		case "y":
+			setY(Integer.parseInt(value));
+			break;
+		case "z":
+			setZ(Integer.parseInt(value));
+			break;
+		case "npcid":
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(Integer.parseInt(value));
+			if (npc == null)
+				throw new InvalidSpawnGroupSettingException("Invalid NPCID");
+			setNpcid(Integer.parseInt(value));
+			break;
+		default:
+			throw new InvalidSpawnGroupSettingException(
+					"Invalid SpawnGroup setting. Valid Options are: name, x, y, z, respawntime,npcid");
+		}
 	}
 }

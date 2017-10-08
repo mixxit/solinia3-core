@@ -18,6 +18,7 @@ import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
+import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
@@ -757,5 +758,14 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<ISoliniaAAAbility> getAAAbilities() {
 		return aaabilitiesRepository.query(q -> q.getId() > 0);
+	}
+
+	@Override
+	public void editSpawnGroup(int spawngroupid, String setting, String value) throws NumberFormatException, InvalidSpawnGroupSettingException, CoreStateInitException, IOException {
+		ISoliniaSpawnGroup spawnGroup = getSpawnGroup(spawngroupid);
+		spawnGroup.editSetting(setting, value);
+
+		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(spawnGroup.getNpcid()));
+		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 }

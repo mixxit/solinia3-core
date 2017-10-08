@@ -776,9 +776,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc.getClassid() < 1)
 				return;
 			
-			System.out.println(npc.getName() + " time to cast!");
-
-
 			List<ISoliniaSpell> spells = StateManager.getInstance().getConfigurationManager()
 					.getSpellsByClassIdAndMaxLevel(npc.getClassid(), npc.getLevel());
 			if (spells.size() == 0)
@@ -803,24 +800,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			int chanceToCastBeneficial = Utils.RandomBetween(1, 10);
 
 			boolean success = false;
-			System.out.println("Determined list of spells to use: Beneficial: " + beneficialSpells.size() + " Hostile: " + hostileSpells.size());
-
 			if (chanceToCastBeneficial > 7) {
 				if (beneficialSpells.size() == 0)
 					return;
 				
-				System.out.println("Casting beneficial");
-				
 				// Cast on self
 				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(beneficialSpells);
-
-				System.out.println("Casting " + spellToCast.getName() + " (mana cost: " + spellToCast.getMana() + " vs my mana: " + getMana() + ")");
 
 				if (getMana() > spellToCast.getMana()) {
 					success = spellToCast.tryApplyOnEntity(plugin, this.livingentity, this.livingentity);
 				}
-				
-				System.out.println("Success: " + success);
 				
 				if (success) {
 					this.setMana(this.getMana() - spellToCast.getMana());
@@ -829,17 +818,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (hostileSpells.size() == 0)
 					return;
 
-				System.out.println("Casting detrimental");
-				
 				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(hostileSpells);
-
-				System.out.println("Casting " + spellToCast.getName() + " (mana cost: " + spellToCast.getMana() + " vs my mana: " + getMana() + ")");
 
 				if (getMana() > spellToCast.getMana()) {
 					success = spellToCast.tryApplyOnEntity(plugin, this.livingentity, castingAtEntity);
 				}
-				
-				System.out.println("Success: " + success);
 				
 				if (success) {
 					this.setMana(this.getMana() - spellToCast.getMana());

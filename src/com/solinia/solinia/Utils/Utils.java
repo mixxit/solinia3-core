@@ -2849,6 +2849,7 @@ public class Utils {
 				spell.getSpellEffectTypes().contains(SpellEffectType.TranslocatetoAnchor) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.Charm) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.SummonItem) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.BindAffinity) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.SummonPet)
 		)
 			return true;

@@ -3,10 +3,13 @@ package com.solinia.solinia.Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.minecraft.server.v1_12_R1.EntityInsentient;
@@ -27,6 +30,18 @@ public class CommandPet implements CommandExecutor {
 				{
 					player.sendMessage("You don't have a pet");
 					return true;
+				}
+				
+				if (args.length > 0)
+				{
+					String petcommand = args[0];
+					if (petcommand.equals("back"))
+					{
+						Wolf c = (Wolf)pet;
+						player.setLastDamageCause(null);
+						player.sendMessage("* As you wish my master");
+						c.setTarget(null);
+					}
 				}
 				
 				player.sendMessage("Pet Name: " + pet.getName());
