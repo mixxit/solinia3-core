@@ -20,6 +20,8 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
+import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -3581,8 +3583,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isAASpell() {
-		if (this.getMana() == 0)
-			return true;
+		try {
+			if (StateManager.getInstance().getConfigurationManager().getAASpellRankCache(this.getId()).size() > 0)
+				return true;
+		} catch (CoreStateInitException e) {
+			return false;
+		}
 		return false;
 	}
 	

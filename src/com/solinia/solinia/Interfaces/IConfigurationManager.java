@@ -214,4 +214,8 @@ public interface IConfigurationManager {
 
 	void editRace(int raceid, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidRaceSettingException;
+
+	List<ISoliniaAARank> getAARankCache();
+
+	List<Integer> getAASpellRankCache(int spellId);
 }

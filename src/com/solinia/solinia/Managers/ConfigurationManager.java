@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -61,7 +62,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaSpawnGroup> spawngroupRepository;
 	private IRepository<WorldWidePerk> perkRepository;
 	private IRepository<ISoliniaAAAbility> aaabilitiesRepository;
-	private IRepository<ISoliniaAARank> aarankRepository;
+	private ConcurrentHashMap<Integer, ISoliniaAARank> aarankcache = new ConcurrentHashMap<Integer, ISoliniaAARank>();
+	private ConcurrentHashMap<Integer, List<Integer>> spellaarankcache = new ConcurrentHashMap<Integer, List<Integer>>();
+	
 	private IRepository<ISoliniaPatch> patchesRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
@@ -81,7 +84,47 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.spawngroupRepository = spawngroupContext;
 		this.perkRepository = perkContext;
 		this.aaabilitiesRepository = aaabilitiesContext;
+		resetAARankRepository();
 		this.patchesRepository = patchesContext;
+	}
+	
+	private void resetAARankRepository()
+	{
+		this.aarankcache.clear();
+		this.spellaarankcache.clear();
+		for (ISoliniaAAAbility ability : getAAAbilities())
+		{
+			for (ISoliniaAARank rank : ability.getRanks())
+			{
+				this.aarankcache.put(rank.getId(), rank);
+				if (this.spellaarankcache.get(rank.getSpell()) == null)
+					this.spellaarankcache.put(rank.getId(), new ArrayList<Integer>());
+					
+				if (this.spellaarankcache.get(rank.getSpell()).contains(rank.getId()))
+					continue;
+				
+				this.spellaarankcache.get(rank.getSpell()).add(rank.getId());
+			}
+		}
+		System.out.println("* AA Rank and SpelltoAARank cache has been reset");
+	}
+
+	@Override
+	public List<Integer> getAASpellRankCache(int spellId)
+	{
+		if (spellaarankcache.get(spellId) == null)
+			return new ArrayList<Integer>();
+		
+		return spellaarankcache.get(spellId);
+	}
+
+	@Override
+	public List<ISoliniaAARank> getAARankCache()
+	{
+		if (aarankcache.values() == null)
+			return new ArrayList<ISoliniaAARank>();
+		
+		return new ArrayList<ISoliniaAARank>(aarankcache.values());
 	}
 
 	@Override
