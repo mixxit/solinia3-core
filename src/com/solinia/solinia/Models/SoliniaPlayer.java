@@ -645,9 +645,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		if (targetmob != null)
 		    		{
 		    			item.useItemOnEntity(plugin, event.getPlayer(),item,targetmob,true);
+		    			event.getPlayer().setItemInHand(null);
+		    			event.getPlayer().updateInventory();
 		    			return;
 		    		} else {
 		    			item.useItemOnEntity(plugin, event.getPlayer(),item,event.getPlayer(),true);
+		    			event.getPlayer().setItemInHand(null);
+		    			event.getPlayer().updateInventory();
 		    			return;
 		    		}
 			    }

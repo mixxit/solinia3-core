@@ -419,16 +419,17 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public void useItemOnEntity(Plugin plugin, Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable)
+	public boolean useItemOnEntity(Plugin plugin, Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable)
 			throws CoreStateInitException {
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
 		if (spell == null) {
-			return;
+			return false;
 		}
 
+		if (!isConsumable)
 		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
-			return;
+			return false;
 		}
 
 		boolean itemUseSuccess = spell.tryApplyOnEntity(plugin, player, targetentity);
@@ -438,19 +439,20 @@ public class SoliniaItem implements ISoliniaItem {
 				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
 		}
 
-		return;
+		return itemUseSuccess;
 	}
 
 	@Override
-	public void useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock) throws CoreStateInitException {
+	public boolean useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock, boolean isConsumable) throws CoreStateInitException {
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
 		if (spell == null) {
-			return;
+			return false;
 		}
 
+		if (!isConsumable)
 		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
-			return;
+			return false;
 		}
 
 		boolean itemUseSuccess = false;
@@ -461,7 +463,7 @@ public class SoliniaItem implements ISoliniaItem {
 			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
 		}
 
-		return;
+		return itemUseSuccess;
 	}
 
 	private String convertItemStackToJsonRegular() {

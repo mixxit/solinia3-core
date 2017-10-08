@@ -155,7 +155,7 @@ public interface ISoliniaItem {
 
 	void setSpellscroll(boolean spellscroll);
 
-	void useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock) throws CoreStateInitException;
+	boolean useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock, boolean isConsumable) throws CoreStateInitException;
 
 	String asJsonString();
 
@@ -174,7 +174,7 @@ public interface ISoliniaItem {
 
 	void setDiseaseResist(int diseaseResist);
 
-	void useItemOnEntity(Plugin plugin, Player player, ISoliniaItem item, LivingEntity targetentity,
+	boolean useItemOnEntity(Plugin plugin, Player player, ISoliniaItem item, LivingEntity targetentity,
 			boolean isConsumable) throws CoreStateInitException;
 
 	void consume(Plugin plugin, Player player) throws CoreStateInitException;
@@ -186,5 +186,4 @@ public interface ISoliniaItem {
 	boolean isConsumable();
 
 	void setConsumable(boolean isConsumable);
-
 }
