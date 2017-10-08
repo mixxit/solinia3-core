@@ -43,75 +43,67 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreEntityListener implements Listener {
 	Solinia3CorePlugin plugin;
-	
+
 	public Solinia3CoreEntityListener(Solinia3CorePlugin solinia3CorePlugin) {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
 	}
-	
+
 	// Needs to occur before anything else
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityTargetEvent(EntityTargetEvent event) {
-		if (event.isCancelled()) 
+		if (event.isCancelled())
 			return;
-		
+
 		if (!(event.getEntity() instanceof Creature))
 			return;
-		
-		if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Skeleton)
-		{
-			Wolf w = (Wolf)event.getEntity();
-			if (w.getOwner() != null)
-			{
-				if (event.getTarget().getLastDamageCause() == null)
-				{
-					((Creature)event.getEntity()).setTarget(null);
+
+		if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Skeleton) {
+			Wolf w = (Wolf) event.getEntity();
+			if (w.getOwner() != null) {
+				if (event.getTarget().getLastDamageCause() == null) {
+					((Creature) event.getEntity()).setTarget(null);
 					event.setCancelled(true);
 					return;
 				}
-				
+
 				// This is where wolves cancel their attacks against all skeletons
-				// If the skeleton in question has hurt their master then it will set its target as normal
-				if(event.getTarget().getLastDamageCause() instanceof EntityDamageByEntityEvent)
-				{
-					EntityDamageByEntityEvent dmgByEntity = (EntityDamageByEntityEvent) event.getTarget().getLastDamageCause();
-					if (dmgByEntity.getDamager() == null)
-					{
-						((Creature)event.getEntity()).setTarget(null);
+				// If the skeleton in question has hurt their master then it will set its target
+				// as normal
+				if (event.getTarget().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+					EntityDamageByEntityEvent dmgByEntity = (EntityDamageByEntityEvent) event.getTarget()
+							.getLastDamageCause();
+					if (dmgByEntity.getDamager() == null) {
+						((Creature) event.getEntity()).setTarget(null);
 						event.setCancelled(true);
 						return;
 					}
-					
+
 					Entity attacker = dmgByEntity.getDamager();
-					
-					if (dmgByEntity.getDamager() instanceof Arrow)
-					{
-						Arrow arr = (Arrow)dmgByEntity.getDamager();
-						if (arr.getShooter() instanceof LivingEntity)
-						{
-							attacker = (LivingEntity)arr.getShooter();
+
+					if (dmgByEntity.getDamager() instanceof Arrow) {
+						Arrow arr = (Arrow) dmgByEntity.getDamager();
+						if (arr.getShooter() instanceof LivingEntity) {
+							attacker = (LivingEntity) arr.getShooter();
 						} else {
 						}
-					} 
-					
-					if (!(attacker instanceof Player))
-					{
-						((Creature)event.getEntity()).setTarget(null);
+					}
+
+					if (!(attacker instanceof Player)) {
+						((Creature) event.getEntity()).setTarget(null);
 						event.setCancelled(true);
 						return;
 					}
-					
-					if (
-							(event.getTarget().getLastDamageCause().getEntity() instanceof Player) && 
-							!(w.getOwner().getUniqueId().equals(attacker.getUniqueId()))
-							)
-					{
-						((Creature)event.getEntity()).setTarget(null);
+
+					if ((event.getTarget().getLastDamageCause().getEntity() instanceof Player)
+							&& !(w.getOwner().getUniqueId().equals(attacker.getUniqueId()))) {
+						((Creature) event.getEntity()).setTarget(null);
 						event.setCancelled(true);
 						return;
 					}
@@ -119,9 +111,8 @@ public class Solinia3CoreEntityListener implements Listener {
 
 			}
 		}
-		
-		try
-		{
+
+		try {
 			// Me
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
 			if (solEntity.isUndead() && event.getTarget() instanceof LivingEntity) {
@@ -129,50 +120,48 @@ public class Solinia3CoreEntityListener implements Listener {
 						SpellEffectType.InvisVsUndead)
 						|| StateManager.getInstance().getEntityManager().hasEntityEffectType(
 								(LivingEntity) event.getTarget(), SpellEffectType.InvisVsUndead2)) {
-					((Creature)event.getEntity()).setTarget(null);
+					((Creature) event.getEntity()).setTarget(null);
 					event.setCancelled(true);
 					return;
 				}
 			}
-			
+
 			// Mez cancel target
-			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity)event.getEntity());
-			
-			if (mezExpiry != null)
-			{
-				((Creature)event.getEntity()).setTarget(null);
+			Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
+					.getMezzed((LivingEntity) event.getEntity());
+
+			if (mezExpiry != null) {
+				((Creature) event.getEntity()).setTarget(null);
 				event.setCancelled(true);
 				return;
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return;
 		}
-		
 
 	}
 
 	@EventHandler
 	public void onEntityDamageEvent(EntityDamageEvent event) {
-		if (event.isCancelled()) 
+		if (event.isCancelled())
 			return;
-		
+
 		if ((event.getEntity() instanceof Player)) {
-			if (!(event.getCause().equals(EntityDamageEvent.DamageCause.FALL))) 
+			if (!(event.getCause().equals(EntityDamageEvent.DamageCause.FALL)))
 				return;
-			
+
 			Player player = (Player) event.getEntity();
 			ISoliniaPlayer solplayer;
 			try {
 				solplayer = SoliniaPlayerAdapter.Adapt(player);
 				if (solplayer == null)
 					return;
-				
+
 				boolean cancelFall = solplayer.getSafefallCheck();
-				if (cancelFall == true)
-				{
+				if (cancelFall == true) {
 					event.setCancelled(true);
-					solplayer.emote(ChatColor.GRAY + "* " + solplayer.getFullName() + " lands softly, breaking their fall");
+					solplayer.emote(
+							ChatColor.GRAY + "* " + solplayer.getFullName() + " lands softly, breaking their fall");
 					solplayer.tryIncreaseSkill("SAFEFALL", 1);
 					return;
 				}
@@ -184,46 +173,111 @@ public class Solinia3CoreEntityListener implements Listener {
 
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.isCancelled()) 
+		if (event.isCancelled())
 			return;
-		
+
 		if (!(event instanceof EntityDamageByEntityEvent)) {
 			return;
 		}
-		
+
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
-		
+
+		// Remove buffs on attacker (invis should drop)
+		try {
+			if (damagecause.getDamager() instanceof LivingEntity) {
+				
+				LivingEntity attacker = (LivingEntity) damagecause.getDamager();
+				// Change attacker to archer
+				if (damagecause.getDamager() instanceof Arrow) {
+					Arrow arr = (Arrow)attacker;
+					if (arr.getShooter() instanceof LivingEntity) {
+						attacker = (LivingEntity) arr.getShooter();
+					} else {
+					}
+				}
+				
+				List<Integer> removeSpells = new ArrayList<Integer>();
+				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
+						.getActiveEntitySpells((LivingEntity) attacker).getActiveSpells()) {
+					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
+
+							spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)) {
+						if (!removeSpells.contains(spell.getSpell().getId()))
+							removeSpells.add(spell.getSpell().getId());
+
+					}
+				}
+
+				for (Integer spellId : removeSpells) {
+					StateManager.getInstance().getEntityManager()
+							.removeSpellEffectsOfSpellId(((LivingEntity) attacker).getUniqueId(), spellId);
+				}
+			}
+		} catch (CoreStateInitException e) {
+			// skip
+		}
+
+		// Remove buffs on recipient (invis should drop)
+		try {
+			if (event.getEntity() instanceof LivingEntity) {
+				List<Integer> removeSpells = new ArrayList<Integer>();
+				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
+						.getActiveEntitySpells((LivingEntity) event.getEntity()).getActiveSpells()) {
+					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
+
+							spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals)
+							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)) {
+						if (!removeSpells.contains(spell.getSpell().getId()))
+							removeSpells.add(spell.getSpell().getId());
+
+					}
+				}
+
+				for (Integer spellId : removeSpells) {
+					StateManager.getInstance().getEntityManager()
+							.removeSpellEffectsOfSpellId(((LivingEntity) event.getEntity()).getUniqueId(), spellId);
+				}
+			}
+		} catch (CoreStateInitException e) {
+			// skip
+		}
+
 		if (damagecause.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
-			// Never forward magic spell damage (cause thorns) to melee damage calculation code
+			// Never forward magic spell damage (cause thorns) to melee damage calculation
+			// code
 			if (event.getCause().equals(DamageCause.THORNS))
 				return;
 			try {
-				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-				soliniaEntity.modifyDamageEvent(this.plugin, (LivingEntity)damagecause.getDamager(), damagecause);
+				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
+				soliniaEntity.modifyDamageEvent(this.plugin, (LivingEntity) damagecause.getDamager(), damagecause);
 			} catch (CoreStateInitException e) {
-				
+
 			}
 		}
-		
+
 	}
-	
-	
 
 	@EventHandler
-	public void onShootBow(EntityShootBowEvent event)
-	{
-		if (event.isCancelled()) 
+	public void onShootBow(EntityShootBowEvent event) {
+		if (event.isCancelled())
 			return;
-		
-		if(event.getEntity() instanceof Player){
-			Player shooter = (Player) event.getEntity(); 
+
+		if (event.getEntity() instanceof Player) {
+			Player shooter = (Player) event.getEntity();
 			{
 				ItemStack seconditem = shooter.getInventory().getItemInOffHand();
-				
-				if (seconditem != null)
-				{
-					if (seconditem.getType() == Material.BOW)
-					{
+
+				if (seconditem != null) {
+					if (seconditem.getType() == Material.BOW) {
 						shooter.sendMessage("You cannot shoot while you have a bow in your offhand");
 						event.setCancelled(true);
 					}
@@ -231,64 +285,58 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
-	public void onPlayerInteractEntity(PlayerInteractEntityEvent event){
-		
-		if (!(event.getRightClicked() instanceof LivingEntity))
-		{
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+
+		if (!(event.getRightClicked() instanceof LivingEntity)) {
 			return;
 		}
-		
-        if(!(event.getRightClicked() instanceof LivingEntity))
-        {
-        	return;
-        }
-        
-        if(event.getRightClicked() instanceof Player)
-        {
-        	return;
-        }
-        
-        if (event.getHand() != EquipmentSlot.HAND || event.getRightClicked() == null)
-		{
+
+		if (!(event.getRightClicked() instanceof LivingEntity)) {
 			return;
 		}
-        
-        try
-        {
-	        ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getRightClicked());
-			if (solentity.getNpcid() > 0)
-			{
-				SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(solentity.getBukkitLivingEntity().getUniqueId(),StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()));
-				solentity.processInteractionEvent(event.getPlayer(),InteractionType.CHAT, "hail");
+
+		if (event.getRightClicked() instanceof Player) {
+			return;
+		}
+
+		if (event.getHand() != EquipmentSlot.HAND || event.getRightClicked() == null) {
+			return;
+		}
+
+		try {
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getRightClicked());
+			if (solentity.getNpcid() > 0) {
+				SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(
+						solentity.getBukkitLivingEntity().getUniqueId(),
+						StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()));
+				solentity.processInteractionEvent(event.getPlayer(), InteractionType.CHAT, "hail");
 			}
-        } catch (CoreStateInitException e)
-        {
-        	e.printStackTrace();
-        	return;
-        }
-    }
+		} catch (CoreStateInitException e) {
+			e.printStackTrace();
+			return;
+		}
+	}
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		if ((event.getEntity() instanceof ArmorStand))
-		{
+		if ((event.getEntity() instanceof ArmorStand)) {
 			return;
 		}
-		
+
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
 		if (event.getEntity() instanceof Player)
 			return;
-		
+
 		if (!(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent))
 			return;
 
-		if (event.getEntity() instanceof Animals && !Utils.isLivingEntityNPC((LivingEntity)event.getEntity()))
+		if (event.getEntity() instanceof Animals && !Utils.isLivingEntityNPC((LivingEntity) event.getEntity()))
 			return;
-		
+
 		EntityDamageByEntityEvent entitykiller = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
 		Entity damager = entitykiller.getDamager();
 		if (damager instanceof Projectile) {
@@ -296,48 +344,44 @@ public class Solinia3CoreEntityListener implements Listener {
 			Projectile projectile = (Projectile) damager;
 			damager = (Entity) projectile.getShooter();
 		}
-		
+
 		if (!(damager instanceof LivingEntity))
 			return;
-		
+
 		ISoliniaLivingEntity soldamagerentity = null;
 		try {
-			soldamagerentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)damager);
+			soldamagerentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) damager);
 		} catch (CoreStateInitException e) {
-			
+
 		}
-		
-		// If damager is npc, have a chance to trigger its chat text for slaying something
-		if ((!(damager instanceof Player)) && Utils.isLivingEntityNPC((LivingEntity)damager))
-		{
+
+		// If damager is npc, have a chance to trigger its chat text for slaying
+		// something
+		if ((!(damager instanceof Player)) && Utils.isLivingEntityNPC((LivingEntity) damager)) {
 			soldamagerentity.doSlayChat();
 		}
-		
-		if (!(damager instanceof Player) && !soldamagerentity.isPet() )
+
+		if (!(damager instanceof Player) && !soldamagerentity.isPet())
 			return;
-		
+
 		try {
 			ISoliniaLivingEntity livingEntity = SoliniaLivingEntityAdapter.Adapt(event.getEntity());
 			ISoliniaPlayer player = null;
-			if (damager instanceof Player)
-			{
-				player = SoliniaPlayerAdapter.Adapt((Player)damager);
+			if (damager instanceof Player) {
+				player = SoliniaPlayerAdapter.Adapt((Player) damager);
 			}
-			if (soldamagerentity.isPet())
-			{
-				if (damager instanceof Wolf)
-				{
-					Wolf w = (Wolf)damager;
-					player = SoliniaPlayerAdapter.Adapt((Player)w.getOwner());
+			if (soldamagerentity.isPet()) {
+				if (damager instanceof Wolf) {
+					Wolf w = (Wolf) damager;
+					player = SoliniaPlayerAdapter.Adapt((Player) w.getOwner());
 				}
 			}
-			if (player == null)
-			{
+			if (player == null) {
 				return;
 			}
-			
+
 			Double experience = Utils.getExperienceRewardAverageForLevel(livingEntity.getLevel());
-			
+
 			// try to share with group
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(player.getUUID());
 			if (group != null) {
@@ -364,18 +408,17 @@ public class Solinia3CoreEntityListener implements Listener {
 				}
 
 				System.out.println("Group Min: " + ilowlvl + " Group Max: " + ihighlvl);
-				
-				if (player.getLevel() < ilowlvl)
-				{
+
+				if (player.getLevel() < ilowlvl) {
 					// Only award player the experience
 					// as they are out of range of the group
 					if (livingEntity.getLevel() >= player.getLevel() - 7) {
 						player.increasePlayerExperience(experience);
 					} else {
-						player.getBukkitPlayer().sendMessage(ChatColor.GRAY
-								+ "* The npc was too low level to gain experience from");
+						player.getBukkitPlayer()
+								.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from");
 					}
-					
+
 				} else {
 					for (UUID member : group.getMembers()) {
 						Player tgtplayer = Bukkit.getPlayer(member);
@@ -385,8 +428,8 @@ public class Solinia3CoreEntityListener implements Listener {
 
 							if (tgtlevel < ilowlvl) {
 								tgtplayer.sendMessage(
-										"You were out of level range to gain experience in this group (Min: "
-												+ ilowlvl + " Max: " + ihighlvl + ")");
+										"You were out of level range to gain experience in this group (Min: " + ilowlvl
+												+ " Max: " + ihighlvl + ")");
 								continue;
 							}
 
@@ -399,8 +442,8 @@ public class Solinia3CoreEntityListener implements Listener {
 								if (livingEntity.getLevel() >= (tgtsolplayer.getLevel() - 7)) {
 									tgtsolplayer.increasePlayerExperience(experience);
 								} else {
-									tgtplayer.sendMessage(ChatColor.GRAY
-											+ "* The npc was too low level to gain experience from");
+									tgtplayer.sendMessage(
+											ChatColor.GRAY + "* The npc was too low level to gain experience from");
 								}
 
 							} else {
@@ -414,10 +457,11 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (livingEntity.getLevel() >= (player.getLevel() - 7)) {
 					player.increasePlayerExperience(experience);
 				} else {
-					player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from");
+					player.getBukkitPlayer()
+							.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from");
 				}
 			}
-			
+
 			player.giveMoney(1);
 			livingEntity.dropLoot();
 
@@ -425,8 +469,6 @@ public class Solinia3CoreEntityListener implements Listener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
-		
 	}
 }

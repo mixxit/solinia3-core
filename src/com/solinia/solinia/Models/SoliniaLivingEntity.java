@@ -257,36 +257,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				solplayer = SoliniaPlayerAdapter.Adapt(player);
 				
-				List<Integer> removeSpells = new ArrayList<Integer>();
-				try
-				{
-					for(SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(player).getActiveSpells())
-					{
-						if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
-								
-								spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) || 
-								spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2) ||
-								spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility) ||
-								spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2) ||
-								spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals) ||
-								spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)
-								)
-						{
-							if (!removeSpells.contains(spell.getSpell().getId()))
-								removeSpells.add(spell.getSpell().getId());
-							
-						}
-					}
-				} catch (CoreStateInitException e)
-				{
-					// do nothing
-				}
-				
-				for(Integer spellId : removeSpells)
-				{
-					StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(player.getUniqueId(), spellId);
-				}
-				
 				// Apply Bane Damage
 				if (isUndead())
 				{
