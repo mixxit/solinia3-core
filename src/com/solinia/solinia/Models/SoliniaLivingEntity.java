@@ -761,11 +761,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void doSpellCast(Plugin plugin, LivingEntity livingEntity) {
+	public void doSpellCast(Plugin plugin, LivingEntity castingAtEntity) {
 		if (isPlayer())
 			return;
+		
+		this.setMana(this.getMana() + 1);
 
-		if (livingEntity == null || this.livingentity == null)
+		if (castingAtEntity == null || this.livingentity == null)
 			return;
 
 		ISoliniaNPC npc;
@@ -773,12 +775,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc.getClassid() < 1)
 				return;
+			
+			System.out.println(npc.getName() + " time to cast!");
 
-			// TODO move this out of the method, its name implies it will always cast
-			// Randomise chance to cast (30%)
-			// int chanceToCast = Utils.RandomBetween(1,100);
-			// if (chanceToCast < 70)
-			// return;
 
 			List<ISoliniaSpell> spells = StateManager.getInstance().getConfigurationManager()
 					.getSpellsByClassIdAndMaxLevel(npc.getClassid(), npc.getLevel());
@@ -805,16 +804,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			int chanceToCastBeneficial = Utils.RandomBetween(1, 10);
 
 			boolean success = false;
+			System.out.println("Determined list of spells to use: Beneficial: " + beneficialSpells.size() + " Hostile: " + hostileSpells.size());
 
 			if (chanceToCastBeneficial > 7) {
 				if (beneficialSpells.size() == 0)
 					return;
 				
+				System.out.println("Casting beneficial");
+				
 				// Cast on self
 				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(beneficialSpells);
+
+				System.out.println("Casting " + spellToCast.getName() + " (mana cost: " + spellToCast.getMana() + " vs my mana: " + getMana() + ")");
+
 				if (getMana() > spellToCast.getMana()) {
 					success = spellToCast.tryApplyOnEntity(plugin, this.livingentity, this.livingentity);
 				}
+				
+				System.out.println("Success: " + success);
+				
 				if (success) {
 					this.setMana(this.getMana() - spellToCast.getMana());
 				}
@@ -822,10 +830,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (hostileSpells.size() == 0)
 					return;
 
+				System.out.println("Casting detrimental");
+				
 				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(hostileSpells);
+
+				System.out.println("Casting " + spellToCast.getName() + " (mana cost: " + spellToCast.getMana() + " vs my mana: " + getMana() + ")");
+
 				if (getMana() > spellToCast.getMana()) {
-					success = spellToCast.tryApplyOnEntity(plugin, this.livingentity, livingEntity);
+					success = spellToCast.tryApplyOnEntity(plugin, this.livingentity, castingAtEntity);
 				}
+				
+				System.out.println("Success: " + success);
+				
 				if (success) {
 					this.setMana(this.getMana() - spellToCast.getMana());
 				}
@@ -975,6 +991,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return totalHp;
 				
 				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());
+				
+				if (npc.isBoss())
+				{
+					totalHp += (200 * npc.getLevel());
+				}
 				
 				return totalHp;
 			}
@@ -1425,6 +1446,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() > 0)
 		{
 			maxmana = maxmana + (50 * getLevel());
+			
+			try
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+				if (npc != null)
+				{
+					if (npc.isBoss())
+					{
+						maxmana += (200 * npc.getLevel());
+					}
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+			
 		}
 		return (int) Math.floor(maxmana);
 	}
@@ -1441,7 +1478,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			if (this.getNpcid() > 0)
 			{
-				StateManager.getInstance().getConfigurationManager().getNPC(getNpcid()).getClassObj();
+				return StateManager.getInstance().getConfigurationManager().getNPC(getNpcid()).getClassObj();
 			}
 		} catch (CoreStateInitException e)
 		{
