@@ -786,18 +786,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			List<ISoliniaSpell> hostileSpells = new ArrayList<ISoliniaSpell>();
 			List<ISoliniaSpell> beneficialSpells = new ArrayList<ISoliniaSpell>();
-
+			
 			for (ISoliniaSpell spell : spells) {
 				if (!spell.isBeneficial()) {
-					if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target)
-							|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional))
+					if (!Utils.isInvalidNpcSpell(spell) && (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target) || Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)))
 						hostileSpells.add(spell);
 					continue;
 				}
 
-				if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
+				if (!Utils.isInvalidNpcSpell(spell) && (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
 						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target)
-						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional))
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)))
 					beneficialSpells.add(spell);
 			}
 

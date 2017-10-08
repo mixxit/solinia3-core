@@ -2839,4 +2839,20 @@ public class Utils {
 			default: return SkillType.None;
 		}
 	}
+
+	public static boolean isInvalidNpcSpell(ISoliniaSpell spell) {
+		if (spell.getSpellEffectTypes().contains(SpellEffectType.Gate) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.Teleport) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.Teleport2) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.TeleporttoAnchor) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.Translocate) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.TranslocatetoAnchor) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.Charm) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.SummonItem) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.SummonPet)
+		)
+			return true;
+		
+		return false;
+	}
 }

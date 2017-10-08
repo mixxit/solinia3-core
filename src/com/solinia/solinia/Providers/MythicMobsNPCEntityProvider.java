@@ -183,13 +183,28 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		} else {
 			mob = mob + "  Display: " + npc.getName() + "\r\n";
 		}
-		mob = mob + "  Health: " + Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75) + "\r\n";
-		mob = mob + "  Damage: " + Utils.getMaxDamage(npc.getLevel(), 75) + "\r\n";
+		
+		double hp = Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75);
+		double damage = Utils.getMaxDamage(npc.getLevel(), 75);
+		if (npc.isBoss())
+		{
+			hp += (200 * npc.getLevel());
+			damage += (10 * npc.getLevel());
+		}
+		
+		float movementSpeed = 0.2f;
+		if (npc.isBoss())
+		{
+			movementSpeed = 0.3f;
+		}
+		
+		mob = mob + "  Health: " + hp + "\r\n";
+		mob = mob + "  Damage: " + damage + "\r\n";
 		mob = mob + "  MaxCombatDistance: 25\r\n";
 		mob = mob + "  PreventOtherDrops: true\r\n";
 		mob = mob + "  PreventRandomEquipment: true\r\n";
 		mob = mob + "  Options:\r\n";
-		mob = mob + "    MovementSpeed: 0.2\r\n";
+		mob = mob + "    MovementSpeed: " + movementSpeed + "\r\n";
 		mob = mob + "    KnockbackResistance: 0.75\r\n";
 		mob = mob + "    PreventMobKillDrops: true\r\n";
 		mob = mob + "    PreventOtherDrops: true\r\n";
