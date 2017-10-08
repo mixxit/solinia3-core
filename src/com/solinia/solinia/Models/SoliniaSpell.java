@@ -3748,6 +3748,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return false;
 			}
 			
+			if (effect.getSpellEffectType().equals(SpellEffectType.Stun))
+			{
+				// If the effect is a mez, cancel out
+				if (target.equals(source))
+					return false;
+			}
+			
 			if (effect.getSpellEffectType().equals(SpellEffectType.DamageShield) && !(target instanceof Player) && !SoliniaLivingEntityAdapter.Adapt(target).isPet())
 			{
 				// If the effect is a mez, cancel out
