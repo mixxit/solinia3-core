@@ -619,13 +619,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			    {
 				    return;
 			    }
-			    
-			    // Only applies to spell effects
-			    if (!(itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999) || !itemstack.getType().equals(Material.ENCHANTED_BOOK))
-			    {
-			    	return;
-			    }
-			    
+
+			    if ((!(itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)))
+		    		return;
+
 		    	// We have our custom item id, lets check it exists
 		    	ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 		    	
@@ -638,8 +635,28 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    	{
 		    		return;
 		    	}
-		    	
+
 		    	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+			    
+			    // Only applies to consumable items
+		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && item.isConsumable()) 
+			    {
+		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
+		    		if (targetmob != null)
+		    		{
+		    			item.useItemOnEntity(plugin, event.getPlayer(),item,targetmob,true);
+		    			return;
+		    		} else {
+		    			item.useItemOnEntity(plugin, event.getPlayer(),item,event.getPlayer(),true);
+		    			return;
+		    		}
+			    }
+			    
+			    // Only applies to spell effects
+			    if (!itemstack.getType().equals(Material.ENCHANTED_BOOK))
+			    {
+			    	return;
+			    }
 		    	
 		    	if (spell.isAASpell())
 		    	{

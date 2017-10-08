@@ -183,4 +183,8 @@ public interface ISoliniaItem {
 
 	void setTemporary(boolean isTemporary);
 
+	boolean isConsumable();
+
+	void setConsumable(boolean isConsumable);
+
 }
