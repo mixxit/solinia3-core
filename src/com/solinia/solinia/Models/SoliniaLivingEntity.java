@@ -1424,7 +1424,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		double maxmana = ((850 * getLevel()) + (85 * wisintagi * getLevel())) / 425;
 		if (this.getNpcid() > 0)
 		{
-			maxmana = maxmana + 500;
+			maxmana = maxmana + (50 * getLevel());
 		}
 		return (int) Math.floor(maxmana);
 	}
