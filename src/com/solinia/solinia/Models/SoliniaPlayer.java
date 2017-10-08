@@ -689,7 +689,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    	}
 		    	
 		    	// Reroute action depending on target
-		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR)) 
+		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) 
 			    {
 		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 		    		if (targetmob != null)
@@ -702,11 +702,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		}
 			    }
 		    	
+		    	// TODO - Implement block functionality
+		    	/*
 		    	if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
 		    	{
 		    		item.useItemOnBlock(event.getPlayer(),item,event.getClickedBlock());
 		    		return;
 		    	}
+		    	*/
 			    
 		    }
 		} catch (CoreStateInitException e)
