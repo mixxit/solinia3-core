@@ -20,6 +20,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -35,6 +36,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
@@ -52,7 +54,8 @@ public class Solinia3CoreEntityListener implements Listener {
 		plugin = solinia3CorePlugin;
 	}
 	
-	@EventHandler
+	// Needs to occur before anything else
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityTargetEvent(EntityTargetEvent event) {
 		if (event.isCancelled()) 
 			return;
@@ -67,6 +70,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			{
 				if (event.getTarget().getLastDamageCause() == null)
 				{
+					((Creature)event.getEntity()).setTarget(null);
 					event.setCancelled(true);
 					return;
 				}
@@ -78,6 +82,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					EntityDamageByEntityEvent dmgByEntity = (EntityDamageByEntityEvent) event.getTarget().getLastDamageCause();
 					if (dmgByEntity.getDamager() == null)
 					{
+						((Creature)event.getEntity()).setTarget(null);
 						event.setCancelled(true);
 						return;
 					}
@@ -96,6 +101,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					
 					if (!(attacker instanceof Player))
 					{
+						((Creature)event.getEntity()).setTarget(null);
 						event.setCancelled(true);
 						return;
 					}
@@ -105,6 +111,7 @@ public class Solinia3CoreEntityListener implements Listener {
 							!(w.getOwner().getUniqueId().equals(attacker.getUniqueId()))
 							)
 					{
+						((Creature)event.getEntity()).setTarget(null);
 						event.setCancelled(true);
 						return;
 					}
@@ -115,26 +122,28 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		try
 		{
-			// Mez cancel target
-			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity)event.getEntity());
-			
-			if (mezExpiry != null)
-			{
-				event.setCancelled(true);
-				return;
-			}
-			
-			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-			if (solEntity.isUndead() && event.getTarget() instanceof LivingEntity)
-			{
-				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity)event.getTarget(),SpellEffectType.InvisVsUndead) || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity)event.getTarget(),SpellEffectType.InvisVsUndead2))
-				{
+			// Me
+			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
+			if (solEntity.isUndead() && event.getTarget() instanceof LivingEntity) {
+				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),
+						SpellEffectType.InvisVsUndead)
+						|| StateManager.getInstance().getEntityManager().hasEntityEffectType(
+								(LivingEntity) event.getTarget(), SpellEffectType.InvisVsUndead2)) {
+					((Creature)event.getEntity()).setTarget(null);
 					event.setCancelled(true);
 					return;
 				}
 			}
 			
-
+			// Mez cancel target
+			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity)event.getEntity());
+			
+			if (mezExpiry != null)
+			{
+				((Creature)event.getEntity()).setTarget(null);
+				event.setCancelled(true);
+				return;
+			}
 		} catch (CoreStateInitException e)
 		{
 			return;
@@ -192,8 +201,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
 				soliniaEntity.modifyDamageEvent(this.plugin, (LivingEntity)damagecause.getDamager(), damagecause);
 			} catch (CoreStateInitException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 		

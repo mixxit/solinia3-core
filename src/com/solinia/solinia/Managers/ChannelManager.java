@@ -3,6 +3,7 @@ package com.solinia.solinia.Managers;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventException;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -143,10 +144,16 @@ public class ChannelManager implements IChannelManager {
 	public void sendToDiscordMC(ISoliniaPlayer source, String message)
 	{
 		System.out.println("sendToDiscordMC called");
-		if(Bukkit.getServer().getPluginManager().getPlugin("DiscordMC")!=null)
+		if(Bukkit.getServer().getPluginManager().getPlugin("DiscordMC")!=null && message != null && !message.equals(""))
 		{
 			System.out.println("Dispatching OOC message to discord");
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "discord send conversations " + message);
+			try
+			{
+				Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "discord send conversations " + message);
+			} catch (IndexOutOfBoundsException e)
+			{
+				// Skip message
+			}
 		}
 	}
 
