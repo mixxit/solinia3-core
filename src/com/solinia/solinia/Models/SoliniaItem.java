@@ -2,6 +2,8 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
@@ -493,6 +495,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
+		sender.sendMessage("- basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);
@@ -561,6 +564,10 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "wisdom":
 			setWisdom(Integer.parseInt(value));
+			break;
+		case "basename":
+			Material material = Material.valueOf(value.toUpperCase());
+			setBasename(material.name());
 			break;
 		case "charisma":
 			setCharisma(Integer.parseInt(value));
