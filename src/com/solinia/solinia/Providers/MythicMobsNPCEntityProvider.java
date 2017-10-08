@@ -186,6 +186,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "  Health: " + Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75) + "\r\n";
 		mob = mob + "  Damage: " + Utils.getMaxDamage(npc.getLevel(), 75) + "\r\n";
 		mob = mob + "  MovementSpeed: 0.2\r\n";
+		mob = mob + "  KnockbackResistance: 0.75\r\n";
 		mob = mob + "  MaxCombatDistance: 25\r\n";
 		mob = mob + "  PreventOtherDrops: true\r\n";
 		mob = mob + "  PreventRandomEquipment: true\r\n";
@@ -319,6 +320,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "    CreateFog: true\r\n";
 			mob = mob + "    DarkenSky: true\r\n";
 			mob = mob + "    PlayMusic: true\r\n";
+			if (npc.getDisguisetype() != null)
 			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
 				String[] disguisedata = npc.getDisguisetype().split("-");
 				mob = mob + "    Player: " + npc.getName() + "\r\n";
