@@ -98,7 +98,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			{
 				this.aarankcache.put(rank.getId(), rank);
 				if (this.spellaarankcache.get(rank.getSpell()) == null)
-					this.spellaarankcache.put(rank.getId(), new ArrayList<Integer>());
+					this.spellaarankcache.put(rank.getSpell(), new ArrayList<Integer>());
 					
 				if (this.spellaarankcache.get(rank.getSpell()).contains(rank.getId()))
 					continue;
