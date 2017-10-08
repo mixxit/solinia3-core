@@ -70,4 +70,6 @@ public interface IEntityManager {
 	List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc);
 
 	List<ISoliniaNPCMerchantEntry> getTemporaryMerchantItems(ISoliniaNPC npc);
+
+	boolean hasEntityEffectType(LivingEntity livingEntity, SpellEffectType type);
 }

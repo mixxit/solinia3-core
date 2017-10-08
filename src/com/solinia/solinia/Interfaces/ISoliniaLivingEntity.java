@@ -77,4 +77,6 @@ public interface ISoliniaLivingEntity
 	ISoliniaClass getClassObj();
 
 	public double getMaxHP();
+
+	boolean isUndead();
 }

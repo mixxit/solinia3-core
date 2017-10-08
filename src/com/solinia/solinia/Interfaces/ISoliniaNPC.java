@@ -161,4 +161,8 @@ public interface ISoliniaNPC {
 	boolean getRiposteCheck();
 
 	boolean getDoubleAttackCheck();
+
+	boolean isUndead();
+
+	void setUndead(boolean isUndead);
 }

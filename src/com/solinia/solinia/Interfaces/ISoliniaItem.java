@@ -186,4 +186,8 @@ public interface ISoliniaItem {
 	boolean isConsumable();
 
 	void setConsumable(boolean isConsumable);
+
+	int getBaneUndead();
+
+	void setBaneUndead(int baneUndead);
 }

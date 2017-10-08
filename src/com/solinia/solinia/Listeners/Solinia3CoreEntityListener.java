@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
@@ -28,6 +29,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
@@ -39,6 +41,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreEntityListener implements Listener {
@@ -112,6 +115,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		try
 		{
+			// Mez cancel target
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity)event.getEntity());
 			
 			if (mezExpiry != null)
@@ -119,10 +123,24 @@ public class Solinia3CoreEntityListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
+			
+			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+			if (solEntity.isUndead() && event.getTarget() instanceof LivingEntity)
+			{
+				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity)event.getTarget(),SpellEffectType.InvisVsUndead) || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity)event.getTarget(),SpellEffectType.InvisVsUndead2))
+				{
+					event.setCancelled(true);
+					return;
+				}
+			}
+			
+
 		} catch (CoreStateInitException e)
 		{
 			return;
 		}
+		
+
 	}
 
 	@EventHandler
@@ -188,6 +206,22 @@ public class Solinia3CoreEntityListener implements Listener {
 	{
 		if (event.isCancelled()) 
 			return;
+		
+		if(event.getEntity() instanceof Player){
+			Player shooter = (Player) event.getEntity(); 
+			{
+				ItemStack seconditem = shooter.getInventory().getItemInOffHand();
+				
+				if (seconditem != null)
+				{
+					if (seconditem.getType() == Material.BOW)
+					{
+						shooter.sendMessage("You cannot shoot while you have a bow in your offhand");
+						event.setCancelled(true);
+					}
+				}
+			}
+		}
 	}
 	
 	@EventHandler

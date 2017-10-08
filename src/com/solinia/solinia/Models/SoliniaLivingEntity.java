@@ -22,9 +22,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -254,6 +256,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ISoliniaPlayer solplayer;
 			try {
 				solplayer = SoliniaPlayerAdapter.Adapt(player);
+				
+				// Apply Bane Damage
+				if (isUndead())
+				{
+					ISoliniaItem attackerItem;
+					try {
+						attackerItem = SoliniaItemAdapter.Adapt(player.getInventory().getItemInMainHand());
+						
+						if (attackerItem != null)
+						{
+							if (attackerItem.getBaneUndead() > 0)
+							{
+								double newdmg = event.getDamage() + attackerItem.getBaneUndead();
+								event.setDamage(DamageModifier.BASE, newdmg);
+							}
+						}
+					} catch (SoliniaItemException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			} catch (CoreStateInitException e) {
 				return;
 			}
@@ -286,6 +309,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			double currentdamage = event.getDamage(EntityDamageEvent.DamageModifier.BASE);
+			
 			if (currentdamage < 1) {
 				currentdamage++;
 			}
@@ -336,7 +360,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// SLASHING
 			if (event.getCause() == DamageCause.ENTITY_ATTACK) {
 				Material materialinhand = player.getInventory().getItemInMainHand().getType();
-
+				
 				if (materialinhand.equals(Material.WOOD_SWORD) || materialinhand.equals(Material.WOOD_AXE)
 						|| materialinhand.equals(Material.STONE_SWORD) || materialinhand.equals(Material.STONE_AXE)
 						|| materialinhand.equals(Material.IRON_SWORD) || materialinhand.equals(Material.IRON_AXE)
@@ -487,6 +511,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc.isPet())
+				return true;
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public boolean isUndead() {
+		if (isPlayer())
+			return false;
+
+		if (this.getNpcid() < 1)
+			return false;
+
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.isUndead())
 				return true;
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

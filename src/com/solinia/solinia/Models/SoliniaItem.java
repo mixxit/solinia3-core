@@ -64,6 +64,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private byte color;
 	private boolean isTemporary;
 	private boolean isConsumable;
+	private int baneUndead = 0;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -501,6 +502,9 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);
 		sender.sendMessage("- consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET);
+		sender.sendMessage("- baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET);
 		sender.sendMessage("- stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET);
 		sender.sendMessage("- agility: " + ChatColor.GOLD + getAgility() + ChatColor.RESET);
@@ -540,6 +544,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "damage":
 			setDamage(Integer.parseInt(value));
+			break;
+		case "baneundead":
+			setBaneUndead(Integer.parseInt(value));
 			break;
 		case "hpregen":
 			setHpregen(Integer.parseInt(value));
@@ -647,6 +654,16 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setConsumable(boolean isConsumable) {
 		this.isConsumable = isConsumable;
+	}
+
+	@Override
+	public int getBaneUndead() {
+		return baneUndead;
+	}
+
+	@Override
+	public void setBaneUndead(int baneUndead) {
+		this.baneUndead = baneUndead;
 	}
 
 }

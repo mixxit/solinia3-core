@@ -31,6 +31,8 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Models.ActiveSpellEffect;
+import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
@@ -100,6 +102,26 @@ public class EntityManager implements IEntityManager {
 		} else {
 			setTrance(uuid, true);
 		}
+	}
+	
+	@Override 
+	public boolean hasEntityEffectType(LivingEntity livingEntity, SpellEffectType type)
+	{
+		try
+		{
+			for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(livingEntity).getActiveSpells()) {
+				for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
+					if (spelleffect.getSpellEffectType().equals(type)) {
+						return true;
+					}
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+		
+		return false;
 	}
 	
 	@Override

@@ -639,7 +639,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
 			    
 			    // Only applies to consumable items
-		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && item.isConsumable()) 
+		    	if((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isConsumable()) 
 			    {
 		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 		    		if (targetmob != null)

@@ -60,6 +60,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isGuard = false;
 	private boolean isRoamer = false;
 	private boolean isPet = false;
+	private boolean isUndead = false;
 	private List<ISoliniaNPCEventHandler> eventHandlers = new ArrayList<ISoliniaNPCEventHandler>();
 	
 	@Override
@@ -429,6 +430,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET);
 		sender.sendMessage("- burning: " + ChatColor.GOLD + isBurning() + ChatColor.RESET);
 		sender.sendMessage("- invisible: " + ChatColor.GOLD + isInvisible() + ChatColor.RESET);
+		sender.sendMessage("- isundead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "EQUIPMENT" + ChatColor.RESET);
 		if (getLoottableid() != 0) {
 			sender.sendMessage("- loottableid: " + ChatColor.GOLD + getLoottableid() + " ("
@@ -596,9 +598,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "roamer":
 			setRoamer(Boolean.parseBoolean(value));
 			break;
+		case "undead":
+			setUndead(Boolean.parseBoolean(value));
+			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead");
 		}
 	}
 
@@ -862,5 +867,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 		chance /= 5;
 
 		return Utils.RandomBetween(1, 500) <= chance;
+	}
+
+	@Override
+	public boolean isUndead() {
+		return isUndead;
+	}
+
+	@Override
+	public void setUndead(boolean isUndead) {
+		this.isUndead = isUndead;
 	}
 }
