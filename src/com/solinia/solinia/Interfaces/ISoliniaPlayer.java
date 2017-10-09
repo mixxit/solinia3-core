@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SpellResistType;
 
@@ -159,4 +160,14 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean getRiposteCheck();
 
 	public boolean getSafefallCheck();
+
+	List<PlayerFactionEntry> getFactionEntries();
+
+	void setFactionEntries(List<PlayerFactionEntry> factionEntries);
+
+	public void decreaseFactionStanding(int factionid, int i);
+
+	PlayerFactionEntry getFactionEntry(int factionId);
+
+	PlayerFactionEntry createPlayerFactionEntry(int factionId);
 }

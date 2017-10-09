@@ -60,6 +60,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String currentChannel = "OOC";
 	private List<Integer> ranks = new ArrayList<Integer>();
 	private List<Integer> aas = new ArrayList<Integer>();
+	private List<PlayerFactionEntry> factionEntries = new ArrayList<PlayerFactionEntry>();
 
 	@Override
 	public UUID getUUID() {
@@ -1133,5 +1134,69 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return false;
 		
 		return true;
+	}
+
+	@Override
+	public List<PlayerFactionEntry> getFactionEntries() {
+		return factionEntries;
+	}
+
+	@Override
+	public void setFactionEntries(List<PlayerFactionEntry> factionEntries) {
+		this.factionEntries = factionEntries;
+	}
+	
+	@Override
+	public PlayerFactionEntry getFactionEntry(int factionId) {
+		for(PlayerFactionEntry entry : getFactionEntries())
+		{
+			if (entry.getFactionId() == factionId)
+				return entry;
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public PlayerFactionEntry createPlayerFactionEntry(int factionId)
+	{
+		PlayerFactionEntry entry = new PlayerFactionEntry();
+		entry.setFactionId(factionId);
+		entry.setValue(0);
+		getFactionEntries().add(entry);
+		return getFactionEntry(factionId);
+	}
+
+	@Override
+	public void decreaseFactionStanding(int factionId, int amount) {
+		PlayerFactionEntry playerFactionEntry = getFactionEntry(factionId);
+		if (playerFactionEntry == null)
+			playerFactionEntry = createPlayerFactionEntry(factionId);
+		
+		int newValue = playerFactionEntry.getValue() + amount;
+		boolean hitCap = false;
+		if (newValue > 1500)
+		{
+			newValue = 1500;
+			hitCap = true;
+			getBukkitPlayer().sendMessage("Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
+		}
+		
+		if (newValue < -1500)
+		{
+			newValue = -1500;
+			hitCap = true;
+			getBukkitPlayer().sendMessage("Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
+		}
+		
+		if (!hitCap)
+		{
+			if (newValue < 0)
+				getBukkitPlayer().sendMessage("Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
+			else
+				getBukkitPlayer().sendMessage("Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
+		}
+		
+		playerFactionEntry.setValue(newValue);
 	}
 }

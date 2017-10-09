@@ -34,6 +34,7 @@ import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
@@ -44,6 +45,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.DisguisePackage;
+import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAAPrereq;
@@ -2855,5 +2857,46 @@ public class Utils {
 			return true;
 		
 		return false;
+	}
+
+	public static FactionStandingType getFactionStandingType(int factionId, int playerFactionValue) {
+		try
+		{
+			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(factionId);
+			if (faction != null)
+				playerFactionValue += faction.getBase();
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		if (playerFactionValue >= 1101) {
+			return FactionStandingType.FACTION_ALLY;
+		}
+		if (playerFactionValue >= 701 && playerFactionValue <= 1100) {
+			return FactionStandingType.FACTION_WARMLY;
+		}
+		if (playerFactionValue >= 401 && playerFactionValue <= 700) {
+			return FactionStandingType.FACTION_KINDLY;
+		}
+		if (playerFactionValue >= 101 && playerFactionValue <= 400) {
+			return FactionStandingType.FACTION_AMIABLE;
+		}
+		if (playerFactionValue >= 0 && playerFactionValue <= 100) {
+			return FactionStandingType.FACTION_INDIFFERENT;
+		}
+		if (playerFactionValue >= -100 && playerFactionValue <= -1) {
+			return FactionStandingType.FACTION_APPREHENSIVE;
+		}
+		if (playerFactionValue >= -700 && playerFactionValue <= -101) {
+			return FactionStandingType.FACTION_DUBIOUS;
+		}
+		if (playerFactionValue >= -999 && playerFactionValue <= -701) {
+			return FactionStandingType.FACTION_THREATENLY;
+		}
+		if (playerFactionValue <= -1000) {
+			return FactionStandingType.FACTION_SCOWLS;
+		}
+		return FactionStandingType.FACTION_INDIFFERENT;
 	}
 }

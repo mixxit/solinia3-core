@@ -462,6 +462,14 @@ public class Solinia3CoreEntityListener implements Listener {
 				}
 			}
 
+			if (livingEntity.getNpcid() > 0) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+				if (npc.getFactionid() > 0)
+				{
+					player.decreaseFactionStanding(npc.getFactionid(),1);
+				}
+			}
+			
 			player.giveMoney(1);
 			livingEntity.dropLoot();
 

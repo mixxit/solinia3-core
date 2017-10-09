@@ -288,6 +288,10 @@ commands:
     description: Buy and list AAs
     usage: /aa
     aliases: []
+  faction:
+    description: Lists faction statuses
+    usage: /fact
+    aliases: []
   toggleaa:
     description: Toggles experience into AA gain
     usage: /toggleaa
