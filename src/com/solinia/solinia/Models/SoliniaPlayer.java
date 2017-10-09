@@ -1179,22 +1179,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 			newValue = 1500;
 			hitCap = true;
-			getBukkitPlayer().sendMessage("Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
 		}
 		
 		if (newValue < -1500)
 		{
 			newValue = -1500;
 			hitCap = true;
-			getBukkitPlayer().sendMessage("Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
 		}
 		
 		if (!hitCap)
 		{
 			if (newValue < 0)
-				getBukkitPlayer().sendMessage("Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
 			else
-				getBukkitPlayer().sendMessage("Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
 		}
 		
 		playerFactionEntry.setValue(newValue);
