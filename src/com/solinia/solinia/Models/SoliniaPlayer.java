@@ -1169,9 +1169,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void decreaseFactionStanding(int factionId, int amount) {
+		if (factionId == 0)
+			return;
+		
+		if (amount == 0)
+			return;
+		
 		PlayerFactionEntry playerFactionEntry = getFactionEntry(factionId);
 		if (playerFactionEntry == null)
 			playerFactionEntry = createPlayerFactionEntry(factionId);
+		
+		// Never handle these special faction types		
+		if (playerFactionEntry.getFaction().getName().toUpperCase().equals("NEUTRAL") || playerFactionEntry.getFaction().getName().toUpperCase().equals("KOS"))
+			return;
 		
 		int newValue = playerFactionEntry.getValue() + amount;
 		boolean hitCap = false;
