@@ -1183,7 +1183,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (playerFactionEntry.getFaction().getName().toUpperCase().equals("NEUTRAL") || playerFactionEntry.getFaction().getName().toUpperCase().equals("KOS"))
 			return;
 		
-		int newValue = playerFactionEntry.getValue() + amount;
+		int newValue = playerFactionEntry.getValue() - amount;
 		boolean hitCap = false;
 		if (newValue > 1500)
 		{
