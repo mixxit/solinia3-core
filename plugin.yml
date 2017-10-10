@@ -21,6 +21,10 @@ commands:
     usage: /lastname <lastname>
     aliases: 
     - surname
+  solignore:
+    description: Ignores a player name in RPG chat (see /who for mcname)
+    usage: /solignore <mcname>
+    aliases: []
   mana:
     description: Gets player mana
     usage: /mana
@@ -303,6 +307,10 @@ commands:
   editrace:
     description: Edits a race
     usage: /editrace raceid setting value
+    aliases: []
+  editfaction:
+    description: Edits a faction
+    usage: /editfaction faction setting value
     aliases: []
 depend:
 - Vault

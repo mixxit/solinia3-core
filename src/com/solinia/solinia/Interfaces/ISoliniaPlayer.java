@@ -170,4 +170,12 @@ public interface ISoliniaPlayer extends Serializable {
 	PlayerFactionEntry getFactionEntry(int factionId);
 
 	PlayerFactionEntry createPlayerFactionEntry(int factionId);
+
+	void ignorePlayer(Player player);
+
+	List<UUID> getIgnoredPlayers();
+
+	void setIgnoredPlayers(List<UUID> ignoredPlayers);
+
+	boolean hasIgnored(UUID uuid);
 }

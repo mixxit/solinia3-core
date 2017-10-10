@@ -15,6 +15,7 @@ import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Events.SoliniaSpawnGroupUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
@@ -767,5 +768,11 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(spawnGroup.getNpcid()));
 		Bukkit.getPluginManager().callEvent(soliniaevent);
+	}
+
+	@Override
+	public void editFaction(int factionid, String setting, String value) throws NumberFormatException, InvalidFactionSettingException, CoreStateInitException, IOException {
+		ISoliniaFaction faction = getFaction(factionid);
+		faction.editSetting(setting, value);
 	}
 }

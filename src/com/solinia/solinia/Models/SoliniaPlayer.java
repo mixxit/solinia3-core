@@ -61,7 +61,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<Integer> ranks = new ArrayList<Integer>();
 	private List<Integer> aas = new ArrayList<Integer>();
 	private List<PlayerFactionEntry> factionEntries = new ArrayList<PlayerFactionEntry>();
+	private List<UUID> ignoredPlayers = new ArrayList<UUID>();
 
+	@Override
+	public List<UUID> getIgnoredPlayers()
+	{
+		return ignoredPlayers;
+	}
+	
+	@Override
+	public boolean hasIgnored(UUID uuid)
+	{
+		return ignoredPlayers.contains(uuid);
+	}
+	
+	@Override
+	public void setIgnoredPlayers(List<UUID> ignoredPlayers)
+	{
+		this.ignoredPlayers = ignoredPlayers;
+	}
+	
 	@Override
 	public UUID getUUID() {
 		return uuid;
@@ -1208,5 +1227,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		playerFactionEntry.setValue(newValue);
+	}
+
+	@Override
+	public void ignorePlayer(Player player) {
+		if(ignoredPlayers.contains(player.getUniqueId()))
+		{
+			ignoredPlayers.remove(player.getUniqueId());
+		} else {
+			ignoredPlayers.add(player.getUniqueId());
+		}
 	}
 }

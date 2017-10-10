@@ -25,6 +25,7 @@ import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandCreateNpcCopy;
 import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
 import com.solinia.solinia.Commands.CommandEditClass;
+import com.solinia.solinia.Commands.CommandEditFaction;
 import com.solinia.solinia.Commands.CommandEditItem;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEditRace;
@@ -37,6 +38,7 @@ import com.solinia.solinia.Commands.CommandForceLevel;
 import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandGroup;
 import com.solinia.solinia.Commands.CommandGroupChat;
+import com.solinia.solinia.Commands.CommandIgnore;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandListFactions;
 import com.solinia.solinia.Commands.CommandListItems;
@@ -115,7 +117,7 @@ import me.dadus33.chatitem.api.ChatItemAPI;
 import net.milkbowl.vault.economy.Economy;
 
 public class Solinia3CorePlugin extends JavaPlugin {
-	
+
 	private StateCommitTimer commitTimer;
 	private PlayerRegenTickTimer playerRegenTimer;
 	private SpellTickTimer spellTickTimer;
@@ -124,27 +126,27 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 	private NPCRandomChatTimer npcRandomChatTimer;
 	private PetCheckTickTimer petCheckTickTimer;
-	
+
 	private Economy economy;
 	private ChatItemAPI ciApi;
 	private PerkLoadTimer perkLoadTimer;
-	
+
 	@Override
-    public void onEnable() {
+	public void onEnable() {
 		System.out.println("[Solinia3Core] Plugin Enabled");
 		createConfigDir();
 		initialise();
 		registerEvents();
-		
+
 		setupEconomy();
 		setupChatItem();
-		
+
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setChatItem(this.ciApi);
 	}
-	
+
 	@Override
-    public void onDisable() {
+	public void onDisable() {
 		try {
 			StateManager.getInstance().getEntityManager().killAllPets();
 			StateManager.getInstance().Commit();
@@ -153,29 +155,28 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			e.printStackTrace();
 		}
 		System.out.println("[Solinia3Core] Plugin Disabled");
-    }
-	
-	private void setupChatItem()
-	{
+	}
+
+	private void setupChatItem() {
 		ciApi = Bukkit.getServicesManager().getRegistration(ChatItemAPI.class).getProvider();
 	}
-	
+
 	private boolean setupEconomy() {
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
+				.getRegistration(net.milkbowl.vault.economy.Economy.class);
 		if (economyProvider != null)
-		economy = economyProvider.getProvider();
+			economy = economyProvider.getProvider();
 		return (economy != null);
-    }
-	
-	private void initialise()
-	{
+	}
+
+	private void initialise() {
 		// TODO Lets load all this from config settings at some point
-		
+
 		try {
 			JsonPlayerRepository repo = new JsonPlayerRepository();
 			repo.setJsonFile(getDataFolder() + "/" + "players.json");
 			repo.reload();
-			
+
 			JsonRaceRepository racerepo = new JsonRaceRepository();
 			racerepo.setJsonFile(getDataFolder() + "/" + "races.json");
 			racerepo.reload();
@@ -183,27 +184,27 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonClassRepository classrepo = new JsonClassRepository();
 			classrepo.setJsonFile(getDataFolder() + "/" + "classes.json");
 			classrepo.reload();
-			
+
 			JsonItemRepository itemrepo = new JsonItemRepository();
 			itemrepo.setJsonFile(getDataFolder() + "/" + "items.json");
 			itemrepo.reload();
-			
+
 			JsonSpellRepository spellrepo = new JsonSpellRepository();
 			spellrepo.setJsonFile(getDataFolder() + "/" + "spells.json");
 			spellrepo.reload();
-			
+
 			JsonFactionRepository factionrepo = new JsonFactionRepository();
 			factionrepo.setJsonFile(getDataFolder() + "/" + "factions.json");
 			factionrepo.reload();
-			
+
 			JsonNPCRepository npcrepo = new JsonNPCRepository();
 			npcrepo.setJsonFile(getDataFolder() + "/" + "npcs.json");
 			npcrepo.reload();
-			
+
 			JsonNPCMerchantRepository npcmerchantrepo = new JsonNPCMerchantRepository();
 			npcmerchantrepo.setJsonFile(getDataFolder() + "/" + "npcmerchants.json");
 			npcmerchantrepo.reload();
-			
+
 			JsonLootTableRepository loottablerepo = new JsonLootTableRepository();
 			loottablerepo.setJsonFile(getDataFolder() + "/" + "loottables.json");
 			loottablerepo.reload();
@@ -215,11 +216,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonSpawnGroupRepository spawngrouprepo = new JsonSpawnGroupRepository();
 			spawngrouprepo.setJsonFile(getDataFolder() + "/" + "spawngroups.json");
 			spawngrouprepo.reload();
-			
+
 			JsonWorldWidePerkRepository perkrepo = new JsonWorldWidePerkRepository();
 			perkrepo.setJsonFile(getDataFolder() + "/" + "worldwideperks.json");
 			perkrepo.reload();
-			
+
 			JsonAAAbilityRepository aaabilityrepo = new JsonAAAbilityRepository();
 			aaabilityrepo.setJsonFile(getDataFolder() + "/" + "aaabilities.json");
 			aaabilityrepo.reload();
@@ -227,59 +228,60 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonPatchRepository patchesrepo = new JsonPatchRepository();
 			patchesrepo.setJsonFile(getDataFolder() + "/" + "patches.json");
 			patchesrepo.reload();
-			
+
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
-			
-			ConfigurationManager configurationManager = new ConfigurationManager(racerepo,classrepo,itemrepo,spellrepo,factionrepo,npcrepo,npcmerchantrepo,loottablerepo,lootdroprepo, spawngrouprepo, perkrepo, aaabilityrepo,patchesrepo);
-			
+
+			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
+					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
+					perkrepo, aaabilityrepo, patchesrepo);
+
 			ChannelManager channelManager = new ChannelManager();
-			
+
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager);
-			
+
 			commitTimer = new StateCommitTimer();
-			commitTimer.runTaskTimer(this, 6*20L, 300*20L);
-			
+			commitTimer.runTaskTimer(this, 6 * 20L, 300 * 20L);
+
 			playerRegenTimer = new PlayerRegenTickTimer();
-			playerRegenTimer.runTaskTimer(this, 6*20L, 6*20L);
-			
+			playerRegenTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+
 			spellTickTimer = new SpellTickTimer(this);
-			spellTickTimer.runTaskTimer(this, 6*20L, 6*20L);
-			
+			spellTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+
 			playerInteractionTimer = new PlayerInteractionTimer();
-			playerInteractionTimer.runTaskTimer(this, 6*20L, 6*20L);
-			
+			playerInteractionTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+
 			perkLoadTimer = new PerkLoadTimer();
-			perkLoadTimer.runTaskTimer(this, 6*20L, 120*20L);
+			perkLoadTimer.runTaskTimer(this, 6 * 20L, 120 * 20L);
 
 			// Only validate these things every 2 minutes
 			playerInventoryValidatorTimer = new PlayerInventoryValidatorTimer();
-			playerInventoryValidatorTimer.runTaskTimer(this, 120*20L, 120*20L);
+			playerInventoryValidatorTimer.runTaskTimer(this, 120 * 20L, 120 * 20L);
 
 			npcRandomChatTimer = new NPCRandomChatTimer();
-			npcRandomChatTimer.runTaskTimer(this, 6*20L, 60*20L);
+			npcRandomChatTimer.runTaskTimer(this, 6 * 20L, 60 * 20L);
 
 			npcSpellCastTimer = new NPCSpellCastTimer(this);
-			npcSpellCastTimer.runTaskTimer(this, 6*20L, 6*20L);
+			npcSpellCastTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 
 			petCheckTickTimer = new PetCheckTickTimer();
-			petCheckTickTimer.runTaskTimer(this, 6*20L, 6*20L);
-			
+			petCheckTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	private void registerEvents()
-	{
+
+	private void registerEvents() {
 		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreEntityListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CorePlayerChatListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreNPCUpdatedListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreSpawnGroupUpdatedListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreItemPickupListener(this), this);
-		
+
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());
 		this.getCommand("forename").setExecutor(new CommandForename());
@@ -349,16 +351,18 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editrace").setExecutor(new CommandEditRace());
 		this.getCommand("editspawngroup").setExecutor(new CommandEditSpawngroup());
 		this.getCommand("faction").setExecutor(new CommandFaction());
+		this.getCommand("solignore").setExecutor(new CommandIgnore());
+		this.getCommand("editfaction").setExecutor(new CommandEditFaction());
 	}
-	
-	private void createConfigDir() {
-	    try {
-	        if (!getDataFolder().exists()) {
-	            getDataFolder().mkdirs();
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
 
-	    }
+	private void createConfigDir() {
+		try {
+			if (!getDataFolder().exists()) {
+				getDataFolder().mkdirs();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
 	}
 }

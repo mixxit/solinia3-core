@@ -22,8 +22,13 @@ public class ChannelManager implements IChannelManager {
 			{
 				try
 				{
+					ISoliniaPlayer solTargetPlayer = SoliniaPlayerAdapter.Adapt(player);
+					if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
+						continue;
+					
 					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
 					{
+						
 						player.sendMessage(message);
 					} else {
 						player.sendMessage(ChatColor.AQUA + " * " + source.getFullName() + " says something in a language you do not understand" + ChatColor.RESET);
@@ -45,6 +50,16 @@ public class ChannelManager implements IChannelManager {
 		String originalmessage = message;
 		message = decorateGlobalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
+			try
+			{
+				ISoliniaPlayer solTargetPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
+					continue;
+			} catch (CoreStateInitException e)
+			{
+				continue;
+			}
+				
 			player.sendMessage(message);
 		}
 		
@@ -124,7 +139,19 @@ public class ChannelManager implements IChannelManager {
 	public void sendToLocalChannel(ISoliniaPlayer source, String message) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 100)
-			player.sendMessage(message);
+			{
+				try
+				{
+					ISoliniaPlayer solTargetPlayer = SoliniaPlayerAdapter.Adapt(player);
+					if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
+						continue;
+				} catch (CoreStateInitException e)
+				{
+					continue;
+				}
+
+				player.sendMessage(message);
+			}
 		}
 		
 		System.out.println(message);
