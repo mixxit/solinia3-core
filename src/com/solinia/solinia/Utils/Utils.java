@@ -2852,6 +2852,10 @@ public class Utils {
 				spell.getSpellEffectTypes().contains(SpellEffectType.Charm) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.SummonItem) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.BindAffinity) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.Levitate) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.FeignDeath) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.ShadowStep) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.ShadowStepDirectional) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.SummonPet)
 		)
 			return true;

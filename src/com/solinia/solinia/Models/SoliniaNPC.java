@@ -24,6 +24,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -726,6 +727,29 @@ public class SoliniaNPC implements ISoliniaNPC {
 							page = 1;
 						
 						sendMerchantItemListToPlayer((Player)triggerentity, page);
+					}
+					return;
+				case "LISTEFFECTS":
+					if (triggerentity instanceof Player)
+					{
+						if (((Player)triggerentity).isOp())
+						{
+							Player player = (Player)triggerentity;
+							try
+							{
+								for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(solentity.getBukkitLivingEntity()).getActiveSpells())
+								{
+									player.sendMessage(spell.getSpell().getName());
+									for (ActiveSpellEffect effect : spell.getActiveSpellEffects())
+									{
+										player.sendMessage(" - " + effect.getSpellEffectType().name() + " " + effect.getBase());
+									}
+								}
+							} catch (CoreStateInitException e)
+							{
+								// 
+							}
+						}
 					}
 					return;
 				default:
