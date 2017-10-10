@@ -2856,6 +2856,7 @@ public class Utils {
 				spell.getSpellEffectTypes().contains(SpellEffectType.FeignDeath) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.ShadowStep) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.ShadowStepDirectional) ||
+				spell.getSpellEffectTypes().contains(SpellEffectType.Familiar) ||
 				spell.getSpellEffectTypes().contains(SpellEffectType.SummonPet)
 		)
 			return true;

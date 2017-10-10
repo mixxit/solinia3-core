@@ -56,6 +56,7 @@ public class CommandSetLanguage implements CommandExecutor {
 	            SoliniaPlayerSkill soliniaskill = soliniaplayer.getSkill(language);
 	            if (soliniaskill != null && soliniaskill.getValue() >= 100)
 	            {
+	            	soliniaplayer.setLanguage(language);
 	            	player.sendMessage("* You will now speak in " + language);
 	                return true;
 	            }
