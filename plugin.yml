@@ -32,7 +32,8 @@ commands:
   settitle:
     description: Sets a title
     usage: /settitle title
-    aliases: []
+    aliases:
+    - title
   addrace:
     description: Creates a new race
     usage: /addrace racename strength stamina agility dexterity wisdom intelligence charisma adminonly

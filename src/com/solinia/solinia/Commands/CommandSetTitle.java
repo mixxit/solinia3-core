@@ -25,6 +25,7 @@ public class CommandSetTitle implements CommandExecutor {
 	            	{
 	                	player.sendMessage("- " + title + "");
 	            	}
+	            	player.sendMessage("/settitle none to remove your current title");
 	            	return true;
 	            }
 	            
@@ -41,24 +42,30 @@ public class CommandSetTitle implements CommandExecutor {
 	    			targetTitle = targetTitle.trim();
 	    		}
 	            
-	            boolean found = false;
-	            for(String title : solplayer.getAvailableTitles())
-            	{
-	            	if (targetTitle.toUpperCase().equals(title.toUpperCase()))
-	            	{
-	            		targetTitle = title;
-	            		found = true;
-	            		break;
-	            	}
-            	}
-	            
-	            if (found == false)
+	            if (targetTitle.equals("none"))
 	            {
-	            	player.sendMessage("You do not have this title");
-	            	return true;
+		            boolean found = false;
+		            for(String title : solplayer.getAvailableTitles())
+	            	{
+		            	if (targetTitle.toUpperCase().equals(title.toUpperCase()))
+		            	{
+		            		targetTitle = title;
+		            		found = true;
+		            		break;
+		            	}
+	            	}
+		            
+		            if (found == false)
+		            {
+		            	player.sendMessage("You do not have this title");
+		            	return true;
+		            }
+
+		            solplayer.setTitle(targetTitle);
+	            } else {
+		            solplayer.setTitle("");
 	            }
 	            
-	            solplayer.setTitle(targetTitle);
 	            player.sendMessage("* Title set to: " + targetTitle);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
