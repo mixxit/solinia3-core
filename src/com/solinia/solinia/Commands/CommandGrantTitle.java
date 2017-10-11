@@ -44,7 +44,7 @@ public class CommandGrantTitle implements CommandExecutor {
 		int current = 0;
 		for (String entry : args) {
 			current++;
-			if (current < 1)
+			if (current < 2)
 				continue;
 			
 			targetTitle = targetTitle + entry + " ";
