@@ -414,6 +414,22 @@ public class Solinia3CoreEntityListener implements Listener {
 					// as they are out of range of the group
 					if (livingEntity.getLevel() >= player.getLevel() - 7) {
 						player.increasePlayerExperience(experience);
+						
+						// Grant title for killing mob
+						if (livingEntity.getNpcid() > 0)
+						{
+							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+							if (npc != null && !npc.getDeathGrantsTitle().equals(""))
+							{
+								player.grantTitle(npc.getDeathGrantsTitle());
+							}
+							
+							if (npc.isBoss())
+							{
+								player.grantTitle("the Vanquisher");
+							}
+						}
+						
 					} else {
 						player.getBukkitPlayer()
 								.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from");
@@ -441,6 +457,22 @@ public class Solinia3CoreEntityListener implements Listener {
 							if (tgtplayer.getLocation().distance(player.getBukkitPlayer().getLocation()) <= 100) {
 								if (livingEntity.getLevel() >= (tgtsolplayer.getLevel() - 7)) {
 									tgtsolplayer.increasePlayerExperience(experience);
+									
+									// Grant title for killing mob
+									if (livingEntity.getNpcid() > 0)
+									{
+										ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+										if (npc != null && !npc.getDeathGrantsTitle().equals(""))
+										{
+											tgtsolplayer.grantTitle(npc.getDeathGrantsTitle());
+										}
+										
+										if (npc.isBoss())
+										{
+											tgtsolplayer.grantTitle("the Vanquisher");
+										}
+									}
+									
 								} else {
 									tgtplayer.sendMessage(
 											ChatColor.GRAY + "* The npc was too low level to gain experience from");
@@ -456,6 +488,22 @@ public class Solinia3CoreEntityListener implements Listener {
 			} else {
 				if (livingEntity.getLevel() >= (player.getLevel() - 7)) {
 					player.increasePlayerExperience(experience);
+					
+					// Grant title for killing mob
+					if (livingEntity.getNpcid() > 0)
+					{
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+						if (npc != null && !npc.getDeathGrantsTitle().equals(""))
+						{
+							player.grantTitle(npc.getDeathGrantsTitle());
+						}
+						
+						if (npc.isBoss())
+						{
+							player.grantTitle("the Vanquisher");
+						}
+					}
+					
 				} else {
 					player.getBukkitPlayer()
 							.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from");
@@ -472,7 +520,6 @@ public class Solinia3CoreEntityListener implements Listener {
 			
 			player.giveMoney(1);
 			livingEntity.dropLoot();
-
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

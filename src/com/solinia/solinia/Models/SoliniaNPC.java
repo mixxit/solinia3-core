@@ -63,6 +63,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isPet = false;
 	private boolean isUndead = false;
 	private List<ISoliniaNPCEventHandler> eventHandlers = new ArrayList<ISoliniaNPCEventHandler>();
+	private String deathGrantsTitle = "";
 	
 	@Override
 	public int getId() {
@@ -411,6 +412,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- professionid: " + ChatColor.GOLD + getClassid() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "STATS" + ChatColor.RESET);
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
+		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
 		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET);
@@ -553,6 +555,10 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "customheaddata":
 			// fetches custom head texture by a player name
 			setCustomheaddata(Utils.getTextureFromName(value));
+			break;
+		case "deathgrantstitle":
+			// fetches custom head texture by a player name
+			setDeathGrantsTitle(value);
 			break;
 		case "merchantid":
 			if (Integer.parseInt(value) == 0) {
@@ -901,5 +907,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setUndead(boolean isUndead) {
 		this.isUndead = isUndead;
+	}
+
+	@Override
+	public String getDeathGrantsTitle() {
+		return deathGrantsTitle;
+	}
+
+	@Override
+	public void setDeathGrantsTitle(String deathGrantsTitle) {
+		this.deathGrantsTitle = deathGrantsTitle;
 	}
 }

@@ -165,4 +165,8 @@ public interface ISoliniaNPC {
 	boolean isUndead();
 
 	void setUndead(boolean isUndead);
+
+	String getDeathGrantsTitle();
+
+	void setDeathGrantsTitle(String deathGrantsTitle);
 }

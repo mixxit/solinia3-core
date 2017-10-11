@@ -71,7 +71,7 @@ public class CommandEditNpc implements CommandExecutor {
 		String value = args[2];
 		
 		// for 'text' based npc settings like trigger texts etc, get the whole thing as a string
-		if (args.length > 3 && setting.toLowerCase().contains("text"))
+		if (args.length > 3 && (setting.toLowerCase().contains("text") || setting.toLowerCase().contains("title")))
 		{
 			value = "";
 			int current = 0;

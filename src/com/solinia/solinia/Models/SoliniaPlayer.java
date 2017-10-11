@@ -383,6 +383,47 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			StateManager.getInstance().getChannelManager().sendToDiscordMC(null,getFullName() + " has reached new heights as a level " + (int)Math.floor(newlevel) + " " + classname.toLowerCase() + "!");
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
 			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
+			
+			// Title rewards
+			if (newlevel >= 10)
+			{
+				if (!getAvailableTitles().contains("the Apprentice"))
+				{
+					grantTitle("the Apprentice");
+				}
+			}
+			
+			if (newlevel >= 20)
+			{
+				if (!getAvailableTitles().contains("the Journeyman"))
+				{
+					grantTitle("the Journeyman");
+				}
+			}
+			
+			if (newlevel >= 30)
+			{
+				if (!getAvailableTitles().contains("the Expert"))
+				{
+					grantTitle("the Expert");
+				}
+			}
+			
+			if (newlevel >= 40)
+			{
+				if (!getAvailableTitles().contains("the Hero"))
+				{
+					grantTitle("the Hero");
+				}
+			}
+			
+			if (newlevel >= 50)
+			{
+				if (!getAvailableTitles().contains("the Legend"))
+				{
+					grantTitle("the Legend");
+				}
+			}
 
             updateMaxHp();
 		}
