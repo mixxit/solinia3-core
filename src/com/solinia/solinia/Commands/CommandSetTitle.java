@@ -9,6 +9,10 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+
 public class CommandSetTitle implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -23,7 +27,13 @@ public class CommandSetTitle implements CommandExecutor {
 	            	player.sendMessage("Available titles:");
 	            	for(String title : solplayer.getAvailableTitles())
 	            	{
-	                	player.sendMessage("- " + title + "");
+	            		TextComponent tc = new TextComponent();
+						tc.setText("- " + title);
+						TextComponent tc2 = new TextComponent();
+						tc2.setText(ChatColor.GRAY + "Click here to set this title" + ChatColor.RESET);
+						tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/settitle " + title));
+						tc.addExtra(tc2);
+						sender.spigot().sendMessage(tc);
 	            	}
 	            	player.sendMessage("/settitle none to remove your current title");
 	            	return true;
@@ -42,7 +52,7 @@ public class CommandSetTitle implements CommandExecutor {
 	    			targetTitle = targetTitle.trim();
 	    		}
 	            
-	            if (targetTitle.equals("none"))
+	            if (!targetTitle.equals("none"))
 	            {
 		            boolean found = false;
 		            for(String title : solplayer.getAvailableTitles())
@@ -66,7 +76,8 @@ public class CommandSetTitle implements CommandExecutor {
 		            solplayer.setTitle("");
 	            }
 	            
-	            player.sendMessage("* Title set to: " + targetTitle);
+	            System.out.println("* [" + player.getName() + "] Title set to: " + "'" + solplayer.getTitle() + "'");
+	            player.sendMessage("* Title set to: '" + solplayer.getTitle() + "'");
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
