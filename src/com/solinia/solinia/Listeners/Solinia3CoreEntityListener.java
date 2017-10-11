@@ -518,6 +518,15 @@ public class Solinia3CoreEntityListener implements Listener {
 				}
 			}
 			
+			if (livingEntity.getNpcid() > 0)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+				if (npc.isBoss())
+				{
+					Bukkit.broadcastMessage(ChatColor.RED + "[VICTORY] The foundations of the earth shake following the destruction of " + npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!" + ChatColor.RESET);
+				}
+			}
+			
 			player.giveMoney(1);
 			livingEntity.dropLoot();
 		} catch (CoreStateInitException e) {
