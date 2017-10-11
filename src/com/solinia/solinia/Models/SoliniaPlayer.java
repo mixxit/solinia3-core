@@ -62,7 +62,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<Integer> aas = new ArrayList<Integer>();
 	private List<PlayerFactionEntry> factionEntries = new ArrayList<PlayerFactionEntry>();
 	private List<UUID> ignoredPlayers = new ArrayList<UUID>();
-
+	private List<String> availableTitles = new ArrayList<String>();
+	private String title = "";
+	
 	@Override
 	public List<UUID> getIgnoredPlayers()
 	{
@@ -84,6 +86,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public UUID getUUID() {
 		return uuid;
+	}
+	
+	@Override
+	public boolean grantTitle(String title)
+	{
+		if (getAvailableTitles().contains(title))
+			return false;
+		
+		getAvailableTitles().add(title);
+		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You have earned the title: " + title + ChatColor.RESET + " See /settitle");		
+		return true;
 	}
 	
 	@Override
@@ -141,6 +154,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		String displayName = forename;
 		if (lastname != null && !lastname.equals(""))
 			displayName = forename + "_" + lastname;
+		
+		return displayName;
+	}
+	
+	@Override
+	public String getFullNameWithTitle()
+	{
+		String displayName = getFullName();
+		if (getTitle() != null && !(getTitle().equals(""))) {
+			displayName += " " + getTitle();
+		}
 		
 		return displayName;
 	}
@@ -1237,5 +1261,25 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} else {
 			ignoredPlayers.add(player.getUniqueId());
 		}
+	}
+
+	@Override
+	public List<String> getAvailableTitles() {
+		return availableTitles;
+	}
+
+	@Override
+	public void setAvailableTitles(List<String> availableTitles) {
+		this.availableTitles = availableTitles;
+	}
+
+	@Override
+	public String getTitle() {
+		return title;
+	}
+
+	@Override
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

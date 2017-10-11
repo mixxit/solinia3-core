@@ -36,6 +36,7 @@ import com.solinia.solinia.Commands.CommandEmote;
 import com.solinia.solinia.Commands.CommandFaction;
 import com.solinia.solinia.Commands.CommandForceLevel;
 import com.solinia.solinia.Commands.CommandForename;
+import com.solinia.solinia.Commands.CommandGrantTitle;
 import com.solinia.solinia.Commands.CommandGroup;
 import com.solinia.solinia.Commands.CommandGroupChat;
 import com.solinia.solinia.Commands.CommandIgnore;
@@ -64,6 +65,7 @@ import com.solinia.solinia.Commands.CommandSetClass;
 import com.solinia.solinia.Commands.CommandSetGender;
 import com.solinia.solinia.Commands.CommandSetLanguage;
 import com.solinia.solinia.Commands.CommandSetRace;
+import com.solinia.solinia.Commands.CommandSetTitle;
 import com.solinia.solinia.Commands.CommandSkills;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Commands.CommandSpawnItem;
@@ -353,6 +355,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("faction").setExecutor(new CommandFaction());
 		this.getCommand("solignore").setExecutor(new CommandIgnore());
 		this.getCommand("editfaction").setExecutor(new CommandEditFaction());
+		this.getCommand("settitle").setExecutor(new CommandSetTitle());
+		this.getCommand("granttitle").setExecutor(new CommandGrantTitle());
 	}
 
 	private void createConfigDir() {

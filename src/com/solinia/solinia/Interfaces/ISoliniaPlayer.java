@@ -178,4 +178,16 @@ public interface ISoliniaPlayer extends Serializable {
 	void setIgnoredPlayers(List<UUID> ignoredPlayers);
 
 	boolean hasIgnored(UUID uuid);
+
+	List<String> getAvailableTitles();
+
+	void setAvailableTitles(List<String> availableTitles);
+
+	String getTitle();
+
+	void setTitle(String title);
+
+	String getFullNameWithTitle();
+
+	boolean grantTitle(String title);
 }

@@ -31,12 +31,12 @@ public class ChannelManager implements IChannelManager {
 						
 						player.sendMessage(message);
 					} else {
-						player.sendMessage(ChatColor.AQUA + " * " + source.getFullName() + " says something in a language you do not understand" + ChatColor.RESET);
+						player.sendMessage(ChatColor.AQUA + " * " + source.getFullNameWithTitle() + " says something in a language you do not understand" + ChatColor.RESET);
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
 				} catch (CoreStateInitException e)
 				{
-					player.sendMessage("You could not understand what " + source.getFullName() + " was saying as your character is currently uninitialised");
+					player.sendMessage("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised");
 					e.printStackTrace();
 				}
 			}
@@ -64,7 +64,7 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
-		sendToDiscordMC(source,source.getFullName() + ": " + originalmessage);
+		sendToDiscordMC(source,source.getFullNameWithTitle() + ": " + originalmessage);
 	}
 
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {
@@ -73,7 +73,7 @@ public class ChannelManager implements IChannelManager {
 		String race = "UNKNOWN";
 		String profession = "UNKNOWN";
 
-		String name = player.getFullName();
+		String name = player.getFullNameWithTitle();
 
 		if (player.getRace() != null) {
 			race = player.getRace().getName().toUpperCase();
@@ -107,7 +107,7 @@ public class ChannelManager implements IChannelManager {
 		String race = "UNKNOWN";
 		String profession = "UNKNOWN";
 
-		String name = player.getFullName();
+		String name = player.getFullNameWithTitle();
 
 		if (player.getRace() != null) {
 			race = player.getRace().getName().toUpperCase();
@@ -164,7 +164,7 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
-		sendToDiscordMC(source,source.getFullName() + ": " + message);
+		sendToDiscordMC(source,source.getFullNameWithTitle() + ": " + message);
 	}
 	
 	@Override

@@ -29,6 +29,10 @@ commands:
     description: Gets player mana
     usage: /mana
     aliases: []
+  settitle:
+    description: Sets a title
+    usage: /settitle title
+    aliases: []
   addrace:
     description: Creates a new race
     usage: /addrace racename strength stamina agility dexterity wisdom intelligence charisma adminonly
@@ -311,6 +315,10 @@ commands:
   editfaction:
     description: Edits a faction
     usage: /editfaction faction setting value
+    aliases: []
+  granttitle:
+    description: Grants a title
+    usage: /granttitle playername title
     aliases: []
 depend:
 - Vault
