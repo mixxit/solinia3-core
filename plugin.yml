@@ -73,7 +73,8 @@ commands:
   setgender:
     description: Sets players gender
     usage: /setgender male/female
-    aliases: []
+    aliases:
+    - gender
   emote:
     description: Emotes a message
     usage: /emote action
@@ -237,6 +238,7 @@ commands:
     usage: /setchannel channelname
     aliases:
     - ch
+    - channel
   ooc:
     description: Sends a message to the ooc channel
     usage: /ooc message
