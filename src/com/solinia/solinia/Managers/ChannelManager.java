@@ -74,9 +74,22 @@ public class ChannelManager implements IChannelManager {
 		String profession = "UNK";
 
 		String name = player.getFullNameWithTitle();
+		ChatColor racealignmentcolour = ChatColor.GRAY;
 
 		if (player.getRace() != null) {
 			race = player.getRace().getShortName().toUpperCase();
+			if (player.getRace().getAlignment().equals("EVIL"))
+			{
+				racealignmentcolour = ChatColor.RED;
+			}
+			if (player.getRace().getAlignment().equals("NEUTRAL"))
+			{
+				racealignmentcolour = ChatColor.YELLOW;
+			}
+			if (player.getRace().getAlignment().equals("GOOD"))
+			{
+				racealignmentcolour = ChatColor.GREEN;
+			}
 		}
 
 		if (player.getClassObj() != null) {
@@ -94,7 +107,7 @@ public class ChannelManager implements IChannelManager {
 
 		String title = name;
 
-		String messageheader = ChatColor.RESET + "[" + channel + "" + gender + "" + ChatColor.RED + race
+		String messageheader = ChatColor.RESET + "[" + channel + "" + gender + "" + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + ChatColor.YELLOW + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + ChatColor.AQUA + message + ChatColor.RESET;
@@ -108,9 +121,22 @@ public class ChannelManager implements IChannelManager {
 		String profession = "UNKNOWN";
 
 		String name = player.getFullNameWithTitle();
+		ChatColor racealignmentcolour = ChatColor.GRAY;
 
 		if (player.getRace() != null) {
 			race = player.getRace().getShortName().toUpperCase();
+			if (player.getRace().getAlignment().equals("EVIL"))
+			{
+				racealignmentcolour = ChatColor.RED;
+			}
+			if (player.getRace().getAlignment().equals("NEUTRAL"))
+			{
+				racealignmentcolour = ChatColor.YELLOW;
+			}
+			if (player.getRace().getAlignment().equals("GOOD"))
+			{
+				racealignmentcolour = ChatColor.GREEN;
+			}
 		}
 
 		if (player.getClassObj() != null) {
@@ -127,8 +153,7 @@ public class ChannelManager implements IChannelManager {
 		}
 
 		String title = name;
-
-		String messageheader = ChatColor.RESET + "[" + channel + "" + gender + "" + ChatColor.RED + race
+		String messageheader = ChatColor.RESET + "[" + channel + "" + gender + "" + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + ChatColor.YELLOW + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + message;
