@@ -106,4 +106,8 @@ public interface ISoliniaClass {
 
 	boolean canSafeFall();
 
+	String getShortName();
+
+	void setShortName(String shortName);
+
 }

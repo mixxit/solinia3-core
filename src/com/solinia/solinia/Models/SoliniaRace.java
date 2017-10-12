@@ -26,7 +26,8 @@ public class SoliniaRace implements ISoliniaRace {
 	
 	private String description = "";
 	private String alignment = "NEUTRAL";
-
+	private String shortName = "";
+	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -138,6 +139,7 @@ public class SoliniaRace implements ISoliniaRace {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
 		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -150,6 +152,9 @@ public class SoliniaRace implements ISoliniaRace {
 		switch (setting.toLowerCase()) {
 		case "description":
 			setDescription(value);
+			break;
+		case "shortname":
+			setShortName(value);
 			break;
 		case "alignment":
 			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
@@ -179,6 +184,16 @@ public class SoliniaRace implements ISoliniaRace {
 	@Override
 	public void setAlignment(String alignment) {
 		this.alignment = alignment;
+	}
+
+	@Override
+	public String getShortName() {
+		return shortName;
+	}
+
+	@Override
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 
 }

@@ -59,4 +59,8 @@ public interface ISoliniaRace {
 	String getAlignment();
 
 	void setAlignment(String alignment);
+
+	String getShortName();
+
+	void setShortName(String shortName);
 }

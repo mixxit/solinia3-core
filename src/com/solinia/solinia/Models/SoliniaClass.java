@@ -46,6 +46,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int ripostelevel = 0;
 	private int doubleattacklevel = 0;
 	private int safefalllevel = 0;
+	private String shortName = "";
 	
 	@Override
 	public String getName() {
@@ -146,6 +147,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- defaultheadmaterial: " + ChatColor.GOLD + getDefaultHeadMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultchestmaterial: " + ChatColor.GOLD + getDefaultChestMaterial() + ChatColor.RESET);
@@ -224,6 +226,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "strengthitembonus":
 			this.setStrengthitembonus(Integer.parseInt(value));
+			break;
+		case "shortname":
+			this.setShortName(value);
 			break;
 		case "staminaitembonus":
 			this.setStaminaitembonus(Integer.parseInt(value));
@@ -584,5 +589,15 @@ public class SoliniaClass implements ISoliniaClass {
 			return false;
 
 		return true;
+	}
+
+	@Override
+	public String getShortName() {
+		return shortName;
+	}
+
+	@Override
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 }

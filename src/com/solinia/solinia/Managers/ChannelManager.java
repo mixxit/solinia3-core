@@ -70,17 +70,17 @@ public class ChannelManager implements IChannelManager {
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {
 		String channel = "L";
 		String gender = "U";
-		String race = "UNKNOWN";
-		String profession = "UNKNOWN";
+		String race = "UNK";
+		String profession = "UNK";
 
 		String name = player.getFullNameWithTitle();
 
 		if (player.getRace() != null) {
-			race = player.getRace().getName().toUpperCase();
+			race = player.getRace().getShortName().toUpperCase();
 		}
 
 		if (player.getClassObj() != null) {
-			profession = player.getClassObj().getName().toUpperCase();
+			profession = player.getClassObj().getShortName().toUpperCase();
 		}
 		
 		if (player.getGender() != null)
@@ -110,11 +110,11 @@ public class ChannelManager implements IChannelManager {
 		String name = player.getFullNameWithTitle();
 
 		if (player.getRace() != null) {
-			race = player.getRace().getName().toUpperCase();
+			race = player.getRace().getShortName().toUpperCase();
 		}
 
 		if (player.getClassObj() != null) {
-			profession = player.getClassObj().getName().toUpperCase();
+			profession = player.getClassObj().getShortName().toUpperCase();
 		}
 		
 		if (player.getGender() != null)
