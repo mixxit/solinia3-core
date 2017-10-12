@@ -1283,25 +1283,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
 		}
 		
-		if (newValue < -1500)
-		{
-			newValue = -1500;
-			hitCap = true;
-			
-			if (!playerFactionEntry.getFaction().getScowlsGrantsTitle().equals(""))
-			{
-				grantTitle(playerFactionEntry.getFaction().getScowlsGrantsTitle());
-			}
-			
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
-		}
-		
 		if (!hitCap)
 		{
-			if (newValue < 0)
-				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
-			else
-				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
 		}
 		
 		playerFactionEntry.setValue(newValue);
@@ -1325,19 +1309,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		int newValue = playerFactionEntry.getValue() - amount;
 		boolean hitCap = false;
-		if (newValue > 1500)
-		{
-			newValue = 1500;
-			hitCap = true;
-			
-			if (!playerFactionEntry.getFaction().getAllyGrantsTitle().equals(""))
-			{
-				grantTitle(playerFactionEntry.getFaction().getAllyGrantsTitle());
-			}
-			
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
-		}
-		
 		if (newValue < -1500)
 		{
 			newValue = -1500;
@@ -1353,10 +1324,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (!hitCap)
 		{
-			if (newValue < 0)
-				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
-			else
-				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
 		}
 		
 		playerFactionEntry.setValue(newValue);
