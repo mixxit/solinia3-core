@@ -63,9 +63,9 @@ public class CommandEditFaction implements CommandExecutor {
 
 		String value = args[2];
 
-		// for 'text' based settings like trigger texts etc, get the whole thing as
+		// for 'text' based settings
 		// a string
-		if (args.length > 3 && (setting.toLowerCase().contains("description") || setting.toLowerCase().contains("setfactionentry"))) {
+		if (args.length > 3 && (setting.toLowerCase().contains("description") || setting.toLowerCase().contains("allygrants") || setting.toLowerCase().contains("title"))) {
 			value = "";
 			int current = 0;
 			for (String entry : args) {

@@ -63,7 +63,7 @@ public class SoliniaFaction implements ISoliniaFaction {
 		sender.sendMessage("- allygrantstitle: " + ChatColor.GOLD + getAllyGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("- scowlsgrantstitle: " + ChatColor.GOLD + getScowlsGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- Faction Entries:");
+		sender.sendMessage("- factionentry:");
 		for(FactionStandingEntry entry : this.getFactionEntries())
 		{
 			sender.sendMessage("- " + entry.getFaction().getName() + "[" + entry.getFactionId() + "]: " + entry.getValue());
@@ -94,7 +94,7 @@ public class SoliniaFaction implements ISoliniaFaction {
 		case "scowlsgrantstitle":
 			setScowlsGrantsTitle(value);
 			break;
-		case "setfactionentry":
+		case "factionentry":
 			String[] data = value.split(" ");
 			if (data.length < 2)
 				throw new InvalidFactionSettingException("Missing factionid and base value to set factionstanding (ie -1500 > 1500)");
@@ -109,7 +109,7 @@ public class SoliniaFaction implements ISoliniaFaction {
 			break;
 		default:
 			throw new InvalidFactionSettingException(
-					"Invalid SpawnGroup setting. Valid Options are: name, base, setfactionentry");
+					"Invalid SpawnGroup setting. Valid Options are: name, base, factionentry");
 		}
 	}
 	
