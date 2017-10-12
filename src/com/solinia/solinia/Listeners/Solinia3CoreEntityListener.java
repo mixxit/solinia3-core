@@ -37,11 +37,14 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.FactionStandingEntry;
+import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SpellEffectType;
@@ -514,7 +517,23 @@ public class Solinia3CoreEntityListener implements Listener {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
 				if (npc.getFactionid() > 0)
 				{
+					ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
 					player.decreaseFactionStanding(npc.getFactionid(),1);
+					for (FactionStandingEntry factionEntry : faction.getFactionEntries())
+					{
+						FactionStandingType standingType = Utils.getFactionStandingType(factionEntry.getFactionId(),factionEntry.getValue());
+						if (standingType.equals(FactionStandingType.FACTION_ALLY))
+						{
+							// If this is an ally of the faction, grant negative faction
+							player.decreaseFactionStanding(factionEntry.getFactionId(),1);
+						}
+						
+						if (standingType.equals(FactionStandingType.FACTION_SCOWLS))
+						{
+							// If this is an enemy of the faction, grant positive faction
+							player.increaseFactionStanding(factionEntry.getFactionId(),1);
+						}
+					}
 				}
 			}
 			

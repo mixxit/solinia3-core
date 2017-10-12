@@ -223,5 +223,6 @@ public interface IConfigurationManager {
 
 	void editSpawnGroup(int spawngroupid, String setting, String value) throws NumberFormatException, InvalidSpawnGroupSettingException, CoreStateInitException, IOException;
 
-	void editFaction(int factionid, String setting, String value) throws NumberFormatException, InvalidFactionSettingException, CoreStateInitException, IOException;
+	void editFaction(int factionid, String setting, String value)
+			throws NumberFormatException, InvalidFactionSettingException, CoreStateInitException, IOException;
 }

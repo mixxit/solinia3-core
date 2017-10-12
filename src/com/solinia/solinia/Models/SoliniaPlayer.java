@@ -27,6 +27,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -1250,6 +1251,61 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		getFactionEntries().add(entry);
 		return getFactionEntry(factionId);
 	}
+	
+	@Override
+	public void increaseFactionStanding(int factionId, int amount) {
+		if (factionId == 0)
+			return;
+		
+		if (amount == 0)
+			return;
+		
+		PlayerFactionEntry playerFactionEntry = getFactionEntry(factionId);
+		if (playerFactionEntry == null)
+			playerFactionEntry = createPlayerFactionEntry(factionId);
+		
+		// Never handle these special faction types		
+		if (playerFactionEntry.getFaction().getName().toUpperCase().equals("NEUTRAL") || playerFactionEntry.getFaction().getName().toUpperCase().equals("KOS"))
+			return;
+		
+		int newValue = playerFactionEntry.getValue() + amount;
+		boolean hitCap = false;
+		if (newValue > 1500)
+		{
+			newValue = 1500;
+			hitCap = true;
+			
+			if (!playerFactionEntry.getFaction().getAllyGrantsTitle().equals(""))
+			{
+				grantTitle(playerFactionEntry.getFaction().getAllyGrantsTitle());
+			}
+			
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
+		}
+		
+		if (newValue < -1500)
+		{
+			newValue = -1500;
+			hitCap = true;
+			
+			if (!playerFactionEntry.getFaction().getScowlsGrantsTitle().equals(""))
+			{
+				grantTitle(playerFactionEntry.getFaction().getScowlsGrantsTitle());
+			}
+			
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
+		}
+		
+		if (!hitCap)
+		{
+			if (newValue < 0)
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
+			else
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
+		}
+		
+		playerFactionEntry.setValue(newValue);
+	}
 
 	@Override
 	public void decreaseFactionStanding(int factionId, int amount) {
@@ -1273,6 +1329,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 			newValue = 1500;
 			hitCap = true;
+			
+			if (!playerFactionEntry.getFaction().getAllyGrantsTitle().equals(""))
+			{
+				grantTitle(playerFactionEntry.getFaction().getAllyGrantsTitle());
+			}
+			
 			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
 		}
 		
@@ -1280,6 +1342,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 			newValue = -1500;
 			hitCap = true;
+			
+			if (!playerFactionEntry.getFaction().getScowlsGrantsTitle().equals(""))
+			{
+				grantTitle(playerFactionEntry.getFaction().getScowlsGrantsTitle());
+			}
+			
 			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
 		}
 		

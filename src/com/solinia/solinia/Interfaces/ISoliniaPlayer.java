@@ -190,4 +190,6 @@ public interface ISoliniaPlayer extends Serializable {
 	String getFullNameWithTitle();
 
 	boolean grantTitle(String title);
+
+	void increaseFactionStanding(int factionId, int amount);
 }
