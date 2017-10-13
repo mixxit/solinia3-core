@@ -556,6 +556,14 @@ public class SoliniaNPC implements ISoliniaNPC {
 			// fetches custom head texture by a player name
 			setCustomheaddata(Utils.getTextureFromName(value));
 			break;
+		case "customheaddatafromnpc":
+			int npcid = Integer.parseInt(value);
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(npcid);
+			if (npc == null)
+				throw new InvalidNpcSettingException("NPCID does not exist");
+			// fetches custom head texture by existing npc
+			setCustomheaddata(npc.getCustomheaddata());
+			break;
 		case "deathgrantstitle":
 			// fetches custom head texture by a player name
 			setDeathGrantsTitle(value);
@@ -610,7 +618,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc");
 		}
 	}
 

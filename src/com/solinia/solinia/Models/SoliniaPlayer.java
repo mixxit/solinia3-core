@@ -1,5 +1,6 @@
 package com.solinia.solinia.Models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +12,7 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Wolf;
@@ -717,6 +719,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		return;
 		    	}
 		    	
+		    	if((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) 
+			    {
+		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
+		    		if (targetmob != null)
+		    		{
+		    			System.out.println("Pet attack from player: " + event.getPlayer());
+		    			item.useItemOnEntity(plugin, event.getPlayer(),item,targetmob,false);
+		    			return;
+		    		}
+			    }
+		    	
 		    	if (item.getAbilityid() < 1)
 		    	{
 		    		return;
@@ -1358,5 +1371,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	@Override
+	public boolean isMezzed()
+	{
+		try
+		{
+			Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
+					.getMezzed((LivingEntity) getBukkitPlayer());
+	
+			if (mezExpiry != null) {
+				return true;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+		
+		return false;
 	}
 }

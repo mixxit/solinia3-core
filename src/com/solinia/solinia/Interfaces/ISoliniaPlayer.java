@@ -192,4 +192,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean grantTitle(String title);
 
 	void increaseFactionStanding(int factionId, int amount);
+
+	boolean isMezzed();
 }

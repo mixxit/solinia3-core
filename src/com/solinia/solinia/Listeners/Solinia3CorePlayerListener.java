@@ -1,8 +1,11 @@
 package com.solinia.solinia.Listeners;
 
+import java.sql.Timestamp;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -65,6 +68,14 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (StateManager.getInstance().getEntityManager().getTrance(event.getPlayer().getUniqueId()) == true)
 			{
 				StateManager.getInstance().getEntityManager().setTrance(event.getPlayer().getUniqueId(), false);
+			}
+			
+			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getPlayer());
+			if (mezExpiry != null)
+			{
+				event.getPlayer().sendMessage("* You are mezzed!");
+				event.setCancelled(true);
+				return;
 			}
 
 		} catch (CoreStateInitException e)
@@ -289,6 +300,20 @@ public class Solinia3CorePlayerListener implements Listener {
 		{
 			if (event.isCancelled())
 				return;
+		}
+		
+		try
+		{
+			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getPlayer());
+			if (mezExpiry != null)
+			{
+				event.getPlayer().sendMessage("* You are mezzed!");
+				event.setCancelled(true);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 		
 		// Handle changing armour

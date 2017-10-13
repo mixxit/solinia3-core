@@ -3,14 +3,18 @@ package com.solinia.solinia.Models;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender.Spigot;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -40,6 +44,9 @@ import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_12_R1.DamageSource;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
+import net.minecraft.server.v1_12_R1.EntityInsentient;
+import net.minecraft.server.v1_12_R1.EntityLiving;
+import net.minecraft.server.v1_12_R1.PathEntity;
 
 public class SoliniaActiveSpell {
 	private int spellId;
@@ -241,8 +248,9 @@ public class SoliniaActiveSpell {
 			return;
 		case Charm
 			: return;
-		case Fear
-			: return;
+		case Fear: 
+			applyFear(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case Stamina
 			: return;
 		case BindAffinity: 
@@ -1191,6 +1199,23 @@ public class SoliniaActiveSpell {
 			: return;
 		default:
 			return;
+		}
+	}
+
+	private void applyFear(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		// run to a nearby mob
+		try
+		{
+			if (!SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).isPlayer())
+			for(Entity nearbyEntity : getLivingEntity().getNearbyEntities(20, 20, 20))
+			{
+				((CraftCreature)getLivingEntity()).setTarget(null);
+				((CraftCreature)getLivingEntity()).getHandle().getNavigation().a(nearbyEntity.getLocation().getX(), nearbyEntity.getLocation().getY(), nearbyEntity.getLocation().getZ(), 1.5);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			//
 		}
 	}
 

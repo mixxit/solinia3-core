@@ -190,4 +190,8 @@ public interface ISoliniaItem {
 	int getBaneUndead();
 
 	void setBaneUndead(int baneUndead);
+
+	boolean isPetControlRod();
+
+	void setPetControlRod(boolean isPetControlRod);
 }

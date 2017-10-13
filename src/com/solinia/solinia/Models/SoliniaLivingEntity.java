@@ -111,8 +111,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (attacker instanceof Player && getBukkitLivingEntity() instanceof Wolf) {
 			if (isPet()) {
-				event.setCancelled(true);
-				return;
+				Wolf wolf = (Wolf)getBukkitLivingEntity();
+				if (wolf != null)
+				{
+					if (!wolf.getTarget().equals(attacker))
+					{
+						event.setCancelled(true);
+						return;
+					}
+				} else {
+					event.setCancelled(true);
+					return;
+				}
 			}
 		}
 

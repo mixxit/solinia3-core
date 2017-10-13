@@ -94,6 +94,10 @@ public class ItemStackAdapter {
 			loretxt.addAll(Arrays.asList(lorestr));
 		}
 
+		if (soliniaItem.isPetControlRod() == true) {
+				loretxt.add(ChatColor.GREEN + "This item will cause your pet to attack a target if used" + ChatColor.RESET);
+		}
+		
 		if (soliniaItem.getDamage() > 0) {
 			if (soliniaItem.getBasename().equals("BOW")) {
 				loretxt.add("Modifies Arrow Dmg: " + ChatColor.GREEN + soliniaItem.getDamage() + ChatColor.RESET);

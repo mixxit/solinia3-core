@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -65,6 +66,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isTemporary;
 	private boolean isConsumable;
 	private int baneUndead = 0;
+	private boolean isPetControlRod = false;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -424,6 +426,21 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public boolean useItemOnEntity(Plugin plugin, Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable)
 			throws CoreStateInitException {
+		
+		if (item.isPetControlRod())
+		{
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
+			if (pet != null)
+			{
+				if (pet instanceof Wolf)
+				{
+					Wolf wolf = (Wolf)pet;
+					wolf.setTarget(targetentity);
+					player.sendMessage("You send your pet to attack!");
+				}
+			}
+		}
+		
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
 		if (spell == null) {
 			return false;
@@ -499,8 +516,9 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
-		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);
+		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);		
 		sender.sendMessage("- consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
+		sender.sendMessage("- petcontrolrod: " + ChatColor.GOLD + isPetControlRod() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET);
 		sender.sendMessage("- baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
@@ -600,6 +618,9 @@ public class SoliniaItem implements ISoliniaItem {
 		case "abilityid":
 			setAbilityid(Integer.parseInt(value));
 			break;
+		case "petcontrolrod":
+			setPetControlRod(Boolean.parseBoolean(value));
+			break;
 		case "consumable":
 			setConsumable(Boolean.parseBoolean(value));
 			break;
@@ -664,6 +685,16 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setBaneUndead(int baneUndead) {
 		this.baneUndead = baneUndead;
+	}
+
+	@Override
+	public boolean isPetControlRod() {
+		return isPetControlRod;
+	}
+
+	@Override
+	public void setPetControlRod(boolean isPetControlRod) {
+		this.isPetControlRod = isPetControlRod;
 	}
 
 }
