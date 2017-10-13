@@ -1394,7 +1394,7 @@ public class SoliniaActiveSpell {
 	}
 	
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!(getLivingEntity() instanceof Creature))
+		if (!(getLivingEntity() instanceof LivingEntity))
 			return;
 		
 		try
@@ -1404,11 +1404,14 @@ public class SoliniaActiveSpell {
 			java.util.Date expire = calendar.getTime();
 			Timestamp expiretimestamp = new Timestamp(expire.getTime());
 			
-			Creature creature = (Creature)getLivingEntity();
 			
 			StateManager.getInstance().getEntityManager().addMezzed(getLivingEntity(), expiretimestamp);
 			
-			creature.setTarget(null);
+			if (getLivingEntity() instanceof Creature)
+			{
+				Creature creature = (Creature)getLivingEntity();
+				creature.setTarget(null);
+			}
 			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
 			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
 		} catch (CoreStateInitException e)

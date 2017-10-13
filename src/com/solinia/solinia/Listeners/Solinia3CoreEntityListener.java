@@ -26,6 +26,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -161,6 +162,15 @@ public class Solinia3CoreEntityListener implements Listener {
 
 	}
 
+	@EventHandler
+	public void onEntitySpawn(EntitySpawnEvent event) {
+		if (event.getEntity() instanceof LivingEntity)
+		{
+			// if this is a skeleton entity, remove the chase task frmo the mobs AI
+			event.getEntity().spigot();
+		}
+	}
+	
 	@EventHandler
 	public void onEntityDamageEvent(EntityDamageEvent event) {
 		if (event.isCancelled())

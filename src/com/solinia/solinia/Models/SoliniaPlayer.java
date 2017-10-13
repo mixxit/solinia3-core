@@ -859,6 +859,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (!(e instanceof LivingEntity))
 			return;
 		
+		if (((Creature)e).getTarget() != null)
+		{
+			if (interaction != null)
+			{
+				this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are no longer interacting");
+				interaction = null;
+			}
+			return;
+		}
+		
 		if (Bukkit.getEntity(interaction) instanceof Wolf)
 		{
 			Wolf w = (Wolf)Bukkit.getEntity(interaction);
