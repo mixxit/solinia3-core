@@ -65,7 +65,7 @@ public class CommandEditFaction implements CommandExecutor {
 
 		// for 'text' based settings
 		// a string
-		if (args.length > 3 && (setting.toLowerCase().contains("description") || setting.toLowerCase().contains("allygrants") || setting.toLowerCase().contains("title"))) {
+		if (args.length > 3 && (setting.toLowerCase().contains("description") || setting.toLowerCase().contains("factionentry") || setting.toLowerCase().contains("allygrants") || setting.toLowerCase().contains("title"))) {
 			value = "";
 			int current = 0;
 			for (String entry : args) {
@@ -94,7 +94,7 @@ public class CommandEditFaction implements CommandExecutor {
 			StateManager.getInstance().getConfigurationManager().editFaction(factionid, setting, value);
 			sender.sendMessage("Updating setting on faction");
 		} catch (InvalidFactionSettingException ne) {
-			sender.sendMessage("Invalid faction setting");
+			sender.sendMessage("Invalid faction setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());
