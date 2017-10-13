@@ -308,6 +308,11 @@ public class EntityManager implements IEntityManager {
 	public void addMezzed(LivingEntity livingEntity, Timestamp expiretimestamp) {
 		this.entityMezzed.put(livingEntity.getUniqueId(), expiretimestamp);
 	}
+	
+	@Override
+	public void removeMezzed(LivingEntity livingEntity, Timestamp expiretimestamp) {
+		this.entityMezzed.remove(livingEntity.getUniqueId());
+	}
 
 	@Override
 	public Timestamp getMezzed(LivingEntity livingEntity) {

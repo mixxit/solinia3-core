@@ -279,8 +279,9 @@ public class Solinia3CoreEntityListener implements Listener {
 				List<Integer> removeSpells = new ArrayList<Integer>();
 				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
 						.getActiveEntitySpells((LivingEntity) event.getEntity()).getActiveSpells()) {
-					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
-
+					if (
+							spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez) ||
+							spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
 							spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
 							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
 							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)

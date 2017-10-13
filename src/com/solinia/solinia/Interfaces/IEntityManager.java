@@ -72,4 +72,6 @@ public interface IEntityManager {
 	List<ISoliniaNPCMerchantEntry> getTemporaryMerchantItems(ISoliniaNPC npc);
 
 	boolean hasEntityEffectType(LivingEntity livingEntity, SpellEffectType type);
+
+	void removeMezzed(LivingEntity livingEntity, Timestamp expiretimestamp);
 }
