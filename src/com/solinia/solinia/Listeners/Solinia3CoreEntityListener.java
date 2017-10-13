@@ -66,6 +66,23 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		if (!(event.getEntity() instanceof Creature))
 			return;
+		
+		try
+		{
+			Timestamp mzExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getEntity());
+			if (mzExpiry != null)
+			{
+				if (event.getEntity() instanceof Player)
+				{
+					event.getEntity().sendMessage("* You are mezzed!");
+				}
+				event.setCancelled(true);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 
 		if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Skeleton) {
 			Wolf w = (Wolf) event.getEntity();
@@ -185,7 +202,9 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
 
+		
 		// Remove buffs on attacker (invis should drop)
+		// and check they are not mezzed
 		try {
 			if (damagecause.getDamager() instanceof LivingEntity) {
 				
@@ -197,6 +216,23 @@ public class Solinia3CoreEntityListener implements Listener {
 						attacker = (LivingEntity) arr.getShooter();
 					} else {
 					}
+				}
+				
+				try
+				{
+					Timestamp mzExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) attacker);
+					if (mzExpiry != null)
+					{
+						if (attacker instanceof Player)
+						{
+							attacker.sendMessage("* You are mezzed!");
+						}
+						event.setCancelled(true);
+						return;
+					}
+				} catch (CoreStateInitException e)
+				{
+					
 				}
 				
 				List<Integer> removeSpells = new ArrayList<Integer>();
@@ -224,6 +260,8 @@ public class Solinia3CoreEntityListener implements Listener {
 		} catch (CoreStateInitException e) {
 			// skip
 		}
+		
+		
 
 		// Remove buffs on recipient (invis should drop)
 		try {
@@ -273,6 +311,23 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onShootBow(EntityShootBowEvent event) {
 		if (event.isCancelled())
 			return;
+		
+		try
+		{
+			Timestamp mzExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getEntity());
+			if (mzExpiry != null)
+			{
+				if (event.getEntity() instanceof Player)
+				{
+					event.getEntity().sendMessage("* You are mezzed!");
+				}
+				event.setCancelled(true);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 
 		if (event.getEntity() instanceof Player) {
 			Player shooter = (Player) event.getEntity();
@@ -291,7 +346,25 @@ public class Solinia3CoreEntityListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-
+		
+		try
+		{
+			Timestamp mzExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getPlayer());
+			if (mzExpiry != null)
+			{
+				if (event.getPlayer() instanceof Player)
+				{
+					event.getPlayer().sendMessage("* You are mezzed!");
+				}
+				event.setCancelled(true);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		
 		if (!(event.getRightClicked() instanceof LivingEntity)) {
 			return;
 		}
