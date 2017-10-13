@@ -1,11 +1,13 @@
 package com.solinia.solinia.Managers;
 
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -404,6 +406,7 @@ public class EntityManager implements IEntityManager {
 			entity.setCanPickupItems(false);
 			
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(entity);
+			solentity.configurePetGoals();
 			entity.setMaxHealth(solentity.getMaxHP());
 			entity.setHealth(solentity.getMaxHP());
 			net.minecraft.server.v1_12_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) entity).getHandle();
@@ -442,6 +445,8 @@ public class EntityManager implements IEntityManager {
 			}
 						
 			DisguiseAPI.disguiseEntity(entity, mob);
+			
+			solentity.configurePetGoals();
 			
 			return entity;
 		} catch (CoreStateInitException e)

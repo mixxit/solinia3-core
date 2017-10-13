@@ -58,7 +58,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
 	}
-
+	
 	// Needs to occur before anything else
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityTargetEvent(EntityTargetEvent event) {
@@ -85,6 +85,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			
 		}
 
+		/*
 		if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Skeleton) {
 			Wolf w = (Wolf) event.getEntity();
 			if (w.getOwner() != null) {
@@ -116,8 +117,9 @@ public class Solinia3CoreEntityListener implements Listener {
 						}
 					}
 
-					if (!(attacker instanceof Player)) {
+					if (!(attacker instanceof Player) && !(!attacker.equals(event.getEntity()))) {
 						((Creature) event.getEntity()).setTarget(null);
+						System.out.println("Cancelling as the target has );
 						event.setCancelled(true);
 						return;
 					}
@@ -132,15 +134,14 @@ public class Solinia3CoreEntityListener implements Listener {
 
 			}
 		}
+		*/
 
 		try {
 			// Me
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
 			if (solEntity.isUndead() && event.getTarget() instanceof LivingEntity) {
-				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),
-						SpellEffectType.InvisVsUndead)
-						|| StateManager.getInstance().getEntityManager().hasEntityEffectType(
-								(LivingEntity) event.getTarget(), SpellEffectType.InvisVsUndead2)) {
+				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),SpellEffectType.InvisVsUndead)
+				 || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.InvisVsUndead2)) {
 					((Creature) event.getEntity()).setTarget(null);
 					event.setCancelled(true);
 					return;
@@ -250,7 +251,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						.getActiveEntitySpells((LivingEntity) attacker).getActiveSpells()) {
 					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
 
-							spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
+							spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez)
 							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
 							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)
 							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2)

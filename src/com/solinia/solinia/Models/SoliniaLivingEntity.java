@@ -1,8 +1,10 @@
 package com.solinia.solinia.Models;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,7 +43,12 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
+import net.minecraft.server.v1_12_R1.EntityCreature;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
+import net.minecraft.server.v1_12_R1.EntityTameableAnimal;
+import net.minecraft.server.v1_12_R1.PathfinderGoalHurtByTarget;
+import net.minecraft.server.v1_12_R1.PathfinderGoalOwnerHurtByTarget;
+import net.minecraft.server.v1_12_R1.PathfinderGoalOwnerHurtTarget;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -1477,5 +1484,50 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return null;
 		}
 		return null;
+	}
+	
+	public void targetSelector() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		final net.minecraft.server.v1_12_R1.EntityInsentient e = (net.minecraft.server.v1_12_R1.EntityInsentient)((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity)getBukkitLivingEntity()).getHandle();
+		if (!(e instanceof net.minecraft.server.v1_12_R1.EntityCreature) && !(e instanceof net.minecraft.server.v1_12_R1.EntityTameableAnimal))
+			return;
+		
+        final Field goalsField = net.minecraft.server.v1_12_R1.EntityInsentient.class.getDeclaredField("targetSelector");
+        goalsField.setAccessible(true);
+        
+        final net.minecraft.server.v1_12_R1.PathfinderGoalSelector goals = (net.minecraft.server.v1_12_R1.PathfinderGoalSelector)goalsField.get(e);
+        Field listField = net.minecraft.server.v1_12_R1.PathfinderGoalSelector.class.getDeclaredField("b");
+        listField.setAccessible(true);
+        Set list = (Set)listField.get(goals);
+        list.clear();
+        listField = net.minecraft.server.v1_12_R1.PathfinderGoalSelector.class.getDeclaredField("c");
+        listField.setAccessible(true);
+        list = (Set)listField.get(goals);
+        list.clear();
+        goals.a(1, (net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer)new net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer(e, (Class)net.minecraft.server.v1_12_R1.EntityHuman.class, 5.0f, 1.0f));
+        goals.a(2, (net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer)new net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer(e, (Class)net.minecraft.server.v1_12_R1.EntityHuman.class, 5.0f, 1.0f));
+        goals.a(10, (net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer)new net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer(e, (Class)net.minecraft.server.v1_12_R1.EntityHuman.class, 5.0f, 1.0f));
+        
+        		
+        goals.a(1, new PathfinderGoalOwnerHurtByTarget((EntityTameableAnimal) e));
+        goals.a(2, new PathfinderGoalOwnerHurtTarget((EntityTameableAnimal) e));
+        goals.a(3, new PathfinderGoalHurtByTarget((EntityCreature) e, true, new Class[0]));
+	}
+	
+	@Override
+	public void configurePetGoals() {
+		if (!isPet())
+			return;
+		
+		System.out.println("Reconfiguring Pet Goals");
+		
+		try {
+			targetSelector();
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 }

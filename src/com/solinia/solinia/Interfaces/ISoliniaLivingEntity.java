@@ -79,4 +79,6 @@ public interface ISoliniaLivingEntity
 	public double getMaxHP();
 
 	boolean isUndead();
+
+	void configurePetGoals();
 }
