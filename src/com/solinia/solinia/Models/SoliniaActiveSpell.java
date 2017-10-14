@@ -359,8 +359,9 @@ public class SoliniaActiveSpell {
 			return;
 		case EyeOfZomm
 			: return;
-		case ReclaimPet
-			: return;
+		case ReclaimPet: 
+			applyReclaimPet(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case TotalHP: 
 			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player)
 			{
@@ -732,8 +733,9 @@ public class SoliniaActiveSpell {
 			: return;
 		case StringUnbreakable
 			: return;
-		case ImprovedReclaimEnergy
-			: return;
+		case ImprovedReclaimEnergy: 
+			applyReclaimPet(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case IncreaseChanceMemwipe
 			: return;
 		case CharmBreakChance
@@ -1199,6 +1201,29 @@ public class SoliniaActiveSpell {
 			: return;
 		default:
 			return;
+		}
+	}
+
+	private void applyReclaimPet(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.getSourceUuid().equals(this.getOwnerUuid()))
+			return;
+		
+		if (!(getLivingEntity() instanceof Player))
+			return;
+		
+		try
+		{
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet((Player)getLivingEntity());
+			if (pet == null)
+				return;
+			
+			pet.remove();
+			StateManager.getInstance().getEntityManager().setPet((Player)getLivingEntity(), null);
+			
+			SoliniaPlayerAdapter.Adapt((Player)getLivingEntity()).increasePlayerMana(20);
+		} catch (CoreStateInitException e)
+		{
+			// do nothing
 		}
 	}
 
