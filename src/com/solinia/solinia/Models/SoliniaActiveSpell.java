@@ -21,6 +21,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -1205,22 +1206,26 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyReclaimPet(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!this.getSourceUuid().equals(this.getOwnerUuid()))
+		if (!(getLivingEntity() instanceof Wolf))
 			return;
 		
-		if (!(getLivingEntity() instanceof Player))
+		LivingEntity owner = (LivingEntity)((Wolf)getLivingEntity()).getOwner();
+		
+		if (owner == null)
+			return;
+		
+		if (!(owner instanceof Player))
 			return;
 		
 		try
 		{
-			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet((Player)getLivingEntity());
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet((Player)owner);
 			if (pet == null)
 				return;
 			
-			pet.remove();
-			StateManager.getInstance().getEntityManager().setPet((Player)getLivingEntity(), null);
+			StateManager.getInstance().getEntityManager().killPet((Player)owner);
 			
-			SoliniaPlayerAdapter.Adapt((Player)getLivingEntity()).increasePlayerMana(20);
+			SoliniaPlayerAdapter.Adapt((Player)owner).increasePlayerMana(20);
 		} catch (CoreStateInitException e)
 		{
 			// do nothing
