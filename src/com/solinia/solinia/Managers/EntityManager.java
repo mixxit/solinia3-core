@@ -227,35 +227,38 @@ public class EntityManager implements IEntityManager {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			for(Entity entity : player.getNearbyEntities(50, 50, 50))
+			for(Entity entityThatWillCast : player.getNearbyEntities(50, 50, 50))
 			{
-				if (entity instanceof Player)
+				if (entityThatWillCast instanceof Player)
 					continue;
 				
-				if (!(entity instanceof LivingEntity))
+				if (!(entityThatWillCast instanceof LivingEntity))
 					continue;
 				
-				LivingEntity le = (LivingEntity)entity;
+				LivingEntity livingEntityThatWillCast = (LivingEntity)entityThatWillCast;
 				
-				if (!(entity instanceof Creature))
+				if (!(entityThatWillCast instanceof Creature))
 					continue;
 				
-				Creature c = (Creature)entity;
-				if (c.getTarget() == null)
+				if(entityThatWillCast.isDead())
 					continue;
 				
-				if (!Utils.isLivingEntityNPC(le))
+				Creature creatureThatWillCast = (Creature)entityThatWillCast;
+				if (creatureThatWillCast.getTarget() == null)
+					continue;
+				
+				if (!Utils.isLivingEntityNPC(livingEntityThatWillCast))
 					continue;
 				
 				try {
-					ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
-					if (completedNpcsIds.contains(solle.getNpcid()))
+					ISoliniaLivingEntity solLivingEntityThatWillCast = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillCast);
+					if (completedNpcsIds.contains(solLivingEntityThatWillCast.getNpcid()))
 						continue;
 					
-					completedNpcsIds.add(solle.getNpcid());
+					completedNpcsIds.add(solLivingEntityThatWillCast.getNpcid());
 					
-					if (Utils.isEntityInLineOfSight(le, c.getTarget()))
-						solle.doSpellCast(plugin, c.getTarget());
+					if (Utils.isEntityInLineOfSight(livingEntityThatWillCast, creatureThatWillCast.getTarget()))
+						solLivingEntityThatWillCast.doSpellCast(plugin, creatureThatWillCast.getTarget());
 					
 				} catch (CoreStateInitException e) {
 					// TODO Auto-generated catch block
