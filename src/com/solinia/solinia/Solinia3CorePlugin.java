@@ -102,6 +102,7 @@ import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
 import com.solinia.solinia.Repositories.JsonPatchRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
+import com.solinia.solinia.Repositories.JsonQuestRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
@@ -232,12 +233,16 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			patchesrepo.setJsonFile(getDataFolder() + "/" + "patches.json");
 			patchesrepo.reload();
 
+			JsonQuestRepository questsrepo = new JsonQuestRepository();
+			questsrepo.setJsonFile(getDataFolder() + "/" + "quests.json");
+			questsrepo.reload();
+			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
-					perkrepo, aaabilityrepo, patchesrepo);
+					perkrepo, aaabilityrepo, patchesrepo, questsrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 

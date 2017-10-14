@@ -26,6 +26,10 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 	@Override
 	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
+		
+		// Spawn groups do not update properly if you reload after changing the file
+		// You have to also execute the change via a command..
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm spawners set SPAWNGROUPID_" + spawngroup.getId() + " warmup " + spawngroup.getRespawntime());
 	}
 	
 	@Override

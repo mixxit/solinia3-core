@@ -17,6 +17,7 @@ import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
+import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.WorldWidePerk;
 
 public interface IConfigurationManager {
@@ -225,4 +226,12 @@ public interface IConfigurationManager {
 
 	void editFaction(int factionid, String setting, String value)
 			throws NumberFormatException, InvalidFactionSettingException, CoreStateInitException, IOException;
+
+	List<ISoliniaQuest> getQuests();
+
+	ISoliniaQuest getQuest(int questId);
+
+	int getNextQuestId();
+
+	ISoliniaQuest addQuest(SoliniaQuest quest);
 }

@@ -33,11 +33,13 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
+import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
+import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
@@ -47,6 +49,7 @@ import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
 import com.solinia.solinia.Repositories.JsonPatchRepository;
+import com.solinia.solinia.Repositories.JsonQuestRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 
@@ -66,14 +69,14 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaAAAbility> aaabilitiesRepository;
 	private ConcurrentHashMap<Integer, ISoliniaAARank> aarankcache = new ConcurrentHashMap<Integer, ISoliniaAARank>();
 	private ConcurrentHashMap<Integer, List<Integer>> spellaarankcache = new ConcurrentHashMap<Integer, List<Integer>>();
-	
+	private IRepository<ISoliniaQuest> questRepository;
 	private IRepository<ISoliniaPatch> patchesRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -88,6 +91,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.aaabilitiesRepository = aaabilitiesContext;
 		resetAARankRepository();
 		this.patchesRepository = patchesContext;
+		this.questRepository = questsContext;
 	}
 	
 	private void resetAARankRepository()
@@ -364,6 +368,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.spellRepository.commit();
 		this.spawngroupRepository.commit();
 		this.aaabilitiesRepository.commit();
+		this.questRepository.commit();
 	}
 
 	@Override
@@ -613,6 +618,17 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return max + 1;
 	}
+	
+	@Override
+	public int getNextQuestId() {
+		int max = 0;
+		for (ISoliniaQuest entry : getQuests()) {
+			if (entry.getId() > max)
+				max = entry.getId();
+		}
+
+		return max + 1;
+	}
 
 	@Override
 	public void editSpell(int spellid, String setting, String value, String[] additional) 
@@ -766,7 +782,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		ISoliniaSpawnGroup spawnGroup = getSpawnGroup(spawngroupid);
 		spawnGroup.editSetting(setting, value);
 
-		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(spawnGroup.getNpcid()));
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawnGroup.getId()));
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 
@@ -774,5 +790,26 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void editFaction(int factionid, String setting, String value) throws NumberFormatException, InvalidFactionSettingException, CoreStateInitException, IOException {
 		ISoliniaFaction faction = getFaction(factionid);
 		faction.editSetting(setting, value);
+	}
+	
+	@Override
+	public List<ISoliniaQuest> getQuests() {
+		// TODO Auto-generated method stub
+		return questRepository.query(q -> q.getId() > 0);
+	}
+	
+	@Override
+	public ISoliniaQuest getQuest(int questId) {
+		List<ISoliniaQuest> list = questRepository.query(q -> q.getId() == questId);
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
+	
+	@Override
+	public ISoliniaQuest addQuest(SoliniaQuest quest) {
+		this.questRepository.add(quest);
+		return getQuest(quest.getId());
 	}
 }

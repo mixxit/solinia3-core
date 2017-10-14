@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.PlayerFactionEntry;
+import com.solinia.solinia.Models.PlayerQuest;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SpellResistType;
 
@@ -194,4 +195,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void increaseFactionStanding(int factionId, int amount);
 
 	boolean isMezzed();
+
+	List<PlayerQuest> getPlayerQuests();
+
+	void setPlayerQuests(List<PlayerQuest> playerQuests);
 }

@@ -67,6 +67,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<UUID> ignoredPlayers = new ArrayList<UUID>();
 	private List<String> availableTitles = new ArrayList<String>();
 	private String title = "";
+	private List<PlayerQuest> playerQuests = new ArrayList<PlayerQuest>();
 	
 	@Override
 	public List<UUID> getIgnoredPlayers()
@@ -1400,5 +1401,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public List<PlayerQuest> getPlayerQuests() {
+		return playerQuests;
+	}
+
+	@Override
+	public void setPlayerQuests(List<PlayerQuest> playerQuests) {
+		this.playerQuests = playerQuests;
 	}
 }

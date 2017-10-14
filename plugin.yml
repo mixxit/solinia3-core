@@ -34,6 +34,10 @@ commands:
     usage: /settitle title
     aliases:
     - title
+  quests:
+    description: Lists quests
+    usage: /quests
+    aliases: []
   addrace:
     description: Creates a new race
     usage: /addrace racename strength stamina agility dexterity wisdom intelligence charisma adminonly
