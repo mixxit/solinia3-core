@@ -253,7 +253,9 @@ public class EntityManager implements IEntityManager {
 						continue;
 					
 					completedNpcsIds.add(solle.getNpcid());
-					solle.doSpellCast(plugin, c.getTarget());
+					
+					if (Utils.isEntityInLineOfSight(le, c.getTarget()))
+						solle.doSpellCast(plugin, c.getTarget());
 					
 				} catch (CoreStateInitException e) {
 					// TODO Auto-generated catch block

@@ -3,6 +3,7 @@ package com.solinia.solinia.Listeners;
 import java.sql.Timestamp;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
@@ -74,7 +75,20 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (mezExpiry != null)
 			{
 				event.getPlayer().sendMessage("* You are mezzed!");
-				event.setCancelled(true);
+				if (event.getTo().getY() < event.getFrom().getY())
+				{
+					event.getTo().setX(event.getFrom().getX());
+					event.getTo().setZ(event.getFrom().getZ());
+					event.getTo().setYaw(event.getFrom().getYaw());
+					event.getTo().setPitch(event.getFrom().getPitch());
+					
+				} else {
+					event.getTo().setX(event.getFrom().getX());
+					event.getTo().setY(event.getFrom().getY());
+					event.getTo().setZ(event.getFrom().getZ());
+					event.getTo().setYaw(event.getFrom().getYaw());
+					event.getTo().setPitch(event.getFrom().getPitch());
+				}
 				return;
 			}
 
