@@ -11,6 +11,8 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
+import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
@@ -234,4 +236,9 @@ public interface IConfigurationManager {
 	int getNextQuestId();
 
 	ISoliniaQuest addQuest(SoliniaQuest quest);
+
+	void editLootDrop(int lootDropid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidLootDropSettingException;
+
+	void editLootTable(int loottableid, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidLootTableSettingException;
 }

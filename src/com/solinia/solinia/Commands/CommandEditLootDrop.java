@@ -1,0 +1,108 @@
+package com.solinia.solinia.Commands;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Managers.StateManager;
+
+import net.md_5.bungee.api.ChatColor;
+
+public class CommandEditLootDrop implements CommandExecutor {
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
+			return false;
+		
+		if (sender instanceof Player)
+		{
+
+			Player player = (Player) sender;
+			
+			if (!player.isOp())
+			{
+				player.sendMessage("This is an operator only command");
+				return false;
+			}
+		}
+		
+		if (args.length < 1)
+		{
+			sender.sendMessage("Insufficient arguments: lootdropid");
+			return false;
+		}
+		
+		// Args
+		// LootDropID
+		// Setting
+		// NewValue
+		
+		if (args.length == 0)
+		{
+			return false;
+		}
+
+		int LootDropid = Integer.parseInt(args[0]);
+		
+		if (args.length == 1)
+		{
+			try
+			{
+				ISoliniaLootDrop LootDrop = StateManager.getInstance().getConfigurationManager().getLootDrop(LootDropid);
+				if (LootDrop != null)
+				{
+					LootDrop.sendLootDropSettingsToSender(sender);
+				} else {
+					sender.sendMessage("LootDrop ID doesnt exist");
+				}
+				return true;
+			} catch (CoreStateInitException e)
+			{
+				sender.sendMessage(e.getMessage());
+			}
+		}
+
+		
+		if (args.length < 3)
+		{
+			sender.sendMessage("Insufficient arguments: LootDropid setting value");
+			return false;
+		}
+		
+		String setting = args[1];
+		
+		String value = args[2];
+		
+		if (LootDropid < 1)
+		{
+			sender.sendMessage("Invalid LootDrop id");
+			return false;
+		}
+		
+		try
+		{
+
+			if (StateManager.getInstance().getConfigurationManager().getLootDrop(LootDropid) == null)
+			{
+				sender.sendMessage("Cannot locate LootDrop id: " + LootDropid);
+				return false;
+			}
+
+			StateManager.getInstance().getConfigurationManager().editLootDrop(LootDropid,setting,value);
+			sender.sendMessage("Updating setting on LootDrop");
+		} catch (InvalidLootDropSettingException ne)
+		{
+			sender.sendMessage("Invalid LootDrop setting");
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			sender.sendMessage(e.getMessage());
+		}
+		return true;
+	}
+}

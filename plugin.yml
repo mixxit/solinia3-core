@@ -281,13 +281,13 @@ commands:
     description: Lists spells
     usage: /listspells searchstring
     aliases: []
-  viewlootdrop:
-    description: Views a loot drop
-    usage: /viewlootdrop lootdropid
+  editlootdrop:
+    description: Edits a loot drop
+    usage: /editlootdrop lootdropid setting value
     aliases: []
-  viewloottable:
-    description: Views a loottable
-    usage: /viewloottable loottableid
+  editloottable:
+    description: Edits a loottable
+    usage: /editloottable loottableid setting value
     aliases: []
   pet:
     description: Views pet information

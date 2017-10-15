@@ -691,6 +691,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} else {
 			currentmana = currentmana + mana;
 		}
+		
 		setMana(currentmana);
 	}
 

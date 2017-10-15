@@ -2,6 +2,11 @@ package com.solinia.solinia.Interfaces;
 
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
+
 public interface ISoliniaLootTable {
 
 	int getId();
@@ -15,4 +20,8 @@ public interface ISoliniaLootTable {
 	List<ISoliniaLootTableEntry> getEntries();
 	
 	void setEntries(List<ISoliniaLootTableEntry> entries);
+
+	void sendLootTableSettingsToSender(CommandSender sender);
+
+	void editSetting(String setting, String value) throws InvalidLootTableSettingException, NumberFormatException, CoreStateInitException;
 }
