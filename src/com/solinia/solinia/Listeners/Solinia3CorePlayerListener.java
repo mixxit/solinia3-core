@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -164,7 +165,6 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getView().getPlayer().getUniqueId()) > 0	
 					)
 			{
-				System.out.println("Attempting to apply augmentation");
 				event.getView().getPlayer().sendMessage("* Attempting to apply augmentation");
 				ItemStack targetItemStack = event.getCurrentItem();
 				ISoliniaItem sourceAugSoliniaItem = StateManager.getInstance().getConfigurationManager().getItem(StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getView().getPlayer().getUniqueId()));
@@ -173,7 +173,6 @@ public class Solinia3CorePlayerListener implements Listener {
 				{
 					event.getView().getPlayer().sendMessage("The item you are attempting to apply from is not an augmentation");
 					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
-					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
 					event.setCancelled(true);
 					return;
@@ -184,7 +183,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			    {
 					event.getView().getPlayer().sendMessage("This augmentation cannot be applied to this item type");
 					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
-					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
 					event.setCancelled(true);
 					return;
@@ -221,9 +219,20 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				}
 				
-				ItemStack outputStack = ItemStackUtils.applyAugmentationToItemStack(targetItemStack, sourceAugSoliniaItem);
+				if (Utils.getPlayerTotalCountOfItemId(((Player)event.getView().getPlayer()),sourceAugSoliniaItem.getId()) < 1)
+				{
+					event.getView().getPlayer().sendMessage("You do not have enough of this augmentation in your inventory to apply it to an item");
+					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
+					System.out.println("Ended applying augmentation");
+					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
+					event.setCancelled(true);
+					return;
+				}
 				
-				((Player)event.getView().getPlayer()).getInventory().setItem(event.getSlot(), outputStack);
+				ItemMeta newMeta = ItemStackUtils.applyAugmentationToItemStack(targetItemStack, sourceAugSoliniaItem.getId());
+				targetItemStack.setItemMeta(newMeta);
+				((Player)event.getView().getPlayer()).getWorld().dropItemNaturally(((Player)event.getView().getPlayer()).getLocation(), targetItemStack);
+				((Player)event.getView().getPlayer()).getInventory().setItem(event.getSlot(), null);
 				((Player)event.getView().getPlayer()).updateInventory();
 				Utils.removeItemsFromInventory(((Player)event.getView().getPlayer()), sourceAugSoliniaItem.getId(), 1);
 				

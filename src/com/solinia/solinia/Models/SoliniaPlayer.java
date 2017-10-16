@@ -38,6 +38,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -728,11 +729,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    				StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getPlayer().getUniqueId()) == 0
 		    				)
 		    		{
-			    		System.out.println("* Applying " + item.getDisplayname() + " to an item, please right click the item you wish to apply this augmentation to. To cancel applying, right click while holding this item again");
 			    		StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getPlayer().getUniqueId(), item.getId());
 			    		event.getPlayer().sendMessage("* Applying " + item.getDisplayname() + " to an item, please right click the item you wish to apply this augmentation to. . To cancel applying, right click while holding this item again");
 		    		} else {
-		    			System.out.println("* Cancelled applying augmentation");
 		    			StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getPlayer().getUniqueId(), 0);
 		    			event.getPlayer().sendMessage("* Cancelled applying augmentation");
 		    		}
@@ -744,7 +743,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
 		    		if (targetmob != null)
 		    		{
-		    			System.out.println("Pet attack from player: " + event.getPlayer());
 		    			item.useItemOnEntity(plugin, event.getPlayer(),item,targetmob,false);
 		    			return;
 		    		}
@@ -989,31 +987,53 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				try
 				{
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0)
+					{
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					}
+					
 					switch (type) {
 					case RESIST_FIRE:
 						if (item.getFireResist() > 0) {
 							total += item.getFireResist();
 						}
+						if (augItem != null)
+							if(augItem.getFireResist() > 0)
+								total += item.getFireResist();
 						break;
 					case RESIST_COLD:
 						if (item.getColdResist() > 0) {
 							total += item.getColdResist();
 						}
+						if (augItem != null)
+							if(augItem.getColdResist() > 0)
+								total += item.getColdResist();
 						break;
 					case RESIST_MAGIC:
 						if (item.getMagicResist() > 0) {
 							total += item.getMagicResist();
 						}
+						if (augItem != null)
+							if(augItem.getMagicResist() > 0)
+								total += item.getMagicResist();
 						break;
 					case RESIST_POISON:
 						if (item.getPoisonResist() > 0) {
 							total += item.getPoisonResist();
 						}
+						if (augItem != null)
+							if(augItem.getPoisonResist() > 0)
+								total += item.getPoisonResist();
 						break;
 					case RESIST_DISEASE:
 						if (item.getDiseaseResist() > 0) {
 							total += item.getDiseaseResist();
 						}
+						if (augItem != null)
+							if(augItem.getDiseaseResist() > 0)
+								total += item.getDiseaseResist();
 						break;
 					default:
 						break;

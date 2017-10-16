@@ -94,12 +94,12 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	// Since the item is temporary, attempt to apply the temporary timestamp it had prior to this
 	            	if (latestitem.isTemporary())
 	        		{
-	        			ItemStackUtils.restoreTemporaryStamp(pickedUpItemStack,temporaryGuid);
+	        			pickedUpItemStack.setItemMeta(ItemStackUtils.applyTemporaryStamp(pickedUpItemStack,temporaryGuid));
 	        		}
 	            	
 	            	if (augmentationItemId != null && augmentationItemId != 0)
 	        		{
-	        			ItemStackUtils.restoreAugmentationId(pickedUpItemStack,augmentationItemId);
+	        			pickedUpItemStack.setItemMeta(ItemStackUtils.applyAugmentationToItemStack(pickedUpItemStack,augmentationItemId));
 	        		}
 	            }
 		    }

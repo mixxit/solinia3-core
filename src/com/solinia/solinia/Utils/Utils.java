@@ -864,41 +864,69 @@ public class Utils {
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0)
+					{
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					}
+					
 					switch (stat) {
 					case "STRENGTH":
 						if (item.getStrength() > 0) {
 							total += item.getStrength();
 						}
+						if (augItem != null)
+							if(augItem.getStrength() > 0)
+								total += item.getStrength();
 						break;
 					case "STAMINA":
 						if (item.getStamina() > 0) {
 							total += item.getStamina();
 						}
+						if (augItem != null)
+							if(augItem.getStamina() > 0)
+								total += item.getStamina();
 						break;
 					case "AGILITY":
 						if (item.getAgility() > 0) {
 							total += item.getAgility();
 						}
+						if (augItem != null)
+							if(augItem.getAgility() > 0)
+								total += item.getAgility();
 						break;
 					case "DEXTERITY":
 						if (item.getDexterity() > 0) {
 							total += item.getDexterity();
 						}
+						if (augItem != null)
+							if(augItem.getDexterity() > 0)
+								total += item.getDexterity();
 						break;
 					case "INTELLIGENCE":
 						if (item.getIntelligence() > 0) {
 							total += item.getIntelligence();
 						}
+						if (augItem != null)
+							if(augItem.getIntelligence() > 0)
+								total += item.getIntelligence();
 						break;
 					case "WISDOM":
 						if (item.getWisdom() > 0) {
 							total += item.getWisdom();
 						}
+						if (augItem != null)
+							if(augItem.getWisdom() > 0)
+								total += item.getWisdom();
 						break;
 					case "CHARISMA":
 						if (item.getCharisma() > 0) {
 							total += item.getCharisma();
 						}
+						if (augItem != null)
+							if(augItem.getCharisma() > 0)
+								total += item.getCharisma();
 						break;
 					default:
 						break;

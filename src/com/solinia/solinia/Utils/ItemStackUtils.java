@@ -34,17 +34,15 @@ public class ItemStackUtils {
 		try
 		{
 			ISoliniaItem i = SoliniaItemAdapter.Adapt(itemStack);
-			
-			if (i.isTemporary())
+			for(String loreLine : itemStack.getItemMeta().getLore())
 			{
-				for(String loreLine : itemStack.getItemMeta().getLore())
-				{
-					if (!loreLine.startsWith("Attached Augmentation: "))
-						continue;
-					
-					String[] temporaryData = loreLine.split(" ");
-					return Integer.parseInt(temporaryData[1]);
-				}
+				if (!loreLine.startsWith("Attached Augmentation: "))
+					continue;
+				
+				System.out.println("Found augmentation on item");
+				
+				String[] temporaryData = loreLine.split(" ");
+				return Integer.parseInt(temporaryData[2]);
 			}
 		} catch (SoliniaItemException e) {
 			return null;
@@ -101,54 +99,121 @@ public class ItemStackUtils {
 		return false;
 	}
 
-	public static ItemStack restoreTemporaryStamp(ItemStack pickedUpItemStack, String temporaryGuid) {
+	public static ItemMeta applyTemporaryStamp(ItemStack pickedUpItemStack, String temporaryGuid) {
 		List<String> lore = pickedUpItemStack.getItemMeta().getLore();
 		ItemMeta newMeta = pickedUpItemStack.getItemMeta();
 		
 		List<String> newLore = new ArrayList<String>();
 		for(int i = 0; i < lore.size(); i++)
 		{
+			// skip, we will re-add it
 			if (lore.get(i).startsWith("Temporary: "))
-			{
-				newLore.add("Temporary: " + temporaryGuid);
-			} else {
-				newLore.add(lore.get(i));
-			}
+				continue;
+			
+			newLore.add(lore.get(i));
 		}
-		
+		newLore.add("Temporary: " + temporaryGuid);
 		newMeta.setLore(newLore);
-		pickedUpItemStack.setItemMeta(newMeta);
-		return pickedUpItemStack;
-	}
-	
-	public static ItemStack restoreAugmentationId(ItemStack pickedUpItemStack, Integer itemId) {
-		List<String> lore = pickedUpItemStack.getItemMeta().getLore();
-		ItemMeta newMeta = pickedUpItemStack.getItemMeta();
-		
-		List<String> newLore = new ArrayList<String>();
-		for(int i = 0; i < lore.size(); i++)
-		{
-			if (lore.get(i).startsWith("Attached Augmentation: "))
-			{
-				newLore.add("Attached Augmentation: " + itemId);
-			} else {
-				newLore.add(lore.get(i));
-			}
-		}
-		
-		newMeta.setLore(newLore);
-		pickedUpItemStack.setItemMeta(newMeta);
-		return pickedUpItemStack;
+		return newMeta;
 	}
 
-	public static ItemStack applyAugmentationToItemStack(ItemStack targetItemStack,
-			ISoliniaItem sourceAugSoliniaItem) {
+	public static ItemMeta applyAugmentationToItemStack(ItemStack targetItemStack,
+			Integer sourceItemId) {
 		ItemMeta newMeta = targetItemStack.getItemMeta();
 		List<String> lore = targetItemStack.getItemMeta().getLore();
-		lore.add("Attached Augmentation: " + sourceAugSoliniaItem.getId());
+		List<String> newLore = new ArrayList<String>();
+		for(int i = 0; i < lore.size(); i++)
+		{
+			// skip, we will re-add it
+			if (lore.get(i).startsWith("Attached Augmentation: "))
+				continue;
+
+			if (lore.get(i).startsWith("AUG:"))
+				continue;
+
+			newLore.add(lore.get(i));
+		}
 		
-		newMeta.setLore(lore);
-		targetItemStack.setItemMeta(newMeta);
-		return targetItemStack;
+		try
+		{
+			ISoliniaItem soliniaItem = StateManager.getInstance().getConfigurationManager().getItem(sourceItemId);
+			if (soliniaItem != null)
+			{
+				newLore.add("Attached Augmentation: " + sourceItemId);
+				
+				String stattxt = "";
+
+				if (soliniaItem.getDexterity() > 0) {
+					stattxt = "DEX: " + ChatColor.GREEN + soliniaItem.getDexterity() + ChatColor.RESET + " ";
+				}
+
+				if (soliniaItem.getIntelligence() > 0) {
+					stattxt += "INT: " + ChatColor.GREEN + soliniaItem.getIntelligence() + ChatColor.RESET + " ";
+				}
+
+				if (soliniaItem.getWisdom() > 0) {
+					stattxt += "WIS: " + ChatColor.GREEN + soliniaItem.getWisdom() + ChatColor.RESET + " ";
+				}
+
+				if (soliniaItem.getCharisma() > 0) {
+					stattxt += "CHA: " + ChatColor.GREEN + soliniaItem.getCharisma() + ChatColor.RESET + " ";
+				}
+
+				if (!stattxt.equals(""))
+				{
+					newLore.add("AUG: " + stattxt);
+				}
+				
+				String resisttxt = "";
+
+				if (soliniaItem.getFireResist() > 0) {
+					resisttxt += "FR: " + ChatColor.AQUA + soliniaItem.getFireResist() + ChatColor.RESET + " ";
+				}
+
+				if (soliniaItem.getColdResist() > 0) {
+					resisttxt += "CR: " + ChatColor.AQUA + soliniaItem.getColdResist() + ChatColor.RESET + " ";
+				}
+
+				if (soliniaItem.getMagicResist() > 0) {
+					resisttxt += "MR: " + ChatColor.AQUA + soliniaItem.getMagicResist() + ChatColor.RESET + " ";
+				}
+
+				if (soliniaItem.getPoisonResist() > 0) {
+					resisttxt += "PR: " + ChatColor.AQUA + soliniaItem.getPoisonResist() + ChatColor.RESET + " ";
+				}
+
+				if (!resisttxt.equals("")) {
+					newLore.add("AUG: " + resisttxt);
+				}
+
+				String regentxt = "";
+
+				if (soliniaItem.getHpregen() > 0 || soliniaItem.getMpregen() > 0) {
+					if (soliniaItem.getHpregen() > 0) {
+						regentxt = ChatColor.WHITE + "HPRegen: " + ChatColor.YELLOW + soliniaItem.getHpregen()
+								+ ChatColor.RESET;
+					}
+
+					if (soliniaItem.getMpregen() > 0) {
+						if (!regentxt.equals(""))
+							regentxt += " ";
+						regentxt += ChatColor.WHITE + "MPRegen: " + ChatColor.YELLOW + soliniaItem.getMpregen()
+								+ ChatColor.RESET;
+					}
+				}
+				
+				if (!regentxt.equals("")) {
+					newLore.add("AUG: " + regentxt);
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		
+
+		newMeta.setLore(newLore);
+		return newMeta;
 	}
 }

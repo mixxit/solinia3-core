@@ -21,6 +21,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Utils.ItemStackUtils;
 
 public class PlayerRegenTickTimer extends BukkitRunnable {
 
@@ -73,6 +74,21 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 					if (item.getHpregen() > 0) {
 						hpregen += item.getHpregen();
 					}
+					
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					if (augmentationId != null && augmentationId != 0)
+					{
+						ISoliniaItem augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+						if (augItem.getHpregen() > 0)
+						{
+							hpregen += item.getHpregen();
+						}
+						if (augItem.getMpregen() > 0)
+						{
+							manaregen += item.getMpregen();
+						}
+					}
+					
 				} catch (CoreStateInitException e) {
 					e.printStackTrace();
 				}
