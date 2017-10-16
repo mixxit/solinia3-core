@@ -751,7 +751,7 @@ public class SoliniaItem implements ISoliniaItem {
 
 	@Override
 	public AugmentationSlotType getAcceptsAugmentationSlotType() {
-		return Utils.getItemStackAugSlotType(this.asItemStack());
+		return Utils.getItemStackAugSlotType(getBasename(), isAugmentation);
 	}
 
 	@Override
