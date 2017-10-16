@@ -3660,6 +3660,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (target == null)
 			return false;
 		
+		if (!source.getUniqueId().equals(target.getUniqueId()))
+		if (!source.hasLineOfSight(target))
+			return false;
+		
 		// Try not to kill potentially friendly player tameables with hostile spells
 		if (target instanceof Tameable && target instanceof Creature && !soliniaSpell.isBeneficial())
 		{

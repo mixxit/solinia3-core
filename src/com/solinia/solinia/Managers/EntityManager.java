@@ -610,8 +610,7 @@ public class EntityManager implements IEntityManager {
 					
 					completedNpcsIds.add(solLivingEntityThatWillSummon.getNpcid());
 					
-					if (Utils.isEntityInLineOfSight(livingEntityThatWillSummon, creatureThatWillSummon.getTarget()))
-						solLivingEntityThatWillSummon.doSummon(plugin, creatureThatWillSummon.getTarget());
+					solLivingEntityThatWillSummon.doSummon(plugin, creatureThatWillSummon.getTarget());
 					
 				} catch (CoreStateInitException e) {
 					// TODO Auto-generated catch block
