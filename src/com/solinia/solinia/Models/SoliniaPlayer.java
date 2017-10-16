@@ -721,6 +721,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		return;
 		    	}
 		    	
+		    	// Start applying an augmentation
+		    	if((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isAugmentation()) 
+			    {
+		    		if (StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getPlayer().getUniqueId()) == null || 
+		    				StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getPlayer().getUniqueId()) == 0
+		    				)
+		    		{
+			    		System.out.println("* Applying " + item.getDisplayname() + " to an item, please right click the item you wish to apply this augmentation to. To cancel applying, right click while holding this item again");
+			    		StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getPlayer().getUniqueId(), item.getId());
+			    		event.getPlayer().sendMessage("* Applying " + item.getDisplayname() + " to an item, please right click the item you wish to apply this augmentation to. . To cancel applying, right click while holding this item again");
+		    		} else {
+		    			System.out.println("* Cancelled applying augmentation");
+		    			StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getPlayer().getUniqueId(), 0);
+		    			event.getPlayer().sendMessage("* Cancelled applying augmentation");
+		    		}
+		    		return;
+			    }
+		    	
 		    	if((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) 
 			    {
 		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);

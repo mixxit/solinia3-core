@@ -1,5 +1,8 @@
 package com.solinia.solinia.Managers;
 
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -7,10 +10,12 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;
+import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class PlayerManager implements IPlayerManager {
 	private IRepository<ISoliniaPlayer> repository;
+	private ConcurrentHashMap<UUID, Integer> playerApplyAugmentation = new ConcurrentHashMap<UUID, Integer>();
 	
 	public PlayerManager(IRepository<ISoliniaPlayer> context)
 	{
@@ -94,5 +99,15 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public void commit() {
 		this.repository.commit();
+	}
+
+	@Override
+	public void setApplyingAugmentation(UUID playerUuid, int itemId) {
+		this.playerApplyAugmentation.put(playerUuid, itemId);
+	}
+	
+	@Override
+	public Integer getApplyingAugmentation(UUID playerUuid) {
+		return this.playerApplyAugmentation.get(playerUuid);
 	}
 }

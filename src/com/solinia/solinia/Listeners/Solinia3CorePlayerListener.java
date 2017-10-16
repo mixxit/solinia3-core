@@ -37,6 +37,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -159,10 +160,87 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		try
 		{
+			if (StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getView().getPlayer().getUniqueId()) != null &&
+					StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getView().getPlayer().getUniqueId()) > 0	
+					)
+			{
+				System.out.println("Attempting to apply augmentation");
+				event.getView().getPlayer().sendMessage("* Attempting to apply augmentation");
+				ItemStack targetItemStack = event.getCurrentItem();
+				ISoliniaItem sourceAugSoliniaItem = StateManager.getInstance().getConfigurationManager().getItem(StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getView().getPlayer().getUniqueId()));
+				
+				if (!sourceAugSoliniaItem.isAugmentation())
+				{
+					event.getView().getPlayer().sendMessage("The item you are attempting to apply from is not an augmentation");
+					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
+					System.out.println("Ended applying augmentation");
+					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
+					event.setCancelled(true);
+					return;
+				}
+				
+				if (targetItemStack.getEnchantmentLevel(Enchantment.OXYGEN) < 1000
+						|| targetItemStack.getType().equals(Material.ENCHANTED_BOOK))
+			    {
+					event.getView().getPlayer().sendMessage("This augmentation cannot be applied to this item type");
+					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
+					System.out.println("Ended applying augmentation");
+					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
+					event.setCancelled(true);
+					return;
+			    } 
+				
+				if (targetItemStack.getAmount() != 1)
+				{
+					event.getView().getPlayer().sendMessage("You cannot apply an augmentation to multiple items at once, please seperate the target item");
+					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
+					System.out.println("Ended applying augmentation");
+					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
+					event.setCancelled(true);
+					return;
+				}
+				
+				if (ItemStackUtils.getAugmentationItemId(targetItemStack) != null && ItemStackUtils.getAugmentationItemId(targetItemStack) != 0)
+				{
+					event.getView().getPlayer().sendMessage("This item already has an augmentation applied");
+					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
+					System.out.println("Ended applying augmentation");
+					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
+					event.setCancelled(true);
+					return;
+				}
+				
+				ISoliniaItem targetSoliniaItem = StateManager.getInstance().getConfigurationManager().getItem(targetItemStack);
+				if (!targetSoliniaItem.getAcceptsAugmentationSlotType().equals(sourceAugSoliniaItem.getAugmentationFitsSlotType()))
+				{
+					event.getView().getPlayer().sendMessage("This augmentation does not fit in this items slot type");
+					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
+					System.out.println("Ended applying augmentation");
+					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
+					event.setCancelled(true);
+					return;
+				}
+				
+				ItemStack outputStack = ItemStackUtils.applyAugmentationToItemStack(targetItemStack, sourceAugSoliniaItem);
+				
+				((Player)event.getView().getPlayer()).getInventory().setItem(event.getSlot(), outputStack);
+				((Player)event.getView().getPlayer()).updateInventory();
+				Utils.removeItemsFromInventory(((Player)event.getView().getPlayer()), sourceAugSoliniaItem.getId(), 1);
+				
+				event.getView().getPlayer().sendMessage("Augmentation Applied to Item Successfully");
+				StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
+				System.out.println("Ended applying augmentation");
+				event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
+				event.setCancelled(true);
+				
+				return;
+			}
+					
+
+			
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getView().getPlayer());
 	
 			// If armour slot modified, update MaxHP
-			
 			// Shift clicking
 			if (event.isShiftClick())
 			{

@@ -13,6 +13,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -25,21 +26,24 @@ public class Solinia3CoreItemPickupListener implements Listener {
     
     @EventHandler
     public void PickupItem(PlayerPickupItemEvent e) {
-        ItemStack item = e.getItem().getItemStack();
+        ItemStack pickedUpItemStack = e.getItem().getItemStack();
+        
+        String temporaryGuid = null;
+        Integer augmentationItemId = null;
         
         try
         {
-	        if (item.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && item.getType().equals(Material.ENCHANTED_BOOK))
+	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK))
 		    {
 	        	e.getPlayer().sendMessage(ChatColor.GRAY + "You have picked up an ability! To use it, hold it in your hand and right click!");
 	        	
-	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(item);
-	            if (item != null)
+	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
+	            if (pickedUpItemStack != null)
 	            {
 	            	if (latestitem != null)
 	            	{
 	            		ItemStack latestitemstack = latestitem.asItemStack();
-	            		item.setItemMeta(latestitemstack.getItemMeta());
+	            		pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
 	            	} else {
 	            		// this is an item that is broken       
 	            		e.getPlayer().sendMessage("This item is no longer implemented");
@@ -49,32 +53,54 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            }
 		    }
 	        
-	        if (item.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !(item.getType().equals(Material.ENCHANTED_BOOK)))
+	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
 		    {
-	        	Map<Enchantment, Integer> oldenchantments = item.getEnchantments();
-	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(item);
-	            if (item != null)
+	        	Map<Enchantment, Integer> oldenchantments = pickedUpItemStack.getEnchantments();
+	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
+	            if (pickedUpItemStack != null)
 	            {
 	            	if (latestitem != null)
 	            	{
 	            		ItemStack latestitemstack = latestitem.asItemStack();
-	            		item.setItemMeta(latestitemstack.getItemMeta());
+	            		
+	            		// We need to store this information before we change the itemmeta, so we can update it afterwards
+	            		if (latestitem.isTemporary())
+	            		{
+	            			temporaryGuid = ItemStackUtils.getTemporaryItemGuid(pickedUpItemStack);
+	            		}
+	            		augmentationItemId = ItemStackUtils.getAugmentationItemId(pickedUpItemStack);
+	            		
+	            		// Now go and replace the itemmeta
+	            		pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
 	            	} else {
 	            		// this is an item that is broken      
 	            		e.getPlayer().sendMessage("This item is no longer implemented");
 	            		e.setCancelled(true);
 	            		e.getItem().remove();
+	            		e.getPlayer().updateInventory();
 	            	}
 	
+	            	// Now re-apply enchantments that it had before
 	            	for (Map.Entry<Enchantment, Integer> entry : oldenchantments.entrySet()) {
 	            		Enchantment key = entry.getKey();
 	            		Integer value = entry.getValue();
 	            		
 	            		if (value < 1000)
 	            		{
-	            			item.addUnsafeEnchantment(key, value);
+	            			pickedUpItemStack.addUnsafeEnchantment(key, value);
 	            		}
 	            	}
+	            	
+	            	// Since the item is temporary, attempt to apply the temporary timestamp it had prior to this
+	            	if (latestitem.isTemporary())
+	        		{
+	        			ItemStackUtils.restoreTemporaryStamp(pickedUpItemStack,temporaryGuid);
+	        		}
+	            	
+	            	if (augmentationItemId != null && augmentationItemId != 0)
+	        		{
+	        			ItemStackUtils.restoreAugmentationId(pickedUpItemStack,augmentationItemId);
+	        		}
 	            }
 		    }
         } catch (CoreStateInitException coreException)
