@@ -44,6 +44,7 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ActiveSpellEffect;
+import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.SkillReward;
@@ -2903,5 +2904,85 @@ public class Utils {
 			return FactionStandingType.FACTION_SCOWLS;
 		}
 		return FactionStandingType.FACTION_INDIFFERENT;
+	}
+
+	public static AugmentationSlotType getItemStackAugSlotType(ItemStack itemStack) {
+		switch(itemStack.getType())
+		{
+			case WOOD_SWORD: 
+				return AugmentationSlotType.WEAPON; 
+			case STONE_SWORD:
+				return AugmentationSlotType.WEAPON; 
+			case IRON_SWORD: 
+				return AugmentationSlotType.WEAPON; 
+			case GOLD_SWORD:
+				return AugmentationSlotType.WEAPON; 
+			case DIAMOND_SWORD: 
+				return AugmentationSlotType.WEAPON; 
+			case WOOD_AXE:
+				return AugmentationSlotType.WEAPON; 
+			case STONE_AXE: 
+				return AugmentationSlotType.WEAPON; 
+			case IRON_AXE:
+				return AugmentationSlotType.WEAPON; 
+			case GOLD_AXE: 
+				return AugmentationSlotType.WEAPON; 
+			case DIAMOND_AXE:
+				return AugmentationSlotType.WEAPON; 
+			case WOOD_SPADE: 
+				return AugmentationSlotType.WEAPON; 
+			case STONE_SPADE:
+				return AugmentationSlotType.WEAPON; 
+			case IRON_SPADE: 
+				return AugmentationSlotType.WEAPON; 
+			case GOLD_SPADE:
+				return AugmentationSlotType.WEAPON; 
+			case DIAMOND_SPADE:
+				return AugmentationSlotType.WEAPON;
+			case LEATHER_HELMET: 
+				return AugmentationSlotType.HELMET;
+			case LEATHER_CHESTPLATE: 
+				return AugmentationSlotType.CHESTPLATE;
+			case LEATHER_LEGGINGS: 
+				return AugmentationSlotType.LEGGINGS;
+			case LEATHER_BOOTS: 
+				return AugmentationSlotType.BOOTS;
+			case CHAINMAIL_HELMET: 
+				return AugmentationSlotType.HELMET;
+			case CHAINMAIL_CHESTPLATE: 
+				return AugmentationSlotType.CHESTPLATE;
+			case CHAINMAIL_LEGGINGS: 
+				return AugmentationSlotType.LEGGINGS;
+			case CHAINMAIL_BOOTS: 
+				return AugmentationSlotType.BOOTS;
+			case IRON_HELMET: 
+				return AugmentationSlotType.HELMET;
+			case IRON_CHESTPLATE: 
+				return AugmentationSlotType.CHESTPLATE;
+			case IRON_LEGGINGS: 
+				return AugmentationSlotType.LEGGINGS;
+			case IRON_BOOTS: 
+				return AugmentationSlotType.BOOTS;
+			case DIAMOND_HELMET: 
+				return AugmentationSlotType.HELMET;
+			case DIAMOND_CHESTPLATE: 
+				return AugmentationSlotType.CHESTPLATE;
+			case DIAMOND_LEGGINGS: 
+				return AugmentationSlotType.LEGGINGS;
+			case DIAMOND_BOOTS: 
+				return AugmentationSlotType.BOOTS;
+			case GOLD_HELMET: 
+				return AugmentationSlotType.HELMET;
+			case GOLD_CHESTPLATE: 
+				return AugmentationSlotType.CHESTPLATE;
+			case GOLD_LEGGINGS: 
+				return AugmentationSlotType.LEGGINGS;
+			case GOLD_BOOTS: 
+				return AugmentationSlotType.BOOTS;
+			case SHIELD: 
+				return AugmentationSlotType.SHIELD;
+			default:
+				return AugmentationSlotType.NONE;
+		}
 	}
 }

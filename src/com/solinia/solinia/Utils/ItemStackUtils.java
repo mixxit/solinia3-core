@@ -38,20 +38,4 @@ public class ItemStackUtils {
 
 		return false;
 	}
-
-	public static String ItemStackAsJsonString(ItemStack itemStack) {
-		/*
-		 * try { Object nmsItem = Reflection.getMethod(Reflection.getOBCClass(
-		 * "inventory.CraftItemStack"), "asNMSCopy",
-		 * ItemStack.class).invoke(null, itemStack); String out =
-		 * Reflection.getMethod(Reflection.getNMSClass("ItemStack"), "save",
-		 * Reflection.getNMSClass("NBTTagCompound")).invoke(nmsItem,
-		 * Reflection.getNMSClass("NBTTagCompound").newInstance()).toString();
-		 * return out.replace("\\", "\\\\") .replace("\"", "\\\"")
-		 * .replace("\r", "\\r") .replace("\n", "\\n"); } catch (Exception e) {
-		 * e.printStackTrace(); return ""; }
-		 */
-		// this is bugged
-		return "";
-	}
 }

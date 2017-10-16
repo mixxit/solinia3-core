@@ -26,6 +26,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
@@ -94,8 +95,18 @@ public class ItemStackAdapter {
 			loretxt.addAll(Arrays.asList(lorestr));
 		}
 
-		if (soliniaItem.isPetControlRod() == true) {
-				loretxt.add(ChatColor.GREEN + "This item will cause your pet to attack a target if used" + ChatColor.RESET);
+		if (soliniaItem.isQuest() == true) {
+			loretxt.add(ChatColor.YELLOW + "This item is part of a quest line" + ChatColor.RESET);
+		}
+
+		if (soliniaItem.isCrafting() == true) {
+			loretxt.add(ChatColor.GOLD + "This looks like it could be crafted into something useful" + ChatColor.RESET);
+		}
+
+		
+		if (soliniaItem.isAugmentation() == true) {
+				loretxt.add(ChatColor.AQUA + "This looks like it could augment a weapon or armour" + ChatColor.RESET);
+				loretxt.add(ChatColor.AQUA + "Augments Item Slots: " + soliniaItem.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		}
 		
 		if (soliniaItem.getDamage() > 0) {
@@ -195,6 +206,11 @@ public class ItemStackAdapter {
 				regentxt += ChatColor.WHITE + "MPRegen: " + ChatColor.YELLOW + soliniaItem.getMpregen()
 						+ ChatColor.RESET;
 			}
+		}
+		
+		if (!(soliniaItem.getAcceptsAugmentationSlotType().equals(AugmentationSlotType.NONE)))
+		{
+			loretxt.add(ChatColor.WHITE + "Augmentation Slot Types: " + ChatColor.YELLOW + soliniaItem.getAcceptsAugmentationSlotType().name() + ChatColor.RESET);
 		}
 
 		if (!regentxt.equals("")) {

@@ -20,6 +20,7 @@ import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.*;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
@@ -67,6 +68,10 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isConsumable;
 	private int baneUndead = 0;
 	private boolean isPetControlRod = false;
+	private boolean isAugmentation = false;
+	private boolean isCrafting = false;
+	private boolean isQuest = false;
+	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -519,6 +524,11 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);		
 		sender.sendMessage("- consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
 		sender.sendMessage("- petcontrolrod: " + ChatColor.GOLD + isPetControlRod() + ChatColor.RESET);
+		sender.sendMessage("- crafting: " + ChatColor.GOLD + isCrafting() + ChatColor.RESET);
+		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
+		sender.sendMessage("- quest: " + ChatColor.GOLD + isQuest() + ChatColor.RESET);
+		sender.sendMessage("- acceptsaugmentationslottype: " + ChatColor.GOLD + getAcceptsAugmentationSlotType() + ChatColor.RESET);
+		sender.sendMessage("- augmentationfitsslottype: " + ChatColor.GOLD + this.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET);
 		sender.sendMessage("- baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
@@ -624,8 +634,20 @@ public class SoliniaItem implements ISoliniaItem {
 		case "consumable":
 			setConsumable(Boolean.parseBoolean(value));
 			break;
+		case "crafting":
+			setCrafting(Boolean.parseBoolean(value));
+			break;
+		case "quest":
+			setQuest(Boolean.parseBoolean(value));
+			break;
+		case "augmentation":
+			setAugmentation(Boolean.parseBoolean(value));
+			break;
+		case "augmentationfitsslottype":
+			setAugmentationFitsSlotType(AugmentationSlotType.valueOf(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation");
 		}
 	}
 
@@ -697,4 +719,48 @@ public class SoliniaItem implements ISoliniaItem {
 		this.isPetControlRod = isPetControlRod;
 	}
 
+	@Override
+	public boolean isAugmentation() {
+		return isAugmentation;
+	}
+
+	@Override
+	public void setAugmentation(boolean isAugmentation) {
+		this.isAugmentation = isAugmentation;
+	}
+
+	@Override
+	public boolean isCrafting() {
+		return isCrafting;
+	}
+
+	@Override
+	public void setCrafting(boolean isCrafting) {
+		this.isCrafting = isCrafting;
+	}
+
+	@Override
+	public boolean isQuest() {
+		return isQuest;
+	}
+	
+	@Override
+	public void setQuest(boolean isQuest) {
+		this.isQuest = isQuest;
+	}
+
+	@Override
+	public AugmentationSlotType getAcceptsAugmentationSlotType() {
+		return Utils.getItemStackAugSlotType(this.asItemStack());
+	}
+
+	@Override
+	public AugmentationSlotType getAugmentationFitsSlotType() {
+		return this.augmentationFitsSlotType;
+	}
+
+	@Override
+	public void setAugmentationFitsSlotType(AugmentationSlotType augmentationFitsSlotType) {
+		this.augmentationFitsSlotType = augmentationFitsSlotType;
+	}
 }

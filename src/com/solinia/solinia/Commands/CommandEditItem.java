@@ -70,6 +70,20 @@ public class CommandEditItem implements CommandExecutor {
 		
 		String value = args[2];
 		
+		if (args.length > 3 && setting.toLowerCase().contains("lore")) {
+			value = "";
+			int current = 0;
+			for (String entry : args) {
+				current++;
+				if (current <= 2)
+					continue;
+
+				value = value + entry + " ";
+			}
+
+			value = value.trim();
+		}
+		
 		if (itemid < 1)
 		{
 			sender.sendMessage("Invalid item id");

@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
+import com.solinia.solinia.Models.AugmentationSlotType;
 
 public interface ISoliniaItem {
 	ItemStack asItemStack();
@@ -194,4 +195,22 @@ public interface ISoliniaItem {
 	boolean isPetControlRod();
 
 	void setPetControlRod(boolean isPetControlRod);
+
+	boolean isAugmentation();
+
+	void setAugmentation(boolean isAugmentation);
+
+	boolean isCrafting();
+
+	void setCrafting(boolean isCrafting);
+
+	boolean isQuest();
+
+	void setQuest(boolean isQuest);
+
+	AugmentationSlotType getAcceptsAugmentationSlotType();
+
+	AugmentationSlotType getAugmentationFitsSlotType();
+
+	void setAugmentationFitsSlotType(AugmentationSlotType augmentationFitsSlotType);
 }
