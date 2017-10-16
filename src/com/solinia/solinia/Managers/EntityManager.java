@@ -574,4 +574,50 @@ public class EntityManager implements IEntityManager {
 		
 		temporaryMerchantItems.get(npcid).put(itemid, newCount);
 	}
+
+	@Override
+	public void doNPCSummon(Plugin plugin) {
+		List<Integer> completedNpcsIds = new ArrayList<Integer>();
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			for(Entity entityThatWillSummon : player.getNearbyEntities(50, 50, 50))
+			{
+				if (entityThatWillSummon instanceof Player)
+					continue;
+				
+				if (!(entityThatWillSummon instanceof LivingEntity))
+					continue;
+				
+				LivingEntity livingEntityThatWillSummon = (LivingEntity)entityThatWillSummon;
+				
+				if (!(entityThatWillSummon instanceof Creature))
+					continue;
+				
+				if(entityThatWillSummon.isDead())
+					continue;
+				
+				Creature creatureThatWillSummon = (Creature)entityThatWillSummon;
+				if (creatureThatWillSummon.getTarget() == null)
+					continue;
+				
+				if (!Utils.isLivingEntityNPC(livingEntityThatWillSummon))
+					continue;
+				
+				try {
+					ISoliniaLivingEntity solLivingEntityThatWillSummon = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillSummon);
+					if (completedNpcsIds.contains(solLivingEntityThatWillSummon.getNpcid()))
+						continue;
+					
+					completedNpcsIds.add(solLivingEntityThatWillSummon.getNpcid());
+					
+					if (Utils.isEntityInLineOfSight(livingEntityThatWillSummon, creatureThatWillSummon.getTarget()))
+						solLivingEntityThatWillSummon.doSummon(plugin, creatureThatWillSummon.getTarget());
+					
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

@@ -39,8 +39,6 @@ public class ItemStackUtils {
 				if (!loreLine.startsWith("Attached Augmentation: "))
 					continue;
 				
-				System.out.println("Found augmentation on item");
-				
 				String[] temporaryData = loreLine.split(" ");
 				return Integer.parseInt(temporaryData[2]);
 			}

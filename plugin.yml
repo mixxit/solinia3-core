@@ -327,6 +327,10 @@ commands:
     description: Grants a title
     usage: /granttitle playername title
     aliases: []
+  editnpcevent:
+    description: Edits an npc event
+    usage: /editnpcevent npcid triggername setting value
+    aliases: []
 depend:
 - Vault
 - MythicMobs

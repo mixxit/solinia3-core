@@ -19,6 +19,7 @@ import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
+import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
@@ -825,5 +826,10 @@ public class ConfigurationManager implements IConfigurationManager {
 	public ISoliniaQuest addQuest(SoliniaQuest quest) {
 		this.questRepository.add(quest);
 		return getQuest(quest.getId());
+	}
+
+	@Override
+	public void editNpcTriggerEvent(int npcid, String triggertext, String setting, String value) throws InvalidNPCEventSettingException {
+		getNPC(npcid).editTriggerEventSetting(triggertext,setting, value);
 	}
 }

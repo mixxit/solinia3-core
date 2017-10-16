@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -64,6 +65,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isUndead = false;
 	private List<ISoliniaNPCEventHandler> eventHandlers = new ArrayList<ISoliniaNPCEventHandler>();
 	private String deathGrantsTitle = "";
+	private boolean isSummoner = false;
 	
 	@Override
 	public int getId() {
@@ -422,6 +424,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- guard: " + ChatColor.GOLD + isGuard() + ChatColor.RESET);
 		sender.sendMessage("- roamer: " + ChatColor.GOLD + isRoamer() + ChatColor.RESET);
 		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
+		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET);
 		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "APPEARANCE" + ChatColor.RESET);
@@ -616,9 +619,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "undead":
 			setUndead(Boolean.parseBoolean(value));
 			break;
+		case "summoner":
+			setSummoner(Boolean.parseBoolean(value));
+			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner");
 		}
 	}
 
@@ -810,6 +816,17 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public List<ISoliniaNPCEventHandler> getEventHandlers() {
 		return eventHandlers;
 	}
+	
+	@Override
+	public List<String> getEventHandlerTriggerDatas() {
+		List<String> eventHandlerTriggerDatas = new ArrayList<String>();
+		for(ISoliniaNPCEventHandler handler : getEventHandlers())
+		{
+			eventHandlerTriggerDatas.add(handler.getTriggerdata());
+		}
+		
+		return eventHandlerTriggerDatas;
+	}
 
 	@Override
 	public void setEventHandlers(List<ISoliniaNPCEventHandler> eventHandlers) {
@@ -925,5 +942,45 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setDeathGrantsTitle(String deathGrantsTitle) {
 		this.deathGrantsTitle = deathGrantsTitle;
+	}
+
+	@Override
+	public void sendNPCEvent(CommandSender sender, String triggertext) {
+		for (ISoliniaNPCEventHandler eventHandler : eventHandlers)
+		{
+			if (!eventHandler.getTriggerdata().toUpperCase().equals(triggertext.toUpperCase()))
+				continue;
+			
+			eventHandler.sendNPCEvent(sender);
+		}
+	}
+
+	@Override
+	public void sendNPCEvents(CommandSender sender) {
+		for(ISoliniaNPCEventHandler eventHandler : eventHandlers)
+		{
+			eventHandler.sendNPCEvent(sender);
+		}
+	}
+
+	@Override
+	public void editTriggerEventSetting(String triggertext, String setting, String value) throws InvalidNPCEventSettingException {
+		for(ISoliniaNPCEventHandler eventHandler : eventHandlers)
+		{
+			if (!eventHandler.getTriggerdata().toUpperCase().equals(triggertext.toUpperCase()))
+				continue;
+			
+			eventHandler.editTriggerEventSetting(setting,value);
+		}
+	}
+
+	@Override
+	public boolean isSummoner() {
+		return isSummoner;
+	}
+
+	@Override
+	public void setSummoner(boolean isSummoner) {
+		this.isSummoner = isSummoner;
 	}
 }

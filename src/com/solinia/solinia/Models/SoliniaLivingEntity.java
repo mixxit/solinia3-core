@@ -1530,4 +1530,36 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		
 	}
+
+	@Override
+	public void doSummon(Plugin plugin, LivingEntity summoningEntity) {
+		if (isPlayer())
+			return;
+		
+		if (summoningEntity == null || this.livingentity == null)
+			return;
+
+		ISoliniaNPC npc;
+		try {
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (!npc.isSummoner())
+				return;
+			
+			int chanceToSummon = Utils.RandomBetween(1, 10);
+
+			if (chanceToSummon > 8) {
+				if (summoningEntity instanceof Player)
+				{
+					this.say("You will not evade me " + ((Player)summoningEntity).getDisplayName() + "!");
+				} else {
+					this.say("You will not evade me " + summoningEntity.getName() + "!");
+					
+				}
+				summoningEntity.teleport(getBukkitLivingEntity().getLocation());
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

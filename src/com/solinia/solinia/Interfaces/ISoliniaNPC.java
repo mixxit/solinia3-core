@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
@@ -169,4 +170,16 @@ public interface ISoliniaNPC {
 	String getDeathGrantsTitle();
 
 	void setDeathGrantsTitle(String deathGrantsTitle);
+
+	void sendNPCEvent(CommandSender sender, String triggertext);
+
+	void sendNPCEvents(CommandSender sender);
+
+	void editTriggerEventSetting(String triggertext, String setting, String value) throws InvalidNPCEventSettingException;
+
+	List<String> getEventHandlerTriggerDatas();
+
+	boolean isSummoner();
+
+	void setSummoner(boolean isSummoner);
 }

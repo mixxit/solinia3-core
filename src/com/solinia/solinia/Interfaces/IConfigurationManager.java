@@ -13,6 +13,7 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
+import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
@@ -241,4 +242,6 @@ public interface IConfigurationManager {
 
 	void editLootTable(int loottableid, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidLootTableSettingException;
+
+	void editNpcTriggerEvent(int npcid, String triggertext, String setting, String value) throws InvalidNPCEventSettingException;
 }

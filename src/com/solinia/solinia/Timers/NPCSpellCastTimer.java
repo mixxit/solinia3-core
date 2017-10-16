@@ -17,6 +17,7 @@ public class NPCSpellCastTimer extends BukkitRunnable {
 
 		try {
 			StateManager.getInstance().getEntityManager().doNPCSpellCast(plugin);
+			StateManager.getInstance().getEntityManager().doNPCSummon(plugin);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

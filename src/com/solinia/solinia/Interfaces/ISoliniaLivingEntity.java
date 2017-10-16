@@ -81,4 +81,6 @@ public interface ISoliniaLivingEntity
 	boolean isUndead();
 
 	void configurePetGoals();
+
+	public void doSummon(Plugin plugin, LivingEntity target);
 }

@@ -110,6 +110,7 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 			}
 
 			SoliniaNPCEventHandler eventhandler = new SoliniaNPCEventHandler();
+			eventhandler.setNpcId(npc.getId());
 			eventhandler.setInteractiontype(interactiontype);
 			eventhandler.setTriggerdata(trigger.toUpperCase());
 			eventhandler.setChatresponse(response);

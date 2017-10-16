@@ -74,4 +74,6 @@ public interface IEntityManager {
 	boolean hasEntityEffectType(LivingEntity livingEntity, SpellEffectType type);
 
 	void removeMezzed(LivingEntity livingEntity, Timestamp expiretimestamp);
+
+	void doNPCSummon(Plugin plugin);
 }

@@ -21,6 +21,7 @@ import com.solinia.solinia.Factories.ISoliniaNPCEventHandlerTypeAdapterFactory;
 import com.solinia.solinia.Factories.ISoliniaNPCMerchantEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Models.SoliniaAARank;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaNPCEventHandler;
@@ -83,6 +84,17 @@ public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
 		NPCs.clear();
 		for(ISoliniaNPC i : file)
 		{
+			if (i.getEventHandlers().size() > 0)
+			{
+				for(ISoliniaNPCEventHandler handler : i.getEventHandlers())
+				{
+					if (handler.getNpcId() == 0)
+					{
+						handler.setNpcId(i.getId());
+						System.out.println("Corrected invalid NPC event handler " + handler.getTriggerdata() + " on npc: " + i.getId());
+					}
+				}
+			}
 			NPCs.put(i.getId(), i);
 		}
 		
