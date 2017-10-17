@@ -218,7 +218,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "    PreventRandomEquipment: true\r\n";
 		mob = mob + "    AlwaysShowName: true\r\n";
 		mob = mob + "  Modules:\r\n";
-		mob = mob + "    ThreatTable: true\r\n";
+		mob = mob + "    ThreatTable: false\r\n";
 
 		if (npc.isPet())
 		{

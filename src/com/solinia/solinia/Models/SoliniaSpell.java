@@ -2859,6 +2859,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (loopSuccess == true)
 							tapsuccess = true;
 					}
+					
+					boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)targetentity,this,sourceEntity);
+					if (loopSuccess == true)
+						tapsuccess = true;
+					
 					return tapsuccess;
 				case AETarget:
 					// Get entities around entity and attempt to apply, if any are successful, return true
@@ -2869,10 +2874,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
-						if (loopSuccess == true)
+						boolean loopSuccess2 = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
+						if (loopSuccess2 == true)
 							success = true;
 					}
+					
+					boolean loopSuccess2 = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)targetentity,this,sourceEntity);
+					if (loopSuccess2 == true)
+						success = true;
+					
 					return success;
 				case Group:
 					boolean successGroup = false;
@@ -2896,8 +2906,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 							
 							if (group.getMembers().contains(e.getUniqueId()))
 							{
-								boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
-								if (loopSuccess == true)
+								boolean loopSuccess3 = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
+								if (loopSuccess3 == true)
 									successGroup = true;
 							}
 						}
@@ -2912,8 +2922,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof LivingEntity))
 							continue;
 						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
-						if (loopSuccess == true)
+						boolean loopSuccess4 = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
+						if (loopSuccess4 == true)
 							successCaster = true;
 					}
 					return successCaster;

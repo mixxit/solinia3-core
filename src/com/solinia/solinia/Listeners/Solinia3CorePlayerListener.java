@@ -143,7 +143,8 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		event.setDeathMessage("");
+		event.setDeathMessage("");		
+		
 
 		try
 		{

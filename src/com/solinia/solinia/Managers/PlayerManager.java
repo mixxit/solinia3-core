@@ -1,5 +1,7 @@
 package com.solinia.solinia.Managers;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,7 +12,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;
-import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class PlayerManager implements IPlayerManager {
