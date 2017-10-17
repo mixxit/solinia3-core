@@ -107,6 +107,21 @@ public class CommandEditNpcEvent implements CommandExecutor {
 		String setting = args[2];
 		String value = args[3];
 		
+		// for 'text' based npc settings like trigger texts etc, get the whole thing as a string
+		if (args.length > 4 && (setting.toLowerCase().contains("chatresponse")))
+		{
+			value = "";
+			int current = 0;
+			for(String entry : args)
+			{
+				current++;
+				if (current <= 3)
+					continue;
+				value = value + entry + " ";
+			}	
+			value = value.trim();
+		}
+		
 		if (npcid < 1)
 		{
 			sender.sendMessage("Invalid NPC id");

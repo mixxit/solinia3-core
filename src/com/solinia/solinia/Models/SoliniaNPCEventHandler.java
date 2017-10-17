@@ -6,6 +6,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
@@ -24,6 +25,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private String requiresQuestFlag = null;
 	private String awardsQuestFlag = null;
 	private int npcId;
+	private int awardsItem = 0;
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -153,9 +155,24 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			}
 			setAwardsQuest(aquestid);
 			break;
+		case "awardsitem":
+			int itemId = Integer.parseInt(value);
+			if (itemId < 1)
+				throw new InvalidNPCEventSettingException("Invalid item ID");
+			try
+			{
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+			if (item == null)
+				throw new InvalidNPCEventSettingException("Invalid item id");
+			} catch (CoreStateInitException e)
+			{
+				throw new InvalidNPCEventSettingException("State not initialised");
+			}
+			setAwardsItem(itemId);
+			break;
 		default:
 			throw new InvalidNPCEventSettingException(
-					"Invalid NPC Event setting. Valid Options are: triggerdata,chatresponse,interactiontype,requiresquest,awardsquest,requiresquestflag,awardsquestflag");
+					"Invalid NPC Event setting. Valid Options are: triggerdata,chatresponse,interactiontype,requiresquest,awardsquest,requiresquestflag,awardsquestflag,awardsitem");
 		}
 	}
 
@@ -167,6 +184,14 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setNpcId(int npcId) {
 		this.npcId = npcId;
+	}
+
+	public int getAwardsItem() {
+		return awardsItem;
+	}
+
+	public void setAwardsItem(int awardsItem) {
+		this.awardsItem = awardsItem;
 	}
 
 }
