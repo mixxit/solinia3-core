@@ -168,16 +168,20 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			int itemId = Integer.parseInt(value);
 			if (itemId < 1)
 				throw new InvalidNPCEventSettingException("Invalid item ID");
+			
+			if (getAwardsQuestFlag() == null || getAwardsQuestFlag().equals(""))
+				throw new InvalidNPCEventSettingException("You cannot set an awardsitem to a npc event handler unless the npc awards a quest flag -  this is to prevent duplicated awards");
+			
 			try
 			{
-			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-			if (item == null)
-				throw new InvalidNPCEventSettingException("Invalid item id");
-			} catch (CoreStateInitException e)
-			{
-				throw new InvalidNPCEventSettingException("State not initialised");
-			}
-			setAwardsItem(itemId);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+				if (item == null)
+					throw new InvalidNPCEventSettingException("Invalid item id");
+				} catch (CoreStateInitException e)
+				{
+					throw new InvalidNPCEventSettingException("State not initialised");
+				}
+				setAwardsItem(itemId);
 			break;
 		default:
 			throw new InvalidNPCEventSettingException(
@@ -281,6 +285,17 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				if (foundQuestFlag == false)
 				{
 					player.addPlayerQuestFlag(getAwardsQuestFlag());
+					
+					// All item awards must be accompanied with a quest flag else they will repeat the item return over and over
+					
+					if (getAwardsItem() > 0)
+					{
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getAwardsItem());
+						if (item != null)
+						{
+							player.getBukkitPlayer().getWorld().dropItemNaturally(player.getBukkitPlayer().getLocation(), item.asItemStack());
+						}
+					}
 				}
 			}
 		} catch (CoreStateInitException e)
