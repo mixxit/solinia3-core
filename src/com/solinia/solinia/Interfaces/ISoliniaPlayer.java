@@ -199,4 +199,12 @@ public interface ISoliniaPlayer extends Serializable {
 	List<PlayerQuest> getPlayerQuests();
 
 	void setPlayerQuests(List<PlayerQuest> playerQuests);
+
+	public void addPlayerQuest(int questId);
+
+	public List<String> getPlayerQuestFlags();
+
+	public void addPlayerQuestFlag(String questFlag);
+
+	void setPlayerQuestFlags(List<String> playerQuestFlags);
 }

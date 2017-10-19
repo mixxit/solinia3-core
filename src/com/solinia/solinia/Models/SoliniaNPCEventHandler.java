@@ -1,7 +1,9 @@
 package com.solinia.solinia.Models;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
@@ -10,6 +12,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
@@ -155,6 +158,12 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			}
 			setAwardsQuest(aquestid);
 			break;
+		case "requiresquestflag":
+			setRequiresQuestFlag(value);
+			break;
+		case "awardsquestflag":
+			setAwardsQuestFlag(value);
+			break;
 		case "awardsitem":
 			int itemId = Integer.parseInt(value);
 			if (itemId < 1)
@@ -192,6 +201,92 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 
 	public void setAwardsItem(int awardsItem) {
 		this.awardsItem = awardsItem;
+	}
+
+	@Override
+	public boolean playerMeetsRequirements(Player triggerentity) {
+		try
+		{
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(triggerentity);
+			if (getRequiresQuest() > 0)
+			{
+				boolean foundQuest = false;
+				for(PlayerQuest playerQuest : player.getPlayerQuests())
+				{
+					if (playerQuest.getQuestId() == getRequiresQuest())
+					{
+						foundQuest = true;
+					}
+				}
+				
+				if (foundQuest == false)
+					return false;
+			}
+			
+			if (getRequiresQuestFlag() != null && !getRequiresQuestFlag().equals(""))
+			{
+				boolean foundQuestFlag = false;
+				for(String playerQuestFlag : player.getPlayerQuestFlags())
+				{
+					if (playerQuestFlag.equals(getRequiresQuestFlag()))
+					{
+						foundQuestFlag = true;
+					}
+				}
+				
+				if (foundQuestFlag == false)
+					return false;
+			}
+			
+			return true;
+		
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public void awardPlayer(Player triggerentity) {
+		try
+		{
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(triggerentity);
+			
+			if (getAwardsQuest() > 0)
+			{
+				boolean foundQuest = false;
+				for(PlayerQuest playerQuest : player.getPlayerQuests())
+				{
+					if (playerQuest.getQuestId() == getAwardsQuest())
+					{
+						foundQuest = true;
+					}
+				}
+				
+				if (foundQuest == false)
+					player.addPlayerQuest(getAwardsQuest());
+			}
+			
+			if (getAwardsQuestFlag() != null && !getAwardsQuestFlag().equals(""))
+			{
+				boolean foundQuestFlag = false;
+				for(String playerQuestFlag : player.getPlayerQuestFlags())
+				{
+					if (playerQuestFlag.equals(getAwardsQuestFlag()))
+					{
+						foundQuestFlag = true;
+					}
+				}
+				
+				if (foundQuestFlag == false)
+				{
+					player.addPlayerQuestFlag(getAwardsQuestFlag());
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
 	}
 
 }

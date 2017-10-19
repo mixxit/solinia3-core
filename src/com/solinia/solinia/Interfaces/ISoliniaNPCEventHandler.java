@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Models.InteractionType;
@@ -42,5 +43,9 @@ public interface ISoliniaNPCEventHandler {
 	int getNpcId();
 
 	void setNpcId(int npcId);
+
+	boolean playerMeetsRequirements(Player triggerentity);
+
+	void awardPlayer(Player triggerentity);
 	
 }

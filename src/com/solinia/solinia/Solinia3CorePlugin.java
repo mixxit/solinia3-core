@@ -23,6 +23,7 @@ import com.solinia.solinia.Commands.CommandCreateMerchantList;
 import com.solinia.solinia.Commands.CommandCreateNPCEvent;
 import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandCreateNpcCopy;
+import com.solinia.solinia.Commands.CommandCreateQuest;
 import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
 import com.solinia.solinia.Commands.CommandEditClass;
 import com.solinia.solinia.Commands.CommandEditFaction;
@@ -59,6 +60,7 @@ import com.solinia.solinia.Commands.CommandNPCSell;
 import com.solinia.solinia.Commands.CommandOoc;
 import com.solinia.solinia.Commands.CommandPerks;
 import com.solinia.solinia.Commands.CommandPet;
+import com.solinia.solinia.Commands.CommandQuests;
 import com.solinia.solinia.Commands.CommandRaceInfo;
 import com.solinia.solinia.Commands.CommandRebuildSpellItems;
 import com.solinia.solinia.Commands.CommandResetPlayer;
@@ -366,6 +368,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("settitle").setExecutor(new CommandSetTitle());
 		this.getCommand("granttitle").setExecutor(new CommandGrantTitle());
 		this.getCommand("editnpcevent").setExecutor(new CommandEditNpcEvent());
+		this.getCommand("createquest").setExecutor(new CommandCreateQuest());
+		this.getCommand("quests").setExecutor(new CommandQuests());
 	}
 
 	private void createConfigDir() {

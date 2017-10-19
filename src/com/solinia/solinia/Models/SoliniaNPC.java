@@ -788,8 +788,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 			
 			if (handler.getChatresponse() != null && !handler.getChatresponse().equals(""))
 			{
+				if ((triggerentity instanceof Player))
+				{
+					if (!handler.playerMeetsRequirements((Player)triggerentity))
+						return;
+				}
+				
 				String response = handler.getChatresponse();
-				solentity.say(replaceChatWordsWithHints(response),triggerentity);					
+				solentity.say(replaceChatWordsWithHints(response),triggerentity);
+				if (triggerentity instanceof Player)
+					handler.awardPlayer((Player)triggerentity);
 			}
 		}
 		return;

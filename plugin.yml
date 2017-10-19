@@ -331,6 +331,10 @@ commands:
     description: Edits an npc event
     usage: /editnpcevent npcid triggername setting value
     aliases: []
+  createquest:
+    description: Creates a new quest
+    usage: /createquest questcode
+    aliases: []
 depend:
 - Vault
 - MythicMobs

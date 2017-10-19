@@ -69,6 +69,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<String> availableTitles = new ArrayList<String>();
 	private String title = "";
 	private List<PlayerQuest> playerQuests = new ArrayList<PlayerQuest>();
+	private List<String> playerQuestFlags = new ArrayList<String>();
 	
 	@Override
 	public List<UUID> getIgnoredPlayers()
@@ -1450,5 +1451,32 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setPlayerQuests(List<PlayerQuest> playerQuests) {
 		this.playerQuests = playerQuests;
+	}
+
+	@Override
+	public void addPlayerQuest(int questId) {
+		
+		PlayerQuest quest = new PlayerQuest();
+		quest.setComplete(false);
+		quest.setQuestId(questId);
+		this.getPlayerQuests().add(quest);
+		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + " * You have received a new Quest [" + quest.getQuest().getName() + "]!");
+	}
+
+	@Override
+	public List<String> getPlayerQuestFlags() {
+		// TODO Auto-generated method stub
+		return playerQuestFlags;
+	}
+	
+	@Override
+	public void setPlayerQuestFlags(List<String> playerQuestFlags) {
+		this.playerQuestFlags = playerQuestFlags;
+	}
+
+	@Override
+	public void addPlayerQuestFlag(String questFlag) {
+		playerQuestFlags.add(questFlag);
+		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + " * You have received a new Quest Flag!");
 	}
 }
