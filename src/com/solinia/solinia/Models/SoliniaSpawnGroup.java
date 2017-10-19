@@ -27,7 +27,7 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	private int npcid;
 	private double yaw;
 	private double pitch;
-	private int respawntime = 360;
+	private int respawntime = 900;
 	
 	@Override
 	public int getId() {
