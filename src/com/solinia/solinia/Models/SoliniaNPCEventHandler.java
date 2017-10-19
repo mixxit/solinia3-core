@@ -1,7 +1,11 @@
 package com.solinia.solinia.Models;
 
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -111,6 +115,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- awardsquest: " + ChatColor.GOLD + getAwardsQuest() + ChatColor.RESET);
 		sender.sendMessage("- requiresquestflag: " + ChatColor.GOLD + getRequiresQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- awardsquestflag: " + ChatColor.GOLD + getAwardsQuestFlag() + ChatColor.RESET);
+		sender.sendMessage("- awardsitem: " + ChatColor.GOLD + getAwardsItem() + ChatColor.RESET);
 	}
 
 	@Override
@@ -290,16 +295,38 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					
 					if (getAwardsItem() > 0)
 					{
+						System.out.println("Awarding item with awardquestflag: " + getAwardsQuestFlag());
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getAwardsItem());
+						
+						final int awarditemid = getAwardsItem();
+						final UUID uuid = player.getBukkitPlayer().getUniqueId();
+						
 						if (item != null)
 						{
-							player.getBukkitPlayer().getWorld().dropItemNaturally(player.getBukkitPlayer().getLocation(), item.asItemStack());
+							
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											try
+											{
+												ItemStack itemStack = item.asItemStack();
+												ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(awarditemid);
+												Bukkit.getPlayer(uuid).getWorld().dropItem(Bukkit.getPlayer(uuid).getLocation(), itemStack);
+												System.out.println("Awarded item: " + item.getDisplayname());
+											} catch (CoreStateInitException e)
+											{
+												// skip
+											}
+										}
+									});
+							
 						}
 					}
 				}
 			}
 		} catch (CoreStateInitException e)
 		{
+			System.out.println(e.getMessage());
 			return;
 		}
 	}
