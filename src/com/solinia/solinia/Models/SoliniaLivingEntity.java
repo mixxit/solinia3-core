@@ -43,6 +43,9 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.EntityCreature;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
 import net.minecraft.server.v1_12_R1.EntityTameableAnimal;
@@ -209,6 +212,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 								((CraftEntity) attacker).getHandle().damageEntity(source, spelleffect.getCalculatedValue() * -1);
 								// attacker.damage(spelleffect.getBase() * -1);
+								
+								if (getBukkitLivingEntity() instanceof Player)
+								{
+									((Player)getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("Your damage shield hit " + attacker.getName() + " for " + (float)(spelleffect.getCalculatedValue() * -1) + "["+(float)(attacker.getHealth()-(spelleffect.getCalculatedValue() * -1))+"/"+(float)attacker.getMaxHealth()+"]"));
+								}
 							}
 						}
 					}
@@ -332,7 +340,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (event.getDamager() instanceof Arrow) {
 				Arrow arr = (Arrow) event.getDamager();
-				if (arr.getShooter() instanceof Player) {
+				if (arr.getShooter() instanceof Player) 
+				{
 					try
 					{
 						// Apply archery modifier
@@ -370,6 +379,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					{
 						
 					}
+					
+					if (attacker instanceof Player)
+					{
+						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SHOT " + getBukkitLivingEntity().getName() + " for " + (float)event.getDamage() + " [" + (float)(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + (float)getBukkitLivingEntity().getMaxHealth() + "]"));
+					}
 				}
 			}
 
@@ -382,7 +396,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						|| materialinhand.equals(Material.IRON_SWORD) || materialinhand.equals(Material.IRON_AXE)
 						|| materialinhand.equals(Material.GOLD_SWORD) || materialinhand.equals(Material.GOLD_AXE)
 						|| materialinhand.equals(Material.DIAMOND_SWORD)
-						|| materialinhand.equals(Material.DIAMOND_AXE)) {
+						|| materialinhand.equals(Material.DIAMOND_AXE)) 
+				{
 					// Apply slashing modifier
 					try
 					{
@@ -438,6 +453,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					{
 						//
 					}
+					
+					if (attacker instanceof Player)
+					{
+						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SLASHED " + getBukkitLivingEntity().getName() + " for " + (float)event.getDamage() + " [" + ((float)getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + (float)getBukkitLivingEntity().getMaxHealth() + "]"));
+					}
 
 				}
 			}
@@ -446,10 +466,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (event.getCause() == DamageCause.ENTITY_ATTACK) {
 				Material materialinhand = player.getInventory().getItemInMainHand().getType();
 
-				if (materialinhand.equals(Material.STICK) || materialinhand.equals(Material.WOOD_SPADE)
+				if (materialinhand == null || materialinhand.equals(Material.STICK) || materialinhand.equals(Material.WOOD_SPADE)
 						|| materialinhand.equals(Material.STONE_SPADE) || materialinhand.equals(Material.IRON_SPADE)
 						|| materialinhand.equals(Material.GOLD_SPADE) || materialinhand.equals(Material.DIAMOND_SPADE)
-						|| materialinhand.equals(Material.AIR)) {
+						|| materialinhand.equals(Material.AIR)) 
+				{
 					try
 					{
 						// Apply crushing modifier
@@ -505,9 +526,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					{
 						//
 					}
+					
+					if (attacker instanceof Player)
+					{
+						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You CRUSHED " + getBukkitLivingEntity().getName() + " for " + (float)event.getDamage() + " [" + (float)(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + (float)getBukkitLivingEntity().getMaxHealth() + "]"));
+					}
 				}
 			}
-
+			
 			SkillReward reward = Utils
 					.getSkillForMaterial(player.getInventory().getItemInMainHand().getType().toString());
 			if (reward != null) {

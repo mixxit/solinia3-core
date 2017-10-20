@@ -51,6 +51,9 @@ import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+
 public class Solinia3CoreEntityListener implements Listener {
 	Solinia3CorePlugin plugin;
 
@@ -308,7 +311,14 @@ public class Solinia3CoreEntityListener implements Listener {
 			// Never forward magic spell damage (cause thorns) to melee damage calculation
 			// code
 			if (event.getCause().equals(DamageCause.THORNS))
+			{
+				if (damagecause.getDamager() instanceof Player)
+				{
+					LivingEntity recipient = (LivingEntity)event.getEntity();
+					((Player)damagecause.getDamager()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SPELLDMG'd " + recipient.getName() + " for " + (float)event.getDamage() + " [" + (float)(recipient.getHealth()-event.getDamage()) + "/" + (float)recipient.getMaxHealth() + "]"));
+				}
 				return;
+			}
 			try {
 				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
 				soliniaEntity.modifyDamageEvent(this.plugin, (LivingEntity) damagecause.getDamager(), damagecause);
