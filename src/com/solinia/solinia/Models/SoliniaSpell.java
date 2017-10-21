@@ -3122,6 +3122,18 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// TODO Auto-generated method stub
 		return effect_value;
 	}
+	
+	@Override
+	public boolean isBardSong()
+	{
+		for (SoliniaSpellClass spellclass : this.getAllowedClasses())
+		{
+			if (spellclass.getClassname().toUpperCase().equals("BARD"))
+				return true;
+		}
+		
+		return false;
+	}
 
 	private boolean isBardInstrumentSkill(Integer skillid) {
 		switch (Utils.getSkillType(skill)) {

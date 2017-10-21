@@ -17,7 +17,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 public class PlayerManager implements IPlayerManager {
 	private IRepository<ISoliniaPlayer> repository;
 	private ConcurrentHashMap<UUID, Integer> playerApplyAugmentation = new ConcurrentHashMap<UUID, Integer>();
-	
+	private ConcurrentHashMap<UUID, Integer> playerActiveBardSong = new ConcurrentHashMap<UUID, Integer>();
 	public PlayerManager(IRepository<ISoliniaPlayer> context)
 	{
 		this.repository = context;
@@ -111,4 +111,16 @@ public class PlayerManager implements IPlayerManager {
 	public Integer getApplyingAugmentation(UUID playerUuid) {
 		return this.playerApplyAugmentation.get(playerUuid);
 	}
+
+	@Override
+	public Integer getPlayerActiveBardSong(UUID playerUuid) {
+		return playerActiveBardSong.get(playerUuid);
+	}
+
+	@Override
+	public void setPlayerActiveBardSong(UUID playerUuid, Integer spellId) {
+		this.playerActiveBardSong.put(playerUuid, spellId);
+	}
+	
+	
 }

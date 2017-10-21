@@ -1035,4 +1035,6 @@ public interface ISoliniaSpell {
 
 	int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
 			int sourceLevel, int ticksleft);
+
+	boolean isBardSong();
 }

@@ -450,6 +450,13 @@ public class SoliniaItem implements ISoliniaItem {
 		if (spell == null) {
 			return false;
 		}
+		
+		// TODO - Implement toggling of bard songs
+		if (spell.isBardSong())
+		{
+			player.sendMessage("Bard songs are not currently implemented");
+			return false;
+		}
 
 		if (!isConsumable)
 		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
