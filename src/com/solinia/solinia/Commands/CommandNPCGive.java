@@ -83,14 +83,17 @@ public class CommandNPCGive implements CommandExecutor {
 				if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
 					continue;
 				
+				System.out.println("Comparing item id: " + item.getId() + " to triggerdata " + eventHandler.getTriggerdata());
 				if (Integer.parseInt(eventHandler.getTriggerdata()) != item.getId())
 					continue;
 				
 				if (eventHandler.getChatresponse() != null && !eventHandler.getChatresponse().equals(""))
 				{
+					System.out.println("Checking if player meets requirements to hand in item");
 					if (!eventHandler.playerMeetsRequirements(player))
 						continue;
 					
+					System.out.println("NPC wants the item");
 					npcWantsItem = true;
 					
 					String response = eventHandler.getChatresponse();

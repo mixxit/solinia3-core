@@ -34,6 +34,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -41,6 +42,9 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
+
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
 
@@ -909,6 +913,36 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				} catch (CoreStateInitException cse)
 				{
 					//
+				}
+			}
+			
+			for (ISoliniaNPCEventHandler eventHandler : npc.getEventHandlers())
+			{
+				if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
+					continue;
+				
+				// See if player has any items that are wanted
+				int itemId = Integer.parseInt(eventHandler.getTriggerdata());
+				if (itemId == 0)
+					continue;
+				
+				if (Utils.getPlayerTotalCountOfItemId(getBukkitPlayer(),itemId) < 1)
+					continue;
+				
+				try
+				{
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+					
+					TextComponent tc = new TextComponent();
+					tc.setText(ChatColor.YELLOW + "[QUEST] ");
+					TextComponent tc2 = new TextComponent();
+					tc2.setText(ChatColor.GRAY + "- Click here to give " + item.getDisplayname() + ChatColor.RESET);
+					tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/npcgive " + itemId));
+					tc.addExtra(tc2);
+					getBukkitPlayer().spigot().sendMessage(tc);	
+				} catch (CoreStateInitException eNotInitialised)
+				{
+					continue;
 				}
 			}
 		}
