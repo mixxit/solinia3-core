@@ -803,6 +803,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		return;
 	}
 	
+	@Override
 	public String replaceChatWordsWithHints(String message)
 	{
 		for(ISoliniaNPCEventHandler handler : getEventHandlers())

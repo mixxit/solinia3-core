@@ -56,6 +56,7 @@ import com.solinia.solinia.Commands.CommandListSpells;
 import com.solinia.solinia.Commands.CommandLocal;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandNPCBuy;
+import com.solinia.solinia.Commands.CommandNPCGive;
 import com.solinia.solinia.Commands.CommandNPCSell;
 import com.solinia.solinia.Commands.CommandOoc;
 import com.solinia.solinia.Commands.CommandPerks;
@@ -370,6 +371,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editnpcevent").setExecutor(new CommandEditNpcEvent());
 		this.getCommand("createquest").setExecutor(new CommandCreateQuest());
 		this.getCommand("quests").setExecutor(new CommandQuests());
+		this.getCommand("npcgive").setExecutor(new CommandNPCGive());		
 	}
 
 	private void createConfigDir() {

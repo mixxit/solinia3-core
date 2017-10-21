@@ -212,6 +212,10 @@ commands:
     description: sells an item to an npc merchant
     usage: /npcsell itemid count
     aliases: []
+  npcgive:
+    description: Gives an item to an npc you are interesting with
+    usage: /npcgive itemid
+    aliases: []
   listmerchantlists:
     description: Lists all merchant lists
     usage: /listmerchantlists

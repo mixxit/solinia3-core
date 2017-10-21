@@ -182,4 +182,6 @@ public interface ISoliniaNPC {
 	boolean isSummoner();
 
 	void setSummoner(boolean isSummoner);
+
+	String replaceChatWordsWithHints(String message);
 }

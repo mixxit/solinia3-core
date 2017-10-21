@@ -145,9 +145,10 @@ public class CommandNPCBuy implements CommandExecutor {
 					}
 				}
 				
-				System.out.println("Removing temporary item id: " + itemid + " qty: " + temporaryQtyToRemove);
 				if (temporaryQtyToRemove > 0)
 				{
+					System.out.println("Removing temporary item id: " + itemid + " qty: " + temporaryQtyToRemove);
+					
 					try {
 						StateManager.getInstance().getEntityManager().removeTemporaryMerchantItem(solnpc.getId(), item.getId(), temporaryQtyToRemove);
 					} catch (InsufficientTemporaryMerchantItemException e) {
