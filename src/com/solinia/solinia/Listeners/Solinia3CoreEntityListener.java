@@ -1,6 +1,7 @@
 package com.solinia.solinia.Listeners;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -315,7 +316,9 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (damagecause.getDamager() instanceof Player)
 				{
 					LivingEntity recipient = (LivingEntity)event.getEntity();
-					((Player)damagecause.getDamager()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SPELLDMG'd " + recipient.getName() + " for " + (float)event.getDamage() + " [" + (float)(recipient.getHealth()-event.getDamage()) + "/" + (float)recipient.getMaxHealth() + "]"));
+					DecimalFormat df = new DecimalFormat();
+					df.setMaximumFractionDigits(2);
+					((Player)damagecause.getDamager()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SPELLDMG'd " + recipient.getName() + " for " + df.format(event.getDamage()) + " [" + df.format(recipient.getHealth()-event.getDamage()) + "/" + df.format(recipient.getMaxHealth()) + "]"));
 				}
 				return;
 			}

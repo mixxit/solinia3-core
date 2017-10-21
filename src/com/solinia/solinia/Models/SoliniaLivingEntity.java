@@ -1,6 +1,7 @@
 package com.solinia.solinia.Models;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -185,6 +186,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
+		// for action bar
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+		
 		// damage shield response
 		try {
 			SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
@@ -215,7 +220,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								
 								if (getBukkitLivingEntity() instanceof Player)
 								{
-									((Player)getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("Your damage shield hit " + attacker.getName() + " for " + (float)(spelleffect.getCalculatedValue() * -1) + "["+(float)(attacker.getHealth()-(spelleffect.getCalculatedValue() * -1))+"/"+(float)attacker.getMaxHealth()+"]"));
+									((Player)getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("Your damage shield hit " + attacker.getName() + " for " + df.format(spelleffect.getCalculatedValue() * -1) + "["+df.format(attacker.getHealth()-(spelleffect.getCalculatedValue() * -1))+"/"+df.format(attacker.getMaxHealth())+"]"));
 								}
 							}
 						}
@@ -382,7 +387,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					
 					if (attacker instanceof Player)
 					{
-						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SHOT " + getBukkitLivingEntity().getName() + " for " + (float)event.getDamage() + " [" + (float)(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + (float)getBukkitLivingEntity().getMaxHealth() + "]"));
+						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SHOT " + getBukkitLivingEntity().getName() + " for " + df.format(event.getDamage()) + " [" + df.format(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + df.format(getBukkitLivingEntity().getMaxHealth()) + "]"));
 					}
 				}
 			}
@@ -456,9 +461,34 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					
 					if (attacker instanceof Player)
 					{
-						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SLASHED " + getBukkitLivingEntity().getName() + " for " + (float)event.getDamage() + " [" + ((float)getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + (float)getBukkitLivingEntity().getMaxHealth() + "]"));
+						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SLASHED " + getBukkitLivingEntity().getName() + " for " + df.format(event.getDamage()) + " [" + df.format(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + df.format(getBukkitLivingEntity().getMaxHealth()) + "]"));
 					}
 
+				}
+			}
+			
+			// Everything else
+			if (event.getCause() == DamageCause.ENTITY_ATTACK) {
+				Material materialinhand = player.getInventory().getItemInMainHand().getType();
+				if (materialinhand == null || materialinhand.equals(Material.STICK) || materialinhand.equals(Material.WOOD_SPADE)
+						|| materialinhand.equals(Material.STONE_SPADE) || materialinhand.equals(Material.IRON_SPADE)
+						|| materialinhand.equals(Material.GOLD_SPADE) || materialinhand.equals(Material.DIAMOND_SPADE)
+						|| materialinhand.equals(Material.AIR) || materialinhand.equals(Material.WOOD_SWORD) || 
+						materialinhand.equals(Material.WOOD_AXE)
+						|| materialinhand.equals(Material.STONE_SWORD) || materialinhand.equals(Material.STONE_AXE)
+						|| materialinhand.equals(Material.IRON_SWORD) || materialinhand.equals(Material.IRON_AXE)
+						|| materialinhand.equals(Material.GOLD_SWORD) || materialinhand.equals(Material.GOLD_AXE)
+						|| materialinhand.equals(Material.DIAMOND_SWORD)
+						|| materialinhand.equals(Material.DIAMOND_AXE)
+						|| event.getDamager() instanceof Arrow
+						) 
+				{
+					// already handled in other areas
+				} else {
+					if (attacker instanceof Player)
+					{
+						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You hit " + getBukkitLivingEntity().getName() + " for " + df.format(event.getDamage()) + " [" + df.format(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + df.format(getBukkitLivingEntity().getMaxHealth()) + "]"));
+					}
 				}
 			}
 
@@ -529,7 +559,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					
 					if (attacker instanceof Player)
 					{
-						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You CRUSHED " + getBukkitLivingEntity().getName() + " for " + (float)event.getDamage() + " [" + (float)(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + (float)getBukkitLivingEntity().getMaxHealth() + "]"));
+						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You CRUSHED " + getBukkitLivingEntity().getName() + " for " + df.format(event.getDamage()) + " [" + df.format(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + df.format(getBukkitLivingEntity().getMaxHealth()) + "]"));
 					}
 				}
 			}
