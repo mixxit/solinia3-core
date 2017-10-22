@@ -387,12 +387,12 @@ public class ChannelManager implements IChannelManager {
 		sendToDiscordMC(null,targetChannelId,"Item " + item.getId() + " ("+ item.getDisplayname() + ") Base: " + item.getBasename());
 		sendToDiscordMC(null,targetChannelId,"Damage " + item.getDamage() + " UndeadBaneDmg: " + item.getBaneUndead() + " Worth: $" + item.getWorth());
 		sendToDiscordMC(null,targetChannelId,"Strength: " + item.getStrength() + 
-				" Stamina: " + item.getStrength() + 
-				" Agility: " + item.getStrength() + 
-				" Dexterity: " + item.getStrength() + 
-				" Intelligence: " + item.getStrength() + 
-				" Wisdom: " + item.getStrength() + 
-				" Charisma: " + item.getStrength());
+				" Stamina: " + item.getStamina() + 
+				" Agility: " + item.getAgility() + 
+				" Dexterity: " + item.getDexterity() + 
+				" Intelligence: " + item.getIntelligence() + 
+				" Wisdom: " + item.getWisdom() + 
+				" Charisma: " + item.getCharisma());
 		sendToDiscordMC(null,targetChannelId,"DR: " + item.getDiseaseResist() + " CR: " + item.getColdResist() + " FR: " + item.getFireResist() + " PR: " + item.getPoisonResist()  + " MR: " + item.getMagicResist());
 		sendToDiscordMC(null,targetChannelId,"HPRegen " + item.getHpregen() + " MPRegen: " + item.getMpregen() + " Temporary: " + item.isTemporary() + " Augmentation " + item.isAugmentation() + " Quest: " + item.isQuest());
 		sendToDiscordMC(null,targetChannelId,"Accepts Aug Type: " + item.getAcceptsAugmentationSlotType().name() + " Fits Aug Types: " + item.getAugmentationFitsSlotType().name());
