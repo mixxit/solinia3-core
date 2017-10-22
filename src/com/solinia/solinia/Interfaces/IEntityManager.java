@@ -76,4 +76,6 @@ public interface IEntityManager {
 	void removeMezzed(LivingEntity livingEntity, Timestamp expiretimestamp);
 
 	void doNPCSummon(Plugin plugin);
+
+	void clearEntityFirstEffect(LivingEntity livingEntity);
 }

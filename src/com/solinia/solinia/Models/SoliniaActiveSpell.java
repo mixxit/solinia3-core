@@ -260,8 +260,9 @@ public class SoliniaActiveSpell {
 		case Gate:
 			applyGate(spellEffect,soliniaSpell,casterLevel);
 			return;
-		case CancelMagic
-			: return;
+		case CancelMagic: 
+			applyCancelMagic(spellEffect, soliniaSpell, casterLevel);
+			return;
 		case InvisVsUndead
 			: return;
 		case InvisVsAnimals
@@ -1525,6 +1526,16 @@ public class SoliniaActiveSpell {
 			return (LivingEntity)Bukkit.getEntity(getOwnerUuid());
 		
 		return null;
+	}
+	
+	private void applyCancelMagic(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		try
+		{
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffect(getLivingEntity());
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
 	}
 	
 	private void applyPoisonCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

@@ -494,6 +494,14 @@ public class EntityManager implements IEntityManager {
 		
 		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(type);
 	}
+	
+	@Override
+	public void clearEntityFirstEffect(LivingEntity livingEntity) {
+		if (entitySpells.get(livingEntity.getUniqueId()) == null)
+			return;
+		
+		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpell();
+	}
 
 	@Override
 	public void addTemporaryMerchantItem(int npcid, int itemid, int amount) {

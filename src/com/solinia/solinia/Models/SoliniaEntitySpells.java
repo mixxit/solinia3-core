@@ -267,4 +267,31 @@ public class SoliniaEntitySpells {
 	public void removeAllSpellsOfId(int spellId) {
 		removeSpell(spellId);
 	}
+
+	public void removeFirstSpell() {
+		List<Integer> removeSpells = new ArrayList<Integer>();
+		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
+		
+		boolean foundToRemove = false;
+		for(SoliniaActiveSpell activeSpell : getActiveSpells())
+		{
+			if (foundToRemove == false)
+			{
+				removeSpells.add(activeSpell.getSpellId());
+				foundToRemove = true;
+			} else {
+				updateSpells.add(activeSpell);
+			}
+		}
+		
+		for(Integer spellId : removeSpells)
+		{
+			removeSpell(spellId);
+		}
+		
+		for(SoliniaActiveSpell activeSpell : updateSpells)
+		{
+			activeSpells.put(activeSpell.getSpellId(), activeSpell);
+		}
+	}
 }
