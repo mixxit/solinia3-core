@@ -16,6 +16,10 @@ commands:
     aliases:
     - name
     - nick
+  today:
+    description: Lists todays RP time
+    usage: /today
+    aliases: []
   lastname:
     description: Sets player lastname
     usage: /lastname <lastname>

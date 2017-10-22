@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -18,4 +19,6 @@ public interface IPlayerManager {
 	Integer getApplyingAugmentation(UUID playerUuid);
 	Integer getPlayerActiveBardSong(UUID playerUuid);
 	void setPlayerActiveBardSong(UUID playerUuid, Integer spellId);
+	List<ISoliniaPlayer> getPlayers();
+	List<ISoliniaPlayer> getTopLevelPlayers();
 }

@@ -1,5 +1,8 @@
 package com.solinia.solinia.Managers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,11 +11,24 @@ import org.bukkit.event.EventException;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IChannelManager;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.DiscordChannel;
+
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IMessage;
 
 public class ChannelManager implements IChannelManager {
 
+	private String discordmainchannelid;
+	private String discordadminchannelid;
+	
 	@Override
 	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message) {
 		
@@ -64,9 +80,19 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
-		sendToDiscordMC(source,source.getFullNameWithTitle() + ": " + originalmessage);
+		sendToDiscordMC(source,getDefaultDiscordChannel(),source.getFullNameWithTitle() + ": " + originalmessage);
 	}
 
+	@Override
+	public String getDefaultDiscordChannel() {
+		return this.discordmainchannelid;
+	}
+
+	@Override
+	public String getAdminDiscordChannel() {
+		return this.discordadminchannelid;
+	}
+	
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {
 		String channel = "L";
 		String gender = "U";
@@ -189,23 +215,20 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
-		sendToDiscordMC(source,source.getFullNameWithTitle() + ": " + message);
+		sendToDiscordMC(source,getDefaultDiscordChannel(),source.getFullNameWithTitle() + ": " + message);
 	}
 	
 	@Override
-	public void sendToDiscordMC(ISoliniaPlayer source, String message)
+	public void sendToDiscordMC(ISoliniaPlayer source, String channelId, String message)
 	{
-		System.out.println("sendToDiscordMC called");
-		if(Bukkit.getServer().getPluginManager().getPlugin("DiscordMC")!=null && message != null && !message.equals(""))
+		System.out.println("Dispatching OOC message to discord");
+		try
 		{
-			System.out.println("Dispatching OOC message to discord");
-			try
-			{
-				Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "discord send conversations " + message);
-			} catch (IndexOutOfBoundsException e)
-			{
-				// Skip message
-			}
+			StateManager.getInstance().getDiscordClient().getChannelByID(channelId).sendMessage(message);
+		} catch (Exception e)
+		{
+			// Skip message
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -215,6 +238,277 @@ public class ChannelManager implements IChannelManager {
 			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
 			player.sendMessage(message);
 		}
+	}
+
+	@Override
+	public void sendToGlobalChannel(String name, String message) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			player.sendMessage(name + ":" + message);
+		}
+	}
+
+	@Override
+	public void sendToOps(String name, String message) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (!player.isOp())
+				continue;
+			
+			player.sendMessage(name + ":" + message);
+		}
+	}
+
+	@Override
+	public void handleDiscordCommand(DiscordChannel discordChannel, MessageReceivedEvent event) {
+		if (!event.getMessage().getContent().startsWith("?"))
+			return;
+		
+		String[] commands = event.getMessage().getContent().split(" ");
+		String command = commands[0];
+		switch(command)
+		{
+			case "?top":
+				sendTopToDiscordChannel(discordChannel);
+				break;
+			case "?item":
+				if (commands.length > 1)
+				{
+					String search = "";
+					for(int i = 0; i < commands.length; i++)
+					{
+						if (i == 0)
+							continue;
+						
+						search += commands[i] + " ";
+					}
+					sendItemListToDiscordChannel(discordChannel,search.trim());
+				}
+				break;
+			case "?loot":
+				if (commands.length > 1)
+				{
+					String search = "";
+					for(int i = 0; i < commands.length; i++)
+					{
+						if (i == 0)
+							continue;
+						
+						search += commands[i] + " ";
+					}
+					sendLootListToDiscordChannel(discordChannel,search.trim());
+				}
+				break;
+			default:
+				return;
+		}
+	}
+
+	private void sendItemListToDiscordChannel(DiscordChannel discordChannel, String itemMatch) {
+		try
+		{
+			String targetChannelId = getDefaultDiscordChannel();
+			if (discordChannel.equals(DiscordChannel.ADMIN))
+				targetChannelId = getAdminDiscordChannel();
+			
+			int itemId = 0;
+			try
+			{
+				itemId = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(itemMatch)).getId();
+			} catch (Exception e)
+			{
+				
+			}
+			
+			if (itemId > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+				sendItemToDiscordChannel(discordChannel,item);
+				return;
+			}
+			
+			if (itemMatch.length() < 3)
+			{
+				sendToDiscordMC(null,targetChannelId,"Item search must be at least 3 characters: " + itemMatch);
+				return;
+			}
+			
+			List<ISoliniaItem> items = StateManager.getInstance().getConfigurationManager().getItemsByPartialName(itemMatch);
+			
+			if (items.size() > 20)
+			{
+				sendToDiscordMC(null,targetChannelId,"Item matched more than 20 items, please be more specific than " + itemMatch);
+				return;
+			}
+			
+			if (items.size() != 1)
+			{
+				List<String> matchingItemList = new ArrayList<String>();
+				String currentLine = "";
+				for(ISoliniaItem item : items)
+				{
+					if ((currentLine + item.getDisplayname() + " ").length() > 2000)
+					{
+						matchingItemList.add(currentLine);
+						currentLine = "";
+					}
+					
+					currentLine += item.getDisplayname() + " ";
+				}
+				
+				if (!currentLine.equals(""))
+				{
+					matchingItemList.add(currentLine);
+				}
+				
+				for(String line : matchingItemList)
+				{
+					sendToDiscordMC(null,targetChannelId,"Item [" + itemMatch + "] matched with: " + line);
+				}
+			} else {
+				for(ISoliniaItem item : items)
+				{
+					sendItemToDiscordChannel(discordChannel, item);
+				}
+			}
+			
+		} catch (CoreStateInitException e)
+		{
+			// ignore it
+		}
+		
+	}
+
+	
+	private void sendItemToDiscordChannel(DiscordChannel discordChannel, ISoliniaItem item) {
+		String targetChannelId = getDefaultDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = getAdminDiscordChannel();
+		
+		
+		sendToDiscordMC(null,targetChannelId,"Item " + item.getId() + " ("+ item.getDisplayname() + ") Base: " + item.getBasename());
+		sendToDiscordMC(null,targetChannelId,"Damage " + item.getDamage() + " UndeadBaneDmg: " + item.getBaneUndead() + " Worth: $" + item.getWorth());
+		sendToDiscordMC(null,targetChannelId,"Strength: " + item.getStrength() + 
+				" Stamina: " + item.getStrength() + 
+				" Agility: " + item.getStrength() + 
+				" Dexterity: " + item.getStrength() + 
+				" Intelligence: " + item.getStrength() + 
+				" Wisdom: " + item.getStrength() + 
+				" Charisma: " + item.getStrength());
+		sendToDiscordMC(null,targetChannelId,"DR: " + item.getDiseaseResist() + " CR: " + item.getColdResist() + " FR: " + item.getFireResist() + " PR: " + item.getPoisonResist()  + " MR: " + item.getMagicResist());
+		sendToDiscordMC(null,targetChannelId,"HPRegen " + item.getHpregen() + " MPRegen: " + item.getMpregen() + " Temporary: " + item.isTemporary() + " Augmentation " + item.isAugmentation() + " Quest: " + item.isQuest());
+		sendToDiscordMC(null,targetChannelId,"Accepts Aug Type: " + item.getAcceptsAugmentationSlotType().name() + " Fits Aug Types: " + item.getAugmentationFitsSlotType().name());
+	}
+
+	private void sendLootListToDiscordChannel(DiscordChannel discordChannel, String itemMatch) {
+		try
+		{
+			String targetChannelId = getDefaultDiscordChannel();
+			if (discordChannel.equals(DiscordChannel.ADMIN))
+				targetChannelId = getAdminDiscordChannel();
+			
+			if (itemMatch.length() < 3)
+			{
+				sendToDiscordMC(null,targetChannelId,"Item search must be at least 3 characters: " + itemMatch);
+				return;
+			}
+			
+			List<ISoliniaItem> items = StateManager.getInstance().getConfigurationManager().getItemsByPartialName(itemMatch);
+			
+			if (items.size() < 1)
+			{
+				sendToDiscordMC(null,targetChannelId,"Could not find item: " + itemMatch);
+				return;
+			}
+			
+			if (items.size() > 1)
+			{
+				sendToDiscordMC(null,targetChannelId,"More than one item found with this string, please be more specific: " + itemMatch);
+				return;
+			}
+			
+			String itemname = "";
+			for(ISoliniaItem item : items)
+			{
+				itemname = item.getDisplayname();
+				List<Integer> lootDropIds = StateManager.getInstance().getConfigurationManager().getLootDropIdsWithItemId(item.getId());
+				
+				if (lootDropIds.size() < 1)
+				{
+					sendToDiscordMC(null,targetChannelId,"Item [" + itemname + "] not found in any loot drops");
+					return;
+				}
+				
+				List<Integer> lootTableIds = StateManager.getInstance().getConfigurationManager().getLootTablesWithLootDrops(lootDropIds);
+				
+				if (lootTableIds.size() < 1)
+				{
+					sendToDiscordMC(null,targetChannelId,"Item [" + itemname + "] not found in any loot tables");
+					return;
+				}
+				
+				List<String> matchingNpcList = new ArrayList<String>();
+				String currentLine = "";
+				
+				for(ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
+				{
+					if (!lootTableIds.contains(npc.getLoottableid()))
+						continue;
+					
+					if ((currentLine + npc.getName() + " ").length() > 2000)
+					{
+						matchingNpcList.add(currentLine);
+						currentLine = "";
+					}
+					
+					currentLine += npc.getName() + " ";
+				}
+				
+				if (!currentLine.equals(""))
+				{
+					matchingNpcList.add(currentLine);
+				}
+				
+				for(String line : matchingNpcList)
+				{
+					sendToDiscordMC(null,targetChannelId,"Item [" + itemname + "] found on: " + line);
+				}
+			}
+			
+		} catch (CoreStateInitException e)
+		{
+			// ignore it
+		}
+		
+	}
+
+	private void sendTopToDiscordChannel(DiscordChannel discordChannel) {
+		try
+		{
+			String targetChannelId = getDefaultDiscordChannel();
+			if (discordChannel.equals(DiscordChannel.ADMIN))
+				targetChannelId = getAdminDiscordChannel();
+			
+			int rank = 1;
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getTopLevelPlayers())
+			{
+				sendToDiscordMC(null,targetChannelId,rank + ": " + player.getFullName() + " " + player.getLevel() + " level " + player.getClassObj().getName());
+				rank++;
+			}
+			
+		} catch (CoreStateInitException e)
+		{
+			// ignore it
+		}
+		
+	}
+
+	@Override
+	public void setDiscordMainChannelId(String discordmainchannelid) {
+		this.discordmainchannelid = discordmainchannelid;
+	}
+
+	@Override
+	public void setDiscordAdminChannelId(String discordadminchannelid) {
+		this.discordadminchannelid = discordadminchannelid;
 	}
 
 }

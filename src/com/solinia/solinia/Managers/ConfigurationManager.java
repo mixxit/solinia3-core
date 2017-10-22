@@ -32,7 +32,9 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
@@ -116,6 +118,62 @@ public class ConfigurationManager implements IConfigurationManager {
 			}
 		}
 		System.out.println("* AA Rank and SpelltoAARank cache has been reset");
+	}
+	
+	@Override
+	public List<Integer> getLootTablesWithLootDrops(List<Integer> lootDropIds)
+	{
+		List<Integer> lootTables = new ArrayList<Integer>();
+		
+		try
+		{
+			// Find all loot tables with an item in its list
+			for (ISoliniaLootTable soliniaLootTable : StateManager.getInstance().getConfigurationManager()
+					.getLootTables()) {
+				for (ISoliniaLootTableEntry soliniaLootTableEntry : soliniaLootTable.getEntries()) {
+					if (!lootDropIds.contains(soliniaLootTableEntry.getLootdropid()))
+						continue;
+
+					if (lootTables.contains(soliniaLootTable.getId()))
+						continue;
+
+					lootTables.add(soliniaLootTable.getId());
+				}
+			}
+
+		} catch (CoreStateInitException e)
+		{
+			// do nothing
+			System.out.println(e.getMessage());
+		}
+		
+		return lootTables;
+	}
+	
+	@Override
+	public List<Integer> getLootDropIdsWithItemId(int itemId)
+	{
+		List<Integer> lootDrops = new ArrayList<Integer>();
+		
+		try
+		{
+			for(ISoliniaLootDrop lootDrop : StateManager.getInstance().getConfigurationManager().getLootDrops())
+			{
+				for(ISoliniaLootDropEntry lootDropEntry : lootDrop.getEntries())
+				{
+					if (lootDropEntry.getItemid() != itemId)
+						continue;
+					
+					if (!lootDrops.contains(lootDrop.getId()))
+						lootDrops.add(lootDrop.getId());
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			// do nothing
+		}
+		
+		return lootDrops;
 	}
 
 	@Override
@@ -831,5 +889,10 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public void editNpcTriggerEvent(int npcid, String triggertext, String setting, String value) throws InvalidNPCEventSettingException {
 		getNPC(npcid).editTriggerEventSetting(triggertext,setting, value);
+	}
+
+	@Override
+	public List<ISoliniaItem> getItemsByPartialName(String itemMatch) {
+		return itemRepository.query(q -> q.getDisplayname().toUpperCase().contains(itemMatch.toUpperCase()));
 	}
 }

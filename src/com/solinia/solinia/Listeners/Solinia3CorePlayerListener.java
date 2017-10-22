@@ -60,7 +60,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			StateManager.getInstance().removePlayerFromGroup(event.getPlayer());
 		}
 		
-		StateManager.getInstance().getChannelManager().sendToDiscordMC(null,event.getPlayer().getName() + " has quit the game");
+		StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),event.getPlayer().getName() + " has quit the game");
 	}
 
 	@EventHandler
@@ -379,7 +379,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			else
 				solplayer.setChosenRace(false);
 			
-			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game");
+			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game");
 			
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");

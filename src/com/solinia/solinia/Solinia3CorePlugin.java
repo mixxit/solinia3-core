@@ -1,6 +1,7 @@
 package com.solinia.solinia;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -78,11 +79,13 @@ import com.solinia.solinia.Commands.CommandSpawnItem;
 import com.solinia.solinia.Commands.CommandSpawnRandomItem;
 import com.solinia.solinia.Commands.CommandStats;
 import com.solinia.solinia.Commands.CommandTarot;
+import com.solinia.solinia.Commands.CommandToday;
 import com.solinia.solinia.Commands.CommandToggleAA;
 import com.solinia.solinia.Commands.CommandTrance;
 import com.solinia.solinia.Commands.CommandUpdateSpawnGroupLoc;
 import com.solinia.solinia.Commands.CommandWho;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Listeners.DiscordListener;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
 import com.solinia.solinia.Listeners.Solinia3CoreItemPickupListener;
 import com.solinia.solinia.Listeners.Solinia3CoreNPCUpdatedListener;
@@ -123,6 +126,10 @@ import com.solinia.solinia.Timers.StateCommitTimer;
 
 import me.dadus33.chatitem.api.ChatItemAPI;
 import net.milkbowl.vault.economy.Economy;
+import sx.blah.discord.api.ClientBuilder;
+import sx.blah.discord.api.IDiscordClient;
+import sx.blah.discord.api.events.EventDispatcher;
+import sx.blah.discord.util.DiscordException;
 
 public class Solinia3CorePlugin extends JavaPlugin {
 
@@ -134,24 +141,88 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 	private NPCRandomChatTimer npcRandomChatTimer;
 	private PetCheckTickTimer petCheckTickTimer;
-
+	FileConfiguration config = getConfig();
+	
 	private Economy economy;
 	private ChatItemAPI ciApi;
 	private PerkLoadTimer perkLoadTimer;
+	private IDiscordClient discordClient;
+	
+	String discordbottoken = "";
+	String discordmainchannelid;
+	String discordadminchannelid;
 
 	@Override
 	public void onEnable() {
 		System.out.println("[Solinia3Core] Plugin Enabled");
 		createConfigDir();
+		
+		config.addDefault("discordbottoken", "");
+		config.addDefault("discordmainchannelid", "");
+		config.addDefault("discordadminchannelid", "");
+		config.options().copyDefaults(true);
+		saveConfig();
+		
+		if (config.getString("discordbottoken").equals(""))
+		{
+			System.out.println("Config for discordbottoken is invalid");
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		}
+		
+		if (config.getString("discordmainchannelid").equals(""))
+		{
+			System.out.println("Config for discordmainchannelid is invalid");
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		}
+		
+		if (config.getString("discordadminchannelid").equals(""))
+		{
+			System.out.println("Config for discordadminchannelid is invalid");
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		}
+		
+		discordbottoken = config.getString("discordbottoken");
+		discordmainchannelid = config.getString("discordmainchannelid");
+		discordadminchannelid = config.getString("discordadminchannelid");
+		
 		initialise();
 		registerEvents();
 
 		setupEconomy();
 		setupChatItem();
+		setupDiscordClient();
 
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setChatItem(this.ciApi);
+		StateManager.getInstance().setDiscordClient(this.discordClient);
+		
 	}
+	
+	private void setupDiscordClient() {
+		this.discordClient = createClient(this.discordbottoken, true);
+		EventDispatcher dispatcher = this.discordClient.getDispatcher(); 
+        dispatcher.registerListener(new DiscordListener(this));
+
+	}
+
+	public static IDiscordClient createClient(String token, boolean login) 
+	{ 
+        ClientBuilder clientBuilder = new ClientBuilder();
+        clientBuilder.withToken(token);
+        try {
+            if (login) {
+                return clientBuilder.login();
+            } else {
+                return clientBuilder.build();
+            }
+        } catch (DiscordException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 	@Override
 	public void onDisable() {
@@ -249,6 +320,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 					perkrepo, aaabilityrepo, patchesrepo, questsrepo);
 
 			ChannelManager channelManager = new ChannelManager();
+			channelManager.setDiscordMainChannelId(discordmainchannelid);
+			channelManager.setDiscordAdminChannelId(discordadminchannelid);
 
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager);
 
@@ -372,6 +445,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createquest").setExecutor(new CommandCreateQuest());
 		this.getCommand("quests").setExecutor(new CommandQuests());
 		this.getCommand("npcgive").setExecutor(new CommandNPCGive());		
+		this.getCommand("today").setExecutor(new CommandToday());		
 	}
 
 	private void createConfigDir() {

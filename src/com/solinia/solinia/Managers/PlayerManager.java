@@ -2,6 +2,9 @@ package com.solinia.solinia.Managers;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,6 +52,22 @@ public class PlayerManager implements IPlayerManager {
 		{
 			return null;
 		}
+	}
+	
+	@Override
+	public List<ISoliniaPlayer> getPlayers() {
+		return repository.query(p ->p.getUUID() != null);
+	}
+	
+	@Override
+	public List<ISoliniaPlayer> getTopLevelPlayers() {
+		List<ISoliniaPlayer> playerList = getPlayers();
+		Collections.sort(playerList,(o1, o2) -> o1.getExperience().compareTo(o2.getExperience()));
+		Collections.reverse(playerList);
+		int to = 5;
+		if (playerList.size() < 5)
+			to = playerList.size();
+		return playerList.subList(0, 4);
 	}
 	
 	@Override

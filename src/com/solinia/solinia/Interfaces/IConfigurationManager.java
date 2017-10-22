@@ -244,4 +244,10 @@ public interface IConfigurationManager {
 			throws NumberFormatException, CoreStateInitException, InvalidLootTableSettingException;
 
 	void editNpcTriggerEvent(int npcid, String triggertext, String setting, String value) throws InvalidNPCEventSettingException;
+
+	List<Integer> getLootDropIdsWithItemId(int itemId);
+
+	List<Integer> getLootTablesWithLootDrops(List<Integer> lootDropIds);
+
+	List<ISoliniaItem> getItemsByPartialName(String itemMatch);
 }

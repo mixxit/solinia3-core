@@ -33,6 +33,7 @@ import me.dadus33.chatitem.api.ChatItemAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import sx.blah.discord.api.IDiscordClient;
 
 public class CoreState {
 	private boolean isInitialised = false;
@@ -47,6 +48,7 @@ public class CoreState {
 	private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
 	private String instanceGuid;
 	private ChatItemAPI chatitemapi;
+	private IDiscordClient discordClient;
 
 	public CoreState()
 	{
@@ -464,5 +466,13 @@ public class CoreState {
 
 	public String getInstanceGuid() {
 		return this.instanceGuid;
+	}
+
+	public void setDiscordClient(IDiscordClient discordClient) {
+		this.discordClient = discordClient;
+	}
+
+	public IDiscordClient getDiscordClient() {
+		return this.discordClient;
 	}
 }

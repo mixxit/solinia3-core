@@ -267,8 +267,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 								if (procSpell.getMana() > 0)
 									if (itemUseSuccess && (attacker instanceof LivingEntity)) {
-										SoliniaPlayerAdapter.Adapt((Player) attacker)
-												.reducePlayerMana(procSpell.getMana());
+										if (attacker instanceof Player)
+										{
+											SoliniaPlayerAdapter.Adapt((Player) attacker).reducePlayerMana(procSpell.getMana());
+										}
 									}
 							}
 						}

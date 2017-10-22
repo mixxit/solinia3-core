@@ -336,7 +336,7 @@ public class SoliniaActiveSpell {
 			applyLevitateSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Illusion: 
-			applyConfusion(spellEffect,soliniaSpell,casterLevel);
+			applyIllusion(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case DamageShield: 
 			// This is passive
