@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import com.solinia.solinia.Models.DiscordChannel;
+import com.solinia.solinia.Models.QueuedDiscordMessage;
 
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
@@ -31,5 +32,8 @@ public interface IChannelManager {
 	void setDiscordMainChannelId(String discordmainchannelid);
 
 	void setDiscordAdminChannelId(String discordadminchannelid);
+	void sendToDiscordQueuedMessage(Integer messageId);
+
+	void processNextDiscordMessage();
 
 }

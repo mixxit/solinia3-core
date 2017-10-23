@@ -114,6 +114,7 @@ import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
+import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
 import com.solinia.solinia.Timers.PerkLoadTimer;
@@ -141,6 +142,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 	private NPCRandomChatTimer npcRandomChatTimer;
 	private PetCheckTickTimer petCheckTickTimer;
+	private DiscordMessageTimer discordMessageTimer;
 	FileConfiguration config = getConfig();
 	
 	private Economy economy;
@@ -352,6 +354,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			petCheckTickTimer = new PetCheckTickTimer();
 			petCheckTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+			
+			discordMessageTimer = new DiscordMessageTimer();
+			discordMessageTimer.runTaskTimer(this, 20L, 20L);
+			
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

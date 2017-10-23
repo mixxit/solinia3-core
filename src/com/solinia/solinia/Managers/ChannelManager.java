@@ -1,7 +1,11 @@
 package com.solinia.solinia.Managers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,14 +24,17 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.DiscordChannel;
+import com.solinia.solinia.Models.QueuedDiscordMessage;
 
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;
 
 public class ChannelManager implements IChannelManager {
 
+	private AtomicInteger discordMessageCount = new AtomicInteger(0);
 	private String discordmainchannelid;
 	private String discordadminchannelid;
+	private ConcurrentHashMap<Integer, QueuedDiscordMessage> queuedDiscordMessages = new ConcurrentHashMap<Integer, QueuedDiscordMessage>();
 	
 	@Override
 	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message) {
@@ -219,17 +226,37 @@ public class ChannelManager implements IChannelManager {
 	}
 	
 	@Override
+	public void sendToDiscordQueuedMessage(Integer messageId)
+	{
+		System.out.println("Sending message " + messageId);
+		QueuedDiscordMessage message = queuedDiscordMessages.get(messageId);
+		
+		if (message != null)
+		{
+			System.out.println("Dispatching queued message to discord");
+			try
+			{
+				
+				StateManager.getInstance().getDiscordClient().getChannelByID(message.getChannelId()).sendMessage(message.getMessage());
+			} catch (Exception e)
+			{
+				// Skip message
+				System.out.println(e.getMessage());
+			}
+			
+			queuedDiscordMessages.remove(messageId);
+		}
+	}
+	
+	@Override
 	public void sendToDiscordMC(ISoliniaPlayer source, String channelId, String message)
 	{
-		System.out.println("Dispatching OOC message to discord");
-		try
-		{
-			StateManager.getInstance().getDiscordClient().getChannelByID(channelId).sendMessage(message);
-		} catch (Exception e)
-		{
-			// Skip message
-			System.out.println(e.getMessage());
-		}
+		UUID uuid = null;
+		if (source != null)
+			uuid = source.getUUID();
+		QueuedDiscordMessage discordMessage = new QueuedDiscordMessage(uuid, channelId, message);
+		int nextMessage = discordMessageCount.getAndIncrement();
+		queuedDiscordMessages.put(nextMessage,discordMessage);
 	}
 
 	@Override
@@ -246,7 +273,7 @@ public class ChannelManager implements IChannelManager {
 			player.sendMessage(name + ":" + message);
 		}
 	}
-
+	
 	@Override
 	public void sendToOps(String name, String message) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -509,6 +536,16 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void setDiscordAdminChannelId(String discordadminchannelid) {
 		this.discordadminchannelid = discordadminchannelid;
+	}
+
+	@Override
+	public void processNextDiscordMessage() {
+		List<Integer> messageIds = Collections.list(this.queuedDiscordMessages.keys());
+		if (messageIds.size() < 1)
+			return;
+		
+		int minIndex = Collections.min(messageIds);
+		sendToDiscordQueuedMessage(minIndex);
 	}
 
 }

@@ -67,7 +67,8 @@ public class PlayerManager implements IPlayerManager {
 		int to = 5;
 		if (playerList.size() < 5)
 			to = playerList.size();
-		return playerList.subList(0, 4);
+		
+		return playerList.subList(0, to);
 	}
 	
 	@Override
