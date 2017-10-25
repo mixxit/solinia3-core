@@ -55,8 +55,8 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            if (latestitem.getDiscoverer() == null || latestitem.getDiscoverer().equals(""))
 	            {
 	            	latestitem.setDiscoverer(e.getPlayer().getCustomName());
-	            	e.getPlayer().getServer().broadcastMessage(ChatColor.YELLOW + "* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
-	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
+	            	e.getPlayer().getServer().broadcastMessage(ChatColor.YELLOW + "* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
+	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
 		    }
 	        
@@ -68,8 +68,8 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	        	if (latestitem.getDiscoverer() == null || latestitem.getDiscoverer().equals(""))
 	            {
 	            	latestitem.setDiscoverer(e.getPlayer().getCustomName());
-	            	e.getPlayer().getServer().broadcastMessage(ChatColor.YELLOW + "* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
-	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
+	            	e.getPlayer().getServer().broadcastMessage(ChatColor.YELLOW + "* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
+	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
 	        	
 	            if (pickedUpItemStack != null)
