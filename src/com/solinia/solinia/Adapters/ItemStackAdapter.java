@@ -228,6 +228,8 @@ public class ItemStackAdapter {
 			loretxt.addAll(generateConsumableAbilityLoreText(soliniaItem));
 	    }
 		
+		loretxt.add("Discovered By: " + soliniaItem.getDiscoverer());
+		
 		if (soliniaItem.getWorth() > 0)
 		{
 			loretxt.add(ChatColor.WHITE + "Worth: " + ChatColor.YELLOW + soliniaItem.getWorth()

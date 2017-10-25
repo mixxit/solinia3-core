@@ -213,4 +213,8 @@ public interface ISoliniaItem {
 	AugmentationSlotType getAugmentationFitsSlotType();
 
 	void setAugmentationFitsSlotType(AugmentationSlotType augmentationFitsSlotType);
+
+	String getDiscoverer();
+
+	void setDiscoverer(String discoverer);
 }

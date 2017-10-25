@@ -72,6 +72,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isCrafting = false;
 	private boolean isQuest = false;
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
+	private String discoverer;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -769,5 +770,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setAugmentationFitsSlotType(AugmentationSlotType augmentationFitsSlotType) {
 		this.augmentationFitsSlotType = augmentationFitsSlotType;
+	}
+
+	@Override
+	public String getDiscoverer() {
+		return discoverer;
+	}
+
+	@Override
+	public void setDiscoverer(String discoverer) {
+		this.discoverer = discoverer;
 	}
 }

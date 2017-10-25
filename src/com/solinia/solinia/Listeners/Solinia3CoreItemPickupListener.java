@@ -51,12 +51,27 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            		e.getItem().remove();
 	            	}
 	            }
+	            
+	            if (latestitem.getDiscoverer().equals(""))
+	            {
+	            	latestitem.setDiscoverer(e.getPlayer().getDisplayName());
+	            	e.getPlayer().getServer().broadcastMessage(ChatColor.YELLOW + "* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
+	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
+	            }
 		    }
 	        
 	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
 		    {
 	        	Map<Enchantment, Integer> oldenchantments = pickedUpItemStack.getEnchantments();
 	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
+	        	
+	        	if (latestitem.getDiscoverer().equals(""))
+	            {
+	            	latestitem.setDiscoverer(e.getPlayer().getDisplayName());
+	            	e.getPlayer().getServer().broadcastMessage(ChatColor.YELLOW + "* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
+	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
+	            }
+	        	
 	            if (pickedUpItemStack != null)
 	            {
 	            	if (latestitem != null)
