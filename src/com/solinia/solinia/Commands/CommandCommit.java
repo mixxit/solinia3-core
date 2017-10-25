@@ -15,11 +15,12 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Providers.DiscordCommandSender;
 
 public class CommandCommit implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender)) {
+		if (!(sender instanceof Player) && !(sender instanceof CommandSender)) {
 			sender.sendMessage("This is a Player/Console only command");
 			return false;
 		}
@@ -43,7 +44,7 @@ public class CommandCommit implements CommandExecutor {
 			return true;
 		}
 
-		if (args.length > 0 && sender instanceof ConsoleCommandSender) {
+		if (args.length > 0 && (sender instanceof ConsoleCommandSender || sender instanceof DiscordCommandSender)) {
 			if (args[0].equals("provider")) {
 				try {
 					System.out.println("Recommiting all NPCs via provider");

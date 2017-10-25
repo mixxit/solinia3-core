@@ -372,13 +372,13 @@ public class ChannelManager implements IChannelManager {
 				String currentLine = "";
 				for(ISoliniaItem item : items)
 				{
-					if ((currentLine + item.getDisplayname() + " ").length() > 2000)
+					if ((currentLine + "[" + item.getId() + "] " + item.getDisplayname() + " ").length() > 2000)
 					{
 						matchingItemList.add(currentLine);
 						currentLine = "";
 					}
 					
-					currentLine += item.getDisplayname() + " ";
+					currentLine += "[" + item.getId() + "] " + item.getDisplayname() + " ";
 				}
 				
 				if (!currentLine.equals(""))
@@ -439,6 +439,17 @@ public class ChannelManager implements IChannelManager {
 			}
 			
 			List<ISoliniaItem> items = StateManager.getInstance().getConfigurationManager().getItemsByPartialName(itemMatch);
+			
+			int itemIdLookup = 0;
+			try
+			{
+				itemIdLookup = Integer.parseInt(itemMatch);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemIdLookup);
+				items.add(item);
+			} catch (Exception e)
+			{
+				
+			}
 			
 			if (items.size() < 1)
 			{

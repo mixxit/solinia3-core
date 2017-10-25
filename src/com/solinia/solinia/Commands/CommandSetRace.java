@@ -14,13 +14,14 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Providers.DiscordCommandSender;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandSetRace implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
+		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 		
 		sender.sendMessage("See /raceinfo for more information");
@@ -41,7 +42,7 @@ public class CommandSetRace implements CommandExecutor {
 			return false;
 		}
 		
-		if (sender instanceof ConsoleCommandSender)
+		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordCommandSender))
 		{
 			sender.sendMessage(racelist);
 			return true;

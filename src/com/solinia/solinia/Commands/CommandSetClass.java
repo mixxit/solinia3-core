@@ -16,6 +16,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Providers.DiscordCommandSender;
 
 public class CommandSetClass implements CommandExecutor {
 
@@ -30,7 +31,7 @@ public class CommandSetClass implements CommandExecutor {
 	        List<ISoliniaClass> pros = new ArrayList<ISoliniaClass>();
 	        List<ISoliniaClass> rawpros = StateManager.getInstance().getConfigurationManager().getClasses();
 	        
-	        if (sender instanceof ConsoleCommandSender)
+	        if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordCommandSender))
 			{
 				String tmplist = "";
 				for(ISoliniaClass pro : rawpros)

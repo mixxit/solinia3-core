@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Providers.DiscordCommandSender;
 
 public class CommandOoc implements CommandExecutor {
 	@Override
@@ -34,7 +35,7 @@ public class CommandOoc implements CommandExecutor {
 			}
             return true;
 		} else {
-			if (sender instanceof ConsoleCommandSender)
+			if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordCommandSender))
 			{
 				StringBuilder builder = new StringBuilder();
 	            for (String value : args) {

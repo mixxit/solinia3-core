@@ -17,7 +17,7 @@ import com.solinia.solinia.Models.SoliniaNPCEventHandler;
 public class CommandCreateNPCEvent implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
+		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 
 		if (sender instanceof Player) {

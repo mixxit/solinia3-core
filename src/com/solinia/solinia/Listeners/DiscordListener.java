@@ -1,8 +1,11 @@
 package com.solinia.solinia.Listeners;
 
+import org.bukkit.Bukkit;
+
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.DiscordChannel;
+import com.solinia.solinia.Providers.DiscordCommandSender;
 
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
@@ -38,7 +41,20 @@ public class DiscordListener {
 		{
 			if (event.getMessage().getContent().startsWith("?"))
 			{
-				StateManager.getInstance().getChannelManager().handleDiscordCommand(DiscordChannel.ADMIN,event);
+				String[] words = event.getMessage().getContent().split(" "); 
+				
+				String command = "";
+				for (int i = 0; i < words.length; i++)
+				{
+					if (i == 0)
+					{
+						command += words[i].replace("?","") + " ";
+					} else {
+						command += words[i] + " ";
+					}
+				}
+				
+				Bukkit.getServer().dispatchCommand(StateManager.getInstance().getDiscordCommandSender(), command.trim());
 				
 			} else {
 				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent());

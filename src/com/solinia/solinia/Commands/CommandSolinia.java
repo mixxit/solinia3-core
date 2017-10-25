@@ -7,6 +7,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Providers.DiscordCommandSender;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandSolinia implements CommandExecutor {
@@ -22,7 +23,7 @@ public class CommandSolinia implements CommandExecutor {
 			e.printStackTrace();
 		}
 		
-		if (sender instanceof ConsoleCommandSender)
+		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordCommandSender))
 		{
 			Utils.Patcher();
 		}

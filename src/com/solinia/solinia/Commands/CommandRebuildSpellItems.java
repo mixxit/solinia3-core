@@ -18,7 +18,7 @@ import com.solinia.solinia.Models.SoliniaSpellClass;
 public class CommandRebuildSpellItems implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
+		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 		{
 			sender.sendMessage("This is a Player/Console only command");
 			return false;
