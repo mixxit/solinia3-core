@@ -72,7 +72,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isCrafting = false;
 	private boolean isQuest = false;
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
-	private String discoverer;
+	private String discoverer = "";
 
 	@Override
 	public ItemStack asItemStack() {

@@ -52,7 +52,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	}
 	            }
 	            
-	            if (latestitem.getDiscoverer().equals(""))
+	            if (latestitem.getDiscoverer() == null || latestitem.getDiscoverer().equals(""))
 	            {
 	            	latestitem.setDiscoverer(e.getPlayer().getDisplayName());
 	            	e.getPlayer().getServer().broadcastMessage(ChatColor.YELLOW + "* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
@@ -65,7 +65,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	        	Map<Enchantment, Integer> oldenchantments = pickedUpItemStack.getEnchantments();
 	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
 	        	
-	        	if (latestitem.getDiscoverer().equals(""))
+	        	if (latestitem.getDiscoverer() == null || latestitem.getDiscoverer().equals(""))
 	            {
 	            	latestitem.setDiscoverer(e.getPlayer().getDisplayName());
 	            	e.getPlayer().getServer().broadcastMessage(ChatColor.YELLOW + "* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getDisplayName() + "!");
