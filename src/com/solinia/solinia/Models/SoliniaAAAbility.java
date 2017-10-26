@@ -13,6 +13,7 @@ public class SoliniaAAAbility implements ISoliniaAAAbility {
 	private String name;
 	private List<String> classes;
 	private List<ISoliniaAARank> ranks = new ArrayList<ISoliniaAARank>();
+	private boolean isEnabled = false;
 	
 	@Override
 	public String getSysname() {
@@ -76,5 +77,15 @@ public class SoliniaAAAbility implements ISoliniaAAAbility {
 			return true;
 		
 		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	@Override
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 }

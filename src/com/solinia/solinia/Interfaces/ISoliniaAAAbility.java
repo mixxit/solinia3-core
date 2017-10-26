@@ -26,4 +26,8 @@ public interface ISoliniaAAAbility {
 
 	boolean canClassUseAbility(ISoliniaClass iSoliniaClass);
 
+	boolean isEnabled();
+
+	void setEnabled(boolean isEnabled);
+
 }

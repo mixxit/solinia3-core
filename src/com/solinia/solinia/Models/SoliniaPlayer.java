@@ -1187,6 +1187,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean canUseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {
+		if (!ability.isEnabled())
+			return false;
+		
 		if (!ability.canClassUseAbility(getClassObj()))
 			return false;
 			
