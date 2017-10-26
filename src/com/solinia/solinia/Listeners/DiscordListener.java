@@ -5,11 +5,10 @@ import org.bukkit.Bukkit;
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.DiscordChannel;
-import com.solinia.solinia.Providers.DiscordCommandSender;
-
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IRole;
 
 public class DiscordListener {
 	Solinia3CorePlugin plugin;
@@ -37,7 +36,16 @@ public class DiscordListener {
 			}
 		} 
 		
-		if (event.getChannel().getID().equals(StateManager.getInstance().getChannelManager().getAdminDiscordChannel()))
+		IRole role = null;
+		for(IRole currentRole : event.getGuild().getRoles())
+		{
+			if (!currentRole.getName().equals("Admin"))
+				continue;
+			
+			role = currentRole;
+		}
+		
+		if (event.getAuthor().getRolesForGuild(event.getGuild()).contains(role))
 		{
 			if (event.getMessage().getContent().startsWith("?"))
 			{
@@ -54,7 +62,12 @@ public class DiscordListener {
 					}
 				}
 				
-				Bukkit.getServer().dispatchCommand(StateManager.getInstance().getDiscordCommandSender(), command.trim());
+				if (event.getChannel().getID().equals(StateManager.getInstance().getChannelManager().getDefaultDiscordChannel()))
+				{
+					Bukkit.getServer().dispatchCommand(StateManager.getInstance().getDiscordDefaultChannelCommandSender(), command.trim());
+				} else {
+					Bukkit.getServer().dispatchCommand(StateManager.getInstance().getDiscordAdminChannelCommandSender(), command.trim());
+				}
 				
 			} else {
 				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent());

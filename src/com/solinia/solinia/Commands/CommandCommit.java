@@ -15,7 +15,8 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Providers.DiscordCommandSender;
+import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
+import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 
 public class CommandCommit implements CommandExecutor {
 	@Override
@@ -44,7 +45,7 @@ public class CommandCommit implements CommandExecutor {
 			return true;
 		}
 
-		if (args.length > 0 && (sender instanceof ConsoleCommandSender || sender instanceof DiscordCommandSender)) {
+		if (args.length > 0 && (sender instanceof ConsoleCommandSender || sender instanceof DiscordDefaultChannelCommandSender || sender instanceof DiscordAdminChannelCommandSender)) {
 			if (args[0].equals("provider")) {
 				try {
 					System.out.println("Recommiting all NPCs via provider");

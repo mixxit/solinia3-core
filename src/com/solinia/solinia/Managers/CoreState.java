@@ -26,7 +26,8 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.WorldWidePerk;
-import com.solinia.solinia.Providers.DiscordCommandSender;
+import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
+import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -50,14 +51,16 @@ public class CoreState {
 	private String instanceGuid;
 	private ChatItemAPI chatitemapi;
 	private IDiscordClient discordClient;
-	private DiscordCommandSender discordCommandSender;
+	private DiscordAdminChannelCommandSender discordAdminChannelCommandSender;
+	private DiscordDefaultChannelCommandSender discordDefaultChannelCommandSender;
 
 	public CoreState()
 	{
 		isInitialised = false;
 		final int SHORT_ID_LENGTH = 8;
 		this.instanceGuid = RandomStringUtils.random(SHORT_ID_LENGTH);
-		this.discordCommandSender = new DiscordCommandSender();
+		this.discordAdminChannelCommandSender = new DiscordAdminChannelCommandSender();
+		this.discordDefaultChannelCommandSender = new DiscordDefaultChannelCommandSender();
 	}
 	
 	public Scoreboard getScoreboard(Player player)
@@ -479,8 +482,14 @@ public class CoreState {
 		return this.discordClient;
 	}
 
-	public DiscordCommandSender getDiscordCommandSender() {
+	public DiscordDefaultChannelCommandSender getDiscordDefaultChannelCommandSender() {
 		// TODO Auto-generated method stub
-		return this.discordCommandSender;
+		return this.discordDefaultChannelCommandSender;
+	}
+
+	
+	public DiscordAdminChannelCommandSender getDiscordAdminChannelCommandSender() {
+		// TODO Auto-generated method stub
+		return this.discordAdminChannelCommandSender;
 	}
 }

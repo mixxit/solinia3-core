@@ -10,7 +10,8 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Providers.DiscordCommandSender;
+import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
+import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -41,7 +42,7 @@ public class CommandWho implements CommandExecutor {
 		    }
 	    }
 		
-		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordCommandSender)) {
+		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordDefaultChannelCommandSender || sender instanceof DiscordAdminChannelCommandSender)) {
 			ConsoleCommandSender player = (ConsoleCommandSender) sender;
         	
         	for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())

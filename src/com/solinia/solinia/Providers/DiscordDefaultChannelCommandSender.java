@@ -13,10 +13,10 @@ import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Managers.StateManager;
 
-public class DiscordCommandSender implements CommandSender {
+public class DiscordDefaultChannelCommandSender implements CommandSender {
 	private final PermissibleBase perm;
 	
-	public DiscordCommandSender()
+	public DiscordDefaultChannelCommandSender()
 	{
 		this.perm = new PermissibleBase(this);
 	}
@@ -103,7 +103,7 @@ public class DiscordCommandSender implements CommandSender {
 
 	@Override
 	public void sendMessage(String message) {
-		StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getAdminDiscordChannel(), message);
+		StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(), message);
 	}
 
 	@Override

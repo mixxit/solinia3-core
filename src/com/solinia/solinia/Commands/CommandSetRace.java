@@ -14,7 +14,8 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Providers.DiscordCommandSender;
+import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
+import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -37,12 +38,13 @@ public class CommandSetRace implements CommandExecutor {
 					races.add(race);
 				}
 			}
-		} catch (CoreStateInitException e1) {
+		} catch (CoreStateInitException e1) 
+    	{
 			sender.sendMessage("Race command failed. " + e1.getMessage());
 			return false;
 		}
 		
-		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordCommandSender))
+		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordDefaultChannelCommandSender || sender instanceof DiscordAdminChannelCommandSender))
 		{
 			sender.sendMessage(racelist);
 			return true;
