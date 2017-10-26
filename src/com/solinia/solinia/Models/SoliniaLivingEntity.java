@@ -1146,6 +1146,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				stat += Utils.getTotalItemStat(solplayer,"STRENGTH");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
+				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
 				
 				return stat;
 			}
@@ -1190,6 +1191,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				stat += Utils.getTotalItemStat(solplayer,"STAMINA");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "STAMINA");
 				
 				return stat;
 			}
@@ -1234,6 +1236,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				stat += Utils.getTotalItemStat(solplayer,"AGILITY");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "AGILITY");
+				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "AGILITY");
 				
 				return stat;
 			}
@@ -1278,6 +1281,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				stat += Utils.getTotalItemStat(solplayer,"DEXTERITY");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
+				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
 				
 				return stat;
 			}
@@ -1322,6 +1326,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				stat += Utils.getTotalItemStat(solplayer,"INTELLIGENCE");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
+				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
 				
 				return stat;
 			}
@@ -1366,6 +1371,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				stat += Utils.getTotalItemStat(solplayer,"WISDOM");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "WISDOM");
+				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "WISDOM");
 				
 				return stat;
 			}
@@ -1410,6 +1416,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				stat += Utils.getTotalItemStat(solplayer,"CHARISMA");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
+				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
 				
 				return stat;
 			}

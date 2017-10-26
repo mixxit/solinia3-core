@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidAASettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
@@ -250,4 +251,10 @@ public interface IConfigurationManager {
 	List<Integer> getLootTablesWithLootDrops(List<Integer> lootDropIds);
 
 	List<ISoliniaItem> getItemsByPartialName(String itemMatch);
+
+	void editAAAbility(int aaid, String setting, String value) throws InvalidAASettingException;
+
+	ISoliniaAARank getAARankCache(int rankId);
+
+	void resetAARankRepository();
 }

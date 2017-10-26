@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Events.SoliniaSpawnGroupUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidAASettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
@@ -99,7 +100,8 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.questRepository = questsContext;
 	}
 	
-	private void resetAARankRepository()
+	@Override
+	public void resetAARankRepository()
 	{
 		this.aarankcache.clear();
 		this.spellaarankcache.clear();
@@ -832,7 +834,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			{
 				for(ISoliniaAARank seekRank : ability.getRanks())
 				{
-					if (seekRank.getAbilityid() != seekRankId)
+					if (seekRank.getId() != seekRankId)
 						continue;
 					
 					aarank = seekRank;
@@ -894,5 +896,19 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<ISoliniaItem> getItemsByPartialName(String itemMatch) {
 		return itemRepository.query(q -> q.getDisplayname().toUpperCase().contains(itemMatch.toUpperCase()));
+	}
+
+	@Override
+	public void editAAAbility(int aaid, String setting, String value) throws InvalidAASettingException {
+		ISoliniaAAAbility aaability = getAAAbility(aaid);
+		aaability.editSetting(setting, value);
+	}
+
+	@Override
+	public ISoliniaAARank getAARankCache(int rankId) {
+		if (aarankcache.values() == null)
+			return null;
+		
+		return aarankcache.get(rankId);
 	}
 }

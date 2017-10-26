@@ -1022,6 +1022,42 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try
 		{
 			total += SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer()).getResistsFromActiveEffects(type);
+			
+			int effectId = 0;
+			switch (type) {
+			case RESIST_FIRE:
+				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistFire);
+				break;
+			case RESIST_COLD:
+				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistCold);
+				break;
+			case RESIST_MAGIC:
+				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistMagic);
+				break;
+			case RESIST_POISON:
+				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistPoison);
+				break;
+			case RESIST_DISEASE:
+				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistDisease);
+				break;
+			default:
+				break;
+			}
+			
+			if (effectId > 0)
+			{
+				for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(effectId))
+				{
+					total += effect.getBase1();
+				}
+			}
+			
+			int resistAllEffectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistAll);
+			for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(resistAllEffectId))
+			{
+				total += effect.getBase1();
+			}
+			
 		} catch (CoreStateInitException e)
 		{
 			// Skip
@@ -1199,6 +1235,37 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean hasRank(ISoliniaAARank rank) {
 		return ranks.contains(rank.getId());
+	}
+	
+	@Override
+	public List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId)
+	{
+		List<SoliniaAARankEffect> effects = new ArrayList<SoliniaAARankEffect>();
+		if (ranks.size() == 0)
+			return effects;
+		
+		try
+		{
+			for (int rankId : ranks)
+			{
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
+				if (rank == null)
+					continue;
+				
+				for (SoliniaAARankEffect effect : rank.getEffects())
+				{
+					if (effect.getEffectId() != effectId)
+						continue;
+					
+					effects.add(effect);
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			//
+		}
+		
+		return effects;
 	}
 
 	@Override

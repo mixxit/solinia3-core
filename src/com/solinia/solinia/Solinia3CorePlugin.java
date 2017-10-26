@@ -26,6 +26,7 @@ import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandCreateNpcCopy;
 import com.solinia.solinia.Commands.CommandCreateQuest;
 import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
+import com.solinia.solinia.Commands.CommandEditAA;
 import com.solinia.solinia.Commands.CommandEditClass;
 import com.solinia.solinia.Commands.CommandEditFaction;
 import com.solinia.solinia.Commands.CommandEditItem;
@@ -46,6 +47,7 @@ import com.solinia.solinia.Commands.CommandGroup;
 import com.solinia.solinia.Commands.CommandGroupChat;
 import com.solinia.solinia.Commands.CommandIgnore;
 import com.solinia.solinia.Commands.CommandLastname;
+import com.solinia.solinia.Commands.CommandListAAs;
 import com.solinia.solinia.Commands.CommandListFactions;
 import com.solinia.solinia.Commands.CommandListItems;
 import com.solinia.solinia.Commands.CommandListLootDrops;
@@ -452,6 +454,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("quests").setExecutor(new CommandQuests());
 		this.getCommand("npcgive").setExecutor(new CommandNPCGive());		
 		this.getCommand("today").setExecutor(new CommandToday());		
+		this.getCommand("listaas").setExecutor(new CommandListAAs());		
+		this.getCommand("editaa").setExecutor(new CommandEditAA());		
 	}
 
 	private void createConfigDir() {

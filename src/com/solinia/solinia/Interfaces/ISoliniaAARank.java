@@ -3,6 +3,7 @@ package com.solinia.solinia.Interfaces;
 import java.util.List;
 
 import com.solinia.solinia.Models.SoliniaAAPrereq;
+import com.solinia.solinia.Models.SoliniaAARankEffect;
 
 public interface ISoliniaAARank {
 
@@ -45,5 +46,9 @@ public interface ISoliniaAARank {
 	List<SoliniaAAPrereq> getPrereqs();
 
 	void setPrereqs(List<SoliniaAAPrereq> prereqs);
+
+	List<SoliniaAARankEffect> getEffects();
+
+	void setEffects(List<SoliniaAARankEffect> effects);
 
 }

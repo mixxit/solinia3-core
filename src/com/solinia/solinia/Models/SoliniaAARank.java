@@ -19,6 +19,7 @@ public class SoliniaAARank implements ISoliniaAARank {
 	private int expansion;
 	private int position;
 	private List<SoliniaAAPrereq> prereqs = new ArrayList<SoliniaAAPrereq>();
+	private List<SoliniaAARankEffect> effects = new ArrayList<SoliniaAARankEffect>();
 	
 	@Override
 	public int getLevel_req() {
@@ -99,5 +100,13 @@ public class SoliniaAARank implements ISoliniaAARank {
 	@Override
 	public void setPrereqs(List<SoliniaAAPrereq> prereqs) {
 		this.prereqs = prereqs;
+	}
+	@Override
+	public List<SoliniaAARankEffect> getEffects() {
+		return effects;
+	}
+	@Override
+	public void setEffects(List<SoliniaAARankEffect> effects) {
+		this.effects = effects;
 	}
 }

@@ -343,6 +343,14 @@ commands:
     description: Creates a new quest
     usage: /createquest questcode
     aliases: []
+  editaa:
+    description: Edits an AA Ability
+    usage: /editaa aaid setting value
+    aliases: []
+  listaas:
+    description: Lists aa abilities
+    usage: /listaa searchstring
+    aliases: []
 depend:
 - Vault
 - MythicMobs

@@ -142,6 +142,8 @@ public class CommandAA implements CommandExecutor {
 					{
 						
 					}
+					
+					return true;
 
 				default:
 					player.sendMessage(ChatColor.GRAY + "Invalid arguments (list,buy)");
