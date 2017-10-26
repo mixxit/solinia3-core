@@ -33,9 +33,12 @@ public class CommandStats implements CommandExecutor {
 	    		Double currentxpprogress = solplayer.getExperience() - xpneededforcurrentlevel;
 	    		
 	            Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
+	            Double percenttoaa = Math.floor((solplayer.getAAExperience() / Utils.getMaxAAXP()) * 100);
 	    		int ipercenttolevel = percenttolevel.intValue();
-	    		player.sendMessage("Level progress: " + ipercenttolevel + "% into level)");
+	    		int ipercenttoaa = percenttoaa.intValue();
+	    		player.sendMessage("Level progress: " + ipercenttolevel + "% into level - Have: " + solplayer.getExperience().longValue() + " Need: " + xpneededfornextlevel.longValue());
 	    		player.sendMessage("AA points: " + solplayer.getAAPoints());
+	    		player.sendMessage("Next AA progress: " + ipercenttolevel + "% into AA - Have: " + solplayer.getAAExperience().longValue() + " Need: " + Utils.getMaxAAXP().longValue());
 	    			
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

@@ -311,12 +311,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (!isAAOn()) {
 			increasePlayerNormalExperience(experience);
 		} else {
-			increasePlayerAAExperience(experience);
+			int normalpct = 100-getAapct();
+			if (normalpct > 0)
+			{
+				Double normalexperience = (experience / 100) * normalpct;
+				increasePlayerNormalExperience(normalexperience);
+			}
+			
+			Double aaexperience = (experience / 100) * getAapct();
+			increasePlayerAAExperience(aaexperience);
 		}
 	}
 
 	private boolean isAAOn() {
-		// TODO Replace with AA toggle
+		if (this.getAapct() > 0)
+			return true;
+		
 		return false;
 	}
 
@@ -353,9 +363,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		if ((currentexperience + experience) > Utils.getExperienceRequirementForLevel(Utils.getMaxLevel())) {
+			//System.out.println("XP: " + experience);
 			currentexperience = Utils.getExperienceRequirementForLevel(Utils.getMaxLevel());
-
 		} else {
+			//System.out.println("XP: " + experience);
 			currentexperience = currentexperience + experience;
 		}
 		setExperience(currentexperience, experience,modified);
@@ -454,14 +465,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			modified = true;
 		}
 		experience = experience * (modifier / 100);
-
+		
 		// Cap at max just under a quarter of an AA experience point
 		if (experience > Utils.getMaxAAXP()) {
 			experience = Utils.getMaxAAXP();
 		}
 
+		//System.out.println("AA XP: " + experience);
+		
 		Double currentaaexperience = getAAExperience();
 		currentaaexperience = currentaaexperience + experience;
+		
 		setAAExperience(currentaaexperience, modified);
 	}
 	
