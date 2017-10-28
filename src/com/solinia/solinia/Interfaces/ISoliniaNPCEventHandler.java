@@ -47,5 +47,9 @@ public interface ISoliniaNPCEventHandler {
 	boolean playerMeetsRequirements(Player triggerentity);
 
 	void awardPlayer(Player triggerentity);
+
+	String getTeleportResponse();
+
+	void setTeleportResponse(String teleportResponse);
 	
 }

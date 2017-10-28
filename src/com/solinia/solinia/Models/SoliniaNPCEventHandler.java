@@ -11,6 +11,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
@@ -33,6 +34,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private String awardsQuestFlag = null;
 	private int npcId;
 	private int awardsItem = 0;
+	private String teleportResponse = "";
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -110,6 +112,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- triggerdata: " + ChatColor.GOLD + getTriggerdata() + ChatColor.RESET);
 		sender.sendMessage("- chatresponse: " + ChatColor.GOLD + getChatresponse() + ChatColor.RESET);
+		sender.sendMessage("- teleportresponse: " + ChatColor.GOLD + getTeleportResponse() + ChatColor.RESET);
 		sender.sendMessage("- interactiontype: " + ChatColor.GOLD + getInteractiontype() + ChatColor.RESET);
 		sender.sendMessage("- requiresquest: " + ChatColor.GOLD + getRequiresQuest() + ChatColor.RESET);
 		sender.sendMessage("- awardsquest: " + ChatColor.GOLD + getAwardsQuest() + ChatColor.RESET);
@@ -169,6 +172,24 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		case "awardsquestflag":
 			setAwardsQuestFlag(value);
 			break;
+		case "teleportresponse":
+			try
+			{
+				String[] zonedata = value.split(",");
+				// Dissasemble the value to ensure it is correct
+				String world = zonedata[0];
+				double x = Double.parseDouble(zonedata[1]);
+				double y = Double.parseDouble(zonedata[2]);
+				double z = Double.parseDouble(zonedata[3]);
+				
+				setTeleportResponse(world+","+x+","+y+","+z);
+				break;
+			} catch (Exception e)
+			{
+				throw new InvalidNPCEventSettingException("Teleport zone value must be in format: world,x,y,z");
+			}
+			
+			
 		case "awardsitem":
 			int itemId = Integer.parseInt(value);
 			if (itemId < 1)
@@ -329,6 +350,16 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			System.out.println(e.getMessage());
 			return;
 		}
+	}
+
+	@Override
+	public String getTeleportResponse() {
+		return teleportResponse;
+	}
+
+	@Override
+	public void setTeleportResponse(String teleportResponse) {
+		this.teleportResponse = teleportResponse;
 	}
 
 }

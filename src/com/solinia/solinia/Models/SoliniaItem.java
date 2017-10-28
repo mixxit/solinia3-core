@@ -651,6 +651,9 @@ public class SoliniaItem implements ISoliniaItem {
 		case "augmentation":
 			setAugmentation(Boolean.parseBoolean(value));
 			break;
+		case "clearallowedclasses":
+			setAllowedClassNames(new ArrayList<String>());
+			break;
 		case "augmentationfitsslottype":
 			setAugmentationFitsSlotType(AugmentationSlotType.valueOf(value));
 			break;

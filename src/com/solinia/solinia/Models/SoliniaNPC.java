@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -798,6 +800,22 @@ public class SoliniaNPC implements ISoliniaNPC {
 				solentity.say(replaceChatWordsWithHints(response),triggerentity);
 				if (triggerentity instanceof Player)
 					handler.awardPlayer((Player)triggerentity);
+				
+				if (handler.getTeleportResponse() != null && !handler.getTeleportResponse().equals(""))
+				{
+					if (triggerentity instanceof Player)
+					{
+						String[] zonedata = handler.getTeleportResponse().split(",");
+						// Dissasemble the value to ensure it is correct
+						String world = zonedata[0];
+						double x = Double.parseDouble(zonedata[1]);
+						double y = Double.parseDouble(zonedata[2]);
+						double z = Double.parseDouble(zonedata[3]);
+						Location loc = new Location(Bukkit.getWorld(world),x,y,z);
+						((Player)triggerentity).teleport(loc);
+					}
+					
+				}
 			}
 		}
 		return;

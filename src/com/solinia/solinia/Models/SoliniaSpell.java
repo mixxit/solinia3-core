@@ -3682,6 +3682,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (target == null)
 			return false;
 		
+		
+		// Always allow self only spells if the target and source is the self
+		if (source.getUniqueId().equals(target.getUniqueId()) && 
+				Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
+				return true;	
+		
 		if (!source.getUniqueId().equals(target.getUniqueId()))
 		if (!source.hasLineOfSight(target))
 			return false;
@@ -3801,6 +3807,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 			if (effect.getSpellEffectType().equals(SpellEffectType.Stun))
 			{
 				// If the effect is a stun, cancel out
+				if (target.equals(source))
+					return false;
+			}
+			
+			if (effect.getSpellEffectType().equals(SpellEffectType.Blind))
+			{
+				// If the effect is a blindness, cancel out
 				if (target.equals(source))
 					return false;
 			}
