@@ -251,6 +251,9 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void sendToDiscordMC(ISoliniaPlayer source, String channelId, String message)
 	{
+		if (channelId == null || channelId.equals(""))
+			return;
+		
 		UUID uuid = null;
 		if (source != null)
 			uuid = source.getUUID();

@@ -30,6 +30,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -216,7 +217,19 @@ public class Solinia3CoreEntityListener implements Listener {
 		}
 
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
-
+		
+		// If the event is being blocked by a shield negate 85% of it unless its thorns then always allow it through
+		if (damagecause.getDamage(DamageModifier.BLOCKING) < 0)
+		{
+			if (event.getCause().equals(DamageCause.THORNS))
+			{
+				damagecause.setDamage(DamageModifier.BLOCKING, 0);
+			} else {
+				// Only give them 15% blocking
+				double newarmour = (damagecause.getDamage(DamageModifier.BLOCKING) / 100) * 15;
+				damagecause.setDamage(DamageModifier.BLOCKING, newarmour);
+			}
+		}
 		
 		// Remove buffs on attacker (invis should drop)
 		// and check they are not mezzed

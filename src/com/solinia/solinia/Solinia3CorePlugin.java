@@ -167,37 +167,19 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		config.options().copyDefaults(true);
 		saveConfig();
 		
-		if (config.getString("discordbottoken").equals(""))
+		if (!config.getString("discordbottoken").equals("") && !config.getString("discordmainchannelid").equals("") && !config.getString("discordadminchannelid").equals(""))
 		{
-			System.out.println("Config for discordbottoken is invalid");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
+			discordbottoken = config.getString("discordbottoken");
+			discordmainchannelid = config.getString("discordmainchannelid");
+			discordadminchannelid = config.getString("discordadminchannelid");
+			setupDiscordClient();
 		}
-		
-		if (config.getString("discordmainchannelid").equals(""))
-		{
-			System.out.println("Config for discordmainchannelid is invalid");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
-		}
-		
-		if (config.getString("discordadminchannelid").equals(""))
-		{
-			System.out.println("Config for discordadminchannelid is invalid");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
-		}
-		
-		discordbottoken = config.getString("discordbottoken");
-		discordmainchannelid = config.getString("discordmainchannelid");
-		discordadminchannelid = config.getString("discordadminchannelid");
 		
 		initialise();
 		registerEvents();
 
 		setupEconomy();
 		setupChatItem();
-		setupDiscordClient();
 
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setChatItem(this.ciApi);
@@ -324,8 +306,12 @@ public class Solinia3CorePlugin extends JavaPlugin {
 					perkrepo, aaabilityrepo, patchesrepo, questsrepo);
 
 			ChannelManager channelManager = new ChannelManager();
-			channelManager.setDiscordMainChannelId(discordmainchannelid);
-			channelManager.setDiscordAdminChannelId(discordadminchannelid);
+			
+			if (this.discordClient != null)
+			{
+				channelManager.setDiscordMainChannelId(discordmainchannelid);
+				channelManager.setDiscordAdminChannelId(discordadminchannelid);
+			}
 
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager);
 
@@ -357,8 +343,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			petCheckTickTimer = new PetCheckTickTimer();
 			petCheckTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 			
-			discordMessageTimer = new DiscordMessageTimer();
-			discordMessageTimer.runTaskTimer(this, 20L, 20L);
+			if (this.discordClient != null)
+			{
+				discordMessageTimer = new DiscordMessageTimer();
+				discordMessageTimer.runTaskTimer(this, 20L, 20L);
+			}
 			
 
 		} catch (CoreStateInitException e) {
