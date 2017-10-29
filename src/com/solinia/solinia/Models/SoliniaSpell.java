@@ -3859,11 +3859,32 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return false;
 			}
 			
-			if (effect.getSpellEffectType().equals(SpellEffectType.NecPet) || effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2))
+			if (effect.getSpellEffectType().equals(SpellEffectType.NecPet) || effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2) || effect.getSpellEffectType().equals(SpellEffectType.Translocate) || effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor))
 			{
 				// If the effect is teleport and the target is not a player then fail
 				if (!(target instanceof Player))
 					return false;
+				
+				if (!(source instanceof Player))
+					return false;
+				
+				// If the effect is a teleport and the target is not in a group or self then fail
+				if (effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2) || effect.getSpellEffectType().equals(SpellEffectType.Translocate) || effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor))
+				{
+					// if target is not the player casting
+					if (!target.getUniqueId().equals(source.getUniqueId()))
+					{
+						ISoliniaPlayer solplayertarget = SoliniaPlayerAdapter.Adapt((Player)target);
+						if (solplayertarget == null)
+							return false;
+						
+						if (solplayertarget.getGroup() == null)
+							return false;
+						
+						if (!(solplayertarget.getGroup().getMembers().contains(source.getUniqueId())))
+							return false;
+					}
+				}
 				
 				if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.NecPet))
 				{
