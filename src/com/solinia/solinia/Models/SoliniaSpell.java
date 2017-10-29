@@ -3710,10 +3710,16 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, SoliniaSpell soliniaSpell) throws CoreStateInitException {
 		if (source == null)
+		{
+			System.out.println("Source was null for isValidEffectForEntity: " + soliniaSpell.getName() + " on target: " + target.getCustomName());
 			return false;
+		}
 		
 		if (target == null)
+		{
+			System.out.println("Target was null for isValidEffectForEntity: " + soliniaSpell.getName() + " from source: " + source.getCustomName());
 			return false;
+		}
 		
 		
 		// Always allow self only spells if the target and source is the self
@@ -3800,19 +3806,31 @@ public class SoliniaSpell implements ISoliniaSpell {
 			
 			if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem))
 			{
+				System.out.println("Validating SummonItem for source: " + source.getCustomName());
 				int itemId = effect.getBase();
 				try
 				{
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+					
+					System.out.println("Validating SummonItem for source: " + source.getCustomName());
+
 					if (item == null)
+					{
+						System.out.println("Validating SummonItem said item was null");
 						return false;
+					}
 					
 					if (!item.isTemporary())
+					{
+						System.out.println("Validating SummonItem said item was not temporary");
 						return false;
+					}
 					
 					if (!(target instanceof LivingEntity))
+					{
+						System.out.println("Validating SummonItem said target was not a living entity");
 						return false;
-					
+					}
 				} catch (CoreStateInitException e)
 				{
 					return false;
