@@ -407,6 +407,7 @@ public class SoliniaActiveSpell {
 		case SummonPC
 			: return;
 		case Teleport: 
+			if (getLivingEntity() instanceof Player)
 			applyTeleport(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case TossUp
@@ -453,8 +454,10 @@ public class SoliniaActiveSpell {
 			: return;
 		case CallPet
 			: return;
-		case Translocate
-			: return;
+		case Translocate:
+			if (getLivingEntity() instanceof Player)
+			applyTeleport(spellEffect, soliniaSpell,casterLevel);
+			return;
 		case AntiGate
 			: return;
 		case SummonBSTPet
@@ -535,7 +538,8 @@ public class SoliniaActiveSpell {
 			: return;
 		case LimitCastTimeMax
 			: return;
-		case Teleport2: 
+		case Teleport2:
+			if (getLivingEntity() instanceof Player)
 			applyTeleport(spellEffect, soliniaSpell,casterLevel);
 			return;
 		case ElectricityResist
