@@ -121,7 +121,7 @@ public class SoliniaEntitySpells {
 		if (duration > 0)
 			activeSpells.put(soliniaSpell.getId(),activeSpell);
 		
-		System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
+		//System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
 		
 		// Initial run
 		activeSpell.apply(plugin);

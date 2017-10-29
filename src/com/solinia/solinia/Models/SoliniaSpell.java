@@ -3144,9 +3144,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return 0;
 
 		effect_value = calcSpellEffectValueFormula(spellEffect, sourceEntity, targetEntity, sourceLevel, ticksleft);
-		System.out.println("Calculated Spell Effect (" + spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
+		//System.out.println("Calculated Spell Effect (" + spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
 		effect_value = modEffectValue(effect_value, spellEffect, sourceEntity);
-		System.out.println("Calculated Modded Spell Effect (" + spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
+		//System.out.println("Calculated Modded Spell Effect (" + spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
 
 		return effect_value;
 	}
@@ -3447,7 +3447,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (spellEffect.getBase() < 0 && result > 0)
 			result *= -1;
 
-		System.out.println("Spell effect calculated from formula as " + result + " from base " + spellEffect.getBase() + " for spell: " + getName() + ":"+ spellEffect.getSpellEffectType().name());
+		//System.out.println("Spell effect calculated from formula as " + result + " from base " + spellEffect.getBase() + " for spell: " + getName() + ":"+ spellEffect.getSpellEffectType().name());
 		return result;
 	}
 
