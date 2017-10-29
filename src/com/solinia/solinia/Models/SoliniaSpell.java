@@ -2884,8 +2884,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 						success = true;
 					
 					return success;
-				case Group:
-					boolean successGroup = false;
+				case GroupTeleport:
+					boolean successGroupTeleport = false;
 					
 					if (!(sourceEntity instanceof Player))
 						return false;
@@ -2893,10 +2893,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 					ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sourceEntity);
 					ISoliniaGroup group = player.getGroup();
 					
-					boolean selfSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, sourceEntity,this,sourceEntity);
-					if (selfSuccess == true)
-						successGroup = true;
-
 					if (group != null)
 					{
 						for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10))
@@ -2908,10 +2904,45 @@ public class SoliniaSpell implements ISoliniaSpell {
 							{
 								boolean loopSuccess3 = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
 								if (loopSuccess3 == true)
+									successGroupTeleport = true;
+							}
+						}
+					}
+					
+					boolean selfSuccessTeleport = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, sourceEntity,this,sourceEntity);
+					if (selfSuccessTeleport == true)
+						successGroupTeleport = true;
+					
+					return successGroupTeleport;
+				case Group:
+					boolean successGroup = false;
+					
+					if (!(sourceEntity instanceof Player))
+						return false;
+					
+					ISoliniaPlayer playerGroupTeleport = SoliniaPlayerAdapter.Adapt((Player)sourceEntity);
+					ISoliniaGroup groupTeleport = playerGroupTeleport.getGroup();
+					
+					if (groupTeleport != null)
+					{
+						for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10))
+						{
+							if (!(e instanceof Player))
+								continue;
+							
+							if (groupTeleport.getMembers().contains(e.getUniqueId()))
+							{
+								boolean loopSuccess3 = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
+								if (loopSuccess3 == true)
 									successGroup = true;
 							}
 						}
 					}
+					
+					boolean selfSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, sourceEntity,this,sourceEntity);
+					if (selfSuccess == true)
+						successGroup = true;
+					
 					return successGroup;
 				case AECaster:
 					// Get entities around caster and attempt to apply, if any are successful, return true
@@ -3686,7 +3717,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// Always allow self only spells if the target and source is the self
 		if (source.getUniqueId().equals(target.getUniqueId()) && 
 				Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
+		{
+			System.out.println("Detected a self only spell (" + soliniaSpell.getName() + "), returning as valid, always");
 				return true;	
+		}
 		
 		if (!source.getUniqueId().equals(target.getUniqueId()))
 		if (!source.hasLineOfSight(target))

@@ -121,6 +121,8 @@ public class SoliniaEntitySpells {
 		if (duration > 0)
 			activeSpells.put(soliniaSpell.getId(),activeSpell);
 		
+		System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
+		
 		// Initial run
 		activeSpell.apply(plugin);
 		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 5);
