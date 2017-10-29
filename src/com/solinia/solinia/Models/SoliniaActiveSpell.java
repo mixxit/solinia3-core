@@ -1482,8 +1482,16 @@ public class SoliniaActiveSpell {
 	private void applyCurrentMpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
 		
-		int mpToRemove = spellEffect.getBase();
+		if(!(sourceEntity instanceof LivingEntity))
+			return;
+		
+		LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
+		
+		int mpToRemove = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), casterLevel, getTicksLeft());
 		
 		try
 		{
