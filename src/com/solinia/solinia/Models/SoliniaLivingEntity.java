@@ -1064,6 +1064,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return totalHp;
 
 				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());
+				// get AA hp bonus
+				totalHp += Utils.getTotalAAEffectMaxHp(this.getBukkitLivingEntity());
 				
 				return totalHp;
 			}

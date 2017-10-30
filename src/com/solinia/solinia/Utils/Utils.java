@@ -4022,4 +4022,30 @@ public class Utils {
 			return 0;
 		}
 	}
+
+	public static double getTotalAAEffectMaxHp(LivingEntity bukkitLivingEntity) {
+		if (!(bukkitLivingEntity instanceof Player))
+			return 0;
+		
+		try
+		{
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)bukkitLivingEntity);
+			int total = 0;
+			
+			int effectIdLookup = 0;
+			effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.MaxHPChange);
+			
+			if (effectIdLookup == 0)
+				return 0;
+			
+			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup))
+			{
+				total += effect.getBase1();
+			}
+			return total;
+		} catch (CoreStateInitException e)
+		{
+			return 0;
+		}
+	}
 }
