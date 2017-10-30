@@ -3726,6 +3726,43 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (source.getUniqueId().equals(target.getUniqueId()) && 
 				Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
 		{
+			// just be sure to check the item its giving if its an item spell
+			for(SpellEffect effect : soliniaSpell.getBaseSpellEffects())
+			{
+				if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem))
+				{
+					System.out.println("Validating SummonItem for source: " + source.getCustomName());
+					int itemId = effect.getBase();
+					try
+					{
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+						
+						System.out.println("Validating SummonItem for source: " + source.getCustomName());
+
+						if (item == null)
+						{
+							System.out.println("Validating SummonItem said item was null");
+							return false;
+						}
+						
+						if (!item.isTemporary())
+						{
+							System.out.println("Validating SummonItem said item was not temporary");
+							return false;
+						}
+						
+						if (!(target instanceof LivingEntity))
+						{
+							System.out.println("Validating SummonItem said target was not a living entity");
+							return false;
+						}
+					} catch (CoreStateInitException e)
+					{
+						return false;
+					}
+				}
+			}
+			
 			System.out.println("Detected a self only spell (" + soliniaSpell.getName() + "), returning as valid, always");
 				return true;	
 		}
