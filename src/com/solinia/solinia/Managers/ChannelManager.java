@@ -23,6 +23,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.DiscordChannel;
 import com.solinia.solinia.Models.QueuedDiscordMessage;
 
@@ -257,8 +258,11 @@ public class ChannelManager implements IChannelManager {
 		UUID uuid = null;
 		if (source != null)
 			uuid = source.getUUID();
+		message = ChatColor.stripColor(message);
 		QueuedDiscordMessage discordMessage = new QueuedDiscordMessage(uuid, channelId, message);
 		int nextMessage = discordMessageCount.getAndIncrement();
+		
+		
 		queuedDiscordMessages.put(nextMessage,discordMessage);
 	}
 
@@ -413,9 +417,21 @@ public class ChannelManager implements IChannelManager {
 		if (discordChannel.equals(DiscordChannel.ADMIN))
 			targetChannelId = getAdminDiscordChannel();
 		
+		String proc = "";
+		if (item.getWeaponabilityid() > 0)
+		{
+			try
+			{
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getWeaponabilityid());
+				proc = "Chance to Proc on Hit: " + ChatColor.YELLOW+spell.getName() + ChatColor.RESET;
+			} catch (CoreStateInitException e)
+			{
+				//
+			}
+		}
 		
 		sendToDiscordMC(null,targetChannelId,"Item " + item.getId() + " ("+ item.getDisplayname() + ") Base: " + item.getBasename());
-		sendToDiscordMC(null,targetChannelId,"Damage " + item.getDamage() + " UndeadBaneDmg: " + item.getBaneUndead() + " Worth: $" + item.getWorth());
+		sendToDiscordMC(null,targetChannelId,"Damage " + item.getDamage() + " UndeadBaneDmg: " + item.getBaneUndead() + " " + proc + " Worth: $" + item.getWorth());
 		sendToDiscordMC(null,targetChannelId,"Strength: " + item.getStrength() + 
 				" Stamina: " + item.getStamina() + 
 				" Agility: " + item.getAgility() + 
