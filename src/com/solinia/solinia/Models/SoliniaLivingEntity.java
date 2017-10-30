@@ -333,6 +333,34 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								return;
 							}
 						}
+						
+						if (soliniaitem.getWeaponabilityid() > 0 && event.getCause().equals(DamageCause.ENTITY_ATTACK))
+						{
+							ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaitem.getWeaponabilityid());
+							if (procSpell != null)
+							{
+								// Chance to proc
+								int procChance = SoliniaLivingEntityAdapter.Adapt(attacker).getProcChancePct();
+								int roll = Utils.RandomBetween(0, 100);
+	
+								if (roll < procChance) {
+									
+									// TODO - For now apply self and group to attacker, else attach to target
+									switch (Utils.getSpellTargetType(procSpell.getTargettype()))
+									{
+										case Self:
+											procSpell.tryApplyOnEntity(plugin, attacker, attacker);
+											break;
+										case Group:
+											procSpell.tryApplyOnEntity(plugin, attacker, attacker);
+											break;
+										default:
+											procSpell.tryApplyOnEntity(plugin, attacker, this.getBukkitLivingEntity());
+									}
+									
+								}
+							}
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

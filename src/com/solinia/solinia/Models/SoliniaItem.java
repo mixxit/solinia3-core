@@ -540,6 +540,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET);
 		sender.sendMessage("- baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
+		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET);
 		sender.sendMessage("- stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET);
@@ -635,6 +636,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "abilityid":
 			setAbilityid(Integer.parseInt(value));
+			break;
+		case "weaponabilityid":
+			setWeaponabilityid(Integer.parseInt(value));
 			break;
 		case "petcontrolrod":
 			setPetControlRod(Boolean.parseBoolean(value));
