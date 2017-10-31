@@ -3902,6 +3902,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return false;
 			}
 			
+			if (effect.getSpellEffectType().equals(SpellEffectType.Root))
+			{
+				// If the effect is a root, cancel out
+				if (target.equals(source))
+					return false;
+			}
+			
 			if (effect.getSpellEffectType().equals(SpellEffectType.Blind))
 			{
 				// If the effect is a blindness, cancel out

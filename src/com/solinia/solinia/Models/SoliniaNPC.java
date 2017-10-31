@@ -546,12 +546,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setOffhanditem(value);
 			break;
 		case "clearitems":
-			setHeaditem("");
-			setChestitem("");
-			setLegsitem("");
-			setFeetitem("");
-			setHanditem("");
-			setOffhanditem(value);
+			setHeaditem(null);
+			setChestitem(null);
+			setLegsitem(null);
+			setFeetitem(null);
+			setHanditem(null);
+			setOffhanditem(null);
 		case "boss":
 			setBoss(Boolean.parseBoolean(value));
 			break;

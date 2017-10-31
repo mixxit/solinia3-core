@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Wolf;
@@ -889,12 +890,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			for (ISoliniaSpell spell : spells) {
 				if (!spell.isBeneficial()) {
-					if (!Utils.isInvalidNpcSpell(spell) && (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target) || Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)))
+					if (!Utils.isInvalidNpcSpell(spell) && (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETarget) || Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster) || Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target) || Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)))
 						hostileSpells.add(spell);
 					continue;
 				}
 
-				if (!Utils.isInvalidNpcSpell(spell) && (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
+				if (!Utils.isInvalidNpcSpell(spell) && (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster) 
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETarget) 
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
 						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target)
 						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)))
 					beneficialSpells.add(spell);
@@ -924,7 +928,38 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaSpell spellToCast = Utils.getRandomItemFromList(hostileSpells);
 
 				if (getMana() > spellToCast.getMana()) {
-					success = spellToCast.tryApplyOnEntity(plugin, this.livingentity, castingAtEntity);
+					if (Utils.getSpellTargetType(spellToCast.getTargettype()).equals(SpellTargetType.AETarget) || Utils.getSpellTargetType(spellToCast.getTargettype()).equals(SpellTargetType.AECaster))
+					{
+						if (Utils.getSpellTargetType(spellToCast.getTargettype()).equals(SpellTargetType.AETarget))
+						{
+							for (Entity e : castingAtEntity.getNearbyEntities(10, 10, 10))
+							{
+								if (!(e instanceof Player))
+									continue;
+								
+								boolean loopSuccess = spellToCast.tryApplyOnEntity(plugin, this.livingentity, (Player)e);
+								if (loopSuccess == true)
+									success = true;
+							}
+						}
+						
+						if (Utils.getSpellTargetType(spellToCast.getTargettype()).equals(SpellTargetType.AECaster))
+						{
+							for (Entity e : getBukkitLivingEntity().getNearbyEntities(10, 10, 10))
+							{
+								if (!(e instanceof Player))
+									continue;
+								
+								boolean loopSuccess = spellToCast.tryApplyOnEntity(plugin, this.livingentity, (Player)e);
+								if (loopSuccess == true)
+									success = true;
+							}
+						}
+						
+						
+					} else {
+						success = spellToCast.tryApplyOnEntity(plugin, this.livingentity, castingAtEntity);
+					}
 				}
 				
 				if (success) {
