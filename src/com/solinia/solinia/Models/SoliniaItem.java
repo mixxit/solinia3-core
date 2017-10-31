@@ -496,7 +496,7 @@ public class SoliniaItem implements ISoliniaItem {
 			if (spell.getRecastTime() > 0)
 			{
 				Calendar calendar = Calendar.getInstance();
-				calendar.add(Calendar.SECOND, spell.getRecastTime());
+				calendar.add(Calendar.MILLISECOND, spell.getRecastTime());
 				java.util.Date expire = calendar.getTime();
 				Timestamp expiretimestamp = new Timestamp(expire.getTime());
 				
