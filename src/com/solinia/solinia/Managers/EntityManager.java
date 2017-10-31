@@ -54,6 +54,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
+	private ConcurrentHashMap<String, Timestamp> entitySpellCooldown = new ConcurrentHashMap<String, Timestamp>();
 	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
@@ -314,6 +315,18 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void addMezzed(LivingEntity livingEntity, Timestamp expiretimestamp) {
 		this.entityMezzed.put(livingEntity.getUniqueId(), expiretimestamp);
+	}
+	
+	@Override
+	public void addEntitySpellCooldown(LivingEntity livingEntity, int spellId, Timestamp expiretimestamp)
+	{
+		this.entitySpellCooldown.put(livingEntity.getUniqueId()+"-"+spellId, expiretimestamp);
+	}
+	
+	@Override
+	public Timestamp getEntitySpellCooldown(LivingEntity livingEntity, int spellId)
+	{
+		return this.entitySpellCooldown.get(livingEntity.getUniqueId()+"-"+spellId);
 	}
 	
 	@Override

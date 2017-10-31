@@ -1,6 +1,8 @@
 package com.solinia.solinia.Models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -464,10 +466,42 @@ public class SoliniaItem implements ISoliniaItem {
 			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
 			return false;
 		}
+		
+		try
+		{
+			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(player, spell.getId()) != null)
+			{
+				Calendar calendar = Calendar.getInstance();
+				java.util.Date now = calendar.getTime();
+				Timestamp nowtimestamp = new Timestamp(now.getTime());
+				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager().getEntitySpellCooldown(player, spell.getId());
+	
+				if (expiretimestamp != null)
+				if (!nowtimestamp.after(expiretimestamp))
+				{
+					player.sendMessage("You do not have enough willpower to cast " + spell.getName() + " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime())/1000) + "s");
+					return false;
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			// skip
+			return false;
+		}
+		
 
 		boolean itemUseSuccess = spell.tryApplyOnEntity(plugin, player, targetentity);
 
 		if (itemUseSuccess) {
+			if (spell.getRecastTime() > 0)
+			{
+				Calendar calendar = Calendar.getInstance();
+				calendar.add(Calendar.SECOND, spell.getRecastTime());
+				java.util.Date expire = calendar.getTime();
+				Timestamp expiretimestamp = new Timestamp(expire.getTime());
+				
+				StateManager.getInstance().getEntityManager().addEntitySpellCooldown(player, spell.getId(),expiretimestamp);
+			}
 			if (!isConsumable)
 				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
 		}

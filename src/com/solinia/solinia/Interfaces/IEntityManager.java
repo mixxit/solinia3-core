@@ -78,4 +78,8 @@ public interface IEntityManager {
 	void doNPCSummon(Plugin plugin);
 
 	void clearEntityFirstEffect(LivingEntity livingEntity);
+
+	void addEntitySpellCooldown(LivingEntity livingEntity, int spellId, Timestamp expiretimestamp);
+
+	Timestamp getEntitySpellCooldown(LivingEntity livingEntity, int spellId);
 }
