@@ -416,9 +416,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						
 					}
 					
-					if (attacker instanceof Player)
+					if (arr.getShooter() instanceof Player)
 					{
-						((Player)attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SHOT " + getBukkitLivingEntity().getName() + " for " + df.format(event.getDamage()) + " [" + df.format(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + df.format(getBukkitLivingEntity().getMaxHealth()) + "]"));
+						System.out.println("Found player shot arrow");
+						((Player)arr.getShooter()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SHOT " + getBukkitLivingEntity().getName() + " for " + df.format(event.getDamage()) + " [" + df.format(getBukkitLivingEntity().getHealth()-event.getDamage()) + "/" + df.format(getBukkitLivingEntity().getMaxHealth()) + "]"));
 					}
 				}
 			}

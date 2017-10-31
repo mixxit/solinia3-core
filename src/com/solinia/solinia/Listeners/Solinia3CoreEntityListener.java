@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
@@ -36,12 +37,14 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -321,7 +324,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			// skip
 		}
 
-		if (damagecause.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
+		if ((damagecause.getDamager() instanceof LivingEntity || damagecause.getDamager() instanceof Arrow) && event.getEntity() instanceof LivingEntity) {
 			// Never forward magic spell damage (cause thorns) to melee damage calculation
 			// code
 			if (event.getCause().equals(DamageCause.THORNS))
@@ -336,8 +339,44 @@ public class Solinia3CoreEntityListener implements Listener {
 				return;
 			}
 			try {
+				Entity damager = damagecause.getDamager();
+				// Change attacker to archer
+				if (damagecause.getDamager() instanceof Arrow) {
+					Arrow arr = (Arrow) damagecause.getDamager();
+					if (arr.getShooter() instanceof LivingEntity) {
+						damager = (LivingEntity) arr.getShooter();
+						
+						// Modify Player Bow Damage
+						if (arr.getShooter() instanceof Player) {
+							Player shooter = (Player) arr.getShooter();
+							ItemStack mainitem = shooter.getInventory().getItemInMainHand();
+							if (mainitem != null) {
+								if (mainitem.getType() == Material.BOW) {
+									int dmgmodifier = 0;
+
+									if ((mainitem.getEnchantmentLevel(Enchantment.OXYGEN) > 999)) {
+										try
+										{
+										ISoliniaItem item = SoliniaItemAdapter.Adapt(mainitem);
+										if (item.getDamage() > 0 && item.getBasename().equals("BOW")) {
+											dmgmodifier = item.getDamage();
+										}
+										} catch (SoliniaItemException e) {
+											// sok just skip
+										}
+									}
+
+									event.setDamage(event.getDamage() + dmgmodifier);
+								}
+							}
+						}
+						
+					} else {
+					}
+				}
+				
 				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-				soliniaEntity.modifyDamageEvent(this.plugin, (LivingEntity) damagecause.getDamager(), damagecause);
+				soliniaEntity.modifyDamageEvent(this.plugin, (LivingEntity) damager, damagecause);
 			} catch (CoreStateInitException e) {
 
 			}
