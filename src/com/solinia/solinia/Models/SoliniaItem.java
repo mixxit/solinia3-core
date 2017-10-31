@@ -692,11 +692,14 @@ public class SoliniaItem implements ISoliniaItem {
 		case "clearallowedclasses":
 			setAllowedClassNames(new ArrayList<String>());
 			break;
+		case "cleardiscoverer":
+			setDiscoverer("");
+			break;
 		case "augmentationfitsslottype":
 			setAugmentationFitsSlotType(AugmentationSlotType.valueOf(value));
 			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses");
 		}
 	}
 

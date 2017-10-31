@@ -545,6 +545,13 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "offhanditem":
 			setOffhanditem(value);
 			break;
+		case "clearitems":
+			setHeaditem("");
+			setChestitem("");
+			setLegsitem("");
+			setFeetitem("");
+			setHanditem("");
+			setOffhanditem(value);
 		case "boss":
 			setBoss(Boolean.parseBoolean(value));
 			break;
