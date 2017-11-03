@@ -720,7 +720,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				try
 				{
 					ISoliniaPlayer solplayerReward = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
-					solplayerReward.tryIncreaseSkill("ACCURACY", 1);
+					solplayerReward.tryIncreaseSkill("OFFENSE", 1);
 				} catch (CoreStateInitException e)
 				{
 					// skip

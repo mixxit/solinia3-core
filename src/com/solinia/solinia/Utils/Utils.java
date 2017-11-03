@@ -739,7 +739,7 @@ public class Utils {
 				}
 		}
 		
-		if (skillname.equals("ACCURACY")) {
+		if (skillname.equals("OFFENSE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
