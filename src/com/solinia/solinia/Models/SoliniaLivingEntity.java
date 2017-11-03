@@ -715,11 +715,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				solplayer.tryIncreaseSkill(reward.getSkillname(), reward.getXp());
 			}
 			
-			if (getBukkitLivingEntity() instanceof Player)
+			if (attacker instanceof Player)
 			{
 				try
 				{
-					ISoliniaPlayer solplayerReward = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+					ISoliniaPlayer solplayerReward = SoliniaPlayerAdapter.Adapt((Player)attacker);
 					solplayerReward.tryIncreaseSkill("OFFENSE", 1);
 				} catch (CoreStateInitException e)
 				{
