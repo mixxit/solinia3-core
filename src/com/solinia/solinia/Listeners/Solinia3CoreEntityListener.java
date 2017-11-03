@@ -93,57 +93,6 @@ public class Solinia3CoreEntityListener implements Listener {
 			
 		}
 
-		/*
-		if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Skeleton) {
-			Wolf w = (Wolf) event.getEntity();
-			if (w.getOwner() != null) {
-				if (event.getTarget().getLastDamageCause() == null) {
-					((Creature) event.getEntity()).setTarget(null);
-					event.setCancelled(true);
-					return;
-				}
-
-				// This is where wolves cancel their attacks against all skeletons
-				// If the skeleton in question has hurt their master then it will set its target
-				// as normal
-				if (event.getTarget().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-					EntityDamageByEntityEvent dmgByEntity = (EntityDamageByEntityEvent) event.getTarget()
-							.getLastDamageCause();
-					if (dmgByEntity.getDamager() == null) {
-						((Creature) event.getEntity()).setTarget(null);
-						event.setCancelled(true);
-						return;
-					}
-
-					Entity attacker = dmgByEntity.getDamager();
-
-					if (dmgByEntity.getDamager() instanceof Arrow) {
-						Arrow arr = (Arrow) dmgByEntity.getDamager();
-						if (arr.getShooter() instanceof LivingEntity) {
-							attacker = (LivingEntity) arr.getShooter();
-						} else {
-						}
-					}
-
-					if (!(attacker instanceof Player) && !(!attacker.equals(event.getEntity()))) {
-						((Creature) event.getEntity()).setTarget(null);
-						System.out.println("Cancelling as the target has );
-						event.setCancelled(true);
-						return;
-					}
-
-					if ((event.getTarget().getLastDamageCause().getEntity() instanceof Player)
-							&& !(w.getOwner().getUniqueId().equals(attacker.getUniqueId()))) {
-						((Creature) event.getEntity()).setTarget(null);
-						event.setCancelled(true);
-						return;
-					}
-				}
-
-			}
-		}
-		*/
-
 		try {
 			// Me
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());

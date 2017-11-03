@@ -566,8 +566,10 @@ public class Utils {
 			skill = "ARCHERY";
 			break;
 		default:
+			// Fall back on crushing
+			xp = 1;
+			skill = "CRUSHING";
 			break;
-
 		}
 
 		if (xp > 0 && !skill.equals("")) {
@@ -618,7 +620,7 @@ public class Utils {
 		return percentagemodifier;
 	}
 
-	public static int getSkillCap(ISoliniaPlayer player, String skillname) {
+	public static int getSkillCap(String skillname, ISoliniaClass profession, int level) {
 
 		// If the skill being queried happens to be a race name, the cap for
 		// language is always 100
@@ -635,8 +637,6 @@ public class Utils {
 			e.printStackTrace();
 		}
 
-		ISoliniaClass profession = player.getClassObj();
-
 		// TODO - Move all these skill cap bonuses to the race configuration
 		// classes
 
@@ -649,7 +649,7 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
-					int cap = (int) ((5 * player.getLevel()) + 5);
+					int cap = (int) ((5 * level) + 5);
 					return cap;
 				}
 		}
@@ -664,7 +664,7 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
-					int cap = (int) ((5 * player.getLevel()) + 5);
+					int cap = (int) ((5 * level) + 5);
 					return cap;
 				}
 		}
@@ -679,7 +679,7 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
-					int cap = (int) ((5 * player.getLevel()) + 5);
+					int cap = (int) ((5 * level) + 5);
 					return cap;
 				}
 		}
@@ -694,7 +694,7 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
-					int cap = (int) ((5 * player.getLevel()) + 5);
+					int cap = (int) ((5 * level) + 5);
 					return cap;
 				}
 		}
@@ -709,7 +709,7 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
-					int cap = (int) ((5 * player.getLevel()) + 5);
+					int cap = (int) ((5 * level) + 5);
 					return cap;
 				}
 		}
@@ -719,7 +719,7 @@ public class Utils {
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
 						|| profession.getName().toUpperCase().equals("HUNTER"))) {
-					int cap = (int) ((5 * player.getLevel()) + 5);
+					int cap = (int) ((5 * level) + 5);
 					return cap;
 				}
 		}
@@ -734,12 +734,27 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("ARCANIST")
 						|| profession.getName().toUpperCase().equals("EXARCH"))) {
-					int cap = (int) ((5 * player.getLevel()) + 5);
+					int cap = (int) ((5 * level) + 5);
+					return cap;
+				}
+		}
+		
+		if (skillname.equals("ACCURACY")) {
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("ROGUE")
+						|| profession.getName().toUpperCase().equals("PALADIN")
+						|| profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("MONK")
+						|| profession.getName().toUpperCase().equals("HUNTER")
+						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
+					int cap = (int) ((5 * level) + 5);
 					return cap;
 				}
 		}
 
-		int cap = (int) ((2 * player.getLevel()) + 2);
+		int cap = (int) ((2 * level) + 2);
 		return cap;
 	}
 

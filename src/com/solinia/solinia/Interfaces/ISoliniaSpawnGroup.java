@@ -57,4 +57,8 @@ public interface ISoliniaSpawnGroup {
 	void editSetting(String setting, String value)
 			throws InvalidSpawnGroupSettingException, NumberFormatException, CoreStateInitException, IOException;
 
+	boolean isDisabled();
+
+	void setDisabled(boolean disabled);
+
 }

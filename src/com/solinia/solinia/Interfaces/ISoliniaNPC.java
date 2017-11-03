@@ -184,4 +184,14 @@ public interface ISoliniaNPC {
 	void setSummoner(boolean isSummoner);
 
 	String replaceChatWordsWithHints(String message);
+
+	void disableAllSpawners(boolean parseBoolean);
+
+	int getAccuracyRating();
+
+	int getSkill(String upperCase);
+
+	int getSkillCap(String skillName);
+
+	int getAvoidanceRating();
 }

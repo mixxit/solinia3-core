@@ -27,6 +27,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
+import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
@@ -68,6 +69,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private List<ISoliniaNPCEventHandler> eventHandlers = new ArrayList<ISoliniaNPCEventHandler>();
 	private String deathGrantsTitle = "";
 	private boolean isSummoner = false;
+	private int avoidanceRating = 0;
+	private int accuracyRating = 0;
 	
 	@Override
 	public int getId() {
@@ -416,6 +419,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- professionid: " + ChatColor.GOLD + getClassid() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "STATS" + ChatColor.RESET);
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
+		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET);
+		sender.sendMessage("- accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
@@ -631,9 +636,35 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "summoner":
 			setSummoner(Boolean.parseBoolean(value));
 			break;
+		case "disablespawners":
+			disableAllSpawners(Boolean.parseBoolean(value));
+			break;
+		case "accuracyrating":
+			setAccuracyRating(Integer.parseInt(value));
+			break;
+		case "avoidancerating":
+			setAvoidanceRating(Integer.parseInt(value));
+			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners");
+		}
+	}
+
+	@Override
+	public void disableAllSpawners(boolean parseBoolean) {
+		try {
+			for(ISoliniaSpawnGroup group : StateManager.getInstance().getConfigurationManager().getSpawnGroups())
+			{
+				if (group.getNpcid() == this.getId())
+				{
+					System.out.println("Set Spawner Disabled Status: " + group.getId() + ":" + group.getName() + " - " + parseBoolean);
+					group.setDisabled(parseBoolean);
+					StateManager.getInstance().getEntityManager().getNPCEntityProvider().removeSpawnGroup(group);
+				}
+			}
+		} catch (CoreStateInitException e) {
+			
 		}
 	}
 
@@ -1017,4 +1048,38 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setSummoner(boolean isSummoner) {
 		this.isSummoner = isSummoner;
 	}
+	
+	@Override
+	public int getSkillCap(String skillName) {
+		return Utils.getSkillCap(skillName, getClassObj(), getLevel());
+	}
+
+	@Override
+	public int getSkill(String skillName) {
+		
+		int skillLevel = getLevel() * 5;
+		
+		if (skillLevel > getSkillCap(skillName))
+			skillLevel = getSkillCap(skillName);
+			
+		return skillLevel;
+	}
+
+	public int getAvoidanceRating() {
+		return avoidanceRating;
+	}
+
+	public void setAvoidanceRating(int avoidanceRating) {
+		this.avoidanceRating = avoidanceRating;
+	}
+
+	public int getAccuracyRating() {
+		return accuracyRating;
+	}
+
+	public void setAccuracyRating(int accuracyRating) {
+		this.accuracyRating = accuracyRating;
+	}
 }
+
+	

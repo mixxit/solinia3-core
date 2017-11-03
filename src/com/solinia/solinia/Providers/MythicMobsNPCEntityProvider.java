@@ -103,6 +103,12 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	private void writeSpawnerDefinition(String fileName, ISoliniaSpawnGroup spawngroup) {
 		String fileData = createSpawnerFile(spawngroup);
+		
+		if (spawngroup.isDisabled())
+		{
+			fileData = "";
+		}
+		
 		try {
 			FileOutputStream fooStream = new FileOutputStream(fileName, false);
 
@@ -353,6 +359,12 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 
 		return mob;
+	}
+
+	@Override
+	public void removeSpawnGroup(ISoliniaSpawnGroup spawngroup) {
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
+		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 	}
 
 }

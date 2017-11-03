@@ -28,6 +28,7 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	private double yaw;
 	private double pitch;
 	private int respawntime = 900;
+	private boolean disabled = false;
 	
 	@Override
 	public int getId() {
@@ -130,6 +131,7 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- disabled: " + ChatColor.GOLD + isDisabled() + ChatColor.RESET);
 		sender.sendMessage("- respawntime: " + ChatColor.GOLD + getRespawntime() + ChatColor.RESET);
 		sender.sendMessage("- npcid: " + ChatColor.GOLD + getNpcid() + ChatColor.RESET);
 		sender.sendMessage("- x: " + ChatColor.GOLD + getX() + ChatColor.RESET);
@@ -165,6 +167,9 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 		case "z":
 			setZ(Integer.parseInt(value));
 			break;
+		case "disabled":
+			setDisabled(Boolean.parseBoolean(value));
+			break;
 		case "npcid":
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(Integer.parseInt(value));
 			if (npc == null)
@@ -175,5 +180,15 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 			throw new InvalidSpawnGroupSettingException(
 					"Invalid SpawnGroup setting. Valid Options are: name, x, y, z, respawntime,npcid");
 		}
+	}
+	
+	@Override
+	public boolean isDisabled() {
+		return disabled;
+	}
+	
+	@Override
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 }

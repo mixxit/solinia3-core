@@ -1,5 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -83,4 +84,18 @@ public interface ISoliniaLivingEntity
 	void configurePetGoals();
 
 	public void doSummon(Plugin plugin, LivingEntity target);
+
+	double getChanceToHit(String skillname, int hitChanceBonus);
+
+	double getChanceToHitForSkill(String skillname);
+
+	boolean isNPC();
+
+	int getSkill(String skillname);
+
+	String getSkillNameFromMaterialInHand(Material materialinhand);
+
+	double getTotalDefense();
+
+	double getDefenseByDefenseSkill();
 }

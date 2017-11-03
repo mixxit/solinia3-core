@@ -8,4 +8,6 @@ public interface INPCEntityProvider {
 
 	void reloadProvider();
 
+	void removeSpawnGroup(ISoliniaSpawnGroup group);
+
 }

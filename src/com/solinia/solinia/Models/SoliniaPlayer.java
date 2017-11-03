@@ -561,7 +561,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public int getSkillCap(String skillName) {
-		return Utils.getSkillCap(this,skillName);
+		return Utils.getSkillCap(skillName, getClassObj(), getLevel());
 	}
 
 	@Override
