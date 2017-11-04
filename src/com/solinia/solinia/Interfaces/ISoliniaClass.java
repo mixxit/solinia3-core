@@ -110,4 +110,6 @@ public interface ISoliniaClass {
 
 	void setShortName(String shortName);
 
+	public boolean isWarriorClass();
+
 }

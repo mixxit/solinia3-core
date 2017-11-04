@@ -1,20 +1,24 @@
 package com.solinia.solinia.Interfaces;
 
+import java.util.UUID;
+
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SpellResistType;
 
 public interface ISoliniaLivingEntity 
 {
 	public LivingEntity getBukkitLivingEntity();
 
-	public void modifyDamageEvent(Plugin plugin, LivingEntity damager, EntityDamageByEntityEvent damagecause);
-	
 	public boolean isPet();
 
 	int getLevel();
@@ -85,19 +89,43 @@ public interface ISoliniaLivingEntity
 
 	public void doSummon(Plugin plugin, LivingEntity target);
 
-	double getChanceToHit(String skillname, int hitChanceBonus);
-
-	double getChanceToHitForSkill(String skillname);
-
 	boolean isNPC();
 
 	int getSkill(String skillname);
 
 	String getSkillNameFromMaterialInHand(Material materialinhand);
 
-	double getTotalDefense();
+	int getTotalDefense();
 
-	double getDefenseByDefenseSkill();
+	int getDefenseByDefenseSkill();
 
 	boolean isBerserk();
+
+	int getDamageCaps(int base_damage);
+
+	void tryIncreaseSkill(String skillName, int amount);
+
+	int getWeaponDamageBonus(ItemStack itemStack);
+
+	int getOffense(String skillname);
+
+	public void addToHateList(UUID uniqueId, int hate);
+
+	int getTotalToHit(String skillname, int hitChanceBonus);
+
+	int computeToHit(String skillname);
+
+	public DamageHitInfo avoidDamage(SoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
+
+	public boolean checkHitChance(SoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
+
+	public DamageHitInfo meleeMitigation(SoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
+
+	public int getMitigationAC();
+
+	boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit);
+
+	public int getSkillDmgTaken(String skill);
+
+	public int getFcDamageAmtIncoming(SoliniaLivingEntity soliniaLivingEntity, int i, boolean b, String skill);
 }

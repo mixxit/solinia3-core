@@ -1597,4 +1597,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		playerQuestFlags.add(questFlag);
 		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + " * You have received a new Quest Flag!");
 	}
+
+	@Override
+	public boolean isMeditating() {
+		try {
+			if (getBukkitPlayer().isSneaking() || StateManager.getInstance().getEntityManager().getTrance(getUUID()) == true) {
+				return true;
+			}
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+		
+		return false;
+	}
 }

@@ -114,33 +114,28 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 
 	private int getPlayerMeditatingManaBonus(ISoliniaPlayer solplayer) {
 		int manaregen = 0;
-		try
+		if (solplayer.isMeditating())
 		{
-			if (solplayer.getBukkitPlayer().isSneaking() || StateManager.getInstance().getEntityManager().getTrance(solplayer.getUUID()) == true) {
-				SoliniaPlayerSkill meditationskill = solplayer.getSkill("MEDITATION");
-				int bonusmana = 3 + (meditationskill.getValue() / 15);
-	
-				manaregen += bonusmana;
-	
-				// apply meditation skill increase
-				Random r = new Random();
-				int randomInt = r.nextInt(100) + 1;
-				if (randomInt > 90) {
-					int currentvalue = 0;
-					SoliniaPlayerSkill skill = solplayer.getSkill("MEDITATION");
-					if (skill != null) {
-						currentvalue = skill.getValue();
-					}
-	
-					if ((currentvalue + 1) <= solplayer.getSkillCap("MEDITATION")) {
-						solplayer.setSkill("MEDITATION", currentvalue + 1);
-					}
-	
+			SoliniaPlayerSkill meditationskill = solplayer.getSkill("MEDITATION");
+			int bonusmana = 3 + (meditationskill.getValue() / 15);
+
+			manaregen += bonusmana;
+
+			// apply meditation skill increase
+			Random r = new Random();
+			int randomInt = r.nextInt(100) + 1;
+			if (randomInt > 90) {
+				int currentvalue = 0;
+				SoliniaPlayerSkill skill = solplayer.getSkill("MEDITATION");
+				if (skill != null) {
+					currentvalue = skill.getValue();
 				}
+
+				if ((currentvalue + 1) <= solplayer.getSkillCap("MEDITATION")) {
+					solplayer.setSkill("MEDITATION", currentvalue + 1);
+				}
+
 			}
-		} catch (CoreStateInitException e)
-		{
-			return manaregen;
 		}
 		return manaregen;
 	}

@@ -600,4 +600,36 @@ public class SoliniaClass implements ISoliniaClass {
 	public void setShortName(String shortName) {
 		this.shortName = shortName;
 	}
+
+	@Override
+	public boolean isWarriorClass() {
+		switch(getName())
+		{
+			case "WARRIOR":
+			case "WARRIORGM":
+			case "ROGUE":
+			case "ROGUEGM":
+			case "MONK":
+			case "MONKGM":
+			case "PALADIN":
+			case "PALADINGM":
+			case "SHADOWKNIGHT":
+			case "SHADOWKNIGHTGM":
+			case "RANGER":
+			case "RANGERGM":
+			case "BEASTLORD":
+			case "BEASTLORDGM":
+			case "BERSERKER":
+			case "BERSERKERGM":
+			case "BARD":
+			case "BARDGM":
+			{
+				return true;
+			}
+			default:
+			{
+				return false;
+			}
+		}
+	}
 }

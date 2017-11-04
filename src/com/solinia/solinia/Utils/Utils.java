@@ -72,6 +72,9 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class Utils {
+	public static float clamp(float val, float min, float max) {
+	    return Math.max(min, Math.min(max, val));
+	}
 
 	public static List<WorldWidePerk> getActiveWorldWidePerks() {
 		List<WorldWidePerk> perks = new ArrayList<WorldWidePerk>();
@@ -4082,132 +4085,7 @@ public class Utils {
 		}
 	}
 
-	public static double tryApplyCritical(LivingEntity attacker, double baseDamage, String skillname) 
-	{
-		ISoliniaLivingEntity entity;
-		try
-		{
-			entity = SoliniaLivingEntityAdapter.Adapt(attacker);
-		} catch (CoreStateInitException e)
-		{
-			return baseDamage;
-		}
-		
-		if (entity == null)
-			return baseDamage;
-		
-		if (baseDamage < 1)
-			return baseDamage;
-
-		double damageDone = 0;
-		
-		String className = "UNKNOWN";
-		if (entity.getClassObj() != null)
-		{
-			className = entity.getClassObj().getName();
-		}
-
-		
-		// TODO Slay Undead AA
-
-		// 2: Try Melee Critical
-		
-		boolean innateCritical = false;
-		int critChance = getCriticalChanceBonus(entity, skillname);
-		if ((className.equals("WARRIOR") || className.equals("BERSERKER")) && entity.getLevel() >= 12)
-			innateCritical = true;
-		else if (className.equals("RANGER") && entity.getLevel() >= 12 && skillname.equals("ARCHERY"))
-			innateCritical = true;
-		else if (className.equals("ROGUE") && entity.getLevel() >= 12 && skillname.equals("THROWING"))
-			innateCritical = true;
-
-		// we have a chance to crit!
-		if (innateCritical || critChance > 0) {
-			int difficulty = 0;
-			if (skillname.equals("ARCHERY"))
-				difficulty = 3400;
-			else if (skillname.equals("THROWING"))
-				difficulty = 1100;
-			else
-				difficulty = 8900;
-
-			//attacker.sendMessage("You have a chance to cause a critical (Diffulty dice roll: " + difficulty);
-			int roll = Utils.RandomBetween(1, difficulty);
-			//attacker.sendMessage("Critical chance roll ended up as: " + roll);
-
-			int dex_bonus = entity.getDexterity();
-			if (dex_bonus > 255)
-				dex_bonus = 255 + ((dex_bonus - 255) / 5);
-			dex_bonus += 45; 
-			//attacker.sendMessage("Critical dex bonus was: " + dex_bonus);
-
-			// so if we have an innate crit we have a better chance, except for ber throwing
-			if (!innateCritical || (className.equals("BERSERKER") && skillname.equals("THROWING")))
-				dex_bonus = dex_bonus * 3 / 5;
-
-			if (critChance > 0)
-				dex_bonus += dex_bonus * critChance / 100;
-			
-
-			//attacker.sendMessage("Checking if your roll: " + roll + " is less than the dexbonus: " + dex_bonus);
-
-			// check if we crited
-			if (roll < dex_bonus) {
-
-				//  TODO: Finishing Blow
-				
-				// step 2: calculate damage
-				damageDone = Math.max(damageDone, baseDamage) + 5;
-				//attacker.sendMessage("Taking the maximum out of damageDone: " + damageDone + " vs baseDamage: " + baseDamage + " adding 5 to it");
-
-				double og_damage = damageDone;
-				int crit_mod = 170 + getCritDmgMod(skillname);
-				if (crit_mod < 100) {
-					crit_mod = 100;
-				}
-				//attacker.sendMessage("Crit mod was: " + crit_mod);
-
-				damageDone = damageDone * crit_mod / 100;
-				//attacker.sendMessage("DamageDone was calculated at: " + damageDone);
-				
-				// TODO Spell bonuses && holyforge
-				double totalCritBonus = (damageDone - baseDamage);
-				
-				DecimalFormat df = new DecimalFormat();
-				df.setMaximumFractionDigits(2);
-				
-				// Berserker
-				if (entity.isBerserk()) {
-					damageDone += og_damage * 119 / 100;
-					//attacker.sendMessage("You are also berserker: damageDone now is: " + damageDone);
-					//attacker.sendMessage("* Your berserker status causes a critical blow!");
-					
-					totalCritBonus = (damageDone - baseDamage);
-					
-					if (attacker instanceof Player) {
-						((Player) attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-								new TextComponent("* Your berserker status causes additional critical blow damage ["+df.format(totalCritBonus)+"]!"));
-					}
-					
-					return damageDone;
-				}
-
-				if (attacker instanceof Player) {
-					((Player) attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent("You scored additional critical damage! [" + df.format(totalCritBonus) + "]"));
-				}
-				
-				//attacker.sendMessage("* Your score a critical hit (" + damageDone + ")!");
-				return damageDone;
-			}
-			
-		}
-		
-		return baseDamage;
-
-	}
-
-	private static int getCriticalChanceBonus(ISoliniaLivingEntity entity, String skillname) {
+	public static int getCriticalChanceBonus(ISoliniaLivingEntity entity, String skillname) {
 		int critical_chance = 0;
 		
 		// TODO - take items, aa spells etc into account
@@ -4217,7 +4095,7 @@ public class Utils {
 		return critical_chance;
 	}
 
-	private static int getCritDmgMod(String skillname) {
+	public static int getCritDmgMod(String skillname) {
 		int critDmg_mod = 0;
 		// TODO take aa and item bonuses into affect
 		return critDmg_mod;

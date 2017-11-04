@@ -210,4 +210,6 @@ public interface ISoliniaPlayer extends Serializable {
 	void setPlayerQuestFlags(List<String> playerQuestFlags);
 
 	List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId);
+
+	public boolean isMeditating();
 }

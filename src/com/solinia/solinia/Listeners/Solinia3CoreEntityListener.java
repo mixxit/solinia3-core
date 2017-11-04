@@ -324,8 +324,48 @@ public class Solinia3CoreEntityListener implements Listener {
 					}
 				}
 				
-				ISoliniaLivingEntity soliniaEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-				soliniaEntity.modifyDamageEvent(this.plugin, (LivingEntity) damager, damagecause);
+				if (!(damager instanceof LivingEntity))
+					return;
+				
+				LivingEntity attacker = (LivingEntity)damager;
+
+				// Change attacker to archer
+				if (damagecause.getDamager() instanceof Arrow) {
+					Arrow arr = (Arrow) damagecause.getDamager();
+					if (arr.getShooter() instanceof LivingEntity) {
+						attacker = (LivingEntity) arr.getShooter();
+					} else {
+					}
+				}
+				
+				if (attacker == null)
+					return;
+				
+				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
+				ISoliniaLivingEntity solattacker = SoliniaLivingEntityAdapter.Adapt((LivingEntity) attacker);
+
+				if (attacker instanceof Player && event.getEntity() instanceof Wolf) {
+					if (soldefender.isPet()) {
+						Wolf wolf = (Wolf) event.getEntity();
+						if (wolf != null) {
+							if (wolf.getTarget() == null || !wolf.getTarget().equals(attacker)) {
+								event.setCancelled(true);
+								return;
+							}
+						} else {
+							event.setCancelled(true);
+							return;
+						}
+					}
+				}
+				
+				if (!(event instanceof EntityDamageByEntityEvent))
+				{
+					return;
+				}
+				
+				solattacker.Attack(soldefender, event, damagecause.getDamager() instanceof Arrow);
+				
 			} catch (CoreStateInitException e) {
 
 			}
