@@ -427,22 +427,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 			}
 			
+			DecimalFormat df = new DecimalFormat();
+			df.setMaximumFractionDigits(2);
+			
 			if (getBukkitLivingEntity() instanceof Player) {
-				DecimalFormat df = new DecimalFormat();
-				df.setMaximumFractionDigits(2);
-				
 				((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent("You hit " + defender.getBukkitLivingEntity().getCustomName() + " for "
 								+ df.format(event.getDamage()) + " "
 								+ df.format(getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
 								+ df.format(getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill + " damage"));
-				
-				if (defender.getBukkitLivingEntity() instanceof Player)
-				{
-					((Player)defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
-									+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
-				}
 				
 				// Only players get this
 				if (getDoubleAttackCheck()) {
@@ -500,6 +493,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				} catch (CoreStateInitException e) {
 
 				}
+			}
+			
+			if (defender.getBukkitLivingEntity() instanceof Player)
+			{
+				((Player)defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+						new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
+								+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
 			}
 			
 			return true;
@@ -615,11 +615,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			else {
 				if (getBukkitLivingEntity() instanceof Player)
 				{
-					((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* You tried to hit " + defender.getBukkitLivingEntity().getCustomName() + ", but missed!");
+					((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("You tried to hit " + defender.getBukkitLivingEntity().getCustomName() + ", but missed!"));
 				}
 				if (defender.getBukkitLivingEntity() instanceof Player)
 				{
-					((Player) defender.getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* " + getBukkitLivingEntity().getCustomName() + " tried to hit you, but missed!");
+					((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(getBukkitLivingEntity().getCustomName() + " tried to hit you, but missed!"));
 					try
 					{
 						ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)defender.getBukkitLivingEntity());
