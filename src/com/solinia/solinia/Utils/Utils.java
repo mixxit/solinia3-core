@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -67,6 +68,8 @@ import com.solinia.solinia.Models.WorldWidePerk;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Utils {
 
@@ -4127,12 +4130,16 @@ public class Utils {
 				difficulty = 1100;
 			else
 				difficulty = 8900;
+
+			//attacker.sendMessage("You have a chance to cause a critical (Diffulty dice roll: " + difficulty);
 			int roll = Utils.RandomBetween(1, difficulty);
+			//attacker.sendMessage("Critical chance roll ended up as: " + roll);
 
 			int dex_bonus = entity.getDexterity();
 			if (dex_bonus > 255)
 				dex_bonus = 255 + ((dex_bonus - 255) / 5);
 			dex_bonus += 45; 
+			//attacker.sendMessage("Critical dex bonus was: " + dex_bonus);
 
 			// so if we have an innate crit we have a better chance, except for ber throwing
 			if (!innateCritical || (className.equals("BERSERKER") && skillname.equals("THROWING")))
@@ -4140,32 +4147,57 @@ public class Utils {
 
 			if (critChance > 0)
 				dex_bonus += dex_bonus * critChance / 100;
+			
+
+			//attacker.sendMessage("Checking if your roll: " + roll + " is less than the dexbonus: " + dex_bonus);
 
 			// check if we crited
 			if (roll < dex_bonus) {
-				
+
 				//  TODO: Finishing Blow
 				
 				// step 2: calculate damage
 				damageDone = Math.max(damageDone, baseDamage) + 5;
+				//attacker.sendMessage("Taking the maximum out of damageDone: " + damageDone + " vs baseDamage: " + baseDamage + " adding 5 to it");
+
 				double og_damage = damageDone;
 				int crit_mod = 170 + getCritDmgMod(skillname);
 				if (crit_mod < 100) {
 					crit_mod = 100;
 				}
+				//attacker.sendMessage("Crit mod was: " + crit_mod);
 
 				damageDone = damageDone * crit_mod / 100;
+				//attacker.sendMessage("DamageDone was calculated at: " + damageDone);
 				
 				// TODO Spell bonuses && holyforge
-
+				double totalCritBonus = (damageDone - baseDamage);
+				
+				DecimalFormat df = new DecimalFormat();
+				df.setMaximumFractionDigits(2);
+				
 				// Berserker
 				if (entity.isBerserk()) {
 					damageDone += og_damage * 119 / 100;
-					attacker.sendMessage("* Your berserker status causes a critical blow!");
+					//attacker.sendMessage("You are also berserker: damageDone now is: " + damageDone);
+					//attacker.sendMessage("* Your berserker status causes a critical blow!");
+					
+					totalCritBonus = (damageDone - baseDamage);
+					
+					if (attacker instanceof Player) {
+						((Player) attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+								new TextComponent("* Your berserker status causes additional critical blow damage ["+df.format(totalCritBonus)+"]!"));
+					}
+					
 					return damageDone;
 				}
 
-				attacker.sendMessage("* Your score a critical hit (" + damageDone + ")!");
+				if (attacker instanceof Player) {
+					((Player) attacker).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent("You scored additional critical damage! [" + df.format(totalCritBonus) + "]"));
+				}
+				
+				//attacker.sendMessage("* Your score a critical hit (" + damageDone + ")!");
 				return damageDone;
 			}
 			

@@ -169,7 +169,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean isBerserk() {
 		// if less than 10% health and warrior, is in berserk mode
-		if (((this.getBukkitLivingEntity().getMaxHealth() / 100)*10) < this.getBukkitLivingEntity().getHealth())
+		if (this.getBukkitLivingEntity().getHealth() < ((this.getBukkitLivingEntity().getMaxHealth() / 100)*10))
 		if (this.getClassObj() != null)
 		{
 			if (this.getClassObj().getName().equals("WARRIOR"))
@@ -701,7 +701,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								}
 								getBukkitLivingEntity().damage(newdmg, attacker);
 							}
-
+						
 						event.setDamage(DamageModifier.BASE, newdmg);
 					} catch (CoreStateInitException e) {
 						//
