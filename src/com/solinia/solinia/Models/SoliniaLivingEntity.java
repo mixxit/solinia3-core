@@ -448,6 +448,45 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 				
 				try {
+					if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getEnchantmentLevel(Enchantment.OXYGEN) > 999) {
+						try
+						{
+							ISoliniaItem soliniaitem = SoliniaItemAdapter.Adapt(getBukkitLivingEntity().getEquipment().getItemInMainHand());
+							if (soliniaitem != null)
+							{
+							// Check if item has any proc effects
+								if (soliniaitem.getWeaponabilityid() > 0
+										&& event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
+									ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
+											.getSpell(soliniaitem.getWeaponabilityid());
+									if (procSpell != null) {
+										// Chance to proc
+										int procChance = getProcChancePct();
+										int roll = Utils.RandomBetween(0, 100);
+			
+										if (roll < procChance) {
+			
+											// TODO - For now apply self and group to attacker, else attach to target
+											switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
+											case Self:
+												procSpell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(), this.getBukkitLivingEntity());
+												break;
+											case Group:
+												procSpell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(), this.getBukkitLivingEntity());
+												break;
+											default:
+												procSpell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(), defender.getBukkitLivingEntity());
+											}
+			
+										}
+									}
+								}
+							}
+						} catch (SoliniaItemException e) {
+							// skip
+						}
+					}
+					
 					// Check if attacker has any WeaponProc effects
 					SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager().getActiveEntitySpells(this.getBukkitLivingEntity());
 
