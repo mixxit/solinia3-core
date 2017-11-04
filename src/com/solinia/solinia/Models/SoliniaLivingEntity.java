@@ -166,7 +166,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return 0;
 	}
 
-	private boolean isBerserk() {
+	@Override
+	public boolean isBerserk() {
 		// if less than 10% health and warrior, is in berserk mode
 		if (((this.getBukkitLivingEntity().getMaxHealth() / 100)*10) < this.getBukkitLivingEntity().getHealth())
 		if (this.getClassObj() != null)
@@ -554,6 +555,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						} catch (Exception e1) {
 						}
 
+						newdmg += Utils.tryApplyCritical(attacker,newdmg,"ARCHERY");
+						
 						event.setDamage(DamageModifier.BASE, newdmg);
 					} catch (CoreStateInitException e) {
 
@@ -605,6 +608,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) * damagepct);
 						} catch (Exception e1) {
 						}
+						
+						newdmg += Utils.tryApplyCritical(attacker,newdmg,"SLASHING");
 
 						event.setDamage(DamageModifier.BASE, newdmg);
 
@@ -676,6 +681,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) * damagepct);
 						} catch (Exception e1) {
 						}
+						
+						newdmg += Utils.tryApplyCritical(attacker,newdmg,"CRUSHING");
 
 						event.setDamage(DamageModifier.BASE, newdmg);
 

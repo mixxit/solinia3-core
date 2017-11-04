@@ -753,6 +753,21 @@ public class Utils {
 					return cap;
 				}
 		}
+		
+		if (skillname.equals("DEFENSE")) {
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("ROGUE")
+						|| profession.getName().toUpperCase().equals("PALADIN")
+						|| profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("MONK")
+						|| profession.getName().toUpperCase().equals("HUNTER")
+						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
+					int cap = (int) ((5 * level) + 5);
+					return cap;
+				}
+		}
 
 		int cap = (int) ((2 * level) + 2);
 		return cap;
@@ -4062,5 +4077,117 @@ public class Utils {
 		{
 			return 0;
 		}
+	}
+
+	public static double tryApplyCritical(LivingEntity attacker, double baseDamage, String skillname) 
+	{
+		ISoliniaLivingEntity entity;
+		try
+		{
+			entity = SoliniaLivingEntityAdapter.Adapt(attacker);
+		} catch (CoreStateInitException e)
+		{
+			return baseDamage;
+		}
+		
+		if (entity == null)
+			return baseDamage;
+		
+		if (baseDamage < 1)
+			return baseDamage;
+
+		double damageDone = 0;
+		
+		String className = "UNKNOWN";
+		if (entity.getClassObj() != null)
+		{
+			className = entity.getClassObj().getName();
+		}
+
+		
+		// TODO Slay Undead AA
+
+		// 2: Try Melee Critical
+		
+		boolean innateCritical = false;
+		int critChance = getCriticalChanceBonus(entity, skillname);
+		if ((className.equals("WARRIOR") || className.equals("BERSERKER")) && entity.getLevel() >= 12)
+			innateCritical = true;
+		else if (className.equals("RANGER") && entity.getLevel() >= 12 && skillname.equals("ARCHERY"))
+			innateCritical = true;
+		else if (className.equals("ROGUE") && entity.getLevel() >= 12 && skillname.equals("THROWING"))
+			innateCritical = true;
+
+		// we have a chance to crit!
+		if (innateCritical || critChance > 0) {
+			int difficulty = 0;
+			if (skillname.equals("ARCHERY"))
+				difficulty = 3400;
+			else if (skillname.equals("THROWING"))
+				difficulty = 1100;
+			else
+				difficulty = 8900;
+			int roll = Utils.RandomBetween(1, difficulty);
+
+			int dex_bonus = entity.getDexterity();
+			if (dex_bonus > 255)
+				dex_bonus = 255 + ((dex_bonus - 255) / 5);
+			dex_bonus += 45; 
+
+			// so if we have an innate crit we have a better chance, except for ber throwing
+			if (!innateCritical || (className.equals("BERSERKER") && skillname.equals("THROWING")))
+				dex_bonus = dex_bonus * 3 / 5;
+
+			if (critChance > 0)
+				dex_bonus += dex_bonus * critChance / 100;
+
+			// check if we crited
+			if (roll < dex_bonus) {
+				
+				//  TODO: Finishing Blow
+				
+				// step 2: calculate damage
+				damageDone = Math.max(damageDone, baseDamage) + 5;
+				double og_damage = damageDone;
+				int crit_mod = 170 + getCritDmgMod(skillname);
+				if (crit_mod < 100) {
+					crit_mod = 100;
+				}
+
+				damageDone = damageDone * crit_mod / 100;
+				
+				// TODO Spell bonuses && holyforge
+
+				// Berserker
+				if (entity.isBerserk()) {
+					damageDone += og_damage * 119 / 100;
+					attacker.sendMessage("* Your berserker status causes a critical blow!");
+					return damageDone;
+				}
+
+				attacker.sendMessage("* Your score a critical hit (" + damageDone + ")!");
+				return damageDone;
+			}
+			
+		}
+		
+		return baseDamage;
+
+	}
+
+	private static int getCriticalChanceBonus(ISoliniaLivingEntity entity, String skillname) {
+		int critical_chance = 0;
+		
+		// TODO - take items, aa spells etc into account
+		if(critical_chance < -100)
+			critical_chance = -100;
+
+		return critical_chance;
+	}
+
+	private static int getCritDmgMod(String skillname) {
+		int critDmg_mod = 0;
+		// TODO take aa and item bonuses into affect
+		return critDmg_mod;
 	}
 }
