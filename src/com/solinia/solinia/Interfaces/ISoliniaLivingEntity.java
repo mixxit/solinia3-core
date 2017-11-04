@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
@@ -123,7 +124,7 @@ public interface ISoliniaLivingEntity
 
 	public int getMitigationAC();
 
-	boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit);
+	boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit, Solinia3CorePlugin plugin);
 
 	public int getSkillDmgTaken(String skill);
 

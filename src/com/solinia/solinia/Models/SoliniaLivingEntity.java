@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -258,7 +259,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
-	public boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit)
+	public boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit, Solinia3CorePlugin plugin)
 	{
 		int baseDamage = (int)event.getDamage(DamageModifier.BASE);
 
@@ -371,23 +372,77 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			triggerDefensiveProcs(defender, my_hit.damage_done, arrowHit);
 			
-			event.setDamage(DamageModifier.ABSORPTION,0);
-			event.setDamage(DamageModifier.ARMOR,0);
-			event.setDamage(DamageModifier.BASE, my_hit.damage_done);
-			event.setDamage(DamageModifier.BLOCKING,0);
-			event.setDamage(DamageModifier.HARD_HAT,0);
-			event.setDamage(DamageModifier.MAGIC,0);
-			event.setDamage(DamageModifier.RESISTANCE,0);
+			try
+			{
+				event.setDamage(DamageModifier.ABSORPTION,0);
+			} catch (UnsupportedOperationException e)
+			{
+				
+			}
+			
+			try
+			{
+				event.setDamage(DamageModifier.ARMOR,0);
+			} catch (UnsupportedOperationException e)
+			{
+				
+			}
+			
+			try
+			{
+				event.setDamage(DamageModifier.BASE, my_hit.damage_done);
+			} catch (UnsupportedOperationException e)
+			{
+				
+			}
+			try
+			{
+				event.setDamage(DamageModifier.BLOCKING,0);
+			} catch (UnsupportedOperationException e)
+			{
+				
+			}
+			
+			try
+			{
+				event.setDamage(DamageModifier.HARD_HAT,0);
+			} catch (UnsupportedOperationException e)
+			{
+				
+			}
+			
+			try
+			{
+				event.setDamage(DamageModifier.MAGIC,0);
+			} catch (UnsupportedOperationException e)
+			{
+				
+			}
+			
+			try
+			{
+				event.setDamage(DamageModifier.RESISTANCE,0);
+			} catch (UnsupportedOperationException e)
+			{
+				
+			}
 			
 			if (getBukkitLivingEntity() instanceof Player) {
 				DecimalFormat df = new DecimalFormat();
 				df.setMaximumFractionDigits(2);
 				
 				((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-						new TextComponent("You hit " + getBukkitLivingEntity().getName() + " for "
+						new TextComponent("You hit " + defender.getBukkitLivingEntity().getCustomName() + " for "
 								+ df.format(event.getDamage()) + " "
 								+ df.format(getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
 								+ df.format(getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill + " damage"));
+				
+				if (defender.getBukkitLivingEntity() instanceof Player)
+				{
+					((Player)defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
+									+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
+				}
 				
 				// Only players get this
 				if (getDoubleAttackCheck()) {
@@ -397,6 +452,53 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								1);
 					}
 					defender.getBukkitLivingEntity().damage(my_hit.damage_done, this.getBukkitLivingEntity());
+				}
+				
+				try {
+					// Check if attacker has any WeaponProc effects
+					SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager().getActiveEntitySpells(this.getBukkitLivingEntity());
+
+					if (effects != null) {
+						for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
+							ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+									.getSpell(activeSpell.getSpellId());
+							if (spell == null)
+								continue;
+
+							if (!spell.isWeaponProc())
+								continue;
+
+							for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
+								if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)) {
+									if (spelleffect.getBase() < 0)
+										continue;
+
+									ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
+											.getSpell(spelleffect.getBase());
+									if (spell == null)
+										continue;
+
+									// Chance to proc
+									int procChance = getProcChancePct();
+									int roll = Utils.RandomBetween(0, 100);
+
+									if (roll < procChance) {
+										boolean itemUseSuccess = procSpell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(),
+												defender.getBukkitLivingEntity());
+
+										if (procSpell.getMana() > 0)
+											if (itemUseSuccess) {
+												if (getBukkitLivingEntity() instanceof Player) {
+													SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).reducePlayerMana(procSpell.getMana());
+												}
+											}
+									}
+								}
+							}
+						}
+					}
+				} catch (CoreStateInitException e) {
+
 				}
 			}
 			

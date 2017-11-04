@@ -364,7 +364,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					return;
 				}
 				
-				solattacker.Attack(soldefender, event, damagecause.getDamager() instanceof Arrow);
+				solattacker.Attack(soldefender, event, damagecause.getDamager() instanceof Arrow, plugin);
 				
 			} catch (CoreStateInitException e) {
 
