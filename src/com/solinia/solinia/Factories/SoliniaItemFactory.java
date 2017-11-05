@@ -269,6 +269,7 @@ public class SoliniaItemFactory {
 				{
 					className = classtype.getName().toLowerCase() + "s";
 					className = Utils.FormatAsName(className);
+					className += " ";
 				}
 				
 				item.setDisplayname(rarityName + className + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
