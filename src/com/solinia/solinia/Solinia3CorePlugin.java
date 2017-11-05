@@ -57,6 +57,7 @@ import com.solinia.solinia.Commands.CommandListNPCs;
 import com.solinia.solinia.Commands.CommandListSpawnGroups;
 import com.solinia.solinia.Commands.CommandListSpells;
 import com.solinia.solinia.Commands.CommandLocal;
+import com.solinia.solinia.Commands.CommandLoot;
 import com.solinia.solinia.Commands.CommandMana;
 import com.solinia.solinia.Commands.CommandNPCBuy;
 import com.solinia.solinia.Commands.CommandNPCGive;
@@ -445,6 +446,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("today").setExecutor(new CommandToday());		
 		this.getCommand("listaas").setExecutor(new CommandListAAs());		
 		this.getCommand("editaa").setExecutor(new CommandEditAA());		
+		this.getCommand("loot").setExecutor(new CommandLoot());		
 	}
 
 	private void createConfigDir() {

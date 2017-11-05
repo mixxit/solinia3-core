@@ -351,6 +351,10 @@ commands:
     description: Lists aa abilities
     usage: /listaa searchstring
     aliases: []
+  loot:
+    description: Searches loot
+    usage: /loot searchstring
+    aliases: []
 depend:
 - Vault
 - MythicMobs
