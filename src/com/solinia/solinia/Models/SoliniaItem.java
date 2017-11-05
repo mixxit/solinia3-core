@@ -75,6 +75,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isQuest = false;
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
 	private String discoverer = "";
+	private int minLevel = 0;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -824,5 +825,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setDiscoverer(String discoverer) {
 		this.discoverer = discoverer;
+	}
+
+	@Override
+	public int getMinLevel() {
+		return minLevel;
+	}
+
+	@Override
+	public void setMinLevel(int minLevel) {
+		this.minLevel = minLevel;
 	}
 }

@@ -217,4 +217,8 @@ public interface ISoliniaItem {
 	String getDiscoverer();
 
 	void setDiscoverer(String discoverer);
+
+	int getMinLevel();
+
+	void setMinLevel(int minLevel);
 }

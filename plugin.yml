@@ -285,6 +285,11 @@ commands:
     usage: /createarmorset classid tier suffixname
     aliases: 
     - createarmourset
+  createallarmoursets:
+    description: Creates a new set of armour for all class with a chance of 10% on a lootdrop
+    usage: /createallarmoursets lootdropid tier suffixname
+    aliases: 
+    - createallarmorsets
   listspells:
     description: Lists spells
     usage: /listspells searchstring

@@ -215,7 +215,7 @@ public class SoliniaItemFactory {
 		return item;
 	}
 
-	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname) throws SoliniaItemException {
+	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname, boolean prefixClassName) throws SoliniaItemException {
 		List<Integer> items = new ArrayList<Integer>();
 		
 		try
@@ -264,12 +264,24 @@ public class SoliniaItemFactory {
 					rarityBonus = 5;
 				}
 				
-				item.setDisplayname(rarityName + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
+				String className = "";
+				if (prefixClassName == true)
+				{
+					className = classtype.getName() + "'s ";
+				}
+				
+				item.setDisplayname(rarityName + className + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
 				
 				int tierMin = 0;
 				int tierMax = armourtier * 5;
 				if (armourtier > 1)
 					tierMin =+ (5 * armourtier) - 5;
+				
+				int lvlMin = 0;
+				if (armourtier > 1)
+					lvlMin =+ (10 * armourtier) - 10;
+				
+				item.setMinLevel(lvlMin);
 				
 				int classStrBonus = classtype.getItemGenerationBonus("strength");
 				int classStaBonus = classtype.getItemGenerationBonus("stamina");

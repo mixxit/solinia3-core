@@ -11,10 +11,12 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
+import com.solinia.solinia.Factories.SoliniaLootFactory;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Managers.StateManager;
 
-public class CommandCreateArmourSet implements CommandExecutor {
+public class CommandCreateAllArmourSets implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
@@ -35,15 +37,15 @@ public class CommandCreateArmourSet implements CommandExecutor {
 			}
 
 			// args
-			// classid
+			// lootdropid
 			// armourtier
 			// suffixname
 
-			int classid = Integer.parseInt(args[0]);
+			int lootdropid = Integer.parseInt(args[0]);
 			int armourtier = Integer.parseInt(args[1]);
-			ISoliniaClass classtype = StateManager.getInstance().getConfigurationManager().getClassObj(classid);
-			if (classtype == null) {
-				sender.sendMessage("Class ID does not exist");
+			ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid);
+			if (lootdrop == null) {
+				sender.sendMessage("Lootdrop ID does not exist");
 				return true;
 			}
 
@@ -65,13 +67,17 @@ public class CommandCreateArmourSet implements CommandExecutor {
 				sender.sendMessage("Blank suffix name not allowed when creating armour set");
 				return false;
 			}
-
-			List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classtype, armourtier, partialname, false);
+			
 			String itemscreated = "";
-			for (Integer item : items) {
-				itemscreated += item + " ";
+			for(ISoliniaClass classEntry : StateManager.getInstance().getConfigurationManager().getClasses())
+			{
+				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true);
+				for (Integer item : items) {
+					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, count, false, 10);
+					itemscreated += item + " ";
+				}
 			}
-			sender.sendMessage("Created items as IDs: " + itemscreated);
+			sender.sendMessage("Created items as IDs: " + itemscreated + " with 10% chance in lootdrop: " + lootdropid);
 		} catch (CoreStateInitException e) {
 			sender.sendMessage(e.getMessage());
 		} catch (SoliniaItemException e) {
