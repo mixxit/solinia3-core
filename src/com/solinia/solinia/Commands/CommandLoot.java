@@ -21,14 +21,11 @@ public class CommandLoot implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
 			return false;
 		
-		if (args.length >= 1)
+		if (args.length > 0)
 		{
 			String search = "";
 			for(int i = 0; i < args.length; i++)
 			{
-				if (i == 0)
-					continue;
-				
 				search += args[i] + " ";
 			}
 			
