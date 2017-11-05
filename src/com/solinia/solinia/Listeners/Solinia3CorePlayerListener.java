@@ -133,6 +133,13 @@ public class Solinia3CorePlayerListener implements Listener {
 	    			return;
 	    		}
 	    		
+	    		if (soliniaitem.getMinLevel() > solplayer.getLevel())
+	    		{
+	    			event.setCancelled(true);
+	    			event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+	    			return;
+	    		}
+	    		
 	    		solplayer.updateMaxHp();
 		    }
 		} catch (CoreStateInitException e)
@@ -276,6 +283,14 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
+	        		
+	        		if (soliniaitem.getMinLevel() > solplayer.getLevel())
+		    		{
+		    			event.setCancelled(true);
+		    			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+		    			return;
+		    		}
+	        		
 	        		solplayer.updateMaxHp();
 			    }
 			}
@@ -305,6 +320,13 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			return;
 	        		}
 	        		
+	        		if (soliniaitem.getMinLevel() > solplayer.getLevel())
+		    		{
+		    			event.setCancelled(true);
+		    			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+		    			return;
+		    		}
+	        		
 	        		solplayer.updateMaxHp();
 			    }
 	        }
@@ -333,6 +355,13 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
+	        		
+	        		if (soliniaitem.getMinLevel() > solplayer.getLevel())
+		    		{
+		    			event.setCancelled(true);
+		    			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+		    			return;
+		    		}
 	        		
 	        		solplayer.updateMaxHp();
 			    }

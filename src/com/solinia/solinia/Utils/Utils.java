@@ -871,6 +871,15 @@ public class Utils {
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;
 				}
+				
+				if (soliniaitem.getMinLevel() > solplayer.getLevel())
+	    		{
+					event.setCancelled(true);
+					event.getPlayer().updateInventory();
+					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+					return;
+	    		}
+				
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

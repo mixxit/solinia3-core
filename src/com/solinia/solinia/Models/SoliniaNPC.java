@@ -1,6 +1,7 @@
 package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -862,12 +863,13 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public String replaceChatWordsWithHints(String message)
 	{
+		List<String> messages = Arrays.asList(message.toUpperCase().split(" "));
 		for(ISoliniaNPCEventHandler handler : getEventHandlers())
 		{
 			if (!handler.getInteractiontype().equals(InteractionType.CHAT))
 				continue;
 			
-			if (!message.toUpperCase().contains(handler.getTriggerdata().toUpperCase()))
+			if (!messages.contains(handler.getTriggerdata().toUpperCase()))
 				continue;
 			
 			message = message.toLowerCase().replace(handler.getTriggerdata().toLowerCase(), "["+handler.getTriggerdata().toLowerCase()+"]");

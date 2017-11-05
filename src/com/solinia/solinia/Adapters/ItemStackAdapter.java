@@ -130,6 +130,10 @@ public class ItemStackAdapter {
 		if (!classtxt.equals("")) {
 			loretxt.add(classtxt);
 		}
+		
+		if (soliniaItem.getMinLevel() > 0) {
+			loretxt.add("Minimum Level: " + ChatColor.YELLOW + soliniaItem.getMinLevel() + ChatColor.RESET);
+		}
 
 		String stattxt = "";
 		if (soliniaItem.getStrength() > 0) {

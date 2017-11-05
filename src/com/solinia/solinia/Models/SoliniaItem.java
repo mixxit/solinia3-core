@@ -562,6 +562,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
 		sender.sendMessage("- basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET);
+		sender.sendMessage("- minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);		
@@ -695,6 +696,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "cleardiscoverer":
 			setDiscoverer("");
+			break;
+		case "minlevel":
+			setMinLevel(Integer.parseInt(value));
 			break;
 		case "augmentationfitsslottype":
 			setAugmentationFitsSlotType(AugmentationSlotType.valueOf(value));

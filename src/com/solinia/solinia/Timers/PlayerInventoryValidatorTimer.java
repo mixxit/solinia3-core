@@ -96,6 +96,16 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been dropped");
 						continue;
 					}
+					
+					if (i.getMinLevel() > solplayer.getLevel())
+		    		{
+						player.getWorld().dropItemNaturally(player.getLocation(), player.getInventory().getItem(slotId));
+						player.getInventory().setItem(slotId, null);
+						player.updateInventory();
+						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been dropped");
+						continue;
+		    		}
+					
 				} catch (SoliniaItemException e) {
 					continue;
 				}
