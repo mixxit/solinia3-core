@@ -430,7 +430,7 @@ public class ChannelManager implements IChannelManager {
 			}
 		}
 		
-		sendToDiscordMC(null,targetChannelId,"Item " + item.getId() + " ("+ item.getDisplayname() + ") Base: " + item.getBasename());
+		sendToDiscordMC(null,targetChannelId,"Item " + item.getId() + " ("+ item.getDisplayname() + ") Base: " + item.getBasename() + " MinLevel: " + item.getMinLevel());
 		sendToDiscordMC(null,targetChannelId,"Damage " + item.getDamage() + " UndeadBaneDmg: " + item.getBaneUndead() + " " + proc + " Worth: $" + item.getWorth());
 		sendToDiscordMC(null,targetChannelId,"Strength: " + item.getStrength() + 
 				" Stamina: " + item.getStamina() + 
