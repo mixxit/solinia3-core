@@ -907,6 +907,10 @@ public class Utils {
 
 			if (solplayer.getBukkitPlayer().getInventory().getItemInOffHand() != null)
 				itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInOffHand());
+			
+			if (!stat.equals("STAMINA"))
+				if (solplayer.getBukkitPlayer().getInventory().getItemInHand() != null)
+					itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInHand());
 
 			for (ItemStack itemstack : itemstacks) {
 				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999

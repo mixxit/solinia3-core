@@ -1063,7 +1063,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// Skip
 		}
 		
+		List<ItemStack> itemstacks = new ArrayList<ItemStack>();
 		for (ItemStack itemstack : getBukkitPlayer().getInventory().getArmorContents()) {
+			if (itemstack == null)
+				continue;
+
+			itemstacks.add(itemstack);
+		}
+
+		if (getBukkitPlayer().getInventory().getItemInOffHand() != null)
+			itemstacks.add(getBukkitPlayer().getInventory().getItemInOffHand());
+		
+		if (getBukkitPlayer().getInventory().getItemInHand() != null)
+			itemstacks.add(getBukkitPlayer().getInventory().getItemInHand());
+		
+		
+		for (ItemStack itemstack : itemstacks) {
 			if (itemstack == null)
 				continue;
 
