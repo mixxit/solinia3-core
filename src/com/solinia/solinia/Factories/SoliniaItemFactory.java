@@ -267,7 +267,7 @@ public class SoliniaItemFactory {
 				String className = "";
 				if (prefixClassName == true)
 				{
-					className = classtype.getName().toLowerCase() + "s";
+					className = classtype.getClassItemPrefix().toLowerCase();
 					className = Utils.FormatAsName(className);
 					className += " ";
 				}
@@ -282,6 +282,11 @@ public class SoliniaItemFactory {
 				int lvlMin = 0;
 				if (armourtier > 1)
 					lvlMin =+ (10 * armourtier) - 10;
+				
+				if (lvlMin > Utils.getMaxLevel())
+				{
+					lvlMin = Utils.getMaxLevel();
+				}
 				
 				item.setMinLevel(lvlMin);
 				

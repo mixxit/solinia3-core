@@ -15,6 +15,7 @@ import com.solinia.solinia.Factories.SoliniaLootFactory;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandCreateAllArmourSets implements CommandExecutor {
 	@Override
@@ -32,7 +33,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 				}
 			}
 
-			if (args.length < 2) {
+			if (args.length < 3) {
 				return false;
 			}
 
@@ -48,7 +49,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 				sender.sendMessage("Lootdrop ID does not exist");
 				return true;
 			}
-
+			
 			String partialname = "";
 			int count = 0;
 			for (String entry : args) {

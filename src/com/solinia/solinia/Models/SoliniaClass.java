@@ -47,6 +47,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int doubleattacklevel = 0;
 	private int safefalllevel = 0;
 	private String shortName = "";
+	private String classItemPrefix = "";
 	
 	@Override
 	public String getName() {
@@ -164,6 +165,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- wisdomitembonus: " + ChatColor.GOLD + getWisdomitembonus() + ChatColor.RESET);
 		sender.sendMessage("- charismaitembonus: " + ChatColor.GOLD + getCharismaitembonus() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- classitemprefix: " + ChatColor.GOLD + getClassItemPrefix() + ChatColor.RESET);
 		sender.sendMessage("- helmtypename: " + ChatColor.GOLD + getHelmtypename() + ChatColor.RESET);
 		sender.sendMessage("- chesttypename: " + ChatColor.GOLD + getChesttypename() + ChatColor.RESET);
 		sender.sendMessage("- legstypename: " + ChatColor.GOLD + getLegstypename() + ChatColor.RESET);
@@ -287,8 +289,11 @@ public class SoliniaClass implements ISoliniaClass {
 		case "safefalllevel":
 			this.setSafefalllevel(Integer.parseInt(value));
 			break;
+		case "classitemprefix":
+			this.setClassItemPrefix(value);
+			break;
 		default:
-			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial");
+			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix");
 		}
 	}
 
@@ -631,5 +636,15 @@ public class SoliniaClass implements ISoliniaClass {
 				return false;
 			}
 		}
+	}
+
+	@Override
+	public String getClassItemPrefix() {
+		return classItemPrefix;
+	}
+
+	@Override
+	public void setClassItemPrefix(String classItemPrefix) {
+		this.classItemPrefix = classItemPrefix;
 	}
 }

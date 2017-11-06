@@ -112,4 +112,8 @@ public interface ISoliniaClass {
 
 	public boolean isWarriorClass();
 
+	String getClassItemPrefix();
+
+	void setClassItemPrefix(String classItemPrefix);
+
 }
