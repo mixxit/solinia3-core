@@ -40,6 +40,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			// args
 			// lootdropid
 			// armourtier
+			// chance
 			// suffixname
 
 			int lootdropid = Integer.parseInt(args[0]);
@@ -50,10 +51,17 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 				return true;
 			}
 			
+			int chance = Integer.parseInt(args[2]);
+			if (chance < 1 || chance > 100)
+			{
+				sender.sendMessage("Chance must be between 1 and 100");
+				return true;
+			}
+			
 			String partialname = "";
 			int count = 0;
 			for (String entry : args) {
-				if (count < 2) {
+				if (count < 3) {
 					count++;
 					continue;
 				}
@@ -74,7 +82,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			{
 				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true);
 				for (Integer item : items) {
-					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, count, false, 10);
+					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, count, false, chance);
 					itemscreated += item + " ";
 				}
 			}
