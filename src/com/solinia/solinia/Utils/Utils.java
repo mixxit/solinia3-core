@@ -627,7 +627,11 @@ public class Utils {
 		return percentagemodifier;
 	}
 
-	public static int getSkillCap(String skillname, ISoliniaClass profession, int level) {
+	public static int getSkillCap(String skillname, ISoliniaClass profession, int level) 
+	{
+		if (!Utils.isValidSkill(skillname.toUpperCase()))
+			return 0;
+		
 
 		// If the skill being queried happens to be a race name, the cap for
 		// language is always 100
@@ -3792,8 +3796,8 @@ public class Utils {
 	public static SkillType getSkillType(Integer skill) {
 		switch(skill)
 		{
-			case 0: return SkillType.OneHandBlunt;
-			case 1: return SkillType.OneHandSlashing;
+			case 0: return SkillType.Slashing;
+			case 1: return SkillType.Crushing;
 			case 2: return SkillType.TwoHandBlunt;
 			case 3: return SkillType.TwoHandSlashing;
 			case 4: return SkillType.Abjuration;
@@ -3823,7 +3827,7 @@ public class Utils {
 			case 28: return SkillType.HandtoHand;
 			case 29: return SkillType.Hide;
 			case 30: return SkillType.Kick;
-			case 31: return SkillType.Meditate;
+			case 31: return SkillType.Meditation;
 			case 32: return SkillType.Mend;
 			case 33: return SkillType.Offense;
 			case 34: return SkillType.Parry;
@@ -4124,26 +4128,11 @@ public class Utils {
 					return true;
 			}
 			
-			if (skillname.toUpperCase().equals("OFFENSE"))
-				return true;
-			if (skillname.toUpperCase().equals("DEFENSE"))
-				return true;
-			if (skillname.toUpperCase().equals("DODGE"))
-				return true;
-			if (skillname.toUpperCase().equals("RIPOSTE"))
-				return true;
-			if (skillname.toUpperCase().equals("DOUBLEATTACK"))
-				return true;
-			if (skillname.toUpperCase().equals("SAFEFALL"))
-				return true;
-			if (skillname.toUpperCase().equals("MEDITATION"))
-				return true;
-			if (skillname.toUpperCase().equals("SLASHING"))
-				return true;
-			if (skillname.toUpperCase().equals("CRUSHING"))
-				return true;
-			if (skillname.toUpperCase().equals("ARCHERY"))
-				return true;
+			for (SkillType skillType : SkillType.values())
+			{
+				if(skillType.name().toUpperCase().equals(skillname.toUpperCase()))
+					return true;
+			}
 		} catch (CoreStateInitException e)
 		{
 			return false;

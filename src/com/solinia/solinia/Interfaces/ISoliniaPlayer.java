@@ -214,4 +214,8 @@ public interface ISoliniaPlayer extends Serializable {
 	public boolean isMeditating();
 
 	public void setSkills(List<SoliniaPlayerSkill> skillCache);
+
+	void doCastSpellItem(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem);
+
+	boolean checkFizzle(ISoliniaSpell spell);
 }

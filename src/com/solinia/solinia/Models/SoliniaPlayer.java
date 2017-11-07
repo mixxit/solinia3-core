@@ -765,7 +765,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
 		    		if (targetmob != null)
 		    		{
-		    			item.useItemOnEntity(plugin, event.getPlayer(),item,targetmob,false);
+		    			item.useItemOnEntity(plugin, event.getPlayer(),targetmob,false);
 		    			return;
 		    		}
 			    }
@@ -783,12 +783,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 		    		if (targetmob != null)
 		    		{
-		    			item.useItemOnEntity(plugin, event.getPlayer(),item,targetmob,true);
+		    			item.useItemOnEntity(plugin, event.getPlayer(),targetmob,true);
 		    			event.getPlayer().setItemInHand(null);
 		    			event.getPlayer().updateInventory();
 		    			return;
 		    		} else {
-		    			item.useItemOnEntity(plugin, event.getPlayer(),item,event.getPlayer(),true);
+		    			item.useItemOnEntity(plugin, event.getPlayer(),event.getPlayer(),true);
 		    			event.getPlayer().setItemInHand(null);
 		    			event.getPlayer().updateInventory();
 		    			return;
@@ -800,82 +800,178 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			    {
 			    	return;
 			    }
-		    	
-		    	if (spell.isAASpell())
-		    	{
-		    		event.getPlayer().sendMessage("You require the correct AA to use this spell");
-		    		return;
-		    	}
-		    	
-		    	if (spell.getAllowedClasses().size() > 0)
-		    	{
-		    		if (getClassObj() == null)
-		    		{
-		    			event.getPlayer().sendMessage(ChatColor.GRAY + " * This item cannot be used by your profession");
-		    			return;
-		    		}
-		    		
-		    		boolean foundprofession = false;
-		    		String professions = "";
-		    		int foundlevel = 0;
-		    		for (SoliniaSpellClass spellclass : spell.getAllowedClasses())
-		    		{
-		    			if (spellclass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase()))
-		    			{
-		    				foundprofession = true;
-		    				foundlevel = spellclass.getMinlevel();
-		    				break;
-		    			}
-		    			professions += spellclass.getClassname() + " "; 
-		    		}
-		    		
-		    		if (foundprofession == false)
-		    		{
-		    			event.getPlayer().sendMessage(ChatColor.GRAY + " * This item can only be used by " + professions);
-		    			return;
-		    		} else {
-		    			if (foundlevel >  0)
-		    			{
-		    				Double level = (double) getLevel();
-		    				if (level < foundlevel)
-		    				{
-		    					event.getPlayer().sendMessage(ChatColor.GRAY + " * This item requires level " + foundlevel);
-				    			return;
-		    				}
-		    			}
-		    		}
-		    		
-		    		
-		    	}
-		    	
-		    	// Reroute action depending on target
+			    
+			 // Reroute action depending on target
 		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) 
 			    {
-		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
-		    		if (targetmob != null)
-		    		{
-		    			item.useItemOnEntity(plugin, event.getPlayer(),item,targetmob,false);
-		    			return;
-		    		} else {
-		    			item.useItemOnEntity(plugin, event.getPlayer(),item,event.getPlayer(),false);
-		    			return;
-		    		}
+		    		doCastSpellItem(plugin,spell,event.getPlayer(),item);
 			    }
-		    	
-		    	// TODO - Implement block functionality
-		    	/*
-		    	if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-		    	{
-		    		item.useItemOnBlock(event.getPlayer(),item,event.getClickedBlock());
-		    		return;
-		    	}
-		    	*/
-			    
 		    }
 		} catch (CoreStateInitException e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void doCastSpellItem(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem) {
+		if (spell.isAASpell())
+    	{
+    		player.sendMessage("You require the correct AA to use this spell");
+    		return;
+    	}
+    	
+    	if (spell.getAllowedClasses().size() > 0)
+    	{
+    		if (getClassObj() == null)
+    		{
+    			player.sendMessage(ChatColor.GRAY + " * This item cannot be used by your profession");
+    			return;
+    		}
+    		
+    		boolean foundprofession = false;
+    		String professions = "";
+    		int foundlevel = 0;
+    		for (SoliniaSpellClass spellclass : spell.getAllowedClasses())
+    		{
+    			if (spellclass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase()))
+    			{
+    				foundprofession = true;
+    				foundlevel = spellclass.getMinlevel();
+    				break;
+    			}
+    			professions += spellclass.getClassname() + " "; 
+    		}
+    		
+    		if (foundprofession == false)
+    		{
+    			player.sendMessage(ChatColor.GRAY + " * This item can only be used by " + professions);
+    			return;
+    		} else {
+    			if (foundlevel >  0)
+    			{
+    				Double level = (double) getLevel();
+    				if (level < foundlevel)
+    				{
+    					player.sendMessage(ChatColor.GRAY + " * This item requires level " + foundlevel);
+		    			return;
+    				}
+    			}
+    		}
+    		
+    		
+    	}
+    	
+    	if (!checkFizzle(spell))
+    	{
+    		emote("* " + getFullName() + "'s spell fizzles");
+    		return;
+    	}
+    	
+    	tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(),1);
+    	
+    	// Reroute action depending on target
+    	LivingEntity targetmob = Utils.getTargettedLivingEntity(player, spell.getRange());
+    	try
+    	{
+			if (targetmob != null)
+			{
+				spellSourceItem.useItemOnEntity(plugin, player,targetmob,false);
+				return;
+			} else {
+				spellSourceItem.useItemOnEntity(plugin, player,player,false);
+				return;
+			}
+    	} catch (CoreStateInitException e)
+    	{
+    		return;
+    	}
+	}
+
+	@Override
+	public boolean checkFizzle(ISoliniaSpell spell) {
+		if (getBukkitPlayer().isOp()) 
+			return true;
+
+		// todo fizzle free features
+		
+		int no_fizzle_level = 0;
+
+		try {
+	
+			ISoliniaLivingEntity entity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
+		
+			if (entity == null)
+				return false;
+			
+			if (getClassObj() == null)
+				return false;
+	
+			// TODO item/aa/spells fizzle bonus
+	
+			int par_skill = 0;
+			int act_skill = 0;
+	
+			int minLevel = 0;
+			
+			for (SoliniaSpellClass spellClass : spell.getAllowedClasses())
+			{
+				if (!spellClass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase()))
+					continue;
+				
+				minLevel = spellClass.getMinlevel();
+				break;
+			}
+			
+			par_skill = minLevel * 5 - 10;
+			
+			if (par_skill > 235)
+				par_skill = 235;
+			
+			par_skill += minLevel;
+	
+			SoliniaPlayerSkill playerSkill = getSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase());
+			
+			if (playerSkill != null)
+				act_skill = playerSkill.getValue();
+			
+			act_skill += getLevel(); 
+	
+			// todo: spell specialisation
+			int specialisation = 0;
+	
+			float diff = par_skill + (float)(spell.getBasediff()) - act_skill;
+	
+			if(getClassObj().getName().equals("BARD"))
+			{
+				diff -= (entity.getCharisma() - 110) / 20.0;
+			}
+			else if (Utils.getCasterClass(getClassObj().getName().toUpperCase()).equals("W"))
+			{
+				diff -= (entity.getWisdom() - 125) / 20.0;
+			}
+			else if (Utils.getCasterClass(getClassObj().getName().toUpperCase()).equals("I"))
+			{
+				diff -= (entity.getIntelligence() - 125) / 20.0;
+			}
+	
+			float basefizzle = 10;
+			float fizzlechance = (float)(basefizzle - specialisation + diff / 5.0);
+	
+			// always at least 1% chance to fail or 5% to succeed
+			fizzlechance = fizzlechance < 1 ? 1 : (fizzlechance > 95 ? 95 : fizzlechance);
+	
+			float fizzle_roll = Utils.RandomBetween(0, 100);
+			
+			System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " + fizzlechance);
+			if(fizzle_roll > fizzlechance)
+				return true;
+			
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+
+		return false;
 	}
 
 	@Override

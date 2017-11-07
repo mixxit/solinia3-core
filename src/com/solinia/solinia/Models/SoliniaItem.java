@@ -433,10 +433,10 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public boolean useItemOnEntity(Plugin plugin, Player player, ISoliniaItem item, LivingEntity targetentity, boolean isConsumable)
+	public boolean useItemOnEntity(Plugin plugin, Player player, LivingEntity targetentity, boolean isConsumable)
 			throws CoreStateInitException {
 		
-		if (item.isPetControlRod())
+		if (isPetControlRod())
 		{
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
 			if (pet != null)
@@ -450,7 +450,7 @@ public class SoliniaItem implements ISoliniaItem {
 			}
 		}
 		
-		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(getAbilityid());
 		if (spell == null) {
 			return false;
 		}
@@ -723,7 +723,7 @@ public class SoliniaItem implements ISoliniaItem {
 		if (this.getAbilityid() < 1)
 			return;
 		
-		useItemOnEntity(plugin, player,this,player,true);
+		useItemOnEntity(plugin, player,player,true);
 	}
 
 	@Override
