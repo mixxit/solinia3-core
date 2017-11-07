@@ -868,18 +868,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
     		return;
     	}
     	
-    	tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(),1);
-    	
     	// Reroute action depending on target
     	LivingEntity targetmob = Utils.getTargettedLivingEntity(player, spell.getRange());
     	try
     	{
 			if (targetmob != null)
 			{
-				spellSourceItem.useItemOnEntity(plugin, player,targetmob,false);
+				boolean success = spellSourceItem.useItemOnEntity(plugin, player,targetmob,false);
+				if (success == true)
+				{
+					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(),1);
+				}
 				return;
 			} else {
-				spellSourceItem.useItemOnEntity(plugin, player,player,false);
+				boolean success = spellSourceItem.useItemOnEntity(plugin, player,player,false);
+				if (success == true)
+				{
+					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(),1);
+				}
 				return;
 			}
     	} catch (CoreStateInitException e)
