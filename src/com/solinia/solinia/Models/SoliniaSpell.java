@@ -3789,6 +3789,20 @@ public class SoliniaSpell implements ISoliniaSpell {
 		
 		for(SpellEffect effect : soliniaSpell.getBaseSpellEffects())
 		{
+			// Return false if the target is in the same group as the player
+			// and the spell is a detrimental
+			if (source instanceof Player && target instanceof Player && soliniaSpell.isDetrimental())
+			{
+				ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt((Player)source);
+				if (solsourceplayer.getGroup() != null)
+				{
+					if (solsourceplayer.getGroup().getMembers().contains(target.getUniqueId()))
+					{
+						return false;
+					}
+				}
+			}
+			
 			// Validate spelleffecttype rules
 			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) || effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce))
 			{
