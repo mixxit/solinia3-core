@@ -862,9 +862,21 @@ public class SoliniaPlayer implements ISoliniaPlayer {
     		
     	}
     	
-    	if (!checkFizzle(spell))
+    	try
     	{
-    		emote("* " + getFullName() + "'s spell fizzles");
+	    	if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
+				player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
+				return;
+			}
+	    	
+	    	if (!checkFizzle(spell))
+	    	{
+	    		emote("* " + getFullName() + "'s spell fizzles");
+	    		SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
+	    		return;
+	    	}
+    	} catch (CoreStateInitException e)
+    	{
     		return;
     	}
     	
