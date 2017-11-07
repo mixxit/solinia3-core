@@ -4137,9 +4137,20 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	public boolean isResistable() {
-		if (isDetrimental())
+		if (isDetrimental() && !isResistDebuffSpell())
 			return true;
 
+		return false;
+	}
+	
+	public boolean isResistDebuffSpell()
+	{
+		if ((isEffectInSpell(SpellEffectType.ResistFire) || isEffectInSpell(SpellEffectType.ResistCold) ||
+				isEffectInSpell(SpellEffectType.ResistPoison) || isEffectInSpell(SpellEffectType.ResistDisease) ||
+				isEffectInSpell(SpellEffectType.ResistMagic) || isEffectInSpell(SpellEffectType.ResistAll) ||
+				isEffectInSpell(SpellEffectType.ResistCorruption)) && !isBeneficial())
+		return true;
+	else
 		return false;
 	}
 
