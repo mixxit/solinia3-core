@@ -212,4 +212,6 @@ public interface ISoliniaPlayer extends Serializable {
 	List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId);
 
 	public boolean isMeditating();
+
+	public void setSkills(List<SoliniaPlayerSkill> skillCache);
 }

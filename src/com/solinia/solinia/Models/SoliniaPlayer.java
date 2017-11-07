@@ -607,6 +607,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	
 	@Override
 	public SoliniaPlayerSkill getSkill(String skillname) {
+		if (!Utils.isValidSkill(skillname))
+			return null;
+		
 		for(SoliniaPlayerSkill skill : this.skills)
 		{
 			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase()))
@@ -1624,5 +1627,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public void setSkills(List<SoliniaPlayerSkill> skills) {
+		this.skills = skills;
 	}
 }

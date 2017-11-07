@@ -57,6 +57,7 @@ import com.solinia.solinia.Models.SoliniaAAPrereq;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffect;
@@ -4112,5 +4113,42 @@ public class Utils {
 		int critDmg_mod = 0;
 		// TODO take aa and item bonuses into affect
 		return critDmg_mod;
+	}
+
+	public static boolean isValidSkill(String skillname) {
+		try
+		{
+			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
+			{
+				if (skillname.toUpperCase().equals(race.getName().toUpperCase()))
+					return true;
+			}
+			
+			if (skillname.toUpperCase().equals("OFFENSE"))
+				return true;
+			if (skillname.toUpperCase().equals("DEFENSE"))
+				return true;
+			if (skillname.toUpperCase().equals("DODGE"))
+				return true;
+			if (skillname.toUpperCase().equals("RIPOSTE"))
+				return true;
+			if (skillname.toUpperCase().equals("DOUBLEATTACK"))
+				return true;
+			if (skillname.toUpperCase().equals("SAFEFALL"))
+				return true;
+			if (skillname.toUpperCase().equals("MEDITATION"))
+				return true;
+			if (skillname.toUpperCase().equals("SLASHING"))
+				return true;
+			if (skillname.toUpperCase().equals("CRUSHING"))
+				return true;
+			if (skillname.toUpperCase().equals("ARCHERY"))
+				return true;
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+		
+		return false;
 	}
 }
