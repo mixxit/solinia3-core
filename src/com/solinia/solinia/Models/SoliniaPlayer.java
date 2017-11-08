@@ -1331,7 +1331,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 			for(ISoliniaAARank rank : ability.getRanks())
 			{
-				buyableRanks.add(rank);
+				if (hasPrerequisites(ability,rank) && canUseAlternateAdvancementRank(ability,rank))
+					buyableRanks.add(rank);
 				break;
 			}
 		}
