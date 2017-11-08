@@ -1,17 +1,23 @@
 package com.solinia.solinia.Models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Nameable;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.google.gson.annotations.Expose;
@@ -3802,6 +3808,80 @@ public class SoliniaSpell implements ISoliniaSpell {
 					{
 						return false;
 					}
+				}
+			}
+			
+			if (effect.getSpellEffectType().equals(SpellEffectType.Revive))
+			{
+				if (!(target instanceof Player))
+				{
+					return false;				
+				}
+				
+				if (!(source instanceof Player))
+					return false;
+				
+				Player sourcePlayer = (Player)source;
+				
+				if (!sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG))
+				{
+					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC): " + sourcePlayer.getInventory().getItemInOffHand().getType().name());
+					return false;				
+				}
+				
+				ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
+				if (item.getEnchantmentLevel(Enchantment.OXYGEN) != 1)
+				{
+					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (EC)");
+					return false;	
+				}
+				
+				if (!item.getItemMeta().getDisplayName().equals("Signaculum"))
+				{
+					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (NC)");
+					return false;	
+				}
+				
+				if (item.getItemMeta().getLore().size() < 5)
+				{
+					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (LC)");
+					return false;			
+				}
+				
+				
+				String sigdataholder = item.getItemMeta().getLore().get(3);
+				String[] sigdata = sigdataholder.split("\\|");
+				
+				if (sigdata.length != 2)
+				{
+					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (SD)");
+					return false;	
+				}
+				
+				String str_experience = sigdata[0];
+				String str_stimetsamp = sigdata[1];
+				
+				int experience = Integer.parseInt(str_experience);
+				Timestamp timestamp = Timestamp.valueOf(str_stimetsamp);
+				Calendar calendar = Calendar.getInstance();
+				java.util.Date now = calendar.getTime();
+				Timestamp currenttimestamp = new Timestamp(now.getTime());
+				
+				long maxminutes = 60*7;
+				if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes*60*1000)
+				{
+					sourcePlayer.sendMessage("This Signaculum has lost its binding to the soul");
+					return false;	
+				}
+				
+				String playeruuidb64 = item.getItemMeta().getLore().get(4);
+				String uuid = Utils.uuidFromBase64(playeruuidb64);
+				
+				Player targetplayer = Bukkit.getPlayer(UUID.fromString(uuid));
+				if (targetplayer == null || !targetplayer.isOnline())
+				{
+					sourcePlayer.sendMessage("You cannot resurrect that player as they are offline");
+					return false;	
 				}
 			}
 			

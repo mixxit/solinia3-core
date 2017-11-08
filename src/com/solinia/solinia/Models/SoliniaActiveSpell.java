@@ -1227,9 +1227,9 @@ public class SoliniaActiveSpell {
 		
 		Player sourcePlayer = (Player)source;
 		
-		if (sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG))
+		if (!sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG))
 		{
-			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC)");
+			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC): " + sourcePlayer.getInventory().getItemInOffHand().getType().name());
 			return;				
 		}
 		
@@ -1279,7 +1279,7 @@ public class SoliniaActiveSpell {
 		}
 		
 		String playeruuidb64 = item.getItemMeta().getLore().get(4);
-		String uuid = uuidFromBase64(playeruuidb64);
+		String uuid = Utils.uuidFromBase64(playeruuidb64);
 		
 		Player targetplayer = Bukkit.getPlayer(UUID.fromString(uuid));
 		if (targetplayer == null || !targetplayer.isOnline())
@@ -1305,13 +1305,6 @@ public class SoliniaActiveSpell {
 		}
 		
 		return;
-	}
-	
-	private static String uuidFromBase64(String str) {
-	    byte[] bytes = Base64.decodeBase64(str);
-	    ByteBuffer bb = ByteBuffer.wrap(bytes);
-	    UUID uuid = new UUID(bb.getLong(), bb.getLong());
-	    return uuid.toString();
 	}
 
 	private void applyReclaimPet(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

@@ -3,14 +3,17 @@ package com.solinia.solinia.Utils;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -4146,5 +4149,12 @@ public class Utils {
 		}
 		
 		return false;
+	}
+	
+	public static String uuidFromBase64(String str) {
+	    byte[] bytes = Base64.decodeBase64(str);
+	    ByteBuffer bb = ByteBuffer.wrap(bytes);
+	    UUID uuid = new UUID(bb.getLong(), bb.getLong());
+	    return uuid.toString();
 	}
 }
