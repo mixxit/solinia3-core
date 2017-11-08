@@ -1,5 +1,6 @@
 package com.solinia.solinia.Models;
 
+import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +17,7 @@ import org.bukkit.command.CommandSender.Spigot;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -23,6 +26,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -402,8 +406,9 @@ public class SoliniaActiveSpell {
 			return;
 		case EnchantLight
 			: return;
-		case Revive
-			: return;
+		case Revive: 
+			applyRevive(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case SummonPC
 			: return;
 		case Teleport: 
@@ -1208,6 +1213,105 @@ public class SoliniaActiveSpell {
 		default:
 			return;
 		}
+	}
+
+	private void applyRevive(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!(getLivingEntity() instanceof Player))
+		{
+			return;				
+		}
+		
+		Entity source = Bukkit.getEntity(getSourceUuid());
+		if (!(source instanceof Player))
+			return;
+		
+		Player sourcePlayer = (Player)source;
+		
+		if (sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG))
+		{
+			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC)");
+			return;				
+		}
+		
+		ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
+		if (item.getEnchantmentLevel(Enchantment.OXYGEN) != 1)
+		{
+			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (EC)");
+			return;	
+		}
+		
+		if (!item.getItemMeta().getDisplayName().equals("Signaculum"))
+		{
+			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (NC)");
+			return;	
+		}
+		
+		if (item.getItemMeta().getLore().size() < 5)
+		{
+			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (LC)");
+			return;			
+		}
+		
+		
+		String sigdataholder = item.getItemMeta().getLore().get(3);
+		String[] sigdata = sigdataholder.split("\\|");
+		
+		if (sigdata.length != 2)
+		{
+			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (SD)");
+			return;	
+		}
+		
+		String str_experience = sigdata[0];
+		String str_stimetsamp = sigdata[1];
+		
+		int experience = Integer.parseInt(str_experience);
+		Timestamp timestamp = Timestamp.valueOf(str_stimetsamp);
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		Timestamp currenttimestamp = new Timestamp(now.getTime());
+		
+		long maxminutes = 60*7;
+		if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes*60*1000)
+		{
+			sourcePlayer.sendMessage("This Signaculum has lost its binding to the soul");
+			return;	
+		}
+		
+		String playeruuidb64 = item.getItemMeta().getLore().get(4);
+		String uuid = uuidFromBase64(playeruuidb64);
+		
+		Player targetplayer = Bukkit.getPlayer(UUID.fromString(uuid));
+		if (targetplayer == null || !targetplayer.isOnline())
+		{
+			sourcePlayer.sendMessage("You cannot resurrect that player as they are offline");
+			return;	
+		}
+		
+		int multiplier = 1;
+		if (spellEffect.getBase() > 0 && spellEffect.getBase() < 100)
+			multiplier = spellEffect.getBase();
+		
+		try
+		{
+			double finalexperience = (experience / 100) * multiplier;
+			SoliniaPlayerAdapter.Adapt(targetplayer).increasePlayerNormalExperience(finalexperience);
+			targetplayer.sendMessage("You have been resurrected by " + sourcePlayer.getCustomName() + "!");
+			targetplayer.teleport(sourcePlayer.getLocation());			
+			sourcePlayer.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
+		
+		return;
+	}
+	
+	private static String uuidFromBase64(String str) {
+	    byte[] bytes = Base64.decodeBase64(str);
+	    ByteBuffer bb = ByteBuffer.wrap(bytes);
+	    UUID uuid = new UUID(bb.getLong(), bb.getLong());
+	    return uuid.toString();
 	}
 
 	private void applyReclaimPet(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

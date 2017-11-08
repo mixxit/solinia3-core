@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -370,6 +371,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			currentexperience = currentexperience + experience;
 		}
 		setExperience(currentexperience, experience,modified);
+	}
+	
+	@Override
+	public void dropResurrectionItem(int experienceamount) {
+		if (experienceamount < 1)
+			return;
+
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		java.sql.Timestamp currenttimestamp = new Timestamp(now.getTime());
+
+		SoliniaResurrectionItem resurrectionitem = new SoliniaResurrectionItem(this, experienceamount,currenttimestamp);
+		ItemStack itemstack = resurrectionitem.AsItemStack();
+		getBukkitPlayer().getWorld().dropItem(getBukkitPlayer().getLocation(), itemstack);
 	}
 	
 	public void setExperience(Double experience, Double changeamount, boolean modified) {
