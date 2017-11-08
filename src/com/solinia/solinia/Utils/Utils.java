@@ -4035,6 +4035,27 @@ public class Utils {
 				return AugmentationSlotType.NONE;
 		}
 	}
+	
+	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType)
+	{
+		if (!(bukkitLivingEntity instanceof Player))
+			return 0;
+		
+		try
+		{
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)bukkitLivingEntity);
+			int total = 0;
+			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType)))
+			{
+				total += effect.getBase1();
+			}
+			return total;
+		} catch (CoreStateInitException e)
+		{
+			return 0;
+		}
+		
+	}
 
 	public static int getTotalAAEffectStat(LivingEntity bukkitLivingEntity, String stat) {
 		if (!(bukkitLivingEntity instanceof Player))

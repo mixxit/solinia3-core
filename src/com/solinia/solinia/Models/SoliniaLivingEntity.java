@@ -2513,7 +2513,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		chance = 0;
 		
 		// TODO take into account item,spell,aa bonuses
-
+		if (isPlayer())
+		{
+			chance += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(),SpellEffectType.CriticalSpellChance);
+		}
+		
+		// TODO Items/aabonuses
 		if (chance > 0 || (getClassObj().getName().equals("WIZARD") && getLevel() >= 12)) {
 
 			 int ratio = 100;
@@ -2524,6 +2529,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (Utils.RandomBetween(0,100) < ratio) {
 				critical = true;
+				if (isPlayer())
+				{
+					ratio += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(),SpellEffectType.SpellCritDmgIncrease);
+				}
 				// TODO add ratio bonuses from spells, aas
 			}
 			else if (getClassObj().getName().equals("WIZARD")) {
@@ -2582,13 +2591,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if(soliniaSpell.getBuffduration() < 1) {
 			
 			// TODO Items/aabonuses
+			if (isPlayer())
+			{
+				chance += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(),SpellEffectType.CriticalHealChance);
+			}
+			
 			// TODO FOcuses
 
 			if(chance > -1 && (Utils.RandomBetween(0,100) < chance)) {
 				critical = true;
 				modifier = 2;
 			}
-
+			
 			value *= modifier;
 
 			// TODO No heal items

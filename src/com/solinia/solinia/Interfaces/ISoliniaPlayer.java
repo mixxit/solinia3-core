@@ -12,6 +12,7 @@ import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.PlayerQuest;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 
 public interface ISoliniaPlayer extends Serializable {
@@ -208,7 +209,7 @@ public interface ISoliniaPlayer extends Serializable {
 	public void addPlayerQuestFlag(String questFlag);
 
 	void setPlayerQuestFlags(List<String> playerQuestFlags);
-
+	
 	List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId);
 
 	public boolean isMeditating();
