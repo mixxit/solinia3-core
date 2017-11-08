@@ -220,4 +220,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean checkFizzle(ISoliniaSpell spell);
 
 	void dropResurrectionItem(int experienceamount);
+
+	void reducePlayerNormalExperience(Double experience);
 }

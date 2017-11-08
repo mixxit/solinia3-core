@@ -161,7 +161,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (player != null)
 			{
 				double experienceLoss = Utils.calculateExpLoss(player);
-				player.increasePlayerNormalExperience(experienceLoss);
+				player.reducePlayerNormalExperience(experienceLoss);
 				player.dropResurrectionItem((int)experienceLoss);
 			}
 		} catch (CoreStateInitException e)

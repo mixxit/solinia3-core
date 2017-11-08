@@ -374,6 +374,31 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	@Override
+	public void reducePlayerNormalExperience(Double experience) {
+
+		Double originalexperience = getExperience();
+		Double experiencechange = -experience;
+		Double newexperience = originalexperience - experience;
+		if (newexperience < 0d) {
+			newexperience = 0d;
+			experiencechange = newexperience - originalexperience;
+		}
+
+		double clevel = Utils.getLevelFromExperience(originalexperience);
+		double nlevel = Utils.getLevelFromExperience(newexperience);
+
+		if (nlevel < (clevel - 1)) {
+			// xp loss is way too high, drop to proper amount
+			System.out.println("XP loss was dropped for being way too high");
+
+			newexperience = Utils.getExperienceRequirementForLevel((int) clevel - 1);
+			experiencechange = newexperience - originalexperience;
+		}
+
+		setExperience(newexperience, experiencechange, false);
+	}
+	
+	@Override
 	public void dropResurrectionItem(int experienceamount) {
 		if (experienceamount < 1)
 			return;
