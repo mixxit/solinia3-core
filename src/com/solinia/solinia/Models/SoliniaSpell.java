@@ -2824,6 +2824,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			{
 				case Self:
 					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, sourceEntity,this,sourceEntity);
+				// Casts on self as holding signaculum
+				case Corpse:
+					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, sourceEntity,this,sourceEntity);
 				case Pet:
 					if (sourceEntity instanceof Player)
 					{
@@ -3720,7 +3723,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 			System.out.println("Target was null for isValidEffectForEntity: " + soliniaSpell.getName() + " from source: " + source.getCustomName());
 			return false;
 		}
-		
 		
 		// Always allow self only spells if the target and source is the self
 		if (source.getUniqueId().equals(target.getUniqueId()) && 
