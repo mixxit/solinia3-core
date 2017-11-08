@@ -58,9 +58,22 @@ public class CommandAA implements CommandExecutor {
 						ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 								.getAAAbility(aarank.getAbilityid());
 						if (aaAbility != null)
+							if (!aaAbility.isEnabled())
+								continue;
+						
 							if (aarank.getCost() <= solplayer.getAAPoints()) {
+								if (solplayer.canPurchaseAlternateAdvancementRank(aaAbility, aarank))
+								{
 								player.sendMessage(ChatColor.LIGHT_PURPLE + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost()
 										+ ChatColor.RESET + " AA points /aa buy " + aarank.getId());
+								} else {
+									player.sendMessage(ChatColor.GRAY + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost()
+									+ ChatColor.GRAY + " Cannot purchase yet");
+								
+								}
+							} else {
+								player.sendMessage(ChatColor.GRAY + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost()
+								+ ChatColor.GRAY + " Cannot purchase yet");
 							}
 					}
 					player.sendMessage("Displayed Page " + ChatColor.GOLD + (pageno + 1) + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil((float)fullaaranks.size() / (float)sizePerPage) + ChatColor.RESET + " (See /aa list <pageno>");
