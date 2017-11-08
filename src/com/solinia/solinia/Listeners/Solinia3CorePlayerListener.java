@@ -40,6 +40,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
+import com.sun.javafx.css.CalculatedValue;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -156,6 +157,11 @@ public class Solinia3CorePlayerListener implements Listener {
 		try
 		{
 			StateManager.getInstance().getEntityManager().clearEntityEffects(event.getEntity().getUniqueId());
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(event.getEntity());
+			if (player != null)
+			{
+				player.increasePlayerNormalExperience(Utils.calculateExpLoss(player));
+			}
 		} catch (CoreStateInitException e)
 		{
 			

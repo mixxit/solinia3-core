@@ -48,7 +48,7 @@ public class ScoreboardUtils {
 				bossbar.setProgress((double) ((double) mana / (double) maxmana));
 
 			} catch (Exception e) {
-				System.out.println(e.getMessage() + " " + e.getStackTrace());
+				e.printStackTrace();
 			}
 		}
 	}

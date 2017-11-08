@@ -76,6 +76,13 @@ public class Utils {
 	public static float clamp(float val, float min, float max) {
 	    return Math.max(min, Math.min(max, val));
 	}
+	
+	public static double calculateExpLoss(ISoliniaPlayer player)
+	{
+		double loss = 0;
+		loss = (double)(player.getLevel() * (player.getLevel() / 18.0) * 12000);
+		return (double)loss;
+	}
 
 	public static List<WorldWidePerk> getActiveWorldWidePerks() {
 		List<WorldWidePerk> perks = new ArrayList<WorldWidePerk>();
