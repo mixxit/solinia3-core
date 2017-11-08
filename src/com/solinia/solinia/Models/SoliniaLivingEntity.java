@@ -2495,7 +2495,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getActSpellDamage(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect,ISoliniaLivingEntity target) {
-		if (spellEffect.getSpellEffectType().equals(SpellTargetType.Self))
+		if (Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
 			return value;
 		
 		if (getClassObj() == null)
@@ -2503,6 +2503,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		boolean critical = false;
 		int value_BaseEffect = 0;
+		value_BaseEffect = value;
 		int chance = 0;
 
 		// TODO Focus effects
@@ -2567,14 +2568,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getClassObj() == null)
 			return value;
 		
-		int value_BaseEffect = 0;
+		//int value_BaseEffect = value;
 		int chance = 0;
 		int modifier = 1;
 		boolean critical = false;
 
 		// TODO FOcus effects
-
-		value = value_BaseEffect;
+		//value_BaseEffect = value;
 
 		// TODO FOcus effects
 
@@ -2597,7 +2597,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (critical) {
 				if (isPlayer())
-					getBukkitLivingEntity().sendMessage("* You critical heal for " + value);
+					getBukkitLivingEntity().sendMessage("* You perform an exception heal for " + value);
 			}
 
 			return value;
