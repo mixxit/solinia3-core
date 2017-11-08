@@ -2492,4 +2492,131 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int dmg = 0;
 		return dmg;
 	}
+
+	@Override
+	public int getActSpellDamage(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect,ISoliniaLivingEntity target) {
+		if (spellEffect.getSpellEffectType().equals(SpellTargetType.Self))
+			return value;
+		
+		if (getClassObj() == null)
+			return value;
+
+		boolean critical = false;
+		int value_BaseEffect = 0;
+		int chance = 0;
+
+		// TODO Focus effects
+		
+		// TODO Harm Touch Scaling
+
+		chance = 0;
+		
+		// TODO take into account item,spell,aa bonuses
+
+		if (chance > 0 || (getClassObj().getName().equals("WIZARD") && getLevel() >= 12)) {
+
+			 int ratio = 100;
+
+			// TODO Harm Touch
+			 
+			// TODO Crit Chance Overrides
+
+			if (Utils.RandomBetween(0,100) < ratio) {
+				critical = true;
+				// TODO add ratio bonuses from spells, aas
+			}
+			else if (getClassObj().getName().equals("WIZARD")) {
+				if ((getLevel() >= 12) && Utils.RandomBetween(0,100) < 7)
+				{
+					ratio += Utils.RandomBetween(20,70);
+					critical = true;
+				}
+			}
+
+			if (critical){
+
+				value = value_BaseEffect*ratio/100;
+
+				// TODO Vulnerabilities
+
+				// TODO spell dmg level restriction
+				// TODO NPC Spell Scale
+
+				if (isPlayer())
+				{
+					getBukkitLivingEntity().sendMessage("* You critical blast for " + value);
+				}
+
+				return value;
+			}
+		}
+		
+		//Non Crtical Hit Calculation pathway
+		value = value_BaseEffect;
+
+		// TODO Vulnerabilities
+
+		// TODO SPell damage lvl restriction
+		// TODO NPC Spell Scale
+
+		return value;
+	}
+
+	@Override
+	public int getActSpellHealing(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect, ISoliniaLivingEntity target) {
+		if (getClassObj() == null)
+			return value;
+		
+		int value_BaseEffect = 0;
+		int chance = 0;
+		int modifier = 1;
+		boolean critical = false;
+
+		// TODO FOcus effects
+
+		value = value_BaseEffect;
+
+		// TODO FOcus effects
+
+		// Instant Heals
+		if(soliniaSpell.getBuffduration() < 1) {
+			
+			// TODO Items/aabonuses
+			// TODO FOcuses
+
+			if(chance > -1 && (Utils.RandomBetween(0,100) < chance)) {
+				critical = true;
+				modifier = 2;
+			}
+
+			value *= modifier;
+
+			// TODO No heal items
+
+			// TODO NPC Heal Scale
+
+			if (critical) {
+				if (isPlayer())
+					getBukkitLivingEntity().sendMessage("* You critical heal for " + value);
+			}
+
+			return value;
+		} else {
+			//Heal over time spells. [Heal Rate and Additional Healing effects do not increase this value]
+			// TODO Item bonuses
+			
+			// TODO FOcuses
+
+			// TOOD Spell Bonuses
+
+			if(chance > -1 && Utils.RandomBetween(0,100) < chance)
+				value *= 2;
+		}
+
+		// TODO Npc Heal Scale
+
+		return value;
+	}
+
+	
 }

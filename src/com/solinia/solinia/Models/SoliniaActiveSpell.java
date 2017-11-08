@@ -1713,21 +1713,38 @@ public class SoliniaActiveSpell {
 		
 		if(!(sourceEntity instanceof LivingEntity))
 			return;
-		
+
 		LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
 		
 		// HP spells also get calculated based on the caster and the recipient
-		int hpToRemove = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), caster_level, getTicksLeft());		
+		int hpToAdd = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), caster_level, getTicksLeft());		
 		
 		// Damage
-		if (hpToRemove < 0)
+		// damage should be < 0
+		// hpToRemove should really be called hpToAdd
+		if (hpToAdd < 0)
 		{
-			hpToRemove = hpToRemove * -1;
+			// Criticals
+			try
+			{
+				ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+				ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+				if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null)
+				{
+					// reverse to positive then pass it back reversed
+					hpToAdd = (sourceSoliniaLivingEntity.getActSpellDamage(soliniaSpell,(hpToAdd*-1),spellEffect,targetSoliniaLivingEntity) * -1);
+				}
+			} catch (CoreStateInitException e)
+			{
+				// just carry on without the crit bonus
+			}
+			
+			hpToAdd = hpToAdd * -1;
 			EntityDamageSource source = new EntityDamageSource("thorns", ((CraftEntity)Bukkit.getEntity(getSourceUuid())).getHandle());
 			source.setMagic();
 			source.ignoresArmor();
 			
-			((CraftEntity)getLivingEntity()).getHandle().damageEntity(source, hpToRemove);
+			((CraftEntity)getLivingEntity()).getHandle().damageEntity(source, hpToAdd);
 			//getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 			if (soliniaSpell.isLifetapSpell())
 			{
@@ -1736,7 +1753,7 @@ public class SoliniaActiveSpell {
 				if (!(sourceEntity instanceof LivingEntity))
 					return;
 				
-				int amount = (int) Math.round(sourceLivingEntity.getHealth()) + hpToRemove;
+				int amount = (int) Math.round(sourceLivingEntity.getHealth()) + hpToAdd;
 				if (amount > sourceLivingEntity.getMaxHealth()) {
 					amount = (int) Math.round(sourceLivingEntity.getMaxHealth());
 				}
@@ -1749,7 +1766,21 @@ public class SoliniaActiveSpell {
 		// Heal
 		else 
 		{
-			int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToRemove;
+			// Criticals
+			try
+			{
+				ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+				ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+				if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null)
+				{
+					hpToAdd = sourceSoliniaLivingEntity.getActSpellHealing(soliniaSpell,hpToAdd,spellEffect,targetSoliniaLivingEntity);
+				}
+			} catch (CoreStateInitException e)
+			{
+				// just carry on without the crit bonus
+			}
+			
+			int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToAdd;
 			if (amount > getLivingEntity().getMaxHealth()) {
 				amount = (int) Math.round(getLivingEntity().getMaxHealth());
 			}

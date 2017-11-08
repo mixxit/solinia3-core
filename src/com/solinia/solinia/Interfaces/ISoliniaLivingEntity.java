@@ -14,6 +14,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
+import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellResistType;
 
 public interface ISoliniaLivingEntity 
@@ -129,4 +130,8 @@ public interface ISoliniaLivingEntity
 	public int getSkillDmgTaken(String skill);
 
 	public int getFcDamageAmtIncoming(SoliniaLivingEntity soliniaLivingEntity, int i, boolean b, String skill);
+
+	int getActSpellDamage(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect, ISoliniaLivingEntity target);
+
+	int getActSpellHealing(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect, ISoliniaLivingEntity target);
 }
