@@ -147,7 +147,7 @@ public class ChannelManager implements IChannelManager {
 		}
 
 		String messageheader = ChatColor.RESET + "[" + channel + "" + gender + "" + racealignmentcolour + race
-				+ ChatColor.RESET + "" + profession + "]" + nameColour + ChatColor.YELLOW + "~" + title + ChatColor.RESET + ": "
+				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + ChatColor.AQUA + message + ChatColor.RESET;
 		return message;
