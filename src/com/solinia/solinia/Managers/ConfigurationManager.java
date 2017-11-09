@@ -932,7 +932,7 @@ public class ConfigurationManager implements IConfigurationManager {
 					if (player.getFealty() == null)
 						continue;
 					
-					if (kingCount.containsKey(player.getFealty()))
+					if (!kingCount.containsKey(player.getFealty()))
 					{
 						kingCount.put(player.getFealty(), 1);
 					} else {
