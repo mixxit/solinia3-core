@@ -227,4 +227,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public void setFealty(UUID uniqueId);
 
 	UUID getFealty();
+
+	boolean isRacialKing();
 }

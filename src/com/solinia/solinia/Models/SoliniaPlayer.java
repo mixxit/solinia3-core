@@ -173,7 +173,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public String getFullNameWithTitle()
 	{
-		String displayName = getFullName();
+		String king = "";
+		if (isRacialKing())
+		{
+			if (this.getGender().equals("MALE"))
+				king = "King ";
+			else
+				king = "Queen ";
+		}
+		
+		String displayName = king + getFullName();
 		if (getTitle() != null && !(getTitle().equals(""))) {
 			displayName += " " + getTitle();
 		}
@@ -1807,5 +1816,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public UUID getFealty() {
 		return fealty;
+	}
+	
+	@Override
+	public boolean isRacialKing()
+	{
+		try {
+			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
+			{
+				if (race.getKing() == null)
+					continue;
+				
+				if (race.getKing().equals(getUUID()))
+					return true;
+			}
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+		
+		return false;
 	}
 }
