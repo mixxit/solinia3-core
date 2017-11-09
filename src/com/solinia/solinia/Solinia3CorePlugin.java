@@ -349,7 +349,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			petCheckTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 
 			kingCheckTimer = new KingCheckTimer();
-			kingCheckTimer.runTaskTimer(this, 120 * 20L, 6 * 20L);
+			kingCheckTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
 			
 			if (this.discordClient != null)
 			{

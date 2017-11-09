@@ -951,9 +951,8 @@ public class ConfigurationManager implements IConfigurationManager {
 				
 				if (maxEntry != null)
 				{
-					if (!race.getKing().equals(maxEntry.getKey()))
-					
-					StateManager.getInstance().getConfigurationManager().getRace(race.getId()).setKing(maxEntry.getKey());
+					if (race.getKing() == null || !race.getKing().equals(maxEntry.getKey()))
+						StateManager.getInstance().getConfigurationManager().getRace(race.getId()).setKing(maxEntry.getKey());
 				}
 				
 			} catch (CoreStateInitException e) {
