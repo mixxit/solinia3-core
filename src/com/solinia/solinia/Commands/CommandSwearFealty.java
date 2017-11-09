@@ -12,7 +12,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 
-public class CommandSwearFeality implements CommandExecutor {
+public class CommandSwearFealty implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player))
@@ -30,14 +30,14 @@ public class CommandSwearFeality implements CommandExecutor {
 		}
 		
 		try {
-			Player fealityTo = Bukkit.getPlayer(args[0]);
+			Player fealtyTo = Bukkit.getPlayer(args[0]);
 			ISoliniaPlayer sourcePlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-			ISoliniaPlayer fealityPlayer = SoliniaPlayerAdapter.Adapt(fealityTo);
-			if (sourcePlayer.getRaceId() != fealityPlayer.getRaceId())
+			ISoliniaPlayer fealtyPlayer = SoliniaPlayerAdapter.Adapt(fealtyTo);
+			if (sourcePlayer.getRaceId() != fealtyPlayer.getRaceId())
 			{
-				sender.sendMessage("You can only swear feality to a player of the same race");
+				sender.sendMessage("You can only swear fealty to a player of the same race");
 			} else {
-				sourcePlayer.setFeality(fealityTo.getUniqueId());
+				sourcePlayer.setFealty(fealtyTo.getUniqueId());
 			}
 			return true;
 		} catch (CoreStateInitException e) {

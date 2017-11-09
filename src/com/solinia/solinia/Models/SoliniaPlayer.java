@@ -75,7 +75,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String title = "";
 	private List<PlayerQuest> playerQuests = new ArrayList<PlayerQuest>();
 	private List<String> playerQuestFlags = new ArrayList<String>();
-	private UUID feality;
+	private UUID fealty;
 	
 	@Override
 	public List<UUID> getIgnoredPlayers()
@@ -1788,24 +1788,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void setFeality(UUID uniqueId) {
-		Entity fealityTo = Bukkit.getEntity(uniqueId);
+	public void setFealty(UUID uniqueId) {
+		Entity fealtyTo = Bukkit.getEntity(uniqueId);
 		
 		if (uniqueId.equals(this.getUUID()))
 			return;
 		
-		if (fealityTo == null)
+		if (fealtyTo == null)
 			return;
 		
-		if (!(fealityTo instanceof Player))
+		if (!(fealtyTo instanceof Player))
 			return;
 		
-		feality = fealityTo.getUniqueId();
-		getBukkitPlayer().sendMessage("* You have sworn feality to " + fealityTo.getCustomName() + "!");
+		fealty = fealtyTo.getUniqueId();
+		getBukkitPlayer().sendMessage("* You have sworn fealty to " + fealtyTo.getCustomName() + "!");
 	}
 	
 	@Override
-	public UUID getFeality() {
-		return feality;
+	public UUID getFealty() {
+		return fealty;
 	}
 }

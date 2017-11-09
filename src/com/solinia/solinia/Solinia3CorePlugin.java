@@ -82,7 +82,7 @@ import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Commands.CommandSpawnItem;
 import com.solinia.solinia.Commands.CommandSpawnRandomItem;
 import com.solinia.solinia.Commands.CommandStats;
-import com.solinia.solinia.Commands.CommandSwearFeality;
+import com.solinia.solinia.Commands.CommandSwearFealty;
 import com.solinia.solinia.Commands.CommandTarot;
 import com.solinia.solinia.Commands.CommandToday;
 import com.solinia.solinia.Commands.CommandToggleAA;
@@ -455,7 +455,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editaa").setExecutor(new CommandEditAA());		
 		this.getCommand("loot").setExecutor(new CommandLoot());		
 		this.getCommand("createallarmoursets").setExecutor(new CommandCreateAllArmourSets());
-		this.getCommand("swearfeality").setExecutor(new CommandSwearFeality());
+		this.getCommand("swearfealty").setExecutor(new CommandSwearFealty());
 	}
 
 	private void createConfigDir() {

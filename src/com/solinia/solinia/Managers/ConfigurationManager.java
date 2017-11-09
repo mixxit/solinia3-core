@@ -929,14 +929,14 @@ public class ConfigurationManager implements IConfigurationManager {
 					if (player.getRaceId() != race.getId())
 						continue;
 					
-					if (player.getFeality() == null)
+					if (player.getFealty() == null)
 						continue;
 					
-					if (kingCount.containsKey(player.getFeality()))
+					if (kingCount.containsKey(player.getFealty()))
 					{
-						kingCount.put(player.getFeality(), 1);
+						kingCount.put(player.getFealty(), 1);
 					} else {
-						kingCount.put(player.getFeality(), kingCount.get(player.getFeality())+1);
+						kingCount.put(player.getFealty(), kingCount.get(player.getFealty())+1);
 					}
 				}
 				

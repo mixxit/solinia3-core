@@ -224,7 +224,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void reducePlayerNormalExperience(Double experience);
 
-	public void setFeality(UUID uniqueId);
+	public void setFealty(UUID uniqueId);
 
-	UUID getFeality();
+	UUID getFealty();
 }

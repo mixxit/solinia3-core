@@ -200,9 +200,9 @@ commands:
     description: Forces a players level
     usage: /forcelevel mcplayer level
     aliases: []
-  swearfeality:
-    description: Swears feality to a player
-    usage: /searfeality mcplayername
+  swearfealty:
+    description: Swears fealty to a player
+    usage: /swearfealty mcplayername
     aliases: []
   createmerchantlist:
     description: Creates a merchant list
