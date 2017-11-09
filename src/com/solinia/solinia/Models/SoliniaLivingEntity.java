@@ -2733,4 +2733,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 		return dmgLeft;
 	}
+
+	@Override
+	public boolean isInvulnerable() {
+		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.DivineAura))
+		{
+			return true;
+		}
+		return false;
+	}
 }

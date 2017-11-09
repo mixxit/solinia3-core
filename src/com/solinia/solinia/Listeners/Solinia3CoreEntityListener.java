@@ -272,6 +272,21 @@ public class Solinia3CoreEntityListener implements Listener {
 				}
 			}
 			
+			// Check for rune damage
+			if (event.getEntity() instanceof LivingEntity) {
+				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
+				if (soldefender.isInvulnerable()) {
+					event.setDamage(0);
+					event.setCancelled(true);
+					if (damagecause.getDamager() instanceof Player) {
+						((Player) damagecause.getDamager())
+						.sendMessage("* Your attack was prevented as the target is Invulnerable!");
+					}
+					if (event.getEntity() instanceof Player) {
+						((Player) event.getEntity()).sendMessage("* Your invulnerability prevented the targets attack!");
+					}
+				}
+			}
 			
 			// Check for rune damage
 			if (event.getEntity() instanceof LivingEntity)
