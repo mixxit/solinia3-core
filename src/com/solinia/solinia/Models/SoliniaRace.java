@@ -10,6 +10,7 @@ import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -212,7 +213,7 @@ public class SoliniaRace implements ISoliniaRace {
 			if (playerName != null && !playerName.equals(""))
 			{
 				this.king = king;
-				Bukkit.broadcastMessage(playerName + " has been declared Ruler of the " + getName()+"s!");
+				Bukkit.broadcastMessage(ChatColor.RED + playerName + " has been declared Ruler of the " + Utils.FormatAsName(getName())+"s!");
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
