@@ -281,12 +281,12 @@ public class Solinia3CoreEntityListener implements Listener {
 				{
 					event.setDamage(soldefender.reduceAndRemoveRunesAndReturnLeftover((int)event.getDamage()));
 					
-					if (event.getDamage() == 0)
+					if (event.getDamage() <= 0)
 					{
 						event.setCancelled(true);
-						if (damagecause.getEntity() instanceof Player)
+						if (damagecause.getDamager() instanceof Player)
 						{
-							((Player)damagecause.getEntity()).sendMessage("* Your attack was absorbed by the targets Rune");
+							((Player)damagecause.getDamager()).sendMessage("* Your attack was absorbed by the targets Rune");
 						}
 						if (event.getEntity() instanceof Player)
 						{

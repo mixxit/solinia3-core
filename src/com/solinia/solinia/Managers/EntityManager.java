@@ -190,7 +190,6 @@ public class EntityManager implements IEntityManager {
 	
 	@Override
 	public void doNPCRandomChat() {
-		System.out.println("NPC Random Chat Tick");
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
@@ -220,7 +219,6 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 		}
-		System.out.println("NPC Random Chat Tick completed");
 	}
 
 	@Override

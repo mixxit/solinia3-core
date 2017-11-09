@@ -229,12 +229,10 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void sendToDiscordQueuedMessage(Integer messageId)
 	{
-		System.out.println("Sending message " + messageId);
 		QueuedDiscordMessage message = queuedDiscordMessages.get(messageId);
 		
 		if (message != null)
 		{
-			System.out.println("Dispatching queued message to discord");
 			try
 			{
 				
