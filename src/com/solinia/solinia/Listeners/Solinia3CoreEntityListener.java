@@ -312,7 +312,11 @@ public class Solinia3CoreEntityListener implements Listener {
 					LivingEntity recipient = (LivingEntity)event.getEntity();
 					DecimalFormat df = new DecimalFormat();
 					df.setMaximumFractionDigits(2);
-					((Player)damagecause.getDamager()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SPELLDMG'd " + recipient.getName() + " for " + df.format(event.getDamage()) + " [" + df.format(recipient.getHealth()-event.getDamage()) + "/" + df.format(recipient.getMaxHealth()) + "]"));
+					String name = recipient.getName();
+					if (recipient.getCustomName() != null)
+						name = recipient.getCustomName();
+					
+					((Player)damagecause.getDamager()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SPELLDMG'd " + name + " for " + df.format(event.getDamage()) + " [" + df.format(recipient.getHealth()-event.getDamage()) + "/" + df.format(recipient.getMaxHealth()) + "]"));
 				}
 				return;
 			}

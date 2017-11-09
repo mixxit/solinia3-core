@@ -431,11 +431,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			df.setMaximumFractionDigits(2);
 			
 			if (getBukkitLivingEntity() instanceof Player) {
+				String name = defender.getBukkitLivingEntity().getName();
+				if (defender.getBukkitLivingEntity().getCustomName() != null)
+					name = defender.getBukkitLivingEntity().getCustomName();
+				
 				((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-						new TextComponent("You hit " + defender.getBukkitLivingEntity().getCustomName() + " for "
+						new TextComponent("You hit " + name + " for "
 								+ df.format(event.getDamage()) + " "
-								+ df.format(getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
-								+ df.format(getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill + " damage"));
+								+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
+								+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill + " damage"));
 				
 				// Only players get this
 				if (getDoubleAttackCheck()) {
