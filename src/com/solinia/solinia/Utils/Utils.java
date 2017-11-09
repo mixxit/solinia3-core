@@ -3672,6 +3672,58 @@ public class Utils {
 		return allTotalHpEffects;
 	}
 
+	public static List<ActiveSpellEffect> getActiveSpellEffects(LivingEntity livingEntity, SpellEffectType effectType)
+	{
+		List<ActiveSpellEffect> returnEffects = new ArrayList<ActiveSpellEffect>();
+		
+		SoliniaEntitySpells effects;
+		try {
+			effects = StateManager.getInstance().getEntityManager()
+					.getActiveEntitySpells(livingEntity);
+			
+			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
+			{
+					for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
+					{
+						if (!(effect.getSpellEffectType().equals(effectType))							)
+							continue;
+						
+						returnEffects.add(effect);
+					}
+			}
+		} catch (CoreStateInitException e) {
+			// skip
+		}
+		
+		return returnEffects;
+	}
+	
+	public static int getActiveSpellEffectsRemainingValue(LivingEntity livingEntity, SpellEffectType effectType)
+	{
+		int totalRemaining = 0;
+		
+		SoliniaEntitySpells effects;
+		try {
+			effects = StateManager.getInstance().getEntityManager()
+					.getActiveEntitySpells(livingEntity);
+			
+			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
+			{
+					for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
+					{
+						if (!(effect.getSpellEffectType().equals(effectType))							)
+							continue;
+						
+						totalRemaining += effect.getRemainingValue();
+					}
+			}
+		} catch (CoreStateInitException e) {
+			// skip
+		}
+		
+		return totalRemaining;
+	}
+	
 	public static int getTotalEffectStat(LivingEntity livingEntity, String stat) {
 		int statTotal = 0;
 

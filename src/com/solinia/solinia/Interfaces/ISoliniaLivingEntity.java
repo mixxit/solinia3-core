@@ -136,4 +136,8 @@ public interface ISoliniaLivingEntity
 	int getActSpellHealing(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect, ISoliniaLivingEntity target);
 
 	int getMaxStat(String skillname);
+
+	int getRune();
+
+	int reduceAndRemoveRunesAndReturnLeftover(int damage);
 }

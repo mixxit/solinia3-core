@@ -333,8 +333,9 @@ public class SoliniaActiveSpell {
 			: return;
 		case SenseAnimals
 			: return;
-		case Rune
-			: return;
+		case Rune: 
+			applyRune(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case TrueNorth
 			: return;
 		case Levitate: 
@@ -1213,6 +1214,10 @@ public class SoliniaActiveSpell {
 		default:
 			return;
 		}
+	}
+
+	private void applyRune(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		// nothing to apply on initial creation
 	}
 
 	private void applyRevive(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

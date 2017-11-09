@@ -2681,5 +2681,52 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return value;
 	}
 
+	@Override
+	public int getRune()
+	{
+		return Utils.getActiveSpellEffectsRemainingValue(this.getBukkitLivingEntity(), SpellEffectType.Rune);
+	}
 	
+	@Override
+	public int reduceAndRemoveRunesAndReturnLeftover(int damage)
+	{
+		int dmgLeft = damage;
+		List<Integer> removeSpells = new ArrayList<Integer>();
+		try
+		{
+			for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells()) {
+				if (!spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Rune))
+						continue;
+				
+				for (ActiveSpellEffect effect : spell.getActiveSpellEffects())
+				{
+					if (!(effect.getSpellEffectType().equals(SpellEffectType.Rune)))
+						continue;
+					
+					if (dmgLeft <= 0)
+						break;
+					
+					if (effect.getRemainingValue() <= dmgLeft)
+					{
+						dmgLeft -= effect.getRemainingValue();
+						effect.setRemainingValue(0);
+						removeSpells.add(spell.getSpellId());
+					} else {
+						effect.setRemainingValue(effect.getRemainingValue() - dmgLeft);
+						dmgLeft = 0;
+						break;
+					}
+				}
+			}
+			
+			for (Integer spellId : removeSpells) {
+				StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId);
+				
+			}
+		} catch (CoreStateInitException e) {
+			// ignore and return full amount
+		}
+			
+		return dmgLeft;
+	}
 }

@@ -183,6 +183,8 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 		}
 		
+		
+		
 		// Remove buffs on attacker (invis should drop)
 		// and check they are not mezzed
 		try {
@@ -269,6 +271,33 @@ public class Solinia3CoreEntityListener implements Listener {
 							.removeSpellEffectsOfSpellId(((LivingEntity) event.getEntity()).getUniqueId(), spellId);
 				}
 			}
+			
+			
+			// Check for rune damage
+			if (event.getEntity() instanceof LivingEntity)
+			{
+				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
+				if (soldefender.getRune() > 0)
+				{
+					event.setDamage(soldefender.reduceAndRemoveRunesAndReturnLeftover((int)event.getDamage()));
+					
+					if (event.getDamage() == 0)
+					{
+						event.setCancelled(true);
+						if (damagecause.getEntity() instanceof Player)
+						{
+							((Player)damagecause.getEntity()).sendMessage("* Your attack was absorbed by the targets Rune");
+						}
+						if (event.getEntity() instanceof Player)
+						{
+							((Player)event.getEntity()).sendMessage("* Your rune spell absorbed the targets attack!");
+						}
+						
+						return;
+					}
+				}
+			}
+			
 		} catch (CoreStateInitException e) {
 			// skip
 		}
