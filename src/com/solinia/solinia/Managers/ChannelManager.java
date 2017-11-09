@@ -192,8 +192,14 @@ public class ChannelManager implements IChannelManager {
 		}
 
 		String title = name;
+		ChatColor nameColour = ChatColor.YELLOW;
+		if (player.isRacialKing())
+		{
+			nameColour = ChatColor.GOLD;
+		}
+
 		String messageheader = ChatColor.RESET + "[" + channel + "" + gender + "" + racealignmentcolour + race
-				+ ChatColor.RESET + "" + profession + "]" + ChatColor.YELLOW + "~" + title + ChatColor.RESET + ": "
+				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + message;
 		return message;
