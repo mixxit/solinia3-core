@@ -1,5 +1,8 @@
 package com.solinia.solinia.Models;
 
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -27,6 +30,7 @@ public class SoliniaRace implements ISoliniaRace {
 	private String description = "";
 	private String alignment = "NEUTRAL";
 	private String shortName = "";
+	private UUID king;
 	
 	@Override
 	public String getName() {
@@ -194,6 +198,26 @@ public class SoliniaRace implements ISoliniaRace {
 	@Override
 	public void setShortName(String shortName) {
 		this.shortName = shortName;
+	}
+
+	@Override
+	public UUID getKing() {
+		return king;
+	}
+
+	@Override
+	public void setKing(UUID king) {
+		try {
+			String playerName = StateManager.getInstance().getPlayerManager().getPlayerNameByUUID(king);
+			if (playerName != null && !playerName.equals(""))
+			{
+				this.king = king;
+				Bukkit.broadcastMessage(playerName + " has been declared Ruler of the " + getName()+"s!");
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

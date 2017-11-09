@@ -141,6 +141,17 @@ public class PlayerManager implements IPlayerManager {
 	public void setPlayerActiveBardSong(UUID playerUuid, Integer spellId) {
 		this.playerActiveBardSong.put(playerUuid, spellId);
 	}
+
+	@Override
+	public String getPlayerNameByUUID(UUID king) {
+		List<ISoliniaPlayer> players = repository.query(p ->p.getUUID().equals(king));
+		for(ISoliniaPlayer player : players)
+		{
+			return player.getFullName();
+		}
+		
+		return null;
+	}
 	
 	
 }

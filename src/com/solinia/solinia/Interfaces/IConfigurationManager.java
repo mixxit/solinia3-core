@@ -257,4 +257,6 @@ public interface IConfigurationManager {
 	ISoliniaAARank getAARankCache(int rankId);
 
 	void resetAARankRepository();
+
+	void updateKings();
 }

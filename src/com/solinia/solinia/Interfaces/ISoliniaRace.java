@@ -1,5 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
+import java.util.UUID;
+
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -63,4 +65,8 @@ public interface ISoliniaRace {
 	String getShortName();
 
 	void setShortName(String shortName);
+
+	UUID getKing();
+
+	void setKing(UUID king);
 }

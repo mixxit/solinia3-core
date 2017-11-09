@@ -1855,7 +1855,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				int stat = npc.getLevel() * 5;
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
-
+				
+				if (stat > getMaxStat("STRENGTH"))
+					stat = getMaxStat("STRENGTH");
 				return stat;
 			}
 
@@ -1872,6 +1874,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				stat += Utils.getTotalItemStat(solplayer, "STRENGTH");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
+				
+				if (stat > getMaxStat("STRENGTH"))
+					stat = getMaxStat("STRENGTH");
 
 				return stat;
 			}
@@ -1925,6 +1930,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				int stat = npc.getLevel() * 5;
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
 
+				if (stat > getMaxStat("STAMINA"))
+					stat = getMaxStat("STAMINA");
+				
 				return stat;
 			}
 
@@ -1941,6 +1949,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				stat += Utils.getTotalItemStat(solplayer, "STAMINA");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				
+				if (stat > getMaxStat("STAMINA"))
+					stat = getMaxStat("STAMINA");
 
 				return stat;
 			}
@@ -1966,6 +1977,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				int stat = npc.getLevel() * 5;
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "AGILITY");
 
+				if (stat > getMaxStat("AGILITY"))
+					stat = getMaxStat("AGILITY");
+				
 				return stat;
 			}
 
@@ -1983,6 +1997,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "AGILITY");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "AGILITY");
 
+				if (stat > getMaxStat("AGILITY"))
+					stat = getMaxStat("AGILITY");
+				
 				return stat;
 			}
 		} catch (CoreStateInitException e) {
@@ -2007,6 +2024,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				int stat = npc.getLevel() * 5;
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
 
+				if (stat > getMaxStat("DEXTERITY"))
+					stat = getMaxStat("DEXTERITY");
+				
 				return stat;
 			}
 
@@ -2024,6 +2044,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
 
+				if (stat > getMaxStat("DEXTERITY"))
+					stat = getMaxStat("DEXTERITY");
+				
 				return stat;
 			}
 		} catch (CoreStateInitException e) {
@@ -2048,6 +2071,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				int stat = npc.getLevel() * 5;
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
 
+				if (stat > getMaxStat("INTELLIGENCE"))
+					stat = getMaxStat("INTELLIGENCE");
+				
 				return stat;
 			}
 
@@ -2065,6 +2091,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
 
+				if (stat > getMaxStat("INTELLIGENCE"))
+					stat = getMaxStat("INTELLIGENCE");
+				
 				return stat;
 			}
 		} catch (CoreStateInitException e) {
@@ -2089,6 +2118,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				int stat = npc.getLevel() * 5;
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "WISDOM");
 
+				if (stat > getMaxStat("WISDOM"))
+					stat = getMaxStat("WISDOM");
+				
 				return stat;
 			}
 
@@ -2106,6 +2138,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "WISDOM");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "WISDOM");
 
+				if (stat > getMaxStat("WISDOM"))
+					stat = getMaxStat("WISDOM");
+				
 				return stat;
 			}
 		} catch (CoreStateInitException e) {
@@ -2130,6 +2165,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				int stat = npc.getLevel() * 5;
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
 
+				if (stat > getMaxStat("CHARISMA"))
+					stat = getMaxStat("CHARISMA");
+				
 				return stat;
 			}
 
@@ -2147,6 +2185,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
 
+				if (stat > getMaxStat("CHARISMA"))
+					stat = getMaxStat("CHARISMA");
+				
 				return stat;
 			}
 		} catch (CoreStateInitException e) {
@@ -2156,6 +2197,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return 1;
 	}
 
+	@Override
+	public int getMaxStat(String skillname)
+	{
+		int baseMaxStat = 255;
+		
+		return baseMaxStat;
+	}
+	
 	@Override
 	public boolean getRiposteCheck() {
 		if (getNpcid() < 1 && !isPlayer())

@@ -223,4 +223,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void dropResurrectionItem(int experienceamount);
 
 	void reducePlayerNormalExperience(Double experience);
+
+	public void setFeality(UUID uniqueId);
+
+	UUID getFeality();
 }

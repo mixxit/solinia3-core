@@ -82,6 +82,7 @@ import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Commands.CommandSpawnItem;
 import com.solinia.solinia.Commands.CommandSpawnRandomItem;
 import com.solinia.solinia.Commands.CommandStats;
+import com.solinia.solinia.Commands.CommandSwearFeality;
 import com.solinia.solinia.Commands.CommandTarot;
 import com.solinia.solinia.Commands.CommandToday;
 import com.solinia.solinia.Commands.CommandToggleAA;
@@ -119,6 +120,7 @@ import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
+import com.solinia.solinia.Timers.KingCheckTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
 import com.solinia.solinia.Timers.PerkLoadTimer;
@@ -147,6 +149,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private NPCRandomChatTimer npcRandomChatTimer;
 	private PetCheckTickTimer petCheckTickTimer;
 	private DiscordMessageTimer discordMessageTimer;
+	private KingCheckTimer kingCheckTimer;
 	FileConfiguration config = getConfig();
 	
 	private Economy economy;
@@ -344,6 +347,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			petCheckTickTimer = new PetCheckTickTimer();
 			petCheckTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+
+			kingCheckTimer = new KingCheckTimer();
+			kingCheckTimer.runTaskTimer(this, 120 * 20L, 6 * 20L);
 			
 			if (this.discordClient != null)
 			{
@@ -449,6 +455,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editaa").setExecutor(new CommandEditAA());		
 		this.getCommand("loot").setExecutor(new CommandLoot());		
 		this.getCommand("createallarmoursets").setExecutor(new CommandCreateAllArmourSets());
+		this.getCommand("swearfeality").setExecutor(new CommandSwearFeality());
 	}
 
 	private void createConfigDir() {

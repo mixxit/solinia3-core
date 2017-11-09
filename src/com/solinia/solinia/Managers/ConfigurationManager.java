@@ -2,8 +2,11 @@ package com.solinia.solinia.Managers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
@@ -39,6 +42,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
@@ -910,5 +914,52 @@ public class ConfigurationManager implements IConfigurationManager {
 			return null;
 		
 		return aarankcache.get(rankId);
+	}
+
+	@Override
+	public void updateKings() {
+		
+		for(ISoliniaRace race : getRaces())
+		{
+			HashMap<UUID,Integer> kingCount = new HashMap<UUID,Integer>();
+			
+			try {
+				for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
+				{
+					if (player.getRaceId() != race.getId())
+						continue;
+					
+					if (player.getFeality() == null)
+						continue;
+					
+					if (kingCount.containsKey(player.getFeality()))
+					{
+						kingCount.put(player.getFeality(), 1);
+					} else {
+						kingCount.put(player.getFeality(), kingCount.get(player.getFeality())+1);
+					}
+				}
+				
+				Entry<UUID,Integer> maxEntry = null;
+				for(Entry<UUID,Integer> entry : kingCount.entrySet())
+				{
+					if (maxEntry == null || entry.getValue() > maxEntry.getValue()) 
+					{
+				        maxEntry = entry;
+				    }
+				}
+				
+				if (maxEntry != null)
+				{
+					if (!race.getKing().equals(maxEntry.getKey()))
+					
+					StateManager.getInstance().getConfigurationManager().getRace(race.getId()).setKing(maxEntry.getKey());
+				}
+				
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

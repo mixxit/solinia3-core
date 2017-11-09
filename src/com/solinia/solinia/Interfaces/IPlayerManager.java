@@ -21,4 +21,5 @@ public interface IPlayerManager {
 	void setPlayerActiveBardSong(UUID playerUuid, Integer spellId);
 	List<ISoliniaPlayer> getPlayers();
 	List<ISoliniaPlayer> getTopLevelPlayers();
+	public String getPlayerNameByUUID(UUID king);
 }
