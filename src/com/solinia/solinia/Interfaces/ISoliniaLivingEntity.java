@@ -142,4 +142,6 @@ public interface ISoliniaLivingEntity
 	int reduceAndRemoveRunesAndReturnLeftover(int damage);
 
 	public boolean isInvulnerable();
+
+	public int ACSum();
 }

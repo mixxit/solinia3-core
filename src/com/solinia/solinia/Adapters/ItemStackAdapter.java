@@ -118,6 +118,10 @@ public class ItemStackAdapter {
 		if (soliniaItem.getBaneUndead() > 0) {
 			loretxt.add("Bane UNDEAD: " + ChatColor.GREEN + soliniaItem.getBaneUndead() + ChatColor.RESET);
 		}
+
+		if (soliniaItem.getAC() > 0) {
+			loretxt.add("Armour Class: " + ChatColor.GREEN + soliniaItem.getAC() + ChatColor.RESET);
+		}
 		
 		String classtxt = "";
 		if (soliniaItem.getAllowedClassNames().size() > 0) {

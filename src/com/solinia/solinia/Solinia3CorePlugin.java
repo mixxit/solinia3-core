@@ -80,7 +80,6 @@ import com.solinia.solinia.Commands.CommandSetTitle;
 import com.solinia.solinia.Commands.CommandSkills;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Commands.CommandSpawnItem;
-import com.solinia.solinia.Commands.CommandSpawnRandomItem;
 import com.solinia.solinia.Commands.CommandStats;
 import com.solinia.solinia.Commands.CommandSwearFealty;
 import com.solinia.solinia.Commands.CommandTarot;
@@ -395,7 +394,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createitem").setExecutor(new CommandCreateItem());
 		this.getCommand("listitems").setExecutor(new CommandListItems());
 		this.getCommand("spawnitem").setExecutor(new CommandSpawnItem());
-		this.getCommand("spawnrandomitem").setExecutor(new CommandSpawnRandomItem());
 		this.getCommand("raceinfo").setExecutor(new CommandRaceInfo());
 		this.getCommand("rebuildspellitems").setExecutor(new CommandRebuildSpellItems());
 		this.getCommand("createfaction").setExecutor(new CommandCreateFaction());

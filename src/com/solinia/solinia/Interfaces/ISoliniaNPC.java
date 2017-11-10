@@ -194,4 +194,8 @@ public interface ISoliniaNPC {
 	int getSkillCap(String skillName);
 
 	int getAvoidanceRating();
+
+	int getAC();
+
+	void setAC(int ac);
 }

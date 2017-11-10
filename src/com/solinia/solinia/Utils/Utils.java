@@ -60,6 +60,7 @@ import com.solinia.solinia.Models.SoliniaAAPrereq;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
@@ -77,14 +78,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class Utils {
 	public static float clamp(float val, float min, float max) {
-	    return Math.max(min, Math.min(max, val));
+		return Math.max(min, Math.min(max, val));
 	}
-	
-	public static double calculateExpLoss(ISoliniaPlayer player)
-	{
+
+	public static double calculateExpLoss(ISoliniaPlayer player) {
 		double loss = 0;
-		loss = (double)(player.getLevel() * (player.getLevel() / 18.0) * 12000);
-		return (double)loss;
+		loss = (double) (player.getLevel() * (player.getLevel() / 18.0) * 12000);
+		return (double) loss;
 	}
 
 	public static List<WorldWidePerk> getActiveWorldWidePerks() {
@@ -106,147 +106,131 @@ public class Utils {
 		return perks;
 	}
 
-	public static void RepairAllowedClasses(ISoliniaSpell spell)
-	{
-		
+	public static void RepairAllowedClasses(ISoliniaSpell spell) {
+
 		List<SoliniaSpellClass> allowedClasses = new ArrayList<SoliniaSpellClass>();
-		
-		if (spell.getClasses1() != null && spell.getClasses1() != 254 && spell.getClasses1() != 255)
-		{
+
+		if (spell.getClasses1() != null && spell.getClasses1() != 254 && spell.getClasses1() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("WARRIOR");
 			spellClass.setMinlevel(spell.getClasses1());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses2() != null && spell.getClasses2() != 254 && spell.getClasses2() != 255)
-		{
+
+		if (spell.getClasses2() != null && spell.getClasses2() != 254 && spell.getClasses2() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("CLERIC");
 			spellClass.setMinlevel(spell.getClasses2());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses3() != null && spell.getClasses3() != 254 && spell.getClasses3() != 255)
-		{
+
+		if (spell.getClasses3() != null && spell.getClasses3() != 254 && spell.getClasses3() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("PALADIN");
 			spellClass.setMinlevel(spell.getClasses3());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses4() != null && spell.getClasses4() != 254 && spell.getClasses4() != 255)
-		{
+
+		if (spell.getClasses4() != null && spell.getClasses4() != 254 && spell.getClasses4() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("RANGER");
 			spellClass.setMinlevel(spell.getClasses4());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses5() != null && spell.getClasses5() != 254 && spell.getClasses5() != 255)
-		{
+
+		if (spell.getClasses5() != null && spell.getClasses5() != 254 && spell.getClasses5() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("SHADOWKNIGHT");
 			spellClass.setMinlevel(spell.getClasses5());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses6() != null && spell.getClasses6() != 254 && spell.getClasses6() != 255)
-		{
+
+		if (spell.getClasses6() != null && spell.getClasses6() != 254 && spell.getClasses6() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("DRUID");
 			spellClass.setMinlevel(spell.getClasses6());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses7() != null && spell.getClasses7() != 254 && spell.getClasses7() != 255)
-		{
+
+		if (spell.getClasses7() != null && spell.getClasses7() != 254 && spell.getClasses7() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("MONK");
 			spellClass.setMinlevel(spell.getClasses7());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses8() != null && spell.getClasses8() != 254 && spell.getClasses8() != 255)
-		{
+
+		if (spell.getClasses8() != null && spell.getClasses8() != 254 && spell.getClasses8() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("BARD");
 			spellClass.setMinlevel(spell.getClasses8());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses9() != null && spell.getClasses9() != 254 && spell.getClasses9() != 255)
-		{
+
+		if (spell.getClasses9() != null && spell.getClasses9() != 254 && spell.getClasses9() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("ROGUE");
 			spellClass.setMinlevel(spell.getClasses9());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses10() != null && spell.getClasses10() != 254 && spell.getClasses10() != 255)
-		{
+
+		if (spell.getClasses10() != null && spell.getClasses10() != 254 && spell.getClasses10() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("SHAMAN");
 			spellClass.setMinlevel(spell.getClasses10());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses11() != null && spell.getClasses11() != 254 && spell.getClasses11() != 255)
-		{
+
+		if (spell.getClasses11() != null && spell.getClasses11() != 254 && spell.getClasses11() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("NECROMANCER");
 			spellClass.setMinlevel(spell.getClasses11());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses12() != null && spell.getClasses12() != 254 && spell.getClasses12() != 255)
-		{
+
+		if (spell.getClasses12() != null && spell.getClasses12() != 254 && spell.getClasses12() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("WIZARD");
 			spellClass.setMinlevel(spell.getClasses12());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses13() != null && spell.getClasses13() != 254 && spell.getClasses13() != 255)
-		{
+
+		if (spell.getClasses13() != null && spell.getClasses13() != 254 && spell.getClasses13() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("MAGICIAN");
 			spellClass.setMinlevel(spell.getClasses13());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses14() != null && spell.getClasses14() != 254 && spell.getClasses14() != 255)
-		{
+
+		if (spell.getClasses14() != null && spell.getClasses14() != 254 && spell.getClasses14() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("ENCHANTER");
 			spellClass.setMinlevel(spell.getClasses14());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses15() != null && spell.getClasses15() != 254 && spell.getClasses15() != 255)
-		{
+
+		if (spell.getClasses15() != null && spell.getClasses15() != 254 && spell.getClasses15() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("BEASTLORD");
 			spellClass.setMinlevel(spell.getClasses15());
 			allowedClasses.add(spellClass);
 		}
-		
-		if (spell.getClasses16() != null && spell.getClasses16() != 254 && spell.getClasses16() != 255)
-		{
+
+		if (spell.getClasses16() != null && spell.getClasses16() != 254 && spell.getClasses16() != 255) {
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
 			spellClass.setClassname("BERSERKER");
 			spellClass.setMinlevel(spell.getClasses16());
 			allowedClasses.add(spellClass);
 		}
 		try {
-			StateManager.getInstance().getConfigurationManager().getSpell(spell.getId()).setAllowedClasses(allowedClasses);
+			StateManager.getInstance().getConfigurationManager().getSpell(spell.getId())
+					.setAllowedClasses(allowedClasses);
 			System.out.println("Fixed spell " + spell.getName() + " with classe count: " + allowedClasses.size());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static int GetWorldPerkDropCountModifier() {
 		int dropcount = 1;
 
@@ -637,11 +621,9 @@ public class Utils {
 		return percentagemodifier;
 	}
 
-	public static int getSkillCap(String skillname, ISoliniaClass profession, int level) 
-	{
+	public static int getSkillCap(String skillname, ISoliniaClass profession, int level) {
 		if (!Utils.isValidSkill(skillname.toUpperCase()))
 			return 0;
-		
 
 		// If the skill being queried happens to be a race name, the cap for
 		// language is always 100
@@ -689,7 +671,7 @@ public class Utils {
 					return cap;
 				}
 		}
-		
+
 		if (skillname.equals("DODGE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
@@ -704,7 +686,7 @@ public class Utils {
 					return cap;
 				}
 		}
-		
+
 		if (skillname.equals("RIPOSTE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
@@ -719,7 +701,7 @@ public class Utils {
 					return cap;
 				}
 		}
-		
+
 		if (skillname.equals("DOUBLEATTACK")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
@@ -759,7 +741,7 @@ public class Utils {
 					return cap;
 				}
 		}
-		
+
 		if (skillname.equals("OFFENSE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
@@ -774,7 +756,7 @@ public class Utils {
 					return cap;
 				}
 		}
-		
+
 		if (skillname.equals("DEFENSE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
@@ -886,15 +868,14 @@ public class Utils {
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;
 				}
-				
-				if (soliniaitem.getMinLevel() > solplayer.getLevel())
-	    		{
+
+				if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
 					event.setCancelled(true);
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;
-	    		}
-				
+				}
+
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -922,7 +903,7 @@ public class Utils {
 
 			if (solplayer.getBukkitPlayer().getInventory().getItemInOffHand() != null)
 				itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInOffHand());
-			
+
 			if (!stat.equals("STAMINA"))
 				if (solplayer.getBukkitPlayer().getInventory().getItemInHand() != null)
 					itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInHand());
@@ -934,18 +915,17 @@ public class Utils {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
 					ISoliniaItem augItem = null;
-					if (augmentationId != null && augmentationId != 0)
-					{
+					if (augmentationId != null && augmentationId != 0) {
 						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
 					}
-					
+
 					switch (stat) {
 					case "STRENGTH":
 						if (item.getStrength() > 0) {
 							total += item.getStrength();
 						}
 						if (augItem != null)
-							if(augItem.getStrength() > 0)
+							if (augItem.getStrength() > 0)
 								total += item.getStrength();
 						break;
 					case "STAMINA":
@@ -953,7 +933,7 @@ public class Utils {
 							total += item.getStamina();
 						}
 						if (augItem != null)
-							if(augItem.getStamina() > 0)
+							if (augItem.getStamina() > 0)
 								total += item.getStamina();
 						break;
 					case "AGILITY":
@@ -961,7 +941,7 @@ public class Utils {
 							total += item.getAgility();
 						}
 						if (augItem != null)
-							if(augItem.getAgility() > 0)
+							if (augItem.getAgility() > 0)
 								total += item.getAgility();
 						break;
 					case "DEXTERITY":
@@ -969,7 +949,7 @@ public class Utils {
 							total += item.getDexterity();
 						}
 						if (augItem != null)
-							if(augItem.getDexterity() > 0)
+							if (augItem.getDexterity() > 0)
 								total += item.getDexterity();
 						break;
 					case "INTELLIGENCE":
@@ -977,7 +957,7 @@ public class Utils {
 							total += item.getIntelligence();
 						}
 						if (augItem != null)
-							if(augItem.getIntelligence() > 0)
+							if (augItem.getIntelligence() > 0)
 								total += item.getIntelligence();
 						break;
 					case "WISDOM":
@@ -985,7 +965,7 @@ public class Utils {
 							total += item.getWisdom();
 						}
 						if (augItem != null)
-							if(augItem.getWisdom() > 0)
+							if (augItem.getWisdom() > 0)
 								total += item.getWisdom();
 						break;
 					case "CHARISMA":
@@ -993,7 +973,7 @@ public class Utils {
 							total += item.getCharisma();
 						}
 						if (augItem != null)
-							if(augItem.getCharisma() > 0)
+							if (augItem.getCharisma() > 0)
 								total += item.getCharisma();
 						break;
 					default:
@@ -1117,7 +1097,7 @@ public class Utils {
 
 		return false;
 	}
-	
+
 	public static int getEffectIdFromEffectType(SpellEffectType spellEffectType) {
 		switch (spellEffectType) {
 		case CurrentHP:
@@ -3027,68 +3007,62 @@ public class Utils {
 		return 0;
 	}
 
-
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
-		
+
 	}
-	
-	public static int convertRawClassToClass(int rawClassId)
-	{
-		switch(rawClassId)
-		{
-			case 1: // war
-				return 1;
-			case 2: // cle
-				return 2;
-			case 3: // pal
-				return 6;
-			case 4: // rng
-				return 3;
-			case 5: // shd
-				return 7;
-			case 6: // dru
-				return 9;
-			case 7: //mnk
-				return 12;
-			case 8: // brd
-				return 10;
-			case 9: // rog
-				return 4;
-			case 10: // shm
-				return 8;
-			case 11: //nec
-				return 13;
-			case 12: //wiz
-				return 5;
-			case 13: // mge
-				return 11;
-			case 14: // enc
-				return 14;			
-			default:
-				return 0;
+
+	public static int convertRawClassToClass(int rawClassId) {
+		switch (rawClassId) {
+		case 1: // war
+			return 1;
+		case 2: // cle
+			return 2;
+		case 3: // pal
+			return 6;
+		case 4: // rng
+			return 3;
+		case 5: // shd
+			return 7;
+		case 6: // dru
+			return 9;
+		case 7: // mnk
+			return 12;
+		case 8: // brd
+			return 10;
+		case 9: // rog
+			return 4;
+		case 10: // shm
+			return 8;
+		case 11: // nec
+			return 13;
+		case 12: // wiz
+			return 5;
+		case 13: // mge
+			return 11;
+		case 14: // enc
+			return 14;
+		default:
+			return 0;
 		}
 	}
 
 	private static void patchNpcClasses() {
-		try
-		{
-			for(ISoliniaPatch patch : StateManager.getInstance().getConfigurationManager().getPatches())
-			{
+		try {
+			for (ISoliniaPatch patch : StateManager.getInstance().getConfigurationManager().getPatches()) {
 				// Lookup npc and edit class
 				String npcName = patch.getClasses().get(0);
 				int rawClassId = Integer.parseInt(patch.getClasses().get(1));
 				int convertedClass = convertRawClassToClass(rawClassId);
-				
+
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(npcName);
 				if (npc == null)
 					continue;
-				
+
 				npc.setClassid(convertedClass);
 				System.out.println("Updated NPC: " + npc.getName() + " to class " + convertedClass);
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			// skip
 		}
 	}
@@ -3098,7 +3072,7 @@ public class Utils {
 		for (MetadataValue val : livingentity.getMetadata("mobname")) {
 			metaid = val.asString();
 		}
-		
+
 		for (MetadataValue val : livingentity.getMetadata("npcid")) {
 			metaid = val.asString();
 		}
@@ -3246,551 +3220,898 @@ public class Utils {
 	}
 
 	public static SpellEffectType getSpellEffectTypeFromResistType(SpellResistType type) {
-		switch(type)
-		{
-			case RESIST_COLD:
-				return SpellEffectType.ResistCold;
-			case RESIST_FIRE:
-				return SpellEffectType.ResistFire;
-			case RESIST_POISON:
-				return SpellEffectType.ResistPoison;
-			case RESIST_DISEASE:
-				return SpellEffectType.ResistDisease;
-			case RESIST_MAGIC:
-				return SpellEffectType.ResistMagic;
-			case RESIST_CORRUPTION:
-				return SpellEffectType.ResistCorruption;
-			case RESIST_NONE:
-				return null;
-			default:
-				return null;
-				
+		switch (type) {
+		case RESIST_COLD:
+			return SpellEffectType.ResistCold;
+		case RESIST_FIRE:
+			return SpellEffectType.ResistFire;
+		case RESIST_POISON:
+			return SpellEffectType.ResistPoison;
+		case RESIST_DISEASE:
+			return SpellEffectType.ResistDisease;
+		case RESIST_MAGIC:
+			return SpellEffectType.ResistMagic;
+		case RESIST_CORRUPTION:
+			return SpellEffectType.ResistCorruption;
+		case RESIST_NONE:
+			return null;
+		default:
+			return null;
+
 		}
 	}
 
 	public static DisguisePackage getDisguiseTypeFromDisguiseId(int disguiseid) {
-		switch(disguiseid)
-		{
-		case 1:  return new DisguisePackage(DisguiseType.PLAYER,"human","k0h"); // human
-		case 2:  return new DisguisePackage(DisguiseType.PLAYER,"barbarian","Lemoh"); // barbarian
-		case 3:  return new DisguisePackage(DisguiseType.PLAYER,"highhuman","hiccupwindwalker"); // high human
-		case 4:  return new DisguisePackage(DisguiseType.PLAYER,"woodelf","Knogi"); // wood elf
-		case 5:  return new DisguisePackage(DisguiseType.PLAYER,"highelf","MoistWater"); // highelf
-		case 6:  return new DisguisePackage(DisguiseType.PLAYER,"darkelf","Kenzo74_"); // dark elf
-		case 7:  return new DisguisePackage(DisguiseType.PLAYER,"halfelf","Maechu_"); //halfelf
-		case 8:  return new DisguisePackage(DisguiseType.PLAYER,"dwarf","Faenon"); //dwarf
-		case 9:  return new DisguisePackage(DisguiseType.PLAYER,"troll","Gronghk"); // troll
-		case 10:  return new DisguisePackage(DisguiseType.PLAYER,"ogre","theorc"); // ogre
-		case 11:  return new DisguisePackage(DisguiseType.PLAYER,"halfling","Yeus"); // halfling
-		case 12:  return new DisguisePackage(DisguiseType.PLAYER,"gnome","Yeus"); // gnome
-		case 13:  return new DisguisePackage(DisguiseType.PLAYER,"aviak","Titus_Vogel"); //aviak
-		case 14:  return new DisguisePackage(DisguiseType.PLAYER,"werewolf","Apiii"); // werewolf
-		case 15:  return new DisguisePackage(DisguiseType.PLAYER,"Brownie");
-		case 16:  return new DisguisePackage(DisguiseType.PLAYER,"Centaur");
-		case 17:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Golem");
-		case 18:  return new DisguisePackage(DisguiseType.GIANT,"Giant/Cyclops");
-		case 19:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Poison Dragon");
-		case 20:  return new DisguisePackage(DisguiseType.PLAYER,"Doppleganger");
-		case 21:  return new DisguisePackage(DisguiseType.GUARDIAN,"Evil Eye");
-		case 22:  return new DisguisePackage(DisguiseType.SILVERFISH,"Beetle");
-		case 23:  return new DisguisePackage(DisguiseType.PLAYER,"Kerra");
-		case 24:  return new DisguisePackage(DisguiseType.GUARDIAN,"Fish");
-		case 25:  return new DisguisePackage(DisguiseType.VEX,"Fairy");
-		case 26:  return new DisguisePackage(DisguiseType.PLAYER,"Frog man");
-		case 27:  return new DisguisePackage(DisguiseType.PLAYER,"Frogman ghoul");
-		case 28:  return new DisguisePackage(DisguiseType.PLAYER,"Fungusman");
-		case 29:  return new DisguisePackage(DisguiseType.PLAYER,"Gargoyle");
-		case 31:  return new DisguisePackage(DisguiseType.SLIME,"Slime cube");
-		case 32:  return new DisguisePackage(DisguiseType.PLAYER,"ghost","Orbitly"); // ghost
-		case 33:  return new DisguisePackage(DisguiseType.PLAYER,"Ghoul");
-		case 34:  return new DisguisePackage(DisguiseType.BAT,"Giant Bat");
-		case 35:  return new DisguisePackage(DisguiseType.GUARDIAN,"Giant Eel");
-		case 36:  return new DisguisePackage(DisguiseType.PLAYER,"Giant Rat");
-		case 37:  return new DisguisePackage(DisguiseType.PLAYER,"Giant Snake");
-		case 38:  return new DisguisePackage(DisguiseType.PLAYER,"Giant Spider");
-		case 39:  return new DisguisePackage(DisguiseType.PLAYER,"Gnoll");
-		case 40:  return new DisguisePackage(DisguiseType.PLAYER,"Goblin");
-		case 41:  return new DisguisePackage(DisguiseType.PLAYER,"Gorilla");
-		case 42:  return new DisguisePackage(DisguiseType.WOLF,"Wolf");
-		case 43:  return new DisguisePackage(DisguiseType.POLAR_BEAR,"Bear");
-		case 44:  return new DisguisePackage(DisguiseType.PLAYER,"Human Guards");
-		case 45:  return new DisguisePackage(DisguiseType.WITHER_SKELETON,"Demi Lich");
-		case 46:  return new DisguisePackage(DisguiseType.VEX,"Imp");
-		case 47:  return new DisguisePackage(DisguiseType.PLAYER,"Griffin");
-		case 48:  return new DisguisePackage(DisguiseType.PLAYER,"kobold","PeterPugger");//kobold
-		case 49:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Lava Dragon");
-		case 50:  return new DisguisePackage(DisguiseType.OCELOT,"Lion");
-		case 51:  return new DisguisePackage(DisguiseType.PLAYER,"Lizard Man");
-		case 52:  return new DisguisePackage(DisguiseType.PLAYER,"Mimic");
-		case 53:  return new DisguisePackage(DisguiseType.PLAYER,"minotaur","_CrimsonBlade_"); // minotaur
-		case 54:  return new DisguisePackage(DisguiseType.PLAYER,"orc","Jeeorc"); // orc
-		case 55:  return new DisguisePackage(DisguiseType.PLAYER,"Human Beggar");
-		case 56:  return new DisguisePackage(DisguiseType.PLAYER,"Pixie");
-		case 57:  return new DisguisePackage(DisguiseType.SPIDER,"half human spider");
-		case 58:  return new DisguisePackage(DisguiseType.PLAYER,"Fire prince");
-		case 59:  return new DisguisePackage(DisguiseType.PLAYER,"goblin","AllOgreNow"); // goblin
-		case 60:  return new DisguisePackage(DisguiseType.SKELETON,"Skeleton");
-		case 61:  return new DisguisePackage(DisguiseType.PLAYER,"Shark");
-		case 62:  return new DisguisePackage(DisguiseType.PLAYER,"Elf priestess");
-		case 63:  return new DisguisePackage(DisguiseType.OCELOT,"Tiger");
-		case 64:  return new DisguisePackage(DisguiseType.PLAYER,"treant","zero_kage"); //treant
-		case 65:  return new DisguisePackage(DisguiseType.PLAYER,"vampire","Kenzo74_"); // vampire
-		case 66:  return new DisguisePackage(DisguiseType.PLAYER,"Iron knight");
-		case 67:  return new DisguisePackage(DisguiseType.PLAYER,"Human Citizen");
-		case 68:  return new DisguisePackage(DisguiseType.PLAYER,"Tentacle");
-		case 69:  return new DisguisePackage(DisguiseType.PLAYER,"Wisp");
-		case 70:  return new DisguisePackage(DisguiseType.ZOMBIE,"Zombie");
-		case 71:  return new DisguisePackage(DisguiseType.PLAYER,"Citizen");
-		case 72:  return new DisguisePackage(DisguiseType.BOAT,"Ship");
-		case 73:  return new DisguisePackage(DisguiseType.PLAYER,"Launch");
-		case 74:  return new DisguisePackage(DisguiseType.PLAYER,"Piranha");
-		case 75:  return new DisguisePackage(DisguiseType.BLAZE,"Elemental");
-		case 76:  return new DisguisePackage(DisguiseType.OCELOT,"Puma");
-		case 77:  return new DisguisePackage(DisguiseType.PLAYER,"Dark elf Citizen");
-		case 78:  return new DisguisePackage(DisguiseType.PLAYER,"High human Citizen");
-		case 79:  return new DisguisePackage(DisguiseType.VEX,"Bixie");
-		case 80:  return new DisguisePackage(DisguiseType.PLAYER,"Reanimated Hand");
-		case 81:  return new DisguisePackage(DisguiseType.PLAYER,"Halfling Citizen");
-		case 82:  return new DisguisePackage(DisguiseType.PLAYER,"Scarecrow");
-		case 83:  return new DisguisePackage(DisguiseType.PLAYER,"Skunk");
-		case 84:  return new DisguisePackage(DisguiseType.PLAYER,"Snake Elemental");
-		case 85:  return new DisguisePackage(DisguiseType.WITHER,"Spectre");
-		case 86:  return new DisguisePackage(DisguiseType.PLAYER,"Sphinx");
-		case 87:  return new DisguisePackage(DisguiseType.PLAYER,"Armadillo");
-		case 88:  return new DisguisePackage(DisguiseType.PLAYER,"Clockwork Gnome");
-		case 89:  return new DisguisePackage(DisguiseType.PLAYER,"Drake");
-		case 90:  return new DisguisePackage(DisguiseType.PLAYER,"Barbarian Citizen");
-		case 91:  return new DisguisePackage(DisguiseType.PLAYER,"Alligator");
-		case 92:  return new DisguisePackage(DisguiseType.PLAYER,"Troll Citizen");
-		case 93:  return new DisguisePackage(DisguiseType.PLAYER,"ogre","theorc"); // ogre
-		case 94:  return new DisguisePackage(DisguiseType.PLAYER,"dwarf","Faenon"); // dwarf
-		case 95:  return new DisguisePackage(DisguiseType.PLAYER,"God of fear");
-		case 96:  return new DisguisePackage(DisguiseType.PLAYER,"Cockatrice");
-		case 97:  return new DisguisePackage(DisguiseType.PLAYER,"Daisy Man");
-		case 98:  return new DisguisePackage(DisguiseType.PLAYER,"elf","Kenzo74_"); // elf vampire
-		case 99:  return new DisguisePackage(DisguiseType.PLAYER,"darkelf","Kenzo74_"); // dark elf
-		case 100:  return new DisguisePackage(DisguiseType.PLAYER,"Dervish");
-		case 101:  return new DisguisePackage(DisguiseType.PLAYER,"Efreeti");
-		case 102:  return new DisguisePackage(DisguiseType.PLAYER,"Tadpole");
-		case 103:  return new DisguisePackage(DisguiseType.PLAYER,"Fish man");
-		case 104:  return new DisguisePackage(DisguiseType.PLAYER,"Leech");
-		case 105:  return new DisguisePackage(DisguiseType.PLAYER,"Swordfish");
-		case 106:  return new DisguisePackage(DisguiseType.PLAYER,"Elf guard");
-		case 107:  return new DisguisePackage(DisguiseType.PLAYER,"Mammoth");
-		case 108:  return new DisguisePackage(DisguiseType.ELDER_GUARDIAN,"Floating eye");
-		case 109:  return new DisguisePackage(DisguiseType.PLAYER,"Wasp");
-		case 110:  return new DisguisePackage(DisguiseType.PLAYER,"mermaid","Suim67"); // mermaid
-		case 111:  return new DisguisePackage(DisguiseType.PLAYER,"Harpie");
-		case 112:  return new DisguisePackage(DisguiseType.PLAYER,"Pixie guard");
-		case 113:  return new DisguisePackage(DisguiseType.PLAYER,"Drixie");
-		case 114:  return new DisguisePackage(DisguiseType.PLAYER,"Ghost Ship");
-		case 115:  return new DisguisePackage(DisguiseType.PLAYER,"Clam");
-		case 116:  return new DisguisePackage(DisguiseType.PLAYER,"Sea Horse");
-		case 117:  return new DisguisePackage(DisguiseType.WITHER,"ghost dwarf","Faenon"); // ghost dwarf
-		case 118:  return new DisguisePackage(DisguiseType.WITHER,"ghost high human","Orbitly"); // ghost high human
-		case 119:  return new DisguisePackage(DisguiseType.OCELOT,"Sabertooth Cat");
-		case 120:  return new DisguisePackage(DisguiseType.WOLF,"Wolf Elemental");
-		case 121:  return new DisguisePackage(DisguiseType.PLAYER,"Gorgon");
-		case 122:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Dragon Skeleton");
-		case 123:  return new DisguisePackage(DisguiseType.PLAYER,"God of hate");
-		case 124:  return new DisguisePackage(DisguiseType.HORSE,"Unicorn");
-		case 125:  return new DisguisePackage(DisguiseType.PLAYER,"Pegasus");
-		case 126:  return new DisguisePackage(DisguiseType.PLAYER,"Genie");
-		case 127:  return new DisguisePackage(DisguiseType.PLAYER,"Invisible Man");
-		case 128:  return new DisguisePackage(DisguiseType.PLAYER,"Iksar");
-		case 129:  return new DisguisePackage(DisguiseType.PLAYER,"Scorpion");
-		case 130:  return new DisguisePackage(DisguiseType.PLAYER,"Cat man");
-		case 131:  return new DisguisePackage(DisguiseType.PLAYER,"Sarnak");
-		case 132:  return new DisguisePackage(DisguiseType.PLAYER,"Dragon frog");
-		case 133:  return new DisguisePackage(DisguiseType.PLAYER,"Lycanthrope");
-		case 134:  return new DisguisePackage(DisguiseType.PLAYER,"Mosquito");
-		case 135:  return new DisguisePackage(DisguiseType.PLAYER,"Rhino");
-		case 136:  return new DisguisePackage(DisguiseType.PLAYER,"Half human dragon");
-		case 137:  return new DisguisePackage(DisguiseType.PLAYER,"goblin","AllOgreNow"); // goblin
-		case 138:  return new DisguisePackage(DisguiseType.PLAYER,"Yeti");
-		case 139:  return new DisguisePackage(DisguiseType.PLAYER,"Scaled human Citizen");
-		case 140:  return new DisguisePackage(DisguiseType.GIANT,"Forest Giant");
-		case 141:  return new DisguisePackage(DisguiseType.BOAT,"Boat");
-		case 142:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown 142");
-		case 143:  return new DisguisePackage(DisguiseType.PLAYER,"tree","zero_kage"); // tree
-		case 144:  return new DisguisePackage(DisguiseType.PLAYER,"Badger man");
-		case 145:  return new DisguisePackage(DisguiseType.SLIME,"Goo");
-		case 146:  return new DisguisePackage(DisguiseType.PLAYER,"Spectral Half dragon");
-		case 147:  return new DisguisePackage(DisguiseType.PLAYER,"Spectral Scaled Human");
-		case 148:  return new DisguisePackage(DisguiseType.PLAYER,"Fish");
-		case 149:  return new DisguisePackage(DisguiseType.PLAYER,"Scorpion");
-		case 150:  return new DisguisePackage(DisguiseType.PLAYER,"Plant fiend");
-		case 151:  return new DisguisePackage(DisguiseType.PLAYER,"God of justice");
-		case 152:  return new DisguisePackage(DisguiseType.PLAYER,"God of disease");
-		case 153:  return new DisguisePackage(DisguiseType.PLAYER,"God of mischieve");
-		case 154:  return new DisguisePackage(DisguiseType.PLAYER,"Butterfly Drake");
-		case 155:  return new DisguisePackage(DisguiseType.PLAYER,"Half dragon Skeleton");
-		case 156:  return new DisguisePackage(DisguiseType.PLAYER,"Ratman");
-		case 157:  return new DisguisePackage(DisguiseType.PLAYER,"Wyvern");
-		case 158:  return new DisguisePackage(DisguiseType.PLAYER,"Wurm");
-		case 159:  return new DisguisePackage(DisguiseType.PLAYER,"Devourer");
-		case 160:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Scaled man Golem");
-		case 161:  return new DisguisePackage(DisguiseType.PLAYER,"Scaled man Skeleton");
-		case 162:  return new DisguisePackage(DisguiseType.PLAYER,"Man Eating Plant");
-		case 163:  return new DisguisePackage(DisguiseType.PLAYER,"Raptor");
-		case 164:  return new DisguisePackage(DisguiseType.PLAYER,"Half dragon Golem");
-		case 165:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Water Dragon");
-		case 166:  return new DisguisePackage(DisguiseType.PLAYER,"Scaled man Hand");
-		case 167:  return new DisguisePackage(DisguiseType.PLAYER,"Plant monster");
-		case 168:  return new DisguisePackage(DisguiseType.PLAYER,"Flying Monkey");
-		case 169:  return new DisguisePackage(DisguiseType.PLAYER,"Rhino");
-		case 170:  return new DisguisePackage(DisguiseType.PLAYER,"Snow air elemental");
-		case 171:  return new DisguisePackage(DisguiseType.WOLF,"Dire Wolf");
-		case 172:  return new DisguisePackage(DisguiseType.PLAYER,"Manticore");
-		case 173:  return new DisguisePackage(DisguiseType.PLAYER,"Totem");
-		case 174:  return new DisguisePackage(DisguiseType.WITHER,"Cold Spectre");
-		case 175:  return new DisguisePackage(DisguiseType.PLAYER,"Enchanted Armor");
-		case 176:  return new DisguisePackage(DisguiseType.RABBIT,"Snow Bunny");
-		case 177:  return new DisguisePackage(DisguiseType.PLAYER,"Walrus");
-		case 178:  return new DisguisePackage(DisguiseType.PLAYER,"Rock-gem Men");
-		case 179:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown");
-		case 180:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown");
-		case 181:  return new DisguisePackage(DisguiseType.PLAYER,"bullman","_CrimsonBlade_"); // bullman
-		case 182:  return new DisguisePackage(DisguiseType.PLAYER,"Faun");
-		case 183:  return new DisguisePackage(DisguiseType.PLAYER,"Coldain");
-		case 184:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Dragons");
-		case 185:  return new DisguisePackage(DisguiseType.WITCH,"Hag");
-		case 186:  return new DisguisePackage(DisguiseType.PLAYER,"Hippogriff");
-		case 187:  return new DisguisePackage(DisguiseType.PLAYER,"Siren");
-		case 188:  return new DisguisePackage(DisguiseType.GIANT,"Frost Giant");
-		case 189:  return new DisguisePackage(DisguiseType.GIANT,"Storm Giant");
-		case 190:  return new DisguisePackage(DisguiseType.PLAYER,"Ottermen");
-		case 191:  return new DisguisePackage(DisguiseType.PLAYER,"Walrus Man");
-		case 192:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Clockwork Dragon");
-		case 193:  return new DisguisePackage(DisguiseType.PLAYER,"Abhorent");
-		case 194:  return new DisguisePackage(DisguiseType.PLAYER,"Sea Turtle");
-		case 195:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Black and White Dragons");
-		case 196:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Ghost Dragon");
-		case 197:  return new DisguisePackage(DisguiseType.PLAYER,"Ronnie Test");
-		case 198:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Prismatic Dragon");
-		case 199:  return new DisguisePackage(DisguiseType.PLAYER,"Bug");
-		case 200:  return new DisguisePackage(DisguiseType.PLAYER,"Raptor");
-		case 201:  return new DisguisePackage(DisguiseType.PLAYER,"Bug");
-		case 202:  return new DisguisePackage(DisguiseType.PLAYER,"Weird man");
-		case 203:  return new DisguisePackage(DisguiseType.PLAYER,"Worm");
-		case 204:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown");
-		case 205:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown");
-		case 206:  return new DisguisePackage(DisguiseType.PLAYER,"Owlbear");
-		case 207:  return new DisguisePackage(DisguiseType.PLAYER,"Rhino Beetle");
-		case 208:  return new DisguisePackage(DisguiseType.PLAYER,"vampire","Kenzo74_"); // vampyre
-		case 209:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Earth Elemental");
-		case 210:  return new DisguisePackage(DisguiseType.PARROT,"Air Elemental");
-		case 211:  return new DisguisePackage(DisguiseType.GUARDIAN,"Water Elemental");
-		case 212:  return new DisguisePackage(DisguiseType.BLAZE,"Fire Elemental");
-		case 213:  return new DisguisePackage(DisguiseType.PLAYER,"Fish");
-		case 214:  return new DisguisePackage(DisguiseType.WITHER,"Horror");
-		case 215:  return new DisguisePackage(DisguiseType.PLAYER,"Small man");
-		case 216:  return new DisguisePackage(DisguiseType.HORSE,"Horse");
-		case 217:  return new DisguisePackage(DisguiseType.PLAYER,"Snake person");
-		case 218:  return new DisguisePackage(DisguiseType.PLAYER,"Fungus");
-		case 219:  return new DisguisePackage(DisguiseType.PLAYER,"vampire","Kenzo74_"); // vampire
-		case 220:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Stone golem");
-		case 221:  return new DisguisePackage(DisguiseType.OCELOT,"Red Cheetah");
-		case 222:  return new DisguisePackage(DisguiseType.PLAYER,"Camel");
-		case 223:  return new DisguisePackage(DisguiseType.PLAYER,"Millipede");
-		case 224:  return new DisguisePackage(DisguiseType.PLAYER,"shade","RainbowF"); // shade
-		case 225:  return new DisguisePackage(DisguiseType.PLAYER,"Exotic plant creature");
-		case 226:  return new DisguisePackage(DisguiseType.PLAYER,"assassin","epicafroninja"); // assassin
-		case 227:  return new DisguisePackage(DisguiseType.PLAYER,"ghost","Orbitly"); // ghost
-		case 228:  return new DisguisePackage(DisguiseType.PLAYER,"ogre","theorc"); // ogre
-		case 229:  return new DisguisePackage(DisguiseType.PLAYER,"Alien");
-		case 230:  return new DisguisePackage(DisguiseType.PLAYER,"4 armed human");
-		case 231:  return new DisguisePackage(DisguiseType.WITHER_SKELETON,"Ghost");
-		case 232:  return new DisguisePackage(DisguiseType.WOLF,"Wolf bat");
-		case 233:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Ground Shaker");
-		case 234:  return new DisguisePackage(DisguiseType.PLAYER,"Cat man Skeleton");
-		case 235:  return new DisguisePackage(DisguiseType.PLAYER,"Mutant Human");
-		case 236:  return new DisguisePackage(DisguiseType.PLAYER,"Human king");
-		case 237:  return new DisguisePackage(DisguiseType.PLAYER,"Bandit");
-		case 238:  return new DisguisePackage(DisguiseType.PLAYER,"Catman King");
-		case 239:  return new DisguisePackage(DisguiseType.PLAYER,"Catman Guard");
-		case 240:  return new DisguisePackage(DisguiseType.PLAYER,"Teleporter man");
-		case 241:  return new DisguisePackage(DisguiseType.PLAYER,"werewolf","Apiii"); // were wolf
-		case 242:  return new DisguisePackage(DisguiseType.PLAYER,"naiad","Suim67"); //naiad
-		case 243:  return new DisguisePackage(DisguiseType.PLAYER,"nymph","Suim67"); // nymph
-		case 244:  return new DisguisePackage(DisguiseType.PLAYER,"ent","zero_kage"); // ent
-		case 245:  return new DisguisePackage(DisguiseType.PLAYER,"Fly Man");
-		case 246:  return new DisguisePackage(DisguiseType.PLAYER,"God of water");
-		case 247:  return new DisguisePackage(DisguiseType.PLAYER,"God of fire");
-		case 248:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Clockwork Golem");
-		case 249:  return new DisguisePackage(DisguiseType.PLAYER,"Clockwork Brain");
-		case 250:  return new DisguisePackage(DisguiseType.PLAYER,"Banshee");
-		case 251:  return new DisguisePackage(DisguiseType.PLAYER,"human hooded guard");
-		case 252:  return new DisguisePackage(DisguiseType.PLAYER,"Unknown");
-		case 253:  return new DisguisePackage(DisguiseType.PLAYER,"fat disease man");
-		case 254:  return new DisguisePackage(DisguiseType.PLAYER,"Fire God Guard");
-		case 255:  return new DisguisePackage(DisguiseType.PLAYER,"GOd of disease");
-		case 269:  return new DisguisePackage(DisguiseType.PLAYER,"Rat creature");
-		case 270:  return new DisguisePackage(DisguiseType.PLAYER,"Disease");
-		case 272:  return new DisguisePackage(DisguiseType.PLAYER,"Mounted Undead");
-		case 273:  return new DisguisePackage(DisguiseType.PLAYER,"Clockwork beast");
-		case 274:  return new DisguisePackage(DisguiseType.PLAYER,"Broken Clockwork");
-		case 275:  return new DisguisePackage(DisguiseType.PLAYER,"Giant Clockwork");
-		case 276:  return new DisguisePackage(DisguiseType.PLAYER,"Clockwork Beetle");
-		case 277:  return new DisguisePackage(DisguiseType.PLAYER,"goblin","AllOgreNow"); // goblin
-		case 278:  return new DisguisePackage(DisguiseType.PLAYER,"God of storms");
-		case 279:  return new DisguisePackage(DisguiseType.PLAYER,"Blood Raven");
-		case 280:  return new DisguisePackage(DisguiseType.PLAYER,"Gargoyle");
-		case 281:  return new DisguisePackage(DisguiseType.PLAYER,"Mouth monster");
-		case 282:  return new DisguisePackage(DisguiseType.HORSE,"Skeletal Horse");
-		case 283:  return new DisguisePackage(DisguiseType.PLAYER,"God of pain");
-		case 284:  return new DisguisePackage(DisguiseType.PLAYER,"God of fire");
-		case 285:  return new DisguisePackage(DisguiseType.PLAYER,"torment inquisitor");
-		case 286:  return new DisguisePackage(DisguiseType.PLAYER,"necromancer priest");
-		case 287:  return new DisguisePackage(DisguiseType.HORSE,"Nightmare");
-		case 288:  return new DisguisePackage(DisguiseType.PLAYER,"god of war");
-		case 289:  return new DisguisePackage(DisguiseType.PLAYER,"god of tactics");
-		case 290:  return new DisguisePackage(DisguiseType.PLAYER,"god of strategy");
-		case 291:  return new DisguisePackage(DisguiseType.PARROT,"Air Mephit");
-		case 292:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Earth Mephit");
-		case 293:  return new DisguisePackage(DisguiseType.BLAZE,"Fire Mephit");
-		case 294:  return new DisguisePackage(DisguiseType.WITHER,"Nightmare Mephit");
-		case 295:  return new DisguisePackage(DisguiseType.PLAYER,"god of knowledge");
-		case 296:  return new DisguisePackage(DisguiseType.PLAYER,"god of truth");
-		case 297:  return new DisguisePackage(DisguiseType.SKELETON,"Undead Knight");
-		case 298:  return new DisguisePackage(DisguiseType.PLAYER,"god of earth");
-		case 299:  return new DisguisePackage(DisguiseType.PLAYER,"god of air");
-		case 300:  return new DisguisePackage(DisguiseType.PLAYER,"Fiend");
-		case 301:  return new DisguisePackage(DisguiseType.PLAYER,"Test");
-		case 302:  return new DisguisePackage(DisguiseType.PLAYER,"Crab");
-		case 303:  return new DisguisePackage(DisguiseType.PLAYER,"Phoenix");
-		case 304:  return new DisguisePackage(DisguiseType.ENDER_DRAGON,"Dragon");
-		case 305:  return new DisguisePackage(DisguiseType.POLAR_BEAR,"Bear");
-		case 306:  return new DisguisePackage(DisguiseType.GIANT,"Storm Giant");
-		case 307:  return new DisguisePackage(DisguiseType.GIANT,"Storm Giant");
-		case 308:  return new DisguisePackage(DisguiseType.GIANT,"Storm Giant");
-		case 309:  return new DisguisePackage(DisguiseType.GIANT,"Storm Giant");
-		case 310:  return new DisguisePackage(DisguiseType.BLAZE,"Storm Mana");
-		case 311:  return new DisguisePackage(DisguiseType.BLAZE,"Storm Fire");
-		case 312:  return new DisguisePackage(DisguiseType.BLAZE,"Storm Celestial");
-		case 313:  return new DisguisePackage(DisguiseType.PLAYER,"War Wraith");
-		case 314:  return new DisguisePackage(DisguiseType.PLAYER,"paladin guard");
-		case 315:  return new DisguisePackage(DisguiseType.PLAYER,"Kraken");
-		case 316:  return new DisguisePackage(DisguiseType.PLAYER,"Poison Frog");
-		case 317:  return new DisguisePackage(DisguiseType.PLAYER,"Quezticoatal");
-		case 318:  return new DisguisePackage(DisguiseType.PLAYER,"paladin guard");
-		case 319:  return new DisguisePackage(DisguiseType.PLAYER,"War Boar");
-		case 320:  return new DisguisePackage(DisguiseType.BLAZE,"Efreeti");
-		case 321:  return new DisguisePackage(DisguiseType.PLAYER,"War Boar Unarmored");
-		case 322:  return new DisguisePackage(DisguiseType.PLAYER,"Black Knight");
-		case 323:  return new DisguisePackage(DisguiseType.PLAYER,"Animated Armor");
-		case 324:  return new DisguisePackage(DisguiseType.PLAYER,"Undead Footman");
-		case 325:  return new DisguisePackage(DisguiseType.PLAYER,"Rallos Zek Minion");
-		case 326:  return new DisguisePackage(DisguiseType.SPIDER,"Arachnid");
-		case 327:  return new DisguisePackage(DisguiseType.SPIDER,"Crystal Spider");
-		case 328:  return new DisguisePackage(DisguiseType.PLAYER,"Cage");
-		case 329:  return new DisguisePackage(DisguiseType.PLAYER,"Portal");
-		case 330:  return new DisguisePackage(DisguiseType.PLAYER,"Frogman");
-		case 331:  return new DisguisePackage(DisguiseType.PLAYER,"Troll seaman");
-		case 332:  return new DisguisePackage(DisguiseType.PLAYER,"Troll seaman");
-		case 333:  return new DisguisePackage(DisguiseType.PLAYER,"Troll seaman");
-		case 334:  return new DisguisePackage(DisguiseType.PLAYER,"Spectre Pirate Boss");
-		case 335:  return new DisguisePackage(DisguiseType.PLAYER,"Pirate Boss");
-		case 336:  return new DisguisePackage(DisguiseType.PLAYER,"Pirate Dark Shaman");
-		case 337:  return new DisguisePackage(DisguiseType.PLAYER,"Pirate Officer");
-		case 338:  return new DisguisePackage(DisguiseType.PLAYER,"Gnome Pirate");
-		case 339:  return new DisguisePackage(DisguiseType.PLAYER,"Dark Elf Pirate");
-		case 340:  return new DisguisePackage(DisguiseType.PLAYER,"ogre pirate","theorc"); // ogre pirate
-		case 341:  return new DisguisePackage(DisguiseType.PLAYER,"Human Pirate");
-		case 342:  return new DisguisePackage(DisguiseType.PLAYER,"High Human Pirate");
-		case 343:  return new DisguisePackage(DisguiseType.PLAYER,"Poison Dart Frog");
-		case 344:  return new DisguisePackage(DisguiseType.PLAYER,"Troll Zombie");
-		case 345:  return new DisguisePackage(DisguiseType.PLAYER,"Sea creature man Land");
-		case 346:  return new DisguisePackage(DisguiseType.PLAYER,"Sea creature man Armored");
-		case 347:  return new DisguisePackage(DisguiseType.PLAYER,"Sea creature man Robed");
-		case 348:  return new DisguisePackage(DisguiseType.PLAYER,"Frogman Mount");
-		case 349:  return new DisguisePackage(DisguiseType.PLAYER,"Frogman Skeleton");
-		case 350:  return new DisguisePackage(DisguiseType.PLAYER,"Undead Frogman");
-		case 351:  return new DisguisePackage(DisguiseType.PLAYER,"Chosen Warrior");
-		case 352:  return new DisguisePackage(DisguiseType.PLAYER,"chosen wizard","Zelinx"); // chosen wizard
-		case 353:  return new DisguisePackage(DisguiseType.PLAYER,"Lizard creature");
-		case 354:  return new DisguisePackage(DisguiseType.PLAYER,"Greater Lizard creature");
-		case 355:  return new DisguisePackage(DisguiseType.PLAYER,"Lizard creature Boss");
-		case 356:  return new DisguisePackage(DisguiseType.PLAYER,"scaled dog");
-		case 357:  return new DisguisePackage(DisguiseType.PLAYER,"Undead scaled dog");
-		case 358:  return new DisguisePackage(DisguiseType.PLAYER,"Undead lizard creature");
-		case 359:  return new DisguisePackage(DisguiseType.PLAYER,"lesser vampire","Kenzo74_"); // vampire lesser
-		case 360:  return new DisguisePackage(DisguiseType.PLAYER,"elite vampire","Kenzo74_"); // vampire elite
-		case 361:  return new DisguisePackage(DisguiseType.PLAYER,"orc","Jeeorc"); // orc
-		case 362:  return new DisguisePackage(DisguiseType.WITHER_SKELETON,"Bone Golem");
-		case 363:  return new DisguisePackage(DisguiseType.PLAYER,"Huge gargoyle");
-		case 364:  return new DisguisePackage(DisguiseType.PLAYER,"Sand Elf");
-		case 365:  return new DisguisePackage(DisguiseType.PLAYER,"Vampire Master");
-		case 366:  return new DisguisePackage(DisguiseType.PLAYER,"orc","Jeeorc"); // orc
-		case 367:  return new DisguisePackage(DisguiseType.SKELETON,"Skeleton New");
-		case 368:  return new DisguisePackage(DisguiseType.ZOMBIE,"mummy","Greng"); //mummy
-		case 369:  return new DisguisePackage(DisguiseType.PLAYER,"goblin","AllOgreNow"); // goblin
-		case 370:  return new DisguisePackage(DisguiseType.PLAYER,"Insect");
-		case 371:  return new DisguisePackage(DisguiseType.PLAYER,"Frogman Ghost");
-		case 372:  return new DisguisePackage(DisguiseType.PLAYER,"Spinning Air Elemental");
-		case 373:  return new DisguisePackage(DisguiseType.PLAYER,"Shadow Creatue");
-		case 374:  return new DisguisePackage(DisguiseType.IRON_GOLEM,"Golem New");
-		case 375:  return new DisguisePackage(DisguiseType.PLAYER,"Evil Eye New");
-		case 376:  return new DisguisePackage(DisguiseType.PLAYER,"Box");
-		case 377:  return new DisguisePackage(DisguiseType.PLAYER,"Barrel");
-		case 378:  return new DisguisePackage(DisguiseType.PLAYER,"Chest");
-		case 379:  return new DisguisePackage(DisguiseType.PLAYER,"Vase");
-		case 380:  return new DisguisePackage(DisguiseType.PLAYER,"Table");
-		case 381:  return new DisguisePackage(DisguiseType.PLAYER,"Weapons Rack");
-		case 382:  return new DisguisePackage(DisguiseType.PLAYER,"Coffin");
-		case 383:  return new DisguisePackage(DisguiseType.PLAYER,"Bones");
-		case 384:  return new DisguisePackage(DisguiseType.PLAYER,"Joker");
-			default:
-				return new DisguisePackage(DisguiseType.UNKNOWN,"Unknown");
+		switch (disguiseid) {
+		case 1:
+			return new DisguisePackage(DisguiseType.PLAYER, "human", "k0h"); // human
+		case 2:
+			return new DisguisePackage(DisguiseType.PLAYER, "barbarian", "Lemoh"); // barbarian
+		case 3:
+			return new DisguisePackage(DisguiseType.PLAYER, "highhuman", "hiccupwindwalker"); // high human
+		case 4:
+			return new DisguisePackage(DisguiseType.PLAYER, "woodelf", "Knogi"); // wood elf
+		case 5:
+			return new DisguisePackage(DisguiseType.PLAYER, "highelf", "MoistWater"); // highelf
+		case 6:
+			return new DisguisePackage(DisguiseType.PLAYER, "darkelf", "Kenzo74_"); // dark elf
+		case 7:
+			return new DisguisePackage(DisguiseType.PLAYER, "halfelf", "Maechu_"); // halfelf
+		case 8:
+			return new DisguisePackage(DisguiseType.PLAYER, "dwarf", "Faenon"); // dwarf
+		case 9:
+			return new DisguisePackage(DisguiseType.PLAYER, "troll", "Gronghk"); // troll
+		case 10:
+			return new DisguisePackage(DisguiseType.PLAYER, "ogre", "theorc"); // ogre
+		case 11:
+			return new DisguisePackage(DisguiseType.PLAYER, "halfling", "Yeus"); // halfling
+		case 12:
+			return new DisguisePackage(DisguiseType.PLAYER, "gnome", "Yeus"); // gnome
+		case 13:
+			return new DisguisePackage(DisguiseType.PLAYER, "aviak", "Titus_Vogel"); // aviak
+		case 14:
+			return new DisguisePackage(DisguiseType.PLAYER, "werewolf", "Apiii"); // werewolf
+		case 15:
+			return new DisguisePackage(DisguiseType.PLAYER, "Brownie");
+		case 16:
+			return new DisguisePackage(DisguiseType.PLAYER, "Centaur");
+		case 17:
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Golem");
+		case 18:
+			return new DisguisePackage(DisguiseType.GIANT, "Giant/Cyclops");
+		case 19:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Poison Dragon");
+		case 20:
+			return new DisguisePackage(DisguiseType.PLAYER, "Doppleganger");
+		case 21:
+			return new DisguisePackage(DisguiseType.GUARDIAN, "Evil Eye");
+		case 22:
+			return new DisguisePackage(DisguiseType.SILVERFISH, "Beetle");
+		case 23:
+			return new DisguisePackage(DisguiseType.PLAYER, "Kerra");
+		case 24:
+			return new DisguisePackage(DisguiseType.GUARDIAN, "Fish");
+		case 25:
+			return new DisguisePackage(DisguiseType.VEX, "Fairy");
+		case 26:
+			return new DisguisePackage(DisguiseType.PLAYER, "Frog man");
+		case 27:
+			return new DisguisePackage(DisguiseType.PLAYER, "Frogman ghoul");
+		case 28:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fungusman");
+		case 29:
+			return new DisguisePackage(DisguiseType.PLAYER, "Gargoyle");
+		case 31:
+			return new DisguisePackage(DisguiseType.SLIME, "Slime cube");
+		case 32:
+			return new DisguisePackage(DisguiseType.PLAYER, "ghost", "Orbitly"); // ghost
+		case 33:
+			return new DisguisePackage(DisguiseType.PLAYER, "Ghoul");
+		case 34:
+			return new DisguisePackage(DisguiseType.BAT, "Giant Bat");
+		case 35:
+			return new DisguisePackage(DisguiseType.GUARDIAN, "Giant Eel");
+		case 36:
+			return new DisguisePackage(DisguiseType.PLAYER, "Giant Rat");
+		case 37:
+			return new DisguisePackage(DisguiseType.PLAYER, "Giant Snake");
+		case 38:
+			return new DisguisePackage(DisguiseType.PLAYER, "Giant Spider");
+		case 39:
+			return new DisguisePackage(DisguiseType.PLAYER, "Gnoll");
+		case 40:
+			return new DisguisePackage(DisguiseType.PLAYER, "Goblin");
+		case 41:
+			return new DisguisePackage(DisguiseType.PLAYER, "Gorilla");
+		case 42:
+			return new DisguisePackage(DisguiseType.WOLF, "Wolf");
+		case 43:
+			return new DisguisePackage(DisguiseType.POLAR_BEAR, "Bear");
+		case 44:
+			return new DisguisePackage(DisguiseType.PLAYER, "Human Guards");
+		case 45:
+			return new DisguisePackage(DisguiseType.WITHER_SKELETON, "Demi Lich");
+		case 46:
+			return new DisguisePackage(DisguiseType.VEX, "Imp");
+		case 47:
+			return new DisguisePackage(DisguiseType.PLAYER, "Griffin");
+		case 48:
+			return new DisguisePackage(DisguiseType.PLAYER, "kobold", "PeterPugger");// kobold
+		case 49:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Lava Dragon");
+		case 50:
+			return new DisguisePackage(DisguiseType.OCELOT, "Lion");
+		case 51:
+			return new DisguisePackage(DisguiseType.PLAYER, "Lizard Man");
+		case 52:
+			return new DisguisePackage(DisguiseType.PLAYER, "Mimic");
+		case 53:
+			return new DisguisePackage(DisguiseType.PLAYER, "minotaur", "_CrimsonBlade_"); // minotaur
+		case 54:
+			return new DisguisePackage(DisguiseType.PLAYER, "orc", "Jeeorc"); // orc
+		case 55:
+			return new DisguisePackage(DisguiseType.PLAYER, "Human Beggar");
+		case 56:
+			return new DisguisePackage(DisguiseType.PLAYER, "Pixie");
+		case 57:
+			return new DisguisePackage(DisguiseType.SPIDER, "half human spider");
+		case 58:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fire prince");
+		case 59:
+			return new DisguisePackage(DisguiseType.PLAYER, "goblin", "AllOgreNow"); // goblin
+		case 60:
+			return new DisguisePackage(DisguiseType.SKELETON, "Skeleton");
+		case 61:
+			return new DisguisePackage(DisguiseType.PLAYER, "Shark");
+		case 62:
+			return new DisguisePackage(DisguiseType.PLAYER, "Elf priestess");
+		case 63:
+			return new DisguisePackage(DisguiseType.OCELOT, "Tiger");
+		case 64:
+			return new DisguisePackage(DisguiseType.PLAYER, "treant", "zero_kage"); // treant
+		case 65:
+			return new DisguisePackage(DisguiseType.PLAYER, "vampire", "Kenzo74_"); // vampire
+		case 66:
+			return new DisguisePackage(DisguiseType.PLAYER, "Iron knight");
+		case 67:
+			return new DisguisePackage(DisguiseType.PLAYER, "Human Citizen");
+		case 68:
+			return new DisguisePackage(DisguiseType.PLAYER, "Tentacle");
+		case 69:
+			return new DisguisePackage(DisguiseType.PLAYER, "Wisp");
+		case 70:
+			return new DisguisePackage(DisguiseType.ZOMBIE, "Zombie");
+		case 71:
+			return new DisguisePackage(DisguiseType.PLAYER, "Citizen");
+		case 72:
+			return new DisguisePackage(DisguiseType.BOAT, "Ship");
+		case 73:
+			return new DisguisePackage(DisguiseType.PLAYER, "Launch");
+		case 74:
+			return new DisguisePackage(DisguiseType.PLAYER, "Piranha");
+		case 75:
+			return new DisguisePackage(DisguiseType.BLAZE, "Elemental");
+		case 76:
+			return new DisguisePackage(DisguiseType.OCELOT, "Puma");
+		case 77:
+			return new DisguisePackage(DisguiseType.PLAYER, "Dark elf Citizen");
+		case 78:
+			return new DisguisePackage(DisguiseType.PLAYER, "High human Citizen");
+		case 79:
+			return new DisguisePackage(DisguiseType.VEX, "Bixie");
+		case 80:
+			return new DisguisePackage(DisguiseType.PLAYER, "Reanimated Hand");
+		case 81:
+			return new DisguisePackage(DisguiseType.PLAYER, "Halfling Citizen");
+		case 82:
+			return new DisguisePackage(DisguiseType.PLAYER, "Scarecrow");
+		case 83:
+			return new DisguisePackage(DisguiseType.PLAYER, "Skunk");
+		case 84:
+			return new DisguisePackage(DisguiseType.PLAYER, "Snake Elemental");
+		case 85:
+			return new DisguisePackage(DisguiseType.WITHER, "Spectre");
+		case 86:
+			return new DisguisePackage(DisguiseType.PLAYER, "Sphinx");
+		case 87:
+			return new DisguisePackage(DisguiseType.PLAYER, "Armadillo");
+		case 88:
+			return new DisguisePackage(DisguiseType.PLAYER, "Clockwork Gnome");
+		case 89:
+			return new DisguisePackage(DisguiseType.PLAYER, "Drake");
+		case 90:
+			return new DisguisePackage(DisguiseType.PLAYER, "Barbarian Citizen");
+		case 91:
+			return new DisguisePackage(DisguiseType.PLAYER, "Alligator");
+		case 92:
+			return new DisguisePackage(DisguiseType.PLAYER, "Troll Citizen");
+		case 93:
+			return new DisguisePackage(DisguiseType.PLAYER, "ogre", "theorc"); // ogre
+		case 94:
+			return new DisguisePackage(DisguiseType.PLAYER, "dwarf", "Faenon"); // dwarf
+		case 95:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of fear");
+		case 96:
+			return new DisguisePackage(DisguiseType.PLAYER, "Cockatrice");
+		case 97:
+			return new DisguisePackage(DisguiseType.PLAYER, "Daisy Man");
+		case 98:
+			return new DisguisePackage(DisguiseType.PLAYER, "elf", "Kenzo74_"); // elf vampire
+		case 99:
+			return new DisguisePackage(DisguiseType.PLAYER, "darkelf", "Kenzo74_"); // dark elf
+		case 100:
+			return new DisguisePackage(DisguiseType.PLAYER, "Dervish");
+		case 101:
+			return new DisguisePackage(DisguiseType.PLAYER, "Efreeti");
+		case 102:
+			return new DisguisePackage(DisguiseType.PLAYER, "Tadpole");
+		case 103:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fish man");
+		case 104:
+			return new DisguisePackage(DisguiseType.PLAYER, "Leech");
+		case 105:
+			return new DisguisePackage(DisguiseType.PLAYER, "Swordfish");
+		case 106:
+			return new DisguisePackage(DisguiseType.PLAYER, "Elf guard");
+		case 107:
+			return new DisguisePackage(DisguiseType.PLAYER, "Mammoth");
+		case 108:
+			return new DisguisePackage(DisguiseType.ELDER_GUARDIAN, "Floating eye");
+		case 109:
+			return new DisguisePackage(DisguiseType.PLAYER, "Wasp");
+		case 110:
+			return new DisguisePackage(DisguiseType.PLAYER, "mermaid", "Suim67"); // mermaid
+		case 111:
+			return new DisguisePackage(DisguiseType.PLAYER, "Harpie");
+		case 112:
+			return new DisguisePackage(DisguiseType.PLAYER, "Pixie guard");
+		case 113:
+			return new DisguisePackage(DisguiseType.PLAYER, "Drixie");
+		case 114:
+			return new DisguisePackage(DisguiseType.PLAYER, "Ghost Ship");
+		case 115:
+			return new DisguisePackage(DisguiseType.PLAYER, "Clam");
+		case 116:
+			return new DisguisePackage(DisguiseType.PLAYER, "Sea Horse");
+		case 117:
+			return new DisguisePackage(DisguiseType.WITHER, "ghost dwarf", "Faenon"); // ghost dwarf
+		case 118:
+			return new DisguisePackage(DisguiseType.WITHER, "ghost high human", "Orbitly"); // ghost high human
+		case 119:
+			return new DisguisePackage(DisguiseType.OCELOT, "Sabertooth Cat");
+		case 120:
+			return new DisguisePackage(DisguiseType.WOLF, "Wolf Elemental");
+		case 121:
+			return new DisguisePackage(DisguiseType.PLAYER, "Gorgon");
+		case 122:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Dragon Skeleton");
+		case 123:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of hate");
+		case 124:
+			return new DisguisePackage(DisguiseType.HORSE, "Unicorn");
+		case 125:
+			return new DisguisePackage(DisguiseType.PLAYER, "Pegasus");
+		case 126:
+			return new DisguisePackage(DisguiseType.PLAYER, "Genie");
+		case 127:
+			return new DisguisePackage(DisguiseType.PLAYER, "Invisible Man");
+		case 128:
+			return new DisguisePackage(DisguiseType.PLAYER, "Iksar");
+		case 129:
+			return new DisguisePackage(DisguiseType.PLAYER, "Scorpion");
+		case 130:
+			return new DisguisePackage(DisguiseType.PLAYER, "Cat man");
+		case 131:
+			return new DisguisePackage(DisguiseType.PLAYER, "Sarnak");
+		case 132:
+			return new DisguisePackage(DisguiseType.PLAYER, "Dragon frog");
+		case 133:
+			return new DisguisePackage(DisguiseType.PLAYER, "Lycanthrope");
+		case 134:
+			return new DisguisePackage(DisguiseType.PLAYER, "Mosquito");
+		case 135:
+			return new DisguisePackage(DisguiseType.PLAYER, "Rhino");
+		case 136:
+			return new DisguisePackage(DisguiseType.PLAYER, "Half human dragon");
+		case 137:
+			return new DisguisePackage(DisguiseType.PLAYER, "goblin", "AllOgreNow"); // goblin
+		case 138:
+			return new DisguisePackage(DisguiseType.PLAYER, "Yeti");
+		case 139:
+			return new DisguisePackage(DisguiseType.PLAYER, "Scaled human Citizen");
+		case 140:
+			return new DisguisePackage(DisguiseType.GIANT, "Forest Giant");
+		case 141:
+			return new DisguisePackage(DisguiseType.BOAT, "Boat");
+		case 142:
+			return new DisguisePackage(DisguiseType.PLAYER, "Unknown 142");
+		case 143:
+			return new DisguisePackage(DisguiseType.PLAYER, "tree", "zero_kage"); // tree
+		case 144:
+			return new DisguisePackage(DisguiseType.PLAYER, "Badger man");
+		case 145:
+			return new DisguisePackage(DisguiseType.SLIME, "Goo");
+		case 146:
+			return new DisguisePackage(DisguiseType.PLAYER, "Spectral Half dragon");
+		case 147:
+			return new DisguisePackage(DisguiseType.PLAYER, "Spectral Scaled Human");
+		case 148:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fish");
+		case 149:
+			return new DisguisePackage(DisguiseType.PLAYER, "Scorpion");
+		case 150:
+			return new DisguisePackage(DisguiseType.PLAYER, "Plant fiend");
+		case 151:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of justice");
+		case 152:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of disease");
+		case 153:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of mischieve");
+		case 154:
+			return new DisguisePackage(DisguiseType.PLAYER, "Butterfly Drake");
+		case 155:
+			return new DisguisePackage(DisguiseType.PLAYER, "Half dragon Skeleton");
+		case 156:
+			return new DisguisePackage(DisguiseType.PLAYER, "Ratman");
+		case 157:
+			return new DisguisePackage(DisguiseType.PLAYER, "Wyvern");
+		case 158:
+			return new DisguisePackage(DisguiseType.PLAYER, "Wurm");
+		case 159:
+			return new DisguisePackage(DisguiseType.PLAYER, "Devourer");
+		case 160:
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Scaled man Golem");
+		case 161:
+			return new DisguisePackage(DisguiseType.PLAYER, "Scaled man Skeleton");
+		case 162:
+			return new DisguisePackage(DisguiseType.PLAYER, "Man Eating Plant");
+		case 163:
+			return new DisguisePackage(DisguiseType.PLAYER, "Raptor");
+		case 164:
+			return new DisguisePackage(DisguiseType.PLAYER, "Half dragon Golem");
+		case 165:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Water Dragon");
+		case 166:
+			return new DisguisePackage(DisguiseType.PLAYER, "Scaled man Hand");
+		case 167:
+			return new DisguisePackage(DisguiseType.PLAYER, "Plant monster");
+		case 168:
+			return new DisguisePackage(DisguiseType.PLAYER, "Flying Monkey");
+		case 169:
+			return new DisguisePackage(DisguiseType.PLAYER, "Rhino");
+		case 170:
+			return new DisguisePackage(DisguiseType.PLAYER, "Snow air elemental");
+		case 171:
+			return new DisguisePackage(DisguiseType.WOLF, "Dire Wolf");
+		case 172:
+			return new DisguisePackage(DisguiseType.PLAYER, "Manticore");
+		case 173:
+			return new DisguisePackage(DisguiseType.PLAYER, "Totem");
+		case 174:
+			return new DisguisePackage(DisguiseType.WITHER, "Cold Spectre");
+		case 175:
+			return new DisguisePackage(DisguiseType.PLAYER, "Enchanted Armor");
+		case 176:
+			return new DisguisePackage(DisguiseType.RABBIT, "Snow Bunny");
+		case 177:
+			return new DisguisePackage(DisguiseType.PLAYER, "Walrus");
+		case 178:
+			return new DisguisePackage(DisguiseType.PLAYER, "Rock-gem Men");
+		case 179:
+			return new DisguisePackage(DisguiseType.PLAYER, "Unknown");
+		case 180:
+			return new DisguisePackage(DisguiseType.PLAYER, "Unknown");
+		case 181:
+			return new DisguisePackage(DisguiseType.PLAYER, "bullman", "_CrimsonBlade_"); // bullman
+		case 182:
+			return new DisguisePackage(DisguiseType.PLAYER, "Faun");
+		case 183:
+			return new DisguisePackage(DisguiseType.PLAYER, "Coldain");
+		case 184:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Dragons");
+		case 185:
+			return new DisguisePackage(DisguiseType.WITCH, "Hag");
+		case 186:
+			return new DisguisePackage(DisguiseType.PLAYER, "Hippogriff");
+		case 187:
+			return new DisguisePackage(DisguiseType.PLAYER, "Siren");
+		case 188:
+			return new DisguisePackage(DisguiseType.GIANT, "Frost Giant");
+		case 189:
+			return new DisguisePackage(DisguiseType.GIANT, "Storm Giant");
+		case 190:
+			return new DisguisePackage(DisguiseType.PLAYER, "Ottermen");
+		case 191:
+			return new DisguisePackage(DisguiseType.PLAYER, "Walrus Man");
+		case 192:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Clockwork Dragon");
+		case 193:
+			return new DisguisePackage(DisguiseType.PLAYER, "Abhorent");
+		case 194:
+			return new DisguisePackage(DisguiseType.PLAYER, "Sea Turtle");
+		case 195:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Black and White Dragons");
+		case 196:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Ghost Dragon");
+		case 197:
+			return new DisguisePackage(DisguiseType.PLAYER, "Ronnie Test");
+		case 198:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Prismatic Dragon");
+		case 199:
+			return new DisguisePackage(DisguiseType.PLAYER, "Bug");
+		case 200:
+			return new DisguisePackage(DisguiseType.PLAYER, "Raptor");
+		case 201:
+			return new DisguisePackage(DisguiseType.PLAYER, "Bug");
+		case 202:
+			return new DisguisePackage(DisguiseType.PLAYER, "Weird man");
+		case 203:
+			return new DisguisePackage(DisguiseType.PLAYER, "Worm");
+		case 204:
+			return new DisguisePackage(DisguiseType.PLAYER, "Unknown");
+		case 205:
+			return new DisguisePackage(DisguiseType.PLAYER, "Unknown");
+		case 206:
+			return new DisguisePackage(DisguiseType.PLAYER, "Owlbear");
+		case 207:
+			return new DisguisePackage(DisguiseType.PLAYER, "Rhino Beetle");
+		case 208:
+			return new DisguisePackage(DisguiseType.PLAYER, "vampire", "Kenzo74_"); // vampyre
+		case 209:
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Earth Elemental");
+		case 210:
+			return new DisguisePackage(DisguiseType.PARROT, "Air Elemental");
+		case 211:
+			return new DisguisePackage(DisguiseType.GUARDIAN, "Water Elemental");
+		case 212:
+			return new DisguisePackage(DisguiseType.BLAZE, "Fire Elemental");
+		case 213:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fish");
+		case 214:
+			return new DisguisePackage(DisguiseType.WITHER, "Horror");
+		case 215:
+			return new DisguisePackage(DisguiseType.PLAYER, "Small man");
+		case 216:
+			return new DisguisePackage(DisguiseType.HORSE, "Horse");
+		case 217:
+			return new DisguisePackage(DisguiseType.PLAYER, "Snake person");
+		case 218:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fungus");
+		case 219:
+			return new DisguisePackage(DisguiseType.PLAYER, "vampire", "Kenzo74_"); // vampire
+		case 220:
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Stone golem");
+		case 221:
+			return new DisguisePackage(DisguiseType.OCELOT, "Red Cheetah");
+		case 222:
+			return new DisguisePackage(DisguiseType.PLAYER, "Camel");
+		case 223:
+			return new DisguisePackage(DisguiseType.PLAYER, "Millipede");
+		case 224:
+			return new DisguisePackage(DisguiseType.PLAYER, "shade", "RainbowF"); // shade
+		case 225:
+			return new DisguisePackage(DisguiseType.PLAYER, "Exotic plant creature");
+		case 226:
+			return new DisguisePackage(DisguiseType.PLAYER, "assassin", "epicafroninja"); // assassin
+		case 227:
+			return new DisguisePackage(DisguiseType.PLAYER, "ghost", "Orbitly"); // ghost
+		case 228:
+			return new DisguisePackage(DisguiseType.PLAYER, "ogre", "theorc"); // ogre
+		case 229:
+			return new DisguisePackage(DisguiseType.PLAYER, "Alien");
+		case 230:
+			return new DisguisePackage(DisguiseType.PLAYER, "4 armed human");
+		case 231:
+			return new DisguisePackage(DisguiseType.WITHER_SKELETON, "Ghost");
+		case 232:
+			return new DisguisePackage(DisguiseType.WOLF, "Wolf bat");
+		case 233:
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Ground Shaker");
+		case 234:
+			return new DisguisePackage(DisguiseType.PLAYER, "Cat man Skeleton");
+		case 235:
+			return new DisguisePackage(DisguiseType.PLAYER, "Mutant Human");
+		case 236:
+			return new DisguisePackage(DisguiseType.PLAYER, "Human king");
+		case 237:
+			return new DisguisePackage(DisguiseType.PLAYER, "Bandit");
+		case 238:
+			return new DisguisePackage(DisguiseType.PLAYER, "Catman King");
+		case 239:
+			return new DisguisePackage(DisguiseType.PLAYER, "Catman Guard");
+		case 240:
+			return new DisguisePackage(DisguiseType.PLAYER, "Teleporter man");
+		case 241:
+			return new DisguisePackage(DisguiseType.PLAYER, "werewolf", "Apiii"); // were wolf
+		case 242:
+			return new DisguisePackage(DisguiseType.PLAYER, "naiad", "Suim67"); // naiad
+		case 243:
+			return new DisguisePackage(DisguiseType.PLAYER, "nymph", "Suim67"); // nymph
+		case 244:
+			return new DisguisePackage(DisguiseType.PLAYER, "ent", "zero_kage"); // ent
+		case 245:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fly Man");
+		case 246:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of water");
+		case 247:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of fire");
+		case 248:
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Clockwork Golem");
+		case 249:
+			return new DisguisePackage(DisguiseType.PLAYER, "Clockwork Brain");
+		case 250:
+			return new DisguisePackage(DisguiseType.PLAYER, "Banshee");
+		case 251:
+			return new DisguisePackage(DisguiseType.PLAYER, "human hooded guard");
+		case 252:
+			return new DisguisePackage(DisguiseType.PLAYER, "Unknown");
+		case 253:
+			return new DisguisePackage(DisguiseType.PLAYER, "fat disease man");
+		case 254:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fire God Guard");
+		case 255:
+			return new DisguisePackage(DisguiseType.PLAYER, "GOd of disease");
+		case 269:
+			return new DisguisePackage(DisguiseType.PLAYER, "Rat creature");
+		case 270:
+			return new DisguisePackage(DisguiseType.PLAYER, "Disease");
+		case 272:
+			return new DisguisePackage(DisguiseType.PLAYER, "Mounted Undead");
+		case 273:
+			return new DisguisePackage(DisguiseType.PLAYER, "Clockwork beast");
+		case 274:
+			return new DisguisePackage(DisguiseType.PLAYER, "Broken Clockwork");
+		case 275:
+			return new DisguisePackage(DisguiseType.PLAYER, "Giant Clockwork");
+		case 276:
+			return new DisguisePackage(DisguiseType.PLAYER, "Clockwork Beetle");
+		case 277:
+			return new DisguisePackage(DisguiseType.PLAYER, "goblin", "AllOgreNow"); // goblin
+		case 278:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of storms");
+		case 279:
+			return new DisguisePackage(DisguiseType.PLAYER, "Blood Raven");
+		case 280:
+			return new DisguisePackage(DisguiseType.PLAYER, "Gargoyle");
+		case 281:
+			return new DisguisePackage(DisguiseType.PLAYER, "Mouth monster");
+		case 282:
+			return new DisguisePackage(DisguiseType.HORSE, "Skeletal Horse");
+		case 283:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of pain");
+		case 284:
+			return new DisguisePackage(DisguiseType.PLAYER, "God of fire");
+		case 285:
+			return new DisguisePackage(DisguiseType.PLAYER, "torment inquisitor");
+		case 286:
+			return new DisguisePackage(DisguiseType.PLAYER, "necromancer priest");
+		case 287:
+			return new DisguisePackage(DisguiseType.HORSE, "Nightmare");
+		case 288:
+			return new DisguisePackage(DisguiseType.PLAYER, "god of war");
+		case 289:
+			return new DisguisePackage(DisguiseType.PLAYER, "god of tactics");
+		case 290:
+			return new DisguisePackage(DisguiseType.PLAYER, "god of strategy");
+		case 291:
+			return new DisguisePackage(DisguiseType.PARROT, "Air Mephit");
+		case 292:
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Earth Mephit");
+		case 293:
+			return new DisguisePackage(DisguiseType.BLAZE, "Fire Mephit");
+		case 294:
+			return new DisguisePackage(DisguiseType.WITHER, "Nightmare Mephit");
+		case 295:
+			return new DisguisePackage(DisguiseType.PLAYER, "god of knowledge");
+		case 296:
+			return new DisguisePackage(DisguiseType.PLAYER, "god of truth");
+		case 297:
+			return new DisguisePackage(DisguiseType.SKELETON, "Undead Knight");
+		case 298:
+			return new DisguisePackage(DisguiseType.PLAYER, "god of earth");
+		case 299:
+			return new DisguisePackage(DisguiseType.PLAYER, "god of air");
+		case 300:
+			return new DisguisePackage(DisguiseType.PLAYER, "Fiend");
+		case 301:
+			return new DisguisePackage(DisguiseType.PLAYER, "Test");
+		case 302:
+			return new DisguisePackage(DisguiseType.PLAYER, "Crab");
+		case 303:
+			return new DisguisePackage(DisguiseType.PLAYER, "Phoenix");
+		case 304:
+			return new DisguisePackage(DisguiseType.ENDER_DRAGON, "Dragon");
+		case 305:
+			return new DisguisePackage(DisguiseType.POLAR_BEAR, "Bear");
+		case 306:
+			return new DisguisePackage(DisguiseType.GIANT, "Storm Giant");
+		case 307:
+			return new DisguisePackage(DisguiseType.GIANT, "Storm Giant");
+		case 308:
+			return new DisguisePackage(DisguiseType.GIANT, "Storm Giant");
+		case 309:
+			return new DisguisePackage(DisguiseType.GIANT, "Storm Giant");
+		case 310:
+			return new DisguisePackage(DisguiseType.BLAZE, "Storm Mana");
+		case 311:
+			return new DisguisePackage(DisguiseType.BLAZE, "Storm Fire");
+		case 312:
+			return new DisguisePackage(DisguiseType.BLAZE, "Storm Celestial");
+		case 313:
+			return new DisguisePackage(DisguiseType.PLAYER, "War Wraith");
+		case 314:
+			return new DisguisePackage(DisguiseType.PLAYER, "paladin guard");
+		case 315:
+			return new DisguisePackage(DisguiseType.PLAYER, "Kraken");
+		case 316:
+			return new DisguisePackage(DisguiseType.PLAYER, "Poison Frog");
+		case 317:
+			return new DisguisePackage(DisguiseType.PLAYER, "Quezticoatal");
+		case 318:
+			return new DisguisePackage(DisguiseType.PLAYER, "paladin guard");
+		case 319:
+			return new DisguisePackage(DisguiseType.PLAYER, "War Boar");
+		case 320:
+			return new DisguisePackage(DisguiseType.BLAZE, "Efreeti");
+		case 321:
+			return new DisguisePackage(DisguiseType.PLAYER, "War Boar Unarmored");
+		case 322:
+			return new DisguisePackage(DisguiseType.PLAYER, "Black Knight");
+		case 323:
+			return new DisguisePackage(DisguiseType.PLAYER, "Animated Armor");
+		case 324:
+			return new DisguisePackage(DisguiseType.PLAYER, "Undead Footman");
+		case 325:
+			return new DisguisePackage(DisguiseType.PLAYER, "Rallos Zek Minion");
+		case 326:
+			return new DisguisePackage(DisguiseType.SPIDER, "Arachnid");
+		case 327:
+			return new DisguisePackage(DisguiseType.SPIDER, "Crystal Spider");
+		case 328:
+			return new DisguisePackage(DisguiseType.PLAYER, "Cage");
+		case 329:
+			return new DisguisePackage(DisguiseType.PLAYER, "Portal");
+		case 330:
+			return new DisguisePackage(DisguiseType.PLAYER, "Frogman");
+		case 331:
+			return new DisguisePackage(DisguiseType.PLAYER, "Troll seaman");
+		case 332:
+			return new DisguisePackage(DisguiseType.PLAYER, "Troll seaman");
+		case 333:
+			return new DisguisePackage(DisguiseType.PLAYER, "Troll seaman");
+		case 334:
+			return new DisguisePackage(DisguiseType.PLAYER, "Spectre Pirate Boss");
+		case 335:
+			return new DisguisePackage(DisguiseType.PLAYER, "Pirate Boss");
+		case 336:
+			return new DisguisePackage(DisguiseType.PLAYER, "Pirate Dark Shaman");
+		case 337:
+			return new DisguisePackage(DisguiseType.PLAYER, "Pirate Officer");
+		case 338:
+			return new DisguisePackage(DisguiseType.PLAYER, "Gnome Pirate");
+		case 339:
+			return new DisguisePackage(DisguiseType.PLAYER, "Dark Elf Pirate");
+		case 340:
+			return new DisguisePackage(DisguiseType.PLAYER, "ogre pirate", "theorc"); // ogre pirate
+		case 341:
+			return new DisguisePackage(DisguiseType.PLAYER, "Human Pirate");
+		case 342:
+			return new DisguisePackage(DisguiseType.PLAYER, "High Human Pirate");
+		case 343:
+			return new DisguisePackage(DisguiseType.PLAYER, "Poison Dart Frog");
+		case 344:
+			return new DisguisePackage(DisguiseType.PLAYER, "Troll Zombie");
+		case 345:
+			return new DisguisePackage(DisguiseType.PLAYER, "Sea creature man Land");
+		case 346:
+			return new DisguisePackage(DisguiseType.PLAYER, "Sea creature man Armored");
+		case 347:
+			return new DisguisePackage(DisguiseType.PLAYER, "Sea creature man Robed");
+		case 348:
+			return new DisguisePackage(DisguiseType.PLAYER, "Frogman Mount");
+		case 349:
+			return new DisguisePackage(DisguiseType.PLAYER, "Frogman Skeleton");
+		case 350:
+			return new DisguisePackage(DisguiseType.PLAYER, "Undead Frogman");
+		case 351:
+			return new DisguisePackage(DisguiseType.PLAYER, "Chosen Warrior");
+		case 352:
+			return new DisguisePackage(DisguiseType.PLAYER, "chosen wizard", "Zelinx"); // chosen wizard
+		case 353:
+			return new DisguisePackage(DisguiseType.PLAYER, "Lizard creature");
+		case 354:
+			return new DisguisePackage(DisguiseType.PLAYER, "Greater Lizard creature");
+		case 355:
+			return new DisguisePackage(DisguiseType.PLAYER, "Lizard creature Boss");
+		case 356:
+			return new DisguisePackage(DisguiseType.PLAYER, "scaled dog");
+		case 357:
+			return new DisguisePackage(DisguiseType.PLAYER, "Undead scaled dog");
+		case 358:
+			return new DisguisePackage(DisguiseType.PLAYER, "Undead lizard creature");
+		case 359:
+			return new DisguisePackage(DisguiseType.PLAYER, "lesser vampire", "Kenzo74_"); // vampire lesser
+		case 360:
+			return new DisguisePackage(DisguiseType.PLAYER, "elite vampire", "Kenzo74_"); // vampire elite
+		case 361:
+			return new DisguisePackage(DisguiseType.PLAYER, "orc", "Jeeorc"); // orc
+		case 362:
+			return new DisguisePackage(DisguiseType.WITHER_SKELETON, "Bone Golem");
+		case 363:
+			return new DisguisePackage(DisguiseType.PLAYER, "Huge gargoyle");
+		case 364:
+			return new DisguisePackage(DisguiseType.PLAYER, "Sand Elf");
+		case 365:
+			return new DisguisePackage(DisguiseType.PLAYER, "Vampire Master");
+		case 366:
+			return new DisguisePackage(DisguiseType.PLAYER, "orc", "Jeeorc"); // orc
+		case 367:
+			return new DisguisePackage(DisguiseType.SKELETON, "Skeleton New");
+		case 368:
+			return new DisguisePackage(DisguiseType.ZOMBIE, "mummy", "Greng"); // mummy
+		case 369:
+			return new DisguisePackage(DisguiseType.PLAYER, "goblin", "AllOgreNow"); // goblin
+		case 370:
+			return new DisguisePackage(DisguiseType.PLAYER, "Insect");
+		case 371:
+			return new DisguisePackage(DisguiseType.PLAYER, "Frogman Ghost");
+		case 372:
+			return new DisguisePackage(DisguiseType.PLAYER, "Spinning Air Elemental");
+		case 373:
+			return new DisguisePackage(DisguiseType.PLAYER, "Shadow Creatue");
+		case 374:
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Golem New");
+		case 375:
+			return new DisguisePackage(DisguiseType.PLAYER, "Evil Eye New");
+		case 376:
+			return new DisguisePackage(DisguiseType.PLAYER, "Box");
+		case 377:
+			return new DisguisePackage(DisguiseType.PLAYER, "Barrel");
+		case 378:
+			return new DisguisePackage(DisguiseType.PLAYER, "Chest");
+		case 379:
+			return new DisguisePackage(DisguiseType.PLAYER, "Vase");
+		case 380:
+			return new DisguisePackage(DisguiseType.PLAYER, "Table");
+		case 381:
+			return new DisguisePackage(DisguiseType.PLAYER, "Weapons Rack");
+		case 382:
+			return new DisguisePackage(DisguiseType.PLAYER, "Coffin");
+		case 383:
+			return new DisguisePackage(DisguiseType.PLAYER, "Bones");
+		case 384:
+			return new DisguisePackage(DisguiseType.PLAYER, "Joker");
+		default:
+			return new DisguisePackage(DisguiseType.UNKNOWN, "Unknown");
 		}
 	}
-	
+
 	public static double getTotalEffectTotalHP(LivingEntity livingEntity) {
 		double allTotalHpEffects = 0;
-		try
-		{
+		try {
 			SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
-				.getActiveEntitySpells(livingEntity);
-		
-			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
-			{
-				for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
-				{
-					if (
-							!(effect.getSpellEffectType().equals(SpellEffectType.TotalHP))
-							)
+					.getActiveEntitySpells(livingEntity);
+
+			for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
+				for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
+					if (!(effect.getSpellEffectType().equals(SpellEffectType.TotalHP)))
 						continue;
-					
+
 					allTotalHpEffects += effect.getCalculatedValue();
 				}
 			}
-		
-		} catch (CoreStateInitException e)
-		{
+
+		} catch (CoreStateInitException e) {
 			return 0;
 		}
 		return allTotalHpEffects;
 	}
 
-	public static List<ActiveSpellEffect> getActiveSpellEffects(LivingEntity livingEntity, SpellEffectType effectType)
-	{
+	public static List<ActiveSpellEffect> getActiveSpellEffects(LivingEntity livingEntity, SpellEffectType effectType) {
 		List<ActiveSpellEffect> returnEffects = new ArrayList<ActiveSpellEffect>();
-		
+
 		SoliniaEntitySpells effects;
 		try {
-			effects = StateManager.getInstance().getEntityManager()
-					.getActiveEntitySpells(livingEntity);
-			
-			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
-			{
-					for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
-					{
-						if (!(effect.getSpellEffectType().equals(effectType))							)
-							continue;
-						
-						returnEffects.add(effect);
-					}
+			effects = StateManager.getInstance().getEntityManager().getActiveEntitySpells(livingEntity);
+
+			for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
+				for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
+					if (!(effect.getSpellEffectType().equals(effectType)))
+						continue;
+
+					returnEffects.add(effect);
+				}
 			}
 		} catch (CoreStateInitException e) {
 			// skip
 		}
-		
+
 		return returnEffects;
 	}
-	
-	public static int getActiveSpellEffectsRemainingValue(LivingEntity livingEntity, SpellEffectType effectType)
-	{
+
+	public static int getActiveSpellEffectsRemainingValue(LivingEntity livingEntity, SpellEffectType effectType) {
 		int totalRemaining = 0;
-		
+
 		SoliniaEntitySpells effects;
 		try {
-			effects = StateManager.getInstance().getEntityManager()
-					.getActiveEntitySpells(livingEntity);
-			
-			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
-			{
-					for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
-					{
-						if (!(effect.getSpellEffectType().equals(effectType))							)
-							continue;
-						
-						totalRemaining += effect.getRemainingValue();
-					}
+			effects = StateManager.getInstance().getEntityManager().getActiveEntitySpells(livingEntity);
+
+			for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
+				for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
+					if (!(effect.getSpellEffectType().equals(effectType)))
+						continue;
+
+					totalRemaining += effect.getRemainingValue();
+				}
 			}
 		} catch (CoreStateInitException e) {
 			// skip
 		}
-		
+
 		return totalRemaining;
 	}
-	
+
 	public static int getTotalEffectStat(LivingEntity livingEntity, String stat) {
 		int statTotal = 0;
 
-		try
-		{
+		try {
 			SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
-				.getActiveEntitySpells(livingEntity);
-		
-			for(SoliniaActiveSpell activeSpell : effects.getActiveSpells())
-			{
-				for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
-				{
-					if (
-							!(effect.getSpellEffectType().equals(SpellEffectType.STR)) && 
-							!(effect.getSpellEffectType().equals(SpellEffectType.STA)) && 
-							!(effect.getSpellEffectType().equals(SpellEffectType.AGI)) && 
-							!(effect.getSpellEffectType().equals(SpellEffectType.DEX)) && 
-							!(effect.getSpellEffectType().equals(SpellEffectType.INT)) && 
-							!(effect.getSpellEffectType().equals(SpellEffectType.WIS)) && 
-							!(effect.getSpellEffectType().equals(SpellEffectType.CHA))
-							)
+					.getActiveEntitySpells(livingEntity);
+
+			for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
+				for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
+					if (!(effect.getSpellEffectType().equals(SpellEffectType.STR))
+							&& !(effect.getSpellEffectType().equals(SpellEffectType.STA))
+							&& !(effect.getSpellEffectType().equals(SpellEffectType.AGI))
+							&& !(effect.getSpellEffectType().equals(SpellEffectType.DEX))
+							&& !(effect.getSpellEffectType().equals(SpellEffectType.INT))
+							&& !(effect.getSpellEffectType().equals(SpellEffectType.WIS))
+							&& !(effect.getSpellEffectType().equals(SpellEffectType.CHA)))
 						continue;
-					
+
 					switch (stat) {
-						case "STRENGTH":
-							if (!(effect.getSpellEffectType().equals(SpellEffectType.STR)))
-								break;
-							statTotal += effect.getCalculatedValue();
+					case "STRENGTH":
+						if (!(effect.getSpellEffectType().equals(SpellEffectType.STR)))
 							break;
-						case "STAMINA":
-							if (!(effect.getSpellEffectType().equals(SpellEffectType.STA)))
-								break;
-							statTotal += effect.getCalculatedValue();
+						statTotal += effect.getCalculatedValue();
+						break;
+					case "STAMINA":
+						if (!(effect.getSpellEffectType().equals(SpellEffectType.STA)))
 							break;
-						case "AGILITY":
-							if (!(effect.getSpellEffectType().equals(SpellEffectType.AGI)))
-								break;
-							statTotal += effect.getCalculatedValue();
+						statTotal += effect.getCalculatedValue();
+						break;
+					case "AGILITY":
+						if (!(effect.getSpellEffectType().equals(SpellEffectType.AGI)))
 							break;
-						case "DEXTERITY":
-							if (!(effect.getSpellEffectType().equals(SpellEffectType.DEX)))
-								break;
-							statTotal += effect.getCalculatedValue();
+						statTotal += effect.getCalculatedValue();
+						break;
+					case "DEXTERITY":
+						if (!(effect.getSpellEffectType().equals(SpellEffectType.DEX)))
 							break;
-						case "INTELLIGENCE":
-							if (!(effect.getSpellEffectType().equals(SpellEffectType.INT)))
-								break;
-							statTotal += effect.getCalculatedValue();
+						statTotal += effect.getCalculatedValue();
+						break;
+					case "INTELLIGENCE":
+						if (!(effect.getSpellEffectType().equals(SpellEffectType.INT)))
 							break;
-						case "WISDOM":
-							if (!(effect.getSpellEffectType().equals(SpellEffectType.WIS)))
-								break;
-							statTotal += effect.getCalculatedValue();
+						statTotal += effect.getCalculatedValue();
+						break;
+					case "WISDOM":
+						if (!(effect.getSpellEffectType().equals(SpellEffectType.WIS)))
 							break;
-						case "CHARISMA":
-							if (!(effect.getSpellEffectType().equals(SpellEffectType.CHA)))
-								break;
-							statTotal += effect.getCalculatedValue();
+						statTotal += effect.getCalculatedValue();
+						break;
+					case "CHARISMA":
+						if (!(effect.getSpellEffectType().equals(SpellEffectType.CHA)))
 							break;
-						default:
-							break;
+						statTotal += effect.getCalculatedValue();
+						break;
+					default:
+						break;
 					}
 				}
 			}
-		
-		} catch (CoreStateInitException e)
-		{
+
+		} catch (CoreStateInitException e) {
 			return 0;
 		}
 		return statTotal;
@@ -3798,11 +4119,11 @@ public class Utils {
 
 	public static double getStatMaxHP(ISoliniaClass classObj, int level, int stamina) {
 		double levelmultiplier = 1;
-		
+
 		String profession = "UNSKILLED";
 		if (classObj != null)
 			profession = classObj.getName().toUpperCase();
-		
+
 		if (profession != null) {
 			if (profession.equals("UNSKILLED") || profession.equals("UNKNOWN"))
 				levelmultiplier = 3;
@@ -3834,7 +4155,7 @@ public class Utils {
 			if (profession.equals("WARRIOR") && level >= 40)
 				levelmultiplier = 27;
 		}
-		
+
 		double hp = level * levelmultiplier;
 		double hpmain = (stamina / 12) * level;
 
@@ -3854,127 +4175,204 @@ public class Utils {
 
 		return (int) Math.floor(basedmg * damagepct);
 	}
-	
+
 	public static SkillType getSkillType(Integer skill) {
-		switch(skill)
-		{
-			case 0: return SkillType.Slashing;
-			case 1: return SkillType.Crushing;
-			case 2: return SkillType.TwoHandBlunt;
-			case 3: return SkillType.TwoHandSlashing;
-			case 4: return SkillType.Abjuration;
-			case 5: return SkillType.Alteration;
-			case 6: return SkillType.ApplyPoison;
-			case 7: return SkillType.Archery;
-			case 8: return SkillType.Backstab;
-			case 9: return SkillType.BindWound;
-			case 10: return SkillType.Bash;
-			case 11: return SkillType.Block;
-			case 12: return SkillType.BrassInstruments;
-			case 13: return SkillType.Channeling;
-			case 14: return SkillType.Conjuration;
-			case 15: return SkillType.Defense;
-			case 16: return SkillType.Disarm;
-			case 17: return SkillType.DisarmTraps;
-			case 18: return SkillType.Divination;
-			case 19: return SkillType.Dodge;
-			case 20: return SkillType.DoubleAttack;
-			case 21: return SkillType.DragonPunch;
-			case 22: return SkillType.DualWield;
-			case 23: return SkillType.EagleStrike;
-			case 24: return SkillType.Evocation;
-			case 25: return SkillType.FeignDeath;
-			case 26: return SkillType.FlyingKick;
-			case 27: return SkillType.Forage;
-			case 28: return SkillType.HandtoHand;
-			case 29: return SkillType.Hide;
-			case 30: return SkillType.Kick;
-			case 31: return SkillType.Meditation;
-			case 32: return SkillType.Mend;
-			case 33: return SkillType.Offense;
-			case 34: return SkillType.Parry;
-			case 35: return SkillType.PickLock;
-			case 36: return SkillType.OneHandPiercing;
-			case 37: return SkillType.Riposte;
-			case 38: return SkillType.RoundKick;
-			case 39: return SkillType.SafeFall;
-			case 40: return SkillType.SenseHeading;
-			case 41: return SkillType.Singing;
-			case 42: return SkillType.Sneak;
-			case 43: return SkillType.SpecializeAbjure;
-			case 44: return SkillType.SpecializeAlteration;
-			case 45: return SkillType.SpecializeConjuration;
-			case 46: return SkillType.SpecializeDivination;
-			case 47: return SkillType.SpecializeEvocation;
-			case 48: return SkillType.PickPockets;
-			case 49: return SkillType.StringedInstruments;
-			case 50: return SkillType.Swimming;
-			case 51: return SkillType.Throwing;
-			case 52: return SkillType.TigerClaw;
-			case 53: return SkillType.Tracking;
-			case 54: return SkillType.WindInstruments;
-			case 55: return SkillType.Fishing;
-			case 56: return SkillType.MakePoison;
-			case 57: return SkillType.Tinkering;
-			case 58: return SkillType.Research;
-			case 59: return SkillType.Alchemy;
-			case 60: return SkillType.Baking;
-			case 61: return SkillType.Tailoring;
-			case 62: return SkillType.SenseTraps;
-			case 63: return SkillType.Blacksmithing;
-			case 64: return SkillType.Fletching;
-			case 65: return SkillType.Brewing;
-			case 66: return SkillType.AlcoholTolerance;
-			case 67: return SkillType.Begging;
-			case 68: return SkillType.JewelryMaking;
-			case 69: return SkillType.Pottery;
-			case 70: return SkillType.PercussionInstruments;
-			case 71: return SkillType.Intimidation;
-			case 72: return SkillType.Berserking;
-			case 73: return SkillType.Taunt;
-			case 74: return SkillType.Frenzy;
-			case 75: return SkillType.RemoveTraps;
-			case 76: return SkillType.TripleAttack;
-			case 77: return SkillType.TwoHandPiercing;
-			case 78: return SkillType.None;
-			case 79: return SkillType.Count;
-			default: return SkillType.None;
+		switch (skill) {
+		case 0:
+			return SkillType.Slashing;
+		case 1:
+			return SkillType.Crushing;
+		case 2:
+			return SkillType.TwoHandBlunt;
+		case 3:
+			return SkillType.TwoHandSlashing;
+		case 4:
+			return SkillType.Abjuration;
+		case 5:
+			return SkillType.Alteration;
+		case 6:
+			return SkillType.ApplyPoison;
+		case 7:
+			return SkillType.Archery;
+		case 8:
+			return SkillType.Backstab;
+		case 9:
+			return SkillType.BindWound;
+		case 10:
+			return SkillType.Bash;
+		case 11:
+			return SkillType.Block;
+		case 12:
+			return SkillType.BrassInstruments;
+		case 13:
+			return SkillType.Channeling;
+		case 14:
+			return SkillType.Conjuration;
+		case 15:
+			return SkillType.Defense;
+		case 16:
+			return SkillType.Disarm;
+		case 17:
+			return SkillType.DisarmTraps;
+		case 18:
+			return SkillType.Divination;
+		case 19:
+			return SkillType.Dodge;
+		case 20:
+			return SkillType.DoubleAttack;
+		case 21:
+			return SkillType.DragonPunch;
+		case 22:
+			return SkillType.DualWield;
+		case 23:
+			return SkillType.EagleStrike;
+		case 24:
+			return SkillType.Evocation;
+		case 25:
+			return SkillType.FeignDeath;
+		case 26:
+			return SkillType.FlyingKick;
+		case 27:
+			return SkillType.Forage;
+		case 28:
+			return SkillType.HandtoHand;
+		case 29:
+			return SkillType.Hide;
+		case 30:
+			return SkillType.Kick;
+		case 31:
+			return SkillType.Meditation;
+		case 32:
+			return SkillType.Mend;
+		case 33:
+			return SkillType.Offense;
+		case 34:
+			return SkillType.Parry;
+		case 35:
+			return SkillType.PickLock;
+		case 36:
+			return SkillType.OneHandPiercing;
+		case 37:
+			return SkillType.Riposte;
+		case 38:
+			return SkillType.RoundKick;
+		case 39:
+			return SkillType.SafeFall;
+		case 40:
+			return SkillType.SenseHeading;
+		case 41:
+			return SkillType.Singing;
+		case 42:
+			return SkillType.Sneak;
+		case 43:
+			return SkillType.SpecializeAbjure;
+		case 44:
+			return SkillType.SpecializeAlteration;
+		case 45:
+			return SkillType.SpecializeConjuration;
+		case 46:
+			return SkillType.SpecializeDivination;
+		case 47:
+			return SkillType.SpecializeEvocation;
+		case 48:
+			return SkillType.PickPockets;
+		case 49:
+			return SkillType.StringedInstruments;
+		case 50:
+			return SkillType.Swimming;
+		case 51:
+			return SkillType.Throwing;
+		case 52:
+			return SkillType.TigerClaw;
+		case 53:
+			return SkillType.Tracking;
+		case 54:
+			return SkillType.WindInstruments;
+		case 55:
+			return SkillType.Fishing;
+		case 56:
+			return SkillType.MakePoison;
+		case 57:
+			return SkillType.Tinkering;
+		case 58:
+			return SkillType.Research;
+		case 59:
+			return SkillType.Alchemy;
+		case 60:
+			return SkillType.Baking;
+		case 61:
+			return SkillType.Tailoring;
+		case 62:
+			return SkillType.SenseTraps;
+		case 63:
+			return SkillType.Blacksmithing;
+		case 64:
+			return SkillType.Fletching;
+		case 65:
+			return SkillType.Brewing;
+		case 66:
+			return SkillType.AlcoholTolerance;
+		case 67:
+			return SkillType.Begging;
+		case 68:
+			return SkillType.JewelryMaking;
+		case 69:
+			return SkillType.Pottery;
+		case 70:
+			return SkillType.PercussionInstruments;
+		case 71:
+			return SkillType.Intimidation;
+		case 72:
+			return SkillType.Berserking;
+		case 73:
+			return SkillType.Taunt;
+		case 74:
+			return SkillType.Frenzy;
+		case 75:
+			return SkillType.RemoveTraps;
+		case 76:
+			return SkillType.TripleAttack;
+		case 77:
+			return SkillType.TwoHandPiercing;
+		case 78:
+			return SkillType.None;
+		case 79:
+			return SkillType.Count;
+		default:
+			return SkillType.None;
 		}
 	}
 
 	public static boolean isInvalidNpcSpell(ISoliniaSpell spell) {
-		if (spell.getSpellEffectTypes().contains(SpellEffectType.Gate) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.Teleport) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.Teleport2) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.TeleporttoAnchor) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.Translocate) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.TranslocatetoAnchor) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.Charm) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.SummonItem) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.BindAffinity) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.Levitate) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.FeignDeath) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.ShadowStep) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.ShadowStepDirectional) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.Familiar) ||
-				spell.getSpellEffectTypes().contains(SpellEffectType.SummonPet)
-		)
+		if (spell.getSpellEffectTypes().contains(SpellEffectType.Gate)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.Teleport)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.Teleport2)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.TeleporttoAnchor)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.Translocate)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.TranslocatetoAnchor)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.Charm)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.SummonItem)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.BindAffinity)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.Levitate)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.FeignDeath)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.ShadowStep)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.ShadowStepDirectional)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.Familiar)
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.SummonPet))
 			return true;
-		
+
 		return false;
 	}
 
 	public static FactionStandingType getFactionStandingType(int factionId, int playerFactionValue) {
-		try
-		{
+		try {
 			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(factionId);
 			if (faction != null)
 				playerFactionValue += faction.getBase();
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 		if (playerFactionValue >= 1101) {
 			return FactionStandingType.FACTION_ALLY;
 		}
@@ -4008,154 +4406,147 @@ public class Utils {
 	public static AugmentationSlotType getItemStackAugSlotType(String basename, boolean isAugmentation) {
 		if (isAugmentation)
 			return AugmentationSlotType.NONE;
-		
-		switch(basename.toUpperCase())
-		{
-			case "WOOD_SWORD": 
-				return AugmentationSlotType.WEAPON; 
-			case "STONE_SWORD":
-				return AugmentationSlotType.WEAPON; 
-			case "IRON_SWORD": 
-				return AugmentationSlotType.WEAPON; 
-			case "GOLD_SWORD":
-				return AugmentationSlotType.WEAPON; 
-			case "DIAMOND_SWORD": 
-				return AugmentationSlotType.WEAPON; 
-			case "WOOD_AXE":
-				return AugmentationSlotType.WEAPON; 
-			case "STONE_AXE": 
-				return AugmentationSlotType.WEAPON; 
-			case "IRON_AXE":
-				return AugmentationSlotType.WEAPON; 
-			case "GOLD_AXE": 
-				return AugmentationSlotType.WEAPON; 
-			case "DIAMOND_AXE":
-				return AugmentationSlotType.WEAPON; 
-			case "WOOD_SPADE": 
-				return AugmentationSlotType.WEAPON; 
-			case "STONE_SPADE":
-				return AugmentationSlotType.WEAPON; 
-			case "IRON_SPADE": 
-				return AugmentationSlotType.WEAPON; 
-			case "GOLD_SPADE":
-				return AugmentationSlotType.WEAPON; 
-			case "DIAMOND_SPADE":
-				return AugmentationSlotType.WEAPON;
-			case "LEATHER_HELMET": 
-				return AugmentationSlotType.HELMET;
-			case "LEATHER_CHESTPLATE": 
-				return AugmentationSlotType.CHESTPLATE;
-			case "LEATHER_LEGGINGS": 
-				return AugmentationSlotType.LEGGINGS;
-			case "LEATHER_BOOTS": 
-				return AugmentationSlotType.BOOTS;
-			case "CHAINMAIL_HELMET": 
-				return AugmentationSlotType.HELMET;
-			case "CHAINMAIL_CHESTPLATE": 
-				return AugmentationSlotType.CHESTPLATE;
-			case "CHAINMAIL_LEGGINGS": 
-				return AugmentationSlotType.LEGGINGS;
-			case "CHAINMAIL_BOOTS": 
-				return AugmentationSlotType.BOOTS;
-			case "IRON_HELMET": 
-				return AugmentationSlotType.HELMET;
-			case "IRON_CHESTPLATE": 
-				return AugmentationSlotType.CHESTPLATE;
-			case "IRON_LEGGINGS": 
-				return AugmentationSlotType.LEGGINGS;
-			case "IRON_BOOTS": 
-				return AugmentationSlotType.BOOTS;
-			case "DIAMOND_HELMET": 
-				return AugmentationSlotType.HELMET;
-			case "DIAMOND_CHESTPLATE": 
-				return AugmentationSlotType.CHESTPLATE;
-			case "DIAMOND_LEGGINGS": 
-				return AugmentationSlotType.LEGGINGS;
-			case "DIAMOND_BOOTS": 
-				return AugmentationSlotType.BOOTS;
-			case "GOLD_HELMET": 
-				return AugmentationSlotType.HELMET;
-			case "GOLD_CHESTPLATE": 
-				return AugmentationSlotType.CHESTPLATE;
-			case "GOLD_LEGGINGS": 
-				return AugmentationSlotType.LEGGINGS;
-			case "GOLD_BOOTS": 
-				return AugmentationSlotType.BOOTS;
-			case "SHIELD": 
-				return AugmentationSlotType.SHIELD;
-			default:
-				return AugmentationSlotType.NONE;
+
+		switch (basename.toUpperCase()) {
+		case "WOOD_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "LEATHER_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "LEATHER_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "LEATHER_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "LEATHER_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "CHAINMAIL_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "CHAINMAIL_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "CHAINMAIL_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "CHAINMAIL_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "IRON_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "IRON_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "IRON_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "IRON_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "DIAMOND_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "DIAMOND_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "DIAMOND_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "DIAMOND_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "GOLD_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "GOLD_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "GOLD_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "GOLD_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "SHIELD":
+			return AugmentationSlotType.SHIELD;
+		default:
+			return AugmentationSlotType.NONE;
 		}
 	}
-	
-	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType)
-	{
+
+	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
-		
-		try
-		{
-			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)bukkitLivingEntity);
+
+		try {
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
 			int total = 0;
-			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType)))
-			{
+			for (SoliniaAARankEffect effect : player
+					.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType))) {
 				total += effect.getBase1();
 			}
 			return total;
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return 0;
 		}
-		
+
 	}
 
 	public static int getTotalAAEffectStat(LivingEntity bukkitLivingEntity, String stat) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
-		
-		try
-		{
-			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)bukkitLivingEntity);
+
+		try {
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
 			int total = 0;
-			
+
 			int effectIdLookup = 0;
-			
+
 			switch (stat) {
-				case "STRENGTH":
-					effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.STR);
-					break;
-				case "STAMINA":
-					effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.STA);
-					break;
-				case "AGILITY":
-					effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.AGI);
-					break;
-				case "DEXTERITY":
-					effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.DEX);
-					break;
-				case "INTELLIGENCE":
-					effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.INT);
-					break;
-				case "WISDOM":
-					effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.WIS);
-					break;
-				case "CHARISMA":
-					effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.CHA);
-					break;
-				default:
-					break;
+			case "STRENGTH":
+				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.STR);
+				break;
+			case "STAMINA":
+				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.STA);
+				break;
+			case "AGILITY":
+				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.AGI);
+				break;
+			case "DEXTERITY":
+				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.DEX);
+				break;
+			case "INTELLIGENCE":
+				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.INT);
+				break;
+			case "WISDOM":
+				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.WIS);
+				break;
+			case "CHARISMA":
+				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.CHA);
+				break;
+			default:
+				break;
 			}
-			
+
 			if (effectIdLookup == 0)
 				return 0;
-			
-			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup))
-			{
+
+			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
 				total += effect.getBase1();
 			}
 			return total;
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return 0;
 		}
 	}
@@ -4163,34 +4554,31 @@ public class Utils {
 	public static double getTotalAAEffectMaxHp(LivingEntity bukkitLivingEntity) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
-		
-		try
-		{
-			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)bukkitLivingEntity);
+
+		try {
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
 			int total = 0;
-			
+
 			int effectIdLookup = 0;
 			effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.MaxHPChange);
-			
+
 			if (effectIdLookup == 0)
 				return 0;
-			
-			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup))
-			{
+
+			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
 				total += effect.getBase1();
 			}
 			return total;
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return 0;
 		}
 	}
 
 	public static int getCriticalChanceBonus(ISoliniaLivingEntity entity, String skillname) {
 		int critical_chance = 0;
-		
+
 		// TODO - take items, aa spells etc into account
-		if(critical_chance < -100)
+		if (critical_chance < -100)
 			critical_chance = -100;
 
 		return critical_chance;
@@ -4203,31 +4591,66 @@ public class Utils {
 	}
 
 	public static boolean isValidSkill(String skillname) {
-		try
-		{
-			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
-			{
+		try {
+			for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces()) {
 				if (skillname.toUpperCase().equals(race.getName().toUpperCase()))
 					return true;
 			}
-			
-			for (SkillType skillType : SkillType.values())
-			{
-				if(skillType.name().toUpperCase().equals(skillname.toUpperCase()))
+
+			for (SkillType skillType : SkillType.values()) {
+				if (skillType.name().toUpperCase().equals(skillname.toUpperCase()))
 					return true;
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return false;
 		}
-		
+
 		return false;
 	}
-	
+
 	public static String uuidFromBase64(String str) {
-	    byte[] bytes = Base64.decodeBase64(str);
-	    ByteBuffer bb = ByteBuffer.wrap(bytes);
-	    UUID uuid = new UUID(bb.getLong(), bb.getLong());
-	    return uuid.toString();
+		byte[] bytes = Base64.decodeBase64(str);
+		ByteBuffer bb = ByteBuffer.wrap(bytes);
+		UUID uuid = new UUID(bb.getLong(), bb.getLong());
+		return uuid.toString();
+	}
+
+	public static int getTotalItemAC(SoliniaLivingEntity soliniaLivingEntity) {
+		int total = 0;
+
+		try {
+			List<ItemStack> itemstacks = new ArrayList<ItemStack>();
+			for (ItemStack itemstack : soliniaLivingEntity.getBukkitLivingEntity().getEquipment().getArmorContents()) {
+				if (itemstack == null)
+					continue;
+
+				itemstacks.add(itemstack);
+			}
+
+			if (soliniaLivingEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand() != null)
+				itemstacks.add(soliniaLivingEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand());
+
+			// does not use item in hand
+
+			for (ItemStack itemstack : itemstacks) {
+				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0) {
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					}
+
+					total += item.getAC();
+					total += augItem.getAC();
+				}
+			}
+			return total;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return total;
+		}
 	}
 }

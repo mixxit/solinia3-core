@@ -221,4 +221,8 @@ public interface ISoliniaItem {
 	int getMinLevel();
 
 	void setMinLevel(int minLevel);
+
+	int getAC();
+
+	void setAC(int ac);
 }

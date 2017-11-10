@@ -72,6 +72,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isSummoner = false;
 	private int avoidanceRating = 0;
 	private int accuracyRating = 0;
+	private int ac = 0;
 	
 	@Override
 	public int getId() {
@@ -422,6 +423,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET);
 		sender.sendMessage("- accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
+		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET);
 		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
@@ -619,6 +621,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "killtriggertext":
 			setKillTriggerText(value);
 			break;
+		case "ac":
+			setAC(Integer.parseInt(value));
 		case "randomchattriggertext":
 			setRandomchatTriggerText(value);
 			break;
@@ -1081,6 +1085,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 	public void setAccuracyRating(int accuracyRating) {
 		this.accuracyRating = accuracyRating;
+	}
+
+	@Override
+	public int getAC() {
+		return ac;
+	}
+
+	@Override
+	public void setAC(int ac) {
+		this.ac = ac;
 	}
 }
 

@@ -76,6 +76,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
 	private String discoverer = "";
 	private int minLevel = 0;
+	private int ac = 0;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -574,6 +575,8 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- acceptsaugmentationslottype: " + ChatColor.GOLD + getAcceptsAugmentationSlotType() + ChatColor.RESET);
 		sender.sendMessage("- augmentationfitsslottype: " + ChatColor.GOLD + this.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET);
 		sender.sendMessage("- baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
 		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET);
@@ -703,8 +706,11 @@ public class SoliniaItem implements ISoliniaItem {
 		case "augmentationfitsslottype":
 			setAugmentationFitsSlotType(AugmentationSlotType.valueOf(value));
 			break;
+		case "ac":
+			setAC(Integer.parseInt(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac");
 		}
 	}
 
@@ -839,5 +845,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setMinLevel(int minLevel) {
 		this.minLevel = minLevel;
+	}
+
+	@Override
+	public int getAC() {
+		return ac;
+	}
+
+	@Override
+	public void setAC(int ac) {
+		this.ac = ac;
 	}
 }

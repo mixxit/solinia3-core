@@ -2526,7 +2526,234 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getMitigationAC() {
-		return 15;
+		return ACSum();
+	}
+	
+	@Override
+	public int ACSum()
+	{
+		double ac = 0;
+		ac += Utils.getTotalItemAC(this);
+		double shield_ac = 0;
+		
+		// EQ math
+		ac = (ac * 4) / 3;
+		// anti-twink
+		if (isPlayer() && getLevel() < 50)
+			ac = Math.min(ac, 25 + 6 * getLevel());
+		ac = Math.max(0, ac + getClassRaceACBonus());
+		
+		if (isNPC()) 
+		{
+			try
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				ac += npc.getAC();
+			} catch (CoreStateInitException e)
+			{
+				// dont get ac from npc type
+			}
+			
+			// TODO Pet avoidance
+			ac += getSkill("DEFENSE") / 5;
+			
+			double spell_aa_ac = 0;
+			// TODO AC AA and Spell bonuses
+			for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.ArmorClass))
+			{
+				spell_aa_ac += effect.getRemainingValue();
+			}
+			
+			spell_aa_ac += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
+			
+			if (getClassObj() != null)
+			{
+				if (getClassObj().getName().equals("ENCHANTER") || getClassObj().getName().equals("ENCHANTER"))
+				{
+					ac += spell_aa_ac / 3;
+				} else {
+					ac += spell_aa_ac / 4;
+				}
+			} else {
+				ac += spell_aa_ac / 4;
+			}
+			
+		} else 
+		{
+			double spell_aa_ac = 0;
+			// TODO AC AA and Spell bonuses
+			for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.ArmorClass))
+			{
+				spell_aa_ac += effect.getRemainingValue();
+			}
+			
+			spell_aa_ac += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
+			
+			if (getClassObj() != null)
+			{
+				if (getClassObj().getName().equals("ENCHANTER") || getClassObj().getName().equals("ENCHANTER"))
+				{
+					ac += getSkill("DEFENSE") / 2 + spell_aa_ac / 3;
+				} else {
+					ac += getSkill("DEFENSE") / 3 + spell_aa_ac / 4;
+				}
+			} else {
+				ac += getSkill("DEFENSE") / 3 + spell_aa_ac / 4;
+			}
+		}
+		
+		if (getAgility() > 70)
+			ac += getAgility() / 20;
+		if (ac < 0)
+			ac = 0;
+
+		if (isPlayer()) 
+		{
+			double softcap = getACSoftcap();
+			double returns = getSoftcapReturns();
+			
+			// TODO itembonuses
+			
+			int total_aclimitmod = 0;
+			for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.CombatStability))
+			{
+				total_aclimitmod += effect.getRemainingValue();
+			}
+			
+			total_aclimitmod += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.CombatStability);
+			
+			if (total_aclimitmod > 0)
+				softcap = (softcap * (100 + total_aclimitmod)) / 100;
+			softcap += shield_ac;
+			if (ac > softcap) {
+				double over_cap = ac - softcap;
+				ac = softcap + (over_cap * returns);
+			}
+		}
+		return (int)ac;
+	}
+
+	private double getSoftcapReturns() {
+		if (getClassObj() == null)
+			return 0.3;
+		
+		switch (getClassObj().getName().toUpperCase()) 
+		{
+		case "WARRIOR":
+			return 0.35;
+		case "CLERIC":
+		case "BARD":
+		case "MONK":
+			return 0.3;
+		case "PALADIN":
+		case "SHADOWKNIGHT":
+			return 0.33;
+		case "RANGER":
+			return 0.315;
+		case "DRUID":
+			return 0.265;
+		case "ROGUE":
+		case "SHAMAN":
+		case "BEASTLORD":
+		case "BERSERKER":
+			return 0.28;
+		case "NECROMANCER":
+		case "WIZARD":
+		case "MAGICIAN":
+		case "ENCHANTER":
+			return 0.25;
+		default:
+			return 0.3;
+		}
+	}
+
+	private int getACSoftcap() {
+		if (getClassObj() == null)
+			return 350;
+
+		int[] war_softcaps = { 312, 314, 316, 318, 320, 322, 324, 326, 328, 330, 332, 334, 336, 338, 340, 342, 344, 346,
+				348, 350, 352, 354, 356, 358, 360, 362, 364, 366, 368, 370, 372, 374, 376, 378, 380, 382, 384, 386, 388,
+				390, 392, 394, 396, 398, 400, 402, 404, 406, 408, 410, 412, 414, 416, 418, 420, 422, 424, 426, 428, 430,
+				432, 434, 436, 438, 440, 442, 444, 446, 448, 450, 452, 454, 456, 458, 460, 462, 464, 466, 468, 470, 472,
+				474, 476, 478, 480, 482, 484, 486, 488, 490, 492, 494, 496, 498, 500, 502, 504, 506, 508, 510, 512, 514,
+				516, 518, 520 };
+
+		int[] clrbrdmnk_softcaps = { 274, 276, 278, 278, 280, 282, 284, 286, 288, 290, 292, 292, 294, 296, 298, 300,
+				302, 304, 306, 308, 308, 310, 312, 314, 316, 318, 320, 322, 322, 324, 326, 328, 330, 332, 334, 336, 336,
+				338, 340, 342, 344, 346, 348, 350, 352, 352, 354, 356, 358, 360, 362, 364, 366, 366, 368, 370, 372, 374,
+				376, 378, 380, 380, 382, 384, 386, 388, 390, 392, 394, 396, 396, 398, 400, 402, 404, 406, 408, 410, 410,
+				412, 414, 416, 418, 420, 422, 424, 424, 426, 428, 430, 432, 434, 436, 438, 440, 440, 442, 444, 446, 448,
+				450, 452, 454, 454, 456 };
+
+		int[] palshd_softcaps = { 298, 300, 302, 304, 306, 308, 310, 312, 314, 316, 318, 320, 322, 324, 326, 328, 330,
+				332, 334, 336, 336, 338, 340, 342, 344, 346, 348, 350, 352, 354, 356, 358, 360, 362, 364, 366, 368, 370,
+				372, 374, 376, 378, 380, 382, 384, 384, 386, 388, 390, 392, 394, 396, 398, 400, 402, 404, 406, 408, 410,
+				412, 414, 416, 418, 420, 422, 424, 426, 428, 430, 432, 432, 434, 436, 438, 440, 442, 444, 446, 448, 450,
+				452, 454, 456, 458, 460, 462, 464, 466, 468, 470, 472, 474, 476, 478, 480, 480, 482, 484, 486, 488, 490,
+				492, 494, 496, 498 };
+
+		int[] rng_softcaps = { 286, 288, 290, 292, 294, 296, 298, 298, 300, 302, 304, 306, 308, 310, 312, 314, 316, 318,
+				320, 322, 322, 324, 326, 328, 330, 332, 334, 336, 338, 340, 342, 344, 344, 346, 348, 350, 352, 354, 356,
+				358, 360, 362, 364, 366, 368, 368, 370, 372, 374, 376, 378, 380, 382, 384, 386, 388, 390, 390, 392, 394,
+				396, 398, 400, 402, 404, 406, 408, 410, 412, 414, 414, 416, 418, 420, 422, 424, 426, 428, 430, 432, 434,
+				436, 436, 438, 440, 442, 444, 446, 448, 450, 452, 454, 456, 458, 460, 460, 462, 464, 466, 468, 470, 472,
+				474, 476, 478 };
+
+		int[] dru_softcaps = { 254, 256, 258, 260, 262, 264, 264, 266, 268, 270, 272, 272, 274, 276, 278, 280, 282, 282,
+				284, 286, 288, 290, 290, 292, 294, 296, 298, 300, 300, 302, 304, 306, 308, 308, 310, 312, 314, 316, 318,
+				318, 320, 322, 324, 326, 328, 328, 330, 332, 334, 336, 336, 338, 340, 342, 344, 346, 346, 348, 350, 352,
+				354, 354, 356, 358, 360, 362, 364, 364, 366, 368, 370, 372, 372, 374, 376, 378, 380, 382, 382, 384, 386,
+				388, 390, 390, 392, 394, 396, 398, 400, 400, 402, 404, 406, 408, 410, 410, 412, 414, 416, 418, 418, 420,
+				422, 424, 426 };
+
+		int[] rogshmbstber_softcaps = { 264, 266, 268, 270, 272, 272, 274, 276, 278, 280, 282, 282, 284, 286, 288, 290,
+				292, 294, 294, 296, 298, 300, 302, 304, 306, 306, 308, 310, 312, 314, 316, 316, 318, 320, 322, 324, 326,
+				328, 328, 330, 332, 334, 336, 338, 340, 340, 342, 344, 346, 348, 350, 350, 352, 354, 356, 358, 360, 362,
+				362, 364, 366, 368, 370, 372, 374, 374, 376, 378, 380, 382, 384, 384, 386, 388, 390, 392, 394, 396, 396,
+				398, 400, 402, 404, 406, 408, 408, 410, 412, 414, 416, 418, 418, 420, 422, 424, 426, 428, 430, 430, 432,
+				434, 436, 438, 440, 442 };
+
+		int[] necwizmagenc_softcaps = { 248, 250, 252, 254, 256, 256, 258, 260, 262, 264, 264, 266, 268, 270, 272, 272,
+				274, 276, 278, 280, 280, 282, 284, 286, 288, 288, 290, 292, 294, 296, 296, 298, 300, 302, 304, 304, 306,
+				308, 310, 312, 312, 314, 316, 318, 320, 320, 322, 324, 326, 328, 328, 330, 332, 334, 336, 336, 338, 340,
+				342, 344, 344, 346, 348, 350, 352, 352, 354, 356, 358, 360, 360, 362, 364, 366, 368, 368, 370, 372, 374,
+				376, 376, 378, 380, 382, 384, 384, 386, 388, 390, 392, 392, 394, 396, 398, 400, 400, 402, 404, 406, 408,
+				408, 410, 412, 414, 416 };
+
+		int level = Math.min(105, getLevel()) - 1;
+
+		switch (getClassObj().getName().toUpperCase()) {
+		case "WARRIOR":
+			return war_softcaps[level];
+		case "CLERIC":
+		case "BARD":
+		case "MONK":
+			return clrbrdmnk_softcaps[level];
+		case "PALADIN":
+		case "SHADOWKNIGHT":
+			return palshd_softcaps[level];
+		case "RANGER":
+			return rng_softcaps[level];
+		case "DRUID":
+			return dru_softcaps[level];
+		case "ROGUE":
+		case "SHAMAN":
+		case "BEASTLORD":
+		case "BERSERKER":
+			return rogshmbstber_softcaps[level];
+		case "NECROMANCER":
+		case "WIZARD":
+		case "MAGICIAN":
+		case "ENCHANTER":
+			return necwizmagenc_softcaps[level];
+		default:
+			return 350;
+		}
+	}
+
+	private int getClassRaceACBonus() {
+		// TODO Class Race Bonus
+		return 1;
 	}
 
 	@Override
