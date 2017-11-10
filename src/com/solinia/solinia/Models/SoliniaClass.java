@@ -166,7 +166,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- intelligenceitembonus: " + ChatColor.GOLD + getIntelligenceitembonus() + ChatColor.RESET);
 		sender.sendMessage("- wisdomitembonus: " + ChatColor.GOLD + getWisdomitembonus() + ChatColor.RESET);
 		sender.sendMessage("- charismaitembonus: " + ChatColor.GOLD + getCharismaitembonus() + ChatColor.RESET);
-		sender.sendMessage("- acitembonus: " + ChatColor.GOLD + getCharismaitembonus() + ChatColor.RESET);
+		sender.sendMessage("- acitembonus: " + ChatColor.GOLD + getACItemBonus() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- classitemprefix: " + ChatColor.GOLD + getClassItemPrefix() + ChatColor.RESET);
 		sender.sendMessage("- helmtypename: " + ChatColor.GOLD + getHelmtypename() + ChatColor.RESET);
