@@ -28,6 +28,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
 
 import com.comphenix.example.Vector3D;
+import com.fasterxml.jackson.module.afterburner.util.ClassName;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -48,6 +49,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
@@ -3009,7 +3011,7 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
-
+		
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {

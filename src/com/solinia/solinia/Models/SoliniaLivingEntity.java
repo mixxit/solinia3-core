@@ -249,6 +249,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							return false;
 						}
 					}
+					
+					if (soliniaitem.getMinLevel() > 0)
+					{
+						if (soliniaitem.getMinLevel() > getLevel())
+						{
+							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "You are not sufficient level to use this item");
+							return false;
+						}
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

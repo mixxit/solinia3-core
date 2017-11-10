@@ -9,6 +9,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
@@ -48,6 +49,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int safefalllevel = 0;
 	private String shortName = "";
 	private String classItemPrefix = "";
+	private int acitembonus = 0;
 	
 	@Override
 	public String getName() {
@@ -164,6 +166,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- intelligenceitembonus: " + ChatColor.GOLD + getIntelligenceitembonus() + ChatColor.RESET);
 		sender.sendMessage("- wisdomitembonus: " + ChatColor.GOLD + getWisdomitembonus() + ChatColor.RESET);
 		sender.sendMessage("- charismaitembonus: " + ChatColor.GOLD + getCharismaitembonus() + ChatColor.RESET);
+		sender.sendMessage("- acitembonus: " + ChatColor.GOLD + getCharismaitembonus() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- classitemprefix: " + ChatColor.GOLD + getClassItemPrefix() + ChatColor.RESET);
 		sender.sendMessage("- helmtypename: " + ChatColor.GOLD + getHelmtypename() + ChatColor.RESET);
@@ -197,32 +200,32 @@ public class SoliniaClass implements ISoliniaClass {
 			setName(value);
 			break;
 		case "defaultheadmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
+			if (!ConfigurationManager.ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultHeadMaterial(value.toUpperCase());
 			break;
 		case "defaultchestmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
+			if (!ConfigurationManager.ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultChestMaterial(value.toUpperCase());
 			break;
 		case "defaultlegsmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
+			if (!ConfigurationManager.ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultLegsMaterial(value.toUpperCase());
 			break;
 		case "defaultfeetmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(value.toUpperCase()))
+			if (!ConfigurationManager.ArmourMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultFeetMaterial(value.toUpperCase());
 			break;
 		case "defaulthandmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().HandMaterials.contains(value.toUpperCase()))
+			if (!ConfigurationManager.HandMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaulthandMaterial(value.toUpperCase());
 			break;
 		case "defaultoffhandmaterial":
-			if (!StateManager.getInstance().getConfigurationManager().HandMaterials.contains(value.toUpperCase()))
+			if (!ConfigurationManager.HandMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultoffHandMaterial(value.toUpperCase());
 			break;
@@ -249,6 +252,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "charismaitembonus":
 			this.setCharismaitembonus(Integer.parseInt(value));
+			break;
+		case "acitembonus":
+			this.setACItemBonus(Integer.parseInt(value));
 			break;
 		case "helmtypename":
 			this.setHelmtypename(value);
@@ -417,6 +423,8 @@ public class SoliniaClass implements ISoliniaClass {
 				return this.getWisdomitembonus();
 			case "charisma":
 				return this.getCharismaitembonus();
+			case "ac":
+				return this.getACItemBonus();
 			default:
 				return 0;
 		}
@@ -646,5 +654,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setClassItemPrefix(String classItemPrefix) {
 		this.classItemPrefix = classItemPrefix;
+	}
+	
+	@Override
+	public int getACItemBonus() {
+		return acitembonus;
+	}
+
+	@Override
+	public void setACItemBonus(int acitembonus) {
+		this.acitembonus = acitembonus;
 	}
 }

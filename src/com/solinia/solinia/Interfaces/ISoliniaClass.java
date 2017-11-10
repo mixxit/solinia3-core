@@ -116,4 +116,8 @@ public interface ISoliniaClass {
 
 	void setClassItemPrefix(String classItemPrefix);
 
+	int getACItemBonus();
+
+	void setACItemBonus(int acitembonus);
+
 }

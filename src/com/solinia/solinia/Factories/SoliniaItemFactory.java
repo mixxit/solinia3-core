@@ -13,6 +13,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Utils.Utils;
@@ -135,6 +136,8 @@ public class SoliniaItemFactory {
 				int classIntBonus = classtype.getItemGenerationBonus("intelligence");
 				int classWisBonus = classtype.getItemGenerationBonus("wisdom");
 				int classChaBonus = classtype.getItemGenerationBonus("charisma");
+				int classAcBonus = classtype.getItemGenerationBonus("ac");
+				
 
 				// Unless there is a bonus defined, the class doesnt seem to use that statistic
 				
@@ -154,12 +157,19 @@ public class SoliniaItemFactory {
 					item.setCharisma(Utils.RandomBetween(tierMin, tierMax + rarityBonus+classChaBonus));
 				
 				// Damage
-				if (StateManager.getInstance().getConfigurationManager().HandMaterials.contains(item.getBasename().toUpperCase()))
+				if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
 				{
-					item.setDamage(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus));
-				} else {
-					// AC
-					item.setAC(Utils.RandomBetween(tierMin,  tierMax + rarityBonus + classStaBonus));
+					if (!item.getBasename().toUpperCase().equals("SHIELD"))
+					{
+						item.setDamage(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus));
+					} else {
+						item.setAC(SoliniaItemFactory.generateArmourClass(classAcBonus, armourtier, rarityBonus));
+					}
+				}
+				
+				if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()))
+				{
+					item.setAC(SoliniaItemFactory.generateArmourClass(classAcBonus, armourtier, rarityBonus));
 				}
 				
 				// mana regen
@@ -184,5 +194,20 @@ public class SoliniaItemFactory {
 		}
 		
 		return items;
+	}
+
+	public static int generateArmourClass(int classAcBonus, int armourTier, int rarityBonus) {
+		// AC
+		int acMultiplier = classAcBonus;
+		if (acMultiplier < 1)
+			acMultiplier = 1;
+		
+		int acMin = 0;
+		int acMax = armourTier * acMultiplier;
+		if (armourTier > 1)
+			acMin =+ (acMultiplier * armourTier) - acMultiplier;
+
+		int armourClass = Utils.RandomBetween(acMin,acMax + rarityBonus);
+		return armourClass;
 	}
 }
