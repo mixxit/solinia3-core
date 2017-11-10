@@ -4645,7 +4645,9 @@ public class Utils {
 						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
 					}
 
+					if (item != null)
 					total += item.getAC();
+					if (augItem != null)
 					total += augItem.getAC();
 				}
 			}
