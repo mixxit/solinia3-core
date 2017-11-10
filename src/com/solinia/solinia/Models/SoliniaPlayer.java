@@ -29,6 +29,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
+import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
@@ -76,6 +77,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<PlayerQuest> playerQuests = new ArrayList<PlayerQuest>();
 	private List<String> playerQuestFlags = new ArrayList<String>();
 	private UUID fealty;
+	private UUID voteemperor;
 	
 	@Override
 	public List<UUID> getIgnoredPlayers()
@@ -180,6 +182,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				king = "King ";
 			else
 				king = "Queen ";
+		}
+		
+		if (isAlignmentEmperor())
+		{
+			king = "Emperor";
 		}
 		
 		String displayName = king + getFullName();
@@ -1835,5 +1842,50 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public boolean isAlignmentEmperor()
+	{
+		try {
+			if (getRace() == null)
+				return false;
+			
+			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(getRace().getAlignment());
+			
+			if (alignment == null)
+				return false;
+			
+			if (alignment.getEmperor() == null)
+				return false;
+			
+			if (alignment.getEmperor().equals(getUUID()))
+				return true;
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public UUID getVoteEmperor() {
+		return voteemperor;
+	}
+
+	@Override
+	public void setVoteEmperor(UUID uniqueId) {
+		Entity fealtyTo = Bukkit.getEntity(uniqueId);
+		
+		if (uniqueId.equals(this.getUUID()))
+			return;
+		
+		if (fealtyTo == null)
+			return;
+		
+		if (!(fealtyTo instanceof Player))
+			return;
+		
+		this.voteemperor = voteemperor;
 	}
 }

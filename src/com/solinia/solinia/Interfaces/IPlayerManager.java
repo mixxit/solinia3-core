@@ -22,4 +22,5 @@ public interface IPlayerManager {
 	List<ISoliniaPlayer> getPlayers();
 	List<ISoliniaPlayer> getTopLevelPlayers();
 	public String getPlayerNameByUUID(UUID king);
+	ISoliniaPlayer getPlayerDataOnly(UUID uniqueId);
 }

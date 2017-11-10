@@ -55,6 +55,14 @@ public class PlayerManager implements IPlayerManager {
 	}
 	
 	@Override
+	public ISoliniaPlayer getPlayerDataOnly(UUID uniqueId) {
+		if (repository.query(p ->p.getUUID().equals(uniqueId)).size() == 0)
+			return null;
+		
+		return repository.query(p ->p.getUUID().equals(uniqueId)).get(0);
+	}
+	
+	@Override
 	public List<ISoliniaPlayer> getPlayers() {
 		return repository.query(p ->p.getUUID() != null);
 	}

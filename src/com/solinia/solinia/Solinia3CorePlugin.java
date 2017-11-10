@@ -15,6 +15,7 @@ import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandConvertMerchantToLootDrop;
+import com.solinia.solinia.Commands.CommandCreateAlignment;
 import com.solinia.solinia.Commands.CommandCreateAllArmourSets;
 import com.solinia.solinia.Commands.CommandCreateArmourSet;
 import com.solinia.solinia.Commands.CommandCreateFaction;
@@ -87,6 +88,7 @@ import com.solinia.solinia.Commands.CommandToday;
 import com.solinia.solinia.Commands.CommandToggleAA;
 import com.solinia.solinia.Commands.CommandTrance;
 import com.solinia.solinia.Commands.CommandUpdateSpawnGroupLoc;
+import com.solinia.solinia.Commands.CommandVoteEmperor;
 import com.solinia.solinia.Commands.CommandWho;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
@@ -104,6 +106,7 @@ import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
+import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
@@ -301,13 +304,17 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonQuestRepository questsrepo = new JsonQuestRepository();
 			questsrepo.setJsonFile(getDataFolder() + "/" + "quests.json");
 			questsrepo.reload();
+
+			JsonAlignmentRepository alignmentsrepo = new JsonAlignmentRepository();
+			alignmentsrepo.setJsonFile(getDataFolder() + "/" + "alignments.json");
+			alignmentsrepo.reload();
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
-					perkrepo, aaabilityrepo, patchesrepo, questsrepo);
+					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -454,6 +461,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("loot").setExecutor(new CommandLoot());		
 		this.getCommand("createallarmoursets").setExecutor(new CommandCreateAllArmourSets());
 		this.getCommand("swearfealty").setExecutor(new CommandSwearFealty());
+		this.getCommand("voteemperor").setExecutor(new CommandVoteEmperor());
+		this.getCommand("createalignment").setExecutor(new CommandCreateAlignment());
 	}
 
 	private void createConfigDir() {

@@ -219,6 +219,8 @@ public interface IConfigurationManager {
 
 	List<ISoliniaPatch> getPatches();
 
+	List<ISoliniaAlignment> getAlignments();
+	
 	void editRace(int raceid, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidRaceSettingException;
 
@@ -258,5 +260,13 @@ public interface IConfigurationManager {
 
 	void resetAARankRepository();
 
-	void updateKings();
+	void updateKingsAndEmperors();
+
+	int getNextAlignmentId();
+
+	ISoliniaAlignment getAlignment(int Id);
+
+	ISoliniaAlignment getAlignment(String alignment);
+
+	void addAlignment(String upperCase) throws Exception;
 }

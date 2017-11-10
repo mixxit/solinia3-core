@@ -229,4 +229,9 @@ public interface ISoliniaPlayer extends Serializable {
 	UUID getFealty();
 
 	boolean isRacialKing();
+
+	public void setVoteEmperor(UUID uniqueId);
+	public UUID getVoteEmperor();
+
+	boolean isAlignmentEmperor();
 }

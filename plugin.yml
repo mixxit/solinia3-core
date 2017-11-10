@@ -204,6 +204,14 @@ commands:
     description: Swears fealty to a player
     usage: /swearfealty mcplayername
     aliases: []
+  createalignment:
+    description: Creates a new alignment
+    usage: /createalignment name
+    aliases: []
+  voteemperor:
+    description: Votes for a player to be an emperor of your alignment
+    usage: /voteemperor mcplayername
+    aliases: []
   createmerchantlist:
     description: Creates a merchant list
     usage: /createmerchantlist name

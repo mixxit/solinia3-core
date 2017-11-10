@@ -10,7 +10,7 @@ public class KingCheckTimer extends BukkitRunnable {
 	public void run() {
 
 		try {
-			StateManager.getInstance().getConfigurationManager().updateKings();
+			StateManager.getInstance().getConfigurationManager().updateKingsAndEmperors();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

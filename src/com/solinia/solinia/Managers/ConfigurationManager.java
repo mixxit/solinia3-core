@@ -32,6 +32,7 @@ import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
+import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -47,12 +48,14 @@ import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
+import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
@@ -81,12 +84,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	private ConcurrentHashMap<Integer, List<Integer>> spellaarankcache = new ConcurrentHashMap<Integer, List<Integer>>();
 	private IRepository<ISoliniaQuest> questRepository;
 	private IRepository<ISoliniaPatch> patchesRepository;
+	private IRepository<ISoliniaAlignment> alignmentsRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -102,6 +106,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		resetAARankRepository();
 		this.patchesRepository = patchesContext;
 		this.questRepository = questsContext;
+		this.alignmentsRepository = alignmentsContext;
 	}
 	
 	@Override
@@ -207,6 +212,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public List<ISoliniaAlignment> getAlignments() {
+		return alignmentsRepository.query(q -> q.getId() > 0);
+	}
+	
+	
+	@Override
 	public List<ISoliniaNPCMerchant> getNPCMerchants() {
 		// TODO Auto-generated method stub
 		return npcmerchantRepository.query(q -> q.getId() > 0);
@@ -278,6 +289,16 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return null;
 	}
+	
+	@Override
+	public ISoliniaAlignment getAlignment(int Id) {
+		// TODO Auto-generated method stub
+		List<ISoliniaAlignment> list = alignmentsRepository.query(q -> q.getId() == Id);
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
 
 	@Override
 	public ISoliniaFaction getFaction(int Id) {
@@ -293,6 +314,16 @@ public class ConfigurationManager implements IConfigurationManager {
 	public ISoliniaFaction getFaction(String faction) {
 		// TODO Auto-generated method stub
 		List<ISoliniaFaction> list = factionRepository.query(q -> q.getName().equals(faction));
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
+	
+	@Override
+	public ISoliniaAlignment getAlignment(String alignment) {
+		// TODO Auto-generated method stub
+		List<ISoliniaAlignment> list = alignmentsRepository.query(q -> q.getName().equals(alignment));
 		if (list.size() > 0)
 			return list.get(0);
 
@@ -436,6 +467,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.spawngroupRepository.commit();
 		this.aaabilitiesRepository.commit();
 		this.questRepository.commit();
+		this.alignmentsRepository.commit();
 	}
 
 	@Override
@@ -477,6 +509,17 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 
 		return maxRace + 1;
+	}
+	
+	@Override
+	public int getNextAlignmentId() {
+		int maxAlignment = 0;
+		for (ISoliniaAlignment alignment : getAlignments()) {
+			if (alignment.getId() > maxAlignment)
+				maxAlignment = alignment.getId();
+		}
+
+		return maxAlignment + 1;
 	}
 
 	@Override
@@ -917,7 +960,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public void updateKings() {
+	public void updateKingsAndEmperors() {
+		
+		List<UUID> goodkingCache = new ArrayList<UUID>();
+		List<UUID> neutralkingCache = new ArrayList<UUID>();
+		List<UUID> evilkingCache = new ArrayList<UUID>();
 		
 		for(ISoliniaRace race : getRaces())
 		{
@@ -930,6 +977,14 @@ public class ConfigurationManager implements IConfigurationManager {
 						continue;
 					
 					if (player.getFealty() == null)
+						continue;
+					
+					ISoliniaPlayer fealtyPlayer = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getFealty());
+					
+					if (fealtyPlayer.getRaceId() != player.getRaceId())
+						continue;
+					
+					if (fealtyPlayer.isAlignmentEmperor())
 						continue;
 					
 					if (!kingCount.containsKey(player.getFealty()))
@@ -953,6 +1008,21 @@ public class ConfigurationManager implements IConfigurationManager {
 				{
 					if (race.getKing() == null || !race.getKing().equals(maxEntry.getKey()))
 						StateManager.getInstance().getConfigurationManager().getRace(race.getId()).setKing(maxEntry.getKey());
+					
+					switch(race.getAlignment())
+					{
+						case "GOOD":
+							goodkingCache.add(maxEntry.getKey());
+							break;
+						case "NEUTRAL":
+							neutralkingCache.add(maxEntry.getKey());
+							break;
+						case "EVIL":
+							evilkingCache.add(maxEntry.getKey());
+							break;
+						default:
+							break;
+					}
 				}
 				
 			} catch (CoreStateInitException e) {
@@ -960,5 +1030,205 @@ public class ConfigurationManager implements IConfigurationManager {
 				e.printStackTrace();
 			}
 		}
+		
+		try
+		{
+			// Good
+			HashMap<UUID,Integer> goodkingCount = new HashMap<UUID,Integer>();
+			
+			if (StateManager.getInstance().getConfigurationManager().getAlignment("GOOD") != null)
+			for (UUID king : goodkingCache)
+			{
+				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(king);
+				if (player == null)
+					continue;
+				
+				if (player.getRace() == null)
+					continue;
+				
+				if (!player.isRacialKing())
+					continue;
+				
+				if (player.getVoteEmperor() == null)
+					continue;
+				
+				if (player.getVoteEmperor().equals(player.getUUID()))
+					continue;
+				
+				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getVoteEmperor());
+				if (fealty == null)
+					continue;
+				
+				if (fealty.getRace() == null)
+					continue;
+				
+				if (!fealty.getRace().getAlignment().equals(player.getRace().getAlignment()))
+					continue;
+				
+				if (fealty.isRacialKing())
+					continue;
+				
+				if (!goodkingCount.containsKey(player.getVoteEmperor()))
+				{
+					goodkingCount.put(player.getVoteEmperor(), 1);
+				} else {
+					goodkingCount.put(player.getVoteEmperor(), goodkingCount.get(player.getVoteEmperor())+1);
+				}
+			}
+			
+			Entry<UUID,Integer> maxEntry = null;
+			for(Entry<UUID,Integer> entry : goodkingCount.entrySet())
+			{
+				if (maxEntry == null || entry.getValue() > maxEntry.getValue()) 
+				{
+			        maxEntry = entry;
+			    }
+			}
+			
+			if (maxEntry != null)
+			{
+				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("GOOD");
+				if (alignment.getEmperor() == null || !alignment.getEmperor().equals(maxEntry.getKey()))
+					StateManager.getInstance().getConfigurationManager().getAlignment("GOOD").setEmperor(maxEntry.getKey());
+			}
+			
+			// Neutral
+			HashMap<UUID,Integer> neutralkingCount = new HashMap<UUID,Integer>();
+			
+			if (StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL") != null)
+			for (UUID king : neutralkingCache)
+			{
+				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(king);
+				if (player == null)
+					continue;
+				
+				if (player.getRace() == null)
+					continue;
+				
+				if (!player.isRacialKing())
+					continue;
+				
+				if (player.getVoteEmperor() == null)
+					continue;
+				
+				if (player.getVoteEmperor().equals(player.getUUID()))
+					continue;
+				
+				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getVoteEmperor());
+				if (fealty == null)
+					continue;
+				
+				if (fealty.getRace() == null)
+					continue;
+				
+				if (!fealty.getRace().getAlignment().equals(player.getRace().getAlignment()))
+					continue;
+				
+				if (fealty.isRacialKing())
+					continue;
+				
+				if (!neutralkingCount.containsKey(player.getVoteEmperor()))
+				{
+					neutralkingCount.put(player.getVoteEmperor(), 1);
+				} else {
+					neutralkingCount.put(player.getVoteEmperor(), neutralkingCount.get(player.getVoteEmperor())+1);
+				}
+			}
+			
+			maxEntry = null;
+			for(Entry<UUID,Integer> entry : neutralkingCount.entrySet())
+			{
+				if (maxEntry == null || entry.getValue() > maxEntry.getValue()) 
+				{
+			        maxEntry = entry;
+			    }
+			}
+			
+			if (maxEntry != null)
+			{
+				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL");
+				if (alignment.getEmperor() == null || !alignment.getEmperor().equals(maxEntry.getKey()))
+					StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL").setEmperor(maxEntry.getKey());
+			}
+			
+			// Evil
+			HashMap<UUID,Integer> evilkingCount = new HashMap<UUID,Integer>();
+			
+			if (StateManager.getInstance().getConfigurationManager().getAlignment("EVIL") != null)
+			for (UUID king : evilkingCache)
+			{
+				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(king);
+				if (player == null)
+					continue;
+				
+				if (player.getRace() == null)
+					continue;
+				
+				if (!player.isRacialKing())
+					continue;
+				
+				if (player.getVoteEmperor() == null)
+					continue;
+				
+				if (player.getVoteEmperor().equals(player.getUUID()))
+					continue;
+				
+				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getVoteEmperor());
+				if (fealty == null)
+					continue;
+				
+				if (fealty.getRace() == null)
+					continue;
+				
+				if (!fealty.getRace().getAlignment().equals(player.getRace().getAlignment()))
+					continue;
+				
+				if (fealty.isRacialKing())
+					continue;
+				
+				if (!evilkingCount.containsKey(player.getVoteEmperor()))
+				{
+					evilkingCount.put(player.getVoteEmperor(), 1);
+				} else {
+					evilkingCount.put(player.getVoteEmperor(), evilkingCount.get(player.getVoteEmperor())+1);
+				}
+			}
+			
+			maxEntry = null;
+			
+			for(Entry<UUID,Integer> entry : evilkingCount.entrySet())
+			{
+				if (maxEntry == null || entry.getValue() > maxEntry.getValue()) 
+				{
+			        maxEntry = entry;
+			    }
+			}
+			
+			if (maxEntry != null)
+			{
+				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("EVIL");
+				if (alignment.getEmperor() == null || !alignment.getEmperor().equals(maxEntry.getKey()))
+					StateManager.getInstance().getConfigurationManager().getAlignment("EVIL").setEmperor(maxEntry.getKey());
+			}
+			
+		} catch (CoreStateInitException e)
+		{
+			// try next loop
+		}
+	}
+
+	@Override
+	public void addAlignment(String alignmentname) throws Exception {
+		for(ISoliniaAlignment alignment : getAlignments())
+		{
+			if (alignment.getName().equals(alignmentname.toUpperCase()))
+				throw new Exception("Alignment already exists");
+		}
+		
+		SoliniaAlignment alignment = new SoliniaAlignment();
+		alignment.setId(getNextAlignmentId());
+		alignment.setName(alignmentname);
+		
+		alignmentsRepository.add(alignment);
 	}
 }
