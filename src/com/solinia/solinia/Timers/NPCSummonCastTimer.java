@@ -6,9 +6,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 
-public class NPCSpellCastTimer extends BukkitRunnable {
+public class NPCSummonCastTimer extends BukkitRunnable {
 	Plugin plugin;
-	public NPCSpellCastTimer(Plugin plugin)
+	public NPCSummonCastTimer(Plugin plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -16,7 +16,7 @@ public class NPCSpellCastTimer extends BukkitRunnable {
 	public void run() {
 
 		try {
-			StateManager.getInstance().getEntityManager().doNPCSpellCast(plugin);
+			StateManager.getInstance().getEntityManager().doNPCSummon(plugin);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

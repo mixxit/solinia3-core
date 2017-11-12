@@ -13,6 +13,7 @@ import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Models.SpellType;
 
 public interface ISoliniaSpell {
 
@@ -1016,8 +1017,6 @@ public interface ISoliniaSpell {
 
 	boolean isDamageShield();
 
-	boolean isCure();
-
 	boolean isDot();
 
 	boolean isGroupSpell();
@@ -1037,4 +1036,20 @@ public interface ISoliniaSpell {
 			int sourceLevel, int ticksleft);
 
 	boolean isBardSong();
+	
+	int getSpellType();
+
+	boolean isCureSpell();
+
+	boolean isNuke();
+
+	boolean isResistable();
+
+	boolean isResistDebuffSpell();
+
+	boolean isDetrimental();
+
+	boolean isInvisSpell();
+
+	int getMinLevelClass(String name);
 }

@@ -125,6 +125,7 @@ import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.KingCheckTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
+import com.solinia.solinia.Timers.NPCSummonCastTimer;
 import com.solinia.solinia.Timers.PerkLoadTimer;
 import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
@@ -146,6 +147,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PlayerRegenTickTimer playerRegenTimer;
 	private SpellTickTimer spellTickTimer;
 	private NPCSpellCastTimer npcSpellCastTimer;
+	private NPCSummonCastTimer npcSummonCastTimer;
 	private PlayerInteractionTimer playerInteractionTimer;
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 	private NPCRandomChatTimer npcRandomChatTimer;
@@ -349,8 +351,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			npcRandomChatTimer.runTaskTimer(this, 6 * 20L, 60 * 20L);
 
 			npcSpellCastTimer = new NPCSpellCastTimer(this);
-			npcSpellCastTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+			npcSpellCastTimer.runTaskTimer(this, 3 * 20L, 3 * 20L);
 
+			npcSummonCastTimer = new NPCSummonCastTimer(this);
+			npcSummonCastTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+			
 			petCheckTickTimer = new PetCheckTickTimer();
 			petCheckTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 

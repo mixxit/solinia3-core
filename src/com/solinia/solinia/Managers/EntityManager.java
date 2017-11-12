@@ -40,6 +40,7 @@ import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Models.SpellType;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -51,6 +52,11 @@ import net.minecraft.server.v1_12_R1.GenericAttributes;
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
+	private ConcurrentHashMap<UUID, Timestamp> dontHealMe = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> dontRootMe = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> dontBuffMe = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> dontSnareMe = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> dontDotMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
@@ -637,5 +643,94 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 		}
+	}
+
+	@Override
+	public int getAIEngagedBeneficialSelfChance() {
+		return 65;
+	}
+
+	@Override
+	public int getAIEngagedBeneficialOtherChance() {
+		return 25;
+	}
+
+	@Override
+	public int getAIEngagedDetrimentalChance() {
+		return 50;
+	}
+
+	@Override
+	public int getAIBeneficialBuffSpellRange() {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+
+	@Override
+	public Timestamp getDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType) 
+	{
+		Timestamp timestamp = null;
+		
+		if (spellType == SpellType.Heal)
+			timestamp = dontHealMe.get(bukkitLivingEntity.getUniqueId());
+		
+		if (spellType == SpellType.Root)
+			timestamp = dontRootMe.get(bukkitLivingEntity.getUniqueId());
+		
+		if (spellType == SpellType.Buff)
+			timestamp = dontBuffMe.get(bukkitLivingEntity.getUniqueId());
+		
+		if (spellType == SpellType.Snare)
+			timestamp = dontSnareMe.get(bukkitLivingEntity.getUniqueId());
+		
+		if (spellType == SpellType.DOT)
+			timestamp = dontDotMe.get(bukkitLivingEntity.getUniqueId());
+		
+		if (timestamp != null)
+		{
+			return timestamp;
+		}
+		else
+		{
+			Calendar calendar = Calendar.getInstance();
+			java.util.Date now = calendar.getTime();
+			Timestamp nowtimestamp = new Timestamp(now.getTime());
+			
+			if (spellType == SpellType.Heal)
+				dontHealMe.put(bukkitLivingEntity.getUniqueId(),nowtimestamp);
+			
+			if (spellType == SpellType.Root)
+				dontRootMe.put(bukkitLivingEntity.getUniqueId(),nowtimestamp);
+			
+			if (spellType == SpellType.Buff)
+				dontBuffMe.put(bukkitLivingEntity.getUniqueId(),nowtimestamp);
+			
+			if (spellType == SpellType.Snare)
+				dontSnareMe.put(bukkitLivingEntity.getUniqueId(),nowtimestamp);
+			
+			if (spellType == SpellType.DOT)
+				dontDotMe.put(bukkitLivingEntity.getUniqueId(),nowtimestamp);
+				
+			return nowtimestamp;
+		}
+	}
+
+	@Override
+	public void setDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType, Timestamp timestamp) {
+		if (spellType == SpellType.Heal)
+			dontHealMe.put(bukkitLivingEntity.getUniqueId(),timestamp);
+		
+		if (spellType == SpellType.Root)
+			dontRootMe.put(bukkitLivingEntity.getUniqueId(),timestamp);
+		
+		if (spellType == SpellType.Buff)
+			dontBuffMe.put(bukkitLivingEntity.getUniqueId(),timestamp);
+		
+		if (spellType == SpellType.Snare)
+			dontSnareMe.put(bukkitLivingEntity.getUniqueId(),timestamp);
+		
+		if (spellType == SpellType.DOT)
+			dontDotMe.put(bukkitLivingEntity.getUniqueId(),timestamp);
+
 	}
 }

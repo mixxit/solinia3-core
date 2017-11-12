@@ -1650,7 +1650,7 @@ public class SoliniaActiveSpell {
 	}
 	
 	private void applyPoisonCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!soliniaSpell.isCure())
+		if (!soliniaSpell.isCureSpell())
 			return;
 		
 		try
@@ -1681,7 +1681,7 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyDiseaseCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!soliniaSpell.isCure())
+		if (!soliniaSpell.isCureSpell())
 			return;
 
 		try

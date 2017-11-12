@@ -3573,6 +3573,21 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return false;
 	}
 	
+	@Override
+	public boolean isNuke()
+	{
+		for(SpellEffect spellEffect : getBaseSpellEffects())
+		{
+			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce) || spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP)) &&
+					Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1 
+					&& spellEffect.getBase() < 0
+					)
+				return true;
+		}
+		
+		return false;
+	}
+	
 	@Override 
 	public SpellEffectType getEffectType1()
 	{
@@ -3717,7 +3732,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return false;
 	}
 
-	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, SoliniaSpell soliniaSpell) throws CoreStateInitException {
+	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, ISoliniaSpell soliniaSpell) throws CoreStateInitException {
 		if (source == null)
 		{
 			System.out.println("Source was null for isValidEffectForEntity: " + soliniaSpell.getName() + " on target: " + target.getCustomName());
@@ -4218,6 +4233,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 	}
 
+	@Override
 	public boolean isResistable() {
 		if (isDetrimental() && !isResistDebuffSpell())
 			return true;
@@ -4225,6 +4241,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return false;
 	}
 	
+	@Override
 	public boolean isResistDebuffSpell()
 	{
 		if ((isEffectInSpell(SpellEffectType.ResistFire) || isEffectInSpell(SpellEffectType.ResistCold) ||
@@ -4236,7 +4253,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return false;
 	}
 
-	private boolean isDetrimental() {
+	@Override
+	public boolean isDetrimental() {
 		return !isBeneficial();
 	}
 
@@ -4252,7 +4270,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 	
 	@Override
-	public boolean isCure()
+	public boolean isCureSpell()
 	{
 		boolean CureEffect = false;
 
@@ -4288,6 +4306,212 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int getSpellType() {
+		if (isNuke())
+			return SpellType.Nuke;
+		
+		if (isHealSpell())
+			return SpellType.Heal;
+		
+		if (isRootSpell())
+			return SpellType.Root;
+		
+		if (isBuffSpell())
+			return SpellType.Buff;
+		
+		if (isEscapeSpell())
+			return SpellType.Escape;
+		
+		if (isPetSpell())
+			return SpellType.Pet;
+		
+		if (isLifetapSpell())
+			return SpellType.Lifetap;
+		
+		if (isSnareSpell())
+			return SpellType.Snare;
+		
+		if (isDot())
+			return SpellType.DOT;
+		
+		if (isDispell())
+			return SpellType.Dispel;
+		
+		if (isInCombatBuff())
+			return SpellType.InCombatBuff;
+		
+		if (isMezSpell())
+			return SpellType.Mez;
+		
+		if (isCharmSpell())
+			return SpellType.Charm;
+		
+		if (isDebuff())
+			return SpellType.Debuff;
+		
+		if (isCureSpell())
+			return SpellType.Cure;
+		
+		if (isResurrectSpell())
+			return SpellType.Resurrect;
+		
+		if (isHateRedux())
+			return SpellType.HateRedux;
+		
+		if (isInCombatBuffSong())
+			return SpellType.InCombatBuffSong;
+		
+		if (isOutOfCombatBuffSong())
+			return SpellType.OutOfCombatBuffSong;
+		
+		if (isPreCombatBuff())
+			return SpellType.PreCombatBuff;
+		
+		if (isPreCombatBuffSong())
+			return SpellType.PreCombatBuffSong;
+		
+		return 0;
+	}
+
+	private boolean isPreCombatBuffSong() {
+		if (!isBardSong())
+			return false;
+
+		return false;
+	}
+
+	private boolean isPreCombatBuff() {
+		return isBuffSpell();
+	}
+
+	private boolean isOutOfCombatBuffSong() {
+		if (!isBardSong())
+			return false;
+
+		return false;
+	}
+
+	private boolean isInCombatBuffSong() {
+		if (!isBardSong())
+			return false;
+		
+		return isBuffSpell();
+	}
+
+	private boolean isHateRedux() {
+		return isEffectInSpell(SpellEffectType.Hate);
+	}
+
+	private boolean isResurrectSpell() {
+		return isEffectInSpell(SpellEffectType.Revive);
+	}
+
+	private boolean isDebuff() {
+		if (isBeneficial() || isEffectHitpointsSpell() || isStunSpell() ||
+				isMezSpell() || isCharmSpell() || isSlowSpell() ||
+				isEffectInSpell(SpellEffectType.Root) || isEffectInSpell(SpellEffectType.CancelMagic) ||
+				isEffectInSpell(SpellEffectType.MovementSpeed) || isFearSpell() || isEffectInSpell(SpellEffectType.InstantHate))
+			return false;
+		else
+			return true;
+	}
+	
+	public boolean isEffectHitpointsSpell()
+	{
+		return isEffectInSpell(SpellEffectType.CurrentHP);
+	}
+	
+	private boolean isStunSpell()
+	{
+		return isEffectInSpell(SpellEffectType.Stun);
+	}
+
+	private boolean isCharmSpell() {
+		return isEffectInSpell(SpellEffectType.Charm);
+	}
+	
+	private boolean isSlowSpell() {
+		for(SpellEffect effect : getBaseSpellEffects())
+		{
+			if ((effect.getSpellEffectType().equals(SpellEffectType.AttackSpeed) && effect.getBase() < 100) || effect.getSpellEffectType().equals(SpellEffectType.AttackSpeed4))
+				return true;
+		}
+
+		return false;
+	}
+	
+	
+	private boolean isFearSpell() {
+		return isEffectInSpell(SpellEffectType.Fear);
+	}
+
+	private boolean isMezSpell() {
+		return isEffectInSpell(SpellEffectType.Mez);
+	}
+
+	private boolean isInCombatBuff() {
+		return isBuffSpell();
+	}
+
+	private boolean isDispell() {
+		return (isEffectInSpell(SpellEffectType.DispelBeneficial) || isEffectInSpell(SpellEffectType.DispelDetrimental));
+	}
+
+	private boolean isSnareSpell() {
+		if (!isBeneficial())
+			return isEffectInSpell(SpellEffectType.MovementSpeed);
+		
+		return false;
+	}
+
+	private boolean isPetSpell() {
+		return isEffectInSpell(SpellEffectType.SummonPet);
+	}
+
+	private boolean isEscapeSpell() {
+		return (isEffectInSpell(SpellEffectType.Gate) || isEffectInSpell(SpellEffectType.Translocate) || isEffectInSpell(SpellEffectType.TranslocatetoAnchor) || isEffectInSpell(SpellEffectType.Teleport) || isEffectInSpell(SpellEffectType.Teleport2) || isEffectInSpell(SpellEffectType.TeleporttoAnchor));
+	}
+
+	private boolean isRootSpell() {
+		return isEffectInSpell(SpellEffectType.Root);
+	}
+
+	private boolean isHealSpell() {
+		for(SpellEffect effect : getBaseSpellEffects())
+		{
+			if ((effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && effect.getBase() > 0))
+				return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isInvisSpell() {
+		if (getSpellEffectTypes().contains(SpellEffectType.Invisibility) ||
+				getSpellEffectTypes().contains(SpellEffectType.Invisibility2) ||
+				getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals) ||
+				getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
+				getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2) ||
+				getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)
+						)
+			return true;
+		
+		return false;
+	}
+
+	@Override
+	public int getMinLevelClass(String name) {
+		for(SoliniaSpellClass spellclass : this.getAllowedClasses())
+		{
+			if (spellclass.getClassname().toUpperCase().equals(name.toUpperCase()))
+				return spellclass.getMinlevel();
+		}
+		
+		return 1000;
 	}
 
 }

@@ -483,6 +483,16 @@ public class Utils {
 
 		return false;
 	}
+	
+	public static boolean RandomRoll(int max) {
+		Random r = new Random();
+		int random = Utils.RandomBetween(0, 100);
+		if (random < max) {
+			return true;
+		}
+
+		return false;
+	}
 
 	public static int RandomBetween(int minnumber, int maxnumber) {
 		Random r = new Random();
@@ -4656,5 +4666,27 @@ public class Utils {
 			e.printStackTrace();
 			return total;
 		}
+	}
+
+	public static void DebugMessage(String string) {
+		//System.out.println(string);
+	}
+
+	public static boolean hasSpellActive(ISoliniaLivingEntity target, ISoliniaSpell spell) {
+		for (SoliniaActiveSpell activeSpell : target.getActiveSpells())
+		{
+			if (activeSpell.getSpell().getId() == spell.getId())
+				continue;
+			
+			return true;
+		}
+		
+		return false;
+	}
+
+	public static Integer getDefaultNPCManaRegen(ISoliniaNPC npc) {
+		if (npc.isBoss())
+			return npc.getLevel() * 13;
+		return npc.getLevel() * 3;
 	}
 }

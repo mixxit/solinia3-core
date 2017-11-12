@@ -82,4 +82,16 @@ public interface IEntityManager {
 	void addEntitySpellCooldown(LivingEntity livingEntity, int spellId, Timestamp expiretimestamp);
 
 	Timestamp getEntitySpellCooldown(LivingEntity livingEntity, int spellId);
+
+	int getAIEngagedBeneficialSelfChance();
+
+	int getAIEngagedBeneficialOtherChance();
+
+	int getAIEngagedDetrimentalChance();
+
+	int getAIBeneficialBuffSpellRange();
+
+	Timestamp getDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType);
+
+	void setDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType, Timestamp timestamp);
 }
