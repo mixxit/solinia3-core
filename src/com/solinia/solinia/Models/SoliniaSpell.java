@@ -3786,7 +3786,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				}
 			}
 			
-			System.out.println("Detected a self only spell (" + soliniaSpell.getName() + "), returning as valid, always");
+			//System.out.println("Detected a self only spell (" + soliniaSpell.getName() + "), returning as valid, always");
 				return true;	
 		}
 		
