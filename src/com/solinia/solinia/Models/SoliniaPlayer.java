@@ -922,7 +922,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
     	try
     	{
 	    	if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
-				player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
+				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]  (Hold crouch or use /trance to meditate)");
 				return;
 			}
 	    	
