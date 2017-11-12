@@ -647,7 +647,7 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public int getAIEngagedBeneficialSelfChance() {
-		return 65;
+		return 50;
 	}
 
 	@Override
@@ -657,7 +657,7 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public int getAIEngagedDetrimentalChance() {
-		return 50;
+		return 75;
 	}
 
 	@Override
