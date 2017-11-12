@@ -91,6 +91,7 @@ public interface ISoliniaLivingEntity
 	public double getMaxHP();
 
 	boolean isUndead();
+	boolean isAnimal();
 
 	void configurePetGoals();
 

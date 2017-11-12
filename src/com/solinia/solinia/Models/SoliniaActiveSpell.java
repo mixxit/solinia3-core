@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -327,17 +328,21 @@ public class SoliniaActiveSpell {
 			return;
 		case DetectTraps
 			: return;
-		case SenseDead
-			: return;
-		case SenseSummoned
-			: return;
-		case SenseAnimals
-			: return;
+		case SenseDead: 
+			applySenseDead(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case SenseSummoned: 
+			applySenseSummoned(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case SenseAnimals: 
+			applySenseAnimal(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case Rune: 
 			applyRune(spellEffect,soliniaSpell,casterLevel);
 			return;
-		case TrueNorth
-			: return;
+		case TrueNorth: 
+			applyTrueNorthSpellEffect(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case Levitate: 
 			applyLevitateSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
@@ -1213,6 +1218,87 @@ public class SoliniaActiveSpell {
 			: return;
 		default:
 			return;
+		}
+	}
+
+	private void applyTrueNorthSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		Vector dir = new Location(getLivingEntity().getWorld(), 0,64,-5000000).subtract(getLivingEntity().getEyeLocation()).toVector();
+        Location loc = getLivingEntity().getLocation().setDirection(dir);
+        getLivingEntity().teleport(loc);
+        return;
+	}
+
+	private void applySenseAnimal(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		try
+		{
+		
+			for (Entity e: this.getLivingEntity().getNearbyEntities(100, 100, 100))
+			{
+				if (!(e instanceof LivingEntity))
+					continue;
+				
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+				if (!solEntity.isAnimal())
+					continue;
+				
+				Vector dir = ((LivingEntity)e).getLocation().clone().subtract(getLivingEntity().getEyeLocation()).toVector();
+		        Location loc = getLivingEntity().getLocation().setDirection(dir);
+		        getLivingEntity().teleport(loc);	
+		        return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	private void applySenseDead(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		try
+		{
+		
+			for (Entity e: this.getLivingEntity().getNearbyEntities(100, 100, 100))
+			{
+				if (!(e instanceof LivingEntity))
+					continue;
+				
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+				if (!solEntity.isUndead())
+					continue;
+				
+				Vector dir = ((LivingEntity)e).getLocation().clone().subtract(getLivingEntity().getEyeLocation()).toVector();
+		        Location loc = getLivingEntity().getLocation().setDirection(dir);
+		        getLivingEntity().teleport(loc);	
+		        return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	private void applySenseSummoned(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		try
+		{
+		
+			for (Entity e: this.getLivingEntity().getNearbyEntities(100, 100, 100))
+			{
+				if (!(e instanceof LivingEntity))
+					continue;
+				
+				if (!(e instanceof Creature))
+					continue;
+				
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+				if (!solEntity.isPet())
+					continue;
+				
+				Vector dir = ((LivingEntity)e).getLocation().clone().subtract(getLivingEntity().getEyeLocation()).toVector();
+		        Location loc = getLivingEntity().getLocation().setDirection(dir);
+		        getLivingEntity().teleport(loc);	
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 

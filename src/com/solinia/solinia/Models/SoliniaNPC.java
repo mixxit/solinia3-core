@@ -67,6 +67,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isRoamer = false;
 	private boolean isPet = false;
 	private boolean isUndead = false;
+	private boolean isAnimal = false;
 	private List<ISoliniaNPCEventHandler> eventHandlers = new ArrayList<ISoliniaNPCEventHandler>();
 	private String deathGrantsTitle = "";
 	private boolean isSummoner = false;
@@ -447,6 +448,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- burning: " + ChatColor.GOLD + isBurning() + ChatColor.RESET);
 		sender.sendMessage("- invisible: " + ChatColor.GOLD + isInvisible() + ChatColor.RESET);
 		sender.sendMessage("- isundead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET);
+		sender.sendMessage("- isanimal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "EQUIPMENT" + ChatColor.RESET);
 		if (getLoottableid() != 0) {
 			sender.sendMessage("- loottableid: " + ChatColor.GOLD + getLoottableid() + " ("
@@ -638,6 +640,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "undead":
 			setUndead(Boolean.parseBoolean(value));
 			break;
+		case "animal":
+			setAnimal(Boolean.parseBoolean(value));
+			break;
 		case "summoner":
 			setSummoner(Boolean.parseBoolean(value));
 			break;
@@ -652,7 +657,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal");
 		}
 	}
 
@@ -1003,6 +1008,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setUndead(boolean isUndead) {
 		this.isUndead = isUndead;
+	}
+	
+	@Override
+	public boolean isAnimal() {
+		return isAnimal;
+	}
+
+	@Override
+	public void setAnimal(boolean isAnimal) {
+		this.isAnimal = isAnimal;
 	}
 
 	@Override

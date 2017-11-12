@@ -1279,6 +1279,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return false;
 	}
+	
+	@Override
+	public boolean isAnimal() {
+		if (isPlayer())
+			return false;
+
+		if (this.getNpcid() < 1)
+			return false;
+
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.isAnimal())
+				return true;
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return false;
+	}
 
 	@Override
 	public String getSkillNameFromMaterialInHand(Material materialinhand) {
