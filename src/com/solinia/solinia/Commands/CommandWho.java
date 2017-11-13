@@ -43,7 +43,7 @@ public class CommandWho implements CommandExecutor {
 	    }
 		
 		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordDefaultChannelCommandSender || sender instanceof DiscordAdminChannelCommandSender)) {
-			ConsoleCommandSender player = (ConsoleCommandSender) sender;
+			CommandSender player = (CommandSender) sender;
         	
         	for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
 		    {

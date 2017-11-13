@@ -21,6 +21,10 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandAA implements CommandExecutor {
 
@@ -47,7 +51,7 @@ public class CommandAA implements CommandExecutor {
 						pageno = Integer.parseInt(args[1]);
 					
 					pageno = pageno - 1;
-					int sizePerPage = 10;
+					int sizePerPage = 8;
 					List<ISoliniaAARank> fullaaranks = solplayer.getBuyableAARanks();
 					List<ISoliniaAARank> aaranks = fullaaranks.stream()
 							  .skip(pageno * sizePerPage)
@@ -64,16 +68,26 @@ public class CommandAA implements CommandExecutor {
 							if (aarank.getCost() <= solplayer.getAAPoints()) {
 								if (solplayer.canPurchaseAlternateAdvancementRank(aaAbility, aarank))
 								{
-								player.sendMessage(ChatColor.LIGHT_PURPLE + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost()
-										+ ChatColor.RESET + " AA points /aa buy " + aarank.getId());
+									TextComponent tc = new TextComponent();
+									tc.setText(ChatColor.LIGHT_PURPLE + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost() + ChatColor.RESET + " AA points /aa buy " + aarank.getId());
+									String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition() + ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
+									tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+									sender.spigot().sendMessage(tc);	
 								} else {
-									player.sendMessage(ChatColor.GRAY + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost()
+									TextComponent tc = new TextComponent();
+									tc.setText(ChatColor.GRAY + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost()
 									+ ChatColor.GRAY + " Cannot purchase yet");
-								
+									String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition() + ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
+									tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+									sender.spigot().sendMessage(tc);	
 								}
 							} else {
-								player.sendMessage(ChatColor.GRAY + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost()
+								TextComponent tc = new TextComponent();
+								tc.setText(ChatColor.GRAY + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost()
 								+ ChatColor.GRAY + " Cannot purchase yet");
+								String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition() + ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
+								tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+								sender.spigot().sendMessage(tc);	
 							}
 					}
 					player.sendMessage("Displayed Page " + ChatColor.GOLD + (pageno + 1) + ChatColor.RESET + "/" + ChatColor.GOLD + Math.ceil((float)fullaaranks.size() / (float)sizePerPage) + ChatColor.RESET + " (See /aa list <pageno>");

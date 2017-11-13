@@ -110,6 +110,7 @@ public class SoliniaAAAbility implements ISoliniaAAAbility {
 		for(ISoliniaAARank rank : this.getRanks())
 		{
 			sender.sendMessage("RANK ID: " + rank.getId() + " position: " + rank.getPosition() + " cost: " + rank.getCost() + " level_req: " + rank.getLevel_req() + " recast_time: " + rank.getRecast_time() + " spell_type: " + rank.getSpell_type() + " spellid: " + ChatColor.GOLD + rank.getSpell());
+			sender.sendMessage(" - " + rank.getDescription());
 			for (SoliniaAARankEffect rankEffect : rank.getEffects())
 			{
 				sender.sendMessage("effectId: " + rankEffect.getEffectId() + " base1: " + rankEffect.getBase1() + " base2: " + rankEffect.getBase2());

@@ -18,6 +18,7 @@ public class SoliniaAARank implements ISoliniaAARank {
 	private int recast_time;
 	private int expansion;
 	private int position;
+	private String description;
 	private List<SoliniaAAPrereq> prereqs = new ArrayList<SoliniaAAPrereq>();
 	private List<SoliniaAARankEffect> effects = new ArrayList<SoliniaAARankEffect>();
 	
@@ -108,5 +109,15 @@ public class SoliniaAARank implements ISoliniaAARank {
 	@Override
 	public void setEffects(List<SoliniaAARankEffect> effects) {
 		this.effects = effects;
+	}
+	
+	@Override
+	public String getDescription() {
+		return description;
+	}
+	
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

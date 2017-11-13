@@ -51,4 +51,8 @@ public interface ISoliniaAARank {
 
 	void setEffects(List<SoliniaAARankEffect> effects);
 
+	String getDescription();
+
+	void setDescription(String description);
+
 }
