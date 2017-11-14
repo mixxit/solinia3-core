@@ -120,4 +120,8 @@ public interface ISoliniaClass {
 
 	void setACItemBonus(int acitembonus);
 
+	int getSpecialiselevel();
+
+	void setSpecialiselevel(int specialiselevel);
+
 }

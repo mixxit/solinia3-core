@@ -81,6 +81,7 @@ import com.solinia.solinia.Commands.CommandSetTitle;
 import com.solinia.solinia.Commands.CommandSkills;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Commands.CommandSpawnItem;
+import com.solinia.solinia.Commands.CommandSpecialise;
 import com.solinia.solinia.Commands.CommandStats;
 import com.solinia.solinia.Commands.CommandSwearFealty;
 import com.solinia.solinia.Commands.CommandTarot;
@@ -468,6 +469,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("swearfealty").setExecutor(new CommandSwearFealty());
 		this.getCommand("voteemperor").setExecutor(new CommandVoteEmperor());
 		this.getCommand("createalignment").setExecutor(new CommandCreateAlignment());
+		this.getCommand("specialise").setExecutor(new CommandSpecialise());
 	}
 
 	private void createConfigDir() {

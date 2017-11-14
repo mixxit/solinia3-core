@@ -78,6 +78,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<String> playerQuestFlags = new ArrayList<String>();
 	private UUID fealty;
 	private UUID voteemperor;
+	private String specialisation = "";
 	
 	@Override
 	public List<UUID> getIgnoredPlayers()
@@ -1886,6 +1887,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (!(fealtyTo instanceof Player))
 			return;
 		
-		this.voteemperor = voteemperor;
+		this.voteemperor = uniqueId;
+	}
+
+	@Override
+	public String getSpecialisation() {
+		return specialisation;
+	}
+
+	@Override
+	public void setSpecialisation(String specialisation) {
+		this.specialisation = specialisation;
 	}
 }

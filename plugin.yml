@@ -332,6 +332,11 @@ commands:
     description: Lists faction statuses
     usage: /fact
     aliases: []
+  specialise:
+    description: specialises in a specific skill
+    usage: /specialise
+    aliases:
+    - specialize
   toggleaa:
     description: Toggles experience into AA gain
     usage: /toggleaa

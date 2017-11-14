@@ -234,4 +234,8 @@ public interface ISoliniaPlayer extends Serializable {
 	public UUID getVoteEmperor();
 
 	boolean isAlignmentEmperor();
+
+	String getSpecialisation();
+
+	void setSpecialisation(String specialisation);
 }

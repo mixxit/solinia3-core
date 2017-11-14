@@ -50,6 +50,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private String shortName = "";
 	private String classItemPrefix = "";
 	private int acitembonus = 0;
+	private int specialiselevel = 0;
 	
 	@Override
 	public String getName() {
@@ -183,6 +184,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- ripostelevel: " + ChatColor.GOLD + getRipostelevel() + ChatColor.RESET);
 		sender.sendMessage("- doubleattacklevel: " + ChatColor.GOLD + getDoubleattacklevel() + ChatColor.RESET);
 		sender.sendMessage("- safefalllevel: " + ChatColor.GOLD + getSafefalllevel() + ChatColor.RESET);
+		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 	}
 
@@ -298,8 +300,11 @@ public class SoliniaClass implements ISoliniaClass {
 		case "classitemprefix":
 			this.setClassItemPrefix(value);
 			break;
+		case "specialiselevel":
+			this.setSpecialiselevel(Integer.getInteger(value));
+			break;
 		default:
-			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix");
+			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel");
 		}
 	}
 
@@ -664,5 +669,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setACItemBonus(int acitembonus) {
 		this.acitembonus = acitembonus;
+	}
+
+	@Override
+	public int getSpecialiselevel() {
+		return specialiselevel;
+	}
+
+	@Override
+	public void setSpecialiselevel(int specialiselevel) {
+		this.specialiselevel = specialiselevel;
 	}
 }
