@@ -4804,4 +4804,14 @@ public class Utils {
 		
 		return (damage - damage_to_reduce);
 	}
+
+	public static List<String> getSpecialisationSkills() {
+		List<String> validSpecialisationSkills = new ArrayList<String>();
+        validSpecialisationSkills.add("ABJURATION");
+        validSpecialisationSkills.add("ALTERATION");
+        validSpecialisationSkills.add("CONJURATION");
+        validSpecialisationSkills.add("DIVINATION");
+        validSpecialisationSkills.add("EVOCATION");
+        return validSpecialisationSkills;
+	}
 }

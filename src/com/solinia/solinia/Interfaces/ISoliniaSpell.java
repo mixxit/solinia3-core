@@ -1052,4 +1052,6 @@ public interface ISoliniaSpell {
 	boolean isInvisSpell();
 
 	int getMinLevelClass(String name);
+
+	int getActSpellCost(ISoliniaLivingEntity solEntity);
 }

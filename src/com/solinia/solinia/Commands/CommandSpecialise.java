@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -31,12 +32,7 @@ public class CommandSpecialise implements CommandExecutor {
         
         String skillName = args[0].toUpperCase();
         
-        List<String> validSpecialisationSkills = new ArrayList<String>();
-        validSpecialisationSkills.add("ABJURATION");
-        validSpecialisationSkills.add("ALTERATION");
-        validSpecialisationSkills.add("CONJURATION");
-        validSpecialisationSkills.add("DIVINATION");
-        validSpecialisationSkills.add("EVOCATION");
+        List<String> validSpecialisationSkills = Utils.getSpecialisationSkills();
             
         if (!validSpecialisationSkills.contains(skillName))
         {

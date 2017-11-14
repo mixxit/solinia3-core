@@ -507,11 +507,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 										boolean itemUseSuccess = procSpell.tryApplyOnEntity(plugin,
 												this.getBukkitLivingEntity(), defender.getBukkitLivingEntity());
 
-										if (procSpell.getMana() > 0)
+										if (procSpell.getActSpellCost(this) > 0)
 											if (itemUseSuccess) {
 												if (getBukkitLivingEntity() instanceof Player) {
 													SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity())
-															.reducePlayerMana(procSpell.getMana());
+															.reducePlayerMana(procSpell.getActSpellCost(this));
 												}
 											}
 									}
@@ -1637,14 +1637,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// }
 
 		boolean success = false;
-		if (getMana() > spell.getMana()) {
+		if (getMana() > spell.getActSpellCost(this)) {
 			success = spell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(), target.getBukkitLivingEntity());
 			Utils.DebugMessage("aiDoSpellCast had a sucess of : " + success + " against entity: "
 					+ target.getBukkitLivingEntity().getName() + " for spell: " + spell.getName());
 		}
 
 		if (success) {
-			this.setMana(this.getMana() - spell.getMana());
+			this.setMana(this.getMana() - spell.getActSpellCost(this));
 		}
 
 		return success;
@@ -1700,7 +1700,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// Does spell types contain spelltype
 			if ((iSpellTypes & spell.getSpellType()) == spell.getSpellType()) {
 				// TODO Check mana
-				int mana_cost = spell.getMana();
+				int mana_cost = spell.getActSpellCost(this);
 				if (mana_cost < 0)
 					mana_cost = 0;
 

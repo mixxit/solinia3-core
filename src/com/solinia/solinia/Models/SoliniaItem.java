@@ -16,10 +16,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.ItemStackAdapter;
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.*;
@@ -462,9 +464,14 @@ public class SoliniaItem implements ISoliniaItem {
 			player.sendMessage("Bard songs are not currently implemented");
 			return false;
 		}
+		
+		ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
+		
+		if (solentity == null)
+			return false;
 
 		if (!isConsumable)
-		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
+		if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E] (Hold crouch or use /trance to meditate)");
 			return false;
 		}
@@ -505,7 +512,7 @@ public class SoliniaItem implements ISoliniaItem {
 				StateManager.getInstance().getEntityManager().addEntitySpellCooldown(player, spell.getId(),expiretimestamp);
 			}
 			if (!isConsumable)
-				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
+				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
 		}
 
 		return itemUseSuccess;
@@ -517,9 +524,15 @@ public class SoliniaItem implements ISoliniaItem {
 		if (spell == null) {
 			return false;
 		}
+		
+		ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
+		
+		if (solentity == null)
+			return false;
+
 
 		if (!isConsumable)
-		if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
+		if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 			player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]  (Hold crouch or use /trance to meditate)");
 			return false;
 		}
@@ -529,7 +542,7 @@ public class SoliniaItem implements ISoliniaItem {
 		itemUseSuccess = spell.tryApplyOnBlock(player, clickedBlock);
 
 		if (itemUseSuccess) {
-			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
+			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
 		}
 
 		return itemUseSuccess;

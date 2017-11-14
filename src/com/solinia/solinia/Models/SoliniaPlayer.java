@@ -710,6 +710,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!skillname.toUpperCase().equals(getSpecialisation().toUpperCase()))
 				return;
 			
+			skill = getSkill("SPECIALISE" + skillname.toUpperCase());
+			
+			currentskill = 0;
+			if (skill != null) {
+				currentskill = skill.getValue();
+			}
+			
 			skillcap = getSkillCap("SPECIALISE" + skillname.toUpperCase());
 			if ((currentskill + skillupamount) > skillcap) {
 				return;
@@ -945,7 +952,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
     	
     	try
     	{
-	    	if (spell.getMana() > SoliniaPlayerAdapter.Adapt(player).getMana()) {
+    		ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
+			if (solentity == null)
+				return;
+    		
+	    	if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]  (Hold crouch or use /trance to meditate)");
 				return;
 			}
@@ -953,7 +964,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	    	if (!checkFizzle(spell))
 	    	{
 	    		emote("* " + getFullName() + "'s spell fizzles");
-	    		SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getMana());
+	    		SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
 	    		return;
 	    	}
     	} catch (CoreStateInitException e)

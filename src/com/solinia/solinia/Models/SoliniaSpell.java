@@ -4514,4 +4514,38 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return 1000;
 	}
 
+	@Override
+	public int getActSpellCost(ISoliniaLivingEntity solEntity) {
+		// TODO Frenzied Devastation
+		// TODO Clairevoyance
+		int cost = getMana();
+		
+		int spec = 0;
+		
+		if (solEntity.isPlayer())
+		{
+			String skillName = (Utils.getSkillType(getSkill()).name().toUpperCase());
+			
+			if (Utils.getSpecialisationSkills().contains(skillName.toUpperCase()))
+	        {
+				spec = solEntity.getSkill("SPECIALISE" + skillName.toUpperCase());
+	        }
+		}
+		
+		int PercentManaReduction = 0;
+		if (spec > 0)
+			PercentManaReduction = 1 + spec / 20;
+
+		// TODO Focus Effects
+
+		cost -= cost * PercentManaReduction / 100;
+
+		// TODO Gift of mana AA
+
+		if(cost < 0)
+			cost = 0;
+
+		return cost;
+	}
+
 }
