@@ -33,6 +33,7 @@ public class CommandBite implements CommandExecutor {
 			if (((Player)sender).getLocation().distance(biten.getLocation()) > 2)
 			{
 				sender.sendMessage("You are too far from that person");
+				return true;
 			}
 			
 			ISoliniaPlayer sourcePlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
