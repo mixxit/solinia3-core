@@ -301,7 +301,7 @@ public class SoliniaClass implements ISoliniaClass {
 			this.setClassItemPrefix(value);
 			break;
 		case "specialiselevel":
-			this.setSpecialiselevel(Integer.getInteger(value));
+			this.setSpecialiselevel(Integer.parseInt(value));
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel");

@@ -619,7 +619,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public int getSkillCap(String skillName) {
-		return Utils.getSkillCap(skillName, getClassObj(), getLevel());
+		return Utils.getSkillCap(skillName, getClassObj(), getLevel(), getSpecialisation());
 	}
 
 	@Override
@@ -702,6 +702,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int randomInt = r.nextInt(100) + 1;
 		if (randomInt < chance) {
 			setSkill(skillname, currentskill + skillupamount);
+		}
+		
+		// Now try to increase specialisation
+		if (getSpecialisation() != null && !getSpecialisation().equals(""))
+		{
+			if (!skillname.toUpperCase().equals(getSpecialisation().toUpperCase()))
+				return;
+			
+			skillcap = getSkillCap("SPECIALISE" + skillname.toUpperCase());
+			if ((currentskill + skillupamount) > skillcap) {
+				return;
+			}
+			
+			chance = 10 + ((252 - currentskill) / 20);
+			if (chance < 1) {
+				chance = 1;
+			}
+			
+			randomInt = r.nextInt(100) + 1;
+			if (randomInt < chance) {
+				
+				setSkill("SPECIALISE" + skillname.toUpperCase(), currentskill + skillupamount);
+			}
 		}
 		
 	}

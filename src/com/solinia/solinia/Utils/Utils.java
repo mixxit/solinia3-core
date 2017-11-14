@@ -633,7 +633,7 @@ public class Utils {
 		return percentagemodifier;
 	}
 
-	public static int getSkillCap(String skillname, ISoliniaClass profession, int level) {
+	public static int getSkillCap(String skillname, ISoliniaClass profession, int level, String specialisation) {
 		if (!Utils.isValidSkill(skillname.toUpperCase()))
 			return 0;
 
@@ -782,6 +782,101 @@ public class Utils {
 					int cap = (int) ((5 * level) + 5);
 					return cap;
 				}
+		}
+		
+		if (skillname.equals("SPECIALISEABJURATION")) {
+			if (profession != null)
+			{
+				if (profession.getSpecialiselevel() < 1)
+					return 0;
+				
+				if (specialisation == null || specialisation.equals(""))
+					return 0;
+				
+				if (level >= profession.getSpecialiselevel())
+				{
+					int cap = (int) ((2 * level) + 2);
+					return cap;
+				} else {
+					return 0;
+				}
+			}
+		}
+		
+		if (skillname.equals("SPECIALISEALTERATION")) {
+			if (profession != null)
+			{
+				if (profession.getSpecialiselevel() < 1)
+					return 0;
+				
+				if (specialisation == null || specialisation.equals(""))
+					return 0;
+				
+				if (level >= profession.getSpecialiselevel())
+				{
+					int cap = (int) ((2 * level) + 2);
+					return cap;
+				} else {
+					return 0;
+				}
+			}
+		}
+		
+		if (skillname.equals("SPECIALISECONJURATION")) {
+			if (profession != null)
+			{
+				if (profession.getSpecialiselevel() < 1)
+					return 0;
+				
+				if (specialisation == null || specialisation.equals(""))
+					return 0;
+				
+				if (level >= profession.getSpecialiselevel())
+				{
+					int cap = (int) ((2 * level) + 2);
+					return cap;
+				} else {
+					return 0;
+				}
+			}
+		}
+		
+		if (skillname.equals("SPECIALISEDIVINATION")) {
+			if (profession != null)
+			{
+				if (profession.getSpecialiselevel() < 1)
+					return 0;
+				
+				if (specialisation == null || specialisation.equals(""))
+					return 0;
+				
+				if (level >= profession.getSpecialiselevel())
+				{
+					int cap = (int) ((2 * level) + 2);
+					return cap;
+				} else {
+					return 0;
+				}
+			}
+		}
+		
+		if (skillname.equals("SPECIALISEEVOCATION")) {
+			if (profession != null)
+			{
+				if (profession.getSpecialiselevel() < 1)
+					return 0;
+				
+				if (specialisation == null || specialisation.equals(""))
+					return 0;
+				
+				if (level >= profession.getSpecialiselevel())
+				{
+					int cap = (int) ((2 * level) + 2);
+					return cap;
+				} else {
+					return 0;
+				}
+			}
 		}
 
 		int cap = (int) ((2 * level) + 2);
@@ -4277,7 +4372,7 @@ public class Utils {
 		case 42:
 			return SkillType.Sneak;
 		case 43:
-			return SkillType.SpecializeAbjure;
+			return SkillType.SpecializeAbjuration;
 		case 44:
 			return SkillType.SpecializeAlteration;
 		case 45:

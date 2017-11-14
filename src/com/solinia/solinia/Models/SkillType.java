@@ -12,7 +12,7 @@ public enum SkillType {
 	Meditation,//Meditate
 	Mend, Offense, Parry, PickLock,
 	OneHandPiercing, Riposte, RoundKick, SafeFall, SenseHeading,
-	Singing, Sneak, SpecializeAbjure, SpecializeAlteration, SpecializeConjuration,
+	Singing, Sneak, SpecializeAbjuration, SpecializeAlteration, SpecializeConjuration,
 	SpecializeDivination, SpecializeEvocation, PickPockets, StringedInstruments, Swimming,
 	Throwing, TigerClaw, Tracking, WindInstruments, Fishing,
 	MakePoison, Tinkering, Research, Alchemy, Baking,
