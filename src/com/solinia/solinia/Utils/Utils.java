@@ -4372,15 +4372,15 @@ public class Utils {
 		case 42:
 			return SkillType.Sneak;
 		case 43:
-			return SkillType.SpecializeAbjuration;
+			return SkillType.SpecialiseAbjuration;
 		case 44:
-			return SkillType.SpecializeAlteration;
+			return SkillType.SpecialiseAlteration;
 		case 45:
-			return SkillType.SpecializeConjuration;
+			return SkillType.SpecialiseConjuration;
 		case 46:
-			return SkillType.SpecializeDivination;
+			return SkillType.SpecialiseDivination;
 		case 47:
-			return SkillType.SpecializeEvocation;
+			return SkillType.SpecialiseEvocation;
 		case 48:
 			return SkillType.PickPockets;
 		case 49:
