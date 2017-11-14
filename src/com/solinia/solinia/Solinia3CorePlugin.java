@@ -13,6 +13,7 @@ import com.solinia.solinia.Commands.CommandAddLootTableLootDrop;
 import com.solinia.solinia.Commands.CommandAddMerchantItem;
 import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
+import com.solinia.solinia.Commands.CommandBite;
 import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandConvertMerchantToLootDrop;
 import com.solinia.solinia.Commands.CommandCreateAlignment;
@@ -470,6 +471,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("voteemperor").setExecutor(new CommandVoteEmperor());
 		this.getCommand("createalignment").setExecutor(new CommandCreateAlignment());
 		this.getCommand("specialise").setExecutor(new CommandSpecialise());
+		this.getCommand("bite").setExecutor(new CommandBite());
 	}
 
 	private void createConfigDir() {

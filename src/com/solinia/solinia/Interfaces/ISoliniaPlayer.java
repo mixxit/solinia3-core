@@ -238,4 +238,8 @@ public interface ISoliniaPlayer extends Serializable {
 	String getSpecialisation();
 
 	void setSpecialisation(String specialisation);
+
+	boolean isVampire();
+
+	void setVampire(boolean vampire);
 }

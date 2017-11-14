@@ -4515,7 +4515,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	@Override
-	public int getActSpellCost(ISoliniaLivingEntity solEntity) {
+	public int getActSpellCost(ISoliniaLivingEntity solEntity) 
+	{
 		// TODO Frenzied Devastation
 		// TODO Clairevoyance
 		int cost = getMana();
@@ -4524,12 +4525,18 @@ public class SoliniaSpell implements ISoliniaSpell {
 		
 		if (solEntity.isPlayer())
 		{
+			try
+			{
 			String skillName = (Utils.getSkillType(getSkill()).name().toUpperCase());
-			
-			if (Utils.getSpecialisationSkills().contains(skillName.toUpperCase()))
-	        {
-				spec = solEntity.getSkill("SPECIALISE" + skillName.toUpperCase());
-	        }
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)solEntity.getBukkitLivingEntity());
+			if (player != null)
+				if (Utils.getSpecialisationSkills().contains(skillName.toUpperCase()))
+					if (player.getSpecialisation() != null && player.getSpecialisation().equals(skillName.toUpperCase()))
+						spec = solEntity.getSkill("SPECIALISE" + skillName.toUpperCase());
+			} catch (CoreStateInitException e)
+			{
+				// skip
+			}
 		}
 		
 		int PercentManaReduction = 0;

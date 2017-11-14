@@ -32,6 +32,7 @@ public class SoliniaRace implements ISoliniaRace {
 	private String alignment = "NEUTRAL";
 	private String shortName = "";
 	private UUID king;
+	private boolean vampire = false;
 	
 	@Override
 	public String getName() {
@@ -147,6 +148,7 @@ public class SoliniaRace implements ISoliniaRace {
 		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
 		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
+		sender.sendMessage("- vampire: " + ChatColor.GOLD + isVampire() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 	}
 
@@ -160,6 +162,9 @@ public class SoliniaRace implements ISoliniaRace {
 			break;
 		case "shortname":
 			setShortName(value);
+			break;
+		case "vampire":
+			setVampire(Boolean.parseBoolean(value));
 			break;
 		case "alignment":
 			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
@@ -219,6 +224,16 @@ public class SoliniaRace implements ISoliniaRace {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean isVampire() {
+		return vampire;
+	}
+
+	@Override
+	public void setVampire(boolean vampire) {
+		this.vampire = vampire;
 	}
 
 }

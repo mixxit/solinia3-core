@@ -79,6 +79,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID fealty;
 	private UUID voteemperor;
 	private String specialisation = "";
+	private boolean vampire = false;
 	
 	@Override
 	public List<UUID> getIgnoredPlayers()
@@ -1932,5 +1933,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSpecialisation(String specialisation) {
 		this.specialisation = specialisation;
+	}
+
+	@Override
+	public boolean isVampire() {
+		if (vampire == true)
+			return true;
+		
+		if (getRace() != null)
+			if (getRace().isVampire())
+				return true;
+		
+		return false;
+	}
+
+	@Override
+	public void setVampire(boolean vampire) {
+		this.vampire = vampire;
 	}
 }

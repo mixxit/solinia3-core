@@ -69,4 +69,8 @@ public interface ISoliniaRace {
 	UUID getKing();
 
 	void setKing(UUID king);
+
+	boolean isVampire();
+
+	void setVampire(boolean vampire);
 }

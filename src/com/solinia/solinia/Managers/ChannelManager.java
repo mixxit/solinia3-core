@@ -106,6 +106,12 @@ public class ChannelManager implements IChannelManager {
 		String gender = "U";
 		String race = "UNK";
 		String profession = "UNK";
+		String vampire = ChatColor.GRAY + "N" + ChatColor.RESET;
+		
+		if (player.isVampire())
+		{
+			vampire = ChatColor.RED + "V" + ChatColor.RESET;
+		}
 
 		String name = player.getFullNameWithTitle();
 		ChatColor racealignmentcolour = ChatColor.GRAY;
@@ -151,7 +157,7 @@ public class ChannelManager implements IChannelManager {
 			nameColour = ChatColor.LIGHT_PURPLE;
 		}
 
-		String messageheader = ChatColor.RESET + "[" + channel + "" + gender + "" + racealignmentcolour + race
+		String messageheader = ChatColor.RESET + "[" + channel + gender + vampire + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + ChatColor.AQUA + message + ChatColor.RESET;
@@ -161,6 +167,13 @@ public class ChannelManager implements IChannelManager {
 	private String decorateGlobalPlayerMessage(ISoliniaPlayer player, String message) {
 		String channel = "O";
 		String gender = "U";
+		String vampire = ChatColor.GRAY + "N" + ChatColor.RESET;
+		
+		if (player.isVampire())
+		{
+			vampire = ChatColor.RED + "V" + ChatColor.RESET;
+		}
+		
 		String race = "UNKNOWN";
 		String profession = "UNKNOWN";
 
@@ -208,7 +221,7 @@ public class ChannelManager implements IChannelManager {
 			nameColour = ChatColor.LIGHT_PURPLE;
 		}
 
-		String messageheader = ChatColor.RESET + "[" + channel + "" + gender + "" + racealignmentcolour + race
+		String messageheader = ChatColor.RESET + "[" + channel + gender + vampire + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + message;

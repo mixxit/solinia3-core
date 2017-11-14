@@ -88,6 +88,11 @@ commands:
     usage: /emote action
     aliases:
     - me
+  bite:
+    description: Bites your target
+    usage: /bite mcplayername
+    aliases:
+    - me
   roll:
     description: Rolls a dice
     usage: /roll sides
