@@ -1490,6 +1490,31 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		return effects;
 	}
+	
+	@Override
+	public List<ISoliniaAARank> getAARanks()
+	{
+		List<ISoliniaAARank> rankList = new ArrayList<ISoliniaAARank>();
+		if (ranks.size() == 0)
+			return rankList;
+		
+		try
+		{
+			for (int rankId : ranks)
+			{
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
+				if (rank == null)
+					continue;
+				
+				rankList.add(rank);
+			}
+		} catch (CoreStateInitException e)
+		{
+			//
+		}
+		
+		return rankList;
+	}
 
 	@Override
 	public boolean hasPreviousRanks(ISoliniaAAAbility ability, ISoliniaAARank rank) {
@@ -1504,7 +1529,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		return true;
 	}
-
+	
 	@Override
 	public void purchaseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {
 		if(!canPurchaseAlternateAdvancementRank(ability, rank))

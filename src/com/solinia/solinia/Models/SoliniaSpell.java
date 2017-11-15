@@ -4539,10 +4539,74 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		}
 		
-		int PercentManaReduction = 0;
-		if (spec > 0)
-			PercentManaReduction = 1 + spec / 20;
+		float bonus = 1;
+		int rank = 0;
+		int advancedrank = 0;
+		ISoliniaAAAbility aa = null;
+		
+		try
+		{
+			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("SPELLCASTINGMASTERY");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		if (aa != null)
+		{
+			rank = Utils.getRankOfAAAbility(solEntity.getBukkitLivingEntity(),aa);
+			switch(rank)
+			{
+				case 1:
+					bonus += 0.05;
+					break;
+				case 2:
+					bonus += 0.15;
+					break;
+				case 3:
+					bonus += 0.30;
+					break;
+			}
+			
+			// TODO advanced rank
+			// bonus += (0.05 * advancedrank);
+			
+		}
+		
+		int SuccessChance = Utils.RandomBetween(0, 100);
+		double PercentManaReduction = 0;
+		
+		if(SuccessChance <= (spec * 0.3 * bonus)) 
+		{
+			PercentManaReduction = (1 + 0.05 * spec);
+			switch(rank) {
+				case 1:
+					PercentManaReduction += 2.5;
+					break;
+				case 2:
+					PercentManaReduction += 5.0;
+					break;
+				case 3:
+					PercentManaReduction += 10.0;
+					break;
+			}
 
+			/* TODO Advanced Spell Casting Mastery
+			switch(advancedrank) {
+				case 1:
+					PercentManaReduction += 2.5;
+					break;
+				case 2:
+					PercentManaReduction += 5.0;
+					break;
+				case 3:
+					PercentManaReduction += 10.0;
+					break;
+			}
+			*/
+		}
+		
+		// TODO Spell Reduction effects on items/buffs
 		// TODO Focus Effects
 
 		cost -= cost * PercentManaReduction / 100;

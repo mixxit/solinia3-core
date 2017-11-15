@@ -269,4 +269,6 @@ public interface IConfigurationManager {
 	ISoliniaAlignment getAlignment(String alignment);
 
 	void addAlignment(String upperCase) throws Exception;
+
+	ISoliniaAAAbility getFirstAAAbilityBySysname(String string);
 }

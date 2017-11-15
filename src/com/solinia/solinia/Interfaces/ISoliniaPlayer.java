@@ -242,4 +242,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isVampire();
 
 	void setVampire(boolean vampire);
+
+	List<ISoliniaAARank> getAARanks();
 }
