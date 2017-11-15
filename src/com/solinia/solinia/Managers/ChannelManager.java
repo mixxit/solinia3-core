@@ -333,7 +333,11 @@ public class ChannelManager implements IChannelManager {
 		switch(command)
 		{
 			case "?top":
-				sendTopToDiscordChannel(discordChannel);
+				if (commands.length > 1)
+					sendTopToDiscordChannel(discordChannel,commands[1]);
+				else
+					sendTopToDiscordChannel(discordChannel,"");
+
 				break;
 			case "?item":
 				if (commands.length > 1)
@@ -569,7 +573,7 @@ public class ChannelManager implements IChannelManager {
 		
 	}
 
-	private void sendTopToDiscordChannel(DiscordChannel discordChannel) {
+	private void sendTopToDiscordChannel(DiscordChannel discordChannel, String classname) {
 		try
 		{
 			String targetChannelId = getDefaultDiscordChannel();
@@ -577,9 +581,9 @@ public class ChannelManager implements IChannelManager {
 				targetChannelId = getAdminDiscordChannel();
 			
 			int rank = 1;
-			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getTopLevelPlayers())
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getTopLevelPlayers(classname))
 			{
-				sendToDiscordMC(null,targetChannelId,rank + ": " + player.getFullName() + " " + player.getLevel() + " level " + player.getClassObj().getName());
+				sendToDiscordMC(null,targetChannelId,rank + ": " + player.getFullName() + " " + player.getLevel() + " level " + player.getClassObj().getName() + " aas: " + player.getAARanks().size());
 				rank++;
 			}
 			

@@ -20,7 +20,7 @@ public interface IPlayerManager {
 	Integer getPlayerActiveBardSong(UUID playerUuid);
 	void setPlayerActiveBardSong(UUID playerUuid, Integer spellId);
 	List<ISoliniaPlayer> getPlayers();
-	List<ISoliniaPlayer> getTopLevelPlayers();
+	List<ISoliniaPlayer> getTopLevelPlayers(String classname);
 	public String getPlayerNameByUUID(UUID king);
 	ISoliniaPlayer getPlayerDataOnly(UUID uniqueId);
 }

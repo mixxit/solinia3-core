@@ -1,6 +1,7 @@
 package com.solinia.solinia.Managers;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +16,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class PlayerManager implements IPlayerManager {
@@ -67,9 +69,43 @@ public class PlayerManager implements IPlayerManager {
 		return repository.query(p ->p.getUUID() != null);
 	}
 	
+	
+	private List<ISoliniaPlayer> getPlayersByClass(String classname) {
+		int classid = 0;
+		try
+		{
+			for (ISoliniaClass classobj : StateManager.getInstance().getConfigurationManager().getClasses())
+			{
+				if (classobj.getName().toUpperCase().equals(classname.toUpperCase()))
+				{
+					classid = classobj.getId();
+					break;
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			return new ArrayList<ISoliniaPlayer>();
+		}
+		
+		if (classid > 0)
+		{
+			final int filterclass = classid;
+			return repository.query(p ->p.getUUID() != null && p.getClassId() == filterclass);
+		}
+		
+		return new ArrayList<ISoliniaPlayer>();
+		
+	}
+
 	@Override
-	public List<ISoliniaPlayer> getTopLevelPlayers() {
-		List<ISoliniaPlayer> playerList = getPlayers();
+	public List<ISoliniaPlayer> getTopLevelPlayers(String classname) {
+		List<ISoliniaPlayer> playerList = new ArrayList<ISoliniaPlayer>();
+		if (!classname.equals(""))
+		{
+			playerList = getPlayersByClass(classname);
+		} else {
+			playerList = getPlayers();
+		}
 		Collections.sort(playerList,(o1, o2) -> o1.getExperience().compareTo(o2.getExperience()));
 		Collections.reverse(playerList);
 		int to = 5;
@@ -78,7 +114,7 @@ public class PlayerManager implements IPlayerManager {
 		
 		return playerList.subList(0, to);
 	}
-	
+
 	@Override
 	public boolean IsNewNameValid(String forename, String lastname)
 	{
