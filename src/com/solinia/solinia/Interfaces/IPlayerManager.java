@@ -22,10 +22,11 @@ public interface IPlayerManager {
 	List<ISoliniaPlayer> getPlayers();
 	List<ISoliniaPlayer> getTopLevelPlayers(String classname);
 	public String getPlayerNameByUUID(UUID king);
-	ISoliniaPlayer getPlayerDataOnly(UUID uniqueId);
+	ISoliniaPlayer getMainCharacterDataOnly(UUID playerUUID);
 	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
 	public ISoliniaPlayer createNewPlayerAlt(Player player);
 	ISoliniaPlayer loadPlayerAlt(Player player, UUID characterUUID);
 	Timestamp getPlayerLastChangeChar(UUID playerUUID);
 	void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp);
+	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException;
 }

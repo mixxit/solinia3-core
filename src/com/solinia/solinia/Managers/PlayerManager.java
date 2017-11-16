@@ -66,11 +66,29 @@ public class PlayerManager implements IPlayerManager {
 	}
 	
 	@Override
-	public ISoliniaPlayer getPlayerDataOnly(UUID uniqueId) {
-		if (repository.query(p ->p.getUUID().equals(uniqueId)).size() == 0)
+	public ISoliniaPlayer getMainCharacterDataOnly(UUID playerUUID) {
+		// First check if the player even exists
+		if (repository.query(p ->p.getUUID().equals(playerUUID)).size() == 0)
+		{
 			return null;
+		}
 		
-		return repository.query(p ->p.getUUID().equals(uniqueId)).get(0);
+		ISoliniaPlayer currentLoadedPlayer = repository.query(p ->p.getUUID().equals(playerUUID)).get(0);
+		if (currentLoadedPlayer.isMain())
+			return currentLoadedPlayer;
+		
+		try {
+			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(playerUUID))
+			{
+				if (player.isMain())
+					return player;
+			}
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+		
+		return null;
+		
 	}
 	
 	@Override
@@ -270,5 +288,10 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp) {
 		this.playerLastChangeChar.put(playerUUID, timestamp);
+	}
+
+	@Override
+	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getCharacters();
 	}
 }

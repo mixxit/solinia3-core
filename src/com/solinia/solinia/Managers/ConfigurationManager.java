@@ -1000,7 +1000,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			HashMap<UUID,Integer> kingCount = new HashMap<UUID,Integer>();
 			
 			try {
-				for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
+				for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getCharacters())
 				{
 					if (player.getRaceId() != race.getId())
 						continue;
@@ -1011,7 +1011,7 @@ public class ConfigurationManager implements IConfigurationManager {
 					if (player.getFealty() == null)
 						continue;
 					
-					ISoliniaPlayer fealtyPlayer = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getFealty());
+					ISoliniaPlayer fealtyPlayer = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getFealty());
 					
 					if (fealtyPlayer.getRaceId() != player.getRaceId())
 						continue;
@@ -1074,7 +1074,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			if (StateManager.getInstance().getConfigurationManager().getAlignment("GOOD") != null)
 			for (UUID king : goodkingCache)
 			{
-				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(king);
+				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(king);
 				if (player == null)
 					continue;
 				
@@ -1093,7 +1093,7 @@ public class ConfigurationManager implements IConfigurationManager {
 				if (player.getVoteEmperor().equals(player.getUUID()))
 					continue;
 				
-				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getVoteEmperor());
+				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getVoteEmperor());
 				if (fealty == null)
 					continue;
 				
@@ -1136,7 +1136,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			if (StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL") != null)
 			for (UUID king : neutralkingCache)
 			{
-				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(king);
+				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(king);
 				if (player == null)
 					continue;
 				
@@ -1152,7 +1152,7 @@ public class ConfigurationManager implements IConfigurationManager {
 				if (player.getVoteEmperor().equals(player.getUUID()))
 					continue;
 				
-				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getVoteEmperor());
+				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getVoteEmperor());
 				if (fealty == null)
 					continue;
 				
@@ -1195,7 +1195,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			if (StateManager.getInstance().getConfigurationManager().getAlignment("EVIL") != null)
 			for (UUID king : evilkingCache)
 			{
-				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(king);
+				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(king);
 				if (player == null)
 					continue;
 				
@@ -1211,7 +1211,7 @@ public class ConfigurationManager implements IConfigurationManager {
 				if (player.getVoteEmperor().equals(player.getUUID()))
 					continue;
 				
-				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getVoteEmperor());
+				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getVoteEmperor());
 				if (fealty == null)
 					continue;
 				
