@@ -75,7 +75,7 @@ public class CommandAA implements CommandExecutor {
 									sender.spigot().sendMessage(tc);	
 								} else {
 									TextComponent tc = new TextComponent();
-									tc.setText(ChatColor.GRAY + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost()
+									tc.setText(ChatColor.GRAY + "[NB] " + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost()
 									+ ChatColor.GRAY + " Cannot purchase yet");
 									String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition() + ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
 									tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
@@ -83,8 +83,8 @@ public class CommandAA implements CommandExecutor {
 								}
 							} else {
 								TextComponent tc = new TextComponent();
-								tc.setText(ChatColor.GRAY + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost()
-								+ ChatColor.GRAY + " Cannot purchase yet");
+								tc.setText(ChatColor.GRAY + "[NA] " + aaAbility.getName() + " Rank " + aarank.getPosition() + ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost()
+								+ ChatColor.GRAY + " Insufficient AA points");
 								String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition() + ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
 								tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 								sender.spigot().sendMessage(tc);	

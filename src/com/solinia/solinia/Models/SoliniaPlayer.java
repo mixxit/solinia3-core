@@ -1384,6 +1384,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 			for(ISoliniaAARank rank : ability.getRanks())
 			{
+				if (this.ranks.contains(rank.getId()))
+					continue;
+				
 				if (hasPrerequisites(ability,rank) && canUseAlternateAdvancementRank(ability,rank))
 					buyableRanks.add(rank);
 				break;
@@ -1399,6 +1402,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean canPurchaseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {
+		// Has already
+		if (this.ranks.contains(rank.getId()))
+			return false;
+		
 		if (rank.getAbilityid() == 0)
 			return false;
 		
