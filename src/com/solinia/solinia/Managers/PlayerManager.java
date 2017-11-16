@@ -31,7 +31,8 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public void resetPlayer(Player player) throws CoreStateInitException
 	{
-		repository.update(SoliniaPlayerFactory.CreatePlayer(player));
+		ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+		repository.update(SoliniaPlayerFactory.CreatePlayer(player, solplayer.isMain()));
 		SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
 		SoliniaPlayerAdapter.Adapt(player).updateMaxHp();
 	}
@@ -42,12 +43,18 @@ public class PlayerManager implements IPlayerManager {
 		repository.add(player);
 	}
 	
+	private void updatePlayer(Player player, ISoliniaPlayer solPlayer) throws CoreStateInitException {
+		repository.update(solPlayer);
+		SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
+		SoliniaPlayerAdapter.Adapt(player).updateMaxHp();
+	}
+	
 	@Override
 	public ISoliniaPlayer getPlayer(Player player) {
 		try
 		{
 			if (repository.query(p ->p.getUUID().equals(player.getUniqueId())).size() == 0)
-				SoliniaPlayerFactory.CreatePlayer(player);
+				SoliniaPlayerFactory.CreatePlayer(player,true);
 			
 			return repository.query(p ->p.getUUID().equals(player.getUniqueId())).get(0);
 		} catch (CoreStateInitException e)
@@ -196,6 +203,52 @@ public class PlayerManager implements IPlayerManager {
 		
 		return null;
 	}
-	
-	
+
+	@Override
+	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(playerUUID);
+	}
+
+	@Override
+	public ISoliniaPlayer createNewPlayerAlt(Player player) {
+		ISoliniaPlayer solPlayer;
+		try {
+			solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
+			solPlayer = SoliniaPlayerFactory.CreatePlayer(player,false);
+			
+			return solPlayer;
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public ISoliniaPlayer loadPlayerAlt(Player player, UUID characterUUID) {
+		ISoliniaPlayer solPlayer;
+		try {
+			solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			
+			// if its the same, why bother?
+			if (solPlayer.getCharacterId().equals(characterUUID))
+				return solPlayer;
+			
+			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+			if (altSolPlayer == null)
+				return null;
+			
+			if (!altSolPlayer.getUUID().equals(player.getUniqueId()))
+				return null;
+			
+			// commit current player
+			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
+			
+			// Now clear the player and load the old one
+			updatePlayer(player, altSolPlayer);
+			
+			return altSolPlayer;
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
 }

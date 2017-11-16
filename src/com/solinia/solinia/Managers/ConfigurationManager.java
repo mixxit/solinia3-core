@@ -56,6 +56,7 @@ import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
+import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
@@ -85,12 +86,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaQuest> questRepository;
 	private IRepository<ISoliniaPatch> patchesRepository;
 	private IRepository<ISoliniaAlignment> alignmentsRepository;
+	private IRepository<ISoliniaPlayer> characterlistsRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, JsonCharacterListRepository characterlistsContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -107,6 +109,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.patchesRepository = patchesContext;
 		this.questRepository = questsContext;
 		this.alignmentsRepository = alignmentsContext;
+		this.characterlistsRepository = characterlistsContext;
 	}
 	
 	@Override
@@ -468,6 +471,32 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.aaabilitiesRepository.commit();
 		this.questRepository.commit();
 		this.alignmentsRepository.commit();
+		
+		commitPlayersToCharacterLists();
+		
+		this.characterlistsRepository.commit();
+	}
+
+	private void commitPlayersToCharacterLists() {
+		try {
+			int count = 0;
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
+			{
+				commitPlayerToCharacterLists(player);
+				
+				count++;
+			}
+			System.out.println("Commited " + count + " characters to the CharacterList repository");
+			
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void commitPlayerToCharacterLists(ISoliniaPlayer player) {
+		this.characterlistsRepository.update(player);
 	}
 
 	@Override
@@ -976,12 +1005,18 @@ public class ConfigurationManager implements IConfigurationManager {
 					if (player.getRaceId() != race.getId())
 						continue;
 					
+					if (!player.isMain())
+						continue;
+					
 					if (player.getFealty() == null)
 						continue;
 					
 					ISoliniaPlayer fealtyPlayer = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(player.getFealty());
 					
 					if (fealtyPlayer.getRaceId() != player.getRaceId())
+						continue;
+					
+					if (!fealtyPlayer.isMain())
 						continue;
 					
 					if (fealtyPlayer.isAlignmentEmperor())
@@ -1041,6 +1076,9 @@ public class ConfigurationManager implements IConfigurationManager {
 			{
 				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getPlayerDataOnly(king);
 				if (player == null)
+					continue;
+				
+				if (!player.isMain())
 					continue;
 				
 				if (player.getRace() == null)
@@ -1235,6 +1273,27 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public ISoliniaAAAbility getFirstAAAbilityBySysname(String sysname) {
 		List<ISoliniaAAAbility> results = aaabilitiesRepository.query(q -> q.getSysname().equals(sysname));
+		if (results.size() != 1)
+			return null;
+		
+		return results.get(0);
+	}
+
+	@Override
+	public List<ISoliniaPlayer> getCharacters() {
+		// TODO Auto-generated method stub
+		return characterlistsRepository.query(q -> q.getCharacterId() != null);
+	}
+	
+	@Override
+	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) {
+		// TODO Auto-generated method stub
+		return characterlistsRepository.query(q -> q.getCharacterId() != null && q.getUUID().equals(playerUUID));
+	}
+	
+	@Override
+	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID) {
+		List<ISoliniaPlayer> results = characterlistsRepository.query(q -> q.getCharacterId() != null && q.getCharacterId().equals(characterUUID));
 		if (results.size() != 1)
 			return null;
 		

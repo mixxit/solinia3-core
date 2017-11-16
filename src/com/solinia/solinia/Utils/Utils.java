@@ -17,6 +17,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -76,6 +77,8 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class Utils {
@@ -4836,5 +4839,27 @@ public class Utils {
         validSpecialisationSkills.add("DIVINATION");
         validSpecialisationSkills.add("EVOCATION");
         return validSpecialisationSkills;
+	}
+
+	public static void sendRaceInfo(CommandSender sender) throws CoreStateInitException {
+		List<ISoliniaClass> classes = StateManager.getInstance().getConfigurationManager().getClasses();
+		for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
+		{
+			String classBuilder = "";
+			for(ISoliniaClass solclass : classes)
+			{
+				if (solclass.getValidRaces().contains(race.getId()))
+					classBuilder += solclass.getName() + " ";
+			}
+			
+			TextComponent tc = new TextComponent();
+			tc.setText(ChatColor.RED + "~ RACE: " + ChatColor.GOLD + race.getName().toUpperCase() + ChatColor.GRAY + " [" + race.getId() + "] - " + ChatColor.RESET);
+			TextComponent tc2 = new TextComponent();
+			tc2.setText("Hover for more details");
+			String details = ChatColor.GOLD + race.getName() + ChatColor.RESET + "\nRecommended Alignment: " + ChatColor.GOLD + race.getAlignment() + ChatColor.RESET + "\n" + race.getDescription() + "\nSTR: " + ChatColor.GOLD + race.getStrength() + ChatColor.RESET + " STA: " + ChatColor.GOLD + race.getStamina() + ChatColor.RESET + " AGI: " + ChatColor.GOLD + race.getAgility() + ChatColor.RESET + " DEX: " + ChatColor.GOLD + race.getDexterity() + ChatColor.RESET + " INT: " + ChatColor.GOLD + race.getIntelligence() + ChatColor.RESET + " WIS: " + ChatColor.GOLD + race.getWisdom() + ChatColor.RESET + " CHA: " + ChatColor.GOLD + race.getCharisma() + ChatColor.GOLD + " \nClasses: " + ChatColor.RESET + classBuilder;
+			tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+			tc.addExtra(tc2);
+			sender.spigot().sendMessage(tc);	
+		}
 	}
 }

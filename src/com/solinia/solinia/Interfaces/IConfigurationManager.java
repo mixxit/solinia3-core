@@ -3,6 +3,7 @@ package com.solinia.solinia.Interfaces;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -271,4 +272,12 @@ public interface IConfigurationManager {
 	void addAlignment(String upperCase) throws Exception;
 
 	ISoliniaAAAbility getFirstAAAbilityBySysname(String string);
+
+	List<ISoliniaPlayer> getCharacters();
+
+	List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID);
+
+	ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID);
+
+	void commitPlayerToCharacterLists(ISoliniaPlayer player);
 }

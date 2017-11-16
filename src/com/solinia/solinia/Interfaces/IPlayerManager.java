@@ -23,4 +23,7 @@ public interface IPlayerManager {
 	List<ISoliniaPlayer> getTopLevelPlayers(String classname);
 	public String getPlayerNameByUUID(UUID king);
 	ISoliniaPlayer getPlayerDataOnly(UUID uniqueId);
+	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
+	public ISoliniaPlayer createNewPlayerAlt(Player player);
+	ISoliniaPlayer loadPlayerAlt(Player player, UUID characterUUID);
 }

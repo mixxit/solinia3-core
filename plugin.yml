@@ -382,6 +382,10 @@ commands:
     description: Searches loot
     usage: /loot searchstring
     aliases: []
+  character:
+    description: Character admin command
+    usage: /character
+    aliases: []
 depend:
 - Vault
 - MythicMobs

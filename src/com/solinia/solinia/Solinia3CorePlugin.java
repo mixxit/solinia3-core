@@ -14,6 +14,7 @@ import com.solinia.solinia.Commands.CommandAddMerchantItem;
 import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandBite;
+import com.solinia.solinia.Commands.CommandCharacter;
 import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandConvertMerchantToLootDrop;
 import com.solinia.solinia.Commands.CommandCreateAlignment;
@@ -109,6 +110,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
+import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
@@ -312,13 +314,18 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonAlignmentRepository alignmentsrepo = new JsonAlignmentRepository();
 			alignmentsrepo.setJsonFile(getDataFolder() + "/" + "alignments.json");
 			alignmentsrepo.reload();
+
+			JsonCharacterListRepository characterlistrepo = new JsonCharacterListRepository();
+			characterlistrepo.setJsonFile(getDataFolder() + "/" + "characterlists.json");
+			characterlistrepo.reload();
+
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
-					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo);
+					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -472,6 +479,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createalignment").setExecutor(new CommandCreateAlignment());
 		this.getCommand("specialise").setExecutor(new CommandSpecialise());
 		this.getCommand("bite").setExecutor(new CommandBite());
+		this.getCommand("character").setExecutor(new CommandCharacter());
 	}
 
 	private void createConfigDir() {

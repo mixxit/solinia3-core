@@ -52,6 +52,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	private static final long serialVersionUID = 9075039437399478391L;
 	private UUID uuid;
+	private UUID characterId = UUID.randomUUID();
 	private String forename = "";
 	private String lastname = "";
 	private int mana = 0;
@@ -80,6 +81,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID voteemperor;
 	private String specialisation = "";
 	private boolean vampire = false;
+	private boolean main = true;
 	
 	@Override
 	public List<UUID> getIgnoredPlayers()
@@ -1982,5 +1984,25 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setVampire(boolean vampire) {
 		this.vampire = vampire;
+	}
+
+	@Override
+	public boolean isMain() {
+		return main;
+	}
+
+	@Override
+	public void setMain(boolean main) {
+		this.main = main;
+	}
+
+	@Override
+	public UUID getCharacterId() {
+		return characterId;
+	}
+
+	@Override
+	public void setCharacterId(UUID characterId) {
+		this.characterId = characterId;
 	}
 }

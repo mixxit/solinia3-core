@@ -34,6 +34,18 @@ public class CommandVoteEmperor implements CommandExecutor {
 			
 			ISoliniaPlayer fealtyPlayer = SoliniaPlayerAdapter.Adapt(fealtyTo);
 
+			if (!sourcePlayer.isMain())
+			{
+				sender.sendMessage("You must be your main character to vote");
+				return true;
+			}
+			
+			if (!fealtyPlayer.isMain())
+			{
+				sender.sendMessage("You can only vote for a main character");
+				return true;
+			}
+			
 			if (sourcePlayer.getRaceId() < 1 || fealtyPlayer.getRaceId() < 1)
 			{
 				sender.sendMessage("You and your target must both have a race set");

@@ -244,4 +244,12 @@ public interface ISoliniaPlayer extends Serializable {
 	void setVampire(boolean vampire);
 
 	List<ISoliniaAARank> getAARanks();
+
+	UUID getCharacterId();
+
+	void setCharacterId(UUID characterId);
+
+	boolean isMain();
+
+	void setMain(boolean main);
 }

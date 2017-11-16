@@ -12,10 +12,11 @@ import com.solinia.solinia.Models.SoliniaPlayer;
 
 public class SoliniaPlayerFactory {
 
-	public static ISoliniaPlayer CreatePlayer(Player player) throws CoreStateInitException {
+	public static ISoliniaPlayer CreatePlayer(Player player, boolean main) throws CoreStateInitException {
 		// A player is different to a players entity
 		ISoliniaPlayer soliniaPlayer = new SoliniaPlayer();
 		soliniaPlayer.setUUID(player.getUniqueId());
+		soliniaPlayer.setMain(main);
 
 		String forename = getRandomNames(5, 1)[0];
 		String lastname = "";

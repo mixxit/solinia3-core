@@ -16,6 +16,7 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -46,7 +47,12 @@ public class CommandSetRace implements CommandExecutor {
 		
 		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordDefaultChannelCommandSender || sender instanceof DiscordAdminChannelCommandSender))
 		{
-			sender.sendMessage(racelist);
+			try {
+				Utils.sendRaceInfo(sender);
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return true;
 		}
 		
@@ -61,14 +67,18 @@ public class CommandSetRace implements CommandExecutor {
     	
     	if (soliniaplayer.hasChosenRace() == true)
         {
-    		player.sendMessage(racelist);
         	player.sendMessage("You cannot choose a race as you have already selected one");
         	return true;            	
         }
         
         if (args.length == 0)
         {
-        	player.sendMessage("Insufficient arguments Valid Races are: ["+racelist+"]");
+        	try {
+				Utils.sendRaceInfo(sender);
+			} catch (CoreStateInitException e1) {
+				
+			}
+        	player.sendMessage("Insufficient arguments. Please provide correct race name");
         	if (soliniaplayer != null)
         	{
         		ISoliniaRace solrace;
@@ -100,7 +110,13 @@ public class CommandSetRace implements CommandExecutor {
         
         if (found == false)
         {
-        	player.sendMessage("Invalid race choice, only ["+racelist+"]");
+        	try {
+				Utils.sendRaceInfo(sender);
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	player.sendMessage("Insufficient arguments. Please provide correct race name");
         	return false;
         }
         
@@ -112,7 +128,8 @@ public class CommandSetRace implements CommandExecutor {
 				player.sendMessage("* Race set to " + race);
 				return true;
 			} else {
-				player.sendMessage("Race command failed. Valid options are ["+racelist+"]");
+				Utils.sendRaceInfo(sender);
+				player.sendMessage("Insufficient arguments. Please provide correct race name");
 				return false;
 			}
 		} catch (CoreStateInitException e) {
