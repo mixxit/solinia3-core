@@ -1,6 +1,8 @@
 package com.solinia.solinia.Commands;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -61,8 +63,28 @@ public class CommandCharacter implements CommandExecutor {
 					} else {
 						main = "ALT";
 					}
+					
+					TextComponent tc = new TextComponent();
+					tc.setText("- " + ChatColor.LIGHT_PURPLE + character.getFullNameWithTitle() + ChatColor.RESET + " " + main + " - ");
+					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " Level: " + character.getLevel() + ChatColor.RESET;
+					
+					TextComponent tc2 = new TextComponent();
+					String changetext = "/character load " + character.getCharacterId().toString();
+					
+					if (StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
+					{
+						tc2.setText(ChatColor.RED + "Already changed this session" + ChatColor.RESET);
+					} else {
+						tc2.setText(ChatColor.AQUA + "[Click to Switch]" + ChatColor.RESET);
+						tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));						
+					}
+					
+					tc.addExtra(tc2);
+					
+					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+							new ComponentBuilder(details).create()));
+					sender.spigot().sendMessage(tc);
 	
-					player.sendMessage("- " + ChatColor.LIGHT_PURPLE + character.getFullNameWithTitle() + " " + main + " - " + ChatColor.AQUA + "[Switch to Character]" + ChatColor.RESET);
 				}
 	
 				player.sendMessage("Note, new characters may not be visible for up to 15 minutes");
@@ -71,6 +93,13 @@ public class CommandCharacter implements CommandExecutor {
 				switch(args[0].toUpperCase())
 				{
 					case "NEW":
+						if (StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
+						{
+							player.sendMessage("You can only change your character once per server session. Please wait for the next 4 hourly restart");
+							return true;
+						}
+							
+						
 						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(player);
 						if (newPlayer != null)
 						{
@@ -86,6 +115,13 @@ public class CommandCharacter implements CommandExecutor {
 							player.sendMessage("You must provide the character UUID");
 							return true;
 						}
+						
+						if (StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
+						{
+							player.sendMessage("You can only change your character once per server session. Please wait for the next 4 hourly restart");
+							return true;
+						}
+						
 						UUID characterUUID = UUID.fromString(args[1]);
 						
 						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(player,characterUUID);

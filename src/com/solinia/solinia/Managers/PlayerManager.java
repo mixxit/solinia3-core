@@ -23,6 +23,8 @@ public class PlayerManager implements IPlayerManager {
 	private IRepository<ISoliniaPlayer> repository;
 	private ConcurrentHashMap<UUID, Integer> playerApplyAugmentation = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Integer> playerActiveBardSong = new ConcurrentHashMap<UUID, Integer>();
+	private ConcurrentHashMap<UUID, Timestamp> playerLastChangeChar = new ConcurrentHashMap<UUID, Timestamp>();
+
 	public PlayerManager(IRepository<ISoliniaPlayer> context)
 	{
 		this.repository = context;
@@ -211,12 +213,16 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public ISoliniaPlayer createNewPlayerAlt(Player player) {
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		Timestamp nowtimestamp = new Timestamp(now.getTime());
+		
 		ISoliniaPlayer solPlayer;
 		try {
 			solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
 			solPlayer = SoliniaPlayerFactory.CreatePlayer(player,false);
-			
+			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			return solPlayer;
 		} catch (CoreStateInitException e) {
 			return null;
@@ -225,6 +231,10 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public ISoliniaPlayer loadPlayerAlt(Player player, UUID characterUUID) {
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		Timestamp nowtimestamp = new Timestamp(now.getTime());
+		
 		ISoliniaPlayer solPlayer;
 		try {
 			solPlayer = SoliniaPlayerAdapter.Adapt(player);
@@ -245,10 +255,20 @@ public class PlayerManager implements IPlayerManager {
 			
 			// Now clear the player and load the old one
 			updatePlayer(player, altSolPlayer);
-			
+			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			return altSolPlayer;
 		} catch (CoreStateInitException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public Timestamp getPlayerLastChangeChar(UUID playerUUID) {
+		return playerLastChangeChar.get(playerUUID);
+	}
+
+	@Override
+	public void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp) {
+		this.playerLastChangeChar.put(playerUUID, timestamp);
 	}
 }
