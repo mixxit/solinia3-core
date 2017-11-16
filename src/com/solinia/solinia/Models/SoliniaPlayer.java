@@ -1898,6 +1898,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean isRacialKing()
 	{
+		if (!isMain())
+			return false;
+		
 		try {
 			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
 			{
@@ -1917,6 +1920,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean isAlignmentEmperor()
 	{
+		if (!isMain())
+			return false;
+		
 		try {
 			if (getRace() == null)
 				return false;

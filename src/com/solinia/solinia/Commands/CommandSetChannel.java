@@ -21,7 +21,7 @@ public class CommandSetChannel implements CommandExecutor {
             	return false;
             }
             
-            if (args[0].toUpperCase().equals("OOC") && args[0].toUpperCase().equals("LOCAL"))
+            if (!args[0].toUpperCase().equals("OOC") && !args[0].toUpperCase().equals("LOCAL"))
             {
             	player.sendMessage("Insufficient arguments [OOC,LOCAL]");
             	return false;
