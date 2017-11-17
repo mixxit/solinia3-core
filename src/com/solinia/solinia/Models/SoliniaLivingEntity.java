@@ -265,6 +265,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit,
 			Solinia3CorePlugin plugin) {
 		int baseDamage = (int) event.getDamage(DamageModifier.BASE);
+		
+		try
+		{
+			if (defender.isPlayer() && isPlayer())
+			{
+				ISoliniaPlayer defenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender.getBukkitLivingEntity());
+				ISoliniaPlayer attackerPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+				
+				if (defenderPlayer.getGroup() != null && attackerPlayer.getGroup() != null)
+				{
+					if (defenderPlayer.getGroup().getId().equals(attackerPlayer.getGroup().getId()))
+					{
+						event.setCancelled(true);
+						return false;
+					}
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			// ignore
+		}
 
 		if (usingValidWeapon() == false) {
 			event.setCancelled(true);
