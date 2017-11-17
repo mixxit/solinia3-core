@@ -161,6 +161,9 @@ public class SoliniaItemFactory {
 				{
 					if (!item.getBasename().toUpperCase().equals("SHIELD"))
 					{
+						int damage = Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus);
+						if (damage < 6)
+							damage = 6;
 						item.setDamage(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus));
 					} else {
 						item.setAC(SoliniaItemFactory.generateArmourClass(classAcBonus, armourtier, rarityBonus));
