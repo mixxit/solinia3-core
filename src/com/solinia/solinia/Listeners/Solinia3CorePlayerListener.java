@@ -472,7 +472,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			return;
 		}
 		
-		event.getView().getPlayer().sendMessage("Detected Merchant Inventory Click for Merchant:" + merchantid + " Slot: " + event.getSlot() + " Raw Slot: " + event.getRawSlot());
+		//event.getView().getPlayer().sendMessage("Detected Merchant Inventory Click for Merchant:" + merchantid + " Slot: " + event.getSlot() + " Raw Slot: " + event.getRawSlot());
 		if (event.getRawSlot() < 0)
 		{
 			event.setCancelled(true);
@@ -483,11 +483,11 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		if (event.getCursor().getType().equals(Material.AIR))
 		{
-			event.getView().getPlayer().sendMessage("Detected AIR Cursor, assuming picking up");
+			//event.getView().getPlayer().sendMessage("Detected AIR Cursor, assuming picking up");
 			if (event.getRawSlot() > 26)
 			{
 				// Picking up own item
-				event.getView().getPlayer().sendMessage("Picking up own item");
+				//event.getView().getPlayer().sendMessage("Picking up own item");
 				
 				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(event.getCurrentItem());
@@ -518,7 +518,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				ItemStack pickingUpItem = event.getCurrentItem();
 				if (pickingUpItem.getType().equals(Material.BARRIER))
 				{
-					event.getView().getPlayer().sendMessage("Ignoring barrier");
+					//event.getView().getPlayer().sendMessage("Ignoring barrier");
 					event.setCancelled(true);
 					return;
 				}
@@ -526,7 +526,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				// Do not allow movement of UI movers
 				if (event.getRawSlot() == 18 || event.getRawSlot() == 26)
 				{
-					event.getView().getPlayer().sendMessage("Moving Left or Right");
+					//event.getView().getPlayer().sendMessage("Moving Left or Right");
 					if (event.getRawSlot() == 18)
 					{
 						if ((page - 1) > 0)
@@ -551,13 +551,13 @@ public class Solinia3CorePlayerListener implements Listener {
 				// Do not allow movement of identifiers
 				if (event.getRawSlot() == 19)
 				{
-					event.getView().getPlayer().sendMessage("Ignoring identifier block");
+					//event.getView().getPlayer().sendMessage("Ignoring identifier block");
 					event.setCancelled(true);
 					return;
 				}
 				
 				// Picking up merchant item
-				event.getView().getPlayer().sendMessage("Picking up merchant item");
+				//event.getView().getPlayer().sendMessage("Picking up merchant item");
 				event.setCursor(event.getCurrentItem());
 				
 				event.setCancelled(true);
@@ -575,7 +575,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: "))
 				{
 					// Buying
-					event.getView().getPlayer().sendMessage("Buying item");
+					//event.getView().getPlayer().sendMessage("Buying item");
 					
 					try
 					{
@@ -646,7 +646,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					
 				} else {
 					// Selling
-					event.getView().getPlayer().sendMessage("Selling item to merchant");
+					//event.getView().getPlayer().sendMessage("Selling item to merchant");
 					
 					try
 					{
