@@ -142,29 +142,37 @@ public class SoliniaItemFactory {
 				// Unless there is a bonus defined, the class doesnt seem to use that statistic
 				
 				if (classStrBonus > 0)
-					item.setStrength(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus));
+					item.setStrength(Utils.RandomBetween(tierMin, tierMax) + rarityBonus + classStrBonus);
 				if (classStaBonus > 0)
-					item.setStamina(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStaBonus));
+					item.setStamina(Utils.RandomBetween(tierMin, tierMax) + rarityBonus + classStaBonus);
 				if (classAgiBonus > 0)
-					item.setAgility(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classAgiBonus));
+					item.setAgility(Utils.RandomBetween(tierMin, tierMax) + rarityBonus + classAgiBonus);
 				if (classDexBonus > 0)
-					item.setDexterity(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classDexBonus));
+					item.setDexterity(Utils.RandomBetween(tierMin, tierMax) + rarityBonus + classDexBonus);
 				if (classIntBonus > 0)
-					item.setIntelligence(Utils.RandomBetween(tierMin, tierMax + rarityBonus+classIntBonus));
+					item.setIntelligence(Utils.RandomBetween(tierMin, tierMax) + rarityBonus+classIntBonus);
 				if (classWisBonus > 0)
-					item.setWisdom(Utils.RandomBetween(tierMin, tierMax + rarityBonus+classWisBonus));
+					item.setWisdom(Utils.RandomBetween(tierMin, tierMax) + rarityBonus+classWisBonus);
 				if (classChaBonus > 0)
-					item.setCharisma(Utils.RandomBetween(tierMin, tierMax + rarityBonus+classChaBonus));
+					item.setCharisma(Utils.RandomBetween(tierMin, tierMax) + rarityBonus+classChaBonus);
 				
 				// Damage
 				if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
 				{
 					if (!item.getBasename().toUpperCase().equals("SHIELD"))
 					{
-						int damage = Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus);
-						if (damage < 6)
-							damage = 6;
-						item.setDamage(Utils.RandomBetween(tierMin, tierMax + rarityBonus + classStrBonus));
+						int dmgMin = tierMin;
+						int dmgMax = tierMax;
+						if (dmgMin < 6)
+						{
+							dmgMin = 6;
+						}
+						
+						if (dmgMax < 7)
+							dmgMax = 7;
+						
+						int damage = Utils.RandomBetween(dmgMin, dmgMax) + rarityBonus + classStrBonus;
+						item.setDamage(damage);
 					} else {
 						item.setAC(SoliniaItemFactory.generateArmourClass(classAcBonus, armourtier, rarityBonus));
 					}
@@ -210,7 +218,7 @@ public class SoliniaItemFactory {
 		if (armourTier > 1)
 			acMin =+ (acMultiplier * armourTier) - acMultiplier;
 
-		int armourClass = Utils.RandomBetween(acMin,acMax + rarityBonus);
+		int armourClass = Utils.RandomBetween(acMin,acMax)  + rarityBonus;
 		return armourClass;
 	}
 }
