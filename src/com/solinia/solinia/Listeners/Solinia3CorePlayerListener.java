@@ -189,15 +189,11 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onInventoryDrag(InventoryDragEvent event) {
 		
 		// More hassle than it is worth, cancel it always
-		event.setCancelled(true);
-		return;
-		/*
 		if (Utils.isInventoryMerchant(event.getInventory()))
 		{
 			event.setCancelled(true);
 			return;
 		}
-		*/
 	}
 
 	@EventHandler

@@ -4877,16 +4877,22 @@ public class Utils {
 			return false;
 		}
 		
-		ItemStack identifierStack = inventory.getStorageContents()[19];
-		if (!identifierStack.getItemMeta().getDisplayName().startsWith("MERCHANT:"))
+		try
 		{
-			System.out.println("Missing start with merchant on identifier");
-			return false;
-		}
-		
-		if (identifierStack.getEnchantmentLevel(Enchantment.OXYGEN) != 999)
+			ItemStack identifierStack = inventory.getStorageContents()[19];
+			if (!identifierStack.getItemMeta().getDisplayName().startsWith("MERCHANT:"))
+			{
+				System.out.println("Missing start with merchant on identifier");
+				return false;
+			}
+			
+			if (identifierStack.getEnchantmentLevel(Enchantment.OXYGEN) != 999)
+			{
+				System.out.println("Not 999 oxy");
+				return false;
+			}
+		} catch (Exception e)
 		{
-			System.out.println("Not 999 oxy");
 			return false;
 		}
 		

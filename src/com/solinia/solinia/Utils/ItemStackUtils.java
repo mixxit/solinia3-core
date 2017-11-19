@@ -141,20 +141,28 @@ public class ItemStackUtils {
 				
 				String stattxt = "";
 
+				if (soliniaItem.getStrength() > 0) {
+					stattxt = ChatColor.WHITE + "STR: " + ChatColor.GREEN + soliniaItem.getStrength() + ChatColor.RESET + " ";
+				}
+
+				if (soliniaItem.getAgility() > 0) {
+					stattxt = ChatColor.WHITE + "AGI: " + ChatColor.GREEN + soliniaItem.getAgility() + ChatColor.RESET + " ";
+				}
+
 				if (soliniaItem.getDexterity() > 0) {
-					stattxt = "DEX: " + ChatColor.GREEN + soliniaItem.getDexterity() + ChatColor.RESET + " ";
+					stattxt = ChatColor.WHITE + "DEX: " + ChatColor.GREEN + soliniaItem.getDexterity() + ChatColor.RESET + " ";
 				}
 
 				if (soliniaItem.getIntelligence() > 0) {
-					stattxt += "INT: " + ChatColor.GREEN + soliniaItem.getIntelligence() + ChatColor.RESET + " ";
+					stattxt += ChatColor.WHITE + "INT: " + ChatColor.GREEN + soliniaItem.getIntelligence() + ChatColor.RESET + " ";
 				}
 
 				if (soliniaItem.getWisdom() > 0) {
-					stattxt += "WIS: " + ChatColor.GREEN + soliniaItem.getWisdom() + ChatColor.RESET + " ";
+					stattxt += ChatColor.WHITE + "WIS: " + ChatColor.GREEN + soliniaItem.getWisdom() + ChatColor.RESET + " ";
 				}
 
 				if (soliniaItem.getCharisma() > 0) {
-					stattxt += "CHA: " + ChatColor.GREEN + soliniaItem.getCharisma() + ChatColor.RESET + " ";
+					stattxt += ChatColor.WHITE + "CHA: " + ChatColor.GREEN + soliniaItem.getCharisma() + ChatColor.RESET + " ";
 				}
 
 				if (!stattxt.equals(""))
@@ -162,22 +170,31 @@ public class ItemStackUtils {
 					newLore.add("AUG: " + stattxt);
 				}
 				
+				String actxt = "";
+				if (soliniaItem.getAC() > 0) {
+					actxt += ChatColor.WHITE + "Armour Class: " + ChatColor.AQUA + soliniaItem.getAC() + ChatColor.RESET + " ";
+				}
+				
+				if (!actxt.equals("")) {
+					newLore.add("AUG: " + actxt);
+				}
+				
 				String resisttxt = "";
 
 				if (soliniaItem.getFireResist() > 0) {
-					resisttxt += "FR: " + ChatColor.AQUA + soliniaItem.getFireResist() + ChatColor.RESET + " ";
+					resisttxt += ChatColor.WHITE + "FR: " + ChatColor.AQUA + soliniaItem.getFireResist() + ChatColor.RESET + " ";
 				}
 
 				if (soliniaItem.getColdResist() > 0) {
-					resisttxt += "CR: " + ChatColor.AQUA + soliniaItem.getColdResist() + ChatColor.RESET + " ";
+					resisttxt += ChatColor.WHITE + "CR: " + ChatColor.AQUA + soliniaItem.getColdResist() + ChatColor.RESET + " ";
 				}
 
 				if (soliniaItem.getMagicResist() > 0) {
-					resisttxt += "MR: " + ChatColor.AQUA + soliniaItem.getMagicResist() + ChatColor.RESET + " ";
+					resisttxt += ChatColor.WHITE + "MR: " + ChatColor.AQUA + soliniaItem.getMagicResist() + ChatColor.RESET + " ";
 				}
 
 				if (soliniaItem.getPoisonResist() > 0) {
-					resisttxt += "PR: " + ChatColor.AQUA + soliniaItem.getPoisonResist() + ChatColor.RESET + " ";
+					resisttxt += ChatColor.WHITE + "PR: " + ChatColor.AQUA + soliniaItem.getPoisonResist() + ChatColor.RESET + " ";
 				}
 
 				if (!resisttxt.equals("")) {
