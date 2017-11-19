@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.InsufficientTemporaryMerchantItemException;
@@ -94,4 +95,6 @@ public interface IEntityManager {
 	Timestamp getDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType);
 
 	void setDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType, Timestamp timestamp);
+
+	Inventory getMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno);
 }

@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -27,6 +28,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -304,9 +306,23 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setClassid(int classid) {
 		this.classid = classid;
 	}
-
+	
 	@Override
 	public void sendMerchantItemListToPlayer(Player player, int pageno) 
+	{
+		try {
+			Inventory merchantInventory = StateManager.getInstance().getEntityManager().getMerchantInventory(player.getUniqueId(),this, pageno);
+			if (merchantInventory != null)
+				player.openInventory(merchantInventory);
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	//@Override
+	/*
+	public void sendOldMerchantItemListToPlayer(Player player, int pageno) 
 	{
 		String debugLastJson = "";
 		try
@@ -411,7 +427,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			System.out.println(debugLastJson);
 		}
 	}
-
+    */
+	
 	@Override
 	public void sendNpcSettingsToSender(CommandSender sender) throws CoreStateInitException {
 		sender.sendMessage(ChatColor.RED + "NPC Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);

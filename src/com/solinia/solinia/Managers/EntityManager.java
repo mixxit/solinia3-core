@@ -10,17 +10,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Wolf;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -63,8 +71,119 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<String, Timestamp> entitySpellCooldown = new ConcurrentHashMap<String, Timestamp>();
 	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
+	private ConcurrentHashMap<UUID, Inventory> merchantInventories = new ConcurrentHashMap<UUID, Inventory>();
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
+	}
+	
+	@Override
+	public Inventory getMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno)
+	{
+		if (npc.getMerchantid() < 1)
+			return null;
+		
+		try
+		{
+			ISoliniaNPCMerchant soliniaNpcMerchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(npc.getMerchantid());
+			merchantInventories.put(playerUUID, Bukkit.createInventory(null, 27, soliniaNpcMerchant.getName() + " Page: " + pageno));
+			
+			pageno = pageno - 1;
+			int sizePerPage = 18;
+			
+			List<ISoliniaNPCMerchantEntry> fullmerchantentries = StateManager.getInstance().getEntityManager()
+					.getNPCMerchantCombinedEntries(npc);
+			
+			List<ISoliniaNPCMerchantEntry> merchantentries = fullmerchantentries.stream()
+					  .skip(pageno * sizePerPage)
+					  .limit(sizePerPage)
+					  .collect(Collectors.toCollection(ArrayList::new));
+			
+			int lastpage = (int)Math.ceil((float)fullmerchantentries.size() / (float)sizePerPage);
+			
+			for (int i = 0; i < 27; i++)
+			{
+				ItemStack itemStack = new ItemStack(Material.BARRIER);
+				ItemMeta itemMeta = itemStack.getItemMeta();
+				itemMeta.setDisplayName("EMPTY SLOT #" + i);
+				itemStack.setItemMeta(itemMeta);
+				
+				try
+				{
+					ISoliniaNPCMerchantEntry entry = merchantentries.get(i);
+					itemStack = StateManager.getInstance().getConfigurationManager().getItem(entry.getItemid()).asItemStack();
+					ItemMeta meta = itemStack.getItemMeta();
+					meta.setDisplayName("Display Item: " + itemStack.getItemMeta().getDisplayName());
+					itemStack.setItemMeta(meta);
+					itemStack.setAmount(1);
+					merchantInventories.get(playerUUID).addItem(itemStack);
+				} catch (IndexOutOfBoundsException eOutOfBounds)
+				{
+					// Final Row left
+					if(i == 18)
+					{
+						if (pageno != 0)
+						{
+							itemStack = new ItemStack(Material.SKULL_ITEM);
+							itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("1226610a-b7f8-47e5-a15d-126c4ef18635"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjg0ZjU5NzEzMWJiZTI1ZGMwNThhZjg4OGNiMjk4MzFmNzk1OTliYzY3Yzk1YzgwMjkyNWNlNGFmYmEzMzJmYyJ9fX0=", null));
+							itemStack.setDurability((short) 3);
+							itemMeta = itemStack.getItemMeta();
+							itemMeta.setDisplayName("<-- PREVIOUS PAGE");
+							itemStack.setItemMeta(itemMeta);
+						}
+					}
+					
+					// Identifier Block
+					if(i == 19)
+					{
+						itemStack = new ItemStack(Material.SKULL_ITEM);
+						itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI5NWE5MjkyMzZjMTc3OWVhYjhmNTcyNTdhODYwNzE0OThhNDg3MDE5Njk0MWY0YmZlMTk1MWU4YzZlZTIxYSJ9fX0=", null));
+						itemMeta = itemStack.getItemMeta();
+						List<String> lore = new ArrayList<String>();
+						Integer merchantid = soliniaNpcMerchant.getId();
+						Integer npcid = npc.getId();
+						Integer page = pageno + 1;
+						Integer nextpage = page + 1;
+						lore.add(merchantid.toString());
+						lore.add(npcid.toString());
+						lore.add(page.toString());
+						
+						if (lastpage > nextpage)
+						{
+							lore.add(nextpage.toString());
+						} else {
+							lore.add("0");
+						}
+						
+						itemMeta.setLore(lore);
+						itemStack.setDurability((short) 3);
+						itemMeta.setDisplayName("MERCHANT: " + soliniaNpcMerchant.getName());
+						itemStack.setItemMeta(itemMeta);
+						itemStack.addUnsafeEnchantment(Enchantment.OXYGEN, 999);
+					}
+					
+					// Final Row right
+					if(i == 26)
+					{
+						if ((pageno + 1) < lastpage)
+						{
+							itemStack = new ItemStack(Material.SKULL_ITEM);
+							itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("94fbab2d-668a-4a42-860a-c357f7acc19a"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmNmZTg4NDVhOGQ1ZTYzNWZiODc3MjhjY2M5Mzg5NWQ0MmI0ZmMyZTZhNTNmMWJhNzhjODQ1MjI1ODIyIn19fQ==", null));
+							itemMeta = itemStack.getItemMeta();
+							itemStack.setDurability((short) 3);
+							itemMeta.setDisplayName("NEXT PAGE -->");
+							itemStack.setItemMeta(itemMeta);
+						}
+					}
+					
+					merchantInventories.get(playerUUID).addItem(itemStack);
+				}
+			}
+			
+			return merchantInventories.get(playerUUID);
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
 	}
 
 	@Override

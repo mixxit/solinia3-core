@@ -13,8 +13,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -36,6 +39,8 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
@@ -43,6 +48,7 @@ import com.solinia.solinia.Utils.Utils;
 import com.sun.javafx.css.CalculatedValue;
 
 import net.md_5.bungee.api.ChatColor;
+import net.milkbowl.vault.economy.EconomyResponse;
 
 public class Solinia3CorePlayerListener implements Listener {
 
@@ -169,9 +175,39 @@ public class Solinia3CorePlayerListener implements Listener {
 			
 		}
 	}
+	
+	@EventHandler
+	public void onInventoryClose(InventoryCloseEvent event) {
+		if (Utils.isInventoryMerchant(event.getInventory()))
+		{
+			onMerchantInventoryClose(event);
+			return;
+		}
+	}
+	
+	@EventHandler
+	public void onInventoryDrag(InventoryDragEvent event) {
+		
+		// More hassle than it is worth, cancel it always
+		event.setCancelled(true);
+		return;
+		/*
+		if (Utils.isInventoryMerchant(event.getInventory()))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		*/
+	}
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
+		if (Utils.isInventoryMerchant(event.getInventory()))
+		{
+			onMerchantInventoryClick(event);
+			return;
+		}
+		
 		if (event.isCancelled())
 			return;
 		
@@ -379,6 +415,276 @@ public class Solinia3CorePlayerListener implements Listener {
 			e.printStackTrace();
 		}
 
+	}
+	
+	private void onMerchantInventoryClose(InventoryCloseEvent event) {
+		
+	}
+	
+	@EventHandler
+	public void onDropItemEvent(PlayerDropItemEvent event)
+	{
+		// This is to stop drops after closing shop
+		if (event.getItemDrop().getItemStack().getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+		if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().startsWith("Display Item: "))
+		{
+			event.getItemDrop().getItemStack().setAmount(0);
+		}
+	}
+	
+	private void onMerchantInventoryClick(InventoryClickEvent event) {
+		int merchantid = 0;
+		int npcid = 0;
+		ISoliniaNPCMerchant merchant = null;
+		ISoliniaNPC npc = null;
+		int page = 0;
+		int nextpage = 0;
+		try
+		{
+			merchantid = Utils.getInventoryMerchantID(event.getInventory());
+			npcid = Utils.getInventoryNPCID(event.getInventory());
+			page = Utils.getInventoryPage(event.getInventory());
+			nextpage = Utils.getInventoryPage(event.getInventory());
+		} catch (Exception e)
+		{
+			event.getView().getPlayer().sendMessage(e.getMessage());
+			e.printStackTrace();
+			event.setCancelled(true);
+			return;
+		}
+		
+		if (merchantid == 0 || npcid == 0)
+		{
+			event.getView().getPlayer().sendMessage("Could not find npc " + npcid + " or merchant " + merchantid + " or page " + page);
+			System.out.println("Could not find npc " + npcid + " or merchant " + merchantid);
+			event.setCancelled(true);
+			return;
+		}
+		
+		try
+		{
+			merchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchantid);
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(npcid);
+		} catch (CoreStateInitException e)
+		{
+			event.getView().getPlayer().sendMessage("Cannot sell/buy right now");
+			event.setCancelled(true);
+			return;
+		}
+		
+		event.getView().getPlayer().sendMessage("Detected Merchant Inventory Click for Merchant:" + merchantid + " Slot: " + event.getSlot() + " Raw Slot: " + event.getRawSlot());
+		if (event.getRawSlot() < 0)
+		{
+			event.setCancelled(true);
+			return;
+		}
+		
+		
+		
+		if (event.getCursor().getType().equals(Material.AIR))
+		{
+			event.getView().getPlayer().sendMessage("Detected AIR Cursor, assuming picking up");
+			if (event.getRawSlot() > 26)
+			{
+				// Picking up own item
+				event.getView().getPlayer().sendMessage("Picking up own item");
+				
+				try {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(event.getCurrentItem());
+					if (item == null)
+					{
+						event.getView().getPlayer().sendMessage("Merchants are not interested in this item");
+						event.setCancelled(true);
+						return;
+					}
+					
+					if (item.isTemporary())
+					{
+						event.getView().getPlayer().sendMessage("Merchants are not interested in temporary items");
+						event.setCancelled(true);
+						return;
+					}
+					
+					// Picked up sellable item
+					
+				} catch (CoreStateInitException e) {
+					event.setCancelled(true);
+					event.getView().getPlayer().sendMessage("Cannot sell/buy right now");
+					return;
+				}
+				
+				return;
+			} else {
+				ItemStack pickingUpItem = event.getCurrentItem();
+				if (pickingUpItem.getType().equals(Material.BARRIER))
+				{
+					event.getView().getPlayer().sendMessage("Ignoring barrier");
+					event.setCancelled(true);
+					return;
+				}
+
+				// Do not allow movement of UI movers
+				if (event.getRawSlot() == 18 || event.getRawSlot() == 26)
+				{
+					event.getView().getPlayer().sendMessage("Moving Left or Right");
+					if (event.getRawSlot() == 18)
+					{
+						if ((page - 1) > 0)
+						{
+							event.getView().getPlayer().closeInventory();
+							npc.sendMerchantItemListToPlayer((Player)event.getView().getPlayer(), page - 1);
+						}
+					}
+					
+					if (event.getRawSlot() == 26)
+					{
+						if (nextpage != 0)
+						{
+							event.getView().getPlayer().closeInventory();
+							npc.sendMerchantItemListToPlayer((Player)event.getView().getPlayer(), nextpage + 1);
+						}
+					}
+					event.setCancelled(true);
+					return;
+				}
+				
+				// Do not allow movement of identifiers
+				if (event.getRawSlot() == 19)
+				{
+					event.getView().getPlayer().sendMessage("Ignoring identifier block");
+					event.setCancelled(true);
+					return;
+				}
+				
+				// Picking up merchant item
+				event.getView().getPlayer().sendMessage("Picking up merchant item");
+				event.setCursor(event.getCurrentItem());
+				
+				event.setCancelled(true);
+				return;
+			}
+			
+		}
+		
+		if (!event.getCursor().getType().equals(Material.AIR))
+		{
+			// Clicking item in cursor onto a slot
+			if (event.getRawSlot() > 26)
+			{
+				// Dropping own item or buying
+				if (event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: "))
+				{
+					// Buying
+					event.getView().getPlayer().sendMessage("Buying item");
+					
+					try
+					{
+						if (!event.getCurrentItem().getType().equals(Material.AIR))
+						{
+							event.getView().getPlayer().sendMessage("You must place the item you wish to buy on an empty slot");
+							event.setCursor(new ItemStack(Material.AIR));
+							event.setCancelled(true);
+							return;
+						}
+					
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(event.getCursor());
+						int individualprice = item.getWorth();
+	
+						// Total price
+						
+						int price = individualprice * event.getCursor().getAmount();
+						
+	
+						if (price > StateManager.getInstance().getEconomy().getBalance((Player)event.getView().getPlayer())) {
+							event.getView().getPlayer().sendMessage("You do not have sufficient balance to buy this item in that quantity.");
+							event.setCursor(new ItemStack(Material.AIR));
+							event.setCancelled(true);
+							return;
+						}
+						
+						EconomyResponse responsewithdraw = StateManager.getInstance().getEconomy()
+								.withdrawPlayer(Bukkit.getOfflinePlayer(((Player)event.getView().getPlayer()).getUniqueId()), price);
+						if (responsewithdraw.transactionSuccess()) {
+							ItemStack purchase = item.asItemStack();
+							event.setCursor(new ItemStack(Material.AIR));
+							event.setCancelled(true);
+							event.getClickedInventory().setItem(event.getSlot(), purchase);
+							event.getView().getPlayer().sendMessage(
+									ChatColor.YELLOW + "* You pay $" + price + " for " + event.getCursor().getAmount() + " " + item.getDisplayname());
+							return;
+							
+						} else {
+							System.out.println(
+									"Error withdrawing money from your account " + String.format(responsewithdraw.errorMessage));
+							event.getView().getPlayer().sendMessage(ChatColor.YELLOW + "* Error withdrawing money from your account "
+									+ String.format(responsewithdraw.errorMessage));
+							
+							event.setCursor(new ItemStack(Material.AIR));
+							event.setCancelled(true);
+							return;
+						}
+					} catch (CoreStateInitException e)
+					{
+						event.getView().getPlayer().sendMessage("Cannot buy items from the merchant right now");
+						event.setCursor(new ItemStack(Material.AIR));
+						event.setCancelled(true);
+						return;
+					}
+				} else {
+					// Dropping own item
+					return;
+				}
+				
+			} else {
+				// Selling items or dropping item back
+				if (event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: "))
+				{
+					// Returning store item
+					event.setCursor(new ItemStack(Material.AIR));
+					event.setCancelled(true);
+					return;
+					
+				} else {
+					// Selling
+					event.getView().getPlayer().sendMessage("Selling item to merchant");
+					
+					try
+					{
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(event.getCursor());
+						int individualprice = item.getWorth();
+	
+						// Total price
+						int price = individualprice * event.getCursor().getAmount();
+						
+						EconomyResponse responsedeposit = StateManager.getInstance().getEconomy().depositPlayer((Player)event.getView().getPlayer(), price);
+						if (responsedeposit.transactionSuccess()) {
+							// Add to buy back list
+							StateManager.getInstance().getEntityManager().addTemporaryMerchantItem(npc.getId(), item.getId(), event.getCursor().getAmount());
+							event.getView().getPlayer().sendMessage(ChatColor.YELLOW + "* You recieve $" + price + " as payment");
+							event.setCursor(new ItemStack(Material.AIR));
+							event.setCancelled(true);
+							return;
+						} else {
+							System.out.println(
+									"Error depositing money to users account " + String.format(responsedeposit.errorMessage));
+							event.getView().getPlayer().sendMessage(ChatColor.YELLOW + "* Error depositing money to your account "
+									+ String.format(responsedeposit.errorMessage));
+							event.setCancelled(true);
+							return;
+						}
+					} catch (CoreStateInitException e)
+					{
+						event.getView().getPlayer().sendMessage("Cannot sell item to merchant right now");
+						event.setCancelled(true);
+						return;
+					}
+				}
+			}
+		}
+		
+		event.getView().getPlayer().sendMessage("Please alert an admin of this message code: GMMI1");
+		event.setCancelled(true);
+		return;
 	}
 
 	@EventHandler
