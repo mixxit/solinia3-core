@@ -60,6 +60,7 @@ import net.minecraft.server.v1_12_R1.GenericAttributes;
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
+	private ConcurrentHashMap<UUID, Integer> entitySinging = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> dontHealMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontRootMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontBuffMe = new ConcurrentHashMap<UUID, Timestamp>();
@@ -259,6 +260,11 @@ public class EntityManager implements IEntityManager {
 			entitySpells.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
 		
 		int duration = Utils.getDurationFromSpell(soliniaSpell);
+		if (soliniaSpell.isBardSong() && duration == 0)
+		{
+			duration = 18;
+		}
+		
 		return entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration);
 	}
 	
@@ -851,5 +857,15 @@ public class EntityManager implements IEntityManager {
 		if (spellType == SpellType.DOT)
 			dontDotMe.put(bukkitLivingEntity.getUniqueId(),timestamp);
 
+	}
+
+	@Override
+	public Integer getEntitySinging(UUID entityUUID) {
+		return entitySinging.get(entityUUID);
+	}
+
+	@Override
+	public void setEntitySinging(UUID entityUUID, Integer spellId) {
+		this.entitySinging.put(entityUUID,spellId);
 	}
 }

@@ -19,6 +19,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -123,6 +124,22 @@ public class SoliniaEntitySpells {
 		
 		//System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
 		
+		if (activeSpell.getSpell().isBardSong())
+		{
+			if (getLivingEntityUUID().equals(sourceEntity.getUniqueId()))
+			{
+				try
+				{
+					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
+					solEntity.emote(ChatColor.GRAY + "* " + sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName());
+					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(), soliniaSpell.getId());
+				} catch (CoreStateInitException e)
+				{
+					// ignore
+				}
+			}
+		}
+		
 		// Initial run
 		activeSpell.apply(plugin);
 		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 5);
@@ -143,6 +160,30 @@ public class SoliniaEntitySpells {
 		
 		if (activeSpell == null)
 			return;
+		
+		// Check if bard song, may need to keep singing
+		if (activeSpell.getSpell().isBardSong())
+		{
+			if (getLivingEntityUUID().equals(activeSpell.getSourceUuid()))
+			{
+				try
+				{
+					Integer singingId = StateManager.getInstance().getEntityManager().getEntitySinging(getLivingEntity().getUniqueId());
+					if (singingId != activeSpell.getSpellId())
+					{
+						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+						solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close");
+					} else {
+						// Continue singing!
+						activeSpell.setTicksLeft(3);
+						return;
+					}
+				} catch (CoreStateInitException e)
+				{
+					// ignore
+				}
+			}
+		}
 		
 		boolean updateMaxHp = false;
 		boolean updateDisguise = false;

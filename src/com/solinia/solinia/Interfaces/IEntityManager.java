@@ -97,4 +97,8 @@ public interface IEntityManager {
 	void setDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType, Timestamp timestamp);
 
 	Inventory getMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno);
+
+	Integer getEntitySinging(UUID entityUUID);
+
+	void setEntitySinging(UUID entityUUID, Integer spellId);
 }
