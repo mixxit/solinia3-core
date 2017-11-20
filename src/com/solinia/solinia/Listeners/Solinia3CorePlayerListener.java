@@ -340,9 +340,18 @@ public class Solinia3CorePlayerListener implements Listener {
 	        	ItemStack itemstack = event.getCursor();
 	        	if (itemstack == null)
 	        		return;
+	        	
 	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
 	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+	        		
+	        		if (soliniaitem.getMinLevel() > solplayer.getLevel())
+		    		{
+		    			event.setCancelled(true);
+		    			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+		    			return;
+		    		}
+	        		
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
 	        			return;
 
@@ -359,13 +368,6 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
-	        		
-	        		if (soliniaitem.getMinLevel() > solplayer.getLevel())
-		    		{
-		    			event.setCancelled(true);
-		    			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
-		    			return;
-		    		}
 	        		
 	        		solplayer.updateMaxHp();
 			    }
