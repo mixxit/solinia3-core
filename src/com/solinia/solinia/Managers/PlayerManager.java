@@ -179,6 +179,16 @@ public class PlayerManager implements IPlayerManager {
 			return false;
 		}
 		
+		try {
+			if (StateManager.getInstance().getConfigurationManager().getCharactersRepository().query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() != 0)
+			{
+				return false;
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return true;
 	}
 	

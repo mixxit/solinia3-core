@@ -112,6 +112,12 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.characterlistsRepository = characterlistsContext;
 	}
 	
+	@Override 
+	public IRepository<ISoliniaPlayer> getCharactersRepository()
+	{
+		return this.characterlistsRepository;		
+	}
+	
 	@Override
 	public void resetAARankRepository()
 	{
