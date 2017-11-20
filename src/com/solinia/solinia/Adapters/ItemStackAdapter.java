@@ -225,6 +225,25 @@ public class ItemStackAdapter {
 			loretxt.add(regentxt);
 		}
 		
+		String hpmanatxt = "";
+		
+		if (soliniaItem.getHp() > 0 || soliniaItem.getMana() > 0) {
+			if (soliniaItem.getHp() > 0) {
+				hpmanatxt = ChatColor.WHITE + "HP: " + ChatColor.YELLOW + soliniaItem.getHp()
+						+ ChatColor.RESET;
+			}
+
+			if (soliniaItem.getMana() > 0) {
+				if (!hpmanatxt.equals(""))
+					hpmanatxt += " ";
+				hpmanatxt += ChatColor.WHITE + "Mana: " + ChatColor.YELLOW + soliniaItem.getMana()
+						+ ChatColor.RESET;
+			}
+		}
+		
+		if (!hpmanatxt.equals("")) {
+			loretxt.add(hpmanatxt);
+		}		
 		
 		if (soliniaItem.getAbilityid() > 0 && soliniaItem.isSpellscroll())
 	    {

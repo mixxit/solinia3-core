@@ -179,6 +179,24 @@ public class ItemStackUtils {
 					newLore.add("AUG: " + actxt);
 				}
 				
+				String hptxt = "";
+				if (soliniaItem.getHp() > 0) {
+					hptxt += ChatColor.WHITE + "HP: " + ChatColor.AQUA + soliniaItem.getHp() + ChatColor.RESET + " ";
+				}
+				
+				if (!hptxt.equals("")) {
+					newLore.add("AUG: " + hptxt);
+				}
+				
+				String manatxt = "";
+				if (soliniaItem.getMana() > 0) {
+					manatxt += ChatColor.WHITE + "Mana: " + ChatColor.AQUA + soliniaItem.getMana() + ChatColor.RESET + " ";
+				}
+				
+				if (!manatxt.equals("")) {
+					newLore.add("AUG: " + manatxt);
+				}
+				
 				String resisttxt = "";
 
 				if (soliniaItem.getFireResist() > 0) {

@@ -476,7 +476,7 @@ public class ChannelManager implements IChannelManager {
 				" Wisdom: " + item.getWisdom() + 
 				" Charisma: " + item.getCharisma());
 		sendToDiscordMC(null,targetChannelId,"DR: " + item.getDiseaseResist() + " CR: " + item.getColdResist() + " FR: " + item.getFireResist() + " PR: " + item.getPoisonResist()  + " MR: " + item.getMagicResist());
-		sendToDiscordMC(null,targetChannelId,"HPRegen " + item.getHpregen() + " MPRegen: " + item.getMpregen() + " Temporary: " + item.isTemporary() + " Augmentation " + item.isAugmentation() + " Quest: " + item.isQuest());
+		sendToDiscordMC(null,targetChannelId,"HP: " + item.getHp() + " Mana: " + item.getMana() +  " HPRegen: " + item.getHpregen() + " MPRegen: " + item.getMpregen() + " Temporary: " + item.isTemporary() + " Augmentation " + item.isAugmentation() + " Quest: " + item.isQuest());
 		sendToDiscordMC(null,targetChannelId,"Accepts Aug Type: " + item.getAcceptsAugmentationSlotType().name() + " Fits Aug Types: " + item.getAugmentationFitsSlotType().name());
 	}
 
