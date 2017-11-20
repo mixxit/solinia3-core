@@ -1384,8 +1384,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				// Now we have prepared our loot list items let's choose which will
 				// drop
 
-				System.out.println(
-						"Prepared a Loot List of ABS: " + absoluteitems.size() + " and ROLL: " + rollitems.size());
+				//System.out.println("Prepared a Loot List of ABS: " + absoluteitems.size() + " and ROLL: " + rollitems.size());
 
 				if (absoluteitems.size() == 0 && rollitems.size() == 0)
 					return;
@@ -1403,8 +1402,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								.getItem(droptableentry.getItemid());
 
 						randomInt = r.nextInt(100) + 1;
-						System.out.println("Rolled a " + randomInt + " against a max of " + droptableentry.getChance()
-								+ " for item: " + item.getDisplayname());
+						//System.out.println("Rolled a " + randomInt + " against a max of " + droptableentry.getChance()+ " for item: " + item.getDisplayname());
 						if (randomInt <= droptableentry.getChance()) {
 							getBukkitLivingEntity().getLocation().getWorld()
 									.dropItem(getBukkitLivingEntity().getLocation(), item.asItemStack());
@@ -2144,7 +2142,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 1;
 
 		double statHp = Utils.getStatMaxHP(getClassObj(), getLevel(), getStamina());
-		double totalHp = statHp;
+		double itemHp = Utils.getItemHp(this);
+		double totalHp = statHp + itemHp;
 
 		try {
 			if (getNpcid() > 0) {
@@ -2642,6 +2641,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			wisintagi = getAgility();
 
 		double maxmana = ((850 * getLevel()) + (85 * wisintagi * getLevel())) / 425;
+		double itemMana = Utils.getItemMana(this);
+		maxmana += itemMana;
 		if (this.getNpcid() > 0) {
 			maxmana = maxmana + (50 * getLevel());
 

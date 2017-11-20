@@ -183,11 +183,11 @@ public class SoliniaItemFactory {
 					item.setAC(SoliniaItemFactory.generateArmourClass(classAcBonus, armourtier, rarityBonus));
 				}
 				
-				// mana regen
-				item.setMpregen(Utils.RandomBetween(0,armourtier + rarityBonus));
+				// mana
+				item.setMana(Utils.RandomBetween(0,armourtier + rarityBonus)*10);
 								
-				// hp regen
-				item.setHpregen(Utils.RandomBetween(0,armourtier + rarityBonus));
+				// hp
+				item.setHp(Utils.RandomBetween(0,armourtier + rarityBonus)*10);
 				
 				// resists
 				item.setColdResist(Utils.RandomBetween(0,armourtier + rarityBonus));

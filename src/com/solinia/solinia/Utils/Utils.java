@@ -4867,13 +4867,13 @@ public class Utils {
 	public static boolean isInventoryMerchant(Inventory inventory) {
 		if (inventory.getSize() != 27)
 		{
-			System.out.println("Inventory size not 27");
+			//System.out.println("Inventory size not 27");
 			return false;
 		}
 		
 		if (inventory.getStorageContents()[19] == null)
 		{
-			System.out.println("Identifier is null");
+			//System.out.println("Identifier is null");
 			return false;
 		}
 		
@@ -4882,13 +4882,13 @@ public class Utils {
 			ItemStack identifierStack = inventory.getStorageContents()[19];
 			if (!identifierStack.getItemMeta().getDisplayName().startsWith("MERCHANT:"))
 			{
-				System.out.println("Missing start with merchant on identifier");
+				//System.out.println("Missing start with merchant on identifier");
 				return false;
 			}
 			
 			if (identifierStack.getEnchantmentLevel(Enchantment.OXYGEN) != 999)
 			{
-				System.out.println("Not 999 oxy");
+				//System.out.println("Not 999 oxy");
 				return false;
 			}
 		} catch (Exception e)
@@ -4933,5 +4933,110 @@ public class Utils {
 		ItemStack identifierStack = inventory.getStorageContents()[19];
 		
 		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(3));
+	}
+
+	public static double getItemHp(SoliniaLivingEntity soliniaLivingEntity) {
+		int total = 0;
+		
+		if (soliniaLivingEntity.isNPC())
+			return 0;
+		
+		if (!soliniaLivingEntity.isPlayer())
+			return 0;
+		
+		try {
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)soliniaLivingEntity.getBukkitLivingEntity());
+			
+			List<ItemStack> itemstacks = new ArrayList<ItemStack>();
+			for (ItemStack itemstack : solplayer.getBukkitPlayer().getInventory().getArmorContents()) {
+				if (itemstack == null)
+					continue;
+
+				itemstacks.add(itemstack);
+			}
+
+			if (solplayer.getBukkitPlayer().getInventory().getItemInOffHand() != null)
+				itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInOffHand());
+
+			for (ItemStack itemstack : itemstacks) {
+				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0) {
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					}
+
+					if (item.getHp() > 0) {
+						total += item.getHp();
+					}
+					
+					if (augItem != null)
+						if (item.getHp() > 0)
+							total += item.getHp();
+
+				}
+			}
+			return total;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return total;
+		}
+	}
+	
+	public static double getItemMana(SoliniaLivingEntity soliniaLivingEntity) {
+		int total = 0;
+		
+		if (soliniaLivingEntity.isNPC())
+			return 0;
+		
+		if (!soliniaLivingEntity.isPlayer())
+			return 0;
+		
+		try {
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)soliniaLivingEntity.getBukkitLivingEntity());
+			
+			List<ItemStack> itemstacks = new ArrayList<ItemStack>();
+			for (ItemStack itemstack : solplayer.getBukkitPlayer().getInventory().getArmorContents()) {
+				if (itemstack == null)
+					continue;
+
+				itemstacks.add(itemstack);
+			}
+			
+			if (solplayer.getBukkitPlayer().getInventory().getItemInHand() != null)
+				itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInHand());
+
+			if (solplayer.getBukkitPlayer().getInventory().getItemInOffHand() != null)
+				itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInOffHand());
+
+			for (ItemStack itemstack : itemstacks) {
+				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0) {
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					}
+
+					if (item.getMana() > 0) {
+						total += item.getMana();
+					}
+					
+					if (augItem != null)
+						if (item.getMana() > 0)
+							total += item.getMana();
+
+				}
+			}
+			return total;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return total;
+		}
 	}
 }

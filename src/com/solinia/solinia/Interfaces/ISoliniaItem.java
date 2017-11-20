@@ -225,4 +225,12 @@ public interface ISoliniaItem {
 	int getAC();
 
 	void setAC(int ac);
+
+	int getHp();
+
+	void setHp(int hp);
+
+	int getMana();
+
+	void setMana(int mana);
 }

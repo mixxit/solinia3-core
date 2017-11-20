@@ -79,6 +79,8 @@ public class SoliniaItem implements ISoliniaItem {
 	private String discoverer = "";
 	private int minLevel = 0;
 	private int ac = 0;
+	private int hp = 0;
+	private int mana = 0;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -589,6 +591,8 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- augmentationfitsslottype: " + ChatColor.GOLD + this.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET);
+		sender.sendMessage("- hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET);
+		sender.sendMessage("- mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET);
 		sender.sendMessage("- baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
@@ -722,8 +726,14 @@ public class SoliniaItem implements ISoliniaItem {
 		case "ac":
 			setAC(Integer.parseInt(value));
 			break;
+		case "hp":
+			setHp(Integer.parseInt(value));
+			break;
+		case "mana":
+			setMana(Integer.parseInt(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana");
 		}
 	}
 
@@ -868,5 +878,25 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setAC(int ac) {
 		this.ac = ac;
+	}
+
+	@Override
+	public int getHp() {
+		return hp;
+	}
+
+	@Override
+	public void setHp(int hp) {
+		this.hp = hp;
+	}
+
+	@Override
+	public int getMana() {
+		return mana;
+	}
+
+	@Override
+	public void setMana(int mana) {
+		this.mana = mana;
 	}
 }
