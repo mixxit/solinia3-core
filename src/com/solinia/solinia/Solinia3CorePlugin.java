@@ -63,9 +63,7 @@ import com.solinia.solinia.Commands.CommandListSpells;
 import com.solinia.solinia.Commands.CommandLocal;
 import com.solinia.solinia.Commands.CommandLoot;
 import com.solinia.solinia.Commands.CommandMana;
-import com.solinia.solinia.Commands.CommandNPCBuy;
 import com.solinia.solinia.Commands.CommandNPCGive;
-import com.solinia.solinia.Commands.CommandNPCSell;
 import com.solinia.solinia.Commands.CommandOoc;
 import com.solinia.solinia.Commands.CommandPerks;
 import com.solinia.solinia.Commands.CommandPet;
@@ -433,8 +431,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("forcelevel").setExecutor(new CommandForceLevel());
 		this.getCommand("createmerchantlist").setExecutor(new CommandCreateMerchantList());
 		this.getCommand("addmerchantitem").setExecutor(new CommandAddMerchantItem());
-		this.getCommand("npcbuy").setExecutor(new CommandNPCBuy());
-		this.getCommand("npcsell").setExecutor(new CommandNPCSell());
 		this.getCommand("listmerchantlists").setExecutor(new CommandListMerchantLists());
 		this.getCommand("edititem").setExecutor(new CommandEditItem());
 		this.getCommand("createspawngroup").setExecutor(new CommandCreateSpawnGroup());

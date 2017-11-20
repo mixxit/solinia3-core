@@ -225,14 +225,6 @@ commands:
     description: adds an item to a merchant list
     usage: /addmerchantitem merchantid itemid
     aliases: []
-  npcbuy:
-    description: buys an item from an npc merchant
-    usage: /npcbuy itemid count
-    aliases: []
-  npcsell:
-    description: sells an item to an npc merchant
-    usage: /npcsell itemid count
-    aliases: []
   npcgive:
     description: Gives an item to an npc you are interesting with
     usage: /npcgive itemid
