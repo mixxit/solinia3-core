@@ -289,10 +289,13 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 			
 			//see if any runes want to reduce this damage
-			if (!event.getCause().equals(DamageCause.THORNS))
+			if (event.getEntity() instanceof LivingEntity)
 			{
-				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-				event.setDamage(Utils.reduceDamage(soldefender,event.getDamage()));
+				if (!event.getCause().equals(DamageCause.THORNS))
+				{
+					ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
+					event.setDamage(Utils.reduceDamage(soldefender,event.getDamage()));
+				}
 			}
 			
 			// Check for rune damage
