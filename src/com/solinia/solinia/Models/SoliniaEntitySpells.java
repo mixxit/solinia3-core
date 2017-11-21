@@ -168,15 +168,18 @@ public class SoliniaEntitySpells {
 			{
 				try
 				{
-					Integer singingId = StateManager.getInstance().getEntityManager().getEntitySinging(getLivingEntity().getUniqueId());
-					if (singingId != activeSpell.getSpellId())
+					if (StateManager.getInstance().getEntityManager().getEntitySinging(getLivingEntity().getUniqueId()) != null)
 					{
-						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-						solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close");
-					} else {
-						// Continue singing!
-						activeSpell.setTicksLeft(3);
-						return;
+						Integer singingId = StateManager.getInstance().getEntityManager().getEntitySinging(getLivingEntity().getUniqueId());
+						if (singingId != activeSpell.getSpellId())
+						{
+							ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+							solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close");
+						} else {
+							// Continue singing!
+							activeSpell.setTicksLeft(3);
+							return;
+						}
 					}
 				} catch (CoreStateInitException e)
 				{

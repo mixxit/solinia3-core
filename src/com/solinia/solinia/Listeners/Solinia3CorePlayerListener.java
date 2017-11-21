@@ -479,7 +479,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		
 		
-		if (event.getCursor().getType().equals(Material.AIR))
+		if (event.getCursor() == null || event.getCursor().getType().equals(Material.AIR))
 		{
 			//event.getView().getPlayer().sendMessage("Detected AIR Cursor, assuming picking up");
 			if (event.getRawSlot() > 26)
@@ -564,7 +564,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			
 		}
 		
-		if (!event.getCursor().getType().equals(Material.AIR))
+		if (event.getCursor() != null && !event.getCursor().getType().equals(Material.AIR))
 		{
 			// Clicking item in cursor onto a slot
 			if (event.getRawSlot() > 26)
