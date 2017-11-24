@@ -391,6 +391,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			//System.out.println("XP: " + experience);
 			currentexperience = currentexperience + experience;
 		}
+		
 		setExperience(currentexperience, experience,modified);
 	}
 	
@@ -449,6 +450,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int ipercenttolevel = percenttolevel.intValue();
 		if (changeamount > 0) {
 			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gain experience (" + ipercenttolevel + "% into level)");
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "Exp Gained: " + changeamount);
 			if (modified == true)
 				getBukkitPlayer().sendMessage(
 						ChatColor.YELLOW + "* You were given bonus XP from a player donation perk! (/perks)");
@@ -535,12 +537,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		//System.out.println("AA XP: " + experience);
 		
 		Double currentaaexperience = getAAExperience();
+		
 		currentaaexperience = currentaaexperience + experience;
 		
-		setAAExperience(currentaaexperience, modified);
+		setAAExperience(currentaaexperience, modified, experience);
 	}
 	
-	private void setAAExperience(Double aaexperience, Boolean modified) {
+	private void setAAExperience(Double aaexperience, Boolean modified, Double amountincreased) {
 		// One AA level is always equal to the same experience as is needed for
 		// 39 to level 40
 		// AA xp should never be above 2313441000
@@ -567,6 +570,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int ipercenttoaa = percenttoaa.intValue();
 
 		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gain alternate experience (" + ipercenttoaa + "% into AA)!");
+		getBukkitPlayer().sendMessage(ChatColor.GRAY + "AAExp Gained: " + amountincreased);
 		if (modified == true)
 			getBukkitPlayer().sendMessage(
 					ChatColor.YELLOW + "* You were given bonus XP from a player donation perk! (/perks)");
