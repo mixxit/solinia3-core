@@ -2156,6 +2156,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc.isBoss()) {
 					totalHp += (200 * npc.getLevel());
 				}
+				
+				if (npc.isBoss()) {
+					totalHp += (20 * npc.getLevel());
+				}
 
 				return totalHp;
 			}
@@ -2651,6 +2655,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc != null) {
 					if (npc.isBoss()) {
 						maxmana += (200 * npc.getLevel());
+					}
+					if (npc.isHeroic()) {
+						maxmana += (20 * npc.getLevel());
 					}
 				}
 			} catch (CoreStateInitException e) {

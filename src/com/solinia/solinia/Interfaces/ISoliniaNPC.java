@@ -202,4 +202,8 @@ public interface ISoliniaNPC {
 	int getAC();
 
 	void setAC(int ac);
+
+	boolean isHeroic();
+
+	void setHeroic(boolean heroic);
 }

@@ -23,6 +23,7 @@ public class SoliniaNPCFactory {
 		npc.setId(StateManager.getInstance().getConfigurationManager().getNextNPCId());
 		npc.setName(name);
 		npc.setBoss(sourcenpc.isBoss());
+		npc.setHeroic(sourcenpc.isHeroic());
 		npc.setBurning(sourcenpc.isBurning());
 		npc.setChestitem(sourcenpc.getChestitem());
 		npc.setClassid(sourcenpc.getClassid());

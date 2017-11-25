@@ -4813,6 +4813,8 @@ public class Utils {
 	public static Integer getDefaultNPCManaRegen(ISoliniaNPC npc) {
 		if (npc.isBoss())
 			return npc.getLevel() * 13;
+		if (npc.isHeroic())
+			return npc.getLevel() * 5;
 		return npc.getLevel() * 3;
 	}
 

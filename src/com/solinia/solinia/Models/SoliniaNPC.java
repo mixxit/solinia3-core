@@ -53,6 +53,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private String handitem;
 	private String offhanditem;
 	private boolean boss = false;
+	private boolean heroic = false;
 	private boolean burning = false;
 	private boolean invisible = false;
 	private boolean customhead = false;
@@ -499,6 +500,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		}
 		sender.sendMessage(ChatColor.RED + "MISC" + ChatColor.RESET);
 		sender.sendMessage("- boss: " + ChatColor.GOLD + isBoss());
+		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic());
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
@@ -581,6 +583,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setOffhanditem(null);
 		case "boss":
 			setBoss(Boolean.parseBoolean(value));
+			break;
+		case "heroic":
+			setHeroic(Boolean.parseBoolean(value));
 			break;
 		case "burning":
 			setBurning(Boolean.parseBoolean(value));
@@ -1127,6 +1132,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setAC(int ac) {
 		this.ac = ac;
+	}
+
+	@Override
+	public boolean isHeroic() {
+		return heroic;
+	}
+
+	@Override
+	public void setHeroic(boolean heroic) {
+		this.heroic = heroic;
 	}
 }
 
