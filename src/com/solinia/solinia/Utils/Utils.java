@@ -4850,6 +4850,9 @@ public class Utils {
 		List<ISoliniaClass> classes = StateManager.getInstance().getConfigurationManager().getClasses();
 		for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
 		{
+			if (race.isAdmin())
+				continue;
+			
 			String classBuilder = "";
 			for(ISoliniaClass solclass : classes)
 			{
