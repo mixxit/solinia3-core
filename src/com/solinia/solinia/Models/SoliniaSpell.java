@@ -3826,6 +3826,30 @@ public class SoliniaSpell implements ISoliniaSpell {
 				}
 			}
 			
+			// Return false if the target is in the same faction as the npc and not self
+			if (!(source instanceof Player) && !(target instanceof Player)  && soliniaSpell.isDetrimental() && !source.getUniqueId().equals(target.getUniqueId()))
+			{
+				if (source instanceof LivingEntity && target instanceof LivingEntity)
+				{
+					ISoliniaLivingEntity solsourceEntity = SoliniaLivingEntityAdapter.Adapt(source);
+					ISoliniaLivingEntity soltargetEntity = SoliniaLivingEntityAdapter.Adapt(target);
+					
+					if (solsourceEntity.isNPC() && soltargetEntity.isNPC())
+					{
+						ISoliniaNPC sourceNpc = StateManager.getInstance().getConfigurationManager().getNPC(solsourceEntity.getNpcid());
+						ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager().getNPC(solsourceEntity.getNpcid());
+						
+						if (sourceNpc.getFactionid() > 0 && targetNpc.getFactionid() > 0)
+						{
+							if (sourceNpc.getFactionid() == targetNpc.getFactionid())
+								return false;
+						}
+						
+					}
+					
+				}
+			}
+			
 			if (effect.getSpellEffectType().equals(SpellEffectType.Revive))
 			{
 				if (!(target instanceof Player))
