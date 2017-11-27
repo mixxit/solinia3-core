@@ -689,6 +689,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void tryIncreaseSkill(String skillname, int skillupamount) {
+		//this.getBukkitPlayer().sendMessage("DEBUG: Trying to increase skill: " + skillname);
 		SoliniaPlayerSkill skill = getSkill(skillname);
 		int currentskill = 0;
 		if (skill != null) {
@@ -696,7 +697,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		int skillcap = getSkillCap(skillname);
+		//this.getBukkitPlayer().sendMessage("DEBUG: Your skill cap is: " + skillcap);
 		if ((currentskill + skillupamount) > skillcap) {
+			//this.getBukkitPlayer().sendMessage("DEBUG: cant increase skill, current skill+increase is greater than you cap: " + skillcap);
 			return;
 		}
 
@@ -707,6 +710,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		Random r = new Random();
 		int randomInt = r.nextInt(100) + 1;
+		//this.getBukkitPlayer().sendMessage("DEBUG: skill roll " + randomInt + " vs needed: " + chance);
+
+		
 		if (randomInt < chance) {
 			setSkill(skillname, currentskill + skillupamount);
 		}
@@ -750,7 +756,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		// max skill point
-		if (value > 255)
+		if (value > Utils.getMaxSkillValue())
 			return;
 
 		skillname = skillname.toUpperCase();

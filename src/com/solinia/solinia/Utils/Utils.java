@@ -673,6 +673,8 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
 					return cap;
 				}
 		}
@@ -688,6 +690,9 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				}
 		}
@@ -703,6 +708,9 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				}
 		}
@@ -718,6 +726,9 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				}
 		}
@@ -733,6 +744,9 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				}
 		}
@@ -743,6 +757,9 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("ROGUE")
 						|| profession.getName().toUpperCase().equals("HUNTER"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				}
 		}
@@ -758,6 +775,9 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("ARCANIST")
 						|| profession.getName().toUpperCase().equals("EXARCH"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				}
 		}
@@ -773,6 +793,9 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				}
 		}
@@ -788,6 +811,9 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				}
 		}
@@ -804,6 +830,9 @@ public class Utils {
 				if (level >= profession.getSpecialiselevel())
 				{
 					int cap = (int) ((2 * level) + 2);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				} else {
 					return 0;
@@ -823,6 +852,9 @@ public class Utils {
 				if (level >= profession.getSpecialiselevel())
 				{
 					int cap = (int) ((2 * level) + 2);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				} else {
 					return 0;
@@ -842,6 +874,9 @@ public class Utils {
 				if (level >= profession.getSpecialiselevel())
 				{
 					int cap = (int) ((2 * level) + 2);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				} else {
 					return 0;
@@ -861,6 +896,9 @@ public class Utils {
 				if (level >= profession.getSpecialiselevel())
 				{
 					int cap = (int) ((2 * level) + 2);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				} else {
 					return 0;
@@ -880,6 +918,9 @@ public class Utils {
 				if (level >= profession.getSpecialiselevel())
 				{
 					int cap = (int) ((2 * level) + 2);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
 					return cap;
 				} else {
 					return 0;
@@ -888,6 +929,9 @@ public class Utils {
 		}
 
 		int cap = (int) ((2 * level) + 2);
+		if (cap > Utils.getMaxSkillValue())
+			return Utils.getMaxSkillValue();
+
 		return cap;
 	}
 
@@ -5047,5 +5091,10 @@ public class Utils {
 			e.printStackTrace();
 			return total;
 		}
+	}
+
+	public static int getMaxSkillValue() {
+		// TODO Auto-generated method stub
+		return 255;
 	}
 }
