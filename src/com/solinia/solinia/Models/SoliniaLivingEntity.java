@@ -2654,10 +2654,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 				if (npc != null) {
 					if (npc.isBoss()) {
-						maxmana += (200 * npc.getLevel());
+						maxmana += (Utils.getBossMPRegenMultipler() * npc.getLevel());
 					}
 					if (npc.isHeroic()) {
-						maxmana += (20 * npc.getLevel());
+						maxmana += (Utils.getHeroicMPRegenMultipler() * npc.getLevel());
 					}
 				}
 			} catch (CoreStateInitException e) {

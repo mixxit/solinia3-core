@@ -198,25 +198,25 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		double damage = Utils.getMaxDamage(npc.getLevel(), 75);
 		if (npc.isHeroic())
 		{
-			hp += (20 * npc.getLevel());
-			damage += (2 * npc.getLevel());
+			hp += (Utils.getHeroicHPMultiplier() * npc.getLevel());
+			damage += (Utils.getHeroicDamageMultiplier() * npc.getLevel());
 		}
 		
 		if (npc.isBoss())
 		{
-			hp += (200 * npc.getLevel());
-			damage += (10 * npc.getLevel());
+			hp += (Utils.getBossHPMultiplier() * npc.getLevel());
+			damage += (Utils.getBossDamageMultiplier() * npc.getLevel());
 		}
 		
 		float movementSpeed = 0.2f;
 		if (npc.isHeroic())
 		{
-			movementSpeed = 0.3f;
+			movementSpeed = Utils.getHeroicRunSpeed();
 		}
 		
 		if (npc.isBoss())
 		{
-			movementSpeed = 0.4f;
+			movementSpeed = Utils.getBossRunSpeed();
 		}
 		
 		mob = mob + "  Health: " + hp + "\r\n";
@@ -349,13 +349,16 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 
 		if (npc.isBoss() == true) {
-			mob = mob + "  BossBar:\r\n";
-			mob = mob + "    Enabled: true\r\n";
-			mob = mob + "    Title: " + npc.getName() + "\r\n";
-			mob = mob + "    Range: 200\r\n";
-			mob = mob + "    CreateFog: true\r\n";
-			mob = mob + "    DarkenSky: true\r\n";
-			mob = mob + "    PlayMusic: true\r\n";
+			// we dont need to spam the screen
+			/*
+				mob = mob + "  BossBar:\r\n";
+				mob = mob + "    Enabled: true\r\n";
+				mob = mob + "    Title: " + npc.getName() + "\r\n";
+				mob = mob + "    Range: 200\r\n";
+				mob = mob + "    CreateFog: true\r\n";
+				mob = mob + "    DarkenSky: true\r\n";
+				mob = mob + "    PlayMusic: true\r\n";
+			*/
 			if (npc.getDisguisetype() != null)
 			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
 				String[] disguisedata = npc.getDisguisetype().split("-");

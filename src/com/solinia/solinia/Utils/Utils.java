@@ -4856,9 +4856,9 @@ public class Utils {
 
 	public static Integer getDefaultNPCManaRegen(ISoliniaNPC npc) {
 		if (npc.isBoss())
-			return npc.getLevel() * 13;
+			return npc.getLevel() * Utils.getBossMPRegenMultipler();
 		if (npc.isHeroic())
-			return npc.getLevel() * 5;
+			return npc.getLevel() * Utils.getHeroicMPRegenMultipler();
 		return npc.getLevel() * 3;
 	}
 
@@ -5096,5 +5096,45 @@ public class Utils {
 	public static int getMaxSkillValue() {
 		// TODO Auto-generated method stub
 		return 255;
+	}
+
+	public static int getBossMPRegenMultipler() {
+		// TODO Auto-generated method stub
+		return 200;
+	}
+
+	public static int getHeroicMPRegenMultipler() {
+		// TODO Auto-generated method stub
+		return 40;
+	}
+
+	public static int getHeroicHPMultiplier() {
+		// TODO Auto-generated method stub
+		return 40;
+	}
+
+	public static int getBossHPMultiplier() {
+		// TODO Auto-generated method stub
+		return 200;
+	}
+
+	public static int getHeroicDamageMultiplier() {
+		// TODO Auto-generated method stub
+		return 4;
+	}
+
+	public static int getBossDamageMultiplier() {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+
+	public static float getHeroicRunSpeed() {
+		// TODO Auto-generated method stub
+		return 0.3f;
+	}
+
+	public static float getBossRunSpeed() {
+		// TODO Auto-generated method stub
+		return 0.4f;
 	}
 }
