@@ -91,9 +91,16 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 					getEntries().remove(i);
 			}
 			break;
+		case "setallchance":
+			int newChance = Integer.parseInt(value);
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				getEntries().get(i).setChance(newChance);
+			}
+			break;
 		default:
 			throw new InvalidLootDropSettingException(
-					"Invalid LootDrop setting. Valid Options are: name,remove");
+					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance");
 		}
 	}
 }
