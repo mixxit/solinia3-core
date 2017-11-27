@@ -86,7 +86,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 					itemscreated += item + " ";
 				}
 			}
-			sender.sendMessage("Created items as IDs: " + itemscreated + " with 10% chance in lootdrop: " + lootdropid);
+			sender.sendMessage("Created items as IDs: " + itemscreated + " with " + chance + "% chance in lootdrop: " + lootdropid);
 		} catch (CoreStateInitException e) {
 			sender.sendMessage(e.getMessage());
 		} catch (SoliniaItemException e) {

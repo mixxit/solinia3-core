@@ -339,20 +339,6 @@ public class ChannelManager implements IChannelManager {
 					sendTopToDiscordChannel(discordChannel,"");
 
 				break;
-			case "?item":
-				if (commands.length > 1)
-				{
-					String search = "";
-					for(int i = 0; i < commands.length; i++)
-					{
-						if (i == 0)
-							continue;
-						
-						search += commands[i] + " ";
-					}
-					sendItemListToDiscordChannel(discordChannel,search.trim());
-				}
-				break;
 			case "?loot":
 				if (commands.length > 1)
 				{
