@@ -14,6 +14,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -98,9 +99,20 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 				getEntries().get(i).setChance(newChance);
 			}
 			break;
+		case "setallitemminlevel":
+			int minLevel = Integer.parseInt(value);
+			if (minLevel < 1 || minLevel > Utils.getMaxLevel())
+				throw new InvalidLootDropSettingException("Invalid minlevel");
+			
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				int itemId = getEntries().get(i).getItemid();
+				StateManager.getInstance().getConfigurationManager().getItem(itemId).setMinLevel(minLevel);
+			}
+			break;
 		default:
 			throw new InvalidLootDropSettingException(
-					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance");
+					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemminlevel");
 		}
 	}
 }
