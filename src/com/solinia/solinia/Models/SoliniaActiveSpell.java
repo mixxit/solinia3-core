@@ -408,6 +408,9 @@ public class SoliniaActiveSpell {
 		case AbsorbMagicAtt
 			: return;
 		case CurrentHPOnce:
+			if (!isFirstRun)
+				return;
+			
 			applyCurrentHpOnceSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case EnchantLight
@@ -661,8 +664,10 @@ public class SoliniaActiveSpell {
 			: return;
 		case SkillDamageTaken
 			: return;
-		case CurrentEnduranceOnce
-			: return;
+		case CurrentEnduranceOnce: 
+			if (!isFirstRun)
+				return;
+			return;
 		case Taunt: 
 			applyTauntSpell(spellEffect,soliniaSpell,casterLevel);
 			return;
@@ -986,7 +991,10 @@ public class SoliniaActiveSpell {
 			: return;
 		case FcMute
 			: return;
-		case CurrentManaOnce: 
+		case CurrentManaOnce:
+			if (!isFirstRun)
+				return;
+
 			applyCurrentMpSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case PassiveSenseTrap
