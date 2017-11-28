@@ -5110,31 +5110,31 @@ public class Utils {
 
 	public static int getHeroicHPMultiplier() {
 		// TODO Auto-generated method stub
-		return 40;
+		return 200;
 	}
 
 	public static int getBossHPMultiplier() {
 		// TODO Auto-generated method stub
-		return 200;
+		return 1000;
 	}
 
 	public static int getHeroicDamageMultiplier() {
 		// TODO Auto-generated method stub
-		return 4;
+		return 10;
 	}
 
 	public static int getBossDamageMultiplier() {
 		// TODO Auto-generated method stub
-		return 10;
+		return 30;
 	}
 
 	public static float getHeroicRunSpeed() {
 		// TODO Auto-generated method stub
-		return 0.3f;
+		return 0.4f;
 	}
 
 	public static float getBossRunSpeed() {
 		// TODO Auto-generated method stub
-		return 0.4f;
+		return 0.5f;
 	}
 }

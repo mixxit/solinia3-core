@@ -250,7 +250,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			damage += (Utils.getBossDamageMultiplier() * npc.getLevel());
 		}
 		
-		float movementSpeed = 0.2f;
+		float movementSpeed = 0.3f;
 		if (npc.isHeroic())
 		{
 			movementSpeed = Utils.getHeroicRunSpeed();

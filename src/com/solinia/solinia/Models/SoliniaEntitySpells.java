@@ -64,7 +64,7 @@ public class SoliniaEntitySpells {
 		{
 			if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),sourceEntity,soliniaSpell))
 			{
-				System.out.println("Spell: " + soliniaSpell.getName() + " found to have invalid target");
+				System.out.println("Spell: " + soliniaSpell.getName() + "[" + soliniaSpell.getId() + "] found to have invalid target (" + getLivingEntity().getName() + ")");
 				return false;
 			}
 		} catch (CoreStateInitException e)
