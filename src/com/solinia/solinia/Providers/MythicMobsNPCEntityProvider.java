@@ -439,6 +439,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							System.out.println("Found better shield in lootdrop (" + potentialWeapons.get(0).getDisplayname() + "), using as shield");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":5\r\n";
+						} else {
+							if (npc.getOffhanditem() != null)
+								mob = mob + "  - " + npc.getOffhanditem() + ":5\r\n";
 						}
 						
 						if (npc.isCustomhead() == true) {
@@ -470,6 +473,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							System.out.println("Found better chest in lootdrop (" + potentialChestArmour.get(0).getDisplayname() + "), using as chest");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialChestArmour.get(0).getId() + ".yml", potentialChestArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialChestArmour.get(0).getId() + ":3\r\n";
+						} else {
+							if (npc.getChestitem() != null)
+								mob = mob + "  - " + npc.getChestitem() + ":3\r\n";
 						}
 						
 						if (potentialLegsArmour.size() > 0)
@@ -489,6 +495,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							System.out.println("Found better weapon in lootdrop (" + potentialLegsArmour.get(0).getDisplayname() + "), using as weapon");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialLegsArmour.get(0).getId() + ".yml", potentialLegsArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialLegsArmour.get(0).getId() + ":2\r\n";
+						} else {
+							if (npc.getLegsitem() != null)
+								mob = mob + "  - " + npc.getLegsitem() + ":2\r\n";
 						}
 						
 						if (potentialFeetArmour.size() > 0)
@@ -508,6 +517,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							System.out.println("Found better feet in lootdrop (" + potentialFeetArmour.get(0).getDisplayname() + "), using as feet");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialFeetArmour.get(0).getId() + ".yml", potentialFeetArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialFeetArmour.get(0).getId() + ":1\r\n";
+						} else {
+							if (npc.getFeetitem() != null)
+								mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
 						}
 						
 						
@@ -530,6 +542,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":0\r\n";
 							
+						} else {
+							if (npc.getHanditem() != null)
+								mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
 						}
 					}
 				}
