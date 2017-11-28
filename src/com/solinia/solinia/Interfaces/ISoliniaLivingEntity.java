@@ -169,4 +169,6 @@ public interface ISoliniaLivingEntity
 
 	Collection<SoliniaActiveSpell> getActiveSpells();
 
+	int getAttk();
+
 }

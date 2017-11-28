@@ -443,6 +443,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
 								+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
 								+ " damage"));
+				
+				if (defender.isNPC())
+				{
+					ISoliniaNPC npc;
+					try {
+						npc = StateManager.getInstance().getConfigurationManager().getNPC(defender.getNpcid());
+						if (npc != null && npc.isBoss())
+						{
+							System.out.println("DEBUG PLAYER->BOSS: " + getBukkitLivingEntity().getName() + " hit " + defender.getBukkitLivingEntity().getName() + " for " + event.getDamage() + " " + my_hit.skill + " damage - defender hp remaining: " + defender.getBukkitLivingEntity().getHealth() + "/" + defender.getBukkitLivingEntity().getMaxHealth());
+						}
+					} catch (CoreStateInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 
 				// Only players get this
 				if (getDoubleAttackCheck()) {
@@ -546,6 +561,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			if (defender.getBukkitLivingEntity() instanceof Player) {
+				
+				try {
+					ISoliniaLivingEntity attackerEntity = SoliniaLivingEntityAdapter.Adapt(getBukkitLivingEntity());
+					if (attackerEntity.isNPC())
+					{
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(attackerEntity.getNpcid());
+						if (npc != null && npc.isBoss())
+						{
+							System.out.println("DEBUG BOSS->PLAYER: " + npc.getName() + " hit " + defender.getBukkitLivingEntity().getName() + " for " + event.getDamage() + " " + my_hit.skill + " damage - defender hp remaining: " + defender.getBukkitLivingEntity().getHealth() + "/" + defender.getBukkitLivingEntity().getMaxHealth());
+						}
+					}
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
+				
 				((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
 								+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
@@ -1060,8 +1091,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			offense += (2 * stat_bonus - 150) / 3;
 
 		// TODO do ATTK
-		// offense += getAttk();
+		offense += getAttk();
 		return offense;
+	}
+
+	@Override
+	public int getAttk() {
+		int attackItemBonuses = 0;
+		// todo, item bonuses
+		
+		int attackSpellBonsues = 0;
+		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
+				SpellEffectType.ATK)) {
+			attackSpellBonsues += effect.getRemainingValue();
+		}
+		
+		// TODO, find a place for this base value, possibly on race?
+		int ATK = 0;
+		
+		return ATK + attackItemBonuses + attackSpellBonsues + ((getStrength() + getSkill("OFFENSE")) * 9 / 10);
 	}
 
 	@Override

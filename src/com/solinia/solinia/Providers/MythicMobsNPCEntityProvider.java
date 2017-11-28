@@ -3,14 +3,25 @@ package com.solinia.solinia.Providers;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -55,6 +66,21 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 	
 	private void writeCustomHead(String fileName, ISoliniaNPC npc) {
 		String fileData = createCustomHeadFile(npc);
+		try {
+			FileOutputStream fooStream = new FileOutputStream(fileName, false);
+
+			byte[] myBytes = fileData.getBytes();
+			fooStream.write(myBytes);
+			fooStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void writeCustomItem(String fileName, ISoliniaItem item) {
+		String fileData = createCustomItemFile(item);
 		try {
 			FileOutputStream fooStream = new FileOutputStream(fileName, false);
 
@@ -163,7 +189,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		return spawner;
 	}
 	
-	public static String createCustomHeadFile(ISoliniaNPC npc) {
+	public String createCustomHeadFile(ISoliniaNPC npc) {
 		String customheaditem = "";
 
 		if (npc.isCustomhead())
@@ -177,8 +203,24 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 		return customheaditem;
 	}
+	
+	public String createCustomItemFile(ISoliniaItem item) {
+		String customitem = "";
 
-	public static String createNpcFile(ISoliniaNPC npc) {
+		customitem += "CUSTOMITEMID_" + item.getId() + ":\r\n";
+		customitem += "  Id: " + item.asItemStack().getTypeId() + "\r\n";
+		customitem += "  Display: '" + item.getDisplayname() + "'\r\n";
+		customitem += "  Data: " + item.getColor() + "\r\n";
+		if (item.getDamage() > 0)
+		{
+			customitem += "  Damage: " + item.getDamage() + "\r\n";
+		}
+		customitem += "  Enchantments:\r\n";
+		customitem += "    OXYGEN: " + (1000 + item.getId()) + "\r\n";
+		return customitem;
+	}
+
+	public String createNpcFile(ISoliniaNPC npc) {
 		String mob = "";
 
 		String uniquename = "NPCID_" + npc.getId();
@@ -303,32 +345,227 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			
 		}
 
-		if (npc.getHeaditem() != null || npc.getChestitem() != null || npc.getLegsitem() != null
-				|| npc.getFeetitem() != null || npc.getHanditem() != null || npc.getOffhanditem() != null) {
-			mob = mob + "  Equipment:\r\n";
-			if (npc.getOffhanditem() != null)
-				mob = mob + "  - " + npc.getOffhanditem() + ":5\r\n";
+		// Here's the fun part, if the npc has decent loot in his loot drops to use for himself
+		// then go ahead and use it! Better than that crap we have right?
+		if (npc.getLoottableid() > 0)
+		{
+			try {
+				ISoliniaLootTable lootTable = StateManager.getInstance().getConfigurationManager().getLootTable(npc.getLoottableid());
+				if (lootTable != null)
+				{
+					List<ISoliniaItem> potentialChestArmour = new ArrayList<ISoliniaItem>();
+					List<ISoliniaItem> potentialLegsArmour = new ArrayList<ISoliniaItem>();
+					List<ISoliniaItem> potentialFeetArmour = new ArrayList<ISoliniaItem>();
+					List<ISoliniaItem> potentialWeapons = new ArrayList<ISoliniaItem>();
+					List<ISoliniaItem> potentialShields = new ArrayList<ISoliniaItem>();
+					
+					
+					for(ISoliniaLootTableEntry loottableentry : lootTable.getEntries())
+					{
+						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(loottableentry.getLootdropid());
+						for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
+						{
+							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(lootdropentry.getItemid());
+							if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()))
+							{
+								if (item.getAllowedClassNames().size() == 0)
+								{
+									if (item.getBasename().contains("CHESTPLATE"))
+										potentialChestArmour.add(item);
+									if (item.getBasename().contains("LEGGINGS"))
+										potentialLegsArmour.add(item);
+									if (item.getBasename().contains("BOOTS"))
+										potentialFeetArmour.add(item);
+									continue;
+								}
 
-			if (npc.isCustomhead() == true) {
-				if (npc.getCustomheaddata() != null) {
-					mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r\n";
+								if (npc.getClassObj() != null)
+								{
+									if (item.getAllowedClassNames().contains(npc.getClassObj().getName()))
+									{
+										if (item.getBasename().contains("CHESTPLATE"))
+											potentialChestArmour.add(item);
+										if (item.getBasename().contains("LEGGINGS"))
+											potentialLegsArmour.add(item);
+										if (item.getBasename().contains("BOOTS"))
+											potentialFeetArmour.add(item);
+										continue;
+									}
+								}
+								
+							}
+							
+							if (ConfigurationManager.WeaponMaterials.contains(item.getBasename().toUpperCase()))
+							{
+								if (item.getAllowedClassNames().size() == 0)
+								{
+									if (item.getBasename().contains("SHIELD"))
+										potentialShields.add(item);
+									else
+										potentialWeapons.add(item);
+									continue;
+								}
+
+								if (npc.getClassObj() != null)
+								{
+									if (item.getAllowedClassNames().contains(npc.getClassObj().getName()))
+									{
+										if (item.getBasename().contains("SHIELD"))
+											potentialShields.add(item);
+										else
+											potentialWeapons.add(item);
+										continue;
+									}
+								}
+							}
+						}
+						
+						mob = mob + "  Equipment:\r\n";
+						
+						if (potentialShields.size() > 0)
+						{
+							Collections.sort(potentialShields, new Comparator<ISoliniaItem>(){
+							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
+							     {
+							         if(o1.getMinLevel() == o2.getMinLevel())
+							             return 0;
+							         
+							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+							     }
+							});
+							
+							Collections.reverse(potentialShields);
+							
+							System.out.println("Found better shield in lootdrop (" + potentialWeapons.get(0).getDisplayname() + "), using as shield");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":5\r\n";
+						}
+						
+						if (npc.isCustomhead() == true) {
+							if (npc.getCustomheaddata() != null) {
+								mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r\n";
+							} else {
+								if (npc.getHeaditem() != null)
+									mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
+							}
+						} else {
+							if (npc.getHeaditem() != null)
+								mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
+						}
+						
+						if (potentialChestArmour.size() > 0)
+						{
+							Collections.sort(potentialChestArmour, new Comparator<ISoliniaItem>(){
+							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
+							     {
+							         if(o1.getMinLevel() == o2.getMinLevel())
+							             return 0;
+							         
+							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+							     }
+							});
+							
+							Collections.reverse(potentialChestArmour);
+							
+							System.out.println("Found better chest in lootdrop (" + potentialChestArmour.get(0).getDisplayname() + "), using as chest");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialChestArmour.get(0).getId() + ".yml", potentialChestArmour.get(0));
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialChestArmour.get(0).getId() + ":3\r\n";
+						}
+						
+						if (potentialLegsArmour.size() > 0)
+						{
+							Collections.sort(potentialLegsArmour, new Comparator<ISoliniaItem>(){
+							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
+							     {
+							         if(o1.getMinLevel() == o2.getMinLevel())
+							             return 0;
+							         
+							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+							     }
+							});
+							
+							Collections.reverse(potentialLegsArmour);
+							
+							System.out.println("Found better weapon in lootdrop (" + potentialLegsArmour.get(0).getDisplayname() + "), using as weapon");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialLegsArmour.get(0).getId() + ".yml", potentialLegsArmour.get(0));
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialLegsArmour.get(0).getId() + ":2\r\n";
+						}
+						
+						if (potentialFeetArmour.size() > 0)
+						{
+							Collections.sort(potentialFeetArmour, new Comparator<ISoliniaItem>(){
+							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
+							     {
+							         if(o1.getMinLevel() == o2.getMinLevel())
+							             return 0;
+							         
+							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+							     }
+							});
+							
+							Collections.reverse(potentialFeetArmour);
+							
+							System.out.println("Found better feet in lootdrop (" + potentialFeetArmour.get(0).getDisplayname() + "), using as feet");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialFeetArmour.get(0).getId() + ".yml", potentialFeetArmour.get(0));
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialFeetArmour.get(0).getId() + ":1\r\n";
+						}
+						
+						
+						
+						if (potentialWeapons.size() > 0)
+						{
+							Collections.sort(potentialWeapons, new Comparator<ISoliniaItem>(){
+							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
+							     {
+							         if(o1.getMinLevel() == o2.getMinLevel())
+							             return 0;
+							         
+							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+							     }
+							});
+							
+							Collections.reverse(potentialWeapons);
+							
+							System.out.println("Found better weapon in lootdrop (" + potentialWeapons.get(0).getDisplayname() + "), using as weapon");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":0\r\n";
+							
+						}
+					}
+				}
+				
+			} catch (CoreStateInitException e) {
+				// skip
+			}
+			
+		} else {
+			if (npc.getHeaditem() != null || npc.getChestitem() != null || npc.getLegsitem() != null
+					|| npc.getFeetitem() != null || npc.getHanditem() != null || npc.getOffhanditem() != null) {
+				mob = mob + "  Equipment:\r\n";
+				if (npc.getOffhanditem() != null)
+					mob = mob + "  - " + npc.getOffhanditem() + ":5\r\n";
+
+				if (npc.isCustomhead() == true) {
+					if (npc.getCustomheaddata() != null) {
+						mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r\n";
+					} else {
+						if (npc.getHeaditem() != null)
+							mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
+					}
 				} else {
 					if (npc.getHeaditem() != null)
 						mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
 				}
-			} else {
-				if (npc.getHeaditem() != null)
-					mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
-			}
 
-			if (npc.getChestitem() != null)
-				mob = mob + "  - " + npc.getChestitem() + ":3\r\n";
-			if (npc.getLegsitem() != null)
-				mob = mob + "  - " + npc.getLegsitem() + ":2\r\n";
-			if (npc.getFeetitem() != null)
-				mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
-			if (npc.getHanditem() != null)
-				mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
+				if (npc.getChestitem() != null)
+					mob = mob + "  - " + npc.getChestitem() + ":3\r\n";
+				if (npc.getLegsitem() != null)
+					mob = mob + "  - " + npc.getLegsitem() + ":2\r\n";
+				if (npc.getFeetitem() != null)
+					mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
+				if (npc.getHanditem() != null)
+					mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
+			}			
 		}
 
 		if (npc.isUsedisguise() == true) {

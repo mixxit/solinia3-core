@@ -82,41 +82,38 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String specialisation = "";
 	private boolean vampire = false;
 	private boolean main = true;
-	
+
 	@Override
-	public List<UUID> getIgnoredPlayers()
-	{
+	public List<UUID> getIgnoredPlayers() {
 		return ignoredPlayers;
 	}
-	
+
 	@Override
-	public boolean hasIgnored(UUID uuid)
-	{
+	public boolean hasIgnored(UUID uuid) {
 		return ignoredPlayers.contains(uuid);
 	}
-	
+
 	@Override
-	public void setIgnoredPlayers(List<UUID> ignoredPlayers)
-	{
+	public void setIgnoredPlayers(List<UUID> ignoredPlayers) {
 		this.ignoredPlayers = ignoredPlayers;
 	}
-	
+
 	@Override
 	public UUID getUUID() {
 		return uuid;
 	}
-	
+
 	@Override
-	public boolean grantTitle(String title)
-	{
+	public boolean grantTitle(String title) {
 		if (getAvailableTitles().contains(title))
 			return false;
-		
+
 		getAvailableTitles().add(title);
-		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You have earned the title: " + title + ChatColor.RESET + " See /settitle");		
+		getBukkitPlayer().sendMessage(
+				ChatColor.YELLOW + "* You have earned the title: " + title + ChatColor.RESET + " See /settitle");
 		return true;
 	}
-	
+
 	@Override
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
@@ -141,16 +138,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-	
+
 	@Override
-	public void updateDisplayName()
-	{
-		if (getBukkitPlayer() != null)
-		{
+	public void updateDisplayName() {
+		if (getBukkitPlayer() != null) {
 			getBukkitPlayer().setDisplayName(getFullName());
 			getBukkitPlayer().setCustomName(getFullName());
 			getBukkitPlayer().setPlayerListName(getFullName());
-			
+
 			if (this.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(this.getBukkitPlayer());
 			} else {
@@ -158,46 +153,41 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 		}
 	}
-	
+
 	@Override
-	public Player getBukkitPlayer()
-	{
+	public Player getBukkitPlayer() {
 		Player player = Bukkit.getPlayer(uuid);
 		return player;
 	}
-	
+
 	@Override
-	public String getFullName()
-	{
+	public String getFullName() {
 		String displayName = forename;
 		if (lastname != null && !lastname.equals(""))
 			displayName = forename + "_" + lastname;
-		
+
 		return displayName;
 	}
-	
+
 	@Override
-	public String getFullNameWithTitle()
-	{
+	public String getFullNameWithTitle() {
 		String king = "";
-		if (isRacialKing())
-		{
+		if (isRacialKing()) {
 			if (this.getGender().equals("MALE"))
 				king = "King ";
 			else
 				king = "Queen ";
 		}
-		
-		if (isAlignmentEmperor())
-		{
+
+		if (isAlignmentEmperor()) {
 			king = "Emperor";
 		}
-		
+
 		String displayName = king + getFullName();
 		if (getTitle() != null && !(getTitle().equals(""))) {
 			displayName += " " + getTitle();
 		}
-		
+
 		return displayName;
 	}
 
@@ -206,44 +196,41 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// TODO Auto-generated method stub
 		return this.mana;
 	}
-	
+
 	@Override
-	public void setMana(int mana)
-	{
+	public void setMana(int mana) {
 		this.mana = mana;
-		try
-		{
-			ScoreboardUtils.UpdateScoreboard(this.getBukkitPlayer(), SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer()).getMaxMP(), mana);
-		} catch (CoreStateInitException e)
-		{
+		try {
+			ScoreboardUtils.UpdateScoreboard(this.getBukkitPlayer(),
+					SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer()).getMaxMP(), mana);
+		} catch (CoreStateInitException e) {
 			//
 		}
 	}
-	
+
 	@Override
 	public Double getAAExperience() {
 		return this.aaexperience;
 	}
-	
+
 	@Override
 	public void setAAExperience(Double aaexperience) {
 		this.aaexperience = aaexperience;
 	}
-	
+
 	@Override
 	public Double getExperience() {
 		return this.experience;
 	}
-	
+
 	@Override
 	public void setExperience(Double experience) {
 		this.experience = experience;
 	}
-	
+
 	@Override
-	public int getLevel()
-	{
-		return Utils.getLevelFromExperience(this.experience);		
+	public int getLevel() {
+		return Utils.getLevelFromExperience(this.experience);
 	}
 
 	@Override
@@ -256,7 +243,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean hasChosenRace() {
 		return this.haschosenrace;
 	}
-	
+
 	@Override
 	public void setChosenRace(boolean chosen) {
 		this.haschosenrace = chosen;
@@ -269,10 +256,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.language = getRace().getName().toUpperCase();
 		updateMaxHp();
 	}
-	
+
 	@Override
-	public ISoliniaRace getRace()
-	{
+	public ISoliniaRace getRace() {
 		try {
 			return StateManager.getInstance().getConfigurationManager().getRace(getRaceId());
 		} catch (CoreStateInitException e) {
@@ -299,10 +285,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setChosenClass(boolean haschosenclass) {
 		this.haschosenclass = haschosenclass;
 	}
-	
+
 	@Override
-	public ISoliniaClass getClassObj()
-	{
+	public ISoliniaClass getClassObj() {
 		try {
 			return StateManager.getInstance().getConfigurationManager().getClassObj(getClassId());
 		} catch (CoreStateInitException e) {
@@ -312,34 +297,30 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void updateMaxHp() {
-		if (getBukkitPlayer() != null && getExperience() != null)
-		{		
-			try
-			{
+		if (getBukkitPlayer() != null && getExperience() != null) {
+			try {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
 				double calculatedhp = solentity.getMaxHP();
 				getBukkitPlayer().setMaxHealth(calculatedhp);
 				getBukkitPlayer().setHealthScaled(true);
 				getBukkitPlayer().setHealthScale(40D);
-			} catch (CoreStateInitException e)
-			{
-				
+			} catch (CoreStateInitException e) {
+
 			}
 		}
 	}
-		
+
 	@Override
 	public void increasePlayerExperience(Double experience) {
 		if (!isAAOn()) {
 			increasePlayerNormalExperience(experience);
 		} else {
-			int normalpct = 100-getAapct();
-			if (normalpct > 0)
-			{
+			int normalpct = 100 - getAapct();
+			if (normalpct > 0) {
 				Double normalexperience = (experience / 100) * normalpct;
 				increasePlayerNormalExperience(normalexperience);
 			}
-			
+
 			Double aaexperience = (experience / 100) * getAapct();
 			increasePlayerAAExperience(aaexperience);
 		}
@@ -348,7 +329,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean isAAOn() {
 		if (this.getAapct() > 0)
 			return true;
-		
+
 		return false;
 	}
 
@@ -385,16 +366,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		if ((currentexperience + experience) > Utils.getExperienceRequirementForLevel(Utils.getMaxLevel())) {
-			//System.out.println("XP: " + experience);
+			// System.out.println("XP: " + experience);
 			currentexperience = Utils.getExperienceRequirementForLevel(Utils.getMaxLevel());
 		} else {
-			//System.out.println("XP: " + experience);
+			// System.out.println("XP: " + experience);
 			currentexperience = currentexperience + experience;
 		}
-		
-		setExperience(currentexperience, experience,modified);
+
+		setExperience(currentexperience, experience, modified);
 	}
-	
+
 	@Override
 	public void reducePlayerNormalExperience(Double experience) {
 
@@ -419,7 +400,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		setExperience(newexperience, experiencechange, false);
 	}
-	
+
 	@Override
 	public void dropResurrectionItem(int experienceamount) {
 		if (experienceamount < 1)
@@ -429,16 +410,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		java.util.Date now = calendar.getTime();
 		java.sql.Timestamp currenttimestamp = new Timestamp(now.getTime());
 
-		SoliniaResurrectionItem resurrectionitem = new SoliniaResurrectionItem(this, experienceamount,currenttimestamp);
+		SoliniaResurrectionItem resurrectionitem = new SoliniaResurrectionItem(this, experienceamount,
+				currenttimestamp);
 		ItemStack itemstack = resurrectionitem.AsItemStack();
 		getBukkitPlayer().getWorld().dropItem(getBukkitPlayer().getLocation(), itemstack);
 	}
-	
+
 	public void setExperience(Double experience, Double changeamount, boolean modified) {
 		Double level = (double) getLevel();
 
 		this.experience = experience;
-		
+
 		Double newlevel = (double) getLevel();
 
 		Double xpneededforcurrentlevel = Utils.getExperienceRequirementForLevel((int) (newlevel + 0));
@@ -449,7 +431,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
 		int ipercenttolevel = percenttolevel.intValue();
 		if (changeamount > 0) {
-			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gain experience (" + ipercenttolevel + "% into level)");
+			getBukkitPlayer()
+					.sendMessage(ChatColor.YELLOW + "* You gain experience (" + ipercenttolevel + "% into level)");
 			getBukkitPlayer().sendMessage(ChatColor.GRAY + "Exp Gained: " + changeamount);
 			if (modified == true)
 				getBukkitPlayer().sendMessage(
@@ -457,68 +440,62 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		if (changeamount < 0) {
-			getBukkitPlayer().sendMessage(ChatColor.RED + "* You lost experience (" + ipercenttolevel + "% into level)");
+			getBukkitPlayer()
+					.sendMessage(ChatColor.RED + "* You lost experience (" + ipercenttolevel + "% into level)");
 		}
 		if (Double.compare(newlevel, level) > 0) {
 			String classname = "Hero";
 			if (getClassObj() != null)
 				classname = getClassObj().getName();
-			
-			StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),getFullName() + " has reached new heights as a level " + (int)Math.floor(newlevel) + " " + classname.toLowerCase() + "!");
+
+			StateManager.getInstance().getChannelManager().sendToDiscordMC(null,
+					StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),
+					getFullName() + " has reached new heights as a level " + (int) Math.floor(newlevel) + " "
+							+ classname.toLowerCase() + "!");
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
 			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
-			
+
 			// Title rewards
-			if (newlevel >= 10)
-			{
-				if (!getAvailableTitles().contains("the Apprentice"))
-				{
+			if (newlevel >= 10) {
+				if (!getAvailableTitles().contains("the Apprentice")) {
 					grantTitle("the Apprentice");
 				}
 			}
-			
-			if (newlevel >= 20)
-			{
-				if (!getAvailableTitles().contains("the Journeyman"))
-				{
+
+			if (newlevel >= 20) {
+				if (!getAvailableTitles().contains("the Journeyman")) {
 					grantTitle("the Journeyman");
 				}
 			}
-			
-			if (newlevel >= 30)
-			{
-				if (!getAvailableTitles().contains("the Expert"))
-				{
+
+			if (newlevel >= 30) {
+				if (!getAvailableTitles().contains("the Expert")) {
 					grantTitle("the Expert");
 				}
 			}
-			
-			if (newlevel >= 40)
-			{
-				if (!getAvailableTitles().contains("the Hero"))
-				{
+
+			if (newlevel >= 40) {
+				if (!getAvailableTitles().contains("the Hero")) {
 					grantTitle("the Hero");
 				}
 			}
-			
-			if (newlevel >= 50)
-			{
-				if (!getAvailableTitles().contains("the Legend"))
-				{
+
+			if (newlevel >= 50) {
+				if (!getAvailableTitles().contains("the Legend")) {
 					grantTitle("the Legend");
 				}
 			}
 
-            updateMaxHp();
+			updateMaxHp();
 		}
 
 		if (Double.compare(newlevel, level) < 0) {
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You lost a level (" + newlevel + ")!");
 
-            updateMaxHp();
+			updateMaxHp();
 		}
 	}
-	
+
 	@Override
 	public void increasePlayerAAExperience(Double experience) {
 
@@ -528,26 +505,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			modified = true;
 		}
 		experience = experience * (modifier / 100);
-		
+
 		// Cap at max just under a quarter of an AA experience point
 		if (experience > Utils.getMaxAAXP()) {
 			experience = Utils.getMaxAAXP();
 		}
 
-		//System.out.println("AA XP: " + experience);
-		
+		// System.out.println("AA XP: " + experience);
+
 		Double currentaaexperience = getAAExperience();
-		
+
 		currentaaexperience = currentaaexperience + experience;
-		
+
 		setAAExperience(currentaaexperience, modified, experience);
 	}
-	
+
 	private void setAAExperience(Double aaexperience, Boolean modified, Double amountincreased) {
 		// One AA level is always equal to the same experience as is needed for
 		// 39 to level 40
 		// AA xp should never be above 2313441000
-		
+
 		if (getClassObj() == null)
 			return;
 
@@ -569,11 +546,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		Double percenttoaa = Math.floor((aaexperience / Utils.getMaxAAXP()) * 100);
 		int ipercenttoaa = percenttoaa.intValue();
 
-		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gain alternate experience (" + ipercenttoaa + "% into AA)!");
+		getBukkitPlayer()
+				.sendMessage(ChatColor.YELLOW + "* You gain alternate experience (" + ipercenttoaa + "% into AA)!");
 		getBukkitPlayer().sendMessage(ChatColor.GRAY + "AAExp Gained: " + amountincreased);
 		if (modified == true)
-			getBukkitPlayer().sendMessage(
-					ChatColor.YELLOW + "* You were given bonus XP from a player donation perk! (/perks)");
+			getBukkitPlayer()
+					.sendMessage(ChatColor.YELLOW + "* You were given bonus XP from a player donation perk! (/perks)");
 
 		if (givenaapoint) {
 			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gained an Alternate Experience Point!");
@@ -582,11 +560,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void giveMoney(int i) {
-		try
-		{
-			StateManager.getInstance().giveMoney(getBukkitPlayer(),i);
-		} catch (Exception e)
-		{
+		try {
+			StateManager.getInstance().giveMoney(getBukkitPlayer(), i);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -604,8 +580,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public String getLanguage() {
 		if (language == null || language.equals("UNKNOWN"))
-				if (getRace() != null)
-					language = getRace().getName();
+			if (getRace() != null)
+				language = getRace().getName();
 		return language;
 	}
 
@@ -637,59 +613,55 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void emote(String string) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this,string);
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, string);
 	}
-	
+
 	@Override
 	public void ooc(String string) {
-		if (getLanguage() == null || getLanguage().equals("UNKNOWN"))
-		{
-			if (getRace() == null)
-			{
+		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
+			if (getRace() == null) {
 				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
 				return;
 			} else {
 				setLanguage(getRace().getName().toUpperCase());
 			}
 		}
-		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this,string);
+		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this, string);
 	}
 
 	@Override
 	public void say(String string) {
-		if (getLanguage() == null || getLanguage().equals("UNKNOWN"))
-		{
-			if (getRace() == null)
-			{
+		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
+			if (getRace() == null) {
 				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
 				return;
 			} else {
 				setLanguage(getRace().getName().toUpperCase());
 			}
 		}
-		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this,string);
+		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, string);
 	}
-	
+
 	@Override
 	public SoliniaPlayerSkill getSkill(String skillname) {
 		if (!Utils.isValidSkill(skillname))
 			return null;
-		
-		for(SoliniaPlayerSkill skill : this.skills)
-		{
+
+		for (SoliniaPlayerSkill skill : this.skills) {
 			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase()))
 				return skill;
 		}
-		
+
 		// If we got this far the skill doesn't exist, create it with 0
-		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillname.toUpperCase(),0);
+		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillname.toUpperCase(), 0);
 		skills.add(skill);
 		return skill;
 	}
 
 	@Override
 	public void tryIncreaseSkill(String skillname, int skillupamount) {
-		//this.getBukkitPlayer().sendMessage("DEBUG: Trying to increase skill: " + skillname);
+		// this.getBukkitPlayer().sendMessage("DEBUG: Trying to increase skill: " +
+		// skillname);
 		SoliniaPlayerSkill skill = getSkill(skillname);
 		int currentskill = 0;
 		if (skill != null) {
@@ -697,9 +669,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		int skillcap = getSkillCap(skillname);
-		//this.getBukkitPlayer().sendMessage("DEBUG: Your skill cap is: " + skillcap);
+		// this.getBukkitPlayer().sendMessage("DEBUG: Your skill cap is: " + skillcap);
 		if ((currentskill + skillupamount) > skillcap) {
-			//this.getBukkitPlayer().sendMessage("DEBUG: cant increase skill, current skill+increase is greater than you cap: " + skillcap);
+			// this.getBukkitPlayer().sendMessage("DEBUG: cant increase skill, current
+			// skill+increase is greater than you cap: " + skillcap);
 			return;
 		}
 
@@ -710,49 +683,47 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		Random r = new Random();
 		int randomInt = r.nextInt(100) + 1;
-		//this.getBukkitPlayer().sendMessage("DEBUG: skill roll " + randomInt + " vs needed: " + chance);
+		//this.getBukkitPlayer().sendMessage("DEBUG: skill roll " + randomInt + " vs
+		// needed: " + chance);
 
-		
 		if (randomInt < chance) {
 			setSkill(skillname, currentskill + skillupamount);
 		}
-		
+
 		// Now try to increase specialisation
-		if (getSpecialisation() != null && !getSpecialisation().equals(""))
-		{
+		if (getSpecialisation() != null && !getSpecialisation().equals("")) {
 			if (!skillname.toUpperCase().equals(getSpecialisation().toUpperCase()))
 				return;
-			
+
 			skill = getSkill("SPECIALISE" + skillname.toUpperCase());
-			
+
 			currentskill = 0;
 			if (skill != null) {
 				currentskill = skill.getValue();
 			}
-			
+
 			skillcap = getSkillCap("SPECIALISE" + skillname.toUpperCase());
 			if ((currentskill + skillupamount) > skillcap) {
 				return;
 			}
-			
+
 			chance = 10 + ((252 - currentskill) / 20);
 			if (chance < 1) {
 				chance = 1;
 			}
-			
+
 			randomInt = r.nextInt(100) + 1;
 			if (randomInt < chance) {
-				
+
 				setSkill("SPECIALISE" + skillname.toUpperCase(), currentskill + skillupamount);
 			}
 		}
-		
+
 	}
 
 	@Override
-	public void setSkill(String skillname, int value) 
-	{
-		if (value > Integer.MAX_VALUE) 
+	public void setSkill(String skillname, int value) {
+		if (value > Integer.MAX_VALUE)
 			return;
 
 		// max skill point
@@ -760,19 +731,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		skillname = skillname.toUpperCase();
-		
+
 		if (this.skills == null)
 			this.skills = new ArrayList<SoliniaPlayerSkill>();
 
 		boolean updated = false;
 
-		for (SoliniaPlayerSkill skill : this.skills) 
-		{
-			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase())) 
-			{
+		for (SoliniaPlayerSkill skill : this.skills) {
+			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase())) {
 				skill.setValue(value);
 				updated = true;
-				getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
+				getBukkitPlayer()
+						.sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
 				return;
 			}
 		}
@@ -781,10 +751,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillname.toUpperCase(), value);
 			skills.add(skill);
 		}
-		
+
 		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
 	}
-	
+
 	@Override
 	public void reducePlayerMana(int mana) {
 
@@ -801,12 +771,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void increasePlayerMana(int mana) {
 		int currentmana = getMana();
 		int maxmp = 1;
-		try
-		{
+		try {
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitPlayer());
 			maxmp = solentity.getMaxMP();
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			// do nothing
 		}
 
@@ -815,7 +783,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} else {
 			currentmana = currentmana + mana;
 		}
-		
+
 		setMana(currentmana);
 	}
 
@@ -823,273 +791,247 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void interact(Plugin plugin, PlayerInteractEvent event) {
 		// TODO Auto-generated method stub
 		ItemStack itemstack = event.getItem();
-	    
-		try
-		{
-		    // this is the item not in offhand
-		    if (event.getHand() == EquipmentSlot.HAND && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
-		    {
-			    if (itemstack == null)
-			    {
-				    return;
-			    }
 
-			    if ((!(itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)))
-		    		return;
+		try {
+			// this is the item not in offhand
+			if (event.getHand() == EquipmentSlot.HAND
+					&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+				if (itemstack == null) {
+					return;
+				}
 
-		    	// We have our custom item id, lets check it exists
-		    	ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-		    	
-		    	if (item == null)
-		    	{
-		    		return;
-		    	}
-		    	
-		    	// Start applying an augmentation
-		    	if((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isAugmentation()) 
-			    {
-		    		if (StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getPlayer().getUniqueId()) == null || 
-		    				StateManager.getInstance().getPlayerManager().getApplyingAugmentation(event.getPlayer().getUniqueId()) == 0
-		    				)
-		    		{
-			    		StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getPlayer().getUniqueId(), item.getId());
-			    		event.getPlayer().sendMessage("* Applying " + item.getDisplayname() + " to an item, please right click the item you wish to apply this augmentation to. . To cancel applying, right click while holding this item again");
-		    		} else {
-		    			StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getPlayer().getUniqueId(), 0);
-		    			event.getPlayer().sendMessage("* Cancelled applying augmentation");
-		    		}
-		    		return;
-			    }
-		    	
-		    	if((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) 
-			    {
-		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
-		    		if (targetmob != null)
-		    		{
-		    			item.useItemOnEntity(plugin, event.getPlayer(),targetmob,false);
-		    			return;
-		    		}
-			    }
-		    	
-		    	if (item.getAbilityid() < 1)
-		    	{
-		    		return;
-		    	}
+				if ((!(itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)))
+					return;
 
-		    	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-			    
-			    // Only applies to consumable items
-		    	if((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isConsumable()) 
-			    {
-		    		LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
-		    		if (targetmob != null)
-		    		{
-		    			item.useItemOnEntity(plugin, event.getPlayer(),targetmob,true);
-		    			event.getPlayer().setItemInHand(null);
-		    			event.getPlayer().updateInventory();
-		    			return;
-		    		} else {
-		    			item.useItemOnEntity(plugin, event.getPlayer(),event.getPlayer(),true);
-		    			event.getPlayer().setItemInHand(null);
-		    			event.getPlayer().updateInventory();
-		    			return;
-		    		}
-			    }
-			    
-			    // Only applies to spell effects
-			    if (!itemstack.getType().equals(Material.ENCHANTED_BOOK))
-			    {
-			    	return;
-			    }
-			    
-			 // Reroute action depending on target
-		    	if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) 
-			    {
-		    		doCastSpellItem(plugin,spell,event.getPlayer(),item);
-			    }
-		    }
-		} catch (CoreStateInitException e)
-		{
+				// We have our custom item id, lets check it exists
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+
+				if (item == null) {
+					return;
+				}
+
+				// Start applying an augmentation
+				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isAugmentation()) {
+					if (StateManager.getInstance().getPlayerManager()
+							.getApplyingAugmentation(event.getPlayer().getUniqueId()) == null
+							|| StateManager.getInstance().getPlayerManager()
+									.getApplyingAugmentation(event.getPlayer().getUniqueId()) == 0) {
+						StateManager.getInstance().getPlayerManager()
+								.setApplyingAugmentation(event.getPlayer().getUniqueId(), item.getId());
+						event.getPlayer().sendMessage("* Applying " + item.getDisplayname()
+								+ " to an item, please right click the item you wish to apply this augmentation to. . To cancel applying, right click while holding this item again");
+					} else {
+						StateManager.getInstance().getPlayerManager()
+								.setApplyingAugmentation(event.getPlayer().getUniqueId(), 0);
+						event.getPlayer().sendMessage("* Cancelled applying augmentation");
+					}
+					return;
+				}
+
+				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) {
+					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
+					if (targetmob != null) {
+						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, false);
+						return;
+					}
+				}
+
+				if (item.getAbilityid() < 1) {
+					return;
+				}
+
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+						.getSpell(item.getAbilityid());
+
+				// Only applies to consumable items
+				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isConsumable()) {
+					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
+					if (targetmob != null) {
+						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
+						event.getPlayer().setItemInHand(null);
+						event.getPlayer().updateInventory();
+						return;
+					} else {
+						item.useItemOnEntity(plugin, event.getPlayer(), event.getPlayer(), true);
+						event.getPlayer().setItemInHand(null);
+						event.getPlayer().updateInventory();
+						return;
+					}
+				}
+
+				// Only applies to spell effects
+				if (!itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+					return;
+				}
+
+				// Reroute action depending on target
+				if (event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+					doCastSpellItem(plugin, spell, event.getPlayer(), item);
+				}
+			}
+		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void doCastSpellItem(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem) {
-		if (spell.isAASpell())
-    	{
-    		player.sendMessage("You require the correct AA to use this spell");
-    		return;
-    	}
-    	
-    	if (spell.getAllowedClasses().size() > 0)
-    	{
-    		if (getClassObj() == null)
-    		{
-    			player.sendMessage(ChatColor.GRAY + " * This item cannot be used by your profession");
-    			return;
-    		}
-    		
-    		boolean foundprofession = false;
-    		String professions = "";
-    		int foundlevel = 0;
-    		for (SoliniaSpellClass spellclass : spell.getAllowedClasses())
-    		{
-    			if (spellclass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase()))
-    			{
-    				foundprofession = true;
-    				foundlevel = spellclass.getMinlevel();
-    				break;
-    			}
-    			professions += spellclass.getClassname() + " "; 
-    		}
-    		
-    		if (foundprofession == false)
-    		{
-    			player.sendMessage(ChatColor.GRAY + " * This item can only be used by " + professions);
-    			return;
-    		} else {
-    			if (foundlevel >  0)
-    			{
-    				Double level = (double) getLevel();
-    				if (level < foundlevel)
-    				{
-    					player.sendMessage(ChatColor.GRAY + " * This item requires level " + foundlevel);
-		    			return;
-    				}
-    			}
-    		}
-    		
-    		
-    	}
-    	
-    	try
-    	{
-    		ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
+		if (spell.isAASpell()) {
+			player.sendMessage("You require the correct AA to use this spell");
+			return;
+		}
+
+		if (spell.getAllowedClasses().size() > 0) {
+			if (getClassObj() == null) {
+				player.sendMessage(ChatColor.GRAY + " * This item cannot be used by your profession");
+				return;
+			}
+
+			boolean foundprofession = false;
+			String professions = "";
+			int foundlevel = 0;
+			for (SoliniaSpellClass spellclass : spell.getAllowedClasses()) {
+				if (spellclass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase())) {
+					foundprofession = true;
+					foundlevel = spellclass.getMinlevel();
+					break;
+				}
+				professions += spellclass.getClassname() + " ";
+			}
+
+			if (foundprofession == false) {
+				player.sendMessage(ChatColor.GRAY + " * This item can only be used by " + professions);
+				return;
+			} else {
+				if (foundlevel > 0) {
+					Double level = (double) getLevel();
+					if (level < foundlevel) {
+						player.sendMessage(ChatColor.GRAY + " * This item requires level " + foundlevel);
+						return;
+					}
+				}
+			}
+
+		}
+
+		try {
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) player);
 			if (solentity == null)
 				return;
-    		
-	    	if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
+
+			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]  (Hold crouch or use /trance to meditate)");
 				return;
 			}
-	    	
-	    	if (!checkFizzle(spell))
-	    	{
-	    		emote("* " + getFullName() + "'s spell fizzles");
-	    		SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
-	    		return;
-	    	}
-    	} catch (CoreStateInitException e)
-    	{
-    		return;
-    	}
-    	
-    	// Reroute action depending on target
-    	LivingEntity targetmob = Utils.getTargettedLivingEntity(player, spell.getRange());
-    	try
-    	{
-			if (targetmob != null)
-			{
-				boolean success = spellSourceItem.useItemOnEntity(plugin, player,targetmob,false);
-				if (success == true)
-				{
-					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(),1);
+
+			if (!checkFizzle(spell)) {
+				emote("* " + getFullName() + "'s spell fizzles");
+				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
+				return;
+			}
+		} catch (CoreStateInitException e) {
+			return;
+		}
+
+		// Reroute action depending on target
+		LivingEntity targetmob = Utils.getTargettedLivingEntity(player, spell.getRange());
+		try {
+			if (targetmob != null) {
+				boolean success = spellSourceItem.useItemOnEntity(plugin, player, targetmob, false);
+				if (success == true) {
+					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 				}
 				return;
 			} else {
-				boolean success = spellSourceItem.useItemOnEntity(plugin, player,player,false);
-				if (success == true)
-				{
-					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(),1);
+				boolean success = spellSourceItem.useItemOnEntity(plugin, player, player, false);
+				if (success == true) {
+					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 				}
 				return;
 			}
-    	} catch (CoreStateInitException e)
-    	{
-    		return;
-    	}
+		} catch (CoreStateInitException e) {
+			return;
+		}
 	}
 
 	@Override
 	public boolean checkFizzle(ISoliniaSpell spell) {
-		if (getBukkitPlayer().isOp()) 
+		if (getBukkitPlayer().isOp())
 			return true;
 
 		// todo fizzle free features
-		
+
 		int no_fizzle_level = 0;
 
 		try {
-	
+
 			ISoliniaLivingEntity entity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
-		
+
 			if (entity == null)
 				return false;
-			
+
 			if (getClassObj() == null)
 				return false;
-	
+
 			// TODO item/aa/spells fizzle bonus
-	
+
 			int par_skill = 0;
 			int act_skill = 0;
-	
+
 			int minLevel = 0;
-			
-			for (SoliniaSpellClass spellClass : spell.getAllowedClasses())
-			{
+
+			for (SoliniaSpellClass spellClass : spell.getAllowedClasses()) {
 				if (!spellClass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase()))
 					continue;
-				
+
 				minLevel = spellClass.getMinlevel();
 				break;
 			}
-			
+
 			par_skill = minLevel * 5 - 10;
-			
+
 			if (par_skill > 235)
 				par_skill = 235;
-			
+
 			par_skill += minLevel;
-	
+
 			SoliniaPlayerSkill playerSkill = getSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase());
-			
+
 			if (playerSkill != null)
 				act_skill = playerSkill.getValue();
-			
-			act_skill += getLevel(); 
-	
+
+			act_skill += getLevel();
+
 			// todo: spell specialisation
 			int specialisation = 0;
-	
-			float diff = par_skill + (float)(spell.getBasediff()) - act_skill;
-	
-			if(getClassObj().getName().equals("BARD"))
-			{
+
+			float diff = par_skill + (float) (spell.getBasediff()) - act_skill;
+
+			if (getClassObj().getName().equals("BARD")) {
 				diff -= (entity.getCharisma() - 110) / 20.0;
-			}
-			else if (Utils.getCasterClass(getClassObj().getName().toUpperCase()).equals("W"))
-			{
+			} else if (Utils.getCasterClass(getClassObj().getName().toUpperCase()).equals("W")) {
 				diff -= (entity.getWisdom() - 125) / 20.0;
-			}
-			else if (Utils.getCasterClass(getClassObj().getName().toUpperCase()).equals("I"))
-			{
+			} else if (Utils.getCasterClass(getClassObj().getName().toUpperCase()).equals("I")) {
 				diff -= (entity.getIntelligence() - 125) / 20.0;
 			}
-	
+
 			float basefizzle = 10;
-			float fizzlechance = (float)(basefizzle - specialisation + diff / 5.0);
-	
+			float fizzlechance = (float) (basefizzle - specialisation + diff / 5.0);
+
 			// always at least 1% chance to fail or 5% to succeed
 			fizzlechance = fizzlechance < 1 ? 1 : (fizzlechance > 95 ? 95 : fizzlechance);
-	
+
 			float fizzle_roll = Utils.RandomBetween(0, 100);
-			
-			//System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " + fizzlechance);
-			if(fizzle_roll > fizzlechance)
+
+			// System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " +
+			// fizzlechance);
+			if (fizzle_roll > fizzlechance)
 				return true;
-			
+
 		} catch (CoreStateInitException e) {
 			return false;
 		}
@@ -1104,80 +1046,74 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void setInteraction(UUID interaction, ISoliniaNPC npc) {
-		if (interaction == null)
-		{
+		if (interaction == null) {
 			this.interaction = interaction;
 			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are no longer interacting");
 			return;
 		}
-		
+
 		Entity e = Bukkit.getEntity(interaction);
 		if (e == null)
 			return;
-		
+
 		if (!(e instanceof LivingEntity))
 			return;
-		
-		if (((Creature)e).getTarget() != null)
-		{
-			if (interaction != null)
-			{
+
+		if (((Creature) e).getTarget() != null) {
+			if (interaction != null) {
 				this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are no longer interacting");
 				interaction = null;
 			}
 			return;
 		}
-		
-		if (Bukkit.getEntity(interaction) instanceof Wolf)
-		{
-			Wolf w = (Wolf)Bukkit.getEntity(interaction);
+
+		if (Bukkit.getEntity(interaction) instanceof Wolf) {
+			Wolf w = (Wolf) Bukkit.getEntity(interaction);
 			if (w.getOwner() != null)
 				return;
 		}
-		
-		this.interaction = interaction;
-		
-		if (npc != null)
-		{
-			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with " + Bukkit.getEntity(interaction).getName() + " [" + npc.getId() + "] - Anything you type will be heared by the NPC and possibly responded to. Words in pink are trigger words you can type");
 
-			if (npc.getMerchantid() > 0)
-			{
-				try
-				{
-					StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity)e).say("i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA + "] available if you are interested in buying or selling something", getBukkitPlayer());
-				} catch (CoreStateInitException cse)
-				{
+		this.interaction = interaction;
+
+		if (npc != null) {
+			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with "
+					+ Bukkit.getEntity(interaction).getName() + " [" + npc.getId()
+					+ "] - Anything you type will be heared by the NPC and possibly responded to. Words in pink are trigger words you can type");
+
+			if (npc.getMerchantid() > 0) {
+				try {
+					StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity) e)
+							.say("i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA
+									+ "] available if you are interested in buying or selling something",
+									getBukkitPlayer());
+				} catch (CoreStateInitException cse) {
 					//
 				}
 			}
-			
-			for (ISoliniaNPCEventHandler eventHandler : npc.getEventHandlers())
-			{
+
+			for (ISoliniaNPCEventHandler eventHandler : npc.getEventHandlers()) {
 				if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
 					continue;
-				
+
 				// See if player has any items that are wanted
 				int itemId = Integer.parseInt(eventHandler.getTriggerdata());
 				if (itemId == 0)
 					continue;
-				
-				if (Utils.getPlayerTotalCountOfItemId(getBukkitPlayer(),itemId) < 1)
+
+				if (Utils.getPlayerTotalCountOfItemId(getBukkitPlayer(), itemId) < 1)
 					continue;
-				
-				try
-				{
+
+				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-					
+
 					TextComponent tc = new TextComponent();
 					tc.setText(ChatColor.YELLOW + "[QUEST] ");
 					TextComponent tc2 = new TextComponent();
 					tc2.setText(ChatColor.GRAY + "- Click here to give " + item.getDisplayname() + ChatColor.RESET);
 					tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/npcgive " + itemId));
 					tc.addExtra(tc2);
-					getBukkitPlayer().spigot().sendMessage(tc);	
-				} catch (CoreStateInitException eNotInitialised)
-				{
+					getBukkitPlayer().spigot().sendMessage(tc);
+				} catch (CoreStateInitException eNotInitialised) {
 					continue;
 				}
 			}
@@ -1190,7 +1126,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return currentChannel;
 	}
 
-	@Override	
+	@Override
 	public void setCurrentChannel(String currentChannel) {
 		this.currentChannel = currentChannel;
 	}
@@ -1200,12 +1136,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getRace() != null)
 			if (getRace().getName().toUpperCase().equals(language.toUpperCase()))
 				return true;
-		
+
 		SoliniaPlayerSkill soliniaskill = getSkill(language);
-        if (soliniaskill != null && soliniaskill.getValue() >= 100)
-        {
-            return true;
-        }
+		if (soliniaskill != null && soliniaskill.getValue() >= 100) {
+			return true;
+		}
 		return false;
 	}
 
@@ -1214,11 +1149,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getRace() != null)
 			if (getRace().getName().toUpperCase().equals(language))
 				return;
-		
+
 		if (getSkill(language).getValue() >= 100)
 			return;
-		
-		tryIncreaseSkill(language,1);
+
+		tryIncreaseSkill(language, 1);
 	}
 
 	@Override
@@ -1236,15 +1171,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		return resist;
 	}
-	
+
 	@Override
 	public int getTotalResist(SpellResistType type) {
 		int total = 0;
 		// Get resist total from all active effects
-		try
-		{
+		try {
 			total += SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer()).getResistsFromActiveEffects(type);
-			
+
 			int effectId = 0;
 			switch (type) {
 			case RESIST_FIRE:
@@ -1265,26 +1199,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			default:
 				break;
 			}
-			
-			if (effectId > 0)
-			{
-				for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(effectId))
-				{
+
+			if (effectId > 0) {
+				for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(effectId)) {
 					total += effect.getBase1();
 				}
 			}
-			
+
 			int resistAllEffectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistAll);
-			for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(resistAllEffectId))
-			{
+			for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(resistAllEffectId)) {
 				total += effect.getBase1();
 			}
-			
-		} catch (CoreStateInitException e)
-		{
+
+		} catch (CoreStateInitException e) {
 			// Skip
 		}
-		
+
 		List<ItemStack> itemstacks = new ArrayList<ItemStack>();
 		for (ItemStack itemstack : getBukkitPlayer().getInventory().getArmorContents()) {
 			if (itemstack == null)
@@ -1295,34 +1225,31 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (getBukkitPlayer().getInventory().getItemInOffHand() != null)
 			itemstacks.add(getBukkitPlayer().getInventory().getItemInOffHand());
-		
+
 		if (getBukkitPlayer().getInventory().getItemInHand() != null)
 			itemstacks.add(getBukkitPlayer().getInventory().getItemInHand());
-		
-		
+
 		for (ItemStack itemstack : itemstacks) {
 			if (itemstack == null)
 				continue;
 
 			if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
 					&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-				try
-				{
+				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
 					ISoliniaItem augItem = null;
-					if (augmentationId != null && augmentationId != 0)
-					{
+					if (augmentationId != null && augmentationId != 0) {
 						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
 					}
-					
+
 					switch (type) {
 					case RESIST_FIRE:
 						if (item.getFireResist() > 0) {
 							total += item.getFireResist();
 						}
 						if (augItem != null)
-							if(augItem.getFireResist() > 0)
+							if (augItem.getFireResist() > 0)
 								total += item.getFireResist();
 						break;
 					case RESIST_COLD:
@@ -1330,7 +1257,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							total += item.getColdResist();
 						}
 						if (augItem != null)
-							if(augItem.getColdResist() > 0)
+							if (augItem.getColdResist() > 0)
 								total += item.getColdResist();
 						break;
 					case RESIST_MAGIC:
@@ -1338,7 +1265,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							total += item.getMagicResist();
 						}
 						if (augItem != null)
-							if(augItem.getMagicResist() > 0)
+							if (augItem.getMagicResist() > 0)
 								total += item.getMagicResist();
 						break;
 					case RESIST_POISON:
@@ -1346,7 +1273,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							total += item.getPoisonResist();
 						}
 						if (augItem != null)
-							if(augItem.getPoisonResist() > 0)
+							if (augItem.getPoisonResist() > 0)
 								total += item.getPoisonResist();
 						break;
 					case RESIST_DISEASE:
@@ -1354,20 +1281,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							total += item.getDiseaseResist();
 						}
 						if (augItem != null)
-							if(augItem.getDiseaseResist() > 0)
+							if (augItem.getDiseaseResist() > 0)
 								total += item.getDiseaseResist();
 						break;
 					default:
 						break;
 					}
-				} catch (CoreStateInitException initException)
-				{
-					
+				} catch (CoreStateInitException initException) {
+
 				}
 
 			}
 		}
-		
+
 		if (total > 255)
 			return 255;
 
@@ -1389,27 +1315,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		List<ISoliniaAARank> buyableRanks = new ArrayList<ISoliniaAARank>();
 		if (getLevel() < 20)
 			return buyableRanks;
-		
-		try
-		{
-		for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAAbilities())
-		{
-			for(ISoliniaAARank rank : ability.getRanks())
-			{
-				if (this.ranks.contains(rank.getId()))
-					continue;
-				
-				if (hasPrerequisites(ability,rank) && canUseAlternateAdvancementRank(ability,rank))
-					buyableRanks.add(rank);
-				break;
+
+		try {
+			for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAAbilities()) {
+				for (ISoliniaAARank rank : ability.getRanks()) {
+					if (this.ranks.contains(rank.getId()))
+						continue;
+
+					if (hasPrerequisites(ability, rank) && canUseAlternateAdvancementRank(ability, rank))
+						buyableRanks.add(rank);
+					break;
+				}
 			}
-		}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			// ignore
 		}
 		return buyableRanks;
-		
+
 	}
 
 	@Override
@@ -1417,44 +1339,43 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// Has already
 		if (this.ranks.contains(rank.getId()))
 			return false;
-		
+
 		if (rank.getAbilityid() == 0)
 			return false;
-		
+
 		if (rank.getCost() == 0)
 			return false;
-		
-		if(rank.getCost() > getAAPoints()) 
+
+		if (rank.getCost() > getAAPoints())
 			return false;
-		
-		if(!canUseAlternateAdvancementRank(ability, rank)) {
+
+		if (!canUseAlternateAdvancementRank(ability, rank)) {
 			return false;
 		}
 
-		if(rank.getLevel_req() > getLevel()) {
+		if (rank.getLevel_req() > getLevel()) {
 			return false;
 		}
-		
+
 		if (hasRank(rank))
 			return false;
 
 		if (!hasPreviousRanks(ability, rank))
 			return false;
-		
+
 		if (!hasPrerequisites(ability, rank))
 			return false;
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public boolean hasPrerequisites(ISoliniaAAAbility ability, ISoliniaAARank rank) {
-		for(SoliniaAAPrereq prereq : rank.getPrereqs())
-		{
+		for (SoliniaAAPrereq prereq : rank.getPrereqs()) {
 			if (!hasAAAbility(prereq.getAbilityid()))
 				return false;
 		}
-			
+
 		return true;
 	}
 
@@ -1467,10 +1388,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean canUseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {
 		if (!ability.isEnabled())
 			return false;
-		
+
 		if (!ability.canClassUseAbility(getClassObj()))
 			return false;
-			
+
 		return true;
 	}
 
@@ -1478,100 +1399,91 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean hasRank(ISoliniaAARank rank) {
 		return ranks.contains(rank.getId());
 	}
-	
+
 	@Override
-	public List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId)
-	{
+	public List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId) {
 		List<SoliniaAARankEffect> effects = new ArrayList<SoliniaAARankEffect>();
 		if (ranks.size() == 0)
 			return effects;
-		
-		try
-		{
-			for (int rankId : ranks)
-			{
+
+		try {
+			for (int rankId : ranks) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 				if (rank == null)
 					continue;
-				
-				for (SoliniaAARankEffect effect : rank.getEffects())
-				{
+
+				for (SoliniaAARankEffect effect : rank.getEffects()) {
 					if (effect.getEffectId() != effectId)
 						continue;
-					
+
 					effects.add(effect);
 				}
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			//
 		}
-		
+
 		return effects;
 	}
-	
+
 	@Override
-	public List<ISoliniaAARank> getAARanks()
-	{
+	public List<ISoliniaAARank> getAARanks() {
 		List<ISoliniaAARank> rankList = new ArrayList<ISoliniaAARank>();
 		if (ranks.size() == 0)
 			return rankList;
-		
-		try
-		{
-			for (int rankId : ranks)
-			{
+
+		try {
+			for (int rankId : ranks) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 				if (rank == null)
 					continue;
-				
+
 				rankList.add(rank);
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			//
 		}
-		
+
 		return rankList;
 	}
 
 	@Override
 	public boolean hasPreviousRanks(ISoliniaAAAbility ability, ISoliniaAARank rank) {
-		for (ISoliniaAARank curRank : ability.getRanks())
-		{
+		for (ISoliniaAARank curRank : ability.getRanks()) {
 			if (curRank.getPosition() >= rank.getPosition())
 				continue;
-			
+
 			if (!hasRank(curRank))
 				return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public void purchaseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {
-		if(!canPurchaseAlternateAdvancementRank(ability, rank))
+		if (!canPurchaseAlternateAdvancementRank(ability, rank))
 			return;
-		
+
 		setAAPoints(getAAPoints() - rank.getCost());
 		ranks.add(rank.getId());
 		if (!aas.contains(rank.getAbilityid()))
 			aas.add(rank.getAbilityid());
-		getBukkitPlayer().sendMessage("You have gained the AA " + ability.getName() + " (rank " + rank.getPosition() + ")");
+		getBukkitPlayer()
+				.sendMessage("You have gained the AA " + ability.getName() + " (rank " + rank.getPosition() + ")");
 	}
 
 	@Override
 	public boolean canDodge() {
 		if (getClassObj() == null)
 			return false;
-		
+
 		if (getClassObj().canDodge() == false)
 			return false;
-		
+
 		if (getClassObj().getDodgelevel() > getLevel())
 			return false;
-		
+
 		return true;
 	}
 
@@ -1579,13 +1491,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean canRiposte() {
 		if (getClassObj() == null)
 			return false;
-		
+
 		if (getClassObj().canRiposte() == false)
 			return false;
-		
+
 		if (getClassObj().getRipostelevel() > getLevel())
 			return false;
-		
+
 		return true;
 	}
 
@@ -1596,48 +1508,44 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (getClassObj().canDoubleAttack() == false)
 			return false;
-		
+
 		if (getClassObj().getDoubleattacklevel() > getLevel())
 			return false;
-		
+
 		return true;
 	}
-	
-	@Override 
-	public boolean getDodgeCheck()
-	{
+
+	@Override
+	public boolean getDodgeCheck() {
 		if (canDodge() == false)
 			return false;
-		
+
 		int chance = getSkill("DODGE").getValue();
 		chance += 100;
 		chance /= 40;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
-	
-	@Override 
-	public boolean getRiposteCheck()
-	{
+
+	@Override
+	public boolean getRiposteCheck() {
 		if (canRiposte() == false)
 			return false;
-		
+
 		int chance = getSkill("RIPOSTE").getValue();
 		chance += 100;
 		chance /= 50;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
-	
-	@Override 
-	public boolean getDoubleAttackCheck()
-	{
+
+	@Override
+	public boolean getDoubleAttackCheck() {
 		if (canDoubleAttack() == false)
 			return false;
-		
+
 		int chance = getSkill("DOUBLEATTACK").getValue();
-		if (getLevel() > 35)
-		{
+		if (getLevel() > 35) {
 			chance += getLevel();
 		}
 		chance /= 5;
@@ -1649,24 +1557,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean getSafefallCheck() {
 		if (canSafefall() == false)
 			return false;
-		
+
 		int chance = getSkill("SAFEFALL").getValue();
 		chance += 10;
 		chance += getLevel();
-		
+
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
 
 	private boolean canSafefall() {
 		if (getClassObj() == null)
 			return false;
-		
+
 		if (getClassObj().canSafeFall() == false)
 			return false;
-		
+
 		if (getClassObj().getSafefalllevel() > getLevel())
 			return false;
-		
+
 		return true;
 	}
 
@@ -1679,64 +1587,62 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setFactionEntries(List<PlayerFactionEntry> factionEntries) {
 		this.factionEntries = factionEntries;
 	}
-	
+
 	@Override
 	public PlayerFactionEntry getFactionEntry(int factionId) {
-		for(PlayerFactionEntry entry : getFactionEntries())
-		{
+		for (PlayerFactionEntry entry : getFactionEntries()) {
 			if (entry.getFactionId() == factionId)
 				return entry;
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
-	public PlayerFactionEntry createPlayerFactionEntry(int factionId)
-	{
+	public PlayerFactionEntry createPlayerFactionEntry(int factionId) {
 		PlayerFactionEntry entry = new PlayerFactionEntry();
 		entry.setFactionId(factionId);
 		entry.setValue(0);
 		getFactionEntries().add(entry);
 		return getFactionEntry(factionId);
 	}
-	
+
 	@Override
 	public void increaseFactionStanding(int factionId, int amount) {
 		if (factionId == 0)
 			return;
-		
+
 		if (amount == 0)
 			return;
-		
+
 		PlayerFactionEntry playerFactionEntry = getFactionEntry(factionId);
 		if (playerFactionEntry == null)
 			playerFactionEntry = createPlayerFactionEntry(factionId);
-		
-		// Never handle these special faction types		
-		if (playerFactionEntry.getFaction().getName().toUpperCase().equals("NEUTRAL") || playerFactionEntry.getFaction().getName().toUpperCase().equals("KOS"))
+
+		// Never handle these special faction types
+		if (playerFactionEntry.getFaction().getName().toUpperCase().equals("NEUTRAL")
+				|| playerFactionEntry.getFaction().getName().toUpperCase().equals("KOS"))
 			return;
-		
+
 		int newValue = playerFactionEntry.getValue() + amount;
 		boolean hitCap = false;
-		if (newValue > 1500)
-		{
+		if (newValue > 1500) {
 			newValue = 1500;
 			hitCap = true;
-			
-			if (!playerFactionEntry.getFaction().getAllyGrantsTitle().equals(""))
-			{
+
+			if (!playerFactionEntry.getFaction().getAllyGrantsTitle().equals("")) {
 				grantTitle(playerFactionEntry.getFaction().getAllyGrantsTitle());
 			}
-			
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
+
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with "
+					+ playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
 		}
-		
-		if (!hitCap)
-		{
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
+
+		if (!hitCap) {
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with "
+					+ playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
 		}
-		
+
 		playerFactionEntry.setValue(newValue);
 	}
 
@@ -1744,45 +1650,44 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void decreaseFactionStanding(int factionId, int amount) {
 		if (factionId == 0)
 			return;
-		
+
 		if (amount == 0)
 			return;
-		
+
 		PlayerFactionEntry playerFactionEntry = getFactionEntry(factionId);
 		if (playerFactionEntry == null)
 			playerFactionEntry = createPlayerFactionEntry(factionId);
-		
-		// Never handle these special faction types		
-		if (playerFactionEntry.getFaction().getName().toUpperCase().equals("NEUTRAL") || playerFactionEntry.getFaction().getName().toUpperCase().equals("KOS"))
+
+		// Never handle these special faction types
+		if (playerFactionEntry.getFaction().getName().toUpperCase().equals("NEUTRAL")
+				|| playerFactionEntry.getFaction().getName().toUpperCase().equals("KOS"))
 			return;
-		
+
 		int newValue = playerFactionEntry.getValue() - amount;
 		boolean hitCap = false;
-		if (newValue < -1500)
-		{
+		if (newValue < -1500) {
 			newValue = -1500;
 			hitCap = true;
-			
-			if (!playerFactionEntry.getFaction().getScowlsGrantsTitle().equals(""))
-			{
+
+			if (!playerFactionEntry.getFaction().getScowlsGrantsTitle().equals("")) {
 				grantTitle(playerFactionEntry.getFaction().getScowlsGrantsTitle());
 			}
-			
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
+
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with "
+					+ playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
 		}
-		
-		if (!hitCap)
-		{
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with " + playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
+
+		if (!hitCap) {
+			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with "
+					+ playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
 		}
-		
+
 		playerFactionEntry.setValue(newValue);
 	}
 
 	@Override
 	public void ignorePlayer(Player player) {
-		if(ignoredPlayers.contains(player.getUniqueId()))
-		{
+		if (ignoredPlayers.contains(player.getUniqueId())) {
 			ignoredPlayers.remove(player.getUniqueId());
 		} else {
 			ignoredPlayers.add(player.getUniqueId());
@@ -1808,23 +1713,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	@Override
-	public boolean isMezzed()
-	{
-		try
-		{
+	public boolean isMezzed() {
+		try {
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
 					.getMezzed((LivingEntity) getBukkitPlayer());
-	
+
 			if (mezExpiry != null) {
 				return true;
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return false;
 		}
-		
+
 		return false;
 	}
 
@@ -1840,12 +1742,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void addPlayerQuest(int questId) {
-		
+
 		PlayerQuest quest = new PlayerQuest();
 		quest.setComplete(false);
 		quest.setQuestId(questId);
 		this.getPlayerQuests().add(quest);
-		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + " * You have received a new Quest [" + quest.getQuest().getName() + "]!");
+		this.getBukkitPlayer().sendMessage(
+				ChatColor.YELLOW + " * You have received a new Quest [" + quest.getQuest().getName() + "]!");
 	}
 
 	@Override
@@ -1853,7 +1756,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// TODO Auto-generated method stub
 		return playerQuestFlags;
 	}
-	
+
 	@Override
 	public void setPlayerQuestFlags(List<String> playerQuestFlags) {
 		this.playerQuestFlags = playerQuestFlags;
@@ -1868,16 +1771,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean isMeditating() {
 		try {
-			if (getBukkitPlayer().isSneaking() || StateManager.getInstance().getEntityManager().getTrance(getUUID()) == true) {
+			if (getBukkitPlayer().isSneaking()
+					|| StateManager.getInstance().getEntityManager().getTrance(getUUID()) == true) {
 				return true;
 			}
 		} catch (CoreStateInitException e) {
 			return false;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public void setSkills(List<SoliniaPlayerSkill> skills) {
 		this.skills = skills;
@@ -1886,71 +1790,69 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setFealty(UUID uniqueId) {
 		Entity fealtyTo = Bukkit.getEntity(uniqueId);
-		
+
 		if (uniqueId.equals(this.getUUID()))
 			return;
-		
+
 		if (fealtyTo == null)
 			return;
-		
+
 		if (!(fealtyTo instanceof Player))
 			return;
-		
+
 		fealty = fealtyTo.getUniqueId();
 		getBukkitPlayer().sendMessage("* You have sworn fealty to " + fealtyTo.getCustomName() + "!");
 	}
-	
+
 	@Override
 	public UUID getFealty() {
 		return fealty;
 	}
-	
+
 	@Override
-	public boolean isRacialKing()
-	{
+	public boolean isRacialKing() {
 		if (!isMain())
 			return false;
-		
+
 		try {
-			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
-			{
+			for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces()) {
 				if (race.getKing() == null)
 					continue;
-				
+
 				if (race.getKing().equals(getUUID()))
 					return true;
 			}
 		} catch (CoreStateInitException e) {
 			return false;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	public boolean isAlignmentEmperor()
-	{
+	public boolean isAlignmentEmperor() {
 		if (!isMain())
 			return false;
-		
+
 		try {
 			if (getRace() == null)
 				return false;
-			
-			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(getRace().getAlignment());
-			
+
+			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager()
+					.getAlignment(getRace().getAlignment());
+
 			if (alignment == null)
 				return false;
-			
+
 			if (alignment.getEmperor() == null)
 				return false;
-			
+
 			if (alignment.getEmperor().equals(getUUID()))
 				return true;
 		} catch (CoreStateInitException e) {
 			return false;
 		}
-		
+
 		return false;
 	}
 
@@ -1962,16 +1864,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setVoteEmperor(UUID uniqueId) {
 		Entity fealtyTo = Bukkit.getEntity(uniqueId);
-		
+
 		if (uniqueId.equals(this.getUUID()))
 			return;
-		
+
 		if (fealtyTo == null)
 			return;
-		
+
 		if (!(fealtyTo instanceof Player))
 			return;
-		
+
 		this.voteemperor = uniqueId;
 	}
 
@@ -1989,11 +1891,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean isVampire() {
 		if (vampire == true)
 			return true;
-		
+
 		if (getRace() != null)
 			if (getRace().isVampire())
 				return true;
-		
+
 		return false;
 	}
 
