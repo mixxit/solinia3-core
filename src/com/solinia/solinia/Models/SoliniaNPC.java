@@ -54,6 +54,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private String offhanditem;
 	private boolean boss = false;
 	private boolean heroic = false;
+	private boolean raidboss = false;
+	private boolean raidheroic = false;
 	private boolean burning = false;
 	private boolean invisible = false;
 	private boolean customhead = false;
@@ -499,8 +501,10 @@ public class SoliniaNPC implements ISoliniaNPC {
 					"- merchantid: " + ChatColor.GOLD + getMerchantid() + " (No Merchant Table)" + ChatColor.RESET);
 		}
 		sender.sendMessage(ChatColor.RED + "MISC" + ChatColor.RESET);
-		sender.sendMessage("- boss: " + ChatColor.GOLD + isBoss());
 		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic());
+		sender.sendMessage("- boss: " + ChatColor.GOLD + isBoss());
+		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic());
+		sender.sendMessage("- raidboss: " + ChatColor.GOLD + isRaidboss());
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
@@ -586,6 +590,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "heroic":
 			setHeroic(Boolean.parseBoolean(value));
+			break;
+		case "raidboss":
+			setRaidboss(Boolean.parseBoolean(value));
+			break;
+		case "raidheroic":
+			setRaidheroic(Boolean.parseBoolean(value));
 			break;
 		case "burning":
 			setBurning(Boolean.parseBoolean(value));
@@ -1148,6 +1158,26 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setHeroic(boolean heroic) {
 		this.heroic = heroic;
+	}
+
+	@Override
+	public boolean isRaidboss() {
+		return raidboss;
+	}
+
+	@Override
+	public void setRaidboss(boolean raidboss) {
+		this.raidboss = raidboss;
+	}
+
+	@Override
+	public boolean isRaidheroic() {
+		return raidheroic;
+	}
+
+	@Override
+	public void setRaidheroic(boolean raidheroic) {
+		this.raidheroic = raidheroic;
 	}
 }
 

@@ -624,7 +624,7 @@ public class Solinia3CoreEntityListener implements Listener {
 								player.grantTitle(npc.getDeathGrantsTitle());
 							}
 							
-							if (npc.isBoss())
+							if (npc.isBoss() || npc.isRaidboss())
 							{
 								player.grantTitle("the Vanquisher");
 							}
@@ -667,7 +667,7 @@ public class Solinia3CoreEntityListener implements Listener {
 											tgtsolplayer.grantTitle(npc.getDeathGrantsTitle());
 										}
 										
-										if (npc.isBoss())
+										if (npc.isBoss() || npc.isRaidboss())
 										{
 											tgtsolplayer.grantTitle("the Vanquisher");
 										}
@@ -698,7 +698,7 @@ public class Solinia3CoreEntityListener implements Listener {
 							player.grantTitle(npc.getDeathGrantsTitle());
 						}
 						
-						if (npc.isBoss())
+						if (npc.isBoss() || npc.isRaidboss())
 						{
 							player.grantTitle("the Vanquisher");
 						}
@@ -741,12 +741,12 @@ public class Solinia3CoreEntityListener implements Listener {
 					player.grantTitle(npc.getDeathGrantsTitle());
 				}
 				
-				if (npc.isBoss())
+				if (npc.isBoss() || npc.isRaidboss())
 				{
 					player.grantTitle("the Vanquisher");
 				}
 				
-				if (npc.isBoss())
+				if (npc.isBoss() || npc.isRaidboss())
 				{
 					Bukkit.broadcastMessage(ChatColor.RED + "[VICTORY] The foundations of the earth shake following the destruction of " + npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!" + ChatColor.RESET);
 				}

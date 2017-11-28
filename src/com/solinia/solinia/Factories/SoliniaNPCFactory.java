@@ -23,6 +23,15 @@ public class SoliniaNPCFactory {
 		npc.setId(StateManager.getInstance().getConfigurationManager().getNextNPCId());
 		npc.setName(name);
 		npc.setBoss(sourcenpc.isBoss());
+		npc.setRaidboss(sourcenpc.isRaidboss());
+		npc.setRaidheroic(sourcenpc.isRaidheroic());
+		npc.setAC(sourcenpc.getAC());
+		npc.setAccuracyRating(sourcenpc.getAccuracyRating());
+		npc.setAvoidanceRating(sourcenpc.getAvoidanceRating());
+		npc.setAnimal(sourcenpc.isAnimal());
+		npc.setUndead(sourcenpc.isUndead());
+		npc.setClassid(sourcenpc.getClassid());
+		npc.setRaceid(sourcenpc.getRaceid());
 		npc.setHeroic(sourcenpc.isHeroic());
 		npc.setBurning(sourcenpc.isBurning());
 		npc.setChestitem(sourcenpc.getChestitem());

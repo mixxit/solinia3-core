@@ -206,4 +206,12 @@ public interface ISoliniaNPC {
 	boolean isHeroic();
 
 	void setHeroic(boolean heroic);
+
+	boolean isRaidboss();
+
+	void setRaidboss(boolean raidboss);
+
+	boolean isRaidheroic();
+
+	void setRaidheroic(boolean raidheroic);
 }

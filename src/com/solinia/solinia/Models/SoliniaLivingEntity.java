@@ -449,10 +449,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					ISoliniaNPC npc;
 					try {
 						npc = StateManager.getInstance().getConfigurationManager().getNPC(defender.getNpcid());
-						if (npc != null && npc.isBoss())
-						{
-							System.out.println("DEBUG PLAYER->BOSS: " + getBukkitLivingEntity().getName() + " hit " + defender.getBukkitLivingEntity().getName() + " for " + event.getDamage() + " " + my_hit.skill + " damage - defender hp remaining: " + defender.getBukkitLivingEntity().getHealth() + "/" + defender.getBukkitLivingEntity().getMaxHealth());
-						}
 					} catch (CoreStateInitException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -561,22 +557,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			if (defender.getBukkitLivingEntity() instanceof Player) {
-				
-				try {
-					ISoliniaLivingEntity attackerEntity = SoliniaLivingEntityAdapter.Adapt(getBukkitLivingEntity());
-					if (attackerEntity.isNPC())
-					{
-						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(attackerEntity.getNpcid());
-						if (npc != null && npc.isBoss())
-						{
-							System.out.println("DEBUG BOSS->PLAYER: " + npc.getName() + " hit " + defender.getBukkitLivingEntity().getName() + " for " + event.getDamage() + " " + my_hit.skill + " damage - defender hp remaining: " + defender.getBukkitLivingEntity().getHealth() + "/" + defender.getBukkitLivingEntity().getMaxHealth());
-						}
-					}
-				} catch (CoreStateInitException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
-				}
-				
 				((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
 								+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
@@ -2202,11 +2182,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());
 
 				if (npc.isBoss()) {
-					totalHp += (200 * npc.getLevel());
+					totalHp += (Utils.getBossHPMultiplier() * npc.getLevel());
 				}
 				
-				if (npc.isBoss()) {
-					totalHp += (20 * npc.getLevel());
+				if (npc.isHeroic()) {
+					totalHp += (Utils.getHeroicHPMultiplier() * npc.getLevel());
+				}
+				
+				if (npc.isRaidboss()) {
+					totalHp += (Utils.getRaidBossHPMultiplier() * npc.getLevel());
+				}
+				
+				if (npc.isRaidheroic()) {
+					totalHp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
 				}
 
 				return totalHp;
@@ -2706,6 +2694,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					if (npc.isHeroic()) {
 						maxmana += (Utils.getHeroicMPRegenMultipler() * npc.getLevel());
+					}
+					
+					if (npc.isRaidboss()) {
+						maxmana += (Utils.getRaidBossMPRegenMultipler() * npc.getLevel());
+					}
+					if (npc.isRaidheroic()) {
+						maxmana += (Utils.getRaidHeroicMPRegenMultipler() * npc.getLevel());
 					}
 				}
 			} catch (CoreStateInitException e) {

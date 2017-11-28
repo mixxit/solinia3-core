@@ -209,7 +209,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 		customitem += "CUSTOMITEMID_" + item.getId() + ":\r\n";
 		customitem += "  Id: " + item.asItemStack().getTypeId() + "\r\n";
-		customitem += "  Display: '" + item.getDisplayname() + "'\r\n";
+		customitem += "  Display: '" + item.getDisplayname().replaceAll("[^a-zA-Z0-9]", "") + "'\r\n";
 		customitem += "  Data: " + item.getColor() + "\r\n";
 		if (item.getDamage() > 0)
 		{
@@ -250,6 +250,18 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			damage += (Utils.getBossDamageMultiplier() * npc.getLevel());
 		}
 		
+		if (npc.isRaidheroic())
+		{
+			hp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
+			damage += (Utils.getRaidHeroicDamageMultiplier() * npc.getLevel());
+		}
+		
+		if (npc.isRaidboss())
+		{
+			hp += (Utils.getRaidBossHPMultiplier() * npc.getLevel());
+			damage += (Utils.getRaidBossDamageMultiplier() * npc.getLevel());
+		}
+		
 		float movementSpeed = 0.3f;
 		if (npc.isHeroic())
 		{
@@ -259,6 +271,16 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		if (npc.isBoss())
 		{
 			movementSpeed = Utils.getBossRunSpeed();
+		}
+		
+		if (npc.isRaidheroic())
+		{
+			movementSpeed = Utils.getRaidHeroicRunSpeed();
+		}
+		
+		if (npc.isRaidboss())
+		{
+			movementSpeed = Utils.getRaidBossRunSpeed();
 		}
 		
 		mob = mob + "  Health: " + hp + "\r\n";
@@ -600,7 +622,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			}
 		}
 
-		if (npc.isBoss() == true) {
+		if (npc.isBoss() == true || npc.isRaidboss()) {
 			// we dont need to spam the screen
 			/*
 				mob = mob + "  BossBar:\r\n";

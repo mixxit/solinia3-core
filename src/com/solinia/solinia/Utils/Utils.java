@@ -36,7 +36,9 @@ import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
@@ -3168,7 +3170,35 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
-		
+		// updates all npcs
+		/*try {
+			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
+			{
+				try {
+					npc.editSetting("name", npc.getName());
+					StateManager.getInstance().getEntityManager().getNPCEntityProvider().updateNpc(npc);
+					System.out.println("Updated npc");
+					
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidNpcSettingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println("Done, reloading provider");
+			StateManager.getInstance().getEntityManager().getNPCEntityProvider().reloadProvider();
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {
@@ -4859,6 +4889,10 @@ public class Utils {
 			return npc.getLevel() * Utils.getBossMPRegenMultipler();
 		if (npc.isHeroic())
 			return npc.getLevel() * Utils.getHeroicMPRegenMultipler();
+		if (npc.isRaidboss())
+			return npc.getLevel() * Utils.getRaidBossMPRegenMultipler();
+		if (npc.isRaidheroic())
+			return npc.getLevel() * Utils.getRaidHeroicMPRegenMultipler();
 		return npc.getLevel() * 3;
 	}
 
@@ -5097,44 +5131,92 @@ public class Utils {
 		// TODO Auto-generated method stub
 		return 255;
 	}
-
-	public static int getBossMPRegenMultipler() {
-		// TODO Auto-generated method stub
-		return 200;
-	}
-
-	public static int getHeroicMPRegenMultipler() {
-		// TODO Auto-generated method stub
-		return 40;
-	}
-
-	public static int getHeroicHPMultiplier() {
-		// TODO Auto-generated method stub
-		return 200;
-	}
-
-	public static int getBossHPMultiplier() {
-		// TODO Auto-generated method stub
-		return 1000;
-	}
-
-	public static int getHeroicDamageMultiplier() {
-		// TODO Auto-generated method stub
-		return 10;
-	}
-
-	public static int getBossDamageMultiplier() {
-		// TODO Auto-generated method stub
-		return 30;
-	}
-
+	
+	// Heroic
+	
 	public static float getHeroicRunSpeed() {
 		// TODO Auto-generated method stub
 		return 0.4f;
 	}
-
+	
+	public static int getHeroicDamageMultiplier() {
+		// TODO Auto-generated method stub
+		return 4;
+	}
+	
+	public static int getHeroicHPMultiplier() {
+		// TODO Auto-generated method stub
+		return 20;
+	}
+	
+	public static int getHeroicMPRegenMultipler() {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+	
+	// Boss
+	
 	public static float getBossRunSpeed() {
 		// TODO Auto-generated method stub
+		return 0.4f;
+	}
+	
+	public static int getBossDamageMultiplier() {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+	
+	public static int getBossHPMultiplier() {
+		// TODO Auto-generated method stub
+		return 200;
+	}
+	
+	public static int getBossMPRegenMultipler() {
+		// TODO Auto-generated method stub
+		return 40;
+	}
+	
+	// Raid Heroic
+	
+	public static float getRaidHeroicRunSpeed() {
+		// TODO Auto-generated method stub
+		return 0.4f;
+	}
+	
+	public static int getRaidHeroicDamageMultiplier() {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+	
+	public static int getRaidHeroicHPMultiplier() {
+		// TODO Auto-generated method stub
+		return 200;
+	}
+	
+	public static int getRaidHeroicMPRegenMultipler() {
+		// TODO Auto-generated method stub
+		return 40;
+	}
+	
+	// Raid Boss
+	
+	public static float getRaidBossRunSpeed() {
+		// TODO Auto-generated method stub
 		return 0.5f;
+	}
+	
+	public static int getRaidBossDamageMultiplier() {
+		// TODO Auto-generated method stub
+		return 30;
+	}
+	
+	public static int getRaidBossHPMultiplier() {
+		// TODO Auto-generated method stub
+		return 1000;
+	}
+	
+	public static int getRaidBossMPRegenMultipler() {
+		// TODO Auto-generated method stub
+		return 200;
 	}
 }
