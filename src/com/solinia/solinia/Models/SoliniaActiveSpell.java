@@ -278,7 +278,10 @@ public class SoliniaActiveSpell {
 			applyMezSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case SummonItem: 
-			applySummonItem(spellEffect, soliniaSpell, casterLevel);
+			for(int i = 0; i < spellEffect.getFormula(); i++)
+			{
+				applySummonItem(spellEffect, soliniaSpell, casterLevel);
+			}
 			return;
 		case SummonPet: 
 			applySummonPet(plugin, spellEffect,soliniaSpell,casterLevel);

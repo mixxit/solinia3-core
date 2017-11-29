@@ -929,7 +929,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			if (!checkFizzle(spell)) {
+			if (checkFizzle(spell)) {
 				emote("* " + getFullName() + "'s spell fizzles");
 				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
 				return;
@@ -962,21 +962,54 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean checkFizzle(ISoliniaSpell spell) {
 		if (getBukkitPlayer().isOp())
-			return true;
+			return false;
 
 		// todo fizzle free features
 
 		int no_fizzle_level = 0;
+		ISoliniaAAAbility aa = null;
+		int rank = 0;
+		try
+		{
+			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("SPELLCASTINGEXPERTISE");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		if (aa != null)
+		{
+			rank = Utils.getRankOfAAAbility(getBukkitPlayer(),aa);
+			switch(rank)
+			{
+				case 1:
+					no_fizzle_level = 20;
+					break;
+				case 2:
+					no_fizzle_level += 35;
+					break;
+				case 3:
+					no_fizzle_level += 52;
+					break;
+			}
+		}
+		
+		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level)
+		{
+			return false;
+		}
+		
+		// todo item and spell no fizzle levels
 
 		try {
 
 			ISoliniaLivingEntity entity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
 
 			if (entity == null)
-				return false;
+				return true;
 
 			if (getClassObj() == null)
-				return false;
+				return true;
 
 			// TODO item/aa/spells fizzle bonus
 
@@ -1034,7 +1067,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return true;
 
 		} catch (CoreStateInitException e) {
-			return false;
+			return true;
 		}
 
 		return false;
