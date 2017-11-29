@@ -50,6 +50,7 @@ import com.solinia.solinia.Commands.CommandGrantTitle;
 import com.solinia.solinia.Commands.CommandGroup;
 import com.solinia.solinia.Commands.CommandGroupChat;
 import com.solinia.solinia.Commands.CommandIgnore;
+import com.solinia.solinia.Commands.CommandInspiration;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandListAAs;
 import com.solinia.solinia.Commands.CommandListFactions;
@@ -476,6 +477,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("specialise").setExecutor(new CommandSpecialise());
 		this.getCommand("bite").setExecutor(new CommandBite());
 		this.getCommand("character").setExecutor(new CommandCharacter());
+		this.getCommand("inspiration").setExecutor(new CommandInspiration());
 	}
 
 	private void createConfigDir() {

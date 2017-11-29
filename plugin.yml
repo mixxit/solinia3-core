@@ -370,6 +370,10 @@ commands:
     description: Lists aa abilities
     usage: /listaa searchstring
     aliases: []
+  inspiration:
+    description: Lists inspiration/buys inspiration rewards
+    usage: /inspiration
+    aliases: []
   loot:
     description: Searches loot
     usage: /loot searchstring

@@ -82,6 +82,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String specialisation = "";
 	private boolean vampire = false;
 	private boolean main = true;
+	private int inspiration = 0;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -1922,5 +1923,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setCharacterId(UUID characterId) {
 		this.characterId = characterId;
+	}
+
+	@Override
+	public int getInspiration() {
+		return inspiration;
+	}
+
+	@Override
+	public void setInspiration(int inspiration) {
+		this.inspiration = inspiration;
 	}
 }

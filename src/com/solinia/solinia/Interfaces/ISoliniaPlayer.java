@@ -252,4 +252,8 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isMain();
 
 	void setMain(boolean main);
+
+	int getInspiration();
+
+	void setInspiration(int inspiration);
 }
