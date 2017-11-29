@@ -218,7 +218,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void doCastSpellItem(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem);
 
-	boolean checkFizzle(ISoliniaSpell spell);
+	boolean checkDoesntFizzle(ISoliniaSpell spell);
 
 	void dropResurrectionItem(int experienceamount);
 

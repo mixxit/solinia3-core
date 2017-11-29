@@ -38,6 +38,7 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -2606,8 +2607,28 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public int getMaxStat(String skillname) {
 		int baseMaxStat = 255;
-
-		return baseMaxStat;
+		ISoliniaAAAbility aa = null;
+		try
+		{
+			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("PLANARPOWER");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		int rank = 0;
+		
+		if (aa != null)
+		{
+			rank = Utils.getRankOfAAAbility(getBukkitLivingEntity(), aa);
+		}
+			
+		if (rank == 0)
+		{
+			return baseMaxStat;
+		} else {
+			return baseMaxStat + (rank * 5);
+		}
 	}
 
 	@Override

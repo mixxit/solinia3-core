@@ -929,7 +929,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			if (checkFizzle(spell)) {
+			if (!checkDoesntFizzle(spell)) {
 				emote("* " + getFullName() + "'s spell fizzles");
 				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
 				return;
@@ -960,9 +960,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean checkFizzle(ISoliniaSpell spell) {
+	public boolean checkDoesntFizzle(ISoliniaSpell spell) {
 		if (getBukkitPlayer().isOp())
-			return false;
+			return true;
 
 		// todo fizzle free features
 
@@ -996,7 +996,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level)
 		{
-			return false;
+			return true;
 		}
 		
 		// todo item and spell no fizzle levels
@@ -1006,10 +1006,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			ISoliniaLivingEntity entity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
 
 			if (entity == null)
-				return true;
+				return false;
 
 			if (getClassObj() == null)
-				return true;
+				return false;
 
 			// TODO item/aa/spells fizzle bonus
 
@@ -1061,13 +1061,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			float fizzle_roll = Utils.RandomBetween(0, 100);
 
-			// System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " +
-			// fizzlechance);
+			 System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " + fizzlechance);
 			if (fizzle_roll > fizzlechance)
 				return true;
 
 		} catch (CoreStateInitException e) {
-			return true;
+			return false;
 		}
 
 		return false;
