@@ -66,6 +66,14 @@ public class PlayerManager implements IPlayerManager {
 	}
 	
 	@Override
+	public ISoliniaPlayer getPlayerAndDoNotCreate(UUID playerUUID) {
+		if (repository.query(p ->p.getUUID().equals(playerUUID)).size() == 0)
+			return null;
+		
+		return repository.query(p ->p.getUUID().equals(playerUUID)).get(0);
+	}
+	
+	@Override
 	public ISoliniaPlayer getMainCharacterDataOnly(UUID playerUUID) {
 		// First check if the player even exists
 		if (repository.query(p ->p.getUUID().equals(playerUUID)).size() == 0)

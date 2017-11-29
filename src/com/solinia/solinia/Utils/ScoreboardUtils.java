@@ -45,7 +45,13 @@ public class ScoreboardUtils {
 
 				double maxmana = maxmp;
 				bossbar.setTitle("MANA: " + mana);
-				bossbar.setProgress((double) ((double) mana / (double) maxmana));
+				double progress = (double) ((double) mana / (double) maxmana);
+				if (progress < 0d)
+					progress = 0d;
+				
+				if (progress > 1d)
+					progress = 1d;
+				bossbar.setProgress(progress);
 
 			} catch (Exception e) {
 				e.printStackTrace();

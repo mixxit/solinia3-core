@@ -385,3 +385,6 @@ commands:
 depend:
 - Vault
 - MythicMobs
+- Votifier
+- ChatItem
+
