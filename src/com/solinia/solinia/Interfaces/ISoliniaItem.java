@@ -233,4 +233,8 @@ public interface ISoliniaItem {
 	int getMana();
 
 	void setMana(int mana);
+
+	boolean isExperienceBonus();
+
+	void setExperienceBonus(boolean isExperienceBonus);
 }

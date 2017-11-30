@@ -34,6 +34,7 @@ public class CommandInspiration implements CommandExecutor {
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Chest) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manachest");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Legs) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manalegs");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Feet) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manafeet");
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x 100% Experience Potion " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy xpbottle");
 				sender.sendMessage("-----------------");
 				sender.sendMessage("Sub Commands: " + ChatColor.LIGHT_PURPLE + "sites, buy, send");
 				sender.sendMessage("Points Available: " + ChatColor.LIGHT_PURPLE + solPlayer.getInspiration());
@@ -120,6 +121,21 @@ public class CommandInspiration implements CommandExecutor {
 									sender.sendMessage("You require more inspiration points to purchase this");
 									return true;
 								}
+							case "xpbottle":
+								cost = 2;
+								if (solPlayer.getInspiration() >= cost)
+								{
+									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
+									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18024);
+									((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
+									sender.sendMessage("You have purchased an item!");
+									return true;
+								} else {
+									sender.sendMessage("You require more inspiration points to purchase this");
+									return true;
+								}
+								
+								
 							default:
 								sender.sendMessage("This is not a known shop item to buy. See /inspiration for valid commands");
 								return true;

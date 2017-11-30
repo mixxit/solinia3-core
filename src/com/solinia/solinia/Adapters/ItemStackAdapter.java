@@ -100,14 +100,17 @@ public class ItemStackAdapter {
 		}
 
 		if (soliniaItem.isCrafting() == true) {
-			loretxt.add(ChatColor.GOLD + "This looks like it could be crafted + ChatColor.RESET");
+			loretxt.add(ChatColor.GOLD + "This looks like it could be crafted" + ChatColor.RESET);
 			loretxt.add(ChatColor.GOLD + "into something useful" + ChatColor.RESET);
 		}
 
+		if (soliniaItem.isExperienceBonus() == true) {
+			loretxt.add(ChatColor.GOLD + "Grant XP Experience!" + ChatColor.RESET);
+		}
 		
 		if (soliniaItem.isAugmentation() == true) {
 				loretxt.add(ChatColor.AQUA + "This looks like it could augment " + ChatColor.RESET);
-				loretxt.add("weapon or armour" + ChatColor.RESET);
+				loretxt.add(ChatColor.AQUA + "weapon or armour" + ChatColor.RESET);
 				loretxt.add(ChatColor.AQUA + "Augments Item Slots: " + soliniaItem.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		}
 		

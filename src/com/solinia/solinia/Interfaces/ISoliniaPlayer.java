@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -256,4 +257,10 @@ public interface ISoliniaPlayer extends Serializable {
 	int getInspiration();
 
 	void setInspiration(int inspiration);
+
+	void setExperienceBonusExpires(Timestamp experienceBonusExpires);
+
+	Timestamp getExperienceBonusExpires();
+
+	public void grantExperienceBonusFromItem();
 }

@@ -1,15 +1,21 @@
 package com.solinia.solinia.Commands;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -19,6 +25,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandEffects implements CommandExecutor {
 
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
@@ -35,6 +42,26 @@ public class CommandEffects implements CommandExecutor {
 	            if (args.length == 0)
 	            {
 		            player.sendMessage(ChatColor.GOLD + "Active Spell Effects on you:" + ChatColor.WHITE);
+		            
+		            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+	            	if (solplayer.getExperienceBonusExpires() != null)
+	            	{
+	            		Calendar calendar = Calendar.getInstance();
+	        			java.util.Date now = calendar.getTime();
+	        			Timestamp nowtimestamp = new Timestamp(now.getTime());
+	        			Timestamp expiretimestamp = solplayer.getExperienceBonusExpires();
+
+	        			if (expiretimestamp != null)
+	        			{
+	        				if (!nowtimestamp.after(expiretimestamp))
+	        				{
+	        					int secondsleft = (int)Math.floor(Utils.compareTwoTimeStamps(expiretimestamp,nowtimestamp));
+	        					TextComponent tc = new TextComponent();
+	        					tc.setText("- " + ChatColor.GREEN + "100% Experience Potion" + ChatColor.RESET + " " + secondsleft + " seconds");
+	        					sender.spigot().sendMessage(tc);
+	        				}
+	        			}
+	            	}
 		            
 		            for(SoliniaActiveSpell activeSpell : spells.getActiveSpells())
 		            {

@@ -81,6 +81,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int ac = 0;
 	private int hp = 0;
 	private int mana = 0;
+	private boolean isExperienceBonus = false;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -455,6 +456,12 @@ public class SoliniaItem implements ISoliniaItem {
 			}
 		}
 		
+		if (isConsumable == true && isExperienceBonus())
+		{
+			SoliniaPlayerAdapter.Adapt(player).grantExperienceBonusFromItem();
+			return true;
+		}
+		
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(getAbilityid());
 		if (spell == null) {
 			return false;
@@ -724,8 +731,11 @@ public class SoliniaItem implements ISoliniaItem {
 		case "mana":
 			setMana(Integer.parseInt(value));
 			break;
+		case "experiencebonus":
+			setExperienceBonus(Boolean.parseBoolean(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus");
 		}
 	}
 
@@ -890,5 +900,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setMana(int mana) {
 		this.mana = mana;
+	}
+
+	@Override
+	public boolean isExperienceBonus() {
+		return isExperienceBonus;
+	}
+
+	@Override
+	public void setExperienceBonus(boolean isExperienceBonus) {
+		this.isExperienceBonus = isExperienceBonus;
 	}
 }

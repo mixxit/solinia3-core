@@ -277,6 +277,16 @@ public class Utils {
 
 		return xppercent;
 	}
+	
+	public static long compareTwoTimeStamps(java.sql.Timestamp currentTime, java.sql.Timestamp oldTime)
+	{
+	    long milliseconds1 = oldTime.getTime();
+	    long milliseconds2 = currentTime.getTime();
+
+	  	long diff = milliseconds2 - milliseconds1;
+	  	long diffSeconds = diff / 1000;
+	    return diffSeconds;
+	}
 
 	public static void broadcastPerks() {
 		for (WorldWidePerk perk : getActiveWorldWidePerks()) {

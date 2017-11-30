@@ -83,6 +83,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean vampire = false;
 	private boolean main = true;
 	private int inspiration = 0;
+	private Timestamp experienceBonusExpires;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -341,6 +342,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		boolean modified = false;
 		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
+		if (getExperienceBonusExpires() != null)
+		{
+			Calendar calendar = Calendar.getInstance();
+			java.util.Date now = calendar.getTime();
+			Timestamp nowtimestamp = new Timestamp(now.getTime());
+			Timestamp expiretimestamp = getExperienceBonusExpires();
+
+			if (expiretimestamp != null)
+			{
+				if (!nowtimestamp.after(expiretimestamp))
+				{
+					modifier += 100;
+				}
+			}
+		}
+		
 		if (modifier > 100) {
 			modified = true;
 		}
@@ -502,6 +519,21 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		boolean modified = false;
 		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
+		if (getExperienceBonusExpires() != null)
+		{
+			Calendar calendar = Calendar.getInstance();
+			java.util.Date now = calendar.getTime();
+			Timestamp nowtimestamp = new Timestamp(now.getTime());
+			Timestamp expiretimestamp = getExperienceBonusExpires();
+
+			if (expiretimestamp != null)
+			{
+				if (!nowtimestamp.after(expiretimestamp))
+				{
+					modifier += 100;
+				}
+			}
+		}
 		if (modifier > 100) {
 			modified = true;
 		}
@@ -1965,5 +1997,34 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setInspiration(int inspiration) {
 		this.inspiration = inspiration;
+	}
+
+	@Override
+	public Timestamp getExperienceBonusExpires() {
+		return experienceBonusExpires;
+	}
+
+	@Override
+	public void setExperienceBonusExpires(Timestamp experienceBonusExpires) {
+		this.experienceBonusExpires = experienceBonusExpires;
+	}
+
+	@Override
+	public void grantExperienceBonusFromItem() {
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		Timestamp nowtimestamp = new Timestamp(now.getTime());
+		
+		if (getExperienceBonusExpires() == null)
+		{
+			setExperienceBonusExpires(nowtimestamp);
+		}
+		
+		calendar.setTime(getExperienceBonusExpires());
+		calendar.add(Calendar.HOUR, 1);
+		java.util.Date expire = calendar.getTime();
+		Timestamp expiretimestamp = new Timestamp(expire.getTime());
+		setExperienceBonusExpires(expiretimestamp);
+		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + "You have gained 100% experience for 1 additional hour");
 	}
 }
