@@ -1093,7 +1093,7 @@ public class Utils {
 						}
 						if (augItem != null)
 							if (augItem.getStrength() > 0)
-								total += item.getStrength();
+								total += augItem.getStrength();
 						break;
 					case "STAMINA":
 						if (item.getStamina() > 0) {
@@ -1101,7 +1101,7 @@ public class Utils {
 						}
 						if (augItem != null)
 							if (augItem.getStamina() > 0)
-								total += item.getStamina();
+								total += augItem.getStamina();
 						break;
 					case "AGILITY":
 						if (item.getAgility() > 0) {
@@ -1109,7 +1109,7 @@ public class Utils {
 						}
 						if (augItem != null)
 							if (augItem.getAgility() > 0)
-								total += item.getAgility();
+								total += augItem.getAgility();
 						break;
 					case "DEXTERITY":
 						if (item.getDexterity() > 0) {
@@ -1117,7 +1117,7 @@ public class Utils {
 						}
 						if (augItem != null)
 							if (augItem.getDexterity() > 0)
-								total += item.getDexterity();
+								total += augItem.getDexterity();
 						break;
 					case "INTELLIGENCE":
 						if (item.getIntelligence() > 0) {
@@ -1125,7 +1125,7 @@ public class Utils {
 						}
 						if (augItem != null)
 							if (augItem.getIntelligence() > 0)
-								total += item.getIntelligence();
+								total += augItem.getIntelligence();
 						break;
 					case "WISDOM":
 						if (item.getWisdom() > 0) {
@@ -1133,7 +1133,7 @@ public class Utils {
 						}
 						if (augItem != null)
 							if (augItem.getWisdom() > 0)
-								total += item.getWisdom();
+								total += augItem.getWisdom();
 						break;
 					case "CHARISMA":
 						if (item.getCharisma() > 0) {
@@ -1141,7 +1141,7 @@ public class Utils {
 						}
 						if (augItem != null)
 							if (augItem.getCharisma() > 0)
-								total += item.getCharisma();
+								total += augItem.getCharisma();
 						break;
 					default:
 						break;
@@ -5067,8 +5067,8 @@ public class Utils {
 					}
 					
 					if (augItem != null)
-						if (item.getHp() > 0)
-							total += item.getHp();
+						if (augItem.getHp() > 0)
+							total += augItem.getHp();
 
 				}
 			}
@@ -5121,8 +5121,8 @@ public class Utils {
 					}
 					
 					if (augItem != null)
-						if (item.getMana() > 0)
-							total += item.getMana();
+						if (augItem.getMana() > 0)
+							total += augItem.getMana();
 
 				}
 			}

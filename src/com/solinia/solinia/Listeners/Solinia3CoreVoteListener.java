@@ -57,7 +57,7 @@ public class Solinia3CoreVoteListener implements Listener {
         	return;
         }
         
-        System.out.println("Vote received: " + vote.getUsername() + " UUID: " + uuid);
+        System.out.println("Vote received: " + vote.getUsername() + " UUID: " + uuid + " from " + vote.getServiceName() + " " + vote.getAddress());
         
         try {
 			ISoliniaPlayer solplayer = StateManager.getInstance().getPlayerManager().getPlayerAndDoNotCreate(UUID.fromString(uuid));
