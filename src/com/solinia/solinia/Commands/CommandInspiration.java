@@ -8,7 +8,9 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -28,6 +30,10 @@ public class CommandInspiration implements CommandExecutor {
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Inspiration Shop");
 				sender.sendMessage("-----------------");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1 AA Point " + ChatColor.RESET + " - Cost: 5 inspiration : /inspiration buy aa");
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Head) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manahead");
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Chest) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manachest");
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Legs) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manalegs");
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Feet) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manafeet");
 				sender.sendMessage("-----------------");
 				sender.sendMessage("Sub Commands: " + ChatColor.LIGHT_PURPLE + "sites, buy, send");
 				sender.sendMessage("Points Available: " + ChatColor.LIGHT_PURPLE + solPlayer.getInspiration());
@@ -39,6 +45,8 @@ public class CommandInspiration implements CommandExecutor {
 				case "buy":
 					if (args.length > 1)
 					{
+						int cost = 0;
+						
 						switch(args[1].toLowerCase())
 						{
 							case "aa":
@@ -47,17 +55,71 @@ public class CommandInspiration implements CommandExecutor {
 									sender.sendMessage("Only players level 20 and above can have AA points any lower and it would be useless");
 									return true;
 								} else {
-									if (solPlayer.getInspiration() >= 5)
+									cost = 5;
+									if (solPlayer.getInspiration() >= cost)
 									{
-										solPlayer.setInspiration(solPlayer.getInspiration() - 5);
+										solPlayer.setInspiration(solPlayer.getInspiration() - cost);
 										solPlayer.setAAPoints(solPlayer.getAAPoints()+1);
 										sender.sendMessage("You have purchased an AA point!");
+										return true;
 									} else {
-										sender.sendMessage("You require 5 inspiration points to purchase an AA point");
+										sender.sendMessage("You require more inspiration points to purchase this");
 										return true;
 									}
 								}
-								break;
+								
+							case "manahead":
+								cost = 2;
+								if (solPlayer.getInspiration() >= cost)
+								{
+									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
+									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18019);
+									((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
+									sender.sendMessage("You have purchased an item!");
+									return true;
+								} else {
+									sender.sendMessage("You require more inspiration points to purchase this");
+									return true;
+								}
+							case "manachest":
+								cost = 2;
+								if (solPlayer.getInspiration() >= cost)
+								{
+									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
+									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18020);
+									((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
+									sender.sendMessage("You have purchased an item!");
+									return true;
+								} else {
+									sender.sendMessage("You require more inspiration points to purchase this");
+									return true;
+								}
+							case "manalegs":
+								cost = 2;
+								if (solPlayer.getInspiration() >= cost)
+								{
+									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
+									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18021);
+									((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
+									sender.sendMessage("You have purchased an item!");
+									return true;
+								} else {
+									sender.sendMessage("You require more inspiration points to purchase this");
+									return true;
+								}
+							case "manafeet":
+								cost = 2;
+								if (solPlayer.getInspiration() >= cost)
+								{
+									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
+									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18022);
+									((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
+									sender.sendMessage("You have purchased an item!");
+									return true;
+								} else {
+									sender.sendMessage("You require more inspiration points to purchase this");
+									return true;
+								}
 							default:
 								sender.sendMessage("This is not a known shop item to buy. See /inspiration for valid commands");
 								return true;
@@ -66,7 +128,6 @@ public class CommandInspiration implements CommandExecutor {
 						sender.sendMessage("You must specify the shop item you want to buy. Ie: /inspiration buy aa");
 						return true;
 					}
-					break;
 				case "sites":
 					sender.sendMessage(ChatColor.YELLOW + "Sites you can vote on:");
 					sender.sendMessage("https://www.planetminecraft.com/server/fall-of-an-empire-heavyrp/vote/");

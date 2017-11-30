@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -22,6 +23,7 @@ import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.Utils;
 
 public class PlayerRegenTickTimer extends BukkitRunnable {
 
@@ -53,6 +55,23 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		
 		// a players mana regen based on if they are meditating (sneaking)
 		manaregen += getPlayerMeditatingManaBonus(solplayer);
+		
+		ISoliniaAAAbility aa = null;
+		try
+		{
+			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("MENTALCLARITY");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		int aamanaregenrank = 0;
+		
+		if (aa != null)
+		{
+			aamanaregenrank = Utils.getRankOfAAAbility(player, aa);
+			manaregen += aamanaregenrank;
+		}
 		
 		// Hp and Mana Regen from Items
 		int hpregen = 0;
