@@ -449,9 +449,16 @@ public class SoliniaItem implements ISoliniaItem {
 			{
 				if (pet instanceof Wolf)
 				{
-					Wolf wolf = (Wolf)pet;
-					wolf.setTarget(targetentity);
-					player.sendMessage("You send your pet to attack!");
+					if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
+					{
+						Wolf wolf = (Wolf)pet;
+						wolf.setTarget(targetentity);
+						player.sendMessage("You send your pet to attack!");
+					} else {
+						Wolf wolf = (Wolf)pet;
+						wolf.setTarget(null);
+						player.sendMessage("You cannot send your pet to attack itself");
+					}
 				}
 			}
 		}
