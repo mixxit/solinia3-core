@@ -4335,13 +4335,29 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public int getSpellType() {
 		if (isNuke())
+		{
 			return SpellType.Nuke;
+		}
+		
+		if (!isBeneficial() && isFearSpell())
+		{
+			return SpellType.Detrimental;
+		}
+
+		if (isHarmonySpell())
+		{
+			return SpellType.Detrimental;
+		}
 		
 		if (isHealSpell())
+		{
 			return SpellType.Heal;
+		}
 		
-		if (isRootSpell())
+		if (!isBeneficial() && isRootSpell())
+		{
 			return SpellType.Root;
+		}
 		
 		if (isBuffSpell())
 			return SpellType.Buff;
@@ -4352,29 +4368,31 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (isPetSpell())
 			return SpellType.Pet;
 		
-		if (isLifetapSpell())
+		if (!isBeneficial() && isLifetapSpell())
 			return SpellType.Lifetap;
 		
-		if (isSnareSpell())
+		if (!isBeneficial() && isSnareSpell())
 			return SpellType.Snare;
 		
-		if (isDot())
+		if (!isBeneficial() && isDot())
 			return SpellType.DOT;
 		
-		if (isDispell())
+		if (!isBeneficial() && isDispell())
 			return SpellType.Dispel;
 		
 		if (isInCombatBuff())
 			return SpellType.InCombatBuff;
 		
-		if (isMezSpell())
+		if (!isBeneficial() && isMezSpell())
 			return SpellType.Mez;
 		
-		if (isCharmSpell())
+		if (!isBeneficial() && isCharmSpell())
 			return SpellType.Charm;
 		
-		if (isDebuff())
+		if (!isBeneficial() && isDebuff())
+		{
 			return SpellType.Debuff;
+		}
 		
 		if (isCureSpell())
 			return SpellType.Cure;
@@ -4398,6 +4416,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return SpellType.PreCombatBuffSong;
 		
 		return 0;
+	}
+
+	private boolean isHarmonySpell() {
+		return isEffectInSpell(SpellEffectType.Lull) || isEffectInSpell(SpellEffectType.Harmony) || isEffectInSpell(SpellEffectType.ChangeFrenzyRad);
 	}
 
 	private boolean isPreCombatBuffSong() {

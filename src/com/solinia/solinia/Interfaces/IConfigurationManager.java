@@ -20,6 +20,7 @@ import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
+import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
@@ -282,4 +283,12 @@ public interface IConfigurationManager {
 	void commitPlayerToCharacterLists(ISoliniaPlayer player);
 
 	IRepository<ISoliniaPlayer> getCharactersRepository();
+
+	IRepository<NPCSpellList> getNpcspelllistsRepository();
+
+	void setNpcspelllistsRepository(IRepository<NPCSpellList> npcspelllistsRepository);
+
+	NPCSpellList getNPCSpellList(int Id);
+
+	List<NPCSpellList> getNPCSpellLists();
 }

@@ -63,6 +63,7 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
+import com.solinia.solinia.Models.NPCSpellListEntry;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAAEffect;
@@ -3186,35 +3187,7 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
-		// updates all npcs
-		/*try {
-			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
-			{
-				try {
-					npc.editSetting("name", npc.getName());
-					StateManager.getInstance().getEntityManager().getNPCEntityProvider().updateNpc(npc);
-					System.out.println("Updated npc");
-					
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvalidNpcSettingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (CoreStateInitException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			System.out.println("Done, reloading provider");
-			StateManager.getInstance().getEntityManager().getNPCEntityProvider().reloadProvider();
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		// dont do anything
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {

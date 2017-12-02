@@ -38,6 +38,7 @@ import com.solinia.solinia.Commands.CommandEditLootDrop;
 import com.solinia.solinia.Commands.CommandEditLootTable;
 import com.solinia.solinia.Commands.CommandEditNpc;
 import com.solinia.solinia.Commands.CommandEditNpcEvent;
+import com.solinia.solinia.Commands.CommandEditNpcSpellList;
 import com.solinia.solinia.Commands.CommandEditRace;
 import com.solinia.solinia.Commands.CommandEditSpawngroup;
 import com.solinia.solinia.Commands.CommandEditSpell;
@@ -59,6 +60,7 @@ import com.solinia.solinia.Commands.CommandListLootDrops;
 import com.solinia.solinia.Commands.CommandListLootTables;
 import com.solinia.solinia.Commands.CommandListMerchantLists;
 import com.solinia.solinia.Commands.CommandListNPCs;
+import com.solinia.solinia.Commands.CommandListNpcSpells;
 import com.solinia.solinia.Commands.CommandListSpawnGroups;
 import com.solinia.solinia.Commands.CommandListSpells;
 import com.solinia.solinia.Commands.CommandLocal;
@@ -118,6 +120,7 @@ import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
+import com.solinia.solinia.Repositories.JsonNPCSpellListRepository;
 import com.solinia.solinia.Repositories.JsonPatchRepository;
 import com.solinia.solinia.Repositories.JsonPlayerRepository;
 import com.solinia.solinia.Repositories.JsonQuestRepository;
@@ -318,6 +321,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonCharacterListRepository characterlistrepo = new JsonCharacterListRepository();
 			characterlistrepo.setJsonFile(getDataFolder() + "/" + "characterlists.json");
 			characterlistrepo.reload();
+			
+			JsonNPCSpellListRepository npcspelllistrepo = new JsonNPCSpellListRepository();
+			npcspelllistrepo.setJsonFile(getDataFolder() + "/" + "npcspelllists.json");
+			npcspelllistrepo.reload();
 
 			
 			PlayerManager playerManager = new PlayerManager(repo);
@@ -325,7 +332,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
-					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo);
+					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -480,6 +487,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("bite").setExecutor(new CommandBite());
 		this.getCommand("character").setExecutor(new CommandCharacter());
 		this.getCommand("inspiration").setExecutor(new CommandInspiration());
+		this.getCommand("listnpcspells").setExecutor(new CommandListNpcSpells());
+		this.getCommand("editnpcspelllist").setExecutor(new CommandEditNpcSpellList());
 	}
 
 	private void createConfigDir() {

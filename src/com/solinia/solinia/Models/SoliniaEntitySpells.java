@@ -59,6 +59,8 @@ public class SoliniaEntitySpells {
 		// This spell ID is already active
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
+		
+		System.out.println("Adding spell: " + soliniaSpell.getName() + " to " + this.getLivingEntity().getName() + " from " + sourceEntity.getName());
 
 		try
 		{

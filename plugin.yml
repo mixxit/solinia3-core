@@ -382,6 +382,19 @@ commands:
     description: Character admin command
     usage: /character
     aliases: []
+  listnpcspells:
+    description: Lists an npc spell ist
+    usage: /listnpcspells
+    aliases:
+    - listnpcspelllists
+    - listnpcspelllist
+  editnpcspelllist:
+    description: Edits an npc spell list
+    usage: /editnpcspelllist
+    aliases:
+    - editnpcspells
+    - editnpcspell
+    - editnpcspelllists
 depend:
 - Vault
 - MythicMobs

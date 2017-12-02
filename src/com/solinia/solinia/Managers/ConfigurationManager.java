@@ -48,6 +48,7 @@ import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -62,6 +63,7 @@ import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
+import com.solinia.solinia.Repositories.JsonNPCSpellListRepository;
 import com.solinia.solinia.Repositories.JsonPatchRepository;
 import com.solinia.solinia.Repositories.JsonQuestRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
@@ -87,12 +89,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaPatch> patchesRepository;
 	private IRepository<ISoliniaAlignment> alignmentsRepository;
 	private IRepository<ISoliniaPlayer> characterlistsRepository;
+	private IRepository<NPCSpellList> npcspelllistsRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, JsonCharacterListRepository characterlistsContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -110,6 +113,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.questRepository = questsContext;
 		this.alignmentsRepository = alignmentsContext;
 		this.characterlistsRepository = characterlistsContext;
+		this.setNpcspelllistsRepository(npcspelllistsContext);
 	}
 	
 	@Override 
@@ -481,6 +485,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		commitPlayersToCharacterLists();
 		
 		this.characterlistsRepository.commit();
+		this.npcspelllistsRepository.commit();
 	}
 
 	private void commitPlayersToCharacterLists() {
@@ -1304,6 +1309,32 @@ public class ConfigurationManager implements IConfigurationManager {
 			return null;
 		
 		return results.get(0);
+	}
+
+	@Override
+	public IRepository<NPCSpellList> getNpcspelllistsRepository() {
+		return npcspelllistsRepository;
+	}
+
+	@Override
+	public void setNpcspelllistsRepository(IRepository<NPCSpellList> npcspelllistsRepository) {
+		this.npcspelllistsRepository = npcspelllistsRepository;
+	}
+	
+	@Override
+	public NPCSpellList getNPCSpellList(int Id) {
+		// TODO Auto-generated method stub
+		List<NPCSpellList> list = npcspelllistsRepository.query(q -> q.getId() == Id);
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
+
+	@Override
+	public List<NPCSpellList> getNPCSpellLists() {
+		// TODO Auto-generated method stub
+		return npcspelllistsRepository.query(q -> q.getName() != null);
 	}
 
 }
