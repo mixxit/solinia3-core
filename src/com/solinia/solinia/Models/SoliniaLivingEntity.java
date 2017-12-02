@@ -1706,6 +1706,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					+ " cannot cast a spell as I have no class");
 			return false;
 		}
+		
+		if (this.getClassObj().getNpcspelllist() < 1)
+		{
+			return false;
+		}
+		
+		NPCSpellList npcSpellList = StateManager.getInstance().getConfigurationManager().getNPCSpellList(getClassObj().getNpcspelllist());
 
 		if (iChance < 100) {
 			int roll = Utils.RandomBetween(0, 100);
@@ -1724,16 +1731,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		double manaR = getManaRatio();
 
-		List<ISoliniaSpell> spells = StateManager.getInstance().getConfigurationManager()
-				.getSpellsByClassIdAndMaxLevel(npc.getClassid(), npc.getLevel());
+		List<NPCSpellListEntry> spells = new ArrayList<NPCSpellListEntry>();
+		for(NPCSpellListEntry entry : npcSpellList.getSpellListEntry())
+		{
+			if (npc.getLevel() >= entry.getMinlevel() && npc.getLevel() <= entry.getMaxlevel())
+			{
+				spells.add(entry);
+			}
+		}
 		
-		Collections.sort(spells, new Comparator<ISoliniaSpell>(){
-		     public int compare(ISoliniaSpell o1, ISoliniaSpell o2)
+		Collections.sort(spells, new Comparator<NPCSpellListEntry>(){
+		     public int compare(NPCSpellListEntry o1, NPCSpellListEntry o2)
 		     {
-		         if(o1.getMinLevelClass(getClassObj().getName()) == o2.getMinLevelClass(getClassObj().getName()))
+		         if(o1.getPriority() == o2.getPriority())
 		             return 0;
 		         
-		         return o1.getMinLevelClass(getClassObj().getName()) > o2.getMinLevelClass(getClassObj().getName()) ? -1 : 1;
+		         return o1.getPriority() > o2.getPriority() ? -1 : 1;
 		     }
 		});
 
@@ -1744,9 +1757,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return false;
 		}
 
-		for (ISoliniaSpell spell : spells) {
+		for (NPCSpellListEntry spelllistentry : spells) {
 			// Does spell types contain spelltype
-			if ((iSpellTypes & spell.getSpellType()) == spell.getSpellType()) {
+			if ((iSpellTypes & spelllistentry.getType()) == spelllistentry.getType()) {
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spelllistentry.getSpellid());
 				// TODO Check mana
 				int mana_cost = spell.getActSpellCost(this);
 				if (mana_cost < 0)
@@ -1760,7 +1774,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				java.util.Date expire = calendar.getTime();
 				Timestamp expiretimestamp = new Timestamp(expire.getTime());
 
-				switch (spell.getSpellType()) {
+				switch (spelllistentry.getType()) {
 				case SpellType.Heal:
 					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast heal " + spell.getName());

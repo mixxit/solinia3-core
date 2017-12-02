@@ -124,4 +124,8 @@ public interface ISoliniaClass {
 
 	void setSpecialiselevel(int specialiselevel);
 
+	int getNpcspelllist();
+
+	void setNpcspelllist(int npcspelllist);
+
 }

@@ -51,6 +51,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private String classItemPrefix = "";
 	private int acitembonus = 0;
 	private int specialiselevel = 0;
+	private int npcspelllist = 0;
 	
 	@Override
 	public String getName() {
@@ -186,6 +187,13 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- safefalllevel: " + ChatColor.GOLD + getSafefalllevel() + ChatColor.RESET);
 		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		if (StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()) != null)
+		{
+			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcspelllist() + "(" + StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()).getName() + ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcspelllist() + ChatColor.RESET);
+		}
+		sender.sendMessage("----------------------------");
 	}
 
 	@Override
@@ -302,6 +310,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "specialiselevel":
 			this.setSpecialiselevel(Integer.parseInt(value));
+			break;
+		case "npcspelllist":
+			this.setNpcspelllist(Integer.parseInt(value));
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel");
@@ -679,5 +690,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setSpecialiselevel(int specialiselevel) {
 		this.specialiselevel = specialiselevel;
+	}
+
+	@Override
+	public int getNpcspelllist() {
+		return npcspelllist;
+	}
+
+	@Override
+	public void setNpcspelllist(int npcspelllist) {
+		this.npcspelllist = npcspelllist;
 	}
 }

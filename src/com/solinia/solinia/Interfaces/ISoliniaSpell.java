@@ -1037,8 +1037,6 @@ public interface ISoliniaSpell {
 
 	boolean isBardSong();
 	
-	int getSpellType();
-
 	boolean isCureSpell();
 
 	boolean isNuke();
