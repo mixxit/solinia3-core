@@ -3142,7 +3142,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 	
 	@Override
-	public int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity, int sourceLevel, int ticksleft) {
+	public int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity, int sourceLevel, int ticksleft, int instrument_mod) {
 		int formula, base, max, effect_value;
 
 		formula = spellEffect.getFormula();

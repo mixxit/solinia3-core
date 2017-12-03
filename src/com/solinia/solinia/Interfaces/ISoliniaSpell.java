@@ -1033,7 +1033,7 @@ public interface ISoliniaSpell {
 	int calcBuffDurationFormula(int level, int formula, int duration);
 
 	int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
-			int sourceLevel, int ticksleft);
+			int sourceLevel, int ticksleft, int instrument_mod);
 
 	boolean isBardSong();
 	

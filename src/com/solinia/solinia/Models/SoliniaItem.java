@@ -82,6 +82,8 @@ public class SoliniaItem implements ISoliniaItem {
 	private int hp = 0;
 	private int mana = 0;
 	private boolean isExperienceBonus = false;
+	private SkillType skillModType = SkillType.None;
+	private int skillModValue = 0;
 
 	@Override
 	public ItemStack asItemStack() {
@@ -621,6 +623,9 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpregen() + ChatColor.RESET);
 		sender.sendMessage("- mpregen: " + ChatColor.GOLD + getMpregen() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- skillmodtype: " + ChatColor.GOLD + getSkillModType().toString() + ChatColor.RESET);
+		sender.sendMessage("- skillmodvalue: " + ChatColor.GOLD + getSkillModValue() + ChatColor.RESET);
 	}
 
 	@Override
@@ -742,8 +747,14 @@ public class SoliniaItem implements ISoliniaItem {
 		case "experiencebonus":
 			setExperienceBonus(Boolean.parseBoolean(value));
 			break;
+		case "skillmodtype":
+			setSkillModType(SkillType.valueOf(value));
+			break;
+		case "skillmodvalue":
+			setSkillModValue(Integer.parseInt(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue");
 		}
 	}
 
@@ -918,5 +929,25 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setExperienceBonus(boolean isExperienceBonus) {
 		this.isExperienceBonus = isExperienceBonus;
+	}
+
+	@Override
+	public SkillType getSkillModType() {
+		return skillModType;
+	}
+
+	@Override
+	public void setSkillModType(SkillType skillModType) {
+		this.skillModType = skillModType;
+	}
+
+	@Override
+	public int getSkillModValue() {
+		return skillModValue;
+	}
+
+	@Override
+	public void setSkillModValue(int skillModValue) {
+		this.skillModValue = skillModValue;
 	}
 }

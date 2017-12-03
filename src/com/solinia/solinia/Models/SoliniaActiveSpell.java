@@ -1687,7 +1687,21 @@ public class SoliniaActiveSpell {
 		
 		LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
 		
-		int mpToRemove = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), casterLevel, getTicksLeft());
+		int instrument_mod = 0;
+		
+		try
+		{
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			if (sourceSoliniaLivingEntity != null)
+			{
+				instrument_mod = sourceSoliniaLivingEntity.getInstrumentMod(this.getSpell());
+			}
+		} catch (CoreStateInitException e)
+		{
+			// just skip it
+		}
+		
+		int mpToRemove = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), casterLevel, getTicksLeft(), instrument_mod);
 		
 		try
 		{
@@ -1818,8 +1832,22 @@ public class SoliniaActiveSpell {
 
 		LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
 		
+		int instrument_mod = 0;
+		
+		try
+		{
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			if (sourceSoliniaLivingEntity != null)
+			{
+				instrument_mod = sourceSoliniaLivingEntity.getInstrumentMod(this.getSpell());
+			}
+		} catch (CoreStateInitException e)
+		{
+			// just skip it
+		}
+		
 		// HP spells also get calculated based on the caster and the recipient
-		int hpToAdd = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), caster_level, getTicksLeft());		
+		int hpToAdd = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), caster_level, getTicksLeft(), instrument_mod);		
 		
 		// Damage
 		// damage should be < 0

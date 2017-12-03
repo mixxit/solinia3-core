@@ -5208,4 +5208,50 @@ public class Utils {
 		// TODO Auto-generated method stub
 		return 200;
 	}
+
+	public static int getBaseInstrumentSoftCap() {
+		// TODO Auto-generated method stub
+		return 36;
+	}
+
+	public static int getTotalItemSkillMod(ISoliniaLivingEntity soliniaLivingEntity, SkillType skilltype) {
+		int total = 0;
+
+		try {
+			List<ItemStack> itemstacks = new ArrayList<ItemStack>();
+			for (ItemStack itemstack : soliniaLivingEntity.getBukkitLivingEntity().getEquipment().getArmorContents()) {
+				if (itemstack == null)
+					continue;
+
+				itemstacks.add(itemstack);
+			}
+
+			if (soliniaLivingEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand() != null)
+				itemstacks.add(soliniaLivingEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand());
+
+			// does not use item in hand
+
+			for (ItemStack itemstack : itemstacks) {
+				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0) {
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					}
+
+					if (item != null && item.getSkillModType().equals(skilltype))
+					total += item.getSkillModValue();
+					if (augItem != null && item.getSkillModType().equals(skilltype))
+					total += augItem.getSkillModValue();
+				}
+			}
+			return total;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return total;
+		}
+	}
 }

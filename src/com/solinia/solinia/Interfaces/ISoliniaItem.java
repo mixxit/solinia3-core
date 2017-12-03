@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Models.AugmentationSlotType;
+import com.solinia.solinia.Models.SkillType;
 
 public interface ISoliniaItem {
 	ItemStack asItemStack();
@@ -237,4 +238,12 @@ public interface ISoliniaItem {
 	boolean isExperienceBonus();
 
 	void setExperienceBonus(boolean isExperienceBonus);
+
+	SkillType getSkillModType();
+
+	void setSkillModType(SkillType skillModType);
+
+	int getSkillModValue();
+
+	void setSkillModValue(int skillModValue);
 }

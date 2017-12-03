@@ -3422,4 +3422,70 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return new ArrayList<SoliniaActiveSpell>();
 		}
 	}
+
+	@Override
+	public int getInstrumentMod(ISoliniaSpell spell) {
+		if (getClassObj() == null || !getClassObj().getName().equals("BARD")) 
+			return 10;
+		
+		int effectmod = 10;
+		int effectmodcap = 0;
+		boolean nocap = false;
+		effectmodcap = Utils.getBaseInstrumentSoftCap();
+		
+		// TODO Spell and AA bonuses
+		switch (Utils.getSkillType(spell.getSkill())) {
+			case PercussionInstruments:
+				if (Utils.getTotalItemSkillMod(this,SkillType.PercussionInstruments) == 0)
+					effectmod = 10;
+				else if (getSkill("PERCUSSIONINSTRUMENTS") == 0)
+					effectmod = 10;
+				else
+				effectmod = Utils.getTotalItemSkillMod(this,SkillType.PercussionInstruments);
+				break;
+			case StringedInstruments:
+				if (Utils.getTotalItemSkillMod(this,SkillType.StringedInstruments) == 0)
+					effectmod = 10;
+				else if (getSkill("STRINGEDINSTRUMENTS") == 0)
+					effectmod = 10;
+				else
+					effectmod = Utils.getTotalItemSkillMod(this,SkillType.StringedInstruments);
+				break;
+			case WindInstruments:
+				if (Utils.getTotalItemSkillMod(this,SkillType.WindInstruments) == 0)
+					effectmod = 10;
+				else if (getSkill("WINDINSTRUMENTS") == 0)
+					effectmod = 10;
+				else
+					effectmod = Utils.getTotalItemSkillMod(this,SkillType.WindInstruments);
+				break;
+			case BrassInstruments:
+				if (Utils.getTotalItemSkillMod(this,SkillType.BrassInstruments) == 0)
+					effectmod = 10;
+				else if (getSkill("BRASSINSTRUMENTS") == 0)
+					effectmod = 10;
+				else
+					effectmod = Utils.getTotalItemSkillMod(this,SkillType.BrassInstruments);
+				break;
+			case Singing:
+				if (Utils.getTotalItemSkillMod(this,SkillType.Singing) == 0)
+					effectmod = 10;
+				else
+					effectmod = Utils.getTotalItemSkillMod(this,SkillType.Singing);
+				break;
+			default:
+				effectmod = 10;
+				return effectmod;
+		}
+		
+		// TODO effect mod cap
+		
+		if (effectmod < 10)
+			effectmod = 10;
+		if (!nocap && effectmod > effectmodcap)
+			effectmod = effectmodcap;
+		
+		
+		return effectmod;
+	}
 }

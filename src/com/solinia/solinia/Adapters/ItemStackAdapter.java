@@ -27,6 +27,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.AugmentationSlotType;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
@@ -219,6 +220,11 @@ public class ItemStackAdapter {
 				regentxt += ChatColor.WHITE + "MPRegen: " + ChatColor.YELLOW + soliniaItem.getMpregen()
 						+ ChatColor.RESET;
 			}
+		}
+		
+		if (!(soliniaItem.getSkillModType().equals(SkillType.None)))
+		{
+			loretxt.add(ChatColor.WHITE + "Modifies skill checks for: " + ChatColor.YELLOW + soliniaItem.getSkillModType().toString() + "  +(" + soliniaItem.getSkillModValue() + ")" + ChatColor.RESET);
 		}
 		
 		if (!(soliniaItem.getAcceptsAugmentationSlotType().equals(AugmentationSlotType.NONE)))

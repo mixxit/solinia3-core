@@ -19,6 +19,7 @@ import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
+import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellResistType;
 
@@ -170,5 +171,7 @@ public interface ISoliniaLivingEntity
 	Collection<SoliniaActiveSpell> getActiveSpells();
 
 	int getAttk();
+
+	public int getInstrumentMod(ISoliniaSpell iSoliniaSpell);
 
 }
