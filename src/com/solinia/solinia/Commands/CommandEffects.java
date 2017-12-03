@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -24,7 +25,11 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandEffects implements CommandExecutor {
+	Solinia3CorePlugin plugin;
 
+	public CommandEffects(Solinia3CorePlugin plugin) {
+		this.plugin = plugin;
+	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -101,7 +106,7 @@ public class CommandEffects implements CommandExecutor {
 	            		return true;
 	            	}
 	            	
-	            	StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(player.getUniqueId(), spell.getId());
+	            	StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(plugin, player.getUniqueId(), spell.getId());
 	            	
 	            	if (!spell.isBeneficial())
 	            	{

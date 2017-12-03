@@ -162,7 +162,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		try
 		{
-			StateManager.getInstance().getEntityManager().clearEntityEffects(event.getEntity().getUniqueId());
+			StateManager.getInstance().getEntityManager().clearEntityEffects(plugin, event.getEntity().getUniqueId());
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(event.getEntity());
 			if (player != null)
 			{

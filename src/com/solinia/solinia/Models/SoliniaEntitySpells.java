@@ -1,6 +1,8 @@
 package com.solinia.solinia.Models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -27,11 +29,10 @@ import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaEntitySpells {
 
-
 	private UUID livingEntityUUID;
-	private ConcurrentHashMap<Integer, SoliniaActiveSpell> activeSpells = new ConcurrentHashMap<Integer,SoliniaActiveSpell>();
+	private ConcurrentHashMap<Integer, SoliniaActiveSpell> activeSpells = new ConcurrentHashMap<Integer, SoliniaActiveSpell>();
 	private boolean isPlayer;
-	
+
 	public SoliniaEntitySpells(LivingEntity livingEntity) {
 		setLivingEntityUUID(livingEntity.getUniqueId());
 		if (livingEntity instanceof Player)
@@ -45,10 +46,9 @@ public class SoliniaEntitySpells {
 	public void setLivingEntityUUID(UUID livingEntityUUID) {
 		this.livingEntityUUID = livingEntityUUID;
 	}
-	
-	public LivingEntity getLivingEntity()
-	{
-		return (LivingEntity)Bukkit.getEntity(this.getLivingEntityUUID());
+
+	public LivingEntity getLivingEntity() {
+		return (LivingEntity) Bukkit.getEntity(this.getLivingEntityUUID());
 	}
 
 	public Collection<SoliniaActiveSpell> getActiveSpells() {
@@ -59,26 +59,24 @@ public class SoliniaEntitySpells {
 		// This spell ID is already active
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
-		
-		System.out.println("Adding spell: " + soliniaSpell.getName() + " to " + this.getLivingEntity().getName() + " from " + sourceEntity.getName());
 
-		try
-		{
-			if(!SoliniaSpell.isValidEffectForEntity(getLivingEntity(),sourceEntity,soliniaSpell))
-			{
-				System.out.println("Spell: " + soliniaSpell.getName() + "[" + soliniaSpell.getId() + "] found to have invalid target (" + getLivingEntity().getName() + ")");
+		System.out.println("Adding spell: " + soliniaSpell.getName() + " to " + this.getLivingEntity().getName()
+				+ " from " + sourceEntity.getName());
+
+		try {
+			if (!SoliniaSpell.isValidEffectForEntity(getLivingEntity(), sourceEntity, soliniaSpell)) {
+				System.out.println("Spell: " + soliniaSpell.getName() + "[" + soliniaSpell.getId()
+						+ "] found to have invalid target (" + getLivingEntity().getName() + ")");
 				return false;
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return false;
 		}
 
 		// Resist spells!
-		if (soliniaSpell.isResistable() && !soliniaSpell.isBeneficial())
-		{
+		if (soliniaSpell.isResistable() && !soliniaSpell.isBeneficial()) {
 			float effectiveness = 100;
-			
+
 			// If state is active, try to use spell effectiveness (resists)
 			try {
 				effectiveness = soliniaSpell.getSpellEffectiveness(sourceEntity, getLivingEntity());
@@ -86,264 +84,229 @@ public class SoliniaEntitySpells {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			if (effectiveness < 100)
-			{
+
+			if (effectiveness < 100) {
 				// Check resistances
-				if (this.getLivingEntity() instanceof Player)
-				{
-					Player player = (Player)this.getLivingEntity();
+				if (this.getLivingEntity() instanceof Player) {
+					Player player = (Player) this.getLivingEntity();
 					player.sendMessage(ChatColor.GRAY + "* You resist " + soliniaSpell.getName());
 					return true;
 				}
-				
-				if (sourceEntity instanceof Player)
-				{
-					Player player = (Player)sourceEntity;
+
+				if (sourceEntity instanceof Player) {
+					Player player = (Player) sourceEntity;
 					player.sendMessage(ChatColor.GRAY + "* " + soliniaSpell.getName() + " was completely resisted");
-					
-					/* TODO - Add hate
-					if (Utils.isLivingEntityNPC((LivingEntity)getLivingEntity()))
-					{
-						try {
-							// Resists should still cause hate
-							ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-							solentity.addHate(sourceEntity,10);
-						} catch (CoreStateInitException e) {
-							
-						}
-					}
-					*/
-					
+
+					/*
+					 * TODO - Add hate if (Utils.isLivingEntityNPC((LivingEntity)getLivingEntity()))
+					 * { try { // Resists should still cause hate ISoliniaLivingEntity solentity =
+					 * SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+					 * solentity.addHate(sourceEntity,10); } catch (CoreStateInitException e) {
+					 * 
+					 * } }
+					 */
+
 					return true;
 				}
 			}
 		}
-		
-		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer, sourceEntity.getUniqueId(), true, duration);
+
+		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer,
+				sourceEntity.getUniqueId(), true, duration);
 		if (duration > 0)
-			activeSpells.put(soliniaSpell.getId(),activeSpell);
-		
-		//System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
-		
-		if (activeSpell.getSpell().isBardSong())
-		{
-			if (getLivingEntityUUID().equals(sourceEntity.getUniqueId()))
-			{
-				try
-				{
+			activeSpells.put(soliniaSpell.getId(), activeSpell);
+
+		// System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
+
+		if (activeSpell.getSpell().isBardSong()) {
+			if (getLivingEntityUUID().equals(sourceEntity.getUniqueId())) {
+				try {
 					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
-					solEntity.emote(ChatColor.GRAY + "* " + sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName());
-					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(), soliniaSpell.getId());
-				} catch (CoreStateInitException e)
-				{
+					solEntity.emote(ChatColor.GRAY + "* " + sourceEntity.getCustomName() + " starts to sing "
+							+ soliniaSpell.getName());
+					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(),
+							soliniaSpell.getId());
+				} catch (CoreStateInitException e) {
 					// ignore
 				}
 			}
 		}
-		
+
 		// Initial run
 		activeSpell.apply(plugin);
-		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5,0.5,0.5), Effect.POTION_BREAK, 5);
-		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,1, 0);
-		
-		if (duration > 0)
-		{
+		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5, 0.5, 0.5),
+				Effect.POTION_BREAK, 5);
+		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 0);
+
+		if (duration > 0) {
 			if (activeSpells.get(soliniaSpell.getId()) != null)
 				activeSpells.get(soliniaSpell.getId()).setFirstRun(false);
 		}
 		return true;
 	}
-	
-	public void removeSpell(Integer spellId)
-	{
+
+	public void removeSpell(Plugin plugin, Integer spellId) {
 		// Effect has worn off
 		SoliniaActiveSpell activeSpell = activeSpells.get(spellId);
-		
+
 		if (activeSpell == null)
 			return;
-		
-		// Check if bard song, may need to keep singing
-		if (activeSpell.getSpell().isBardSong())
-		{
-			if (getLivingEntityUUID().equals(activeSpell.getSourceUuid()))
-			{
-				try
-				{
-					if (getLivingEntity() != null)
-					{
-						if (StateManager.getInstance().getEntityManager().getEntitySinging(getLivingEntity().getUniqueId()) != null)
-						{
-							Integer singingId = StateManager.getInstance().getEntityManager().getEntitySinging(getLivingEntity().getUniqueId());
-							if (singingId != activeSpell.getSpellId())
-							{
-								ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-								solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close");
-							} else {
-								// Continue singing!
-								activeSpell.setTicksLeft(3);
-								return;
-							}
-						} else {
-							// skip
-						}
-					}
-				} catch (CoreStateInitException e)
-				{
-					// ignore
-				}
-			}
-		}
-		
+
 		boolean updateMaxHp = false;
 		boolean updateDisguise = false;
-		
+
 		// Handle any effect removals needed
-		for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
-		{
-			switch(effect.getSpellEffectType())
-			{
-				case TotalHP:
-					updateMaxHp = true;
-					break;
-				case STA:
-					updateMaxHp = true;
-					break;
-				case Illusion:
-				case IllusionCopy:
-				case IllusionOther:
-				case IllusionPersistence:
-				case IllusionaryTarget:
-					updateDisguise = true;
+		for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
+			switch (effect.getSpellEffectType()) {
+			case TotalHP:
+				updateMaxHp = true;
+				break;
+			case STA:
+				updateMaxHp = true;
+				break;
+			case Illusion:
+			case IllusionCopy:
+			case IllusionOther:
+			case IllusionPersistence:
+			case IllusionaryTarget:
+				updateDisguise = true;
 				break;
 			}
 		}
-		
+
 		activeSpells.remove(spellId);
-		
-		if (updateMaxHp == true)
-		{
-			if (getLivingEntity() != null && getLivingEntity() instanceof Player)
-			{
-				try
-				{
-					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+
+		if (updateMaxHp == true) {
+			if (getLivingEntity() != null && getLivingEntity() instanceof Player) {
+				try {
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
 					if (solplayer != null)
-					solplayer.updateMaxHp();
-				} catch (CoreStateInitException e)
-				{
-					
+						solplayer.updateMaxHp();
+				} catch (CoreStateInitException e) {
+
 				}
 			}
 		}
-		
-		if (updateDisguise == true)
-		{
+
+		if (updateDisguise == true) {
 			if (getLivingEntity() != null)
 				DisguiseAPI.undisguiseToAll(getLivingEntity());
 		}
+		
+		// Check if bard song, may need to keep singing
+				if (activeSpell.getSpell().isBardSong()) {
+					if (getLivingEntityUUID().equals(activeSpell.getSourceUuid())) {
+						try {
+							if (getLivingEntity() != null) {
+								if (StateManager.getInstance().getEntityManager()
+										.getEntitySinging(getLivingEntity().getUniqueId()) != null) {
+									Integer singingId = StateManager.getInstance().getEntityManager()
+											.getEntitySinging(getLivingEntity().getUniqueId());
+									if (singingId != activeSpell.getSpellId()) {
+										ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+										solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close");
+									} else {
+										// Continue singing!
+										if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity)
+										{
+											boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity(plugin, (LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()), (LivingEntity)Bukkit.getEntity(activeSpell.getOwnerUuid()));
+											return;
+										}
+									}
+								} else {
+									// skip
+								}
+							}
+						} catch (CoreStateInitException e) {
+							// ignore
+						}
+					}
+				}
 	}
-	
-	public void removeAllSpells()
-	{
+
+	public void removeAllSpells(Plugin plugin) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
-		for(SoliniaActiveSpell activeSpell : getActiveSpells())
-		{
+		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
 			removeSpells.add(activeSpell.getSpellId());
 		}
-		
-		for(Integer spellId : removeSpells)
-		{
-			removeSpell(spellId);
+
+		for (Integer spellId : removeSpells) {
+			removeSpell(plugin, spellId);
 		}
 	}
 
 	public void run(Plugin plugin) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
-		
+
 		if (!getLivingEntity().isDead())
-		for(SoliniaActiveSpell activeSpell : getActiveSpells())
-		{
-			if (activeSpell.getTicksLeft() == 0)
-			{
-				removeSpells.add(activeSpell.getSpellId());
+			for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+				if (activeSpell.getTicksLeft() == 0) {
+					removeSpells.add(activeSpell.getSpellId());
+				} else {
+					activeSpell.apply(plugin);
+					activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
+					updateSpells.add(activeSpell);
+				}
 			}
-			else
-			{
-				activeSpell.apply(plugin);
-				activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
-				updateSpells.add(activeSpell);
-			}
+
+		for (Integer spellId : removeSpells) {
+			removeSpell(plugin, spellId);
 		}
-		
-		for(Integer spellId : removeSpells)
-		{
-			removeSpell(spellId);
-		}
-		
-		for(SoliniaActiveSpell activeSpell : updateSpells)
-		{
+
+		for (SoliniaActiveSpell activeSpell : updateSpells) {
 			activeSpells.put(activeSpell.getSpellId(), activeSpell);
 		}
 	}
-	
+
 	// Mainly used for cures
-	public void removeFirstSpellOfEffectType(SpellEffectType type) {
+	public void removeFirstSpellOfEffectType(Plugin plugin, SpellEffectType type) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
-		
+
 		boolean foundToRemove = false;
-		for(SoliniaActiveSpell activeSpell : getActiveSpells())
-		{
-			if (foundToRemove == false && activeSpell.getSpell().isEffectInSpell(type))
-			{
+		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+			if (foundToRemove == false && activeSpell.getSpell().isEffectInSpell(type)) {
 				removeSpells.add(activeSpell.getSpellId());
 				foundToRemove = true;
 			} else {
 				updateSpells.add(activeSpell);
 			}
 		}
-		
-		for(Integer spellId : removeSpells)
-		{
-			removeSpell(spellId);
+
+		for (Integer spellId : removeSpells) {
+			removeSpell(plugin,spellId);
 		}
-		
-		for(SoliniaActiveSpell activeSpell : updateSpells)
-		{
+
+		for (SoliniaActiveSpell activeSpell : updateSpells) {
 			activeSpells.put(activeSpell.getSpellId(), activeSpell);
 		}
-		
+
 	}
 
-	public void removeAllSpellsOfId(int spellId) {
-		removeSpell(spellId);
+	public void removeAllSpellsOfId(Plugin plugin, int spellId) {
+		removeSpell(plugin, spellId);
 	}
 
-	public void removeFirstSpell() {
+	public void removeFirstSpell(Plugin plugin) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
-		
+
 		boolean foundToRemove = false;
-		for(SoliniaActiveSpell activeSpell : getActiveSpells())
-		{
-			if (foundToRemove == false)
-			{
+		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+			if (foundToRemove == false) {
 				removeSpells.add(activeSpell.getSpellId());
 				foundToRemove = true;
 			} else {
 				updateSpells.add(activeSpell);
 			}
 		}
-		
-		for(Integer spellId : removeSpells)
-		{
-			removeSpell(spellId);
+
+		for (Integer spellId : removeSpells) {
+			removeSpell(plugin, spellId);
 		}
-		
-		for(SoliniaActiveSpell activeSpell : updateSpells)
-		{
+
+		for (SoliniaActiveSpell activeSpell : updateSpells) {
 			activeSpells.put(activeSpell.getSpellId(), activeSpell);
 		}
 	}

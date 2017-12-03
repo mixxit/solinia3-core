@@ -145,7 +145,7 @@ public interface ISoliniaLivingEntity
 
 	int getRune();
 
-	int reduceAndRemoveRunesAndReturnLeftover(int damage);
+	int reduceAndRemoveRunesAndReturnLeftover(Plugin plugin, int damage);
 
 	public boolean isInvulnerable();
 

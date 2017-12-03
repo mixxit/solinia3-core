@@ -236,7 +236,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 				for (Integer spellId : removeSpells) {
 					StateManager.getInstance().getEntityManager()
-							.removeSpellEffectsOfSpellId(((LivingEntity) attacker).getUniqueId(), spellId);
+							.removeSpellEffectsOfSpellId(plugin, ((LivingEntity) attacker).getUniqueId(), spellId);
 				}
 			}
 		} catch (CoreStateInitException e) {
@@ -268,7 +268,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 				for (Integer spellId : removeSpells) {
 					StateManager.getInstance().getEntityManager()
-							.removeSpellEffectsOfSpellId(((LivingEntity) event.getEntity()).getUniqueId(), spellId);
+							.removeSpellEffectsOfSpellId(plugin, ((LivingEntity) event.getEntity()).getUniqueId(), spellId);
 				}
 			}
 			
@@ -304,7 +304,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
 				if (soldefender.getRune() > 0)
 				{
-					event.setDamage(soldefender.reduceAndRemoveRunesAndReturnLeftover((int)event.getDamage()));
+					event.setDamage(soldefender.reduceAndRemoveRunesAndReturnLeftover(plugin, (int)event.getDamage()));
 					
 					if (event.getDamage() <= 0)
 					{

@@ -41,9 +41,9 @@ public interface IEntityManager {
 
 	List<LivingEntity> getAllWorldPets();
 
-	void clearEntityEffects(UUID uniqueId);
+	void clearEntityEffects(Plugin plugin, UUID uniqueId);
 
-	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter);
+	void clearEntityFirstEffectOfType(Plugin plugin, LivingEntity livingEntity, SpellEffectType poisoncounter);
 
 	void toggleTrance(UUID uniqueId);
 
@@ -60,9 +60,7 @@ public interface IEntityManager {
 
 	void doNPCSpellCast(Plugin plugin);
 
-	void removeSpellEffects(UUID uuid);
-
-	void removeSpellEffectsOfSpellId(UUID uuid, int spellId);
+	void removeSpellEffects(Plugin plugin, UUID uuid);
 
 	void addTemporaryMerchantItem(int npcid, int itemid, int amount);
 
@@ -78,7 +76,7 @@ public interface IEntityManager {
 
 	void doNPCSummon(Plugin plugin);
 
-	void clearEntityFirstEffect(LivingEntity livingEntity);
+	void clearEntityFirstEffect(Plugin plugin, LivingEntity livingEntity);
 
 	void addEntitySpellCooldown(LivingEntity livingEntity, int spellId, Timestamp expiretimestamp);
 
@@ -101,4 +99,6 @@ public interface IEntityManager {
 	Integer getEntitySinging(UUID entityUUID);
 
 	void setEntitySinging(UUID entityUUID, Integer spellId);
+
+	void removeSpellEffectsOfSpellId(Plugin plugin, UUID uuid, int spellId);
 }

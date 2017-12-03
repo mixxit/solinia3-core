@@ -266,7 +266,7 @@ public class SoliniaActiveSpell {
 			applyGate(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case CancelMagic: 
-			applyCancelMagic(spellEffect, soliniaSpell, casterLevel);
+			applyCancelMagic(plugin, spellEffect, soliniaSpell, casterLevel);
 			return;
 		case InvisVsUndead
 			: return;
@@ -290,10 +290,10 @@ public class SoliniaActiveSpell {
 			applyConfusion(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case DiseaseCounter: 
-			applyDiseaseCounter(spellEffect,soliniaSpell,casterLevel);
+			applyDiseaseCounter(plugin, spellEffect,soliniaSpell,casterLevel);
 			return;
 		case PoisonCounter: 
-			applyPoisonCounter(spellEffect,soliniaSpell,casterLevel);
+			applyPoisonCounter(plugin, spellEffect,soliniaSpell,casterLevel);
 			return;
 		case DetectHostile
 			: return;
@@ -1736,23 +1736,23 @@ public class SoliniaActiveSpell {
 		return null;
 	}
 	
-	private void applyCancelMagic(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+	private void applyCancelMagic(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		try
 		{
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffect(getLivingEntity());
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffect(plugin, getLivingEntity());
 		} catch (CoreStateInitException e)
 		{
 			return;
 		}
 	}
 	
-	private void applyPoisonCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+	private void applyPoisonCounter(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!soliniaSpell.isCureSpell())
 			return;
 		
 		try
 		{
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),SpellEffectType.PoisonCounter);
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(plugin, getLivingEntity(),SpellEffectType.PoisonCounter);
 			if (isOwnerPlayer())
 			{
 				Player player = (Player)Bukkit.getPlayer(getOwnerUuid());
@@ -1777,13 +1777,13 @@ public class SoliniaActiveSpell {
 		}
 	}
 
-	private void applyDiseaseCounter(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+	private void applyDiseaseCounter(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!soliniaSpell.isCureSpell())
 			return;
 
 		try
 		{
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),SpellEffectType.DiseaseCounter);
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(plugin, getLivingEntity(),SpellEffectType.DiseaseCounter);
 			if (isOwnerPlayer())
 			{
 				Player player = (Player)Bukkit.getPlayer(getOwnerUuid());

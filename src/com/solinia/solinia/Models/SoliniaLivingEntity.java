@@ -3342,7 +3342,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int reduceAndRemoveRunesAndReturnLeftover(int damage) {
+	public int reduceAndRemoveRunesAndReturnLeftover(Plugin plugin, int damage) {
 		int dmgLeft = damage;
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		try {
@@ -3372,7 +3372,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId);
+						.removeSpellEffectsOfSpellId(plugin, getBukkitLivingEntity().getUniqueId(), spellId);
 
 			}
 		} catch (CoreStateInitException e) {
