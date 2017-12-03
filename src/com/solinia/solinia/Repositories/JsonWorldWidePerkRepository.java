@@ -65,6 +65,12 @@ public class JsonWorldWidePerkRepository implements IRepository<WorldWidePerk> {
 			file = gson.fromJson(br, new TypeToken<List<WorldWidePerk>>(){}.getType());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return;
+		} catch (IllegalStateException ie)
+		{
+			// try later its locked
+			System.out.println("Perk file was in use, attempting again later");
+			return;
 		}
 		
 		perks.clear();

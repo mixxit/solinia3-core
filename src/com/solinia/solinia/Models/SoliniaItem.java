@@ -466,6 +466,7 @@ public class SoliniaItem implements ISoliniaItem {
 		if (isConsumable == true && isExperienceBonus())
 		{
 			SoliniaPlayerAdapter.Adapt(player).grantExperienceBonusFromItem();
+			System.out.println("Granted " + player.getName() + " experience bonus from item [" + SoliniaPlayerAdapter.Adapt(player).getExperienceBonusExpires().toString() + "]");
 			return true;
 		}
 		
