@@ -2670,6 +2670,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- teleport_zone: " + ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
 		sender.sendMessage("- mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
+		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET);
 		sender.sendMessage("- range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
@@ -2704,6 +2705,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 			
 			int mana = Integer.parseInt(value);
 			setMana(mana);
+			break;
+		case "duration":
+			if (value.equals(""))
+				throw new InvalidSpellSettingException("duration is empty");
+			
+			int buffduration = Integer.parseInt(value);
+			setBuffduration(buffduration);
 			break;
 		case "effect":
 			int effectNo = Integer.parseInt(value);
@@ -3154,10 +3162,35 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 		effect_value = calcSpellEffectValueFormula(spellEffect, sourceEntity, targetEntity, sourceLevel, ticksleft);
 		//System.out.println("Calculated Spell Effect (" + spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
+
+		if (Utils.IsBardInstrumentSkill(Utils.getSkillType(getSkill())) &&
+				spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed
+				&& spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed2
+				&& spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed3
+				&& spellEffect.getSpellEffectType() != SpellEffectType.Lull
+				&& spellEffect.getSpellEffectType() != SpellEffectType.ChangeFrenzyRad
+				&& spellEffect.getSpellEffectType() != SpellEffectType.Harmony
+				&& spellEffect.getSpellEffectType() != SpellEffectType.CurrentMana
+				&& spellEffect.getSpellEffectType() != SpellEffectType.ManaRegen_v2
+				&& spellEffect.getSpellEffectType() != SpellEffectType.AddFaction) 
+		{
+
+				int oval = effect_value;
+				int mod = applySpellEffectiveness(instrument_mod, true, sourceEntity);
+				effect_value = effect_value * mod / 10;
+			}
+		
 		effect_value = modEffectValue(effect_value, spellEffect, sourceEntity);
 		//System.out.println("Calculated Modded Spell Effect (" + spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
 
 		return effect_value;
+	}
+
+	private int applySpellEffectiveness(int value, boolean isBard, LivingEntity sourceEntity) {
+		if (isBard)
+			return value;
+		// TODO
+		return value;
 	}
 
 	private int modEffectValue(int effect_value, SpellEffect effect, LivingEntity caster) {

@@ -5254,4 +5254,17 @@ public class Utils {
 			return total;
 		}
 	}
+
+	public static boolean IsBardInstrumentSkill(SkillType skill) {
+		switch (skill) {
+		case BrassInstruments:
+		case Singing:
+		case StringedInstruments:
+		case WindInstruments:
+		case PercussionInstruments:
+			return true;
+		default:
+			return false;
+		}
+	}
 }

@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -626,6 +627,13 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- skillmodtype: " + ChatColor.GOLD + getSkillModType().toString() + ChatColor.RESET);
 		sender.sendMessage("- skillmodvalue: " + ChatColor.GOLD + getSkillModValue() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- allowedclassnames: ");
+		for(String classname : this.getAllowedClassNames())
+		{
+			sender.sendMessage(" - " + ChatColor.GOLD + classname + ChatColor.RESET);
+		}
+
 	}
 
 	@Override
@@ -643,6 +651,10 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "worth":
 			setWorth(Integer.parseInt(value));
+			break;
+		case "allowedclassnames":
+			String[] allowedclasses = value.split(",");
+			setAllowedClassNames(Arrays.asList(allowedclasses));
 			break;
 		case "color":
 			setColor((byte)Integer.parseInt(value));
