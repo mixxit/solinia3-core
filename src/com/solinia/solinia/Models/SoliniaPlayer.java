@@ -182,7 +182,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		if (isAlignmentEmperor()) {
-			king = "Emperor";
+			king = "Emperor ";
 		}
 
 		String displayName = king + getFullName();

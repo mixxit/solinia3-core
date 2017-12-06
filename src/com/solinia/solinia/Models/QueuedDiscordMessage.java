@@ -4,11 +4,11 @@ import java.util.UUID;
 
 public class QueuedDiscordMessage {
 	private UUID playerUuid;
-	private String channelId;
+	private long channelId;
 	private String message;
 	private boolean isSent;
 	
-	public QueuedDiscordMessage(UUID playerUuid, String channelId, String message) {
+	public QueuedDiscordMessage(UUID playerUuid, long channelId, String message) {
 		this.setPlayerUuid(playerUuid);
 		this.setChannelId(channelId);
 		this.setMessage(message);
@@ -23,11 +23,11 @@ public class QueuedDiscordMessage {
 		this.playerUuid = playerUuid;
 	}
 
-	public String getChannelId() {
+	public long getChannelId() {
 		return channelId;
 	}
 
-	public void setChannelId(String channelId) {
+	public void setChannelId(long channelId) {
 		this.channelId = channelId;
 	}
 

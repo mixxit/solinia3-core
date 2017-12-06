@@ -25,7 +25,7 @@ public class DiscordListener {
 	@EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) { // This method is NOT called because it doesn't have the @EventSubscriber annotation
 		System.out.println(event.getAuthor().getName()+"@"+event.getChannel().getName()+":"+event.getMessage().getContent());
-		if (event.getChannel().getID().equals(StateManager.getInstance().getChannelManager().getDefaultDiscordChannel()))
+		if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDefaultDiscordChannel()))
 		{
 			// Handle command messaging here
 			if (event.getMessage().getContent().startsWith("?"))
@@ -62,7 +62,7 @@ public class DiscordListener {
 					}
 				}
 				
-				if (event.getChannel().getID().equals(StateManager.getInstance().getChannelManager().getDefaultDiscordChannel()))
+				if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDefaultDiscordChannel()))
 				{
 					Bukkit.getServer().dispatchCommand(StateManager.getInstance().getDiscordDefaultChannelCommandSender(), command.trim());
 				} else {
