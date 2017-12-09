@@ -71,7 +71,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<String, Timestamp> entitySpellCooldown = new ConcurrentHashMap<String, Timestamp>();
 	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
-	private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
+	//private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
 	private ConcurrentHashMap<UUID, Inventory> merchantInventories = new ConcurrentHashMap<UUID, Inventory>();
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
@@ -644,7 +644,7 @@ public class EntityManager implements IEntityManager {
 		
 		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpell(plugin);
 	}
-
+	/*
 	@Override
 	public void addTemporaryMerchantItem(int npcid, int itemid, int amount) {
 		if (temporaryMerchantItems.get(npcid) == null)
@@ -677,7 +677,7 @@ public class EntityManager implements IEntityManager {
 		}
 		return entries;
 	}
-	
+	*/
 	@Override
 	public List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc) {
 		List<ISoliniaNPCMerchantEntry> combinedEntries = new ArrayList<ISoliniaNPCMerchantEntry>();
@@ -694,9 +694,9 @@ public class EntityManager implements IEntityManager {
 			if (merchant.getEntries().size() > 0)
 				combinedEntries.addAll(merchant.getEntries());
 	
-			List<ISoliniaNPCMerchantEntry> tempItems = getTemporaryMerchantItems(npc);
-			if (tempItems.size() > 0)
-				combinedEntries.addAll(tempItems);
+			//List<ISoliniaNPCMerchantEntry> tempItems = getTemporaryMerchantItems(npc);
+			//if (tempItems.size() > 0)
+			//	combinedEntries.addAll(tempItems);
 		} catch (CoreStateInitException e)
 		{
 			return new ArrayList<ISoliniaNPCMerchantEntry>();
@@ -704,7 +704,7 @@ public class EntityManager implements IEntityManager {
 		return combinedEntries;
 		
 	}
-	
+	/*
 	@Override
 	public void removeTemporaryMerchantItem(int npcid, int itemid, int amount) throws InsufficientTemporaryMerchantItemException {
 		if (temporaryMerchantItems.get(npcid) == null)
@@ -724,7 +724,7 @@ public class EntityManager implements IEntityManager {
 		
 		temporaryMerchantItems.get(npcid).put(itemid, newCount);
 	}
-
+	*/
 	@Override
 	public void doNPCSummon(Plugin plugin) {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();

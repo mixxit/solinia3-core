@@ -62,13 +62,13 @@ public interface IEntityManager {
 
 	void removeSpellEffects(Plugin plugin, UUID uuid);
 
-	void addTemporaryMerchantItem(int npcid, int itemid, int amount);
+	//void addTemporaryMerchantItem(int npcid, int itemid, int amount);
 
-	void removeTemporaryMerchantItem(int npcid, int itemid, int amount) throws InsufficientTemporaryMerchantItemException;
+	//void removeTemporaryMerchantItem(int npcid, int itemid, int amount) throws InsufficientTemporaryMerchantItemException;
 
 	List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc);
 
-	List<ISoliniaNPCMerchantEntry> getTemporaryMerchantItems(ISoliniaNPC npc);
+	//List<ISoliniaNPCMerchantEntry> getTemporaryMerchantItems(ISoliniaNPC npc);
 
 	boolean hasEntityEffectType(LivingEntity livingEntity, SpellEffectType type);
 

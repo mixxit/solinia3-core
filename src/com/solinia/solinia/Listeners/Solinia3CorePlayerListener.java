@@ -657,7 +657,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						EconomyResponse responsedeposit = StateManager.getInstance().getEconomy().depositPlayer((Player)event.getView().getPlayer(), price);
 						if (responsedeposit.transactionSuccess()) {
 							// Add to buy back list
-							StateManager.getInstance().getEntityManager().addTemporaryMerchantItem(npc.getId(), item.getId(), event.getCursor().getAmount());
+							//StateManager.getInstance().getEntityManager().addTemporaryMerchantItem(npc.getId(), item.getId(), event.getCursor().getAmount());
 							event.getView().getPlayer().sendMessage(ChatColor.YELLOW + "* You recieve $" + price + " as payment");
 							event.setCursor(new ItemStack(Material.AIR));
 							event.setCancelled(true);
