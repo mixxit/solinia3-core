@@ -2,8 +2,8 @@ package com.solinia.solinia.Managers;
 
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -465,9 +465,8 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public Timestamp getMezzed(LivingEntity livingEntity) {
-		Calendar calendar = Calendar.getInstance();
-		java.util.Date now = calendar.getTime();
-		Timestamp nowtimestamp = new Timestamp(now.getTime());
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		Timestamp expiretimestamp = this.entityMezzed.get(livingEntity.getUniqueId());
 
 		if (expiretimestamp != null)
@@ -817,9 +816,8 @@ public class EntityManager implements IEntityManager {
 		}
 		else
 		{
-			Calendar calendar = Calendar.getInstance();
-			java.util.Date now = calendar.getTime();
-			Timestamp nowtimestamp = new Timestamp(now.getTime());
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 			
 			if (spellType == SpellType.Heal)
 				dontHealMe.put(bukkitLivingEntity.getUniqueId(),nowtimestamp);

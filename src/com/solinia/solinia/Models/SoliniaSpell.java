@@ -1,8 +1,8 @@
 package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -3935,9 +3935,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				int experience = Integer.parseInt(str_experience);
 				Timestamp timestamp = Timestamp.valueOf(str_stimetsamp);
-				Calendar calendar = Calendar.getInstance();
-				java.util.Date now = calendar.getTime();
-				Timestamp currenttimestamp = new Timestamp(now.getTime());
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp currenttimestamp = Timestamp.valueOf(datetime);
 				
 				long maxminutes = 60*7;
 				if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes*60*1000)

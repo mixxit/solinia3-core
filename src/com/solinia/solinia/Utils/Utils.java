@@ -6,8 +6,8 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -103,9 +103,8 @@ public class Utils {
 	public static List<WorldWidePerk> getActiveWorldWidePerks() {
 		List<WorldWidePerk> perks = new ArrayList<WorldWidePerk>();
 
-		Calendar calendar = Calendar.getInstance();
-		java.util.Date now = calendar.getTime();
-		Timestamp currenttimestamp = new Timestamp(now.getTime());
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp currenttimestamp = Timestamp.valueOf(datetime);
 
 		for (WorldWidePerk entity : StateManager.getInstance().getWorldWidePerks()) {
 			// System.out.println("Comparing Perk [" + entity.getId() + "/" +

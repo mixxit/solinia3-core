@@ -3,8 +3,9 @@ package com.solinia.solinia.Models;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1767,12 +1768,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					mana_cost = 0;
 
 				ISoliniaLivingEntity soltarget = SoliniaLivingEntityAdapter.Adapt(target);
-				Calendar calendar = Calendar.getInstance();
-				java.util.Date now = calendar.getTime();
-				Timestamp nowtimestamp = new Timestamp(now.getTime());
-				calendar.add(Calendar.MILLISECOND, spell.getCastTime() + 1000);
-				java.util.Date expire = calendar.getTime();
-				Timestamp expiretimestamp = new Timestamp(expire.getTime());
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(spell.getCastTime() + 1000, ChronoUnit.MILLIS));
 
 				switch (spelllistentry.getType()) {
 				case SpellType.Heal:

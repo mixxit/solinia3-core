@@ -1,7 +1,7 @@
 package com.solinia.solinia.Commands;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,23 +49,30 @@ public class CommandEffects implements CommandExecutor {
 		            player.sendMessage(ChatColor.GOLD + "Active Spell Effects on you:" + ChatColor.WHITE);
 		            
 		            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+
 	            	if (solplayer.getExperienceBonusExpires() != null)
 	            	{
-	            		Calendar calendar = Calendar.getInstance();
-	        			java.util.Date now = calendar.getTime();
-	        			Timestamp nowtimestamp = new Timestamp(now.getTime());
+			    		System.out.println("Experience Bonus was not null: " + solplayer.getExperienceBonusExpires().toString());
+
+			    		LocalDateTime datetime = LocalDateTime.now();
+			    		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 	        			Timestamp expiretimestamp = solplayer.getExperienceBonusExpires();
 
 	        			if (expiretimestamp != null)
 	        			{
+		        			System.out.println("Experience Bonus expire timestamp " + solplayer.getExperienceBonusExpires() +  " vs Now: "  + nowtimestamp.toString());
+
 	        				if (!nowtimestamp.after(expiretimestamp))
 	        				{
+			        			System.out.println("Experience bonus was after, displaying in effects");
 	        					int secondsleft = (int)Math.floor(Utils.compareTwoTimeStamps(expiretimestamp,nowtimestamp));
 	        					TextComponent tc = new TextComponent();
 	        					tc.setText("- " + ChatColor.GREEN + "100% Experience Potion" + ChatColor.RESET + " " + secondsleft + " seconds");
 	        					sender.spigot().sendMessage(tc);
 	        				}
 	        			}
+	            	} else {
+			    		System.out.println("Experience Bonus was null");
 	            	}
 		            
 		            for(SoliniaActiveSpell activeSpell : spells.getActiveSpells())

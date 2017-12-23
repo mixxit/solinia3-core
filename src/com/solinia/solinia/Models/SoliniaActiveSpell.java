@@ -2,8 +2,9 @@ package com.solinia.solinia.Models;
 
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -1369,9 +1370,8 @@ public class SoliniaActiveSpell {
 		
 		int experience = Integer.parseInt(str_experience);
 		Timestamp timestamp = Timestamp.valueOf(str_stimetsamp);
-		Calendar calendar = Calendar.getInstance();
-		java.util.Date now = calendar.getTime();
-		Timestamp currenttimestamp = new Timestamp(now.getTime());
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp currenttimestamp = Timestamp.valueOf(datetime);
 		
 		long maxminutes = 60*7;
 		if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes*60*1000)
@@ -1630,10 +1630,8 @@ public class SoliniaActiveSpell {
 		
 		try
 		{
-			Calendar calendar = Calendar.getInstance();
-			calendar.add(Calendar.SECOND, 6);
-			java.util.Date expire = calendar.getTime();
-			Timestamp expiretimestamp = new Timestamp(expire.getTime());
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
 			
 			
 			StateManager.getInstance().getEntityManager().addMezzed(getLivingEntity(), expiretimestamp);

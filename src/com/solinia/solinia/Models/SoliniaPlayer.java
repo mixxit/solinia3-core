@@ -1,8 +1,9 @@
 package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -344,9 +345,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
 		if (getExperienceBonusExpires() != null)
 		{
-			Calendar calendar = Calendar.getInstance();
-			java.util.Date now = calendar.getTime();
-			Timestamp nowtimestamp = new Timestamp(now.getTime());
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 			Timestamp expiretimestamp = getExperienceBonusExpires();
 
 			if (expiretimestamp != null)
@@ -424,9 +424,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (experienceamount < 1)
 			return;
 
-		Calendar calendar = Calendar.getInstance();
-		java.util.Date now = calendar.getTime();
-		java.sql.Timestamp currenttimestamp = new Timestamp(now.getTime());
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp currenttimestamp = Timestamp.valueOf(datetime);
 
 		SoliniaResurrectionItem resurrectionitem = new SoliniaResurrectionItem(this, experienceamount,
 				currenttimestamp);
@@ -521,9 +520,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
 		if (getExperienceBonusExpires() != null)
 		{
-			Calendar calendar = Calendar.getInstance();
-			java.util.Date now = calendar.getTime();
-			Timestamp nowtimestamp = new Timestamp(now.getTime());
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 			Timestamp expiretimestamp = getExperienceBonusExpires();
 
 			if (expiretimestamp != null)
@@ -2011,19 +2009,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void grantExperienceBonusFromItem() {
-		Calendar calendar = Calendar.getInstance();
-		java.util.Date now = calendar.getTime();
-		Timestamp nowtimestamp = new Timestamp(now.getTime());
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		
 		if (getExperienceBonusExpires() == null)
 		{
+			System.out.println("Granted Experience Bonus From Item [Current expiry was null]: " + nowtimestamp.toString());
 			setExperienceBonusExpires(nowtimestamp);
 		}
 		
-		calendar.setTime(getExperienceBonusExpires());
-		calendar.add(Calendar.HOUR, 1);
-		java.util.Date expire = calendar.getTime();
-		Timestamp expiretimestamp = new Timestamp(expire.getTime());
+		LocalDateTime expiredatetime = nowtimestamp.toLocalDateTime();
+		expiredatetime.plus(1, ChronoUnit.HOURS);
+		
+		Timestamp expiretimestamp = Timestamp.valueOf(expiredatetime);
+		System.out.println("Granted Experience Bonus From Item [Current expiry was not null]: " + expiretimestamp.toString());
 		setExperienceBonusExpires(expiretimestamp);
 		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + "You have gained 100% experience for 1 additional hour");
 	}

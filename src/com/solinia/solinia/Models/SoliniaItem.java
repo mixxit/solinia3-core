@@ -1,9 +1,10 @@
 package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -492,9 +493,8 @@ public class SoliniaItem implements ISoliniaItem {
 		{
 			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(player, spell.getId()) != null)
 			{
-				Calendar calendar = Calendar.getInstance();
-				java.util.Date now = calendar.getTime();
-				Timestamp nowtimestamp = new Timestamp(now.getTime());
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager().getEntitySpellCooldown(player, spell.getId());
 	
 				if (expiretimestamp != null)
@@ -516,10 +516,8 @@ public class SoliniaItem implements ISoliniaItem {
 		if (itemUseSuccess) {
 			if (spell.getRecastTime() > 0)
 			{
-				Calendar calendar = Calendar.getInstance();
-				calendar.add(Calendar.MILLISECOND, spell.getRecastTime());
-				java.util.Date expire = calendar.getTime();
-				Timestamp expiretimestamp = new Timestamp(expire.getTime());
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(spell.getRecastTime(),ChronoUnit.MILLIS));
 				
 				StateManager.getInstance().getEntityManager().addEntitySpellCooldown(player, spell.getId(),expiretimestamp);
 			}

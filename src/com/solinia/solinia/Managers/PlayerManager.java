@@ -1,8 +1,8 @@
 package com.solinia.solinia.Managers;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -141,6 +141,7 @@ public class PlayerManager implements IPlayerManager {
 		} else {
 			playerList = getPlayers();
 		}
+		Collections.sort(playerList,(o1, o2) -> ((Integer)o1.getAAPoints()).compareTo(((Integer)o2.getAAPoints())));
 		Collections.sort(playerList,(o1, o2) -> o1.getExperience().compareTo(o2.getExperience()));
 		Collections.reverse(playerList);
 		int to = 5;
@@ -249,9 +250,8 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public ISoliniaPlayer createNewPlayerAlt(Player player) {
-		Calendar calendar = Calendar.getInstance();
-		java.util.Date now = calendar.getTime();
-		Timestamp nowtimestamp = new Timestamp(now.getTime());
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		
 		ISoliniaPlayer solPlayer;
 		try {
@@ -267,9 +267,8 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public ISoliniaPlayer loadPlayerAlt(Player player, UUID characterUUID) {
-		Calendar calendar = Calendar.getInstance();
-		java.util.Date now = calendar.getTime();
-		Timestamp nowtimestamp = new Timestamp(now.getTime());
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		
 		ISoliniaPlayer solPlayer;
 		try {
