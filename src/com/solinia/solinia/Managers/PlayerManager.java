@@ -141,7 +141,8 @@ public class PlayerManager implements IPlayerManager {
 		} else {
 			playerList = getPlayers();
 		}
-		Collections.sort(playerList,(o1, o2) -> ((Integer)o1.getAAPoints()).compareTo(((Integer)o2.getAAPoints())));
+		
+		Collections.sort(playerList,(o1, o2) -> ((Integer)o1.getAARanks().size()).compareTo(((Integer)o2.getAARanks().size())));
 		Collections.sort(playerList,(o1, o2) -> o1.getExperience().compareTo(o2.getExperience()));
 		Collections.reverse(playerList);
 		int to = 5;
