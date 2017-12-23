@@ -2019,9 +2019,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		LocalDateTime expiredatetime = nowtimestamp.toLocalDateTime();
-		expiredatetime.plus(1, ChronoUnit.HOURS);
 		
-		Timestamp expiretimestamp = Timestamp.valueOf(expiredatetime);
+		Timestamp expiretimestamp = Timestamp.valueOf(expiredatetime.plus(1, ChronoUnit.HOURS));
 		System.out.println("Granted Experience Bonus From Item [Current expiry was not null]: " + expiretimestamp.toString());
 		setExperienceBonusExpires(expiretimestamp);
 		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + "You have gained 100% experience for 1 additional hour");
