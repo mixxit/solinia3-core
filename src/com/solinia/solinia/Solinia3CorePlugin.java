@@ -15,6 +15,7 @@ import com.solinia.solinia.Commands.CommandAddRace;
 import com.solinia.solinia.Commands.CommandAddRaceClass;
 import com.solinia.solinia.Commands.CommandBite;
 import com.solinia.solinia.Commands.CommandCharacter;
+import com.solinia.solinia.Commands.CommandClaim;
 import com.solinia.solinia.Commands.CommandCommit;
 import com.solinia.solinia.Commands.CommandConvertMerchantToLootDrop;
 import com.solinia.solinia.Commands.CommandCreateAlignment;
@@ -111,6 +112,7 @@ import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
+import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
@@ -326,13 +328,16 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			npcspelllistrepo.setJsonFile(getDataFolder() + "/" + "npcspelllists.json");
 			npcspelllistrepo.reload();
 
+			JsonAccountClaimRepository accountclaimsrepo = new JsonAccountClaimRepository();
+			accountclaimsrepo.setJsonFile(getDataFolder() + "/" + "accountclaimrepo.json");
+			accountclaimsrepo.reload();
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
-					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo);
+					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,accountclaimsrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -489,6 +494,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("inspiration").setExecutor(new CommandInspiration());
 		this.getCommand("listnpcspells").setExecutor(new CommandListNpcSpells());
 		this.getCommand("editnpcspelllist").setExecutor(new CommandEditNpcSpellList());
+		this.getCommand("claim").setExecutor(new CommandClaim());
 	}
 
 	private void createConfigDir() {

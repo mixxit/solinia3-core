@@ -49,6 +49,7 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.NPCSpellList;
+import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -56,6 +57,7 @@ import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
+import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
@@ -90,12 +92,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaAlignment> alignmentsRepository;
 	private IRepository<ISoliniaPlayer> characterlistsRepository;
 	private IRepository<NPCSpellList> npcspelllistsRepository;
+	private IRepository<SoliniaAccountClaim> accountClaimsRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, JsonAccountClaimRepository accountClaimsContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -114,6 +117,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.alignmentsRepository = alignmentsContext;
 		this.characterlistsRepository = characterlistsContext;
 		this.setNpcspelllistsRepository(npcspelllistsContext);
+		this.accountClaimsRepository = accountClaimsContext;
 	}
 	
 	@Override 
@@ -486,6 +490,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		this.characterlistsRepository.commit();
 		this.npcspelllistsRepository.commit();
+		this.accountClaimsRepository.commit();
 	}
 
 	private void commitPlayersToCharacterLists() {
@@ -1337,4 +1342,56 @@ public class ConfigurationManager implements IConfigurationManager {
 		return npcspelllistsRepository.query(q -> q.getName() != null);
 	}
 
+	@Override
+	public List<SoliniaAccountClaim> getAccountClaims(String name) {
+		return accountClaimsRepository.query(q -> q.isClaimed() == false && q.getMcname().equals(name));
+	}
+
+	@Override
+	public void removeClaim(int id) {
+		
+		if (getAccountClaim(id) != null)
+			getAccountClaim(id).setClaimed(true);
+	}
+
+	@Override
+	public SoliniaAccountClaim getAccountClaim(int seekClaimId) {
+		List<SoliniaAccountClaim> results = accountClaimsRepository.query(q -> q.getId() == seekClaimId);
+		if (results.size() != 1)
+			return null;
+		
+		return results.get(0);
+	}
+	
+	@Override
+	public SoliniaAccountClaim getAccountClaim(String mcname, int seekClaimId) {
+		List<SoliniaAccountClaim> results = accountClaimsRepository.query(q -> q.getId() == seekClaimId && q.isClaimed() == false && q.getMcname().equals(mcname) && q.getMcname().equals(mcname));
+		if (results.size() != 1)
+			return null;
+		
+		return results.get(0);
+	}
+	
+	@Override
+	public void addAccountClaim(SoliniaAccountClaim claim) {
+		this.accountClaimsRepository.add(claim);
+
+	}
+	
+	@Override
+	public List<SoliniaAccountClaim> getAccountClaims() {
+		return accountClaimsRepository.query(q -> q.getId() > 0);
+	}
+
+	@Override
+	public int getNextAccountClaimId() {
+		int max = 0;
+		for (SoliniaAccountClaim claim : getAccountClaims()) {
+			if (claim.getId() > max)
+				max = claim.getId();
+		}
+
+		return max + 1;
+	}
+	
 }

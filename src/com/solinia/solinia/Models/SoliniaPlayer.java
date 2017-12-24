@@ -2025,4 +2025,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		setExperienceBonusExpires(expiretimestamp);
 		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + "You have gained 100% experience for 1 additional hour");
 	}
+
+	@Override
+	public List<SoliniaAccountClaim> getAccountClaims() {
+		try {
+			return StateManager.getInstance().getConfigurationManager().getAccountClaims(this.getBukkitPlayer().getName());
+		} catch (CoreStateInitException e) {
+			return new ArrayList<SoliniaAccountClaim>();
+		}
+	}
 }

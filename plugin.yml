@@ -366,6 +366,10 @@ commands:
     description: Edits an AA Ability
     usage: /editaa aaid setting value
     aliases: []
+  claim:
+    description: Claims an item
+    usage: /claim <subcommand>
+    aliases: []
   listaas:
     description: Lists aa abilities
     usage: /listaa searchstring
