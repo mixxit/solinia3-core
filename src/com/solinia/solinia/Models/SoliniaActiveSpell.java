@@ -23,9 +23,11 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Horse.Color;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -492,8 +494,10 @@ public class SoliniaActiveSpell {
 			: return;
 		case CastingLevel
 			: return;
-		case SummonHorse
-			: return;
+		case SummonHorse: 
+			if (getLivingEntity() instanceof Player)
+				applySummonHorse(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case ChangeAggro
 			: return;
 		case Hunger
@@ -1230,6 +1234,24 @@ public class SoliniaActiveSpell {
 			: return;
 		default:
 			return;
+		}
+	}
+
+	private void applySummonHorse(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (getLivingEntity() instanceof Player)
+		{
+			Player player = (Player)getLivingEntity();
+		    Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
+		    h.setCustomName("Holy_Steed");
+		    h.setCustomNameVisible(true);
+		    h.setBreed(false);
+		    h.setColor(Color.WHITE);
+		    h.setMaxHealth(1000);
+		    h.setHealth(1000);
+	        h.setTamed(true);
+	        h.setOwner(player);
+	        h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+	        System.out.println("Summoned Holy Steed for player: " + player.getDisplayName());
 		}
 	}
 

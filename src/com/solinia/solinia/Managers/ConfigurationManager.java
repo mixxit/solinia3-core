@@ -1344,7 +1344,7 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public List<SoliniaAccountClaim> getAccountClaims(String name) {
-		return accountClaimsRepository.query(q -> q.isClaimed() == false && q.getMcname().equals(name));
+		return accountClaimsRepository.query(q -> q.isClaimed() == false && q.getMcname().toUpperCase().equals(name.toUpperCase()));
 	}
 
 	@Override
@@ -1365,7 +1365,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public SoliniaAccountClaim getAccountClaim(String mcname, int seekClaimId) {
-		List<SoliniaAccountClaim> results = accountClaimsRepository.query(q -> q.getId() == seekClaimId && q.isClaimed() == false && q.getMcname().equals(mcname) && q.getMcname().equals(mcname));
+		List<SoliniaAccountClaim> results = accountClaimsRepository.query(q -> q.getId() == seekClaimId && q.isClaimed() == false && q.getMcname().toUpperCase().equals(mcname.toUpperCase()));
 		if (results.size() != 1)
 			return null;
 		

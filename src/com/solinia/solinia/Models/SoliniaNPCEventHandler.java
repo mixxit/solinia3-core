@@ -1,5 +1,6 @@
 package com.solinia.solinia.Models;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -12,6 +13,8 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
@@ -35,6 +38,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int npcId;
 	private int awardsItem = 0;
 	private String teleportResponse = "";
+	private boolean awardsRandomisedGear = false;
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -119,6 +123,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- requiresquestflag: " + ChatColor.GOLD + getRequiresQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- awardsquestflag: " + ChatColor.GOLD + getAwardsQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- awardsitem: " + ChatColor.GOLD + getAwardsItem() + ChatColor.RESET);
+		sender.sendMessage("- awardsrandomisedgear: " + ChatColor.GOLD + isAwardsRandomisedGear() + ChatColor.RESET);
 	}
 
 	@Override
@@ -188,8 +193,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			{
 				throw new InvalidNPCEventSettingException("Teleport zone value must be in format: world,x,y,z");
 			}
-			
-			
+		case "awardsrandomisedgear":
+			setAwardsRandomisedGear(Boolean.parseBoolean(value));
+			break;
 		case "awardsitem":
 			int itemId = Integer.parseInt(value);
 			if (itemId < 1)
@@ -313,7 +319,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					player.addPlayerQuestFlag(getAwardsQuestFlag());
 					
 					// All item awards must be accompanied with a quest flag else they will repeat the item return over and over
-					
 					if (getAwardsItem() > 0)
 					{
 						System.out.println("Awarding item with awardquestflag: " + getAwardsQuestFlag());
@@ -343,6 +348,74 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 							
 						}
 					}
+					
+					if (isAwardsRandomisedGear() == true)
+					{
+						System.out.println("Awarding randomisedgear with awardquestflag: " + getAwardsQuestFlag());
+						
+						int playertier = 1;
+						if (player.getLevel() >= 1 && player.getLevel() < 11)
+							playertier = 1;
+						if (player.getLevel() >= 11 && player.getLevel() < 21)
+							playertier = 2;
+						if (player.getLevel() >= 21 && player.getLevel() < 31)
+							playertier = 3;
+						if (player.getLevel() >= 31 && player.getLevel() < 41)
+							playertier = 4;
+						if (player.getLevel() >= 41 && player.getLevel() < 51)
+							playertier = 5;
+						if (player.getLevel() >= 51 && player.getLevel() < 61)
+							playertier = 6;
+						
+						try {
+							
+							// always give the next tier up and then we will reset the player requirements ot current level
+							// this ability is for special seasonal rewards only
+							playertier += 1;
+							List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, "of the Season", false);
+							
+							for(int itemid : items)
+							{
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
+								final String playerName = player.getBukkitPlayer().getName();
+								final int minLevel = player.getLevel();
+								final int finalitemid = itemid;
+								if (item != null)
+								{
+									
+									Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+											Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+												public void run() {
+													try
+													{
+														ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(finalitemid);
+														item.setMinLevel(minLevel);
+														SoliniaAccountClaim claim = new SoliniaAccountClaim();
+														claim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+														claim.setMcname(playerName);
+														claim.setItemid(finalitemid);
+														claim.setClaimed(false);
+														Player claimPlayer = Bukkit.getPlayer(playerName);
+														if (claimPlayer != null)
+														{
+															claimPlayer.sendMessage(ChatColor.GOLD + "You have been awarded with a claim item! See /claim");
+														}
+														StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
+														System.out.println("Awarded Claim: " + item.getDisplayname() + " to " + playerName);
+													} catch (CoreStateInitException e)
+													{
+														// skip
+													}
+												}
+											});
+								}
+							}
+							
+						} catch (SoliniaItemException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
 				}
 			}
 		} catch (CoreStateInitException e)
@@ -360,6 +433,14 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setTeleportResponse(String teleportResponse) {
 		this.teleportResponse = teleportResponse;
+	}
+
+	public boolean isAwardsRandomisedGear() {
+		return awardsRandomisedGear;
+	}
+
+	public void setAwardsRandomisedGear(boolean awardsRandomisedGear) {
+		this.awardsRandomisedGear = awardsRandomisedGear;
 	}
 
 }

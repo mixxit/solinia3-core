@@ -29,22 +29,21 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class CommandClaim implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
-
-		Player player = (Player) sender;
-
 		try {
-			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
-			player.sendMessage("Current Claims: " + solplayer.getAccountClaims().size());
-
 			if (args.length < 1) {
-				player.sendMessage(ChatColor.GRAY + "Insufficient arguments (list,claim)");
+				sender.sendMessage(ChatColor.GRAY + "Insufficient arguments (list,claim)");
 				return true;
 			}
 
 			switch (args[0]) {
 			case "list":
+				if (!(sender instanceof Player))
+					return false;
+
+				Player player = (Player) sender;
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+				sender.sendMessage("Current Claims: " + solplayer.getAccountClaims().size());
+				
 				for (SoliniaAccountClaim claim : solplayer.getAccountClaims()) 
 				{
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(claim.getItemid());
@@ -62,11 +61,11 @@ public class CommandClaim implements CommandExecutor {
 				
 				return true;
 			case "give":
-				if (!player.isOp())
+				if (!sender.isOp())
 					return false;
 				
 				if (args.length < 3) {
-					player.sendMessage("That is not a claim id - /claim give mcaccountname itemid");
+					sender.sendMessage("That is not a claim id - /claim give mcaccountname itemid");
 					return true;
 				}
 				
@@ -80,36 +79,44 @@ public class CommandClaim implements CommandExecutor {
 				newclaim.setClaimed(false);
 				
 				StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-				player.sendMessage("Account claim added!");
+				sender.sendMessage("Account claim added!");
 				return true;
 			case "claim":
+				if (!(sender instanceof Player))
+					return false;
+
+				Player claimPlayer = (Player) sender;
+				ISoliniaPlayer solClaimPlayer = SoliniaPlayerAdapter.Adapt(claimPlayer);
+				sender.sendMessage("Current Claims: " + solClaimPlayer.getAccountClaims().size());
+				
 				if (args.length < 2) {
-					player.sendMessage("That is not a claim id - /claim claim claimid (see /claim list)");
+					sender.sendMessage("That is not a claim id - /claim claim claimid (see /claim list)");
 					return true;
 				}
 
 				int seekClaimId = Integer.parseInt(args[1].toUpperCase());
-				SoliniaAccountClaim claim = StateManager.getInstance().getConfigurationManager().getAccountClaim(player.getName(),seekClaimId);
+				System.out.println("Looking up claims for player name: " + claimPlayer.getName() + " for claim ID: " + seekClaimId);
+				SoliniaAccountClaim claim = StateManager.getInstance().getConfigurationManager().getAccountClaim(claimPlayer.getName().toUpperCase(),seekClaimId);
 				if (claim == null) {
-					player.sendMessage("That is not a valid claim - /claim claim claimid (see /aa claim)");
+					sender.sendMessage("That is not a valid claim - /claim claim claimid (see /claim list)");
 					return true;
 				}
 
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(claim.getItemid());
 				if (item == null) {
-					player.sendMessage("That is not a valid claim - /claim claim claimid (see /aa claim)");
+					sender.sendMessage("That is not a valid claim item - /claim claim claimid (see /claim list)");
 					return true;
 				}
 
-				player.getWorld().dropItemNaturally(player.getLocation(), item.asItemStack());
-				player.sendMessage("Claim item dropped at your feet - ID: " + claim.getId());
+				claimPlayer.getWorld().dropItemNaturally(claimPlayer.getLocation(), item.asItemStack());
+				sender.sendMessage("Claim item dropped at your feet - ID: " + claim.getId());
 				StateManager.getInstance().getConfigurationManager().removeClaim(claim.getId());
 
 				return true;
 
 			default:
-				player.sendMessage(ChatColor.GRAY + "Invalid arguments (list,claim)");
+				sender.sendMessage(ChatColor.GRAY + "Invalid arguments (list,claim)");
 				return true;
 			}
 

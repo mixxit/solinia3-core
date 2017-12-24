@@ -1091,7 +1091,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			float fizzle_roll = Utils.RandomBetween(0, 100);
 
-			 System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " + fizzlechance);
+			 //System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " + fizzlechance);
 			if (fizzle_roll > fizzlechance)
 				return true;
 

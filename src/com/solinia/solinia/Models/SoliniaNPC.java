@@ -911,14 +911,25 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public String replaceChatWordsWithHints(String message)
 	{
 		List<String> messages = Arrays.asList(message.toUpperCase().split(" "));
+		
+		if (getEventHandlers().size() > 0)
+		{
+			String searchlist = "";
+			for(String messageword : messages)
+			{
+				searchlist += messageword + ",";
+			}
+		}
+		
 		for(ISoliniaNPCEventHandler handler : getEventHandlers())
 		{
 			if (!handler.getInteractiontype().equals(InteractionType.CHAT))
 				continue;
-			
+
 			if (!messages.contains(handler.getTriggerdata().toUpperCase()))
 				continue;
-			
+
+
 			message = message.toLowerCase().replace(handler.getTriggerdata().toLowerCase(), "["+handler.getTriggerdata().toLowerCase()+"]");
 		}
 		message = message.replace("[", "[" + ChatColor.LIGHT_PURPLE);

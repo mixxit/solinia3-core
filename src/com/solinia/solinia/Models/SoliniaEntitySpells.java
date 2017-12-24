@@ -203,7 +203,7 @@ public class SoliniaEntitySpells {
 											.getEntitySinging(getLivingEntity().getUniqueId());
 									if (singingId != activeSpell.getSpellId()) {
 										ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-										solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close");
+										solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]");
 									} else {
 										// Continue singing!
 										if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity)

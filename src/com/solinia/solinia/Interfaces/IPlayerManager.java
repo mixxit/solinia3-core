@@ -30,4 +30,6 @@ public interface IPlayerManager {
 	void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp);
 	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException;
 	ISoliniaPlayer getPlayerAndDoNotCreate(UUID playerUUID);
+	Timestamp getPlayerLastSteed(UUID playerUUID);
+	void setPlayerLastSteed(UUID playerUUID, Timestamp timestamp);
 }

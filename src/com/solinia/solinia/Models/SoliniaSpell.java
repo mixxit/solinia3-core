@@ -3785,6 +3785,25 @@ public class SoliniaSpell implements ISoliniaSpell {
 			// just be sure to check the item its giving if its an item spell
 			for(SpellEffect effect : soliniaSpell.getBaseSpellEffects())
 			{
+				if (effect.getSpellEffectType().equals(SpellEffectType.SummonHorse))
+				{
+					if (source instanceof Player)
+					{
+						if (source.getUniqueId().equals(target.getUniqueId()))
+						{
+							if (StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(source.getUniqueId()) != null)
+							{
+								source.sendMessage("You can only summon a mount once per server session. Please wait for the next 4 hourly restart");
+								return false;
+							}
+						} else {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				}
+				
 				if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem))
 				{
 					System.out.println("Validating SummonItem for source: " + source.getCustomName());

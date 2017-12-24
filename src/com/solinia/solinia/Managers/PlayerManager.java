@@ -24,6 +24,7 @@ public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, Integer> playerApplyAugmentation = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Integer> playerActiveBardSong = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> playerLastChangeChar = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> playerLastSummonSteed = new ConcurrentHashMap<UUID, Timestamp>();
 
 	public PlayerManager(IRepository<ISoliniaPlayer> context)
 	{
@@ -306,6 +307,16 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp) {
 		this.playerLastChangeChar.put(playerUUID, timestamp);
+	}
+	
+	@Override
+	public Timestamp getPlayerLastSteed(UUID playerUUID) {
+		return playerLastSummonSteed.get(playerUUID);
+	}
+	
+	@Override
+	public void setPlayerLastSteed(UUID playerUUID, Timestamp timestamp) {
+		this.playerLastSummonSteed.put(playerUUID, timestamp);
 	}
 
 	@Override
