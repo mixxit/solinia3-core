@@ -5243,8 +5243,29 @@ public class Utils {
 
 					if (item != null && item.getSkillModType().equals(skilltype))
 					total += item.getSkillModValue();
+					
 					if (augItem != null && item.getSkillModType().equals(skilltype))
 					total += augItem.getSkillModValue();
+					
+					if (item != null && item.getSkillModType2().equals(skilltype))
+						total += item.getSkillModValue2();
+					
+					if (augItem != null && item.getSkillModType2().equals(skilltype))
+						total += augItem.getSkillModValue2();
+					
+					if (item != null && item.getSkillModType3().equals(skilltype))
+						total += item.getSkillModValue3();
+					
+					if (augItem != null && item.getSkillModType3().equals(skilltype))
+						total += augItem.getSkillModValue3();
+					
+					if (item != null && item.getSkillModType4().equals(skilltype))
+						total += item.getSkillModValue4();
+					
+					if (augItem != null && item.getSkillModType4().equals(skilltype))
+						total += augItem.getSkillModValue4();
+					
+					
 				}
 			}
 			return total;

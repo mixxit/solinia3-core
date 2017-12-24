@@ -226,6 +226,22 @@ public class ItemStackAdapter {
 		{
 			loretxt.add(ChatColor.WHITE + "Modifies skill checks for: " + ChatColor.YELLOW + soliniaItem.getSkillModType().toString() + "  +(" + soliniaItem.getSkillModValue() + ")" + ChatColor.RESET);
 		}
+
+		if (!(soliniaItem.getSkillModType2().equals(SkillType.None)))
+		{
+			loretxt.add(ChatColor.WHITE + "Modifies skill checks for: " + ChatColor.YELLOW + soliniaItem.getSkillModType2().toString() + "  +(" + soliniaItem.getSkillModValue2() + ")" + ChatColor.RESET);
+		}
+
+		if (!(soliniaItem.getSkillModType3().equals(SkillType.None)))
+		{
+			loretxt.add(ChatColor.WHITE + "Modifies skill checks for: " + ChatColor.YELLOW + soliniaItem.getSkillModType3().toString() + "  +(" + soliniaItem.getSkillModValue3() + ")" + ChatColor.RESET);
+		}
+
+		if (!(soliniaItem.getSkillModType4().equals(SkillType.None)))
+		{
+			loretxt.add(ChatColor.WHITE + "Modifies skill checks for: " + ChatColor.YELLOW + soliniaItem.getSkillModType4().toString() + "  +(" + soliniaItem.getSkillModValue4() + ")" + ChatColor.RESET);
+		}
+
 		
 		if (!(soliniaItem.getAcceptsAugmentationSlotType().equals(AugmentationSlotType.NONE)))
 		{

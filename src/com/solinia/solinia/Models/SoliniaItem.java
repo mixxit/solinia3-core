@@ -86,7 +86,16 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isExperienceBonus = false;
 	private SkillType skillModType = SkillType.None;
 	private int skillModValue = 0;
+	
+	private SkillType skillModType2 = SkillType.None;
+	private int skillModValue2 = 0;
 
+	private SkillType skillModType3 = SkillType.None;
+	private int skillModValue3 = 0;
+	
+	private SkillType skillModType4 = SkillType.None;
+	private int skillModValue4 = 0;
+	
 	@Override
 	public ItemStack asItemStack() {
 		return ItemStackAdapter.Adapt(this);
@@ -625,6 +634,12 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- skillmodtype: " + ChatColor.GOLD + getSkillModType().toString() + ChatColor.RESET);
 		sender.sendMessage("- skillmodvalue: " + ChatColor.GOLD + getSkillModValue() + ChatColor.RESET);
+		sender.sendMessage("- skillmodtype2: " + ChatColor.GOLD + getSkillModType2().toString() + ChatColor.RESET);
+		sender.sendMessage("- skillmodvalue2: " + ChatColor.GOLD + getSkillModValue2() + ChatColor.RESET);
+		sender.sendMessage("- skillmodtype3: " + ChatColor.GOLD + getSkillModType3().toString() + ChatColor.RESET);
+		sender.sendMessage("- skillmodvalue3: " + ChatColor.GOLD + getSkillModValue3() + ChatColor.RESET);
+		sender.sendMessage("- skillmodtype4: " + ChatColor.GOLD + getSkillModType4().toString() + ChatColor.RESET);
+		sender.sendMessage("- skillmodvalue4: " + ChatColor.GOLD + getSkillModValue4() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- allowedclassnames: ");
 		for(String classname : this.getAllowedClassNames())
@@ -763,8 +778,26 @@ public class SoliniaItem implements ISoliniaItem {
 		case "skillmodvalue":
 			setSkillModValue(Integer.parseInt(value));
 			break;
+		case "skillmodtype2":
+			setSkillModType2(SkillType.valueOf(value));
+			break;
+		case "skillmodvalue2":
+			setSkillModValue2(Integer.parseInt(value));
+			break;
+		case "skillmodtype3":
+			setSkillModType3(SkillType.valueOf(value));
+			break;
+		case "skillmodvalue3":
+			setSkillModValue3(Integer.parseInt(value));
+			break;
+		case "skillmodtype4":
+			setSkillModType4(SkillType.valueOf(value));
+			break;
+		case "skillmodvalue4":
+			setSkillModValue4(Integer.parseInt(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4");
 		}
 	}
 
@@ -959,5 +992,64 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setSkillModValue(int skillModValue) {
 		this.skillModValue = skillModValue;
+	}
+
+	@Override
+	public SkillType getSkillModType2() {
+		return skillModType2;
+	}
+
+	@Override
+	public void setSkillModType2(SkillType skillModType2) {
+		this.skillModType2 = skillModType2;
+	}
+
+	@Override
+	public int getSkillModValue2() {
+		return skillModValue2;
+	}
+
+	@Override
+	public void setSkillModValue2(int skillModValue2) {
+		this.skillModValue2 = skillModValue2;
+	}
+
+	@Override
+	public SkillType getSkillModType3() {
+		return skillModType3;
+	}
+
+	@Override
+	public void setSkillModType3(SkillType skillModType3) {
+		this.skillModType3 = skillModType3;
+	}
+
+	@Override
+	public int getSkillModValue3() {
+		return skillModValue3;
+	}
+
+	@Override
+	public void setSkillModValue3(int skillModValue3) {
+		this.skillModValue3 = skillModValue3;
+	}
+
+	@Override
+	public SkillType getSkillModType4() {
+		return skillModType4;
+	}
+
+	@Override
+	public void setSkillModType4(SkillType skillModType4) {
+		this.skillModType4 = skillModType4;
+	}
+
+	@Override
+	public int getSkillModValue4() {
+		return skillModValue4;
+	}
+
+	public void setSkillModValue4(int skillModValue4) {
+		this.skillModValue4 = skillModValue4;
 	}
 }

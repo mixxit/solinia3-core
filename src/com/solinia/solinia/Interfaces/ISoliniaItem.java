@@ -246,4 +246,26 @@ public interface ISoliniaItem {
 	int getSkillModValue();
 
 	void setSkillModValue(int skillModValue);
+
+	int getSkillModValue2();
+
+	void setSkillModValue2(int skillModValue2);
+
+	SkillType getSkillModType3();
+
+	void setSkillModType3(SkillType skillModType3);
+
+	int getSkillModValue3();
+
+	void setSkillModValue3(int skillModValue3);
+
+	SkillType getSkillModType4();
+
+	void setSkillModType4(SkillType skillModType4);
+
+	SkillType getSkillModType2();
+
+	void setSkillModType2(SkillType skillModType2);
+
+	int getSkillModValue4();
 }
