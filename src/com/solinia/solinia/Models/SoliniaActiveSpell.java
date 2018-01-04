@@ -1240,18 +1240,35 @@ public class SoliniaActiveSpell {
 	private void applySummonHorse(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (getLivingEntity() instanceof Player)
 		{
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			
 			Player player = (Player)getLivingEntity();
-		    Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
-		    h.setCustomName("Holy_Steed");
-		    h.setCustomNameVisible(true);
-		    h.setBreed(false);
-		    h.setColor(Color.WHITE);
-		    h.setMaxHealth(1000);
-		    h.setHealth(1000);
-	        h.setTamed(true);
-	        h.setOwner(player);
-	        h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
-	        System.out.println("Summoned Holy Steed for player: " + player.getDisplayName());
+			
+			try {
+				if (StateManager.getInstance().getPlayerManager().getPlayerLastSteed(player.getUniqueId()) != null)
+				{
+					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
+				    h.setCustomName("Holy_Steed");
+				    h.setCustomNameVisible(true);
+				    h.setBreed(false);
+				    h.setColor(Color.WHITE);
+				    h.setMaxHealth(1000);
+				    h.setHealth(1000);
+				    h.setTamed(true);
+				    h.setOwner(player);
+				    h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+				    System.out.println("Summoned Holy Steed for player: " + player.getDisplayName());
+				    player.sendMessage("Your steed has been summoned! You must wait for some time before another steed can be summoned ((server restart))");
+				    StateManager.getInstance().getPlayerManager().setPlayerLastSteed(player.getUniqueId(), nowtimestamp);
+				} else {
+				    // skip, already summoned
+				}
+			} catch (CoreStateInitException e) {
+				// skip
+			}
+			
+			
 		}
 	}
 
