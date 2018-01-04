@@ -360,36 +360,42 @@ public class ItemStackAdapter {
 		List<String> loreTxt = new ArrayList<String>();
 		ISoliniaSpell spell;
 		
+		String consumable = "";
+		if (soliniaItem.isConsumable())
+		{
+			consumable += "Consumable ";
+		}
+		
 		try {
 			spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getAbilityid());
 			if (spell.getEffectid1() != 254 && !Utils.getSpellEffectType(spell.getEffectid1()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid1()).name() + "(" + spell.getEffectBaseValue1() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid1()).name() + "(" + spell.getEffectBaseValue1() + ")" + ChatColor.RESET);
 			if (spell.getEffectid2() != 254 && !Utils.getSpellEffectType(spell.getEffectid2()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid2()).name() + "(" + spell.getEffectBaseValue2() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid2()).name() + "(" + spell.getEffectBaseValue2() + ")" + ChatColor.RESET);
 			if (spell.getEffectid3() != 254 && !Utils.getSpellEffectType(spell.getEffectid3()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid3()).name() + "(" + spell.getEffectBaseValue3() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid3()).name() + "(" + spell.getEffectBaseValue3() + ")" + ChatColor.RESET);
 			if (spell.getEffectid4() != 254 && !Utils.getSpellEffectType(spell.getEffectid4()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid4()).name() + "(" + spell.getEffectBaseValue4() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid4()).name() + "(" + spell.getEffectBaseValue4() + ")" + ChatColor.RESET);
 			if (spell.getEffectid5() != 254 && !Utils.getSpellEffectType(spell.getEffectid5()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid5()).name() + "(" + spell.getEffectBaseValue5() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid5()).name() + "(" + spell.getEffectBaseValue5() + ")" + ChatColor.RESET);
 			if (spell.getEffectid6() != 254 && !Utils.getSpellEffectType(spell.getEffectid6()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid6()).name() + "(" + spell.getEffectBaseValue6() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid6()).name() + "(" + spell.getEffectBaseValue6() + ")" + ChatColor.RESET);
 			if (spell.getEffectid7() != 254 && !Utils.getSpellEffectType(spell.getEffectid7()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid7()).name() + "(" + spell.getEffectBaseValue7() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid7()).name() + "(" + spell.getEffectBaseValue7() + ")" + ChatColor.RESET);
 			if (spell.getEffectid8() != 254 && !Utils.getSpellEffectType(spell.getEffectid8()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid8()).name() + "(" + spell.getEffectBaseValue8() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid8()).name() + "(" + spell.getEffectBaseValue8() + ")" + ChatColor.RESET);
 			if (spell.getEffectid9() != 254 && !Utils.getSpellEffectType(spell.getEffectid9()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid9()).name() + "(" + spell.getEffectBaseValue9() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid9()).name() + "(" + spell.getEffectBaseValue9() + ")" + ChatColor.RESET);
 			if (spell.getEffectid10() != 254 && !Utils.getSpellEffectType(spell.getEffectid10()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid10()).name() + "(" + spell.getEffectBaseValue10() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid10()).name() + "(" + spell.getEffectBaseValue10() + ")" + ChatColor.RESET);
 			if (spell.getEffectid11() != 254 && !Utils.getSpellEffectType(spell.getEffectid11()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid11()).name() + "(" + spell.getEffectBaseValue11() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid11()).name() + "(" + spell.getEffectBaseValue11() + ")" + ChatColor.RESET);
 			if (spell.getEffectid12() != 254 && !Utils.getSpellEffectType(spell.getEffectid12()).name().contains("LIMIT_"))
-				loreTxt.add(ChatColor.WHITE + "Consumable Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid12()).name() + "(" + spell.getEffectBaseValue12() + ")" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Ability: " + ChatColor.YELLOW+Utils.getSpellEffectType(spell.getEffectid12()).name() + "(" + spell.getEffectBaseValue12() + ")" + ChatColor.RESET);
 			
 			if (spell.isBuffSpell() && spell.getBuffduration() > 0)
 			{
-				loreTxt.add(ChatColor.WHITE + "Consumable Buff Duration: " + ChatColor.YELLOW + ((spell.getBuffduration() * 6) / 60) + " minutes" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Buff Duration: " + ChatColor.YELLOW + ((spell.getBuffduration() * 6) / 60) + " minutes" + ChatColor.RESET);
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

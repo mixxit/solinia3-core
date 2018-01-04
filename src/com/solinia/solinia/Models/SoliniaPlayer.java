@@ -893,6 +893,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						return;
 					}
 				}
+				
+				// Only applies to non-consumable items
+				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.isConsumable()) {
+					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
+					if (targetmob != null) {
+						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
+						return;
+					} else {
+						item.useItemOnEntity(plugin, event.getPlayer(), event.getPlayer(), true);
+						return;
+					}
+				}
 
 				// Only applies to spell effects
 				if (!itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
