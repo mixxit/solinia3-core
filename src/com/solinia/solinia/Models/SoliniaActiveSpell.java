@@ -1246,7 +1246,7 @@ public class SoliniaActiveSpell {
 			Player player = (Player)getLivingEntity();
 			
 			try {
-				if (StateManager.getInstance().getPlayerManager().getPlayerLastSteed(player.getUniqueId()) != null)
+				if (StateManager.getInstance().getPlayerManager().getPlayerLastSteed(player.getUniqueId()) == null)
 				{
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 				    h.setCustomName("Holy_Steed");
