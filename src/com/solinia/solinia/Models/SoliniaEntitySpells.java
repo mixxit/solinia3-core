@@ -59,6 +59,12 @@ public class SoliniaEntitySpells {
 		if (activeSpells.get(soliniaSpell.getId()) != null)
 			return false;
 
+		if (this.getLivingEntity() == null)
+			return false;
+		
+		if (sourceEntity == null)
+			return false;
+		
 		System.out.println("Adding spell: " + soliniaSpell.getName() + " to " + this.getLivingEntity().getName()
 				+ " from " + sourceEntity.getName());
 

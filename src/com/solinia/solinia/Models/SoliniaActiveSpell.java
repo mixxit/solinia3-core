@@ -1603,7 +1603,12 @@ public class SoliniaActiveSpell {
 		
 		String[] zonedata = soliniaSpell.getTeleportZone().split(",");
 		// Dissasemble the value to ensure it is correct
+
+		if (zonedata.length < 4)
+			return;
+
 		String world = zonedata[0];
+		
 		double x = Double.parseDouble(zonedata[1]);
 		double y = Double.parseDouble(zonedata[2]);
 		double z = Double.parseDouble(zonedata[3]);
