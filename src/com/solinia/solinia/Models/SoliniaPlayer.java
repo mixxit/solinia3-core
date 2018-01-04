@@ -85,6 +85,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean main = true;
 	private int inspiration = 0;
 	private Timestamp experienceBonusExpires;
+	private boolean oocEnabled = true;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -2033,5 +2034,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 			return new ArrayList<SoliniaAccountClaim>();
 		}
+	}
+
+	@Override
+	public boolean isOocEnabled() {
+		return oocEnabled;
+	}
+	
+	@Override
+	public void setOocEnabled(boolean oocEnabled) {
+		this.oocEnabled = oocEnabled;
 	}
 }

@@ -386,6 +386,11 @@ commands:
     description: Character admin command
     usage: /character
     aliases: []
+  hideooc:
+    description: Toggles hiding of the OOC channel
+    usage: /hideooc
+    aliases:
+    - toggleooc
   listnpcspells:
     description: Lists an npc spell ist
     usage: /listnpcspells

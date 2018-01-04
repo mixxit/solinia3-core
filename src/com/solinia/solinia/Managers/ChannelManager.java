@@ -77,6 +77,9 @@ public class ChannelManager implements IChannelManager {
 			try
 			{
 				ISoliniaPlayer solTargetPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (!solTargetPlayer.isOocEnabled())
+					continue;
+				
 				if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
 					continue;
 			} catch (CoreStateInitException e)

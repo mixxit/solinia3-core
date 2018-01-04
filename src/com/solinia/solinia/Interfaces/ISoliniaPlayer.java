@@ -266,4 +266,8 @@ public interface ISoliniaPlayer extends Serializable {
 	public void grantExperienceBonusFromItem();
 
 	public List<SoliniaAccountClaim> getAccountClaims();
+
+	boolean isOocEnabled();
+
+	void setOocEnabled(boolean oocEnabled);
 }

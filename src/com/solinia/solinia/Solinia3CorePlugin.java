@@ -51,6 +51,7 @@ import com.solinia.solinia.Commands.CommandForename;
 import com.solinia.solinia.Commands.CommandGrantTitle;
 import com.solinia.solinia.Commands.CommandGroup;
 import com.solinia.solinia.Commands.CommandGroupChat;
+import com.solinia.solinia.Commands.CommandHideOoc;
 import com.solinia.solinia.Commands.CommandIgnore;
 import com.solinia.solinia.Commands.CommandInspiration;
 import com.solinia.solinia.Commands.CommandLastname;
@@ -495,6 +496,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listnpcspells").setExecutor(new CommandListNpcSpells());
 		this.getCommand("editnpcspelllist").setExecutor(new CommandEditNpcSpellList());
 		this.getCommand("claim").setExecutor(new CommandClaim());
+		this.getCommand("hideooc").setExecutor(new CommandHideOoc());
 	}
 
 	private void createConfigDir() {
