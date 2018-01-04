@@ -896,7 +896,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				
 				// Only applies to non-consumable items
 				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.isConsumable()) {
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 					if (targetmob != null) {
 						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
