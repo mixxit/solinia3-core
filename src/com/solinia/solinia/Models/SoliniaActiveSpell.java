@@ -468,8 +468,9 @@ public class SoliniaActiveSpell {
 		case Root: 
 			applyRootSpellEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
-		case HealOverTime
-			: return;
+		case HealOverTime: 
+			applyCurrentHpSpellEffect(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case CompleteHeal
 			: return;
 		case Fearless
