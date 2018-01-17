@@ -56,11 +56,15 @@ public class CommandPet implements CommandExecutor {
 				player.sendMessage("Pet Name: " + pet.getName());
 				player.sendMessage("Pet HP: " + pet.getHealth() + "/" + pet.getMaxHealth());
 				ISoliniaLivingEntity petLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
-				player.sendMessage("Pet AC: " + petLivingEntity.getMitigationAC());
-				
 				EntityInsentient entityhandle = (EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) pet).getHandle();
 				double dmg = entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
 				player.sendMessage("Pet DMG: " + dmg);
+
+				player.sendMessage("STR: " + petLivingEntity.getStrength() + " STA: " + petLivingEntity.getStamina() + " AGI: " + petLivingEntity.getAgility() + " DEX: " + petLivingEntity.getDexterity() + " INT: " + petLivingEntity.getIntelligence() + " WIS: " + petLivingEntity.getWisdom() + " CHA: " + petLivingEntity.getCharisma());
+	            player.sendMessage("Pet Armour Class Mitigation : " + petLivingEntity.getMitigationAC());
+	            player.sendMessage("Pet Attack Value: " + petLivingEntity.getAttk());
+	            player.sendMessage("Pet Total Rune of: " + petLivingEntity.getRune());
+				
 				player.sendMessage("Active Effects:");
 				SoliniaEntitySpells spells = StateManager.getInstance().getEntityManager().getActiveEntitySpells(pet);
 				for(SoliniaActiveSpell activeSpell : spells.getActiveSpells())
