@@ -439,8 +439,10 @@ public class SoliniaActiveSpell {
 			: return;
 		case MagnifyVision
 			: return;
-		case Succor
-			: return;
+		case Succor: 
+			if (getLivingEntity() instanceof Player)
+				applyTeleport(spellEffect, soliniaSpell,casterLevel);
+			return;
 		case ModelSize
 			: return;
 		case Cloak: 
@@ -1162,8 +1164,10 @@ public class SoliniaActiveSpell {
 			: return;
 		case BeneficialCountDownHold
 			: return;
-		case TeleporttoAnchor
-			: return;
+		case TeleporttoAnchor: 
+			if (getLivingEntity() instanceof Player)
+				applyTeleport(spellEffect, soliniaSpell,casterLevel);
+			return;
 		case TranslocatetoAnchor
 			: return;
 		case Assassinate
