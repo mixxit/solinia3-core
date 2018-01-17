@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
@@ -30,6 +31,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
@@ -810,6 +812,36 @@ public class SoliniaNPC implements ISoliniaNPC {
 		// Merchant special commands
 		if (words.length > 0)
 		{
+			// Check player has sufficient faction
+			if (triggerentity instanceof Player)
+			if (solentity.getNpcid() > 0)
+			{
+				try
+				{
+					ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
+					if (npc.getFactionid() > 0)
+					{
+						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)triggerentity);
+						PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
+						if (factionEntry != null)
+						{
+							switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValue()))
+							{
+								case FACTION_THREATENLY:
+								case FACTION_SCOWLS:
+									solentity.emote("* " + npc.getName() + " scowls angrily at " + solPlayer.getFullName());
+									return;
+								default:
+									break;
+							}
+						}
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			
 			switch(words[0].toUpperCase())
 			{
 				case "SHOP":
