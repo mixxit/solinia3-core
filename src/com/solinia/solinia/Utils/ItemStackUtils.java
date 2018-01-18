@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -31,22 +32,19 @@ public class ItemStackUtils {
 	
 	public static Integer getAugmentationItemId(ItemStack itemStack)
 	{
-		try
+		if (!(itemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999))
+			return null;
+		
+		for(String loreLine : itemStack.getItemMeta().getLore())
 		{
-			ISoliniaItem i = SoliniaItemAdapter.Adapt(itemStack);
-			for(String loreLine : itemStack.getItemMeta().getLore())
-			{
-				if (!loreLine.startsWith("Attached Augmentation: "))
-					continue;
-				
-				String[] temporaryData = loreLine.split(" ");
-				return Integer.parseInt(temporaryData[2]);
-			}
-		} catch (SoliniaItemException e) {
-			return null;
-		} catch (CoreStateInitException e) {
-			return null;
+			if (!loreLine.startsWith("Attached Augmentation: "))
+				continue;
+			
+			String[] temporaryData = loreLine.split(" ");
+			
+			return Integer.parseInt(temporaryData[2]);
 		}
+		
 		return null;
 	}
 	

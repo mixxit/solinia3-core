@@ -117,4 +117,9 @@ public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer> 
 	{
 		this.filePath = jsonFile;
 	}
+	
+	@Override
+	public ISoliniaPlayer getByKey(Object key) {
+		return this.CharacterLists.get(key);
+	}
 }

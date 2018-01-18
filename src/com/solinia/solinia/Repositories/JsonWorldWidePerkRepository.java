@@ -91,4 +91,8 @@ public class JsonWorldWidePerkRepository implements IRepository<WorldWidePerk> {
 		this.filePath = filePath;		
 	}
 
+	@Override
+	public WorldWidePerk getByKey(Object key) {
+		return this.perks.get(key);
+	}
 }

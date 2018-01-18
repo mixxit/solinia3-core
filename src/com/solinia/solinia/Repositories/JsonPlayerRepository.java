@@ -119,4 +119,9 @@ public class JsonPlayerRepository implements IRepository<ISoliniaPlayer>  {
 	{
 		this.filePath = jsonFile;
 	}
+	
+	@Override
+	public ISoliniaPlayer getByKey(Object key) {
+		return this.players.get(key);
+	}
 }

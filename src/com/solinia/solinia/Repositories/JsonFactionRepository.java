@@ -115,4 +115,9 @@ public class JsonFactionRepository implements IRepository<ISoliniaFaction> {
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
+	
+	@Override
+	public ISoliniaFaction getByKey(Object key) {
+		return this.Factions.get(key);
+	}
 }

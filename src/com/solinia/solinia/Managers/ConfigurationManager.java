@@ -299,32 +299,17 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public ISoliniaRace getRace(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaRace> list = raceRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return raceRepository.getByKey(Id);
 	}
 	
 	@Override
 	public ISoliniaAlignment getAlignment(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaAlignment> list = alignmentsRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return alignmentsRepository.getByKey(Id);
 	}
 
 	@Override
 	public ISoliniaFaction getFaction(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaFaction> list = factionRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return factionRepository.getByKey(Id);
 	}
 	
 	@Override
@@ -349,62 +334,32 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public ISoliniaNPCMerchant getNPCMerchant(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaNPCMerchant> list = npcmerchantRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return npcmerchantRepository.getByKey(Id);
 	}
 
 	@Override
 	public ISoliniaLootTable getLootTable(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaLootTable> list = loottableRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return loottableRepository.getByKey(Id);
 	}
 	
 	@Override
 	public ISoliniaSpawnGroup getSpawnGroup(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaSpawnGroup> list = spawngroupRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return spawngroupRepository.getByKey(Id);
 	}
 
 	@Override
 	public ISoliniaLootDrop getLootDrop(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaLootDrop> list = lootdropRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return lootdropRepository.getByKey(Id);
 	}
 
 	@Override
 	public ISoliniaNPC getNPC(int Id) {
-		// TODO Auto-generated method stub
-		List<ISoliniaNPC> list = npcRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return npcRepository.getByKey(Id);
 	}
 
 	@Override
 	public ISoliniaClass getClassObj(int classId) {
-		// TODO Auto-generated method stub
-		List<ISoliniaClass> classes = classRepository.query(q -> q.getId() == classId);
-		if (classes.size() > 0)
-			return classes.get(0);
-
-		return null;
+		return classRepository.getByKey(classId);
 	}
 
 	@Override
@@ -429,32 +384,18 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public ISoliniaItem getItem(int Id) {
-
-		List<ISoliniaItem> items = itemRepository.query(q -> q.getId() == Id);
-		if (items.size() > 0)
-			return items.get(0);
-
-		return null;
+		return itemRepository.getByKey(Id);
 	}
 
 	@Override
 	public ISoliniaSpell getSpell(int Id) {
-
-		List<ISoliniaSpell> items = spellRepository.query(q -> q.getId() == Id);
-		if (items.size() > 0)
-			return items.get(0);
-
-		return null;
+		return spellRepository.getByKey(Id);
 	}
 
 	@Override
 	public ISoliniaItem getItem(ItemStack itemStack) {
 		int Id = (itemStack.getEnchantmentLevel(Enchantment.OXYGEN) - 1000);
-		List<ISoliniaItem> items = itemRepository.query(q -> q.getId() == Id);
-		if (items.size() > 0)
-			return items.get(0);
-
-		return null;
+		return getItem(Id);
 	}
 
 	@Override
@@ -911,11 +852,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public ISoliniaAAAbility getAAAbility(int Id) {
-		List<ISoliniaAAAbility> results = aaabilitiesRepository.query(q -> q.getId() == Id);
-		if (results.size() != 1)
-			return null;
-		
-		return results.get(0);
+		return aaabilitiesRepository.getByKey(Id);
 	}
 	
 	@Override
@@ -967,11 +904,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public ISoliniaQuest getQuest(int questId) {
-		List<ISoliniaQuest> list = questRepository.query(q -> q.getId() == questId);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return questRepository.getByKey(questId);
 	}
 	
 	@Override
@@ -1328,12 +1261,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public NPCSpellList getNPCSpellList(int Id) {
-		// TODO Auto-generated method stub
-		List<NPCSpellList> list = npcspelllistsRepository.query(q -> q.getId() == Id);
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		return npcspelllistsRepository.getByKey(Id);
 	}
 
 	@Override
@@ -1355,12 +1283,8 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public SoliniaAccountClaim getAccountClaim(int seekClaimId) {
-		List<SoliniaAccountClaim> results = accountClaimsRepository.query(q -> q.getId() == seekClaimId);
-		if (results.size() != 1)
-			return null;
-		
-		return results.get(0);
+	public SoliniaAccountClaim getAccountClaim(int Id) {
+		return accountClaimsRepository.getByKey(Id);
 	}
 	
 	@Override

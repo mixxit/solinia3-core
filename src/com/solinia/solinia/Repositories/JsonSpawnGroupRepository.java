@@ -120,5 +120,10 @@ public class JsonSpawnGroupRepository implements IRepository<ISoliniaSpawnGroup>
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
+	
+	@Override
+	public ISoliniaSpawnGroup getByKey(Object key) {
+		return this.spawngroups.get(key);
+	}
 
 }

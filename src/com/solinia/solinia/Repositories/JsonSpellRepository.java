@@ -116,5 +116,10 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
+	
+	@Override
+	public ISoliniaSpell getByKey(Object key) {
+		return this.spells.get(key);
+	}
 
 }

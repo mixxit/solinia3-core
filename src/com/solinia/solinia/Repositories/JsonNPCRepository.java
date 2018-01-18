@@ -134,4 +134,9 @@ public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
+	
+	@Override
+	public ISoliniaNPC getByKey(Object key) {
+		return this.NPCs.get(key);
+	}
 }

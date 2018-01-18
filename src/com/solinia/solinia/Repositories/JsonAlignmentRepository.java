@@ -113,4 +113,9 @@ public class JsonAlignmentRepository implements IRepository<ISoliniaAlignment> {
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
+	
+	@Override
+	public ISoliniaAlignment getByKey(Object key) {
+		return this.alignments.get(key);
+	}
 }

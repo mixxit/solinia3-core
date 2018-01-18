@@ -122,4 +122,8 @@ public class JsonNPCMerchantRepository implements IRepository<ISoliniaNPCMerchan
 		this.filePath = filePath;		
 	}
 
+	@Override
+	public ISoliniaNPCMerchant getByKey(Object key) {
+		return this.npcmerchants.get(key);
+	}
 }

@@ -113,4 +113,9 @@ public class JsonQuestRepository implements IRepository<ISoliniaQuest> {
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
+	
+	@Override
+	public ISoliniaQuest getByKey(Object key) {
+		return this.Quests.get(key);
+	}
 }

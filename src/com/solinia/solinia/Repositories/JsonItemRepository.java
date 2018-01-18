@@ -50,7 +50,7 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 	public void remove(ISoliniaItem item) {
 		this.items.remove(item.getId());
 	}
-
+	
 	@Override
 	public void remove(Predicate<ISoliniaItem> filter) {
 		for(ISoliniaItem i : items.values().stream().filter(filter).collect(Collectors.toList()))
@@ -116,5 +116,10 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
+	}
+	
+	@Override
+	public ISoliniaItem getByKey(Object key) {
+		return this.items.get(key);
 	}
 }

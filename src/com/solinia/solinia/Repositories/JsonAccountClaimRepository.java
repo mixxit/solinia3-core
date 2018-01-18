@@ -112,4 +112,9 @@ public class JsonAccountClaimRepository implements IRepository<SoliniaAccountCla
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
+	
+	@Override
+	public SoliniaAccountClaim getByKey(Object key) {
+		return this.AccountClaims.get(key);
+	}
 }

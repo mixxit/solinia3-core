@@ -12,6 +12,8 @@ public interface IRepository<T> {
 
     void remove(T item);
 
+    T getByKey(Object key);
+    
     void remove(Predicate<T> filter);
 
     List<T> query(Predicate<T> filter);

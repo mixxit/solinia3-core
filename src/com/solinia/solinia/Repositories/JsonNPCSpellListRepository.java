@@ -113,5 +113,10 @@ public class JsonNPCSpellListRepository implements IRepository<NPCSpellList> {
 	public List<NPCSpellList> query(Predicate<NPCSpellList> filter) {
 		return npcspelllists.values().stream().filter(filter).collect(Collectors.toList());
 	}
+	
+	@Override
+	public NPCSpellList getByKey(Object key) {
+		return this.npcspelllists.get(key);
+	}
 
 }

@@ -117,4 +117,8 @@ public class JsonClassRepository implements IRepository<ISoliniaClass> {
 		this.filePath = filePath;		
 	}
 
+	@Override
+	public ISoliniaClass getByKey(Object key) {
+		return this.classes.get(key);
+	}
 }

@@ -117,4 +117,8 @@ public class JsonRaceRepository implements IRepository<ISoliniaRace> {
 		return races.values().stream().filter(filter).collect(Collectors.toList());
 	}
 
+	@Override
+	public ISoliniaRace getByKey(Object key) {
+		return this.races.get(key);
+	}
 }

@@ -113,4 +113,9 @@ public class JsonPatchRepository implements IRepository<ISoliniaPatch> {
 	public void setJsonFile(String filePath) {
 		this.filePath = filePath;		
 	}
+	
+	@Override
+	public ISoliniaPatch getByKey(Object key) {
+		return this.patches.get(key);
+	}
 }

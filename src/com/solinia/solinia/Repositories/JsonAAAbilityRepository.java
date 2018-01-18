@@ -129,4 +129,9 @@ public class JsonAAAbilityRepository implements IRepository<ISoliniaAAAbility> {
 		this.filePath = filePath;		
 	}
 
+	@Override
+	public ISoliniaAAAbility getByKey(Object key) {
+		return this.aaabilities.get(key);
+	}
+
 }

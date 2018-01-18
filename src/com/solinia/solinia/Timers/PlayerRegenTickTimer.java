@@ -84,12 +84,14 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999) {
 				
 				try {
+					
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					if (item == null)
 						continue;
 
+					
+					
 					//System.out.println("Checking mpregen for " + player.getName() + " " + item.getDisplayname());
-
 					if (item.getMpregen() > 0) {
 						manaregen += item.getMpregen();
 					}
@@ -97,7 +99,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 					if (item.getHpregen() > 0) {
 						hpregen += item.getHpregen();
 					}
-					
+										
 					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
 					if (augmentationId != null && augmentationId != 0)
 					{
@@ -112,10 +114,11 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 							manaregen += augItem.getMpregen();
 						}
 					}
-					
+				
 				} catch (CoreStateInitException e) {
 					e.printStackTrace();
 				}
+				
 			}
 		}
 
@@ -131,7 +134,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 
 			player.setHealth(amount);
 		}
-
+		
 		// Process Mana Regeneration
 		//System.out.println(player.getName() + " was found to have " + manaregen + " mana regen");
 		solplayer.increasePlayerMana(manaregen);

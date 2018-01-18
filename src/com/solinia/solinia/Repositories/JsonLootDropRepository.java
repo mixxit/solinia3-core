@@ -122,4 +122,8 @@ public class JsonLootDropRepository implements IRepository<ISoliniaLootDrop> {
 		this.filePath = filePath;		
 	}
 
+	@Override
+	public ISoliniaLootDrop getByKey(Object key) {
+		return this.lootdrops.get(key);
+	}
 }
