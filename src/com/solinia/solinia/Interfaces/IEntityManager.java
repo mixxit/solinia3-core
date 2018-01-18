@@ -101,4 +101,6 @@ public interface IEntityManager {
 	void setEntitySinging(UUID entityUUID, Integer spellId);
 
 	void removeSpellEffectsOfSpellId(Plugin plugin, UUID uuid, int spellId);
+
+	void doNPCCheckForEnemies();
 }

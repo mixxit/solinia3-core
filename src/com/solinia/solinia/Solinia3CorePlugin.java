@@ -133,6 +133,7 @@ import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.KingCheckTimer;
+import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
 import com.solinia.solinia.Timers.NPCSummonCastTimer;
@@ -161,6 +162,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PlayerInteractionTimer playerInteractionTimer;
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 	private NPCRandomChatTimer npcRandomChatTimer;
+	private NPCCheckForEnemiesTimer npcCheckForEnemiesTimer;
 	private PetCheckTickTimer petCheckTickTimer;
 	private DiscordMessageTimer discordMessageTimer;
 	private KingCheckTimer kingCheckTimer;
@@ -372,6 +374,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			npcRandomChatTimer = new NPCRandomChatTimer();
 			npcRandomChatTimer.runTaskTimer(this, 6 * 20L, 60 * 20L);
 
+			npcCheckForEnemiesTimer = new NPCCheckForEnemiesTimer();
+			npcCheckForEnemiesTimer.runTaskTimer(this, 6 * 20L, 60 * 20L);
+			
 			npcSpellCastTimer = new NPCSpellCastTimer(this);
 			npcSpellCastTimer.runTaskTimer(this, 3 * 20L, 3 * 20L);
 

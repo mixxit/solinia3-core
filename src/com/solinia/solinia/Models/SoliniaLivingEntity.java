@@ -20,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
@@ -41,6 +42,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
@@ -3485,5 +3487,67 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		
 		return effectmod;
+	}
+	
+	@Override
+	public void doCheckForEnemies() {
+		if (isPlayer())
+			return;
+
+		if (this.getNpcid() < 1)
+			return;
+		
+		if (getBukkitLivingEntity().isDead())
+			return;
+		
+		if (!(getBukkitLivingEntity() instanceof Creature))
+			return;
+
+		if (((Creature)getBukkitLivingEntity()).getTarget() != null)
+			return;
+		
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.getFactionid() == 0)
+				return;
+
+			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
+			if (faction.getName().equals("NEUTRAL") || faction.getName().equals("KOS"))
+				return;
+			
+			for(Entity entity : getBukkitLivingEntity().getNearbyEntities(10, 10, 10))
+			{
+				if (!(entity instanceof Player))
+					continue;
+				
+				if (entity.isDead())
+					continue;
+				
+				Player player = (Player)entity;
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
+				if (factionEntry != null)
+				{
+					switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValue()))
+					{
+						case FACTION_THREATENLY:
+						case FACTION_SCOWLS:
+							if (Utils.isEntityInLineOfSight(player, getBukkitLivingEntity()))
+							{
+								((Creature)getBukkitLivingEntity()).setTarget(player);
+								return;
+							} else {
+								continue;
+							}
+						default:
+							break;
+					}
+				}
+			}
+			
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

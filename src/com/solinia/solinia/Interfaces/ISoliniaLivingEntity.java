@@ -174,4 +174,6 @@ public interface ISoliniaLivingEntity
 
 	public int getInstrumentMod(ISoliniaSpell iSoliniaSpell);
 
+	public void doCheckForEnemies();
+
 }

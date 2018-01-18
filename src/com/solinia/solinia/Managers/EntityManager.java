@@ -351,6 +351,39 @@ public class EntityManager implements IEntityManager {
 			}
 		}
 	}
+	
+	@Override
+	public void doNPCCheckForEnemies() {
+		List<Integer> completedNpcsIds = new ArrayList<Integer>();
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			for(Entity entity : player.getNearbyEntities(50, 50, 50))
+			{
+				if (entity instanceof Player)
+					continue;
+				
+				if (!(entity instanceof LivingEntity))
+					continue;
+				
+				LivingEntity le = (LivingEntity)entity;
+				if (!Utils.isLivingEntityNPC(le))
+					continue;
+				
+				try {
+					ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
+					if (completedNpcsIds.contains(solle.getNpcid()))
+						continue;
+					
+					completedNpcsIds.add(solle.getNpcid());
+					solle.doCheckForEnemies();
+					
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	@Override
 	public void doNPCSpellCast(Plugin plugin) {
