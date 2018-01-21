@@ -3201,6 +3201,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public boolean isBardSong()
 	{
+		if (this.getAllowedClasses().size() == 1)
 		for (SoliniaSpellClass spellclass : this.getAllowedClasses())
 		{
 			if (spellclass.getClassname().toUpperCase().equals("BARD"))
