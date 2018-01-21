@@ -1085,10 +1085,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// todo, item bonuses
 		
 		int attackSpellBonsues = 0;
-		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
-				SpellEffectType.ATK)) {
-			attackSpellBonsues += effect.getRemainingValue();
-		}
+		
+		attackSpellBonsues += getSpellBonuses(SpellEffectType.ATK);
 		
 		// TODO, find a place for this base value, possibly on race?
 		int ATK = 0;
@@ -1228,9 +1226,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		accuracy = (accuracy * 121) / 100;
 
 		/*
-		 * TODO if (!skillname.equals("ARCHERY") && !skillname.equals("THROWING")) {
-		 * accuracy += getItemBonuses("HITCHANCE"); }
-		 */
+		if (!skillname.equals("ARCHERY") && !skillname.equals("THROWING")) 
+		{
+			accuracy += getItemBonuses("HITCHANCE"); 
+		}
+		*/
 
 		// TODO
 		double accuracySkill = 0;
@@ -1270,15 +1270,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return (int) Math.max(1, defense);
 	}
 
+	public int getSpellBonuses(SpellEffectType spellEffectType)
+	{
+		int bonus = 0;
+		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), spellEffectType)) 
+		{
+			bonus += effect.getRemainingValue();
+		}
+		
+		return bonus;
+	}
+	
 	@Override
 	public int getTotalDefense() {
 		double avoidance = getDefenseByDefenseSkill() + 10;
 
-		// Todo avoid melee chance spell effects
-		/*
-		 * int evasion_bonus = spellbonuses.AvoidMeleeChanceEffect; if (evasion_bonus >=
-		 * 10000) return -1;
-		 */
+		int evasion_bonus = getSpellBonuses(SpellEffectType.AvoidMeleeChance); 
+		
+		//if (evasion_bonus >= * 10000) return -1;
 
 		double aaItemAAAvoidance = 0;
 
@@ -1287,7 +1296,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// aabonuses.AvoidMeleeChanceEffect; // item bonus here isn't mod2 avoidance
 
 		// Evasion is a percentage bonus according to AA descriptions
-		if (aaItemAAAvoidance > 0)
+		if (evasion_bonus > 0)
 			avoidance = (avoidance * (100 + aaItemAAAvoidance)) / 100;
 
 		return (int) Math.floor(avoidance);
@@ -2990,11 +2999,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			double spell_aa_ac = 0;
 			// TODO AC AA and Spell bonuses
-			for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
-					SpellEffectType.ArmorClass)) {
-				spell_aa_ac += effect.getRemainingValue();
-			}
-
+			
+			spell_aa_ac += getSpellBonuses(SpellEffectType.ArmorClass);
+			
 			spell_aa_ac += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
 
 			if (getClassObj() != null) {
@@ -3010,10 +3017,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} else {
 			double spell_aa_ac = 0;
 			// TODO AC AA and Spell bonuses
-			for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
-					SpellEffectType.ArmorClass)) {
-				spell_aa_ac += effect.getRemainingValue();
-			}
+			spell_aa_ac += getSpellBonuses(SpellEffectType.ArmorClass);
 
 			spell_aa_ac += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
 
@@ -3040,10 +3044,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO itembonuses
 
 			int total_aclimitmod = 0;
-			for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
-					SpellEffectType.CombatStability)) {
-				total_aclimitmod += effect.getRemainingValue();
-			}
+			
+			total_aclimitmod += getSpellBonuses(SpellEffectType.CombatStability);
 
 			total_aclimitmod += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(),
 					SpellEffectType.CombatStability);
