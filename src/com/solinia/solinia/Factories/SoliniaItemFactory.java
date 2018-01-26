@@ -93,15 +93,26 @@ public class SoliniaItemFactory {
 					rarityBonus = 1;
 				}
 
-				if (rarityChance > 90) {
+				if (rarityChance > 85) {
 					rarityName = "Rare ";
 					rarityBonus = 3;
 				}
 
-				if (rarityChance > 97) {
+				if (rarityChance > 92) {
 					rarityName = "Legendary ";
 					rarityBonus = 5;
 				}
+				
+				if (rarityChance > 96) {
+					rarityName = "Mythical ";
+					rarityBonus = 6;
+				}
+
+				if (rarityChance > 98) {
+					rarityName = "Ancient ";
+					rarityBonus = 7;
+				}
+
 				
 				String className = "";
 				if (prefixClassName == true)
