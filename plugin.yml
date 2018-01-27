@@ -404,6 +404,11 @@ commands:
     - editnpcspells
     - editnpcspell
     - editnpcspelllists
+  skillcheck:
+    description: Rolls a 1d20 for a skill check
+    usage: /skillcheck <skill>
+    aliases:
+    - rollskill
 depend:
 - Vault
 - MythicMobs

@@ -83,6 +83,7 @@ import com.solinia.solinia.Commands.CommandSetGender;
 import com.solinia.solinia.Commands.CommandSetLanguage;
 import com.solinia.solinia.Commands.CommandSetRace;
 import com.solinia.solinia.Commands.CommandSetTitle;
+import com.solinia.solinia.Commands.CommandSkillCheck;
 import com.solinia.solinia.Commands.CommandSkills;
 import com.solinia.solinia.Commands.CommandSolinia;
 import com.solinia.solinia.Commands.CommandSpawnItem;
@@ -502,6 +503,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editnpcspelllist").setExecutor(new CommandEditNpcSpellList());
 		this.getCommand("claim").setExecutor(new CommandClaim());
 		this.getCommand("hideooc").setExecutor(new CommandHideOoc());
+		this.getCommand("skillcheck").setExecutor(new CommandSkillCheck());
 	}
 
 	private void createConfigDir() {
