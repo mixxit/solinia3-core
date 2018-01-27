@@ -64,7 +64,7 @@ public class CommandSkillCheck implements CommandExecutor {
 	            	skill = args[0].toLowerCase();
 	            	if (!skills.contains(skill))
 	            	{
-	            		player.sendMessage("Invalid argument [" + skill + "], must provide skill from this list: " + String.join(",", skills));
+	            		player.sendMessage("Invalid argument [" + skill + "], must provide skill from this list: " + String.join(", ", skills));
 	            		return false;
 	            	}
 	            }
