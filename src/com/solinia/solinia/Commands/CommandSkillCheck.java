@@ -69,7 +69,7 @@ public class CommandSkillCheck implements CommandExecutor {
 	            	}
 	            }
 	            
-	            String message = ChatColor.AQUA + " * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + Utils.RandomBetween(0, 20) + "/20 for " + ChatColor.RESET;
+	            String message = ChatColor.AQUA + " * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + Utils.RandomBetween(0, 20) + "/20" + ChatColor.RESET;
 	            solplayer.emote(message);
             } catch (CoreStateInitException e)
             {
