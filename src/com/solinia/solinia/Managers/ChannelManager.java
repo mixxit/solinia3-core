@@ -293,6 +293,7 @@ public class ChannelManager implements IChannelManager {
 		UUID uuid = null;
 		if (source != null)
 			uuid = source.getUUID();
+		message = message.replaceAll("@", "");
 		message = ChatColor.stripColor(message);
 		QueuedDiscordMessage discordMessage = new QueuedDiscordMessage(uuid, Long.parseLong(channelId), message);
 		int nextMessage = discordMessageCount.getAndIncrement();
