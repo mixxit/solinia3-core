@@ -4777,6 +4777,9 @@ public class Utils {
 	public static int getCriticalChanceBonus(ISoliniaLivingEntity entity, String skillname) {
 		int critical_chance = 0;
 
+		// All skills + Skill specific
+		critical_chance += entity.getSpellBonuses(SpellEffectType.CriticalHitChance);
+		
 		// TODO - take items, aa spells etc into account
 		if (critical_chance < -100)
 			critical_chance = -100;

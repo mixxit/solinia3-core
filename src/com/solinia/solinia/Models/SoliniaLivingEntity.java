@@ -1238,6 +1238,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// TODO
 		double buffItemAndAABonus = 0;
+		buffItemAndAABonus += getSpellBonuses(SpellEffectType.HitChance);
 
 		accuracy = (accuracy * (100 + buffItemAndAABonus)) / 100;
 		return (int) Math.floor(accuracy);
@@ -1270,6 +1271,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return (int) Math.max(1, defense);
 	}
 
+	@Override
 	public int getSpellBonuses(SpellEffectType spellEffectType)
 	{
 		int bonus = 0;
