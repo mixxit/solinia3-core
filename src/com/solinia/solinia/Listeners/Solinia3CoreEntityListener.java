@@ -715,13 +715,13 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (npc.getFactionid() > 0)
 				{
 					ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
-					player.decreaseFactionStanding(npc.getFactionid(),1);
+					player.decreaseFactionStanding(npc.getFactionid(),50);
 					for (FactionStandingEntry factionEntry : faction.getFactionEntries())
 					{
 						if (factionEntry.getValue() >= 1500)
 						{
 							// If this is an ally of the faction, grant negative faction
-							player.decreaseFactionStanding(factionEntry.getFactionId(),1);
+							player.decreaseFactionStanding(factionEntry.getFactionId(),10);
 						}
 						
 						if (factionEntry.getValue() <= -1500)
