@@ -110,6 +110,17 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 				StateManager.getInstance().getConfigurationManager().getItem(itemId).setMinLevel(minLevel);
 			}
 			break;
+		case "setallitemchance":
+			int chance = Integer.parseInt(value);
+			if (chance < 1 || chance > 100)
+				throw new InvalidLootDropSettingException("Invalid chance");
+			
+			for(ISoliniaLootDropEntry entry : getEntries())
+			{
+				entry.setChance(chance);
+			}
+			
+			break;
 		default:
 			throw new InvalidLootDropSettingException(
 					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemminlevel");
