@@ -430,8 +430,9 @@ public class SoliniaActiveSpell {
 			if (getLivingEntity() instanceof Player)
 			applyTeleport(spellEffect,soliniaSpell,casterLevel);
 			return;
-		case TossUp
-			: return;
+		case TossUp: 
+			applyTossUpEffect(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case WeaponProc: 
 			applyProc(spellEffect, soliniaSpell,casterLevel);
 			return;
@@ -1140,7 +1141,6 @@ public class SoliniaActiveSpell {
 		case LimitUseType
 			: return;
 		case GravityEffect: 
-			applyGravityEffect(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Display
 			: return;
@@ -1243,8 +1243,8 @@ public class SoliniaActiveSpell {
 		}
 	}
 
-	private void applyGravityEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().setVelocity(new Vector(0,1.5,0));
+	private void applyTossUpEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		getLivingEntity().setVelocity(new Vector(0,5,0));
         return;
 	}
 
