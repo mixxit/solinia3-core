@@ -59,6 +59,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		ISoliniaAAAbility aa = null;
 		try
 		{
+			if(solplayer.getAARanks().size() > 0)
 			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("MENTALCLARITY");
 		} catch (CoreStateInitException e)
 		{
@@ -69,12 +70,30 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		
 		if (aa != null)
 		{
+			if(solplayer.getAARanks().size() > 0)
 			aamanaregenrank = Utils.getRankOfAAAbility(player, aa);
 			manaregen += aamanaregenrank;
 		}
 		
 		// Hp and Mana Regen from Items
 		int hpregen = 0;
+		
+		ISoliniaAAAbility hpaa = null;
+		try
+		{
+			hpaa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("INNATEREGENERATION");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		int aahpregenrank = 0;
+		
+		if (hpaa != null)
+		{
+			aahpregenrank = Utils.getRankOfAAAbility(player, hpaa);
+			hpregen += aahpregenrank;
+		}
 		
 		List<ItemStack> itemStackBonuses = new ArrayList<ItemStack>() {{ add(player.getInventory().getItemInMainHand()); add(player.getInventory().getItemInOffHand()); addAll(Arrays.asList(player.getInventory().getArmorContents())); }};
 		
