@@ -1139,8 +1139,9 @@ public class SoliniaActiveSpell {
 			: return;
 		case LimitUseType
 			: return;
-		case GravityEffect
-			: return;
+		case GravityEffect: 
+			applyGravityEffect(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case Display
 			: return;
 		case IncreaseExtTargetWindow
@@ -1240,6 +1241,11 @@ public class SoliniaActiveSpell {
 		default:
 			return;
 		}
+	}
+
+	private void applyGravityEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		getLivingEntity().setVelocity(new Vector(0,1.5,0));
+        return;
 	}
 
 	private void applySummonHorse(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
