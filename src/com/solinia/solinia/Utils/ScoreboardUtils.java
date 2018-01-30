@@ -70,7 +70,7 @@ public class ScoreboardUtils {
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("health").unregister();
 		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
 				.registerNewObjective("health", "health");
-		health.setDisplayName(ChatColor.RED + "❤");
+		health.setDisplayName(ChatColor.RED + "♥");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
 		for (UUID groupmemberuuid : group.getMembers()) {
@@ -101,7 +101,7 @@ public class ScoreboardUtils {
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("showhealth").unregister();
 		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
 				.registerNewObjective("showhealth", "health");
-		health.setDisplayName(ChatColor.RED + "â�¤");
+		health.setDisplayName(ChatColor.RED + "Ã¢ï¿½Â¤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
 		try {
