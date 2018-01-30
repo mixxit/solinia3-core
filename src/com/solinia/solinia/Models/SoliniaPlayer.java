@@ -876,6 +876,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (item.getAbilityid() < 1) {
 					return;
 				}
+				
+				if (ItemStackUtils.isPotion(itemstack))
+				{
+					// Handled by on consume event
+					return;
+				}
+				
 
 				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
 						.getSpell(item.getAbilityid());
