@@ -101,7 +101,7 @@ public class ScoreboardUtils {
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("showhealth").unregister();
 		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
 				.registerNewObjective("showhealth", "health");
-		health.setDisplayName(ChatColor.RED + "Ã¢ï¿½Â¤");
+		health.setDisplayName(ChatColor.RED + "❤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
 		try {
