@@ -104,6 +104,24 @@ public class Solinia3CoreEntityListener implements Listener {
 					return;
 				}
 			}
+			
+			if (!solEntity.isUndead() && !solEntity.isAnimal() && event.getTarget() instanceof LivingEntity) {
+				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),SpellEffectType.Invisibility)
+				 || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.Invisibility2)) {
+					((Creature) event.getEntity()).setTarget(null);
+					event.setCancelled(true);
+					return;
+				}
+			}
+			
+			if (solEntity.isAnimal() && event.getTarget() instanceof LivingEntity) {
+				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),SpellEffectType.InvisVsAnimals)
+				 || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.ImprovedInvisAnimals)) {
+					((Creature) event.getEntity()).setTarget(null);
+					event.setCancelled(true);
+					return;
+				}
+			}
 
 			// Mez cancel target
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
