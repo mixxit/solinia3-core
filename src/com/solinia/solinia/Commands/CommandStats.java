@@ -21,6 +21,7 @@ public class CommandStats implements CommandExecutor {
 	            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 	            ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
 
+				player.sendMessage("Your Level: " + solplayer.getLevel());
 				player.sendMessage("STR: " + solentity.getStrength() + " STA: " + solentity.getStamina() + " AGI: " + solentity.getAgility() + " DEX: " + solentity.getDexterity() + " INT: " + solentity.getIntelligence() + " WIS: " + solentity.getWisdom() + " CHA: " + solentity.getCharisma());
 	            player.sendMessage("You have a maximum HP of: " + player.getMaxHealth());
 	            player.sendMessage("You have a maximum MP of: " + solentity.getMaxMP());

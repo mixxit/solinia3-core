@@ -475,6 +475,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							+ classname.toLowerCase() + "!");
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
 			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
+			
+			if (getGroup() != null)
+			{
+				for(UUID uuid : getGroup().getMembers())
+				{
+					ScoreboardUtils.UpdateGroupScoreboard(uuid,getGroup());
+				}
+			}
 
 			// Title rewards
 			if (newlevel >= 10) {
@@ -513,6 +521,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (Double.compare(newlevel, level) < 0) {
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You lost a level (" + newlevel + ")!");
 
+			if (getGroup() != null)
+			{
+				for(UUID uuid : getGroup().getMembers())
+				{
+					ScoreboardUtils.UpdateGroupScoreboard(uuid,getGroup());
+				}
+			}
+			
 			updateMaxHp();
 		}
 	}
