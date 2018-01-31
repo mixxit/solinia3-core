@@ -2822,6 +2822,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		case "skill":
 			this.setSkill(Integer.parseInt(value));
+			break;
 		default:
 			throw new InvalidSpellSettingException(
 					"Invalid Spell setting. Valid Options are: name");

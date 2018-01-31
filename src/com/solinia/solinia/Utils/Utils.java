@@ -696,6 +696,20 @@ public class Utils {
 					return cap;
 				}
 		}
+		
+		if (skillname.equals("TAUNT")) {
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("PALADIN")
+						)) {
+					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+					return cap;
+				}
+		}
 
 		if (skillname.equals("CRUSHING")) {
 			if (profession != null)
