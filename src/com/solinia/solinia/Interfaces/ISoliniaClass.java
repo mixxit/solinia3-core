@@ -128,4 +128,8 @@ public interface ISoliniaClass {
 
 	void setNpcspelllist(int npcspelllist);
 
+	boolean isSneakFromCrouch();
+
+	void setSneakFromCrouch(boolean sneakFromCrouch);
+
 }

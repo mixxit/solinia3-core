@@ -52,6 +52,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int acitembonus = 0;
 	private int specialiselevel = 0;
 	private int npcspelllist = 0;
+	private boolean sneakFromCrouch = false;
 	
 	@Override
 	public String getName() {
@@ -186,6 +187,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- doubleattacklevel: " + ChatColor.GOLD + getDoubleattacklevel() + ChatColor.RESET);
 		sender.sendMessage("- safefalllevel: " + ChatColor.GOLD + getSafefalllevel() + ChatColor.RESET);
 		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
+		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		if (StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()) != null)
 		{
@@ -313,6 +315,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "npcspelllist":
 			this.setNpcspelllist(Integer.parseInt(value));
+			break;
+		case "sneakfromcrouch":
+			this.setSneakFromCrouch(Boolean.parseBoolean(value));
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel");
@@ -700,5 +705,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setNpcspelllist(int npcspelllist) {
 		this.npcspelllist = npcspelllist;
+	}
+
+	@Override
+	public boolean isSneakFromCrouch() {
+		return sneakFromCrouch;
+	}
+
+	@Override
+	public void setSneakFromCrouch(boolean sneakFromCrouch) {
+		this.sneakFromCrouch = sneakFromCrouch;
 	}
 }

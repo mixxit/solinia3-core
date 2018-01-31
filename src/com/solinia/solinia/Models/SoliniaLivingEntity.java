@@ -290,6 +290,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			// ignore
 		}
+		
+		if (isPlayer())
+		{
+			Player player = (Player)this.getBukkitLivingEntity();
+			if (player.isSneaking())
+			{
+				try
+				{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solplayer.getClassObj() != null)
+				{
+					if (solplayer.getClassObj().isSneakFromCrouch())
+					{
+						player.sendMessage("You cannot concentrate on combat while meditating or sneaking");
+						event.setCancelled(true);
+						return false;
+					}
+				}
+				} catch (CoreStateInitException e)
+				{
+					// do nothing
+				}
+			}
+		}
 
 		if (usingValidWeapon() == false) {
 			event.setCancelled(true);

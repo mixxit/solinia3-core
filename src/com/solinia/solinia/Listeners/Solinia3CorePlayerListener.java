@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -68,6 +69,27 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 		
 		StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),event.getPlayer().getName() + " has quit the game");
+	}
+	
+	@EventHandler
+	public void onPlayerSneak(PlayerToggleSneakEvent event) {
+		if (event.isCancelled())
+			return;
+		
+		try
+		{
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getPlayer());
+			if (solplayer.getClassObj() != null)
+			{
+				if (solplayer.getClassObj().isSneakFromCrouch())
+				{
+					((Player)event.getPlayer()).sendMessage(ChatColor.GRAY + "* You toggle sneak (NPCs are less likely to see you)");
+				}
+			} 
+		} catch (CoreStateInitException e)
+		{
+			// do nothing
+		}
 	}
 
 	@EventHandler

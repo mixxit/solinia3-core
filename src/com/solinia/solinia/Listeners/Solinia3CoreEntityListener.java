@@ -122,6 +122,24 @@ public class Solinia3CoreEntityListener implements Listener {
 					return;
 				}
 			}
+			
+			// rogue sneak
+			if (event.getTarget() instanceof Player)
+			{
+				Player targetPlayer = (Player)event.getTarget();
+				if (targetPlayer.isSneaking())
+				{
+					ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)event.getTarget());
+					if (player.getClassObj() != null)
+					{
+						if (player.getClassObj().isSneakFromCrouch())
+						{
+							event.setCancelled(true);
+							return;
+						}
+					}
+				}
+			}
 
 			// Mez cancel target
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
