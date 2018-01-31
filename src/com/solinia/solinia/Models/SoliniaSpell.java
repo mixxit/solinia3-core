@@ -2673,6 +2673,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET);
 		sender.sendMessage("- range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
+		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name() + ")" + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		for(SoliniaSpellClass spellclass : this.getAllowedClasses())
@@ -2819,6 +2820,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			{
 				throw new InvalidSpellSettingException("Teleport zone value must be in format: world,x,y,z");
 			}
+		case "skill":
+			this.setSkill(Integer.parseInt(value));
 		default:
 			throw new InvalidSpellSettingException(
 					"Invalid Spell setting. Valid Options are: name");
