@@ -157,12 +157,12 @@ public class CommandInspiration implements CommandExecutor {
 					if (args.length > 2)
 					{
 						String mcAccount = args[1];
-						int amount = Integer.parseInt(args[1]);
+						int amount = Integer.parseInt(args[2]);
 						
 						Player player = Bukkit.getPlayer(mcAccount);
 						if (player == null)
 						{
-							sender.sendMessage("Cannot find that player to forward to. It must be their minecraft account name and they must be online");
+							sender.sendMessage("Cannot find that player to forward to. It must be their minecraft account name and they must be online (ie /inspiration send mixxit 1)");
 							return true;
 						}
 						
@@ -179,7 +179,7 @@ public class CommandInspiration implements CommandExecutor {
 							return true;
 						}
 					} else {
-						sender.sendMessage("You must specify how many you wish to transfer and the mc account name of the person you want to send it to");
+						sender.sendMessage("You must specify how many you wish to transfer and the mc account name of the person you want to send it to (ie /inspiration send mixxit 1)");
 						return true;
 					}
 				default:
