@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaRaceCreationException;
 import com.solinia.solinia.Factories.SoliniaRaceFactory;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 
 public class CommandAddRace implements CommandExecutor {
 	
@@ -44,8 +45,8 @@ public class CommandAddRace implements CommandExecutor {
 		boolean adminonly = Boolean.parseBoolean(args[8]);
 		
 		try {
-			SoliniaRaceFactory.CreateRace(racename,strength,stamina,agility,dexterity,wisdom,intelligence,charisma,adminonly);
-			sender.sendMessage("* Race created");
+			ISoliniaRace race = SoliniaRaceFactory.CreateRace(racename,strength,stamina,agility,dexterity,wisdom,intelligence,charisma,adminonly);
+			sender.sendMessage("* Race created [" + race.getId() + "]");
 		} catch (CoreStateInitException | SoliniaRaceCreationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

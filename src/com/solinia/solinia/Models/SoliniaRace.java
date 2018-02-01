@@ -149,6 +149,7 @@ public class SoliniaRace implements ISoliniaRace {
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
 		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
 		sender.sendMessage("- vampire: " + ChatColor.GOLD + isVampire() + ChatColor.RESET);
+		sender.sendMessage("- admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 	}
 
@@ -165,6 +166,9 @@ public class SoliniaRace implements ISoliniaRace {
 			break;
 		case "vampire":
 			setVampire(Boolean.parseBoolean(value));
+			break;
+		case "admin":
+			setAdmin(Boolean.parseBoolean(value));
 			break;
 		case "alignment":
 			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
