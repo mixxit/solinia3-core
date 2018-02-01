@@ -154,8 +154,34 @@ public class CommandInspiration implements CommandExecutor {
 					sender.sendMessage(ChatColor.YELLOW + "You will earn 1 inspiration point for each vote");
 					break;
 				case "send":
-					sender.sendMessage("Forwarding inspiration is currently disabled");
-					break;
+					if (args.length > 2)
+					{
+						String mcAccount = args[1];
+						int amount = Integer.parseInt(args[1]);
+						
+						Player player = Bukkit.getPlayer(mcAccount);
+						if (player == null)
+						{
+							sender.sendMessage("Cannot find that player to forward to. It must be their minecraft account name and they must be online");
+							return true;
+						}
+						
+						if (solPlayer.getInspiration() >= amount)
+						{
+							ISoliniaPlayer targetPlayer = SoliniaPlayerAdapter.Adapt(player);
+							solPlayer.setInspiration(solPlayer.getInspiration() - amount);
+							targetPlayer.setInspiration(targetPlayer.getInspiration() + amount);
+							sender.sendMessage("You have sent " + amount + " inspiration to " + player.getName());
+							player.sendMessage("You have received " + amount + " inspiration from " + sender.getName());
+							return true;
+						} else {
+							sender.sendMessage("You do not have that amount of inspiration to send");
+							return true;
+						}
+					} else {
+						sender.sendMessage("You must specify how many you wish to transfer and the mc account name of the person you want to send it to");
+						return true;
+					}
 				default:
 					sender.sendMessage("Unknown subcommand - Valid are: sites, buy, send");
 					break;
