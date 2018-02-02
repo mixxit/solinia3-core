@@ -1,5 +1,6 @@
 package com.solinia.solinia.Utils;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
@@ -7,7 +8,9 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 
 import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.effect.AnimatedBallEffect;
 import de.slikey.effectlib.effect.BleedEffect;
+import de.slikey.effectlib.effect.CircleEffect;
 import de.slikey.effectlib.effect.FlameEffect;
 import de.slikey.effectlib.effect.LoveEffect;
 import de.slikey.effectlib.effect.MusicEffect;
@@ -34,9 +37,18 @@ public class SpecialEffectUtils {
 		effect.start();
 	}
 	
-	public static void playWarpEffect(Entity entity, SoliniaActiveSpell activeSpell) {
-		Effect effect = new WarpEffect(StateManager.getInstance().getEffectManager()); 
+	public static void playPortalEffect(Entity entity, SoliniaActiveSpell activeSpell) {
+		Effect effect = new CircleEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
+		effect.iterations = 1 * 20;
+		effect.start();
+	}
+	
+	public static void playColdEffect(Entity entity, SoliniaActiveSpell activeSpell) {
+		// TODO Auto-generated method stub
+		FlameEffect effect = new FlameEffect(StateManager.getInstance().getEffectManager()); 
+		effect.setEntity(entity); 
+		effect.color = Color.AQUA;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
@@ -49,15 +61,23 @@ public class SpecialEffectUtils {
 	}
 
 	public static void playBleedEffect(Entity entity, SoliniaActiveSpell activeSpell) {
-		BleedEffect effect = new BleedEffect(StateManager.getInstance().getEffectManager()); 
+		AnimatedBallEffect effect = new AnimatedBallEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
-		effect.hurt = false;
+		effect.particle = ParticleEffect.DAMAGE_INDICATOR;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
 
+	public static void playPoisonEffect(Entity entity, SoliniaActiveSpell activeSpell) {
+		AnimatedBallEffect effect = new AnimatedBallEffect(StateManager.getInstance().getEffectManager()); 
+		effect.setEntity(entity); 
+		effect.particle = ParticleEffect.SLIME;
+		effect.iterations = 1 * 20;
+		effect.start();
+	}
+	
 	public static void playShieldEffect(Entity entity, SoliniaActiveSpell activeSpell) {
-		ShieldEffect effect = new ShieldEffect(StateManager.getInstance().getEffectManager()); 
+		WarpEffect effect = new WarpEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity);
 		effect.particle = ParticleEffect.ENCHANTMENT_TABLE; 
 		effect.iterations = 1 * 20;
@@ -66,14 +86,6 @@ public class SpecialEffectUtils {
 
 	public static void playSmokeEffect(Entity entity, SoliniaActiveSpell activeSpell) {
 		Effect effect = new SmokeEffect(StateManager.getInstance().getEffectManager()); 
-		effect.setEntity(entity); 
-		effect.iterations = 1 * 20;
-		effect.start();
-	}
-
-	public static void playWaveEffect(Entity entity, SoliniaActiveSpell activeSpell) {
-		// TODO Auto-generated method stub
-		Effect effect = new WaveEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
 		effect.iterations = 1 * 20;
 		effect.start();

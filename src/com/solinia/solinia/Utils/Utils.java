@@ -5382,7 +5382,7 @@ public class Utils {
 				SpecialEffectUtils.playBleedEffect(entity, activeSpell);
 				break;
 			case Cold_DD: 
-				SpecialEffectUtils.playWaveEffect(entity, activeSpell);
+				SpecialEffectUtils.playColdEffect(entity, activeSpell);
 				break;
 			case Poison_Disease_DD: 
 				SpecialEffectUtils.playLegacy(entity, activeSpell);
@@ -5406,13 +5406,13 @@ public class Utils {
 				SpecialEffectUtils.playFlameEffect(entity, activeSpell);
 				break;
 			case Cold_AE: 
-				SpecialEffectUtils.playWaveEffect(entity, activeSpell);
+				SpecialEffectUtils.playColdEffect(entity, activeSpell);
 				break;
 			case Poison_Disease_AE: 
-				SpecialEffectUtils.playBleedEffect(entity, activeSpell);
+				SpecialEffectUtils.playPoisonEffect(entity, activeSpell);
 				break;
 			case Teleport: 
-				SpecialEffectUtils.playWarpEffect(entity, activeSpell);
+				SpecialEffectUtils.playPortalEffect(entity, activeSpell);
 				break;
 			case Direct_Damage_Song: 
 				SpecialEffectUtils.playMusicEffect(entity, activeSpell);
