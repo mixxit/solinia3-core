@@ -139,8 +139,7 @@ public class SoliniaEntitySpells {
 
 		// Initial run
 		activeSpell.apply(plugin);
-		getLivingEntity().getLocation().getWorld().playEffect(getLivingEntity().getLocation().add(0.5, 0.5, 0.5),
-				Effect.POTION_BREAK, 5);
+		Utils.playSpecialEffect(getLivingEntity(), activeSpell);
 		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 0);
 
 		if (duration > 0) {

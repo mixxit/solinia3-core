@@ -414,4 +414,4 @@ depend:
 - MythicMobs
 - Votifier
 - ChatItem
-
+- EffectLib

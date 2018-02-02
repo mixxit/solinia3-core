@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -5302,6 +5303,164 @@ public class Utils {
 			return true;
 		default:
 			return false;
+		}
+	}
+
+	public static void playSpecialEffect(Entity entity, SoliniaActiveSpell activeSpell) {
+		int sai = activeSpell.getSpell().getSpellAffectIndex();
+		
+		SpellEffectIndex effectType = Utils.getSpellEffectIndex(sai);
+		switch (effectType)
+		{
+			case Summon_Mount_Unclass: 
+				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+				break;
+			case Direct_Damage: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Heal_Cure: 
+				SpecialEffectUtils.playLoveEffect(entity, activeSpell);
+				break;
+			case AC_Buff: 
+				SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+				break;
+			case AE_Damage: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Summon: 
+				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+				break;
+			case Sight: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Mana_Regen_Resist_Song: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Stat_Buff: 
+				SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+				break;
+			case Vanish: 
+				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+				break;
+			case Appearance: 
+				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+				break;
+			case Enchanter_Pet: 
+				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+				break;
+			case Calm: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Fear: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Dispell_Sight: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Stun: 
+				SpecialEffectUtils.playStarEffect(entity, activeSpell);
+				break;
+			case Haste_Runspeed: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Combat_Slow: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Damage_Shield: 
+				SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+				break;
+			case Cannibalize_Weapon_Proc: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Weaken: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Banish: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Blind_Poison: 
+				SpecialEffectUtils.playBleedEffect(entity, activeSpell);
+				break;
+			case Cold_DD: 
+				SpecialEffectUtils.playWaveEffect(entity, activeSpell);
+				break;
+			case Poison_Disease_DD: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Fire_DD: 
+				SpecialEffectUtils.playFlameEffect(entity, activeSpell);
+				break;
+			case Memory_Blur: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Gravity_Fling: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Suffocate: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Lifetap_Over_Time: 
+				SpecialEffectUtils.playBleedEffect(entity, activeSpell);
+				break;
+			case Fire_AE: 
+				SpecialEffectUtils.playFlameEffect(entity, activeSpell);
+				break;
+			case Cold_AE: 
+				SpecialEffectUtils.playWaveEffect(entity, activeSpell);
+				break;
+			case Poison_Disease_AE: 
+				SpecialEffectUtils.playBleedEffect(entity, activeSpell);
+				break;
+			case Teleport: 
+				SpecialEffectUtils.playWarpEffect(entity, activeSpell);
+				break;
+			case Direct_Damage_Song: 
+				SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+				break;
+			case Combat_Buff_Song: 
+				SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+				break;
+			case Calm_Song: 
+				SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+				break;
+			case Firework: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Firework_AE: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Weather_Rocket: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Convert_Vitals: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case NPC_Special_60: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case NPC_Special_61: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case NPC_Special_62: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case NPC_Special_63: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case NPC_Special_70: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case NPC_Special_71: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case NPC_Special_80: 
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			case Trap_Lock:
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
+				break;
+			default:
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
 		}
 	}
 }

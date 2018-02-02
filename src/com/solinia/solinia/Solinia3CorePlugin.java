@@ -146,6 +146,7 @@ import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 
+import de.slikey.effectlib.EffectManager;
 import me.dadus33.chatitem.api.ChatItemAPI;
 import net.milkbowl.vault.economy.Economy;
 import sx.blah.discord.api.ClientBuilder;
@@ -168,6 +169,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private DiscordMessageTimer discordMessageTimer;
 	private KingCheckTimer kingCheckTimer;
 	FileConfiguration config = getConfig();
+	private EffectManager effectManager;
 	
 	private Economy economy;
 	private ChatItemAPI ciApi;
@@ -197,11 +199,14 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			setupDiscordClient();
 		}
 		
+		effectManager = new EffectManager(this);
+
 		initialise();
 		registerEvents();
 
 		setupEconomy();
 		setupChatItem();
+		
 
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setChatItem(this.ciApi);
@@ -241,6 +246,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		effectManager.dispose();
+		
 		System.out.println("[Solinia3Core] Plugin Disabled");
 	}
 
@@ -351,7 +359,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 				channelManager.setDiscordAdminChannelId(discordadminchannelid);
 			}
 
-			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager);
+			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager, effectManager);
 
 			commitTimer = new StateCommitTimer();
 			commitTimer.runTaskTimer(this, 6 * 20L, 300 * 20L);

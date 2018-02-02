@@ -31,6 +31,7 @@ import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
+import de.slikey.effectlib.EffectManager;
 import me.dadus33.chatitem.api.ChatItemAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
@@ -53,7 +54,8 @@ public class CoreState {
 	private IDiscordClient discordClient;
 	private DiscordAdminChannelCommandSender discordAdminChannelCommandSender;
 	private DiscordDefaultChannelCommandSender discordDefaultChannelCommandSender;
-
+	private EffectManager effectManager;
+	
 	public CoreState()
 	{
 		isInitialised = false;
@@ -94,7 +96,7 @@ public class CoreState {
 		return this.economy;
 	}
 	
-	public void Initialise(IPlayerManager playerManager, IEntityManager entityManager, IConfigurationManager configurationManager, ChannelManager channelManager) throws CoreStateInitException
+	public void Initialise(IPlayerManager playerManager, IEntityManager entityManager, IConfigurationManager configurationManager, ChannelManager channelManager, EffectManager effectManager) throws CoreStateInitException
 	{
 		if (isInitialised == true)
 			throw new CoreStateInitException("State already initialised");
@@ -103,6 +105,7 @@ public class CoreState {
 		this.entityManager = entityManager;
 		this.configurationManager = configurationManager;
 		this.channelManager = channelManager;
+		this.effectManager = effectManager;
 		isInitialised = true;
 	}
 	
@@ -120,6 +123,11 @@ public class CoreState {
 			throw new CoreStateInitException("State not initialised");
 		
 		return configurationManager;
+	}
+	
+	public EffectManager getEffectManager()
+	{
+		return this.effectManager;
 	}
 
 	public void Commit() throws CoreStateInitException {
