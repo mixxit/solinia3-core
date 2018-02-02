@@ -80,7 +80,7 @@ public class SpecialEffectUtils {
 		WarpEffect effect = new WarpEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity);
 		effect.particle = ParticleEffect.SPELL_MOB; 
-		effect.color = Color.AQUA;
+		effect.color = Color.YELLOW;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
