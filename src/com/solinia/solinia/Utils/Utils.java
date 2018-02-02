@@ -5328,7 +5328,7 @@ public class Utils {
 				SpecialEffectUtils.playLegacy(entity, activeSpell);
 				break;
 			case Summon: 
-				SpecialEffectUtils.playPortalEffect(entity, activeSpell);
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
 				break;
 			case Sight: 
 				SpecialEffectUtils.playLegacy(entity, activeSpell);
