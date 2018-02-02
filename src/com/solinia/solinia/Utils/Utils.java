@@ -5313,7 +5313,7 @@ public class Utils {
 		switch (effectType)
 		{
 			case Summon_Mount_Unclass: 
-				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+				SpecialEffectUtils.playLegacy(entity, activeSpell);
 				break;
 			case Direct_Damage: 
 				SpecialEffectUtils.playLegacy(entity, activeSpell);
@@ -5328,7 +5328,7 @@ public class Utils {
 				SpecialEffectUtils.playLegacy(entity, activeSpell);
 				break;
 			case Summon: 
-				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+				SpecialEffectUtils.playPortalEffect(entity, activeSpell);
 				break;
 			case Sight: 
 				SpecialEffectUtils.playLegacy(entity, activeSpell);
@@ -5340,7 +5340,7 @@ public class Utils {
 				SpecialEffectUtils.playShieldEffect(entity, activeSpell);
 				break;
 			case Vanish: 
-				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+				SpecialEffectUtils.playPortalEffect(entity, activeSpell);
 				break;
 			case Appearance: 
 				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);

@@ -9,23 +9,21 @@ import com.solinia.solinia.Models.SoliniaActiveSpell;
 
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.effect.AnimatedBallEffect;
-import de.slikey.effectlib.effect.BleedEffect;
 import de.slikey.effectlib.effect.CircleEffect;
 import de.slikey.effectlib.effect.FlameEffect;
 import de.slikey.effectlib.effect.LoveEffect;
 import de.slikey.effectlib.effect.MusicEffect;
-import de.slikey.effectlib.effect.ShieldEffect;
 import de.slikey.effectlib.effect.SmokeEffect;
 import de.slikey.effectlib.effect.StarEffect;
 import de.slikey.effectlib.effect.WarpEffect;
-import de.slikey.effectlib.effect.WaveEffect;
 import de.slikey.effectlib.util.ParticleEffect;
 
 public class SpecialEffectUtils {
 
 	public static void playLegacy(Entity entity, SoliniaActiveSpell activeSpell) {
-		Effect effect = new BleedEffect(StateManager.getInstance().getEffectManager()); 
+		AnimatedBallEffect effect = new AnimatedBallEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
+		effect.particle = ParticleEffect.FIREWORKS_SPARK;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
@@ -38,9 +36,11 @@ public class SpecialEffectUtils {
 	}
 	
 	public static void playPortalEffect(Entity entity, SoliniaActiveSpell activeSpell) {
-		Effect effect = new CircleEffect(StateManager.getInstance().getEffectManager()); 
+		CircleEffect effect = new CircleEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
 		effect.iterations = 1 * 20;
+		effect.radius = 1.2f;
+		effect.color = Color.MAROON;
 		effect.start();
 	}
 	
@@ -79,7 +79,8 @@ public class SpecialEffectUtils {
 	public static void playShieldEffect(Entity entity, SoliniaActiveSpell activeSpell) {
 		WarpEffect effect = new WarpEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity);
-		effect.particle = ParticleEffect.ENCHANTMENT_TABLE; 
+		effect.particle = ParticleEffect.SPELL_MOB; 
+		effect.color = Color.AQUA;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
