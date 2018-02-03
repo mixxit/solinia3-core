@@ -395,7 +395,7 @@ public class ItemStackAdapter {
 			
 			if (spell.isBuffSpell() && spell.getBuffduration() > 0)
 			{
-				loreTxt.add(ChatColor.WHITE + consumable + "Buff Duration: " + ChatColor.YELLOW + ((spell.getBuffduration() * 6) / 60) + " minutes" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + consumable + "Buff Duration: " + ChatColor.YELLOW + (spell.getBuffduration() * 6) + " seconds" + ChatColor.RESET);
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -521,7 +521,7 @@ public class ItemStackAdapter {
 			
 			if (spell.isBuffSpell() && spell.getBuffduration() > 0)
 			{
-				loreTxt.add(ChatColor.WHITE + "Buff Duration: " + ChatColor.YELLOW + ((spell.getBuffduration() * 6) / 60) + " minutes" + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Buff Duration: " + ChatColor.YELLOW + (spell.getBuffduration() * 6) + " seconds" + ChatColor.RESET);
 			}
 			loreTxt.add(ChatColor.WHITE + "Target Type: " + ChatColor.YELLOW + Utils.getSpellTargetType(spell.getTargettype()).name() + ChatColor.RESET);
 			String classesBuilder = "";
