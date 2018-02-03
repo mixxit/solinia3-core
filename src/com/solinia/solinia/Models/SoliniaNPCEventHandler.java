@@ -39,6 +39,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int awardsItem = 0;
 	private String teleportResponse = "";
 	private boolean awardsRandomisedGear = false;
+	private String randomisedGearSuffix = "";
+	private boolean awardsTitle = false;
+	private String title = "";
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -124,11 +127,23 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- awardsquestflag: " + ChatColor.GOLD + getAwardsQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- awardsitem: " + ChatColor.GOLD + getAwardsItem() + ChatColor.RESET);
 		sender.sendMessage("- awardsrandomisedgear: " + ChatColor.GOLD + isAwardsRandomisedGear() + ChatColor.RESET);
+		sender.sendMessage("- randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
+		sender.sendMessage("- title: " + ChatColor.GOLD + this.getTitle() + ChatColor.RESET);
+		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
 	}
 
 	@Override
 	public void editTriggerEventSetting(String setting, String value) throws InvalidNPCEventSettingException {
 		switch (setting.toLowerCase()) {
+		case "randomisedgearsuffix":
+			setRandomisedGearSuffix(value);
+			break;
+		case "title":
+			setTitle(value);
+			break;
+		case "awardstitle":
+			setAwardsTitle(Boolean.parseBoolean(value));
+			break;
 		case "triggerdata":
 			if (value.equals(""))
 				throw new InvalidNPCEventSettingException("Triggerdata is empty");
@@ -349,8 +364,28 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 						}
 					}
 					
+					if (this.isAwardsTitle() == true)
+					{
+						if (this.getTitle() != null)
+						{
+							if (!this.getTitle().equals(""))
+							{
+								player.grantTitle(this.getTitle());
+							}
+						}
+					}
+					
 					if (isAwardsRandomisedGear() == true)
 					{
+						String suffix = "of Randomisation";
+						if (getRandomisedGearSuffix() != null)
+						{
+							if (!getRandomisedGearSuffix().equals(""))
+							{
+								suffix = getRandomisedGearSuffix();
+							}
+						}
+						
 						System.out.println("Awarding randomisedgear with awardquestflag: " + getAwardsQuestFlag());
 						
 						int playertier = 1;
@@ -372,7 +407,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 							// always give the next tier up and then we will reset the player requirements ot current level
 							// this ability is for special seasonal rewards only
 							playertier += 1;
-							List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, "of the Season", false);
+							List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false);
 							
 							for(int itemid : items)
 							{
@@ -435,12 +470,44 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		this.teleportResponse = teleportResponse;
 	}
 
+	@Override
 	public boolean isAwardsRandomisedGear() {
 		return awardsRandomisedGear;
 	}
 
+	@Override
 	public void setAwardsRandomisedGear(boolean awardsRandomisedGear) {
 		this.awardsRandomisedGear = awardsRandomisedGear;
+	}
+
+	@Override
+	public String getRandomisedGearSuffix() {
+		return randomisedGearSuffix;
+	}
+
+	@Override
+	public void setRandomisedGearSuffix(String randomisedGearSuffix) {
+		this.randomisedGearSuffix = randomisedGearSuffix;
+	}
+
+	@Override
+	public boolean isAwardsTitle() {
+		return awardsTitle;
+	}
+
+	@Override
+	public void setAwardsTitle(boolean awardsTitle) {
+		this.awardsTitle = awardsTitle;
+	}
+
+	@Override
+	public String getTitle() {
+		return title;
+	}
+
+	@Override
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

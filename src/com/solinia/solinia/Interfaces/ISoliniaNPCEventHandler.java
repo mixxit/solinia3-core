@@ -51,5 +51,21 @@ public interface ISoliniaNPCEventHandler {
 	String getTeleportResponse();
 
 	void setTeleportResponse(String teleportResponse);
+
+	void setTitle(String title);
+
+	String getTitle();
+
+	void setAwardsTitle(boolean awardsTitle);
+
+	boolean isAwardsTitle();
+
+	void setRandomisedGearSuffix(String randomisedGearSuffix);
+
+	String getRandomisedGearSuffix();
+
+	void setAwardsRandomisedGear(boolean awardsRandomisedGear);
+
+	boolean isAwardsRandomisedGear();
 	
 }
