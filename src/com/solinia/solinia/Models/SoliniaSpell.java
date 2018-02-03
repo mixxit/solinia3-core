@@ -2674,6 +2674,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name() + ")" + ChatColor.RESET);
+		sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (" + Utils.getSpellEffectIndex(getSpellAffectIndex()).name() + ")" + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		for(SoliniaSpellClass spellclass : this.getAllowedClasses())
@@ -2713,6 +2714,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 			
 			int buffduration = Integer.parseInt(value);
 			setBuffduration(buffduration);
+			break;
+			
+		case "spelleffectindex":
+			setSpellAffectIndex(Integer.parseInt(value));
 			break;
 		case "effect":
 			int effectNo = Integer.parseInt(value);

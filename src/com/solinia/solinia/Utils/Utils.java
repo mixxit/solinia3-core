@@ -5358,7 +5358,7 @@ public class Utils {
 				SpecialEffectUtils.playLegacy(entity, activeSpell);
 				break;
 			case Stun: 
-				SpecialEffectUtils.playStarEffect(entity, activeSpell);
+				SpecialEffectUtils.playStunEffect(entity, activeSpell);
 				break;
 			case Haste_Runspeed: 
 				SpecialEffectUtils.playLegacy(entity, activeSpell);

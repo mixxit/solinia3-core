@@ -92,9 +92,11 @@ public class SpecialEffectUtils {
 		effect.start();
 	}
 
-	public static void playStarEffect(Entity entity, SoliniaActiveSpell activeSpell) {
-		Effect effect = new StarEffect(StateManager.getInstance().getEffectManager()); 
+	public static void playStunEffect(Entity entity, SoliniaActiveSpell activeSpell) {
+		AnimatedBallEffect effect = new AnimatedBallEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
+		effect.particle = ParticleEffect.SPELL_MOB;
+		effect.color = Color.SILVER;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
