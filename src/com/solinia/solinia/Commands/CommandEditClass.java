@@ -92,7 +92,7 @@ public class CommandEditClass implements CommandExecutor {
 			StateManager.getInstance().getConfigurationManager().editClass(classid, setting, value);
 			sender.sendMessage("Updating setting on class");
 		} catch (InvalidClassSettingException ne) {
-			sender.sendMessage("Invalid class setting");
+			sender.sendMessage("Invalid class setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

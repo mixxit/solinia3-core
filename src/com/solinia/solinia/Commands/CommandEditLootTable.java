@@ -101,7 +101,7 @@ public class CommandEditLootTable implements CommandExecutor {
 			sender.sendMessage("Updating setting on LootTable");
 		} catch (InvalidLootTableSettingException ne)
 		{
-			sender.sendMessage("Invalid LootTable setting");
+			sender.sendMessage("Invalid LootTable setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

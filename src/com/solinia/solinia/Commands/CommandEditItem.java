@@ -103,7 +103,7 @@ public class CommandEditItem implements CommandExecutor {
 			sender.sendMessage("Updating setting on item");
 		} catch (InvalidItemSettingException ne)
 		{
-			sender.sendMessage("Invalid item setting");
+			sender.sendMessage("Invalid item setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

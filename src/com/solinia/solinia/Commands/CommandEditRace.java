@@ -94,7 +94,7 @@ public class CommandEditRace implements CommandExecutor {
 			StateManager.getInstance().getConfigurationManager().editRace(raceid, setting, value);
 			sender.sendMessage("Updating setting on race");
 		} catch (InvalidRaceSettingException ne) {
-			sender.sendMessage("Invalid race setting");
+			sender.sendMessage("Invalid race setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

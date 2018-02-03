@@ -108,7 +108,7 @@ public class CommandEditNpcSpellList implements CommandExecutor {
 			
 		} catch (InvalidNpcSpellListSettingException ne)
 		{
-			sender.sendMessage("Invalid NPC setting");
+			sender.sendMessage("Invalid NPC setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

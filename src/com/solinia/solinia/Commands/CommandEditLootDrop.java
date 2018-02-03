@@ -98,7 +98,7 @@ public class CommandEditLootDrop implements CommandExecutor {
 			sender.sendMessage("Updating setting on LootDrop");
 		} catch (InvalidLootDropSettingException ne)
 		{
-			sender.sendMessage("Invalid LootDrop setting");
+			sender.sendMessage("Invalid LootDrop setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

@@ -158,7 +158,7 @@ public class CommandEditNpcEvent implements CommandExecutor {
 			sender.sendMessage("Updating setting on NPC Event");
 		} catch (InvalidNPCEventSettingException ne)
 		{
-			sender.sendMessage("Invalid NPC Event Setting");
+			sender.sendMessage("Invalid NPC Event Setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());

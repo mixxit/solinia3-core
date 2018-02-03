@@ -77,7 +77,7 @@ public class CommandEditAA implements CommandExecutor {
 			StateManager.getInstance().getConfigurationManager().editAAAbility(aaid, setting, value);
 			sender.sendMessage("Updating setting on aaability");
 		} catch (InvalidAASettingException ne) {
-			sender.sendMessage("Invalid aaability setting");
+			sender.sendMessage("Invalid aaability setting: " + ne.getMessage());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			sender.sendMessage(e.getMessage());
