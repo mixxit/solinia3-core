@@ -314,13 +314,18 @@ public class ChannelManager implements IChannelManager {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
 				{
-					if (player.isOp() || source.getLanguage() != null || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
+					if (source.getLanguage() != null)
 					{
-						player.sendMessage(message);
+						if (player.isOp() || source.getLanguage() != null || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
+						{
+							player.sendMessage(message);
+						} else {
+							player.sendMessage(ChatColor.AQUA + " * " + source.getName() + " says something in a language you do not understand" + ChatColor.RESET);
+							
+							SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+						} 
 					} else {
-						player.sendMessage(ChatColor.AQUA + " * " + source.getName() + " says something in a language you do not understand" + ChatColor.RESET);
-						
-						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+						player.sendMessage(message);
 					}
 				}
 			}
