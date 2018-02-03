@@ -51,6 +51,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.SpellTargetType;
@@ -1567,7 +1568,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc == null)
 				return;
 
-			this.emote(ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET);
+			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
+			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage);
+			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1597,9 +1600,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc == null)
 				return;
-
-			this.emote(ChatColor.AQUA + npc.getName() + " says to " + messageto.getName() + " '" + message + "'"
-					+ ChatColor.RESET);
+			
+			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + messageto.getName() + " '" + message + "'"
+					+ ChatColor.RESET;
+			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3577,5 +3581,31 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String getLanguage() {
+		if (isNPC())
+		{
+			try
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+				if (npc.getRaceid() > 0)
+				{
+					ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(npc.getRaceid());
+					return race.getName().toUpperCase();
+				}
+			} catch (CoreStateInitException e)
+			{
+				//
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return getBukkitLivingEntity().getCustomName();
 	}
 }

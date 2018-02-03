@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -178,5 +179,9 @@ public interface ISoliniaLivingEntity
 	public void doCheckForEnemies();
 
 	int getSpellBonuses(SpellEffectType spellEffectType);
+
+	public String getLanguage();
+
+	public String getName();
 
 }

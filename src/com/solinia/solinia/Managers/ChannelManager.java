@@ -52,7 +52,6 @@ public class ChannelManager implements IChannelManager {
 					
 					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
 					{
-						
 						player.sendMessage(message);
 					} else {
 						player.sendMessage(ChatColor.AQUA + " * " + source.getFullNameWithTitle() + " says something in a language you do not understand" + ChatColor.RESET);
@@ -304,12 +303,33 @@ public class ChannelManager implements IChannelManager {
 
 	@Override
 	public void sendToLocalChannel(ISoliniaLivingEntity source, String message) {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
-			player.sendMessage(message);
+		
+	}
+	
+	@Override
+	public void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message)
+	{
+		try
+		{
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
+				{
+					if (player.isOp() || source.getLanguage() != null || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
+					{
+						player.sendMessage(message);
+					} else {
+						player.sendMessage(ChatColor.AQUA + " * " + source.getName() + " says something in a language you do not understand" + ChatColor.RESET);
+						
+						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+					}
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			// skip
 		}
 	}
-
+	
 	@Override
 	public void sendToGlobalChannel(String name, String message) {
 		for (Player player : Bukkit.getOnlinePlayers()) {

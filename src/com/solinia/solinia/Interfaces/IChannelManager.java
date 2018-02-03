@@ -36,4 +36,6 @@ public interface IChannelManager {
 
 	void processNextDiscordMessage();
 
+	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message);
+
 }
