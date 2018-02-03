@@ -108,7 +108,7 @@ public class CommandEditNpcEvent implements CommandExecutor {
 		String value = args[3];
 		
 		// for 'text' based npc settings like trigger texts etc, get the whole thing as a string
-		if (args.length > 4 && (setting.toLowerCase().contains("chatresponse")))
+		if (args.length > 4 && (setting.toLowerCase().equals("chatresponse") || setting.toLowerCase().equals("title") || setting.toLowerCase().equals("randomisedgearsuffix")))
 		{
 			value = "";
 			int current = 0;
