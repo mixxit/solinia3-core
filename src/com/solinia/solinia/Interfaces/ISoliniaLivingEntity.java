@@ -184,4 +184,8 @@ public interface ISoliniaLivingEntity
 
 	public String getName();
 
+	public boolean isSpeaksAllLanguages();
+	
+	public void setSpeaksAllLanguages(boolean speaksAllLanguages);
+
 }

@@ -3607,4 +3607,36 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public String getName() {
 		return getBukkitLivingEntity().getCustomName();
 	}
+
+	@Override
+	public boolean isSpeaksAllLanguages() {
+		if (isNPC())
+		{
+			try
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+				return npc.isSpeaksAllLanguages();
+			} catch (CoreStateInitException e)
+			{
+				//
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public void setSpeaksAllLanguages(boolean speaksAllLanguages) {
+		if (isNPC())
+		{
+			try
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+				npc.setSpeaksAllLanguages(speaksAllLanguages);
+			} catch (CoreStateInitException e)
+			{
+				//
+			}
+		}
+	}
 }

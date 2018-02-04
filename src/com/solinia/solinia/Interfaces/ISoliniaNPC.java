@@ -214,4 +214,8 @@ public interface ISoliniaNPC {
 	boolean isRaidheroic();
 
 	void setRaidheroic(boolean raidheroic);
+
+	boolean isSpeaksAllLanguages();
+
+	void setSpeaksAllLanguages(boolean speaksAllLanguages);
 }

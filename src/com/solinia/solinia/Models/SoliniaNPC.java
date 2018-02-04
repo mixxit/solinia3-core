@@ -81,6 +81,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int avoidanceRating = 0;
 	private int accuracyRating = 0;
 	private int ac = 0;
+	private boolean speaksAllLanguages = false;
 	
 	@Override
 	public int getId() {
@@ -507,6 +508,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- boss: " + ChatColor.GOLD + isBoss());
 		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic());
 		sender.sendMessage("- raidboss: " + ChatColor.GOLD + isRaidboss());
+		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
@@ -695,9 +697,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "avoidancerating":
 			setAvoidanceRating(Integer.parseInt(value));
 			break;
+		case "speaksalllanguages":
+			setSpeaksAllLanguages(Boolean.parseBoolean(value));
+			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal,speaksalllanguages");
 		}
 	}
 
@@ -1221,6 +1226,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setRaidheroic(boolean raidheroic) {
 		this.raidheroic = raidheroic;
+	}
+
+	@Override
+	public boolean isSpeaksAllLanguages() {
+		return speaksAllLanguages;
+	}
+
+	@Override
+	public void setSpeaksAllLanguages(boolean speaksAllLanguages) {
+		this.speaksAllLanguages = speaksAllLanguages;
 	}
 }
 

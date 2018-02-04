@@ -376,6 +376,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 					List<ISoliniaItem> potentialLegsArmour = new ArrayList<ISoliniaItem>();
 					List<ISoliniaItem> potentialFeetArmour = new ArrayList<ISoliniaItem>();
 					List<ISoliniaItem> potentialWeapons = new ArrayList<ISoliniaItem>();
+					List<ISoliniaItem> potentialBows = new ArrayList<ISoliniaItem>();
 					List<ISoliniaItem> potentialShields = new ArrayList<ISoliniaItem>();
 					
 					
@@ -420,6 +421,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 								{
 									if (item.getBasename().contains("SHIELD"))
 										potentialShields.add(item);
+									else if (item.getBasename().contains("BOW"))
+										potentialBows.add(item);
 									else
 										potentialWeapons.add(item);
 									continue;
@@ -511,7 +514,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							
 							Collections.reverse(potentialLegsArmour);
 							
-							System.out.println("Found better weapon in lootdrop (" + potentialLegsArmour.get(0).getDisplayname() + "), using as weapon");
+							System.out.println("Found better legs in lootdrop (" + potentialLegsArmour.get(0).getDisplayname() + "), using as weapon");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialLegsArmour.get(0).getId() + ".yml", potentialLegsArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialLegsArmour.get(0).getId() + ":2\r\n";
 						} else {
@@ -541,11 +544,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 								mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
 						}
 						
-						
-						
-						if (potentialWeapons.size() > 0)
+						if (npc.getClassObj() != null && npc.getClassObj().getName().equals("RANGER") && potentialBows.size() > 0)
 						{
-							Collections.sort(potentialWeapons, new Comparator<ISoliniaItem>(){
+							Collections.sort(potentialBows, new Comparator<ISoliniaItem>(){
 							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
 							     {
 							         if(o1.getMinLevel() == o2.getMinLevel())
@@ -555,15 +556,34 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							     }
 							});
 							
-							Collections.reverse(potentialWeapons);
+							Collections.reverse(potentialBows);
 							
-							System.out.println("Found better weapon in lootdrop (" + potentialWeapons.get(0).getDisplayname() + "), using as weapon");
-							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
-							mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":0\r\n";
-							
+							System.out.println("Found better weapon (bow) in lootdrop (" + potentialBows.get(0).getDisplayname() + "), using as weapon");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialBows.get(0).getId() + ".yml", potentialBows.get(0));
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialBows.get(0).getId() + ":0\r\n";
 						} else {
-							if (npc.getHanditem() != null)
-								mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
+							if (potentialWeapons.size() > 0)
+							{
+								Collections.sort(potentialWeapons, new Comparator<ISoliniaItem>(){
+								     public int compare(ISoliniaItem o1, ISoliniaItem o2)
+								     {
+								         if(o1.getMinLevel() == o2.getMinLevel())
+								             return 0;
+								         
+								         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+								     }
+								});
+								
+								Collections.reverse(potentialWeapons);
+								
+								System.out.println("Found better weapon in lootdrop (" + potentialWeapons.get(0).getDisplayname() + "), using as weapon");
+								writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
+								mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":0\r\n";
+								
+							} else {
+								if (npc.getHanditem() != null)
+									mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
+							}
 						}
 					}
 				}

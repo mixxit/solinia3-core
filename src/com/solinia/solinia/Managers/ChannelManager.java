@@ -319,7 +319,7 @@ public class ChannelManager implements IChannelManager {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
 				{
-					if (player.isOp() || (source.getLanguage() == null || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
+					if (player.isOp() || (source.getLanguage() == null || source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
 					{
 						player.sendMessage(message);
 					} else {
