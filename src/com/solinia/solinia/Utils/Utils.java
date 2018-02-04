@@ -5319,6 +5319,12 @@ public class Utils {
 		int sai = activeSpell.getSpell().getSpellAffectIndex();
 		
 		SpellEffectIndex effectType = Utils.getSpellEffectIndex(sai);
+		if (effectType == null)
+		{
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			return;
+		}
+		
 		switch (effectType)
 		{
 			case Summon_Mount_Unclass: 
