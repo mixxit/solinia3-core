@@ -440,6 +440,32 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									}
 								}
 							}
+							
+							if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
+							{
+								if (item.getAllowedClassNames().size() == 0)
+								{
+									if (item.getBasename().contains("SHIELD"))
+										potentialShields.add(item);
+									else if (item.getBasename().contains("BOW"))
+										potentialBows.add(item);
+									else
+										potentialWeapons.add(item);
+									continue;
+								}
+
+								if (npc.getClassObj() != null)
+								{
+									if (item.getAllowedClassNames().contains(npc.getClassObj().getName()))
+									{
+										if (item.getBasename().contains("SHIELD"))
+											potentialShields.add(item);
+										else
+											potentialWeapons.add(item);
+										continue;
+									}
+								}
+							}
 						}
 						
 						mob = mob + "  Equipment:\r\n";
@@ -544,7 +570,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 								mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
 						}
 						
-						if (npc.getClassObj() != null && npc.getClassObj().getName().equals("RANGER") && potentialBows.size() > 0)
+						if (npc.getClassObj() != null && npc.getClassObj().getName().toUpperCase().equals("RANGER") && potentialBows.size() > 0)
 						{
 							Collections.sort(potentialBows, new Comparator<ISoliniaItem>(){
 							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
