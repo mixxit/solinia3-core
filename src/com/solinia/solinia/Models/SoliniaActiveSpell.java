@@ -1712,7 +1712,7 @@ public class SoliniaActiveSpell {
 		try
 		{
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			solPlayer.setBindPoint(player.getLocation());
+			solPlayer.setBindPoint(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + "," + player.getLocation().getY() + "," + player.getLocation().getZ());
 		} catch (CoreStateInitException e)
 		{
 			// skip
@@ -1728,14 +1728,19 @@ public class SoliniaActiveSpell {
 		try
 		{
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			Location blocation = solPlayer.getBindPoint();
-			if (blocation == null)
+			String blocation = solPlayer.getBindPoint();
+			if (blocation == null || solPlayer.getBindPoint().equals(""))
 			{
 				player.sendMessage("Could not teleport, you are not bound to a location (by bind affinity)");
 				return;
 			}
 			
-			player.teleport(blocation);
+			String[] loc = solPlayer.getBindPoint().split(",");
+			
+			Location location = new Location(Bukkit.getWorld(loc[0]),Double.parseDouble(loc[1]),Double.parseDouble(loc[2]),Double.parseDouble(loc[3]));
+			
+			player.setBedSpawnLocation(location, true);
+			player.teleport(location);
 		} catch (CoreStateInitException e)
 		{
 			

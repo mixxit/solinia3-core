@@ -87,7 +87,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int inspiration = 0;
 	private Timestamp experienceBonusExpires;
 	private boolean oocEnabled = true;
-	private Location bindPoint;
+	private String bindPoint;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -2088,12 +2088,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void setBindPoint(Location location) {
-		this.bindPoint = location;
+	public void setBindPoint(String teleportlocation) {
+		this.bindPoint = teleportlocation;
 	}
 
 	@Override
-	public Location getBindPoint() {
+	public String getBindPoint() {
 		return this.bindPoint;
 	}
 }

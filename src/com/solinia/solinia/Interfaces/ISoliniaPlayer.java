@@ -272,6 +272,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setOocEnabled(boolean oocEnabled);
 
-	public void setBindPoint(Location location);
-	public Location getBindPoint();
+	public void setBindPoint(String teleportlocation);
+	public String getBindPoint();
 }

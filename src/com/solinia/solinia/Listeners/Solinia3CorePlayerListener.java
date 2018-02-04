@@ -714,9 +714,14 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (solplayer != null)
 			{
 				solplayer.updateMaxHp();
-				if (solplayer.getBindPoint() != null)
+				if (solplayer.getBindPoint() != null && !solplayer.getBindPoint().equals(""))
 				{
-					event.getPlayer().teleport(solplayer.getBindPoint());
+					String[] loc = solplayer.getBindPoint().split(",");
+					
+					Location location = new Location(Bukkit.getWorld(loc[0]),Double.parseDouble(loc[1]),Double.parseDouble(loc[2]),Double.parseDouble(loc[3]));
+					
+					event.setRespawnLocation(location);
+					event.getPlayer().teleport(location);
 				}
 			}
 		} catch (CoreStateInitException e) {
