@@ -303,7 +303,12 @@ public class ChannelManager implements IChannelManager {
 
 	@Override
 	public void sendToLocalChannel(ISoliniaLivingEntity source, String message) {
-		
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
+			{
+				player.sendMessage(message);
+			}
+		}
 	}
 	
 	@Override
