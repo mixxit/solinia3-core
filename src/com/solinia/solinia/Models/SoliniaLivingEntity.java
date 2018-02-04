@@ -1546,8 +1546,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// 2% chance of saying something
 			int random = Utils.RandomBetween(1, 100);
 			if (random < 2) {
-				this.emote(ChatColor.AQUA + npc.getName() + " says '" + npc.getRandomchatTriggerText() + "'"
-						+ ChatColor.RESET);
+				this.say(npc.getRandomchatTriggerText());
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
