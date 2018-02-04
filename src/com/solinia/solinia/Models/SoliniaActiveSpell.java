@@ -1709,7 +1709,15 @@ public class SoliniaActiveSpell {
 			return;
 		
 		Player player = (Player)getLivingEntity();
-		player.setBedSpawnLocation(player.getLocation(), true);
+		try
+		{
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			solPlayer.setBindPoint(player.getLocation());
+		} catch (CoreStateInitException e)
+		{
+			// skip
+		}
+		
 	}
 
 	private void applyGate(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -1717,15 +1725,21 @@ public class SoliniaActiveSpell {
 			return;
 
 		Player player = (Player)getLivingEntity();
-		
-		Location blocation = player.getBedSpawnLocation();
-		if (blocation == null)
+		try
 		{
-			player.sendMessage("Could not teleport, you are not bound to a location");
-			return;
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			Location blocation = solPlayer.getBindPoint();
+			if (blocation == null)
+			{
+				player.sendMessage("Could not teleport, you are not bound to a location (by bind affinity)");
+				return;
+			}
+			
+			player.teleport(blocation);
+		} catch (CoreStateInitException e)
+		{
+			
 		}
-		
-		player.teleport(blocation);
 	}
 
 	private void applyCurrentMpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

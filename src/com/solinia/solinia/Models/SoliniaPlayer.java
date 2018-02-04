@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
@@ -86,6 +87,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int inspiration = 0;
 	private Timestamp experienceBonusExpires;
 	private boolean oocEnabled = true;
+	private Location bindPoint;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -2083,5 +2085,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setOocEnabled(boolean oocEnabled) {
 		this.oocEnabled = oocEnabled;
+	}
+
+	@Override
+	public void setBindPoint(Location location) {
+		this.bindPoint = location;
+	}
+
+	@Override
+	public Location getBindPoint() {
+		return this.bindPoint;
 	}
 }

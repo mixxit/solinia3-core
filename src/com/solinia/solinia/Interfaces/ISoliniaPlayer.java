@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
@@ -270,4 +271,7 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isOocEnabled();
 
 	void setOocEnabled(boolean oocEnabled);
+
+	public void setBindPoint(Location location);
+	public Location getBindPoint();
 }

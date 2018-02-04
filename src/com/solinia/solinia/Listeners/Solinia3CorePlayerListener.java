@@ -712,7 +712,13 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (solplayer != null)
+			{
 				solplayer.updateMaxHp();
+				if (solplayer.getBindPoint() != null)
+				{
+					event.getPlayer().teleport(solplayer.getBindPoint());
+				}
+			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
