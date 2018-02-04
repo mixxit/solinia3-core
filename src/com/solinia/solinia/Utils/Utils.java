@@ -4777,12 +4777,21 @@ public class Utils {
 			int effectIdLookup = 0;
 			effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.MaxHPChange);
 
-			if (effectIdLookup == 0)
-				return 0;
-
-			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
-				total += effect.getBase1();
+			if (effectIdLookup > 0)
+			{
+				for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
+					total += effect.getBase1();
+				}
 			}
+			effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.TotalHP);
+
+			if (effectIdLookup > 0)
+			{
+				for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
+					total += effect.getBase1();
+				}
+			}
+			
 			return total;
 		} catch (CoreStateInitException e) {
 			return 0;
