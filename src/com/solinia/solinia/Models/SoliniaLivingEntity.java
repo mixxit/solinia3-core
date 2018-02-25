@@ -399,7 +399,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			my_hit.offense = getOffense(my_hit.skill); // we need this a few times
 			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
 
-			doAttack(defender, my_hit);
+			doAttack(plugin, defender, my_hit);
 		}
 
 		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate);
@@ -493,7 +493,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* You double attack!");
 						tryIncreaseSkill("DOUBLEATTACK", 1);
 					}
-					defender.damage(my_hit.damage_done, this.getBukkitLivingEntity());
+					defender.damage(plugin, my_hit.damage_done, this.getBukkitLivingEntity());
 				}
 
 				try {
@@ -595,11 +595,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 			}
 			
+			if (event.getDamage() > getBukkitLivingEntity().getHealth() && hasDeathSave() > 0)
+			{
+				Utils.CancelEvent(event);
+				removeDeathSaves(plugin);
+				getBukkitLivingEntity().sendMessage("* Your death save boon has saved you from death!");
+				return false;
+			}
+
 			defender.damageHook(event.getDamage(),getBukkitLivingEntity());
 
 			return true;
 		} else {
-			Utils.CancelEvent(event);;
+			Utils.CancelEvent(event);
 			return false;
 		}
 	}
@@ -624,9 +632,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	
 	@Override
-	public void damage(double damage, Entity sourceEntity)
+	public void damage(Plugin plugin, double damage, Entity sourceEntity)
 	{
 		damageHook(damage, sourceEntity);
+		
+		if (damage > getBukkitLivingEntity().getHealth() && hasDeathSave() > 0)
+		{
+			removeDeathSaves(plugin);
+			getBukkitLivingEntity().sendMessage("* Your death save boon has saved you from death!");
+			return;
+		}
+		
 		getBukkitLivingEntity().damage(damage, sourceEntity);
 	}
 
@@ -688,7 +704,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
-	private DamageHitInfo doAttack(ISoliniaLivingEntity defender, DamageHitInfo hit) {
+	private DamageHitInfo doAttack(Plugin plugin, ISoliniaLivingEntity defender, DamageHitInfo hit) {
 		if (defender == null)
 			return hit;
 
@@ -709,7 +725,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (isPlayer()) {
 					((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* "
 							+ defender.getBukkitLivingEntity().getCustomName() + " ripostes your attack!");
-					damage(originalDamage, getBukkitLivingEntity());
+					damage(plugin, originalDamage, getBukkitLivingEntity());
 				}
 			}
 
@@ -3669,6 +3685,40 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			{
 				//
 			}
+		}
+	}
+
+	@Override
+	public int hasDeathSave() {
+		List<ActiveSpellEffect> spellEffects = Utils.getActiveSpellEffects(getBukkitLivingEntity(),SpellEffectType.DivineSave);
+		List<ActiveSpellEffect> spellEffects2 = Utils.getActiveSpellEffects(getBukkitLivingEntity(),SpellEffectType.DeathSave);
+		return spellEffects.size() + spellEffects2.size();
+	}
+
+	@Override
+	public void removeDeathSaves(Plugin plugin) {
+		List<Integer> removeSpells = new ArrayList<Integer>();
+		try {
+			for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
+					.getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells()) {
+				if (!spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.DivineSave) && !spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.DeathSave))
+					continue;
+
+				for (ActiveSpellEffect effect : spell.getActiveSpellEffects()) {
+					if (!(effect.getSpellEffectType().equals(SpellEffectType.Rune)) && !(effect.getSpellEffectType().equals(SpellEffectType.DeathSave)))
+						continue;
+
+					removeSpells.add(spell.getSpellId());
+				}
+			}
+
+			for (Integer spellId : removeSpells) {
+				StateManager.getInstance().getEntityManager()
+						.removeSpellEffectsOfSpellId(plugin, getBukkitLivingEntity().getUniqueId(), spellId);
+
+			}
+		} catch (CoreStateInitException e) {
+			// ignore and return full amount
 		}
 	}
 }

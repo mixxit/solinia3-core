@@ -189,8 +189,12 @@ public interface ISoliniaLivingEntity
 	
 	public void setSpeaksAllLanguages(boolean speaksAllLanguages);
 
-	void damage(double damage, Entity sourceEntity);
-
 	void damageHook(double damage, Entity sourceEntity);
+
+	public int hasDeathSave();
+
+	void removeDeathSaves(Plugin plugin);
+
+	void damage(Plugin plugin, double damage, Entity sourceEntity);
 
 }

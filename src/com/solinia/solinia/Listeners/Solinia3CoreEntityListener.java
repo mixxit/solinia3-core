@@ -423,6 +423,15 @@ public class Solinia3CoreEntityListener implements Listener {
 					ISoliniaLivingEntity solentity;
 					try {
 						solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+						
+						if (event.getDamage() > solentity.getBukkitLivingEntity().getHealth() && solentity.hasDeathSave() > 0)
+						{
+							Utils.CancelEvent(event);
+							solentity.removeDeathSaves(plugin);
+							solentity.getBukkitLivingEntity().sendMessage("* Your death/divine save boon has saved you from death!");
+							return;
+						}
+						
 						solentity.damageHook(event.getDamage(),damagecause.getDamager());
 					} catch (CoreStateInitException e) {
 						// skip
