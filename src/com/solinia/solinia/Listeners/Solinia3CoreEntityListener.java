@@ -142,13 +142,14 @@ public class Solinia3CoreEntityListener implements Listener {
 				}
 			}
 			
-			// Player still operates on all these commands
-			
 			if (event.getEntity() != null && event.getTarget() != null)
 			{
-				
 				if (!(event.getEntity() instanceof Player))
 				{
+					if (event.getEntity() instanceof LivingEntity)
+					{
+						ISoliniaLivingEntity livingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+					}
 					// Mez cancel target
 					Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getTarget());
 	
@@ -245,6 +246,30 @@ public class Solinia3CoreEntityListener implements Listener {
 					}
 				}
 				
+				// cancel attacks on mobs mezzed
+				if (attacker instanceof Creature && attacker instanceof LivingEntity && event.getEntity() instanceof LivingEntity)
+				{
+					ISoliniaLivingEntity solCreatureEntity = SoliniaLivingEntityAdapter.Adapt(attacker);
+					if (solCreatureEntity.isPet() || !solCreatureEntity.isPlayer())
+					{
+						Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity)event.getEntity());
+						
+						if (mezExpiry != null) {
+							((Creature) attacker).setTarget(null);
+							
+							if (solCreatureEntity.isPet())
+							{
+								Wolf wolf = (Wolf)attacker;
+								wolf.setTarget(null);
+								solCreatureEntity.say("Stopping attacking master, the target is mesmerized");
+							}
+							
+							event.setCancelled(true);
+							return;
+						}
+					}
+				}
+				
 				try
 				{
 					Timestamp mzExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) attacker);
@@ -258,6 +283,9 @@ public class Solinia3CoreEntityListener implements Listener {
 						Utils.CancelEvent(event);;
 						return;
 					}
+					
+					
+					
 				} catch (CoreStateInitException e)
 				{
 					

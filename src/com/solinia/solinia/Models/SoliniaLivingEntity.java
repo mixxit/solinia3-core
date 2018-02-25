@@ -275,8 +275,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			if (defender.isPlayer() && isPlayer())
 			{
-				System.out.println("Start of Attack process for player " + defender.getName() + " vs player " + getBukkitLivingEntity().getName());
-
 				ISoliniaPlayer defenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender.getBukkitLivingEntity());
 				ISoliniaPlayer attackerPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
 
@@ -595,16 +593,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
 								+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
 				
-				if (getBukkitLivingEntity() instanceof Player)
-					System.out.println("Player " + defender.getName() + " was hit by Player " + getBukkitLivingEntity().getCustomName());
 			}
 			
 			defender.damageHook(event.getDamage(),getBukkitLivingEntity());
 
 			return true;
 		} else {
-			if (getBukkitLivingEntity() instanceof Player && defender.getBukkitLivingEntity() instanceof Player)
-				System.out.println("Player " + defender.getName() + " was missed (dmg 0) by Player " + getBukkitLivingEntity().getCustomName());
 			Utils.CancelEvent(event);;
 			return false;
 		}

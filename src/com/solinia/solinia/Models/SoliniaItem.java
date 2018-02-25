@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -462,15 +463,28 @@ public class SoliniaItem implements ISoliniaItem {
 			{
 				if (pet instanceof Wolf)
 				{
+					// Mez cancel target
+					Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed(targetentity);
+	
+					if (mezExpiry != null) {
+						((Creature) pet).setTarget(null);
+						Wolf wolf = (Wolf)pet;
+						wolf.setTarget(null);
+						player.sendMessage("You cannot send your pet to attack a mezzed player");
+						return false;
+					}
+					
 					if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
 					{
 						Wolf wolf = (Wolf)pet;
 						wolf.setTarget(targetentity);
 						player.sendMessage("You send your pet to attack!");
+						return true;
 					} else {
 						Wolf wolf = (Wolf)pet;
 						wolf.setTarget(null);
 						player.sendMessage("You cannot send your pet to attack itself");
+						return false;
 					}
 				}
 			}
