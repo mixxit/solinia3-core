@@ -12,6 +12,7 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
+import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreVehicleListener implements Listener {
 	Solinia3CorePlugin plugin;
@@ -31,7 +32,7 @@ public class Solinia3CoreVehicleListener implements Listener {
 				
 				if (solEntity != null)
 				if (solEntity.getNpcid() > 0)
-					event.setCancelled(true);
+					Utils.CancelEvent(event);
 				} catch (CoreStateInitException e)
 			{
 				// do nothing

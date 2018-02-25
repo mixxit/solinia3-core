@@ -14,6 +14,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CorePlayerChatListener implements Listener {
 	Solinia3CorePlugin plugin;
@@ -32,7 +33,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		
 		// We control all chat!
 		AsyncPlayerChatEvent rawEvent = (AsyncPlayerChatEvent)event.getRawEvent();
-		rawEvent.setCancelled(true);
+		Utils.CancelEvent(rawEvent);
 		
 		String currentChannel = event.getPlayer().getCurrentChannel();
 		

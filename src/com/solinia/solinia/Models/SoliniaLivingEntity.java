@@ -275,14 +275,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			if (defender.isPlayer() && isPlayer())
 			{
+				System.out.println("Start of Attack process for player " + defender.getName() + " vs player " + getBukkitLivingEntity().getName());
+
 				ISoliniaPlayer defenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender.getBukkitLivingEntity());
 				ISoliniaPlayer attackerPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
-				
+
 				if (defenderPlayer.getGroup() != null && attackerPlayer.getGroup() != null)
 				{
 					if (defenderPlayer.getGroup().getId().equals(attackerPlayer.getGroup().getId()))
 					{
-						event.setCancelled(true);
+						Utils.CancelEvent(event);;
 						return false;
 					}
 				}
@@ -305,7 +307,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (solplayer.getClassObj().isSneakFromCrouch())
 					{
 						player.sendMessage("You cannot concentrate on combat while meditating or sneaking");
-						event.setCancelled(true);
+						Utils.CancelEvent(event);;
 						return false;
 					}
 				}
@@ -317,7 +319,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (usingValidWeapon() == false) {
-			event.setCancelled(true);
+			Utils.CancelEvent(event);;
 			return false;
 		} else {
 			if (getBukkitLivingEntity().getEquipment().getItemInMainHand()
@@ -330,7 +332,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (soliniaitem.getBaneUndead() > 0 && defender.isUndead())
 						baseDamage += soliniaitem.getBaneUndead();
 				} catch (CoreStateInitException e) {
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					return false;
 				}
 			}
@@ -340,23 +342,23 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			baseDamage = 1;
 
 		if (defender == null) {
-			event.setCancelled(true);
+			Utils.CancelEvent(event);;
 			return false;
 		}
 
 		if (defender.getBukkitLivingEntity().isDead() || this.getBukkitLivingEntity().isDead()
 				|| this.getBukkitLivingEntity().getHealth() < 0) {
-			event.setCancelled(true);
+			Utils.CancelEvent(event);;
 			return false;
 		}
 
 		if (isInulvnerable()) {
-			event.setCancelled(true);
+			Utils.CancelEvent(event);;
 			return false;
 		}
 
 		if (isFeigned()) {
-			event.setCancelled(true);
+			Utils.CancelEvent(event);;
 			return false;
 		}
 
@@ -411,7 +413,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO Skill Procs
 
 		if (getBukkitLivingEntity().isDead()) {
-			event.setCancelled(true);
+			Utils.CancelEvent(event);;
 			return false;
 		}
 
@@ -466,6 +468,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				String name = defender.getBukkitLivingEntity().getName();
 				if (defender.getBukkitLivingEntity().getCustomName() != null)
 					name = defender.getBukkitLivingEntity().getCustomName();
+				
+				if (defender.isPlayer())
+					System.out.println("Detected player " + getBukkitLivingEntity().getName() + " vs player " + defender.getName());
 
 				((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent("You hit " + name + " for " + df.format(event.getDamage()) + " "
@@ -589,13 +594,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
 								+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
+				
+				if (getBukkitLivingEntity() instanceof Player)
+					System.out.println("Player " + defender.getName() + " was hit by Player " + getBukkitLivingEntity().getCustomName());
 			}
 			
 			defender.damageHook(event.getDamage(),getBukkitLivingEntity());
 
 			return true;
 		} else {
-			event.setCancelled(true);
+			if (getBukkitLivingEntity() instanceof Player && defender.getBukkitLivingEntity() instanceof Player)
+				System.out.println("Player " + defender.getName() + " was missed (dmg 0) by Player " + getBukkitLivingEntity().getCustomName());
+			Utils.CancelEvent(event);;
 			return false;
 		}
 	}

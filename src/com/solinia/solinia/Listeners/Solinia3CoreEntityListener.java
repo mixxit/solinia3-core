@@ -35,6 +35,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredListener;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -85,46 +86,46 @@ public class Solinia3CoreEntityListener implements Listener {
 				{
 					event.getEntity().sendMessage("* You are mezzed!");
 				}
-				event.setCancelled(true);
+				Utils.CancelEvent(event);;
 				return;
 			}
 		} catch (CoreStateInitException e)
 		{
 			
 		}
-
+		
 		try {
 			// Me
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-			if (solEntity.isUndead() && event.getTarget() instanceof LivingEntity) {
+			if (solEntity.isUndead() && !(event.getEntity() instanceof Player) && event.getTarget() instanceof LivingEntity) {
 				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),SpellEffectType.InvisVsUndead)
 				 || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.InvisVsUndead2)) {
 					((Creature) event.getEntity()).setTarget(null);
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					return;
 				}
 			}
 			
-			if (!solEntity.isUndead() && !solEntity.isAnimal() && event.getTarget() instanceof LivingEntity) {
+			if (!solEntity.isUndead()  && !(event.getEntity() instanceof Player) && !solEntity.isAnimal() && event.getTarget() instanceof LivingEntity) {
 				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),SpellEffectType.Invisibility)
 				 || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.Invisibility2)) {
 					((Creature) event.getEntity()).setTarget(null);
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					return;
 				}
 			}
 			
-			if (solEntity.isAnimal() && event.getTarget() instanceof LivingEntity) {
+			if (solEntity.isAnimal()  && !(event.getEntity() instanceof Player) &&  event.getTarget() instanceof LivingEntity) {
 				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),SpellEffectType.InvisVsAnimals)
 				 || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.ImprovedInvisAnimals)) {
 					((Creature) event.getEntity()).setTarget(null);
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					return;
 				}
 			}
 			
 			// rogue sneak
-			if (event.getTarget() instanceof Player)
+			if (event.getTarget() instanceof Player && !(event.getEntity() instanceof Player))
 			{
 				Player targetPlayer = (Player)event.getTarget();
 				if (targetPlayer.isSneaking())
@@ -134,22 +135,32 @@ public class Solinia3CoreEntityListener implements Listener {
 					{
 						if (player.getClassObj().isSneakFromCrouch())
 						{
-							event.setCancelled(true);
+							Utils.CancelEvent(event);;
 							return;
 						}
 					}
 				}
 			}
-
-			// Mez cancel target
-			Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
-					.getMezzed((LivingEntity) event.getEntity());
-
-			if (mezExpiry != null) {
-				((Creature) event.getEntity()).setTarget(null);
-				event.setCancelled(true);
-				return;
+			
+			// Player still operates on all these commands
+			
+			if (event.getEntity() != null && event.getTarget() != null)
+			{
+				
+				if (!(event.getEntity() instanceof Player))
+				{
+					// Mez cancel target
+					Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getTarget());
+	
+					if (mezExpiry != null) {
+						((Creature) event.getEntity()).setTarget(null);
+						event.getEntity().sendMessage("The target is mezzed, you cannot hit it");
+						Utils.CancelEvent(event);;
+						return;
+					}
+				}
 			}
+			
 		} catch (CoreStateInitException e) {
 			return;
 		}
@@ -183,7 +194,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 				boolean cancelFall = solplayer.getSafefallCheck();
 				if (cancelFall == true) {
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					solplayer.emote(
 							ChatColor.GRAY + "* " + solplayer.getFullName() + " lands softly, breaking their fall");
 					solplayer.tryIncreaseSkill("SAFEFALL", 1);
@@ -203,7 +214,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (!(event instanceof EntityDamageByEntityEvent)) {
 			return;
 		}
-
+		
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
 		
 		// If the event is being blocked by a shield negate 85% of it unless its thorns then always allow it through
@@ -218,8 +229,6 @@ public class Solinia3CoreEntityListener implements Listener {
 				damagecause.setDamage(DamageModifier.BLOCKING, newarmour);
 			}
 		}
-		
-		
 		
 		// Remove buffs on attacker (invis should drop)
 		// and check they are not mezzed
@@ -245,7 +254,8 @@ public class Solinia3CoreEntityListener implements Listener {
 						{
 							attacker.sendMessage("* You are mezzed!");
 						}
-						event.setCancelled(true);
+						
+						Utils.CancelEvent(event);;
 						return;
 					}
 				} catch (CoreStateInitException e)
@@ -313,7 +323,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
 				if (soldefender.isInvulnerable()) {
 					event.setDamage(0);
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					if (damagecause.getDamager() instanceof Player) {
 						((Player) damagecause.getDamager())
 						.sendMessage("* Your attack was prevented as the target is Invulnerable!");
@@ -344,7 +354,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					
 					if (event.getDamage() <= 0)
 					{
-						event.setCancelled(true);
+						Utils.CancelEvent(event);;
 						if (damagecause.getDamager() instanceof Player)
 						{
 							((Player)damagecause.getDamager()).sendMessage("* Your attack was absorbed by the targets Rune");
@@ -454,11 +464,11 @@ public class Solinia3CoreEntityListener implements Listener {
 						Wolf wolf = (Wolf) event.getEntity();
 						if (wolf != null) {
 							if (wolf.getTarget() == null || !wolf.getTarget().equals(attacker)) {
-								event.setCancelled(true);
+								Utils.CancelEvent(event);;
 								return;
 							}
 						} else {
-							event.setCancelled(true);
+							Utils.CancelEvent(event);;
 							return;
 						}
 					}
@@ -493,7 +503,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				{
 					event.getEntity().sendMessage("* You are mezzed!");
 				}
-				event.setCancelled(true);
+				Utils.CancelEvent(event);;
 				return;
 			}
 		} catch (CoreStateInitException e)
@@ -509,7 +519,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (seconditem != null) {
 					if (seconditem.getType() == Material.BOW) {
 						shooter.sendMessage("You cannot shoot while you have a bow in your offhand");
-						event.setCancelled(true);
+						Utils.CancelEvent(event);;
 					}
 				}
 			}
@@ -528,7 +538,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				{
 					event.getPlayer().sendMessage("* You are mezzed!");
 				}
-				event.setCancelled(true);
+				Utils.CancelEvent(event);;
 				return;
 			}
 		} catch (CoreStateInitException e)
@@ -654,8 +664,6 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (ilowlvl < 1) {
 					ilowlvl = 1;
 				}
-
-				System.out.println("Group Min: " + ilowlvl + " Group Max: " + ihighlvl);
 
 				if (player.getLevel() < ilowlvl) {
 					// Only award player the experience

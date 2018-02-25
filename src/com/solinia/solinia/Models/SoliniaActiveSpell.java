@@ -1692,6 +1692,7 @@ public class SoliniaActiveSpell {
 				Creature creature = (Creature)getLivingEntity();
 				creature.setTarget(null);
 			}
+			
 			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
 			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
 		} catch (CoreStateInitException e)

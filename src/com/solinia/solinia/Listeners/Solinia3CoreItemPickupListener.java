@@ -14,6 +14,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -47,7 +48,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	} else {
 	            		// this is an item that is broken       
 	            		e.getPlayer().sendMessage("This item is no longer implemented");
-	            		e.setCancelled(true);
+	            		Utils.CancelEvent(e);
 	            		e.getItem().remove();
 	            	}
 	            }
@@ -90,7 +91,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	} else {
 	            		// this is an item that is broken      
 	            		e.getPlayer().sendMessage("This item is no longer implemented");
-	            		e.setCancelled(true);
+	            		Utils.CancelEvent(e);
 	            		e.getItem().remove();
 	            		e.getPlayer().updateInventory();
 	            	}

@@ -24,6 +24,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -99,6 +101,12 @@ public class Utils {
 		double loss = 0;
 		loss = (double) (player.getLevel() * (player.getLevel() / 18.0) * 12000);
 		return (double) loss;
+	}
+	
+	public static void CancelEvent(Cancellable event)
+	{
+		//System.out.println("Cancel event found for Event Type: " + event.getClass().getName());
+		event.setCancelled(true);
 	}
 
 	public static List<WorldWidePerk> getActiveWorldWidePerks() {
@@ -1048,21 +1056,21 @@ public class Utils {
 					return;
 
 				if (solplayer.getClassObj() == null) {
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;
 				}
 
 				if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName())) {
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;
 				}
 
 				if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
-					event.setCancelled(true);
+					Utils.CancelEvent(event);;
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;

@@ -2,6 +2,7 @@ package com.solinia.solinia;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -148,6 +149,7 @@ import com.solinia.solinia.Timers.StateCommitTimer;
 
 import de.slikey.effectlib.EffectManager;
 import me.dadus33.chatitem.api.ChatItemAPI;
+import me.yamakaja.runtimetransformer.RuntimeTransformer;
 import net.milkbowl.vault.economy.Economy;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -198,6 +200,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			discordadminchannelid = config.getString("discordadminchannelid");
 			setupDiscordClient();
 		}
+		
+		// For debugging
+		//new RuntimeTransformer( EntityDamageEventTransformer.class );
 		
 		effectManager = new EffectManager(this);
 
