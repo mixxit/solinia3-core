@@ -34,7 +34,7 @@ public class CommandInspiration implements CommandExecutor {
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Legs) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manalegs");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Feet) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manafeet");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x 100% Experience Potion " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy xpbottle");
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x next tier gear set" + ChatColor.RESET + " - Cost: 35 inspiration : /inspiration buy gearset");
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x next tier gear set" + ChatColor.RESET + " - Cost: 35 inspiration : /inspiration buy gear");
 				sender.sendMessage("-----------------");
 				sender.sendMessage("Sub Commands: " + ChatColor.LIGHT_PURPLE + "sites, buy, send");
 				
