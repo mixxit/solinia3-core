@@ -61,6 +61,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		{
 			if(solplayer.getAARanks().size() > 0)
 			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("MENTALCLARITY");
+			
 		} catch (CoreStateInitException e)
 		{
 			
@@ -74,6 +75,27 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			aamanaregenrank = Utils.getRankOfAAAbility(player, aa);
 			manaregen += aamanaregenrank;
 		}
+		
+		ISoliniaAAAbility emaa = null;
+		try
+		{
+			if(solplayer.getAARanks().size() > 0)
+				emaa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("MENTALCLARITY");
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		int emaamanaregenrank = 0;
+		
+		if (emaa != null)
+		{
+			if(solplayer.getAARanks().size() > 0)
+			emaamanaregenrank = Utils.getRankOfAAAbility(player, emaa);
+			manaregen += emaamanaregenrank;
+		}
+		
 		
 		// Hp and Mana Regen from Items
 		int hpregen = 0;
