@@ -379,6 +379,17 @@ public class Solinia3CoreEntityListener implements Listener {
 					
 					((Player)damagecause.getDamager()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You SPELLDMG'd " + name + " for " + df.format(event.getDamage()) + " [" + df.format(recipient.getHealth()-event.getDamage()) + "/" + df.format(recipient.getMaxHealth()) + "]"));
 				}
+				
+				if (event.getEntity() instanceof LivingEntity)
+				{
+					ISoliniaLivingEntity solentity;
+					try {
+						solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+						solentity.damageHook(event.getDamage(),damagecause.getDamager());
+					} catch (CoreStateInitException e) {
+						// skip
+					}
+				}
 				return;
 			}
 			try {
@@ -455,6 +466,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				
 				if (!(event instanceof EntityDamageByEntityEvent))
 				{
+					soldefender.damageHook(event.getDamage(),damagecause.getDamager());
 					return;
 				}
 				

@@ -368,6 +368,10 @@ public class ChannelManager implements IChannelManager {
 					sendTopToDiscordChannel(discordChannel,"");
 
 				break;
+			case "?moblvl":
+				if (commands.length > 2)
+					sendMobLvlToDiscordChannel(discordChannel,Integer.parseInt(commands[1]),Integer.parseInt(commands[2]));
+				break;
 			case "?loot":
 				if (commands.length > 1)
 				{
@@ -384,6 +388,40 @@ public class ChannelManager implements IChannelManager {
 				break;
 			default:
 				return;
+		}
+	}
+
+	private void sendMobLvlToDiscordChannel(DiscordChannel discordChannel, int mobmin, int mobmax) {
+		String list = "";
+		String targetChannelId = getDefaultDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = getAdminDiscordChannel();
+		
+		try
+		{
+			int count = 0;
+			
+			for(ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
+			{
+				if (npc.isPet())
+					continue;
+								
+				if (npc.getLevel() >= mobmin && npc.getLevel() <= mobmax)
+				{
+					list += npc.getName() + "(" + npc.getLevel() + ") ";
+					count++;
+				}
+			}
+			
+			if (count > 30)
+			{
+				sendToDiscordMC(null,targetChannelId,"Too many mobs found, try lowering your level range");
+			} else {
+				sendToDiscordMC(null,targetChannelId,"Matching Npcs: " + list);
+			}
+		} catch (CoreStateInitException e)
+		{
+			// ignore it
 		}
 	}
 

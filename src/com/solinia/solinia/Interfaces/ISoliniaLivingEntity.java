@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -187,5 +188,9 @@ public interface ISoliniaLivingEntity
 	public boolean isSpeaksAllLanguages();
 	
 	public void setSpeaksAllLanguages(boolean speaksAllLanguages);
+
+	void damage(double damage, Entity sourceEntity);
+
+	void damageHook(double damage, Entity sourceEntity);
 
 }

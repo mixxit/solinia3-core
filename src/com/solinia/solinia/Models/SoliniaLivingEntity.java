@@ -490,7 +490,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* You double attack!");
 						tryIncreaseSkill("DOUBLEATTACK", 1);
 					}
-					defender.getBukkitLivingEntity().damage(my_hit.damage_done, this.getBukkitLivingEntity());
+					defender.damage(my_hit.damage_done, this.getBukkitLivingEntity());
 				}
 
 				try {
@@ -590,12 +590,40 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
 								+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
 			}
+			
+			defender.damageHook(event.getDamage(),getBukkitLivingEntity());
 
 			return true;
 		} else {
 			event.setCancelled(true);
 			return false;
 		}
+	}
+	
+	@Override
+	public void damageHook(double damage, Entity sourceEntity) {
+		if (isPlayer())
+		{
+			try {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+				if (solPlayer.getGroup() != null)
+				{
+					if (this.getBukkitLivingEntity().getHealth() < ((this.getBukkitLivingEntity().getMaxHealth() / 100) * 10))
+						solPlayer.getGroup().sendGroupMessage(solPlayer.getBukkitPlayer(), "[Notification] I am low on health!");
+				}
+				
+			} catch (CoreStateInitException e) {
+				// skip
+			}
+		}
+	}
+
+	
+	@Override
+	public void damage(double damage, Entity sourceEntity)
+	{
+		damageHook(damage, sourceEntity);
+		getBukkitLivingEntity().damage(damage, sourceEntity);
 	}
 
 	private void triggerDefensiveProcs(ISoliniaLivingEntity defender, int damage, boolean arrowHit) {
@@ -677,7 +705,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (isPlayer()) {
 					((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* "
 							+ defender.getBukkitLivingEntity().getCustomName() + " ripostes your attack!");
-					((Player) getBukkitLivingEntity()).damage(originalDamage, getBukkitLivingEntity());
+					damage(originalDamage, getBukkitLivingEntity());
 				}
 			}
 
