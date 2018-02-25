@@ -1595,14 +1595,10 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyTauntSpell(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!isOwnerPlayer())
-			return;
-		
 		if (!(getLivingEntity() instanceof Creature))
 			return;
 		
 		Creature creature = (Creature)getLivingEntity();
-		
 		Entity source = Bukkit.getEntity(getSourceUuid());
 		if (source instanceof LivingEntity)
 			creature.setTarget((LivingEntity)source);
