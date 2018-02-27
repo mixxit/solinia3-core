@@ -49,12 +49,14 @@ public class CommandSetClass implements CommandExecutor {
 				ISoliniaPlayer soliniaplayer = SoliniaPlayerAdapter.Adapt(player);
 				if (soliniaplayer.hasChosenRace() == false)
 		        {
+					SendProfessionList(sender,rawpros,prolistunformatted);
 		        	sender.sendMessage("You cannot pick a profession until you set your race with /setrace"); 
 		        	return true;
 		        }
 		        
 		        if (soliniaplayer.hasChosenClass() == true)
 		        {
+		        	SendProfessionList(sender,rawpros,prolistunformatted);
 		        	sender.sendMessage("You cannot pick a profession as you have already chosen one");
 		        	return true;
 		        }
