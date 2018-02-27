@@ -154,6 +154,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET);
+		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- defaultheadmaterial: " + ChatColor.GOLD + getDefaultHeadMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultchestmaterial: " + ChatColor.GOLD + getDefaultChestMaterial() + ChatColor.RESET);
@@ -318,6 +319,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "sneakfromcrouch":
 			this.setSneakFromCrouch(Boolean.parseBoolean(value));
+			break;
+		case "description":
+			this.setDescription(value);
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel");
