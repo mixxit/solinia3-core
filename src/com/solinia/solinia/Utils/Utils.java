@@ -105,7 +105,7 @@ public class Utils {
 	
 	public static void CancelEvent(Cancellable event)
 	{
-		//System.out.println("Cancel event found for Event Type: " + event.getClass().getName());
+		//System.out.println("Cancel event found for Event Type: " + event.getClassObj().getName());
 		event.setCancelled(true);
 	}
 

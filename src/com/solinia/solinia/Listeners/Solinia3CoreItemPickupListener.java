@@ -139,23 +139,28 @@ public class Solinia3CoreItemPickupListener implements Listener {
 					if (item.getAllowedClassNames().size() > 0)
 		        	{
 		        		ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(e.getPlayer());
-		        		if (solPlayer.getGroup() != null)
+		        		if (solPlayer.getGroup() != null && solPlayer.getGroup().getMembers() != null)
 		        			for(UUID playerUuid : solPlayer.getGroup().getMembers())
 		        			{
+		        				if (playerUuid.equals(e.getPlayer().getUniqueId()))
+		        					continue;
+		        				
 		        				Player groupMember = Bukkit.getPlayer(playerUuid);
 		        				ISoliniaPlayer groupSolPlayer = SoliniaPlayerAdapter.Adapt(groupMember);
 		        				
 		        				if (groupSolPlayer != null)
-	        					if (groupSolPlayer.getClass() != null)
-	        					if (item.getAllowedClassNames().contains(groupSolPlayer.getClass().getName()))
-	        					{
-	        						TextComponent tc = new TextComponent();
-	        						tc.setText(groupSolPlayer.getFullName() + " pickedup an item of interest you class: [" + item.getDisplayname() + "]");
-	        						
-	        						tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-	        								new ComponentBuilder(item.asJsonString()).create()));
-	        						groupSolPlayer.getBukkitPlayer().spigot().sendMessage(tc);
-	        					}
+		        				{
+		        					if (groupSolPlayer.getClassObj() != null)
+		        					if (item.getAllowedClassNames().contains(groupSolPlayer.getClassObj().getName().toUpperCase()))
+		        					{
+		        						TextComponent tc = new TextComponent();
+		        						tc.setText("* " + groupSolPlayer.getFullName() + " picked up an item of interest to your class: [" + ChatColor.AQUA + item.getDisplayname() + ChatColor.RESET + "]");
+		        						
+		        						tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+		        								new ComponentBuilder(item.asJsonString()).create()));
+		        						groupSolPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+		        					}
+		        				}
 		        			}
 		        	}
 				} catch (SoliniaItemException e1) {
