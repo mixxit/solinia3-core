@@ -1,22 +1,32 @@
 package com.solinia.solinia.Listeners;
 
 import java.util.Map;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Solinia3CoreItemPickupListener implements Listener {
 	Solinia3CorePlugin plugin;
@@ -119,6 +129,40 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	        		}
 	            }
 		    }
+	        
+	        // group messages
+	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+		    {
+	        	ISoliniaItem item;
+				try {
+					item = SoliniaItemAdapter.Adapt(pickedUpItemStack);
+					if (item.getAllowedClassNames().size() > 0)
+		        	{
+		        		ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(e.getPlayer());
+		        		if (solPlayer.getGroup() != null)
+		        			for(UUID playerUuid : solPlayer.getGroup().getMembers())
+		        			{
+		        				Player groupMember = Bukkit.getPlayer(playerUuid);
+		        				ISoliniaPlayer groupSolPlayer = SoliniaPlayerAdapter.Adapt(groupMember);
+		        				
+		        				if (groupSolPlayer != null)
+	        					if (groupSolPlayer.getClass() != null)
+	        					if (item.getAllowedClassNames().contains(groupSolPlayer.getClass().getName()))
+	        					{
+	        						TextComponent tc = new TextComponent();
+	        						tc.setText(groupSolPlayer.getFullName() + " pickedup an item of interest you class: [" + item.getDisplayname() + "]");
+	        						
+	        						tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+	        								new ComponentBuilder(item.asJsonString()).create()));
+	        						groupSolPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+	        					}
+		        			}
+		        	}
+				} catch (SoliniaItemException e1) {
+				}
+	        	
+		    }
+	        
         } catch (CoreStateInitException coreException)
         {
         	// do nothing
