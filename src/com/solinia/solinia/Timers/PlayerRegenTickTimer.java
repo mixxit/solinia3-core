@@ -122,7 +122,14 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		for (ItemStack itemstack : itemStackBonuses) {
 			if (itemstack == null)
 				continue;
-			if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999) {
+			
+	        if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+	        {
+	        	player.sendMessage("You appear to have items in your inventory that contain a respiration enchantment greater than 999, please drop and pick this item back up");
+	        }
+
+			
+			if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999) {
 				
 				try {
 					

@@ -41,7 +41,7 @@ public class CommandCreateItem implements CommandExecutor {
 	        	return false;
 	        }
 	        
-	        if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+	        if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999)
 	        {
 	        	player.sendMessage("You can only create a new item from core minecraft items, not solinia items");
 	        	return true;

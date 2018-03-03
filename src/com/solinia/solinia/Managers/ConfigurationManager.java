@@ -394,10 +394,16 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public ISoliniaItem getItem(ItemStack itemStack) {
-		int Id = (itemStack.getEnchantmentLevel(Enchantment.OXYGEN) - 1000);
+		int Id = (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) - 1000);
 		return getItem(Id);
 	}
 
+	@Override
+	public ISoliniaItem getItemByOxygen(ItemStack itemStack) {
+		int Id = (itemStack.getEnchantmentLevel(Enchantment.OXYGEN) - 1000);
+		return getItem(Id);
+	}
+	
 	@Override
 	public ISoliniaClass getClassObj(String classname) {
 

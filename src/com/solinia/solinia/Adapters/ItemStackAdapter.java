@@ -302,7 +302,7 @@ public class ItemStackAdapter {
 
 		i.setLore(loretxt);
 		stack.setItemMeta(i);
-		stack.addUnsafeEnchantment(Enchantment.OXYGEN, 1000 + soliniaItem.getId());
+		stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1000 + soliniaItem.getId());
 
 		if (soliniaItem.getEnchantment1() != null) {
 			if (soliniaItem.getEnchantment1val() > 0) {

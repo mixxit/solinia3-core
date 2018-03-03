@@ -11,7 +11,7 @@ import com.solinia.solinia.Managers.StateManager;
 public class SoliniaItemAdapter {
 	public static ISoliniaItem Adapt(ItemStack itemStack) throws SoliniaItemException, CoreStateInitException
 	{
-		if (!(itemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999))
+		if (!(itemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999))
 			throw new SoliniaItemException("Not a valid solinia item");
 		
 		return StateManager.getInstance().getConfigurationManager().getItem(itemStack);

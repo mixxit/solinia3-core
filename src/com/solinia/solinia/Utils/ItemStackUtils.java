@@ -32,7 +32,7 @@ public class ItemStackUtils {
 	
 	public static Integer getAugmentationItemId(ItemStack itemStack)
 	{
-		if (!(itemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999))
+		if (!(itemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999))
 			return null;
 		
 		for(String loreLine : itemStack.getItemMeta().getLore())

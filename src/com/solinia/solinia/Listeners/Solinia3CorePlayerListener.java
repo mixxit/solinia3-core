@@ -140,7 +140,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	    	if (itemstack == null)
 	    		return;
 	    	
-	    	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+	    	if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 		    {
 
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getPlayer());
@@ -248,7 +248,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				}
 				
-				if (targetItemStack.getEnchantmentLevel(Enchantment.OXYGEN) < 1000
+				if (targetItemStack.getEnchantmentLevel(Enchantment.DURABILITY) < 1000
 						|| targetItemStack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
 					event.getView().getPlayer().sendMessage("This augmentation cannot be applied to this item type");
@@ -326,7 +326,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				ItemStack itemstack = event.getCurrentItem();
 	        	if (itemstack == null)
 	        		return;
-	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+	        	if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
 	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
@@ -363,7 +363,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        	if (itemstack == null)
 	        		return;
 	        	
-	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+	        	if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
 	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 	        		
@@ -400,7 +400,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        	ItemStack itemstack = event.getCursor();
 	        	if (itemstack == null)
 	        		return;
-	        	if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
+	        	if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 && !itemstack.getType().equals(Material.ENCHANTED_BOOK))
 			    {
 	        		ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 	        		if (soliniaitem.getAllowedClassNames().size() == 0)
@@ -445,7 +445,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onDropItemEvent(PlayerDropItemEvent event)
 	{
 		// This is to stop drops after closing shop
-		if (event.getItemDrop().getItemStack().getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+		if (event.getItemDrop().getItemStack().getEnchantmentLevel(Enchantment.DURABILITY) > 999)
 		if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().startsWith("Display Item: "))
 		{
 			event.getItemDrop().getItemStack().setAmount(0);

@@ -346,7 +346,7 @@ public class Utils {
 			if (itemstack.getType().equals(Material.AIR))
 				continue;
 
-			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.DURABILITY);
 			if (tmpitemid < 1000)
 				continue;
 
@@ -377,7 +377,7 @@ public class Utils {
 			if (itemstack.getType().equals(Material.AIR))
 				continue;
 
-			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.DURABILITY);
 			if (tmpitemid < 1000)
 				continue;
 
@@ -1047,7 +1047,7 @@ public class Utils {
 			return;
 		}
 
-		if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+		if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999
 				&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 			try {
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
@@ -1109,7 +1109,7 @@ public class Utils {
 					itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInHand());
 
 			for (ItemStack itemstack : itemstacks) {
-				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+				if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
@@ -4868,7 +4868,7 @@ public class Utils {
 			// does not use item in hand
 
 			for (ItemStack itemstack : itemstacks) {
-				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+				if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
@@ -4996,7 +4996,7 @@ public class Utils {
 				return false;
 			}
 			
-			if (identifierStack.getEnchantmentLevel(Enchantment.OXYGEN) != 999)
+			if (identifierStack.getEnchantmentLevel(Enchantment.DURABILITY) != 999)
 			{
 				//System.out.println("Not 999 oxy");
 				return false;
@@ -5069,7 +5069,7 @@ public class Utils {
 				itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInOffHand());
 
 			for (ItemStack itemstack : itemstacks) {
-				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+				if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
@@ -5123,7 +5123,7 @@ public class Utils {
 				itemstacks.add(solplayer.getBukkitPlayer().getInventory().getItemInOffHand());
 
 			for (ItemStack itemstack : itemstacks) {
-				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+				if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
@@ -5266,7 +5266,7 @@ public class Utils {
 			// does not use item in hand
 
 			for (ItemStack itemstack : itemstacks) {
-				if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+				if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);

@@ -39,12 +39,38 @@ public class Solinia3CoreItemPickupListener implements Listener {
     public void PickupItem(PlayerPickupItemEvent e) {
         ItemStack pickedUpItemStack = e.getItem().getItemStack();
         
+        // Replace oxygen items with durability items
+        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+        {
+        	e.getPlayer().sendMessage("Detected an item in the old format, converting to the new format. Please drop all your old items and pick them up if you are having problems with them");
+        	try
+        	{
+	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItemByOxygen(pickedUpItemStack);
+	            if (pickedUpItemStack != null)
+	            {
+	            	if (latestitem != null)
+	            	{
+	            		ItemStack latestitemstack = latestitem.asItemStack();
+	            		pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
+	            	} else {
+	            		// this is an item that is broken       
+	            		e.getPlayer().sendMessage("This item is no longer implemented");
+	            		Utils.CancelEvent(e);
+	            		e.getItem().remove();
+	            	}
+	            }
+        	} catch (CoreStateInitException eOxy)
+        	{
+        		
+        	}
+        }
+        
         String temporaryGuid = null;
         Integer augmentationItemId = null;
         
         try
         {
-	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK))
+	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 && pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK))
 		    {
 	        	e.getPlayer().sendMessage(ChatColor.GRAY + "You have picked up an ability! To use it, hold it in your hand and right click!");
 	        	
@@ -71,7 +97,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            }
 		    }
 	        
-	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999 && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
+	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
 		    {
 	        	Map<Enchantment, Integer> oldenchantments = pickedUpItemStack.getEnchantments();
 	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
@@ -131,7 +157,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 		    }
 	        
 	        // group messages
-	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999)
 		    {
 	        	ISoliniaItem item;
 				try {

@@ -43,7 +43,7 @@ public class SoliniaResurrectionItem {
 		loretxt.add(playeruuidb64);
 	    i.setLore(loretxt);
 	    stack.setItemMeta(i);
-	    stack.addUnsafeEnchantment(Enchantment.OXYGEN, 1);
+	    stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
 	    return stack;
 	}
 	

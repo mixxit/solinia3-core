@@ -159,7 +159,7 @@ public class EntityManager implements IEntityManager {
 						itemStack.setDurability((short) 3);
 						itemMeta.setDisplayName("MERCHANT: " + soliniaNpcMerchant.getName());
 						itemStack.setItemMeta(itemMeta);
-						itemStack.addUnsafeEnchantment(Enchantment.OXYGEN, 999);
+						itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 999);
 					}
 					
 					// Final Row right

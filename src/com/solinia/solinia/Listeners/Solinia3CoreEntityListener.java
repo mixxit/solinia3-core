@@ -455,7 +455,7 @@ public class Solinia3CoreEntityListener implements Listener {
 								if (mainitem.getType() == Material.BOW) {
 									int dmgmodifier = 0;
 
-									if ((mainitem.getEnchantmentLevel(Enchantment.OXYGEN) > 999)) {
+									if ((mainitem.getEnchantmentLevel(Enchantment.DURABILITY) > 999)) {
 										try
 										{
 										ISoliniaItem item = SoliniaItemAdapter.Adapt(mainitem);

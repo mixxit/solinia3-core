@@ -388,7 +388,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 				if (itemstack.getType().equals(Material.AIR))
 					continue;
 	
-				int ench = itemstack.getEnchantmentLevel(Enchantment.OXYGEN);
+				int ench = itemstack.getEnchantmentLevel(Enchantment.DURABILITY);
 				if (ench < 1000)
 					continue;
 	

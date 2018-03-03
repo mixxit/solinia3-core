@@ -306,4 +306,6 @@ public interface IConfigurationManager {
 	int getNextAccountClaimId();
 
 	List<SoliniaAccountClaim> getAccountClaims();
+
+	ISoliniaItem getItemByOxygen(ItemStack itemStack);
 }

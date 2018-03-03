@@ -1387,7 +1387,7 @@ public class SoliniaActiveSpell {
 		}
 		
 		ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
-		if (item.getEnchantmentLevel(Enchantment.OXYGEN) != 1)
+		if (item.getEnchantmentLevel(Enchantment.DURABILITY) != 1)
 		{
 			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (EC)");
 			return;	

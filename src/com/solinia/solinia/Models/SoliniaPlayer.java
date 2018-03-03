@@ -853,7 +853,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return;
 				}
 
-				if ((!(itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)))
+				if ((!(itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999)))
 					return;
 
 				// We have our custom item id, lets check it exists
@@ -1338,7 +1338,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (itemstack == null)
 				continue;
 
-			if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999
+			if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999
 					&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);

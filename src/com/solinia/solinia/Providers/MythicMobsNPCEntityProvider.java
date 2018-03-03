@@ -213,7 +213,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			customitem += "  Damage: " + item.getDamage() + "\r\n";
 		}
 		customitem += "  Enchantments:\r\n";
-		customitem += "    OXYGEN: " + (1000 + item.getId()) + "\r\n";
+		customitem += "    DURABILITY: " + (1000 + item.getId()) + "\r\n";
 		return customitem;
 	}
 
