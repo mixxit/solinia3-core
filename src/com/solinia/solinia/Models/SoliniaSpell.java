@@ -2940,6 +2940,37 @@ public class SoliniaSpell implements ISoliniaSpell {
 						successGroupTeleport = true;
 					
 					return successGroupTeleport;
+				case GroupClientAndPet:
+					boolean successGroupClient = false;
+					
+					if (!(sourceEntity instanceof Player))
+						return false;
+					
+					ISoliniaPlayer playerGroupClient = SoliniaPlayerAdapter.Adapt((Player)sourceEntity);
+					ISoliniaGroup groupClient = playerGroupClient.getGroup();
+					
+					if (groupClient != null)
+					{
+						for(UUID uuidClient : playerGroupClient.getGroup().getMembers())
+						{
+							Entity e = Bukkit.getEntity(uuidClient);
+							if (!(e instanceof Player))
+								continue;
+							
+							if (groupClient.getMembers().contains(e.getUniqueId()))
+							{
+								boolean loopSuccess3 = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, (LivingEntity)e,this,sourceEntity);
+								if (loopSuccess3 == true)
+									successGroupClient = true;
+							}
+						}
+					}
+					
+					boolean selfSuccessClient = StateManager.getInstance().getEntityManager().addActiveEntitySpell(plugin, sourceEntity,this,sourceEntity);
+					if (selfSuccessClient == true)
+						successGroupClient = true;
+					
+					return successGroupClient;
 				case Group:
 					boolean successGroup = false;
 					
@@ -3759,7 +3790,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public boolean isGroupSpell() {
 		if (Utils.getSpellTargetType(getTargettype()) == SpellTargetType.AEBard ||
 				Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Group ||
-						Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupTeleport)
+						Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupTeleport ||
+						Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupClientAndPet)
 			return true;
 
 		return false;

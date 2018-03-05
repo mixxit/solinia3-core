@@ -424,8 +424,9 @@ public class SoliniaActiveSpell {
 		case Revive: 
 			applyRevive(spellEffect,soliniaSpell,casterLevel);
 			return;
-		case SummonPC
-			: return;
+		case SummonPC: 
+			applySummonGroup(spellEffect, soliniaSpell, casterLevel);
+			return;
 		case Teleport: 
 			if (getLivingEntity() instanceof Player)
 			applyTeleport(spellEffect,soliniaSpell,casterLevel);
@@ -1603,6 +1604,16 @@ public class SoliniaActiveSpell {
 		if (source instanceof LivingEntity)
 			creature.setTarget((LivingEntity)source);
 	}
+	
+	private void applySummonGroup(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		Entity source = Bukkit.getEntity(getSourceUuid());
+		if (source != null && source instanceof Player && getLivingEntity() instanceof Player)
+		{
+			if (!source.getUniqueId().equals(getLivingEntity().getUniqueId()))
+				getLivingEntity().teleport(source);
+		}
+	}
+
 
 	private void applyTeleport(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
