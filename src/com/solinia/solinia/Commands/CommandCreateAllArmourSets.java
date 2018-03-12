@@ -82,7 +82,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			{
 				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true, sender.isOp());
 				for (Integer item : items) {
-					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, count, false, chance);
+					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, 1, false, chance);
 					itemscreated += item + " ";
 				}
 			}

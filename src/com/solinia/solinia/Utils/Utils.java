@@ -5486,4 +5486,12 @@ public class Utils {
 				SpecialEffectUtils.playLegacy(entity, activeSpell);
 		}
 	}
+
+	public static void dismountEntity(LivingEntity livingEntity) {
+		Entity vehicle = livingEntity.getVehicle();
+		if (vehicle != null)
+		{
+			vehicle.eject();
+		}
+	}
 }

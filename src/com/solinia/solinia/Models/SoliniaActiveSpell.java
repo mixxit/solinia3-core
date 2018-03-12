@@ -1246,6 +1246,8 @@ public class SoliniaActiveSpell {
 
 	private void applyTossUpEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		getLivingEntity().setVelocity(new Vector(0,5,0));
+		Utils.dismountEntity(getLivingEntity());
+
         return;
 	}
 
@@ -1642,7 +1644,10 @@ public class SoliniaActiveSpell {
 		{
 			Block block = getLivingEntity().getTargetBlock(null, soliniaSpell.getRange());
 			if (block != null)
+			{
+				Utils.dismountEntity(getLivingEntity());
 				getLivingEntity().teleport(block.getLocation());
+			}
 		} catch (Exception e)
 		{
 			// out of world block
@@ -1670,6 +1675,8 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		Utils.dismountEntity(getLivingEntity());
+
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
 	}
 
@@ -1682,6 +1689,8 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		Utils.dismountEntity(getLivingEntity());
+
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
 		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
 	}
@@ -1702,6 +1711,15 @@ public class SoliniaActiveSpell {
 			{
 				Creature creature = (Creature)getLivingEntity();
 				creature.setTarget(null);
+				
+			}
+			
+			Utils.dismountEntity(getLivingEntity());
+			
+			Entity vehicle = getLivingEntity().getVehicle();
+			if (vehicle != null)
+			{
+				vehicle.eject();
 			}
 			
 			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
@@ -1804,6 +1822,8 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyMovementSpeedEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		Utils.dismountEntity(getLivingEntity());
+
 		int normalize = spellEffect.getBase();
 		// value is a percentage but we range from 1-5 (we can stretch to 10)
 		normalize = normalize / 10;
