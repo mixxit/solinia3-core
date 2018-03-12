@@ -407,7 +407,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 							// always give the next tier up and then we will reset the player requirements ot current level
 							// this ability is for special seasonal rewards only
 							playertier += 1;
-							List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false);
+							List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, true);
 							
 							for(int itemid : items)
 							{

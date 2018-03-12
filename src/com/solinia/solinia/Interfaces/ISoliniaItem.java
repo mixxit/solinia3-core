@@ -268,4 +268,8 @@ public interface ISoliniaItem {
 	void setSkillModType2(SkillType skillModType2);
 
 	int getSkillModValue4();
+
+	boolean isOperatorCreated();
+
+	void setOperatorCreated(boolean operatorCreated);
 }

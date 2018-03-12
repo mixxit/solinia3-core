@@ -22,9 +22,9 @@ public class CommandCreateItem implements CommandExecutor {
 		if (sender instanceof Player)
 		{
 			Player player = (Player)sender;
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.createitem"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -37,7 +37,7 @@ public class CommandCreateItem implements CommandExecutor {
 			itemstack = player.getInventory().getItemInMainHand();
 	        if (itemstack.getType().equals(Material.AIR))
 	        {
-	        	player.sendMessage(ChatColor.GRAY+"Empty item in hand");
+	        	player.sendMessage(ChatColor.GRAY+"Empty item in hand. You must hold the item you want to make a new item from");
 	        	return false;
 	        }
 	        
@@ -54,8 +54,9 @@ public class CommandCreateItem implements CommandExecutor {
         
         try
         {
-        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack);
+        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack,sender.isOp());
         	sender.sendMessage("New Item Created with ID: " + item.getId());
+        	sender.sendMessage("Use /edititem ID to further edit this item");
         } catch (Exception e)
         {
         	sender.sendMessage(e.getMessage());

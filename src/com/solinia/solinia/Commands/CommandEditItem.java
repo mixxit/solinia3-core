@@ -11,6 +11,8 @@ import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+
 public class CommandEditItem implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -22,9 +24,9 @@ public class CommandEditItem implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.edititem"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -90,14 +92,24 @@ public class CommandEditItem implements CommandExecutor {
 			return false;
 		}
 		
+		 value = value.replaceAll("[^A-Za-z0-9_]", "");
+		
 		try
 		{
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
 
-			if (StateManager.getInstance().getConfigurationManager().getItem(itemid) == null)
+			if (item == null)
 			{
 				sender.sendMessage("Cannot locate item id: " + itemid);
 				return false;
 			}
+			
+			if (item.isOperatorCreated() && !sender.isOp())
+			{
+				sender.sendMessage("This item was op created and you are not an op. Only ops can edit op items");
+				return false;
+			}
+			
 
 			StateManager.getInstance().getConfigurationManager().editItem(itemid,setting,value);
 			sender.sendMessage("Updating setting on item");

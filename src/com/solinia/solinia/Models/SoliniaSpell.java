@@ -2940,6 +2940,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						successGroupTeleport = true;
 					
 					return successGroupTeleport;
+				// this might need to be target only
 				case GroupClientAndPet:
 					boolean successGroupClient = false;
 					
