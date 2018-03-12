@@ -1,33 +1,45 @@
+
 # solinia3-core
 Core RPG Plugin
 
 # Commands
 
-##/createitem
+**/createitem**
 
 Permission: solinia.createitem
 
 Turns the item you are holding into a solinia item and returns the new Item ID
 
-Example: /createitem
+Example: 
 
-##/listitems <search term>
+    /createitem
+
+**/listitems <search term>**
 
 Permission solinia.listitems
 
 Returns a list of item ids and names of items that match the search term by name
 
-Example: /listitems orc
+Example: 
 
-##/edititem <itemid>
+    /listitems orc
+
+**/edititem <itemid>**
 
 permission: solinia.edititem
 
 Returns all current settings on an item id
+Example:
 
-##/edititem <itemid> <setting> <value>
+    /edititem 55
+
+**/edititem <itemid> <setting> <value>**
 
 permission: solinia.edititem
 
 Changes the configuration setting on the item id
+
+Example: 
+
+    /edititem 55 displayname Sword_of_a_Thousands_Truths
 
