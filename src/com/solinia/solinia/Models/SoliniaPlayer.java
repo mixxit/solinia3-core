@@ -476,6 +476,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					getFullName() + " has reached new heights as a level " + (int) Math.floor(newlevel) + " "
 							+ classname.toLowerCase() + "!");
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
+			
+			if (newlevel < 6)
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "[Hint] Bored of this class? You rename this player and create a new class with the /character command");
+			
 			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
 			
 			if (getGroup() != null)
