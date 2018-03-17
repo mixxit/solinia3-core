@@ -2,7 +2,9 @@
 Core RPG Plugin
 
 # Commands
+
 **/createfaction**
+
 /createfaction \<basestandingvalue> \<nospacedname>
 
 Permission: solinia.createfaction
@@ -14,6 +16,7 @@ Example:
     /createfaction -1500 Evil_Sorcerers_of_Veldor
 
 **/createloottable**
+
 /createloottable \<nospacedname>
 
 Permission: solinia.createloottable
@@ -21,6 +24,7 @@ Permission: solinia.createloottable
 Creats a new loottable
 
 **/createnpc**
+
 /createnpc \<factionid> \<level> \<nospacedname>
 
 Permission: solinia.createnpc
@@ -28,6 +32,7 @@ Permission: solinia.createnpc
 Creates a new npc
 
 **/createspawngroup**
+
 /createspawngroup \<npcid> \<nospacedname>
 
 Permission: solinia.createspawngroup
@@ -35,6 +40,7 @@ Permission: solinia.createspawngroup
 Creates a new spawn group at your location
 
 **/editfaction**
+
 /editfaction \<factionid> \<setting> \<value>
 
 Permission: solinia.editfaction
@@ -42,6 +48,7 @@ Permission: solinia.editfaction
 Edits settings on a faction, requires a faction standing where -1500 is aggressive and 1500 is ally, 0 is neutral
 
 **/editloottable**
+
 /editloottable \<loottableid> \<setting> \<value>
 
 Permission: solinia.editloottable
@@ -49,6 +56,7 @@ Permission: solinia.editloottable
 Edits settings on a loot table
 
 **/editnpc**
+
 /editnpc \<npcid> \<setting> \<value>
 
 Permission: solinia.editnpc
@@ -56,6 +64,7 @@ Permission: solinia.editnpc
 Edits current settings on an npc
 
 **/editspawngroup**
+
 /editspawngroup \<spawngroupid> \<setting> \<value>
 
 Permission: solinia.editspawngroup
@@ -63,6 +72,7 @@ Permission: solinia.editspawngroup
 Edits current settings on a spawn group
 
 **/listitems**
+
 /listitems \<name>
 
 Permission: solinia.listitems
@@ -70,6 +80,7 @@ Permission: solinia.listitems
 Lists items
 
 **/listnpcs**
+
 /listnpcs \<name>
 
 Permission: solinia.listnpcs
@@ -77,6 +88,7 @@ Permission: solinia.listnpcs
 Lists npcs
 
 **/listspawngroups**
+
 /listspawngroups \<name>
 
 Permission: solinia.listspawngroups
@@ -84,6 +96,7 @@ Permission: solinia.listspawngroups
 Lists spawn groups
 
 **/listloottables**
+
 /listloottables \<name>
 
 Permission: solinia.listloottables
@@ -91,6 +104,7 @@ Permission: solinia.listloottables
 Lists loot tables
 
 **/listlootdrops**
+
 /listlootdrops \<name>
 
 Permission: solinia.listlootdrops
@@ -98,6 +112,7 @@ Permission: solinia.listlootdrops
 Lists current lootdrops
 
 **/listfactions**
+
 /listfactions \<name>
 
 Permission: solinia.listfactions
@@ -105,6 +120,7 @@ Permission: solinia.listfactions
 Lists current factions
 
 **/addlootdropitem**
+
 /addlootdropitem \<lootdropid> \<itemid> \<numbertodrop> \<alwaysdrop> \<percentagechance>
 
 Permission: solinia.addlootdropitem
@@ -112,6 +128,7 @@ Permission: solinia.addlootdropitem
 Adds items to a loot drop list
 
 **/addloottablelootdrop**
+
 /addloottablelootdrop \<loottableid> \<lootdropid>
 
 Permission: solinia.addloottablelootdrop
@@ -119,6 +136,7 @@ Permission: solinia.addloottablelootdrop
 Adds a loot drop to a loot table
 
 **/convertmerchanttolootdrop**
+
 /convertmerchanttolootdrop \<merchantid> \<nospacedname> \<numbertodrop> \<alwaysdrop> \<percantchance>
 
 Permission: solinia.createitem
@@ -126,6 +144,7 @@ Permission: solinia.createitem
 Converts a merchant list to a lootdrop, useful for converting spell merchant lists to lootdrops for npcs
 
 **/createallarmorsets**
+
 /createallarmorsets \<lootdropid> \<tier> \<percentagechance> \<suffixname>
 
 Permission: solinia.createallarmorsets
@@ -133,6 +152,7 @@ Permission: solinia.createallarmorsets
 Populates a lootdrop with a full set of armour and weapons for all classes
 
 **/createlootdrop**
+
 /createlootdrop \<nospacedname>
 
 Permission: solinia.createlootdrop
@@ -140,6 +160,7 @@ Permission: solinia.createlootdrop
 Creates a new loot drop
 
 **/createnpccopy**
+
 /createnpccopy \<npcid> \<nospacedname>
 
 Permission: solinia.createnpccopy
@@ -147,6 +168,7 @@ Permission: solinia.createnpccopy
 Creates a copy of an existing NPC
 
 **/editlootdrop**
+
 /editlootdrop \<lootdropid> \<setting> \<value>
 
 Permission: solinia.editlootdrop
@@ -154,6 +176,7 @@ Permission: solinia.editlootdrop
 Edits loot drop settings
 
 **/listnpcspells**
+
 /listnpcspells \<name>
 
 Permission: solinia.listnpcspells
@@ -161,6 +184,7 @@ Permission: solinia.listnpcspells
 Lists available NPC spell lists, used for assigning to NPCs
 
 **/createitem**
+
 /createitem
 
 Permission: solinia.createitem
@@ -172,6 +196,7 @@ Example:
     /createitem
 
 **/listitems**
+
 /listitems \<search term>
 
 Permission solinia.listitems
@@ -183,6 +208,7 @@ Example:
     /listitems orc
 
 **/edititem**
+
 /edititem \<itemid>
 
 permission: solinia.edititem
@@ -194,6 +220,7 @@ Example:
     /edititem 55
 
 **/edititem**
+
 /edititem \<itemid> \<setting> \<value>
 
 permission: solinia.edititem
