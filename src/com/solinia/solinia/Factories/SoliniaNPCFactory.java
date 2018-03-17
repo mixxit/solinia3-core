@@ -7,16 +7,17 @@ import com.solinia.solinia.Models.SoliniaNPC;
 
 public class SoliniaNPCFactory {
 
-	public static ISoliniaNPC CreateNPC(String name, int level, int factionid) throws CoreStateInitException {
+	public static ISoliniaNPC CreateNPC(String name, int level, int factionid, boolean operatorCreated) throws CoreStateInitException {
 		SoliniaNPC npc = new SoliniaNPC();
 		npc.setId(StateManager.getInstance().getConfigurationManager().getNextNPCId());
 		npc.setName(name);
 		npc.setLevel(level);
 		npc.setFactionid(factionid);
+		npc.setOperatorCreated(operatorCreated);
 		return StateManager.getInstance().getConfigurationManager().addNPC(npc);
 	}
 
-	public static ISoliniaNPC CreateNPCCopy(int npcid, String name) throws CoreStateInitException {
+	public static ISoliniaNPC CreateNPCCopy(int npcid, String name, boolean operatorCreated) throws CoreStateInitException {
 		ISoliniaNPC sourcenpc = StateManager.getInstance().getConfigurationManager().getNPC(npcid);
 		
 		SoliniaNPC npc = new SoliniaNPC();
@@ -58,6 +59,7 @@ public class SoliniaNPCFactory {
 		npc.setRoamer(sourcenpc.isRoamer());
 		npc.setUpsidedown(sourcenpc.isUpsidedown());
 		npc.setUsedisguise(sourcenpc.isUsedisguise());
+		npc.setOperatorCreated(operatorCreated);
 		return StateManager.getInstance().getConfigurationManager().addNPC(npc);
 	}
 

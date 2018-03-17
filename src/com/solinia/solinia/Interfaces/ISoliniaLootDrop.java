@@ -26,4 +26,8 @@ public interface ISoliniaLootDrop {
 
 	void editSetting(String setting, String value) throws InvalidLootDropSettingException, NumberFormatException, CoreStateInitException;
 
+	void setOperatorCreated(boolean operatorCreated);
+
+	boolean isOperatorCreated();
+
 }

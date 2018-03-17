@@ -10,6 +10,7 @@ public class SoliniaLootDropEntry implements ISoliniaLootDropEntry {
 	private int count;
 	private int chance;
 	private int lootdropid;
+	private boolean operatorCreated = true;
 	
 	@Override
 	public int getId() {
@@ -69,5 +70,17 @@ public class SoliniaLootDropEntry implements ISoliniaLootDropEntry {
 	@Override
 	public void setLootdropid(int lootdropid) {
 		this.lootdropid = lootdropid;
+	}
+	
+	@Override
+	public void setOperatorCreated(boolean operatorCreated)
+	{
+		this.operatorCreated = operatorCreated;
+	}
+	
+	@Override
+	public boolean isOperatorCreated()
+	{
+		return this.operatorCreated;
 	}
 }

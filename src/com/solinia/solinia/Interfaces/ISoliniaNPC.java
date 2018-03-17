@@ -218,4 +218,8 @@ public interface ISoliniaNPC {
 	boolean isSpeaksAllLanguages();
 
 	void setSpeaksAllLanguages(boolean speaksAllLanguages);
+
+	void setOperatorCreated(boolean operatorCreated);
+
+	boolean isOperatorCreated();
 }

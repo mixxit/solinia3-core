@@ -24,4 +24,8 @@ public interface ISoliniaLootTable {
 	void sendLootTableSettingsToSender(CommandSender sender);
 
 	void editSetting(String setting, String value) throws InvalidLootTableSettingException, NumberFormatException, CoreStateInitException;
+
+	void setOperatorCreated(boolean operatorCreated);
+
+	boolean isOperatorCreated();
 }

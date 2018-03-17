@@ -82,6 +82,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int accuracyRating = 0;
 	private int ac = 0;
 	private boolean speaksAllLanguages = false;
+	private boolean operatorCreated = true;
 	
 	@Override
 	public int getId() {
@@ -1237,6 +1238,19 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setSpeaksAllLanguages(boolean speaksAllLanguages) {
 		this.speaksAllLanguages = speaksAllLanguages;
 	}
+
+	@Override
+	public void setOperatorCreated(boolean operatorCreated) {
+		// TODO Auto-generated method stub
+		this.operatorCreated  = operatorCreated;
+	}
+
+	@Override
+	public boolean isOperatorCreated() {
+		// TODO Auto-generated method stub
+		return this.operatorCreated;
+	}
+
 }
 
 	

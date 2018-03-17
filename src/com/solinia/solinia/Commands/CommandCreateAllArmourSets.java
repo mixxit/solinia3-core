@@ -27,8 +27,9 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 
-				if (!player.isOp()) {
-					player.sendMessage("This is an operator only command");
+				if (!player.isOp() && !player.hasPermission("solinia.createallarmorsets"))
+				{
+					player.sendMessage("You do not have permission to access this command");
 					return false;
 				}
 			}
@@ -49,6 +50,12 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			if (lootdrop == null) {
 				sender.sendMessage("Lootdrop ID does not exist");
 				return true;
+			}
+			
+			if (lootdrop.isOperatorCreated() && !sender.isOp())
+			{
+				sender.sendMessage("This lootdrop was op created and you are not an op. Only ops can edit op lootdrop items");
+				return false;
 			}
 			
 			int chance = Integer.parseInt(args[2]);
@@ -82,7 +89,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			{
 				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true, sender.isOp());
 				for (Integer item : items) {
-					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, 1, false, chance);
+					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, 1, false, chance, sender.isOp());
 					itemscreated += item + " ";
 				}
 			}

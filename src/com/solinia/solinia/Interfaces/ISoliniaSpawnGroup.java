@@ -61,4 +61,8 @@ public interface ISoliniaSpawnGroup {
 
 	void setDisabled(boolean disabled);
 
+	void setOperatorCreated(boolean operatorCreated);
+
+	boolean isOperatorCreated();
+
 }

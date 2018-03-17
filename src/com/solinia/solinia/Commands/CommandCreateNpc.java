@@ -22,9 +22,9 @@ public class CommandCreateNpc implements CommandExecutor {
 		if (sender instanceof Player)
 		{
 			Player player = (Player) sender;
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.createnpc"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -97,7 +97,8 @@ public class CommandCreateNpc implements CommandExecutor {
 		name = name.replace(" ", "_");
 		
 		try {
-			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level, factionid);
+			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level, factionid, sender.isOp());
+			
 			sender.sendMessage("Created NPC: " + npc.getId());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

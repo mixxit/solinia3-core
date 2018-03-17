@@ -22,6 +22,7 @@ public class SoliniaFaction implements ISoliniaFaction {
 	private List<FactionStandingEntry> factionEntries = new ArrayList<FactionStandingEntry>();
 	private String allyGrantsTitle = "";
 	private String scowlsGrantsTitle = "";
+	private boolean operatorCreated = true;
 	
 	@Override
 	public int getId() {
@@ -170,5 +171,15 @@ public class SoliniaFaction implements ISoliniaFaction {
 	@Override
 	public void setScowlsGrantsTitle(String scowlsGrantsTitle) {
 		this.scowlsGrantsTitle = scowlsGrantsTitle;
+	}
+	
+	@Override
+	public boolean isOperatorCreated() {
+		return operatorCreated;
+	}
+
+	@Override
+	public void setOperatorCreated(boolean operatorCreated) {
+		this.operatorCreated = operatorCreated;
 	}
 }

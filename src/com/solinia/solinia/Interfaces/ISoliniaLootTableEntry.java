@@ -14,5 +14,9 @@ public interface ISoliniaLootTableEntry {
 
 	int getLoottableid(int loottableid);
 
+	void setOperatorCreated(boolean operatorCreated);
+
+	boolean isOperatorCreated();
+
 
 }

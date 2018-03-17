@@ -22,9 +22,9 @@ public class CommandEditNpc implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.editnpc"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -99,6 +99,12 @@ public class CommandEditNpc implements CommandExecutor {
 			if (StateManager.getInstance().getConfigurationManager().getNPC(npcid) == null)
 			{
 				sender.sendMessage("Cannot locate npc id: " + npcid);
+				return false;
+			}
+			
+			if (StateManager.getInstance().getConfigurationManager().getNPC(npcid).isOperatorCreated() && !sender.isOp())
+			{
+				sender.sendMessage("This npc was op created and you are not an op. Only ops can edit op npcs");
 				return false;
 			}
 

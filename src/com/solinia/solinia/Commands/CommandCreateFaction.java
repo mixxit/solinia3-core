@@ -23,8 +23,9 @@ public class CommandCreateFaction implements CommandExecutor {
 
 				Player player = (Player) sender;
 
-				if (!player.isOp()) {
-					player.sendMessage("This is an operator only command");
+				if (!player.isOp() && !player.hasPermission("solinia.createfaction"))
+				{
+					player.sendMessage("You do not have permission to access this command");
 					return false;
 				}
 			}
@@ -64,7 +65,7 @@ public class CommandCreateFaction implements CommandExecutor {
 				return true;
 			}
 
-			ISoliniaFaction faction = SoliniaFactionFactory.CreateFaction(factionname, base);
+			ISoliniaFaction faction = SoliniaFactionFactory.CreateFaction(factionname, base, sender.isOp());
 			sender.sendMessage("Created faction: " + faction.getId());
 			return true;
 		} catch (CoreStateInitException e) {

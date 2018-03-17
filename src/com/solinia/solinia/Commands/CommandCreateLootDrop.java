@@ -21,9 +21,9 @@ public class CommandCreateLootDrop implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.createlootdrop"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -64,7 +64,7 @@ public class CommandCreateLootDrop implements CommandExecutor {
 				return true;
 			}
 			
-			SoliniaLootFactory.CreateLootDrop(lootdropname);
+			SoliniaLootFactory.CreateLootDrop(lootdropname, sender.isOp());
 			sender.sendMessage("LootDrop created as " + StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropname).getId());
 			
 		} catch (CoreStateInitException e)

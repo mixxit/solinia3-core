@@ -23,8 +23,9 @@ public class CommandEditFaction implements CommandExecutor {
 
 			Player player = (Player) sender;
 
-			if (!player.isOp()) {
-				player.sendMessage("This is an operator only command");
+			if (!player.isOp() && !player.hasPermission("solinia.editfaction"))
+			{
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -88,6 +89,12 @@ public class CommandEditFaction implements CommandExecutor {
 
 			if (StateManager.getInstance().getConfigurationManager().getFaction(factionid) == null) {
 				sender.sendMessage("Cannot locate faction id: " + factionid);
+				return false;
+			}
+			
+			if (StateManager.getInstance().getConfigurationManager().getFaction(factionid).isOperatorCreated() && !sender.isOp())
+			{
+				sender.sendMessage("This faction was op created and you are not an op. Only ops can faction op items");
 				return false;
 			}
 

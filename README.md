@@ -1,8 +1,140 @@
 
+
 # solinia3-core
 Core RPG Plugin
 
 # Commands
+**/createfaction**
+
+Permission: solinia.createfaction
+
+Creates a new faction
+
+**/createloottable**
+
+Permission: solinia.createloottable
+
+Creats a new loottable
+
+**/createnpc**
+
+Permission: solinia.createnpc
+
+Creates a new npc
+
+**/createspawngroup**
+
+Permission: solinia.createspawngroup
+
+Creates a new spawn group at your location
+
+**/editfaction**
+
+Permission: solinia.editfaction
+
+Edits settings on a faction, requires a faction standing where -1500 is aggressive and 1500 is ally, 0 is neutral
+
+**/editloottable**
+
+Permission: solinia.editloottable
+
+Edits settings on a loot table
+
+**/editnpc**
+
+Permission: solinia.editnpc
+
+Edits current settings on an npc
+
+**/editspawngroup**
+
+Permission: solinia.editspawngroup
+
+Edits current settings on a spawn group
+
+**/listitems**
+
+Permission: solinia.listitems
+
+Lists items
+
+**/listnpcs**
+
+Permission: solinia.listnpcs
+
+Lists npcs
+
+**/listspawngroups**
+
+Permission: solinia.listspawngroups
+
+Lists spawn groups
+
+**/listloottables**
+
+Permission: solinia.listloottables
+
+Lists loot tables
+
+**/listlootdrops**
+
+Permission: solinia.listlootdrops
+
+Lists current lootdrops
+
+**/listfactions**
+
+Permission: solinia.listfactions
+
+Lists current factions
+
+**/addlootdropitem**
+
+Permission: solinia.addlootdropitem
+
+Adds items to a loot drop list
+
+**/addloottablelootdrop**
+
+Permission: solinia.addloottablelootdrop
+
+Adds a loot drop to a loot table
+
+**/convertmerchanttolootdrop**
+
+Permission: solinia.createitem
+
+Converts a merchant list to a lootdrop, useful for converting spell merchant lists to lootdrops for npcs
+
+**/createallarmorsets**
+
+Permission: solinia.createallarmorsets
+
+Populates a lootdrop with a full set of armour and weapons for all classes
+
+**/createlootdrop**
+
+Permission: solinia.createlootdrop
+
+Creates a new loot drop
+
+**/createnpccopy**
+
+Permission: solinia.createnpccopy
+
+Creates a copy of an existing NPC
+
+**/editlootdrop**
+
+Permission: solinia.editlootdrop
+
+Edits loot drop settings
+
+**/listnpcspells**
+
+Permission: solinia.listnpcspells
+
+Lists available NPC spell lists, used for assigning to NPCs
 
 **/createitem**
 

@@ -25,9 +25,9 @@ public class CommandEditLootDrop implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.editlootdrop"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -91,6 +91,12 @@ public class CommandEditLootDrop implements CommandExecutor {
 			if (StateManager.getInstance().getConfigurationManager().getLootDrop(LootDropid) == null)
 			{
 				sender.sendMessage("Cannot locate LootDrop id: " + LootDropid);
+				return false;
+			}
+			
+			if (StateManager.getInstance().getConfigurationManager().getLootDrop(LootDropid).isOperatorCreated() && !sender.isOp())
+			{
+				sender.sendMessage("This lootdrop was op created and you are not an op. Only ops can edit op lootdrop items");
 				return false;
 			}
 

@@ -22,9 +22,9 @@ public class CommandCreateNpcCopy implements CommandExecutor {
 		if (sender instanceof Player)
 		{
 			Player player = (Player) sender;
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.createnpccopy"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -81,7 +81,7 @@ public class CommandCreateNpcCopy implements CommandExecutor {
 			
 			name = name.replace(" ", "_");
 		
-			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPCCopy(npcid,name);
+			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPCCopy(npcid,name, sender.isOp());
 			sender.sendMessage("Created NPC Copy: " + npc.getId());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

@@ -45,5 +45,9 @@ public interface ISoliniaFaction {
 	String getScowlsGrantsTitle();
 
 	void setScowlsGrantsTitle(String scowlsGrantTitle);
+
+	boolean isOperatorCreated();
+
+	void setOperatorCreated(boolean operatorCreated);
 	
 }

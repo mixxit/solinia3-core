@@ -22,10 +22,10 @@ public class CommandConvertMerchantToLootDrop implements CommandExecutor {
 		if (sender instanceof Player)
 		{
 			Player player = (Player)sender;
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.convertmerchanttolootdrop"))
 			{
-				player.sendMessage("This is an operator only command");
-				return true;
+				player.sendMessage("You do not have permission to access this command");
+				return false;
 			}
 		}
 		
@@ -61,7 +61,7 @@ public class CommandConvertMerchantToLootDrop implements CommandExecutor {
 				return true;
 			}
 		
-			SoliniaLootFactory.CreateLootDropFromMerchant(StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchant), name, count, always, chance);
+			SoliniaLootFactory.CreateLootDropFromMerchant(StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchant), name, count, always, chance, sender.isOp());
 			sender.sendMessage("LootDrop Created: " + StateManager.getInstance().getConfigurationManager().getLootDrop(name.toUpperCase()).getId());
 			return true;
 		} catch (CoreStateInitException e)

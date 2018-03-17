@@ -21,6 +21,7 @@ public class SoliniaLootTable implements ISoliniaLootTable {
 	private int id;
 	private String name;
 	private List<ISoliniaLootTableEntry> entries = new ArrayList<ISoliniaLootTableEntry>();	
+	private boolean operatorCreated = true;
 	
 	@Override
 	public int getId() {
@@ -100,5 +101,17 @@ public class SoliniaLootTable implements ISoliniaLootTable {
 			throw new InvalidLootTableSettingException(
 					"Invalid LootTable setting. Valid Options are: name,remove");
 		}
+	}
+	
+	@Override
+	public void setOperatorCreated(boolean operatorCreated)
+	{
+		this.operatorCreated = operatorCreated;
+	}
+	
+	@Override
+	public boolean isOperatorCreated()
+	{
+		return this.operatorCreated;
 	}
 }

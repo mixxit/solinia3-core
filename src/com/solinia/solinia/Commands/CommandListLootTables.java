@@ -21,9 +21,9 @@ public class CommandListLootTables implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.listloottables"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}

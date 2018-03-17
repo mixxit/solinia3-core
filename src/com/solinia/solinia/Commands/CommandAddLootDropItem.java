@@ -22,9 +22,9 @@ public class CommandAddLootDropItem implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.addlootdropitem"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -51,11 +51,19 @@ public class CommandAddLootDropItem implements CommandExecutor {
 				return true;
 			}
 			
+			if (StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid).isOperatorCreated() && !sender.isOp())
+			{
+				sender.sendMessage("This lootdrop was op created and you are not an op. Only ops can edit op lootdrop items");
+				return false;
+			}
+			
 			if (StateManager.getInstance().getConfigurationManager().getItem(itemid) == null)
 			{
 				sender.sendMessage("Item does not exist");
 				return true;
 			}
+			
+			
 			
 			for(ISoliniaLootDropEntry lde : StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid).getEntries())
 			{
@@ -66,7 +74,7 @@ public class CommandAddLootDropItem implements CommandExecutor {
 				}
 			}
 			
-			SoliniaLootFactory.CreateLootDropItem(lootdropid, itemid, count, always, chance);
+			SoliniaLootFactory.CreateLootDropItem(lootdropid, itemid, count, always, chance, sender.isOp());
 			sender.sendMessage("Item added to loot drop");
 		} catch (CoreStateInitException e)
 		{

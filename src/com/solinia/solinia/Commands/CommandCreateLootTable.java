@@ -21,9 +21,9 @@ public class CommandCreateLootTable implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.createloottable"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -62,7 +62,7 @@ public class CommandCreateLootTable implements CommandExecutor {
 				return true;
 			}
 
-			SoliniaLootFactory.CreateLootTable(loottablename);
+			SoliniaLootFactory.CreateLootTable(loottablename, sender.isOp());
 			sender.sendMessage("Loot Table created as " + StateManager.getInstance().getConfigurationManager().getLootTable(loottablename).getId());
 		} catch (CoreStateInitException e)
 		{

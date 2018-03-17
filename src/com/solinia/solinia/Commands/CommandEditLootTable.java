@@ -28,9 +28,9 @@ public class CommandEditLootTable implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.editloottable"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -94,6 +94,12 @@ public class CommandEditLootTable implements CommandExecutor {
 			if (StateManager.getInstance().getConfigurationManager().getLootTable(LootTableid) == null)
 			{
 				sender.sendMessage("Cannot locate LootTable id: " + LootTableid);
+				return false;
+			}
+			
+			if (StateManager.getInstance().getConfigurationManager().getLootTable(LootTableid).isOperatorCreated() && !sender.isOp())
+			{
+				sender.sendMessage("This loottable was op created and you are not an op. Only ops can edit op loottable items");
 				return false;
 			}
 
