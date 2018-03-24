@@ -455,8 +455,9 @@ public class SoliniaActiveSpell {
 		case InstantHate: 
 			applyTauntSpell(spellEffect, soliniaSpell,casterLevel);
 			return;
-		case StopRain
-			: return;
+		case StopRain: 
+			applyStopRain(spellEffect, soliniaSpell,casterLevel);
+			return;
 		case NegateIfCombat
 			: return;
 		case Sacrifice
@@ -1242,6 +1243,10 @@ public class SoliniaActiveSpell {
 		default:
 			return;
 		}
+	}
+
+	private void applyStopRain(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		getLivingEntity().getWorld().setStorm(false);
 	}
 
 	private void applyTossUpEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
