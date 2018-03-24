@@ -13,6 +13,7 @@ import com.solinia.solinia.Exceptions.InvalidAASettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
@@ -23,6 +24,7 @@ import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaFaction;
+import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.WorldWidePerk;
@@ -308,4 +310,19 @@ public interface IConfigurationManager {
 	List<SoliniaAccountClaim> getAccountClaims();
 
 	ISoliniaItem getItemByOxygen(ItemStack itemStack);
+
+	void addZone(SoliniaZone zone);
+
+	int getNextZoneId();
+
+	List<SoliniaZone> getZones();
+
+	List<SoliniaZone> getZones(String name);
+
+	void editZone(int zoneid, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidZoneSettingException;
+
+	SoliniaZone getZone(int Id);
+
+	SoliniaZone getZone(String name);
 }

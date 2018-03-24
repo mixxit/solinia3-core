@@ -364,6 +364,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 		}
 		
+		if (isInHotzone() == true)
+		{
+			modifier += 100;
+		}
+		
 		if (modifier > 100) {
 			modified = true;
 		}
@@ -398,6 +403,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		setExperience(currentexperience, experience, modified);
+	}
+
+	private boolean isInHotzone() {
+		for(SoliniaZone zone : StateManager.getInstance().getCurrentHotzones())
+		{
+			if (this.getBukkitPlayer().getLocation().distance(new Location(this.getBukkitPlayer().getWorld(), zone.getX(),zone.getY(),zone.getZ())) < 500)
+				return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -459,7 +474,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			getBukkitPlayer().sendMessage(ChatColor.GRAY + "Exp Gained: " + changeamount);
 			if (modified == true)
 				getBukkitPlayer().sendMessage(
-						ChatColor.YELLOW + "* You were given bonus XP from a player donation perk! (/perks)");
+						ChatColor.YELLOW + "* You were given bonus XP from a player donation perk/hotzone or potion! (See /perks && /hotzones)");
 		}
 
 		if (changeamount < 0) {
@@ -558,6 +573,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 		}
+		
+		if (isInHotzone() == true)
+		{
+			modifier += 100;
+		}		
+		
 		if (modifier > 100) {
 			modified = true;
 		}
@@ -608,7 +629,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		getBukkitPlayer().sendMessage(ChatColor.GRAY + "AAExp Gained: " + amountincreased);
 		if (modified == true)
 			getBukkitPlayer()
-					.sendMessage(ChatColor.YELLOW + "* You were given bonus XP from a player donation perk! (/perks)");
+					.sendMessage(ChatColor.YELLOW + "* You were given bonus XP from a player donation perk/hotzone or potion! (See /perks && /hotzones)");
 
 		if (givenaapoint) {
 			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gained an Alternate Experience Point!");

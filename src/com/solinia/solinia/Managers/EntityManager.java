@@ -73,6 +73,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
 	//private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
 	private ConcurrentHashMap<UUID, Inventory> merchantInventories = new ConcurrentHashMap<UUID, Inventory>();
+	
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
 	}

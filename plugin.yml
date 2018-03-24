@@ -120,6 +120,14 @@ commands:
     description: Lists items
     usage: /listitems searchstring
     aliases: []
+  listzones:
+    description: Lists active zones
+    usage: /listzones
+    aliases: []
+  hotzones:
+    description: Lists hot zones
+    usage: /listhotzones
+    aliases: []
   spawnitem:
     description: Spawns an item
     usage: /spawnitem itemid
@@ -362,6 +370,14 @@ commands:
     description: Creates a new quest
     usage: /createquest questcode
     aliases: []
+  createzone:
+    description: Creates a new zone
+    usage: /createzone zonenamenospaces x y z
+    aliases: []
+  editzone:
+    description: Edits a zone
+    usage: /editzone zoneid setting value
+    aliases: []
   editaa:
     description: Edits an AA Ability
     usage: /editaa aaid setting value
@@ -415,3 +431,4 @@ depend:
 - Votifier
 - ChatItem
 - EffectLib
+- Towny

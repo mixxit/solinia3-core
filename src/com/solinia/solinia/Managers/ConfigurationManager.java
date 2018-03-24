@@ -28,6 +28,7 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
@@ -52,6 +53,7 @@ import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaFaction;
+import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaSpellClass;
@@ -61,6 +63,7 @@ import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
+import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
@@ -93,12 +96,17 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaPlayer> characterlistsRepository;
 	private IRepository<NPCSpellList> npcspelllistsRepository;
 	private IRepository<SoliniaAccountClaim> accountClaimsRepository;
+	private IRepository<SoliniaZone> zonesRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
-			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, JsonAccountClaimRepository accountClaimsContext) {
+			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, 
+			JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, 
+			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
+			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
+			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -118,6 +126,8 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.characterlistsRepository = characterlistsContext;
 		this.setNpcspelllistsRepository(npcspelllistsContext);
 		this.accountClaimsRepository = accountClaimsContext;
+		this.zonesRepository = zonesContext;
+		
 	}
 	
 	@Override 
@@ -438,6 +448,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.characterlistsRepository.commit();
 		this.npcspelllistsRepository.commit();
 		this.accountClaimsRepository.commit();
+		this.zonesRepository.commit();
 	}
 
 	private void commitPlayersToCharacterLists() {
@@ -643,6 +654,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public void editZone(int zoneid, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidZoneSettingException {
+		getZone(zoneid).editSetting(setting, value);
+	}
+	
+	@Override
 	public void editLootDrop(int lootdropid, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidLootDropSettingException {
 		getLootDrop(lootdropid).editSetting(setting, value);
@@ -695,6 +712,16 @@ public class ConfigurationManager implements IConfigurationManager {
 	public ISoliniaLootDrop getLootDrop(String lootdropname) {
 		// TODO Auto-generated method stub
 		List<ISoliniaLootDrop> list = lootdropRepository.query(q -> q.getName().equals(lootdropname));
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
+	
+	@Override
+	public SoliniaZone getZone(String name) {
+		// TODO Auto-generated method stub
+		List<SoliniaZone> list = zonesRepository.query(q -> q.getName().equals(name));
 		if (list.size() > 0)
 			return list.get(0);
 
@@ -859,6 +886,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public ISoliniaAAAbility getAAAbility(int Id) {
 		return aaabilitiesRepository.getByKey(Id);
+	}
+	
+	@Override
+	public SoliniaZone getZone(int Id) {
+		return zonesRepository.getByKey(Id);
 	}
 	
 	@Override
@@ -1281,6 +1313,33 @@ public class ConfigurationManager implements IConfigurationManager {
 		return accountClaimsRepository.query(q -> q.isClaimed() == false && q.getMcname().toUpperCase().equals(name.toUpperCase()));
 	}
 
+	@Override
+	public List<SoliniaZone> getZones() {
+		return zonesRepository.query(q -> q.getId() > 0);
+	}
+	
+	@Override
+	public List<SoliniaZone> getZones(String name) {
+		return zonesRepository.query(q -> q.getName().toUpperCase().equals(name.toUpperCase()));
+	}
+	
+	@Override
+	public void addZone(SoliniaZone zone) {
+		this.zonesRepository.add(zone);
+
+	}
+	
+	@Override
+	public int getNextZoneId() {
+		int max = 0;
+		for (SoliniaZone zone : getZones()) {
+			if (zone.getId() > max)
+				max = zone.getId();
+		}
+
+		return max + 1;
+	}
+	
 	@Override
 	public void removeClaim(int id) {
 		

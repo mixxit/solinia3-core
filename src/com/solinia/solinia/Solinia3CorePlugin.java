@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.solinia.solinia.Commands.CommandAA;
 import com.solinia.solinia.Commands.CommandAddClass;
 import com.solinia.solinia.Commands.CommandAddLootDropItem;
@@ -32,6 +33,7 @@ import com.solinia.solinia.Commands.CommandCreateNpc;
 import com.solinia.solinia.Commands.CommandCreateNpcCopy;
 import com.solinia.solinia.Commands.CommandCreateQuest;
 import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
+import com.solinia.solinia.Commands.CommandCreateZone;
 import com.solinia.solinia.Commands.CommandEditAA;
 import com.solinia.solinia.Commands.CommandEditClass;
 import com.solinia.solinia.Commands.CommandEditFaction;
@@ -44,6 +46,7 @@ import com.solinia.solinia.Commands.CommandEditNpcSpellList;
 import com.solinia.solinia.Commands.CommandEditRace;
 import com.solinia.solinia.Commands.CommandEditSpawngroup;
 import com.solinia.solinia.Commands.CommandEditSpell;
+import com.solinia.solinia.Commands.CommandEditZone;
 import com.solinia.solinia.Commands.CommandEffects;
 import com.solinia.solinia.Commands.CommandEmote;
 import com.solinia.solinia.Commands.CommandFaction;
@@ -53,6 +56,7 @@ import com.solinia.solinia.Commands.CommandGrantTitle;
 import com.solinia.solinia.Commands.CommandGroup;
 import com.solinia.solinia.Commands.CommandGroupChat;
 import com.solinia.solinia.Commands.CommandHideOoc;
+import com.solinia.solinia.Commands.CommandHotzones;
 import com.solinia.solinia.Commands.CommandIgnore;
 import com.solinia.solinia.Commands.CommandInspiration;
 import com.solinia.solinia.Commands.CommandLastname;
@@ -66,6 +70,7 @@ import com.solinia.solinia.Commands.CommandListNPCs;
 import com.solinia.solinia.Commands.CommandListNpcSpells;
 import com.solinia.solinia.Commands.CommandListSpawnGroups;
 import com.solinia.solinia.Commands.CommandListSpells;
+import com.solinia.solinia.Commands.CommandListZones;
 import com.solinia.solinia.Commands.CommandLocal;
 import com.solinia.solinia.Commands.CommandLoot;
 import com.solinia.solinia.Commands.CommandMana;
@@ -120,6 +125,7 @@ import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
+import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
@@ -211,7 +217,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 		setupEconomy();
 		setupChatItem();
-		
 
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setChatItem(this.ciApi);
@@ -348,13 +353,18 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonAccountClaimRepository accountclaimsrepo = new JsonAccountClaimRepository();
 			accountclaimsrepo.setJsonFile(getDataFolder() + "/" + "accountclaimrepo.json");
 			accountclaimsrepo.reload();
+
+			JsonZoneRepository zonesrepo = new JsonZoneRepository();
+			zonesrepo.setJsonFile(getDataFolder() + "/" + "zones.json");
+			zonesrepo.reload();
+
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
-					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,accountclaimsrepo);
+					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,accountclaimsrepo, zonesrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -517,6 +527,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("claim").setExecutor(new CommandClaim());
 		this.getCommand("hideooc").setExecutor(new CommandHideOoc());
 		this.getCommand("skillcheck").setExecutor(new CommandSkillCheck());
+		this.getCommand("createzone").setExecutor(new CommandCreateZone());
+		this.getCommand("editzone").setExecutor(new CommandEditZone());
+		this.getCommand("listzones").setExecutor(new CommandListZones());
+		this.getCommand("hotzones").setExecutor(new CommandHotzones());
 	}
 
 	private void createConfigDir() {

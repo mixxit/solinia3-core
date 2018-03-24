@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IChannelManager;
@@ -25,6 +26,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
@@ -56,6 +58,76 @@ public class CoreState {
 	private DiscordDefaultChannelCommandSender discordDefaultChannelCommandSender;
 	private EffectManager effectManager;
 	
+	private List<Integer> currentHotZones = new ArrayList<Integer>();
+		
+	public List<SoliniaZone> getCurrentHotzones() {
+		List<SoliniaZone> zones = new ArrayList<SoliniaZone>();
+		for(Integer zoneid : currentHotZones)
+		{
+			try {
+				zones.add(StateManager.getInstance().getConfigurationManager().getZone(zoneid));
+			} catch (CoreStateInitException e) {
+			}
+		}
+		
+		return zones;
+	}
+
+	public void setRandomHotzones()
+	{
+		currentHotZones.clear();
+		try {
+			int maxCheckSize = StateManager.getInstance().getConfigurationManager().getZones().size()*4;
+			int currentCount = 0;
+			
+			List<SoliniaZone> possibleHotZones = new ArrayList<SoliniaZone>();
+			
+			for(SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
+			{
+				if (!zone.isHotzone())
+					continue;
+				
+				possibleHotZones.add(zone);
+				
+			}
+		
+			// if there isnt any just skip this
+			if (possibleHotZones.size() < 1)
+				return;
+			
+			
+			// If only one, just always return it
+			if (possibleHotZones.size() == 1)
+			{
+				currentHotZones.add(possibleHotZones.get(0).getId());
+				return;
+			}
+			
+			// Else try to pick two random ones
+			while (currentHotZones.size() < 2)
+			{
+				if (currentCount > maxCheckSize)
+					break;
+				
+					SoliniaZone zone = Utils.getRandomItemFromList(possibleHotZones);
+					if (!zone.isHotzone())
+						continue;
+					
+					if (currentHotZones.contains(zone.getId()))
+						continue;
+					
+					System.out.println("Hotzone set to: " + zone.getName());
+					currentHotZones.add(zone.getId());
+			}
+		
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 	public CoreState()
 	{
 		isInitialised = false;
@@ -63,6 +135,8 @@ public class CoreState {
 		this.instanceGuid = RandomStringUtils.random(SHORT_ID_LENGTH);
 		this.discordAdminChannelCommandSender = new DiscordAdminChannelCommandSender();
 		this.discordDefaultChannelCommandSender = new DiscordDefaultChannelCommandSender();
+		
+		
 	}
 	
 	public Scoreboard getScoreboard(Player player)
@@ -107,6 +181,13 @@ public class CoreState {
 		this.channelManager = channelManager;
 		this.effectManager = effectManager;
 		isInitialised = true;
+		
+		OnInitialized();
+	}
+	
+	public void OnInitialized()
+	{
+		StateManager.getInstance().setRandomHotzones();
 	}
 	
 	public IPlayerManager getPlayerManager() throws CoreStateInitException
