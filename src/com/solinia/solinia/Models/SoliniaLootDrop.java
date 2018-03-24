@@ -62,7 +62,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			for(ISoliniaLootDropEntry lde : getEntries())
 			{
 				ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
-				sender.sendMessage("- " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - " + lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());
+				sender.sendMessage("- [" + lde.getId() + "] " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - " + lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());
 			}
 		} catch (CoreStateInitException e)
 		{
@@ -91,6 +91,19 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			{
 				if (getEntries().get(i).getLootdropid() == itemIdToRemove)
 					getEntries().remove(i);
+			}
+			break;
+		case "toggleunique":
+			int itemIdToUnique = Integer.parseInt(value);
+			if (itemIdToUnique < 1)
+				throw new InvalidLootDropSettingException("Invalid item id to toggle unique");
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				if (getEntries().get(i).getLootdropid() == itemIdToUnique)
+				{
+					boolean uniqueToggle = !getEntries().get(i).isUnique();
+					getEntries().get(i).setUnique(uniqueToggle);
+				}
 			}
 			break;
 		case "setallchance":
@@ -124,7 +137,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			break;
 		default:
 			throw new InvalidLootDropSettingException(
-					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemminlevel");
+					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemminlevel,toggleunique");
 		}
 	}
 	

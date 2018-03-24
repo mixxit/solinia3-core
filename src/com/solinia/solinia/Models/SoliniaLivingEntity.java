@@ -1488,6 +1488,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							.getLootDrop(entry.getLootdropid());
 					for (ISoliniaLootDropEntry dropentry : StateManager.getInstance().getConfigurationManager()
 							.getLootDrop(droptable.getId()).getEntries()) {
+						
+						// Handle unique item checking also
+						// if its got a discoverer its already been found so skip it
+						if (dropentry.isUnique())
+						{
+							ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+									.getItem(dropentry.getItemid());
+							if (item != null && !item.getDiscoverer().equals(""))
+							{
+								continue;
+							}
+						}
+
 						if (dropentry.isAlways() == true) {
 							absoluteitems.add(dropentry);
 							continue;
@@ -1522,6 +1535,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						if (randomInt <= droptableentry.getChance()) {
 							getBukkitLivingEntity().getLocation().getWorld()
 									.dropItem(getBukkitLivingEntity().getLocation(), item.asItemStack());
+							
 						}
 					}
 				}

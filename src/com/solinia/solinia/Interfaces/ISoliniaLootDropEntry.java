@@ -30,4 +30,8 @@ public interface ISoliniaLootDropEntry {
 
 	boolean isOperatorCreated();
 
+	boolean isUnique();
+
+	void setUnique(boolean unique);
+
 }
