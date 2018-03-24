@@ -61,6 +61,7 @@ import com.solinia.solinia.Commands.CommandIgnore;
 import com.solinia.solinia.Commands.CommandInspiration;
 import com.solinia.solinia.Commands.CommandLastname;
 import com.solinia.solinia.Commands.CommandListAAs;
+import com.solinia.solinia.Commands.CommandListClasses;
 import com.solinia.solinia.Commands.CommandListFactions;
 import com.solinia.solinia.Commands.CommandListItems;
 import com.solinia.solinia.Commands.CommandListLootDrops;
@@ -68,6 +69,7 @@ import com.solinia.solinia.Commands.CommandListLootTables;
 import com.solinia.solinia.Commands.CommandListMerchantLists;
 import com.solinia.solinia.Commands.CommandListNPCs;
 import com.solinia.solinia.Commands.CommandListNpcSpells;
+import com.solinia.solinia.Commands.CommandListRaces;
 import com.solinia.solinia.Commands.CommandListSpawnGroups;
 import com.solinia.solinia.Commands.CommandListSpells;
 import com.solinia.solinia.Commands.CommandListZones;
@@ -531,6 +533,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editzone").setExecutor(new CommandEditZone());
 		this.getCommand("listzones").setExecutor(new CommandListZones());
 		this.getCommand("hotzones").setExecutor(new CommandHotzones());
+		this.getCommand("listraces").setExecutor(new CommandListRaces());
+		this.getCommand("listclasses").setExecutor(new CommandListClasses());
 	}
 
 	private void createConfigDir() {

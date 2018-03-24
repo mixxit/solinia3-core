@@ -408,11 +408,19 @@ commands:
     aliases:
     - toggleooc
   listnpcspells:
-    description: Lists an npc spell ist
+    description: Lists an npcs spell list
     usage: /listnpcspells
     aliases:
     - listnpcspelllists
     - listnpcspelllist
+  listclasses:
+    description: Lists classes
+    usage: /listclasses
+    aliases: []
+  listraces:
+    description: List races
+    usage: /listraces
+    aliases: []
   editnpcspelllist:
     description: Edits an npc spell list
     usage: /editnpcspelllist
