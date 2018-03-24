@@ -93,19 +93,6 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 					getEntries().remove(i);
 			}
 			break;
-		case "toggleunique":
-			int itemIdToUnique = Integer.parseInt(value);
-			if (itemIdToUnique < 1)
-				throw new InvalidLootDropSettingException("Invalid item id to toggle unique");
-			for(int i = 0; i < getEntries().size(); i++)
-			{
-				if (getEntries().get(i).getLootdropid() == itemIdToUnique)
-				{
-					boolean uniqueToggle = !getEntries().get(i).isUnique();
-					getEntries().get(i).setUnique(uniqueToggle);
-				}
-			}
-			break;
 		case "setallchance":
 			int newChance = Integer.parseInt(value);
 			for(int i = 0; i < getEntries().size(); i++)
@@ -137,7 +124,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			break;
 		default:
 			throw new InvalidLootDropSettingException(
-					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemminlevel,toggleunique");
+					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemminlevel");
 		}
 	}
 	

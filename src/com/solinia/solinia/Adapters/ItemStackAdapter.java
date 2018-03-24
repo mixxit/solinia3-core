@@ -97,6 +97,10 @@ public class ItemStackAdapter {
 		}
 
 		if (soliniaItem.isQuest() == true) {
+			loretxt.add(ChatColor.GREEN + "This item is part of a unique artifact!" + ChatColor.RESET);
+		}
+		
+		if (soliniaItem.isQuest() == true) {
 			loretxt.add(ChatColor.YELLOW + "This item is part of a quest line" + ChatColor.RESET);
 		}
 

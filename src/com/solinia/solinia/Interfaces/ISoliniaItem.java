@@ -272,4 +272,12 @@ public interface ISoliniaItem {
 	boolean isOperatorCreated();
 
 	void setOperatorCreated(boolean operatorCreated);
+
+	boolean isArtifact();
+
+	void setArtifact(boolean artifact);
+
+	boolean isArtifactFound();
+
+	void setArtifactFound(boolean artifactFound);
 }

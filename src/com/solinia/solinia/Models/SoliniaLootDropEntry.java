@@ -11,7 +11,6 @@ public class SoliniaLootDropEntry implements ISoliniaLootDropEntry {
 	private int chance;
 	private int lootdropid;
 	private boolean operatorCreated = true;
-	private boolean unique = false;
 	
 	@Override
 	public int getId() {
@@ -83,15 +82,5 @@ public class SoliniaLootDropEntry implements ISoliniaLootDropEntry {
 	public boolean isOperatorCreated()
 	{
 		return this.operatorCreated;
-	}
-
-	@Override
-	public boolean isUnique() {
-		return unique;
-	}
-
-	@Override
-	public void setUnique(boolean unique) {
-		this.unique = unique;
 	}
 }

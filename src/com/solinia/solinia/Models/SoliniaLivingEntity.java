@@ -1489,18 +1489,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					for (ISoliniaLootDropEntry dropentry : StateManager.getInstance().getConfigurationManager()
 							.getLootDrop(droptable.getId()).getEntries()) {
 						
-						// Handle unique item checking also
-						// if its got a discoverer its already been found so skip it
-						if (dropentry.isUnique())
-						{
-							ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-									.getItem(dropentry.getItemid());
-							if (item != null && !item.getDiscoverer().equals(""))
-							{
-								continue;
-							}
-						}
-
 						if (dropentry.isAlways() == true) {
 							absoluteitems.add(dropentry);
 							continue;
@@ -1532,7 +1520,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 						randomInt = r.nextInt(100) + 1;
 						//System.out.println("Rolled a " + randomInt + " against a max of " + droptableentry.getChance()+ " for item: " + item.getDisplayname());
+						
+						// Handle unique item checking also
+						if (item.isArtifact() == true && item.isArtifactFound() == true)
+							continue;
+						
 						if (randomInt <= droptableentry.getChance()) {
+							
+							// Handle unique item setting also
+							if (item.isArtifact() == true && item.isArtifactFound() == false)
+								item.setArtifactFound(true);
+							
 							getBukkitLivingEntity().getLocation().getWorld()
 									.dropItem(getBukkitLivingEntity().getLocation(), item.asItemStack());
 							
@@ -1546,8 +1544,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(absoluteitems.get(i).getItemid());
 						for (int c = 0; c < absoluteitems.get(i).getCount(); c++) {
+							
+							// Handle unique item checking also
+							if (item.isArtifact() == true && item.isArtifactFound() == true)
+								continue;
+							
 							getBukkitLivingEntity().getLocation().getWorld()
 									.dropItem(getBukkitLivingEntity().getLocation(), item.asItemStack());
+							
+							// Handle unique item setting also
+							if (item.isArtifact() == true && item.isArtifactFound() == false)
+								item.setArtifactFound(true);
+
 						}
 					}
 				}

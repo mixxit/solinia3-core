@@ -29,9 +29,4 @@ public interface ISoliniaLootDropEntry {
 	void setOperatorCreated(boolean operatorCreated);
 
 	boolean isOperatorCreated();
-
-	boolean isUnique();
-
-	void setUnique(boolean unique);
-
 }

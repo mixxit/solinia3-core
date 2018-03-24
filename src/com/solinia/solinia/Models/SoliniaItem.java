@@ -88,6 +88,9 @@ public class SoliniaItem implements ISoliniaItem {
 	private SkillType skillModType = SkillType.None;
 	private int skillModValue = 0;
 	
+	private boolean artifact = false;
+	private boolean artifactFound = false;
+	
 	private SkillType skillModType2 = SkillType.None;
 	private int skillModValue2 = 0;
 
@@ -620,6 +623,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- crafting: " + ChatColor.GOLD + isCrafting() + ChatColor.RESET);
 		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
 		sender.sendMessage("- quest: " + ChatColor.GOLD + isQuest() + ChatColor.RESET);
+		sender.sendMessage("- artifact: " + ChatColor.GOLD + isArtifact() + "Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
 		sender.sendMessage("- acceptsaugmentationslottype: " + ChatColor.GOLD + getAcceptsAugmentationSlotType() + ChatColor.RESET);
 		sender.sendMessage("- augmentationfitsslottype: " + ChatColor.GOLD + this.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -690,6 +694,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "damage":
 			setDamage(Integer.parseInt(value));
+			break;
+		case "artifact":
+			setArtifact(Boolean.parseBoolean(value));
 			break;
 		case "baneundead":
 			setBaneUndead(Integer.parseInt(value));
@@ -813,7 +820,7 @@ public class SoliniaItem implements ISoliniaItem {
 			setSkillModValue4(Integer.parseInt(value));
 			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact");
 		}
 	}
 
@@ -1077,5 +1084,25 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setOperatorCreated(boolean operatorCreated) {
 		this.operatorCreated = operatorCreated;
+	}
+
+	@Override
+	public boolean isArtifact() {
+		return artifact;
+	}
+
+	@Override
+	public void setArtifact(boolean artifact) {
+		this.artifact = artifact;
+	}
+
+	@Override
+	public boolean isArtifactFound() {
+		return artifactFound;
+	}
+
+	@Override
+	public void setArtifactFound(boolean artifactFound) {
+		this.artifactFound = artifactFound;
 	}
 }
