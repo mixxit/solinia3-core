@@ -91,7 +91,10 @@ public class CommandNPCGive implements CommandExecutor {
 				{
 					System.out.println("Checking if player meets requirements to hand in item");
 					if (!eventHandler.playerMeetsRequirements(player))
+					{
+						player.sendMessage(ChatColor.GRAY + "[Hint] You do not meet the requirements to hand this quest item in. Either you are missing a quest step or have already completed this step");
 						continue;
+					}
 					
 					System.out.println("NPC wants the item");
 					npcWantsItem = true;
