@@ -630,7 +630,7 @@ public class Utils {
 	}
 
 	public static int getMaxLevel() {
-		return 55;
+		return 57;
 	}
 
 	public static Double getExperienceRewardAverageForLevel(int level) {
@@ -698,6 +698,7 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("PALADIN")
 						|| profession.getName().toUpperCase().equals("ROGUE")
 						|| profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
@@ -713,6 +714,8 @@ public class Utils {
 				if ((profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
+						|| profession.getName().toUpperCase().equals("BEASTLORD")
 						|| profession.getName().toUpperCase().equals("PALADIN")
 						)) {
 					int cap = (int) ((5 * level) + 5);
@@ -729,6 +732,8 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("PALADIN")
 						|| profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
+						|| profession.getName().toUpperCase().equals("BEASTLORD")
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
@@ -747,6 +752,8 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("PALADIN")
 						|| profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
+						|| profession.getName().toUpperCase().equals("BEASTLORD")
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
@@ -766,6 +773,8 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("MONK")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
+						|| profession.getName().toUpperCase().equals("BEASTLORD")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
@@ -784,6 +793,7 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("MONK")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
 						|| profession.getName().toUpperCase().equals("HUNTER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
@@ -834,6 +844,8 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("HUNTER")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
+						|| profession.getName().toUpperCase().equals("BEASTLORD")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
 					if (cap > Utils.getMaxSkillValue())
@@ -852,6 +864,8 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("HUNTER")
+						|| profession.getName().toUpperCase().equals("BEASTLORD")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
 						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
 					int cap = (int) ((5 * level) + 5);
 					if (cap > Utils.getMaxSkillValue())
@@ -4319,47 +4333,99 @@ public class Utils {
 		return statTotal;
 	}
 
-	public static double getStatMaxHP(ISoliniaClass classObj, int level, int stamina) {
-		double levelmultiplier = 1;
+	public static double getStatMaxHP(ISoliniaClass classObj, int tmplevel, int stamina) {
+		// level multiplier
+		double multiplier = 1;
+		
 
 		String profession = "UNSKILLED";
 		if (classObj != null)
 			profession = classObj.getName().toUpperCase();
 
 		if (profession != null) {
-			if (profession.equals("UNSKILLED") || profession.equals("UNKNOWN"))
-				levelmultiplier = 3;
-			if (profession.equals("MONK") || profession.equals("ROGUE") || profession.equals("BARD"))
-				levelmultiplier = 18;
-			if (profession.equals("CLERIC") || profession.equals("DRUID") || profession.equals("SHAMAN")
-					|| profession.equals("EXARCH"))
-				levelmultiplier = 15;
-			if (profession.equals("MAGICIAN") || profession.equals("NECROMANCER") || profession.equals("ENCHANTER")
-					|| profession.equals("WIZARD") || profession.equals("ARCANIST"))
-				levelmultiplier = 12;
-			if (profession.equals("RANGER") || profession.equals("HUNTER"))
-				levelmultiplier = 20;
-			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
-					&& level <= 34)
-				levelmultiplier = 21;
-			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
-					&& level >= 35)
-				levelmultiplier = 22;
-			if ((profession.equals("SHADOWKNIGHT") || profession.equals("PALADIN") || profession.equals("KNIGHT"))
-					&& level >= 45)
-				levelmultiplier = 23;
-			if (profession.equals("WARRIOR") && level <= 19)
-				levelmultiplier = 22;
-			if (profession.equals("WARRIOR") && level >= 20)
-				levelmultiplier = 23;
-			if (profession.equals("WARRIOR") && level >= 30)
-				levelmultiplier = 25;
-			if (profession.equals("WARRIOR") && level >= 40)
-				levelmultiplier = 27;
+			switch (profession)
+			{
+				case "WARRIOR":
+					if (tmplevel < 20)
+						multiplier = 22;
+					else if (tmplevel < 30)
+						multiplier = 23;
+					else if (tmplevel < 40)
+						multiplier = 25;
+					else if (tmplevel < 53)
+						multiplier = 27;
+					else if (tmplevel < 57)
+						multiplier = 28;
+					else
+						multiplier = 30;
+					break;
+		
+				case "DRUID":
+				case "CLERIC":
+				case "SHAMAN":
+					multiplier = 15;
+					break;
+		
+				case "PALADIN":
+				case "SHADOWKNIGHT":
+					if (tmplevel < 35)
+						multiplier = 21;
+					else if (tmplevel < 45)
+						multiplier = 22;
+					else if (tmplevel < 51)
+						multiplier = 23;
+					else if (tmplevel < 56)
+						multiplier = 24;
+					else if (tmplevel < 60)
+						multiplier = 25;
+					else
+						multiplier = 26;
+					break;
+		
+				case "MONK":
+				case "BARD":
+				case "ROGUE":
+				//case BEASTLORD:
+					if (tmplevel < 51)
+						multiplier = 18;
+					else if (tmplevel < 58)
+						multiplier = 19;
+					else
+						multiplier = 20;
+					break;
+		
+				case "RANGER":
+					if (tmplevel < 58)
+						multiplier = 20;
+					else
+						multiplier = 21;
+					break;
+		
+				case "MAGICIAN":
+				case "WIZARD":
+				case "NECROMANCER":
+				case "ENCHANTER":
+					multiplier = 12;
+					break;
+				default:
+					if (tmplevel < 35)
+						multiplier = 21;
+					else if (tmplevel < 45)
+						multiplier = 22;
+					else if (tmplevel < 51)
+						multiplier = 23;
+					else if (tmplevel < 56)
+						multiplier = 24;
+					else if (tmplevel < 60)
+						multiplier = 25;
+					else
+						multiplier = 26;
+					break;
+			}
 		}
 
-		double hp = level * levelmultiplier;
-		double hpmain = (stamina / 12) * level;
+		double hp = tmplevel * multiplier;
+		double hpmain = (stamina / 12) * tmplevel;
 
 		double calculatedhp = hp + hpmain;
 		return (int) Math.floor(calculatedhp);
