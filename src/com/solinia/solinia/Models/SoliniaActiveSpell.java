@@ -1511,7 +1511,7 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyVision(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6 * 20, 1));
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.NIGHT_VISION, 1);
 	}
 
 	private void applySummonItem(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -1655,29 +1655,29 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 1));
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.BLINDNESS, 1);
 	}
 
 	private void applyInvisibility(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6 * 20, 1));
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.INVISIBILITY, 1);
 	}
 
 	private void applyWaterBreathing(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 6 * 20, 1));
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.WATER_BREATHING, 1);
 	}
 
 	private void applyConfusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.CONFUSION, 1);
 	}
 
 	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 6 * 20, 1));
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.LEVITATION, 1);
 	}
 
 	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.dismountEntity(getLivingEntity());
 
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SLOW, 10);
 	}
 
 	private void applyWipeHateList(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -1691,8 +1691,8 @@ public class SoliniaActiveSpell {
 	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.dismountEntity(getLivingEntity());
 
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
-		getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SLOW, 10);
+		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.CONFUSION, 1);
 	}
 	
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -1722,8 +1722,8 @@ public class SoliniaActiveSpell {
 				vehicle.eject();
 			}
 			
-			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 10));
-			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 6 * 20, 1));
+			Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SLOW, 10);
+			Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.CONFUSION, 1);
 		} catch (CoreStateInitException e)
 		{
 			return;
@@ -1829,9 +1829,9 @@ public class SoliniaActiveSpell {
 		normalize = normalize / 10;
 		if (spellEffect.getBase() > 0)
 		{
-			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 6 * 20, normalize));
+			Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SPEED, normalize);
 		} else {
-			getLivingEntity().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, (normalize * -1)));
+			Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SLOW, (normalize * -1));
 		}
 		
 	}

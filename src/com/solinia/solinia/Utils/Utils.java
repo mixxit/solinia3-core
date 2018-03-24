@@ -30,6 +30,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.comphenix.example.Vector3D;
@@ -5493,5 +5495,15 @@ public class Utils {
 		{
 			vehicle.eject();
 		}
+	}
+
+	public static void AddPotionEffect(LivingEntity entity, PotionEffectType effectType, int amplifier)
+	{
+		entity.addPotionEffect(new PotionEffect(effectType, Utils.GetGlobalPotionEffectTickLength(), amplifier), true);
+	}
+	
+	public static int GetGlobalPotionEffectTickLength() {
+		// TODO Auto-generated method stub
+		return 8 * 20;
 	}
 }
