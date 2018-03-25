@@ -695,6 +695,9 @@ public class SoliniaItem implements ISoliniaItem {
 		case "damage":
 			setDamage(Integer.parseInt(value));
 			break;
+		case "spellscroll":
+			this.setSpellscroll(Boolean.parseBoolean(value));
+			break;
 		case "artifact":
 			setArtifact(Boolean.parseBoolean(value));
 			break;
@@ -820,7 +823,7 @@ public class SoliniaItem implements ISoliniaItem {
 			setSkillModValue4(Integer.parseInt(value));
 			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll");
 		}
 	}
 

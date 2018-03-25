@@ -1899,7 +1899,8 @@ public class SoliniaActiveSpell {
 
 			int weaponDamage = 0;
 
-			ItemStack mainitem = sourceLivingEntity.getEquipment().getItemInMainHand();
+			// Offhand item only
+			ItemStack mainitem = sourceLivingEntity.getEquipment().getItemInOffHand();
 
 			if (mainitem != null) {
 				try {

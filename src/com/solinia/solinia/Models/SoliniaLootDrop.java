@@ -111,6 +111,61 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 				StateManager.getInstance().getConfigurationManager().getItem(itemId).setMinLevel(minLevel);
 			}
 			break;
+		case "setallitemfireresist":
+			int fireresist = Integer.parseInt(value);
+			if (fireresist < 0 || fireresist > ((Utils.getMaxLevel() / 10) * 5))
+				throw new InvalidLootDropSettingException("Invalid fireresist value is it too low or too high?");
+			
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				int itemId = getEntries().get(i).getItemid();
+				StateManager.getInstance().getConfigurationManager().getItem(itemId).setFireResist(fireresist);
+			}
+			break;
+		case "setallitemcoldresist":
+			int coldresist = Integer.parseInt(value);
+			if (coldresist < 0 || coldresist > ((Utils.getMaxLevel() / 10) * 5))
+				throw new InvalidLootDropSettingException("Invalid coldresist value is it too low or too high?");
+			
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				int itemId = getEntries().get(i).getItemid();
+				StateManager.getInstance().getConfigurationManager().getItem(itemId).setColdResist(coldresist);
+			}
+			break;
+		case "setallitemmagicresist":
+			int magicresist = Integer.parseInt(value);
+			if (magicresist < 0 || magicresist > ((Utils.getMaxLevel() / 10) * 5))
+				throw new InvalidLootDropSettingException("Invalid magicresist value is it too low or too high?");
+			
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				int itemId = getEntries().get(i).getItemid();
+				StateManager.getInstance().getConfigurationManager().getItem(itemId).setMagicResist(magicresist);
+			}
+			break;
+		case "setallitempoisonresist":
+			int poisonresist = Integer.parseInt(value);
+			if (poisonresist < 0 || poisonresist > ((Utils.getMaxLevel() / 10) * 5))
+				throw new InvalidLootDropSettingException("Invalid poisonresist value is it too low or too high?");
+			
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				int itemId = getEntries().get(i).getItemid();
+				StateManager.getInstance().getConfigurationManager().getItem(itemId).setPoisonResist(poisonresist);
+			}
+			break;
+		case "setallitemdiseaseresist":
+			int diseaseresist = Integer.parseInt(value);
+			if (diseaseresist < 0 || diseaseresist > ((Utils.getMaxLevel() / 10) * 5))
+				throw new InvalidLootDropSettingException("Invalid diseaseresist value is it too low or too high?");
+			
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				int itemId = getEntries().get(i).getItemid();
+				StateManager.getInstance().getConfigurationManager().getItem(itemId).setDiseaseResist(diseaseresist);
+			}
+			break;
 		case "setallitemchance":
 			int chance = Integer.parseInt(value);
 			if (chance < 1 || chance > 100)
@@ -122,9 +177,19 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			}
 			
 			break;
-		default:
+		case "setallcount":
+			int count = Integer.parseInt(value);
+			if (count < 0 || count > 100)
+				throw new InvalidLootDropSettingException("Invalid count");
+			
+			for(ISoliniaLootDropEntry entry : getEntries())
+			{
+				entry.setCount(count);
+			}
+			
+			break;		default:
 			throw new InvalidLootDropSettingException(
-					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemminlevel");
+					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemchance,setallcount,setallitemminlevel,setallitemfireresist,setallitemcoldresist,setallitemmagicresist,setallitempoisonresist,setallitemdiseaseresist");
 		}
 	}
 	
