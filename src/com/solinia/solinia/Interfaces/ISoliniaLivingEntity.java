@@ -197,4 +197,6 @@ public interface ISoliniaLivingEntity
 
 	void damage(Plugin plugin, double damage, Entity sourceEntity);
 
+	public boolean isBehindEntity(LivingEntity livingEntity);
+
 }

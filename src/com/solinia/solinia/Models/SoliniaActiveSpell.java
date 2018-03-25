@@ -35,9 +35,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -66,8 +68,9 @@ public class SoliniaActiveSpell {
 	private UUID ownerUuid;
 	private boolean isFirstRun = true;
 	private List<ActiveSpellEffect> activeSpellEffects = new ArrayList<ActiveSpellEffect>();
-	
-	public SoliniaActiveSpell(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid, boolean sourceIsPlayer, int ticksLeft) {
+
+	public SoliniaActiveSpell(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid,
+			boolean sourceIsPlayer, int ticksLeft) {
 		setOwnerUuid(owneruuid);
 		setOwnerPlayer(isOwnerPlayer);
 		setSourceUuid(sourceuuid);
@@ -79,31 +82,31 @@ public class SoliniaActiveSpell {
 
 	private void setActiveSpellEffects() {
 		activeSpellEffects = new ArrayList<ActiveSpellEffect>();
-		
-		try
-		{
-			ISoliniaLivingEntity solOwner = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(ownerUuid));
-			ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(sourceUuid));
-			
+
+		try {
+			ISoliniaLivingEntity solOwner = SoliniaLivingEntityAdapter
+					.Adapt((LivingEntity) Bukkit.getEntity(ownerUuid));
+			ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter
+					.Adapt((LivingEntity) Bukkit.getEntity(sourceUuid));
+
 			if (solOwner == null)
 				return;
-			
+
 			if (solSource == null)
 				return;
-			
-			for(SpellEffect spellEffect : getSpell().getBaseSpellEffects())
-			{
-				ActiveSpellEffect activeSpellEffect = new ActiveSpellEffect(getSpell(), spellEffect, solSource.getBukkitLivingEntity(), solOwner.getBukkitLivingEntity(), solSource.getLevel(), getTicksLeft());
+
+			for (SpellEffect spellEffect : getSpell().getBaseSpellEffects()) {
+				ActiveSpellEffect activeSpellEffect = new ActiveSpellEffect(getSpell(), spellEffect,
+						solSource.getBukkitLivingEntity(), solOwner.getBukkitLivingEntity(), solSource.getLevel(),
+						getTicksLeft());
 				activeSpellEffects.add(activeSpellEffect);
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
-	
-	public List<ActiveSpellEffect> getActiveSpellEffects()
-	{
+
+	public List<ActiveSpellEffect> getActiveSpellEffects() {
 		return activeSpellEffects;
 	}
 
@@ -114,7 +117,7 @@ public class SoliniaActiveSpell {
 	public void setOwnerPlayer(boolean isOwnerPlayer) {
 		this.isOwnerPlayer = isOwnerPlayer;
 	}
-	
+
 	public UUID getOwnerUuid() {
 		return ownerUuid;
 	}
@@ -139,10 +142,10 @@ public class SoliniaActiveSpell {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	public int getSpellId() {
 		return spellId;
 	}
@@ -154,8 +157,7 @@ public class SoliniaActiveSpell {
 	public void apply(Plugin plugin) {
 		try {
 			ISoliniaSpell soliniaSpell = StateManager.getInstance().getConfigurationManager().getSpell(getSpellId());
-			if (soliniaSpell == null)
-			{
+			if (soliniaSpell == null) {
 				System.out.print("Spell not found");
 				return;
 			}
@@ -163,23 +165,22 @@ public class SoliniaActiveSpell {
 			Entity sourceEntity = Bukkit.getEntity(this.getSourceUuid());
 			if (sourceEntity == null || (!(sourceEntity instanceof LivingEntity)))
 				return;
-			
-			ISoliniaLivingEntity solsource = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sourceEntity);
+
+			ISoliniaLivingEntity solsource = SoliniaLivingEntityAdapter.Adapt((LivingEntity) sourceEntity);
 			if (solsource == null)
 				return;
-			
-			if (isFirstRun)
-			{
-				if (soliniaSpell.getCastOnYou() != null && !soliniaSpell.getCastOnYou().equals("") && isOwnerPlayer)
-				{
+
+			if (isFirstRun) {
+				if (soliniaSpell.getCastOnYou() != null && !soliniaSpell.getCastOnYou().equals("") && isOwnerPlayer) {
 					Player player = Bukkit.getPlayer(getOwnerUuid());
 					player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
 				}
-					
+
 				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals(""))
-					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(ChatColor.GRAY + "* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther());
+					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(
+							ChatColor.GRAY + "* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther());
 			}
-				
+
 			for (ActiveSpellEffect spellEffect : getActiveSpellEffects()) {
 				applySpellEffect(plugin, spellEffect, soliniaSpell, isFirstRun, solsource.getLevel());
 			}
@@ -189,1057 +190,1054 @@ public class SoliniaActiveSpell {
 		}
 	}
 
-	private void applySpellEffect(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, boolean isFirstRun, int casterLevel) {
-		
+	private void applySpellEffect(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell,
+			boolean isFirstRun, int casterLevel) {
+
 		switch (spellEffect.getSpellEffectType()) {
 		case CurrentHP:
-			applyCurrentHpSpellEffect(spellEffect,soliniaSpell,casterLevel);
+			applyCurrentHpSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case ArmorClass: 
+		case ArmorClass:
 			return;
-		case ATK: 
+		case ATK:
 			return;
 		case MovementSpeed:
-			applyMovementSpeedEffect(spellEffect,soliniaSpell,casterLevel);
+			applyMovementSpeedEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case STR
-			: return;
-		case DEX
-			: return;
-		case AGI
-			: return;
-		case STA: 
-			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player)
-			{
-				try
-				{
-					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+		case STR:
+			return;
+		case DEX:
+			return;
+		case AGI:
+			return;
+		case STA:
+			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player) {
+				try {
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
 					if (solplayer != null)
-					solplayer.updateMaxHp();
-				} catch (CoreStateInitException e)
-				{
-					
+						solplayer.updateMaxHp();
+				} catch (CoreStateInitException e) {
+
 				}
 			}
 			return;
-		case INT
-			: return;
-		case WIS
-			: return;
-		case CHA
-			: return;
-		case AttackSpeed
-			: return;
-		case Invisibility: 
-			applyInvisibility(spellEffect,soliniaSpell,casterLevel);
+		case INT:
 			return;
-		case SeeInvis
-			: return;
-		case WaterBreathing: 
-			applyWaterBreathing(spellEffect,soliniaSpell,casterLevel);
+		case WIS:
+			return;
+		case CHA:
+			return;
+		case AttackSpeed:
+			return;
+		case Invisibility:
+			applyInvisibility(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case SeeInvis:
+			return;
+		case WaterBreathing:
+			applyWaterBreathing(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case CurrentMana:
-			applyCurrentMpSpellEffect(spellEffect,soliniaSpell,casterLevel);
+			applyCurrentMpSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case NPCFrenzy
-			: return;
-		case NPCAwareness
-			: return;
-		case Lull
-			: return;
-		case AddFaction
-			: return;
-		case Blind: 
-			applyBlind(spellEffect,soliniaSpell,casterLevel);
+		case NPCFrenzy:
 			return;
-		case Stun: 
-			applyStunSpellEffect(spellEffect,soliniaSpell,casterLevel);
+		case NPCAwareness:
 			return;
-		case Charm
-			: return;
-		case Fear: 
-			applyFear(spellEffect,soliniaSpell,casterLevel);
+		case Lull:
 			return;
-		case Stamina
-			: return;
-		case BindAffinity: 
-			applyBindAffinty(spellEffect,soliniaSpell,casterLevel);
+		case AddFaction:
+			return;
+		case Blind:
+			applyBlind(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case Stun:
+			applyStunSpellEffect(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case Charm:
+			return;
+		case Fear:
+			applyFear(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case Stamina:
+			return;
+		case BindAffinity:
+			applyBindAffinty(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case Gate:
-			applyGate(spellEffect,soliniaSpell,casterLevel);
+			applyGate(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case CancelMagic: 
+		case CancelMagic:
 			applyCancelMagic(plugin, spellEffect, soliniaSpell, casterLevel);
 			return;
-		case InvisVsUndead
-			: return;
-		case InvisVsAnimals
-			: return;
-		case ChangeFrenzyRad
-			: return;
-		case Mez: 
-			applyMezSpellEffect(spellEffect,soliniaSpell,casterLevel);
+		case InvisVsUndead:
 			return;
-		case SummonItem: 
-			for(int i = 0; i < spellEffect.getFormula(); i++)
-			{
+		case InvisVsAnimals:
+			return;
+		case ChangeFrenzyRad:
+			return;
+		case Mez:
+			applyMezSpellEffect(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case SummonItem:
+			for (int i = 0; i < spellEffect.getFormula(); i++) {
 				applySummonItem(spellEffect, soliniaSpell, casterLevel);
 			}
 			return;
-		case SummonPet: 
-			applySummonPet(plugin, spellEffect,soliniaSpell,casterLevel);
+		case SummonPet:
+			applySummonPet(plugin, spellEffect, soliniaSpell, casterLevel);
 			return;
-		case Confuse: 
-			applyConfusion(spellEffect,soliniaSpell,casterLevel);
+		case Confuse:
+			applyConfusion(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case DiseaseCounter: 
-			applyDiseaseCounter(plugin, spellEffect,soliniaSpell,casterLevel);
+		case DiseaseCounter:
+			applyDiseaseCounter(plugin, spellEffect, soliniaSpell, casterLevel);
 			return;
-		case PoisonCounter: 
-			applyPoisonCounter(plugin, spellEffect,soliniaSpell,casterLevel);
+		case PoisonCounter:
+			applyPoisonCounter(plugin, spellEffect, soliniaSpell, casterLevel);
 			return;
-		case DetectHostile
-			: return;
-		case DetectMagic
-			: return;
-		case DetectPoison
-			: return;
-		case DivineAura
-			: return;
-		case Destroy
-			: return;
-		case ShadowStep: 
-			applyShadowStep(spellEffect,soliniaSpell,casterLevel);
+		case DetectHostile:
 			return;
-		case Berserk
-			: return;
-		case Lycanthropy
-			: return;
-		case Vampirism
-			: return;
-		case ResistFire: 
+		case DetectMagic:
+			return;
+		case DetectPoison:
+			return;
+		case DivineAura:
+			return;
+		case Destroy:
+			return;
+		case ShadowStep:
+			applyShadowStep(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case Berserk:
+			return;
+		case Lycanthropy:
+			return;
+		case Vampirism:
+			return;
+		case ResistFire:
 			// this is passive
 			return;
-		case ResistCold: 
+		case ResistCold:
 			// this is passive
 			return;
-		case ResistPoison: 
+		case ResistPoison:
 			// this is passive
 			return;
-		case ResistDisease: 
+		case ResistDisease:
 			// this is passive
 			return;
-		case ResistMagic: 
+		case ResistMagic:
 			// this is passive
 			return;
-		case DetectTraps
-			: return;
-		case SenseDead: 
-			applySenseDead(spellEffect,soliniaSpell,casterLevel);
+		case DetectTraps:
 			return;
-		case SenseSummoned: 
-			applySenseSummoned(spellEffect,soliniaSpell,casterLevel);
+		case SenseDead:
+			applySenseDead(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case SenseAnimals: 
-			applySenseAnimal(spellEffect,soliniaSpell,casterLevel);
+		case SenseSummoned:
+			applySenseSummoned(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case Rune: 
-			applyRune(spellEffect,soliniaSpell,casterLevel);
+		case SenseAnimals:
+			applySenseAnimal(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case TrueNorth: 
-			applyTrueNorthSpellEffect(spellEffect,soliniaSpell,casterLevel);
+		case Rune:
+			applyRune(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case Levitate: 
-			applyLevitateSpellEffect(spellEffect,soliniaSpell,casterLevel);
+		case TrueNorth:
+			applyTrueNorthSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case Illusion: 
-			applyIllusion(spellEffect,soliniaSpell,casterLevel);
+		case Levitate:
+			applyLevitateSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case DamageShield: 
+		case Illusion:
+			applyIllusion(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case DamageShield:
 			// This is passive
 			return;
-		case TransferItem
-			: return;
-		case Identify
-			: return;
-		case ItemID
-			: return;
-		case WipeHateList: 
-			applyWipeHateList(spellEffect,soliniaSpell,casterLevel);
+		case TransferItem:
 			return;
-		case SpinTarget
-			: return;
-		case InfraVision: 
-			applyVision(spellEffect,soliniaSpell,casterLevel);
+		case Identify:
 			return;
-		case UltraVision: 
-			applyVision(spellEffect,soliniaSpell,casterLevel);
+		case ItemID:
 			return;
-		case EyeOfZomm
-			: return;
-		case ReclaimPet: 
-			applyReclaimPet(spellEffect,soliniaSpell,casterLevel);
+		case WipeHateList:
+			applyWipeHateList(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case TotalHP: 
-			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player)
-			{
-				try
-				{
-					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+		case SpinTarget:
+			return;
+		case InfraVision:
+			applyVision(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case UltraVision:
+			applyVision(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case EyeOfZomm:
+			return;
+		case ReclaimPet:
+			applyReclaimPet(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case TotalHP:
+			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player) {
+				try {
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
 					if (solplayer != null)
-					solplayer.updateMaxHp();
-				} catch (CoreStateInitException e)
-				{
-					
+						solplayer.updateMaxHp();
+				} catch (CoreStateInitException e) {
+
 				}
 			}
 			return;
-		case CorpseBomb
-			: return;
-		case NecPet: 
-			applySummonPet(plugin, spellEffect,soliniaSpell,casterLevel);
+		case CorpseBomb:
 			return;
-		case PreserveCorpse
-			: return;
-		case BindSight
-			: return;
-		case FeignDeath
-			: return;
-		case VoiceGraft
-			: return;
-		case Sentinel
-			: return;
-		case LocateCorpse
-			: return;
-		case AbsorbMagicAtt
-			: return;
+		case NecPet:
+			applySummonPet(plugin, spellEffect, soliniaSpell, casterLevel);
+			return;
+		case PreserveCorpse:
+			return;
+		case BindSight:
+			return;
+		case FeignDeath:
+			return;
+		case VoiceGraft:
+			return;
+		case Sentinel:
+			return;
+		case LocateCorpse:
+			return;
+		case AbsorbMagicAtt:
+			return;
 		case CurrentHPOnce:
 			if (!isFirstRun)
 				return;
-			
-			applyCurrentHpOnceSpellEffect(spellEffect,soliniaSpell,casterLevel);
+
+			applyCurrentHpOnceSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case EnchantLight
-			: return;
-		case Revive: 
-			applyRevive(spellEffect,soliniaSpell,casterLevel);
+		case EnchantLight:
 			return;
-		case SummonPC: 
+		case Revive:
+			applyRevive(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case SummonPC:
 			applySummonGroup(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case Teleport: 
+		case Teleport:
 			if (getLivingEntity() instanceof Player)
-			applyTeleport(spellEffect,soliniaSpell,casterLevel);
+				applyTeleport(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case TossUp: 
-			applyTossUpEffect(spellEffect,soliniaSpell,casterLevel);
+		case TossUp:
+			applyTossUpEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case WeaponProc: 
-			applyProc(spellEffect, soliniaSpell,casterLevel);
+		case WeaponProc:
+			applyProc(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case Harmony
-			: return;
-		case MagnifyVision
-			: return;
-		case Succor: 
+		case Harmony:
+			return;
+		case MagnifyVision:
+			return;
+		case Succor:
 			if (getLivingEntity() instanceof Player)
-				applyTeleport(spellEffect, soliniaSpell,casterLevel);
+				applyTeleport(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case ModelSize
-			: return;
-		case Cloak: 
-			applyInvisibility(spellEffect, soliniaSpell,casterLevel);
+		case ModelSize:
 			return;
-		case SummonCorpse
-			: return;
-		case InstantHate: 
-			applyTauntSpell(spellEffect, soliniaSpell,casterLevel);
+		case Cloak:
+			applyInvisibility(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case StopRain: 
-			applyStopRain(spellEffect, soliniaSpell,casterLevel);
+		case SummonCorpse:
 			return;
-		case NegateIfCombat
-			: return;
-		case Sacrifice
-			: return;
-		case Silence
-			: return;
-		case ManaPool
-			: return;
-		case AttackSpeed2
-			: return;
-		case Root: 
-			applyRootSpellEffect(spellEffect,soliniaSpell,casterLevel);
+		case InstantHate:
+			applyTauntSpell(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case HealOverTime: 
-			applyCurrentHpSpellEffect(spellEffect,soliniaSpell,casterLevel);
+		case StopRain:
+			applyStopRain(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case CompleteHeal
-			: return;
-		case Fearless
-			: return;
-		case CallPet
-			: return;
+		case NegateIfCombat:
+			return;
+		case Sacrifice:
+			return;
+		case Silence:
+			return;
+		case ManaPool:
+			return;
+		case AttackSpeed2:
+			return;
+		case Root:
+			applyRootSpellEffect(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case HealOverTime:
+			applyCurrentHpSpellEffect(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case CompleteHeal:
+			return;
+		case Fearless:
+			return;
+		case CallPet:
+			return;
 		case Translocate:
 			if (getLivingEntity() instanceof Player)
-			applyTeleport(spellEffect, soliniaSpell,casterLevel);
+				applyTeleport(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case AntiGate
-			: return;
-		case SummonBSTPet
-			: return;
-		case AlterNPCLevel
-			: return;
-		case Familiar
-			: return;
-		case SummonItemIntoBag
-			: return;
-		case IncreaseArchery
-			: return;
-		case ResistAll
-			: return;
-		case CastingLevel
-			: return;
-		case SummonHorse: 
+		case AntiGate:
+			return;
+		case SummonBSTPet:
+			return;
+		case AlterNPCLevel:
+			return;
+		case Familiar:
+			return;
+		case SummonItemIntoBag:
+			return;
+		case IncreaseArchery:
+			return;
+		case ResistAll:
+			return;
+		case CastingLevel:
+			return;
+		case SummonHorse:
 			if (getLivingEntity() instanceof Player)
-				applySummonHorse(spellEffect,soliniaSpell,casterLevel);
+				applySummonHorse(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case ChangeAggro
-			: return;
-		case Hunger
-			: return;
-		case CurseCounter
-			: return;
-		case MagicWeapon
-			: return;
-		case Amplification
-			: return;
-		case AttackSpeed3
-			: return;
-		case HealRate
-			: return;
-		case ReverseDS
-			: return;
-		case ReduceSkill
-			: return;
-		case Screech
-			: return;
-		case ImprovedDamage
-			: return;
-		case ImprovedHeal
-			: return;
-		case SpellResistReduction
-			: return;
-		case IncreaseSpellHaste
-			: return;
-		case IncreaseSpellDuration
-			: return;
-		case IncreaseRange
-			: return;
-		case SpellHateMod
-			: return;
-		case ReduceReagentCost
-			: return;
-		case ReduceManaCost
-			: return;
-		case FcStunTimeMod
-			: return;
-		case LimitMaxLevel
-			: return;
-		case LimitResist
-			: return;
-		case LimitTarget
-			: return;
-		case LimitEffect
-			: return;
-		case LimitSpellType
-			: return;
-		case LimitSpell
-			: return;
-		case LimitMinDur
-			: return;
-		case LimitInstant
-			: return;
-		case LimitMinLevel
-			: return;
-		case LimitCastTimeMin
-			: return;
-		case LimitCastTimeMax
-			: return;
+		case ChangeAggro:
+			return;
+		case Hunger:
+			return;
+		case CurseCounter:
+			return;
+		case MagicWeapon:
+			return;
+		case Amplification:
+			return;
+		case AttackSpeed3:
+			return;
+		case HealRate:
+			return;
+		case ReverseDS:
+			return;
+		case ReduceSkill:
+			return;
+		case Screech:
+			return;
+		case ImprovedDamage:
+			return;
+		case ImprovedHeal:
+			return;
+		case SpellResistReduction:
+			return;
+		case IncreaseSpellHaste:
+			return;
+		case IncreaseSpellDuration:
+			return;
+		case IncreaseRange:
+			return;
+		case SpellHateMod:
+			return;
+		case ReduceReagentCost:
+			return;
+		case ReduceManaCost:
+			return;
+		case FcStunTimeMod:
+			return;
+		case LimitMaxLevel:
+			return;
+		case LimitResist:
+			return;
+		case LimitTarget:
+			return;
+		case LimitEffect:
+			return;
+		case LimitSpellType:
+			return;
+		case LimitSpell:
+			return;
+		case LimitMinDur:
+			return;
+		case LimitInstant:
+			return;
+		case LimitMinLevel:
+			return;
+		case LimitCastTimeMin:
+			return;
+		case LimitCastTimeMax:
+			return;
 		case Teleport2:
 			if (getLivingEntity() instanceof Player)
-			applyTeleport(spellEffect, soliniaSpell,casterLevel);
+				applyTeleport(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case ElectricityResist
-			: return;
-		case PercentalHeal
-			: return;
-		case StackingCommand_Block
-			: return;
-		case StackingCommand_Overwrite
-			: return;
-		case DeathSave
-			: return;
-		case SuspendPet
-			: return;
-		case TemporaryPets
-			: return;
-		case BalanceHP
-			: return;
-		case DispelDetrimental
-			: return;
-		case SpellCritDmgIncrease
-			: return;
-		case IllusionCopy: 
-			applyIllusion(spellEffect,soliniaSpell,casterLevel);
+		case ElectricityResist:
 			return;
-		case SpellDamageShield
-			: return;
-		case Reflect
-			: return;
-		case AllStats
-			: return;
-		case MakeDrunk
-			: return;
-		case MitigateSpellDamage
-			: return;
-		case MitigateMeleeDamage
-			: return;
-		case NegateAttacks
-			: return;
-		case AppraiseLDonChest
-			: return;
-		case DisarmLDoNTrap
-			: return;
-		case UnlockLDoNChest
-			: return;
-		case PetPowerIncrease
-			: return;
-		case MeleeMitigation
-			: return;
-		case CriticalHitChance
-			: return;
-		case SpellCritChance
-			: return;
-		case CrippBlowChance
-			: return;
-		case AvoidMeleeChance
-			: return;
-		case RiposteChance
-			: return;
-		case DodgeChance
-			: return;
-		case ParryChance
-			: return;
-		case DualWieldChance
-			: return;
-		case DoubleAttackChance
-			: return;
-		case MeleeLifetap
-			: return;
-		case AllInstrumentMod
-			: return;
-		case ResistSpellChance
-			: return;
-		case ResistFearChance
-			: return;
-		case HundredHands
-			: return;
-		case MeleeSkillCheck
-			: return;
-		case HitChance
-			: return;
-		case DamageModifier
-			: return;
-		case MinDamageModifier
-			: return;
-		case BalanceMana
-			: return;
-		case IncreaseBlockChance
-			: return;
-		case CurrentEndurance
-			: return;
-		case EndurancePool
-			: return;
-		case Amnesia: 
-			applyWipeHateList(spellEffect, soliniaSpell,casterLevel);
+		case PercentalHeal:
+			return;
+		case StackingCommand_Block:
+			return;
+		case StackingCommand_Overwrite:
+			return;
+		case DeathSave:
+			return;
+		case SuspendPet:
+			return;
+		case TemporaryPets:
+			return;
+		case BalanceHP:
+			return;
+		case DispelDetrimental:
+			return;
+		case SpellCritDmgIncrease:
+			return;
+		case IllusionCopy:
+			applyIllusion(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case SpellDamageShield:
+			return;
+		case Reflect:
+			return;
+		case AllStats:
+			return;
+		case MakeDrunk:
+			return;
+		case MitigateSpellDamage:
+			return;
+		case MitigateMeleeDamage:
+			return;
+		case NegateAttacks:
+			return;
+		case AppraiseLDonChest:
+			return;
+		case DisarmLDoNTrap:
+			return;
+		case UnlockLDoNChest:
+			return;
+		case PetPowerIncrease:
+			return;
+		case MeleeMitigation:
+			return;
+		case CriticalHitChance:
+			return;
+		case SpellCritChance:
+			return;
+		case CrippBlowChance:
+			return;
+		case AvoidMeleeChance:
+			return;
+		case RiposteChance:
+			return;
+		case DodgeChance:
+			return;
+		case ParryChance:
+			return;
+		case DualWieldChance:
+			return;
+		case DoubleAttackChance:
+			return;
+		case MeleeLifetap:
+			return;
+		case AllInstrumentMod:
+			return;
+		case ResistSpellChance:
+			return;
+		case ResistFearChance:
+			return;
+		case HundredHands:
+			return;
+		case MeleeSkillCheck:
+			return;
+		case HitChance:
+			return;
+		case DamageModifier:
+			return;
+		case MinDamageModifier:
+			return;
+		case BalanceMana:
+			return;
+		case IncreaseBlockChance:
+			return;
+		case CurrentEndurance:
+			return;
+		case EndurancePool:
+			return;
+		case Amnesia:
+			applyWipeHateList(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case Hate:
-			applyTauntSpell(spellEffect, soliniaSpell,casterLevel);
+			applyTauntSpell(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case SkillAttack
-			: return;
-		case FadingMemories: 
-			applyWipeHateList(spellEffect, soliniaSpell,casterLevel);
+		case SkillAttack:
 			return;
-		case StunResist
-			: return;
-		case StrikeThrough
-			: return;
-		case SkillDamageTaken
-			: return;
-		case CurrentEnduranceOnce: 
+		case FadingMemories:
+			applyWipeHateList(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case StunResist:
+			return;
+		case StrikeThrough:
+			return;
+		case SkillDamageTaken:
+			return;
+		case CurrentEnduranceOnce:
 			if (!isFirstRun)
 				return;
 			return;
-		case Taunt: 
-			applyTauntSpell(spellEffect,soliniaSpell,casterLevel);
+		case Taunt:
+			applyTauntSpell(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case ProcChance
-			: return;
-		case RangedProc
-			: return;
-		case IllusionOther: 
-			applyIllusion(spellEffect,soliniaSpell,casterLevel);
+		case ProcChance:
 			return;
-		case MassGroupBuff
-			: return;
-		case GroupFearImmunity
-			: return;
-		case Rampage
-			: return;
-		case AETaunt
-			: return;
-		case FleshToBone
-			: return;
-		case PurgePoison
-			: return;
-		case DispelBeneficial
-			: return;
-		case PetShield
-			: return;
-		case AEMelee
-			: return;
-		case FrenziedDevastation
-			: return;
-		case PetMaxHP
-			: return;
-		case MaxHPChange
-			: return;
-		case PetAvoidance
-			: return;
-		case Accuracy
-			: return;
-		case HeadShot
-			: return;
-		case PetCriticalHit
-			: return;
-		case SlayUndead: 
+		case RangedProc:
 			return;
-		case SkillDamageAmount
-			: return;
-		case Packrat
-			: return;
-		case BlockBehind
-			: return;
-		case DoubleRiposte
-			: return;
-		case GiveDoubleRiposte
-			: return;
-		case GiveDoubleAttack
-			: return;
-		case TwoHandBash
-			: return;
-		case ReduceSkillTimer
-			: return;
-		case ReduceFallDamage
-			: return;
-		case PersistantCasting
-			: return;
-		case ExtendedShielding
-			: return;
-		case StunBashChance
-			: return;
-		case DivineSave
-			: return;
-		case Metabolism
-			: return;
-		case ReduceApplyPoisonTime
-			: return;
-		case ChannelChanceSpells
-			: return;
-		case FreePet
-			: return;
-		case GivePetGroupTarget
-			: return;
-		case IllusionPersistence: 
-			applyIllusion(spellEffect,soliniaSpell,casterLevel);
+		case IllusionOther:
+			applyIllusion(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case FeignedCastOnChance
-			: return;
-		case StringUnbreakable
-			: return;
-		case ImprovedReclaimEnergy: 
-			applyReclaimPet(spellEffect,soliniaSpell,casterLevel);
+		case MassGroupBuff:
 			return;
-		case IncreaseChanceMemwipe
-			: return;
-		case CharmBreakChance
-			: return;
-		case RootBreakChance: 
+		case GroupFearImmunity:
 			return;
-		case TrapCircumvention: 
+		case Rampage:
 			return;
-		case SetBreathLevel
-			: return;
-		case RaiseSkillCap
-			: return;
-		case SecondaryForte
-			: return;
-		case SecondaryDmgInc
-			: return;
-		case SpellProcChance
-			: return;
-		case ConsumeProjectile
-			: return;
-		case FrontalBackstabChance
-			: return;
-		case FrontalBackstabMinDmg
-			: return;
-		case Blank: 
+		case AETaunt:
 			return;
-		case ShieldDuration: 
+		case FleshToBone:
 			return;
-		case ShroudofStealth
-			: return;
-		case PetDiscipline
-			: return;
-		case TripleBackstab
-			: return;
-		case CombatStability
-			: return;
-		case AddSingingMod
-			: return;
-		case SongModCap
-			: return;
-		case RaiseStatCap
-			: return;
-		case TradeSkillMastery
-			: return;
-		case HastenedAASkill
-			: return;
-		case MasteryofPast
-			: return;
-		case ExtraAttackChance
-			: return;
-		case AddPetCommand
-			: return;
-		case ReduceTradeskillFail
-			: return;
-		case MaxBindWound
-			: return;
-		case BardSongRange
-			: return;
-		case BaseMovementSpeed
-			: return;
-		case CastingLevel2
-			: return;
-		case CriticalDoTChance
-			: return;
-		case CriticalHealChance
-			: return;
-		case CriticalMend
-			: return;
-		case Ambidexterity
-			: return;
-		case UnfailingDivinity
-			: return;
-		case FinishingBlow
-			: return;
-		case Flurry
-			: return;
-		case PetFlurry
-			: return;
-		case FeignedMinion
-			: return;
-		case ImprovedBindWound
-			: return;
-		case DoubleSpecialAttack
-			: return;
-		case LoHSetHeal
-			: return;
-		case NimbleEvasion
-			: return;
-		case FcDamageAmt
-			: return;
-		case SpellDurationIncByTic
-			: return;
-		case SkillAttackProc
-			: return;
-		case CastOnFadeEffect
-			: return;
-		case IncreaseRunSpeedCap
-			: return;
-		case Purify
-			: return;
-		case StrikeThrough2
-			: return;
-		case FrontalStunResist
-			: return;
-		case CriticalSpellChance
-			: return;
-		case ReduceTimerSpecial
-			: return;
-		case FcSpellVulnerability
-			: return;
-		case FcDamageAmtIncoming
-			: return;
-		case ChangeHeight
-			: return;
-		case WakeTheDead
-			: return;
-		case Doppelganger
-			: return;
-		case ArcheryDamageModifier
-			: return;
-		case FcDamagePctCrit
-			: return;
-		case FcDamageAmtCrit
-			: return;
-		case OffhandRiposteFail
-			: return;
-		case MitigateDamageShield
-			: return;
-		case ArmyOfTheDead
-			: return;
-		case Appraisal
-			: return;
-		case SuspendMinion
-			: return;
-		case GateCastersBindpoint
-			: return;
-		case ReduceReuseTimer
-			: return;
-		case LimitCombatSkills
-			: return;
-		case Sanctuary
-			: return;
-		case ForageAdditionalItems
-			: return;
-		case Invisibility2
-			: return;
-		case InvisVsUndead2
-			: return;
-		case ImprovedInvisAnimals
-			: return;
-		case ItemHPRegenCapIncrease
-			: return;
-		case ItemManaRegenCapIncrease
-			: return;
-		case CriticalHealOverTime
-			: return;
-		case ShieldBlock
-			: return;
-		case ReduceHate
-			: return;
-		case GateToHomeCity
-			: return;
-		case DefensiveProc
-			: return;
-		case HPToMana
-			: return;
-		case NoBreakAESneak
-			: return;
-		case SpellSlotIncrease
-			: return;
-		case MysticalAttune
-			: return;
-		case DelayDeath
-			: return;
-		case ManaAbsorbPercentDamage
-			: return;
-		case CriticalDamageMob
-			: return;
-		case Salvage
-			: return;
-		case SummonToCorpse
-			: return;
-		case CastOnRuneFadeEffect
-			: return;
-		case BardAEDot
-			: return;
-		case BlockNextSpellFocus
-			: return;
-		case IllusionaryTarget: 
-			applyIllusion(spellEffect,soliniaSpell,casterLevel);
+		case PurgePoison:
 			return;
-		case PercentXPIncrease
-			: return;
-		case SummonAndResAllCorpses
-			: return;
-		case TriggerOnCast
-			: return;
-		case SpellTrigger
-			: return;
-		case ItemAttackCapIncrease
-			: return;
-		case ImmuneFleeing
-			: return;
-		case InterruptCasting
-			: return;
-		case ChannelChanceItems
-			: return;
-		case AssassinateLevel
-			: return;
-		case HeadShotLevel
-			: return;
-		case DoubleRangedAttack
-			: return;
-		case LimitManaMin
-			: return;
-		case ShieldEquipDmgMod
-			: return;
-		case ManaBurn
-			: return;
-		case PersistentEffect
-			: return;
-		case IncreaseTrapCount
-			: return;
-		case AdditionalAura
-			: return;
-		case DeactivateAllTraps
-			: return;
-		case LearnTrap
-			: return;
-		case ChangeTriggerType
-			: return;
-		case FcMute
-			: return;
+		case DispelBeneficial:
+			return;
+		case PetShield:
+			return;
+		case AEMelee:
+			return;
+		case FrenziedDevastation:
+			return;
+		case PetMaxHP:
+			return;
+		case MaxHPChange:
+			return;
+		case PetAvoidance:
+			return;
+		case Accuracy:
+			return;
+		case HeadShot:
+			return;
+		case PetCriticalHit:
+			return;
+		case SlayUndead:
+			return;
+		case SkillDamageAmount:
+			return;
+		case Packrat:
+			return;
+		case BlockBehind:
+			return;
+		case DoubleRiposte:
+			return;
+		case GiveDoubleRiposte:
+			return;
+		case GiveDoubleAttack:
+			return;
+		case TwoHandBash:
+			return;
+		case ReduceSkillTimer:
+			return;
+		case ReduceFallDamage:
+			return;
+		case PersistantCasting:
+			return;
+		case ExtendedShielding:
+			return;
+		case StunBashChance:
+			return;
+		case DivineSave:
+			return;
+		case Metabolism:
+			return;
+		case ReduceApplyPoisonTime:
+			return;
+		case ChannelChanceSpells:
+			return;
+		case FreePet:
+			return;
+		case GivePetGroupTarget:
+			return;
+		case IllusionPersistence:
+			applyIllusion(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case FeignedCastOnChance:
+			return;
+		case StringUnbreakable:
+			return;
+		case ImprovedReclaimEnergy:
+			applyReclaimPet(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case IncreaseChanceMemwipe:
+			return;
+		case CharmBreakChance:
+			return;
+		case RootBreakChance:
+			return;
+		case TrapCircumvention:
+			return;
+		case SetBreathLevel:
+			return;
+		case RaiseSkillCap:
+			return;
+		case SecondaryForte:
+			return;
+		case SecondaryDmgInc:
+			return;
+		case SpellProcChance:
+			return;
+		case ConsumeProjectile:
+			return;
+		case FrontalBackstabChance:
+			return;
+		case FrontalBackstabMinDmg:
+			return;
+		case Blank:
+			return;
+		case ShieldDuration:
+			return;
+		case ShroudofStealth:
+			return;
+		case PetDiscipline:
+			return;
+		case TripleBackstab:
+			return;
+		case CombatStability:
+			return;
+		case AddSingingMod:
+			return;
+		case SongModCap:
+			return;
+		case RaiseStatCap:
+			return;
+		case TradeSkillMastery:
+			return;
+		case HastenedAASkill:
+			return;
+		case MasteryofPast:
+			return;
+		case ExtraAttackChance:
+			return;
+		case AddPetCommand:
+			return;
+		case ReduceTradeskillFail:
+			return;
+		case MaxBindWound:
+			return;
+		case BardSongRange:
+			return;
+		case BaseMovementSpeed:
+			return;
+		case CastingLevel2:
+			return;
+		case CriticalDoTChance:
+			return;
+		case CriticalHealChance:
+			return;
+		case CriticalMend:
+			return;
+		case Ambidexterity:
+			return;
+		case UnfailingDivinity:
+			return;
+		case FinishingBlow:
+			return;
+		case Flurry:
+			return;
+		case PetFlurry:
+			return;
+		case FeignedMinion:
+			return;
+		case ImprovedBindWound:
+			return;
+		case DoubleSpecialAttack:
+			return;
+		case LoHSetHeal:
+			return;
+		case NimbleEvasion:
+			return;
+		case FcDamageAmt:
+			return;
+		case SpellDurationIncByTic:
+			return;
+		case SkillAttackProc:
+			return;
+		case CastOnFadeEffect:
+			return;
+		case IncreaseRunSpeedCap:
+			return;
+		case Purify:
+			return;
+		case StrikeThrough2:
+			return;
+		case FrontalStunResist:
+			return;
+		case CriticalSpellChance:
+			return;
+		case ReduceTimerSpecial:
+			return;
+		case FcSpellVulnerability:
+			return;
+		case FcDamageAmtIncoming:
+			return;
+		case ChangeHeight:
+			return;
+		case WakeTheDead:
+			return;
+		case Doppelganger:
+			return;
+		case ArcheryDamageModifier:
+			return;
+		case FcDamagePctCrit:
+			return;
+		case FcDamageAmtCrit:
+			return;
+		case OffhandRiposteFail:
+			return;
+		case MitigateDamageShield:
+			return;
+		case ArmyOfTheDead:
+			return;
+		case Appraisal:
+			return;
+		case SuspendMinion:
+			return;
+		case GateCastersBindpoint:
+			return;
+		case ReduceReuseTimer:
+			return;
+		case LimitCombatSkills:
+			return;
+		case Sanctuary:
+			return;
+		case ForageAdditionalItems:
+			return;
+		case Invisibility2:
+			return;
+		case InvisVsUndead2:
+			return;
+		case ImprovedInvisAnimals:
+			return;
+		case ItemHPRegenCapIncrease:
+			return;
+		case ItemManaRegenCapIncrease:
+			return;
+		case CriticalHealOverTime:
+			return;
+		case ShieldBlock:
+			return;
+		case ReduceHate:
+			return;
+		case GateToHomeCity:
+			return;
+		case DefensiveProc:
+			return;
+		case HPToMana:
+			return;
+		case NoBreakAESneak:
+			return;
+		case SpellSlotIncrease:
+			return;
+		case MysticalAttune:
+			return;
+		case DelayDeath:
+			return;
+		case ManaAbsorbPercentDamage:
+			return;
+		case CriticalDamageMob:
+			return;
+		case Salvage:
+			return;
+		case SummonToCorpse:
+			return;
+		case CastOnRuneFadeEffect:
+			return;
+		case BardAEDot:
+			return;
+		case BlockNextSpellFocus:
+			return;
+		case IllusionaryTarget:
+			applyIllusion(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case PercentXPIncrease:
+			return;
+		case SummonAndResAllCorpses:
+			return;
+		case TriggerOnCast:
+			return;
+		case SpellTrigger:
+			return;
+		case ItemAttackCapIncrease:
+			return;
+		case ImmuneFleeing:
+			return;
+		case InterruptCasting:
+			return;
+		case ChannelChanceItems:
+			return;
+		case AssassinateLevel:
+			return;
+		case HeadShotLevel:
+			return;
+		case DoubleRangedAttack:
+			return;
+		case LimitManaMin:
+			return;
+		case ShieldEquipDmgMod:
+			return;
+		case ManaBurn:
+			return;
+		case PersistentEffect:
+			return;
+		case IncreaseTrapCount:
+			return;
+		case AdditionalAura:
+			return;
+		case DeactivateAllTraps:
+			return;
+		case LearnTrap:
+			return;
+		case ChangeTriggerType:
+			return;
+		case FcMute:
+			return;
 		case CurrentManaOnce:
 			if (!isFirstRun)
 				return;
 
-			applyCurrentMpSpellEffect(spellEffect,soliniaSpell,casterLevel);
+			applyCurrentMpSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case PassiveSenseTrap
-			: return;
-		case ProcOnKillShot
-			: return;
-		case SpellOnDeath
-			: return;
-		case PotionBeltSlots
-			: return;
-		case BandolierSlots
-			: return;
-		case TripleAttackChance
-			: return;
-		case ProcOnSpellKillShot
-			: return;
-		case GroupShielding
-			: return;
-		case SetBodyType
-			: return;
-		case FactionMod
-			: return;
-		case CorruptionCounter
-			: return;
-		case ResistCorruption
-			: return;
-		case AttackSpeed4
-			: return;
-		case ForageSkill
-			: return;
-		case CastOnFadeEffectAlways
-			: return;
-		case ApplyEffect
-			: return;
-		case DotCritDmgIncrease
-			: return;
-		case Fling
-			: return;
-		case CastOnFadeEffectNPC
-			: return;
-		case SpellEffectResistChance
-			: return;
-		case ShadowStepDirectional: 
-			applyShadowStep(spellEffect,soliniaSpell,casterLevel);
+		case PassiveSenseTrap:
 			return;
-		case Knockdown
-			: return;
-		case KnockTowardCaster
-			: return;
-		case NegateSpellEffect
-			: return;
-		case SympatheticProc
-			: return;
-		case Leap
-			: return;
-		case LimitSpellGroup
-			: return;
-		case CastOnCurer
-			: return;
-		case CastOnCure
-			: return;
-		case SummonCorpseZone
-			: return;
-		case FcTimerRefresh
-			: return;
-		case FcTimerLockout
-			: return;
-		case LimitManaMax
-			: return;
-		case FcHealAmt
-			: return;
-		case FcHealPctIncoming
-			: return;
-		case FcHealAmtIncoming
-			: return;
-		case FcHealPctCritIncoming
-			: return;
-		case FcHealAmtCrit
-			: return;
-		case PetMeleeMitigation
-			: return;
-		case SwarmPetDuration
-			: return;
-		case FcTwincast
-			: return;
-		case HealGroupFromMana
-			: return;
-		case ManaDrainWithDmg
-			: return;
-		case EndDrainWithDmg
-			: return;
-		case LimitSpellClass
-			: return;
-		case LimitSpellSubclass
-			: return;
-		case TwoHandBluntBlock
-			: return;
-		case CastonNumHitFade
-			: return;
-		case CastonFocusEffect
-			: return;
-		case LimitHPPercent
-			: return;
-		case LimitManaPercent
-			: return;
-		case LimitEndPercent
-			: return;
-		case LimitClass
-			: return;
-		case LimitRace
-			: return;
-		case FcBaseEffects
-			: return;
-		case LimitCastingSkill
-			: return;
-		case FFItemClass
-			: return;
-		case ACv2
-			: return;
-		case ManaRegen_v2: 
+		case ProcOnKillShot:
 			return;
-		case SkillDamageAmount2
-			: return;
-		case AddMeleeProc
-			: return;
-		case FcLimitUse
-			: return;
-		case FcIncreaseNumHits
-			: return;
-		case LimitUseMin
-			: return;
-		case LimitUseType
-			: return;
-		case GravityEffect: 
+		case SpellOnDeath:
 			return;
-		case Display
-			: return;
-		case IncreaseExtTargetWindow
-			: return;
-		case SkillProc
-			: return;
-		case LimitToSkill
-			: return;
-		case SkillProcSuccess
-			: return;
-		case PostEffect
-			: return;
-		case PostEffectData
-			: return;
-		case ExpandMaxActiveTrophyBen
-			: return;
-		case CriticalDotDecay
-			: return;
-		case CriticalHealDecay
-			: return;
-		case CriticalRegenDecay
-			: return;
-		case BeneficialCountDownHold
-			: return;
-		case TeleporttoAnchor: 
+		case PotionBeltSlots:
+			return;
+		case BandolierSlots:
+			return;
+		case TripleAttackChance:
+			return;
+		case ProcOnSpellKillShot:
+			return;
+		case GroupShielding:
+			return;
+		case SetBodyType:
+			return;
+		case FactionMod:
+			return;
+		case CorruptionCounter:
+			return;
+		case ResistCorruption:
+			return;
+		case AttackSpeed4:
+			return;
+		case ForageSkill:
+			return;
+		case CastOnFadeEffectAlways:
+			return;
+		case ApplyEffect:
+			return;
+		case DotCritDmgIncrease:
+			return;
+		case Fling:
+			return;
+		case CastOnFadeEffectNPC:
+			return;
+		case SpellEffectResistChance:
+			return;
+		case ShadowStepDirectional:
+			applyShadowStep(spellEffect, soliniaSpell, casterLevel);
+			return;
+		case Knockdown:
+			return;
+		case KnockTowardCaster:
+			return;
+		case NegateSpellEffect:
+			return;
+		case SympatheticProc:
+			return;
+		case Leap:
+			return;
+		case LimitSpellGroup:
+			return;
+		case CastOnCurer:
+			return;
+		case CastOnCure:
+			return;
+		case SummonCorpseZone:
+			return;
+		case FcTimerRefresh:
+			return;
+		case FcTimerLockout:
+			return;
+		case LimitManaMax:
+			return;
+		case FcHealAmt:
+			return;
+		case FcHealPctIncoming:
+			return;
+		case FcHealAmtIncoming:
+			return;
+		case FcHealPctCritIncoming:
+			return;
+		case FcHealAmtCrit:
+			return;
+		case PetMeleeMitigation:
+			return;
+		case SwarmPetDuration:
+			return;
+		case FcTwincast:
+			return;
+		case HealGroupFromMana:
+			return;
+		case ManaDrainWithDmg:
+			return;
+		case EndDrainWithDmg:
+			return;
+		case LimitSpellClass:
+			return;
+		case LimitSpellSubclass:
+			return;
+		case TwoHandBluntBlock:
+			return;
+		case CastonNumHitFade:
+			return;
+		case CastonFocusEffect:
+			return;
+		case LimitHPPercent:
+			return;
+		case LimitManaPercent:
+			return;
+		case LimitEndPercent:
+			return;
+		case LimitClass:
+			return;
+		case LimitRace:
+			return;
+		case FcBaseEffects:
+			return;
+		case LimitCastingSkill:
+			return;
+		case FFItemClass:
+			return;
+		case ACv2:
+			return;
+		case ManaRegen_v2:
+			return;
+		case SkillDamageAmount2:
+			return;
+		case AddMeleeProc:
+			return;
+		case FcLimitUse:
+			return;
+		case FcIncreaseNumHits:
+			return;
+		case LimitUseMin:
+			return;
+		case LimitUseType:
+			return;
+		case GravityEffect:
+			return;
+		case Display:
+			return;
+		case IncreaseExtTargetWindow:
+			return;
+		case SkillProc:
+			return;
+		case LimitToSkill:
+			return;
+		case SkillProcSuccess:
+			return;
+		case PostEffect:
+			return;
+		case PostEffectData:
+			return;
+		case ExpandMaxActiveTrophyBen:
+			return;
+		case CriticalDotDecay:
+			return;
+		case CriticalHealDecay:
+			return;
+		case CriticalRegenDecay:
+			return;
+		case BeneficialCountDownHold:
+			return;
+		case TeleporttoAnchor:
 			if (getLivingEntity() instanceof Player)
-				applyTeleport(spellEffect, soliniaSpell,casterLevel);
+				applyTeleport(spellEffect, soliniaSpell, casterLevel);
 			return;
-		case TranslocatetoAnchor
-			: return;
-		case Assassinate
-			: return;
-		case FinishingBlowLvl
-			: return;
-		case DistanceRemoval
-			: return;
-		case TriggerOnReqTarget
-			: return;
-		case TriggerOnReqCaster
-			: return;
-		case ImprovedTaunt
-			: return;
-		case AddMercSlot
-			: return;
-		case AStacker
-			: return;
-		case BStacker
-			: return;
-		case CStacker
-			: return;
-		case DStacker
-			: return;
-		case MitigateDotDamage
-			: return;
-		case MeleeThresholdGuard
-			: return;
-		case SpellThresholdGuard
-			: return;
-		case TriggerMeleeThreshold
-			: return;
-		case TriggerSpellThreshold
-			: return;
-		case AddHatePct
-			: return;
-		case AddHateOverTimePct
-			: return;
-		case ResourceTap
-			: return;
-		case FactionModPct
-			: return;
-		case DamageModifier2
-			: return;
-		case Ff_Override_NotFocusable
-			: return;
-		case ImprovedDamage2
-			: return;
-		case FcDamageAmt2
-			: return;
-		case Shield_Target
-			: return;
-		case PC_Pet_Rampage
-			: return;
-		case PC_Pet_AE_Rampage
-			: return;
-		case PC_Pet_Flurry_Chance
-			: return;
-		case DS_Mitigation_Amount
-			: return;
-		case DS_Mitigation_Percentage
-			: return;
-		case Chance_Best_in_Spell_Grp
-			: return;
-		case SE_Trigger_Best_in_Spell_Grp
-			: return;
-		case Double_Melee_Round
-			: return;
+		case TranslocatetoAnchor:
+			return;
+		case Assassinate:
+			return;
+		case FinishingBlowLvl:
+			return;
+		case DistanceRemoval:
+			return;
+		case TriggerOnReqTarget:
+			return;
+		case TriggerOnReqCaster:
+			return;
+		case ImprovedTaunt:
+			return;
+		case AddMercSlot:
+			return;
+		case AStacker:
+			return;
+		case BStacker:
+			return;
+		case CStacker:
+			return;
+		case DStacker:
+			return;
+		case MitigateDotDamage:
+			return;
+		case MeleeThresholdGuard:
+			return;
+		case SpellThresholdGuard:
+			return;
+		case TriggerMeleeThreshold:
+			return;
+		case TriggerSpellThreshold:
+			return;
+		case AddHatePct:
+			return;
+		case AddHateOverTimePct:
+			return;
+		case ResourceTap:
+			return;
+		case FactionModPct:
+			return;
+		case DamageModifier2:
+			return;
+		case Ff_Override_NotFocusable:
+			return;
+		case ImprovedDamage2:
+			return;
+		case FcDamageAmt2:
+			return;
+		case Shield_Target:
+			return;
+		case PC_Pet_Rampage:
+			return;
+		case PC_Pet_AE_Rampage:
+			return;
+		case PC_Pet_Flurry_Chance:
+			return;
+		case DS_Mitigation_Amount:
+			return;
+		case DS_Mitigation_Percentage:
+			return;
+		case Chance_Best_in_Spell_Grp:
+			return;
+		case SE_Trigger_Best_in_Spell_Grp:
+			return;
+		case Double_Melee_Round:
+			return;
+		case Backstab:
+			applyBackstab(spellEffect, soliniaSpell, casterLevel);
+			return;
 		default:
 			return;
 		}
@@ -1250,125 +1248,119 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyTossUpEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().setVelocity(new Vector(0,5,0));
+		getLivingEntity().setVelocity(new Vector(0, 5, 0));
 		Utils.dismountEntity(getLivingEntity());
 
-        return;
+		return;
 	}
 
 	private void applySummonHorse(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (getLivingEntity() instanceof Player)
-		{
+		if (getLivingEntity() instanceof Player) {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-			
-			Player player = (Player)getLivingEntity();
-			
+
+			Player player = (Player) getLivingEntity();
+
 			try {
-				if (StateManager.getInstance().getPlayerManager().getPlayerLastSteed(player.getUniqueId()) == null)
-				{
+				if (StateManager.getInstance().getPlayerManager().getPlayerLastSteed(player.getUniqueId()) == null) {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
-				    h.setCustomName("Holy_Steed");
-				    h.setCustomNameVisible(true);
-				    h.setBreed(false);
-				    h.setColor(Color.WHITE);
-				    h.setMaxHealth(1000);
-				    h.setHealth(1000);
-				    h.setTamed(true);
-				    h.setOwner(player);
-				    h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
-				    System.out.println("Summoned Holy Steed for player: " + player.getDisplayName());
-				    player.sendMessage("Your steed has been summoned! You must wait for some time before another steed can be summoned ((server restart))");
-				    StateManager.getInstance().getPlayerManager().setPlayerLastSteed(player.getUniqueId(), nowtimestamp);
+					h.setCustomName("Holy_Steed");
+					h.setCustomNameVisible(true);
+					h.setBreed(false);
+					h.setColor(Color.WHITE);
+					h.setMaxHealth(1000);
+					h.setHealth(1000);
+					h.setTamed(true);
+					h.setOwner(player);
+					h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+					System.out.println("Summoned Holy Steed for player: " + player.getDisplayName());
+					player.sendMessage(
+							"Your steed has been summoned! You must wait for some time before another steed can be summoned ((server restart))");
+					StateManager.getInstance().getPlayerManager().setPlayerLastSteed(player.getUniqueId(),
+							nowtimestamp);
 				} else {
-				    // skip, already summoned
+					// skip, already summoned
 				}
 			} catch (CoreStateInitException e) {
 				// skip
 			}
-			
-			
+
 		}
 	}
 
 	private void applyTrueNorthSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Vector dir = new Location(getLivingEntity().getWorld(), 0,64,-5000000).subtract(getLivingEntity().getEyeLocation()).toVector();
-        Location loc = getLivingEntity().getLocation().setDirection(dir);
-        getLivingEntity().teleport(loc);
-        return;
+		Vector dir = new Location(getLivingEntity().getWorld(), 0, 64, -5000000)
+				.subtract(getLivingEntity().getEyeLocation()).toVector();
+		Location loc = getLivingEntity().getLocation().setDirection(dir);
+		getLivingEntity().teleport(loc);
+		return;
 	}
 
 	private void applySenseAnimal(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		try
-		{
-		
-			for (Entity e: this.getLivingEntity().getNearbyEntities(100, 100, 100))
-			{
+		try {
+
+			for (Entity e : this.getLivingEntity().getNearbyEntities(100, 100, 100)) {
 				if (!(e instanceof LivingEntity))
 					continue;
-				
-				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) e);
 				if (!solEntity.isAnimal())
 					continue;
-				
-				Vector dir = ((LivingEntity)e).getLocation().clone().subtract(getLivingEntity().getEyeLocation()).toVector();
-		        Location loc = getLivingEntity().getLocation().setDirection(dir);
-		        getLivingEntity().teleport(loc);	
-		        return;
+
+				Vector dir = ((LivingEntity) e).getLocation().clone().subtract(getLivingEntity().getEyeLocation())
+						.toVector();
+				Location loc = getLivingEntity().getLocation().setDirection(dir);
+				getLivingEntity().teleport(loc);
+				return;
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
-	
+
 	private void applySenseDead(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		try
-		{
-		
-			for (Entity e: this.getLivingEntity().getNearbyEntities(100, 100, 100))
-			{
+		try {
+
+			for (Entity e : this.getLivingEntity().getNearbyEntities(100, 100, 100)) {
 				if (!(e instanceof LivingEntity))
 					continue;
-				
-				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) e);
 				if (!solEntity.isUndead())
 					continue;
-				
-				Vector dir = ((LivingEntity)e).getLocation().clone().subtract(getLivingEntity().getEyeLocation()).toVector();
-		        Location loc = getLivingEntity().getLocation().setDirection(dir);
-		        getLivingEntity().teleport(loc);	
-		        return;
+
+				Vector dir = ((LivingEntity) e).getLocation().clone().subtract(getLivingEntity().getEyeLocation())
+						.toVector();
+				Location loc = getLivingEntity().getLocation().setDirection(dir);
+				getLivingEntity().teleport(loc);
+				return;
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
-	
+
 	private void applySenseSummoned(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		try
-		{
-		
-			for (Entity e: this.getLivingEntity().getNearbyEntities(100, 100, 100))
-			{
+		try {
+
+			for (Entity e : this.getLivingEntity().getNearbyEntities(100, 100, 100)) {
 				if (!(e instanceof LivingEntity))
 					continue;
-				
+
 				if (!(e instanceof Creature))
 					continue;
-				
-				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) e);
 				if (!solEntity.isPet())
 					continue;
-				
-				Vector dir = ((LivingEntity)e).getLocation().clone().subtract(getLivingEntity().getEyeLocation()).toVector();
-		        Location loc = getLivingEntity().getLocation().setDirection(dir);
-		        getLivingEntity().teleport(loc);	
+
+				Vector dir = ((LivingEntity) e).getLocation().clone().subtract(getLivingEntity().getEyeLocation())
+						.toVector();
+				Location loc = getLivingEntity().getLocation().setDirection(dir);
+				getLivingEntity().teleport(loc);
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 
@@ -1377,136 +1369,122 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyRevive(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!(getLivingEntity() instanceof Player))
-		{
-			return;				
+		if (!(getLivingEntity() instanceof Player)) {
+			return;
 		}
-		
+
 		Entity source = Bukkit.getEntity(getSourceUuid());
 		if (!(source instanceof Player))
 			return;
-		
-		Player sourcePlayer = (Player)source;
-		
-		if (!sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG))
-		{
-			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC): " + sourcePlayer.getInventory().getItemInOffHand().getType().name());
-			return;				
+
+		Player sourcePlayer = (Player) source;
+
+		if (!sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG)) {
+			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC): "
+					+ sourcePlayer.getInventory().getItemInOffHand().getType().name());
+			return;
 		}
-		
+
 		ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
-		if (item.getEnchantmentLevel(Enchantment.DURABILITY) != 1)
-		{
+		if (item.getEnchantmentLevel(Enchantment.DURABILITY) != 1) {
 			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (EC)");
-			return;	
+			return;
 		}
-		
-		if (!item.getItemMeta().getDisplayName().equals("Signaculum"))
-		{
+
+		if (!item.getItemMeta().getDisplayName().equals("Signaculum")) {
 			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (NC)");
-			return;	
+			return;
 		}
-		
-		if (item.getItemMeta().getLore().size() < 5)
-		{
+
+		if (item.getItemMeta().getLore().size() < 5) {
 			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (LC)");
-			return;			
+			return;
 		}
-		
-		
+
 		String sigdataholder = item.getItemMeta().getLore().get(3);
 		String[] sigdata = sigdataholder.split("\\|");
-		
-		if (sigdata.length != 2)
-		{
+
+		if (sigdata.length != 2) {
 			sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (SD)");
-			return;	
+			return;
 		}
-		
+
 		String str_experience = sigdata[0];
 		String str_stimetsamp = sigdata[1];
-		
+
 		int experience = Integer.parseInt(str_experience);
 		Timestamp timestamp = Timestamp.valueOf(str_stimetsamp);
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp currenttimestamp = Timestamp.valueOf(datetime);
-		
-		long maxminutes = 60*7;
-		if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes*60*1000)
-		{
+
+		long maxminutes = 60 * 7;
+		if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes * 60 * 1000) {
 			sourcePlayer.sendMessage("This Signaculum has lost its binding to the soul");
-			return;	
+			return;
 		}
-		
+
 		String playeruuidb64 = item.getItemMeta().getLore().get(4);
 		String uuid = Utils.uuidFromBase64(playeruuidb64);
-		
+
 		Player targetplayer = Bukkit.getPlayer(UUID.fromString(uuid));
-		if (targetplayer == null || !targetplayer.isOnline())
-		{
+		if (targetplayer == null || !targetplayer.isOnline()) {
 			sourcePlayer.sendMessage("You cannot resurrect that player as they are offline");
-			return;	
+			return;
 		}
-		
+
 		int multiplier = 1;
 		if (spellEffect.getBase() > 0 && spellEffect.getBase() < 100)
 			multiplier = spellEffect.getBase();
-		
-		try
-		{
+
+		try {
 			double finalexperience = (experience / 100) * multiplier;
 			SoliniaPlayerAdapter.Adapt(targetplayer).increasePlayerNormalExperience(finalexperience);
 			targetplayer.sendMessage("You have been resurrected by " + sourcePlayer.getCustomName() + "!");
-			targetplayer.teleport(sourcePlayer.getLocation());			
+			targetplayer.teleport(sourcePlayer.getLocation());
 			sourcePlayer.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return;
 		}
-		
+
 		return;
 	}
 
 	private void applyReclaimPet(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Wolf))
 			return;
-		
-		LivingEntity owner = (LivingEntity)((Wolf)getLivingEntity()).getOwner();
-		
+
+		LivingEntity owner = (LivingEntity) ((Wolf) getLivingEntity()).getOwner();
+
 		if (owner == null)
 			return;
-		
+
 		if (!(owner instanceof Player))
 			return;
-		
-		try
-		{
-			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet((Player)owner);
+
+		try {
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet((Player) owner);
 			if (pet == null)
 				return;
-			
-			StateManager.getInstance().getEntityManager().killPet((Player)owner);
-			
-			SoliniaPlayerAdapter.Adapt((Player)owner).increasePlayerMana(20);
-		} catch (CoreStateInitException e)
-		{
+
+			StateManager.getInstance().getEntityManager().killPet((Player) owner);
+
+			SoliniaPlayerAdapter.Adapt((Player) owner).increasePlayerMana(20);
+		} catch (CoreStateInitException e) {
 			// do nothing
 		}
 	}
 
 	private void applyFear(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		// run to a nearby mob
-		try
-		{
+		try {
 			if (!SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).isPlayer())
-			for(Entity nearbyEntity : getLivingEntity().getNearbyEntities(20, 20, 20))
-			{
-				((CraftCreature)getLivingEntity()).setTarget(null);
-				((CraftCreature)getLivingEntity()).getHandle().getNavigation().a(nearbyEntity.getLocation().getX(), nearbyEntity.getLocation().getY(), nearbyEntity.getLocation().getZ(), 1.5);
-				return;
-			}
-		} catch (CoreStateInitException e)
-		{
+				for (Entity nearbyEntity : getLivingEntity().getNearbyEntities(20, 20, 20)) {
+					((CraftCreature) getLivingEntity()).setTarget(null);
+					((CraftCreature) getLivingEntity()).getHandle().getNavigation().a(nearbyEntity.getLocation().getX(),
+							nearbyEntity.getLocation().getY(), nearbyEntity.getLocation().getZ(), 1.5);
+					return;
+				}
+		} catch (CoreStateInitException e) {
 			//
 		}
 	}
@@ -1516,54 +1494,50 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyVision(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.NIGHT_VISION, 1);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.NIGHT_VISION, 1);
 	}
 
 	private void applySummonItem(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		int itemId = spellEffect.getBase();
-		try
-		{
+		try {
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 			if (item == null)
 				return;
-			
+
 			if (!item.isTemporary())
 				return;
-			
+
 			Entity ownerEntity = Bukkit.getEntity(this.getOwnerUuid());
 			if (ownerEntity == null)
 				return;
-			
+
 			if (!(ownerEntity instanceof LivingEntity))
 				return;
-			
+
 			ownerEntity.getWorld().dropItem(ownerEntity.getLocation(), item.asItemStack());
-			
-		} catch (CoreStateInitException e)
-		{
+
+		} catch (CoreStateInitException e) {
 			return;
 		}
 	}
-	
+
 	private void applyIllusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		DisguisePackage disguise = Utils.getDisguiseTypeFromDisguiseId(spellEffect.getBase());
-		if (disguise.getDisguisetype() == null || disguise.getDisguisetype() == null || disguise.getDisguisetype().equals(DisguiseType.UNKNOWN))
-		{
+		if (disguise.getDisguisetype() == null || disguise.getDisguisetype() == null
+				|| disguise.getDisguisetype().equals(DisguiseType.UNKNOWN)) {
 			System.out.println("Could not find illusion: " + spellEffect.getBase());
 			return;
 		}
-		
-		if (DisguiseAPI.isDisguised(getLivingEntity()))
-		{
+
+		if (DisguiseAPI.isDisguised(getLivingEntity())) {
 			Disguise dis = DisguiseAPI.getDisguise(getLivingEntity());
-			if (dis instanceof PlayerDisguise)
-			{
-				if (disguise.getDisguisedata() != null && !disguise.getDisguisedata().equals(""))
-				{
-					if (((PlayerDisguise)dis).getSkin().equals(disguise.getDisguisedata()))
+			if (dis instanceof PlayerDisguise) {
+				if (disguise.getDisguisedata() != null && !disguise.getDisguisedata().equals("")) {
+					if (((PlayerDisguise) dis).getSkin().equals(disguise.getDisguisedata()))
 						return;
-					
-					// If we get here we can let the player change their skin as it doesnt match their existing player skin name
+
+					// If we get here we can let the player change their skin as it doesnt match
+					// their existing player skin name
 				} else {
 					return;
 				}
@@ -1572,32 +1546,29 @@ public class SoliniaActiveSpell {
 					return;
 			}
 		}
-		
-		
-			if (disguise.getDisguisetype().equals(DisguiseType.PLAYER))
-			{
-				String disguisename = disguise.getDisguisedata();
-				if (disguisename == null || disguisename.equals(""))
-					disguisename = "RomanPraetor";
-				
-				PlayerDisguise playerdisguise = new PlayerDisguise(getLivingEntity().getName(), disguisename);
-				DisguiseAPI.disguiseEntity(getLivingEntity(), playerdisguise);
-			} else {
-				MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
-				DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
-			}
-		
+
+		if (disguise.getDisguisetype().equals(DisguiseType.PLAYER)) {
+			String disguisename = disguise.getDisguisedata();
+			if (disguisename == null || disguisename.equals(""))
+				disguisename = "RomanPraetor";
+
+			PlayerDisguise playerdisguise = new PlayerDisguise(getLivingEntity().getName(), disguisename);
+			DisguiseAPI.disguiseEntity(getLivingEntity(), playerdisguise);
+		} else {
+			MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
+			DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
+		}
+
 	}
 
 	private void applySummonPet(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
-		
-		try
-		{
-			StateManager.getInstance().getEntityManager().SpawnPet(plugin, Bukkit.getPlayer(getOwnerUuid()), soliniaSpell);
-		} catch (CoreStateInitException e)
-		{
+
+		try {
+			StateManager.getInstance().getEntityManager().SpawnPet(plugin, Bukkit.getPlayer(getOwnerUuid()),
+					soliniaSpell);
+		} catch (CoreStateInitException e) {
 			return;
 		}
 	}
@@ -1605,27 +1576,25 @@ public class SoliniaActiveSpell {
 	private void applyTauntSpell(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Creature))
 			return;
-		
-		Creature creature = (Creature)getLivingEntity();
+
+		Creature creature = (Creature) getLivingEntity();
 		Entity source = Bukkit.getEntity(getSourceUuid());
 		if (source instanceof LivingEntity)
-			creature.setTarget((LivingEntity)source);
+			creature.setTarget((LivingEntity) source);
 	}
-	
+
 	private void applySummonGroup(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Entity source = Bukkit.getEntity(getSourceUuid());
-		if (source != null && source instanceof Player && getLivingEntity() instanceof Player)
-		{
+		if (source != null && source instanceof Player && getLivingEntity() instanceof Player) {
 			if (!source.getUniqueId().equals(getLivingEntity().getUniqueId()))
 				getLivingEntity().teleport(source);
 		}
 	}
 
-
 	private void applyTeleport(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
-		
+
 		String[] zonedata = soliniaSpell.getTeleportZone().split(",");
 		// Dissasemble the value to ensure it is correct
 
@@ -1633,148 +1602,137 @@ public class SoliniaActiveSpell {
 			return;
 
 		String world = zonedata[0];
-		
+
 		double x = Double.parseDouble(zonedata[1]);
 		double y = Double.parseDouble(zonedata[2]);
 		double z = Double.parseDouble(zonedata[3]);
-		Location loc = new Location(Bukkit.getWorld(world),x,y,z);
+		Location loc = new Location(Bukkit.getWorld(world), x, y, z);
 		getLivingEntity().teleport(loc);
 	}
-	
+
 	private void applyShadowStep(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
-		
-		try
-		{
+
+		try {
 			Block block = getLivingEntity().getTargetBlock(null, soliniaSpell.getRange());
-			if (block != null)
-			{
+			if (block != null) {
 				Utils.dismountEntity(getLivingEntity());
 				getLivingEntity().teleport(block.getLocation());
 			}
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			// out of world block
 		}
 	}
 
 	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.BLINDNESS, 1);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.BLINDNESS, 1);
 	}
 
 	private void applyInvisibility(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.INVISIBILITY, 1);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.INVISIBILITY, 1);
 	}
 
 	private void applyWaterBreathing(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.WATER_BREATHING, 1);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.WATER_BREATHING, 1);
 	}
 
 	private void applyConfusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.CONFUSION, 1);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
 	}
 
 	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.LEVITATION, 1);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.LEVITATION, 1);
 	}
 
 	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.dismountEntity(getLivingEntity());
 
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SLOW, 10);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
 	}
 
 	private void applyWipeHateList(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Creature))
 			return;
-		
-		Creature creature = (Creature)getLivingEntity();
+
+		Creature creature = (Creature) getLivingEntity();
 		creature.setTarget(null);
 	}
 
 	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.dismountEntity(getLivingEntity());
 
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SLOW, 10);
-		Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.CONFUSION, 1);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
 	}
-	
+
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof LivingEntity))
 			return;
-		
-		try
-		{
+
+		try {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
-			
-			
+
 			StateManager.getInstance().getEntityManager().addMezzed(getLivingEntity(), expiretimestamp);
-			
-			if (getLivingEntity() instanceof Creature)
-			{
-				Creature creature = (Creature)getLivingEntity();
+
+			if (getLivingEntity() instanceof Creature) {
+				Creature creature = (Creature) getLivingEntity();
 				creature.setTarget(null);
-				
+
 			}
-			
+
 			Utils.dismountEntity(getLivingEntity());
-			
+
 			Entity vehicle = getLivingEntity().getVehicle();
-			if (vehicle != null)
-			{
+			if (vehicle != null) {
 				vehicle.eject();
 			}
-			
-			Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SLOW, 10);
-			Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.CONFUSION, 1);
-		} catch (CoreStateInitException e)
-		{
+
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
+		} catch (CoreStateInitException e) {
 			return;
 		}
 	}
-	
+
 	private void applyBindAffinty(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
-		
-		Player player = (Player)getLivingEntity();
-		try
-		{
+
+		Player player = (Player) getLivingEntity();
+		try {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			solPlayer.setBindPoint(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + "," + player.getLocation().getY() + "," + player.getLocation().getZ());
-		} catch (CoreStateInitException e)
-		{
+			solPlayer.setBindPoint(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + ","
+					+ player.getLocation().getY() + "," + player.getLocation().getZ());
+		} catch (CoreStateInitException e) {
 			// skip
 		}
-		
+
 	}
 
 	private void applyGate(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 
-		Player player = (Player)getLivingEntity();
-		try
-		{
+		Player player = (Player) getLivingEntity();
+		try {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			String blocation = solPlayer.getBindPoint();
-			if (blocation == null || solPlayer.getBindPoint().equals(""))
-			{
+			if (blocation == null || solPlayer.getBindPoint().equals("")) {
 				player.sendMessage("Could not teleport, you are not bound to a location (by bind affinity)");
 				return;
 			}
-			
+
 			String[] loc = solPlayer.getBindPoint().split(",");
-			
-			Location location = new Location(Bukkit.getWorld(loc[0]),Double.parseDouble(loc[1]),Double.parseDouble(loc[2]),Double.parseDouble(loc[3]));
-			
+
+			Location location = new Location(Bukkit.getWorld(loc[0]), Double.parseDouble(loc[1]),
+					Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
+
 			player.setBedSpawnLocation(location, true);
 			player.teleport(location);
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 
@@ -1784,44 +1742,40 @@ public class SoliniaActiveSpell {
 		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
 		if (sourceEntity == null)
 			return;
-		
-		if(!(sourceEntity instanceof LivingEntity))
+
+		if (!(sourceEntity instanceof LivingEntity))
 			return;
-		
-		LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
-		
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+
 		int instrument_mod = 0;
-		
-		try
-		{
+
+		try {
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
-			if (sourceSoliniaLivingEntity != null)
-			{
+			if (sourceSoliniaLivingEntity != null) {
 				instrument_mod = sourceSoliniaLivingEntity.getInstrumentMod(this.getSpell());
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			// just skip it
 		}
-		
-		int mpToRemove = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), casterLevel, getTicksLeft(), instrument_mod);
-		
-		try
-		{
+
+		int mpToRemove = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(),
+				casterLevel, getTicksLeft(), instrument_mod);
+
+		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(this.getOwnerUuid()));
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(Bukkit.getPlayer(this.getOwnerUuid()));
-			
+
 			int amount = (int) Math.round(solplayer.getMana()) + mpToRemove;
 			if (amount > solentity.getMaxMP()) {
 				amount = (int) Math.round(solentity.getMaxMP());
 			}
-			
+
 			if (amount < 0)
 				amount = 0;
-			
+
 			solplayer.setMana(amount);
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}
 	}
@@ -1832,13 +1786,12 @@ public class SoliniaActiveSpell {
 		int normalize = spellEffect.getBase();
 		// value is a percentage but we range from 1-5 (we can stretch to 10)
 		normalize = normalize / 10;
-		if (spellEffect.getBase() > 0)
-		{
-			Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SPEED, normalize);
+		if (spellEffect.getBase() > 0) {
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SPEED, normalize);
 		} else {
-			Utils.AddPotionEffect(getLivingEntity(),PotionEffectType.SLOW, (normalize * -1));
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, (normalize * -1));
 		}
-		
+
 	}
 
 	private void applyCurrentHpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -1848,35 +1801,32 @@ public class SoliniaActiveSpell {
 	private LivingEntity getLivingEntity() {
 		if (isOwnerPlayer())
 			return Bukkit.getPlayer(getOwnerUuid());
-		
+
 		if (Bukkit.getEntity(getOwnerUuid()) instanceof LivingEntity)
-			return (LivingEntity)Bukkit.getEntity(getOwnerUuid());
-		
+			return (LivingEntity) Bukkit.getEntity(getOwnerUuid());
+
 		return null;
 	}
-	
+
 	private void applyCancelMagic(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		try
-		{
+		try {
 			StateManager.getInstance().getEntityManager().clearEntityFirstEffect(plugin, getLivingEntity());
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return;
 		}
 	}
-	
-	private void applyPoisonCounter(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+
+	private void applyPoisonCounter(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell,
+			int casterLevel) {
 		if (!soliniaSpell.isCureSpell())
 			return;
-		
-		try
-		{
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(plugin, getLivingEntity(),SpellEffectType.PoisonCounter);
-			if (isOwnerPlayer())
-			{
-				Player player = (Player)Bukkit.getPlayer(getOwnerUuid());
-				if (player != null)
-				{
+
+		try {
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(plugin, getLivingEntity(),
+					SpellEffectType.PoisonCounter);
+			if (isOwnerPlayer()) {
+				Player player = (Player) Bukkit.getPlayer(getOwnerUuid());
+				if (player != null) {
 					if (player.hasPotionEffect(PotionEffectType.POISON))
 						player.removePotionEffect(PotionEffectType.POISON);
 					if (player.hasPotionEffect(PotionEffectType.HUNGER))
@@ -1884,142 +1834,192 @@ public class SoliniaActiveSpell {
 					player.sendMessage(ChatColor.GRAY + "* You have been cured of some poison");
 				}
 			}
-			if (isSourcePlayer())
-			{
-				Player player = (Player)Bukkit.getPlayer(getSourceUuid());
+			if (isSourcePlayer()) {
+				Player player = (Player) Bukkit.getPlayer(getSourceUuid());
 				if (player != null)
-				player.sendMessage(ChatColor.GRAY + "* You cured your target of some poison");
+					player.sendMessage(ChatColor.GRAY + "* You cured your target of some poison");
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return;
 		}
 	}
 
-	private void applyDiseaseCounter(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+	private void applyDiseaseCounter(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell,
+			int casterLevel) {
 		if (!soliniaSpell.isCureSpell())
 			return;
 
-		try
-		{
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(plugin, getLivingEntity(),SpellEffectType.DiseaseCounter);
-			if (isOwnerPlayer())
-			{
-				Player player = (Player)Bukkit.getPlayer(getOwnerUuid());
+		try {
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(plugin, getLivingEntity(),
+					SpellEffectType.DiseaseCounter);
+			if (isOwnerPlayer()) {
+				Player player = (Player) Bukkit.getPlayer(getOwnerUuid());
 				if (player != null)
-				player.sendMessage(ChatColor.GRAY + "* You have been cured of some disease");
+					player.sendMessage(ChatColor.GRAY + "* You have been cured of some disease");
 			}
-			if (isSourcePlayer())
-			{
-				Player player = (Player)Bukkit.getPlayer(getSourceUuid());
+			if (isSourcePlayer()) {
+				Player player = (Player) Bukkit.getPlayer(getSourceUuid());
 				if (player != null)
-				player.sendMessage(ChatColor.GRAY + "* You cured your target of some poison");
+					player.sendMessage(ChatColor.GRAY + "* You cured your target of some poison");
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return;
+		}
+	}
+
+	private void applyBackstab(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (getLivingEntity().isDead())
+			return;
+
+		if (Bukkit.getEntity(getSourceUuid()) == null)
+			return;
+
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+
+		try {
+			ISoliniaLivingEntity solSourceEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			if (solSourceEntity == null)
+				return;
+
+			int backstabSkill = solSourceEntity.getSkill("BACKSTAB");
+			if (backstabSkill < 1)
+				backstabSkill = 1;
+
+			EntityDamageSource source = new EntityDamageSource("thorns",
+					((CraftEntity) Bukkit.getEntity(getSourceUuid())).getHandle());
+			source.setMagic();
+			source.ignoresArmor();
+
+			int weaponDamage = 0;
+
+			ItemStack mainitem = sourceLivingEntity.getEquipment().getItemInMainHand();
+
+			if (mainitem != null) {
+				try {
+					ISoliniaItem item = SoliniaItemAdapter.Adapt(mainitem);
+					if (item != null)
+						if (item.getDamage() > 0) {
+							weaponDamage = item.getDamage();
+						}
+				} catch (SoliniaItemException e) {
+
+				}
+			}
+
+			if (weaponDamage < 1)
+				weaponDamage = 1;
+
+			int hpToRemove = weaponDamage;
+
+			// back stab formula
+			if (solSourceEntity.isBehindEntity(this.getLivingEntity()))
+				hpToRemove = (int) Math.floor((2 + backstabSkill / 50) * weaponDamage);
+
+			((CraftEntity) getLivingEntity()).getHandle().damageEntity(source, hpToRemove);
+			solSourceEntity.tryIncreaseSkill("BACKSTAB", 1);
+
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 
 	private void applyCurrentHpOnceSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int caster_level) {
 		if (getLivingEntity().isDead())
 			return;
-		
+
 		if (Bukkit.getEntity(getSourceUuid()) == null)
 			return;
-		
+
 		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
 		if (sourceEntity == null)
 			return;
-		
-		if(!(sourceEntity instanceof LivingEntity))
+
+		if (!(sourceEntity instanceof LivingEntity))
 			return;
 
-		LivingEntity sourceLivingEntity = (LivingEntity)sourceEntity;
-		
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+
 		int instrument_mod = 0;
-		
-		try
-		{
+
+		try {
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
-			if (sourceSoliniaLivingEntity != null)
-			{
+			if (sourceSoliniaLivingEntity != null) {
 				instrument_mod = sourceSoliniaLivingEntity.getInstrumentMod(this.getSpell());
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			// just skip it
 		}
-		
+
 		// HP spells also get calculated based on the caster and the recipient
-		int hpToAdd = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(), caster_level, getTicksLeft(), instrument_mod);		
-		
+		int hpToAdd = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(),
+				caster_level, getTicksLeft(), instrument_mod);
+
 		// Damage
 		// damage should be < 0
 		// hpToRemove should really be called hpToAdd
-		if (hpToAdd < 0)
-		{
+		if (hpToAdd < 0) {
 			// Criticals
-			try
-			{
+			try {
 				ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
 				ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-				if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null)
-				{
+				if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
 					// reverse to positive then pass it back reversed
-					hpToAdd = (sourceSoliniaLivingEntity.getActSpellDamage(soliniaSpell,(hpToAdd*-1),spellEffect,targetSoliniaLivingEntity) * -1);
+					hpToAdd = (sourceSoliniaLivingEntity.getActSpellDamage(soliniaSpell, (hpToAdd * -1), spellEffect,
+							targetSoliniaLivingEntity) * -1);
 				}
-			} catch (CoreStateInitException e)
-			{
+			} catch (CoreStateInitException e) {
 				// just carry on without the crit bonus
 			}
-			
+
 			hpToAdd = hpToAdd * -1;
-			EntityDamageSource source = new EntityDamageSource("thorns", ((CraftEntity)Bukkit.getEntity(getSourceUuid())).getHandle());
+			EntityDamageSource source = new EntityDamageSource("thorns",
+					((CraftEntity) Bukkit.getEntity(getSourceUuid())).getHandle());
 			source.setMagic();
 			source.ignoresArmor();
-			
-			((CraftEntity)getLivingEntity()).getHandle().damageEntity(source, hpToAdd);
-			//getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
-			if (soliniaSpell.isLifetapSpell())
-			{
-				
-				
+
+			((CraftEntity) getLivingEntity()).getHandle().damageEntity(source, hpToAdd);
+			// getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
+			if (soliniaSpell.isLifetapSpell()) {
+
 				if (!(sourceEntity instanceof LivingEntity))
 					return;
-				
+
 				int amount = (int) Math.round(sourceLivingEntity.getHealth()) + hpToAdd;
 				if (amount > sourceLivingEntity.getMaxHealth()) {
 					amount = (int) Math.round(sourceLivingEntity.getMaxHealth());
 				}
-				
+
 				if (amount < 0)
 					amount = 0;
 				sourceLivingEntity.setHealth(amount);
 			}
 		}
 		// Heal
-		else 
-		{
+		else {
 			// Criticals
-			try
-			{
+			try {
 				ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
 				ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-				if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null)
-				{
-					hpToAdd = sourceSoliniaLivingEntity.getActSpellHealing(soliniaSpell,hpToAdd,spellEffect,targetSoliniaLivingEntity);
+				if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+					hpToAdd = sourceSoliniaLivingEntity.getActSpellHealing(soliniaSpell, hpToAdd, spellEffect,
+							targetSoliniaLivingEntity);
 				}
-			} catch (CoreStateInitException e)
-			{
+			} catch (CoreStateInitException e) {
 				// just carry on without the crit bonus
 			}
-			
+
 			int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToAdd;
 			if (amount > getLivingEntity().getMaxHealth()) {
 				amount = (int) Math.round(getLivingEntity().getMaxHealth());
 			}
-			
+
 			if (amount < 0)
 				amount = 0;
 			getLivingEntity().setHealth(amount);

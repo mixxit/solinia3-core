@@ -709,6 +709,17 @@ public class Utils {
 				}
 		}
 		
+		if (skillname.equals("BACKSTAB")) {
+			if (profession != null)
+				if (profession.getName().toUpperCase().equals("ROGUE")
+					) {
+					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+					return cap;
+				}
+		}
+		
 		if (skillname.equals("TAUNT")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("WARRIOR")
@@ -2260,6 +2271,8 @@ public class Utils {
 			return 470;
 		case Double_Melee_Round:
 			return 471;
+		case Backstab:
+			return 472;
 		default:
 			return -1;
 		}
@@ -3211,6 +3224,8 @@ public class Utils {
 			return SpellEffectType.SE_Trigger_Best_in_Spell_Grp;
 		case 471:
 			return SpellEffectType.Double_Melee_Round;
+		case 472:
+			return SpellEffectType.Backstab;
 		default:
 			return SpellEffectType.ERROR;
 		}

@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
@@ -33,6 +34,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -3743,4 +3745,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// ignore and return full amount
 		}
 	}
+
+	@Override
+	public boolean isBehindEntity(LivingEntity livingEntity) {
+		Vector targetDirection = livingEntity.getLocation().getDirection();
+        Vector myDirection = getBukkitLivingEntity().getLocation().getDirection();
+        //determine if the dot product between the vectors is greater than 0
+        if (myDirection.dot(targetDirection) > 0) {
+            return true;
+        }
+        
+        return false;
+	}
+
 }
