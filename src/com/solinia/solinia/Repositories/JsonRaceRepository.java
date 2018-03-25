@@ -51,7 +51,7 @@ public class JsonRaceRepository implements IRepository<ISoliniaRace> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(races.values(), new TypeToken<List<SoliniaRace>>(){}.getType());
 		try {

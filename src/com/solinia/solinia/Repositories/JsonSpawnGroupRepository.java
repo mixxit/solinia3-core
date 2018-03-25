@@ -91,7 +91,7 @@ public class JsonSpawnGroupRepository implements IRepository<ISoliniaSpawnGroup>
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		gsonbuilder.registerTypeAdapterFactory(new ISoliniaSpawnGroupTypeAdapterFactory(SoliniaSpawnGroup.class));
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(spawngroups.values(), new TypeToken<List<SoliniaSpawnGroup>>(){}.getType());

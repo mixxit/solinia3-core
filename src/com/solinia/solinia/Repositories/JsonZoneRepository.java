@@ -84,7 +84,7 @@ public class JsonZoneRepository implements IRepository<SoliniaZone> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(Zones.values(), new TypeToken<List<SoliniaZone>>(){}.getType());
 		try {

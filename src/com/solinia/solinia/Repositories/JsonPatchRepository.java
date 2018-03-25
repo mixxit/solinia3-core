@@ -85,7 +85,7 @@ public class JsonPatchRepository implements IRepository<ISoliniaPatch> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(patches.values(), new TypeToken<List<SoliniaPatch>>(){}.getType());
 		try {

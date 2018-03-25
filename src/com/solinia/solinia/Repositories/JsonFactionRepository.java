@@ -87,7 +87,7 @@ public class JsonFactionRepository implements IRepository<ISoliniaFaction> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(Factions.values(), new TypeToken<List<SoliniaFaction>>(){}.getType());
 		try {

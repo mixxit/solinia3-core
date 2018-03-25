@@ -92,7 +92,7 @@ public class JsonLootDropRepository implements IRepository<ISoliniaLootDrop> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		gsonbuilder.registerTypeAdapterFactory(new ISoliniaLootDropEntryTypeAdapterFactory(SoliniaLootDropEntry.class));
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(lootdrops.values(), new TypeToken<List<SoliniaLootDrop>>(){}.getType());

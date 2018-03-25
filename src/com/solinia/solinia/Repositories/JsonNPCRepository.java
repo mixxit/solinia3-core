@@ -105,7 +105,7 @@ public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		gsonbuilder.registerTypeAdapterFactory(new ISoliniaNPCEventHandlerTypeAdapterFactory(SoliniaNPCEventHandler.class));
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(NPCs.values(), new TypeToken<List<SoliniaNPC>>(){}.getType());

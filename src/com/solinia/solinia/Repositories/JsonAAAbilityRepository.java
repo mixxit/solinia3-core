@@ -98,7 +98,7 @@ public class JsonAAAbilityRepository implements IRepository<ISoliniaAAAbility> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		gsonbuilder.registerTypeAdapterFactory(new ISoliniaAARankTypeAdapterFactory(SoliniaAARank.class));
 		gsonbuilder.registerTypeAdapterFactory(new ISoliniaAAEffectTypeAdapterFactory(SoliniaAAEffect.class));
 		Gson gson = gsonbuilder.create();

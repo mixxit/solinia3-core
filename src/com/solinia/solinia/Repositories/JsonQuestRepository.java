@@ -85,7 +85,7 @@ public class JsonQuestRepository implements IRepository<ISoliniaQuest> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(Quests.values(), new TypeToken<List<SoliniaQuest>>(){}.getType());
 		try {

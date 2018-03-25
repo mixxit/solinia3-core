@@ -65,13 +65,11 @@ public class SoliniaEntitySpells {
 		if (sourceEntity == null)
 			return false;
 		
-		System.out.println("Adding spell: " + soliniaSpell.getName() + " to " + this.getLivingEntity().getName()
-				+ " from " + sourceEntity.getName());
+		//System.out.println("Adding spell: " + soliniaSpell.getName() + " to " + this.getLivingEntity().getName() + " from " + sourceEntity.getName());
 
 		try {
 			if (!SoliniaSpell.isValidEffectForEntity(getLivingEntity(), sourceEntity, soliniaSpell)) {
-				System.out.println("Spell: " + soliniaSpell.getName() + "[" + soliniaSpell.getId()
-						+ "] found to have invalid target (" + getLivingEntity().getName() + ")");
+				//System.out.println("Spell: " + soliniaSpell.getName() + "[" + soliniaSpell.getId() + "] found to have invalid target (" + getLivingEntity().getName() + ")");
 				return false;
 			}
 		} catch (CoreStateInitException e) {

@@ -84,7 +84,7 @@ public class JsonAccountClaimRepository implements IRepository<SoliniaAccountCla
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(AccountClaims.values(), new TypeToken<List<SoliniaAccountClaim>>(){}.getType());
 		try {

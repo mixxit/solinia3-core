@@ -85,7 +85,7 @@ public class JsonAlignmentRepository implements IRepository<ISoliniaAlignment> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(alignments.values(), new TypeToken<List<SoliniaAlignment>>(){}.getType());
 		try {

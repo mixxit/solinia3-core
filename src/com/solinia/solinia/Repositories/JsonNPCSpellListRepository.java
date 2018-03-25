@@ -48,7 +48,7 @@ public class JsonNPCSpellListRepository implements IRepository<NPCSpellList> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(npcspelllists.values(), new TypeToken<List<NPCSpellList>>(){}.getType());
 		try {

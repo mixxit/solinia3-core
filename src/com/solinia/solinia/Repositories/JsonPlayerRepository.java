@@ -53,7 +53,7 @@ public class JsonPlayerRepository implements IRepository<ISoliniaPlayer>  {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(players.values(), new TypeToken<List<SoliniaPlayer>>(){}.getType());
 		try {
