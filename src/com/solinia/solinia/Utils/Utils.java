@@ -5565,11 +5565,15 @@ public class Utils {
 
 	public static void AddPotionEffect(LivingEntity entity, PotionEffectType effectType, int amplifier)
 	{
-		entity.addPotionEffect(new PotionEffect(effectType, Utils.GetGlobalPotionEffectTickLength(), amplifier), true);
+		entity.addPotionEffect(new PotionEffect(effectType, Utils.GetPotionEffectTickLength(effectType), amplifier), true);
 	}
 	
-	public static int GetGlobalPotionEffectTickLength() {
-		// TODO Auto-generated method stub
+	public static int GetPotionEffectTickLength(PotionEffectType effectType) {
+		if (effectType == PotionEffectType.NIGHT_VISION)
+		{
+			return 16 * 20;
+		}
+		
 		return 8 * 20;
 	}
 }
