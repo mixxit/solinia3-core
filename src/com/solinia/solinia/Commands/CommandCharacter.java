@@ -12,6 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -29,6 +30,12 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandCharacter implements CommandExecutor {
+
+	Solinia3CorePlugin plugin;
+	
+	public CommandCharacter(Solinia3CorePlugin plugin) {
+		this.plugin = plugin;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -99,7 +106,7 @@ public class CommandCharacter implements CommandExecutor {
 						}
 							
 						
-						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(player);
+						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
 						if (newPlayer != null)
 						{
 							player.sendMessage("Your character has been stored and a new character created");
@@ -123,7 +130,7 @@ public class CommandCharacter implements CommandExecutor {
 						
 						UUID characterUUID = UUID.fromString(args[1]);
 						
-						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(player,characterUUID);
+						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(plugin, player,characterUUID);
 						if (loadedPlayer != null)
 						{
 							player.sendMessage("Your character has been stored and your new character loaded");

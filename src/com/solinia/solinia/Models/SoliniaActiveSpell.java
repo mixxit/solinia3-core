@@ -1462,11 +1462,13 @@ public class SoliniaActiveSpell {
 			return;
 
 		try {
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)owner);
+			
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet((Player) owner);
 			if (pet == null)
 				return;
-
-			StateManager.getInstance().getEntityManager().killPet((Player) owner);
+			
+			solplayer.killAllPets();
 
 			SoliniaPlayerAdapter.Adapt((Player) owner).increasePlayerMana(20);
 		} catch (CoreStateInitException e) {

@@ -70,7 +70,8 @@ public class SoliniaItem implements ISoliniaItem {
 	private int poisonResist = 0;
 	private int diseaseResist = 0;
 	private boolean spellscroll = false;
-	private byte color;
+	private short color;
+	private int dye;
 	private boolean isTemporary;
 	private boolean isConsumable;
 	private int baneUndead = 0;
@@ -614,6 +615,8 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
 		sender.sendMessage("- basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET);
+		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET);
+		sender.sendMessage("- dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
 		sender.sendMessage("- minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
@@ -623,7 +626,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- crafting: " + ChatColor.GOLD + isCrafting() + ChatColor.RESET);
 		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
 		sender.sendMessage("- quest: " + ChatColor.GOLD + isQuest() + ChatColor.RESET);
-		sender.sendMessage("- artifact: " + ChatColor.GOLD + isArtifact() + "Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
+		sender.sendMessage("- artifact: " + ChatColor.GOLD + isArtifact() + ChatColor.RESET + " Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
 		sender.sendMessage("- acceptsaugmentationslottype: " + ChatColor.GOLD + getAcceptsAugmentationSlotType() + ChatColor.RESET);
 		sender.sendMessage("- augmentationfitsslottype: " + ChatColor.GOLD + this.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -685,12 +688,15 @@ public class SoliniaItem implements ISoliniaItem {
 		case "worth":
 			setWorth(Integer.parseInt(value));
 			break;
+		case "dye":
+			setDye(Integer.parseInt(value));
+			break;
 		case "allowedclassnames":
 			String[] allowedclasses = value.split(",");
 			setAllowedClassNames(Arrays.asList(allowedclasses));
 			break;
 		case "color":
-			setColor((byte)Integer.parseInt(value));
+			setColor(Short.parseShort(value));
 			break;
 		case "damage":
 			setDamage(Integer.parseInt(value));
@@ -828,12 +834,12 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public byte getColor() {
+	public short getColor() {
 		return color;
 	}
 
 	@Override
-	public void setColor(byte color) {
+	public void setColor(short color) {
 		this.color = color;
 	}
 
@@ -1107,5 +1113,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setArtifactFound(boolean artifactFound) {
 		this.artifactFound = artifactFound;
+	}
+
+	@Override
+	public int getDye() {
+		return dye;
+	}
+
+	@Override
+	public void setDye(int dye) {
+		this.dye = dye;
 	}
 }

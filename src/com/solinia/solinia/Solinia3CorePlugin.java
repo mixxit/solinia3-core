@@ -522,7 +522,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createalignment").setExecutor(new CommandCreateAlignment());
 		this.getCommand("specialise").setExecutor(new CommandSpecialise());
 		this.getCommand("bite").setExecutor(new CommandBite());
-		this.getCommand("character").setExecutor(new CommandCharacter());
+		this.getCommand("character").setExecutor(new CommandCharacter(this));
 		this.getCommand("inspiration").setExecutor(new CommandInspiration());
 		this.getCommand("listnpcspells").setExecutor(new CommandListNpcSpells());
 		this.getCommand("editnpcspelllist").setExecutor(new CommandEditNpcSpellList());

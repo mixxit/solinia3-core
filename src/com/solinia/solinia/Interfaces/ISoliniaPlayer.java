@@ -274,4 +274,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void setBindPoint(String teleportlocation);
 	public String getBindPoint();
+
+	public void removeAllEntityEffects(Plugin plugin);
+
+	public void killAllPets();
 }

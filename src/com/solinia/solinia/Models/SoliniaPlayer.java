@@ -2121,4 +2121,27 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public String getBindPoint() {
 		return this.bindPoint;
 	}
+
+	@Override
+	public void removeAllEntityEffects(Plugin plugin) {
+		try {
+			StateManager.getInstance().getEntityManager().clearEntityEffects(plugin, this.getBukkitPlayer().getUniqueId());
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void killAllPets() {
+		try {
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(this.getBukkitPlayer());
+			if (pet == null)
+				return;
+			
+			StateManager.getInstance().getEntityManager().killPet(this.getBukkitPlayer());
+		} catch (CoreStateInitException e) {
+
+		}
+	}
 }

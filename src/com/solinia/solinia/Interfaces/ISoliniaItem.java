@@ -168,9 +168,9 @@ public interface ISoliniaItem {
 	void editSetting(String setting, String value)
 			throws InvalidItemSettingException, NumberFormatException, CoreStateInitException;
 
-	byte getColor();
+	short getColor();
 
-	void setColor(byte color);
+	void setColor(short color);
 
 	int getDiseaseResist();
 
@@ -280,4 +280,8 @@ public interface ISoliniaItem {
 	boolean isArtifactFound();
 
 	void setArtifactFound(boolean artifactFound);
+
+	int getDye();
+
+	void setDye(int dye);
 }

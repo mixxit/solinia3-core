@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 
@@ -24,8 +25,8 @@ public interface IPlayerManager {
 	public String getPlayerNameByUUID(UUID king);
 	ISoliniaPlayer getMainCharacterDataOnly(UUID playerUUID);
 	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
-	public ISoliniaPlayer createNewPlayerAlt(Player player);
-	ISoliniaPlayer loadPlayerAlt(Player player, UUID characterUUID);
+	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player);
+	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, UUID characterUUID);
 	Timestamp getPlayerLastChangeChar(UUID playerUUID);
 	void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp);
 	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException;

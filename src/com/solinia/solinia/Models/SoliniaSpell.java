@@ -2684,7 +2684,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("----------------------------");
 		for(SpellEffect effect : this.getBaseSpellEffects())
 		{
-			sender.sendMessage("- [" + effect.getSpellEffectNo() + "]"  + effect.getSpellEffectType().name() + ": BASE: " + ChatColor.GOLD + effect.getBase() + ChatColor.RESET);		
+			sender.sendMessage("- [" + effect.getSpellEffectNo() + "]"  + effect.getSpellEffectType().name() + ": BASE: " + ChatColor.GOLD + effect.getBase() + " Formula: " + ChatColor.GOLD + effect.getFormula() + " " + ChatColor.RESET);		
 		}
 	}
 
@@ -2737,11 +2737,19 @@ public class SoliniaSpell implements ISoliniaSpell {
 					{
 						this.setEffectBaseValue1(effectValue);
 					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula1(effectValue);
+					}
 					break;
 				case 2:
 					if (effectSettingType.equals("BASE"))
 					{
 						this.setEffectBaseValue2(effectValue);
+					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula2(effectValue);
 					}
 					break;
 				case 3:
@@ -2749,11 +2757,19 @@ public class SoliniaSpell implements ISoliniaSpell {
 					{
 						this.setEffectBaseValue3(effectValue);
 					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula3(effectValue);
+					}
 					break;
 				case 4:
 					if (effectSettingType.equals("BASE"))
 					{
 						this.setEffectBaseValue4(effectValue);
+					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula4(effectValue);
 					}
 					break;
 				case 5:
@@ -2761,11 +2777,19 @@ public class SoliniaSpell implements ISoliniaSpell {
 					{
 						this.setEffectBaseValue5(effectValue);
 					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula5(effectValue);
+					}
 					break;
 				case 6:
 					if (effectSettingType.equals("BASE"))
 					{
 						this.setEffectBaseValue6(effectValue);
+					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula6(effectValue);
 					}
 					break;
 				case 7:
@@ -2773,11 +2797,19 @@ public class SoliniaSpell implements ISoliniaSpell {
 					{
 						this.setEffectBaseValue7(effectValue);
 					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula7(effectValue);
+					}
 					break;
 				case 8:
 					if (effectSettingType.equals("BASE"))
 					{
 						this.setEffectBaseValue8(effectValue);
+					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula8(effectValue);
 					}
 					break;
 				case 9:
@@ -2785,11 +2817,19 @@ public class SoliniaSpell implements ISoliniaSpell {
 					{
 						this.setEffectBaseValue9(effectValue);
 					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula9(effectValue);
+					}
 					break;
 				case 10:
 					if (effectSettingType.equals("BASE"))
 					{
 						this.setEffectBaseValue10(effectValue);
+					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula10(effectValue);
 					}
 					break;
 				case 11:
@@ -2797,11 +2837,19 @@ public class SoliniaSpell implements ISoliniaSpell {
 					{
 						this.setEffectBaseValue11(effectValue);
 					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula11(effectValue);
+					}
 					break;
 				case 12:
 					if (effectSettingType.equals("BASE"))
 					{
 						this.setEffectBaseValue12(effectValue);
+					}
+					if (effectSettingType.equals("FORMULA"))
+					{
+						this.setFormula12(effectValue);
 					}
 					break;
 				default:

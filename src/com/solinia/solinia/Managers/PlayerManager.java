@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -251,13 +252,17 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	@Override
-	public ISoliniaPlayer createNewPlayerAlt(Player player) {
+	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player) {
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		
 		ISoliniaPlayer solPlayer;
 		try {
 			solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			
+			solPlayer.removeAllEntityEffects(plugin);
+			solPlayer.killAllPets();
+			
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
 			solPlayer = SoliniaPlayerFactory.CreatePlayer(player,false);
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
@@ -268,7 +273,7 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	@Override
-	public ISoliniaPlayer loadPlayerAlt(Player player, UUID characterUUID) {
+	public ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, UUID characterUUID) {
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		
@@ -279,6 +284,9 @@ public class PlayerManager implements IPlayerManager {
 			// if its the same, why bother?
 			if (solPlayer.getCharacterId().equals(characterUUID))
 				return solPlayer;
+			
+			solPlayer.removeAllEntityEffects(plugin);
+			solPlayer.killAllPets();
 			
 			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
 			if (altSolPlayer == null)
