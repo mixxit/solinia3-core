@@ -17,9 +17,15 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaActiveSpell;
+import com.solinia.solinia.Models.SoliniaEntitySpells;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class ScoreboardUtils {
 	public static void UpdateScoreboard(Player player, int maxmp, int mana) {
@@ -44,7 +50,8 @@ public class ScoreboardUtils {
 					bossbar.addPlayer(player);
 
 				double maxmana = maxmp;
-				bossbar.setTitle("MANA: " + mana);
+				
+				bossbar.setTitle("MANA: " + mana + " ");
 				double progress = (double) ((double) mana / (double) maxmana);
 				if (progress < 0d)
 					progress = 0d;
@@ -73,6 +80,7 @@ public class ScoreboardUtils {
 		health.setDisplayName(ChatColor.RED + "❤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
+		if (group != null)
 		for (UUID groupmemberuuid : group.getMembers()) {
 			try {
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(groupmemberuuid));

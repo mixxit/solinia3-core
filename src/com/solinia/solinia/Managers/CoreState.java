@@ -24,6 +24,7 @@ import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;

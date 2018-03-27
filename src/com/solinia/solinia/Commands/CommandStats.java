@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,7 +11,10 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandStats implements CommandExecutor {
@@ -43,7 +47,6 @@ public class CommandStats implements CommandExecutor {
 	    		player.sendMessage("Level progress: " + ipercenttolevel + "% into level - Have: " + solplayer.getExperience().longValue() + " Need: " + xpneededfornextlevel.longValue());
 	    		player.sendMessage("AA points: " + solplayer.getAAPoints());
 	    		player.sendMessage("Next AA progress: " + ipercenttoaa + "% into AA - Have: " + solplayer.getAAExperience().longValue() + " Need: " + Utils.getMaxAAXP().longValue());
-	    			
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -26,6 +26,8 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.DiscordChannel;
 import com.solinia.solinia.Models.QueuedDiscordMessage;
+import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Models.WorldWidePerk;
 
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;
@@ -361,16 +363,24 @@ public class ChannelManager implements IChannelManager {
 		String command = commands[0];
 		switch(command)
 		{
+			case "?hotzones":
+					sendHotzonesToDiscordChannel(discordChannel);
+				break;
+			case "?online":
+				sendOnlineToDiscordChannel(discordChannel);
+				break;
 			case "?top":
 				if (commands.length > 1)
 					sendTopToDiscordChannel(discordChannel,commands[1]);
 				else
 					sendTopToDiscordChannel(discordChannel,"");
-
 				break;
 			case "?moblvl":
 				if (commands.length > 2)
 					sendMobLvlToDiscordChannel(discordChannel,Integer.parseInt(commands[1]),Integer.parseInt(commands[2]));
+				break;
+			case "?donation":
+					sendDonationToDiscordChannel(discordChannel);
 				break;
 			case "?loot":
 				if (commands.length > 1)
@@ -388,6 +398,103 @@ public class ChannelManager implements IChannelManager {
 				break;
 			default:
 				return;
+		}
+	}
+	
+	private void sendOnlineToDiscordChannel(DiscordChannel discordChannel) {
+		String list = "";
+		String targetChannelId = getDefaultDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = getAdminDiscordChannel();
+		
+		try
+		{
+			for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
+		    {
+        		ISoliniaPlayer solplayer;
+				try {
+					solplayer = SoliniaPlayerAdapter.Adapt(currentplayer);
+				
+		        	int lvl = (int) Math.floor(solplayer.getLevel());
+		        	
+		        	String racename = "UNKNOWN";
+		        	String classname = "UNKNOWN";
+		        	
+		        	if (solplayer.getRace() != null)
+		        		racename = solplayer.getRace().getName();
+		        	if (solplayer.getClassObj() != null)
+			        	classname = solplayer.getClassObj().getName();
+		        	
+		        	sendToDiscordMC(null,targetChannelId,"["+currentplayer.getName()+"]"+ solplayer.getFullName().toUpperCase() + " ["+ currentplayer.getWorld().getName() +"] - LVL " + lvl + " " + racename + " " + classname);
+				} catch (CoreStateInitException e) {
+					
+				}
+		    }
+			
+		} catch (Exception e)
+		{
+			// ignore it
+		}
+	}
+	
+	private void sendHotzonesToDiscordChannel(DiscordChannel discordChannel) {
+		String list = "";
+		String targetChannelId = getDefaultDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = getAdminDiscordChannel();
+		
+		try
+		{
+			sendToDiscordMC(null,targetChannelId,"Current 100% bonus XP Hotzones are: ");
+			for(SoliniaZone zone : StateManager.getInstance().getCurrentHotzones())
+			{
+				sendToDiscordMC(null,targetChannelId,zone.getName() + ": " + zone.getX() + "," + zone.getY() + "," + zone.getZ());
+			}
+			
+			
+		} catch (Exception e)
+		{
+			// ignore it
+		}
+	}
+	
+	private void sendDonationToDiscordChannel(DiscordChannel discordChannel) {
+		String list = "";
+		String targetChannelId = getDefaultDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = getAdminDiscordChannel();
+		
+		try
+		{
+			int total = 0;
+			
+			for(WorldWidePerk perk : StateManager.getInstance().getWorldWidePerks())
+			{
+				if (perk.getPerkname().equals("DROP100")) {
+					total += 4;
+				}
+
+				if (perk.getPerkname().equals("XPBONUS50")) {
+					total += 1;
+				}
+
+				if (perk.getPerkname().equals("XPBONUS100")) {
+					total += 2;
+				}
+
+				if (perk.getPerkname().equals("XPBONUS150")) {
+					total += 3;
+				}
+
+				if (perk.getPerkname().equals("XPBONUS200")) {
+					total += 4;
+				}
+			}
+			
+			sendToDiscordMC(null,targetChannelId,"Total Donations to-date (CAD): $" + total);
+		} catch (Exception e)
+		{
+			// ignore it
 		}
 	}
 
@@ -567,7 +674,18 @@ public class ChannelManager implements IChannelManager {
 			
 			if (items.size() > 1)
 			{
-				sendToDiscordMC(null,targetChannelId,"More than one item found with this string, please be more specific: " + itemMatch);
+				String itemsMatched = "";
+				for (ISoliniaItem item : items)
+				{
+					itemsMatched += item.getId() + " ";
+				}
+				
+				if (itemsMatched.length() > 256)
+				{
+					itemsMatched = itemsMatched.substring(0, 250) + "...";
+				}
+				
+				sendToDiscordMC(null,targetChannelId,"More than one item found with this string, please be more specific than '" + itemMatch + "' (Or Try ?loot with one of these IDs: " + itemsMatched.trim() + ")");
 				return;
 			}
 			
