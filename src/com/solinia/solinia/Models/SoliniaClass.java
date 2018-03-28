@@ -53,6 +53,9 @@ public class SoliniaClass implements ISoliniaClass {
 	private int specialiselevel = 0;
 	private int npcspelllist = 0;
 	private boolean sneakFromCrouch = false;
+	private String level51Title = "";
+	private String level55Title = "";
+	private String level60Title = "";
 	
 	@Override
 	public String getName() {
@@ -191,6 +194,11 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
 		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- level51title: " + ChatColor.GOLD + getLevel51Title() + ChatColor.RESET);
+		sender.sendMessage("- level55title: " + ChatColor.GOLD + getLevel55Title() + ChatColor.RESET);
+		sender.sendMessage("- level60title: " + ChatColor.GOLD + getLevel60Title() + ChatColor.RESET);
+		
+		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
 		if (StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()) != null)
 		{
 			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcspelllist() + "(" + StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()).getName() + ")" + ChatColor.RESET);
@@ -327,8 +335,17 @@ public class SoliniaClass implements ISoliniaClass {
 		case "description":
 			this.setDescription(value);
 			break;
+		case "level51title":
+			this.setLevel51Title(value);
+			break;
+		case "level55title":
+			this.setLevel55Title(value);
+			break;
+		case "level60title":
+			this.setLevel60Title(value);
+			break;
 		default:
-			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel");
+			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel,level51title,level55title,level60title");
 		}
 	}
 
@@ -723,5 +740,35 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setSneakFromCrouch(boolean sneakFromCrouch) {
 		this.sneakFromCrouch = sneakFromCrouch;
+	}
+
+	@Override
+	public String getLevel51Title() {
+		return level51Title;
+	}
+
+	@Override
+	public void setLevel51Title(String level51Title) {
+		this.level51Title = level51Title;
+	}
+
+	@Override
+	public String getLevel55Title() {
+		return level55Title;
+	}
+
+	@Override
+	public void setLevel55Title(String level55Title) {
+		this.level55Title = level55Title;
+	}
+
+	@Override
+	public String getLevel60Title() {
+		return level60Title;
+	}
+
+	@Override
+	public void setLevel60Title(String level60Title) {
+		this.level60Title = level60Title;
 	}
 }

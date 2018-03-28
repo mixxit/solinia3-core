@@ -132,4 +132,16 @@ public interface ISoliniaClass {
 
 	void setSneakFromCrouch(boolean sneakFromCrouch);
 
+	String getLevel51Title();
+
+	void setLevel51Title(String level51Title);
+
+	String getLevel55Title();
+
+	void setLevel55Title(String level55Title);
+
+	String getLevel60Title();
+
+	void setLevel60Title(String level60Title);
+
 }

@@ -261,6 +261,9 @@ public class Utils {
 			if (perk.getPerkname().equals("DROP100")) {
 				dropcount += 1;
 			}
+			if (perk.getPerkname().equals("DROP1000")) {
+				dropcount += 10;
+			}
 		}
 
 		return dropcount;
@@ -283,6 +286,10 @@ public class Utils {
 
 			if (perk.getPerkname().equals("XPBONUS200")) {
 				xppercent += 200;
+			}
+			
+			if (perk.getPerkname().equals("XPBONUS1000")) {
+				xppercent += 1000;
 			}
 		}
 
@@ -630,7 +637,7 @@ public class Utils {
 	}
 
 	public static int getMaxLevel() {
-		return 57;
+		return 60;
 	}
 
 	public static Double getExperienceRewardAverageForLevel(int level) {

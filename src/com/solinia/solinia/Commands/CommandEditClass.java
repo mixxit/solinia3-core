@@ -63,7 +63,7 @@ public class CommandEditClass implements CommandExecutor {
 
 		// for 'text' based settings like trigger texts etc, get the whole thing as
 		// a string
-		if (args.length > 3 && (setting.toLowerCase().contains("text") || setting.toLowerCase().contains("description"))) {
+		if (args.length > 3 && (setting.toLowerCase().contains("text") || setting.toLowerCase().contains("description") || setting.toLowerCase().contains("title"))) {
 			value = "";
 			int current = 0;
 			for (String entry : args) {

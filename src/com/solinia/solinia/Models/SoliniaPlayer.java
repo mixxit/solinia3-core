@@ -535,6 +535,30 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					grantTitle("the Legend");
 				}
 			}
+			
+			if (newlevel >= 51) {
+				if (getClassObj() != null)
+				if (getClassObj().getLevel51Title() != null && !getClassObj().getLevel51Title().equals(""))
+				if (!getAvailableTitles().contains(getClassObj().getLevel51Title())) {
+					grantTitle(getClassObj().getLevel51Title());
+				}
+			}
+			
+			if (newlevel >= 55) {
+				if (getClassObj() != null)
+				if (getClassObj().getLevel55Title() != null && !getClassObj().getLevel55Title().equals(""))
+				if (!getAvailableTitles().contains(getClassObj().getLevel55Title())) {
+					grantTitle(getClassObj().getLevel55Title());
+				}
+			}
+			
+			if (newlevel >= 60) {
+				if (getClassObj() != null)
+				if (getClassObj().getLevel60Title() != null && !getClassObj().getLevel60Title().equals(""))
+				if (!getAvailableTitles().contains(getClassObj().getLevel60Title())) {
+					grantTitle(getClassObj().getLevel60Title());
+				}
+			}
 
 			updateMaxHp();
 		}

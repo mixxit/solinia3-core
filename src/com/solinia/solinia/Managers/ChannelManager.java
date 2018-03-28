@@ -473,6 +473,10 @@ public class ChannelManager implements IChannelManager {
 				if (perk.getPerkname().equals("DROP100")) {
 					total += 4;
 				}
+				
+				if (perk.getPerkname().equals("DROP1000")) {
+					total += 40;
+				}
 
 				if (perk.getPerkname().equals("XPBONUS50")) {
 					total += 1;
@@ -489,6 +493,11 @@ public class ChannelManager implements IChannelManager {
 				if (perk.getPerkname().equals("XPBONUS200")) {
 					total += 4;
 				}
+
+				if (perk.getPerkname().equals("XPBONUS1000")) {
+					total += 40;
+				}
+
 			}
 			
 			sendToDiscordMC(null,targetChannelId,"Total Donations to-date (CAD): $" + total);
