@@ -404,8 +404,21 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public ISoliniaItem getItem(ItemStack itemStack) {
-		int Id = (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) - 1000);
-		return getItem(Id);
+		
+		int durability = itemStack.getEnchantmentLevel(Enchantment.DURABILITY);
+		
+		int id = 0;
+		if (durability > 999)
+		{
+			id = durability - 1000;
+		}
+		
+		if (durability < 0)
+		{
+			id = (32768 + (durability + 32768)) - 1000;
+		}
+		
+		return getItem(id);
 	}
 
 	@Override

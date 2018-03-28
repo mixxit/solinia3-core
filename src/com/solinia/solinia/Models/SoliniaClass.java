@@ -197,8 +197,6 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- level51title: " + ChatColor.GOLD + getLevel51Title() + ChatColor.RESET);
 		sender.sendMessage("- level55title: " + ChatColor.GOLD + getLevel55Title() + ChatColor.RESET);
 		sender.sendMessage("- level60title: " + ChatColor.GOLD + getLevel60Title() + ChatColor.RESET);
-		
-		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
 		if (StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()) != null)
 		{
 			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcspelllist() + "(" + StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()).getName() + ")" + ChatColor.RESET);

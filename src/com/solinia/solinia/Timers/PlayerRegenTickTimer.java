@@ -129,7 +129,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 	        }
 
 			
-			if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999) {
+			if (Utils.IsSoliniaItem(itemstack)) {
 				
 				try {
 					

@@ -70,7 +70,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
         
         try
         {
-	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 && pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK))
+	        if (Utils.IsSoliniaItem(pickedUpItemStack) && pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK))
 		    {
 	        	e.getPlayer().sendMessage(ChatColor.GRAY + "You have picked up an ability! To use it, hold it in your hand and right click!");
 	        	
@@ -96,8 +96,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
 		    }
-	        
-	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
+	        if (Utils.IsSoliniaItem(pickedUpItemStack) && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
 		    {
 	        	Map<Enchantment, Integer> oldenchantments = pickedUpItemStack.getEnchantments();
 	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
@@ -157,7 +156,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 		    }
 	        
 	        // group messages
-	        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999)
+	        if (Utils.IsSoliniaItem(pickedUpItemStack))
 		    {
 	        	ISoliniaItem item;
 				try {

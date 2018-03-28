@@ -235,7 +235,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	public boolean usingValidWeapon() {
-		if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getEnchantmentLevel(Enchantment.DURABILITY) > 999) {
+		if (Utils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 			try {
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager()
 						.getItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
@@ -322,8 +322,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			Utils.CancelEvent(event);;
 			return false;
 		} else {
-			if (getBukkitLivingEntity().getEquipment().getItemInMainHand()
-					.getEnchantmentLevel(Enchantment.DURABILITY) > 999) {
+			if (
+					Utils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 				try {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager()
 							.getItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
@@ -497,10 +497,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					defender.damage(plugin, my_hit.damage_done, this.getBukkitLivingEntity());
 				}
-
+				
 				try {
-					if (getBukkitLivingEntity().getEquipment().getItemInMainHand()
-							.getEnchantmentLevel(Enchantment.DURABILITY) > 999) {
+					if (Utils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 						try {
 							ISoliniaItem soliniaitem = SoliniaItemAdapter
 									.Adapt(getBukkitLivingEntity().getEquipment().getItemInMainHand());

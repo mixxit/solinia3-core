@@ -32,7 +32,7 @@ public class ItemStackUtils {
 	
 	public static Integer getAugmentationItemId(ItemStack itemStack)
 	{
-		if (!(itemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999))
+		if (!Utils.IsSoliniaItem(itemStack))
 			return null;
 		
 		for(String loreLine : itemStack.getItemMeta().getLore())
