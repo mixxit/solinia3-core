@@ -3240,7 +3240,7 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
-		// dont do anything
+		
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {

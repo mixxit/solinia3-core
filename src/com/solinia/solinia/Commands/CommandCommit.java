@@ -17,6 +17,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandCommit implements CommandExecutor {
 	@Override
@@ -67,6 +68,11 @@ public class CommandCommit implements CommandExecutor {
 				} catch (CoreStateInitException e) {
 
 				}
+			}
+			
+			if (args[0].equals("patch")) {
+				System.out.println("Patching");
+				Utils.Patcher();
 			}
 		}
 

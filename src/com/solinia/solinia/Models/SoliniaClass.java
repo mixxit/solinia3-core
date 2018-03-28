@@ -155,6 +155,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
+		sender.sendMessage("- admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- defaultheadmaterial: " + ChatColor.GOLD + getDefaultHeadMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultchestmaterial: " + ChatColor.GOLD + getDefaultChestMaterial() + ChatColor.RESET);
@@ -247,6 +248,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "shortname":
 			this.setShortName(value);
+			break;
+		case "admin":
+			this.setAdmin(Boolean.parseBoolean(value));
 			break;
 		case "staminaitembonus":
 			this.setStaminaitembonus(Integer.parseInt(value));
