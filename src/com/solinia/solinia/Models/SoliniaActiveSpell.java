@@ -482,6 +482,7 @@ public class SoliniaActiveSpell {
 		case AntiGate:
 			return;
 		case SummonBSTPet:
+			applySummonPet(plugin, spellEffect, soliniaSpell, casterLevel);
 			return;
 		case AlterNPCLevel:
 			return;
