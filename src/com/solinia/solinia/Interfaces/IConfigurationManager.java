@@ -20,9 +20,11 @@ import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -325,4 +327,17 @@ public interface IConfigurationManager {
 	SoliniaZone getZone(int Id);
 
 	SoliniaZone getZone(String name);
+
+	int getNextCraftId();
+
+	List<SoliniaCraft> getCrafts();
+
+	void addCraft(SoliniaCraft craft);
+
+	SoliniaCraft getCraft(int Id);
+
+	void editCraft(int craftid, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidCraftSettingException;
+
+	SoliniaCraft getCraft(String name);
 }

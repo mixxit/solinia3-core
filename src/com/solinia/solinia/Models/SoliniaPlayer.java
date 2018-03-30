@@ -88,6 +88,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private Timestamp experienceBonusExpires;
 	private boolean oocEnabled = true;
 	private String bindPoint;
+	private int fingersItem = 0;
+	private int shouldersItem = 0;
+	private int neckItem = 0;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -2183,5 +2186,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 
 		}
+	}
+
+	public int getFingersItem() {
+		return fingersItem;
+	}
+
+	public void setFingersItem(int fingersItem) {
+		this.fingersItem = fingersItem;
+	}
+
+	public int getShouldersItem() {
+		return shouldersItem;
+	}
+
+	public void setShouldersItem(int shouldersItem) {
+		this.shouldersItem = shouldersItem;
+	}
+
+	public int getNeckItem() {
+		return neckItem;
+	}
+
+	public void setNeckItem(int neckItem) {
+		this.neckItem = neckItem;
 	}
 }

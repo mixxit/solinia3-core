@@ -103,6 +103,11 @@ public class SoliniaItem implements ISoliniaItem {
 	
 	private boolean operatorCreated = true;
 	
+	private boolean isFingersItem = false;
+	private boolean isNeckItem = false;
+	private boolean isShouldersItem = false;
+	
+	
 	@Override
 	public ItemStack asItemStack() {
 		return ItemStackAdapter.Adapt(this);
@@ -664,6 +669,10 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- skillmodtype4: " + ChatColor.GOLD + getSkillModType4().toString() + ChatColor.RESET);
 		sender.sendMessage("- skillmodvalue4: " + ChatColor.GOLD + getSkillModValue4() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- fingersItem: " + ChatColor.GOLD + isFingersItem() + ChatColor.RESET);
+		sender.sendMessage("- neckItem: " + ChatColor.GOLD + isNeckItem() + ChatColor.RESET);
+		sender.sendMessage("- shouldersItem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
 		sender.sendMessage("- allowedclassnames: ");
 		for(String classname : this.getAllowedClassNames())
@@ -828,6 +837,21 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "skillmodvalue4":
 			setSkillModValue4(Integer.parseInt(value));
+			break;
+		case "fingersitem":
+			setFingersItem(Boolean.parseBoolean(value));
+			setNeckItem(false);
+			setShouldersItem(false);
+			break;
+		case "neckitem":
+			setNeckItem(Boolean.parseBoolean(value));
+			setFingersItem(false);
+			setShouldersItem(false);
+			break;
+		case "shouldersitem":
+			setShouldersItem(Boolean.parseBoolean(value));
+			setFingersItem(false);
+			setNeckItem(false);
 			break;
 		default:
 			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll");
@@ -1124,5 +1148,29 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setDye(int dye) {
 		this.dye = dye;
+	}
+
+	public boolean isFingersItem() {
+		return isFingersItem;
+	}
+
+	public void setFingersItem(boolean isFingersItem) {
+		this.isFingersItem = isFingersItem;
+	}
+
+	public boolean isNeckItem() {
+		return isNeckItem;
+	}
+
+	public void setNeckItem(boolean isNeckItem) {
+		this.isNeckItem = isNeckItem;
+	}
+
+	public boolean isShouldersItem() {
+		return isShouldersItem;
+	}
+
+	public void setShouldersItem(boolean isShouldersItem) {
+		this.isShouldersItem = isShouldersItem;
 	}
 }

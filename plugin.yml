@@ -433,6 +433,26 @@ commands:
     usage: /skillcheck <skill>
     aliases:
     - rollskill
+  equip:
+    description: Handles equipment configuration
+    usage: /equip <options>
+    aliases: []
+  craft:
+    description: Combines two items in your hands
+    usage: /craft
+    aliases: []
+  createcraft:
+    description: Creates a new crafting recipe
+    usage: /createcraft recipenamenospaces itemid1 itemid2 outputitemid
+    aliases: []
+  editcraft:
+    description: Edits a crafting recipe
+    usage: /editcraft craftid setting value
+    aliases: []
+  listcrafts:
+    description: Lists crafting recipes
+    usage: /listcrafts
+    aliases: []
 depend:
 - Vault
 - MythicMobs

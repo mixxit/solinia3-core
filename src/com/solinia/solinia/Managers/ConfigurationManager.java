@@ -19,6 +19,7 @@ import com.solinia.solinia.Events.SoliniaSpawnGroupUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidAASettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
@@ -52,6 +53,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaAlignment;
+import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -62,6 +64,7 @@ import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
+import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
@@ -97,6 +100,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<NPCSpellList> npcspelllistsRepository;
 	private IRepository<SoliniaAccountClaim> accountClaimsRepository;
 	private IRepository<SoliniaZone> zonesRepository;
+	private IRepository<SoliniaCraft> craftRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
@@ -106,7 +110,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, 
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
-			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext) {
+			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -127,7 +131,34 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.setNpcspelllistsRepository(npcspelllistsContext);
 		this.accountClaimsRepository = accountClaimsContext;
 		this.zonesRepository = zonesContext;
+		this.craftRepository = craftContext;
+	}
+	
+	@Override
+	public void commit() {
+		this.raceRepository.commit();
+		this.classRepository.commit();
+		this.itemRepository.commit();
+		// TODO this is never needed?
+		// this.spellRepository.commit();
+		this.factionRepository.commit();
+		this.npcRepository.commit();
+		this.npcmerchantRepository.commit();
+		this.loottableRepository.commit();
+		this.lootdropRepository.commit();
+		this.spellRepository.commit();
+		this.spawngroupRepository.commit();
+		this.aaabilitiesRepository.commit();
+		this.questRepository.commit();
+		this.alignmentsRepository.commit();
 		
+		commitPlayersToCharacterLists();
+		
+		this.characterlistsRepository.commit();
+		this.npcspelllistsRepository.commit();
+		this.accountClaimsRepository.commit();
+		this.zonesRepository.commit();
+		this.craftRepository.commit();
 	}
 	
 	@Override 
@@ -438,32 +469,6 @@ public class ConfigurationManager implements IConfigurationManager {
 		return null;
 	}
 
-	@Override
-	public void commit() {
-		this.raceRepository.commit();
-		this.classRepository.commit();
-		this.itemRepository.commit();
-		// TODO this is never needed?
-		// this.spellRepository.commit();
-		this.factionRepository.commit();
-		this.npcRepository.commit();
-		this.npcmerchantRepository.commit();
-		this.loottableRepository.commit();
-		this.lootdropRepository.commit();
-		this.spellRepository.commit();
-		this.spawngroupRepository.commit();
-		this.aaabilitiesRepository.commit();
-		this.questRepository.commit();
-		this.alignmentsRepository.commit();
-		
-		commitPlayersToCharacterLists();
-		
-		this.characterlistsRepository.commit();
-		this.npcspelllistsRepository.commit();
-		this.accountClaimsRepository.commit();
-		this.zonesRepository.commit();
-	}
-
 	private void commitPlayersToCharacterLists() {
 		try {
 			int count = 0;
@@ -673,6 +678,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public void editCraft(int craftid, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidCraftSettingException {
+		getCraft(craftid).editSetting(setting, value);
+	}
+	
+	@Override
 	public void editLootDrop(int lootdropid, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidLootDropSettingException {
 		getLootDrop(lootdropid).editSetting(setting, value);
@@ -735,6 +746,16 @@ public class ConfigurationManager implements IConfigurationManager {
 	public SoliniaZone getZone(String name) {
 		// TODO Auto-generated method stub
 		List<SoliniaZone> list = zonesRepository.query(q -> q.getName().equals(name));
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
+	
+	@Override
+	public SoliniaCraft getCraft(String name) {
+		// TODO Auto-generated method stub
+		List<SoliniaCraft> list = craftRepository.query(q -> q.getRecipeName().equals(name));
 		if (list.size() > 0)
 			return list.get(0);
 
@@ -904,6 +925,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public SoliniaZone getZone(int Id) {
 		return zonesRepository.getByKey(Id);
+	}
+	
+	@Override
+	public SoliniaCraft getCraft(int Id) {
+		return craftRepository.getByKey(Id);
 	}
 	
 	@Override
@@ -1332,6 +1358,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public List<SoliniaCraft> getCrafts() {
+		return craftRepository.query(q -> q.getId() > 0);
+	}
+	
+	@Override
 	public List<SoliniaZone> getZones(String name) {
 		return zonesRepository.query(q -> q.getName().toUpperCase().equals(name.toUpperCase()));
 	}
@@ -1343,11 +1374,28 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public void addCraft(SoliniaCraft craft) {
+		this.craftRepository.add(craft);
+
+	}
+	
+	@Override
 	public int getNextZoneId() {
 		int max = 0;
 		for (SoliniaZone zone : getZones()) {
 			if (zone.getId() > max)
 				max = zone.getId();
+		}
+
+		return max + 1;
+	}
+	
+	@Override
+	public int getNextCraftId() {
+		int max = 0;
+		for (SoliniaCraft entity : getCrafts()) {
+			if (entity.getId() > max)
+				max = entity.getId();
 		}
 
 		return max + 1;

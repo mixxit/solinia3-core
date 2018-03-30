@@ -8,103 +8,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.solinia.solinia.Commands.CommandAA;
-import com.solinia.solinia.Commands.CommandAddClass;
-import com.solinia.solinia.Commands.CommandAddLootDropItem;
-import com.solinia.solinia.Commands.CommandAddLootTableLootDrop;
-import com.solinia.solinia.Commands.CommandAddMerchantItem;
-import com.solinia.solinia.Commands.CommandAddRace;
-import com.solinia.solinia.Commands.CommandAddRaceClass;
-import com.solinia.solinia.Commands.CommandBite;
-import com.solinia.solinia.Commands.CommandCharacter;
-import com.solinia.solinia.Commands.CommandClaim;
-import com.solinia.solinia.Commands.CommandCommit;
-import com.solinia.solinia.Commands.CommandConvertMerchantToLootDrop;
-import com.solinia.solinia.Commands.CommandCreateAlignment;
-import com.solinia.solinia.Commands.CommandCreateAllArmourSets;
-import com.solinia.solinia.Commands.CommandCreateArmourSet;
-import com.solinia.solinia.Commands.CommandCreateFaction;
-import com.solinia.solinia.Commands.CommandCreateItem;
-import com.solinia.solinia.Commands.CommandCreateLootDrop;
-import com.solinia.solinia.Commands.CommandCreateLootTable;
-import com.solinia.solinia.Commands.CommandCreateMerchantList;
-import com.solinia.solinia.Commands.CommandCreateNPCEvent;
-import com.solinia.solinia.Commands.CommandCreateNpc;
-import com.solinia.solinia.Commands.CommandCreateNpcCopy;
-import com.solinia.solinia.Commands.CommandCreateQuest;
-import com.solinia.solinia.Commands.CommandCreateSpawnGroup;
-import com.solinia.solinia.Commands.CommandCreateZone;
-import com.solinia.solinia.Commands.CommandEditAA;
-import com.solinia.solinia.Commands.CommandEditClass;
-import com.solinia.solinia.Commands.CommandEditFaction;
-import com.solinia.solinia.Commands.CommandEditItem;
-import com.solinia.solinia.Commands.CommandEditLootDrop;
-import com.solinia.solinia.Commands.CommandEditLootTable;
-import com.solinia.solinia.Commands.CommandEditNpc;
-import com.solinia.solinia.Commands.CommandEditNpcEvent;
-import com.solinia.solinia.Commands.CommandEditNpcSpellList;
-import com.solinia.solinia.Commands.CommandEditRace;
-import com.solinia.solinia.Commands.CommandEditSpawngroup;
-import com.solinia.solinia.Commands.CommandEditSpell;
-import com.solinia.solinia.Commands.CommandEditZone;
-import com.solinia.solinia.Commands.CommandEffects;
-import com.solinia.solinia.Commands.CommandEmote;
-import com.solinia.solinia.Commands.CommandFaction;
-import com.solinia.solinia.Commands.CommandForceLevel;
-import com.solinia.solinia.Commands.CommandForename;
-import com.solinia.solinia.Commands.CommandGrantTitle;
-import com.solinia.solinia.Commands.CommandGroup;
-import com.solinia.solinia.Commands.CommandGroupChat;
-import com.solinia.solinia.Commands.CommandHideOoc;
-import com.solinia.solinia.Commands.CommandHotzones;
-import com.solinia.solinia.Commands.CommandIgnore;
-import com.solinia.solinia.Commands.CommandInspiration;
-import com.solinia.solinia.Commands.CommandLastname;
-import com.solinia.solinia.Commands.CommandListAAs;
-import com.solinia.solinia.Commands.CommandListClasses;
-import com.solinia.solinia.Commands.CommandListFactions;
-import com.solinia.solinia.Commands.CommandListItems;
-import com.solinia.solinia.Commands.CommandListLootDrops;
-import com.solinia.solinia.Commands.CommandListLootTables;
-import com.solinia.solinia.Commands.CommandListMerchantLists;
-import com.solinia.solinia.Commands.CommandListNPCs;
-import com.solinia.solinia.Commands.CommandListNpcSpells;
-import com.solinia.solinia.Commands.CommandListRaces;
-import com.solinia.solinia.Commands.CommandListSpawnGroups;
-import com.solinia.solinia.Commands.CommandListSpells;
-import com.solinia.solinia.Commands.CommandListZones;
-import com.solinia.solinia.Commands.CommandLocal;
-import com.solinia.solinia.Commands.CommandLoot;
-import com.solinia.solinia.Commands.CommandMana;
-import com.solinia.solinia.Commands.CommandNPCGive;
-import com.solinia.solinia.Commands.CommandOoc;
-import com.solinia.solinia.Commands.CommandPerks;
-import com.solinia.solinia.Commands.CommandPet;
-import com.solinia.solinia.Commands.CommandQuests;
-import com.solinia.solinia.Commands.CommandRaceInfo;
-import com.solinia.solinia.Commands.CommandRebuildSpellItems;
-import com.solinia.solinia.Commands.CommandResetPlayer;
-import com.solinia.solinia.Commands.CommandRoll;
-import com.solinia.solinia.Commands.CommandSetChannel;
-import com.solinia.solinia.Commands.CommandSetClass;
-import com.solinia.solinia.Commands.CommandSetGender;
-import com.solinia.solinia.Commands.CommandSetLanguage;
-import com.solinia.solinia.Commands.CommandSetRace;
-import com.solinia.solinia.Commands.CommandSetTitle;
-import com.solinia.solinia.Commands.CommandSkillCheck;
-import com.solinia.solinia.Commands.CommandSkills;
-import com.solinia.solinia.Commands.CommandSolinia;
-import com.solinia.solinia.Commands.CommandSpawnItem;
-import com.solinia.solinia.Commands.CommandSpecialise;
-import com.solinia.solinia.Commands.CommandStats;
-import com.solinia.solinia.Commands.CommandSwearFealty;
-import com.solinia.solinia.Commands.CommandTarot;
-import com.solinia.solinia.Commands.CommandToday;
-import com.solinia.solinia.Commands.CommandToggleAA;
-import com.solinia.solinia.Commands.CommandTrance;
-import com.solinia.solinia.Commands.CommandUpdateSpawnGroupLoc;
-import com.solinia.solinia.Commands.CommandVoteEmperor;
-import com.solinia.solinia.Commands.CommandWho;
+import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
@@ -126,6 +30,7 @@ import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
+import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
@@ -360,13 +265,17 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			zonesrepo.setJsonFile(getDataFolder() + "/" + "zones.json");
 			zonesrepo.reload();
 
+			JsonCraftRepository craftrepo = new JsonCraftRepository();
+			craftrepo.setJsonFile(getDataFolder() + "/" + "craft.json");
+			craftrepo.reload();
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
-					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,accountclaimsrepo, zonesrepo);
+					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
+					accountclaimsrepo, zonesrepo, craftrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -535,6 +444,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("hotzones").setExecutor(new CommandHotzones());
 		this.getCommand("listraces").setExecutor(new CommandListRaces());
 		this.getCommand("listclasses").setExecutor(new CommandListClasses());
+		this.getCommand("equip").setExecutor(new CommandEquip());
+		this.getCommand("craft").setExecutor(new CommandCraft());
+		this.getCommand("createcraft").setExecutor(new CommandCreateCraft());
+		this.getCommand("listcrafts").setExecutor(new CommandListCrafts());
+		this.getCommand("editcraft").setExecutor(new CommandEditCraft());
 	}
 
 	private void createConfigDir() {
