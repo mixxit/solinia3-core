@@ -283,4 +283,26 @@ public interface ISoliniaPlayer extends Serializable {
 	SoliniaZone getZone();
 
 	boolean isInHotzone();
+
+	public int getItemHpRegenBonuses();
+
+	public int getItemMpRegenBonuses();
+
+	List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand);
+
+	List<ISoliniaItem> getEquippedSoliniaItems();
+
+	int getTotalItemStat(String stat);
+
+	int getFingersItem();
+
+	void setFingersItem(int fingersItem);
+
+	int getShouldersItem();
+
+	void setShouldersItem(int shouldersItem);
+
+	int getNeckItem();
+
+	void setNeckItem(int neckItem);
 }

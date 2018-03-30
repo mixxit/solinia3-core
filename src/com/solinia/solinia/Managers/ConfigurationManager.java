@@ -1443,5 +1443,39 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return max + 1;
 	}
+
+	@Override
+	public List<SoliniaCraft> getCrafts(int itemid1, int itemid2) {
+		List<SoliniaCraft> craft = new ArrayList<SoliniaCraft>();
+		
+		for(SoliniaCraft craftEntry : getCrafts())
+		{
+			if (craftEntry.getItem1() == itemid1 && craftEntry.getItem2() == itemid2)
+			{
+				craft.add(craftEntry);
+				continue;
+			}
+			if (craftEntry.getItem1() == itemid2 && craftEntry.getItem2() == itemid1)
+			{
+				craft.add(craftEntry);
+				continue;
+			}
+		}
+		
+		return craft;
+	}
+
+	@Override
+	public boolean isCraftsHasComponent(int id) {
+		for(SoliniaCraft craftEntry : getCrafts())
+		{
+			if (craftEntry.getItem1() == id || craftEntry.getItem2() == id)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 }

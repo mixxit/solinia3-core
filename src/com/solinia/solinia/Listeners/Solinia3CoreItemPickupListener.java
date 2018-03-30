@@ -110,26 +110,17 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	        	
 	            if (pickedUpItemStack != null)
 	            {
-	            	if (latestitem != null)
-	            	{
-	            		ItemStack latestitemstack = latestitem.asItemStack();
-	            		
-	            		// We need to store this information before we change the itemmeta, so we can update it afterwards
-	            		if (latestitem.isTemporary())
-	            		{
-	            			temporaryGuid = ItemStackUtils.getTemporaryItemGuid(pickedUpItemStack);
-	            		}
-	            		augmentationItemId = ItemStackUtils.getAugmentationItemId(pickedUpItemStack);
-	            		
-	            		// Now go and replace the itemmeta
-	            		pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
-	            	} else {
-	            		// this is an item that is broken      
-	            		e.getPlayer().sendMessage("This item is no longer implemented");
-	            		Utils.CancelEvent(e);
-	            		e.getItem().remove();
-	            		e.getPlayer().updateInventory();
-	            	}
+	            	ItemStack latestitemstack = latestitem.asItemStack();
+					
+					// We need to store this information before we change the itemmeta, so we can update it afterwards
+					if (latestitem.isTemporary())
+					{
+						temporaryGuid = ItemStackUtils.getTemporaryItemGuid(pickedUpItemStack);
+					}
+					augmentationItemId = ItemStackUtils.getAugmentationItemId(pickedUpItemStack);
+					
+					// Now go and replace the itemmeta
+					pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
 	
 	            	// Now re-apply enchantments that it had before
 	            	for (Map.Entry<Enchantment, Integer> entry : oldenchantments.entrySet()) {

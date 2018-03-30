@@ -47,6 +47,7 @@ import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
+import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.KingCheckTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
@@ -83,6 +84,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PetCheckTickTimer petCheckTickTimer;
 	private DiscordMessageTimer discordMessageTimer;
 	private KingCheckTimer kingCheckTimer;
+	private InvalidItemCheckerTimer invalidItemCheckerTimer;
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
 	
@@ -288,7 +290,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager, effectManager);
 
 			commitTimer = new StateCommitTimer();
-			commitTimer.runTaskTimer(this, 6 * 20L, 300 * 20L);
+			commitTimer.runTaskTimer(this, 300 * 20L, 300 * 20L);
 
 			playerRegenTimer = new PlayerRegenTickTimer();
 			playerRegenTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
@@ -323,6 +325,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			kingCheckTimer = new KingCheckTimer();
 			kingCheckTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
+
+			invalidItemCheckerTimer = new InvalidItemCheckerTimer();
+			invalidItemCheckerTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
+			
+			
 			
 			if (this.discordClient != null)
 			{

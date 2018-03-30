@@ -95,7 +95,8 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			emaamanaregenrank = Utils.getRankOfAAAbility(player, emaa);
 			manaregen += emaamanaregenrank;
 		}
-		
+
+		manaregen += solplayer.getItemMpRegenBonuses();
 		
 		// Hp and Mana Regen from Items
 		int hpregen = 0;
@@ -117,58 +118,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			hpregen += aahpregenrank;
 		}
 		
-		List<ItemStack> itemStackBonuses = new ArrayList<ItemStack>() {{ add(player.getInventory().getItemInMainHand()); add(player.getInventory().getItemInOffHand()); addAll(Arrays.asList(player.getInventory().getArmorContents())); }};
-		
-		for (ItemStack itemstack : itemStackBonuses) {
-			if (itemstack == null)
-				continue;
-			
-	        if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
-	        {
-	        	player.sendMessage("You appear to have items in your inventory that contain a respiration enchantment greater than 999, please drop and pick this item back up");
-	        }
-
-			
-			if (Utils.IsSoliniaItem(itemstack)) {
-				
-				try {
-					
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-					if (item == null)
-						continue;
-
-					
-					
-					//System.out.println("Checking mpregen for " + player.getName() + " " + item.getDisplayname());
-					if (item.getMpregen() > 0) {
-						manaregen += item.getMpregen();
-					}
-
-					if (item.getHpregen() > 0) {
-						hpregen += item.getHpregen();
-					}
-										
-					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
-					if (augmentationId != null && augmentationId != 0)
-					{
-						ISoliniaItem augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-						//System.out.println("Checking aug mpregen for " + player.getName() + " " + augItem.getDisplayname() + " " + augItem.getMpregen());
-						if (augItem.getHpregen() > 0)
-						{
-							hpregen += augItem.getHpregen();
-						}
-						if (augItem.getMpregen() > 0)
-						{
-							manaregen += augItem.getMpregen();
-						}
-					}
-				
-				} catch (CoreStateInitException e) {
-					e.printStackTrace();
-				}
-				
-			}
-		}
+		hpregen += solplayer.getItemHpRegenBonuses();
 
 		// Process HP Regeneration
 		if (hpregen > 0) {

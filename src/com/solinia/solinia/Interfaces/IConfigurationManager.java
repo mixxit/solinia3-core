@@ -340,4 +340,8 @@ public interface IConfigurationManager {
 			throws NumberFormatException, CoreStateInitException, InvalidCraftSettingException;
 
 	SoliniaCraft getCraft(String name);
+
+	List<SoliniaCraft> getCrafts(int itemid1, int itemid2);
+
+	boolean isCraftsHasComponent(int id);
 }

@@ -56,6 +56,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -2294,7 +2295,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 1;
 
 		double statHp = Utils.getStatMaxHP(getClassObj(), getLevel(), getStamina());
-		double itemHp = Utils.getItemHp(this);
+		double itemHp = getItemHp();
 		double totalHp = statHp + itemHp;
 
 		try {
@@ -2405,7 +2406,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solplayer.getRace() != null)
 					stat += solplayer.getRace().getStrength();
 
-				stat += Utils.getTotalItemStat(solplayer, "STRENGTH");
+				stat += solplayer.getTotalItemStat("STRENGTH");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "STRENGTH");
 
@@ -2419,6 +2420,54 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		return 1;
+	}
+
+	@Override
+	public int getTotalItemAC() {
+		int total = 0;
+
+		try {
+			// does not use item in hand
+			for (ISoliniaItem item : getEquippedSoliniaItems(true)) {
+				if (item != null)
+				total += item.getAC();
+			}
+			return total;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return total;
+		}
+	}
+
+	@Override
+	public List<ISoliniaItem> getEquippedSoliniaItems() {
+		return getEquippedSoliniaItems(false);
+	}
+
+	
+	@Override
+	public List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand) {
+		if (isPlayer())
+		{
+			try {
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+				return solplayer.getEquippedSoliniaItems(ignoreMainhand);
+			} catch (CoreStateInitException e) {
+				
+			}
+		}
+		
+		if (isNPC())
+		{
+			try {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+				return npc.getEquippedSoliniaItems(getBukkitLivingEntity(), ignoreMainhand);
+			} catch (CoreStateInitException e) {
+				
+			}
+		}
+		
+		return new ArrayList<ISoliniaItem>();
 	}
 
 	@Override
@@ -2476,7 +2525,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solplayer.getRace() != null)
 					stat += solplayer.getRace().getStamina();
 
-				stat += Utils.getTotalItemStat(solplayer, "STAMINA");
+				stat += solplayer.getTotalItemStat("STAMINA");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "STAMINA");
 
@@ -2523,7 +2572,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solplayer.getRace() != null)
 					stat += solplayer.getRace().getAgility();
 
-				stat += Utils.getTotalItemStat(solplayer, "AGILITY");
+				stat += solplayer.getTotalItemStat("AGILITY");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "AGILITY");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "AGILITY");
 
@@ -2570,7 +2619,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solplayer.getRace() != null)
 					stat += solplayer.getRace().getDexterity();
 
-				stat += Utils.getTotalItemStat(solplayer, "DEXTERITY");
+				stat += solplayer.getTotalItemStat("DEXTERITY");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "DEXTERITY");
 
@@ -2617,7 +2666,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solplayer.getRace() != null)
 					stat += solplayer.getRace().getIntelligence();
 
-				stat += Utils.getTotalItemStat(solplayer, "INTELLIGENCE");
+				stat += solplayer.getTotalItemStat("INTELLIGENCE");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "INTELLIGENCE");
 
@@ -2664,7 +2713,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solplayer.getRace() != null)
 					stat += solplayer.getRace().getWisdom();
 
-				stat += Utils.getTotalItemStat(solplayer, "WISDOM");
+				stat += solplayer.getTotalItemStat("WISDOM");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "WISDOM");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "WISDOM");
 
@@ -2711,7 +2760,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solplayer.getRace() != null)
 					stat += solplayer.getRace().getCharisma();
 
-				stat += Utils.getTotalItemStat(solplayer, "CHARISMA");
+				stat += solplayer.getTotalItemStat("CHARISMA");
 				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
 				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "CHARISMA");
 
@@ -2825,7 +2874,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			wisintagi = getAgility();
 
 		double maxmana = ((850 * getLevel()) + (85 * wisintagi * getLevel())) / 425;
-		double itemMana = Utils.getItemMana(this);
+		double itemMana = getItemMana();
 		maxmana += itemMana;
 		if (this.getNpcid() > 0) {
 			maxmana = maxmana + (50 * getLevel());
@@ -3076,7 +3125,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public int ACSum() {
 		double ac = 0;
-		ac += Utils.getTotalItemAC(this);
+		ac += getTotalItemAC();
 		double shield_ac = 0;
 
 		// EQ math
@@ -3538,42 +3587,42 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO Spell and AA bonuses
 		switch (Utils.getSkillType(spell.getSkill())) {
 			case PercussionInstruments:
-				if (Utils.getTotalItemSkillMod(this,SkillType.PercussionInstruments) == 0)
+				if (getTotalItemSkillMod(SkillType.PercussionInstruments) == 0)
 					effectmod = 10;
 				else if (getSkill("PERCUSSIONINSTRUMENTS") == 0)
 					effectmod = 10;
 				else
-				effectmod = Utils.getTotalItemSkillMod(this,SkillType.PercussionInstruments);
+				effectmod = getTotalItemSkillMod(SkillType.PercussionInstruments);
 				break;
 			case StringedInstruments:
-				if (Utils.getTotalItemSkillMod(this,SkillType.StringedInstruments) == 0)
+				if (getTotalItemSkillMod(SkillType.StringedInstruments) == 0)
 					effectmod = 10;
 				else if (getSkill("STRINGEDINSTRUMENTS") == 0)
 					effectmod = 10;
 				else
-					effectmod = Utils.getTotalItemSkillMod(this,SkillType.StringedInstruments);
+					effectmod = getTotalItemSkillMod(SkillType.StringedInstruments);
 				break;
 			case WindInstruments:
-				if (Utils.getTotalItemSkillMod(this,SkillType.WindInstruments) == 0)
+				if (getTotalItemSkillMod(SkillType.WindInstruments) == 0)
 					effectmod = 10;
 				else if (getSkill("WINDINSTRUMENTS") == 0)
 					effectmod = 10;
 				else
-					effectmod = Utils.getTotalItemSkillMod(this,SkillType.WindInstruments);
+					effectmod = getTotalItemSkillMod(SkillType.WindInstruments);
 				break;
 			case BrassInstruments:
-				if (Utils.getTotalItemSkillMod(this,SkillType.BrassInstruments) == 0)
+				if (getTotalItemSkillMod(SkillType.BrassInstruments) == 0)
 					effectmod = 10;
 				else if (getSkill("BRASSINSTRUMENTS") == 0)
 					effectmod = 10;
 				else
-					effectmod = Utils.getTotalItemSkillMod(this,SkillType.BrassInstruments);
+					effectmod = getTotalItemSkillMod(SkillType.BrassInstruments);
 				break;
 			case Singing:
-				if (Utils.getTotalItemSkillMod(this,SkillType.Singing) == 0)
+				if (getTotalItemSkillMod(SkillType.Singing) == 0)
 					effectmod = 10;
 				else
-					effectmod = Utils.getTotalItemSkillMod(this,SkillType.Singing);
+					effectmod = getTotalItemSkillMod(SkillType.Singing);
 				break;
 			default:
 				effectmod = 10;
@@ -3755,6 +3804,63 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
         }
         
         return false;
+	}
+	
+	@Override
+	public double getItemHp() {
+		int total = 0;
+		
+		if (!isNPC() && !isPlayer())
+			return 0;
+		
+		for(ISoliniaItem item : getEquippedSoliniaItems(true))
+		{
+			if (item.getHp() > 0) {
+				total += item.getHp();
+			}
+		}
+		
+		return total;
+	}
+	
+	@Override
+	public double getItemMana() {
+		int total = 0;
+		
+		if (!isNPC() && !isPlayer())
+			return 0;
+		
+		for(ISoliniaItem item : getEquippedSoliniaItems(true))
+		{
+			if (item.getHp() > 0) {
+				total += item.getMana();
+			}
+		}
+		
+		return total;
+	}
+	
+	@Override
+	public int getTotalItemSkillMod(SkillType skilltype) {
+		int total = 0;
+
+		try {
+			for(ISoliniaItem item : getEquippedSoliniaItems(false))
+			{
+				if (item != null && item.getSkillModType().equals(skilltype))
+				total += item.getSkillModValue();
+				if (item != null && item.getSkillModType2().equals(skilltype))
+					total += item.getSkillModValue2();
+				if (item != null && item.getSkillModType3().equals(skilltype))
+					total += item.getSkillModValue3();
+				if (item != null && item.getSkillModType4().equals(skilltype))
+					total += item.getSkillModValue4();
+			}
+			return total;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return total;
+		}
 	}
 
 }

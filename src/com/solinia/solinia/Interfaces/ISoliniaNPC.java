@@ -222,4 +222,8 @@ public interface ISoliniaNPC {
 	void setOperatorCreated(boolean operatorCreated);
 
 	boolean isOperatorCreated();
+
+	List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity, boolean excludeMainHand);
+
+	List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity);
 }

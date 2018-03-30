@@ -1,5 +1,7 @@
 package com.solinia.solinia.Commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -52,6 +54,14 @@ public class CommandCreateCraft implements CommandExecutor {
 		}
 		
 		try {
+			
+			List<SoliniaCraft> existing = StateManager.getInstance().getConfigurationManager().getCrafts(item1,item2);
+			if (existing.size() > 0)
+			{
+				sender.sendMessage("A recipe already exists that take these two items");
+				return false;
+			}
+			
 			SoliniaCraft craft = SoliniaCraftFactory.Create(craftname,item1, item2, outputitem, sender.isOp());
 			
 			sender.sendMessage("Created Craft: " + craft.getId());

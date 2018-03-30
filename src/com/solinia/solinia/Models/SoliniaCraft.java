@@ -5,6 +5,9 @@ import org.bukkit.command.CommandSender;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -78,6 +81,9 @@ public class SoliniaCraft {
 		sender.sendMessage("- item1: " + ChatColor.GOLD + getItem1() + ChatColor.RESET);
 		sender.sendMessage("- item2: " + ChatColor.GOLD + getItem2() + ChatColor.RESET);
 		sender.sendMessage("- outputitem: " + ChatColor.GOLD + getOutputItem() + ChatColor.RESET);
+		sender.sendMessage("- classid: " + ChatColor.GOLD + getClassId() + ChatColor.RESET);
+		sender.sendMessage("- skilltype: " + ChatColor.GOLD + getSkilltype() + ChatColor.RESET);
+		sender.sendMessage("- minskill: " + ChatColor.GOLD + getMinSkill() + ChatColor.RESET);
 	}
 
 	public void editSetting(String setting, String value)
@@ -87,16 +93,51 @@ public class SoliniaCraft {
 		case "recipename":
 			if (value.equals(""))
 				throw new InvalidCraftSettingException("Name is empty");
-			setRecipeName(value);
+			if (StateManager.getInstance().getConfigurationManager().getCraft(value.toUpperCase()) != null)
+				throw new InvalidCraftSettingException("Recipe already exists with this name");
+			setRecipeName(value.toUpperCase());
+			break;
+		case "classid":
+			ISoliniaClass classObj = StateManager.getInstance().getConfigurationManager().getClassObj(Integer.parseInt(value));
+			if (classObj == null)
+				throw new InvalidCraftSettingException("Class does not exist");
+			setClassId(Integer.parseInt(value));
+			break;
+		case "skilltype":
+			setSkilltype(SkillType.valueOf(value));
+			break;
+		case "minskill":
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidCraftSettingException("Skill must be greater than or equal to 0");
+			setMinSkill(Integer.parseInt(value));
 			break;
 		case "item1":
-			setItem1(Integer.parseInt(value));
+			int itemId1 = Integer.parseInt(value);
+			ISoliniaItem solitem1 = StateManager.getInstance().getConfigurationManager().getItem(itemId1);
+			if (solitem1 == null)
+			{
+				throw new InvalidCraftSettingException("Invalid item id (in item 1)");
+			}
+			setItem1(itemId1);
 			break;
 		case "item2":
-			setItem2(Integer.parseInt(value));
+			int itemId2 = Integer.parseInt(value);
+			ISoliniaItem solitem2 = StateManager.getInstance().getConfigurationManager().getItem(itemId2);
+			if (solitem2 == null)
+			{
+				throw new InvalidCraftSettingException("Invalid item id (in item 2)");
+			}
+			setItem2(itemId2);
 			break;
 		case "outputitem":
-			setOutputItem(Integer.parseInt(value));
+			int outputitem = Integer.parseInt(value);
+			ISoliniaItem soloutitem = StateManager.getInstance().getConfigurationManager().getItem(outputitem);
+			if (soloutitem == null)
+			{
+				throw new InvalidCraftSettingException("Invalid item id (out item)");
+			}
+
+			setOutputItem(outputitem);
 			break;
 		default:
 			throw new InvalidCraftSettingException(

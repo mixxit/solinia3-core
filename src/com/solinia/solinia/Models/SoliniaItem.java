@@ -77,7 +77,6 @@ public class SoliniaItem implements ISoliniaItem {
 	private int baneUndead = 0;
 	private boolean isPetControlRod = false;
 	private boolean isAugmentation = false;
-	private boolean isCrafting = false;
 	private boolean isQuest = false;
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
 	private String discoverer = "";
@@ -781,9 +780,6 @@ public class SoliniaItem implements ISoliniaItem {
 		case "consumable":
 			setConsumable(Boolean.parseBoolean(value));
 			break;
-		case "crafting":
-			setCrafting(Boolean.parseBoolean(value));
-			break;
 		case "quest":
 			setQuest(Boolean.parseBoolean(value));
 			break;
@@ -938,12 +934,11 @@ public class SoliniaItem implements ISoliniaItem {
 
 	@Override
 	public boolean isCrafting() {
-		return isCrafting;
-	}
-
-	@Override
-	public void setCrafting(boolean isCrafting) {
-		this.isCrafting = isCrafting;
+		try {
+			return StateManager.getInstance().getConfigurationManager().isCraftsHasComponent(this.getId());
+		} catch (CoreStateInitException e) {
+			return false;
+		}
 	}
 
 	@Override
@@ -1150,26 +1145,32 @@ public class SoliniaItem implements ISoliniaItem {
 		this.dye = dye;
 	}
 
+	@Override
 	public boolean isFingersItem() {
 		return isFingersItem;
 	}
 
+	@Override
 	public void setFingersItem(boolean isFingersItem) {
 		this.isFingersItem = isFingersItem;
 	}
 
+	@Override
 	public boolean isNeckItem() {
 		return isNeckItem;
 	}
 
+	@Override
 	public void setNeckItem(boolean isNeckItem) {
 		this.isNeckItem = isNeckItem;
 	}
 
+	@Override
 	public boolean isShouldersItem() {
 		return isShouldersItem;
 	}
 
+	@Override
 	public void setShouldersItem(boolean isShouldersItem) {
 		this.isShouldersItem = isShouldersItem;
 	}

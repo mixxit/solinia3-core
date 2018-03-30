@@ -19,6 +19,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaSpell;
@@ -198,5 +199,17 @@ public interface ISoliniaLivingEntity
 	void damage(Plugin plugin, double damage, Entity sourceEntity);
 
 	public boolean isBehindEntity(LivingEntity livingEntity);
+
+	int getTotalItemAC();
+
+	List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand);
+
+	List<ISoliniaItem> getEquippedSoliniaItems();
+
+	double getItemHp();
+
+	double getItemMana();
+
+	int getTotalItemSkillMod(SkillType skilltype);
 
 }

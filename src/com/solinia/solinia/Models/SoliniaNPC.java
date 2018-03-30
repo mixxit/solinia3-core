@@ -35,6 +35,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -1140,6 +1141,56 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public boolean isOperatorCreated() {
 		// TODO Auto-generated method stub
 		return this.operatorCreated;
+	}
+
+	@Override
+	public List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity) {
+		return getEquippedSoliniaItems(livingEntity, false);
+	}
+
+	@Override
+	public List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity, boolean excludeMainHand) {
+		List<ISoliniaItem> items = new ArrayList<ISoliniaItem>();
+		
+		try {
+			List<ItemStack> itemStacks = new ArrayList<ItemStack>() {
+				{
+					if (excludeMainHand == false)
+					{
+						
+						add(livingEntity.getEquipment().getItemInMainHand());
+					}
+					add(livingEntity.getEquipment().getItemInOffHand());
+					addAll(Arrays.asList(livingEntity.getEquipment().getArmorContents()));
+				}
+			};
+			for (ItemStack itemstack : itemStacks) {
+				if (itemstack == null)
+					continue;
+
+				if (Utils.IsSoliniaItem(itemstack)) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					if (item == null)
+						continue;
+					
+					if (item.isSpellscroll())
+						continue;
+					
+					items.add(item);
+
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0) {
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+						items.add(augItem);
+					}
+				}
+			}
+		} catch (CoreStateInitException e) {
+			
+		}
+
+		return items;
 	}
 
 }

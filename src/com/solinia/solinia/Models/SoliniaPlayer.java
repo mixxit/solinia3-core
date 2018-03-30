@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -352,26 +353,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		boolean modified = false;
 		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
-		if (getExperienceBonusExpires() != null)
-		{
+		if (getExperienceBonusExpires() != null) {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 			Timestamp expiretimestamp = getExperienceBonusExpires();
 
-			if (expiretimestamp != null)
-			{
-				if (!nowtimestamp.after(expiretimestamp))
-				{
+			if (expiretimestamp != null) {
+				if (!nowtimestamp.after(expiretimestamp)) {
 					modifier += 100;
 				}
 			}
 		}
-		
-		if (isInHotzone() == true)
-		{
+
+		if (isInHotzone() == true) {
 			modifier += 100;
 		}
-		
+
 		if (modifier > 100) {
 			modified = true;
 		}
@@ -407,30 +404,30 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		setExperience(currentexperience, experience, modified);
 	}
-	
+
 	@Override
 	public SoliniaZone getZone() {
 		try {
-			for(SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
-			{
-				if (this.getBukkitPlayer().getLocation().distance(new Location(this.getBukkitPlayer().getWorld(), zone.getX(),zone.getY(),zone.getZ())) < 500)
+			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
+				if (this.getBukkitPlayer().getLocation().distance(
+						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < 500)
 					return zone;
 			}
 		} catch (CoreStateInitException e) {
-			
+
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
 	public boolean isInHotzone() {
-		for(SoliniaZone zone : StateManager.getInstance().getCurrentHotzones())
-		{
-			if (this.getBukkitPlayer().getLocation().distance(new Location(this.getBukkitPlayer().getWorld(), zone.getX(),zone.getY(),zone.getZ())) < 500)
+		for (SoliniaZone zone : StateManager.getInstance().getCurrentHotzones()) {
+			if (this.getBukkitPlayer().getLocation().distance(
+					new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < 500)
 				return true;
 		}
-		
+
 		return false;
 	}
 
@@ -492,8 +489,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					.sendMessage(ChatColor.YELLOW + "* You gain experience (" + ipercenttolevel + "% into level)");
 			getBukkitPlayer().sendMessage(ChatColor.GRAY + "Exp Gained: " + changeamount);
 			if (modified == true)
-				getBukkitPlayer().sendMessage(
-						ChatColor.YELLOW + "* You were given bonus XP from a player donation perk/hotzone or potion! (See /perks && /hotzones)");
+				getBukkitPlayer().sendMessage(ChatColor.YELLOW
+						+ "* You were given bonus XP from a player donation perk/hotzone or potion! (See /perks && /hotzones)");
 		}
 
 		if (changeamount < 0) {
@@ -510,17 +507,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					getFullName() + " has reached new heights as a level " + (int) Math.floor(newlevel) + " "
 							+ classname.toLowerCase() + "!");
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
-			
+
 			if (newlevel < 6)
-				getBukkitPlayer().sendMessage(ChatColor.GRAY + "[Hint] Bored of this class? You rename this player and create a new class with the /character command");
-			
+				getBukkitPlayer().sendMessage(ChatColor.GRAY
+						+ "[Hint] Bored of this class? You rename this player and create a new class with the /character command");
+
 			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
-			
-			if (getGroup() != null)
-			{
-				for(UUID uuid : getGroup().getMembers())
-				{
-					ScoreboardUtils.UpdateGroupScoreboard(uuid,getGroup());
+
+			if (getGroup() != null) {
+				for (UUID uuid : getGroup().getMembers()) {
+					ScoreboardUtils.UpdateGroupScoreboard(uuid, getGroup());
 				}
 			}
 
@@ -554,29 +550,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					grantTitle("the Legend");
 				}
 			}
-			
+
 			if (newlevel >= 51) {
 				if (getClassObj() != null)
-				if (getClassObj().getLevel51Title() != null && !getClassObj().getLevel51Title().equals(""))
-				if (!getAvailableTitles().contains(getClassObj().getLevel51Title())) {
-					grantTitle(getClassObj().getLevel51Title());
-				}
+					if (getClassObj().getLevel51Title() != null && !getClassObj().getLevel51Title().equals(""))
+						if (!getAvailableTitles().contains(getClassObj().getLevel51Title())) {
+							grantTitle(getClassObj().getLevel51Title());
+						}
 			}
-			
+
 			if (newlevel >= 55) {
 				if (getClassObj() != null)
-				if (getClassObj().getLevel55Title() != null && !getClassObj().getLevel55Title().equals(""))
-				if (!getAvailableTitles().contains(getClassObj().getLevel55Title())) {
-					grantTitle(getClassObj().getLevel55Title());
-				}
+					if (getClassObj().getLevel55Title() != null && !getClassObj().getLevel55Title().equals(""))
+						if (!getAvailableTitles().contains(getClassObj().getLevel55Title())) {
+							grantTitle(getClassObj().getLevel55Title());
+						}
 			}
-			
+
 			if (newlevel >= 60) {
 				if (getClassObj() != null)
-				if (getClassObj().getLevel60Title() != null && !getClassObj().getLevel60Title().equals(""))
-				if (!getAvailableTitles().contains(getClassObj().getLevel60Title())) {
-					grantTitle(getClassObj().getLevel60Title());
-				}
+					if (getClassObj().getLevel60Title() != null && !getClassObj().getLevel60Title().equals(""))
+						if (!getAvailableTitles().contains(getClassObj().getLevel60Title())) {
+							grantTitle(getClassObj().getLevel60Title());
+						}
 			}
 
 			updateMaxHp();
@@ -585,14 +581,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (Double.compare(newlevel, level) < 0) {
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You lost a level (" + newlevel + ")!");
 
-			if (getGroup() != null)
-			{
-				for(UUID uuid : getGroup().getMembers())
-				{
-					ScoreboardUtils.UpdateGroupScoreboard(uuid,getGroup());
+			if (getGroup() != null) {
+				for (UUID uuid : getGroup().getMembers()) {
+					ScoreboardUtils.UpdateGroupScoreboard(uuid, getGroup());
 				}
 			}
-			
+
 			updateMaxHp();
 		}
 	}
@@ -602,26 +596,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		boolean modified = false;
 		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
-		if (getExperienceBonusExpires() != null)
-		{
+		if (getExperienceBonusExpires() != null) {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 			Timestamp expiretimestamp = getExperienceBonusExpires();
 
-			if (expiretimestamp != null)
-			{
-				if (!nowtimestamp.after(expiretimestamp))
-				{
+			if (expiretimestamp != null) {
+				if (!nowtimestamp.after(expiretimestamp)) {
 					modifier += 100;
 				}
 			}
 		}
-		
-		if (isInHotzone() == true)
-		{
+
+		if (isInHotzone() == true) {
 			modifier += 100;
-		}		
-		
+		}
+
 		if (modifier > 100) {
 			modified = true;
 		}
@@ -671,8 +661,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				.sendMessage(ChatColor.YELLOW + "* You gain alternate experience (" + ipercenttoaa + "% into AA)!");
 		getBukkitPlayer().sendMessage(ChatColor.GRAY + "AAExp Gained: " + amountincreased);
 		if (modified == true)
-			getBukkitPlayer()
-					.sendMessage(ChatColor.YELLOW + "* You were given bonus XP from a player donation perk/hotzone or potion! (See /perks && /hotzones)");
+			getBukkitPlayer().sendMessage(ChatColor.YELLOW
+					+ "* You were given bonus XP from a player donation perk/hotzone or potion! (See /perks && /hotzones)");
 
 		if (givenaapoint) {
 			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gained an Alternate Experience Point!");
@@ -804,7 +794,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		Random r = new Random();
 		int randomInt = r.nextInt(100) + 1;
-		//this.getBukkitPlayer().sendMessage("DEBUG: skill roll " + randomInt + " vs
+		// this.getBukkitPlayer().sendMessage("DEBUG: skill roll " + randomInt + " vs
 		// needed: " + chance);
 
 		if (randomInt < chance) {
@@ -962,13 +952,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (item.getAbilityid() < 1) {
 					return;
 				}
-				
-				if (ItemStackUtils.isPotion(itemstack))
-				{
+
+				if (ItemStackUtils.isPotion(itemstack)) {
 					// Handled by on consume event
 					return;
 				}
-				
 
 				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
 						.getSpell(item.getAbilityid());
@@ -989,10 +977,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						return;
 					}
 				}
-				
+
 				// Only applies to non-consumable items
 				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.isConsumable()
+						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 					if (targetmob != null) {
 						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
@@ -1109,36 +1098,32 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int no_fizzle_level = 0;
 		ISoliniaAAAbility aa = null;
 		int rank = 0;
-		try
-		{
-			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("SPELLCASTINGEXPERTISE");
-		} catch (CoreStateInitException e)
-		{
-			
+		try {
+			aa = StateManager.getInstance().getConfigurationManager()
+					.getFirstAAAbilityBySysname("SPELLCASTINGEXPERTISE");
+		} catch (CoreStateInitException e) {
+
 		}
-		
-		if (aa != null)
-		{
-			rank = Utils.getRankOfAAAbility(getBukkitPlayer(),aa);
-			switch(rank)
-			{
-				case 1:
-					no_fizzle_level = 20;
-					break;
-				case 2:
-					no_fizzle_level += 35;
-					break;
-				case 3:
-					no_fizzle_level += 52;
-					break;
+
+		if (aa != null) {
+			rank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
+			switch (rank) {
+			case 1:
+				no_fizzle_level = 20;
+				break;
+			case 2:
+				no_fizzle_level += 35;
+				break;
+			case 3:
+				no_fizzle_level += 52;
+				break;
 			}
 		}
-		
-		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level)
-		{
+
+		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level) {
 			return true;
 		}
-		
+
 		// todo item and spell no fizzle levels
 
 		try {
@@ -1201,7 +1186,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			float fizzle_roll = Utils.RandomBetween(0, 100);
 
-			 //System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " + fizzlechance);
+			// System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " +
+			// fizzlechance);
 			if (fizzle_roll > fizzlechance)
 				return true;
 
@@ -1388,82 +1374,36 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// Skip
 		}
 
-		List<ItemStack> itemstacks = new ArrayList<ItemStack>();
-		for (ItemStack itemstack : getBukkitPlayer().getInventory().getArmorContents()) {
-			if (itemstack == null)
-				continue;
-
-			itemstacks.add(itemstack);
-		}
-
-		if (getBukkitPlayer().getInventory().getItemInOffHand() != null)
-			itemstacks.add(getBukkitPlayer().getInventory().getItemInOffHand());
-
-		if (getBukkitPlayer().getInventory().getItemInHand() != null)
-			itemstacks.add(getBukkitPlayer().getInventory().getItemInHand());
-
-		for (ItemStack itemstack : itemstacks) {
-			if (itemstack == null)
-				continue;
-
-			if (Utils.IsSoliniaItem(itemstack)
-					&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-				try {
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
-					ISoliniaItem augItem = null;
-					if (augmentationId != null && augmentationId != 0) {
-						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-					}
-
-					switch (type) {
-					case RESIST_FIRE:
-						if (item.getFireResist() > 0) {
-							total += item.getFireResist();
-						}
-						if (augItem != null)
-							if (augItem.getFireResist() > 0)
-								total += item.getFireResist();
-						break;
-					case RESIST_COLD:
-						if (item.getColdResist() > 0) {
-							total += item.getColdResist();
-						}
-						if (augItem != null)
-							if (augItem.getColdResist() > 0)
-								total += item.getColdResist();
-						break;
-					case RESIST_MAGIC:
-						if (item.getMagicResist() > 0) {
-							total += item.getMagicResist();
-						}
-						if (augItem != null)
-							if (augItem.getMagicResist() > 0)
-								total += item.getMagicResist();
-						break;
-					case RESIST_POISON:
-						if (item.getPoisonResist() > 0) {
-							total += item.getPoisonResist();
-						}
-						if (augItem != null)
-							if (augItem.getPoisonResist() > 0)
-								total += item.getPoisonResist();
-						break;
-					case RESIST_DISEASE:
-						if (item.getDiseaseResist() > 0) {
-							total += item.getDiseaseResist();
-						}
-						if (augItem != null)
-							if (augItem.getDiseaseResist() > 0)
-								total += item.getDiseaseResist();
-						break;
-					default:
-						break;
-					}
-				} catch (CoreStateInitException initException) {
-
+		for(ISoliniaItem item : this.getEquippedSoliniaItems())
+		{
+			switch (type) {
+			case RESIST_FIRE:
+				if (item.getFireResist() > 0) {
+					total += item.getFireResist();
 				}
-
+				break;
+			case RESIST_COLD:
+				if (item.getColdResist() > 0) {
+					total += item.getColdResist();
+				}
+				break;
+			case RESIST_MAGIC:
+				if (item.getMagicResist() > 0) {
+					total += item.getMagicResist();
+				}
+				break;
+			case RESIST_POISON:
+				if (item.getPoisonResist() > 0) {
+					total += item.getPoisonResist();
+				}
+				break;
+			case RESIST_DISEASE:
+				if (item.getDiseaseResist() > 0) {
+					total += item.getDiseaseResist();
+				}
+				break;
+			default:
+				break;
 			}
 		}
 
@@ -2121,17 +2061,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void grantExperienceBonusFromItem() {
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-		
-		if (getExperienceBonusExpires() == null)
-		{
-			System.out.println("Granted Experience Bonus From Item [Current expiry was null]: " + nowtimestamp.toString());
+
+		if (getExperienceBonusExpires() == null) {
+			System.out.println(
+					"Granted Experience Bonus From Item [Current expiry was null]: " + nowtimestamp.toString());
 			setExperienceBonusExpires(nowtimestamp);
 		}
-		
+
 		LocalDateTime expiredatetime = nowtimestamp.toLocalDateTime();
-		
+
 		Timestamp expiretimestamp = Timestamp.valueOf(expiredatetime.plus(1, ChronoUnit.HOURS));
-		System.out.println("Granted Experience Bonus From Item [Current expiry was not null]: " + expiretimestamp.toString());
+		System.out.println(
+				"Granted Experience Bonus From Item [Current expiry was not null]: " + expiretimestamp.toString());
 		setExperienceBonusExpires(expiretimestamp);
 		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + "You have gained 100% experience for 1 additional hour");
 	}
@@ -2139,7 +2080,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public List<SoliniaAccountClaim> getAccountClaims() {
 		try {
-			return StateManager.getInstance().getConfigurationManager().getAccountClaims(this.getBukkitPlayer().getName());
+			return StateManager.getInstance().getConfigurationManager()
+					.getAccountClaims(this.getBukkitPlayer().getName());
 		} catch (CoreStateInitException e) {
 			return new ArrayList<SoliniaAccountClaim>();
 		}
@@ -2149,7 +2091,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean isOocEnabled() {
 		return oocEnabled;
 	}
-	
+
 	@Override
 	public void setOocEnabled(boolean oocEnabled) {
 		this.oocEnabled = oocEnabled;
@@ -2168,7 +2110,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void removeAllEntityEffects(Plugin plugin) {
 		try {
-			StateManager.getInstance().getEntityManager().clearEntityEffects(plugin, this.getBukkitPlayer().getUniqueId());
+			StateManager.getInstance().getEntityManager().clearEntityEffects(plugin,
+					this.getBukkitPlayer().getUniqueId());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2181,34 +2124,202 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(this.getBukkitPlayer());
 			if (pet == null)
 				return;
-			
+
 			StateManager.getInstance().getEntityManager().killPet(this.getBukkitPlayer());
 		} catch (CoreStateInitException e) {
 
 		}
 	}
 
+	@Override
 	public int getFingersItem() {
 		return fingersItem;
 	}
 
+	@Override
 	public void setFingersItem(int fingersItem) {
 		this.fingersItem = fingersItem;
 	}
 
+	@Override
 	public int getShouldersItem() {
 		return shouldersItem;
 	}
 
+	@Override
 	public void setShouldersItem(int shouldersItem) {
 		this.shouldersItem = shouldersItem;
 	}
 
+	@Override
 	public int getNeckItem() {
 		return neckItem;
 	}
 
+	@Override
 	public void setNeckItem(int neckItem) {
 		this.neckItem = neckItem;
+	}
+
+	@Override
+	public int getItemHpRegenBonuses() {
+		int bonus = 0;
+		for (ISoliniaItem item : getEquippedSoliniaItems()) {
+			bonus += item.getHpregen();
+		}
+		return bonus;
+	}
+
+	@Override
+	public int getItemMpRegenBonuses() {
+		int bonus = 0;
+		for (ISoliniaItem item : getEquippedSoliniaItems()) {
+			bonus += item.getMpregen();
+		}
+		return bonus;
+	}
+
+	@Override
+	public int getTotalItemStat(String stat) {
+		int total = 0;
+
+		try {
+			List<ISoliniaItem> items = new ArrayList<ISoliniaItem>();
+
+			if (!stat.equals("STAMINA"))
+				items = getEquippedSoliniaItems();
+			else
+				items = getEquippedSoliniaItems(true);				
+
+			for(ISoliniaItem item : items)
+			{
+				switch (stat) {
+				case "STRENGTH":
+					if (item.getStrength() > 0) {
+						total += item.getStrength();
+					}
+					break;
+				case "STAMINA":
+					if (item.getStamina() > 0) {
+						total += item.getStamina();
+					}
+					break;
+				case "AGILITY":
+					if (item.getAgility() > 0) {
+						total += item.getAgility();
+					}
+					break;
+				case "DEXTERITY":
+					if (item.getDexterity() > 0) {
+						total += item.getDexterity();
+					}
+					break;
+				case "INTELLIGENCE":
+					if (item.getIntelligence() > 0) {
+						total += item.getIntelligence();
+					}
+					break;
+				case "WISDOM":
+					if (item.getWisdom() > 0) {
+						total += item.getWisdom();
+					}
+					break;
+				case "CHARISMA":
+					if (item.getCharisma() > 0) {
+						total += item.getCharisma();
+					}
+					break;
+				default:
+					break;
+				}
+				
+			}
+			
+			return total;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return total;
+		}
+	}
+
+	@Override
+	public List<ISoliniaItem> getEquippedSoliniaItems() {
+		return getEquippedSoliniaItems(false);
+	}
+
+	
+	@Override
+	public List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand) {
+		List<ISoliniaItem> items = new ArrayList<ISoliniaItem>();
+
+		try {
+			List<ItemStack> itemStacks = new ArrayList<ItemStack>() {
+				{
+					if (excludeMainHand == false)
+					{
+						add(getBukkitPlayer().getInventory().getItemInMainHand());
+					}
+					add(getBukkitPlayer().getInventory().getItemInOffHand());
+					addAll(Arrays.asList(getBukkitPlayer().getInventory().getArmorContents()));
+				}
+			};
+			for (ItemStack itemstack : itemStacks) {
+				if (itemstack == null)
+					continue;
+
+				if (Utils.IsSoliniaItem(itemstack)) {
+
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					if (item == null)
+						continue;
+					
+					if (item.isSpellscroll())
+						continue;
+					
+					items.add(item);
+
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0) {
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+						items.add(augItem);
+					}
+				}
+			}
+
+			// Also check non-ui items
+			if (this.getFingersItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getFingersItem());
+				if (item != null)
+				{
+					if (!item.isSpellscroll())
+					items.add(item);
+				}
+			}
+
+			if (this.getShouldersItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(this.getShouldersItem());
+				if (item != null)
+				{
+					if (!item.isSpellscroll())
+					items.add(item);
+				}
+			}
+
+			if (this.getNeckItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getNeckItem());
+				if (item != null)
+				{
+					if (!item.isSpellscroll())
+					items.add(item);
+				}
+			}
+
+		} catch (CoreStateInitException e) {
+			
+		}
+
+		return items;
 	}
 }

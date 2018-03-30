@@ -203,8 +203,6 @@ public interface ISoliniaItem {
 
 	boolean isCrafting();
 
-	void setCrafting(boolean isCrafting);
-
 	boolean isQuest();
 
 	void setQuest(boolean isQuest);
@@ -284,4 +282,16 @@ public interface ISoliniaItem {
 	int getDye();
 
 	void setDye(int dye);
+
+	boolean isFingersItem();
+
+	void setFingersItem(boolean isFingersItem);
+
+	boolean isNeckItem();
+
+	void setNeckItem(boolean isNeckItem);
+
+	boolean isShouldersItem();
+
+	void setShouldersItem(boolean isShouldersItem);
 }

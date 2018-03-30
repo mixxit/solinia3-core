@@ -96,8 +96,8 @@ public class ItemStackAdapter {
 			loretxt.addAll(Arrays.asList(lorestr));
 		}
 
-		if (soliniaItem.isQuest() == true) {
-			loretxt.add(ChatColor.GREEN + "This item is part of a unique artifact!" + ChatColor.RESET);
+		if (soliniaItem.isArtifact() == true) {
+			loretxt.add(ChatColor.GREEN + "This item is a unique artifact!" + ChatColor.RESET);
 		}
 		
 		if (soliniaItem.isQuest() == true) {
@@ -111,6 +111,21 @@ public class ItemStackAdapter {
 
 		if (soliniaItem.isExperienceBonus() == true) {
 			loretxt.add(ChatColor.GOLD + "Grant XP Experience!" + ChatColor.RESET);
+		}
+		
+		if (soliniaItem.isFingersItem())
+		{
+			loretxt.add(ChatColor.AQUA + "/EQUIP : FINGERS" + ChatColor.RESET);
+		}
+		
+		if (soliniaItem.isNeckItem())
+		{
+			loretxt.add(ChatColor.AQUA + "/EQUIP : NECK" + ChatColor.RESET);
+		}
+		
+		if (soliniaItem.isShouldersItem())
+		{
+			loretxt.add(ChatColor.AQUA + "/EQUIP : SHOULDERS" + ChatColor.RESET);
 		}
 		
 		if (soliniaItem.isAugmentation() == true) {
@@ -132,7 +147,7 @@ public class ItemStackAdapter {
 		if (soliniaItem.getAC() > 0) {
 			loretxt.add("Armour Class: " + ChatColor.GREEN + soliniaItem.getAC() + ChatColor.RESET);
 		}
-		
+
 		String classtxt = "";
 		if (soliniaItem.getAllowedClassNames().size() > 0) {
 			classtxt = "Usable By: ";
