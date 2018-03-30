@@ -22,6 +22,9 @@ public class SoliniaZone {
 	private int z;
 	private boolean operatorCreated = true;
 	private boolean hotzone = false;
+	private int succorx;
+	private int succory;
+	private int succorz;
 
 	public int getId() {
 		return id;
@@ -78,6 +81,9 @@ public class SoliniaZone {
 		sender.sendMessage("- y: " + ChatColor.GOLD + getY() + ChatColor.RESET);
 		sender.sendMessage("- z: " + ChatColor.GOLD + getZ() + ChatColor.RESET);
 		sender.sendMessage("- hotzone: " + ChatColor.GOLD + isHotzone() + ChatColor.RESET);
+		sender.sendMessage("- succorx: " + ChatColor.GOLD + getSuccorx() + ChatColor.RESET);
+		sender.sendMessage("- succory: " + ChatColor.GOLD + getSuccory() + ChatColor.RESET);
+		sender.sendMessage("- succorz: " + ChatColor.GOLD + getSuccorz() + ChatColor.RESET);
 	}
 
 	public void editSetting(String setting, String value)
@@ -101,9 +107,36 @@ public class SoliniaZone {
 		case "hotzone":
 			setHotzone(Boolean.parseBoolean(value));
 			break;
+		case "succorx":
+			setSuccorx(Integer.parseInt(value));
+			break;
+		case "succory":
+			setSuccory(Integer.parseInt(value));
+			break;
+		case "succorz":
+			setSuccorz(Integer.parseInt(value));
+			break;
 		default:
 			throw new InvalidZoneSettingException(
-					"Invalid zone setting. Valid Options are: name,x,y,z,hotzone");
+					"Invalid zone setting. Valid Options are: name,x,y,z,hotzone,succorx,succory,succorz");
 		}
+	}
+	public int getSuccorx() {
+		return succorx;
+	}
+	public void setSuccorx(int succorx) {
+		this.succorx = succorx;
+	}
+	public int getSuccory() {
+		return succory;
+	}
+	public void setSuccory(int succory) {
+		this.succory = succory;
+	}
+	public int getSuccorz() {
+		return succorz;
+	}
+	public void setSuccorz(int succorz) {
+		this.succorz = succorz;
 	}
 }

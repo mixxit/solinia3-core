@@ -404,8 +404,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		setExperience(currentexperience, experience, modified);
 	}
-
-	private boolean isInHotzone() {
+	
+	@Override
+	public SoliniaZone getZone() {
+		try {
+			for(SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
+			{
+				if (this.getBukkitPlayer().getLocation().distance(new Location(this.getBukkitPlayer().getWorld(), zone.getX(),zone.getY(),zone.getZ())) < 500)
+					return zone;
+			}
+		} catch (CoreStateInitException e) {
+			
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public boolean isInHotzone() {
 		for(SoliniaZone zone : StateManager.getInstance().getCurrentHotzones())
 		{
 			if (this.getBukkitPlayer().getLocation().distance(new Location(this.getBukkitPlayer().getWorld(), zone.getX(),zone.getY(),zone.getZ())) < 500)

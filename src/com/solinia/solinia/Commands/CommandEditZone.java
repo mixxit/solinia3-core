@@ -90,11 +90,11 @@ public class CommandEditZone implements CommandExecutor {
 				return false;
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getZone(zoneid).isOperatorCreated() && !sender.isOp())
+			/*if (StateManager.getInstance().getConfigurationManager().getZone(zoneid).isOperatorCreated() && !sender.isOp())
 			{
 				sender.sendMessage("This zone was op created and you are not an op. Only ops can edit op zone items");
 				return false;
-			}
+			}*/
 
 			StateManager.getInstance().getConfigurationManager().editZone(zoneid,setting,value);
 			sender.sendMessage("Updating setting on Zone");

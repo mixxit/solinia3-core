@@ -15,6 +15,7 @@ import com.solinia.solinia.Models.PlayerQuest;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 
@@ -278,4 +279,8 @@ public interface ISoliniaPlayer extends Serializable {
 	public void removeAllEntityEffects(Plugin plugin);
 
 	public void killAllPets();
+
+	SoliniaZone getZone();
+
+	boolean isInHotzone();
 }

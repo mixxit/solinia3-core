@@ -438,7 +438,7 @@ public class SoliniaActiveSpell {
 			return;
 		case Succor:
 			if (getLivingEntity() instanceof Player)
-				applyTeleport(spellEffect, soliniaSpell, casterLevel);
+				applySuccor(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case ModelSize:
 			return;
@@ -1241,6 +1241,39 @@ public class SoliniaActiveSpell {
 			return;
 		default:
 			return;
+		}
+	}
+
+	private void applySuccor(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!(getLivingEntity() instanceof Player))
+			return;
+		
+		ISoliniaPlayer solPlayer;
+		try {
+			solPlayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+
+			SoliniaZone zone = solPlayer.getZone();
+			if (zone == null)
+			{
+				getLivingEntity().sendMessage("Succor failed! Your body could not be pulled by an astral anchor (not found in a zone)!");
+				return;
+			}
+			
+			if (zone.getSuccorx() == 0 && zone.getSuccory() == 0 && zone.getSuccorz() == 0)
+			{
+				getLivingEntity().sendMessage("Succor failed! Your body could not be pulled by an astral anchor (zone has no succor point)!");
+				return;
+			}
+			
+			double x = (zone.getSuccorx());
+			double y = (zone.getSuccory());
+			double z = (zone.getSuccorz());
+			Location loc = new Location(Bukkit.getWorld("world"), x, y, z);
+			getLivingEntity().teleport(loc);
+
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
