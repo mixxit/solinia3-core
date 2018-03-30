@@ -39,10 +39,23 @@ public class CommandCraft implements CommandExecutor {
         	player.sendMessage(ChatColor.GRAY+"Empty item in primary hand. You must hold the item you want to use in your crafting recipe");
         	return false;
         }
+        
 		ItemStack secondaryItem = player.getInventory().getItemInOffHand();
         if (secondaryItem.getType().equals(Material.AIR))
         {
         	player.sendMessage(ChatColor.GRAY+"Empty item in offhand. You must hold the item you want to use in your crafting recipe");
+        	return false;
+        }
+        
+        if (primaryItem.getAmount() > 1)
+        {
+        	player.sendMessage(ChatColor.GRAY+"Stack size in primary hand is too high (max 1)");
+        	return false;
+        }
+
+        if (secondaryItem.getAmount() > 1)
+        {
+        	player.sendMessage(ChatColor.GRAY+"Stack size in secondary hand is too high (max 1)");
         	return false;
         }
         

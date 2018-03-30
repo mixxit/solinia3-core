@@ -920,7 +920,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (item == null) {
 					return;
 				}
-
+				
 				// Start applying an augmentation
 				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isAugmentation()) {
@@ -964,6 +964,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				// Only applies to consumable items
 				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isConsumable()) {
+					
+					if (itemstack.getAmount() > 1)
+					{
+						event.getPlayer().sendMessage("Tried to use an entire stack at once! Cancelling, did you forget to split them?");
+						return;
+					}
+					
 					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 					if (targetmob != null) {
 						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
