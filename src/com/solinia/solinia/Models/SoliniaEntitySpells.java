@@ -92,25 +92,15 @@ public class SoliniaEntitySpells {
 				// Check resistances
 				if (this.getLivingEntity() instanceof Player) {
 					Player player = (Player) this.getLivingEntity();
-					player.sendMessage(ChatColor.GRAY + "* You resist " + soliniaSpell.getName());
-					return true;
+					player.sendMessage(ChatColor.GRAY + "* o " + soliniaSpell.getName());
 				}
 
 				if (sourceEntity instanceof Player) {
 					Player player = (Player) sourceEntity;
 					player.sendMessage(ChatColor.GRAY + "* " + soliniaSpell.getName() + " was completely resisted");
-
-					/*
-					 * TODO - Add hate if (Utils.isLivingEntityNPC((LivingEntity)getLivingEntity()))
-					 * { try { // Resists should still cause hate ISoliniaLivingEntity solentity =
-					 * SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-					 * solentity.addHate(sourceEntity,10); } catch (CoreStateInitException e) {
-					 * 
-					 * } }
-					 */
-
-					return true;
 				}
+				
+				return true;
 			}
 		}
 
