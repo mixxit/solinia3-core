@@ -8,6 +8,7 @@ import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -16,7 +17,7 @@ public class SoliniaCraft {
 	private String recipeName = "";
 	private int item1 = 0;
 	private int item2 = 0;
-	private SkillType skilltype = SkillType.None;
+	private String skill = "";
 	private int minSkill = 0;
 	private boolean nearForge = false;
 	private int classId = 0;
@@ -34,11 +35,11 @@ public class SoliniaCraft {
 	public void setItem2(int item2) {
 		this.item2 = item2;
 	}
-	public SkillType getSkilltype() {
-		return skilltype;
+	public String getSkill() {
+		return skill;
 	}
-	public void setSkilltype(SkillType skilltype) {
-		this.skilltype = skilltype;
+	public void setSkill(String skill) {
+		this.skill = skill;
 	}
 	public int getMinSkill() {
 		return minSkill;
@@ -82,7 +83,7 @@ public class SoliniaCraft {
 		sender.sendMessage("- item2: " + ChatColor.GOLD + getItem2() + ChatColor.RESET);
 		sender.sendMessage("- outputitem: " + ChatColor.GOLD + getOutputItem() + ChatColor.RESET);
 		sender.sendMessage("- classid: " + ChatColor.GOLD + getClassId() + ChatColor.RESET);
-		sender.sendMessage("- skilltype: " + ChatColor.GOLD + getSkilltype() + ChatColor.RESET);
+		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + ChatColor.RESET);
 		sender.sendMessage("- minskill: " + ChatColor.GOLD + getMinSkill() + ChatColor.RESET);
 	}
 
@@ -103,8 +104,11 @@ public class SoliniaCraft {
 				throw new InvalidCraftSettingException("Class does not exist");
 			setClassId(Integer.parseInt(value));
 			break;
-		case "skilltype":
-			setSkilltype(SkillType.valueOf(value));
+		case "skill":
+			if (!Utils.isValidSkill(value))
+				throw new InvalidCraftSettingException("Invalid skill");
+
+			setSkill(value.toUpperCase());
 			break;
 		case "minskill":
 			if (Integer.parseInt(value) < 0)
@@ -141,7 +145,7 @@ public class SoliniaCraft {
 			break;
 		default:
 			throw new InvalidCraftSettingException(
-					"Invalid zone setting. Valid Options are: recipename,item1,item2,outputitem");
+					"Invalid zone setting. Valid Options are: recipename,item1,item2,outputitem,skill,classid,minskill");
 		}
 	}
 	public String getRecipeName() {

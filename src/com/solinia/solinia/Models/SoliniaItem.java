@@ -473,6 +473,9 @@ public class SoliniaItem implements ISoliniaItem {
 			{
 				if (pet instanceof Wolf)
 				{
+					// Move pet to player
+					pet.teleport(player.getLocation());
+					
 					// Mez cancel target
 					Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed(targetentity);
 	

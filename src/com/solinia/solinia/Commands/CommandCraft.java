@@ -93,31 +93,31 @@ public class CommandCraft implements CommandExecutor {
 				{
 					if (solPlayer.getClassObj() == null)
 					{
-						player.sendMessage("You do not seem to know how to make anything with these items");
+						player.sendMessage("You are not the correct class to produce " + craftEntry.getRecipeName());
 						continue;
 					}
 					
 					if (solPlayer.getClassObj().getId() != craftEntry.getClassId())
 					{
-						player.sendMessage("You do not seem to know how to make anything with these items");
+						player.sendMessage("You are not the correct class to produce " + craftEntry.getRecipeName());
 						continue;
 					}
 				}
 				
-				if (craftEntry.getSkilltype() != SkillType.None)
+				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
 				{
 					if (craftEntry.getMinSkill() > 0)
 					{
-						SoliniaPlayerSkill skill = solPlayer.getSkill(craftEntry.getSkilltype().name().toUpperCase());
+						SoliniaPlayerSkill skill = solPlayer.getSkill(craftEntry.getSkill().toUpperCase());
 						if (skill == null)
 						{
-				        	player.sendMessage("You do not seem to know how to make anything with these items");
+				        	player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
 							continue;
 						}
 						
 						if (skill.getValue() < craftEntry.getMinSkill())
 						{
-				        	player.sendMessage("You do not seem to know how to make anything with these items");
+							player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
 							continue;
 						}
 					}
@@ -130,9 +130,9 @@ public class CommandCraft implements CommandExecutor {
 					player.sendMessage("You fashion the items together to make something new!");
 					createCount++;
 					
-					if (craftEntry.getSkilltype() != SkillType.None)
+					if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
 					{
-						solPlayer.tryIncreaseSkill(craftEntry.getSkilltype().name().toUpperCase(), 1);
+						solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
 					}
 				}
 			}
