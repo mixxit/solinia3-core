@@ -92,7 +92,7 @@ public class SoliniaEntitySpells {
 				// Check resistances
 				if (this.getLivingEntity() instanceof Player) {
 					Player player = (Player) this.getLivingEntity();
-					player.sendMessage(ChatColor.GRAY + "* o " + soliniaSpell.getName());
+					player.sendMessage(ChatColor.GRAY + "* You resist " + soliniaSpell.getName());
 				}
 
 				if (sourceEntity instanceof Player) {
