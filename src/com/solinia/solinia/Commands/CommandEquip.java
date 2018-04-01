@@ -67,6 +67,7 @@ public class CommandEquip implements CommandExecutor {
 	        	return true;
 	        }
 
+	        if (item.getAllowedClassNames() != null && item.getAllowedClassNames().size() > 0)
     		if (!item.getAllowedClassNames().contains(solPlayer.getClassObj().getName().toUpperCase()))
     		{
     			player.sendMessage(ChatColor.GRAY + "Your class cannot wear this equipment");
