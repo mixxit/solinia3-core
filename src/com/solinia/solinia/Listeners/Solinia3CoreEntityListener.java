@@ -841,7 +841,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				
 				if (npc.isBoss() || npc.isRaidboss())
 				{
-					Bukkit.broadcastMessage(ChatColor.RED + "[VICTORY] The foundations of the earth shake following the destruction of " + npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!" + ChatColor.RESET);
+					Utils.BroadcastPlayers("[VICTORY] The foundations of the earth shake following the destruction of " + npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!");
 				}
 			}
 			

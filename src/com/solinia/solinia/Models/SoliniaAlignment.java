@@ -51,7 +51,7 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 			if (playerName != null && !playerName.equals(""))
 			{
 				this.emperor = emperor;
-				Bukkit.broadcastMessage(ChatColor.RED + playerName + " has been declared Emperor! (" + getName() + ")");
+				Utils.BroadcastPlayers(playerName + " has been declared Emperor! (" + getName() + ")");
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

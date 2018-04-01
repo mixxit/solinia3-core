@@ -222,7 +222,7 @@ public class SoliniaRace implements ISoliniaRace {
 			if (playerName != null && !playerName.equals(""))
 			{
 				this.king = king;
-				Bukkit.broadcastMessage(ChatColor.RED + playerName + " has been declared Ruler of the " + Utils.FormatAsName(getName())+"s!");
+				Utils.BroadcastPlayers(playerName + " has been declared Ruler of the " + Utils.FormatAsName(getName())+"s!");
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
@@ -109,6 +110,17 @@ public class Utils {
 	{
 		//System.out.println("Cancel event found for Event Type: " + event.getClassObj().getName());
 		event.setCancelled(true);
+	}
+	
+	public static void BroadcastPlayers(String message)
+	{
+		for(World world : Bukkit.getWorlds())
+		{
+			for(Player player : world.getPlayers())
+			{
+				player.sendMessage(ChatColor.YELLOW + "[Announcement] " + message + ChatColor.RESET);
+			}
+		}
 	}
 
 	public static List<WorldWidePerk> getActiveWorldWidePerks() {

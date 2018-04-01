@@ -11,6 +11,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandOoc implements CommandExecutor {
 	@Override
@@ -50,7 +51,7 @@ public class CommandOoc implements CommandExecutor {
 	            	return false;            	
 	            }
 				
-				Bukkit.broadcastMessage("Console:" + message);
+	            Utils.BroadcastPlayers("Console:" + message);
 			}
 		}
 		return false;
