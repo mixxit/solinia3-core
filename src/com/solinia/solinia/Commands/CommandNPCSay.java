@@ -77,7 +77,7 @@ public class CommandNPCSay implements CommandExecutor {
 			for(String entry : args)
 			{
 				current++;
-				if (current <= 2)
+				if (current <= 1)
 					continue;
 				
 				message = message + entry + " ";

@@ -34,7 +34,16 @@ public class DiscordListener {
 			} else {
 				StateManager.getInstance().getChannelManager().sendToGlobalChannel(event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent());
 			}
-		} 
+		}
+		
+		if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getInCharacterDiscordChannel()))
+		{
+			// Handle command messaging here
+			if (event.getMessage().getContent().startsWith("?"))
+			{
+				StateManager.getInstance().getChannelManager().handleDiscordCommand(DiscordChannel.INCHARACTER,event);
+			}
+		}
 		
 		IRole role = null;
 		for(IRole currentRole : event.getGuild().getRoles())

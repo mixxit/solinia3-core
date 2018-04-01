@@ -27,6 +27,8 @@ public interface IChannelManager {
 
 	String getAdminDiscordChannel();
 
+	String getInCharacterDiscordChannel();
+
 	void handleDiscordCommand(DiscordChannel default1, MessageReceivedEvent event);
 
 	void setDiscordMainChannelId(String discordmainchannelid);
@@ -37,5 +39,7 @@ public interface IChannelManager {
 	void processNextDiscordMessage();
 
 	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message);
+
+	void setDiscordInCharacterChannelId(String discordincharacterchannelid);
 
 }

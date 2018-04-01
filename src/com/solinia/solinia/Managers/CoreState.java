@@ -31,6 +31,7 @@ import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
+import com.solinia.solinia.Providers.DiscordInCharacterChannelCommandSender;
 import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -57,6 +58,7 @@ public class CoreState {
 	private IDiscordClient discordClient;
 	private DiscordAdminChannelCommandSender discordAdminChannelCommandSender;
 	private DiscordDefaultChannelCommandSender discordDefaultChannelCommandSender;
+	private DiscordInCharacterChannelCommandSender discordInCharacterChannelCommandSender;
 	private EffectManager effectManager;
 	
 	private List<Integer> currentHotZones = new ArrayList<Integer>();
@@ -136,8 +138,7 @@ public class CoreState {
 		this.instanceGuid = RandomStringUtils.random(SHORT_ID_LENGTH);
 		this.discordAdminChannelCommandSender = new DiscordAdminChannelCommandSender();
 		this.discordDefaultChannelCommandSender = new DiscordDefaultChannelCommandSender();
-		
-		
+		this.discordInCharacterChannelCommandSender = new DiscordInCharacterChannelCommandSender();
 	}
 	
 	public Scoreboard getScoreboard(Player player)
@@ -582,4 +583,11 @@ public class CoreState {
 		// TODO Auto-generated method stub
 		return this.discordAdminChannelCommandSender;
 	}
+
+
+	public DiscordInCharacterChannelCommandSender getDiscordInCharacterChannelCommandSender() {
+		// TODO Auto-generated method stub
+		return this.discordInCharacterChannelCommandSender;
+	}
+
 }

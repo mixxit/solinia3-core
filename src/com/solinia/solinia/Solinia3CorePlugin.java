@@ -96,6 +96,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	String discordbottoken = "";
 	String discordmainchannelid;
 	String discordadminchannelid;
+	String discordincharacterchannelid;
 
 	@Override
 	public void onEnable() {
@@ -105,14 +106,16 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		config.addDefault("discordbottoken", "");
 		config.addDefault("discordmainchannelid", "");
 		config.addDefault("discordadminchannelid", "");
+		config.addDefault("discordincharacterchannelid", "");
 		config.options().copyDefaults(true);
 		saveConfig();
 		
-		if (!config.getString("discordbottoken").equals("") && !config.getString("discordmainchannelid").equals("") && !config.getString("discordadminchannelid").equals(""))
+		if (!config.getString("discordbottoken").equals("") && !config.getString("discordmainchannelid").equals("") && !config.getString("discordadminchannelid").equals("") &&  !config.getString("discordincharacterchannelid").equals(""))
 		{
 			discordbottoken = config.getString("discordbottoken");
 			discordmainchannelid = config.getString("discordmainchannelid");
 			discordadminchannelid = config.getString("discordadminchannelid");
+			discordincharacterchannelid = config.getString("discordincharacterchannelid");
 			setupDiscordClient();
 		}
 		
@@ -285,6 +288,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			{
 				channelManager.setDiscordMainChannelId(discordmainchannelid);
 				channelManager.setDiscordAdminChannelId(discordadminchannelid);
+				channelManager.setDiscordInCharacterChannelId(discordincharacterchannelid);
 			}
 
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager, effectManager);

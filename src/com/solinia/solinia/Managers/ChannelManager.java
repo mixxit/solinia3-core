@@ -39,6 +39,7 @@ public class ChannelManager implements IChannelManager {
 	private AtomicInteger discordMessageCount = new AtomicInteger(0);
 	private String discordmainchannelid;
 	private String discordadminchannelid;
+	private String discordincharacterchannelid;
 	private ConcurrentHashMap<Integer, QueuedDiscordMessage> queuedDiscordMessages = new ConcurrentHashMap<Integer, QueuedDiscordMessage>();
 	
 	@Override
@@ -105,6 +106,11 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public String getAdminDiscordChannel() {
 		return this.discordadminchannelid;
+	}
+
+	@Override
+	public String getInCharacterDiscordChannel() {
+		return this.discordincharacterchannelid;
 	}
 	
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {
@@ -369,7 +375,7 @@ public class ChannelManager implements IChannelManager {
 					sendHotzonesToDiscordChannel(discordChannel);
 				break;
 			case "?online":
-				sendOnlineToDiscordChannel(discordChannel);
+					sendOnlineToDiscordChannel(discordChannel);
 				break;
 			case "?top":
 				if (commands.length > 1)
@@ -384,7 +390,7 @@ public class ChannelManager implements IChannelManager {
 			case "?donation":
 					sendDonationToDiscordChannel(discordChannel);
 				break;
-			case "?skillcheeck":
+			case "?skillcheck":
 				sendSkillCheckToDiscordChannel(discordChannel,commands[1]);
 				break;
 			case "?roll":
@@ -413,7 +419,9 @@ public class ChannelManager implements IChannelManager {
 		String targetChannelId = getDefaultDiscordChannel();
 		if (discordChannel.equals(DiscordChannel.ADMIN))
 			targetChannelId = getAdminDiscordChannel();
-		
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getInCharacterDiscordChannel();
+
 		if (argument == null || argument.equals(""))
         {
 			sendToDiscordMC(null,targetChannelId,"Insufficient arguments, must provide MAXNUMBER");
@@ -446,7 +454,9 @@ public class ChannelManager implements IChannelManager {
 		String targetChannelId = getDefaultDiscordChannel();
 		if (discordChannel.equals(DiscordChannel.ADMIN))
 			targetChannelId = getAdminDiscordChannel();
-		
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getInCharacterDiscordChannel();
+
 		List<String> skills = new ArrayList<String>();
 		skills.add("athletics");
 		skills.add("acrobatics");
@@ -491,6 +501,8 @@ public class ChannelManager implements IChannelManager {
 		String targetChannelId = getDefaultDiscordChannel();
 		if (discordChannel.equals(DiscordChannel.ADMIN))
 			targetChannelId = getAdminDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getInCharacterDiscordChannel();
 		
 		try
 		{
@@ -527,7 +539,9 @@ public class ChannelManager implements IChannelManager {
 		String targetChannelId = getDefaultDiscordChannel();
 		if (discordChannel.equals(DiscordChannel.ADMIN))
 			targetChannelId = getAdminDiscordChannel();
-		
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getInCharacterDiscordChannel();
+
 		try
 		{
 			sendToDiscordMC(null,targetChannelId,"Current 100% bonus XP Hotzones are: ");
@@ -548,7 +562,9 @@ public class ChannelManager implements IChannelManager {
 		String targetChannelId = getDefaultDiscordChannel();
 		if (discordChannel.equals(DiscordChannel.ADMIN))
 			targetChannelId = getAdminDiscordChannel();
-		
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getInCharacterDiscordChannel();
+
 		try
 		{
 			int total = 0;
@@ -597,7 +613,9 @@ public class ChannelManager implements IChannelManager {
 		String targetChannelId = getDefaultDiscordChannel();
 		if (discordChannel.equals(DiscordChannel.ADMIN))
 			targetChannelId = getAdminDiscordChannel();
-		
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getInCharacterDiscordChannel();
+
 		try
 		{
 			int count = 0;
@@ -632,7 +650,9 @@ public class ChannelManager implements IChannelManager {
 			String targetChannelId = getDefaultDiscordChannel();
 			if (discordChannel.equals(DiscordChannel.ADMIN))
 				targetChannelId = getAdminDiscordChannel();
-			
+			if (discordChannel.equals(DiscordChannel.INCHARACTER))
+				targetChannelId = getInCharacterDiscordChannel();
+
 			int itemId = 0;
 			try
 			{
@@ -706,7 +726,9 @@ public class ChannelManager implements IChannelManager {
 		String targetChannelId = getDefaultDiscordChannel();
 		if (discordChannel.equals(DiscordChannel.ADMIN))
 			targetChannelId = getAdminDiscordChannel();
-		
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getInCharacterDiscordChannel();
+
 		String proc = "";
 		if (item.getWeaponabilityid() > 0)
 		{
@@ -740,7 +762,9 @@ public class ChannelManager implements IChannelManager {
 			String targetChannelId = getDefaultDiscordChannel();
 			if (discordChannel.equals(DiscordChannel.ADMIN))
 				targetChannelId = getAdminDiscordChannel();
-			
+			if (discordChannel.equals(DiscordChannel.INCHARACTER))
+				targetChannelId = getInCharacterDiscordChannel();
+
 			if (itemMatch.length() < 3)
 			{
 				sendToDiscordMC(null,targetChannelId,"Item search must be at least 3 characters: " + itemMatch);
@@ -844,7 +868,9 @@ public class ChannelManager implements IChannelManager {
 			String targetChannelId = getDefaultDiscordChannel();
 			if (discordChannel.equals(DiscordChannel.ADMIN))
 				targetChannelId = getAdminDiscordChannel();
-			
+			if (discordChannel.equals(DiscordChannel.INCHARACTER))
+				targetChannelId = getInCharacterDiscordChannel();
+
 			int rank = 1;
 			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getTopLevelPlayers(classname))
 			{
@@ -869,6 +895,11 @@ public class ChannelManager implements IChannelManager {
 		this.discordadminchannelid = discordadminchannelid;
 	}
 
+	@Override
+	public void setDiscordInCharacterChannelId(String discordincharacterchannelid) {
+		this.discordincharacterchannelid = discordincharacterchannelid;
+	}
+	
 	@Override
 	public void processNextDiscordMessage() {
 		List<Integer> messageIds = Collections.list(this.queuedDiscordMessages.keys());
