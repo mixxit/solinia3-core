@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ import com.solinia.solinia.Models.DiscordChannel;
 import com.solinia.solinia.Models.QueuedDiscordMessage;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.WorldWidePerk;
+import com.solinia.solinia.Utils.Utils;
 
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;
@@ -382,6 +384,12 @@ public class ChannelManager implements IChannelManager {
 			case "?donation":
 					sendDonationToDiscordChannel(discordChannel);
 				break;
+			case "?skillcheeck":
+				sendSkillCheckToDiscordChannel(discordChannel,commands[1]);
+				break;
+			case "?roll":
+				sendRollToDiscordChannel(discordChannel,commands[1]);
+				break;
 			case "?loot":
 				if (commands.length > 1)
 				{
@@ -401,6 +409,83 @@ public class ChannelManager implements IChannelManager {
 		}
 	}
 	
+	private void sendRollToDiscordChannel(DiscordChannel discordChannel, String argument) {
+		String targetChannelId = getDefaultDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = getAdminDiscordChannel();
+		
+		if (argument == null || argument.equals(""))
+        {
+			sendToDiscordMC(null,targetChannelId,"Insufficient arguments, must provide MAXNUMBER");
+        	return;
+        }
+        
+        if (!StringUtils.isNumeric(argument))
+        {
+        	sendToDiscordMC(null,targetChannelId,"Invalid argument, must provide a number");
+        	return;
+        }
+        
+        int maxnumber = 1;
+        try
+        {
+        	maxnumber = Integer.parseInt(argument);
+        } catch (Exception e)
+        {
+        	sendToDiscordMC(null,targetChannelId,"Invalid number");
+        	return;            	
+        }
+
+        int roll = 1 + (int)(Math.random() * ((maxnumber - 1) + 1));
+        
+        String message = ChatColor.AQUA + " * You roll 1d"+maxnumber+". It's a "+roll+"!";
+		sendToDiscordMC(null,targetChannelId,message);
+	}
+
+	private void sendSkillCheckToDiscordChannel(DiscordChannel discordChannel, String argument) {
+		String targetChannelId = getDefaultDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = getAdminDiscordChannel();
+		
+		List<String> skills = new ArrayList<String>();
+		skills.add("athletics");
+		skills.add("acrobatics");
+		skills.add("sleightofhand");
+		skills.add("stealth");
+		skills.add("arcana");
+		skills.add("history");
+		skills.add("investigation");
+		skills.add("nature");
+		skills.add("religion");
+		skills.add("animalhandling");
+		skills.add("insight");
+		skills.add("medicine");
+		skills.add("perception");
+		skills.add("survival");
+		skills.add("deception");
+		skills.add("intimidation");
+		skills.add("performance");
+		skills.add("persuasion");
+		
+		String skill = "perception";
+		
+		if (argument == null || argument.equals(""))
+		{
+			sendToDiscordMC(null,targetChannelId,"Insufficient arguments, must provide skill from this list: " + String.join(",", skills));
+			return;
+		} else {
+			skill = argument.toLowerCase();
+			if (!skills.contains(skill))
+			{
+				sendToDiscordMC(null,targetChannelId,"Invalid argument [" + skill + "], must provide skill from this list: " + String.join(", ", skills));
+				return;
+			}
+		}
+		
+		String message = "* You make a skill check for " + skill + ". You roll: " + Utils.RandomBetween(0, 20) + "/20";
+		sendToDiscordMC(null,targetChannelId,message);
+	}
+
 	private void sendOnlineToDiscordChannel(DiscordChannel discordChannel) {
 		String list = "";
 		String targetChannelId = getDefaultDiscordChannel();

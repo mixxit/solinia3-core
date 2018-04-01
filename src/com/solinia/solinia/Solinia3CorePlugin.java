@@ -456,6 +456,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createcraft").setExecutor(new CommandCreateCraft());
 		this.getCommand("listcrafts").setExecutor(new CommandListCrafts());
 		this.getCommand("editcraft").setExecutor(new CommandEditCraft());
+		this.getCommand("npcsay").setExecutor(new CommandNPCSay());
 	}
 
 	private void createConfigDir() {

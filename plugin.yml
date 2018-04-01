@@ -171,6 +171,10 @@ commands:
     description: Edits an npc
     usage: /editnpc npcid setting value
     aliases: []
+  npcsay:
+    description: Makes npcs of this ID nearby say something
+    usage: /npcsay npcid message
+    aliases: []
   editspawngroup:
     description: Edits a spawngroup
     usage: /editspawngroup spawngroupid setting value
