@@ -1503,6 +1503,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean hasAAAbility(int abilityid) {
 		return aas.contains(abilityid);
 	}
+	
+	@Override
+	public void clearAAs()
+	{
+		this.aas.clear();
+		this.ranks.clear();
+	}
 
 	@Override
 	public boolean canUseAlternateAdvancementRank(ISoliniaAAAbility ability, ISoliniaAARank rank) {

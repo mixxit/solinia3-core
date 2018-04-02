@@ -305,4 +305,6 @@ public interface ISoliniaPlayer extends Serializable {
 	int getNeckItem();
 
 	void setNeckItem(int neckItem);
+
+	void clearAAs();
 }

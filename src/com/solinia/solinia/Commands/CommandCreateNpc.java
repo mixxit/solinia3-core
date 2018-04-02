@@ -43,9 +43,9 @@ public class CommandCreateNpc implements CommandExecutor {
 		int factionid = Integer.parseInt(args[0]);
 		int level = Integer.parseInt(args[1]);
 		
-		if (level > 60)
+		if (level > 80)
 		{
-			sender.sendMessage("NPC should not be greater than level 60");
+			sender.sendMessage("NPC should not be greater than level 80");
 			return false;
 		}
 		
