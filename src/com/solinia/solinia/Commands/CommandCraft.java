@@ -126,14 +126,24 @@ public class CommandCraft implements CommandExecutor {
 				ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(craftEntry.getOutputItem());
 				if (outputItem != null)
 				{
-					player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
-					player.sendMessage("You fashion the items together to make something new!");
-					createCount++;
-					
 					if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
 					{
 						solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
+
+						if (!solPlayer.getSkillCheck(craftEntry.getSkill().toUpperCase(),craftEntry.getMinSkill()+50))
+						{
+							player.sendMessage("Your lack of skill resulted in failure!");
+					        player.getInventory().setItemInMainHand(null);
+					        player.getInventory().setItemInOffHand(null);
+							player.updateInventory();
+							return true;
+						}
 					}
+
+					player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
+					player.sendMessage("You fashion the items together to make something new!");
+					createCount++;
+
 				}
 			}
 			

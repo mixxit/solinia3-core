@@ -430,6 +430,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return false;
 	}
+	
+	@Override
+	public SoliniaZone isInZone() {
+		try {
+			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
+				if (this.getBukkitPlayer().getLocation().distance(
+						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < 500)
+					return zone;
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
 	@Override
 	public void reducePlayerNormalExperience(Double experience) {
@@ -2335,5 +2351,31 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return items;
+	}
+
+	@Override
+	public boolean getSkillCheck(String skillname, int trivial) {
+		SoliniaPlayerSkill skill = this.getSkill(skillname);
+		float chance = (skill.getValue() - trivial) + 66;
+		int over_trivial = skill.getValue() - trivial;
+		
+		if (over_trivial >= 0)
+		{
+			chance = 95.0f + ((float)(skill.getValue() - trivial) / 40.0f);
+		} else if (chance < 5f)
+		{
+			chance = 5;
+		} else if (chance > 95)
+		{
+			chance = 95;
+		}
+		
+		float res = Utils.RandomBetween(0, 99);
+		if (chance > res)
+		{
+			return true;
+		}
+		
+		return false;
 	}
 }

@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
@@ -25,6 +26,9 @@ public class SoliniaZone {
 	private int succorx;
 	private int succory;
 	private int succorz;
+	private int forestryLootTableId = 0;
+	private int miningLootTableId = 0;
+	private int fishingLootTableId = 0;
 
 	public int getId() {
 		return id;
@@ -84,6 +88,33 @@ public class SoliniaZone {
 		sender.sendMessage("- succorx: " + ChatColor.GOLD + getSuccorx() + ChatColor.RESET);
 		sender.sendMessage("- succory: " + ChatColor.GOLD + getSuccory() + ChatColor.RESET);
 		sender.sendMessage("- succorz: " + ChatColor.GOLD + getSuccorz() + ChatColor.RESET);
+		
+		if (getForestryLootTableId() != 0) {
+			sender.sendMessage("- forestryloottableid: " + ChatColor.GOLD + getForestryLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getForestryLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- forestryloottableid: " + ChatColor.GOLD + getForestryLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
+
+		if (getFishingLootTableId() != 0) {
+			sender.sendMessage("- fishingloottableid: " + ChatColor.GOLD + getFishingLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getFishingLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- fishingloottableid: " + ChatColor.GOLD + getFishingLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
+
+		if (getMiningLootTableId() != 0) {
+			sender.sendMessage("- miningloottableid: " + ChatColor.GOLD + getMiningLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getMiningLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- miningloottableid: " + ChatColor.GOLD + getMiningLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
 	}
 
 	public void editSetting(String setting, String value)
@@ -116,9 +147,48 @@ public class SoliniaZone {
 		case "succorz":
 			setSuccorz(Integer.parseInt(value));
 			break;
+		case "forestryloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setForestryLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable1 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable1 == null)
+				throw new InvalidZoneSettingException("Loottable ID does not exist");
+			setForestryLootTableId(Integer.parseInt(value));
+			break;
+		case "fishingloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setFishingLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable2 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable2 == null)
+				throw new InvalidZoneSettingException("Loottable ID does not exist");
+			setFishingLootTableId(Integer.parseInt(value));
+			break;
+		case "miningloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setMiningLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable3 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable3 == null)
+				throw new InvalidZoneSettingException("Loottable ID does not exist");
+			setMiningLootTableId(Integer.parseInt(value));
+			break;
 		default:
 			throw new InvalidZoneSettingException(
-					"Invalid zone setting. Valid Options are: name,x,y,z,hotzone,succorx,succory,succorz");
+					"Invalid zone setting. Valid Options are: name,x,y,z,hotzone,succorx,succory,succorz,forestryloottableid,fishingloottableid,miningloottableid");
 		}
 	}
 	public int getSuccorx() {
@@ -138,5 +208,23 @@ public class SoliniaZone {
 	}
 	public void setSuccorz(int succorz) {
 		this.succorz = succorz;
+	}
+	public int getForestryLootTableId() {
+		return forestryLootTableId;
+	}
+	public void setForestryLootTableId(int forestryLootTableId) {
+		this.forestryLootTableId = forestryLootTableId;
+	}
+	public int getMiningLootTableId() {
+		return miningLootTableId;
+	}
+	public void setMiningLootTableId(int miningLootTableId) {
+		this.miningLootTableId = miningLootTableId;
+	}
+	public int getFishingLootTableId() {
+		return fishingLootTableId;
+	}
+	public void setFishingLootTableId(int fishingLootTableId) {
+		this.fishingLootTableId = fishingLootTableId;
 	}
 }

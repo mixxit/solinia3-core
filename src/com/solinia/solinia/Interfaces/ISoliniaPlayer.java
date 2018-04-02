@@ -307,4 +307,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void setNeckItem(int neckItem);
 
 	void clearAAs();
+
+	SoliniaZone isInZone();
+
+	boolean getSkillCheck(String skillname, int trivial);
 }

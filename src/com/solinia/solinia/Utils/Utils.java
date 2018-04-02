@@ -105,19 +105,16 @@ public class Utils {
 		loss = (double) (player.getLevel() * (player.getLevel() / 18.0) * 12000);
 		return (double) loss;
 	}
-	
-	public static void CancelEvent(Cancellable event)
-	{
-		//System.out.println("Cancel event found for Event Type: " + event.getClassObj().getName());
+
+	public static void CancelEvent(Cancellable event) {
+		// System.out.println("Cancel event found for Event Type: " +
+		// event.getClassObj().getName());
 		event.setCancelled(true);
 	}
-	
-	public static void BroadcastPlayers(String message)
-	{
-		for(World world : Bukkit.getWorlds())
-		{
-			for(Player player : world.getPlayers())
-			{
+
+	public static void BroadcastPlayers(String message) {
+		for (World world : Bukkit.getWorlds()) {
+			for (Player player : world.getPlayers()) {
 				player.sendMessage(ChatColor.YELLOW + "[Announcement] " + message + ChatColor.RESET);
 			}
 		}
@@ -299,7 +296,7 @@ public class Utils {
 			if (perk.getPerkname().equals("XPBONUS200")) {
 				xppercent += 200;
 			}
-			
+
 			if (perk.getPerkname().equals("XPBONUS1000")) {
 				xppercent += 1000;
 			}
@@ -307,15 +304,14 @@ public class Utils {
 
 		return xppercent;
 	}
-	
-	public static long compareTwoTimeStamps(java.sql.Timestamp currentTime, java.sql.Timestamp oldTime)
-	{
-	    long milliseconds1 = oldTime.getTime();
-	    long milliseconds2 = currentTime.getTime();
 
-	  	long diff = milliseconds2 - milliseconds1;
-	  	long diffSeconds = diff / 1000;
-	    return diffSeconds;
+	public static long compareTwoTimeStamps(java.sql.Timestamp currentTime, java.sql.Timestamp oldTime) {
+		long milliseconds1 = oldTime.getTime();
+		long milliseconds2 = currentTime.getTime();
+
+		long diff = milliseconds2 - milliseconds1;
+		long diffSeconds = diff / 1000;
+		return diffSeconds;
 	}
 
 	public static void broadcastPerks() {
@@ -327,14 +323,13 @@ public class Utils {
 		}
 	}
 
-	public static String getUUIDFromPlayerName(String playerName) throws IOException
-	{
+	public static String getUUIDFromPlayerName(String playerName) throws IOException {
 		URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
 		InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
 		String uuid = new JsonParser().parse(reader_0).getAsJsonObject().get("id").getAsString();
 		return uuid;
 	}
-	
+
 	public static String getTextureFromName(String name) {
 		String texture = "";
 		try {
@@ -369,9 +364,9 @@ public class Utils {
 
 			if (!Utils.IsSoliniaItem(itemstack))
 				continue;
-				
+
 			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.DURABILITY);
-			
+
 			// covers cases of negative tmp ids
 			if (tmpitemid >= 0 && tmpitemid < 1000)
 				continue;
@@ -405,7 +400,7 @@ public class Utils {
 
 			if (!Utils.IsSoliniaItem(itemstack))
 				continue;
-			
+
 			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.DURABILITY);
 
 			// covers cases of negative tmp ids
@@ -549,7 +544,7 @@ public class Utils {
 
 		return false;
 	}
-	
+
 	public static boolean RandomRoll(int max) {
 		Random r = new Random();
 		int random = Utils.RandomBetween(0, 100);
@@ -737,18 +732,17 @@ public class Utils {
 					return cap;
 				}
 		}
-		
+
 		if (skillname.equals("BACKSTAB")) {
 			if (profession != null)
-				if (profession.getName().toUpperCase().equals("ROGUE")
-					) {
+				if (profession.getName().toUpperCase().equals("ROGUE")) {
 					int cap = (int) ((5 * level) + 5);
 					if (cap > Utils.getMaxSkillValue())
 						return Utils.getMaxSkillValue();
 					return cap;
 				}
 		}
-		
+
 		if (skillname.equals("TAUNT")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("WARRIOR")
@@ -756,8 +750,7 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("BERSERKER")
 						|| profession.getName().toUpperCase().equals("BEASTLORD")
-						|| profession.getName().toUpperCase().equals("PALADIN")
-						)) {
+						|| profession.getName().toUpperCase().equals("PALADIN"))) {
 					int cap = (int) ((5 * level) + 5);
 					if (cap > Utils.getMaxSkillValue())
 						return Utils.getMaxSkillValue();
@@ -914,18 +907,16 @@ public class Utils {
 					return cap;
 				}
 		}
-		
+
 		if (skillname.equals("SPECIALISEABJURATION")) {
-			if (profession != null)
-			{
+			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
-				
+
 				if (specialisation == null || specialisation.equals(""))
 					return 0;
-				
-				if (level >= profession.getSpecialiselevel())
-				{
+
+				if (level >= profession.getSpecialiselevel()) {
 					int cap = (int) ((2 * level) + 2);
 					if (cap > Utils.getMaxSkillValue())
 						return Utils.getMaxSkillValue();
@@ -936,18 +927,16 @@ public class Utils {
 				}
 			}
 		}
-		
+
 		if (skillname.equals("SPECIALISEALTERATION")) {
-			if (profession != null)
-			{
+			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
-				
+
 				if (specialisation == null || specialisation.equals(""))
 					return 0;
-				
-				if (level >= profession.getSpecialiselevel())
-				{
+
+				if (level >= profession.getSpecialiselevel()) {
 					int cap = (int) ((2 * level) + 2);
 					if (cap > Utils.getMaxSkillValue())
 						return Utils.getMaxSkillValue();
@@ -958,18 +947,16 @@ public class Utils {
 				}
 			}
 		}
-		
+
 		if (skillname.equals("SPECIALISECONJURATION")) {
-			if (profession != null)
-			{
+			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
-				
+
 				if (specialisation == null || specialisation.equals(""))
 					return 0;
-				
-				if (level >= profession.getSpecialiselevel())
-				{
+
+				if (level >= profession.getSpecialiselevel()) {
 					int cap = (int) ((2 * level) + 2);
 					if (cap > Utils.getMaxSkillValue())
 						return Utils.getMaxSkillValue();
@@ -980,18 +967,16 @@ public class Utils {
 				}
 			}
 		}
-		
+
 		if (skillname.equals("SPECIALISEDIVINATION")) {
-			if (profession != null)
-			{
+			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
-				
+
 				if (specialisation == null || specialisation.equals(""))
 					return 0;
-				
-				if (level >= profession.getSpecialiselevel())
-				{
+
+				if (level >= profession.getSpecialiselevel()) {
 					int cap = (int) ((2 * level) + 2);
 					if (cap > Utils.getMaxSkillValue())
 						return Utils.getMaxSkillValue();
@@ -1002,18 +987,16 @@ public class Utils {
 				}
 			}
 		}
-		
+
 		if (skillname.equals("SPECIALISEEVOCATION")) {
-			if (profession != null)
-			{
+			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
-				
+
 				if (specialisation == null || specialisation.equals(""))
 					return 0;
-				
-				if (level >= profession.getSpecialiselevel())
-				{
+
+				if (level >= profession.getSpecialiselevel()) {
 					int cap = (int) ((2 * level) + 2);
 					if (cap > Utils.getMaxSkillValue())
 						return Utils.getMaxSkillValue();
@@ -1103,8 +1086,7 @@ public class Utils {
 			return;
 		}
 
-		if (Utils.IsSoliniaItem(itemstack)
-				&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+		if (Utils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 			try {
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
@@ -1112,21 +1094,24 @@ public class Utils {
 					return;
 
 				if (solplayer.getClassObj() == null) {
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
+					;
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;
 				}
 
 				if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName())) {
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
+					;
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;
 				}
 
 				if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
+					;
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;
@@ -3169,7 +3154,7 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
-		
+
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {
@@ -4280,91 +4265,89 @@ public class Utils {
 	public static double getStatMaxHP(ISoliniaClass classObj, int tmplevel, int stamina) {
 		// level multiplier
 		double multiplier = 1;
-		
 
 		String profession = "UNSKILLED";
 		if (classObj != null)
 			profession = classObj.getName().toUpperCase();
 
 		if (profession != null) {
-			switch (profession)
-			{
-				case "WARRIOR":
-					if (tmplevel < 20)
-						multiplier = 22;
-					else if (tmplevel < 30)
-						multiplier = 23;
-					else if (tmplevel < 40)
-						multiplier = 25;
-					else if (tmplevel < 53)
-						multiplier = 27;
-					else if (tmplevel < 57)
-						multiplier = 28;
-					else
-						multiplier = 30;
-					break;
-		
-				case "DRUID":
-				case "CLERIC":
-				case "SHAMAN":
-					multiplier = 15;
-					break;
-		
-				case "PALADIN":
-				case "SHADOWKNIGHT":
-					if (tmplevel < 35)
-						multiplier = 21;
-					else if (tmplevel < 45)
-						multiplier = 22;
-					else if (tmplevel < 51)
-						multiplier = 23;
-					else if (tmplevel < 56)
-						multiplier = 24;
-					else if (tmplevel < 60)
-						multiplier = 25;
-					else
-						multiplier = 26;
-					break;
-		
-				case "MONK":
-				case "BARD":
-				case "ROGUE":
-				//case BEASTLORD:
-					if (tmplevel < 51)
-						multiplier = 18;
-					else if (tmplevel < 58)
-						multiplier = 19;
-					else
-						multiplier = 20;
-					break;
-		
-				case "RANGER":
-					if (tmplevel < 58)
-						multiplier = 20;
-					else
-						multiplier = 21;
-					break;
-		
-				case "MAGICIAN":
-				case "WIZARD":
-				case "NECROMANCER":
-				case "ENCHANTER":
-					multiplier = 12;
-					break;
-				default:
-					if (tmplevel < 35)
-						multiplier = 21;
-					else if (tmplevel < 45)
-						multiplier = 22;
-					else if (tmplevel < 51)
-						multiplier = 23;
-					else if (tmplevel < 56)
-						multiplier = 24;
-					else if (tmplevel < 60)
-						multiplier = 25;
-					else
-						multiplier = 26;
-					break;
+			switch (profession) {
+			case "WARRIOR":
+				if (tmplevel < 20)
+					multiplier = 22;
+				else if (tmplevel < 30)
+					multiplier = 23;
+				else if (tmplevel < 40)
+					multiplier = 25;
+				else if (tmplevel < 53)
+					multiplier = 27;
+				else if (tmplevel < 57)
+					multiplier = 28;
+				else
+					multiplier = 30;
+				break;
+
+			case "DRUID":
+			case "CLERIC":
+			case "SHAMAN":
+				multiplier = 15;
+				break;
+
+			case "PALADIN":
+			case "SHADOWKNIGHT":
+				if (tmplevel < 35)
+					multiplier = 21;
+				else if (tmplevel < 45)
+					multiplier = 22;
+				else if (tmplevel < 51)
+					multiplier = 23;
+				else if (tmplevel < 56)
+					multiplier = 24;
+				else if (tmplevel < 60)
+					multiplier = 25;
+				else
+					multiplier = 26;
+				break;
+
+			case "MONK":
+			case "BARD":
+			case "ROGUE":
+				// case BEASTLORD:
+				if (tmplevel < 51)
+					multiplier = 18;
+				else if (tmplevel < 58)
+					multiplier = 19;
+				else
+					multiplier = 20;
+				break;
+
+			case "RANGER":
+				if (tmplevel < 58)
+					multiplier = 20;
+				else
+					multiplier = 21;
+				break;
+
+			case "MAGICIAN":
+			case "WIZARD":
+			case "NECROMANCER":
+			case "ENCHANTER":
+				multiplier = 12;
+				break;
+			default:
+				if (tmplevel < 35)
+					multiplier = 21;
+				else if (tmplevel < 45)
+					multiplier = 22;
+				else if (tmplevel < 51)
+					multiplier = 23;
+				else if (tmplevel < 56)
+					multiplier = 24;
+				else if (tmplevel < 60)
+					multiplier = 25;
+				else
+					multiplier = 26;
+				break;
 			}
 		}
 
@@ -4714,20 +4697,19 @@ public class Utils {
 		}
 
 	}
-	
+
 	public static int getRankOfAAAbility(LivingEntity bukkitLivingEntity, ISoliniaAAAbility aa) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
-		
+
 		int position = 0;
 
 		try {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
-			for (ISoliniaAARank rank : player.getAARanks()) 
-			{
+			for (ISoliniaAARank rank : player.getAARanks()) {
 				if (aa.getId() != rank.getAbilityid())
 					continue;
-				
+
 				if (rank.getPosition() > position)
 					position = rank.getPosition();
 			}
@@ -4797,21 +4779,19 @@ public class Utils {
 			int effectIdLookup = 0;
 			effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.MaxHPChange);
 
-			if (effectIdLookup > 0)
-			{
+			if (effectIdLookup > 0) {
 				for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
 					total += effect.getBase1();
 				}
 			}
 			effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.TotalHP);
 
-			if (effectIdLookup > 0)
-			{
+			if (effectIdLookup > 0) {
 				for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
 					total += effect.getBase1();
 				}
 			}
-			
+
 			return total;
 		} catch (CoreStateInitException e) {
 			return 0;
@@ -4823,7 +4803,7 @@ public class Utils {
 
 		// All skills + Skill specific
 		critical_chance += entity.getSpellBonuses(SpellEffectType.CriticalHitChance);
-		
+
 		// TODO - take items, aa spells etc into account
 		if (critical_chance < -100)
 			critical_chance = -100;
@@ -4863,18 +4843,17 @@ public class Utils {
 	}
 
 	public static void DebugMessage(String string) {
-		//System.out.println(string);
+		// System.out.println(string);
 	}
 
 	public static boolean hasSpellActive(ISoliniaLivingEntity target, ISoliniaSpell spell) {
-		for (SoliniaActiveSpell activeSpell : target.getActiveSpells())
-		{
+		for (SoliniaActiveSpell activeSpell : target.getActiveSpells()) {
 			if (activeSpell.getSpell().getId() == spell.getId())
 				continue;
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -4893,126 +4872,126 @@ public class Utils {
 	public static double reduceDamage(ISoliniaLivingEntity defender, double damage) {
 		if (damage <= 0)
 			return damage;
-		
+
 		int spellMitigateMeleeDamage = 0;
-		
+
 		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(defender.getBukkitLivingEntity(),
-                SpellEffectType.MitigateMeleeDamage)) {
+				SpellEffectType.MitigateMeleeDamage)) {
 			spellMitigateMeleeDamage += effect.getRemainingValue();
-        }
-		
+		}
+
 		// We should check this in advance really
 		if (spellMitigateMeleeDamage < 1)
 			return damage;
-		
+
 		double damage_to_reduce = damage * (spellMitigateMeleeDamage / 100);
-		
+
 		return (damage - damage_to_reduce);
 	}
 
 	public static List<String> getSpecialisationSkills() {
 		List<String> validSpecialisationSkills = new ArrayList<String>();
-        validSpecialisationSkills.add("ABJURATION");
-        validSpecialisationSkills.add("ALTERATION");
-        validSpecialisationSkills.add("CONJURATION");
-        validSpecialisationSkills.add("DIVINATION");
-        validSpecialisationSkills.add("EVOCATION");
-        return validSpecialisationSkills;
+		validSpecialisationSkills.add("ABJURATION");
+		validSpecialisationSkills.add("ALTERATION");
+		validSpecialisationSkills.add("CONJURATION");
+		validSpecialisationSkills.add("DIVINATION");
+		validSpecialisationSkills.add("EVOCATION");
+		return validSpecialisationSkills;
 	}
 
 	public static void sendRaceInfo(CommandSender sender) throws CoreStateInitException {
 		List<ISoliniaClass> classes = StateManager.getInstance().getConfigurationManager().getClasses();
-		for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
-		{
+		for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces()) {
 			if (race.isAdmin())
 				continue;
-			
+
 			String classBuilder = "";
-			for(ISoliniaClass solclass : classes)
-			{
+			for (ISoliniaClass solclass : classes) {
 				if (solclass.getValidRaces().contains(race.getId()))
 					classBuilder += solclass.getName() + " ";
 			}
-			
+
 			TextComponent tc = new TextComponent();
-			tc.setText(ChatColor.RED + "~ RACE: " + ChatColor.GOLD + race.getName().toUpperCase() + ChatColor.GRAY + " [" + race.getId() + "] - " + ChatColor.RESET);
+			tc.setText(ChatColor.RED + "~ RACE: " + ChatColor.GOLD + race.getName().toUpperCase() + ChatColor.GRAY
+					+ " [" + race.getId() + "] - " + ChatColor.RESET);
 			TextComponent tc2 = new TextComponent();
 			tc2.setText("Hover for more details");
-			String details = ChatColor.GOLD + race.getName() + ChatColor.RESET + "\nRecommended Alignment: " + ChatColor.GOLD + race.getAlignment() + ChatColor.RESET + "\n" + race.getDescription() + "\nSTR: " + ChatColor.GOLD + race.getStrength() + ChatColor.RESET + " STA: " + ChatColor.GOLD + race.getStamina() + ChatColor.RESET + " AGI: " + ChatColor.GOLD + race.getAgility() + ChatColor.RESET + " DEX: " + ChatColor.GOLD + race.getDexterity() + ChatColor.RESET + " INT: " + ChatColor.GOLD + race.getIntelligence() + ChatColor.RESET + " WIS: " + ChatColor.GOLD + race.getWisdom() + ChatColor.RESET + " CHA: " + ChatColor.GOLD + race.getCharisma() + ChatColor.GOLD + " \nClasses: " + ChatColor.RESET + classBuilder;
+			String details = ChatColor.GOLD + race.getName() + ChatColor.RESET + "\nRecommended Alignment: "
+					+ ChatColor.GOLD + race.getAlignment() + ChatColor.RESET + "\n" + race.getDescription() + "\nSTR: "
+					+ ChatColor.GOLD + race.getStrength() + ChatColor.RESET + " STA: " + ChatColor.GOLD
+					+ race.getStamina() + ChatColor.RESET + " AGI: " + ChatColor.GOLD + race.getAgility()
+					+ ChatColor.RESET + " DEX: " + ChatColor.GOLD + race.getDexterity() + ChatColor.RESET + " INT: "
+					+ ChatColor.GOLD + race.getIntelligence() + ChatColor.RESET + " WIS: " + ChatColor.GOLD
+					+ race.getWisdom() + ChatColor.RESET + " CHA: " + ChatColor.GOLD + race.getCharisma()
+					+ ChatColor.GOLD + " \nClasses: " + ChatColor.RESET + classBuilder;
 			tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 			tc.addExtra(tc2);
-			sender.spigot().sendMessage(tc);	
+			sender.spigot().sendMessage(tc);
 		}
 	}
 
 	public static boolean isInventoryMerchant(Inventory inventory) {
-		if (inventory.getSize() != 27)
-		{
-			//System.out.println("Inventory size not 27");
+		if (inventory.getSize() != 27) {
+			// System.out.println("Inventory size not 27");
 			return false;
 		}
-		
-		if (inventory.getStorageContents()[19] == null)
-		{
-			//System.out.println("Identifier is null");
+
+		if (inventory.getStorageContents()[19] == null) {
+			// System.out.println("Identifier is null");
 			return false;
 		}
-		
-		try
-		{
+
+		try {
 			ItemStack identifierStack = inventory.getStorageContents()[19];
-			if (!identifierStack.getItemMeta().getDisplayName().startsWith("MERCHANT:"))
-			{
-				//System.out.println("Missing start with merchant on identifier");
+			if (!identifierStack.getItemMeta().getDisplayName().startsWith("MERCHANT:")) {
+				// System.out.println("Missing start with merchant on identifier");
 				return false;
 			}
-			
-			if (identifierStack.getEnchantmentLevel(Enchantment.DURABILITY) != 999)
-			{
-				//System.out.println("Not 999 oxy");
+
+			if (identifierStack.getEnchantmentLevel(Enchantment.DURABILITY) != 999) {
+				// System.out.println("Not 999 oxy");
 				return false;
 			}
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public static int getInventoryMerchantID(Inventory inventory) {
 		if (!isInventoryMerchant(inventory))
 			return 0;
-		
+
 		ItemStack identifierStack = inventory.getStorageContents()[19];
-		
+
 		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(0));
 	}
-	
+
 	public static int getInventoryNPCID(Inventory inventory) {
 		if (!isInventoryMerchant(inventory))
 			return 0;
-		
+
 		ItemStack identifierStack = inventory.getStorageContents()[19];
-		
+
 		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(1));
 	}
-	
+
 	public static int getInventoryPage(Inventory inventory) {
 		if (!isInventoryMerchant(inventory))
 			return 0;
-		
+
 		ItemStack identifierStack = inventory.getStorageContents()[19];
-		
+
 		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(2));
 	}
-	
+
 	public static int getInventoryNextPage(Inventory inventory) {
 		if (!isInventoryMerchant(inventory))
 			return 0;
-		
+
 		ItemStack identifierStack = inventory.getStorageContents()[19];
-		
+
 		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(3));
 	}
 
@@ -5020,90 +4999,90 @@ public class Utils {
 		// TODO Auto-generated method stub
 		return 255;
 	}
-	
+
 	// Heroic
-	
+
 	public static float getHeroicRunSpeed() {
 		// TODO Auto-generated method stub
 		return 0.4f;
 	}
-	
+
 	public static int getHeroicDamageMultiplier() {
 		// TODO Auto-generated method stub
 		return 4;
 	}
-	
+
 	public static int getHeroicHPMultiplier() {
 		// TODO Auto-generated method stub
 		return 20;
 	}
-	
+
 	public static int getHeroicMPRegenMultipler() {
 		// TODO Auto-generated method stub
 		return 10;
 	}
-	
+
 	// Boss
-	
+
 	public static float getBossRunSpeed() {
 		// TODO Auto-generated method stub
 		return 0.4f;
 	}
-	
+
 	public static int getBossDamageMultiplier() {
 		// TODO Auto-generated method stub
 		return 10;
 	}
-	
+
 	public static int getBossHPMultiplier() {
 		// TODO Auto-generated method stub
 		return 200;
 	}
-	
+
 	public static int getBossMPRegenMultipler() {
 		// TODO Auto-generated method stub
 		return 40;
 	}
-	
+
 	// Raid Heroic
-	
+
 	public static float getRaidHeroicRunSpeed() {
 		// TODO Auto-generated method stub
 		return 0.4f;
 	}
-	
+
 	public static int getRaidHeroicDamageMultiplier() {
 		// TODO Auto-generated method stub
 		return 10;
 	}
-	
+
 	public static int getRaidHeroicHPMultiplier() {
 		// TODO Auto-generated method stub
 		return 200;
 	}
-	
+
 	public static int getRaidHeroicMPRegenMultipler() {
 		// TODO Auto-generated method stub
 		return 40;
 	}
-	
+
 	// Raid Boss
-	
+
 	public static float getRaidBossRunSpeed() {
 		// TODO Auto-generated method stub
 		return 0.5f;
 	}
-	
+
 	public static int getRaidBossDamageMultiplier() {
 		// TODO Auto-generated method stub
 		return 30;
 	}
-	
+
 	public static int getRaidBossHPMultiplier() {
 		// TODO Auto-generated method stub
 		return 1000;
 	}
-	
+
 	public static int getRaidBossMPRegenMultipler() {
 		// TODO Auto-generated method stub
 		return 200;
@@ -5129,196 +5108,282 @@ public class Utils {
 
 	public static void playSpecialEffect(Entity entity, SoliniaActiveSpell activeSpell) {
 		int sai = activeSpell.getSpell().getSpellAffectIndex();
-		
+
 		SpellEffectIndex effectType = Utils.getSpellEffectIndex(sai);
-		if (effectType == null)
-		{
+		if (effectType == null) {
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
 			return;
 		}
-		
-		switch (effectType)
-		{
-			case Summon_Mount_Unclass: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Direct_Damage: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Heal_Cure: 
-				SpecialEffectUtils.playLoveEffect(entity, activeSpell);
-				break;
-			case AC_Buff: 
-				SpecialEffectUtils.playShieldEffect(entity, activeSpell);
-				break;
-			case AE_Damage: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Summon: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Sight: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Mana_Regen_Resist_Song: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Stat_Buff: 
-				SpecialEffectUtils.playShieldEffect(entity, activeSpell);
-				break;
-			case Vanish: 
-				SpecialEffectUtils.playPortalEffect(entity, activeSpell);
-				break;
-			case Appearance: 
-				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
-				break;
-			case Enchanter_Pet: 
-				SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
-				break;
-			case Calm: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Fear: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Dispell_Sight: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Stun: 
-				SpecialEffectUtils.playStunEffect(entity, activeSpell);
-				break;
-			case Haste_Runspeed: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Combat_Slow: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Damage_Shield: 
-				SpecialEffectUtils.playShieldEffect(entity, activeSpell);
-				break;
-			case Cannibalize_Weapon_Proc: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Weaken: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Banish: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Blind_Poison: 
-				SpecialEffectUtils.playBleedEffect(entity, activeSpell);
-				break;
-			case Cold_DD: 
-				SpecialEffectUtils.playColdEffect(entity, activeSpell);
-				break;
-			case Poison_Disease_DD: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Fire_DD: 
-				SpecialEffectUtils.playFlameEffect(entity, activeSpell);
-				break;
-			case Memory_Blur: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Gravity_Fling: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Suffocate: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Lifetap_Over_Time: 
-				SpecialEffectUtils.playBleedEffect(entity, activeSpell);
-				break;
-			case Fire_AE: 
-				SpecialEffectUtils.playFlameEffect(entity, activeSpell);
-				break;
-			case Cold_AE: 
-				SpecialEffectUtils.playColdEffect(entity, activeSpell);
-				break;
-			case Poison_Disease_AE: 
-				SpecialEffectUtils.playPoisonEffect(entity, activeSpell);
-				break;
-			case Teleport: 
-				SpecialEffectUtils.playPortalEffect(entity, activeSpell);
-				break;
-			case Direct_Damage_Song: 
-				SpecialEffectUtils.playMusicEffect(entity, activeSpell);
-				break;
-			case Combat_Buff_Song: 
-				SpecialEffectUtils.playMusicEffect(entity, activeSpell);
-				break;
-			case Calm_Song: 
-				SpecialEffectUtils.playMusicEffect(entity, activeSpell);
-				break;
-			case Firework: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Firework_AE: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Weather_Rocket: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Convert_Vitals: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case NPC_Special_60: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case NPC_Special_61: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case NPC_Special_62: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case NPC_Special_63: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case NPC_Special_70: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case NPC_Special_71: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case NPC_Special_80: 
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			case Trap_Lock:
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
-				break;
-			default:
-				SpecialEffectUtils.playLegacy(entity, activeSpell);
+
+		switch (effectType) {
+		case Summon_Mount_Unclass:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Direct_Damage:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Heal_Cure:
+			SpecialEffectUtils.playLoveEffect(entity, activeSpell);
+			break;
+		case AC_Buff:
+			SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+			break;
+		case AE_Damage:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Summon:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Sight:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Mana_Regen_Resist_Song:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Stat_Buff:
+			SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+			break;
+		case Vanish:
+			SpecialEffectUtils.playPortalEffect(entity, activeSpell);
+			break;
+		case Appearance:
+			SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+			break;
+		case Enchanter_Pet:
+			SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+			break;
+		case Calm:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Fear:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Dispell_Sight:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Stun:
+			SpecialEffectUtils.playStunEffect(entity, activeSpell);
+			break;
+		case Haste_Runspeed:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Combat_Slow:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Damage_Shield:
+			SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+			break;
+		case Cannibalize_Weapon_Proc:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Weaken:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Banish:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Blind_Poison:
+			SpecialEffectUtils.playBleedEffect(entity, activeSpell);
+			break;
+		case Cold_DD:
+			SpecialEffectUtils.playColdEffect(entity, activeSpell);
+			break;
+		case Poison_Disease_DD:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Fire_DD:
+			SpecialEffectUtils.playFlameEffect(entity, activeSpell);
+			break;
+		case Memory_Blur:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Gravity_Fling:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Suffocate:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Lifetap_Over_Time:
+			SpecialEffectUtils.playBleedEffect(entity, activeSpell);
+			break;
+		case Fire_AE:
+			SpecialEffectUtils.playFlameEffect(entity, activeSpell);
+			break;
+		case Cold_AE:
+			SpecialEffectUtils.playColdEffect(entity, activeSpell);
+			break;
+		case Poison_Disease_AE:
+			SpecialEffectUtils.playPoisonEffect(entity, activeSpell);
+			break;
+		case Teleport:
+			SpecialEffectUtils.playPortalEffect(entity, activeSpell);
+			break;
+		case Direct_Damage_Song:
+			SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+			break;
+		case Combat_Buff_Song:
+			SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+			break;
+		case Calm_Song:
+			SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+			break;
+		case Firework:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Firework_AE:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Weather_Rocket:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Convert_Vitals:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case NPC_Special_60:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case NPC_Special_61:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case NPC_Special_62:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case NPC_Special_63:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case NPC_Special_70:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case NPC_Special_71:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case NPC_Special_80:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		case Trap_Lock:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			break;
+		default:
+			SpecialEffectUtils.playLegacy(entity, activeSpell);
 		}
 	}
 
 	public static void dismountEntity(LivingEntity livingEntity) {
 		Entity vehicle = livingEntity.getVehicle();
-		if (vehicle != null)
-		{
+		if (vehicle != null) {
 			vehicle.eject();
 		}
 	}
 
-	public static void AddPotionEffect(LivingEntity entity, PotionEffectType effectType, int amplifier)
-	{
-		entity.addPotionEffect(new PotionEffect(effectType, Utils.GetPotionEffectTickLength(effectType), amplifier), true);
+	public static void AddPotionEffect(LivingEntity entity, PotionEffectType effectType, int amplifier) {
+		entity.addPotionEffect(new PotionEffect(effectType, Utils.GetPotionEffectTickLength(effectType), amplifier),
+				true);
 	}
-	
+
 	public static int GetPotionEffectTickLength(PotionEffectType effectType) {
-		if (effectType == PotionEffectType.NIGHT_VISION)
-		{
+		if (effectType == PotionEffectType.NIGHT_VISION) {
 			return 16 * 20;
 		}
-		
+
 		return 8 * 20;
 	}
 
 	public static boolean IsSoliniaItem(ItemStack itemStack) {
-		return (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) < 0 || itemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999);
+		return (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) < 0
+				|| itemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999);
 	}
 
 	public static int getMaxUnspentAAPoints() {
 		// TODO Auto-generated method stub
 		return 1000;
+	}
+
+	public static void DropLoot(int lootTableId, World world, Location location) {
+		try {
+			ISoliniaLootTable table = StateManager.getInstance().getConfigurationManager().getLootTable(lootTableId);
+
+			List<ISoliniaLootDropEntry> absoluteitems = new ArrayList<ISoliniaLootDropEntry>();
+			List<ISoliniaLootDropEntry> rollitems = new ArrayList<ISoliniaLootDropEntry>();
+
+			for (ISoliniaLootTableEntry entry : StateManager.getInstance().getConfigurationManager()
+					.getLootTable(table.getId()).getEntries()) {
+				ISoliniaLootDrop droptable = StateManager.getInstance().getConfigurationManager()
+						.getLootDrop(entry.getLootdropid());
+				for (ISoliniaLootDropEntry dropentry : StateManager.getInstance().getConfigurationManager()
+						.getLootDrop(droptable.getId()).getEntries()) {
+
+					if (dropentry.isAlways() == true) {
+						absoluteitems.add(dropentry);
+						continue;
+					}
+
+					rollitems.add(dropentry);
+				}
+			}
+
+			// Now we have prepared our loot list items let's choose which will
+			// drop
+
+			// System.out.println("Prepared a Loot List of ABS: " + absoluteitems.size() + "
+			// and ROLL: " + rollitems.size());
+
+			if (absoluteitems.size() == 0 && rollitems.size() == 0)
+				return;
+
+			int dropcount = StateManager.getInstance().getWorldPerkDropCountModifier();
+
+			Random r = new Random();
+			int randomInt = r.nextInt(100) + 1;
+
+			if (rollitems.size() > 0) {
+				// Based on the chance attempt to drop this item
+				for (int i = 0; i < dropcount; i++) {
+					ISoliniaLootDropEntry droptableentry = rollitems.get(new Random().nextInt(rollitems.size()));
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+							.getItem(droptableentry.getItemid());
+
+					randomInt = r.nextInt(100) + 1;
+					// System.out.println("Rolled a " + randomInt + " against a max of " +
+					// droptableentry.getChance()+ " for item: " + item.getDisplayname());
+
+					// Handle unique item checking also
+					if (item.isArtifact() == true && item.isArtifactFound() == true)
+						continue;
+
+					if (randomInt <= droptableentry.getChance()) {
+
+						// Handle unique item setting also
+						if (item.isArtifact() == true && item.isArtifactFound() == false)
+							item.setArtifactFound(true);
+
+						world.dropItem(location, item.asItemStack());
+
+					}
+				}
+			}
+
+			// Always drop these items
+			if (absoluteitems.size() > 0) {
+				for (int i = 0; i < absoluteitems.size(); i++) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+							.getItem(absoluteitems.get(i).getItemid());
+					for (int c = 0; c < absoluteitems.get(i).getCount(); c++) {
+
+						// Handle unique item checking also
+						if (item.isArtifact() == true && item.isArtifactFound() == true)
+							continue;
+
+						world.dropItem(location, item.asItemStack());
+
+						// Handle unique item setting also
+						if (item.isArtifact() == true && item.isArtifactFound() == false)
+							item.setArtifactFound(true);
+
+					}
+				}
+			}
+		} catch (CoreStateInitException e) {
+			//
+		}
 	}
 }
