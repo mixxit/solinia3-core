@@ -29,6 +29,9 @@ public class SoliniaZone {
 	private int forestryLootTableId = 0;
 	private int miningLootTableId = 0;
 	private int fishingLootTableId = 0;
+	private int fishingMinSkill = 0;
+	private int miningMinSkill = 0;
+	private int forestryMinSkill = 0;
 
 	public int getId() {
 		return id;
@@ -88,6 +91,9 @@ public class SoliniaZone {
 		sender.sendMessage("- succorx: " + ChatColor.GOLD + getSuccorx() + ChatColor.RESET);
 		sender.sendMessage("- succory: " + ChatColor.GOLD + getSuccory() + ChatColor.RESET);
 		sender.sendMessage("- succorz: " + ChatColor.GOLD + getSuccorz() + ChatColor.RESET);
+		sender.sendMessage("- forestryminskill: " + ChatColor.GOLD + getForestryMinSkill() + ChatColor.RESET);
+		sender.sendMessage("- fishingminskill: " + ChatColor.GOLD + getFishingMinSkill() + ChatColor.RESET);
+		sender.sendMessage("- miningminskill: " + ChatColor.GOLD + getMiningMinSkill() + ChatColor.RESET);
 		
 		if (getForestryLootTableId() != 0) {
 			sender.sendMessage("- forestryloottableid: " + ChatColor.GOLD + getForestryLootTableId() + " ("
@@ -146,6 +152,15 @@ public class SoliniaZone {
 			break;
 		case "succorz":
 			setSuccorz(Integer.parseInt(value));
+			break;
+		case "forestryminskill":
+			setForestryMinSkill(Integer.parseInt(value));
+			break;
+		case "miningminskill":
+			setMiningMinSkill(Integer.parseInt(value));
+			break;
+		case "fishingminskill":
+			setFishingMinSkill(Integer.parseInt(value));
 			break;
 		case "forestryloottableid":
 			if (Integer.parseInt(value) == 0)
@@ -226,5 +241,23 @@ public class SoliniaZone {
 	}
 	public void setFishingLootTableId(int fishingLootTableId) {
 		this.fishingLootTableId = fishingLootTableId;
+	}
+	public int getFishingMinSkill() {
+		return fishingMinSkill;
+	}
+	public void setFishingMinSkill(int fishingMinSkill) {
+		this.fishingMinSkill = fishingMinSkill;
+	}
+	public int getMiningMinSkill() {
+		return miningMinSkill;
+	}
+	public void setMiningMinSkill(int miningMinSkill) {
+		this.miningMinSkill = miningMinSkill;
+	}
+	public int getForestryMinSkill() {
+		return forestryMinSkill;
+	}
+	public void setForestryMinSkill(int forestryMinSkill) {
+		this.forestryMinSkill = forestryMinSkill;
 	}
 }

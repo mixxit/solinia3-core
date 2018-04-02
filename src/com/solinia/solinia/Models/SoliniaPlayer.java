@@ -2356,6 +2356,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean getSkillCheck(String skillname, int trivial) {
 		SoliniaPlayerSkill skill = this.getSkill(skillname);
+		
+		if (skill == null)
+			return false;
+		
 		float chance = (skill.getValue() - trivial) + 66;
 		int over_trivial = skill.getValue() - trivial;
 		

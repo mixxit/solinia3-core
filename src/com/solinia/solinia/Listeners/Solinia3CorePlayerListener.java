@@ -88,26 +88,46 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			if (event.getBlock().getType().equals(Material.LOG))
 			{
-				if (!solplayer.getSkillCheck("LOGGING",50))
+				solplayer.tryIncreaseSkill("LOGGING", 1);
+				int minskill = 0;
+				SoliniaZone zone = solplayer.isInZone();
+				if (zone != null)
+				{
+					if (zone.getForestryMinSkill() > 0)
+					{
+						minskill = zone.getForestryMinSkill();
+					}
+				}
+				
+				if (!solplayer.getSkillCheck("LOGGING",minskill+50))
 				{
 					event.setCancelled(true);
 					event.getPlayer().sendMessage("Your lack of skill resulted in failure!");
 					return;
 				}
 
-				solplayer.tryIncreaseSkill("LOGGING", 1);
 			}
 			
 			if (event.getBlock().getType().equals(Material.STONE))
 			{
-				if (!solplayer.getSkillCheck("MINING",50))
+				solplayer.tryIncreaseSkill("MINING", 1);
+				int minskill = 0;
+				
+				SoliniaZone zone = solplayer.isInZone();
+				if (zone != null)
+				{
+					if (zone.getMiningMinSkill() > 0)
+					{
+						minskill = zone.getMiningMinSkill();
+					}
+				}
+				
+				if (!solplayer.getSkillCheck("MINING",minskill+50))
 				{
 					event.setCancelled(true);
 					event.getPlayer().sendMessage("Your lack of skill resulted in failure!");
 					return;
 				}
-				
-				solplayer.tryIncreaseSkill("MINING", 1);
 			}
 			
 			
@@ -134,17 +154,26 @@ public class Solinia3CorePlayerListener implements Listener {
 		try
 		{
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getPlayer());
+			int minskill = 0;
 
-			if (!solplayer.getSkillCheck("FISHING",50))
+			SoliniaZone zone = solplayer.isInZone();
+			if (zone != null)
+			{
+				if (zone.getFishingMinSkill() > 0)
+				{
+					minskill = zone.getFishingMinSkill();
+				}
+			}
+			
+			solplayer.tryIncreaseSkill("FISHING", 1);
+			if (!solplayer.getSkillCheck("FISHING",minskill+50))
 			{
 				event.setCancelled(true);
 				event.getPlayer().sendMessage("Your lack of skill resulted in failure!");
 				return;
 			}
 			
-			solplayer.tryIncreaseSkill("FISHING", 1);
 			
-			SoliniaZone zone = solplayer.isInZone();
 			if (zone == null)
 				return;
 
