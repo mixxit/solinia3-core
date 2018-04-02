@@ -147,9 +147,9 @@ public class CommandInspiration implements CommandExecutor {
 								if (sender instanceof Player)
 								{
 									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-									if (solPlayer.getLevel() < 20)
+									if (solPlayer.getLevel() < 50)
 									{
-										sender.sendMessage("Only players level 20 and above can have AA points any lower and it would be useless");
+										sender.sendMessage("Only players level 50 and above can have AA points any lower and it would be useless");
 										return true;
 									} else {
 										cost = 5;

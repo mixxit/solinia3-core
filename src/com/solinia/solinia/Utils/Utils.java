@@ -3169,7 +3169,45 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
+		/*try {
+			for(ISoliniaAAAbility aa : StateManager.getInstance().getConfigurationManager().getAAAbilities())
+			{
+				for(ISoliniaAARank rank : aa.getRanks())
+				{
+					rank.setLevel_req(rank.getLevel_req() + 30);
+				}
+				
+				StateManager.getInstance().getConfigurationManager().resetAARankRepository();
+			}
+			
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
+			{
+				for(ISoliniaAARank rank : player.getAARanks())
+				{
+					player.setAAPoints(player.getAAPoints() + rank.getCost());
+				}
+				
+				player.getAARanks().clear();
+			}
+			
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getCharacters())
+			{
+				for(ISoliniaAARank rank : player.getAARanks())
+				{
+					player.setAAPoints(player.getAAPoints() + rank.getCost());
+				}
+				
+				player.getAARanks().clear();
+			}
+			
+			System.out.println("Reset aas");
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		
+		*/
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {

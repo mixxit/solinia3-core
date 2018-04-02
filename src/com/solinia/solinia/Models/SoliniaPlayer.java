@@ -1433,7 +1433,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public List<ISoliniaAARank> getBuyableAARanks() {
 		List<ISoliniaAARank> buyableRanks = new ArrayList<ISoliniaAARank>();
-		if (getLevel() < 20)
+		if (getLevel() < 50)
 			return buyableRanks;
 
 		try {

@@ -26,7 +26,7 @@ public class CommandToggleAA implements CommandExecutor {
 	            	return false;	
 	            }
 	            
-	            if (solplayer.getLevel() >= 20)
+	            if (solplayer.getLevel() >= 50)
 	            {
 		            if (solplayer.getAapct() > 0)
 		            {
@@ -37,7 +37,7 @@ public class CommandToggleAA implements CommandExecutor {
 		            	solplayer.setAapct(100);
 		            }
 	            } else {
-	            	player.sendMessage("You must be minimum level 20 to enable AA experience");
+	            	player.sendMessage("You must be minimum level 50 to enable AA experience");
 	            }
             } catch (CoreStateInitException e)
             {
