@@ -20,6 +20,6 @@ public enum SkillType {
 	AlcoholTolerance, Begging, JewelryMaking, Pottery, PercussionInstruments,
 	Intimidation, Berserking, Taunt, Frenzy,
 	RemoveTraps,TripleAttack, TwoHandPiercing,
-	None, Count
+	None, Count, Logging, Mining
 };
 
