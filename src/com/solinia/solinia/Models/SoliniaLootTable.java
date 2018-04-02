@@ -22,6 +22,9 @@ public class SoliniaLootTable implements ISoliniaLootTable {
 	private String name;
 	private List<ISoliniaLootTableEntry> entries = new ArrayList<ISoliniaLootTableEntry>();	
 	private boolean operatorCreated = true;
+	private boolean miningLootTable = false;
+	private boolean forestryLootTable = false;
+	private boolean fishingLootTable = false;
 	
 	@Override
 	public int getId() {
@@ -57,16 +60,24 @@ public class SoliniaLootTable implements ISoliniaLootTable {
 	public void sendLootTableSettingsToSender(CommandSender sender) {
 		try
 		{
-		for(ISoliniaLootTableEntry le : getEntries())
-		{
-			ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager().getLootDrop(le.getLootdropid());
-			sender.sendMessage("- " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
-			for(ISoliniaLootDropEntry lde : ld.getEntries())
+			sender.sendMessage(ChatColor.RED + "Loot Table Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
+			sender.sendMessage("----------------------------");
+			sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
+			sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+			sender.sendMessage("- miningloottable: " + ChatColor.GOLD + isForestryLootTable() + ChatColor.RESET);
+			sender.sendMessage("- forestryloottable: " + ChatColor.GOLD + isMiningLootTable() + ChatColor.RESET);
+			sender.sendMessage("- fishingloottable: " + ChatColor.GOLD + isFishingLootTable() + ChatColor.RESET);
+
+			for(ISoliniaLootTableEntry le : getEntries())
 			{
-				ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
-				sender.sendMessage("  - " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - " + lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());
+				ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager().getLootDrop(le.getLootdropid());
+				sender.sendMessage("- " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
+				for(ISoliniaLootDropEntry lde : ld.getEntries())
+				{
+					ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
+					sender.sendMessage("  - " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - " + lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());
+				}
 			}
-		}
 		} catch (CoreStateInitException e)
 		{
 			sender.sendMessage(e.getMessage());
@@ -85,6 +96,15 @@ public class SoliniaLootTable implements ISoliniaLootTable {
 			if (value.length() > 25)
 				throw new InvalidLootTableSettingException("Name is longer than 25 characters");
 			setName(value);
+			break;
+		case "forestryloottable":
+			setForestryLootTable(Boolean.parseBoolean(value));
+			break;
+		case "fishingloottable":
+			setFishingLootTable(Boolean.parseBoolean(value));
+			break;
+		case "miningloottable":
+			setMiningLootTable(Boolean.parseBoolean(value));
 			break;
 		case "remove":
 			int lootDropIdToRemove = Integer.parseInt(value);
@@ -113,5 +133,35 @@ public class SoliniaLootTable implements ISoliniaLootTable {
 	public boolean isOperatorCreated()
 	{
 		return this.operatorCreated;
+	}
+
+	@Override
+	public boolean isMiningLootTable() {
+		return miningLootTable;
+	}
+
+	@Override
+	public void setMiningLootTable(boolean miningLootTable) {
+		this.miningLootTable = miningLootTable;
+	}
+
+	@Override
+	public boolean isForestryLootTable() {
+		return forestryLootTable;
+	}
+
+	@Override
+	public void setForestryLootTable(boolean forestryLootTable) {
+		this.forestryLootTable = forestryLootTable;
+	}
+
+	@Override
+	public boolean isFishingLootTable() {
+		return fishingLootTable;
+	}
+
+	@Override
+	public void setFishingLootTable(boolean fishingLootTable) {
+		this.fishingLootTable = fishingLootTable;
 	}
 }

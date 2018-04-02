@@ -5316,4 +5316,9 @@ public class Utils {
 	public static boolean IsSoliniaItem(ItemStack itemStack) {
 		return (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) < 0 || itemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999);
 	}
+
+	public static int getMaxUnspentAAPoints() {
+		// TODO Auto-generated method stub
+		return 1000;
+	}
 }

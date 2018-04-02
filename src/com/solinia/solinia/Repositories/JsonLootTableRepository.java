@@ -94,6 +94,7 @@ public class JsonLootTableRepository implements IRepository<ISoliniaLootTable> {
 		GsonBuilder gsonbuilder = new GsonBuilder();
 		//gsonbuilder.setPrettyPrinting();
 		gsonbuilder.registerTypeAdapterFactory(new ISoliniaLootTableEntryTypeAdapterFactory(SoliniaLootTableEntry.class));
+		gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(loottables.values(), new TypeToken<List<SoliniaLootTable>>(){}.getType());
 		try {

@@ -28,4 +28,16 @@ public interface ISoliniaLootTable {
 	void setOperatorCreated(boolean operatorCreated);
 
 	boolean isOperatorCreated();
+
+	boolean isMiningLootTable();
+
+	void setMiningLootTable(boolean miningLootTable);
+
+	boolean isForestryLootTable();
+
+	void setForestryLootTable(boolean forestryLootTable);
+
+	boolean isFishingLootTable();
+
+	void setFishingLootTable(boolean fishingLootTable);
 }

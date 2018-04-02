@@ -640,7 +640,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		// Max limit on AA points right now is 100
-		if (getAAPoints() > 100) {
+		if (getAAPoints() > Utils.getMaxUnspentAAPoints()) {
 			return;
 		}
 
