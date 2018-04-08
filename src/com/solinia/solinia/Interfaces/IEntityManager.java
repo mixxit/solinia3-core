@@ -10,9 +10,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.InsufficientTemporaryMerchantItemException;
+import com.solinia.solinia.Models.UniversalMerchantEntry;
+import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Models.UniversalMerchant;
 
 public interface IEntityManager {
 	ISoliniaLivingEntity getLivingEntity(LivingEntity livingentity);
@@ -94,8 +97,6 @@ public interface IEntityManager {
 
 	void setDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType, Timestamp timestamp);
 
-	Inventory getMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno);
-
 	Integer getEntitySinging(UUID entityUUID);
 
 	void setEntitySinging(UUID entityUUID, Integer spellId);
@@ -103,4 +104,13 @@ public interface IEntityManager {
 	void removeSpellEffectsOfSpellId(Plugin plugin, UUID uuid, int spellId);
 
 	void doNPCCheckForEnemies();
+
+	UniversalMerchant getUniversalMerchant(UUID universalMerchant);
+
+	Inventory getMerchantInventory(UUID playerUUID, int pageno, UniversalMerchant universalMerchant);
+
+	Inventory getNPCMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno);
+
+	Inventory getTradeShopMerchantInventory(UUID playerUUID, SoliniaAlignmentChunk alignmentChunk, int pageno);
+
 }

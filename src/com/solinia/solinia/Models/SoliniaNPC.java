@@ -319,7 +319,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void sendMerchantItemListToPlayer(Player player, int pageno) 
 	{
 		try {
-			Inventory merchantInventory = StateManager.getInstance().getEntityManager().getMerchantInventory(player.getUniqueId(),this, pageno);
+			Inventory merchantInventory = StateManager.getInstance().getEntityManager().getNPCMerchantInventory(player.getUniqueId(),this, pageno);
 			if (merchantInventory != null)
 				player.openInventory(merchantInventory);
 		} catch (CoreStateInitException e) {

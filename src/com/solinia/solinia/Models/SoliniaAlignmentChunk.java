@@ -1,5 +1,8 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.World;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -64,5 +67,9 @@ public class SoliniaAlignmentChunk {
 		}
 		
 		return null;
+	}
+	public List<UniversalMerchantEntry> getUniversalMerchantEntries() {
+		// TODO Auto-generated method stub
+		return new ArrayList<UniversalMerchantEntry>();
 	}
 }

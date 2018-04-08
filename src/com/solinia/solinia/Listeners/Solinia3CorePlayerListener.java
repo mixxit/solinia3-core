@@ -49,6 +49,7 @@ import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Models.UniversalMerchant;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 import com.sun.javafx.css.CalculatedValue;
@@ -691,16 +692,12 @@ public class Solinia3CorePlayerListener implements Listener {
 	}
 	
 	private void onMerchantInventoryClick(InventoryClickEvent event) {
-		int merchantid = 0;
-		int npcid = 0;
-		ISoliniaNPCMerchant merchant = null;
-		ISoliniaNPC npc = null;
+		UniversalMerchant universalmerchant = null;
 		int page = 0;
 		int nextpage = 0;
 		try
 		{
-			merchantid = Utils.getInventoryMerchantID(event.getInventory());
-			npcid = Utils.getInventoryNPCID(event.getInventory());
+			universalmerchant = StateManager.getInstance().getEntityManager().getUniversalMerchant(Utils.getInventoryUniversalMerchant(event.getInventory()));
 			page = Utils.getInventoryPage(event.getInventory());
 			nextpage = Utils.getInventoryPage(event.getInventory());
 		} catch (Exception e)
@@ -711,26 +708,14 @@ public class Solinia3CorePlayerListener implements Listener {
 			return;
 		}
 		
-		if (merchantid == 0 || npcid == 0)
+		if (universalmerchant == null)
 		{
-			event.getView().getPlayer().sendMessage("Could not find npc " + npcid + " or merchant " + merchantid + " or page " + page);
-			System.out.println("Could not find npc " + npcid + " or merchant " + merchantid);
+			event.getView().getPlayer().sendMessage("Could not find universal mercahnt or page " + page);
+			System.out.println("Could not find universal mercahnt or page " + page);
 			Utils.CancelEvent(event);;
 			return;
 		}
-		
-		try
-		{
-			merchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchantid);
-			npc = StateManager.getInstance().getConfigurationManager().getNPC(npcid);
-		} catch (CoreStateInitException e)
-		{
-			event.getView().getPlayer().sendMessage("Cannot sell/buy right now");
-			Utils.CancelEvent(event);;
-			return;
-		}
-		
-		//event.getView().getPlayer().sendMessage("Detected Merchant Inventory Click for Merchant:" + merchantid + " Slot: " + event.getSlot() + " Raw Slot: " + event.getRawSlot());
+				
 		if (event.getRawSlot() < 0)
 		{
 			Utils.CancelEvent(event);;
@@ -741,32 +726,29 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		if (event.getCursor() == null || event.getCursor().getType().equals(Material.AIR))
 		{
-			//event.getView().getPlayer().sendMessage("Detected AIR Cursor, assuming picking up");
 			if (event.getRawSlot() > 26)
 			{
-				// Picking up own item
-				//event.getView().getPlayer().sendMessage("Picking up own item");
 				
 				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(event.getCurrentItem());
 					if (item == null)
 					{
 						event.getView().getPlayer().sendMessage("Merchants are not interested in this item");
-						Utils.CancelEvent(event);;
+						Utils.CancelEvent(event);
 						return;
 					}
 					
 					if (item.isTemporary())
 					{
 						event.getView().getPlayer().sendMessage("Merchants are not interested in temporary items");
-						Utils.CancelEvent(event);;
+						Utils.CancelEvent(event);
 						return;
 					}
 					
 					// Picked up sellable item
 					
 				} catch (CoreStateInitException e) {
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					event.getView().getPlayer().sendMessage("Cannot sell/buy right now");
 					return;
 				}
@@ -777,7 +759,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (pickingUpItem.getType().equals(Material.BARRIER))
 				{
 					//event.getView().getPlayer().sendMessage("Ignoring barrier");
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 
@@ -790,7 +772,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						if ((page - 1) > 0)
 						{
 							event.getView().getPlayer().closeInventory();
-							npc.sendMerchantItemListToPlayer((Player)event.getView().getPlayer(), page - 1);
+							universalmerchant.sendMerchantItemListToPlayer((Player)event.getView().getPlayer(), page - 1);
 						}
 					}
 					
@@ -799,10 +781,10 @@ public class Solinia3CorePlayerListener implements Listener {
 						if (nextpage != 0)
 						{
 							event.getView().getPlayer().closeInventory();
-							npc.sendMerchantItemListToPlayer((Player)event.getView().getPlayer(), nextpage + 1);
+							universalmerchant.sendMerchantItemListToPlayer((Player)event.getView().getPlayer(), nextpage + 1);
 						}
 					}
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 				
@@ -810,7 +792,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (event.getRawSlot() == 19)
 				{
 					//event.getView().getPlayer().sendMessage("Ignoring identifier block");
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 				
@@ -818,7 +800,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				//event.getView().getPlayer().sendMessage("Picking up merchant item");
 				event.setCursor(event.getCurrentItem());
 				
-				Utils.CancelEvent(event);;
+				Utils.CancelEvent(event);
 				return;
 			}
 			
@@ -841,7 +823,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						{
 							event.getView().getPlayer().sendMessage("You must place the item you wish to buy on an empty slot");
 							event.setCursor(new ItemStack(Material.AIR));
-							Utils.CancelEvent(event);;
+							Utils.CancelEvent(event);
 							return;
 						}
 					
@@ -856,7 +838,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						if (price > StateManager.getInstance().getEconomy().getBalance((Player)event.getView().getPlayer())) {
 							event.getView().getPlayer().sendMessage("You do not have sufficient balance to buy this item in that quantity.");
 							event.setCursor(new ItemStack(Material.AIR));
-							Utils.CancelEvent(event);;
+							Utils.CancelEvent(event);
 							return;
 						}
 						
@@ -878,14 +860,14 @@ public class Solinia3CorePlayerListener implements Listener {
 									+ String.format(responsewithdraw.errorMessage));
 							
 							event.setCursor(new ItemStack(Material.AIR));
-							Utils.CancelEvent(event);;
+							Utils.CancelEvent(event);
 							return;
 						}
 					} catch (CoreStateInitException e)
 					{
 						event.getView().getPlayer().sendMessage("Cannot buy items from the merchant right now");
 						event.setCursor(new ItemStack(Material.AIR));
-						Utils.CancelEvent(event);;
+						Utils.CancelEvent(event);
 						return;
 					}
 				} else {
@@ -899,7 +881,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				{
 					// Returning store item
 					event.setCursor(new ItemStack(Material.AIR));
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 					
 				} else {
@@ -920,20 +902,20 @@ public class Solinia3CorePlayerListener implements Listener {
 							//StateManager.getInstance().getEntityManager().addTemporaryMerchantItem(npc.getId(), item.getId(), event.getCursor().getAmount());
 							event.getView().getPlayer().sendMessage(ChatColor.YELLOW + "* You recieve $" + price + " as payment");
 							event.setCursor(new ItemStack(Material.AIR));
-							Utils.CancelEvent(event);;
+							Utils.CancelEvent(event);
 							return;
 						} else {
 							System.out.println(
 									"Error depositing money to users account " + String.format(responsedeposit.errorMessage));
 							event.getView().getPlayer().sendMessage(ChatColor.YELLOW + "* Error depositing money to your account "
 									+ String.format(responsedeposit.errorMessage));
-							Utils.CancelEvent(event);;
+							Utils.CancelEvent(event);
 							return;
 						}
 					} catch (CoreStateInitException e)
 					{
 						event.getView().getPlayer().sendMessage("Cannot sell item to merchant right now");
-						Utils.CancelEvent(event);;
+						Utils.CancelEvent(event);
 						return;
 					}
 				}
@@ -941,7 +923,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 		
 		event.getView().getPlayer().sendMessage("Please alert an admin of this message code: GMMI1");
-		Utils.CancelEvent(event);;
+		Utils.CancelEvent(event);
 		return;
 	}
 

@@ -29,9 +29,7 @@ public interface ISoliniaAlignment {
 
 	void sendAlignmentStats(CommandSender sender);
 
-	int getTotalZones();
-
-	int getTotalMaterialZones();
+	int getTotalMaterialChunks();
 
 	SoliniaAlignmentChunk getChunk(SoliniaChunk chunk);
 
@@ -40,5 +38,7 @@ public interface ISoliniaAlignment {
 	void setChunk(String worldChunkPositionCode, SoliniaAlignmentChunk alignmentChunk);
 
 	void removeChunk(SoliniaChunk chunk);
+
+	int getTotalChunks();
 
 }

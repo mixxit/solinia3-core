@@ -460,11 +460,13 @@ commands:
   plantflag:
     description: Plant flag
     usage: /plantflag
-    aliases: []
+    aliases:
+    - placeflag
   trader:
     description: Trader menu
     usage: /trader
-    aliases: []
+    aliases:
+    - trade   
   editworld:
     description: Edits a world
     usage: /editworld worldid setting value

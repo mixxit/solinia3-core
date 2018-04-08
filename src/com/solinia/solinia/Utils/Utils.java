@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
@@ -30,6 +31,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -39,6 +42,7 @@ import com.comphenix.example.Vector3D;
 import com.fasterxml.jackson.module.afterburner.util.ClassName;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -58,6 +62,8 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -85,6 +91,7 @@ import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Models.UniversalMerchant;
 import com.solinia.solinia.Models.WorldWidePerk;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -4946,7 +4953,6 @@ public class Utils {
 			}
 
 			if (identifierStack.getEnchantmentLevel(Enchantment.DURABILITY) != 999) {
-				// System.out.println("Not 999 oxy");
 				return false;
 			}
 		} catch (Exception e) {
@@ -4956,22 +4962,13 @@ public class Utils {
 		return true;
 	}
 
-	public static int getInventoryMerchantID(Inventory inventory) {
+	public static UUID getInventoryUniversalMerchant(Inventory inventory) {
 		if (!isInventoryMerchant(inventory))
-			return 0;
+			return null;
 
 		ItemStack identifierStack = inventory.getStorageContents()[19];
 
-		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(0));
-	}
-
-	public static int getInventoryNPCID(Inventory inventory) {
-		if (!isInventoryMerchant(inventory))
-			return 0;
-
-		ItemStack identifierStack = inventory.getStorageContents()[19];
-
-		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(1));
+		return UUID.fromString(identifierStack.getItemMeta().getLore().get(0));
 	}
 
 	public static int getInventoryPage(Inventory inventory) {
@@ -4980,7 +4977,7 @@ public class Utils {
 
 		ItemStack identifierStack = inventory.getStorageContents()[19];
 
-		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(2));
+		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(1));
 	}
 
 	public static int getInventoryNextPage(Inventory inventory) {
@@ -4989,7 +4986,7 @@ public class Utils {
 
 		ItemStack identifierStack = inventory.getStorageContents()[19];
 
-		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(3));
+		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(2));
 	}
 
 	public static int getMaxSkillValue() {

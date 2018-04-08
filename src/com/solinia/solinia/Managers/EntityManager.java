@@ -43,9 +43,12 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
+import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
+import com.solinia.solinia.Models.UniversalMerchant;
+import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
@@ -73,13 +76,14 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
 	//private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
 	private ConcurrentHashMap<UUID, Inventory> merchantInventories = new ConcurrentHashMap<UUID, Inventory>();
+	private ConcurrentHashMap<UUID, UniversalMerchant> universalMerchant = new ConcurrentHashMap<UUID, UniversalMerchant>();
 	
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
 	}
 	
 	@Override
-	public Inventory getMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno)
+	public Inventory getNPCMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno)
 	{
 		if (npc.getMerchantid() < 1)
 			return null;
@@ -87,20 +91,58 @@ public class EntityManager implements IEntityManager {
 		try
 		{
 			ISoliniaNPCMerchant soliniaNpcMerchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(npc.getMerchantid());
-			merchantInventories.put(playerUUID, Bukkit.createInventory(null, 27, soliniaNpcMerchant.getName() + " Page: " + pageno));
-			
-			pageno = pageno - 1;
-			int sizePerPage = 18;
 			
 			List<ISoliniaNPCMerchantEntry> fullmerchantentries = StateManager.getInstance().getEntityManager()
 					.getNPCMerchantCombinedEntries(npc);
 			
-			List<ISoliniaNPCMerchantEntry> merchantentries = fullmerchantentries.stream()
+			List<UniversalMerchantEntry> entries = new ArrayList<UniversalMerchantEntry>();
+			
+			for(ISoliniaNPCMerchantEntry entry : fullmerchantentries)
+			{
+				entries.add(UniversalMerchantEntry.FromNPCMerchantEntry(entry));
+			}
+			
+			UniversalMerchant merchant = new UniversalMerchant();
+			merchant.fullmerchantentries = entries;
+			merchant.merchantName = soliniaNpcMerchant.getName();
+			
+			// Cache
+			universalMerchant.put(merchant.universalMerchant, merchant);
+			return getMerchantInventory(playerUUID, pageno, merchant);
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
+	
+	@Override
+	public Inventory getTradeShopMerchantInventory(UUID playerUUID, SoliniaAlignmentChunk alignmentChunk, int pageno)
+	{
+		UniversalMerchant merchant = new UniversalMerchant();
+		merchant.fullmerchantentries = alignmentChunk.getUniversalMerchantEntries();
+		merchant.merchantName = alignmentChunk.getChunkX() + "_" + alignmentChunk.getChunkZ() + "_TradeShop";
+		
+		// Cache
+		universalMerchant.put(merchant.universalMerchant, merchant);
+		return getMerchantInventory(playerUUID, pageno, merchant);
+	}
+	
+	@Override
+	public Inventory getMerchantInventory(UUID playerUUID, int pageno, UniversalMerchant universalMerchant)
+	{
+		try
+		{
+			merchantInventories.put(playerUUID, Bukkit.createInventory(null, 27, universalMerchant.merchantName + " Page: " + pageno));
+			
+			pageno = pageno - 1;
+			int sizePerPage = 18;
+			
+			List<UniversalMerchantEntry> merchantentries = universalMerchant.fullmerchantentries.stream()
 					  .skip(pageno * sizePerPage)
 					  .limit(sizePerPage)
 					  .collect(Collectors.toCollection(ArrayList::new));
 			
-			int lastpage = (int)Math.ceil((float)fullmerchantentries.size() / (float)sizePerPage);
+			int lastpage = (int)Math.ceil((float)universalMerchant.fullmerchantentries.size() / (float)sizePerPage);
 			
 			for (int i = 0; i < 27; i++)
 			{
@@ -111,7 +153,7 @@ public class EntityManager implements IEntityManager {
 				
 				try
 				{
-					ISoliniaNPCMerchantEntry entry = merchantentries.get(i);
+					UniversalMerchantEntry entry = merchantentries.get(i);
 					itemStack = StateManager.getInstance().getConfigurationManager().getItem(entry.getItemid()).asItemStack();
 					ItemMeta meta = itemStack.getItemMeta();
 					meta.setDisplayName("Display Item: " + itemStack.getItemMeta().getDisplayName());
@@ -141,12 +183,10 @@ public class EntityManager implements IEntityManager {
 						itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI5NWE5MjkyMzZjMTc3OWVhYjhmNTcyNTdhODYwNzE0OThhNDg3MDE5Njk0MWY0YmZlMTk1MWU4YzZlZTIxYSJ9fX0=", null));
 						itemMeta = itemStack.getItemMeta();
 						List<String> lore = new ArrayList<String>();
-						Integer merchantid = soliniaNpcMerchant.getId();
-						Integer npcid = npc.getId();
+						UUID universalmerchant = universalMerchant.universalMerchant;
 						Integer page = pageno + 1;
 						Integer nextpage = page + 1;
-						lore.add(merchantid.toString());
-						lore.add(npcid.toString());
+						lore.add(universalmerchant.toString());
 						lore.add(page.toString());
 						
 						if (lastpage > nextpage)
@@ -158,7 +198,7 @@ public class EntityManager implements IEntityManager {
 						
 						itemMeta.setLore(lore);
 						itemStack.setDurability((short) 3);
-						itemMeta.setDisplayName("MERCHANT: " + soliniaNpcMerchant.getName());
+						itemMeta.setDisplayName("MERCHANT: " + universalMerchant.merchantName);
 						itemStack.setItemMeta(itemMeta);
 						itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 999);
 					}
@@ -899,5 +939,11 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setEntitySinging(UUID entityUUID, Integer spellId) {
 		this.entitySinging.put(entityUUID,spellId);
+	}
+
+	@Override
+	public UniversalMerchant getUniversalMerchant(UUID universalMerchant) {
+		// TODO Auto-generated method stub
+		return this.universalMerchant.get(universalMerchant);
 	}
 }

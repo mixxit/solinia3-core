@@ -12,6 +12,8 @@ import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class SoliniaAlignment implements ISoliniaAlignment {
 
 	private int id;
@@ -72,16 +74,16 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 
 	@Override
 	public int getUpkeepCost() {
-		return 0;
+		return getTotalTradePosts() * 100;
 	}
 	
 	@Override
-	public int getTotalZones() {
+	public int getTotalChunks() {
 		return chunks.size();
 	}
 
 	@Override
-	public int getTotalMaterialZones() {
+	public int getTotalMaterialChunks() {
 		int count = 0;
 		for (Entry<String, SoliniaAlignmentChunk> chunk : getChunks().entrySet())
 		{
@@ -97,14 +99,14 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 
 	@Override
 	public void sendAlignmentStats(CommandSender sender) {
-		sender.sendMessage(getName().toUpperCase() + " Empire Territory Overview:");
+		sender.sendMessage(ChatColor.AQUA + getName().toUpperCase() + " Empire Territory Overview:" + ChatColor.RESET);
 		sender.sendMessage("-----------------------------");
 		
-		sender.sendMessage("Coffers: $" + getCoffers());
-		sender.sendMessage("Upkeep Cost: $" + getUpkeepCost());
-		sender.sendMessage("Total Zones: " + getTotalZones());
-		sender.sendMessage("Total Material Zones: " + getTotalMaterialZones());
-		sender.sendMessage("Total Trade Posts: $" + getTotalTradePosts());
+		sender.sendMessage("Coffers: " + ChatColor.GOLD + "$" + getCoffers() + ChatColor.RESET);
+		sender.sendMessage("Upkeep Cost: " + ChatColor.GOLD + "$" + getUpkeepCost() + ChatColor.RESET);
+		sender.sendMessage("Total Territories: " + ChatColor.GOLD + getTotalChunks() + ChatColor.RESET);
+		sender.sendMessage("Total Material Zones: " + ChatColor.GOLD + getTotalMaterialChunks() + ChatColor.RESET);
+		sender.sendMessage("Total Trade Posts: " + ChatColor.GOLD + getTotalTradePosts() + ChatColor.RESET);
 	}
 
 	@Override
