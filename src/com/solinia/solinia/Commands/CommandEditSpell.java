@@ -90,6 +90,22 @@ public class CommandEditSpell implements CommandExecutor {
 			}
 		}
 		
+		if (args.length > 3 && (setting.toLowerCase().contains("caston")))
+		{
+			value = "";
+			int current = 0;
+			for(String entry : args)
+			{
+				current++;
+				if (current <= 2)
+					continue;
+				
+				value = value + entry + " ";
+			}
+			
+			value = value.trim();
+		}
+		
 		try
 		{
 
