@@ -111,6 +111,25 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 		
 		return alignmentChunks;
 	}
+	
+	@Override
+	public List<SoliniaZone> getMaterialZones() {
+		List<SoliniaZone> alignmentZones = new ArrayList<SoliniaZone>();
+		List<Integer> zoneIds = new ArrayList<Integer>();
+		for(SoliniaAlignmentChunk chunk : getMaterialChunks())
+		{
+			for (SoliniaZone zone : chunk.getSoliniaChunk().getZones())
+			{
+				if (!zoneIds.contains(zone.getId()))
+				{
+					zoneIds.add(zone.getId());
+					alignmentZones.add(zone);
+				}
+			}
+		}
+		
+		return alignmentZones;
+	}
 
 	@Override
 	public void sendAlignmentStats(CommandSender sender) {

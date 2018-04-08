@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaChunk;
+import com.solinia.solinia.Models.SoliniaZone;
 
 public interface ISoliniaAlignment {
 
@@ -43,5 +44,7 @@ public interface ISoliniaAlignment {
 	int getTotalChunks();
 
 	List<SoliniaAlignmentChunk> getMaterialChunks();
+
+	List<SoliniaZone> getMaterialZones();
 
 }

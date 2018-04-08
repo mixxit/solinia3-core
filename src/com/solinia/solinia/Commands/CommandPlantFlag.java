@@ -73,6 +73,12 @@ public class CommandPlantFlag implements CommandExecutor  {
     			return true;
             }
             
+            if (itemstack.getAmount() != 1)
+            {
+            	player.sendMessage("You can only have 1 of the item in your hand you wish to plant");
+    			return true;
+            }
+            
             if (!Utils.IsSoliniaItem(itemstack))
             {
             	player.sendMessage("The item in your main hand is not a territory flag");

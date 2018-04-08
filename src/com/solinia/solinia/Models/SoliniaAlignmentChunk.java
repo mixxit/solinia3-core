@@ -83,29 +83,26 @@ public class SoliniaAlignmentChunk {
 		{
 			System.out.println("Generating Universal Merchant Entries for Alignment: " + getAlignmentId());
 			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(getAlignmentId());
-			for (SoliniaAlignmentChunk chunk : alignment.getMaterialChunks())
+			for (SoliniaZone zone : alignment.getMaterialZones())
 			{
-				for(SoliniaZone zone : chunk.getSoliniaChunk().getZones())
+				if (zone.getFishingLootTableId() > 0)
 				{
-					if (zone.getFishingLootTableId() > 0)
-					{
-						lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getFishingLootTableId()));
-					}
-					
-					if (zone.getForagingLootTableId() > 0)
-					{
-						lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForagingLootTableId()));
-					}
-					
-					if (zone.getMiningLootTableId() > 0)
-					{
-						lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getMiningLootTableId()));
-					}
-					
-					if (zone.getForestryLootTableId() > 0)
-					{
-						lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForestryLootTableId()));
-					}
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getFishingLootTableId()));
+				}
+				
+				if (zone.getForagingLootTableId() > 0)
+				{
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForagingLootTableId()));
+				}
+				
+				if (zone.getMiningLootTableId() > 0)
+				{
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getMiningLootTableId()));
+				}
+				
+				if (zone.getForestryLootTableId() > 0)
+				{
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForestryLootTableId()));
 				}
 			}
 			
