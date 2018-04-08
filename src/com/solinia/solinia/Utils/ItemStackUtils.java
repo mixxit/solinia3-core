@@ -60,7 +60,7 @@ public class ItemStackUtils {
 			
 			String[] temporaryData = loreLine.split(" ");
 			
-			return Integer.parseInt(temporaryData[2]);
+			return Integer.parseInt(temporaryData[1]);
 		}
 		
 		return null;
