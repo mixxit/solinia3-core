@@ -366,12 +366,8 @@ public class Utils {
 			if (!Utils.IsSoliniaItem(itemstack))
 				continue;
 
-			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.DURABILITY);
-
-			// covers cases of negative tmp ids
-			if (tmpitemid >= 0 && tmpitemid < 1000)
-				continue;
-
+			int tmpitemid = 0;
+			
 			try {
 				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
 			} catch (SoliniaItemException e) {
