@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,6 +33,7 @@ import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
 import com.solinia.solinia.Factories.SoliniaWorldFactory;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
@@ -72,6 +74,10 @@ import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
+
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagString;
+
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
@@ -447,7 +453,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public ISoliniaItem getItem(ItemStack itemStack) {
+	public ISoliniaItem getItemByDurability(ItemStack itemStack) {
 		
 		int durability = itemStack.getEnchantmentLevel(Enchantment.DURABILITY);
 		
@@ -464,6 +470,16 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		return getItem(id);
 	}
+	
+	@Override
+	public ISoliniaItem getItem(ItemStack itemStack) {
+		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+		
+		String soliniaid = compound.getString("soliniaid");
+		return getItem(Integer.parseInt(soliniaid));
+	}
+
 
 	@Override
 	public ISoliniaItem getItemByOxygen(ItemStack itemStack) {

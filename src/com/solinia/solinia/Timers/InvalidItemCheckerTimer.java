@@ -16,6 +16,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class InvalidItemCheckerTimer  extends BukkitRunnable {
 	@Override
 	public void run() {
@@ -30,7 +32,12 @@ public class InvalidItemCheckerTimer  extends BukkitRunnable {
 				
 		        if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
 		        {
-		        	player.sendMessage("You appear to have items in your inventory that contain a respiration enchantment greater than 999, please drop and pick this item back up");
+		        	player.sendMessage(ChatColor.RED + "* You appear to have items in your inventory that contain a respiration enchantment greater than 999, please drop and pick this item back up");
+		        }
+		        
+		        if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 || itemstack.getEnchantmentLevel(Enchantment.DURABILITY) < 0)
+		        {
+		        	player.sendMessage(ChatColor.RED + "* You appear to have items in your inventory that contain a durability enchantment greater than 999 or less than 0, please drop and pick this item back up");
 		        }
 			}
 		}

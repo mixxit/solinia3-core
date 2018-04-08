@@ -94,6 +94,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 
 public class Utils {
 	public static float clamp(float val, float min, float max) {
@@ -5289,8 +5290,12 @@ public class Utils {
 	}
 
 	public static boolean IsSoliniaItem(ItemStack itemStack) {
-		return (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) < 0
-				|| itemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999);
+		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+		
+		String soliniaid = compound.getString("soliniaid");
+		
+		return soliniaid.matches("-?\\d+");
 	}
 
 	public static int getMaxUnspentAAPoints() {

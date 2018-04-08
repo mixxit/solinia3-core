@@ -42,6 +42,13 @@ public class ItemStackAdapter {
 	public static ItemStack Adapt(ISoliniaItem soliniaItem) {
 		
 		ItemStack stack = new ItemStack(Material.valueOf(soliniaItem.getBasename().toUpperCase()), 1, soliniaItem.getColor());
+		
+		// New Item ID storage system
+		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+		compound.set("soliniaid", new NBTTagString(Integer.toString(soliniaItem.getId())));
+		nmsStack.setTag(compound);
+		stack = CraftItemStack.asBukkitCopy(nmsStack);
 
 		if (soliniaItem.getDamage() > 0) {
 			if (soliniaItem.getBasename().equals("WOOD_SWORD") || soliniaItem.getBasename().equals("STONE_SWORD")
@@ -52,9 +59,9 @@ public class ItemStackAdapter {
 					|| soliniaItem.getBasename().equals("WOOD_SPADE") || soliniaItem.getBasename().equals("STONE_SPADE")
 					|| soliniaItem.getBasename().equals("IRON_SPADE") || soliniaItem.getBasename().equals("GOLD_SPADE")
 					|| soliniaItem.getBasename().equals("DIAMOND_SPADE")) {
-				net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+				nmsStack = CraftItemStack.asNMSCopy(stack);
 
-				NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+				compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 				NBTTagList modifiers = new NBTTagList();
 				NBTTagCompound damagecompound = new NBTTagCompound();
 				damagecompound.set("AttributeName", new NBTTagString("generic.attackDamage"));
@@ -321,7 +328,8 @@ public class ItemStackAdapter {
 
 		i.setLore(loretxt);
 		stack.setItemMeta(i);
-		stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1000 + soliniaItem.getId());
+		// depcreated in favour of nbt string soliniaid
+		//stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1000 + soliniaItem.getId());
 
 		if (soliniaItem.getEnchantment1() != null) {
 			if (soliniaItem.getEnchantment1val() > 0) {

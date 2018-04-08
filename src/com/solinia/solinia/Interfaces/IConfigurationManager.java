@@ -15,6 +15,7 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
@@ -170,6 +171,8 @@ public interface IConfigurationManager {
 	ISoliniaItem getItem(int Id);
 
 	ISoliniaItem getItem(ItemStack itemStack);
+	
+	ISoliniaItem getItemByDurability(ItemStack itemStack);
 	int getNextItemId();
 
 	void addItem(ISoliniaItem item);
