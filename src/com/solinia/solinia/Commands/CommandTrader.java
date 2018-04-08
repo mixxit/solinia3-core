@@ -164,6 +164,11 @@ public class CommandTrader implements CommandExecutor {
 							player.sendMessage("This territory is not owned by an alliance");
 							return true;
 						}
+						
+						if (isInMaterialZone)
+						{
+							player.sendMessage("You cannot make material territory a trade post");
+						}
 	
 						if (!(solPlayer.isAlignmentEmperor() || player.isOp()))
 						{

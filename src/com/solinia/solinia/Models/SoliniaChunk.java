@@ -1,5 +1,8 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -125,6 +128,30 @@ public class SoliniaChunk {
 		}
 		
 		return null;
+	}
+	
+	public List<SoliniaZone> getZones() {
+		World world = getWorld();
+		
+		if (world == null)
+			return new ArrayList<SoliniaZone>();
+		
+		return getZones(world);
+	}
+	
+	public List<SoliniaZone> getZones(World world) {
+		List<SoliniaZone> zones = new ArrayList<SoliniaZone>();
+		try {
+			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
+				if (getFirstBlockLocation(world).distance(
+						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < 500)
+					zones.add(zone);
+			}
+		} catch (CoreStateInitException e) {
+			
+		}
+		
+		return zones;
 	}
 	
 	public boolean isInZone() {

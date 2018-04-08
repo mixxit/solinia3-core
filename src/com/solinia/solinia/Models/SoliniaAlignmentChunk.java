@@ -85,25 +85,27 @@ public class SoliniaAlignmentChunk {
 			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(getAlignmentId());
 			for (SoliniaAlignmentChunk chunk : alignment.getMaterialChunks())
 			{
-				SoliniaZone zone = chunk.getSoliniaChunk().getFirstZone();
-				if (zone.getFishingLootTableId() > 0)
+				for(SoliniaZone zone : chunk.getSoliniaChunk().getZones())
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getFishingLootTableId()));
-				}
-				
-				if (zone.getForagingLootTableId() > 0)
-				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForagingLootTableId()));
-				}
-				
-				if (zone.getMiningLootTableId() > 0)
-				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getMiningLootTableId()));
-				}
-				
-				if (zone.getForestryLootTableId() > 0)
-				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForestryLootTableId()));
+					if (zone.getFishingLootTableId() > 0)
+					{
+						lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getFishingLootTableId()));
+					}
+					
+					if (zone.getForagingLootTableId() > 0)
+					{
+						lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForagingLootTableId()));
+					}
+					
+					if (zone.getMiningLootTableId() > 0)
+					{
+						lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getMiningLootTableId()));
+					}
+					
+					if (zone.getForestryLootTableId() > 0)
+					{
+						lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForestryLootTableId()));
+					}
 				}
 			}
 			
