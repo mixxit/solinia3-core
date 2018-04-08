@@ -38,7 +38,7 @@ public class CommandTrader implements CommandExecutor {
 			}
 			
 			player.sendMessage("Economic Zone: [" + chunk.getChunkX() + "," + chunk.getChunkZ() + "]");
-						
+			player.sendMessage("Material Zone: " + chunk.isInZoneWithMaterials(player.getWorld()));
 			if (chunk.getAlignmentId() > 0)
 			{
 				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(chunk.getAlignmentId());
