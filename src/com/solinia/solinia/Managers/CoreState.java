@@ -186,6 +186,8 @@ public class CoreState {
 		this.channelManager = channelManager;
 		this.effectManager = effectManager;
 		
+		isInitialised = true;
+		
 		for(World world : Bukkit.getWorlds())
 		{
 			if (this.configurationManager.getWorld(world.getName().toUpperCase()) == null)
@@ -198,8 +200,6 @@ public class CoreState {
 				}
 			}
 		}
-		
-		isInitialised = true;
 		
 		OnInitialized();
 	}
