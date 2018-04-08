@@ -130,6 +130,9 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public Inventory getMerchantInventory(UUID playerUUID, int pageno, UniversalMerchant universalMerchant)
 	{
+		if (universalMerchant.fullmerchantentries.size() < 1)
+			return null;
+		
 		try
 		{
 			merchantInventories.put(playerUUID, Bukkit.createInventory(null, 27, universalMerchant.merchantName + " Page: " + pageno));
