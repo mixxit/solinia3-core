@@ -81,7 +81,8 @@ public class SoliniaAlignmentChunk {
 		
 		try
 		{
-			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(this.getAlignmentId());
+			System.out.println("Generating Universal Merchant Entries for Alignment: " + getAlignmentId());
+			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(getAlignmentId());
 			for (SoliniaAlignmentChunk chunk : alignment.getMaterialChunks())
 			{
 				SoliniaZone zone = chunk.getSoliniaChunk().getFirstZone();

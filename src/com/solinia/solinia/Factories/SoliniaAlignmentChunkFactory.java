@@ -11,6 +11,7 @@ public class SoliniaAlignmentChunkFactory {
 		SoliniaAlignmentChunk entry = new SoliniaAlignmentChunk();
 		entry.setChunkX(chunkX);
 		entry.setChunkZ(chunkZ);
+		entry.setAlignmentId(alignment.getId());
 		entry.setSoliniaWorldName(worldName.toUpperCase());
 		alignment.setChunk(worldName.toUpperCase() + "_" + chunkX + "_" + chunkZ, entry);
 		return entry;
