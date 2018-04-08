@@ -59,6 +59,7 @@ import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaSpellClass;
+import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
@@ -75,6 +76,7 @@ import com.solinia.solinia.Repositories.JsonNPCSpellListRepository;
 import com.solinia.solinia.Repositories.JsonPatchRepository;
 import com.solinia.solinia.Repositories.JsonQuestRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
+import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 
 public class ConfigurationManager implements IConfigurationManager {
@@ -101,6 +103,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<SoliniaAccountClaim> accountClaimsRepository;
 	private IRepository<SoliniaZone> zonesRepository;
 	private IRepository<SoliniaCraft> craftRepository;
+	private IRepository<SoliniaWorld> worldRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
@@ -110,7 +113,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, 
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
-			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext) {
+			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -132,6 +135,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.accountClaimsRepository = accountClaimsContext;
 		this.zonesRepository = zonesContext;
 		this.craftRepository = craftContext;
+		this.worldRepository = worldContext;
 	}
 	
 	@Override
@@ -159,6 +163,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.accountClaimsRepository.commit();
 		this.zonesRepository.commit();
 		this.craftRepository.commit();
+		this.worldRepository.commit();
 	}
 	
 	@Override 
@@ -274,6 +279,10 @@ public class ConfigurationManager implements IConfigurationManager {
 		return alignmentsRepository.query(q -> q.getId() > 0);
 	}
 	
+	@Override
+	public List<SoliniaWorld> getWorlds() {
+		return worldRepository.query(q -> q.getId() > 0);
+	}
 	
 	@Override
 	public List<ISoliniaNPCMerchant> getNPCMerchants() {
@@ -514,6 +523,12 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.raceRepository.add(race);
 
 	}
+	
+	@Override
+	public void addWorld(SoliniaWorld world) {
+		this.worldRepository.add(world);
+
+	}
 
 	@Override
 	public void addClass(ISoliniaClass classobj) {
@@ -530,6 +545,17 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 
 		return maxRace + 1;
+	}
+	
+	@Override
+	public int getNextWorldId() {
+		int max = 0;
+		for (SoliniaWorld entry : getWorlds()) {
+			if (entry.getId() > max)
+				max = entry.getId();
+		}
+
+		return max + 1;
 	}
 	
 	@Override
@@ -761,6 +787,16 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return null;
 	}
+	
+	@Override
+	public SoliniaWorld getWorld(String name) {
+		// TODO Auto-generated method stub
+		List<SoliniaWorld> list = worldRepository.query(q -> q.getName().equals(name));
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
 
 	@Override
 	public ISoliniaLootTable getLootTable(String loottablename) {
@@ -930,6 +966,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public SoliniaCraft getCraft(int Id) {
 		return craftRepository.getByKey(Id);
+	}
+	
+	@Override
+	public SoliniaWorld getWorld(int Id) {
+		return worldRepository.getByKey(Id);
 	}
 	
 	@Override

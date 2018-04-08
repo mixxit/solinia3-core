@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.LivingEntity;
@@ -18,6 +19,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import com.palmergames.bukkit.towny.Towny;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
+import com.solinia.solinia.Factories.SoliniaWorldFactory;
 import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IEntityManager;
@@ -182,6 +185,20 @@ public class CoreState {
 		this.configurationManager = configurationManager;
 		this.channelManager = channelManager;
 		this.effectManager = effectManager;
+		
+		for(World world : Bukkit.getWorlds())
+		{
+			if (this.configurationManager.getWorld(world.getName().toUpperCase()) == null)
+			{
+				try {
+					SoliniaWorldFactory.Create(world.getName());
+					System.out.println("World Created: " + world.getName());
+				} catch (SoliniaWorldCreationException e) {
+					throw new CoreStateInitException("Could not create worlds");
+				}
+			}
+		}
+		
 		isInitialised = true;
 		
 		OnInitialized();

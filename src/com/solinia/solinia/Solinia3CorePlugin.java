@@ -45,6 +45,7 @@ import com.solinia.solinia.Repositories.JsonQuestRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
+import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
@@ -273,6 +274,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonCraftRepository craftrepo = new JsonCraftRepository();
 			craftrepo.setJsonFile(getDataFolder() + "/" + "craft.json");
 			craftrepo.reload();
+
+			JsonWorldRepository worldrepo = new JsonWorldRepository();
+			worldrepo.setJsonFile(getDataFolder() + "/" + "worlds.json");
+			worldrepo.reload();
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
@@ -280,7 +285,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
 					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
-					accountclaimsrepo, zonesrepo, craftrepo);
+					accountclaimsrepo, zonesrepo, craftrepo, worldrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -461,6 +466,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listcrafts").setExecutor(new CommandListCrafts());
 		this.getCommand("editcraft").setExecutor(new CommandEditCraft());
 		this.getCommand("npcsay").setExecutor(new CommandNPCSay());
+		this.getCommand("plantflag").setExecutor(new CommandPlantFlag());
+		this.getCommand("trader").setExecutor(new CommandTrader());
 	}
 
 	private void createConfigDir() {

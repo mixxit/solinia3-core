@@ -457,6 +457,14 @@ commands:
     description: Lists crafting recipes
     usage: /listcrafts
     aliases: []
+  plantflag:
+    description: Plant flag
+    usage: /plantflag
+    aliases: []
+  trader:
+    description: Trader menu
+    usage: /trader
+    aliases: []
 depend:
 - Vault
 - MythicMobs

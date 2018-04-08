@@ -105,6 +105,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isFingersItem = false;
 	private boolean isNeckItem = false;
 	private boolean isShouldersItem = false;
+	private boolean territoryFlag = false;
 	
 	
 	@Override
@@ -676,6 +677,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- shouldersItem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
+		sender.sendMessage("- territoryflag: " + ChatColor.GOLD + isTerritoryFlag() + ChatColor.RESET);
 		sender.sendMessage("- allowedclassnames: ");
 		for(String classname : this.getAllowedClassNames())
 		{
@@ -852,8 +854,11 @@ public class SoliniaItem implements ISoliniaItem {
 			setFingersItem(false);
 			setNeckItem(false);
 			break;
+		case "territoryflag":
+			setTerritoryFlag(Boolean.parseBoolean(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag");
 		}
 	}
 
@@ -1176,5 +1181,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setShouldersItem(boolean isShouldersItem) {
 		this.isShouldersItem = isShouldersItem;
+	}
+
+	@Override
+	public boolean isTerritoryFlag() {
+		return territoryFlag;
+	}
+
+	@Override
+	public void setTerritoryFlag(boolean territoryFlag) {
+		this.territoryFlag = territoryFlag;
 	}
 }

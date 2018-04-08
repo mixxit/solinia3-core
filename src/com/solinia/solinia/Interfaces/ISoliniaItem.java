@@ -294,4 +294,8 @@ public interface ISoliniaItem {
 	boolean isShouldersItem();
 
 	void setShouldersItem(boolean isShouldersItem);
+
+	boolean isTerritoryFlag();
+
+	void setTerritoryFlag(boolean territoryFlag);
 }

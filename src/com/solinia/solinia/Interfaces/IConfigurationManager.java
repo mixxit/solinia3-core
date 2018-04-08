@@ -29,6 +29,7 @@ import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
+import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.WorldWidePerk;
 
 public interface IConfigurationManager {
@@ -344,4 +345,14 @@ public interface IConfigurationManager {
 	List<SoliniaCraft> getCrafts(int itemid1, int itemid2);
 
 	boolean isCraftsHasComponent(int id);
+
+	int getNextWorldId();
+
+	List<SoliniaWorld> getWorlds();
+
+	void addWorld(SoliniaWorld world);
+
+	SoliniaWorld getWorld(String name);
+
+	SoliniaWorld getWorld(int Id);
 }
