@@ -203,7 +203,7 @@ public class SoliniaZone {
 			break;
 		default:
 			throw new InvalidZoneSettingException(
-					"Invalid zone setting. Valid Options are: name,x,y,z,hotzone,succorx,succory,succorz,forestryloottableid,fishingloottableid,miningloottableid");
+					"Invalid zone setting. Valid Options are: name,x,y,z,hotzone,succorx,succory,succorz,forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill");
 		}
 	}
 	public int getSuccorx() {

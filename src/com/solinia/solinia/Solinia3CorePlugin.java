@@ -468,6 +468,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("npcsay").setExecutor(new CommandNPCSay());
 		this.getCommand("plantflag").setExecutor(new CommandPlantFlag());
 		this.getCommand("trader").setExecutor(new CommandTrader());
+		this.getCommand("listworlds").setExecutor(new CommandListWorlds());
+		this.getCommand("editworld").setExecutor(new CommandEditWorld());
 	}
 
 	private void createConfigDir() {

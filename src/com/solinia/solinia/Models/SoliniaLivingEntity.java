@@ -3772,5 +3772,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return total;
 		}
 	}
+	
+	@Override
+	public SoliniaWorld getSoliniaWorld()
+	{
+		try {
+			return StateManager.getInstance().getConfigurationManager().getWorld(this.getBukkitLivingEntity().getWorld().getName().toUpperCase());
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
 
 }

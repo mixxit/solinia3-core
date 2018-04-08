@@ -9,11 +9,11 @@ import com.solinia.solinia.Models.SoliniaWorld;
 
 public class SoliniaWorldFactory {
 	public static SoliniaWorld Create(String name) throws CoreStateInitException, SoliniaWorldCreationException {
-		if (StateManager.getInstance().getConfigurationManager().getWorld(name.toUpperCase()) != null)
+		if (!StateManager.getInstance().getConfigurationManager().isWorldNameFree(name.toUpperCase()))
 			throw new SoliniaWorldCreationException("World already exists");
 		
 		SoliniaWorld entry = new SoliniaWorld();
-		entry.setId(StateManager.getInstance().getConfigurationManager().getNextCraftId());
+		entry.setId(StateManager.getInstance().getConfigurationManager().getNextWorldId());
 		entry.setName(name.toUpperCase());
 		
 		StateManager.getInstance().getConfigurationManager().addWorld(entry);

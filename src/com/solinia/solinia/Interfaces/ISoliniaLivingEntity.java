@@ -23,6 +23,7 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
@@ -211,5 +212,7 @@ public interface ISoliniaLivingEntity
 	double getItemMana();
 
 	int getTotalItemSkillMod(SkillType skilltype);
+
+	SoliniaWorld getSoliniaWorld();
 
 }

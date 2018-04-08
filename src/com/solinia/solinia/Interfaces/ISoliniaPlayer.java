@@ -15,6 +15,7 @@ import com.solinia.solinia.Models.PlayerQuest;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
@@ -311,4 +312,6 @@ public interface ISoliniaPlayer extends Serializable {
 	SoliniaZone isInZone();
 
 	boolean getSkillCheck(String skillname, int trivial);
+
+	SoliniaWorld getSoliniaWorld();
 }

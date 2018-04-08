@@ -46,6 +46,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -101,8 +102,6 @@ public class Solinia3CorePlayerListener implements Listener {
 				
 				if (!solplayer.getSkillCheck("LOGGING",minskill+50))
 				{
-					event.setCancelled(true);
-					event.getPlayer().sendMessage("Your lack of skill resulted in failure!");
 					return;
 				}
 
@@ -124,21 +123,30 @@ public class Solinia3CorePlayerListener implements Listener {
 				
 				if (!solplayer.getSkillCheck("MINING",minskill+50))
 				{
-					event.setCancelled(true);
-					event.getPlayer().sendMessage("Your lack of skill resulted in failure!");
 					return;
 				}
 			}
 			
 			
 			SoliniaZone zone = solplayer.isInZone();
-			if (zone == null)
-				return;
+			if (zone != null)
+			{
+				if (zone.getForestryLootTableId() > 0)
+					Utils.DropLoot(zone.getForestryLootTableId(),event.getPlayer().getWorld(), event.getPlayer().getLocation());
+					
+				if (zone.getMiningLootTableId() > 0)
+					Utils.DropLoot(zone.getMiningLootTableId(),event.getPlayer().getWorld(), event.getPlayer().getLocation());
+			}
 			
-			if (zone.getForestryLootTableId() == 0 && zone.getMiningLootTableId() == 0)
-				return;
-			
-			Utils.DropLoot(zone.getFishingLootTableId(),event.getPlayer().getWorld(), event.getPlayer().getLocation());
+			SoliniaWorld world = solplayer.getSoliniaWorld();
+			if (world != null)
+			{
+				if (world.getForestryLootTableId() > 0)
+					Utils.DropLoot(world.getForestryLootTableId(),event.getPlayer().getWorld(), event.getPlayer().getLocation());
+					
+				if (world.getMiningLootTableId() > 0)
+					Utils.DropLoot(world.getMiningLootTableId(),event.getPlayer().getWorld(), event.getPlayer().getLocation());
+			}
 			
 		} catch (CoreStateInitException e)
 		{
@@ -168,19 +176,22 @@ public class Solinia3CorePlayerListener implements Listener {
 			solplayer.tryIncreaseSkill("FISHING", 1);
 			if (!solplayer.getSkillCheck("FISHING",minskill+50))
 			{
-				event.setCancelled(true);
-				event.getPlayer().sendMessage("Your lack of skill resulted in failure!");
 				return;
 			}
 			
 			
-			if (zone == null)
-				return;
-
-			if (zone.getFishingLootTableId() == 0)
-				return;
+			if (zone != null)
+			{	
+				if (zone.getFishingLootTableId() > 0)
+					Utils.DropLoot(zone.getFishingLootTableId(),event.getPlayer().getWorld(), event.getPlayer().getLocation());
+			}
 			
-			Utils.DropLoot(zone.getFishingLootTableId(),event.getPlayer().getWorld(), event.getPlayer().getLocation());
+			SoliniaWorld world = solplayer.getSoliniaWorld();
+			if (world != null)
+			{
+				if (world.getFishingLootTableId() > 0)
+					Utils.DropLoot(world.getFishingLootTableId(),event.getPlayer().getWorld(), event.getPlayer().getLocation());
+			}
 
 		} catch (CoreStateInitException e)
 		{

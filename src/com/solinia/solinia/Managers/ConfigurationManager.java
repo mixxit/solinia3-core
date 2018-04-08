@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,7 +30,10 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
+import com.solinia.solinia.Factories.SoliniaWorldFactory;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
@@ -710,6 +714,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public void editWorld(int id, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidWorldSettingException {
+		getWorld(id).editSetting(setting, value);
+	}
+	
+	@Override
 	public void editLootDrop(int lootdropid, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidLootDropSettingException {
 		getLootDrop(lootdropid).editSetting(setting, value);
@@ -795,6 +805,24 @@ public class ConfigurationManager implements IConfigurationManager {
 		if (list.size() > 0)
 			return list.get(0);
 
+		try
+		{
+			for(World world : Bukkit.getWorlds())
+			{
+				if (!world.getName().toUpperCase().equals(name.toUpperCase()))
+					continue;
+	
+				SoliniaWorld createdWorld = SoliniaWorldFactory.Create(world.getName());
+				System.out.println("World Created: " + world.getName());
+				return createdWorld;
+			}
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		} catch (SoliniaWorldCreationException e) {
+			return null;
+		}
+		
 		return null;
 	}
 
@@ -1517,6 +1545,15 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public boolean isWorldNameFree(String worldNameUpperCase) {
+		List<SoliniaWorld> list = worldRepository.query(q -> q.getName().toUpperCase().equals(worldNameUpperCase.toUpperCase()));
+		if (list.size() > 0)
+			return false;
+		
+		return true;
 	}
 	
 }

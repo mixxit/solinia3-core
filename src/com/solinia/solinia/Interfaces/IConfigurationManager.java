@@ -13,6 +13,7 @@ import com.solinia.solinia.Exceptions.InvalidAASettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
@@ -355,4 +356,9 @@ public interface IConfigurationManager {
 	SoliniaWorld getWorld(String name);
 
 	SoliniaWorld getWorld(int Id);
+
+	void editWorld(int id, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidWorldSettingException;
+
+	boolean isWorldNameFree(String upperCase);
 }

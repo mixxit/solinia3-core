@@ -188,6 +188,11 @@ public class CoreState {
 		
 		isInitialised = true;
 		
+		OnInitialized();
+	}
+	
+	public void OnInitialized()
+	{
 		for(World world : Bukkit.getWorlds())
 		{
 			if (this.configurationManager.getWorld(world.getName().toUpperCase()) == null)
@@ -195,17 +200,15 @@ public class CoreState {
 				try {
 					SoliniaWorldFactory.Create(world.getName());
 					System.out.println("World Created: " + world.getName());
+					
 				} catch (SoliniaWorldCreationException e) {
-					throw new CoreStateInitException("Could not create worlds");
+					
+				} catch (CoreStateInitException e) {
+					
 				}
 			}
 		}
 		
-		OnInitialized();
-	}
-	
-	public void OnInitialized()
-	{
 		StateManager.getInstance().setRandomHotzones();
 	}
 	

@@ -2382,4 +2382,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		return false;
 	}
+	
+	@Override
+	public SoliniaWorld getSoliniaWorld()
+	{
+		try {
+			return StateManager.getInstance().getConfigurationManager().getWorld(this.getBukkitPlayer().getWorld().getName().toUpperCase());
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
 }

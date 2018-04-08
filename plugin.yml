@@ -465,6 +465,14 @@ commands:
     description: Trader menu
     usage: /trader
     aliases: []
+  editworld:
+    description: Edits a world
+    usage: /editworld worldid setting value
+    aliases: []
+  listworlds:
+    description: Lists worlds
+    usage: /listworlds
+    aliases: []
 depend:
 - Vault
 - MythicMobs
