@@ -80,6 +80,8 @@ public interface IConfigurationManager {
 	public List<String> ForagingMaterials = new ArrayList<String>() {{
 		add("GRASS");
 		add("LONG_GRASS");
+		add("DOUBLE_PLANT");
+		add("RED_ROSE");
 		add("YELLOW_FLOWER");
 		add("CHORUS_FLOWER");
 	}};

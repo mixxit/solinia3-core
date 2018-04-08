@@ -160,7 +160,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getPlayer());
 
 			SoliniaZone zone = solplayer.isInZone();
-			solplayer.tryIncreaseSkill("FORAGING", 1);
+			solplayer.tryIncreaseSkill("FORAGE", 1);
 			
 			if (zone != null)
 			{	
@@ -170,7 +170,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForagingMinSkill();
 				}
 				
-				if (!solplayer.getSkillCheck("FORAGING",minskill+50))
+				if (!solplayer.getSkillCheck("FORAGE",minskill+50))
 				{
 					return;
 				}
@@ -188,7 +188,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForagingMinSkill();
 				}
 				
-				if (!solplayer.getSkillCheck("FORAGING",minskill+50))
+				if (!solplayer.getSkillCheck("FORAGE",minskill+50))
 				{
 					return;
 				}
