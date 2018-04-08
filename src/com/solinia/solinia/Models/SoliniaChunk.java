@@ -6,13 +6,13 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Managers.StateManager;
 
 public class SoliniaChunk {
 	private int chunkX;
 	private int chunkZ;
 	private String soliniaWorldName;
-	private int alignmentId = 0;
 	
 	public int getChunkX() {
 		return chunkX;
@@ -32,20 +32,30 @@ public class SoliniaChunk {
 	public void setSoliniaWorldName(String soliniaWorldName) {
 		this.soliniaWorldName = soliniaWorldName;
 	}
-	public int getAlignmentId() {
-		return alignmentId;
+
+	public World getWorld()
+	{
+		for(World world : Bukkit.getWorlds())
+		{
+			if (!world.getName().toUpperCase().equals(soliniaWorldName.toUpperCase()))
+				continue;
+			
+			return world;
+		}
+		
+		return null;
 	}
-	public void setAlignmentId(int alignmentId) {
-		this.alignmentId = alignmentId;
+	
+	public Location getFirstBlockLocation()
+	{
+		World world = getWorld();
+		
+		if (world == null)
+			return null;
+
+		return getFirstBlockLocation(world);
 	}
-	public int getCoinGenerated() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	public int getTotalTradeRoutes() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 	public boolean isInZoneWithMaterials() {
 		World world = getWorld();
 		
@@ -70,36 +80,13 @@ public class SoliniaChunk {
 		return false;
 	}
 	
-	public World getWorld()
-	{
-		for(World world : Bukkit.getWorlds())
-		{
-			if (!world.getName().toUpperCase().equals(soliniaWorldName.toUpperCase()))
-				continue;
-			
-			return world;
-		}
-		
-		return null;
-	}
-	
-	private Location getFirstBlockLocation()
-	{
-		World world = getWorld();
-		
-		if (world == null)
-			return null;
-
-		return getFirstBlockLocation(world);
-	}
-	
-	private Location getFirstBlockLocation(World world)
+	public Location getFirstBlockLocation(World world)
 	{
 		Chunk chunk = world.getChunkAt(getChunkX(), getChunkZ());
 		return chunk.getBlock(0, 0, 0).getLocation();
 	}
 	
-	private boolean isInZone(World world) {
+	public boolean isInZone(World world) {
 		
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
@@ -115,7 +102,7 @@ public class SoliniaChunk {
 		return false;
 	}
 	
-	private SoliniaZone getFirstZone() {
+	public SoliniaZone getFirstZone() {
 		
 		World world = getWorld();
 		
@@ -125,7 +112,7 @@ public class SoliniaChunk {
 		return getFirstZone(world);
 	}
 	
-	private SoliniaZone getFirstZone(World world) {
+	public SoliniaZone getFirstZone(World world) {
 		
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
@@ -140,7 +127,7 @@ public class SoliniaChunk {
 		return null;
 	}
 	
-	private boolean isInZone() {
+	public boolean isInZone() {
 		
 		World world = getWorld();
 		
@@ -148,6 +135,64 @@ public class SoliniaChunk {
 			return false;
 		
 		return isInZone(world);
+	}
+	
+	public boolean isAlignmentChunk() {
+		try {
+			for(ISoliniaAlignment alignmentEntry : StateManager.getInstance().getConfigurationManager().getAlignments())
+			{
+				SoliniaAlignmentChunk temporaryChunk = alignmentEntry.getChunk(this);
+				if (temporaryChunk == null)
+					continue;
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public SoliniaAlignmentChunk getAlignmentChunk() {
+		SoliniaAlignmentChunk alignmentChunk = null;
+		ISoliniaAlignment alignment = null;
+		try {
+			
+			for(ISoliniaAlignment alignmentEntry : StateManager.getInstance().getConfigurationManager().getAlignments())
+			{
+				SoliniaAlignmentChunk temporaryChunk = alignmentEntry.getChunk(this);
+				if (temporaryChunk == null)
+					continue;
+				
+				alignmentChunk = temporaryChunk;
+				alignment = alignmentEntry;
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return alignmentChunk;
+	}
+	
+	public ISoliniaAlignment getChunkAlignment() {
+		ISoliniaAlignment alignment = null;
+		try {
+			
+			for(ISoliniaAlignment alignmentEntry : StateManager.getInstance().getConfigurationManager().getAlignments())
+			{
+				SoliniaAlignmentChunk temporaryChunk = alignmentEntry.getChunk(this);
+				if (temporaryChunk == null)
+					continue;
+				
+				alignment = alignmentEntry;
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return alignment;
 	}
 	
 }

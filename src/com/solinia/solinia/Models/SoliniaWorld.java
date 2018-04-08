@@ -59,20 +59,8 @@ public class SoliniaWorld {
 	}
 	
 	public SoliniaChunk getChunk(Chunk bukkitChunk) {
-		SoliniaChunk chunk = chunks.get(bukkitChunk.getX() + "_" + bukkitChunk.getZ());
 		
-		if (chunk != null)
-		{
-			return chunk;
-		} else {
-			try {
-				return SoliniaChunkFactory.Create(bukkitChunk);
-			} catch (CoreStateInitException e) {
-			} catch (SoliniaChunkCreationException e) {
-			}
-		}
-		
-		return null;
+		return getChunk(bukkitChunk.getX(), bukkitChunk.getZ());
 	}
 	
 	public void setChunk(String chunkUnderscoredPosition, SoliniaChunk chunk) {
@@ -248,5 +236,22 @@ public class SoliniaWorld {
 	}
 	public void setForagingMinSkill(int foragingMinSkill) {
 		this.foragingMinSkill = foragingMinSkill;
+	}
+
+	public SoliniaChunk getChunk(int chunkX, int chunkZ) {
+		SoliniaChunk chunk = chunks.get(chunkX + "_" + chunkZ);
+		
+		if (chunk != null)
+		{
+			return chunk;
+		} else {
+			try {
+				return SoliniaChunkFactory.Create(getName().toUpperCase(), chunkX, chunkZ);
+			} catch (CoreStateInitException e) {
+			} catch (SoliniaChunkCreationException e) {
+			}
+		}
+		
+		return null;
 	}
 }

@@ -11,7 +11,9 @@ import com.solinia.solinia.Adapters.SoliniaChunkAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaChunkCreationException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Factories.SoliniaAlignmentChunkFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -47,7 +49,9 @@ public class CommandPlantFlag implements CommandExecutor  {
 				return true;
 			}
 			
-			if (chunk.getAlignmentId() > 0)
+			ISoliniaAlignment chunkAlignment = chunk.getChunkAlignment();
+			
+			if (chunkAlignment != null)
 			{
 				player.sendMessage("Territory is already claimed! (see /trader)");
 				return true;
@@ -83,17 +87,30 @@ public class CommandPlantFlag implements CommandExecutor  {
 	        	return true;
 	        }
 	        
-	        chunk.setAlignmentId(alignment.getId());		
-	        player.sendMessage("This economic area is now under control of the " + alignment.getName() + " alliance. It will now generate gold when trade routes pass through it");
-	        player.getInventory().setItemInMainHand(null);
-	        player.updateInventory();
-        
+	        for(ISoliniaAlignment currentAlignment : StateManager.getInstance().getConfigurationManager().getAlignments())
+	        {
+	        	if (currentAlignment.getId() != alignment.getId())
+	        	{
+	        		if (currentAlignment.getChunk(chunk) != null)
+		        	{
+	        			currentAlignment.removeChunk(chunk);
+		        	}
+	        	} else {
+        			SoliniaAlignmentChunkFactory.Create(currentAlignment, chunk.getSoliniaWorldName(), chunk.getChunkX(), chunk.getChunkZ());
+	        		
+	        		player.sendMessage("This economic area is now under control of the " + alignment.getName() + " alliance. It will now generate gold when trade routes pass through it");
+	    	        player.getInventory().setItemInMainHand(null);
+	    	        player.updateInventory();
+	        	}
+	        }
 	        return true;
         } catch (CoreStateInitException e)
         {
         	
         } catch (SoliniaItemException e) {
 
+		} catch (SoliniaChunkCreationException e) {
+			return true;
 		}
 
 		return true;

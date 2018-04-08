@@ -11,7 +11,7 @@ import com.solinia.solinia.Models.SoliniaChunk;
 import com.solinia.solinia.Utils.Utils;
 
 public interface SoliniaChunkAdapter {
-	public static SoliniaChunk Adapt(Chunk chunk) throws SoliniaItemException, CoreStateInitException
+	public static SoliniaChunk Adapt(Chunk chunk) throws CoreStateInitException
 	{
 		return SoliniaWorldAdapter.Adapt(chunk.getWorld().getName().toUpperCase()).getChunk(chunk);
 	}
