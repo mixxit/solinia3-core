@@ -33,6 +33,8 @@ import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.WorldWidePerk;
 
+import net.minecraft.server.v1_12_R1.Material;
+
 public interface IConfigurationManager {
 	
 	public List<String> WeaponMaterials = new ArrayList<String>() {{ 
@@ -73,6 +75,13 @@ public interface IConfigurationManager {
 		add("STONE");
 		add("QUARTZ_ORE");
 		add("GLOWING_REDSTONE_ORE");
+	}};
+	
+	public List<String> ForagingMaterials = new ArrayList<String>() {{
+		add("GRASS");
+		add("LONG_GRASS");
+		add("YELLOW_FLOWER");
+		add("CHORUS_FLOWER");
 	}};
 	
 	public List<String> LumberingMaterials = new ArrayList<String>() {{

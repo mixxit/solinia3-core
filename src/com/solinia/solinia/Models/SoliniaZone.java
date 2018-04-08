@@ -26,12 +26,14 @@ public class SoliniaZone {
 	private int succorx;
 	private int succory;
 	private int succorz;
-	private int forestryLootTableId = 0;
-	private int miningLootTableId = 0;
-	private int fishingLootTableId = 0;
-	private int fishingMinSkill = 0;
-	private int miningMinSkill = 0;
 	private int forestryMinSkill = 0;
+	private int forestryLootTableId = 0;
+	private int fishingMinSkill = 0;
+	private int fishingLootTableId = 0;
+	private int miningMinSkill = 0;
+	private int miningLootTableId = 0;
+	private int foragingMinSkill = 0;
+	private int foragingLootTableId = 0;
 
 	public int getId() {
 		return id;
@@ -94,6 +96,16 @@ public class SoliniaZone {
 		sender.sendMessage("- forestryminskill: " + ChatColor.GOLD + getForestryMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- fishingminskill: " + ChatColor.GOLD + getFishingMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- miningminskill: " + ChatColor.GOLD + getMiningMinSkill() + ChatColor.RESET);
+		sender.sendMessage("- foragingminskill: " + ChatColor.GOLD + getForagingMinSkill() + ChatColor.RESET);
+		
+		if (getForagingLootTableId() != 0) {
+			sender.sendMessage("- foragingloottableid: " + ChatColor.GOLD + getForagingLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getForagingLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- foragingloottableid: " + ChatColor.GOLD + getForagingLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}		
 		
 		if (getForestryLootTableId() != 0) {
 			sender.sendMessage("- forestryloottableid: " + ChatColor.GOLD + getForestryLootTableId() + " ("
@@ -161,6 +173,22 @@ public class SoliniaZone {
 			break;
 		case "fishingminskill":
 			setFishingMinSkill(Integer.parseInt(value));
+			break;
+		case "foragingminskill":
+			setForagingMinSkill(Integer.parseInt(value));
+			break;
+		case "foragingloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setForagingLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable0 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable0 == null)
+				throw new InvalidZoneSettingException("Loottable ID does not exist");
+			setForagingLootTableId(Integer.parseInt(value));
 			break;
 		case "forestryloottableid":
 			if (Integer.parseInt(value) == 0)
@@ -259,5 +287,17 @@ public class SoliniaZone {
 	}
 	public void setForestryMinSkill(int forestryMinSkill) {
 		this.forestryMinSkill = forestryMinSkill;
+	}
+	public int getForagingLootTableId() {
+		return foragingLootTableId;
+	}
+	public void setForagingLootTableId(int foragingLootTableId) {
+		this.foragingLootTableId = foragingLootTableId;
+	}
+	public int getForagingMinSkill() {
+		return foragingMinSkill;
+	}
+	public void setForagingMinSkill(int foragingMinSkill) {
+		this.foragingMinSkill = foragingMinSkill;
 	}
 }
