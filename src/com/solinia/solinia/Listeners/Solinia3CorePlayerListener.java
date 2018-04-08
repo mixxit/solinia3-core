@@ -45,6 +45,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
@@ -87,7 +88,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getPlayer());
 
-			if (event.getBlock().getType().equals(Material.LOG))
+			if (ConfigurationManager.LumberingMaterials.contains(event.getBlock().getType().name()))
 			{
 				solplayer.tryIncreaseSkill("LOGGING", 1);
 				int minskill = 0;
@@ -107,7 +108,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			}
 			
-			if (event.getBlock().getType().equals(Material.STONE))
+			if (ConfigurationManager.MiningMaterials.contains(event.getBlock().getType().name()))
 			{
 				solplayer.tryIncreaseSkill("MINING", 1);
 				int minskill = 0;

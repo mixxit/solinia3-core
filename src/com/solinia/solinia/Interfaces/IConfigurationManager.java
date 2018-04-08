@@ -53,6 +53,37 @@ public interface IConfigurationManager {
 		add("DIAMOND_SPADE"); 
 		}};
 		
+	public List<String> MiningMaterials = new ArrayList<String>() {{
+		add("COAL_ORE");
+		add("DIAMOND_ORE");
+		add("EMERALD_ORE");
+		add("ENDER_STONE");
+		add("GLOWSTONE");
+		add("GOLD_ORE");
+		add("HARD_CLAY");
+		add("IRON_ORE");
+		add("LAPIS_ORE");
+		add("MOSSY_COBBLESTONE");
+		add("NETHERRACK");
+		add("OBSIDIAN");
+		add("PACKED_ICE");
+		add("REDSTONE_ORE");
+		add("SANDSTONE");
+		add("STAINED_CLAY");
+		add("STONE");
+		add("QUARTZ_ORE");
+		add("GLOWING_REDSTONE_ORE");
+	}};
+	
+	public List<String> LumberingMaterials = new ArrayList<String>() {{
+		add("LOG");
+		add("LOG_2");
+		add("HUGE_MUSHROOM_1");
+		add("HUGE_MUSHROOM_2");
+		add("LEAVES");
+		add("LEAVES_2");
+	}};
+	
 	public List<String> ArmourMaterials = new ArrayList<String>() {{ 
 		add("LEATHER_HELMET");
 		add("LEATHER_CHESTPLATE");
