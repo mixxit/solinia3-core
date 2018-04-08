@@ -110,7 +110,7 @@ public class SoliniaItem implements ISoliniaItem {
 	
 	@Override
 	public ItemStack asItemStack() {
-		return ItemStackAdapter.Adapt(this);
+		return ItemStackAdapter.Adapt(this, 1);
 	}
 
 	@Override
@@ -1191,5 +1191,10 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setTerritoryFlag(boolean territoryFlag) {
 		this.territoryFlag = territoryFlag;
+	}
+
+	@Override
+	public ItemStack asItemStackForMerchant(int costmultiplier) {
+		return ItemStackAdapter.Adapt(this, costmultiplier);
 	}
 }

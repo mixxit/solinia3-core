@@ -3,6 +3,8 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -12,6 +14,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Managers.UniversalTemporarySoliniaLootTable;
 
 public class SoliniaAlignmentChunk {
 	private int alignmentId = 0;
@@ -74,65 +77,85 @@ public class SoliniaAlignmentChunk {
 		return null;
 	}
 	
-	public List<UniversalMerchantEntry> getUniversalMerchantEntries() {
+	public List<UniversalMerchantEntry> getUniversalMerchantEntries(SoliniaAlignmentChunk alignmentChunk) {
 		List<UniversalMerchantEntry> entries = new ArrayList<UniversalMerchantEntry>();
+		List<UniversalTemporarySoliniaLootTable> lootTables = new ArrayList<UniversalTemporarySoliniaLootTable>();
 		
-		List<ISoliniaLootTable> lootTables = new ArrayList<ISoliniaLootTable>();
+		World bukkitworld = null;
+		for(World tmpworld : Bukkit.getWorlds())
+		{
+			if(tmpworld.getName().toUpperCase().equals(alignmentChunk.getSoliniaWorldName().toUpperCase()))
+				bukkitworld = tmpworld;
+		}
+		
+		if (bukkitworld == null)
+			return entries;
 		
 		try
 		{
-			System.out.println("Generating Universal Merchant Entries for Alignment: " + getAlignmentId());
 			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(getAlignmentId());
 			for (SoliniaZone zone : alignment.getMaterialZones())
 			{
+				Location locationfrom = new Location(bukkitworld, alignmentChunk.getChunkX(), 0, alignmentChunk.getChunkZ());
+				Location locationto = new Location(bukkitworld, zone.getX(), 0, zone.getZ());
+				
+				int tmpdistance = (int) locationfrom.distance(locationto);
+				int distance = tmpdistance / 16;
+				System.out.println("Item distance was: " + distance);
+				
+				if (distance < 1)
+					distance = 1;
+				
 				if (zone.getFishingLootTableId() > 0)
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getFishingLootTableId()));
+					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getFishingLootTableId()),distance));
 				}
 				
 				if (zone.getForagingLootTableId() > 0)
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForagingLootTableId()));
+					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForagingLootTableId()),distance));
 				}
 				
 				if (zone.getMiningLootTableId() > 0)
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getMiningLootTableId()));
+					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getMiningLootTableId()),distance));
 				}
 				
 				if (zone.getForestryLootTableId() > 0)
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForestryLootTableId()));
+					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForestryLootTableId()),distance));
 				}
 			}
 			
 			// Always show global world drops
 			for (SoliniaWorld world : StateManager.getInstance().getConfigurationManager().getWorlds())
 			{
+				int distance = 1;
+				
 				if (world.getFishingLootTableId() > 0)
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(world.getFishingLootTableId()));
+					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(world.getFishingLootTableId()),distance));
 				}
 				
 				if (world.getForagingLootTableId() > 0)
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(world.getForagingLootTableId()));
+					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(world.getForagingLootTableId()),distance));
 				}
 				
 				if (world.getMiningLootTableId() > 0)
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(world.getMiningLootTableId()));
+					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(world.getMiningLootTableId()),distance));
 				}
 				
 				if (world.getForestryLootTableId() > 0)
 				{
-					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(world.getForestryLootTableId()));
+					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(world.getForestryLootTableId()),distance));
 				}
 			}
 		
-			for (ISoliniaLootTable lootTable : lootTables)
+			for (UniversalTemporarySoliniaLootTable templootTable : lootTables)
 			{
-				for(ISoliniaLootTableEntry entry : lootTable.getEntries())
+				for(ISoliniaLootTableEntry entry : templootTable.soliniaLootTable.getEntries())
 				{
 					ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
 					for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
@@ -140,6 +163,7 @@ public class SoliniaAlignmentChunk {
 						UniversalMerchantEntry ume = new UniversalMerchantEntry();
 						ume.setItemid(lootdropentry.getItemid());
 						ume.setTemporaryquantitylimit(64);
+						ume.setCostMultiplier(templootTable.distance);
 						entries.add(ume);
 					}
 				}

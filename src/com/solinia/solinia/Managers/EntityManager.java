@@ -119,7 +119,7 @@ public class EntityManager implements IEntityManager {
 	public Inventory getTradeShopMerchantInventory(UUID playerUUID, SoliniaAlignmentChunk alignmentChunk, int pageno)
 	{
 		UniversalMerchant merchant = new UniversalMerchant();
-		merchant.fullmerchantentries = alignmentChunk.getUniversalMerchantEntries();
+		merchant.fullmerchantentries = alignmentChunk.getUniversalMerchantEntries(alignmentChunk);
 		merchant.merchantName = alignmentChunk.getChunkX() + "_" + alignmentChunk.getChunkZ() + "_TradeShop";
 		
 		// Cache
@@ -157,7 +157,7 @@ public class EntityManager implements IEntityManager {
 				try
 				{
 					UniversalMerchantEntry entry = merchantentries.get(i);
-					itemStack = StateManager.getInstance().getConfigurationManager().getItem(entry.getItemid()).asItemStack();
+					itemStack = StateManager.getInstance().getConfigurationManager().getItem(entry.getItemid()).asItemStackForMerchant(entry.getCostMultiplier());
 					ItemMeta meta = itemStack.getItemMeta();
 					meta.setDisplayName("Display Item: " + itemStack.getItemMeta().getDisplayName());
 					itemStack.setItemMeta(meta);

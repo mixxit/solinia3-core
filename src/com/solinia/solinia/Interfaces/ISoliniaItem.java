@@ -298,4 +298,6 @@ public interface ISoliniaItem {
 	boolean isTerritoryFlag();
 
 	void setTerritoryFlag(boolean territoryFlag);
+
+	ItemStack asItemStackForMerchant(int costmultiplier);
 }

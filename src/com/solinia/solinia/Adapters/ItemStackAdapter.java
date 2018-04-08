@@ -28,6 +28,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.SkillType;
+import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
@@ -39,7 +40,7 @@ import net.minecraft.server.v1_12_R1.NBTTagList;
 import net.minecraft.server.v1_12_R1.NBTTagString;
 
 public class ItemStackAdapter {
-	public static ItemStack Adapt(ISoliniaItem soliniaItem) {
+	public static ItemStack Adapt(ISoliniaItem soliniaItem, int costmultiplier) {
 		
 		ItemStack stack = new ItemStack(Material.valueOf(soliniaItem.getBasename().toUpperCase()), 1, soliniaItem.getColor());
 		
@@ -315,10 +316,9 @@ public class ItemStackAdapter {
 		
 		loretxt.add("Discovered By: " + soliniaItem.getDiscoverer());
 		
-		if (soliniaItem.getWorth() > 0)
+		if ((soliniaItem.getWorth() * costmultiplier) > 0)
 		{
-			loretxt.add(ChatColor.WHITE + "Worth: " + ChatColor.YELLOW + soliniaItem.getWorth()
-			+ ChatColor.RESET);
+			loretxt.add("Worth: " + (soliniaItem.getWorth() * costmultiplier));
 		}
 		
 		if (soliniaItem.isTemporary())
@@ -631,5 +631,4 @@ public class ItemStackAdapter {
 			throw new RuntimeException(e);
 		}
 	}
-
 }

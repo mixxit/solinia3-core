@@ -4,7 +4,8 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 
 public class UniversalMerchantEntry {
 	private int itemid;
-	private int temporaryquantitylimit;
+	private int temporaryquantitylimit = 64;
+	private int costMultiplier = 1;
 	
 	public int getItemid() {
 		return itemid;
@@ -28,5 +29,13 @@ public class UniversalMerchantEntry {
 		entry.itemid = npcMerchantEntry.getItemid();
 		entry.temporaryquantitylimit = npcMerchantEntry.getTemporaryquantitylimit();
 		return entry;
+	}
+
+	public int getCostMultiplier() {
+		return costMultiplier;
+	}
+
+	public void setCostMultiplier(int costMultiplier) {
+		this.costMultiplier = costMultiplier;
 	}
 }

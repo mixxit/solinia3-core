@@ -48,6 +48,24 @@ public class ItemStackUtils {
 		return null;
 	}
 	
+	public static Integer getMerchantItemWorth(ItemStack itemStack)
+	{
+		if (!Utils.IsSoliniaItem(itemStack))
+			return null;
+		
+		for(String loreLine : itemStack.getItemMeta().getLore())
+		{
+			if (!loreLine.startsWith("Worth: "))
+				continue;
+			
+			String[] temporaryData = loreLine.split(" ");
+			
+			return Integer.parseInt(temporaryData[2]);
+		}
+		
+		return null;
+	}
+	
 	public static String getTemporaryItemGuid(ItemStack itemStack)
 	{
 		try

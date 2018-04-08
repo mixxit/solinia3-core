@@ -829,7 +829,16 @@ public class Solinia3CorePlayerListener implements Listener {
 					
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(event.getCursor());
 						int individualprice = item.getWorth();
-	
+						
+						// Try to read from the itemstack worth
+						Integer merchantworth = ItemStackUtils.getMerchantItemWorth(event.getCursor());
+						
+						if (event.getCursor().getItemMeta().getDisplayName().contains("Display Item"))
+						if (merchantworth != null && merchantworth != individualprice)
+						{
+							individualprice = merchantworth;
+						}
+						
 						// Total price
 						
 						int price = individualprice * event.getCursor().getAmount();

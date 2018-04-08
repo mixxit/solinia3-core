@@ -104,8 +104,7 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 		List<SoliniaAlignmentChunk> alignmentChunks = new ArrayList<SoliniaAlignmentChunk>();
 		for (Entry<String, SoliniaAlignmentChunk> chunk : getChunks().entrySet())
 		{
-			
-			if (!chunk.getValue().getSoliniaChunk().isInZoneWithMaterials())
+			if (chunk.getValue().getSoliniaChunk().isInZoneWithMaterials())
 				alignmentChunks.add(chunk.getValue());
 		}
 		
