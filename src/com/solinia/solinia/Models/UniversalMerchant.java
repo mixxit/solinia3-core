@@ -17,9 +17,6 @@ public class UniversalMerchant {
 	
 	public void sendMerchantItemListToPlayer(Player player, int pageno) 
 	{
-		if (pageno < 1)
-			pageno = 1;
-		
 		try {
 			Inventory merchantInventory = StateManager.getInstance().getEntityManager().getMerchantInventory(player.getUniqueId(), pageno, this);
 			if (merchantInventory != null)

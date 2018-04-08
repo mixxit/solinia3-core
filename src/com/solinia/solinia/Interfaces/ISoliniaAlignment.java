@@ -1,5 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
@@ -40,5 +41,7 @@ public interface ISoliniaAlignment {
 	void removeChunk(SoliniaChunk chunk);
 
 	int getTotalChunks();
+
+	List<SoliniaAlignmentChunk> getMaterialChunks();
 
 }

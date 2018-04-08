@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.World;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
@@ -72,78 +73,78 @@ public class SoliniaAlignmentChunk {
 		
 		return null;
 	}
+	
 	public List<UniversalMerchantEntry> getUniversalMerchantEntries() {
 		List<UniversalMerchantEntry> entries = new ArrayList<UniversalMerchantEntry>();
 		
+		List<ISoliniaLootTable> lootTables = new ArrayList<ISoliniaLootTable>();
+		
 		try
 		{
+			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(this.getAlignmentId());
+			for (SoliniaAlignmentChunk chunk : alignment.getMaterialChunks())
+			{
+				SoliniaZone zone = chunk.getSoliniaChunk().getFirstZone();
+				if (zone.getFishingLootTableId() > 0)
+				{
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getFishingLootTableId()));
+				}
+				
+				if (zone.getForagingLootTableId() > 0)
+				{
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForagingLootTableId()));
+				}
+				
+				if (zone.getMiningLootTableId() > 0)
+				{
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getMiningLootTableId()));
+				}
+				
+				if (zone.getForestryLootTableId() > 0)
+				{
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getForestryLootTableId()));
+				}
+			}
+			
 			// Always show global world drops
 			for (SoliniaWorld world : StateManager.getInstance().getConfigurationManager().getWorlds())
 			{
 				if (world.getFishingLootTableId() > 0)
 				{
-					ISoliniaLootTable lootTable = StateManager.getInstance().getConfigurationManager().getLootTable(world.getFishingLootTableId());
-					for(ISoliniaLootTableEntry entry : lootTable.getEntries())
-					{
-						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
-						for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
-						{
-							UniversalMerchantEntry ume = new UniversalMerchantEntry();
-							ume.setItemid(lootdropentry.getItemid());
-							ume.setTemporaryquantitylimit(64);
-							entries.add(ume);
-						}
-					}
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(world.getFishingLootTableId()));
 				}
 				
 				if (world.getForagingLootTableId() > 0)
 				{
-					ISoliniaLootTable lootTable = StateManager.getInstance().getConfigurationManager().getLootTable(world.getForagingLootTableId());	
-					for(ISoliniaLootTableEntry entry : lootTable.getEntries())
-					{
-						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
-						for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
-						{
-							UniversalMerchantEntry ume = new UniversalMerchantEntry();
-							ume.setItemid(lootdropentry.getItemid());
-							ume.setTemporaryquantitylimit(64);
-							entries.add(ume);
-						}
-					}
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(world.getForagingLootTableId()));
 				}
 				
 				if (world.getMiningLootTableId() > 0)
 				{
-					ISoliniaLootTable lootTable = StateManager.getInstance().getConfigurationManager().getLootTable(world.getMiningLootTableId());
-					for(ISoliniaLootTableEntry entry : lootTable.getEntries())
-					{
-						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
-						for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
-						{
-							UniversalMerchantEntry ume = new UniversalMerchantEntry();
-							ume.setItemid(lootdropentry.getItemid());
-							ume.setTemporaryquantitylimit(64);
-							entries.add(ume);
-						}
-					}
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(world.getMiningLootTableId()));
 				}
 				
 				if (world.getForestryLootTableId() > 0)
 				{
-					ISoliniaLootTable lootTable = StateManager.getInstance().getConfigurationManager().getLootTable(world.getForestryLootTableId());
-					for(ISoliniaLootTableEntry entry : lootTable.getEntries())
+					lootTables.add(StateManager.getInstance().getConfigurationManager().getLootTable(world.getForestryLootTableId()));
+				}
+			}
+		
+			for (ISoliniaLootTable lootTable : lootTables)
+			{
+				for(ISoliniaLootTableEntry entry : lootTable.getEntries())
+				{
+					ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
+					for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
 					{
-						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
-						for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
-						{
-							UniversalMerchantEntry ume = new UniversalMerchantEntry();
-							ume.setItemid(lootdropentry.getItemid());
-							ume.setTemporaryquantitylimit(64);
-							entries.add(ume);
-						}
+						UniversalMerchantEntry ume = new UniversalMerchantEntry();
+						ume.setItemid(lootdropentry.getItemid());
+						ume.setTemporaryquantitylimit(64);
+						entries.add(ume);
 					}
 				}
 			}
+			
 		} catch (CoreStateInitException e)
 		{
 			

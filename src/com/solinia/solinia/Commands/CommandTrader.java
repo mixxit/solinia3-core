@@ -117,7 +117,7 @@ public class CommandTrader implements CommandExecutor {
 			{
 				player.sendMessage("Controlled by alliance: " + ChatColor.GOLD + alignment.getName().toUpperCase() + ChatColor.RESET);
 			} else {
-				player.sendMessage("Controlled by alliance: " + ChatColor.GOLD + "NONE" + ChatColor.RESET);
+				player.sendMessage("Controlled by alliance: " + ChatColor.GOLD + "NONE" + ChatColor.RESET + " - You can capture it with /plantflag");
 			}
 			
 			if (alignmentChunk != null)
@@ -199,6 +199,9 @@ public class CommandTrader implements CommandExecutor {
 	
 	public void sendMerchantItemListToPlayer(SoliniaAlignmentChunk alignmentChunk, Player player, int pageno) 
 	{
+		if (pageno < 1)
+			pageno = 1;
+		
 		player.sendMessage("DEBUG: Sending Merchant Items");
 		Inventory alignmentChunkInventory;
 		try {

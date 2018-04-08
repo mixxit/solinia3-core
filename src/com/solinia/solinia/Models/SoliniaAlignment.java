@@ -1,6 +1,8 @@
 package com.solinia.solinia.Models;
 
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -95,6 +97,19 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 		}
 		
 		return count;
+	}
+	
+	@Override
+	public List<SoliniaAlignmentChunk> getMaterialChunks() {
+		List<SoliniaAlignmentChunk> alignmentChunks = new ArrayList<SoliniaAlignmentChunk>();
+		for (Entry<String, SoliniaAlignmentChunk> chunk : getChunks().entrySet())
+		{
+			
+			if (!chunk.getValue().getSoliniaChunk().isInZoneWithMaterials())
+				alignmentChunks.add(chunk.getValue());
+		}
+		
+		return alignmentChunks;
 	}
 
 	@Override
