@@ -5354,6 +5354,10 @@ public class Utils {
 						if (item.isArtifact() == true && item.isArtifactFound() == false)
 							item.setArtifactFound(true);
 
+						if (item.isArtifact() == true)
+						{
+							Utils.BroadcastPlayers("A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+						}
 						world.dropItem(location, item.asItemStack());
 
 					}
@@ -5371,6 +5375,11 @@ public class Utils {
 						if (item.isArtifact() == true && item.isArtifactFound() == true)
 							continue;
 
+						if (item.isArtifact() == true)
+						{
+							Utils.BroadcastPlayers("A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+						}
+						
 						world.dropItem(location, item.asItemStack());
 
 						// Handle unique item setting also
