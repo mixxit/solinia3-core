@@ -2511,6 +2511,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		for(ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters())
 		{
+			if (player.getMotherId() == null)
+				continue;
+			
 			if (player.getMotherId().toString().equals(getCharacterId().toString()))
 			{
 				this.getBukkitPlayer().sendMessage("Child: " + player.getFullName());
