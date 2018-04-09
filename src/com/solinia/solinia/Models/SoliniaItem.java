@@ -87,6 +87,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isExperienceBonus = false;
 	private SkillType skillModType = SkillType.None;
 	private int skillModValue = 0;
+	private boolean reagent = false;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -678,6 +679,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
 		sender.sendMessage("- territoryflag: " + ChatColor.GOLD + isTerritoryFlag() + ChatColor.RESET);
+		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- allowedclassnames: ");
 		for(String classname : this.getAllowedClassNames())
 		{
@@ -857,8 +859,11 @@ public class SoliniaItem implements ISoliniaItem {
 		case "territoryflag":
 			setTerritoryFlag(Boolean.parseBoolean(value));
 			break;
+		case "reagent":
+			setReagent(Boolean.parseBoolean(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent");
 		}
 	}
 
@@ -1196,5 +1201,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public ItemStack asItemStackForMerchant(int costmultiplier) {
 		return ItemStackAdapter.Adapt(this, costmultiplier);
+	}
+
+	@Override
+	public boolean isReagent() {
+		return reagent;
+	}
+
+	@Override
+	public void setReagent(boolean reagent) {
+		this.reagent = reagent;
 	}
 }

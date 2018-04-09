@@ -475,6 +475,11 @@ commands:
     description: Lists worlds
     usage: /listworlds
     aliases: []
+  reagent:
+    description: Reagent pouch control
+    usage: /reagent <option>
+    aliases:
+    - reagents  
 depend:
 - Vault
 - MythicMobs

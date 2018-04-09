@@ -2679,6 +2679,52 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name() + ")" + ChatColor.RESET);
 		sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (" + Utils.getSpellEffectIndex(getSpellAffectIndex()).name() + ")" + ChatColor.RESET);
+
+		ISoliniaItem item1 = null;
+		ISoliniaItem item2 = null;
+		ISoliniaItem item3 = null;
+		ISoliniaItem item4 = null;
+		
+		try
+		{
+		
+		item1 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents1());
+		item2 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents2());
+		item3 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents3());
+		item4 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents4());
+		
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		String component1name = "";
+		String component2name = "";
+		String component3name = "";
+		String component4name = "";
+		
+		if (item1 != null)
+		{
+			component1name = item1.getDisplayname();
+		}
+		if (item2 != null)
+		{
+			component2name = item2.getDisplayname();
+		}
+		if (item3 != null)
+		{
+			component3name = item3.getDisplayname();
+		}
+		if (item4 != null)
+		{
+			component4name = item4.getDisplayname();
+		}
+		
+		sender.sendMessage("- components1: " + ChatColor.GOLD + this.getComponents1() + "(" + component1name + ")" + ChatColor.RESET + " componentcounts1: " + this.getComponentCounts1());
+		sender.sendMessage("- components2: " + ChatColor.GOLD + this.getComponents2() + "(" + component2name + ")" +  ChatColor.RESET + " componentcounts2: " + this.getComponentCounts2());
+		sender.sendMessage("- components3: " + ChatColor.GOLD + this.getComponents3() + "(" + component3name + ")" +  ChatColor.RESET + " componentcounts3: " + this.getComponentCounts3());
+		sender.sendMessage("- components4: " + ChatColor.GOLD + this.getComponents4() + "(" + component4name + ")" +  ChatColor.RESET + " componentcounts4: " + this.getComponentCounts4());
+
 		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		for(SoliniaSpellClass spellclass : this.getAllowedClasses())
@@ -2704,6 +2750,86 @@ public class SoliniaSpell implements ISoliniaSpell {
 			if (value.length() > 30)
 				throw new InvalidSpellSettingException("Name is longer than 30 characters");
 			setName(value);
+			break;
+		case "components1":
+			if (Integer.parseInt(value) > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(value));
+				if (item == null)
+					throw new InvalidSpellSettingException("Invalid item");
+				if (!item.isReagent())
+					throw new InvalidSpellSettingException("Not a reagent item");
+			}
+			
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Component ID must be 0 or higher");
+			
+			setComponents1(Integer.parseInt(value));
+			break;
+		case "components2":
+			if (Integer.parseInt(value) > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(value));
+				if (item == null)
+					throw new InvalidSpellSettingException("Invalid item");
+				if (!item.isReagent())
+					throw new InvalidSpellSettingException("Not a reagent item");
+			}
+			
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Component ID must be 0 or higher");
+
+			setComponents2(Integer.parseInt(value));
+			break;
+		case "components3":
+			if (Integer.parseInt(value) > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(value));
+				if (item == null)
+					throw new InvalidSpellSettingException("Invalid item");
+				if (!item.isReagent())
+					throw new InvalidSpellSettingException("Not a reagent item");
+			}
+			
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Component ID must be 0 or higher");
+
+			setComponents3(Integer.parseInt(value));
+			break;
+		case "components4":
+			if (Integer.parseInt(value) > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(value));
+				if (item == null)
+					throw new InvalidSpellSettingException("Invalid item");
+				if (!item.isReagent())
+					throw new InvalidSpellSettingException("Not a reagent item");
+			}
+			
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Component ID must be 0 or higher");
+
+			setComponents4(Integer.parseInt(value));
+			break;
+		case "componentcounts1":
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Component count must be 0 or higher");
+			setComponentCounts1(Integer.parseInt(value));
+			break;
+		case "componentcounts2":
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Component count must be 0 or higher");
+			setComponentCounts2(Integer.parseInt(value));
+			break;
+		case "componentcounts3":
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Component count must be 0 or higher");
+			setComponentCounts3(Integer.parseInt(value));
+			break;
+		case "componentcounts4":
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Component count must be 0 or higher");
+			setComponentCounts4(Integer.parseInt(value));
 			break;
 		case "mana":
 			if (value.equals(""))

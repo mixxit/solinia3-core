@@ -300,4 +300,8 @@ public interface ISoliniaItem {
 	void setTerritoryFlag(boolean territoryFlag);
 
 	ItemStack asItemStackForMerchant(int costmultiplier);
+
+	boolean isReagent();
+
+	void setReagent(boolean reagent);
 }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -92,6 +93,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int fingersItem = 0;
 	private int shouldersItem = 0;
 	private int neckItem = 0;
+	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>(); 
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -2391,5 +2393,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public ConcurrentHashMap<Integer, Integer> getReagents() {
+		return reagents;
+	}
+
+	@Override
+	public void setReagents(ConcurrentHashMap<Integer, Integer> reagents) {
+		this.reagents = reagents;
 	}
 }

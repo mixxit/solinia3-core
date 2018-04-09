@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -314,4 +315,8 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean getSkillCheck(String skillname, int trivial);
 
 	SoliniaWorld getSoliniaWorld();
+
+	ConcurrentHashMap<Integer, Integer> getReagents();
+
+	void setReagents(ConcurrentHashMap<Integer, Integer> reagents);
 }

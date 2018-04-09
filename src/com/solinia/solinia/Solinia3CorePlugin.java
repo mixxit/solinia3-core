@@ -470,6 +470,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("trader").setExecutor(new CommandTrader());
 		this.getCommand("listworlds").setExecutor(new CommandListWorlds());
 		this.getCommand("editworld").setExecutor(new CommandEditWorld());
+		this.getCommand("reagent").setExecutor(new CommandReagent());
 	}
 
 	private void createConfigDir() {
