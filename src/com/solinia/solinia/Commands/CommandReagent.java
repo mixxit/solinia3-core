@@ -43,7 +43,8 @@ public class CommandReagent implements CommandExecutor {
 			
 			if (args.length > 0)
 			{
-				switch (args[0])
+				String command = args[0];
+				switch (command)
 				{
 					case "add":
 						ItemStack itemstack = null;
@@ -67,7 +68,11 @@ public class CommandReagent implements CommandExecutor {
 				        	return true;
 				        }
 				        
-				        int currentAmount = solPlayer.getReagents().get(item.getId());
+				        int currentAmount = 0;
+				        if (solPlayer.getReagents().get(item.getId()) != null)
+				        {
+				        	currentAmount = solPlayer.getReagents().get(item.getId());
+				        }
 				        solPlayer.getReagents().put(item.getId(),currentAmount + itemstack.getAmount());
 				        
 				        player.sendMessage("Item added to your reagent pouch");
