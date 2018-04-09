@@ -18,18 +18,22 @@ public class CommandSetMother implements CommandExecutor {
 			return false;
 		}
 		
-		if (args.length < 1)
-			return false;
-		
-		if (Bukkit.getPlayer(args[0]) == null)
-		{
-			sender.sendMessage("Cannot find player");
-			return true;
-		}
-		
 		try {
-			Player targetTo = Bukkit.getPlayer(args[0]);
 			ISoliniaPlayer sourcePlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+			
+			if (args.length < 1)
+			{
+				sourcePlayer.sendFamilyTree();
+				return true;
+			}
+			
+			if (Bukkit.getPlayer(args[0]) == null)
+			{
+				sender.sendMessage("Cannot find player");
+				return true;
+			}
+		
+			Player targetTo = Bukkit.getPlayer(args[0]);
 			ISoliniaPlayer targetPlayer = SoliniaPlayerAdapter.Adapt(targetTo);
 			
 			sourcePlayer.setMotherId(targetPlayer.getCharacterId());

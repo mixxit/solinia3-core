@@ -327,4 +327,6 @@ public interface ISoliniaPlayer extends Serializable {
 	UUID getSpouseId();
 
 	void setSpouseId(UUID spouseId);
+
+	public void sendFamilyTree();
 }

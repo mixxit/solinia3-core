@@ -2426,4 +2426,44 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setSpouseId(UUID spouseId) {
 		this.spouseId = spouseId;
 	}
+
+	@Override
+	public void sendFamilyTree() {
+		this.getBukkitPlayer().sendMessage("Family Tree for " + this.getFullNameWithTitle());
+		this.getBukkitPlayer().sendMessage("--------------------");
+		String self = this.getFullName();
+		String spouse = "";
+		try
+		{
+		if (spouseId != null)
+		{
+			
+			ISoliniaPlayer spousePlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(spouseId);
+			spouse = spousePlayer.getFullName();
+			
+		}
+
+		this.getBukkitPlayer().sendMessage(self + " -> " + spouse);
+		
+		for(ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters())
+		{
+			if (player.getMotherId().toString().equals(getCharacterId().toString()))
+			{
+				this.getBukkitPlayer().sendMessage("Child: " + player.getFullName());
+			} else {
+				if (spouseId != null)
+				{
+					if (player.getMotherId().toString().equals(spouseId.toString()))
+					{
+						this.getBukkitPlayer().sendMessage("Child: " + player.getFullName());
+					}
+				}
+			}
+		}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+	}
 }
