@@ -329,4 +329,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void setSpouseId(UUID spouseId);
 
 	public void sendFamilyTree();
+
+	public boolean hasSufficientReagents(Integer components1, Integer componentCounts1);
+
+	public void reduceReagents(Integer components1, Integer componentCounts1);
 }

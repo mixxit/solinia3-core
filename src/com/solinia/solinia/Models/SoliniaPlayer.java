@@ -1084,6 +1084,70 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]  (Hold crouch or use /trance to meditate)");
 				return;
 			}
+			
+			if (spell.getComponents1() > 0)
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
+				if (item == null || !item.isReagent())
+				{
+					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
+					return;
+				}
+				if(!solPlayer.hasSufficientReagents(spell.getComponents1(),spell.getComponentCounts1()))
+				{
+					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					return;
+				}
+			}
+			
+			if (spell.getComponents2() > 0)
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
+				if (item == null || !item.isReagent())
+				{
+					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
+					return;
+				}
+				if(!solPlayer.hasSufficientReagents(spell.getComponents2(),spell.getComponentCounts2()))
+				{
+					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					return;
+				}
+			}
+			
+			if (spell.getComponents3() > 0)
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
+				if (item == null || !item.isReagent())
+				{
+					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
+					return;
+				}
+				if(!solPlayer.hasSufficientReagents(spell.getComponents3(),spell.getComponentCounts3()))
+				{
+					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					return;
+				}
+			}
+			
+			if (spell.getComponents4() > 0)
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
+				if (item == null || !item.isReagent())
+				{
+					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
+					return;
+				}
+				if(!solPlayer.hasSufficientReagents(spell.getComponents4(),spell.getComponentCounts4()))
+				{
+					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					return;
+				}
+			}
 
 			if (!checkDoesntFizzle(spell)) {
 				emote("* " + getFullName() + "'s spell fizzles");
@@ -2465,5 +2529,28 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 		}
 		
+	}
+
+	@Override
+	public boolean hasSufficientReagents(Integer itemId, Integer neededCount) {
+		if (getReagents().get(itemId) == null)
+			return false;
+		
+		if (getReagents().get(itemId) < neededCount)
+			return false;
+		
+		return true;
+	}
+
+	@Override
+	public void reduceReagents(Integer itemId, Integer reduceAmount) {
+		if (getReagents().get(itemId) == null)
+			return;
+		
+		int currentCount = getReagents().get(itemId);
+		currentCount = currentCount - reduceAmount;
+		if (currentCount < 0)
+			currentCount = 0;
+		getReagents().put(itemId,currentCount);
 	}
 }

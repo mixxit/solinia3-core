@@ -1,5 +1,7 @@
 package com.solinia.solinia.Commands;
 
+import java.lang.reflect.Field;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,6 +12,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaSpell;
 
 public class CommandListSpells implements CommandExecutor {
 	@Override
@@ -39,19 +42,62 @@ public class CommandListSpells implements CommandExecutor {
 		
 		int found = 0;
 		try {
-			for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
+			if (args[0].equals(".criteria"))
 			{
-				found++;
-				if (spell.getName().toUpperCase().contains(args[0].toUpperCase()))
+				if (args.length < 3)
 				{
-					String spellmessage = spell.getId() + " - " + spell.getName();
-					sender.sendMessage(spellmessage);
+					sender.sendMessage("Criteria must include a search term and value - ie .criteria name aegolism");
+				} else {
+					String field = args[1];
+					String value = args[2];
+					
+					try {
+						Field f = SoliniaSpell.class.getDeclaredField(field);
+						f.setAccessible(true);
+						
+						for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
+						{
+							String matchedValue = f.get(spell).toString(); 
+							
+							if (matchedValue.contains(value))
+							{
+								found++;
+								String spellmessage = spell.getId() + " - " + spell.getName();
+								sender.sendMessage(spellmessage);
+							}
+						}
+						
+					} catch (NoSuchFieldException e) {
+						sender.sendMessage("Spell could not be located by search criteria (field not found)");
+					} catch (SecurityException e) {
+						sender.sendMessage("Spell could not be located by search criteria (field is private)");
+					} catch (IllegalArgumentException e) {
+						sender.sendMessage("Spell could not be located by search criteria (argument issue)");
+					} catch (IllegalAccessException e) {
+						sender.sendMessage("Spell could not be located by search criteria (access issue)");
+					}
+					
+					if (found == 0)
+					{
+						sender.sendMessage("Spell could not be located by search criteria (no matches)");
+					}
+					
 				}
-			}
-			
-			if (found == 0)
-			{
-				sender.sendMessage("Spell could not be located by search string");
+			} else {
+				for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
+				{
+					if (spell.getName().toUpperCase().contains(args[0].toUpperCase()))
+					{
+						found++;
+						String spellmessage = spell.getId() + " - " + spell.getName();
+						sender.sendMessage(spellmessage);
+					}
+				}
+				
+				if (found == 0)
+				{
+					sender.sendMessage("Spell could not be located by search string");
+				}
 			}
 			
 		} catch (CoreStateInitException e) {

@@ -537,6 +537,50 @@ public class ItemStackAdapter {
 				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid12()).name() + ChatColor.RESET);
 			}
 			
+			if (spell.getComponents1() > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents1());
+				if (item != null && item.isReagent())
+				{
+					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts1() + ChatColor.RESET);
+				} else {
+					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents1());
+				}
+			}
+
+			if (spell.getComponents2() > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents2());
+				if (item != null && item.isReagent())
+				{
+					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts2() + ChatColor.RESET);
+				} else {
+					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents2());
+				}
+			}
+
+			if (spell.getComponents3() > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents3());
+				if (item != null && item.isReagent())
+				{
+					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts3() + ChatColor.RESET);
+				} else {
+					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents3());
+				}
+			}
+
+			if (spell.getComponents4() > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
+				if (item != null && item.isReagent())
+				{
+					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts4() + ChatColor.RESET);
+				} else {
+					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
+				}
+			}
+
 			loreTxt.add(ChatColor.WHITE + "Mana/Power: " + ChatColor.YELLOW+spell.getMana() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Spell Skill: " + ChatColor.YELLOW+Utils.getSkillType(spell.getSkill()).name().toUpperCase() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Range: " + ChatColor.YELLOW+spell.getRange() + ChatColor.RESET);
