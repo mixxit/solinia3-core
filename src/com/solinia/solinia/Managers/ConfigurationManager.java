@@ -477,6 +477,10 @@ public class ConfigurationManager implements IConfigurationManager {
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		
 		String soliniaid = compound.getString("soliniaid");
+		
+		if (soliniaid == null || soliniaid.equals(""))
+			return null;
+		
 		return getItem(Integer.parseInt(soliniaid));
 	}
 
