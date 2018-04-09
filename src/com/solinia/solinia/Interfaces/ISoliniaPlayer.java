@@ -319,4 +319,12 @@ public interface ISoliniaPlayer extends Serializable {
 	ConcurrentHashMap<Integer, Integer> getReagents();
 
 	void setReagents(ConcurrentHashMap<Integer, Integer> reagents);
+
+	UUID getMotherId();
+
+	void setMotherId(UUID motherId);
+
+	UUID getSpouseId();
+
+	void setSpouseId(UUID spouseId);
 }

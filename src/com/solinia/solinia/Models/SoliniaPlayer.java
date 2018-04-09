@@ -57,6 +57,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private static final long serialVersionUID = 9075039437399478391L;
 	private UUID uuid;
 	private UUID characterId = UUID.randomUUID();
+	private UUID motherId;
+	private UUID spouseId;
 	private String forename = "";
 	private String lastname = "";
 	private int mana = 0;
@@ -2403,5 +2405,25 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setReagents(ConcurrentHashMap<Integer, Integer> reagents) {
 		this.reagents = reagents;
+	}
+
+	@Override
+	public UUID getMotherId() {
+		return motherId;
+	}
+
+	@Override
+	public void setMotherId(UUID motherId) {
+		this.motherId = motherId;
+	}
+
+	@Override
+	public UUID getSpouseId() {
+		return spouseId;
+	}
+
+	@Override
+	public void setSpouseId(UUID spouseId) {
+		this.spouseId = spouseId;
 	}
 }

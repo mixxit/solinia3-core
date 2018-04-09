@@ -471,6 +471,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listworlds").setExecutor(new CommandListWorlds());
 		this.getCommand("editworld").setExecutor(new CommandEditWorld());
 		this.getCommand("reagent").setExecutor(new CommandReagent());
+		this.getCommand("setspouse").setExecutor(new CommandSetSpouse());
+		this.getCommand("setmother").setExecutor(new CommandSetMother());
 	}
 
 	private void createConfigDir() {

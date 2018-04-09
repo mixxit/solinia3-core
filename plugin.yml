@@ -480,6 +480,16 @@ commands:
     usage: /reagent <option>
     aliases:
     - reagents  
+  setspouse:
+    description: Sets your spouse
+    usage: /setspouse mcname
+    aliases:
+    - spouse   
+  setmother:
+    description: Sets your mother
+    usage: /setmother mcname
+    aliases:
+    - mother  
 depend:
 - Vault
 - MythicMobs
