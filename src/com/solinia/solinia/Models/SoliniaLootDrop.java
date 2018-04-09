@@ -89,7 +89,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 				throw new InvalidLootDropSettingException("Invalid item id to remove");
 			for(int i = 0; i < getEntries().size(); i++)
 			{
-				if (getEntries().get(i).getLootdropid() == itemIdToRemove)
+				if (getEntries().get(i).getItemid() == itemIdToRemove)
 					getEntries().remove(i);
 			}
 			break;
