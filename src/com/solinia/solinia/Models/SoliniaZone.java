@@ -34,6 +34,7 @@ public class SoliniaZone {
 	private int miningLootTableId = 0;
 	private int foragingMinSkill = 0;
 	private int foragingLootTableId = 0;
+	private int size = 500;
 
 	public int getId() {
 		return id;
@@ -89,6 +90,7 @@ public class SoliniaZone {
 		sender.sendMessage("- x: " + ChatColor.GOLD + getX() + ChatColor.RESET);
 		sender.sendMessage("- y: " + ChatColor.GOLD + getY() + ChatColor.RESET);
 		sender.sendMessage("- z: " + ChatColor.GOLD + getZ() + ChatColor.RESET);
+		sender.sendMessage("- size: " + ChatColor.GOLD + getSize() + ChatColor.RESET);
 		sender.sendMessage("- hotzone: " + ChatColor.GOLD + isHotzone() + ChatColor.RESET);
 		sender.sendMessage("- succorx: " + ChatColor.GOLD + getSuccorx() + ChatColor.RESET);
 		sender.sendMessage("- succory: " + ChatColor.GOLD + getSuccory() + ChatColor.RESET);
@@ -155,6 +157,9 @@ public class SoliniaZone {
 			break;
 		case "hotzone":
 			setHotzone(Boolean.parseBoolean(value));
+			break;
+		case "size":
+			setSize(Integer.parseInt(value));
 			break;
 		case "succorx":
 			setSuccorx(Integer.parseInt(value));
@@ -299,5 +304,11 @@ public class SoliniaZone {
 	}
 	public void setForagingMinSkill(int foragingMinSkill) {
 		this.foragingMinSkill = foragingMinSkill;
+	}
+	public int getSize() {
+		return size;
+	}
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

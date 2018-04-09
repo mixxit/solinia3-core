@@ -414,7 +414,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (this.getBukkitPlayer().getLocation().distance(
-						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < 500)
+						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
 					return zone;
 			}
 		} catch (CoreStateInitException e) {
@@ -428,7 +428,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean isInHotzone() {
 		for (SoliniaZone zone : StateManager.getInstance().getCurrentHotzones()) {
 			if (this.getBukkitPlayer().getLocation().distance(
-					new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < 500)
+					new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
 				return true;
 		}
 
@@ -440,7 +440,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (this.getBukkitPlayer().getLocation().distance(
-						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < 500)
+						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
 					return zone;
 			}
 		} catch (CoreStateInitException e) {

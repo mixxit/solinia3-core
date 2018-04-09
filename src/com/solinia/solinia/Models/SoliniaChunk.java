@@ -94,7 +94,7 @@ public class SoliniaChunk {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (getFirstBlockLocation(world).distance(
-						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < 500)
+						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
 					return true;
 			}
 		} catch (CoreStateInitException e) {
@@ -120,7 +120,7 @@ public class SoliniaChunk {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (getFirstBlockLocation(world).distance(
-						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < 500)
+						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
 					return zone;
 			}
 		} catch (CoreStateInitException e) {
@@ -144,7 +144,7 @@ public class SoliniaChunk {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (getFirstBlockLocation(world).distance(
-						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < 500)
+						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
 					zones.add(zone);
 			}
 		} catch (CoreStateInitException e) {
