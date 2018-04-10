@@ -335,4 +335,12 @@ public interface ISoliniaPlayer extends Serializable {
 	public void reduceReagents(Integer components1, Integer componentCounts1);
 
 	boolean canUseAASpell(ISoliniaSpell spell);
+
+	boolean isRacialKingSpouse();
+
+	boolean isAlignmentEmperorSpouse();
+
+	boolean isAlignmentEmperorChild();
+
+	boolean isRacialKingChild();
 }

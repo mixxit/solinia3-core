@@ -186,6 +186,36 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public String getFullNameWithTitle() {
 		String king = "";
+		if (isRacialKingChild())
+		{
+			if (this.getGender().equals("MALE"))
+				king = "Prince ";
+			else
+				king = "Princess ";
+		}
+		
+		if (isAlignmentEmperorChild()) {
+			if (this.getGender().equals("MALE"))
+				king = "Prince ";
+			else
+				king = "Princess ";
+		}
+		
+		if (isRacialKingSpouse())
+		{
+			if (this.getGender().equals("MALE"))
+				king = "Consort ";
+			else
+				king = "Queen ";
+		}
+		
+		if (isAlignmentEmperorSpouse()) {
+			if (this.getGender().equals("MALE"))
+				king = "Consort ";
+			else
+				king = "Empress ";
+		}
+		
 		if (isRacialKing()) {
 			if (this.getGender().equals("MALE"))
 				king = "King ";
@@ -206,6 +236,97 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return displayName;
+	}
+
+	@Override
+	public boolean isAlignmentEmperorChild() {
+		if (this.getMotherId() != null)
+		{
+			try
+			{
+				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(this.getMotherId());
+				if (solPlayer == null)
+					return false;
+				if (solPlayer.isAlignmentEmperor() || solPlayer.isAlignmentEmperorSpouse())
+				{
+					return true;
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+					
+		}
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isRacialKingChild() {
+		
+		if (this.getMotherId() != null)
+		{
+			try
+			{
+				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(this.getMotherId());
+				if (solPlayer == null)
+					return false;
+				if (solPlayer.isRacialKing() || solPlayer.isRacialKing())
+				{
+					return true;
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+					
+		}
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAlignmentEmperorSpouse() {
+		if (this.getSpouseId() != null)
+		{
+			try
+			{
+				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(this.getSpouseId());
+				if (solPlayer == null)
+					return false;
+				if (solPlayer.isAlignmentEmperor())
+				{
+					return true;
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+					
+		}
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isRacialKingSpouse() {
+		if (this.getSpouseId() != null)
+		{
+			try
+			{
+				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(this.getSpouseId());
+				if (solPlayer == null)
+					return false;
+				if (solPlayer.isRacialKing())
+				{
+					return true;
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		return false;
 	}
 
 	@Override
