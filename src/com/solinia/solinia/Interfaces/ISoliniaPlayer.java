@@ -333,4 +333,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public boolean hasSufficientReagents(Integer components1, Integer componentCounts1);
 
 	public void reduceReagents(Integer components1, Integer componentCounts1);
+
+	boolean canUseAASpell(ISoliniaSpell spell);
 }
