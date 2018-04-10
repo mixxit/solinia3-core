@@ -1037,7 +1037,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void doCastSpellItem(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem) {
-		if (spell.isAASpell()) {
+		if (spell.isAASpell() && !canUseAASpell(spell)) {
 			player.sendMessage("You require the correct AA to use this spell");
 			return;
 		}
@@ -1177,6 +1177,31 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 			return;
 		}
+	}
+
+	@Override
+	public boolean canUseAASpell(ISoliniaSpell spell) {
+		// If its not an AA spell then sure they can use it
+		if (!spell.isAASpell())
+			return true;
+		
+		try {
+			List<Integer> rankIds = StateManager.getInstance().getConfigurationManager().getAASpellRankCache(spell.getId());
+			if (rankIds.size() < 1)
+				return true;
+			
+			for(Integer rankId : rankIds)
+			{
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+				if (this.hasRank(rank))
+					return true;
+			}
+			
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+		
+		return false;
 	}
 
 	@Override
