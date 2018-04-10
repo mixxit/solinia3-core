@@ -1,5 +1,9 @@
 package com.solinia.solinia.Utils;
 
+import java.io.BufferedReader;
+import java.io.Console;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -40,8 +44,10 @@ import org.bukkit.util.Vector;
 
 import com.comphenix.example.Vector3D;
 import com.fasterxml.jackson.module.afterburner.util.ClassName;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
@@ -3158,7 +3164,7 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
-
+		
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {
@@ -5352,7 +5358,10 @@ public class Utils {
 
 						// Handle unique item setting also
 						if (item.isArtifact() == true && item.isArtifactFound() == false)
+						{
 							item.setArtifactFound(true);
+							StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
+						}
 
 						if (item.isArtifact() == true)
 						{
@@ -5384,7 +5393,10 @@ public class Utils {
 
 						// Handle unique item setting also
 						if (item.isArtifact() == true && item.isArtifactFound() == false)
+						{
+							StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 							item.setArtifactFound(true);
+						}
 
 					}
 				}

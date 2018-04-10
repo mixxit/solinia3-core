@@ -114,6 +114,10 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<SoliniaZone> zonesRepository;
 	private IRepository<SoliniaCraft> craftRepository;
 	private IRepository<SoliniaWorld> worldRepository;
+	
+	// Commit tracking
+	private boolean spellsChanged = false;
+	private boolean itemsChanged = false;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
@@ -152,15 +156,25 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void commit() {
 		this.raceRepository.commit();
 		this.classRepository.commit();
-		this.itemRepository.commit();
-		// TODO this is never needed?
-		// this.spellRepository.commit();
+		
+		if (isItemsChanged() == true)
+		{
+			this.itemRepository.commit();
+			this.itemsChanged = false;
+		}
 		this.factionRepository.commit();
 		this.npcRepository.commit();
 		this.npcmerchantRepository.commit();
 		this.loottableRepository.commit();
 		this.lootdropRepository.commit();
-		this.spellRepository.commit();
+		
+		// Only commit on change
+		if (isSpellsChanged() == true)
+		{
+			this.spellRepository.commit();
+			this.spellsChanged = false;
+		}
+		
 		this.spawngroupRepository.commit();
 		this.aaabilitiesRepository.commit();
 		this.questRepository.commit();
@@ -528,6 +542,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void addNPCMerchant(ISoliniaNPCMerchant merchant) {
 		this.npcmerchantRepository.add(merchant);
 
+	}
+	
+	@Override
+	public void addSpell(ISoliniaSpell spell) {
+		this.spellRepository.add(spell);
 	}
 
 	@Override
@@ -1574,6 +1593,26 @@ public class ConfigurationManager implements IConfigurationManager {
 			return false;
 		
 		return true;
+	}
+
+	@Override
+	public boolean isSpellsChanged() {
+		return spellsChanged;
+	}
+
+	@Override
+	public void setSpellsChanged(boolean spellsChanged) {
+		this.spellsChanged = spellsChanged;
+	}
+
+	@Override
+	public boolean isItemsChanged() {
+		return itemsChanged;
+	}
+
+	@Override
+	public void setItemsChanged(boolean itemsChanged) {
+		this.itemsChanged = itemsChanged;
 	}
 	
 }

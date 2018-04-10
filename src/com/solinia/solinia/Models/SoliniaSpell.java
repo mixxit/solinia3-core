@@ -2740,6 +2740,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public void editSetting(String setting, String value, String[] additional) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
+		
+		StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
+		
 		String name = getName();
 
 		switch (setting.toLowerCase()) {

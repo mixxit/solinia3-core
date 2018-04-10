@@ -858,6 +858,8 @@ public class SoliniaItem implements ISoliniaItem {
 	public void editSetting(String setting, String value)
 			throws InvalidItemSettingException, NumberFormatException, CoreStateInitException {
 
+		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
+		
 		switch (setting.toLowerCase()) {
 		case "displayname":
 			if (value.equals(""))

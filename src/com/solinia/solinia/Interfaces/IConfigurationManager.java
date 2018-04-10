@@ -406,4 +406,14 @@ public interface IConfigurationManager {
 			throws NumberFormatException, CoreStateInitException, InvalidWorldSettingException;
 
 	boolean isWorldNameFree(String upperCase);
+
+	boolean isSpellsChanged();
+
+	void setSpellsChanged(boolean spellsChanged);
+
+	void addSpell(ISoliniaSpell spell);
+
+	boolean isItemsChanged();
+
+	void setItemsChanged(boolean itemsChanged);
 }
