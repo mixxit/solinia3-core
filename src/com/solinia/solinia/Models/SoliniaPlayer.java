@@ -271,7 +271,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(this.getMotherId());
 				if (solPlayer == null)
 					return false;
-				if (solPlayer.isRacialKing() || solPlayer.isRacialKing())
+				if (solPlayer.isRacialKing() || solPlayer.isRacialKingSpouse())
 				{
 					return true;
 				}
