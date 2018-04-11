@@ -986,6 +986,7 @@ public class SoliniaActiveSpell {
 		case ShieldEquipDmgMod:
 			return;
 		case ManaBurn:
+			applyManaBurn(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case PersistentEffect:
 			return;
@@ -2060,6 +2061,69 @@ public class SoliniaActiveSpell {
 			if (amount < 0)
 				amount = 0;
 			getLivingEntity().setHealth(amount);
+		}
+	}
+	
+	private void applyManaBurn(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int caster_level) {
+		if (getLivingEntity().isDead())
+			return;
+
+		if (Bukkit.getEntity(getSourceUuid()) == null)
+			return;
+
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (!(sourceLivingEntity instanceof Player))
+			return;
+		
+		Player sourcePlayer = (Player)sourceLivingEntity;
+		ISoliniaPlayer sourceSolPlayer;
+		try {
+			sourceSolPlayer = SoliniaPlayerAdapter.Adapt(sourcePlayer);
+			if (sourceSolPlayer == null)
+				return;
+
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+
+			int max_mana = spellEffect.getBase();
+			int ratio = 100; // TODO this should be Base2?
+			int dmg = 0;
+			
+			if (sourceSolPlayer.getMana() < sourceSoliniaLivingEntity.getMaxMP())
+				dmg = ratio * sourceSolPlayer.getMana()/10;
+			else 
+				dmg = ratio * max_mana/10;
+			
+			sourceSolPlayer.setMana(0);
+			
+			if (soliniaSpell.isDetrimental())
+			{
+				int amount = (int) Math.round(sourceLivingEntity.getHealth()) - dmg;
+				if (amount > sourceLivingEntity.getMaxHealth()) {
+					amount = (int) Math.round(sourceLivingEntity.getMaxHealth());
+				}
+
+				if (amount < 0)
+					amount = 0;
+				getLivingEntity().setHealth(amount);
+			} else {
+				int amount = (int) Math.round(getLivingEntity().getHealth()) + dmg;
+				if (amount > getLivingEntity().getMaxHealth()) {
+					amount = (int) Math.round(getLivingEntity().getMaxHealth());
+				}
+				
+				if (amount < 0)
+					amount = 0;
+				getLivingEntity().setHealth(amount);
+			}
+		} catch (CoreStateInitException e) {
 		}
 	}
 

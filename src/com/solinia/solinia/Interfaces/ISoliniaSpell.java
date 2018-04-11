@@ -1056,4 +1056,6 @@ public interface ISoliniaSpell {
 	List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesData();
 
 	List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesAAData();
+
+	int getAARecastTime(ISoliniaPlayer solPlayer);
 }

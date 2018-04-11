@@ -617,11 +617,21 @@ public class SoliniaItem implements ISoliniaItem {
 		boolean itemUseSuccess = spell.tryApplyOnEntity(plugin, player, targetentity);
 
 		if (itemUseSuccess) {
+			
+			int recastTime = spell.getRecastTime();
+			if (spell.isAASpell())
+			{
+				recastTime = (spell.getAARecastTime(SoliniaPlayerAdapter.Adapt(player)) * 1000);
+				if (recastTime < spell.getRecastTime())
+				{
+					recastTime = spell.getRecastTime();
+				}
+			}
+			
 			if (spell.getRecastTime() > 0)
 			{
 				LocalDateTime datetime = LocalDateTime.now();
-				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(spell.getRecastTime(),ChronoUnit.MILLIS));
-				
+				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(recastTime,ChronoUnit.MILLIS));
 				StateManager.getInstance().getEntityManager().addEntitySpellCooldown(player, spell.getId(),expiretimestamp);
 			}
 			if (!isConsumable)

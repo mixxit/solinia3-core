@@ -75,6 +75,30 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 					}
 				}
 				
+				// Last pass, check if all allowed class levels are set to 255, if so attempt a rebuild on AA
+				boolean anyClassLevelBelow255 = false;
+				for (SoliniaSpellClass spellClass : spell.getAllowedClasses())
+				{
+					if (spellClass.getMinlevel() < 255)
+					{
+						anyClassLevelBelow255 = true;
+					}
+				}
+				
+				if (anyClassLevelBelow255 == false)
+				{
+					try
+					{
+						if (spell.getSoliniaSpellClassesFromClassesAAData().size() > 0)
+						{
+							spell.setAllowedClasses(spell.getSoliniaSpellClassesFromClassesAAData());
+						}
+					} catch (Exception e)
+					{
+						System.out.println("Problem parsing classes AA data");
+					}
+				}
+				
 				
 				for(SoliniaSpellClass spellClass : spell.getAllowedClasses())
 				{

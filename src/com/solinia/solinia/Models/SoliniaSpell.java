@@ -4872,7 +4872,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	{
 		List<SoliniaSpellClass> classes = new ArrayList<SoliniaSpellClass>();
 		
-		if (getClasses1() > 1 && getClasses1() < 254)
+		if (getClasses1() > 0 && getClasses1() < 254)
 		{
 			int classLevel = getClasses1();
 			String className = "WARRIOR";
@@ -4882,7 +4882,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses2() > 1 && getClasses2() < 254)
+		if (getClasses2() > 0 && getClasses2() < 254)
 		{
 			int classLevel = getClasses2();
 			String className = "CLERIC";
@@ -4892,7 +4892,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses3() > 1 && getClasses3() < 254)
+		if (getClasses3() > 0 && getClasses3() < 254)
 		{
 			int classLevel = getClasses3();
 			String className = "PALADIN";
@@ -4902,7 +4902,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses4() > 1 && getClasses4() < 254)
+		if (getClasses4() > 0 && getClasses4() < 254)
 		{
 			int classLevel = getClasses4();
 			String className = "RANGER";
@@ -4912,7 +4912,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses5() > 1 && getClasses5() < 254)
+		if (getClasses5() > 0 && getClasses5() < 254)
 		{
 			int classLevel = getClasses5();
 			String className = "SHADOWKNIGHT";
@@ -4922,7 +4922,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses6() > 1 && getClasses6() < 254)
+		if (getClasses6() > 0 && getClasses6() < 254)
 		{
 			int classLevel = getClasses6();
 			String className = "DRUID";
@@ -4932,7 +4932,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses7() > 1 && getClasses7() < 254)
+		if (getClasses7() > 0 && getClasses7() < 254)
 		{
 			int classLevel = getClasses7();
 			String className = "MONK";
@@ -4942,7 +4942,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses8() > 1 && getClasses8() < 254)
+		if (getClasses8() > 0 && getClasses8() < 254)
 		{
 			int classLevel = getClasses8();
 			String className = "BARD";
@@ -4952,7 +4952,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses9() > 1 && getClasses9() < 254)
+		if (getClasses9() > 0 && getClasses9() < 254)
 		{
 			int classLevel = getClasses9();
 			String className = "ROGUE";
@@ -4962,7 +4962,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses10() > 1 && getClasses10() < 254)
+		if (getClasses10() > 0 && getClasses10() < 254)
 		{
 			int classLevel = getClasses10();
 			String className = "SHAMAN";
@@ -4972,7 +4972,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses11() > 1 && getClasses11() < 254)
+		if (getClasses11() > 0 && getClasses11() < 254)
 		{
 			int classLevel = getClasses11();
 			String className = "NECROMANCER";
@@ -4982,7 +4982,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses12() > 1 && getClasses12() < 254)
+		if (getClasses12() > 0 && getClasses12() < 254)
 		{
 			int classLevel = getClasses12();
 			String className = "WIZARD";
@@ -4992,7 +4992,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses13() > 1 && getClasses13() < 254)
+		if (getClasses13() > 0 && getClasses13() < 254)
 		{
 			int classLevel = getClasses13();
 			String className = "MAGICIAN";
@@ -5002,7 +5002,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses14() > 1 && getClasses14() < 254)
+		if (getClasses14() > 0 && getClasses14() < 254)
 		{
 			int classLevel = getClasses14();
 			String className = "ENCHANTER";
@@ -5012,7 +5012,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses15() > 1 && getClasses15() < 254)
+		if (getClasses15() > 0 && getClasses15() < 254)
 		{
 			int classLevel = getClasses15();
 			String className = "BEASTLORD";
@@ -5022,7 +5022,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			classes.add(spellClass);
 		}
 		
-		if (getClasses16() > 1 && getClasses16() < 254)
+		if (getClasses16() > 0 && getClasses16() < 254)
 		{
 			int classLevel = getClasses16();
 			String className = "BERSERKER";
@@ -5045,7 +5045,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 			List<Integer> aa = StateManager.getInstance().getConfigurationManager().getAASpellRankCache(getId());
 			if (getClasses1() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses1();
 				String className = "WARRIOR";
 
@@ -5062,13 +5061,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses2() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses2();
 				String className = "CLERIC";
 				
@@ -5085,13 +5083,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses3() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses3();
 				String className = "PALADIN";
 				
@@ -5108,13 +5105,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses4() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses4();
 				String className = "RANGER";
 				
@@ -5131,13 +5127,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses5() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses5();
 				String className = "SHADOWKNIGHT";
 				
@@ -5154,13 +5149,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses6() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses6();
 				String className = "DRUID";
 				
@@ -5177,13 +5171,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses7() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses7();
 				String className = "MONK";
 				
@@ -5200,13 +5193,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses8() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses8();
 				String className = "BARD";
 				
@@ -5223,13 +5215,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses9() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses9();
 				String className = "ROGUE";
 				
@@ -5246,13 +5237,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses10() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses10();
 				String className = "SHAMAN";
 				
@@ -5269,13 +5259,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses11() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses11();
 				String className = "NECROMANCER";
 				
@@ -5292,13 +5281,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses12() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses12();
 				String className = "WIZARD";
 				
@@ -5315,13 +5303,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses13() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses13();
 				String className = "MAGICIAN";
 				
@@ -5338,13 +5325,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses14() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses14();
 				String className = "ENCHANTER";
 				
@@ -5361,13 +5347,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses15() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses15();
 				String className = "BEASTLORD";
 				
@@ -5384,13 +5369,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 			
 			if (getClasses16() == 254)
 			{
-				int aaLevel = 255;
 				int classLevel = getClasses16();
 				String className = "BERSERKER";
 				
@@ -5407,7 +5391,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
-				spellClass.setMinlevel(aaLevel);
+				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
 		
@@ -5417,5 +5401,31 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 		
 		return classes;
+	}
+
+	@Override
+	public int getAARecastTime(ISoliniaPlayer solPlayer) {
+		if (!isAASpell())
+			return getRecastTime();
+		
+		try {
+		List<Integer> rankIds = StateManager.getInstance().getConfigurationManager().getAASpellRankCache(getId());
+			
+			if (rankIds.size() < 1)
+				return getRecastTime();
+			
+			for(Integer rankId : rankIds)
+			{
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+				if (rank.getRecast_time() > 0)
+				if (solPlayer.hasRank(rank))
+				{
+					return rank.getRecast_time();
+				}
+			}
+		} catch (CoreStateInitException e) {
+		}
+		
+		return getRecastTime();
 	}
 }
