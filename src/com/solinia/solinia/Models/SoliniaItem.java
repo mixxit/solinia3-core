@@ -621,7 +621,7 @@ public class SoliniaItem implements ISoliniaItem {
 			int recastTime = spell.getRecastTime();
 			if (spell.isAASpell())
 			{
-				recastTime = (spell.getAARecastTime(SoliniaPlayerAdapter.Adapt(player)) * 1000);
+				recastTime = spell.getAARecastTime(SoliniaPlayerAdapter.Adapt(player));
 				if (recastTime < spell.getRecastTime())
 				{
 					recastTime = spell.getRecastTime();
