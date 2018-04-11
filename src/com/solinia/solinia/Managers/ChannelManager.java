@@ -31,6 +31,7 @@ import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Utils.Utils;
 
+import jdk.nashorn.internal.runtime.regexp.joni.constants.Arguments;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;
 
@@ -383,6 +384,10 @@ public class ChannelManager implements IChannelManager {
 				else
 					sendTopToDiscordChannel(discordChannel,"");
 				break;
+			case "?character":
+				if (commands.length > 1)
+					sendCharacterToDiscordChannel(discordChannel,commands[1]);
+				break;
 			case "?moblvl":
 				if (commands.length > 2)
 					sendMobLvlToDiscordChannel(discordChannel,Integer.parseInt(commands[1]),Integer.parseInt(commands[2]));
@@ -415,6 +420,49 @@ public class ChannelManager implements IChannelManager {
 		}
 	}
 	
+	private void sendCharacterToDiscordChannel(DiscordChannel discordChannel, String argument) {
+		String targetChannelId = getDefaultDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = getAdminDiscordChannel();
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getInCharacterDiscordChannel();
+		
+		if (argument == null || argument.equals(""))
+        {
+			sendToDiscordMC(null,targetChannelId,"Insufficient arguments, must provide character name");
+        	return;
+        }
+		
+		if (argument.length() < 4)
+		{
+			sendToDiscordMC(null,targetChannelId,"Character name must be at least 4 characters long");
+        	return;
+		}
+		
+		try
+        {
+        	for (ISoliniaPlayer character : StateManager.getInstance().getConfigurationManager().getCharacters())
+        	{
+        		if (!character.getFullName().toUpperCase().contains(argument.toUpperCase()))
+        			continue;
+        		
+        		String characterClass = "Citizen";
+        		if (character.getClassObj() != null)
+        			characterClass = character.getClassObj().getName();
+        		
+        		String characterRace = "Unknown";
+        		if (character.getRace() != null)
+        			characterRace = character.getRace().getName();
+        			
+        		sendToDiscordMC(null,targetChannelId,character.getFullName() + " the Level " + character.getLevel() + " " + characterRace + " " + characterClass);
+        	}
+        } catch (Exception e)
+        {
+        	sendToDiscordMC(null,targetChannelId,"Invalid number");
+        	return;            	
+        }
+	}
+
 	private void sendRollToDiscordChannel(DiscordChannel discordChannel, String argument) {
 		String targetChannelId = getDefaultDiscordChannel();
 		if (discordChannel.equals(DiscordChannel.ADMIN))
