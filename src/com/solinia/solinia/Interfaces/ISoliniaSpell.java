@@ -1052,4 +1052,8 @@ public interface ISoliniaSpell {
 	int getMinLevelClass(String name);
 
 	int getActSpellCost(ISoliniaLivingEntity solEntity);
+
+	List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesData();
+
+	List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesAAData();
 }

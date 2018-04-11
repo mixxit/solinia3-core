@@ -44,6 +44,38 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 				int worth = 10;
 				int minLevel = 1;
 				int lowestLevel = 1000;
+				
+				// If no class defined rip it from the classes columns
+				if (spell.getAllowedClasses().size() == 0)
+				{
+					try
+					{
+						if (spell.getSoliniaSpellClassesFromClassesData().size() > 0)
+						{
+							spell.setAllowedClasses(spell.getSoliniaSpellClassesFromClassesData());
+						}
+					} catch (Exception e)
+					{
+						System.out.println("Problem parsing classes data");
+					}
+				}
+				
+				// If we get this far and the spell is classes are still empty they are AA spells
+				if (spell.getAllowedClasses().size() == 0)
+				{
+					try
+					{
+						if (spell.getSoliniaSpellClassesFromClassesAAData().size() > 0)
+						{
+							spell.setAllowedClasses(spell.getSoliniaSpellClassesFromClassesAAData());
+						}
+					} catch (Exception e)
+					{
+						System.out.println("Problem parsing classes AA data");
+					}
+				}
+				
+				
 				for(SoliniaSpellClass spellClass : spell.getAllowedClasses())
 				{
 					if (spellClass.getMinlevel() < lowestLevel)
@@ -81,6 +113,9 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 					StateManager.getInstance().getConfigurationManager().updateItem(item);
 					updated++;
 				}
+				
+				StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
+				StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 			}
 			
 		} catch (Exception e)

@@ -2659,6 +2659,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public void setAllowedClasses(List<SoliniaSpellClass> allowedClasses) {
 		this.allowedClasses = allowedClasses;
+		try
+		{
+			StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
+		} catch (CoreStateInitException e)
+		{
+			// do nothing
+		}
 	}
 
 	@Override
@@ -4859,5 +4866,556 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 		return cost;
 	}
+	
+	@Override
+	public List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesData()
+	{
+		List<SoliniaSpellClass> classes = new ArrayList<SoliniaSpellClass>();
+		
+		if (getClasses1() > 1 && getClasses1() < 254)
+		{
+			int classLevel = getClasses1();
+			String className = "WARRIOR";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses2() > 1 && getClasses2() < 254)
+		{
+			int classLevel = getClasses2();
+			String className = "CLERIC";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses3() > 1 && getClasses3() < 254)
+		{
+			int classLevel = getClasses3();
+			String className = "PALADIN";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses4() > 1 && getClasses4() < 254)
+		{
+			int classLevel = getClasses4();
+			String className = "RANGER";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses5() > 1 && getClasses5() < 254)
+		{
+			int classLevel = getClasses5();
+			String className = "SHADOWKNIGHT";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses6() > 1 && getClasses6() < 254)
+		{
+			int classLevel = getClasses6();
+			String className = "DRUID";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses7() > 1 && getClasses7() < 254)
+		{
+			int classLevel = getClasses7();
+			String className = "MONK";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses8() > 1 && getClasses8() < 254)
+		{
+			int classLevel = getClasses8();
+			String className = "BARD";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses9() > 1 && getClasses9() < 254)
+		{
+			int classLevel = getClasses9();
+			String className = "ROGUE";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses10() > 1 && getClasses10() < 254)
+		{
+			int classLevel = getClasses10();
+			String className = "SHAMAN";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses11() > 1 && getClasses11() < 254)
+		{
+			int classLevel = getClasses11();
+			String className = "NECROMANCER";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses12() > 1 && getClasses12() < 254)
+		{
+			int classLevel = getClasses12();
+			String className = "WIZARD";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses13() > 1 && getClasses13() < 254)
+		{
+			int classLevel = getClasses13();
+			String className = "MAGICIAN";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses14() > 1 && getClasses14() < 254)
+		{
+			int classLevel = getClasses14();
+			String className = "ENCHANTER";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses15() > 1 && getClasses15() < 254)
+		{
+			int classLevel = getClasses15();
+			String className = "BEASTLORD";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		if (getClasses16() > 1 && getClasses16() < 254)
+		{
+			int classLevel = getClasses16();
+			String className = "BERSERKER";
+			SoliniaSpellClass spellClass = new SoliniaSpellClass();
+			spellClass.setClassname(className);
+			spellClass.setMinlevel(classLevel);
+			classes.add(spellClass);
+		}
+		
+		return classes;
+	}
+	
+	@Override
+	public List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesAAData()
+	{
+		List<SoliniaSpellClass> classes = new ArrayList<SoliniaSpellClass>();
+		
+		try
+		{
+			List<Integer> aa = StateManager.getInstance().getConfigurationManager().getAASpellRankCache(getId());
+			if (getClasses1() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses1();
+				String className = "WARRIOR";
 
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses2() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses2();
+				String className = "CLERIC";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses3() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses3();
+				String className = "PALADIN";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses4() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses4();
+				String className = "RANGER";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses5() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses5();
+				String className = "SHADOWKNIGHT";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses6() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses6();
+				String className = "DRUID";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses7() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses7();
+				String className = "MONK";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses8() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses8();
+				String className = "BARD";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses9() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses9();
+				String className = "ROGUE";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses10() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses10();
+				String className = "SHAMAN";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses11() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses11();
+				String className = "NECROMANCER";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses12() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses12();
+				String className = "WIZARD";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses13() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses13();
+				String className = "MAGICIAN";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses14() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses14();
+				String className = "ENCHANTER";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses15() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses15();
+				String className = "BEASTLORD";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+			
+			if (getClasses16() == 254)
+			{
+				int aaLevel = 255;
+				int classLevel = getClasses16();
+				String className = "BERSERKER";
+				
+				for(Integer rankId : aa)
+				{
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className))
+					{
+						if (rank.getLevel_req() < classLevel)
+							classLevel = rank.getLevel_req();
+					}
+				}
+				
+				SoliniaSpellClass spellClass = new SoliniaSpellClass();
+				spellClass.setClassname(className);
+				spellClass.setMinlevel(aaLevel);
+				classes.add(spellClass);
+			}
+		
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return classes;
+	}
 }
