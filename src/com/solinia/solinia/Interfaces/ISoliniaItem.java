@@ -304,4 +304,10 @@ public interface ISoliniaItem {
 	boolean isReagent();
 
 	void setReagent(boolean reagent);
+
+	boolean isArmour();
+
+	boolean isJewelry();
+
+	boolean isWeaponOrBowOrShield();
 }

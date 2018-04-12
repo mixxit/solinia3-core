@@ -1403,4 +1403,31 @@ public class SoliniaItem implements ISoliniaItem {
 	public void setReagent(boolean reagent) {
 		this.reagent = reagent;
 	}
+
+	@Override
+	public boolean isWeaponOrBowOrShield() {
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().HandMaterials.contains(this.getBasename().toUpperCase());
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isArmour() {
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(this.getBasename().toUpperCase());
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isJewelry() {
+		return (this.isFingersItem() || this.isNeckItem() || this.isShouldersItem());
+	}
 }
