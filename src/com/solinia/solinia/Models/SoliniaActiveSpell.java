@@ -1591,9 +1591,11 @@ public class SoliniaActiveSpell {
 
 			PlayerDisguise playerdisguise = new PlayerDisguise(getLivingEntity().getName(), disguisename);
 			DisguiseAPI.disguiseEntity(getLivingEntity(), playerdisguise);
+			getLivingEntity().sendMessage(ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
 		} else {
 			MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
 			DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
+			getLivingEntity().sendMessage(ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
 		}
 
 	}
