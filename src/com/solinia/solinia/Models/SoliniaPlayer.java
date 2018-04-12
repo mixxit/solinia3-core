@@ -2737,7 +2737,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			{
 				Chunk chunk = getBukkitPlayer().getLocation().getChunk();
 				if (alignment.getChunks().get(chunk.getWorld().getName().toUpperCase()+ "_" + chunk.getX() + "_" + chunk.getZ()) != null)
-					return alignmentChunk;
+					return alignment.getChunks().get(chunk.getWorld().getName().toUpperCase()+ "_" + chunk.getX() + "_" + chunk.getZ());
 			}
 		} catch (CoreStateInitException e)
 		{

@@ -355,11 +355,22 @@ public class Solinia3CorePlayerListener implements Listener {
 					} else {
 						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 						SoliniaAlignmentChunk territory = solPlayer.getCurrentAlignmentChunk();
-						ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(territory.getAlignmentId());
-						player.sendMessage(ChatColor.AQUA + "* You have entered " + alignment.getName() + " territory [/trader]");
-						if (territory.isTradePost())
+						if (territory != null)
 						{
-							player.sendMessage(ChatColor.AQUA + "- This territory has a Trade Post!");
+							System.out.println(player.getName() + " has entered territory chunk: " + territory.getChunkX() + "_" + territory.getChunkZ());
+							if (territory.getAlignmentId() > 0)
+							{
+								ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(territory.getAlignmentId());
+								player.sendMessage(ChatColor.AQUA + "* You have entered " + alignment.getName() + " territory [/trader]");
+								if (territory.isTradePost())
+								{
+									player.sendMessage(ChatColor.AQUA + "- This territory has a Trade Post!");
+								}
+							} else {
+								player.sendMessage(ChatColor.AQUA + "* You have entered broken territory [/trader]");
+							}
+						} else {
+							player.sendMessage(ChatColor.AQUA + "* You have entered territory [/trader]");
 						}
 					}
 				}
