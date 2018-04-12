@@ -107,6 +107,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isFingersItem = false;
 	private boolean isNeckItem = false;
 	private boolean isShouldersItem = false;
+	private boolean isEarsItem = false;
 	private boolean territoryFlag = false;
 	
 	
@@ -865,6 +866,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- fingersItem: " + ChatColor.GOLD + isFingersItem() + ChatColor.RESET);
 		sender.sendMessage("- neckItem: " + ChatColor.GOLD + isNeckItem() + ChatColor.RESET);
 		sender.sendMessage("- shouldersItem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET);
+		sender.sendMessage("- earsItem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
 		sender.sendMessage("- territoryflag: " + ChatColor.GOLD + isTerritoryFlag() + ChatColor.RESET);
@@ -1036,14 +1038,23 @@ public class SoliniaItem implements ISoliniaItem {
 			setFingersItem(Boolean.parseBoolean(value));
 			setNeckItem(false);
 			setShouldersItem(false);
+			setEarsItem(false);
 			break;
 		case "neckitem":
 			setNeckItem(Boolean.parseBoolean(value));
 			setFingersItem(false);
 			setShouldersItem(false);
+			setEarsItem(false);
 			break;
 		case "shouldersitem":
 			setShouldersItem(Boolean.parseBoolean(value));
+			setFingersItem(false);
+			setNeckItem(false);
+			setEarsItem(false);
+			break;
+		case "earsitem":
+			setEarsItem(Boolean.parseBoolean(value));
+			setShouldersItem(false);
 			setFingersItem(false);
 			setNeckItem(false);
 			break;
@@ -1380,6 +1391,16 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
+	public boolean isEarsItem() {
+		return isEarsItem;
+	}
+
+	@Override
+	public void setEarsItem(boolean isEarsItem) {
+		this.isEarsItem = isEarsItem;
+	}
+	
+	@Override
 	public boolean isTerritoryFlag() {
 		return territoryFlag;
 	}
@@ -1428,6 +1449,6 @@ public class SoliniaItem implements ISoliniaItem {
 
 	@Override
 	public boolean isJewelry() {
-		return (this.isFingersItem() || this.isNeckItem() || this.isShouldersItem());
+		return (this.isFingersItem() || this.isNeckItem() || this.isShouldersItem() || this.isEarsItem());
 	}
 }

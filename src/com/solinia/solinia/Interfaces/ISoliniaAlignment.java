@@ -2,6 +2,7 @@ package com.solinia.solinia.Interfaces;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.command.CommandSender;
 
@@ -46,5 +47,7 @@ public interface ISoliniaAlignment {
 	List<SoliniaAlignmentChunk> getMaterialChunks();
 
 	List<SoliniaZone> getMaterialZones();
+
+	ConcurrentHashMap<String, SoliniaAlignmentChunk> getChunks();
 
 }

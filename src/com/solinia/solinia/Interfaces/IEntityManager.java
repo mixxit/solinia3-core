@@ -3,6 +3,7 @@ package com.solinia.solinia.Interfaces;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -112,5 +113,9 @@ public interface IEntityManager {
 	Inventory getNPCMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno);
 
 	Inventory getTradeShopMerchantInventory(UUID playerUUID, SoliniaAlignmentChunk alignmentChunk, int pageno);
+
+	ConcurrentHashMap<UUID, Boolean> getPlayerInTerritory();
+
+	void setPlayerInTerritory(ConcurrentHashMap<UUID, Boolean> playerInTerritory);
 
 }

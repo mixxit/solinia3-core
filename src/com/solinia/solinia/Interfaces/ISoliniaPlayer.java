@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.PlayerQuest;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -302,7 +303,11 @@ public interface ISoliniaPlayer extends Serializable {
 
 	int getShouldersItem();
 
-	void setShouldersItem(int shouldersItem);
+	void setShouldersItem(int earsItem);
+	
+	int getEarsItem();
+
+	void setEarsItem(int earsItem);
 
 	int getNeckItem();
 
@@ -343,4 +348,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isAlignmentEmperorChild();
 
 	boolean isRacialKingChild();
+
+	public SoliniaAlignmentChunk getCurrentAlignmentChunk();
 }

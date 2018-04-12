@@ -156,6 +156,7 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 		return count;
 	}
 
+	@Override
 	public ConcurrentHashMap<String, SoliniaAlignmentChunk> getChunks() {
 		return chunks;
 	}

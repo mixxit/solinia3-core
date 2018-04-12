@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -59,6 +60,7 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
+import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -5404,5 +5406,22 @@ public class Utils {
 		} catch (CoreStateInitException e) {
 			//
 		}
+	}
+
+	public static boolean isPlayerInTerritory(Player player) {
+		try
+		{
+			for (ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager().getAlignments())
+			{
+				Chunk chunk = player.getLocation().getChunk();
+				if (alignment.getChunks().get(chunk.getWorld().getName().toUpperCase()+ "_" + chunk.getX() + "_" + chunk.getZ()) != null)
+					return true;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return false;
 	}
 }

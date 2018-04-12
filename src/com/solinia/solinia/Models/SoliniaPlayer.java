@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,6 +45,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.ScoreboardUtils;
@@ -95,6 +97,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int fingersItem = 0;
 	private int shouldersItem = 0;
 	private int neckItem = 0;
+	private int earsItem = 0;
 	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>(); 
 
 	@Override
@@ -2397,6 +2400,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setShouldersItem(int shouldersItem) {
 		this.shouldersItem = shouldersItem;
 	}
+	
+	@Override
+	public int getEarsItem() {
+		return earsItem;
+	}
+
+	@Override
+	public void setEarsItem(int earsItem) {
+		this.earsItem = earsItem;
+	}
 
 	@Override
 	public int getNeckItem() {
@@ -2562,6 +2575,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					items.add(item);
 				}
 			}
+			
+			if (this.getEarsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getEarsItem());
+				if (item != null)
+				{
+					if (!item.isSpellscroll())
+					items.add(item);
+				}
+			}
 
 		} catch (CoreStateInitException e) {
 			
@@ -2704,5 +2726,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (currentCount < 0)
 			currentCount = 0;
 		getReagents().put(itemId,currentCount);
+	}
+
+	@Override
+	public SoliniaAlignmentChunk getCurrentAlignmentChunk() {
+		SoliniaAlignmentChunk alignmentChunk = null;
+		try
+		{
+			for (ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager().getAlignments())
+			{
+				Chunk chunk = getBukkitPlayer().getLocation().getChunk();
+				if (alignment.getChunks().get(chunk.getWorld().getName().toUpperCase()+ "_" + chunk.getX() + "_" + chunk.getZ()) != null)
+					return alignmentChunk;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return alignmentChunk;
 	}
 }

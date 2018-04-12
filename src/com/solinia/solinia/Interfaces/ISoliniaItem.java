@@ -293,7 +293,11 @@ public interface ISoliniaItem {
 
 	boolean isShouldersItem();
 
-	void setShouldersItem(boolean isShouldersItem);
+	void setShouldersItem(boolean isEarsItem);
+	
+	boolean isEarsItem();
+
+	void setEarsItem(boolean isEarsItem);
 
 	boolean isTerritoryFlag();
 

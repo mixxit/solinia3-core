@@ -105,6 +105,19 @@ public class CommandEquip implements CommandExecutor {
 	        	player.sendMessage("You have equipped this item");
 	        	return true;
 	        }
+	        
+	        if (item.isEarsItem())
+		        if (solPlayer.getEarsItem() > 0)
+		        {
+		        	player.sendMessage("You have already equipped an item in that slot");
+		        	return true;
+		        } else {
+		        	solPlayer.setEarsItem(item.getId());
+		        	player.getInventory().setItemInMainHand(null);
+		        	player.updateInventory();
+		        	player.sendMessage("You have equipped this item");
+		        	return true;
+		        }
 
 	        if (item.isNeckItem())
 	        if (solPlayer.getNeckItem() > 0)
@@ -140,14 +153,23 @@ public class CommandEquip implements CommandExecutor {
 			}
 			if (solPlayer.getFingersItem() > 0)
 			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(solPlayer.getNeckItem());
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(solPlayer.getFingersItem());
 				solPlayer.getBukkitPlayer().sendMessage("Fingers Item: " + item.getDisplayname());
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Fingers Item: EMPTY");
 			}
+			
+			if (solPlayer.getEarsItem() > 0)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(solPlayer.getEarsItem());
+				solPlayer.getBukkitPlayer().sendMessage("Ears Item: " + item.getDisplayname());
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Ears Item: EMPTY");
+			}
+			
 			if (solPlayer.getShouldersItem() > 0)
 			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(solPlayer.getNeckItem());
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(solPlayer.getShouldersItem());
 				solPlayer.getBukkitPlayer().sendMessage("Shoulders Item: " + item.getDisplayname());
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Shoulders Item: EMPTY");

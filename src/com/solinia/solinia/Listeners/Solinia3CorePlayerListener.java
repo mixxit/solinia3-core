@@ -41,6 +41,7 @@ import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
@@ -48,6 +49,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.UniversalMerchant;
@@ -337,15 +339,41 @@ public class Solinia3CorePlayerListener implements Listener {
 	{
 		try
 		{
-			if (StateManager.getInstance().getEntityManager().getTrance(event.getPlayer().getUniqueId()) == true)
+			Player player = event.getPlayer();
+			boolean playerIsInTerritory = Utils.isPlayerInTerritory(player);
+			Boolean cachedPlayerIsInTerritory = StateManager.getInstance().getEntityManager().getPlayerInTerritory().get(player.getUniqueId());
+			if (cachedPlayerIsInTerritory == null)
 			{
-				StateManager.getInstance().getEntityManager().setTrance(event.getPlayer().getUniqueId(), false);
+				StateManager.getInstance().getEntityManager().getPlayerInTerritory().put(player.getUniqueId(), playerIsInTerritory);
+			} else {
+				if (cachedPlayerIsInTerritory != playerIsInTerritory)
+				{
+					StateManager.getInstance().getEntityManager().getPlayerInTerritory().put(player.getUniqueId(), playerIsInTerritory);
+					if (playerIsInTerritory == false)
+					{
+						player.sendMessage(ChatColor.AQUA + "* You have left the territory");
+					} else {
+						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+						SoliniaAlignmentChunk territory = solPlayer.getCurrentAlignmentChunk();
+						ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment(territory.getAlignmentId());
+						player.sendMessage(ChatColor.AQUA + "* You have entered " + alignment.getName() + " territory [/trader]");
+						if (territory.isTradePost())
+						{
+							player.sendMessage(ChatColor.AQUA + "- This territory has a Trade Post!");
+						}
+					}
+				}
 			}
 			
-			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getPlayer());
+			if (StateManager.getInstance().getEntityManager().getTrance(player.getUniqueId()) == true)
+			{
+				StateManager.getInstance().getEntityManager().setTrance(player.getUniqueId(), false);
+			}
+			
+			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) player);
 			if (mezExpiry != null)
 			{
-				event.getPlayer().sendMessage("* You are mezzed!");
+				player.sendMessage("* You are mezzed!");
 				if (event.getTo().getY() < event.getFrom().getY())
 				{
 					event.getTo().setX(event.getFrom().getX());

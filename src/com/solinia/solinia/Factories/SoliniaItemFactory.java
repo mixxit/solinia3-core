@@ -68,6 +68,20 @@ public class SoliniaItemFactory {
 			ISoliniaItem feetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultFeetMaterial().toUpperCase())),operatorCreated);
 			ISoliniaItem handItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaulthandMaterial().toUpperCase())),operatorCreated);
 			ISoliniaItem offhandItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultoffHandMaterial().toUpperCase())),operatorCreated);
+			
+			// Jewelry!
+			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			neckItem.setNeckItem(true);
+			neckItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
+			ISoliniaItem shouldersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			shouldersItem.setShouldersItem(true);
+			shouldersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
+			ISoliniaItem fingersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			fingersItem.setFingersItem(true);
+			fingersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
+			ISoliniaItem earsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			earsItem.setEarsItem(true);
+			earsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
 
 			items.add(headItem.getId());
 			items.add(chestItem.getId());
@@ -75,6 +89,10 @@ public class SoliniaItemFactory {
 			items.add(feetItem.getId());
 			items.add(handItem.getId());
 			items.add(offhandItem.getId());
+			items.add(neckItem.getId());
+			items.add(shouldersItem.getId());
+			items.add(fingersItem.getId());
+			items.add(earsItem.getId());
 			
 			for(Integer i : items)
 			{
@@ -123,16 +141,46 @@ public class SoliniaItemFactory {
 					className += " ";
 				}
 				
-				item.setDisplayname(rarityName + className + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
+				if (!item.isJewelry())
+				{
+					item.setDisplayname(rarityName + className + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
+				} else {
+					String jewelryTypeName = "Jewelry";
+					
+					if (item.isEarsItem())
+						jewelryTypeName = "Earrings";
+
+					if (item.isNeckItem())
+						jewelryTypeName = "Necklace";
+					
+					if (item.isFingersItem())
+						jewelryTypeName = "Rings";
+
+					if (item.isShouldersItem())
+						jewelryTypeName = "Cloak";
+					
+					
+					item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
+				}
 				
 				int tierMin = 0;
-				int tierMax = armourtier * 5;
+				
+				int baseAmount = 5;
+				
+				if (item.isJewelry())
+				{
+					baseAmount = 2;
+				}
+				
+				int baseDoubler = baseAmount * 2;
+				
+				int tierMax = armourtier * baseAmount;
 				if (armourtier > 1)
-					tierMin =+ (5 * armourtier) - 5;
+					tierMin =+ (baseAmount * armourtier) - baseAmount;
 				
 				int lvlMin = 0;
 				if (armourtier > 1)
-					lvlMin =+ (10 * armourtier) - 10;
+					lvlMin =+ (baseDoubler * armourtier) - baseDoubler;
 				
 				if (lvlMin > Utils.getMaxLevel())
 				{
