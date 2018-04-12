@@ -1206,67 +1206,70 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 			
-			if (spell.getComponents1() > 0)
+			if (!spell.isBardSong())
 			{
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents1());
-				if (item == null || !item.isReagent())
+				if (spell.getComponents1() > 0)
 				{
-					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents1());
-					return;
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents1());
+					if (item == null || !item.isReagent())
+					{
+						player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents1());
+						return;
+					}
+					if(!solPlayer.hasSufficientReagents(spell.getComponents1(),spell.getComponentCounts1()))
+					{
+						player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+						return;
+					}
 				}
-				if(!solPlayer.hasSufficientReagents(spell.getComponents1(),spell.getComponentCounts1()))
+				
+				if (spell.getComponents2() > 0)
 				{
-					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
-					return;
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents2());
+					if (item == null || !item.isReagent())
+					{
+						player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents2());
+						return;
+					}
+					if(!solPlayer.hasSufficientReagents(spell.getComponents2(),spell.getComponentCounts2()))
+					{
+						player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+						return;
+					}
 				}
-			}
-			
-			if (spell.getComponents2() > 0)
-			{
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents2());
-				if (item == null || !item.isReagent())
+				
+				if (spell.getComponents3() > 0)
 				{
-					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents2());
-					return;
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents3());
+					if (item == null || !item.isReagent())
+					{
+						player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents3());
+						return;
+					}
+					if(!solPlayer.hasSufficientReagents(spell.getComponents3(),spell.getComponentCounts3()))
+					{
+						player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+						return;
+					}
 				}
-				if(!solPlayer.hasSufficientReagents(spell.getComponents2(),spell.getComponentCounts2()))
+				
+				if (spell.getComponents4() > 0)
 				{
-					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
-					return;
-				}
-			}
-			
-			if (spell.getComponents3() > 0)
-			{
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents3());
-				if (item == null || !item.isReagent())
-				{
-					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents3());
-					return;
-				}
-				if(!solPlayer.hasSufficientReagents(spell.getComponents3(),spell.getComponentCounts3()))
-				{
-					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
-					return;
-				}
-			}
-			
-			if (spell.getComponents4() > 0)
-			{
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
-				if (item == null || !item.isReagent())
-				{
-					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
-					return;
-				}
-				if(!solPlayer.hasSufficientReagents(spell.getComponents4(),spell.getComponentCounts4()))
-				{
-					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
-					return;
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
+					if (item == null || !item.isReagent())
+					{
+						player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
+						return;
+					}
+					if(!solPlayer.hasSufficientReagents(spell.getComponents4(),spell.getComponentCounts4()))
+					{
+						player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+						return;
+					}
 				}
 			}
 

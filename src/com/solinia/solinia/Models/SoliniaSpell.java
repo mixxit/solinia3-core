@@ -2727,10 +2727,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 			component4name = item4.getDisplayname();
 		}
 		
-		sender.sendMessage("- components1: " + ChatColor.GOLD + this.getComponents1() + "(" + component1name + ")" + ChatColor.RESET + " componentcounts1: " + this.getComponentCounts1());
-		sender.sendMessage("- components2: " + ChatColor.GOLD + this.getComponents2() + "(" + component2name + ")" +  ChatColor.RESET + " componentcounts2: " + this.getComponentCounts2());
-		sender.sendMessage("- components3: " + ChatColor.GOLD + this.getComponents3() + "(" + component3name + ")" +  ChatColor.RESET + " componentcounts3: " + this.getComponentCounts3());
-		sender.sendMessage("- components4: " + ChatColor.GOLD + this.getComponents4() + "(" + component4name + ")" +  ChatColor.RESET + " componentcounts4: " + this.getComponentCounts4());
+		sender.sendMessage("- components1: " + ChatColor.GOLD + this.getComponents1() + "(" + component1name + ")" + ChatColor.RESET + " componentcounts1: " + this.getComponentCounts1() + "NoExpend:(" + getNoexpendReagent1() + ")");
+		sender.sendMessage("- components2: " + ChatColor.GOLD + this.getComponents2() + "(" + component2name + ")" +  ChatColor.RESET + " componentcounts2: " + this.getComponentCounts2() + "NoExpend:(" + getNoexpendReagent2() + ")");
+		sender.sendMessage("- components3: " + ChatColor.GOLD + this.getComponents3() + "(" + component3name + ")" +  ChatColor.RESET + " componentcounts3: " + this.getComponentCounts3() + "NoExpend:(" + getNoexpendReagent3() + ")");
+		sender.sendMessage("- components4: " + ChatColor.GOLD + this.getComponents4() + "(" + component4name + ")" +  ChatColor.RESET + " componentcounts4: " + this.getComponentCounts4() + "NoExpend:(" + getNoexpendReagent4() + ")");
 
 		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");

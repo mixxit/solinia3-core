@@ -537,47 +537,50 @@ public class ItemStackAdapter {
 				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid12()).name() + ChatColor.RESET);
 			}
 			
-			if (spell.getComponents1() > 0)
+			if (!spell.isBardSong())
 			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents1());
-				if (item != null && item.isReagent())
+				if (spell.getComponents1() > 0)
 				{
-					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts1() + ChatColor.RESET);
-				} else {
-					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents1());
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents1());
+					if (item != null && item.isReagent())
+					{
+						loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts1() + ChatColor.RESET);
+					} else {
+						loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents1());
+					}
 				}
-			}
-
-			if (spell.getComponents2() > 0)
-			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents2());
-				if (item != null && item.isReagent())
+	
+				if (spell.getComponents2() > 0)
 				{
-					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts2() + ChatColor.RESET);
-				} else {
-					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents2());
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents2());
+					if (item != null && item.isReagent())
+					{
+						loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts2() + ChatColor.RESET);
+					} else {
+						loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents2());
+					}
 				}
-			}
-
-			if (spell.getComponents3() > 0)
-			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents3());
-				if (item != null && item.isReagent())
+	
+				if (spell.getComponents3() > 0)
 				{
-					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts3() + ChatColor.RESET);
-				} else {
-					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents3());
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents3());
+					if (item != null && item.isReagent())
+					{
+						loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts3() + ChatColor.RESET);
+					} else {
+						loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents3());
+					}
 				}
-			}
-
-			if (spell.getComponents4() > 0)
-			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
-				if (item != null && item.isReagent())
+	
+				if (spell.getComponents4() > 0)
 				{
-					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts4() + ChatColor.RESET);
-				} else {
-					loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(spell.getComponents4());
+					if (item != null && item.isReagent())
+					{
+						loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW+item.getDisplayname()+" x " + spell.getComponentCounts4() + ChatColor.RESET);
+					} else {
+						loreTxt.add(ChatColor.WHITE + "Requires Component: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"+ spell.getId() + "-ID" + spell.getComponents4());
+					}
 				}
 			}
 
