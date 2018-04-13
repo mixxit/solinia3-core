@@ -78,6 +78,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Inventory> merchantInventories = new ConcurrentHashMap<UUID, Inventory>();
 	private ConcurrentHashMap<UUID, UniversalMerchant> universalMerchant = new ConcurrentHashMap<UUID, UniversalMerchant>();
 	private ConcurrentHashMap<UUID, Boolean> playerInTerritory = new ConcurrentHashMap<UUID, Boolean>();
+	private ConcurrentHashMap<UUID, Boolean> playerSetMain = new ConcurrentHashMap<UUID, Boolean>();
 	
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
@@ -959,5 +960,15 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setPlayerInTerritory(ConcurrentHashMap<UUID, Boolean> playerInTerritory) {
 		this.playerInTerritory = playerInTerritory;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, Boolean> getPlayerSetMain() {
+		return playerSetMain;
+	}
+
+	@Override
+	public void setPlayerSetMain(ConcurrentHashMap<UUID, Boolean> playerSetMain) {
+		this.playerSetMain = playerSetMain;
 	}
 }

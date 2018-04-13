@@ -348,4 +348,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isRacialKingChild();
 
 	public SoliniaAlignmentChunk getCurrentAlignmentChunk();
+
+	public void setMainAndCleanup();
 }

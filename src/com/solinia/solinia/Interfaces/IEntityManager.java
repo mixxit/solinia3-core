@@ -118,4 +118,8 @@ public interface IEntityManager {
 
 	void setPlayerInTerritory(ConcurrentHashMap<UUID, Boolean> playerInTerritory);
 
+	ConcurrentHashMap<UUID, Boolean> getPlayerSetMain();
+
+	void setPlayerSetMain(ConcurrentHashMap<UUID, Boolean> playerSetMain);
+
 }

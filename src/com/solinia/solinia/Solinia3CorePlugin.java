@@ -473,6 +473,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("reagent").setExecutor(new CommandReagent());
 		this.getCommand("setspouse").setExecutor(new CommandSetSpouse());
 		this.getCommand("setmother").setExecutor(new CommandSetMother());
+		this.getCommand("setmain").setExecutor(new CommandSetMain());
 	}
 
 	private void createConfigDir() {

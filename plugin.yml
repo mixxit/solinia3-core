@@ -490,6 +490,10 @@ commands:
     usage: /setmother mcname
     aliases:
     - mother  
+  setmain:
+    description: Sets your current character as main
+    usage: /setmother confirm
+    aliases: []
 depend:
 - Vault
 - MythicMobs

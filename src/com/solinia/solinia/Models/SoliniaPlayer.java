@@ -2682,4 +2682,48 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		return alignmentChunk;
 	}
+
+	@Override
+	public void setMainAndCleanup() {
+		try
+		{
+			// Set alt to all other characters
+			for (ISoliniaPlayer solPlayer : StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(this.getBukkitPlayer().getUniqueId()))
+			{
+				solPlayer.setMain(false);
+				
+				for(ISoliniaPlayer otherSolPlayer : StateManager.getInstance().getConfigurationManager().getCharacters())
+				{
+					if (otherSolPlayer.getFealty().toString().equals(solPlayer.getCharacterId().toString()))
+					{
+						otherSolPlayer.setFealty(null);
+					}
+				}
+				
+				for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
+				{
+					if (race.getKing().toString().equals(solPlayer.getUUID().toString()))
+					{
+						Utils.BroadcastPlayers("The " + race.getName() +" race no longer has a King!");
+						race.setKing(null);
+					}
+				}
+				
+				for(ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager().getAlignments())
+				{
+					if (alignment.getEmperor().toString().equals(solPlayer.getUUID().toString()))
+					{
+						Utils.BroadcastPlayers("The " + alignment.getName() +" empire no longer has an emperor!");
+						alignment.setEmperor(null);
+					}
+				}
+				
+				// Set current to main
+				setMain(true);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
 }
