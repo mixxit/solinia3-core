@@ -77,6 +77,8 @@ public interface ISoliniaLivingEntity
 	int getMaxDamage();
 
 	int getStrength();
+	
+	int getTotalItemStat(String stat);
 
 	int getStamina();
 
@@ -215,4 +217,5 @@ public interface ISoliniaLivingEntity
 
 	SoliniaWorld getSoliniaWorld();
 
+	void updateMaxHp();
 }

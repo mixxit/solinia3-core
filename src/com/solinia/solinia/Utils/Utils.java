@@ -676,10 +676,34 @@ public class Utils {
 			experience = 1d;
 		}
 		
-		if (level < 32)
+		if (level < 10)
 		{
-			experience = experience * 2d;
+			return experience * 6d;
 		}
+		
+		if (level < 20)
+		{
+			return experience * 5d;
+		}
+
+		
+		if (level < 30)
+		{
+			return experience * 4d;
+		}
+
+		
+		if (level < 40)
+		{
+			return experience * 3d;
+		}
+
+		
+		if (level < 50)
+		{
+			return experience * 2d;
+		}
+
 		
 		return experience;
 	}

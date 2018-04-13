@@ -295,8 +295,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	List<ISoliniaItem> getEquippedSoliniaItems();
 
-	int getTotalItemStat(String stat);
-
 	int getFingersItem();
 
 	void setFingersItem(int fingersItem);
