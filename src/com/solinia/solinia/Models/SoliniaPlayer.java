@@ -2694,6 +2694,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				
 				for(ISoliniaPlayer otherSolPlayer : StateManager.getInstance().getConfigurationManager().getCharacters())
 				{
+					if (otherSolPlayer.getFealty() != null)
 					if (otherSolPlayer.getFealty().toString().equals(solPlayer.getCharacterId().toString()))
 					{
 						otherSolPlayer.setFealty(null);
@@ -2702,6 +2703,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				
 				for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
 				{
+					if (race.getKing() != null)
 					if (race.getKing().toString().equals(solPlayer.getUUID().toString()))
 					{
 						Utils.BroadcastPlayers("The " + race.getName() +" race no longer has a King!");
@@ -2711,6 +2713,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				
 				for(ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager().getAlignments())
 				{
+					if (alignment.getEmperor() != null)
 					if (alignment.getEmperor().toString().equals(solPlayer.getUUID().toString()))
 					{
 						Utils.BroadcastPlayers("The " + alignment.getName() +" empire no longer has an emperor!");
