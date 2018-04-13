@@ -22,13 +22,13 @@ public class CommandSetMain implements CommandExecutor {
 		
 		if (args.length < 1)
 		{
-			sender.sendMessage("This command will reset your old characters votes and set your current character as main. To confirm use /setmail confirm");
+			sender.sendMessage("This command will reset your old characters votes and set your current character as main. To confirm use /setmain confirm");
 			return true;
 		}
 		
-		if (!args[0].toUpperCase().equals("confirm"))
+		if (!args[0].toUpperCase().equals("CONFIRM"))
 		{
-			sender.sendMessage("This command will reset your old characters votes and set your current character as main. To confirm use /setmail confirm");
+			sender.sendMessage("This command will reset your old characters votes and set your current character as main. To confirm use /setmain confirm");
 			return true;
 		}
 		
