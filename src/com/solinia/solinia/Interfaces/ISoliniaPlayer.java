@@ -352,4 +352,8 @@ public interface ISoliniaPlayer extends Serializable {
 	public void setMainAndCleanup();
 
 	public void scheduleUpdateMaxHp();
+
+	List<Integer> getSpellBookItems();
+
+	void setSpellBookItems(List<Integer> spellBookItems);
 }

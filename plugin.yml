@@ -494,6 +494,10 @@ commands:
     description: Sets your current character as main
     usage: /setmother confirm
     aliases: []
+  spellbook:
+    description: Manipulates your spell book
+    usage: /spellbook <arg> <arg>
+    aliases: []
 depend:
 - Vault
 - MythicMobs

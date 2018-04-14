@@ -474,6 +474,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("setspouse").setExecutor(new CommandSetSpouse());
 		this.getCommand("setmother").setExecutor(new CommandSetMother());
 		this.getCommand("setmain").setExecutor(new CommandSetMain());
+		this.getCommand("spellbook").setExecutor(new CommandSpellBook());
 	}
 
 	private void createConfigDir() {

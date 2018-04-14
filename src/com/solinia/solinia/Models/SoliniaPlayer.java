@@ -98,6 +98,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int shouldersItem = 0;
 	private int neckItem = 0;
 	private int earsItem = 0;
+	private List<Integer> spellBookItems = new ArrayList<Integer>();
 	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>(); 
 
 	@Override
@@ -2753,5 +2754,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						}
 					}
 				},20L);
+	}
+
+	@Override
+	public List<Integer> getSpellBookItems() {
+		return spellBookItems;
+	}
+
+	@Override
+	public void setSpellBookItems(List<Integer> spellBookItems) {
+		this.spellBookItems = spellBookItems;
 	}
 }
