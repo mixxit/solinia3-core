@@ -448,7 +448,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	    			return;
 	    		}
 	    		
-	    		solplayer.updateMaxHp();
+	    		solplayer.scheduleUpdateMaxHp();
 		    }
 		} catch (CoreStateInitException e)
 		{
@@ -523,7 +523,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					event.getView().getPlayer().sendMessage("The item you are attempting to apply from is not an augmentation");
 					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 				
@@ -533,7 +533,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					event.getView().getPlayer().sendMessage("This augmentation cannot be applied to this item type");
 					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 			    } 
 				
@@ -543,7 +543,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
 					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 				
@@ -553,7 +553,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
 					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 				
@@ -564,7 +564,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
 					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 				
@@ -574,7 +574,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
 					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 				
@@ -589,7 +589,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				StateManager.getInstance().getPlayerManager().setApplyingAugmentation(event.getView().getPlayer().getUniqueId(),0);
 				System.out.println("Ended applying augmentation");
 				event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-				Utils.CancelEvent(event);;
+				Utils.CancelEvent(event);
 				
 				return;
 			}
@@ -597,9 +597,29 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)event.getView().getPlayer());
-	
+
+			// REMOVING EVENTS
+			if (event.getSlotType().equals(SlotType.ARMOR) || event.getSlot() == 40) {
+				ItemStack item = event.getWhoClicked().getInventory().getItem(event.getSlot());
+				if (item != null && !item.getType().equals(Material.AIR))
+				{
+					if (Utils.IsSoliniaItem(item))
+					{
+						ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(item);
+						//((Player)event.getView().getPlayer()).sendMessage("* Debug found removal on soliniaitem: " + soliniaitem.getDisplayname());
+						if (soliniaitem.getHp() > 0 || soliniaitem.getStamina() > 0)
+						{
+							solplayer.scheduleUpdateMaxHp();
+						}
+					}
+				}
+			}
+			
+			// ADDING EVENTS
+			
+			
 			// If armour slot modified, update MaxHP
-			// Shift clicking
+			// Shift clicking 
 			if (event.isShiftClick())
 			{
 				ItemStack itemstack = event.getCurrentItem();
@@ -613,26 +633,26 @@ public class Solinia3CorePlayerListener implements Listener {
 	        		
 	        		if (solplayer.getClassObj() == null)
 	        		{
-	        			Utils.CancelEvent(event);;
+	        			Utils.CancelEvent(event);
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
 	        		
 	        		if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
 	        		{
-	        			Utils.CancelEvent(event);;
+	        			Utils.CancelEvent(event);
 	        			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 	        			return;
 	        		}
 	        		
 	        		if (soliniaitem.getMinLevel() > solplayer.getLevel())
 		    		{
-		    			Utils.CancelEvent(event);;
+		    			Utils.CancelEvent(event);
 		    			event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
 		    			return;
 		    		}
 	        		
-	        		solplayer.updateMaxHp();
+	        		solplayer.scheduleUpdateMaxHp();
 			    }
 			}
 			
@@ -670,7 +690,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	        			return;
 	        		}
 	        		
-	        		solplayer.updateMaxHp();
+	        		solplayer.scheduleUpdateMaxHp();
 			    }
 	        }
 	        
@@ -706,7 +726,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		    			return;
 		    		}
 	        		
-	        		solplayer.updateMaxHp();
+	        		solplayer.scheduleUpdateMaxHp();
 			    }
 	        }
 		} catch (Exception e)

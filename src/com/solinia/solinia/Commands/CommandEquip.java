@@ -90,6 +90,7 @@ public class CommandEquip implements CommandExecutor {
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
+							solPlayer.updateMaxHp();
 							return true;
 						}
 
@@ -102,6 +103,7 @@ public class CommandEquip implements CommandExecutor {
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
+							solPlayer.updateMaxHp();
 							return true;
 						}
 
@@ -114,6 +116,7 @@ public class CommandEquip implements CommandExecutor {
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
+							solPlayer.updateMaxHp();
 							return true;
 						}
 
@@ -126,6 +129,7 @@ public class CommandEquip implements CommandExecutor {
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
+							solPlayer.updateMaxHp();
 							return true;
 						}
 
@@ -179,6 +183,7 @@ public class CommandEquip implements CommandExecutor {
 					solPlayer.setShouldersItem(0);
 					sender.sendMessage("Your cloak has been moved to the /claim list");
 				}
+				solPlayer.updateMaxHp();
 
 				return true;
 

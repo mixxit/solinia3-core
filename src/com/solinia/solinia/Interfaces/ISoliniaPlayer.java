@@ -350,4 +350,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public SoliniaAlignmentChunk getCurrentAlignmentChunk();
 
 	public void setMainAndCleanup();
+
+	public void scheduleUpdateMaxHp();
 }

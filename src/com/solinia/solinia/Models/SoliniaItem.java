@@ -863,10 +863,10 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- skillmodtype4: " + ChatColor.GOLD + getSkillModType4().toString() + ChatColor.RESET);
 		sender.sendMessage("- skillmodvalue4: " + ChatColor.GOLD + getSkillModValue4() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- fingersItem: " + ChatColor.GOLD + isFingersItem() + ChatColor.RESET);
-		sender.sendMessage("- neckItem: " + ChatColor.GOLD + isNeckItem() + ChatColor.RESET);
-		sender.sendMessage("- shouldersItem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET);
-		sender.sendMessage("- earsItem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET);
+		sender.sendMessage("- fingersitem: " + ChatColor.GOLD + isFingersItem() + ChatColor.RESET);
+		sender.sendMessage("- neckitem: " + ChatColor.GOLD + isNeckItem() + ChatColor.RESET);
+		sender.sendMessage("- shouldersitem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET);
+		sender.sendMessage("- earsitem: " + ChatColor.GOLD + isEarsItem() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
 		sender.sendMessage("- territoryflag: " + ChatColor.GOLD + isTerritoryFlag() + ChatColor.RESET);

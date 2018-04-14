@@ -2729,4 +2729,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 		}
 	}
+
+	// Used to schedule a HP update after an event 
+	// For example if a player has changed his items
+	@Override
+	public void scheduleUpdateMaxHp() {
+		if (this.getBukkitPlayer() == null)
+			return;
+		
+		final UUID playerUUID = this.getBukkitPlayer().getUniqueId();
+		
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+				Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+					public void run() {
+						try
+						{
+							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(playerUUID));
+							solPlayer.updateMaxHp();
+							
+						} catch (CoreStateInitException e)
+						{
+							// skip
+						}
+					}
+				},20L);
+	}
 }
