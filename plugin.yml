@@ -389,7 +389,8 @@ commands:
   claim:
     description: Claims an item
     usage: /claim <subcommand>
-    aliases: []
+    aliases:
+    - claims
   listaas:
     description: Lists aa abilities
     usage: /listaa searchstring

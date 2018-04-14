@@ -49,7 +49,7 @@ public class CommandSpellBook implements CommandExecutor {
 					return true;
 				}
 				
-				String searchTerm = args[1];
+				String searchTerm = args[1].toUpperCase();
 				
 				sender.sendMessage("Matching Spells: ");
 
