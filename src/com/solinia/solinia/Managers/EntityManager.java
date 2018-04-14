@@ -176,7 +176,7 @@ public class EntityManager implements IEntityManager {
 							{
 								if (solPlayer.getSpellBookItems().contains(item.getId()))
 								{
-									meta.setDisplayName("Display Item: " + itemStack.getItemMeta().getDisplayName() + ChatColor.RED + "[In Spellbook]" + ChatColor.RESET);
+									meta.setDisplayName("Display Item: " + itemStack.getItemMeta().getDisplayName() + ChatColor.RED + " [In Spellbook]" + ChatColor.RESET);
 								}
 							}
 						}

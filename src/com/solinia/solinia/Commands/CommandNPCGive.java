@@ -100,7 +100,7 @@ public class CommandNPCGive implements CommandExecutor {
 					npcWantsItem = true;
 					
 					String response = eventHandler.getChatresponse();
-					solentity.say(solnpc.replaceChatWordsWithHints(response),player);
+					solentity.say(solnpc.replaceChatWordsWithHints(response),player, true);
 					eventHandler.awardPlayer((Player)player);
 					Utils.removeItemsFromInventory(player, itemid, 1);
 				}

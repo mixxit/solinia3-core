@@ -62,8 +62,6 @@ public interface ISoliniaLivingEntity
 
 	void processInteractionEvent(LivingEntity triggerentity, InteractionType type, String data);
 
-	void say(String message, LivingEntity messageto);
-
 	void doSpellCast(Plugin plugin, LivingEntity livingEntity);
 
 	public int getProcChancePct();
@@ -218,4 +216,10 @@ public interface ISoliniaLivingEntity
 	SoliniaWorld getSoliniaWorld();
 
 	void updateMaxHp();
+
+	void say(String message, LivingEntity messageto, boolean allowlanguagelearn);
+
+	void sayto(Player player, String message);
+
+	void sayto(Player player, String message, boolean allowlanguagelearn);
 }

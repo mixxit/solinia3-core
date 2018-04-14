@@ -812,8 +812,35 @@ public class SoliniaNPC implements ISoliniaNPC {
 						return;
 				}
 				
+				// stop players spamming hail to learn a language
 				String response = handler.getChatresponse();
-				solentity.say(replaceChatWordsWithHints(response),triggerentity);
+				if (words.length > 0)
+				{
+					if (words[0].toLowerCase().equals("hail"))
+					{
+						if ((triggerentity instanceof Player))
+						{
+							solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), false);
+						} else {
+							solentity.say(replaceChatWordsWithHints(response), triggerentity, false);
+						}
+					} else {
+						if ((triggerentity instanceof Player))
+						{
+							solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), true);
+						} else {
+							solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
+						}
+					}
+				} else {
+					if ((triggerentity instanceof Player))
+					{
+						solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response),true);
+					} else {
+						solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
+					}
+				}
+				
 				if (triggerentity instanceof Player)
 					handler.awardPlayer((Player)triggerentity);
 				

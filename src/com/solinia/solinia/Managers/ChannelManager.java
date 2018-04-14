@@ -323,7 +323,7 @@ public class ChannelManager implements IChannelManager {
 	}
 	
 	@Override
-	public void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message)
+	public void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn)
 	{
 		try
 		{
@@ -336,7 +336,10 @@ public class ChannelManager implements IChannelManager {
 					} else {
 						player.sendMessage(ChatColor.AQUA + " * " + source.getName() + " says something in a language you do not understand" + ChatColor.RESET);
 						
-						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+						if (allowlanguagelearn == true)
+						{
+							SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+						}
 					} 
 				}
 			}

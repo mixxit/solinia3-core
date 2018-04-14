@@ -38,8 +38,8 @@ public interface IChannelManager {
 
 	void processNextDiscordMessage();
 
-	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message);
-
 	void setDiscordInCharacterChannelId(String discordincharacterchannelid);
+
+	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn);
 
 }

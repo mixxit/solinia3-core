@@ -1616,7 +1616,55 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
-			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage);
+			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage, true);
+			
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void sayto(Player player, String message, boolean allowlanguagelearn) {
+		if (isPlayer())
+			return;
+
+		if (this.getNpcid() < 1)
+			return;
+
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc == null)
+				return;
+			
+			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + player.getName() + " '" + message + "'"
+					+ ChatColor.RESET;
+			player.sendMessage(decoratedMessage);
+			if (allowlanguagelearn == true)
+			{
+				SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(getLanguage());
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void sayto(Player player, String message) {
+		if (isPlayer())
+			return;
+
+		if (this.getNpcid() < 1)
+			return;
+
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc == null)
+				return;
+
+			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
+			player.sendMessage(decoratedMessage);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -1636,7 +1684,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void say(String message, LivingEntity messageto) {
+	public void say(String message, LivingEntity messageto, boolean allowlanguagelearn) {
 		if (isPlayer())
 			return;
 
@@ -1650,7 +1698,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + messageto.getName() + " '" + message + "'"
 					+ ChatColor.RESET;
-			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage);
+			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage, allowlanguagelearn);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

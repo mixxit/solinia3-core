@@ -1488,7 +1488,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity) e)
 							.say("i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA
 									+ "] available if you are interested in buying or selling something",
-									getBukkitPlayer());
+									getBukkitPlayer(), true);
 				} catch (CoreStateInitException cse) {
 					//
 				}
