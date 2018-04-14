@@ -309,11 +309,6 @@ public class ItemStackAdapter {
 			loretxt.add("This item can be added to your /spellbook");
 		}
 		
-		if (soliniaItem.isSpellscroll())
-		{
-			loretxt.add("This item can be added to your /spellbook");
-		}
-		
 		if (soliniaItem.getAbilityid() > 0 && soliniaItem.isSpellscroll())
 	    {
 			loretxt.addAll(generateSpellLoreText(soliniaItem));
