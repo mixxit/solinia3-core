@@ -37,8 +37,6 @@ public class CommandEquip implements CommandExecutor {
 
 			if (args[0].toUpperCase().equals("EQUIP")) {
 				try {
-					showCurrentEquippedItems(solPlayer);
-
 					ItemStack primaryItem = player.getInventory().getItemInMainHand();
 					if (primaryItem.getType().equals(Material.AIR)) {
 						player.sendMessage(ChatColor.GRAY
@@ -139,9 +137,8 @@ public class CommandEquip implements CommandExecutor {
 				}
 			}
 
-			if (args[0].toUpperCase().equals("UNEQUIP")) {
-
-				showCurrentEquippedItems(solPlayer);
+			if (args[0].toUpperCase().equals("UNEQUIP")) 
+			{
 				if (solPlayer.getEarsItem() > 0) {
 					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
@@ -150,17 +147,17 @@ public class CommandEquip implements CommandExecutor {
 					newclaim.setClaimed(false);
 					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 					solPlayer.setEarsItem(0);
-					sender.sendMessage("Your earrings have been moved to the /claim inventory");
+					sender.sendMessage("Your earrings have been moved to the /claim list");
 				}
 				if (solPlayer.getNeckItem() > 0) {
 					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 					newclaim.setMcname(player.getName());
-					newclaim.setItemid(solPlayer.getEarsItem());
+					newclaim.setItemid(solPlayer.getNeckItem());
 					newclaim.setClaimed(false);
 					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 					solPlayer.setNeckItem(0);
-					sender.sendMessage("Your necklace has been moved to the /claim inventory");
+					sender.sendMessage("Your necklace has been moved to the /claim list");
 				}
 				if (solPlayer.getFingersItem() > 0) {
 					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
@@ -170,7 +167,7 @@ public class CommandEquip implements CommandExecutor {
 					newclaim.setClaimed(false);
 					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 					solPlayer.setFingersItem(0);
-					sender.sendMessage("Your rings have been moved to the /claim inventory");
+					sender.sendMessage("Your rings have been moved to the /claim list");
 				}
 				if (solPlayer.getShouldersItem() > 0) {
 					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
@@ -180,7 +177,7 @@ public class CommandEquip implements CommandExecutor {
 					newclaim.setClaimed(false);
 					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 					solPlayer.setShouldersItem(0);
-					sender.sendMessage("Your cloak has been moved to the /claim inventory");
+					sender.sendMessage("Your cloak has been moved to the /claim list");
 				}
 
 				return true;
