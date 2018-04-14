@@ -33,6 +33,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -379,6 +380,18 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (StateManager.getInstance().getEntityManager().getTrance(player.getUniqueId()) == true)
 			{
 				StateManager.getInstance().getEntityManager().setTrance(player.getUniqueId(), false);
+			}
+			
+			// Prevent jump when slowed
+			if (event.getTo().getY() > event.getFrom().getY())
+			{
+				if (event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))
+				{
+						event.setCancelled(true);
+						event.getPlayer().sendMessage(ChatColor.GRAY + "* Your legs are bound and unable to jump!");
+						return;
+				}
+				
 			}
 			
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) player);
