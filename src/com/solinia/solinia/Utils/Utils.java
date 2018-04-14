@@ -4890,6 +4890,9 @@ public class Utils {
 	}
 
 	public static boolean isValidSkill(String skillname) {
+		if (skillname == null || skillname.equals(""))
+			return false;
+		
 		try {
 			for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces()) {
 				if (skillname.toUpperCase().equals(race.getName().toUpperCase()))

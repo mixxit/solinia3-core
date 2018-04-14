@@ -1642,7 +1642,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			player.sendMessage(decoratedMessage);
 			if (allowlanguagelearn == true)
 			{
-				SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(getLanguage());
+				if (getLanguage() != null && !getLanguage().equals(""))
+					SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(getLanguage());
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
