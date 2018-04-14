@@ -601,12 +601,30 @@ public class Solinia3CoreEntityListener implements Listener {
 		}
 
 		try {
-			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getRightClicked());
-			if (solentity.getNpcid() > 0) {
-				SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(
-						solentity.getBukkitLivingEntity().getUniqueId(),
-						StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()));
-				solentity.processInteractionEvent(event.getPlayer(), InteractionType.CHAT, "hail");
+			// if its in combat dont respond
+			if (event.getRightClicked() instanceof Creature)
+			{
+				Creature le = (Creature)event.getRightClicked();
+				if (le.getTarget() == null)
+				{
+					ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getRightClicked());
+					if (solentity.getNpcid() > 0) {
+						SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(
+								solentity.getBukkitLivingEntity().getUniqueId(),
+								StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()));
+						solentity.processInteractionEvent(event.getPlayer(), InteractionType.CHAT, "hail");
+					}
+				} else {
+					event.getPlayer().sendMessage(ChatColor.GRAY + "* This npc will not respond to interactions while it is in combat (has a target)");
+				}
+			} else {
+				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getRightClicked());
+				if (solentity.getNpcid() > 0) {
+					SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(
+							solentity.getBukkitLivingEntity().getUniqueId(),
+							StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()));
+					solentity.processInteractionEvent(event.getPlayer(), InteractionType.CHAT, "hail");
+				}
 			}
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
