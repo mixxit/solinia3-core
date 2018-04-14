@@ -1093,6 +1093,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						return;
 					}
 				}
+				
+				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isThrowing()) {
+					
+					
+					if (itemstack.getAmount() > 1)
+					{
+						event.getPlayer().sendMessage("Tried to use an entire stack at once! Cancelling, did you forget to split them?");
+						return;
+					}
+					
+					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
+					if (targetmob != null) {
+						if (item.useItemOnEntity(plugin, event.getPlayer(), targetmob, false) == true)
+						{
+							event.getPlayer().setItemInHand(null);
+							event.getPlayer().updateInventory();
+							return;
+						} else {
+							return;
+						}
+					}
+				}
 
 				if (item.getAbilityid() < 1) {
 					return;

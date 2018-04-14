@@ -314,4 +314,8 @@ public interface ISoliniaItem {
 	boolean isJewelry();
 
 	boolean isWeaponOrBowOrShield();
+
+	boolean isThrowing();
+
+	void setThrowing(boolean throwing);
 }

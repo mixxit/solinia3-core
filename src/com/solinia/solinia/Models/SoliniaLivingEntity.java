@@ -244,6 +244,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager()
 						.getItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
 				if (soliniaitem != null) {
+					if (soliniaitem.isThrowing())
+					{
+						getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "This is a throwing weapon! (you must right click to throw it)");
+					}
+					
 					if (soliniaitem.getAllowedClassNames().size() > 0) {
 						if (getClassObj() == null) {
 							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your class cannot use this item");

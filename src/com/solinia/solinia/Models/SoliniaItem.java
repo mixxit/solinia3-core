@@ -89,6 +89,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private SkillType skillModType = SkillType.None;
 	private int skillModValue = 0;
 	private boolean reagent = false;
+	private boolean throwing = false;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -507,6 +508,26 @@ public class SoliniaItem implements ISoliniaItem {
 			}
 		}
 		
+		if (isThrowing())
+		{
+			player.sendMessage("You throw a " + getDisplayname());
+			
+			if (targetentity instanceof Player)
+			{
+				ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solsourceplayer.getGroup() != null)
+				{
+					if (solsourceplayer.getGroup().getMembers().contains(targetentity.getUniqueId()))
+					{
+						return false;
+					}
+				}
+			}
+			
+			targetentity.damage(getDamage());
+			return true;
+		}
+		
 		if (isConsumable == true && isExperienceBonus())
 		{
 			SoliniaPlayerAdapter.Adapt(player).grantExperienceBonusFromItem();
@@ -871,6 +892,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
 		sender.sendMessage("- territoryflag: " + ChatColor.GOLD + isTerritoryFlag() + ChatColor.RESET);
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
+		sender.sendMessage("- throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
 		sender.sendMessage("- allowedclassnames: ");
 		for(String classname : this.getAllowedClassNames())
 		{
@@ -1064,8 +1086,11 @@ public class SoliniaItem implements ISoliniaItem {
 		case "reagent":
 			setReagent(Boolean.parseBoolean(value));
 			break;
+		case "throwing":
+			setThrowing(Boolean.parseBoolean(value));
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,throwing");
 		}
 	}
 
@@ -1450,5 +1475,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public boolean isJewelry() {
 		return (this.isFingersItem() || this.isNeckItem() || this.isShouldersItem() || this.isEarsItem());
+	}
+
+	@Override
+	public boolean isThrowing() {
+		return throwing;
+	}
+
+	@Override
+	public void setThrowing(boolean throwing) {
+		this.throwing = throwing;
 	}
 }
