@@ -4725,20 +4725,29 @@ public class Utils {
 	
 	public static List<SoliniaAARankEffect> getHighestRankEffectsForEffectId(ISoliniaPlayer soliniaPlayer, int effectId)
 	{
-		int currentRank = 0;
 		List<SoliniaAARankEffect> rankEffects = new ArrayList<SoliniaAARankEffect>();
 		
 		for (ISoliniaAAAbility aaAbility : soliniaPlayer.getAAAbilitiesWithEffectType(effectId)) 
+		{
+			int currentRank = 0;
+			SoliniaAARankEffect highestEffect = null;
 			for (ISoliniaAARank rank : aaAbility.getRanks())
+			{
 				if (soliniaPlayer.hasRank(rank))
 					if (rank.getPosition() > currentRank)
 					{
 						currentRank = rank.getPosition();
 						for (SoliniaAARankEffect effect : rank.getEffects())
 							if (effect.getEffectId() == effectId)
-								rankEffects.add(effect);
+								highestEffect = effect;
 					}
-		
+			}
+			
+			if (highestEffect != null)
+			{
+				rankEffects.add(highestEffect);
+			}
+		}
 		return rankEffects;
 	}
 	
