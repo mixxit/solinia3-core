@@ -35,7 +35,7 @@ public class CommandEquip implements CommandExecutor {
 				return true;
 			}
 
-			if (args[0].toUpperCase().equals("EQUIP")) {
+			if (args[0].toUpperCase().equals("EQUIP") || args[0].toUpperCase().equals("EARS") || args[0].toUpperCase().equals("NECK") || args[0].toUpperCase().equals("FINGERS") || args[0].toUpperCase().equals("SHOULDERS")) {
 				try {
 					ItemStack primaryItem = player.getInventory().getItemInMainHand();
 					if (primaryItem.getType().equals(Material.AIR)) {
