@@ -35,6 +35,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InsufficientTemporaryMerchantItemException;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
@@ -160,8 +161,28 @@ public class EntityManager implements IEntityManager {
 				{
 					UniversalMerchantEntry entry = merchantentries.get(i);
 					itemStack = StateManager.getInstance().getConfigurationManager().getItem(entry.getItemid()).asItemStackForMerchant(entry.getCostMultiplier());
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(entry.getItemid());
 					ItemMeta meta = itemStack.getItemMeta();
 					meta.setDisplayName("Display Item: " + itemStack.getItemMeta().getDisplayName());
+
+					if (item != null)
+					{
+						Player tmpPlayer = Bukkit.getPlayer(playerUUID);
+
+						if (item.isSpellscroll() && tmpPlayer != null)
+						{
+							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(tmpPlayer);
+							if (solPlayer != null)
+							{
+								if (solPlayer.getSpellBookItems().contains(item.getId()))
+								{
+									meta.setDisplayName("Display Item: " + itemStack.getItemMeta().getDisplayName() + ChatColor.RED + "[In Spellbook]" + ChatColor.RESET);
+								}
+							}
+						}
+					}
+					
+					// if item is a spell, show if the spell is in the players spell book
 					itemStack.setItemMeta(meta);
 					itemStack.setAmount(1);
 					merchantInventories.get(playerUUID).addItem(itemStack);
