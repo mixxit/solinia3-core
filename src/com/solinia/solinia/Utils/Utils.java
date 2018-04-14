@@ -59,6 +59,7 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
+import com.solinia.solinia.Interfaces.ISoliniaAAEffect;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -86,6 +87,7 @@ import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.NPCSpellListEntry;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
+import com.solinia.solinia.Models.SoliniaAAAbility;
 import com.solinia.solinia.Models.SoliniaAAEffect;
 import com.solinia.solinia.Models.SoliniaAAPrereq;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -4720,6 +4722,26 @@ public class Utils {
 			return AugmentationSlotType.NONE;
 		}
 	}
+	
+	public static List<SoliniaAARankEffect> getHighestRankEffectsForEffectId(ISoliniaPlayer soliniaPlayer, int effectId)
+	{
+		int currentRank = 0;
+		List<SoliniaAARankEffect> rankEffects = new ArrayList<SoliniaAARankEffect>();
+		
+		for (ISoliniaAAAbility aaAbility : soliniaPlayer.getAAAbilitiesWithEffectType(effectId)) 
+			for (ISoliniaAARank rank : aaAbility.getRanks())
+				if (soliniaPlayer.hasRank(rank))
+					if (rank.getPosition() > currentRank)
+					{
+						currentRank = rank.getPosition();
+						for (SoliniaAARankEffect effect : rank.getEffects())
+							if (effect.getEffectId() == effectId)
+								rankEffects.add(effect);
+					}
+		
+		return rankEffects;
+	}
+	
 
 	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
 		if (!(bukkitLivingEntity instanceof Player))

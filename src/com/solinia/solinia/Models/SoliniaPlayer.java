@@ -1603,10 +1603,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				break;
 			}
 
-			if (effectId > 0) {
-				for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(effectId)) {
-					total += effect.getBase1();
+			if (effectId > 0) 
+			{
+				int aaEffect = 0;
+				
+				for (SoliniaAARankEffect highestRankEffect : Utils.getHighestRankEffectsForEffectId(this, effectId))
+				{
+					aaEffect += highestRankEffect.getBase1();
 				}
+
+				total += aaEffect;
 			}
 
 			int resistAllEffectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistAll);
@@ -1788,6 +1794,34 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return effects;
+	}
+	
+	@Override
+	public List<ISoliniaAAAbility> getAAAbilitiesWithEffectType(int effectId) {
+		List<Integer> aaIds = new ArrayList<Integer>();
+		List<ISoliniaAAAbility> abilities = new ArrayList<ISoliniaAAAbility>();
+		
+		try
+			{
+			for (SoliniaAARankEffect rankEffect : getRanksEffectsOfEffectType(effectId))
+			{
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankEffect.getRankId());
+				if (rank != null)
+				{
+					if (!aaIds.contains(rank.getAbilityid()))
+					{
+						aaIds.add(rank.getAbilityid());
+						ISoliniaAAAbility ability = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
+						abilities.add(ability);
+					}
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return abilities;
 	}
 
 	@Override

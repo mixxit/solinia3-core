@@ -356,4 +356,6 @@ public interface ISoliniaPlayer extends Serializable {
 	List<Integer> getSpellBookItems();
 
 	void setSpellBookItems(List<Integer> spellBookItems);
+
+	List<ISoliniaAAAbility> getAAAbilitiesWithEffectType(int effectId);
 }
