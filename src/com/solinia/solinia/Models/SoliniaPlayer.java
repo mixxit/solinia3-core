@@ -1138,6 +1138,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 									)
 							{
 								StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(), getBukkitPlayer());
+							} else {
+								getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
+								return;
 							}
 						} else {
 							getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
@@ -1223,6 +1226,41 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (spell.isAASpell() && !canUseAASpell(spell)) {
 			player.sendMessage("You require the correct AA to use this spell");
 			return;
+		}
+		
+		LivingEntity targetmob = null;
+		
+		// This now all uses the targetting system
+		// If the player is using a self only spell or AE switch target to themselves if they have no target right now
+		try
+		{
+			if (StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer()) == null)
+			{
+				if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self) || 
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional) ||
+						Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)
+						)
+				{
+					StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(), getBukkitPlayer());
+				} else {
+					getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
+					return;
+				}
+			}
+			
+			targetmob = StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer());
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 
 		if (spell.getAllowedClasses().size() > 0) {
@@ -1345,7 +1383,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		// Reroute action depending on target
-		LivingEntity targetmob = Utils.getTargettedLivingEntity(player, spell.getRange());
+		//
 		try {
 			if (targetmob != null) {
 				boolean success = spellSourceItem.useItemOnEntity(plugin, player, targetmob, false);
