@@ -10,8 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -21,9 +23,15 @@ import net.md_5.bungee.api.ChatColor;
 public class InvalidItemCheckerTimer  extends BukkitRunnable {
 	@Override
 	public void run() {
-
+		
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
+			try {
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+				solplayer.configureUIElements();
+			} catch (CoreStateInitException e) {
+			}
+			
 			List<ItemStack> itemStackBonuses = new ArrayList<ItemStack>() {{ add(player.getInventory().getItemInMainHand()); add(player.getInventory().getItemInOffHand()); addAll(Arrays.asList(player.getInventory().getArmorContents())); }};
 			
 			for (ItemStack itemstack : itemStackBonuses) {

@@ -1089,8 +1089,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			else
 				solplayer.setChosenRace(false);
 			
-			solplayer.configureUIElements();
-			
 			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game");
 			
 		} catch (CoreStateInitException e) {

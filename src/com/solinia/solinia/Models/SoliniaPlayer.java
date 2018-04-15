@@ -32,9 +32,11 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.ItemStackAdapter;
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
@@ -2843,11 +2845,34 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (currentItemStack.getEnchantmentLevel(Enchantment.DURABILITY) != 998)
 		{
-			getBukkitPlayer().getWorld().dropItem(getBukkitPlayer().getLocation(), currentItemStack);
-			getBukkitPlayer().sendMessage(ChatColor.RED + "WARNING! An item was currently in your targetting slot and has been dropped!!");
-			currentItemStack = Utils.getTargetingItemStack();
-			getBukkitPlayer().getInventory().setItem(0, currentItemStack);
-			getBukkitPlayer().updateInventory();
+			try
+			{
+				if (!Utils.IsSoliniaItem(currentItemStack))
+				{
+					getBukkitPlayer().getWorld().dropItem(getBukkitPlayer().getLocation(), currentItemStack);
+					getBukkitPlayer().sendMessage(ChatColor.RED + "WARNING! An item was currently in your targetting slot and has been dropped to the ground!!");
+				} else {
+					ISoliniaItem soliniaItem = SoliniaItemAdapter.Adapt(currentItemStack);
+					
+					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+					newclaim.setMcname(getBukkitPlayer().getName());
+					newclaim.setItemid(soliniaItem.getId());
+					newclaim.setClaimed(false);
+					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+					getBukkitPlayer().sendMessage(ChatColor.RED + "WARNING! An item was currently in your targetting slot and has been added to your /claim list");
+				}
+				
+				currentItemStack = Utils.getTargetingItemStack();
+				getBukkitPlayer().getInventory().setItem(0, currentItemStack);
+				getBukkitPlayer().updateInventory();
+			} catch (CoreStateInitException e)
+			{
+				
+			} catch (SoliniaItemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
