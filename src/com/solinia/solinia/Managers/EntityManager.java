@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -430,6 +431,11 @@ public class EntityManager implements IEntityManager {
 			{
 				if (entity instanceof Player)
 					continue;
+				
+				if (entity instanceof Boat)
+				{
+					Utils.despawnBoatIfNotNearWater((Boat)entity);
+				}
 				
 				if (!(entity instanceof LivingEntity))
 					continue;

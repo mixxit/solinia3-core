@@ -28,6 +28,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -5515,6 +5516,19 @@ public class Utils {
 			return false;
 		} else {
 			return true;
+		}
+		
+	}
+
+	public static void despawnBoatIfNotNearWater(Boat entity) {
+		int y = (int)entity.getLocation().getY();
+		if (!(
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-1,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-2,(int)entity.getLocation().getZ()).getType().equals(Material.WATER)
+				))
+		{
+			entity.remove();
 		}
 		
 	}
