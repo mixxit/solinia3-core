@@ -42,17 +42,31 @@ public class CommandPet implements CommandExecutor {
 			{
 				Player player = (Player)sender;
 				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
+				
 				if (pet == null)
 				{
 					player.sendMessage("You don't have a pet");
 					return true;
 				}
 				
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+				
 				if (args.length > 0)
 				{
 					String petcommand = args[0];
 					if (petcommand.equals("back"))
 					{
+						if (solLivingEntity != null)
+						{
+							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+							if (npc != null)
+							if (npc.isPetControllable() == false)
+							{
+								player.sendMessage("This pet is not controllable");
+								return true;
+							}
+						}
+						
 						Wolf c = (Wolf)pet;
 						player.setLastDamageCause(null);
 						player.sendMessage("* As you wish my master");
@@ -61,6 +75,17 @@ public class CommandPet implements CommandExecutor {
 					
 					if (petcommand.equals("equip"))
 					{
+						if (solLivingEntity != null)
+						{
+							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+							if (npc != null)
+							if (npc.isPetControllable() == false)
+							{
+								player.sendMessage("This pet is not controllable/equippable");
+								return true;
+							}
+						}
+						
 						PetEquip(player,pet);
 					}
 				}

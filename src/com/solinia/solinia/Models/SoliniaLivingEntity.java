@@ -2333,6 +2333,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
 				if (npc == null)
 					return totalHp;
+				
+				if (npc.getForcedMaxHp() > 0)
+				{
+					return npc.getForcedMaxHp();
+				}
 
 				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());
 

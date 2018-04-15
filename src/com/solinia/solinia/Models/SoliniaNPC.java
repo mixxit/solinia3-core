@@ -84,6 +84,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int ac = 0;
 	private boolean speaksAllLanguages = false;
 	private boolean operatorCreated = true;
+	private boolean isPetControllable = true;
+	private int forcedMaxHp = 0;
 	
 	@Override
 	public int getId() {
@@ -402,6 +404,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic());
 		sender.sendMessage("- raidboss: " + ChatColor.GOLD + isRaidboss());
 		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
+		sender.sendMessage("- forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
+		sender.sendMessage("- petcontrollable: " + ChatColor.GOLD + isPetControllable());
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
 			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
@@ -592,6 +596,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "speaksalllanguages":
 			setSpeaksAllLanguages(Boolean.parseBoolean(value));
+			break;
+		case "forcedmaxhp":
+			setForcedMaxHp(Integer.parseInt(value));
+			break;
+		case "petcontrollable":
+			setPetControllable(Boolean.parseBoolean(value));
 			break;
 		default:
 			throw new InvalidNpcSettingException(
@@ -1218,6 +1228,26 @@ public class SoliniaNPC implements ISoliniaNPC {
 		}
 
 		return items;
+	}
+
+	@Override
+	public boolean isPetControllable() {
+		return isPetControllable;
+	}
+
+	@Override
+	public void setPetControllable(boolean isPetControllable) {
+		this.isPetControllable = isPetControllable;
+	}
+
+	@Override
+	public int getForcedMaxHp() {
+		return forcedMaxHp;
+	}
+
+	@Override
+	public void setForcedMaxHp(int forcedMaxHp) {
+		this.forcedMaxHp = forcedMaxHp;
 	}
 
 }

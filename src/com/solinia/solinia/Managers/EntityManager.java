@@ -655,8 +655,15 @@ public class EntityManager implements IEntityManager {
 			
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(entity);
 			solentity.configurePetGoals();
-			entity.setMaxHealth(solentity.getMaxHP());
-			entity.setHealth(solentity.getMaxHP());
+			
+			double maxHp = solentity.getMaxHP();
+			if (npc.getForcedMaxHp() > 0)
+			{
+				maxHp = (double)npc.getForcedMaxHp();
+			}
+			
+			entity.setMaxHealth(maxHp);
+			entity.setHealth(maxHp);
 			net.minecraft.server.v1_12_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) entity).getHandle();
 			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solentity.getMaxDamage());
 			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + solentity.getMaxDamage() + " dmg");

@@ -25,6 +25,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
@@ -476,6 +477,22 @@ public class SoliniaItem implements ISoliniaItem {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
 			if (pet != null)
 			{
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+				if (solLivingEntity  != null)
+				{
+					if (solLivingEntity.isNPC() && solLivingEntity.isPet())
+					{
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+						if (npc != null)
+						{
+							if (npc.isPetControllable() == false)
+							{
+								player.sendMessage("This pet is not controllable");
+								return false;
+							}
+						}
+					}
+				}
 				if (pet instanceof Wolf)
 				{
 					// Move pet to player

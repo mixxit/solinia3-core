@@ -226,4 +226,12 @@ public interface ISoliniaNPC {
 	List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity, boolean excludeMainHand);
 
 	List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity);
+
+	boolean isPetControllable();
+
+	void setPetControllable(boolean isPetControllable);
+
+	int getForcedMaxHp();
+
+	void setForcedMaxHp(int forcedMaxHp);
 }
