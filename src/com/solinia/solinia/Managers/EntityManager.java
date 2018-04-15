@@ -53,6 +53,7 @@ import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
+import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -1039,6 +1040,50 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setEntityTarget(LivingEntity source, LivingEntity target)
 	{
-		entityTargets.put(source.getUniqueId(), target.getUniqueId());
+		if (target == null)
+		{
+			source.sendMessage(ChatColor.GRAY + "Cleared your target");
+			entityTargets.remove(source.getUniqueId());
+			
+			if (source instanceof Player)
+			{
+				try
+				{
+					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
+					ScoreboardUtils.UpdateScoreboard((Player)source,
+						solPlayer.getMaxMP(), solPlayer.getMana());
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		} else {
+			source.sendMessage(ChatColor.GRAY + "Set target to " + target.getName());
+			entityTargets.put(source.getUniqueId(), target.getUniqueId());
+			if (source instanceof Player)
+			{
+				try
+				{
+					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
+					ScoreboardUtils.UpdateScoreboard((Player)source,
+							solPlayer.getMaxMP(), SoliniaLivingEntityAdapter.Adapt(source).getMana());
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		}
+	}
+
+	@Override
+	public void clearTargetsAgainstMe(LivingEntity entity) {
+		for (Player player : entity.getWorld().getPlayers())
+		{
+			if (getEntityTarget(player) == null)
+				continue;
+			
+			if (getEntityTarget(player).getUniqueId().toString().equals(entity.getUniqueId().toString()))
+				setEntityTarget(player,null);
+		}
 	}
 }

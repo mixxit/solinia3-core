@@ -130,4 +130,6 @@ public interface IEntityManager {
 
 	void setEntityTarget(LivingEntity source, LivingEntity target);
 
+	void clearTargetsAgainstMe(LivingEntity entity);
+
 }

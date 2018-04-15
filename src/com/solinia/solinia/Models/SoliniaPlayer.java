@@ -54,6 +54,7 @@ import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.ScoreboardUtils;
+import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -1089,15 +1090,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 					return;
 				}
-
-				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) {
-					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
-					if (targetmob != null) {
-						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, false);
-						return;
-					}
-				}
 				
 				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isThrowing()) {
@@ -1119,6 +1111,54 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						} else {
 							return;
 						}
+					}
+				}
+				
+				// This now all uses the targetting system
+				// If the player is using a self only spell or AE switch target to themselves if they have no target right now
+				if (StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer()) == null)
+				{
+					if (item.getAbilityid() > 0)
+					{
+						ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+						if (spell != null)
+						{
+							if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self) || 
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional) ||
+									Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)
+									)
+							{
+								StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(), getBukkitPlayer());
+							}
+						} else {
+							getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
+							return;
+						}
+					} else {
+						getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
+						return;
+						
+					}
+				}
+				
+				LivingEntity targetmob = StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer());
+				
+				// we should probably check line of sight here for detrimentals, or maybe in the spell
+
+				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) {
+					if (targetmob != null) {
+						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, false);
+						return;
 					}
 				}
 
@@ -1144,14 +1184,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						return;
 					}
 					
-					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 					if (targetmob != null) {
 						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
-						event.getPlayer().setItemInHand(null);
-						event.getPlayer().updateInventory();
-						return;
-					} else {
-						item.useItemOnEntity(plugin, event.getPlayer(), event.getPlayer(), true);
 						event.getPlayer().setItemInHand(null);
 						event.getPlayer().updateInventory();
 						return;
@@ -1162,12 +1196,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.isConsumable()
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), spell.getRange());
 					if (targetmob != null) {
 						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
-						return;
-					} else {
-						item.useItemOnEntity(plugin, event.getPlayer(), event.getPlayer(), true);
 						return;
 					}
 				}
@@ -2843,13 +2873,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			getBukkitPlayer().getInventory().setItem(0, currentItemStack);
 		}
 		
-		if (currentItemStack.getEnchantmentLevel(Enchantment.DURABILITY) != 998)
+		if (currentItemStack.getEnchantmentLevel(Enchantment.DURABILITY) != 997)
 		{
 			try
 			{
 				if (!Utils.IsSoliniaItem(currentItemStack))
 				{
-					getBukkitPlayer().getWorld().dropItem(getBukkitPlayer().getLocation(), currentItemStack);
+					if (currentItemStack.getEnchantmentLevel(Enchantment.DURABILITY) != 998)
+					{
+						getBukkitPlayer().getWorld().dropItem(getBukkitPlayer().getLocation(), currentItemStack);
+					}
 					getBukkitPlayer().sendMessage(ChatColor.RED + "WARNING! An item was currently in your targetting slot and has been dropped to the ground!!");
 				} else {
 					ISoliniaItem soliniaItem = SoliniaItemAdapter.Adapt(currentItemStack);

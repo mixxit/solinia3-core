@@ -5493,15 +5493,16 @@ public class Utils {
 		itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFlNDI1YzViYTlmM2MyOTYyYjM4MTc4Y2JjMjMxNzJhNmM2MjE1YTExYWNjYjkyNzc0YTQ3MTZlOTZjYWRhIn19fQ==", null));
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		List<String> lore = new ArrayList<String>();
-		lore.add("This is a targetting button");
+		lore.add("This is a targetting tool");
 		lore.add("Right click on an entity with this");
+		lore.add("Left click to target self");
 		lore.add("To clear, right click on nothing");
 		
 		itemMeta.setLore(lore);
 		itemStack.setDurability((short) 3);
 		itemMeta.setDisplayName("Targetting Tool");
 		itemStack.setItemMeta(itemMeta);
-		itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 998);
+		itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 997);
 		return itemStack;
 	}
 
@@ -5509,7 +5510,7 @@ public class Utils {
 		if (itemStack == null)
 			return false;
 		
-		if (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) != 998)
+		if (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) != 997)
 		{
 			return false;
 		} else {

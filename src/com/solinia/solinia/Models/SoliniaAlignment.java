@@ -178,7 +178,7 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 
 	@Override
 	public void removeChunk(SoliniaChunk chunk) {
-		chunks.put(chunk.getSoliniaWorldName().toUpperCase() + "_" + chunk.getChunkX() + "_" + chunk.getChunkZ(), null);
+		chunks.remove(chunk.getSoliniaWorldName().toUpperCase() + "_" + chunk.getChunkX() + "_" + chunk.getChunkZ());
 		
 	}
 }

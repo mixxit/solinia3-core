@@ -640,6 +640,12 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
+		
+		try {
+			StateManager.getInstance().getEntityManager().clearTargetsAgainstMe((LivingEntity)event.getEntity());
+		} catch (CoreStateInitException e) {
+			
+		}
 
 		if (event.getEntity() instanceof Player)
 			return;
