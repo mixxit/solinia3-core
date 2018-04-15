@@ -264,7 +264,7 @@ public class Solinia3CoreEntityListener implements Listener {
 								solCreatureEntity.say("Stopping attacking master, the target is mesmerized");
 							}
 							
-							event.setCancelled(true);
+							Utils.CancelEvent(event);
 							return;
 						}
 					}

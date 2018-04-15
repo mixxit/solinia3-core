@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -99,6 +100,16 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (ConfigurationManager.ForagingMaterials.contains(event.getBlock().getType().name()))
 		{
 			onForage(event);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onBlockPlace(BlockPlaceEvent event)
+	{
+		if (Utils.isUIElement(event.getItemInHand()))
+		{
+			Utils.CancelEvent(event);
+			return;
 		}
 	}
 	
@@ -387,7 +398,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			{
 				if (event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))
 				{
-						event.setCancelled(true);
+						Utils.CancelEvent(event);
 						event.getPlayer().sendMessage(ChatColor.GRAY + "* Your legs are bound and unable to jump!");
 						return;
 				}
@@ -423,6 +434,12 @@ public class Solinia3CorePlayerListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+		if (Utils.isUIElement(event.getMainHandItem()) || Utils.isUIElement(event.getOffHandItem()))
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+		
 		if (event.isCancelled())
 			return;
 		
@@ -512,6 +529,18 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
+		if (event.getSlot() == 0)
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+		
+		if (Utils.isUIElement(event.getCurrentItem()))
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+		
 		if (Utils.isInventoryMerchant(event.getInventory()))
 		{
 			onMerchantInventoryClick(event);
@@ -756,6 +785,11 @@ public class Solinia3CorePlayerListener implements Listener {
 	@EventHandler
 	public void onDropItemEvent(PlayerDropItemEvent event)
 	{
+		if (Utils.isUIElement(event.getItemDrop().getItemStack()))
+		{
+			Utils.CancelEvent(event);
+		}
+		
 		// This is to stop drops after closing shop
 		if (Utils.IsSoliniaItem(event.getItemDrop().getItemStack()))
 		if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().startsWith("Display Item: "))
@@ -1054,6 +1088,8 @@ public class Solinia3CorePlayerListener implements Listener {
 				solplayer.setChosenRace(true);
 			else
 				solplayer.setChosenRace(false);
+			
+			solplayer.configureUIElements();
 			
 			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game");
 			

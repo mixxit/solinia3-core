@@ -103,6 +103,11 @@ public class ItemStackAdapter {
 
 			loretxt.addAll(Arrays.asList(lorestr));
 		}
+		
+		if (soliniaItem.isThrowing() == true && !soliniaItem.isSpellscroll())
+	    {
+			loretxt.add("This item can be thrown!");
+	    }
 
 		if (soliniaItem.isArtifact() == true) {
 			loretxt.add(ChatColor.GREEN + "This item is a unique artifact!" + ChatColor.RESET);
@@ -312,11 +317,6 @@ public class ItemStackAdapter {
 		if (soliniaItem.getAbilityid() > 0 && soliniaItem.isSpellscroll())
 	    {
 			loretxt.addAll(generateSpellLoreText(soliniaItem));
-	    }
-		
-		if (soliniaItem.isThrowing() == true && !soliniaItem.isSpellscroll())
-	    {
-			loretxt.add("This item can be thrown!");
 	    }
 		
 		if (soliniaItem.getWeaponabilityid() > 0 && !soliniaItem.isSpellscroll())

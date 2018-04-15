@@ -1,5 +1,7 @@
 package com.solinia.solinia;
 
+import java.util.Locale;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -119,6 +121,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			discordincharacterchannelid = config.getString("discordincharacterchannelid");
 			setupDiscordClient();
 		}
+		
+		System.out.println("All local dates stored in format: " + Locale.getDefault().toLanguageTag());
 		
 		// For debugging
 		//new RuntimeTransformer( EntityDamageEventTransformer.class );

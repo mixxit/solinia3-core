@@ -27,8 +27,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -1105,7 +1108,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 					
 					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
-					if (targetmob != null) {
+					if (targetmob != null && !targetmob.getUniqueId().equals(event.getPlayer().getUniqueId())) {
 						if (item.useItemOnEntity(plugin, event.getPlayer(), targetmob, false) == true)
 						{
 							event.getPlayer().setItemInHand(null);
@@ -2821,5 +2824,30 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSpellBookItems(List<Integer> spellBookItems) {
 		this.spellBookItems = spellBookItems;
+	}
+
+	@Override
+	public void configureUIElements() {
+		ItemStack currentItemStack = getBukkitPlayer().getInventory().getItem(0);
+		if (currentItemStack == null)
+		{
+			currentItemStack = Utils.getTargetingItemStack();
+			getBukkitPlayer().getInventory().setItem(0, currentItemStack);
+		}
+		
+		if (currentItemStack.getType().equals(Material.AIR))
+		{
+			currentItemStack = Utils.getTargetingItemStack();
+			getBukkitPlayer().getInventory().setItem(0, currentItemStack);
+		}
+		
+		if (currentItemStack.getEnchantmentLevel(Enchantment.DURABILITY) != 998)
+		{
+			getBukkitPlayer().getWorld().dropItem(getBukkitPlayer().getLocation(), currentItemStack);
+			getBukkitPlayer().sendMessage(ChatColor.RED + "WARNING! An item was currently in your targetting slot and has been dropped!!");
+			currentItemStack = Utils.getTargetingItemStack();
+			getBukkitPlayer().getInventory().setItem(0, currentItemStack);
+			getBukkitPlayer().updateInventory();
+		}
 	}
 }

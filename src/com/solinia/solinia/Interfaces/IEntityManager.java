@@ -122,4 +122,12 @@ public interface IEntityManager {
 
 	void setPlayerSetMain(ConcurrentHashMap<UUID, Boolean> playerSetMain);
 
+	ConcurrentHashMap<UUID, UUID> getEntityTargets();
+
+	void setEntityTargets(ConcurrentHashMap<UUID, UUID> entityTarget);
+
+	LivingEntity getEntityTarget(LivingEntity source);
+
+	void setEntityTarget(LivingEntity source, LivingEntity target);
+
 }

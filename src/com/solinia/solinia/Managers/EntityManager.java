@@ -80,6 +80,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, UniversalMerchant> universalMerchant = new ConcurrentHashMap<UUID, UniversalMerchant>();
 	private ConcurrentHashMap<UUID, Boolean> playerInTerritory = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, Boolean> playerSetMain = new ConcurrentHashMap<UUID, Boolean>();
+	private ConcurrentHashMap<UUID, UUID> entityTargets = new ConcurrentHashMap<UUID, UUID>();
 	
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
@@ -991,5 +992,53 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setPlayerSetMain(ConcurrentHashMap<UUID, Boolean> playerSetMain) {
 		this.playerSetMain = playerSetMain;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, UUID> getEntityTargets() {
+		return entityTargets;
+	}
+
+	@Override
+	public void setEntityTargets(ConcurrentHashMap<UUID, UUID> entityTarget) {
+		this.entityTargets = entityTarget;
+	}
+	
+	@Override
+	public LivingEntity getEntityTarget(LivingEntity entitySource)
+	{
+		if (entitySource == null)
+			return null;
+		
+		UUID target = entityTargets.get(entitySource.getUniqueId());
+		if (target == null)
+			return null;
+		
+		Entity entity = Bukkit.getEntity(target);
+		if (entity == null)
+		{
+			setEntityTarget(entitySource,null);
+			return null;
+		}
+		
+		if (!(entity instanceof LivingEntity))
+		{
+			setEntityTarget(entitySource,null);
+			return null;
+		}
+
+		if (((LivingEntity)entity).isDead())
+		{
+			setEntityTarget(entitySource,null);
+			return null;
+		}
+		
+		return ((LivingEntity)entity);		
+	}
+	
+	@Override
+	public void setEntityTarget(LivingEntity source, LivingEntity target)
+	{
+		entityTargets.put(source.getUniqueId(), target.getUniqueId());
 	}
 }

@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -51,7 +53,14 @@ public class ScoreboardUtils {
 
 				double maxmana = maxmp;
 				
-				bossbar.setTitle("MANA: " + mana + " ");
+				String target = "";
+				LivingEntity entityTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
+				if (entityTarget != null)
+				{
+					target = entityTarget.getCustomName();
+				}
+				
+				bossbar.setTitle("MANA: " + mana + " TARGET: " + target);
 				double progress = (double) ((double) mana / (double) maxmana);
 				if (progress < 0d)
 					progress = 0d;
