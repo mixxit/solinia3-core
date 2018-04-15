@@ -529,12 +529,6 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getSlot() == 0)
-		{
-			Utils.CancelEvent(event);
-			return;
-		}
-		
 		if (Utils.isUIElement(event.getCurrentItem()))
 		{
 			Utils.CancelEvent(event);
