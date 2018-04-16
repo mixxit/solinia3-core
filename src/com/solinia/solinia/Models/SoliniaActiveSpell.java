@@ -84,8 +84,15 @@ public class SoliniaActiveSpell {
 		activeSpellEffects = new ArrayList<ActiveSpellEffect>();
 
 		try {
+			if (Bukkit.getEntity(ownerUuid) == null)
+				return;
+			
 			ISoliniaLivingEntity solOwner = SoliniaLivingEntityAdapter
 					.Adapt((LivingEntity) Bukkit.getEntity(ownerUuid));
+			
+			if (Bukkit.getEntity(sourceUuid) == null)
+				return;
+			
 			ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter
 					.Adapt((LivingEntity) Bukkit.getEntity(sourceUuid));
 
