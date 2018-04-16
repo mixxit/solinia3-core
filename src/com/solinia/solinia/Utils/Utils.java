@@ -5510,11 +5510,17 @@ public class Utils {
 	public static void despawnBoatIfNotNearWater(Boat entity) {
 		int y = (int)entity.getLocation().getY();
 		if (!(
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y+1,(int)entity.getLocation().getZ()).getType().equals(Material.STATIONARY_WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y+1,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().equals(Material.STATIONARY_WATER) ||
 			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-1,(int)entity.getLocation().getZ()).getType().equals(Material.STATIONARY_WATER) ||
 			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-1,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-2,(int)entity.getLocation().getZ()).getType().equals(Material.STATIONARY_WATER) ||
 			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-2,(int)entity.getLocation().getZ()).getType().equals(Material.WATER)
 				))
 		{
+			System.out.println("Despawned Boat on: " + entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().name());
 			entity.remove();
 		}
 		
