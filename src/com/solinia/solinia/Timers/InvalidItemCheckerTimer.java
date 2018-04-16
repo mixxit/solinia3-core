@@ -26,12 +26,6 @@ public class InvalidItemCheckerTimer  extends BukkitRunnable {
 		
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			try {
-				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
-				solplayer.configureUIElements();
-			} catch (CoreStateInitException e) {
-			}
-			
 			List<ItemStack> itemStackBonuses = new ArrayList<ItemStack>() {{ add(player.getInventory().getItemInMainHand()); add(player.getInventory().getItemInOffHand()); addAll(Arrays.asList(player.getInventory().getArmorContents())); }};
 			
 			for (ItemStack itemstack : itemStackBonuses) {

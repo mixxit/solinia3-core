@@ -5507,19 +5507,6 @@ public class Utils {
 		return itemStack;
 	}
 
-	public static boolean isUIElement(ItemStack itemStack) {
-		if (itemStack == null)
-			return false;
-		
-		if (itemStack.getEnchantmentLevel(Enchantment.DURABILITY) != 997)
-		{
-			return false;
-		} else {
-			return true;
-		}
-		
-	}
-
 	public static void despawnBoatIfNotNearWater(Boat entity) {
 		int y = (int)entity.getLocation().getY();
 		if (!(

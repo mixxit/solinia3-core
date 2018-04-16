@@ -21,11 +21,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -104,10 +106,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (Utils.isUIElement(event.getItemInHand())) {
-			Utils.CancelEvent(event);
-			return;
-		}
+
 	}
 
 	public void onLumber(BlockBreakEvent event) {
@@ -408,11 +407,19 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-		if (Utils.isUIElement(event.getMainHandItem()) || Utils.isUIElement(event.getOffHandItem())) {
-			Utils.CancelEvent(event);
-			return;
+		if (event.getPlayer().isSneaking())
+		{
+			try {
+				StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(),
+						event.getPlayer());
+				Utils.CancelEvent(event);
+				return;
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 		}
-
+		
 		if (event.isCancelled())
 			return;
 
@@ -484,7 +491,6 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onInventoryDrag(InventoryDragEvent event) {
-
 		// More hassle than it is worth, cancel it always
 		if (Utils.isInventoryMerchant(event.getInventory())) {
 			Utils.CancelEvent(event);
@@ -492,10 +498,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			return;
 		}
 		
-		if (Utils.isUIElement(event.getCursor()) || Utils.isUIElement(event.getOldCursor())) {
-			Utils.CancelEvent(event);
-			return;
-		}
 	}
 
 	@EventHandler
@@ -507,15 +509,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			return;
 		}
 		
-		if (Utils.isUIElement(event.getCurrentItem())) {
-			Utils.CancelEvent(event);
-			return;
-		}
-		
-		if (Utils.isUIElement(event.getCursor())) {
-			Utils.CancelEvent(event);
-			return;
-		}
 
 		if (Utils.isInventoryMerchant(event.getInventory())) {
 			onMerchantInventoryClick(event);
@@ -760,9 +753,6 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onDropItemEvent(PlayerDropItemEvent event) {
-		if (Utils.isUIElement(event.getItemDrop().getItemStack())) {
-			Utils.CancelEvent(event);
-		}
 
 		// This is to stop drops after closing shop
 		if (Utils.IsSoliniaItem(event.getItemDrop().getItemStack()))
@@ -1069,30 +1059,32 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		// Player is changing target
-		try {
-			ItemStack itemstack = event.getItem();
-			if (itemstack != null)
-				if (Utils.isUIElement(itemstack)) {
-					if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-							|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
+		ItemStack itemstack = event.getItem();
+		if (itemstack != null)
+		{
+			
+			// Left clicking with spell to target
+			ISoliniaItem solItem = null;
+			
+			try
+			{
+				solItem = SoliniaItemAdapter.Adapt(itemstack);
+				
+				if (solItem != null && solItem.isSpellscroll())
+				{
+					if ((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK))) {
 						LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
-						StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(), targetmob);
-						return;
-					}
-
-					if ((event.getAction().equals(Action.LEFT_CLICK_AIR)
-							|| event.getAction().equals(Action.LEFT_CLICK_BLOCK))) {
+						
 						StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(),
-								event.getPlayer());
+								targetmob);
+						Utils.CancelEvent(event);
 						return;
 					}
-
-					StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(), null);
-					return;
 				}
-		} catch (CoreStateInitException e) {
-
+			} catch (CoreStateInitException | SoliniaItemException e)
+			{
+				
+			}
 		}
 
 		// Right click air is a cancelled event so we have to ignore it when checking

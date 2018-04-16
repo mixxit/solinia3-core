@@ -359,8 +359,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	List<ISoliniaAAAbility> getAAAbilitiesWithEffectType(int effectId);
 
-	public void configureUIElements();
-
 	boolean isFeignedDeath();
 
 	void setFeigned(boolean feigned);

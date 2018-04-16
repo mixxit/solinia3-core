@@ -35,6 +35,8 @@ public class SoliniaZone {
 	private int foragingMinSkill = 0;
 	private int foragingLootTableId = 0;
 	private int size = 500;
+	private int manaRegen = 0;
+	private int hpRegen = 0;
 
 	public int getId() {
 		return id;
@@ -99,6 +101,8 @@ public class SoliniaZone {
 		sender.sendMessage("- fishingminskill: " + ChatColor.GOLD + getFishingMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- miningminskill: " + ChatColor.GOLD + getMiningMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- foragingminskill: " + ChatColor.GOLD + getForagingMinSkill() + ChatColor.RESET);
+		sender.sendMessage("- manaregen: " + ChatColor.GOLD + getManaRegen() + ChatColor.RESET);
+		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpRegen() + ChatColor.RESET);
 		
 		if (getForagingLootTableId() != 0) {
 			sender.sendMessage("- foragingloottableid: " + ChatColor.GOLD + getForagingLootTableId() + " ("
@@ -169,6 +173,12 @@ public class SoliniaZone {
 			break;
 		case "succorz":
 			setSuccorz(Integer.parseInt(value));
+			break;
+		case "hpregen":
+			setHpRegen(Integer.parseInt(value));
+			break;
+		case "manaregen":
+			setManaRegen(Integer.parseInt(value));
 			break;
 		case "forestryminskill":
 			setForestryMinSkill(Integer.parseInt(value));
@@ -310,5 +320,17 @@ public class SoliniaZone {
 	}
 	public void setSize(int size) {
 		this.size = size;
+	}
+	public int getManaRegen() {
+		return manaRegen;
+	}
+	public void setManaRegen(int manaRegen) {
+		this.manaRegen = manaRegen;
+	}
+	public int getHpRegen() {
+		return hpRegen;
+	}
+	public void setHpRegen(int hpRegen) {
+		this.hpRegen = hpRegen;
 	}
 }

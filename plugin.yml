@@ -333,6 +333,7 @@ commands:
     aliases:
     - settrance
     - tran
+    - tr
   aa:
     description: Buy and list AAs
     usage: /aa
@@ -499,6 +500,11 @@ commands:
     description: Manipulates your spell book
     usage: /spellbook <arg> <arg>
     aliases: []
+  groupselect:
+    description: Selects a group by group position number or name
+    usage: /gs 1
+    aliases:
+    - gs
 depend:
 - Vault
 - MythicMobs
