@@ -1139,18 +1139,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							{
 								StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(), getBukkitPlayer());
 							} else {
-								getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
+								getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
 								return;
 							}
 						} else {
-							getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
+							getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
 							return;
 						}
-					} else {
-						getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
-						return;
-						
-					}
+					} 
 				}
 				
 				LivingEntity targetmob = StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer());
@@ -1161,6 +1157,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) {
 					if (targetmob != null) {
 						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, false);
+						return;
+					} else {
+						getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
 						return;
 					}
 				}
@@ -1192,6 +1191,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						event.getPlayer().setItemInHand(null);
 						event.getPlayer().updateInventory();
 						return;
+					} else {
+						getBukkitPlayer().sendMessage("* You must select a target target (left click with spell or use /ts for group or shift-f for self");
+						return;
 					}
 				}
 
@@ -1201,6 +1203,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					if (targetmob != null) {
 						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
+						return;
+					} else {
+						getBukkitPlayer().sendMessage("* You must select a target target (left click with spell or use /ts for group or shift-f for self");
 						return;
 					}
 				}
@@ -1252,7 +1257,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				{
 					StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(), getBukkitPlayer());
 				} else {
-					getBukkitPlayer().sendMessage("* You must select a target with the target tool before using this item");
+					getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
 					return;
 				}
 			}
