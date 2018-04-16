@@ -399,6 +399,7 @@ public class SoliniaActiveSpell {
 		case BindSight:
 			return;
 		case FeignDeath:
+			applyFeignDeath(plugin, spellEffect, soliniaSpell, casterLevel);
 			return;
 		case VoiceGraft:
 			return;
@@ -1242,6 +1243,24 @@ public class SoliniaActiveSpell {
 			return;
 		default:
 			return;
+		}
+	}
+
+	private void applyFeignDeath(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!(getLivingEntity() instanceof Player))
+			return;
+		
+		ISoliniaPlayer solPlayer;
+		try {
+			solPlayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+
+			if (solPlayer != null)
+			{
+				solPlayer.setFeigned(true);
+			}
+
+		} catch (CoreStateInitException e) {
+			
 		}
 	}
 

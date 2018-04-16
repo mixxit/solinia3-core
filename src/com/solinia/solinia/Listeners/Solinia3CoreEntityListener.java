@@ -77,6 +77,19 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (!(event.getEntity() instanceof Creature))
 			return;
 		
+		// cancel feigened if targetting
+		try
+		{
+			boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getEntity().getUniqueId());
+			if (feigned == true)
+			{
+				StateManager.getInstance().getEntityManager().setFeignedDeath(event.getEntity().getUniqueId(), false);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
 		try
 		{
 			Timestamp mzExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getEntity());
@@ -86,7 +99,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				{
 					event.getEntity().sendMessage("* You are mezzed!");
 				}
-				Utils.CancelEvent(event);;
+				Utils.CancelEvent(event);
 				return;
 			}
 		} catch (CoreStateInitException e)
@@ -110,7 +123,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),SpellEffectType.Invisibility)
 				 || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.Invisibility2)) {
 					((Creature) event.getEntity()).setTarget(null);
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 			}
@@ -119,7 +132,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),SpellEffectType.InvisVsAnimals)
 				 || StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.ImprovedInvisAnimals)) {
 					((Creature) event.getEntity()).setTarget(null);
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return;
 				}
 			}
@@ -135,7 +148,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					{
 						if (player.getClassObj().isSneakFromCrouch())
 						{
-							Utils.CancelEvent(event);;
+							Utils.CancelEvent(event);
 							return;
 						}
 					}
@@ -146,17 +159,29 @@ public class Solinia3CoreEntityListener implements Listener {
 			{
 				if (!(event.getEntity() instanceof Player))
 				{
-					if (event.getEntity() instanceof LivingEntity)
-					{
-						ISoliniaLivingEntity livingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-					}
 					// Mez cancel target
 					Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) event.getTarget());
 	
 					if (mezExpiry != null) {
 						((Creature) event.getEntity()).setTarget(null);
 						event.getEntity().sendMessage("The target is mezzed, you cannot hit it");
-						Utils.CancelEvent(event);;
+						Utils.CancelEvent(event);
+						return;
+					}
+				}
+			}
+			
+			if (event.getEntity() != null && event.getTarget() != null)
+			{
+				if (!(event.getEntity() instanceof Player))
+				{
+					// Feigned death cancel target
+					boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getTarget().getUniqueId());
+	
+					if (feigned == true) {
+						((Creature) event.getEntity()).setTarget(null);
+						event.getEntity().sendMessage("The target is feigned, you cannot hit it");
+						Utils.CancelEvent(event);
 						return;
 					}
 				}

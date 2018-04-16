@@ -317,6 +317,21 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerMove(PlayerMoveEvent event) {
 		try {
 			Player player = event.getPlayer();
+			
+			
+			// cancel feigened if moving
+			try
+			{
+				boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getPlayer().getUniqueId());
+				if (feigned == true)
+				{
+					StateManager.getInstance().getEntityManager().setFeignedDeath(event.getPlayer().getUniqueId(), false);
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+			
 			boolean playerIsInTerritory = Utils.isPlayerInTerritory(player);
 			Boolean cachedPlayerIsInTerritory = StateManager.getInstance().getEntityManager().getPlayerInTerritory()
 					.get(player.getUniqueId());
@@ -1086,6 +1101,19 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (event.getAction() != Action.RIGHT_CLICK_AIR) {
 			if (event.isCancelled())
 				return;
+		}
+		
+		// cancel feigened if targetting
+		try
+		{
+			boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getPlayer().getUniqueId());
+			if (feigned == true)
+			{
+				StateManager.getInstance().getEntityManager().setFeignedDeath(event.getPlayer().getUniqueId(), false);
+			}
+		} catch (CoreStateInitException e)
+		{
+					
 		}
 
 		try {

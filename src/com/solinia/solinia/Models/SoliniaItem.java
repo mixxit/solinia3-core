@@ -23,6 +23,8 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
+import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
@@ -941,6 +943,22 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "allowedclassnames":
 			String[] allowedclasses = value.split(",");
+			
+			for (String classname : allowedclasses)
+			{
+				boolean foundClass = false;
+				for (ISoliniaClass solClass : StateManager.getInstance().getConfigurationManager().getClasses())
+				{
+					if (solClass.getName().toUpperCase().equals(classname.toUpperCase()))
+						foundClass = true;
+				}
+				
+				if (foundClass == false)
+				{
+					throw new InvalidItemSettingException("Invalid class in allowedclasses array");
+				}
+			}
+			
 			setAllowedClassNames(Arrays.asList(allowedclasses));
 			break;
 		case "color":
@@ -1109,6 +1127,8 @@ public class SoliniaItem implements ISoliniaItem {
 		default:
 			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,throwing");
 		}
+		
+		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 	}
 
 	@Override

@@ -222,4 +222,8 @@ public interface ISoliniaLivingEntity
 	void sayto(Player player, String message);
 
 	void sayto(Player player, String message, boolean allowlanguagelearn);
+
+	boolean isFeignedDeath();
+
+	void setFeigned(boolean feigned);
 }

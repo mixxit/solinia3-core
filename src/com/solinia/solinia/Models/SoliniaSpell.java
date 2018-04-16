@@ -28,6 +28,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -3022,10 +3023,55 @@ public class SoliniaSpell implements ISoliniaSpell {
 		case "skill":
 			this.setSkill(Integer.parseInt(value));
 			break;
+		case "addspellclass":
+			try
+			{
+				String[] spellclassdata = value.split(",");
+				// Dissasemble the value to ensure it is correct
+				String classname = spellclassdata[0].toUpperCase();
+				int minLevel = Integer.parseInt(spellclassdata[1]);
+				
+				boolean foundClass = false;
+				for (ISoliniaClass solClass : StateManager.getInstance().getConfigurationManager().getClasses())
+				{
+					if (solClass.getName().toUpperCase().equals(classname.toUpperCase()))
+						foundClass = true;
+				}
+				
+				if (foundClass == false)
+				{
+					throw new InvalidSpellSettingException("Spell class value must be in format: CLASSNAME,MINLEVEL");
+				}
+				
+				boolean updatedSpellClass = false;
+				for(SoliniaSpellClass allowedClass : this.getAllowedClasses())
+				{
+					if (allowedClass.getClassname().toUpperCase().equals(classname.toUpperCase()))
+					{
+						updatedSpellClass = true;
+						allowedClass.setMinlevel(minLevel);
+					}
+				}
+				
+				if (updatedSpellClass == false)
+				{
+					SoliniaSpellClass allowedClass = new SoliniaSpellClass();
+					allowedClass.setClassname(classname.toUpperCase());
+					allowedClass.setMinlevel(minLevel);
+					this.getAllowedClasses().add(allowedClass);
+				}
+				
+				break;
+			} catch (Exception e)
+			{
+				throw new InvalidSpellSettingException("Spell class value must be in format: CLASSNAME,MINLEVEL");
+			}
 		default:
 			throw new InvalidSpellSettingException(
-					"Invalid Spell setting. Valid Options are: name");
+					"Invalid Spell setting. Valid Options are: name, teleportzone, effect, castonyou, castonother, spelleffectindex, duration, mana, componentsX, componentscountX, addspellclass");
 		}
+		
+		StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
 	}
 
 	@Override

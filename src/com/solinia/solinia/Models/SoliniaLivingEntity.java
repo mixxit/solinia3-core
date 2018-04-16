@@ -92,6 +92,38 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (!metaid.equals(""))
 				installNpcByMetaName(metaid);
 	}
+	
+	@Override
+	public boolean isFeignedDeath()
+	{
+		try
+		{
+			return StateManager.getInstance().getEntityManager().isFeignedDeath(getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public void setFeigned(boolean feigned)
+	{
+		try
+		{
+			StateManager.getInstance().getEntityManager().setFeignedDeath(getBukkitLivingEntity().getUniqueId(),feigned);
+			if (feigned == true)
+			{
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You feign your death");
+				StateManager.getInstance().getEntityManager().clearTargetsAgainstMe(getBukkitLivingEntity());
+
+			} else {
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are no longer feigning death!");
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
 
 	private void installNpcByMetaName(String metaid) {
 		if (isPlayer())

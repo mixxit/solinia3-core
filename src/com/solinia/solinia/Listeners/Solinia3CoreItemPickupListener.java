@@ -197,7 +197,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 		        					if (item.getAllowedClassNames().contains(groupSolPlayer.getClassObj().getName().toUpperCase()))
 		        					{
 		        						TextComponent tc = new TextComponent();
-		        						tc.setText("* " + groupSolPlayer.getFullName() + " picked up an item of interest to your class: [" + ChatColor.AQUA + item.getDisplayname() + ChatColor.RESET + "]");
+		        						tc.setText(ChatColor.RED + "* " + solPlayer.getFullName() + " picked up an item of interest to your class: [" + ChatColor.AQUA + item.getDisplayname() + ChatColor.RESET + "]");
 		        						
 		        						tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 		        								new ComponentBuilder(item.asJsonString()).create()));

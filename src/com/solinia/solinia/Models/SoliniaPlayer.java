@@ -2574,7 +2574,38 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public List<ISoliniaItem> getEquippedSoliniaItems() {
 		return getEquippedSoliniaItems(false);
 	}
+	
+	@Override
+	public boolean isFeignedDeath()
+	{
+		try
+		{
+			return StateManager.getInstance().getEntityManager().isFeignedDeath(getBukkitPlayer().getUniqueId());
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public void setFeigned(boolean feigned)
+	{
+		try
+		{
+			StateManager.getInstance().getEntityManager().setFeignedDeath(getBukkitPlayer().getUniqueId(),feigned);
+			if (feigned == true)
+			{
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You feign your death");
+				StateManager.getInstance().getEntityManager().clearTargetsAgainstMe(getBukkitPlayer());
 
+			} else {
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are no longer feigning death!");
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
 	
 	@Override
 	public List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand) {

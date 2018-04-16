@@ -83,6 +83,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Boolean> playerInTerritory = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, Boolean> playerSetMain = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, UUID> entityTargets = new ConcurrentHashMap<UUID, UUID>();
+	private ConcurrentHashMap<UUID, Boolean> feignedDeath = new ConcurrentHashMap<UUID, Boolean>();
 	
 	public EntityManager(INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
@@ -1053,6 +1054,11 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setEntityTarget(LivingEntity source, LivingEntity target)
 	{
+		if (source instanceof Creature)
+		{
+			((Creature)source).setTarget(target);
+		}
+		
 		if (target == null)
 		{
 			source.sendMessage(ChatColor.GRAY + "Cleared your target");
@@ -1089,14 +1095,53 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void clearTargetsAgainstMe(LivingEntity entity) {
-		for (Player player : entity.getWorld().getPlayers())
+	public void clearTargetsAgainstMe(LivingEntity livingEntity) {
+		for (Player player : livingEntity.getWorld().getPlayers())
 		{
 			if (getEntityTarget(player) == null)
 				continue;
 			
-			if (getEntityTarget(player).getUniqueId().toString().equals(entity.getUniqueId().toString()))
+			if (getEntityTarget(player).getUniqueId().toString().equals(livingEntity.getUniqueId().toString()))
 				setEntityTarget(player,null);
 		}
+		
+		for(Entity entity : livingEntity.getNearbyEntities(50, 50, 50))
+		{
+			if (entity instanceof Creature)
+			{
+				if (((Creature) entity).getTarget() != null)
+				if (((Creature) entity).getTarget().getUniqueId().toString().equals(livingEntity.getUniqueId().toString()))
+				{
+					setEntityTarget((LivingEntity)entity,null);
+				}
+			}
+		}
+
+	}
+
+	public ConcurrentHashMap<UUID, Boolean> getFeignedDeath() {
+		return feignedDeath;
+	}
+
+	public void setFeignedDeath(ConcurrentHashMap<UUID, Boolean> feignedDeath) {
+		this.feignedDeath = feignedDeath;
+	}
+	
+	@Override
+	public boolean isFeignedDeath(UUID entityUuid)
+	{
+		Boolean feignedDeath = getFeignedDeath().get(entityUuid);
+		if (feignedDeath == null)
+		{
+			return false;
+		}
+		
+		return getFeignedDeath().get(entityUuid);
+	}
+	
+	@Override
+	public void setFeignedDeath(UUID entityUuid, boolean feigned)
+	{
+		getFeignedDeath().put(entityUuid, feigned);
 	}
 }

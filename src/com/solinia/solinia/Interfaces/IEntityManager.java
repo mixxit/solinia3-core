@@ -132,4 +132,8 @@ public interface IEntityManager {
 
 	void clearTargetsAgainstMe(LivingEntity entity);
 
+	boolean isFeignedDeath(UUID entityUuid);
+
+	void setFeignedDeath(UUID entityUuid, boolean feigned);
+
 }
