@@ -505,6 +505,14 @@ commands:
     usage: /gs 1
     aliases:
     - gs
+  listquests:
+    description: Lists quests
+    usage: /listquests searchstring
+    aliases: []
+  editquest:
+    description: Edits a quest
+    usage: /editquest questid setting value
+    aliases: []
 depend:
 - Vault
 - MythicMobs

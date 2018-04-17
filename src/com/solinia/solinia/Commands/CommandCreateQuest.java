@@ -22,12 +22,12 @@ public class CommandCreateQuest implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 
-		if (sender instanceof Player) {
-
+		if (sender instanceof Player)
+		{
 			Player player = (Player) sender;
-
-			if (!player.isOp()) {
-				player.sendMessage("This is an operator only command");
+			if (!player.isOp() && !player.hasPermission("solinia.createquest"))
+			{
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -57,7 +57,7 @@ public class CommandCreateQuest implements CommandExecutor {
 			SoliniaQuest quest = new SoliniaQuest();
 			quest.setId(StateManager.getInstance().getConfigurationManager().getNextQuestId());
 			quest.setName(questname);
-			StateManager.getInstance().getConfigurationManager().addQuest(quest);
+			StateManager.getInstance().getConfigurationManager().addQuest(quest,sender.isOp());
 			sender.sendMessage("Quest created! [" + quest.getId() + "]");
 		} catch (CoreStateInitException e) {
 			sender.sendMessage(e.getMessage());

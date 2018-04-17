@@ -28,6 +28,7 @@ import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
@@ -915,6 +916,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
+	public void editQuest(int id, String setting, String value, String[] additional) 
+		throws InvalidQuestSettingException, NumberFormatException, CoreStateInitException {
+			getQuest(id).editSetting(setting, value, additional);
+	}
+	
+	@Override
 	public ISoliniaNPCMerchant getNPCMerchant(String merchantlistname) {
 		List<ISoliniaNPCMerchant> list = npcmerchantRepository.query(q -> q.getName().toUpperCase().equals(merchantlistname.toUpperCase()));
 		if (list.size() > 0)
@@ -1093,7 +1100,8 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
-	public ISoliniaQuest addQuest(SoliniaQuest quest) {
+	public ISoliniaQuest addQuest(SoliniaQuest quest, boolean isOperatorCreated) {
+		quest.setOperatorCreated(isOperatorCreated);
 		this.questRepository.add(quest);
 		return getQuest(quest.getId());
 	}

@@ -12,6 +12,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidAASettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
@@ -293,7 +294,7 @@ public interface IConfigurationManager {
 
 	int getNextQuestId();
 
-	ISoliniaQuest addQuest(SoliniaQuest quest);
+	ISoliniaQuest addQuest(SoliniaQuest quest, boolean operatorCreated);
 
 	void editLootDrop(int lootDropid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidLootDropSettingException;
 
@@ -416,4 +417,7 @@ public interface IConfigurationManager {
 	boolean isItemsChanged();
 
 	void setItemsChanged(boolean itemsChanged);
+
+	void editQuest(int id, String setting, String value, String[] additional)
+			throws InvalidQuestSettingException, NumberFormatException, CoreStateInitException;
 }
