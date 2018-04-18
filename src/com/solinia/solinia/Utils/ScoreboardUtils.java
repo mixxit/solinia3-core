@@ -31,7 +31,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class ScoreboardUtils {
-	public static void UpdateScoreboard(Player player, int maxmp, int mana) {
+	public static void UpdateScoreboard(Player player, int mana) {
 
 		if (player != null) {
 			BossBar bossbar = StateManager.getInstance().getBossBar(player.getUniqueId());

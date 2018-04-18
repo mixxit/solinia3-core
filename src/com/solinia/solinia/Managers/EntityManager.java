@@ -1074,8 +1074,7 @@ public class EntityManager implements IEntityManager {
 				try
 				{
 					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
-					ScoreboardUtils.UpdateScoreboard((Player)source,
-						solPlayer.getMaxMP(), solPlayer.getMana());
+					ScoreboardUtils.UpdateScoreboard((Player)source,solPlayer.getMana());
 				} catch (CoreStateInitException e)
 				{
 					
@@ -1089,8 +1088,7 @@ public class EntityManager implements IEntityManager {
 				try
 				{
 					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
-					ScoreboardUtils.UpdateScoreboard((Player)source,
-							solPlayer.getMaxMP(), SoliniaLivingEntityAdapter.Adapt(source).getMana());
+					ScoreboardUtils.UpdateScoreboard((Player)source,SoliniaLivingEntityAdapter.Adapt(source).getMana());
 				} catch (CoreStateInitException e)
 				{
 					
@@ -1235,8 +1233,8 @@ public class EntityManager implements IEntityManager {
 			if (entity instanceof Player && (!((Player)entity).isDead()))
 			{
 				try {
-					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-					ScoreboardUtils.UpdateScoreboard((Player)entity, solEntity.getMana(), solEntity.getMaxMP());
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
+					ScoreboardUtils.UpdateScoreboard((Player)entity, solPlayer.getMana());
 				} catch (CoreStateInitException e) {
 					
 				}
