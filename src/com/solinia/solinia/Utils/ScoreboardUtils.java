@@ -69,7 +69,6 @@ public class ScoreboardUtils {
 					double progressmilliseconds = ((double)casting.getSpell().getCastTime() - casting.timeLeftMilliseconds);
 					progress = (double)((double)progressmilliseconds / (double)casting.getSpell().getCastTime());
 					
-					System.out.println("Progress is: " + progress);
 					if (progress < 0d)
 						progress = 0d;
 					

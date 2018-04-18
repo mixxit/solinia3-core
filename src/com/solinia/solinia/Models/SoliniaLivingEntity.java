@@ -684,6 +684,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
+		try
+		{
+			if (Utils.RandomBetween(1,100) > 70)
+			{
+				StateManager.getInstance().getEntityManager().interruptCasting(getBukkitLivingEntity());
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
 		getBukkitLivingEntity().damage(damage, sourceEntity);
 	}
 

@@ -320,14 +320,23 @@ public class Solinia3CorePlayerListener implements Listener {
 			
 			// If player is casting spell and spell is not allowed to be used during moving then cancel
 			
+			/*
+			 * TODO - allow a tiny bit of movement with a chance to interupt
 			CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(event.getPlayer());
 			if (castingSpell != null)
 			{
 				if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0)
 				{
-					StateManager.getInstance().getEntityManager().interruptCasting(event.getPlayer());
+					if (event.getTo().getX() != event.getFrom().getX() ||
+							event.getTo().getY() != event.getFrom().getY() || 
+									event.getTo().getZ() != event.getFrom().getZ()
+							) {
+						StateManager.getInstance().getEntityManager().interruptCasting(event.getPlayer());
+					}
+					
 				}
 			}
+			*/
 			
 			// cancel feigned if moving
 			try
