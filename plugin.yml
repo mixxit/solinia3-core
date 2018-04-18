@@ -399,7 +399,8 @@ commands:
   inspiration:
     description: Lists inspiration/buys inspiration rewards
     usage: /inspiration
-    aliases: []
+    aliases:
+    - vote
   loot:
     description: Searches loot
     usage: /loot searchstring
@@ -499,7 +500,9 @@ commands:
   spellbook:
     description: Manipulates your spell book
     usage: /spellbook <arg> <arg>
-    aliases: []
+    aliases:
+    - spell
+    - spells
   groupselect:
     description: Selects a group by group position number or name
     usage: /gs 1
