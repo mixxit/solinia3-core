@@ -597,6 +597,7 @@ public class ItemStackAdapter {
 			loreTxt.add(ChatColor.WHITE + "Mana/Power: " + ChatColor.YELLOW+spell.getMana() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Spell Skill: " + ChatColor.YELLOW+Utils.getSkillType(spell.getSkill()).name().toUpperCase() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Range: " + ChatColor.YELLOW+spell.getRange() + ChatColor.RESET);
+			loreTxt.add(ChatColor.WHITE + "Casting Time: " + ChatColor.YELLOW+(spell.getCastTime()/1000) + " seconds" + ChatColor.RESET);
 			
 			if (spell.isAASpell())
 			{

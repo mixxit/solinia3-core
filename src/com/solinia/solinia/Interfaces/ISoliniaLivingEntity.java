@@ -101,7 +101,7 @@ public interface ISoliniaLivingEntity
 
 	void configurePetGoals();
 
-	public void doSummon(Plugin plugin, LivingEntity target);
+	public void doSummon(LivingEntity target);
 
 	boolean isNPC();
 

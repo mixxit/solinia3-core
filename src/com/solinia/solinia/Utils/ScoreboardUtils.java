@@ -21,6 +21,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 
@@ -35,7 +36,7 @@ public class ScoreboardUtils {
 		if (player != null) {
 			BossBar bossbar = StateManager.getInstance().getBossBar(player.getUniqueId());
 			if (bossbar == null) {
-				bossbar = Bukkit.createBossBar(player.getUniqueId().toString(), BarColor.BLUE, BarStyle.SOLID);
+				bossbar = Bukkit.createBossBar(player.getUniqueId().toString(), BarColor.PINK, BarStyle.SOLID);
 				bossbar.addPlayer(player);
 				StateManager.getInstance().setBossBar(player.getUniqueId(), bossbar);
 			}
@@ -51,8 +52,6 @@ public class ScoreboardUtils {
 				if (found == false)
 					bossbar.addPlayer(player);
 
-				double maxmana = maxmp;
-				
 				String target = "";
 				LivingEntity entityTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
 				if (entityTarget != null)
@@ -61,12 +60,22 @@ public class ScoreboardUtils {
 				}
 				
 				bossbar.setTitle("MANA: " + mana + " TARGET: " + target);
-				double progress = (double) ((double) mana / (double) maxmana);
-				if (progress < 0d)
-					progress = 0d;
 				
-				if (progress > 1d)
-					progress = 1d;
+				CastingSpell casting = StateManager.getInstance().getEntityManager().getCasting(player);
+				
+				double progress = 0d;
+				if (casting != null && casting.timeLeftMilliseconds > 0 && casting.getSpell() != null)
+				{
+					double progressmilliseconds = ((double)casting.getSpell().getCastTime() - casting.timeLeftMilliseconds);
+					progress = (double)((double)progressmilliseconds / (double)casting.getSpell().getCastTime());
+					
+					System.out.println("Progress is: " + progress);
+					if (progress < 0d)
+						progress = 0d;
+					
+					if (progress > 1d)
+						progress = 1d;
+				}
 				bossbar.setProgress(progress);
 
 			} catch (Exception e) {

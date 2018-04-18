@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
+import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.PlayerQuest;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -223,7 +224,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void setSkills(List<SoliniaPlayerSkill> skillCache);
 
-	void doCastSpellItem(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem);
+	void doCastSpellItem(ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem);
 
 	boolean checkDoesntFizzle(ISoliniaSpell spell);
 
@@ -362,4 +363,8 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isFeignedDeath();
 
 	void setFeigned(boolean feigned);
+
+	void startCasting(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem item);
+
+	void castingComplete(CastingSpell castingSpell);
 }

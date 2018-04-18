@@ -176,7 +176,7 @@ public interface ISoliniaItem {
 
 	void setDiseaseResist(int diseaseResist);
 
-	boolean useItemOnEntity(Plugin plugin, Player player, LivingEntity targetentity,
+	boolean useItemOnEntity(Player player, LivingEntity targetentity,
 			boolean isConsumable) throws CoreStateInitException;
 
 	void consume(Plugin plugin, Player player) throws CoreStateInitException;

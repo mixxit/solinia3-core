@@ -1685,7 +1685,7 @@ public class SoliniaActiveSpell {
 			return;
 
 		try {
-			StateManager.getInstance().getEntityManager().SpawnPet(plugin, Bukkit.getPlayer(getOwnerUuid()),
+			StateManager.getInstance().getEntityManager().SpawnPet(Bukkit.getPlayer(getOwnerUuid()),
 					soliniaSpell);
 		} catch (CoreStateInitException e) {
 			return;
@@ -1929,7 +1929,7 @@ public class SoliniaActiveSpell {
 
 	private void applyCancelMagic(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		try {
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffect(plugin, getLivingEntity());
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffect(getLivingEntity());
 		} catch (CoreStateInitException e) {
 			return;
 		}
@@ -1941,7 +1941,7 @@ public class SoliniaActiveSpell {
 			return;
 
 		try {
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(plugin, getLivingEntity(),
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),
 					SpellEffectType.PoisonCounter);
 			if (isOwnerPlayer()) {
 				Player player = (Player) Bukkit.getPlayer(getOwnerUuid());
@@ -1969,7 +1969,7 @@ public class SoliniaActiveSpell {
 			return;
 
 		try {
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(plugin, getLivingEntity(),
+			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),
 					SpellEffectType.DiseaseCounter);
 			if (isOwnerPlayer()) {
 				Player player = (Player) Bukkit.getPlayer(getOwnerUuid());

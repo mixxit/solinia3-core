@@ -49,6 +49,7 @@ import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
+import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.KingCheckTimer;
@@ -75,6 +76,7 @@ import sx.blah.discord.util.DiscordException;
 
 public class Solinia3CorePlugin extends JavaPlugin {
 
+	private CastingTimer castingTimer;
 	private StateCommitTimer commitTimer;
 	private PlayerRegenTickTimer playerRegenTimer;
 	private SpellTickTimer spellTickTimer;
@@ -284,7 +286,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			worldrepo.reload();
 			
 			PlayerManager playerManager = new PlayerManager(repo);
-			EntityManager entityManager = new EntityManager(new MythicMobsNPCEntityProvider());
+			EntityManager entityManager = new EntityManager(this, new MythicMobsNPCEntityProvider());
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
@@ -341,6 +343,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			invalidItemCheckerTimer = new InvalidItemCheckerTimer();
 			invalidItemCheckerTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
+			
+			castingTimer = new CastingTimer();
+			// every 100 milliseconds
+			castingTimer.runTaskTimer(this, 0L, 1 * 2L);
 			
 			
 			

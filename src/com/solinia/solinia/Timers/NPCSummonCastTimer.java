@@ -16,7 +16,7 @@ public class NPCSummonCastTimer extends BukkitRunnable {
 	public void run() {
 
 		try {
-			StateManager.getInstance().getEntityManager().doNPCSummon(plugin);
+			StateManager.getInstance().getEntityManager().doNPCSummon();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

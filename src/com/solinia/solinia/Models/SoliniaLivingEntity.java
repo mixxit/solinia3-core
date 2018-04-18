@@ -560,15 +560,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 											// TODO - For now apply self and group to attacker, else attach to target
 											switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
 											case Self:
-												procSpell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(),
+												procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
 														this.getBukkitLivingEntity());
 												break;
 											case Group:
-												procSpell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(),
+												procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
 														this.getBukkitLivingEntity());
 												break;
 											default:
-												procSpell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(),
+												procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
 														defender.getBukkitLivingEntity());
 											}
 
@@ -610,8 +610,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									int roll = Utils.RandomBetween(0, 100);
 
 									if (roll < procChance) {
-										boolean itemUseSuccess = procSpell.tryApplyOnEntity(plugin,
-												this.getBukkitLivingEntity(), defender.getBukkitLivingEntity());
+										boolean itemUseSuccess = procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(), defender.getBukkitLivingEntity());
 
 										if (procSpell.getActSpellCost(this) > 0)
 											if (itemUseSuccess) {
@@ -1861,7 +1860,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		boolean success = false;
 		if (getMana() > spell.getActSpellCost(this)) {
-			success = spell.tryApplyOnEntity(plugin, this.getBukkitLivingEntity(), target.getBukkitLivingEntity());
+			success = spell.tryApplyOnEntity(this.getBukkitLivingEntity(), target.getBukkitLivingEntity());
 			Utils.DebugMessage("aiDoSpellCast had a sucess of : " + success + " against entity: "
 					+ target.getBukkitLivingEntity().getName() + " for spell: " + spell.getName());
 		}
@@ -1944,7 +1943,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaLivingEntity soltarget = SoliniaLivingEntityAdapter.Adapt(target);
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(spell.getCastTime() + 1000, ChronoUnit.MILLIS));
+				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(spell.getRecastTime() + 1000, ChronoUnit.MILLIS));
 
 				switch (spelllistentry.getType()) {
 				case SpellType.Heal:
@@ -3054,7 +3053,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void doSummon(Plugin plugin, LivingEntity summoningEntity) {
+	public void doSummon(LivingEntity summoningEntity) {
 		if (isPlayer())
 			return;
 
@@ -3603,7 +3602,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(plugin, getBukkitLivingEntity().getUniqueId(), spellId);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId);
 
 			}
 		} catch (CoreStateInitException e) {
@@ -3866,7 +3865,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(plugin, getBukkitLivingEntity().getUniqueId(), spellId);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId);
 
 			}
 		} catch (CoreStateInitException e) {

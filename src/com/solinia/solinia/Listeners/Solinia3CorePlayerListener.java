@@ -54,6 +54,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
@@ -317,8 +318,18 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			Player player = event.getPlayer();
 			
+			// If player is casting spell and spell is not allowed to be used during moving then cancel
 			
-			// cancel feigened if moving
+			CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(event.getPlayer());
+			if (castingSpell != null)
+			{
+				if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0)
+				{
+					StateManager.getInstance().getEntityManager().interruptCasting(event.getPlayer());
+				}
+			}
+			
+			// cancel feigned if moving
 			try
 			{
 				boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getPlayer().getUniqueId());
@@ -469,7 +480,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		event.setDeathMessage("");
 
 		try {
-			StateManager.getInstance().getEntityManager().clearEntityEffects(plugin, event.getEntity().getUniqueId());
+			StateManager.getInstance().getEntityManager().clearEntityEffects(event.getEntity().getUniqueId());
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(event.getEntity());
 			if (player != null) {
 				double experienceLoss = Utils.calculateExpLoss(player);
