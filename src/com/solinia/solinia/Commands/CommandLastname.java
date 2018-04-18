@@ -39,6 +39,26 @@ public class CommandLastname implements CommandExecutor {
 					if (!lastname.equals(""))
 						newname = SoliniaPlayerAdapter.Adapt(player).getForename() + "_" + lastname;
 					
+					
+					
+					try {
+						final String nametest = newname;
+						
+						if (StateManager.getInstance().getPlayerManager().getPlayersRepository().query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() != 0)
+						{
+							player.sendMessage("That name combination already exists in an active player");
+						}
+						
+						if (StateManager.getInstance().getConfigurationManager().getCharactersRepository().query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() != 0)
+						{
+							player.sendMessage("That name combination already exists in a cached character");
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
 					player.sendMessage("Target name [" + newname + "] length: " + newname.length());
 					return false;
 				}

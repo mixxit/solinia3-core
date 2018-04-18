@@ -113,6 +113,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isShouldersItem = false;
 	private boolean isEarsItem = false;
 	private boolean territoryFlag = false;
+	private String identifyMessage = "";
 	
 	
 	@Override
@@ -912,6 +913,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- territoryflag: " + ChatColor.GOLD + isTerritoryFlag() + ChatColor.RESET);
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
+		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
 		sender.sendMessage("- allowedclassnames: ");
 		for(String classname : this.getAllowedClassNames())
 		{
@@ -1124,8 +1126,11 @@ public class SoliniaItem implements ISoliniaItem {
 		case "throwing":
 			setThrowing(Boolean.parseBoolean(value));
 			break;
+		case "identifymessage":
+			setIdentifyMessage(value);
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,throwing");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,throwing,identifymessage");
 		}
 		
 		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
@@ -1522,5 +1527,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setThrowing(boolean throwing) {
 		this.throwing = throwing;
+	}
+
+	@Override
+	public String getIdentifyMessage() {
+		return identifyMessage;
+	}
+
+	@Override
+	public void setIdentifyMessage(String identifyMessage) {
+		this.identifyMessage = identifyMessage;
 	}
 }

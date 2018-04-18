@@ -72,7 +72,8 @@ public class CommandEditItem implements CommandExecutor {
 		
 		String value = args[2];
 		
-		if (args.length > 3 && setting.toLowerCase().contains("lore")) {
+		if (args.length > 3 && (setting.toLowerCase().contains("lore") || setting.toLowerCase().contains("identifymessage")))
+		{
 			value = "";
 			int current = 0;
 			for (String entry : args) {
@@ -84,6 +85,8 @@ public class CommandEditItem implements CommandExecutor {
 			}
 
 			value = value.trim();
+		} else {
+			 value = value.replaceAll("[^A-Za-z0-9_]", "");
 		}
 		
 		if (itemid < 1)
@@ -92,7 +95,6 @@ public class CommandEditItem implements CommandExecutor {
 			return false;
 		}
 		
-		 value = value.replaceAll("[^A-Za-z0-9_]", "");
 		
 		try
 		{

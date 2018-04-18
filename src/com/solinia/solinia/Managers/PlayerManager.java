@@ -106,6 +106,11 @@ public class PlayerManager implements IPlayerManager {
 		return repository.query(p ->p.getUUID() != null);
 	}
 	
+	@Override
+	public IRepository<ISoliniaPlayer> getPlayersRepository() {
+		return repository;
+	}
+	
 	
 	private List<ISoliniaPlayer> getPlayersByClass(String classname) {
 		int classid = 0;

@@ -366,6 +366,7 @@ public class SoliniaActiveSpell {
 		case TransferItem:
 			return;
 		case Identify:
+			applyIdentify(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case ItemID:
 			return;
@@ -1251,6 +1252,59 @@ public class SoliniaActiveSpell {
 		default:
 			return;
 		}
+	}
+
+	private void applyIdentify(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!(getLivingEntity() instanceof Player)) {
+			return;
+		}
+
+		Entity source = Bukkit.getEntity(getSourceUuid());
+		if (!(source instanceof Player))
+			return;
+
+		Player sourcePlayer = (Player) source;
+
+		if (sourcePlayer.getInventory().getItemInOffHand() == null)
+		{
+			sourcePlayer.sendMessage("You are not holding an item to identify in your offhand");
+			return;	
+		}
+		
+		if (sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.AIR)) {
+			sourcePlayer.sendMessage("You are not holding an item to identify in your offhand");
+			return;	
+		}
+
+		ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
+		
+		if (!Utils.IsSoliniaItem(item))
+		{
+			sourcePlayer.sendMessage("You do not recognise anything particularly interesting about this item");
+			return;	
+		}
+		
+		try
+		{
+			ISoliniaItem solItem = SoliniaItemAdapter.Adapt(item);
+			if (solItem == null)
+			{
+				sourcePlayer.sendMessage("You do not recognise anything particularly interesting about this item");
+				return;	
+			}
+	
+			if (solItem.getIdentifyMessage().equals(""))
+			{
+				sourcePlayer.sendMessage("You do not recognise anything particularly interesting about this item");
+				return;	
+			}
+			
+			sourcePlayer.sendMessage(solItem.getIdentifyMessage());
+		} catch (CoreStateInitException | SoliniaItemException e)
+		{
+			
+		}
+		return;
 	}
 
 	private void applyFeignDeath(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

@@ -318,4 +318,8 @@ public interface ISoliniaItem {
 	boolean isThrowing();
 
 	void setThrowing(boolean throwing);
+
+	String getIdentifyMessage();
+
+	void setIdentifyMessage(String identifyMessage);
 }

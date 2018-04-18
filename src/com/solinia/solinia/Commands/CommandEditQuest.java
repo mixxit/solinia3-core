@@ -100,7 +100,7 @@ public class CommandEditQuest implements CommandExecutor {
 			
 			if (StateManager.getInstance().getConfigurationManager().getQuest(id).isOperatorCreated() && !sender.isOp())
 			{
-				sender.sendMessage("This was op created and you are not an op. Only ops can edit op itemss");
+				sender.sendMessage("This was op created and you are not an op. Only ops can edit op entries");
 				return false;
 			}
 

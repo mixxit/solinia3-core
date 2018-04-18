@@ -33,4 +33,5 @@ public interface IPlayerManager {
 	ISoliniaPlayer getPlayerAndDoNotCreate(UUID playerUUID);
 	Timestamp getPlayerLastSteed(UUID playerUUID);
 	void setPlayerLastSteed(UUID playerUUID, Timestamp timestamp);
+	IRepository<ISoliniaPlayer> getPlayersRepository();
 }
