@@ -5456,7 +5456,7 @@ public class Utils {
 					
 					if (item == null)
 					{
-						System.out.println("Missing item id [" + item.getId() + "] in lootdrop id [" + droptableentry.getLootdropid() + "].. skipping..");
+						System.out.println("Missing item id [" + droptableentry.getItemid() + "] in lootdrop id [" + droptableentry.getLootdropid() + "].. skipping..");
 						continue;
 					}
 					

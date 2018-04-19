@@ -93,6 +93,20 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 					getEntries().remove(i);
 			}
 			break;
+		case "removeall":
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				getEntries().remove(i);
+			}
+			break;
+		case "removeallmissing":
+			for(int i = 0; i < getEntries().size(); i++)
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getEntries().get(i).getItemid());
+				if (item == null)
+					getEntries().remove(i);
+			}
+			break;
 		case "setallchance":
 			int newChance = Integer.parseInt(value);
 			for(int i = 0; i < getEntries().size(); i++)
