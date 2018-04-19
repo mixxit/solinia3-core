@@ -22,6 +22,7 @@ import net.minecraft.server.v1_12_R1.NBTTagCompound;
 
 public class SoliniaItemFactory {
 	public static ISoliniaItem CreateItem(ItemStack itemStack, boolean operatorCreated) throws SoliniaItemException, CoreStateInitException {
+		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 		SoliniaItem item = new SoliniaItem();
 		item.setOperatorCreated(operatorCreated);
 		item.setId(StateManager.getInstance().getConfigurationManager().getNextItemId());
@@ -52,6 +53,7 @@ public class SoliniaItemFactory {
 		
 		StateManager.getInstance().getConfigurationManager().addItem(item);
 		System.out.println("New Item Added: " + item.getId() + " - " + item.getDisplayname());
+		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 		return item;
 	}
 
@@ -60,7 +62,7 @@ public class SoliniaItemFactory {
 		
 		try
 		{
-		
+			StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 			// Get the appropriate material for the class and generate the base item
 			ISoliniaItem headItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultHeadMaterial().toUpperCase())),operatorCreated);
 			ISoliniaItem chestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultChestMaterial().toUpperCase())),operatorCreated);
@@ -257,6 +259,7 @@ public class SoliniaItemFactory {
 				item.setDiseaseResist(Utils.RandomBetween(0,armourtier + rarityBonus));
 				
 				// TODO class procs?
+				StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 			}
 		
 		} catch (CoreStateInitException e)

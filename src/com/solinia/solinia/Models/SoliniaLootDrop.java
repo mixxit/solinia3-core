@@ -62,7 +62,12 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			for(ISoliniaLootDropEntry lde : getEntries())
 			{
 				ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
-				sender.sendMessage("- [" + lde.getId() + "] " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - " + lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());
+				if (i != null)
+				{
+					sender.sendMessage("- [" + lde.getId() + "] " + ChatColor.GOLD + i.getDisplayname() + ChatColor.RESET + "[" + i.getId() + "] - " + lde.getChance() + "% chance Count: " + lde.getCount() + " Always: " + lde.isAlways());
+				} else {
+					sender.sendMessage("- MISSING [" + lde.getId() + "] " + ChatColor.GOLD + lde.getItemid() + ChatColor.RESET);
+				}
 			}
 		} catch (CoreStateInitException e)
 		{
@@ -94,10 +99,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			}
 			break;
 		case "removeall":
-			for(int i = 0; i < getEntries().size(); i++)
-			{
-				getEntries().remove(i);
-			}
+			getEntries().clear();
 			break;
 		case "removeallmissing":
 			for(int i = 0; i < getEntries().size(); i++)
