@@ -5453,7 +5453,13 @@ public class Utils {
 					ISoliniaLootDropEntry droptableentry = rollitems.get(new Random().nextInt(rollitems.size()));
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 							.getItem(droptableentry.getItemid());
-
+					
+					if (item == null)
+					{
+						System.out.println("Missing item id [" + item.getId() + "] in lootdrop id [" + droptableentry.getLootdropid() + "].. skipping..");
+						continue;
+					}
+					
 					randomInt = r.nextInt(100) + 1;
 					// System.out.println("Rolled a " + randomInt + " against a max of " +
 					// droptableentry.getChance()+ " for item: " + item.getDisplayname());
