@@ -472,7 +472,7 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public boolean useItemOnEntity(Plugin plugin, Player player, LivingEntity targetentity, boolean isConsumable)
+	public boolean useItemOnEntity(Player player, LivingEntity targetentity, boolean isConsumable)
 			throws CoreStateInitException {
 		
 		if (isPetControlRod())
@@ -660,7 +660,7 @@ public class SoliniaItem implements ISoliniaItem {
 		}
 		
 
-		boolean itemUseSuccess = spell.tryApplyOnEntity(plugin, player, targetentity);
+		boolean itemUseSuccess = spell.tryApplyOnEntity(player, targetentity);
 
 		if (itemUseSuccess) {
 			
@@ -1151,7 +1151,7 @@ public class SoliniaItem implements ISoliniaItem {
 		if (this.getAbilityid() < 1)
 			return;
 		
-		useItemOnEntity(plugin, player,player,true);
+		useItemOnEntity(player,player,true);
 	}
 
 	@Override

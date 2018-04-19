@@ -1023,7 +1023,7 @@ public interface ISoliniaSpell {
 
 	boolean isEffectInSpell(SpellEffectType effecttype);
 
-	boolean tryApplyOnEntity(Plugin plugin, LivingEntity sourceEntity, LivingEntity targetentity);
+	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity);
 
 	boolean isWeaponProc();
 

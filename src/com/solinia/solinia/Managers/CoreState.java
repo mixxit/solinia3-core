@@ -289,7 +289,7 @@ public class CoreState {
 	}
 
 	public void spellTick(Plugin plugin) {
-		entityManager.spellTick(plugin);
+		entityManager.spellTick();
 	}
 
 	public ChatItemAPI getChatItem() {

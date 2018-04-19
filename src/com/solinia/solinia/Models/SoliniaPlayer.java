@@ -348,12 +348,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMana(int mana) {
 		this.mana = mana;
-		try {
-			ScoreboardUtils.UpdateScoreboard(this.getBukkitPlayer(),
-					SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer()).getMaxMP(), mana);
-		} catch (CoreStateInitException e) {
-			//
-		}
+		ScoreboardUtils.UpdateScoreboard(this.getBukkitPlayer(), mana);
 	}
 
 	@Override
@@ -1103,7 +1098,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					
 					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
 					if (targetmob != null && !targetmob.getUniqueId().equals(event.getPlayer().getUniqueId())) {
-						if (item.useItemOnEntity(plugin, event.getPlayer(), targetmob, false) == true)
+						if (item.useItemOnEntity(event.getPlayer(), targetmob, false) == true)
 						{
 							event.getPlayer().setItemInHand(null);
 							event.getPlayer().updateInventory();
@@ -1156,10 +1151,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) {
 					if (targetmob != null) {
-						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, false);
+						item.useItemOnEntity(event.getPlayer(), targetmob, false);
 						return;
 					} else {
-						getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
+						getBukkitPlayer().sendMessage("* You must select a target (left click with pet control rod or use /ts for group or shift-f for self");
 						return;
 					}
 				}
@@ -1187,12 +1182,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 					
 					if (targetmob != null) {
-						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
+						item.useItemOnEntity(event.getPlayer(), targetmob, true);
 						event.getPlayer().setItemInHand(null);
 						event.getPlayer().updateInventory();
 						return;
 					} else {
-						getBukkitPlayer().sendMessage("* You must select a target target (left click with spell or use /ts for group or shift-f for self");
+						getBukkitPlayer().sendMessage("* You must select a target (left click with consumable or use /ts for group or shift-f for self");
 						return;
 					}
 				}
@@ -1202,10 +1197,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.isConsumable()
 						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					if (targetmob != null) {
-						item.useItemOnEntity(plugin, event.getPlayer(), targetmob, true);
+						item.useItemOnEntity(event.getPlayer(), targetmob, true);
 						return;
 					} else {
-						getBukkitPlayer().sendMessage("* You must select a target target (left click with spell or use /ts for group or shift-f for self");
+						getBukkitPlayer().sendMessage("* You must select a target (left click with usable item or use /ts for group or shift-f for self");
 						return;
 					}
 				}
@@ -1218,16 +1213,56 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				// Reroute action depending on target
 				if (event.getAction().equals(Action.RIGHT_CLICK_AIR)
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-					doCastSpellItem(plugin, spell, event.getPlayer(), item);
+					// This now attempts casting
+					
+					startCasting(plugin, spell, event.getPlayer(), item);
 				}
 			}
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void startCasting(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem item)
+	{
+		try
+		{
+			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), item.getId());
+			StateManager.getInstance().getEntityManager().startCasting((LivingEntity)player, castingSpell);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	@Override
+	public void castingComplete(CastingSpell castingSpell)
+	{
+		Entity entity = Bukkit.getEntity(castingSpell.livingEntityUUID);
+		
+		if (entity == null)
+			return;
+		
+		if (!(entity instanceof Player))
+			return;
+		
+		Player player = (Player)entity;
+		
+		if (player.isDead())
+			return;
+		
+		if (castingSpell.getSpell() == null)
+			return;
+		
+		if (castingSpell.getItem() == null)
+			return;
+		
+		doCastSpellItem(castingSpell.getSpell(), player, castingSpell.getItem());
+	}
 
 	@Override
-	public void doCastSpellItem(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem) {
+	public void doCastSpellItem(ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem) {
 		if (spell.isAASpell() && !canUseAASpell(spell)) {
 			player.sendMessage("You require the correct AA to use this spell");
 			return;
@@ -1391,13 +1426,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		//
 		try {
 			if (targetmob != null) {
-				boolean success = spellSourceItem.useItemOnEntity(plugin, player, targetmob, false);
+				boolean success = spellSourceItem.useItemOnEntity(player, targetmob, false);
 				if (success == true) {
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 				}
 				return;
 			} else {
-				boolean success = spellSourceItem.useItemOnEntity(plugin, player, player, false);
+				boolean success = spellSourceItem.useItemOnEntity(player, player, false);
 				if (success == true) {
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 				}
@@ -2496,8 +2531,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void removeAllEntityEffects(Plugin plugin) {
 		try {
-			StateManager.getInstance().getEntityManager().clearEntityEffects(plugin,
-					this.getBukkitPlayer().getUniqueId());
+			StateManager.getInstance().getEntityManager().clearEntityEffects(this.getBukkitPlayer().getUniqueId());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

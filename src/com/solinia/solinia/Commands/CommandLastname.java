@@ -25,7 +25,7 @@ public class CommandLastname implements CommandExecutor {
 			if (args.length == 0)
 				return false;
 			
-			String lastname = "";
+			String lastname = args[0];
 			
 			if (lastname.equals("reset"))
 			{

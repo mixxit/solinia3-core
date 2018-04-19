@@ -201,7 +201,7 @@ public class SoliniaEntitySpells {
 										// Continue singing!
 										if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity)
 										{
-											boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity(plugin, (LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()), (LivingEntity)Bukkit.getEntity(activeSpell.getOwnerUuid()));
+											boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity((LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()), (LivingEntity)Bukkit.getEntity(activeSpell.getOwnerUuid()));
 											return;
 										}
 									}

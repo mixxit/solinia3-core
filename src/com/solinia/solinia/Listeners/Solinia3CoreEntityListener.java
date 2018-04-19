@@ -335,7 +335,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 				for (Integer spellId : removeSpells) {
 					StateManager.getInstance().getEntityManager()
-							.removeSpellEffectsOfSpellId(plugin, ((LivingEntity) attacker).getUniqueId(), spellId);
+							.removeSpellEffectsOfSpellId(((LivingEntity) attacker).getUniqueId(), spellId);
 				}
 			}
 		} catch (CoreStateInitException e) {
@@ -367,7 +367,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 				for (Integer spellId : removeSpells) {
 					StateManager.getInstance().getEntityManager()
-							.removeSpellEffectsOfSpellId(plugin, ((LivingEntity) event.getEntity()).getUniqueId(), spellId);
+							.removeSpellEffectsOfSpellId(((LivingEntity) event.getEntity()).getUniqueId(), spellId);
 				}
 			}
 			

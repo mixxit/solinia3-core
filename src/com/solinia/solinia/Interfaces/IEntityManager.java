@@ -8,10 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.plugin.Plugin;
 
-import com.solinia.solinia.Exceptions.InsufficientTemporaryMerchantItemException;
-import com.solinia.solinia.Models.UniversalMerchantEntry;
+import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
@@ -45,9 +43,9 @@ public interface IEntityManager {
 
 	List<LivingEntity> getAllWorldPets();
 
-	void clearEntityEffects(Plugin plugin, UUID uniqueId);
+	void clearEntityEffects(UUID uniqueId);
 
-	void clearEntityFirstEffectOfType(Plugin plugin, LivingEntity livingEntity, SpellEffectType poisoncounter);
+	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter);
 
 	void toggleTrance(UUID uniqueId);
 
@@ -55,16 +53,16 @@ public interface IEntityManager {
 
 	void setTrance(UUID uuid, Boolean enabled);
 
-	LivingEntity SpawnPet(Plugin plugin, Player owner, ISoliniaSpell spell);
+	LivingEntity SpawnPet(Player owner, ISoliniaSpell spell);
 
-	void spellTick(Plugin plugin);
+	void spellTick();
 
-	boolean addActiveEntitySpell(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell,
+	boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell,
 			LivingEntity sourceEntity);
 
-	void doNPCSpellCast(Plugin plugin);
+	void doNPCSpellCast();
 
-	void removeSpellEffects(Plugin plugin, UUID uuid);
+	void removeSpellEffects(UUID uuid);
 
 	//void addTemporaryMerchantItem(int npcid, int itemid, int amount);
 
@@ -78,9 +76,9 @@ public interface IEntityManager {
 
 	void removeMezzed(LivingEntity livingEntity, Timestamp expiretimestamp);
 
-	void doNPCSummon(Plugin plugin);
+	void doNPCSummon();
 
-	void clearEntityFirstEffect(Plugin plugin, LivingEntity livingEntity);
+	void clearEntityFirstEffect(LivingEntity livingEntity);
 
 	void addEntitySpellCooldown(LivingEntity livingEntity, int spellId, Timestamp expiretimestamp);
 
@@ -102,7 +100,7 @@ public interface IEntityManager {
 
 	void setEntitySinging(UUID entityUUID, Integer spellId);
 
-	void removeSpellEffectsOfSpellId(Plugin plugin, UUID uuid, int spellId);
+	void removeSpellEffectsOfSpellId(UUID uuid, int spellId);
 
 	void doNPCCheckForEnemies();
 
@@ -135,5 +133,17 @@ public interface IEntityManager {
 	boolean isFeignedDeath(UUID entityUuid);
 
 	void setFeignedDeath(UUID entityUuid, boolean feigned);
+
+	void startCasting(LivingEntity livingEntity, CastingSpell castingSpell);
+
+	CastingSpell getCasting(LivingEntity livingEntity);
+	
+	boolean isCasting(LivingEntity livingEntity);
+
+	void interruptCasting(LivingEntity livingEntity);
+
+	void processCastingTimer();
+
+	void finishCasting(UUID entityUUID);
 
 }

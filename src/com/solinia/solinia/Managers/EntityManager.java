@@ -44,6 +44,8 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.ActiveSpellEffect;
+import com.solinia.solinia.Models.CastingSpell;
+import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
@@ -84,9 +86,12 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Boolean> playerSetMain = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, UUID> entityTargets = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, Boolean> feignedDeath = new ConcurrentHashMap<UUID, Boolean>();
+	private ConcurrentHashMap<UUID, CastingSpell> entitySpellCasting = new ConcurrentHashMap<UUID, CastingSpell>();
+	private Plugin plugin;
 	
-	public EntityManager(INPCEntityProvider npcEntityProvider) {
+	public EntityManager(Plugin plugin, INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
+		this.plugin = plugin;
 	}
 	
 	@Override
@@ -325,7 +330,7 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public boolean addActiveEntitySpell(Plugin plugin, LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
+	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		
 		if (entitySpells.get(targetEntity.getUniqueId()) == null)
 			entitySpells.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
@@ -348,7 +353,7 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void spellTick(Plugin plugin) {
+	public void spellTick() {
 		List<UUID> uuidRemoval = new ArrayList<UUID>();
 		for (SoliniaEntitySpells entityEffects : entitySpells.values())
 		{
@@ -364,7 +369,7 @@ public class EntityManager implements IEntityManager {
 		
 		for(UUID uuid : uuidRemoval)
 		{
-			removeSpellEffects(plugin, uuid);
+			removeSpellEffects(uuid);
 		}
 		
 		
@@ -375,7 +380,7 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override 
-	public void removeSpellEffects(Plugin plugin, UUID uuid)
+	public void removeSpellEffects(UUID uuid)
 	{
 		if (entitySpells.get(uuid) != null)
 			entitySpells.get(uuid).removeAllSpells(plugin);
@@ -384,7 +389,7 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override 
-	public void removeSpellEffectsOfSpellId(Plugin plugin, UUID uuid, int spellId)
+	public void removeSpellEffectsOfSpellId(UUID uuid, int spellId)
 	{
 		if (entitySpells.get(uuid) != null)
 			entitySpells.get(uuid).removeAllSpellsOfId(plugin, spellId);
@@ -462,7 +467,7 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void doNPCSpellCast(Plugin plugin) {
+	public void doNPCSpellCast() {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
@@ -630,7 +635,7 @@ public class EntityManager implements IEntityManager {
 		return pets;
 	}
 	@Override
-	public LivingEntity SpawnPet(Plugin plugin, Player owner, ISoliniaSpell spell)
+	public LivingEntity SpawnPet(Player owner, ISoliniaSpell spell)
 	{
 		try
 		{
@@ -739,13 +744,13 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void clearEntityEffects(Plugin plugin, UUID uniqueId) {
+	public void clearEntityEffects(UUID uniqueId) {
 		if (entitySpells.get(uniqueId) != null)
-			removeSpellEffects(plugin, uniqueId);
+			removeSpellEffects(uniqueId);
 	}
 
 	@Override
-	public void clearEntityFirstEffectOfType(Plugin plugin, LivingEntity livingEntity, SpellEffectType type) {
+	public void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type) {
 		if (entitySpells.get(livingEntity.getUniqueId()) == null)
 			return;
 		
@@ -753,7 +758,7 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public void clearEntityFirstEffect(Plugin plugin, LivingEntity livingEntity) {
+	public void clearEntityFirstEffect(LivingEntity livingEntity) {
 		if (entitySpells.get(livingEntity.getUniqueId()) == null)
 			return;
 		
@@ -841,7 +846,7 @@ public class EntityManager implements IEntityManager {
 	}
 	*/
 	@Override
-	public void doNPCSummon(Plugin plugin) {
+	public void doNPCSummon() {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
@@ -875,7 +880,7 @@ public class EntityManager implements IEntityManager {
 					
 					completedNpcsIds.add(solLivingEntityThatWillSummon.getNpcid());
 					
-					solLivingEntityThatWillSummon.doSummon(plugin, creatureThatWillSummon.getTarget());
+					solLivingEntityThatWillSummon.doSummon(creatureThatWillSummon.getTarget());
 					
 				} catch (CoreStateInitException e) {
 					// TODO Auto-generated catch block
@@ -1069,8 +1074,7 @@ public class EntityManager implements IEntityManager {
 				try
 				{
 					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
-					ScoreboardUtils.UpdateScoreboard((Player)source,
-						solPlayer.getMaxMP(), solPlayer.getMana());
+					ScoreboardUtils.UpdateScoreboard((Player)source,solPlayer.getMana());
 				} catch (CoreStateInitException e)
 				{
 					
@@ -1084,8 +1088,7 @@ public class EntityManager implements IEntityManager {
 				try
 				{
 					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
-					ScoreboardUtils.UpdateScoreboard((Player)source,
-							solPlayer.getMaxMP(), SoliniaLivingEntityAdapter.Adapt(source).getMana());
+					ScoreboardUtils.UpdateScoreboard((Player)source,SoliniaLivingEntityAdapter.Adapt(source).getMana());
 				} catch (CoreStateInitException e)
 				{
 					
@@ -1143,5 +1146,99 @@ public class EntityManager implements IEntityManager {
 	public void setFeignedDeath(UUID entityUuid, boolean feigned)
 	{
 		getFeignedDeath().put(entityUuid, feigned);
+	}
+
+	public ConcurrentHashMap<UUID, CastingSpell> getEntitySpellCasting() {
+		return entitySpellCasting;
+	}
+
+	public void setEntitySpellCasting(ConcurrentHashMap<UUID, CastingSpell> entitySpellCasting) {
+		this.entitySpellCasting = entitySpellCasting;
+	}
+	
+	@Override
+	public void startCasting(LivingEntity livingEntity, CastingSpell castingSpell)
+	{
+		interruptCasting(livingEntity);
+		if (livingEntity instanceof Player)
+		{
+			livingEntity.sendMessage("You begin casting " + castingSpell.getSpell().getName());
+			entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
+		}
+	}
+
+	@Override
+	public void interruptCasting(LivingEntity livingEntity) {
+		if (entitySpellCasting.get(livingEntity.getUniqueId()) != null)
+		{
+			if (livingEntity instanceof Player)
+				livingEntity.sendMessage("Your casting was interrupted");
+			entitySpellCasting.remove(livingEntity.getUniqueId());
+		}
+	}
+	
+	@Override
+	public void finishCasting(UUID entityUUID) {
+		if (entitySpellCasting.get(entityUUID) != null)
+		{
+			Entity entity = Bukkit.getEntity(entityUUID);
+			if (entity instanceof Player && (!((Player)entity).isDead()))
+			{
+				Player player = (Player)entity;
+				player.sendMessage("You finish casting");
+				try {
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					solPlayer.castingComplete(entitySpellCasting.get(entityUUID));
+				} catch (CoreStateInitException e) {
+				}
+				
+			}
+			
+			entitySpellCasting.remove(entityUUID);
+		}
+	}
+
+	@Override
+	public CastingSpell getCasting(LivingEntity livingEntity) {
+		return entitySpellCasting.get(livingEntity.getUniqueId());
+	}
+
+	@Override
+	public boolean isCasting(LivingEntity livingEntity) {
+		if (entitySpellCasting.get(livingEntity.getUniqueId()) != null)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void processCastingTimer() {
+		for (CastingSpell castingSpell : entitySpellCasting.values())
+		{
+			Entity entity = Bukkit.getEntity(castingSpell.getLivingEntityUUID());
+			
+			if (entity.isDead())
+			{
+				finishCasting(castingSpell.getLivingEntityUUID());
+			}
+			
+			if (castingSpell.timeLeftMilliseconds > 0)
+			{
+				castingSpell.timeLeftMilliseconds = (castingSpell.timeLeftMilliseconds - 100);
+			} else {
+				finishCasting(castingSpell.getLivingEntityUUID());
+			}
+			
+			if (entity instanceof Player && (!((Player)entity).isDead()))
+			{
+				try {
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
+					ScoreboardUtils.UpdateScoreboard((Player)entity, solPlayer.getMana());
+				} catch (CoreStateInitException e) {
+					
+				}
+			}
+		}
 	}
 }
