@@ -408,7 +408,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- petcontrollable: " + ChatColor.GOLD + isPetControllable());
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
-			sender.sendMessage(ChatColor.RED + "LOOT" + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
+			sender.sendMessage(ChatColor.RED + "LOOTTABLE: " + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
 					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName()
 					+ ")");
 			ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager()
@@ -418,7 +418,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 				ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager()
 						.getLootDrop(le.getLootdropid());
 				sender.sendMessage(
-						"- " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
+						"- LOOTDROP: " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
 				}
 		}
 
