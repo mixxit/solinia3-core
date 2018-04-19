@@ -57,7 +57,9 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Exceptions.SoliniaCraftCreationException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Factories.SoliniaCraftFactory;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAAEffect;
@@ -93,6 +95,7 @@ import com.solinia.solinia.Models.SoliniaAAEffect;
 import com.solinia.solinia.Models.SoliniaAAPrereq;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
+import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
@@ -1171,7 +1174,12 @@ public class Utils {
 
 	public static String FormatAsName(String name) {
 		// TODO Auto-generated method stub
-		return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+		return CapitaliseFirstLetter(name);
+	}
+	
+	public static String CapitaliseFirstLetter(String word)
+	{
+		return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
 	}
 
 	public static String getCasterClass(String classname) {
@@ -3198,7 +3206,41 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher() {
+		int portableFurnaceId = 81542;
 		
+		try
+		{
+			// Foreach race create an ore
+			for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
+			{
+				try
+				{
+					ItemStack oreStack = new ItemStack(Material.IRON_ORE);
+					ISoliniaItem oreItem = SoliniaItemFactory.CreateItem(oreStack, true);
+					oreItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Ore");
+	
+					ItemStack ingotStack = new ItemStack(Material.IRON_ORE);
+					ISoliniaItem ingotItem = SoliniaItemFactory.CreateItem(ingotStack, true);
+					ingotItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Ingot");
+					
+					// Create smelting recipe
+					try {
+						SoliniaCraft ingotRecipe = SoliniaCraftFactory.Create(ingotItem.getDisplayname().replace(" ", "_").toUpperCase(), oreItem.getId(), portableFurnaceId, ingotItem.getId(), true);
+						
+						
+					} catch (SoliniaCraftCreationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (SoliniaItemException e)
+				{
+					
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {

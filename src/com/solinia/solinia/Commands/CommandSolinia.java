@@ -24,10 +24,6 @@ public class CommandSolinia implements CommandExecutor {
 			e.printStackTrace();
 		}
 		
-		if ((sender instanceof ConsoleCommandSender || sender instanceof DiscordDefaultChannelCommandSender || sender instanceof DiscordAdminChannelCommandSender))
-		{
-			Utils.Patcher();
-		}
 		return true;
 	}
 }
