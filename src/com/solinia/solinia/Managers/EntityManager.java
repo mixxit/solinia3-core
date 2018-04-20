@@ -678,6 +678,7 @@ public class EntityManager implements IEntityManager {
 			entity.setHealth(maxHp);
 			net.minecraft.server.v1_12_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) entity).getHandle();
 			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solentity.getMaxDamage());
+			entityhandle.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double)0.4D);
 			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + solentity.getMaxDamage() + " dmg");
 			
 
