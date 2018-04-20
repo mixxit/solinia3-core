@@ -107,6 +107,12 @@ public class CommandEditNpc implements CommandExecutor {
 				sender.sendMessage("This npc was op created and you are not an op. Only ops can edit op npcs");
 				return false;
 			}
+			
+			if (setting.toLowerCase().equals("mctype") && !sender.isOp())
+			{
+				sender.sendMessage("Sorry, only operators can adjust the mctype for technical reasons. Try using a disguise instead.");
+				return false;
+			}
 
 			try
 			{

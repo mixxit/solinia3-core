@@ -132,6 +132,10 @@ commands:
     description: Spawns an item
     usage: /spawnitem itemid
     aliases: []
+  spawnnpc:
+    description: Spawns an npc
+    usage: /spawnnpc npcid
+    aliases: []
   spawnrandomitem:
     description: Spawns a random item
     usage: /spawnrandomitem
@@ -353,7 +357,7 @@ commands:
     aliases: []
   createnpcevent:
     description: Creates an NPC event
-    usage: /createnpcevent npcid eventtype trigger response
+    usage: /createnpcevent npcid eventtype trigger responsetype response
     aliases: cnpce
   editrace:
     description: Edits a race

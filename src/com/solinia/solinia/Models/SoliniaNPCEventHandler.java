@@ -35,13 +35,15 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int awardsQuest = 0;
 	private String requiresQuestFlag = null;
 	private String awardsQuestFlag = null;
-	private int npcId;
+	private int npcId = 0;
+	private int summonsNpcId = 0;
 	private int awardsItem = 0;
 	private String teleportResponse = "";
 	private boolean awardsRandomisedGear = false;
 	private String randomisedGearSuffix = "";
 	private boolean awardsTitle = false;
 	private String title = "";
+	private String responseType = "SAY";
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -119,6 +121,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- triggerdata: " + ChatColor.GOLD + getTriggerdata() + ChatColor.RESET);
 		sender.sendMessage("- chatresponse: " + ChatColor.GOLD + getChatresponse() + ChatColor.RESET);
+		sender.sendMessage("- responsetype: " + ChatColor.GOLD + getResponseType() + ChatColor.RESET);
 		sender.sendMessage("- teleportresponse: " + ChatColor.GOLD + getTeleportResponse() + ChatColor.RESET);
 		sender.sendMessage("- interactiontype: " + ChatColor.GOLD + getInteractiontype() + ChatColor.RESET);
 		sender.sendMessage("- requiresquest: " + ChatColor.GOLD + getRequiresQuest() + ChatColor.RESET);
@@ -130,6 +133,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
 		sender.sendMessage("- title: " + ChatColor.GOLD + this.getTitle() + ChatColor.RESET);
 		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
+		sender.sendMessage("- summonsnpcid: " + ChatColor.GOLD + this.getSummonsNpcId() + ChatColor.RESET);
 	}
 
 	@Override
@@ -137,6 +141,13 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		switch (setting.toLowerCase()) {
 		case "randomisedgearsuffix":
 			setRandomisedGearSuffix(value);
+			break;
+		case "responsetype":
+			if (!value.toUpperCase().equals("SAY") && !value.toUpperCase().equals("EMOTE"))
+			{
+				throw new InvalidNPCEventSettingException("responsetype can either be EMOTE or SAY");
+			}
+			setResponseType(value.toUpperCase());
 			break;
 		case "title":
 			setTitle(value);
@@ -210,6 +221,19 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			}
 		case "awardsrandomisedgear":
 			setAwardsRandomisedGear(Boolean.parseBoolean(value));
+			break;
+		case "summonsnpcid":
+			int npcId = Integer.parseInt(value);
+			try
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(npcId);
+				if (npc == null)
+					throw new InvalidNPCEventSettingException("Invalid npc ID");
+				setSummonsNpcId(npcId);
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 			break;
 		case "awardsitem":
 			int itemId = Integer.parseInt(value);
@@ -508,6 +532,26 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	@Override
+	public int getSummonsNpcId() {
+		return summonsNpcId;
+	}
+
+	@Override
+	public void setSummonsNpcId(int summonsNpcId) {
+		this.summonsNpcId = summonsNpcId;
+	}
+
+	@Override
+	public String getResponseType() {
+		return responseType;
+	}
+
+	@Override
+	public void setResponseType(String responseType) {
+		this.responseType = responseType;
 	}
 
 }

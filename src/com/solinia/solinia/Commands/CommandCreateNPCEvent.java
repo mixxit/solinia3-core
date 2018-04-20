@@ -30,8 +30,8 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 			}
 		}
 
-		if (args.length < 4) {
-			sender.sendMessage("Insufficient arguments: npcid eventtype trigger response");
+		if (args.length < 5) {
+			sender.sendMessage("Insufficient arguments: npcid eventtype trigger responsetype response");
 			return false;
 		}
 
@@ -58,9 +58,16 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 		Integer npcid = Integer.parseInt(args[0]);
 		String eventtype = args[1];
 		String trigger = args[2];
+		String responsetype = args[3].toUpperCase();
 
 		if (npcid < 1) {
 			sender.sendMessage("NPC does not exist");
+			return false;
+		}
+		
+		if (!responsetype.equals("SAY") && !responsetype.equals("EMOTE"))
+		{
+			sender.sendMessage("responsetype can only be SAY or EMOTE");
 			return false;
 		}
 
@@ -114,6 +121,7 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 			eventhandler.setInteractiontype(interactiontype);
 			eventhandler.setTriggerdata(trigger.toUpperCase());
 			eventhandler.setChatresponse(response);
+			eventhandler.setResponseType(responsetype);
 			npc.addEventHandler(eventhandler);
 			sender.sendMessage("New EventHandler added to NPC");
 		} catch (CoreStateInitException e) {

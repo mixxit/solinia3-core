@@ -697,5 +697,10 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 	}
+	
+	@Override
+	public void spawnNPC(ISoliniaNPC npc, int amount, String world, int x, int y, int z) {
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm mobs spawn NPCID_" + npc.getId() + " " + amount + " " + world + "," + x + "," + y + "," + z);
+	}
 
 }

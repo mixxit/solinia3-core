@@ -830,14 +830,23 @@ public class SoliniaNPC implements ISoliniaNPC {
 					{
 						if ((triggerentity instanceof Player))
 						{
-							solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), false);
+							if (handler.getResponseType().equals("SAY"))
+								solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), false);
+							if (handler.getResponseType().equals("EMOTE"))
+								solentity.emote(replaceChatWordsWithHints(response));
 						} else {
-							solentity.say(replaceChatWordsWithHints(response), triggerentity, false);
+							if (handler.getResponseType().equals("SAY"))
+								solentity.say(replaceChatWordsWithHints(response), triggerentity, false);
+							if (handler.getResponseType().equals("EMOTE"))
+								solentity.emote(replaceChatWordsWithHints(response));
 						}
 					} else {
 						if ((triggerentity instanceof Player))
 						{
-							solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), true);
+							if (handler.getResponseType().equals("SAY"))
+								solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), true);
+							if (handler.getResponseType().equals("EMOTE"))
+								solentity.emote(replaceChatWordsWithHints(response));
 						} else {
 							solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
 						}
@@ -845,14 +854,34 @@ public class SoliniaNPC implements ISoliniaNPC {
 				} else {
 					if ((triggerentity instanceof Player))
 					{
-						solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response),true);
+						if (handler.getResponseType().equals("SAY"))
+							solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response),true);
+						if (handler.getResponseType().equals("EMOTE"))
+							solentity.emote(replaceChatWordsWithHints(response));
 					} else {
-						solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
-					}
+						if (handler.getResponseType().equals("SAY"))
+							solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
+						if (handler.getResponseType().equals("EMOTE"))
+							solentity.emote(replaceChatWordsWithHints(response));
+						}
 				}
 				
 				if (triggerentity instanceof Player)
 					handler.awardPlayer((Player)triggerentity);
+				
+				if (handler.getNpcId() > 0 && handler.getInteractiontype().equals(InteractionType.ITEM))
+				{
+					try {
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(handler.getNpcId());
+						if (npc != null)
+						{
+							// Spawn Npc
+							npc.Spawn(triggerentity.getLocation(), 1);
+						}
+						
+					} catch (CoreStateInitException e) {
+					}
+				}
 				
 				if (handler.getTeleportResponse() != null && !handler.getTeleportResponse().equals(""))
 				{
@@ -1248,6 +1277,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setForcedMaxHp(int forcedMaxHp) {
 		this.forcedMaxHp = forcedMaxHp;
+	}
+
+	@Override
+	public void Spawn(Location location, int amount) {
+		try {
+			StateManager.getInstance().getEntityManager().getNPCEntityProvider().spawnNPC(this, amount, location.getWorld().getName(), (int)location.getX(), (int)location.getY(), (int)location.getZ());
+		} catch (CoreStateInitException e) {
+			
+		}
 	}
 
 }

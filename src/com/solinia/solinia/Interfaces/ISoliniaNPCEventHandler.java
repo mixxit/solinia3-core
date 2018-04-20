@@ -67,5 +67,13 @@ public interface ISoliniaNPCEventHandler {
 	void setAwardsRandomisedGear(boolean awardsRandomisedGear);
 
 	boolean isAwardsRandomisedGear();
+
+	int getSummonsNpcId();
+
+	void setSummonsNpcId(int summonsNpcId);
+
+	String getResponseType();
+
+	void setResponseType(String responseType);
 	
 }

@@ -1,5 +1,8 @@
 package com.solinia.solinia.Commands;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -48,7 +51,18 @@ public class CommandCreateItem implements CommandExecutor {
 	        	return true;
 	        }
 		} else {
-			itemstack = new ItemStack(Material.valueOf(args[0]));
+			try
+			{
+				itemstack = new ItemStack(Material.valueOf(args[0]));
+			} catch (Exception e)
+			{
+				sender.sendMessage("You are trying to create an item from the name of the minecraft item instead of the item you are holding it in. But the name you provided is invalid. Here are the possible values:");
+				sender.sendMessage(Arrays.asList(Material.values()).stream()
+					      .map(t -> t.toString())
+					      .collect(Collectors.joining(",")));
+				sender.sendMessage("Optionally use /createitem with no arguments to take the item in your hand and use to create an item from");
+				return true;
+			}
 		}
 		
         sender.sendMessage("Building new item based on: " + itemstack.getType().name());

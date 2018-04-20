@@ -10,4 +10,6 @@ public interface INPCEntityProvider {
 
 	void removeSpawnGroup(ISoliniaSpawnGroup group);
 
+	void spawnNPC(ISoliniaNPC npc, int amount, String world, int x, int y, int z);
+
 }

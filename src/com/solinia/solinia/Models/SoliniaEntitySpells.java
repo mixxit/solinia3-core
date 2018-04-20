@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -89,6 +90,16 @@ public class SoliniaEntitySpells {
 			}
 
 			if (effectiveness < 100) {
+				if (this.getLivingEntity() instanceof Creature)
+				{
+					// aggro player if resisted					
+					Creature creature = (Creature)this.getLivingEntity();
+					if (creature.getTarget() == null)
+					{
+						creature.setTarget(sourceEntity);
+					}
+				}
+				
 				// Check resistances
 				if (this.getLivingEntity() instanceof Player) {
 					Player player = (Player) this.getLivingEntity();
