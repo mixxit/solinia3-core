@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Factories.SoliniaAlignmentChunkFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;

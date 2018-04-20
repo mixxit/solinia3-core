@@ -17,7 +17,6 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Utils.Utils;

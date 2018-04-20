@@ -4,17 +4,10 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
-import com.solinia.solinia.Interfaces.ISoliniaFaction;
-import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
-import com.solinia.solinia.Interfaces.ISoliniaLootTable;
-import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {

@@ -1,6 +1,5 @@
 package com.solinia.solinia.Models;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,10 +7,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -153,6 +150,7 @@ public class SoliniaEntitySpells {
 		return true;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public void removeSpell(Plugin plugin, Integer spellId) {
 		// Effect has worn off
 		SoliniaActiveSpell activeSpell = activeSpells.get(spellId);

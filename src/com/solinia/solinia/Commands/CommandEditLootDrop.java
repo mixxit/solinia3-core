@@ -3,16 +3,12 @@ package com.solinia.solinia.Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
-import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Managers.StateManager;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class CommandEditLootDrop implements CommandExecutor {
 	@Override

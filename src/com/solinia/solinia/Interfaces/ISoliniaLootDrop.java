@@ -1,6 +1,5 @@
 package com.solinia.solinia.Interfaces;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;

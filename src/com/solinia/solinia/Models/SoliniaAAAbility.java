@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidAASettingException;
-import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAAEffect;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;

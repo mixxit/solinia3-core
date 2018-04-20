@@ -28,7 +28,6 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.SkillType;
-import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;

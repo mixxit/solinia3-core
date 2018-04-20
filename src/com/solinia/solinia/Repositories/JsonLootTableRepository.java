@@ -16,11 +16,9 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
 import com.solinia.solinia.Factories.ISoliniaLootTableEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
-import com.solinia.solinia.Models.SoliniaAARank;
 import com.solinia.solinia.Models.SoliniaLootTable;
 import com.solinia.solinia.Models.SoliniaLootTableEntry;
 

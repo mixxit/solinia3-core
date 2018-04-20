@@ -4,16 +4,12 @@ import java.util.List;
 
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.plugin.Plugin;
-
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
-import com.solinia.solinia.Models.SpellType;
 
 public interface ISoliniaSpell {
 

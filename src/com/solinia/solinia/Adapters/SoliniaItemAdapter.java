@@ -1,6 +1,5 @@
 package com.solinia.solinia.Adapters;
 
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;

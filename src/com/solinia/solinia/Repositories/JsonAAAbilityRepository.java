@@ -18,16 +18,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Factories.ISoliniaAAEffectTypeAdapterFactory;
 import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
-import com.solinia.solinia.Factories.ISoliniaLootDropEntryTypeAdapterFactory;
-import com.solinia.solinia.Factories.ISoliniaLootTableEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Models.SoliniaAAAbility;
 import com.solinia.solinia.Models.SoliniaAAEffect;
 import com.solinia.solinia.Models.SoliniaAARank;
-import com.solinia.solinia.Models.SoliniaLootDrop;
-import com.solinia.solinia.Models.SoliniaLootDropEntry;
-import com.solinia.solinia.Models.SoliniaLootTableEntry;
 
 public class JsonAAAbilityRepository implements IRepository<ISoliniaAAAbility> {
 

@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Managers.StateManager;
 

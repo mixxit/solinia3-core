@@ -1,7 +1,6 @@
 package com.solinia.solinia.Timers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -15,9 +14,6 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaPlayerSkill;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerInventoryValidatorTimer extends BukkitRunnable {

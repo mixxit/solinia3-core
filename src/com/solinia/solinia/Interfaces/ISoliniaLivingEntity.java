@@ -1,16 +1,13 @@
 package com.solinia.solinia.Interfaces;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -22,7 +19,6 @@ import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
-import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;

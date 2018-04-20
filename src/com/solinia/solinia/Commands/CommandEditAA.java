@@ -7,9 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidAASettingException;
-import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
-import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Managers.StateManager;
 
 public class CommandEditAA implements CommandExecutor {

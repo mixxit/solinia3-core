@@ -5,14 +5,11 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import com.google.gson.JsonElement;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
-import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 

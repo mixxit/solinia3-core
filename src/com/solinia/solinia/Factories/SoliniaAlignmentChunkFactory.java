@@ -4,7 +4,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaChunkCreationException;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
-import com.solinia.solinia.Models.SoliniaChunk;
 
 public class SoliniaAlignmentChunkFactory {
 	public static SoliniaAlignmentChunk Create(ISoliniaAlignment alignment, String worldName, int chunkX, int chunkZ) throws CoreStateInitException, SoliniaChunkCreationException {

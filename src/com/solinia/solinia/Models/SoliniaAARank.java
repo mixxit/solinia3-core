@@ -3,10 +3,7 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
-import com.solinia.solinia.Managers.StateManager;
 
 public class SoliniaAARank implements ISoliniaAARank {
 	private int id;

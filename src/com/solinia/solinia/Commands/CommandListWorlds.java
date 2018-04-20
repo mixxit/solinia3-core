@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaWorld;
 
 public class CommandListWorlds implements CommandExecutor {

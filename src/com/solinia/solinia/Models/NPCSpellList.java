@@ -6,15 +6,9 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSpellListSettingException;
-import com.solinia.solinia.Interfaces.ISoliniaFaction;
-import com.solinia.solinia.Interfaces.ISoliniaLootTable;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class NPCSpellList {

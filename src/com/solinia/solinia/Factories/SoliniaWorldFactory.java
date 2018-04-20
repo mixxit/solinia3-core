@@ -1,10 +1,8 @@
 package com.solinia.solinia.Factories;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.SoliniaCraftCreationException;
 import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaWorld;
 
 public class SoliniaWorldFactory {

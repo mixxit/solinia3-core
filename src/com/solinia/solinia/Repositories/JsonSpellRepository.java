@@ -16,10 +16,8 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.solinia.solinia.Factories.ISoliniaAARankTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
-import com.solinia.solinia.Models.SoliniaAARank;
 import com.solinia.solinia.Models.SoliniaSpell;
 
 public class JsonSpellRepository implements IRepository<ISoliniaSpell> {

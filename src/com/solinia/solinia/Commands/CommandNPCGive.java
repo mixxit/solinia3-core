@@ -21,7 +21,6 @@ import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CommandNPCGive implements CommandExecutor {
 	@Override

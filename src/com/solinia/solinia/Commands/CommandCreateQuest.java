@@ -3,17 +3,11 @@ package com.solinia.solinia.Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Factories.SoliniaNPCMerchantFactory;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
-import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.InteractionType;
-import com.solinia.solinia.Models.SoliniaNPCEventHandler;
 import com.solinia.solinia.Models.SoliniaQuest;
 
 public class CommandCreateQuest implements CommandExecutor {

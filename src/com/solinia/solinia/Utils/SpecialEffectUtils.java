@@ -1,7 +1,6 @@
 package com.solinia.solinia.Utils;
 
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import com.solinia.solinia.Managers.StateManager;
@@ -14,7 +13,6 @@ import de.slikey.effectlib.effect.FlameEffect;
 import de.slikey.effectlib.effect.LoveEffect;
 import de.slikey.effectlib.effect.MusicEffect;
 import de.slikey.effectlib.effect.SmokeEffect;
-import de.slikey.effectlib.effect.StarEffect;
 import de.slikey.effectlib.effect.WarpEffect;
 import de.slikey.effectlib.util.ParticleEffect;
 

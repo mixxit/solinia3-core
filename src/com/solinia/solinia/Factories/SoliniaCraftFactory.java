@@ -1,7 +1,5 @@
 package com.solinia.solinia.Factories;
 
-import org.bukkit.Location;
-
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaCraftCreationException;
 import com.solinia.solinia.Managers.StateManager;

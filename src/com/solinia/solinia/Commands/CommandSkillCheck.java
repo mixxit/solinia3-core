@@ -1,7 +1,6 @@
 package com.solinia.solinia.Commands;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.Command;

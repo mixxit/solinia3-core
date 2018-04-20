@@ -2,16 +2,13 @@ package com.solinia.solinia.Listeners;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
-import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreVehicleListener implements Listener {

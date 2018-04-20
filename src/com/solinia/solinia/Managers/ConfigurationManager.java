@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,7 +33,6 @@ import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
-import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
 import com.solinia.solinia.Factories.SoliniaWorldFactory;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
@@ -77,8 +75,6 @@ import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.NBTTagString;
-
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;

@@ -4,12 +4,9 @@ import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
@@ -67,7 +64,6 @@ import com.solinia.solinia.Timers.StateCommitTimer;
 
 import de.slikey.effectlib.EffectManager;
 import me.dadus33.chatitem.api.ChatItemAPI;
-import me.yamakaja.runtimetransformer.RuntimeTransformer;
 import net.milkbowl.vault.economy.Economy;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;

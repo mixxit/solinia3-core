@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
-import com.solinia.solinia.Managers.StateManager;
 
 public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 	private int id;

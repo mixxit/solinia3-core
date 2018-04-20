@@ -16,7 +16,6 @@ import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
-import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
@@ -34,8 +33,6 @@ import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.WorldWidePerk;
-
-import net.minecraft.server.v1_12_R1.Material;
 
 public interface IConfigurationManager {
 	

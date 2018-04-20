@@ -7,10 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
-import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
-import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;

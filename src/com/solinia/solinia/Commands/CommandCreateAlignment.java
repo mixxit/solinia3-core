@@ -5,9 +5,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.SoliniaRaceCreationException;
-import com.solinia.solinia.Factories.SoliniaRaceFactory;
 import com.solinia.solinia.Managers.StateManager;
 
 public class CommandCreateAlignment implements CommandExecutor {

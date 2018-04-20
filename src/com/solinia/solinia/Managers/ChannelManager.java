@@ -11,17 +11,11 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventException;
-
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
-import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
-import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
-import com.solinia.solinia.Interfaces.ISoliniaLootTable;
-import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -31,9 +25,7 @@ import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Utils.Utils;
 
-import jdk.nashorn.internal.runtime.regexp.joni.constants.Arguments;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.obj.IMessage;
 
 public class ChannelManager implements IChannelManager {
 
