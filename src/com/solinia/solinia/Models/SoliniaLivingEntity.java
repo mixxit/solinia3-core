@@ -497,7 +497,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (defender.getBukkitLivingEntity().getCustomName() != null)
 				name = defender.getBukkitLivingEntity().getCustomName();
 			
-			if (defender.isPlayer())
+			if (defender.isPlayer() && attackerEntity instanceof Player)
 				System.out.println("Detected player " + attackerEntity.getName() + " vs player " + defender.getName());
 			
 			if (attackerEntity instanceof Player)
@@ -514,10 +514,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				{
 					Player owner = (Player)pet.getOwner();
 					owner.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent("You pet hit " + name + " for " + df.format(event.getDamage()) + " "
+							new TextComponent("You petr hit " + name + " for " + df.format(event.getDamage()) + " "
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
 									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
-									+ " damage"));
+									+ " damage [PetHP:" + pet.getHealth() + "]"));
 				}
 			}
 			
