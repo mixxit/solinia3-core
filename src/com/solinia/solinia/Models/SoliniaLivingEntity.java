@@ -505,129 +505,148 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			DecimalFormat df = new DecimalFormat();
 			df.setMaximumFractionDigits(2);
 
-			if (getBukkitLivingEntity() instanceof Player) {
-				String name = defender.getBukkitLivingEntity().getName();
-				if (defender.getBukkitLivingEntity().getCustomName() != null)
-					name = defender.getBukkitLivingEntity().getCustomName();
-				
-				if (defender.isPlayer())
-					System.out.println("Detected player " + getBukkitLivingEntity().getName() + " vs player " + defender.getName());
-
-				((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-						new TextComponent("You hit " + name + " for " + df.format(event.getDamage()) + " "
-								+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
-								+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
-								+ " damage"));
-				
-				if (defender.isNPC())
+			LivingEntity attackerEntity = getBukkitLivingEntity();
+			
+			
+			
+			// Moved from player to support creatures too
+			
+			String name = defender.getBukkitLivingEntity().getName();
+			if (defender.getBukkitLivingEntity().getCustomName() != null)
+				name = defender.getBukkitLivingEntity().getCustomName();
+			
+			if (defender.isPlayer())
+				System.out.println("Detected player " + attackerEntity.getName() + " vs player " + defender.getName());
+			
+			if (attackerEntity instanceof Player)
+			((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+					new TextComponent("You hit " + name + " for " + df.format(event.getDamage()) + " "
+							+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
+							+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
+							+ " damage"));
+			
+			if (attackerEntity instanceof Wolf)
+			{
+				Wolf pet = (Wolf)attackerEntity;
+				if (pet.getOwner() != null && pet.getOwner() instanceof Player)
 				{
-					ISoliniaNPC npc;
-					try {
-						npc = StateManager.getInstance().getConfigurationManager().getNPC(defender.getNpcid());
-					} catch (CoreStateInitException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					Player owner = (Player)pet.getOwner();
+					owner.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent("You pet hit " + name + " for " + df.format(event.getDamage()) + " "
+									+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
+									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
+									+ " damage"));
 				}
-
-				// Only players get this
-				if (getDoubleAttackCheck()) {
-					if (getBukkitLivingEntity() instanceof Player) {
-						((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* You double attack!");
-						tryIncreaseSkill("DOUBLEATTACK", 1);
-					}
-					defender.damage(plugin, my_hit.damage_done, this.getBukkitLivingEntity());
-				}
-				
+			}
+			
+			if (defender.isNPC())
+			{
 				try {
-					if (Utils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
-						try {
-							ISoliniaItem soliniaitem = SoliniaItemAdapter
-									.Adapt(getBukkitLivingEntity().getEquipment().getItemInMainHand());
-							if (soliniaitem != null) {
-								// Check if item has any proc effects
-								if (soliniaitem.getWeaponabilityid() > 0
-										&& event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
-									ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
-											.getSpell(soliniaitem.getWeaponabilityid());
-									if (procSpell != null) {
-										// Chance to proc
-										int procChance = getProcChancePct();
-										int roll = Utils.RandomBetween(0, 100);
+					ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(defender.getNpcid());
+				} catch (CoreStateInitException e) {
+					
+				}
+			}
 
-										if (roll < procChance) {
-
-											// TODO - For now apply self and group to attacker, else attach to target
-											switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
-											case Self:
-												procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
-														this.getBukkitLivingEntity());
-												break;
-											case Group:
-												procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
-														this.getBukkitLivingEntity());
-												break;
-											default:
-												procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
-														defender.getBukkitLivingEntity());
-											}
-
-										}
-									}
-								}
-							}
-						} catch (SoliniaItemException e) {
-							// skip
-						}
-					}
-
-					// Check if attacker has any WeaponProc effects
-					SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
-							.getActiveEntitySpells(this.getBukkitLivingEntity());
-
-					if (effects != null) {
-						for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
-							ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-									.getSpell(activeSpell.getSpellId());
-							if (spell == null)
-								continue;
-
-							if (!spell.isWeaponProc())
-								continue;
-
-							for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
-								if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)) {
-									if (spelleffect.getBase() < 0)
-										continue;
-
-									ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
-											.getSpell(spelleffect.getBase());
-									if (spell == null)
-										continue;
-
+			// Only players get this
+			if (getDoubleAttackCheck()) {
+				if (attackerEntity instanceof Player) {
+					((Player) attackerEntity).sendMessage(ChatColor.GRAY + "* You double attack!");
+					tryIncreaseSkill("DOUBLEATTACK", 1);
+				}
+				defender.damage(plugin, my_hit.damage_done, attackerEntity);
+			}
+			
+			try {
+				if (Utils.IsSoliniaItem(attackerEntity.getEquipment().getItemInMainHand())) {
+					try {
+						ISoliniaItem soliniaitem = SoliniaItemAdapter
+								.Adapt(attackerEntity.getEquipment().getItemInMainHand());
+						if (soliniaitem != null) {
+							// Check if item has any proc effects
+							if (soliniaitem.getWeaponabilityid() > 0
+									&& event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
+								ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
+										.getSpell(soliniaitem.getWeaponabilityid());
+								if (procSpell != null) {
 									// Chance to proc
 									int procChance = getProcChancePct();
 									int roll = Utils.RandomBetween(0, 100);
 
 									if (roll < procChance) {
-										boolean itemUseSuccess = procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(), defender.getBukkitLivingEntity());
 
-										if (procSpell.getActSpellCost(this) > 0)
-											if (itemUseSuccess) {
-												if (getBukkitLivingEntity() instanceof Player) {
-													SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity())
-															.reducePlayerMana(procSpell.getActSpellCost(this));
-												}
-											}
+										// TODO - For now apply self and group to attacker, else attach to target
+										switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
+										case Self:
+											procSpell.tryApplyOnEntity(attackerEntity,
+													attackerEntity);
+											break;
+										case Group:
+											procSpell.tryApplyOnEntity(attackerEntity,
+													attackerEntity);
+											break;
+										default:
+											procSpell.tryApplyOnEntity(attackerEntity,
+													defender.getBukkitLivingEntity());
+										}
+
 									}
 								}
 							}
 						}
+					} catch (SoliniaItemException e) {
+						// skip
 					}
-				} catch (CoreStateInitException e) {
-
 				}
+
+				// Check if attacker has any WeaponProc effects
+				SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
+						.getActiveEntitySpells(attackerEntity);
+
+				if (effects != null) {
+					for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
+						ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+								.getSpell(activeSpell.getSpellId());
+						if (spell == null)
+							continue;
+
+						if (!spell.isWeaponProc())
+							continue;
+
+						for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
+							if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)) {
+								if (spelleffect.getBase() < 0)
+									continue;
+
+								ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
+										.getSpell(spelleffect.getBase());
+								if (spell == null)
+									continue;
+
+								// Chance to proc
+								int procChance = getProcChancePct();
+								int roll = Utils.RandomBetween(0, 100);
+
+								if (roll < procChance) {
+									boolean itemUseSuccess = procSpell.tryApplyOnEntity(attackerEntity, defender.getBukkitLivingEntity());
+
+									if (procSpell.getActSpellCost(this) > 0)
+										if (itemUseSuccess) {
+											if (attackerEntity instanceof Player) {
+												SoliniaPlayerAdapter.Adapt((Player) attackerEntity)
+														.reducePlayerMana(procSpell.getActSpellCost(this));
+											}
+										}
+								}
+							}
+						}
+					}
+				}
+			} catch (CoreStateInitException e) {
+
 			}
+			
+			// end of what was old only player code
 
 			if (defender.getBukkitLivingEntity() instanceof Player) {
 				((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
