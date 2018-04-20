@@ -1207,6 +1207,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 					// This now attempts casting
 					
+					ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getPlayer());
+					if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(event.getPlayer()).getMana()) {
+						event.getPlayer().sendMessage(ChatColor.GRAY + "Insufficient Mana  [E] (Hold crouch or use /trance to meditate)");
+						return;
+					}
+					
+					if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(event.getPlayer(), spell.getId()) != null)
+					{
+						LocalDateTime datetime = LocalDateTime.now();
+						Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+						Timestamp expiretimestamp = StateManager.getInstance().getEntityManager().getEntitySpellCooldown(event.getPlayer(), spell.getId());
+			
+						if (expiretimestamp != null)
+						if (!nowtimestamp.after(expiretimestamp))
+						{
+							event.getPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName() + " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime())/1000) + "s");
+							return;
+						}
+					}
+					
 					startCasting(plugin, spell, event.getPlayer(), item);
 				}
 			}
@@ -1220,6 +1240,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	{
 		try
 		{
+			
+			
 			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), item.getId());
 			StateManager.getInstance().getEntityManager().startCasting((LivingEntity)player, castingSpell);
 		} catch (CoreStateInitException e)
