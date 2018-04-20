@@ -5550,4 +5550,13 @@ public class Utils {
 		}
 		
 	}
+
+	public static int getMinLevelDistanceFromLevel(int level) {
+		// TODO Auto-generated method stub
+		int minlevel = (level / 2)+7;
+		if (minlevel < 1)
+			minlevel = 1;
+		
+		return minlevel;
+	}
 }
