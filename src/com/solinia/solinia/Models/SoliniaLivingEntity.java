@@ -514,7 +514,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				{
 					Player owner = (Player)pet.getOwner();
 					owner.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent("You petr hit " + name + " for " + df.format(event.getDamage()) + " "
+							new TextComponent("Your pet hit " + name + " for " + df.format(event.getDamage()) + " "
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
 									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
 									+ " damage [PetHP:" + pet.getHealth() + "]"));
@@ -1779,26 +1779,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int beneficialOtherSpells = SpellType.Heal;
 		int detrimentalSpells = SpellType.Nuke | SpellType.Lifetap | SpellType.DOT | SpellType.Dispel | SpellType.Mez
 				| SpellType.Slow | SpellType.Debuff | SpellType.Root;
-
+		
+		int engagedBeneficialSelfChance = StateManager.getInstance().getEntityManager().getAIEngagedBeneficialSelfChance();
+		int engagedBeneficialOtherChance = StateManager.getInstance().getEntityManager().getAIEngagedBeneficialOtherChance();
+		int engagedDetrimentalOtherChance = StateManager.getInstance().getEntityManager().getAIEngagedDetrimentalChance();
+		
+		if (npc.isPet())
+		{
+			engagedBeneficialSelfChance = 10;
+			engagedBeneficialOtherChance = 0;
+			engagedDetrimentalOtherChance = 90;
+		}
+		
 		// Try self buff, then nearby then target detrimental
 		Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 				+ " attempting to cast self buff");
-		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(),
-				StateManager.getInstance().getEntityManager().getAIEngagedBeneficialSelfChance(),
-				beneficialSelfSpells)) {
-			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-					+ " attempting to cast others buff");
-			if (!aiCheckCloseBeneficialSpells(plugin, npc,
-					StateManager.getInstance().getEntityManager().getAIEngagedBeneficialOtherChance(),
-					StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),
-					beneficialOtherSpells)) {
-				Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-						+ " attempting to cast detrimental");
-				if (!aiCastSpell(plugin, npc, castingAtEntity,
-						StateManager.getInstance().getEntityManager().getAIEngagedDetrimentalChance(),
-						detrimentalSpells)) {
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-							+ " cannot cast at all");
+		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(),engagedBeneficialSelfChance,beneficialSelfSpells)) {
+			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast others buff");
+			if (!aiCheckCloseBeneficialSpells(plugin, npc,engagedBeneficialOtherChance,StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),beneficialOtherSpells)) {
+				Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast detrimental");
+				if (!aiCastSpell(plugin, npc, castingAtEntity,engagedDetrimentalOtherChance,detrimentalSpells)) {
+					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " cannot cast at all");
 				}
 			}
 		}
@@ -1893,12 +1894,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return false;
 		}
 		
-		if (this.getClassObj().getNpcspelllist() < 1)
-		{
-			return false;
-		}
+		NPCSpellList npcSpellList = null;
 		
-		NPCSpellList npcSpellList = StateManager.getInstance().getConfigurationManager().getNPCSpellList(getClassObj().getNpcspelllist());
+		if (npc.getNpcSpellList() < 1 && this.getClassObj().getNpcspelllist() < 1)
+			return false;
+		
+		if (getClassObj().getNpcspelllist() > 0)
+		{
+			npcSpellList = StateManager.getInstance().getConfigurationManager().getNPCSpellList(getClassObj().getNpcspelllist());
+		}
+
+		if (npc.getNpcSpellList() > 0)
+		{
+			npcSpellList = StateManager.getInstance().getConfigurationManager().getNPCSpellList(npc.getNpcSpellList());
+		}
 
 		if (iChance < 100) {
 			int roll = Utils.RandomBetween(0, 100);
@@ -1920,6 +1929,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		List<NPCSpellListEntry> spells = new ArrayList<NPCSpellListEntry>();
 		for(NPCSpellListEntry entry : npcSpellList.getSpellListEntry())
 		{
+			if (npc.isPet())
+				spells.add(entry);
+			else
 			if (npc.getLevel() >= entry.getMinlevel() && npc.getLevel() <= entry.getMaxlevel())
 			{
 				spells.add(entry);

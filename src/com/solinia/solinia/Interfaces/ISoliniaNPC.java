@@ -237,4 +237,8 @@ public interface ISoliniaNPC {
 	void setForcedMaxHp(int forcedMaxHp);
 
 	void Spawn(Location location, int amount);
+
+	int getNpcSpellList();
+
+	void setNpcSpellList(int npcSpellList);
 }

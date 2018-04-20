@@ -76,6 +76,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean operatorCreated = true;
 	private boolean isPetControllable = true;
 	private int forcedMaxHp = 0;
+	private int npcSpellList = 0;
 	
 	@Override
 	public int getId() {
@@ -395,6 +396,13 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- raidboss: " + ChatColor.GOLD + isRaidboss());
 		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
 		sender.sendMessage("- forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
+		if (getNpcSpellList() > 0)
+		{
+			NPCSpellList npcSpellList = StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcSpellList());
+			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + npcSpellList.getName());
+		} else {
+			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcSpellList() + " (Defaults to class spell list)");
+		}
 		sender.sendMessage("- petcontrollable: " + ChatColor.GOLD + isPetControllable());
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
@@ -525,6 +533,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "upsidedown":
 			setUpsidedown(Boolean.parseBoolean(value));
+			break;
+		case "npcspelllist":
+			setNpcSpellList(Integer.parseInt(value));
 			break;
 		case "loottableid":
 			if (Integer.parseInt(value) == 0)
@@ -1276,6 +1287,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 		} catch (CoreStateInitException e) {
 			
 		}
+	}
+
+	@Override
+	public int getNpcSpellList() {
+		return npcSpellList;
+	}
+
+	@Override
+	public void setNpcSpellList(int npcSpellList) {
+		this.npcSpellList = npcSpellList;
 	}
 
 }
