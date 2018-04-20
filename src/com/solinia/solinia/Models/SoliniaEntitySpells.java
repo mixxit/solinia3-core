@@ -90,13 +90,18 @@ public class SoliniaEntitySpells {
 			}
 
 			if (effectiveness < 100) {
-				if (this.getLivingEntity() instanceof Creature)
+				if (this.getLivingEntity() instanceof Creature && sourceEntity instanceof LivingEntity)
 				{
-					// aggro player if resisted					
+					// aggro if resisted					
 					Creature creature = (Creature)this.getLivingEntity();
 					if (creature.getTarget() == null)
 					{
-						creature.setTarget(sourceEntity);
+						try {
+							StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity)creature, (LivingEntity)sourceEntity);
+							creature.setTarget(sourceEntity);
+						} catch (CoreStateInitException e) {
+							
+						}
 					}
 				}
 				

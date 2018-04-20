@@ -512,17 +512,41 @@ public class SoliniaItem implements ISoliniaItem {
 						return false;
 					}
 					
+					if (pet.getUniqueId().equals(targetentity.getUniqueId()))
+					{
+						Wolf wolf = (Wolf)pet;
+						wolf.setTarget(null);
+						player.sendMessage("You cannot send your pet to attack itself");
+						return false;
+					}
+
+					if (((Wolf) pet).getOwner().getUniqueId().equals(targetentity.getUniqueId()))
+					{
+						Wolf wolf = (Wolf)pet;
+						wolf.setTarget(null);
+						player.sendMessage("You cannot send your pet to attack you!");
+						return false;
+					}
+					
+					ISoliniaPlayer tmpPlayer = SoliniaPlayerAdapter.Adapt(player);
+					if (tmpPlayer != null)
+					{
+						if (tmpPlayer.getGroup() != null)
+						if (tmpPlayer.getGroup().getMembers().contains(targetentity.getUniqueId()))
+						{
+							Wolf wolf = (Wolf)pet;
+							wolf.setTarget(null);
+							player.sendMessage("You cannot send your pet to attack your group!");
+							return false;
+						}
+					}
+					
 					if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
 					{
 						Wolf wolf = (Wolf)pet;
 						wolf.setTarget(targetentity);
 						player.sendMessage("You send your pet to attack!");
 						return true;
-					} else {
-						Wolf wolf = (Wolf)pet;
-						wolf.setTarget(null);
-						player.sendMessage("You cannot send your pet to attack itself");
-						return false;
 					}
 				}
 			}

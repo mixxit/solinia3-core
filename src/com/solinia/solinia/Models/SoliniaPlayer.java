@@ -1141,7 +1141,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
 							return;
 						}
-					} 
+					}
 				}
 				
 				LivingEntity targetmob = StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer());
