@@ -365,4 +365,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void startCasting(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem item);
 
 	void castingComplete(CastingSpell castingSpell);
+
+	void toggleAutoAttack();
+
+	public void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity);
 }

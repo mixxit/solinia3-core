@@ -1087,6 +1087,26 @@ public class Solinia3CorePlayerListener implements Listener {
 		ItemStack itemstack = event.getItem();
 		if (itemstack != null)
 		{
+			try
+			{
+				// check if player is toggling auto attack
+				// left click while sneaking
+				if (event.getPlayer().isSneaking() && 
+						ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name()) && 
+						((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))) {
+					
+					ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+					if (soliniaPlayer != null)
+					{
+						soliniaPlayer.toggleAutoAttack();
+						event.setCancelled(true);
+						return;
+					}
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 			
 			// Left clicking with spell to target
 			ISoliniaItem solItem = null;
@@ -1111,6 +1131,28 @@ public class Solinia3CorePlayerListener implements Listener {
 			{
 				
 			}
+			
+			// Shift Left clicking with a weapon to set target to damage recipient
+			try
+			{
+				solItem = SoliniaItemAdapter.Adapt(itemstack);
+				
+				if (event.getPlayer().isSneaking() && 
+						ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name()) && 
+						((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)))) 
+				{
+					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
+					
+					StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(),
+							targetmob);
+					Utils.CancelEvent(event);
+					return;
+				}
+			} catch (CoreStateInitException | SoliniaItemException e)
+			{
+				
+			}
+			
 		}
 
 		// Right click air is a cancelled event so we have to ignore it when checking

@@ -146,4 +146,10 @@ public interface IEntityManager {
 
 	void finishCasting(UUID entityUUID);
 
+	void toggleAutoAttack(Player bukkitPlayer);
+
+	Boolean getPlayerAutoAttack(Player player);
+
+	void setPlayerAutoAttack(Player player, boolean playerAutoAttack);
+
 }
