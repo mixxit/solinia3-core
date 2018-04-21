@@ -330,18 +330,35 @@ public class Solinia3CorePlayerListener implements Listener {
 			}
 			*/
 			
-			// cancel feigned if moving
-			try
+			if (
+					event.getFrom().getX() != event.getTo().getX() ||
+					event.getFrom().getY() != event.getTo().getY() ||
+					event.getFrom().getZ() != event.getTo().getZ()				
+				) 
 			{
-				boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getPlayer().getUniqueId());
-				if (feigned == true)
-				{
-					StateManager.getInstance().getEntityManager().setFeignedDeath(event.getPlayer().getUniqueId(), false);
-				}
-			} catch (CoreStateInitException e)
-			{
+				// stop trance if moving in any direction other than pitch yaw
 				
-			}
+				if (StateManager.getInstance().getEntityManager().getTrance(player.getUniqueId()) == true) {
+					StateManager.getInstance().getEntityManager().setTrance(player.getUniqueId(), false);
+				}
+				
+				// cancel feigned if moving
+				try
+				{
+					boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getPlayer().getUniqueId());
+					if (feigned == true)
+					{
+						StateManager.getInstance().getEntityManager().setFeignedDeath(event.getPlayer().getUniqueId(), false);
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+
+
+			} 
+			
+			// territory code
 			
 			boolean playerIsInTerritory = Utils.isPlayerInTerritory(player);
 			Boolean cachedPlayerIsInTerritory = StateManager.getInstance().getEntityManager().getPlayerInTerritory()
@@ -377,10 +394,6 @@ public class Solinia3CorePlayerListener implements Listener {
 						}
 					}
 				}
-			}
-
-			if (StateManager.getInstance().getEntityManager().getTrance(player.getUniqueId()) == true) {
-				StateManager.getInstance().getEntityManager().setTrance(player.getUniqueId(), false);
 			}
 
 			// Prevent jump when slowed
