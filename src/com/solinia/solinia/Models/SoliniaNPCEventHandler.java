@@ -254,7 +254,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			break;
 		case "awardsxp":
 			double xp = Double.parseDouble(value);
-			double maxXp = (Utils.getExperienceRequirementForLevel(1) * Utils.getMaxLevel());
+			double maxXp = (Utils.getExperienceRequirementForLevel(2) * Utils.getMaxLevel());
 			if (maxXp < 0 || xp > maxXp)
 				throw new InvalidNPCEventSettingException("XP must be greater than -1 and less than " + maxXp);
 			
