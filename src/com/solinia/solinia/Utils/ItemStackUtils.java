@@ -1,13 +1,17 @@
 package com.solinia.solinia.Utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.google.common.collect.Multimap;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
@@ -15,19 +19,47 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.AttributeModifier;
+import net.minecraft.server.v1_12_R1.EnumItemSlot;
+import net.minecraft.server.v1_12_R1.GenericAttributes;
 
 public class ItemStackUtils {
+	
 	public static int getWeaponDamage(ItemStack itemStack) {
-
-		if (isMeleeWeapon(itemStack)) {
-			net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-			NBTTagCompound compound = nmsStack.hasTag() ? nmsStack.getTag() : new NBTTagCompound();
-			return compound.getCompound("generic.attackDamage").getInt("Amount");
-		}
-
-		return 0;
-	}
+        double attackDamage = 1.0;
+        UUID uuid = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+        net.minecraft.server.v1_12_R1.ItemStack craftItemStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_12_R1.Item item = craftItemStack.getItem();
+        if(item instanceof net.minecraft.server.v1_12_R1.ItemSword || item instanceof net.minecraft.server.v1_12_R1.ItemTool || item instanceof net.minecraft.server.v1_12_R1.ItemHoe) {
+            Multimap<String, AttributeModifier> map = item.a(EnumItemSlot.MAINHAND);
+            Collection<AttributeModifier> attributes = map.get(GenericAttributes.ATTACK_DAMAGE.getName());
+            if(!attributes.isEmpty()) {
+                for(AttributeModifier am: attributes) {
+                    Bukkit.getLogger().info(String.format("  (%s, %s, %f, %d)",am.a().toString(), am.b(), am.d(), am.c()));
+                }
+                for(AttributeModifier am: attributes) {
+                    if(am.a().toString().equalsIgnoreCase(uuid.toString()) && am.c() == 0) attackDamage += am.d();
+                }
+                double y = 1;
+                for(AttributeModifier am: attributes) {
+                    if(am.a().toString().equalsIgnoreCase(uuid.toString()) && am.c() == 1) y += am.d();
+                }
+                attackDamage *= y;
+                for(AttributeModifier am: attributes) {
+                    if(am.a().toString().equalsIgnoreCase(uuid.toString()) && am.c() == 2) attackDamage *= (1 + am.d());
+                }
+            }
+        }
+        
+        Long rounded = Math.round(attackDamage);
+        
+        if (rounded > Integer.MAX_VALUE)
+        	rounded = (long)Integer.MAX_VALUE;
+        
+        int damage = Integer.valueOf(rounded.intValue());
+        
+        return damage;
+    }
 	
 	public static Integer getAugmentationItemId(ItemStack itemStack)
 	{

@@ -18,6 +18,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
@@ -58,6 +59,8 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.AttributeModifier;
 import net.minecraft.server.v1_12_R1.DamageSource;
+import net.minecraft.server.v1_12_R1.EntityDamageSource;
+import net.minecraft.server.v1_12_R1.EntityHuman;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EnumItemSlot;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
@@ -3051,7 +3054,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
         		((CraftPlayer)listening).getHandle().playerConnection.sendPacket(packet);
         }
     	
-    	solLivingEntity.getBukkitLivingEntity().damage(ItemStackUtils.getWeaponDamage(itemStack), getBukkitPlayer());
+    	DamageSource source = EntityDamageSource.playerAttack(((CraftPlayer)getBukkitPlayer()).getHandle());
+    	
+		((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle().damageEntity(source, (int)ItemStackUtils.getWeaponDamage(itemStack));
 	}
 	
 	

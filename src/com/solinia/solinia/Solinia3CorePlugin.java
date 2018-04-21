@@ -343,8 +343,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			invalidItemCheckerTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
 			
 			castingTimer = new CastingTimer();
-			// every 300 milliseconds
-			castingTimer.runTaskTimer(this, 0L, 3 * 2L);
+			// every 100 milliseconds
+			castingTimer.runTaskTimer(this, 0L, 1 * 2L);
 			
 			playerAutoAttackTimer = new PlayerAutoAttackTimer();
 			// every 500 milliseconds

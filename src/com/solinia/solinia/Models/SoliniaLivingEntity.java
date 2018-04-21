@@ -347,7 +347,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (usingValidWeapon() == false) {
-			Utils.CancelEvent(event);;
+			Utils.CancelEvent(event);
 			return false;
 		} else {
 			if (
@@ -360,7 +360,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (soliniaitem.getBaneUndead() > 0 && defender.isUndead())
 						baseDamage += soliniaitem.getBaneUndead();
 				} catch (CoreStateInitException e) {
-					Utils.CancelEvent(event);;
+					Utils.CancelEvent(event);
 					return false;
 				}
 			}
@@ -436,10 +436,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO Skill Procs
 
 		if (getBukkitLivingEntity().isDead()) {
-			Utils.CancelEvent(event);;
+			Utils.CancelEvent(event);
 			return false;
 		}
-
+		
 		if (my_hit.damage_done > 0) {
 			triggerDefensiveProcs(defender, my_hit.damage_done, arrowHit);
 
@@ -457,7 +457,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			try {
 				event.setDamage(DamageModifier.BASE, my_hit.damage_done);
+
 			} catch (UnsupportedOperationException e) {
+				System.out.println(e.getMessage());
 
 			}
 			try {
@@ -496,9 +498,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			String name = defender.getBukkitLivingEntity().getName();
 			if (defender.getBukkitLivingEntity().getCustomName() != null)
 				name = defender.getBukkitLivingEntity().getCustomName();
-			
-			if (defender.isPlayer() && attackerEntity instanceof Player)
-				System.out.println("Detected player " + attackerEntity.getName() + " vs player " + defender.getName());
 			
 			if (attackerEntity instanceof Player)
 			((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,

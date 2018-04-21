@@ -1135,8 +1135,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			// Shift Left clicking with a weapon to set target to damage recipient
 			try
 			{
-				solItem = SoliniaItemAdapter.Adapt(itemstack);
-				
 				if (event.getPlayer().isSneaking() && 
 						ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name()) && 
 						((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)))) 
@@ -1148,7 +1146,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					Utils.CancelEvent(event);
 					return;
 				}
-			} catch (CoreStateInitException | SoliniaItemException e)
+			} catch (CoreStateInitException e)
 			{
 				
 			}

@@ -50,6 +50,7 @@ import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatMessageType;
@@ -521,11 +522,11 @@ public class Solinia3CoreEntityListener implements Listener {
 						Wolf wolf = (Wolf) event.getEntity();
 						if (wolf != null) {
 							if (wolf.getTarget() == null || !wolf.getTarget().equals(attacker)) {
-								Utils.CancelEvent(event);;
+								Utils.CancelEvent(event);
 								return;
 							}
 						} else {
-							Utils.CancelEvent(event);;
+							Utils.CancelEvent(event);
 							return;
 						}
 					}
