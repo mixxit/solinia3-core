@@ -317,6 +317,11 @@ public class ItemStackAdapter {
 	    {
 			loretxt.addAll(generateSpellLoreText(soliniaItem));
 	    }
+
+		if (soliniaItem.getAbilityid() > 0 && !soliniaItem.isSpellscroll())
+	    {
+			loretxt.addAll(generateItemSpellLoreText(soliniaItem));
+	    }
 		
 		if (soliniaItem.getWeaponabilityid() > 0 && !soliniaItem.isSpellscroll())
 	    {
@@ -390,6 +395,22 @@ public class ItemStackAdapter {
 		}
 
 		return stack;
+	}
+
+	private static List<String> generateItemSpellLoreText(ISoliniaItem soliniaItem) {
+		List<String> loreTxt = new ArrayList<String>();
+		ISoliniaSpell spell;
+		try {
+			spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getAbilityid());
+			
+			loreTxt.add(ChatColor.WHITE + "Right Click Effect: " + ChatColor.YELLOW+ spell.getName() + " " + ChatColor.RESET);
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return loreTxt;
 	}
 
 	private static Collection<String> generateConsumableAbilityLoreText(ISoliniaItem soliniaItem) {

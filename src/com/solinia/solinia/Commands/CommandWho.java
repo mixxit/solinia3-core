@@ -18,11 +18,20 @@ import net.md_5.bungee.api.ChatColor;
 public class CommandWho implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		
+		String filter = "";
+		if (args.length > 0)
+			filter = args[0];
+		
 		if (sender instanceof Player) {
 	        Player player = (Player) sender;
 	        
 	        for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
 		    {
+	        	if (!filter.equals(""))
+	        		if (!currentplayer.getDisplayName().contains(filter))
+	        			continue;
+	        	
 	        	try {
 		            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(currentplayer);
 		        	int lvl = (int) Math.floor(solplayer.getLevel());
@@ -47,6 +56,11 @@ public class CommandWho implements CommandExecutor {
         	
         	for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
 		    {
+	        	if (!filter.equals(""))
+	        		if (!currentplayer.getDisplayName().contains(filter))
+	        			continue;
+
+        		
         		ISoliniaPlayer solplayer;
 				try {
 					solplayer = SoliniaPlayerAdapter.Adapt(currentplayer);
