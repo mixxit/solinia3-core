@@ -741,7 +741,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				dhighestlevel = levelranges.get(levelranges.size() - 1);
 
 				int ihighlvl = (int) Math.floor(dhighestlevel);
-				int ilowlvl = Utils.getMinLevelDistanceFromLevel(ihighlvl);
+				int ilowlvl = Utils.getMinLevelFromLevel(ihighlvl);
 
 				if (ilowlvl < 1) {
 					ilowlvl = 1;
@@ -750,7 +750,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (player.getLevel() < ilowlvl) {
 					// Only award player the experience
 					// as they are out of range of the group
-					if (livingEntity.getLevel() >= Utils.getMinLevelDistanceFromLevel(player.getLevel())) {
+					if (livingEntity.getLevel() >= Utils.getMinLevelFromLevel(player.getLevel())) {
 						player.increasePlayerExperience(experience);
 						
 						// Grant title for killing mob
@@ -793,7 +793,7 @@ public class Solinia3CoreEntityListener implements Listener {
 							}
 
 							if (tgtplayer.getLocation().distance(player.getBukkitPlayer().getLocation()) <= 100) {
-								if (livingEntity.getLevel() >= (Utils.getMinLevelDistanceFromLevel(tgtsolplayer.getLevel()))) {
+								if (livingEntity.getLevel() >= (Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()))) {
 									tgtsolplayer.increasePlayerExperience(experience);
 									
 									// Grant title for killing mob
@@ -824,7 +824,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					}
 				}
 			} else {
-				if (livingEntity.getLevel() >= (Utils.getMinLevelDistanceFromLevel(player.getLevel()))) {
+				if (livingEntity.getLevel() >= (Utils.getMinLevelFromLevel(player.getLevel()))) {
 					player.increasePlayerExperience(experience);
 					
 					// Grant title for killing mob

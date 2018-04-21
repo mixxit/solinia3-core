@@ -35,9 +35,6 @@ public class ItemStackUtils {
             Collection<AttributeModifier> attributes = map.get(GenericAttributes.ATTACK_DAMAGE.getName());
             if(!attributes.isEmpty()) {
                 for(AttributeModifier am: attributes) {
-                    Bukkit.getLogger().info(String.format("  (%s, %s, %f, %d)",am.a().toString(), am.b(), am.d(), am.c()));
-                }
-                for(AttributeModifier am: attributes) {
                     if(am.a().toString().equalsIgnoreCase(uuid.toString()) && am.c() == 0) attackDamage += am.d();
                 }
                 double y = 1;

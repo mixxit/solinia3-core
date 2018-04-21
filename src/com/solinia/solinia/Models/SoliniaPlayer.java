@@ -3044,7 +3044,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		EntityPlayer ep = ((CraftPlayer)getBukkitPlayer()).getHandle();
         PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-        getBukkitPlayer().getWorld().playSound(getBukkitPlayer().getLocation(),Sound.ENTITY_PLAYER_ATTACK_WEAK, 1.0F, 1.0F);
+        getBukkitPlayer().getWorld().playSound(getBukkitPlayer().getLocation(),Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
         
     	((CraftPlayer)getBukkitPlayer()).getHandle().playerConnection.sendPacket(packet);
         
