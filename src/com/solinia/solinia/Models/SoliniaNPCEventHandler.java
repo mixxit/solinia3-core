@@ -1,5 +1,6 @@
 package com.solinia.solinia.Models;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -131,7 +132,10 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- title: " + ChatColor.GOLD + this.getTitle() + ChatColor.RESET);
 		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
 		sender.sendMessage("- summonsnpcid: " + ChatColor.GOLD + this.getSummonsNpcId() + ChatColor.RESET);
-		sender.sendMessage("- awardsxp: " + ChatColor.GOLD + this.getAwardsExperience() + ChatColor.RESET);
+		
+		DecimalFormat df = new DecimalFormat("#");
+        df.setMaximumFractionDigits(8);
+		sender.sendMessage("- awardsxp: " + ChatColor.GOLD + df.format(getAwardsExperience()) + ChatColor.RESET);
 	}
 
 	@Override
@@ -255,13 +259,18 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		case "awardsxp":
 			double xp = Double.parseDouble(value);
 			double maxXp = (Utils.getExperienceRequirementForLevel(Utils.getMaxLevel()) / Utils.getMaxLevel());
-			if (maxXp < 0 || xp > maxXp)
-				throw new InvalidNPCEventSettingException("XP must be greater than -1 and less than " + maxXp);
+			if (xp < 0 || xp > maxXp)
+			{
+				DecimalFormat df = new DecimalFormat("#");
+		        df.setMaximumFractionDigits(8);
+				
+				throw new InvalidNPCEventSettingException("XP must be greater than -1 and less than " + df.format(maxXp));
+			}
 			
 			if (getAwardsQuestFlag() == null || getAwardsQuestFlag().equals(""))
 				throw new InvalidNPCEventSettingException("You cannot set a rewardsxp to a npc event handler unless the npc awards a quest flag -  this is to prevent duplicated awards");
 			
-			setAwardsExperience(maxXp);
+			setAwardsExperience(xp);
 			break;
 		default:
 			throw new InvalidNPCEventSettingException(
