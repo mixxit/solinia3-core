@@ -424,7 +424,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			my_hit.offense = getOffense(my_hit.skill); // we need this a few times
 			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
 
-			doAttack(plugin, defender, my_hit);
+			my_hit = doAttack(plugin, defender, my_hit);
 		}
 
 		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate);
@@ -760,6 +760,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (defender == null)
 			return hit;
 
+		((Player) getBukkitLivingEntity()).sendMessage("Damage before everything : " + hit.damage_done);
 		// for riposte
 		int originalDamage = hit.damage_done;
 
@@ -798,7 +799,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (defender.checkHitChance(this, hit)) {
 				hit = defender.meleeMitigation(this, hit);
 				if (hit.damage_done > 0) {
+					((Player) getBukkitLivingEntity()).sendMessage("Damage before damage table: " + hit.damage_done);
 					hit = applyDamageTable(hit);
+					((Player) getBukkitLivingEntity()).sendMessage("Damage after damage table: " + hit.damage_done);
 					hit = commonOutgoingHitSuccess(defender, hit);
 				}
 			} else {
@@ -881,11 +884,32 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return dmg_mod;
 	}
+	
+	private int getMeleeDamageMod_SE(String skill)
+	{
+		int dmg_mod = 0;
+
+		int spellDamageModifier = getSpellBonuses(SpellEffectType.DamageModifier);
+		int aaDamageModifier = Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.DamageModifier);
+		
+		dmg_mod += spellDamageModifier;
+		dmg_mod += aaDamageModifier;
+		
+		if (getBukkitLivingEntity() instanceof Player)
+		{
+			getBukkitLivingEntity().sendMessage("DEBUG: dmg_mod before: 0 - new damage_mod after DamageModifier spell effects: " + dmg_mod);
+		}
+
+		if(dmg_mod < -100)
+			dmg_mod = -100;
+
+		return dmg_mod;
+	}
 
 	private int applyMeleeDamageMods(String skill, int damage_done, ISoliniaLivingEntity defender) {
 		int dmgbonusmod = 0;
 
-		// dmgbonusmod += GetMeleeDamageMod_SE(skill);
+		dmgbonusmod += getMeleeDamageMod_SE(skill);
 
 		if (defender != null) {
 			if (defender.isPlayer() && defender.getClassObj() != null
@@ -896,7 +920,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// itembonuses.MeleeMitigationEffect + aabonuses.MeleeMitigationEffect);
 		}
 
+		if (getBukkitLivingEntity() instanceof Player)
+		{
+			getBukkitLivingEntity().sendMessage("DEBUG: Increasing damage_done value " + (damage_done/100));
+		}
+		
 		damage_done += damage_done * dmgbonusmod / 100;
+
+		if (getBukkitLivingEntity() instanceof Player)
+		{
+			getBukkitLivingEntity().sendMessage("DEBUG: To value " + (damage_done * dmgbonusmod/100));
+		}
+		
 		return damage_done;
 	}
 
@@ -1379,6 +1414,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				tohit += (getLevel() * 2) / 5;
 			}
 		}
+		
 		return (int) Math.max(tohit, 1);
 	}
 

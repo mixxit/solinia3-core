@@ -2683,7 +2683,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name() + ")" + ChatColor.RESET);
-		sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (" + Utils.getSpellEffectIndex(getSpellAffectIndex()).name() + ")" + ChatColor.RESET);
+		SpellEffectIndex sei = Utils.getSpellEffectIndex(getSpellAffectIndex());
+		if (sei != null)
+		{
+			sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (" + sei.name() + ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (NO MAP)" + ChatColor.RESET);
+		}
 
 		ISoliniaItem item1 = null;
 		ISoliniaItem item2 = null;
