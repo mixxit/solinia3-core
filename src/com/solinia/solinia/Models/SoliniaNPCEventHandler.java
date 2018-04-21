@@ -19,6 +19,8 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
@@ -38,6 +40,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private boolean awardsTitle = false;
 	private String title = "";
 	private String responseType = "SAY";
+	private double awardsExperience = 0;
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -128,6 +131,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- title: " + ChatColor.GOLD + this.getTitle() + ChatColor.RESET);
 		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
 		sender.sendMessage("- summonsnpcid: " + ChatColor.GOLD + this.getSummonsNpcId() + ChatColor.RESET);
+		sender.sendMessage("- awardsxp: " + ChatColor.GOLD + this.getAwardsExperience() + ChatColor.RESET);
 	}
 
 	@Override
@@ -248,9 +252,20 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				}
 				setAwardsItem(itemId);
 			break;
+		case "awardsxp":
+			double xp = Double.parseDouble(value);
+			double maxXp = (Utils.getExperienceRequirementForLevel(1) * Utils.getMaxLevel());
+			if (maxXp < 0 || xp > maxXp)
+				throw new InvalidNPCEventSettingException("XP must be greater than -1 and less than " + maxXp);
+			
+			if (getAwardsQuestFlag() == null || getAwardsQuestFlag().equals(""))
+				throw new InvalidNPCEventSettingException("You cannot set a rewardsxp to a npc event handler unless the npc awards a quest flag -  this is to prevent duplicated awards");
+			
+			setAwardsExperience(maxXp);
+			break;
 		default:
 			throw new InvalidNPCEventSettingException(
-					"Invalid NPC Event setting. Valid Options are: triggerdata,chatresponse,interactiontype,requiresquest,awardsquest,requiresquestflag,awardsquestflag,awardsitem");
+					"Invalid NPC Event setting. Valid Options are: triggerdata,chatresponse,interactiontype,requiresquest,awardsquest,requiresquestflag,awardsquestflag,awardsitem,awardsxp");
 		}
 	}
 
@@ -380,6 +395,13 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 									});
 							
 						}
+					}
+					
+					// All xp awards must be accompanied with a quest flag else they will repeat the item return over and over
+					if (getAwardsExperience() > 0)
+					{
+						System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
+						player.increasePlayerExperience(getAwardsExperience());
 					}
 					
 					if (this.isAwardsTitle() == true)
@@ -546,6 +568,16 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setResponseType(String responseType) {
 		this.responseType = responseType;
+	}
+
+	@Override
+	public double getAwardsExperience() {
+		return awardsExperience;
+	}
+
+	@Override
+	public void setAwardsExperience(double awardsExperience) {
+		this.awardsExperience = awardsExperience;
 	}
 
 }

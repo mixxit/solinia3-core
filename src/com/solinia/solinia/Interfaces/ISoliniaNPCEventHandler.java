@@ -75,5 +75,9 @@ public interface ISoliniaNPCEventHandler {
 	String getResponseType();
 
 	void setResponseType(String responseType);
+
+	double getAwardsExperience();
+
+	void setAwardsExperience(double awardsExperience);
 	
 }
