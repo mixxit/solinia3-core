@@ -206,7 +206,6 @@ public class CommandTrader implements CommandExecutor {
 		if (pageno < 1)
 			pageno = 1;
 		
-		player.sendMessage("DEBUG: Sending Merchant Items");
 		Inventory alignmentChunkInventory;
 		try {
 			alignmentChunkInventory = StateManager.getInstance().getEntityManager().getTradeShopMerchantInventory(player.getUniqueId(),alignmentChunk, pageno);
