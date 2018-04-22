@@ -1084,6 +1084,9 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.isCancelled())
+			return;
+		
 		ItemStack itemstack = event.getItem();
 		if (itemstack != null)
 		{
@@ -1099,7 +1102,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					if (soliniaPlayer != null)
 					{
 						soliniaPlayer.toggleAutoAttack();
-						event.setCancelled(true);
+						Utils.CancelEvent(event);
 						return;
 					}
 				}
