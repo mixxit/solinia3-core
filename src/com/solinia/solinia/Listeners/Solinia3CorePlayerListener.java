@@ -1083,7 +1083,12 @@ public class Solinia3CorePlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	public void onPlayerInteract(PlayerInteractEvent event) 
+	{
+		// we only care about main hand interactions
+		if (!event.getHand().equals(EquipmentSlot.HAND))
+			return;
+			
 		ItemStack itemstack = event.getItem();
 		if (itemstack != null)
 		{
@@ -1094,7 +1099,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (event.getPlayer().isSneaking() && 
 						ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name()) && 
 						((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))) {
-					
+					event.getPlayer().sendMessage("Received weapon right click interaction");
 					ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 					if (soliniaPlayer != null)
 					{
@@ -1152,7 +1157,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			}
 			
 		}
-
+		
 		// Right click air is a cancelled event so we have to ignore it when checking
 		// iscancelled
 		// We need it for spells
