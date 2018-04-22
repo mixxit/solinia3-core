@@ -15,7 +15,9 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -45,6 +47,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -52,7 +55,9 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.EntityCreature;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EntityTameableAnimal;
+import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
 import net.minecraft.server.v1_12_R1.PathfinderGoalHurtByTarget;
 import net.minecraft.server.v1_12_R1.PathfinderGoalOwnerHurtByTarget;
 import net.minecraft.server.v1_12_R1.PathfinderGoalOwnerHurtTarget;
@@ -387,48 +392,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInHand();
 
-		DamageHitInfo my_hit = new DamageHitInfo();
-		my_hit.skill = Utils.getSkillForMaterial(weapon.getType().toString()).getSkillname();
-		if (arrowHit) {
-			my_hit.skill = "ARCHERY";
-		}
-
-		// Now figure out damage
-		my_hit.damage_done = 1;
-		my_hit.min_damage = 0;
-		int mylevel = getLevel();
-		int hate = 0;
-
-		my_hit.base_damage = baseDamage;
-		// amount of hate is based on the damage done
-		if (hate == 0 && my_hit.base_damage > 1)
-			hate = my_hit.base_damage;
-
-		if (my_hit.base_damage > 0) {
-			my_hit.base_damage = getDamageCaps(my_hit.base_damage);
-
-			tryIncreaseSkill(my_hit.skill, 1);
-			tryIncreaseSkill("OFFENSE", 1);
-
-			int ucDamageBonus = 0;
-
-			if (getClassObj() != null && getClassObj().isWarriorClass() && getLevel() >= 28) {
-				ucDamageBonus = getWeaponDamageBonus(weapon);
-				my_hit.min_damage = ucDamageBonus;
-				hate += ucDamageBonus;
-			}
-
-			// TODO Sinister Strikes
-
-			int hit_chance_bonus = 0;
-			my_hit.offense = getOffense(my_hit.skill); // we need this a few times
-			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
-
-			my_hit = doAttack(plugin, defender, my_hit);
-		}
-
-		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate);
-
+		
+		DamageHitInfo my_hit = this.GetHitInfo(plugin, weapon, baseDamage, arrowHit, defender);
+		
 		///////////////////////////////////////////////////////////
 		////// Send Attack Damage
 		///////////////////////////////////////////////////////////
@@ -537,6 +503,32 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 				defender.damage(plugin, my_hit.damage_done, attackerEntity);
 			}
+			
+			// Only players get this
+			if (getDualWieldCheck()) {
+				if (attackerEntity instanceof Player)
+				{
+					((Player) attackerEntity).sendMessage(ChatColor.GRAY + "* You dual wield!");
+					tryIncreaseSkill("DUALWIELD", 1);
+					
+					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer)attackerEntity).getHandle(), 3);
+			        ((CraftPlayer)attackerEntity).getHandle().playerConnection.sendPacket(packet);
+			        attackerEntity.getWorld().playSound(attackerEntity.getLocation(),Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
+			        ((CraftPlayer)attackerEntity).getHandle().playerConnection.sendPacket(packet);
+
+			        for(Entity listening : attackerEntity.getNearbyEntities(100, 100, 100))
+			        {
+			        	if (listening instanceof Player)
+			        		((CraftPlayer)listening).getHandle().playerConnection.sendPacket(packet);
+			        }
+				}
+		        
+				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
+				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2);
+				
+				DamageHitInfo my_hit2 = this.GetHitInfo(plugin, weapon2, baseDamage2, false, defender);
+				defender.damage(plugin, my_hit2.damage_done, attackerEntity);
+			}			
 			
 			try {
 				if (Utils.IsSoliniaItem(attackerEntity.getEquipment().getItemInMainHand())) {
@@ -653,6 +645,52 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 	
+	private DamageHitInfo GetHitInfo(Plugin plugin, ItemStack weapon, int baseDamage, boolean arrowHit, ISoliniaLivingEntity defender) {
+		DamageHitInfo my_hit = new DamageHitInfo();
+		my_hit.skill = Utils.getSkillForMaterial(weapon.getType().toString()).getSkillname();
+		if (arrowHit) {
+			my_hit.skill = "ARCHERY";
+		}
+
+		// Now figure out damage
+		my_hit.damage_done = 1;
+		my_hit.min_damage = 0;
+		int mylevel = getLevel();
+		int hate = 0;
+
+		my_hit.base_damage = baseDamage;
+		// amount of hate is based on the damage done
+		if (hate == 0 && my_hit.base_damage > 1)
+			hate = my_hit.base_damage;
+
+		if (my_hit.base_damage > 0) {
+			my_hit.base_damage = getDamageCaps(my_hit.base_damage);
+
+			tryIncreaseSkill(my_hit.skill, 1);
+			tryIncreaseSkill("OFFENSE", 1);
+
+			int ucDamageBonus = 0;
+
+			if (getClassObj() != null && getClassObj().isWarriorClass() && getLevel() >= 28) {
+				ucDamageBonus = getWeaponDamageBonus(weapon);
+				my_hit.min_damage = ucDamageBonus;
+				hate += ucDamageBonus;
+			}
+
+			// TODO Sinister Strikes
+
+			int hit_chance_bonus = 0;
+			my_hit.offense = getOffense(my_hit.skill); // we need this a few times
+			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
+
+			my_hit = doAttack(plugin, defender, my_hit);
+		}
+		
+		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate);
+
+		return my_hit;
+	}
+
 	@Override
 	public void damageHook(double damage, Entity sourceEntity) {
 		if (isPlayer())
@@ -2449,6 +2487,39 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return totalHp;
 	}
+	
+	@Override
+	public boolean getDualWieldCheck()
+	{
+		if (getNpcid() < 1 && !isPlayer())
+			return false;
+		
+		try {
+			if (getNpcid() > 0) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return false;
+
+				boolean result = npc.getDualWieldCheck(this);
+
+				return result;
+			}
+
+			if (isPlayer()) {
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
+				if (solplayer == null)
+					return false;
+
+				boolean result = solplayer.getDualWieldCheck(this);
+
+				return result;
+			}
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public boolean getDodgeCheck() {
@@ -2474,7 +2545,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				boolean result = solplayer.getDodgeCheck();
 
-				return solplayer.getDodgeCheck();
+				return result;
 			}
 		} catch (CoreStateInitException e) {
 			return false;

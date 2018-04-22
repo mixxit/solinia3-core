@@ -144,4 +144,10 @@ public interface ISoliniaClass {
 
 	void setLevel60Title(String level60Title);
 
+	boolean canDualWield();
+
+	int getDualwieldlevel();
+
+	void setDualwieldlevel(int dualwieldlevel);
+
 }

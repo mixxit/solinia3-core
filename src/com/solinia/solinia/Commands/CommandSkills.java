@@ -38,6 +38,8 @@ public class CommandSkills implements CommandExecutor
 	            	player.sendMessage(ChatColor.GRAY + "You gain the Safefall Skill at: " + soliniaplayer.getClassObj().getSafefalllevel());	            	
 	            	if (soliniaplayer.getClassObj().getSpecialiselevel() > 0)
 	            	player.sendMessage(ChatColor.GRAY + "You gain the Spell Specilisation (/specialise) at: " + soliniaplayer.getClassObj().getSpecialiselevel());	            	
+	            	if (soliniaplayer.getClassObj().getDualwieldlevel() > 0)
+	            	player.sendMessage(ChatColor.GRAY + "You gain the Dual Wield at: " + soliniaplayer.getClassObj().getDualwieldlevel());	            	
 	            }
 	            
 	            for(SoliniaPlayerSkill skill : soliniaplayer.getSkills())

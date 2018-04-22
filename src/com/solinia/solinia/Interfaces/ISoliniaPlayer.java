@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
+import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.PlayerQuest;
@@ -369,4 +370,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void toggleAutoAttack();
 
 	public void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity);
+
+	boolean canDualWield();
+
+	boolean getDualWieldCheck(ISoliniaLivingEntity soliniaLivingEntity);
 }

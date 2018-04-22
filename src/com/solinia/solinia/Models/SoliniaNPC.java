@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
@@ -18,6 +19,7 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
@@ -1044,6 +1046,42 @@ public class SoliniaNPC implements ISoliniaNPC {
 		chance /= 5;
 
 		return Utils.RandomBetween(1, 500) <= chance;
+	}
+	
+	@Override
+	public boolean canDualWield() {
+		if (getClassObj() == null)
+			return false;
+
+		if (getClassObj().canDualWield() == false)
+			return false;
+
+		if (getClassObj().getDualwieldlevel() > getLevel())
+			return false;
+
+		return true;
+	}
+	
+	@Override
+	public boolean getDualWieldCheck(ISoliniaLivingEntity solLivingEntity)
+	{
+		if (canDualWield() == false)
+			return false;
+		
+		int chance = getLevel();
+
+		if (solLivingEntity != null)
+		{
+			int spellAmbidexterity = solLivingEntity.getSpellBonuses(SpellEffectType.Ambidexterity);
+			int spellDualWieldChance = solLivingEntity.getSpellBonuses(SpellEffectType.DualWieldChance);
+			
+			chance += spellAmbidexterity;
+			int per_inc = spellDualWieldChance;
+			if (per_inc > 0)
+				chance += chance * per_inc / 100;
+		}
+		
+		return Utils.RandomBetween(1, 375) <= chance;
 	}
 
 	@Override

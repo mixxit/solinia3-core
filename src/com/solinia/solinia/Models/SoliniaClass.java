@@ -46,6 +46,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int ripostelevel = 0;
 	private int doubleattacklevel = 0;
 	private int safefalllevel = 0;
+	private int dualwieldlevel = 0;
 	private String shortName = "";
 	private String classItemPrefix = "";
 	private int acitembonus = 0;
@@ -191,6 +192,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- doubleattacklevel: " + ChatColor.GOLD + getDoubleattacklevel() + ChatColor.RESET);
 		sender.sendMessage("- safefalllevel: " + ChatColor.GOLD + getSafefalllevel() + ChatColor.RESET);
 		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
+		sender.sendMessage("- dualwieldlevel: " + ChatColor.GOLD + getDualwieldlevel() + ChatColor.RESET);
 		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- level51title: " + ChatColor.GOLD + getLevel51Title() + ChatColor.RESET);
@@ -313,6 +315,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "doubleattacklevel":
 			this.setDoubleattacklevel(Integer.parseInt(value));
+			break;
+		case "dualwieldlevel":
+			this.setDualwieldlevel(Integer.parseInt(value));
 			break;
 		case "safefalllevel":
 			this.setSafefalllevel(Integer.parseInt(value));
@@ -582,6 +587,14 @@ public class SoliniaClass implements ISoliniaClass {
 		
 		return true;
 	}
+	
+	@Override
+	public boolean canDualWield() {
+		if (getDualwieldlevel() < 1)
+			return false;
+		
+		return true;
+	}
 
 	@Override
 	public boolean canRiposte() {
@@ -767,5 +780,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setLevel60Title(String level60Title) {
 		this.level60Title = level60Title;
+	}
+
+	@Override
+	public int getDualwieldlevel() {
+		return dualwieldlevel;
+	}
+
+	@Override
+	public void setDualwieldlevel(int dualwieldlevel) {
+		this.dualwieldlevel = dualwieldlevel;
 	}
 }

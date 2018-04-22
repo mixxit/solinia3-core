@@ -222,4 +222,6 @@ public interface ISoliniaLivingEntity
 	boolean isFeignedDeath();
 
 	void setFeigned(boolean feigned);
+
+	boolean getDualWieldCheck();
 }

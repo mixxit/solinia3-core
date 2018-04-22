@@ -241,4 +241,8 @@ public interface ISoliniaNPC {
 	int getNpcSpellList();
 
 	void setNpcSpellList(int npcSpellList);
+
+	boolean canDualWield();
+
+	boolean getDualWieldCheck(ISoliniaLivingEntity solLivingEntity);
 }
