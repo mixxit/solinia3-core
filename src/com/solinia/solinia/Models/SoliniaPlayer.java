@@ -3054,9 +3054,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
         		((CraftPlayer)listening).getHandle().playerConnection.sendPacket(packet);
         }
     	
+    	((CraftPlayer)getBukkitPlayer()).getHandle().attack(((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle());
+    	/*
     	DamageSource source = EntityDamageSource.playerAttack(((CraftPlayer)getBukkitPlayer()).getHandle());
     	
+    	
 		((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle().damageEntity(source, (int)ItemStackUtils.getWeaponDamage(itemStack));
+		*/
 	}
 	
 	
