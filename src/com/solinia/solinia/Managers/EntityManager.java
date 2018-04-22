@@ -56,6 +56,8 @@ import com.solinia.solinia.Utils.Utils;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
+import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
 
@@ -677,7 +679,7 @@ public class EntityManager implements IEntityManager {
 			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + solentity.getMaxDamage() + " dmg");
 			
 
-			MobDisguise mob = new MobDisguise(DisguiseType.WOLF);
+			TargetedDisguise mob = new MobDisguise(DisguiseType.WOLF);
 			
 			switch(npc.getMctype().toUpperCase())
 			{
@@ -685,19 +687,19 @@ public class EntityManager implements IEntityManager {
 					mob = new MobDisguise(DisguiseType.WOLF);
 					break;
 				case "SQUID":
-					mob = new MobDisguise(DisguiseType.PLAYER);
+					mob = new PlayerDisguise("addicct");
 					break;
 				case "PARROT":
-					mob = new MobDisguise(DisguiseType.PLAYER);
+					mob = new PlayerDisguise("ExoticBengal");
 					break;
 				case "SKELETON":
 					mob = new MobDisguise(DisguiseType.SKELETON);
 					break;
 				case "BLAZE":
-					mob = new MobDisguise(DisguiseType.PLAYER);
+					mob = new PlayerDisguise("Detze");
 					break;
 				case "IRON_GOLEM":
-					mob = new MobDisguise(DisguiseType.PLAYER);
+					mob = new PlayerDisguise("katxxx");
 					break;
 				case "GUARDIAN":
 					mob = new MobDisguise(DisguiseType.PLAYER);
