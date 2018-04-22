@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,6 +32,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -57,6 +59,8 @@ import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.EconomyResponse;
+import net.minecraft.server.v1_12_R1.EntityHuman;
+import net.minecraft.server.v1_12_R1.GenericAttributes;
 
 public class Solinia3CorePlayerListener implements Listener {
 
@@ -69,6 +73,19 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
+
+		// enable knockback effects
+	    try
+	    {
+	      Player player = event.getPlayer();
+	      EntityHuman entityHuman = ((CraftPlayer)player).getHandle();
+	      entityHuman.getAttributeInstance(GenericAttributes.c).setValue(0.0D);
+	    }
+	    catch (Exception ex)
+	    {
+	      ex.printStackTrace();
+	    }
+		
 		ISoliniaGroup group = StateManager.getInstance().getGroupByMember(event.getPlayer().getUniqueId());
 		if (group != null) {
 			StateManager.getInstance().removePlayerFromGroup(event.getPlayer());
@@ -78,7 +95,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),
 				event.getPlayer().getName() + " has quit the game");
 	}
-
+	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (event.isCancelled())
@@ -1045,6 +1062,19 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		
+		// disable knockback effects
+		try
+	    {
+	      Player player = event.getPlayer();
+	      EntityHuman entityHuman = ((CraftPlayer)player).getHandle();
+	      entityHuman.getAttributeInstance(GenericAttributes.c).setValue(1.0D);
+	    }
+	    catch (Exception ex)
+	    {
+	      ex.printStackTrace();
+	    }
+		
 		SoliniaPlayerJoinEvent soliniaevent;
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());

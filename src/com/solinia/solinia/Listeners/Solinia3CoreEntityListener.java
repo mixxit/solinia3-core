@@ -197,7 +197,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			event.getEntity().spigot();
 		}
 	}
-	
+
 	@EventHandler
 	public void onEntityDamageEvent(EntityDamageEvent event) {
 		if (event.isCancelled())

@@ -727,7 +727,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException {
 		getNPC(npcid).editSetting(setting, value);
 
-		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(npcid));
+		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(npcid), true);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 	
@@ -799,7 +799,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	public ISoliniaNPC addNPC(SoliniaNPC npc) {
 		this.npcRepository.add(npc);
 
-		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc);
+		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc, true);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 		return getNPC(npc.getId());
 	}

@@ -10,11 +10,13 @@ public class SoliniaNPCUpdatedEvent extends Event implements Cancellable {
 	private boolean cancelled;
 	private static final HandlerList handlers = new HandlerList();
 	private ISoliniaNPC npc;
+	private boolean reloadMythicMobs = true;
 
-	public SoliniaNPCUpdatedEvent(ISoliniaNPC npc) 
+	public SoliniaNPCUpdatedEvent(ISoliniaNPC npc, boolean reloadMythicMobs) 
     {
 		this.npc = npc;
 		this.cancelled = false;
+		this.setReloadMythicMobs(reloadMythicMobs);
     }
 	
 	public boolean isCancelled() {
@@ -37,4 +39,12 @@ public class SoliniaNPCUpdatedEvent extends Event implements Cancellable {
     {
     	return this.npc;
     }
+
+	public boolean getReloadMythicMobs() {
+		return reloadMythicMobs;
+	}
+
+	public void setReloadMythicMobs(boolean reloadMythicMobs) {
+		this.reloadMythicMobs = reloadMythicMobs;
+	}
 }

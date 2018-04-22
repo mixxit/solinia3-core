@@ -286,7 +286,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "  PreventRandomEquipment: true\r\n";
 		mob = mob + "  Options:\r\n";
 		mob = mob + "    MovementSpeed: " + movementSpeed + "\r\n";
-		mob = mob + "    KnockbackResistance: 0.75\r\n";
+		mob = mob + "    KnockbackResistance: 1\r\n";
 		mob = mob + "    PreventMobKillDrops: true\r\n";
 		mob = mob + "    PreventOtherDrops: true\r\n";
 		mob = mob + "    Silent: true\r\n";

@@ -42,7 +42,9 @@ import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.SoliniaCraftCreationException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaCraftFactory;
@@ -3177,7 +3179,7 @@ public class Utils {
 	}
 
 	// Used for one off patching, added in /solinia command for console sender
-	public static void Patcher() {
+	public static void Patcher()  {
 		
 		/*
 		int portableFurnaceId = 81542;

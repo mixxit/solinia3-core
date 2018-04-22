@@ -85,9 +85,9 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	@Override
 	public void setLocation(Location location) {
 		// TODO Auto-generated method stub
-		this.x = location.getX();
-		this.y = location.getY();
-		this.z = location.getZ();
+		this.x = location.getBlockX();
+		this.y = location.getBlockY();
+		this.z = location.getBlockZ();
 		this.world = location.getWorld().getName();
 		this.yaw = location.getYaw();
 		this.pitch = location.getPitch();
