@@ -1097,6 +1097,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 		
 		// we only care about main hand interactions
+		if (event.getHand() != null)
 		if (!event.getHand().equals(EquipmentSlot.HAND))
 			return;
 			
