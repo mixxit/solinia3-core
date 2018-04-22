@@ -2099,7 +2099,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return false;
 		
 		int chance = getSkill("DUALWIELD").getValue();
-
+		chance += 50;
+		
 		try
 		{
 			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
