@@ -770,7 +770,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						
 					} else {
 						player.getBukkitPlayer()
-								.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from");
+								.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(player.getLevel()));
 					}
 
 				} else {
@@ -812,8 +812,7 @@ public class Solinia3CoreEntityListener implements Listener {
 									}
 									
 								} else {
-									tgtplayer.sendMessage(
-											ChatColor.GRAY + "* The npc was too low level to gain experience from");
+									tgtplayer.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()));
 								}
 
 							} else {
@@ -844,7 +843,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					
 				} else {
 					player.getBukkitPlayer()
-							.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from");
+					.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(player.getLevel()));
 				}
 			}
 
