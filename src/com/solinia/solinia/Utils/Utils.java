@@ -3486,7 +3486,7 @@ public class Utils {
 		case 16:
 			return new DisguisePackage(DisguiseType.PLAYER, "Centaur");
 		case 17:
-			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Golem");
+			return new DisguisePackage(DisguiseType.PLAYER, "katxxx");
 		case 18:
 			return new DisguisePackage(DisguiseType.GIANT, "Giant/Cyclops");
 		case 19:
