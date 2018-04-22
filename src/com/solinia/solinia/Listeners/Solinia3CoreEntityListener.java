@@ -239,6 +239,20 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
 		
+		// if this is a melee attack and the attacker is too far from the defender cancel teh event
+		if (damagecause.getDamager() instanceof LivingEntity && !event.getCause().equals(DamageCause.THORNS) && !(damagecause.getDamager() instanceof Arrow) && event.getEntity() instanceof LivingEntity)
+		{
+			
+			LivingEntity defender = (LivingEntity) event.getEntity();
+			LivingEntity attacker = (LivingEntity) damagecause.getDamager();
+			if (defender.getLocation().distance(attacker.getLocation()) > 2)
+			{
+				attacker.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
+				Utils.CancelEvent(event);
+				return;
+			}
+		}
+		
 		// If the event is being blocked by a shield negate 85% of it unless its thorns then always allow it through
 		if (damagecause.getDamage(DamageModifier.BLOCKING) < 0)
 		{
