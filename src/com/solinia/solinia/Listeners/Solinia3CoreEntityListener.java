@@ -45,6 +45,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.InteractionType;
@@ -202,6 +203,59 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityDamageEvent(EntityDamageEvent event) {
 		if (event.isCancelled())
 			return;
+		
+		// CLOSE RANGE TARGETTING - USED TO WORK AROUND MIN TARGET DISTANCE
+		
+		// Close range weapon
+		if ((event instanceof EntityDamageByEntityEvent)) {
+			EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
+			if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity))
+			{
+				try
+				{
+					Player damager = (Player)damagecause.getDamager();
+					ItemStack itemstack = damager.getEquipment().getItemInMainHand();
+					if (itemstack != null && damager.isSneaking() && 
+							ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name()))
+					{
+						StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity)damager,(LivingEntity)event.getEntity());
+						Utils.CancelEvent(event);
+						return;
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		}
+		
+		// Close range spell/petcontrol rod
+		if ((event instanceof EntityDamageByEntityEvent)) {
+			EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
+			if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity))
+			{
+				try
+				{
+					Player damager = (Player)damagecause.getDamager();
+					ItemStack itemstack = damager.getEquipment().getItemInMainHand();
+					if (itemstack != null)
+					{
+						ISoliniaItem solItem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+						if (solItem != null && (solItem.isSpellscroll() || solItem.isPetControlRod()))
+						{
+							StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity)damager,(LivingEntity)event.getEntity());
+							Utils.CancelEvent(event);
+							return;
+						}
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		}
+		
+		// END CLOSE RANGE TARGETTING
 
 		if ((event.getEntity() instanceof Player)) {
 			if (!(event.getCause().equals(EntityDamageEvent.DamageCause.FALL)))

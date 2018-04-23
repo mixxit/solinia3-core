@@ -336,9 +336,9 @@ public class Solinia3CorePlayerListener implements Listener {
 			{
 				if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0)
 				{
-					if (event.getTo().getX() != event.getFrom().getX() ||
-							event.getTo().getY() != event.getFrom().getY() || 
-									event.getTo().getZ() != event.getFrom().getZ()
+					if (event.getTo().getBlockX() != event.getFrom().getBlockX() ||
+							event.getTo().getBlockY() != event.getFrom().getBlockY() || 
+									event.getTo().getBlockZ() != event.getFrom().getBlockZ()
 							) {
 						StateManager.getInstance().getEntityManager().interruptCasting(event.getPlayer());
 					}
@@ -348,9 +348,9 @@ public class Solinia3CorePlayerListener implements Listener {
 			*/
 			
 			if (
-					event.getFrom().getX() != event.getTo().getX() ||
-					event.getFrom().getY() != event.getTo().getY() ||
-					event.getFrom().getZ() != event.getTo().getZ()				
+					event.getFrom().getBlockX() != event.getTo().getBlockX() ||
+					event.getFrom().getBlockY() != event.getTo().getBlockY() ||
+					event.getFrom().getBlockZ() != event.getTo().getBlockZ()				
 				) 
 			{
 				// stop trance if moving in any direction other than pitch yaw
@@ -414,7 +414,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			}
 
 			// Prevent jump when slowed
-			if (event.getTo().getY() > event.getFrom().getY()) {
+			if (event.getTo().getBlockY() > event.getFrom().getBlockY()) {
 				if (event.getPlayer().hasPotionEffect(PotionEffectType.SLOW)) {
 					Utils.CancelEvent(event);
 					event.getPlayer().sendMessage(ChatColor.GRAY + "* Your legs are bound and unable to jump!");
@@ -426,7 +426,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) player);
 			if (mezExpiry != null) {
 				player.sendMessage("* You are mezzed!");
-				if (event.getTo().getY() < event.getFrom().getY()) {
+				if (event.getTo().getBlockY() < event.getFrom().getBlockY()) {
 					event.getTo().setX(event.getFrom().getX());
 					event.getTo().setZ(event.getFrom().getZ());
 					event.getTo().setYaw(event.getFrom().getYaw());
@@ -1109,7 +1109,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if (event.isCancelled())
 			return;
-
+		
 	}
 
 	@EventHandler
@@ -1141,7 +1141,6 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (event.getPlayer().isSneaking() && 
 						ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name()) && 
 						((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))) {
-					event.getPlayer().sendMessage("Received weapon right click interaction");
 					ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 					if (soliniaPlayer != null)
 					{
@@ -1187,9 +1186,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)))) 
 				{
 					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
-					
-					StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(),
-							targetmob);
+					StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(),targetmob);
 					Utils.CancelEvent(event);
 					return;
 				}
