@@ -13,6 +13,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -43,8 +44,8 @@ public class CommandClaim implements CommandExecutor {
 						continue;
 					
 					TextComponent tc = new TextComponent();
-					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + " /claim claim " + claim.getId());
-					
+					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + "[ Click here to remove ]");
+					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim claim " + claim.getId()));
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 							new ComponentBuilder(item.asJsonString()).create()));
 					sender.spigot().sendMessage(tc);

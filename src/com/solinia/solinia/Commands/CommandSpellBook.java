@@ -21,6 +21,7 @@ import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -63,8 +64,8 @@ public class CommandSpellBook implements CommandExecutor {
 					if (!item.getDisplayname().toUpperCase().contains(searchTerm))
 						continue;
 					
-					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + " /spellbook remove " + itemId);
-
+					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + "[ Click here to remove ]");
+					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/spellbook remove " + itemId));
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 							new ComponentBuilder(item.asJsonString()).create()));
 					sender.spigot().sendMessage(tc);
@@ -82,8 +83,8 @@ public class CommandSpellBook implements CommandExecutor {
 
 					TextComponent tc = new TextComponent();
 					
-					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + " /spellbook remove " + itemId);
-
+					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + "[ Click here to remove ]");
+					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/spellbook remove " + itemId));
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 							new ComponentBuilder(item.asJsonString()).create()));
 					sender.spigot().sendMessage(tc);
