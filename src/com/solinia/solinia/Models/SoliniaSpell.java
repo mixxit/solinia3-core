@@ -4851,7 +4851,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		
 		if (aa != null)
 		{
-			rank = Utils.getRankOfAAAbility(solEntity.getBukkitLivingEntity(),aa);
+			rank = Utils.getRankPositionOfAAAbility(solEntity.getBukkitLivingEntity(),aa);
 			switch(rank)
 			{
 				case 1:

@@ -2983,7 +2983,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		if (aa != null)
 		{
-			rank = Utils.getRankOfAAAbility(getBukkitLivingEntity(), aa);
+			rank = Utils.getRankPositionOfAAAbility(getBukkitLivingEntity(), aa);
 		}
 			
 		if (rank == 0)

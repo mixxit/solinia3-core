@@ -417,4 +417,6 @@ public interface IConfigurationManager {
 
 	void editQuest(int id, String setting, String value, String[] additional)
 			throws InvalidQuestSettingException, NumberFormatException, CoreStateInitException;
+
+	List<ISoliniaAAAbility> getAAbilitiesBySysname(String sysname);
 }

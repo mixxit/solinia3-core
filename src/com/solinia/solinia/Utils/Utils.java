@@ -4791,8 +4791,35 @@ public class Utils {
 		}
 
 	}
+	
+	public static ISoliniaAARank getRankOfAAAbility(LivingEntity bukkitLivingEntity, ISoliniaAAAbility aa) {
+		if (!(bukkitLivingEntity instanceof Player))
+			return null;
 
-	public static int getRankOfAAAbility(LivingEntity bukkitLivingEntity, ISoliniaAAAbility aa) {
+		ISoliniaAARank foundRank = null;
+		
+		int position = 0;
+
+		try {
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
+			for (ISoliniaAARank rank : player.getAARanks()) {
+				if (aa.getId() != rank.getAbilityid())
+					continue;
+
+				if (rank.getPosition() > position)
+				{
+					position = rank.getPosition();
+					foundRank = rank;
+				}
+			}
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+
+		return foundRank;
+	}
+
+	public static int getRankPositionOfAAAbility(LivingEntity bukkitLivingEntity, ISoliniaAAAbility aa) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
 

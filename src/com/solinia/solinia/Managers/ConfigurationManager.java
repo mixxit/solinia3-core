@@ -1416,6 +1416,11 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		return results.get(0);
 	}
+	
+	@Override
+	public List<ISoliniaAAAbility> getAAbilitiesBySysname(String sysname) {
+		return aaabilitiesRepository.query(q -> q.getSysname().equals(sysname));
+	}
 
 	@Override
 	public List<ISoliniaPlayer> getCharacters() {

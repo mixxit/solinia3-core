@@ -89,7 +89,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		if (aa != null)
 		{
 			if(solplayer.getAARanks().size() > 0)
-			aamanaregenrank = Utils.getRankOfAAAbility(player, aa);
+			aamanaregenrank = Utils.getRankPositionOfAAAbility(player, aa);
 			manaregen += aamanaregenrank;
 		}
 		
@@ -109,7 +109,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		if (emaa != null)
 		{
 			if(solplayer.getAARanks().size() > 0)
-			emaamanaregenrank = Utils.getRankOfAAAbility(player, emaa);
+			emaamanaregenrank = Utils.getRankPositionOfAAAbility(player, emaa);
 			manaregen += emaamanaregenrank;
 		}
 
@@ -131,7 +131,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		
 		if (hpaa != null)
 		{
-			aahpregenrank = Utils.getRankOfAAAbility(player, hpaa);
+			aahpregenrank = Utils.getRankPositionOfAAAbility(player, hpaa);
 			hpregen += aahpregenrank;
 		}
 		

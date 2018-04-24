@@ -1506,7 +1506,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		int no_fizzle_level = 0;
 		ISoliniaAAAbility aa = null;
-		int rank = 0;
 		try {
 			aa = StateManager.getInstance().getConfigurationManager()
 					.getFirstAAAbilityBySysname("SPELLCASTINGEXPERTISE");
@@ -1515,19 +1514,46 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		if (aa != null) {
-			rank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
-			switch (rank) {
-			case 1:
-				no_fizzle_level = 20;
-				break;
-			case 2:
-				no_fizzle_level += 35;
-				break;
-			case 3:
-				no_fizzle_level += 52;
-				break;
+			ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
+			if (AArank != null)
+			{
+				for (SoliniaAARankEffect rankEffect : AArank.getEffects())
+				{
+					if (rankEffect.getBase1() > no_fizzle_level)
+						no_fizzle_level = rankEffect.getBase1();
+				}
 			}
 		}
+		
+		try {
+			// there are two potential mastery of the pasts
+			for (ISoliniaAAAbility aaMasteryOfThePast : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("MASTERYOFTHEPAST"))
+			{
+				ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
+				if (AArank != null)
+				{
+					for (SoliniaAARankEffect rankEffect : AArank.getEffects())
+					{
+						if (rankEffect.getBase1() > no_fizzle_level)
+							no_fizzle_level = rankEffect.getBase1();
+					}
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+
+		if (aa != null) {
+			ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
+			if (AArank != null)
+			{
+				for (SoliniaAARankEffect rankEffect : AArank.getEffects())
+				{
+					no_fizzle_level = rankEffect.getBase1();
+				}
+			}
+		}
+		
 
 		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level) {
 			return true;
