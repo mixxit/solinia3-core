@@ -299,7 +299,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			
 			LivingEntity defender = (LivingEntity) event.getEntity();
 			LivingEntity attacker = (LivingEntity) damagecause.getDamager();
-			if (defender.getLocation().distance(attacker.getLocation()) > 2)
+			if (defender.getLocation().distance(attacker.getLocation()) > 3)
 			{
 				attacker.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
 				Utils.CancelEvent(event);

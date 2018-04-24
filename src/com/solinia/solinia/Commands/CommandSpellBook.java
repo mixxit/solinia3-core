@@ -64,7 +64,7 @@ public class CommandSpellBook implements CommandExecutor {
 					if (!item.getDisplayname().toUpperCase().contains(searchTerm))
 						continue;
 					
-					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + "[ Click here to remove ]");
+					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
 					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/spellbook remove " + itemId));
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 							new ComponentBuilder(item.asJsonString()).create()));
@@ -83,7 +83,7 @@ public class CommandSpellBook implements CommandExecutor {
 
 					TextComponent tc = new TextComponent();
 					
-					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + "[ Click here to remove ]");
+					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
 					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/spellbook remove " + itemId));
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 							new ComponentBuilder(item.asJsonString()).create()));
@@ -120,7 +120,13 @@ public class CommandSpellBook implements CommandExecutor {
 					itemIdsRemoved.add(foundItemId);
 
 					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-					sender.sendMessage("Added " + item.getDisplayname() + " to your /claim list");
+					sender.sendMessage("");
+					
+					TextComponent tc = new TextComponent();
+					
+					tc.setText("Added " + item.getDisplayname() + " to your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+					sender.spigot().sendMessage(tc);
 				}
 				
 				for (int itemIdRemoved : itemIdsRemoved)

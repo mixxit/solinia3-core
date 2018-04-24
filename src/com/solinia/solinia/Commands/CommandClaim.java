@@ -44,7 +44,7 @@ public class CommandClaim implements CommandExecutor {
 						continue;
 					
 					TextComponent tc = new TextComponent();
-					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + "[ Click here to remove ]");
+					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
 					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim claim " + claim.getId()));
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 							new ComponentBuilder(item.asJsonString()).create()));

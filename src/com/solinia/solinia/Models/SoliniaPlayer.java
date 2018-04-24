@@ -3108,7 +3108,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		}
 		
-		if (solLivingEntity.getBukkitLivingEntity().getLocation().distance(getBukkitPlayer().getLocation()) > 2)
+		if (solLivingEntity.getBukkitLivingEntity().getLocation().distance(getBukkitPlayer().getLocation()) > 3)
 		{
 			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
 			return;
