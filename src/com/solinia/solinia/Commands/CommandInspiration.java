@@ -28,7 +28,13 @@ public class CommandInspiration implements CommandExecutor {
 			{
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Inspiration Shop");
 				sender.sendMessage("-----------------");
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1 AA Point " + ChatColor.RESET + " - Cost: 5 inspiration : /inspiration buy aa");
+				if (sender instanceof Player)
+				{
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+					if (solPlayer.getLevel() >= 50)
+					sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1 AA Point " + ChatColor.RESET + " - Cost: 5 inspiration : /inspiration buy aa");
+				}
+				
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Head) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manahead");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Chest) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manachest");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Legs) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manalegs");
