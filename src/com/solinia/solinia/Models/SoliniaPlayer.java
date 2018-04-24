@@ -1141,11 +1141,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							{
 								StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(), getBukkitPlayer());
 							} else {
-								getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
+								getBukkitPlayer().sendMessage("* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
 								return;
 							}
 						} else {
-							getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
+							getBukkitPlayer().sendMessage("* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
 							return;
 						}
 					}
@@ -1161,7 +1161,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						item.useItemOnEntity(event.getPlayer(), targetmob, false);
 						return;
 					} else {
-						getBukkitPlayer().sendMessage("* You must select a target (left click with pet control rod or use /ts for group or shift-f for self");
+						getBukkitPlayer().sendMessage("* You must select a target (shift+left click with pet control rod or use /ts for group or shift-f for self");
 						return;
 					}
 				}
@@ -1194,7 +1194,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						event.getPlayer().updateInventory();
 						return;
 					} else {
-						getBukkitPlayer().sendMessage("* You must select a target (left click with consumable or use /ts for group or shift-f for self");
+						getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /ts for group or shift-f for self");
 						return;
 					}
 				}
@@ -1207,7 +1207,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						item.useItemOnEntity(event.getPlayer(), targetmob, true);
 						return;
 					} else {
-						getBukkitPlayer().sendMessage("* You must select a target (left click with usable item or use /ts for group or shift-f for self");
+						getBukkitPlayer().sendMessage("* You must select a target (shift+left click with usable item or use /ts for group or shift-f for self");
 						return;
 					}
 				}
@@ -1321,7 +1321,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				{
 					StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(), getBukkitPlayer());
 				} else {
-					getBukkitPlayer().sendMessage("* You must select a target (left click with spell or use /ts for group or shift-f for self");
+					getBukkitPlayer().sendMessage("* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
 					return;
 				}
 			}

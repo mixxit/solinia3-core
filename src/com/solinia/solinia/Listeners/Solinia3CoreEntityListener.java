@@ -241,7 +241,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					if (itemstack != null)
 					{
 						ISoliniaItem solItem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-						if (solItem != null && (solItem.isSpellscroll() || solItem.isPetControlRod()))
+						if (damager.isSneaking() && solItem != null && (solItem.isSpellscroll() || solItem.isPetControlRod()))
 						{
 							StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity)damager,(LivingEntity)event.getEntity());
 							Utils.CancelEvent(event);

@@ -1162,7 +1162,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				solItem = SoliniaItemAdapter.Adapt(itemstack);
 				
 				// also allow targetting via pet control rod
-				if (solItem != null && (solItem.isSpellscroll() || solItem.isPetControlRod()))
+				if (event.getPlayer().isSneaking() && solItem != null && (solItem.isSpellscroll() || solItem.isPetControlRod()))
 				{
 					if ((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK))) {
 						LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
