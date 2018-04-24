@@ -3911,7 +3911,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public String getLanguage() {
-		System.out.println("Getting language for entity: " + getName() + " Npc: " + isNPC() + " " + this.getNpcid());
 		if (isNPC())
 		{
 			try

@@ -837,12 +837,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 						if ((triggerentity instanceof Player))
 						{
 							if (handler.getResponseType().equals("SAY"))
-								solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), false);
+								solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), true);
 							if (handler.getResponseType().equals("EMOTE"))
 								solentity.emote(replaceChatWordsWithHints(response));
 						} else {
 							if (handler.getResponseType().equals("SAY"))
-								solentity.say(replaceChatWordsWithHints(response), triggerentity, false);
+								solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
 							if (handler.getResponseType().equals("EMOTE"))
 								solentity.emote(replaceChatWordsWithHints(response));
 						}
