@@ -1742,12 +1742,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + player.getName() + " '" + message + "'"
 					+ ChatColor.RESET;
-			player.sendMessage(decoratedMessage);
-			if (allowlanguagelearn == true)
+			
+			if (player.isOp() || (getLanguage() == null || isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(getLanguage())))
 			{
-				if (getLanguage() != null && !getLanguage().equals(""))
+				player.sendMessage(decoratedMessage);
+			} else {
+				player.sendMessage(ChatColor.AQUA + " * " + getName() + " says something in a language you do not understand" + ChatColor.RESET);
+				
+				if (allowlanguagelearn == true)
+				{
+					if (getLanguage() != null && !getLanguage().equals(""))
 					SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(getLanguage());
+				}
 			}
+			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1768,8 +1776,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
-			player.sendMessage(decoratedMessage);
 			
+			if (player.isOp() || (getLanguage() == null || isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(getLanguage())))
+			{
+				player.sendMessage(decoratedMessage);
+			} else {
+				player.sendMessage(ChatColor.AQUA + " * " + getName() + " says something in a language you do not understand" + ChatColor.RESET);
+				
+				if (getLanguage() != null && !getLanguage().equals(""))
+					SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(getLanguage());
+			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3895,6 +3911,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public String getLanguage() {
+		System.out.println("Getting language for entity: " + getName() + " Npc: " + isNPC() + " " + this.getNpcid());
 		if (isNPC())
 		{
 			try

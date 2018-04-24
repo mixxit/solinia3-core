@@ -16,6 +16,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Utils.Utils;
@@ -91,8 +92,25 @@ public class CommandNPCGive implements CommandExecutor {
 					System.out.println("Checking if player meets requirements to hand in item");
 					if (!eventHandler.playerMeetsRequirements(player))
 					{
-						player.sendMessage(ChatColor.GRAY + "[Hint] You do not meet the requirements to hand this quest item in. Either you are missing a quest step or have already completed this step");
+						player.sendMessage(ChatColor.GRAY + "[Hint] You do not meet the requirements to hand this quest item in. Either you are missing a quest step, have already completed this step");
 						continue;
+					}
+					
+					ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(eventHandler.getNpcId());
+					if (npc != null)
+					{
+						if (!npc.isSpeaksAllLanguages())
+						{
+							if (npc.getRaceid() > 0)
+							{
+								ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(npc.getRaceid());
+								if (!solplayer.understandsLanguage(race.getName().toUpperCase()))
+								{
+									player.sendMessage(ChatColor.AQUA + " * " + npc.getName() + " does not want this item as you do not speak their tongue and may wish to speak to you about it" + ChatColor.RESET);
+									continue;
+								}
+							}
+						}
 					}
 					
 					System.out.println("NPC wants the item");
@@ -100,7 +118,7 @@ public class CommandNPCGive implements CommandExecutor {
 					
 					String response = eventHandler.getChatresponse();
 					if (eventHandler.getResponseType().equals("SAY"))
-						solentity.say(solnpc.replaceChatWordsWithHints(response),player, true);
+						solentity.sayto(player,solnpc.replaceChatWordsWithHints(response), true);
 					if (eventHandler.getResponseType().equals("EMOTE"))
 						solentity.emote(solnpc.replaceChatWordsWithHints(response));
 						

@@ -1727,6 +1727,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean understandsLanguage(String language) {
+		
 		if (getRace() != null)
 			if (getRace().getName().toUpperCase().equals(language.toUpperCase()))
 				return true;
