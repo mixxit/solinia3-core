@@ -3111,6 +3111,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return false;
 				case TargetOptional:
 					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(targetentity,this,sourceEntity);
+				case Plant:
+				case Summoned:
+				case Animal:
+				case Undead:
 				case Target:
 					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(targetentity,this,sourceEntity);
 				case Tap:
@@ -3245,6 +3249,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						successGroup = true;
 					
 					return successGroup;
+				case UndeadAE:
 				case AECaster:
 					// Get entities around caster and attempt to apply, if any are successful, return true
 					boolean successCaster = false;
@@ -4064,6 +4069,59 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return false;
 		}
 		
+		if (source.isDead() || target.isDead())
+			return false;
+		
+		ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(target);
+		if (solLivingEntity != null)
+		{
+			switch (Utils.getSpellTargetType(soliniaSpell.getTargettype()))
+			{
+				case SummonedAE:
+					if (!solLivingEntity.isUndead())
+					{
+						return false;
+					}
+				break;
+				case UndeadAE:
+					if (!solLivingEntity.isUndead())
+					{
+						return false;
+					}
+				break;
+				case Undead:
+					if (!solLivingEntity.isUndead())
+					{
+						source.sendMessage("This spell is only effective on Undead");
+						return false;
+					}
+					break;
+				case Summoned:
+					if (!solLivingEntity.isPet())
+					{
+						source.sendMessage("This spell is only effective on Summoned");
+						return false;
+					}
+					break;
+				case Animal:
+					if (!solLivingEntity.isAnimal())
+					{
+						source.sendMessage("This spell is only effective on Animals");
+						return false;
+					}
+					break;
+				case Plant:
+					if (!solLivingEntity.isPlant())
+					{
+						source.sendMessage("This spell is only effective on Plants");
+						return false;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
 		// Always allow self only spells if the target and source is the self
 		if (source.getUniqueId().equals(target.getUniqueId()) && 
 				Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
@@ -4092,29 +4150,23 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 				if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem))
 				{
-					System.out.println("Validating SummonItem for source: " + source.getCustomName());
 					int itemId = effect.getBase();
 					try
 					{
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 						
-						System.out.println("Validating SummonItem for source: " + source.getCustomName());
-
 						if (item == null)
 						{
-							System.out.println("Validating SummonItem said item was null");
 							return false;
 						}
 						
 						if (!item.isTemporary())
 						{
-							System.out.println("Validating SummonItem said item was not temporary");
 							return false;
 						}
 						
 						if (!(target instanceof LivingEntity))
 						{
-							System.out.println("Validating SummonItem said target was not a living entity");
 							return false;
 						}
 					} catch (CoreStateInitException e)

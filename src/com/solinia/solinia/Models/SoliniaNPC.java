@@ -68,6 +68,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isPet = false;
 	private boolean isUndead = false;
 	private boolean isAnimal = false;
+	private boolean isPlant = false;
 	private List<ISoliniaNPCEventHandler> eventHandlers = new ArrayList<ISoliniaNPCEventHandler>();
 	private String deathGrantsTitle = "";
 	private boolean isSummoner = false;
@@ -358,8 +359,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET);
 		sender.sendMessage("- burning: " + ChatColor.GOLD + isBurning() + ChatColor.RESET);
 		sender.sendMessage("- invisible: " + ChatColor.GOLD + isInvisible() + ChatColor.RESET);
-		sender.sendMessage("- isundead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET);
-		sender.sendMessage("- isanimal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
+		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET);
+		sender.sendMessage("- plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET);
+		sender.sendMessage("- animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "EQUIPMENT" + ChatColor.RESET);
 		if (getLoottableid() != 0) {
 			sender.sendMessage("- loottableid: " + ChatColor.GOLD + getLoottableid() + " ("
@@ -581,6 +583,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "undead":
 			setUndead(Boolean.parseBoolean(value));
+			break;
+		case "plant":
+			setPlant(Boolean.parseBoolean(value));
 			break;
 		case "animal":
 			setAnimal(Boolean.parseBoolean(value));
@@ -1339,7 +1344,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setNpcSpellList(int npcSpellList) {
 		this.npcSpellList = npcSpellList;
 	}
+	
+	@Override
+	public boolean isPlant() {
+		return isPlant;
+	}
 
+	@Override
+	public void setPlant(boolean isPlant) {
+		this.isPlant = isPlant;
+	}
 }
 
 	

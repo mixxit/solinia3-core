@@ -1589,6 +1589,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
+	public boolean isPlant() {
+		if (isPlayer())
+			return false;
+
+		if (this.getNpcid() < 1)
+			return false;
+
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.isPlant())
+				return true;
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
+	@Override
 	public boolean isAnimal() {
 		if (isPlayer())
 			return false;

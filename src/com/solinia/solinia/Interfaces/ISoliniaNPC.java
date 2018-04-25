@@ -245,4 +245,8 @@ public interface ISoliniaNPC {
 	boolean canDualWield();
 
 	boolean getDualWieldCheck(ISoliniaLivingEntity solLivingEntity);
+
+	boolean isPlant();
+
+	void setPlant(boolean isPlant);
 }

@@ -224,4 +224,6 @@ public interface ISoliniaLivingEntity
 	void setFeigned(boolean feigned);
 
 	boolean getDualWieldCheck();
+
+	boolean isPlant();
 }
