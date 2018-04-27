@@ -52,6 +52,57 @@ public class SoliniaItemFactory {
 		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 		return item;
 	}
+	
+	public static ISoliniaItem CreateItemCopy(ISoliniaItem originalItem, boolean operatorCreated) throws SoliniaItemException, CoreStateInitException {
+		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
+		ItemStack itemStack = originalItem.asItemStack();		
+		
+		SoliniaItem item = new SoliniaItem();
+		item.setOperatorCreated(operatorCreated);
+		item.setId(StateManager.getInstance().getConfigurationManager().getNextItemId());
+		item.setBasename(itemStack.getType().name());
+		item.setDisplayname(originalItem.getDisplayname());
+		
+		item.setEarsItem(originalItem.isEarsItem());
+		item.setShouldersItem(originalItem.isShouldersItem());
+		item.setNeckItem(originalItem.isNeckItem());
+		item.setFingersItem(originalItem.isFingersItem());
+		
+		item.setDamage(originalItem.getDamage());
+		item.setAC(originalItem.getAC());
+
+		item.setAugmentation(originalItem.isAugmentation());
+		item.setAugmentationFitsSlotType(originalItem.getAugmentationFitsSlotType());
+		
+		item.setAllowedClassNames(originalItem.getAllowedClassNames());
+		
+		if (itemStack.getData() != null)
+		{
+			try
+			{
+				item.setColor(itemStack.getData().getData());
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		if (itemStack.getType().name().equals("SKULL_ITEM"))
+	    {
+			net.minecraft.server.v1_12_R1.ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
+			NBTTagCompound tag = stack.hasTag() ? stack.getTag() : new NBTTagCompound();
+
+			tag.getCompound("SkullOwner").getString("Id");
+			String texturevalue = tag.getCompound("SkullOwner").getCompound("Properties").getList("textures", 10).get(0).getString("Value");
+			
+			item.setTexturebase64(texturevalue);
+	    }
+		
+		StateManager.getInstance().getConfigurationManager().addItem(item);
+		System.out.println("New Item Added: " + item.getId() + " - " + item.getDisplayname());
+		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
+		return item;
+	}
 
 	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname, boolean prefixClassName, boolean operatorCreated) throws SoliniaItemException {
 		List<Integer> items = new ArrayList<Integer>();
@@ -161,31 +212,12 @@ public class SoliniaItemFactory {
 					item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
 				}
 				
-				int tierMin = 0;
+				int baseAmount = getBaseAmount(item);
 				
-				int baseAmount = 5;
+				int tierMin = getTierMin(item, armourtier, baseAmount);
+				int tierMax = getTierMax(item, armourtier, baseAmount);
 				
-				if (item.isJewelry())
-				{
-					baseAmount = 2;
-				}
-				
-				int baseDoubler = baseAmount * 2;
-				
-				int tierMax = armourtier * baseAmount;
-				if (armourtier > 1)
-					tierMin =+ (baseAmount * armourtier) - baseAmount;
-				
-				int lvlMin = 0;
-				if (armourtier > 1)
-					lvlMin =+ (baseDoubler * armourtier) - baseDoubler;
-				
-				if (lvlMin > Utils.getMaxLevel())
-				{
-					lvlMin = Utils.getMaxLevel();
-				}
-				
-				item.setMinLevel(lvlMin);
+				setMinLevel(item, armourtier, baseAmount, true);
 				
 				int classStrBonus = classtype.getItemGenerationBonus("strength");
 				int classStaBonus = classtype.getItemGenerationBonus("stamina");
@@ -214,32 +246,7 @@ public class SoliniaItemFactory {
 				if (classChaBonus > 0)
 					item.setCharisma(Utils.RandomBetween(tierMin, tierMax) + rarityBonus+classChaBonus);
 				
-				// Damage
-				if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
-				{
-					if (!item.getBasename().toUpperCase().equals("SHIELD"))
-					{
-						int dmgMin = tierMin;
-						int dmgMax = tierMax;
-						if (dmgMin < 6)
-						{
-							dmgMin = 6;
-						}
-						
-						if (dmgMax < 7)
-							dmgMax = 7;
-						
-						int damage = Utils.RandomBetween(dmgMin, dmgMax) + rarityBonus + classStrBonus;
-						item.setDamage(damage);
-					} else {
-						item.setAC(SoliniaItemFactory.generateArmourClass(classAcBonus, armourtier, rarityBonus));
-					}
-				}
-				
-				if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()))
-				{
-					item.setAC(SoliniaItemFactory.generateArmourClass(classAcBonus, armourtier, rarityBonus));
-				}
+				setItemDamageAndAc(item, armourtier, tierMin, tierMax, classAcBonus, rarityBonus, classStrBonus);
 				
 				// mana
 				item.setMana(Utils.RandomBetween(0,armourtier + rarityBonus)*10);
@@ -264,6 +271,75 @@ public class SoliniaItemFactory {
 		}
 		
 		return items;
+	}
+	
+	public static void setMinLevel(ISoliniaItem item, int tier, int baseAmount, boolean restrictMaxLevel) {
+		int baseDoubler = baseAmount * 2;
+		
+		int lvlMin = 0;
+		if (tier > 1)
+			lvlMin =+ (baseDoubler * tier) - baseDoubler;
+		
+		if (restrictMaxLevel == true)
+		if (lvlMin > Utils.getMaxLevel())
+		{
+			lvlMin = Utils.getMaxLevel();
+		}
+		
+		item.setMinLevel(lvlMin);
+	}
+
+	public static int getBaseAmount(ISoliniaItem item) {
+		int baseAmount = 5;
+		
+		if (item.isJewelry())
+		{
+			baseAmount = 2;
+		}
+		return baseAmount;
+	}
+
+	public static int getTierMin(ISoliniaItem item, int tier, int baseAmount)
+	{
+		int tierMin = 0;
+		if (tier > 1)
+			tierMin =+ (baseAmount * tier) - baseAmount;
+		
+		return tierMin;
+	}
+	
+	public static int getTierMax(ISoliniaItem item, int tier, int baseAmount)
+	{
+		int tierMax = tier * baseAmount;
+		return tierMax;
+	}
+
+	public static void setItemDamageAndAc(ISoliniaItem item, int tier, int tierMin, int tierMax, int acBonus, int rarityBonus, int damageBonus) {
+		// Damage
+		if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
+		{
+			if (!item.getBasename().toUpperCase().equals("SHIELD"))
+			{
+				int dmgMin = tierMin;
+				int dmgMax = tierMax;
+				if (dmgMin < 6)
+				{
+					dmgMin = 6;
+				}
+				
+				if (dmgMax < 7)
+					dmgMax = 7;
+				
+				int damage = Utils.RandomBetween(dmgMin, dmgMax) + rarityBonus + damageBonus;
+				item.setDamage(damage);
+			} else {
+				item.setAC(SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus));
+			}
+		}
+		if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()))
+		{
+			item.setAC(SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus));
+		}
 	}
 
 	public static int generateArmourClass(int classAcBonus, int armourTier, int rarityBonus) {

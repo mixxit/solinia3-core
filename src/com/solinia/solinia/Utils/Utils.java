@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -49,6 +50,7 @@ import com.solinia.solinia.Exceptions.SoliniaCraftCreationException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaCraftFactory;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
+import com.solinia.solinia.Factories.SoliniaNPCMerchantFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
@@ -61,10 +63,12 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
@@ -3181,28 +3185,742 @@ public class Utils {
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher()  {
 		
-		/*
-		int portableFurnaceId = 81542;
 		
+		
+	}
+	
+	private static void genCultural()
+	{
+		int portableFurnaceId = 81542;
+		int tailoringKitId = 84602;
+		ISoliniaItem[] dustItems = new ISoliniaItem[13];
 		try
 		{
+			for (int i = 1; i < 13; i++)
+			{
+				ISoliniaItem dustItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.BOOK), true);
+				
+				switch (i)
+				{
+					case 12:
+						dustItem.setDisplayname("Holy Words of Manandu");
+					break;
+					case 11:
+						dustItem.setDisplayname("Holy Words of Ingorir");
+					break;
+					case 10:
+						dustItem.setDisplayname("Holy Words of Gias");
+					break;
+					case 9:
+						dustItem.setDisplayname("Holy Words of Zephyr");
+					break;
+					case 8:
+						dustItem.setDisplayname("Holy Words of Zurvan");
+					break;
+					case 7:
+						dustItem.setDisplayname("Holy Words of Methabeht");
+					break;
+					case 6:
+						dustItem.setDisplayname("Holy Words of Valhas");
+					break;
+					case 5:
+						dustItem.setDisplayname("Holy Words of Tisroeh");
+					break;
+					case 4:
+						dustItem.setDisplayname("Holy Words of Boralis");
+					break;
+					case 3:
+						dustItem.setDisplayname("Holy Words of Irduolo");
+					break;
+					case 2:
+						dustItem.setDisplayname("Holy Words of Lumyle");
+						break;
+					case 1:
+						dustItem.setDisplayname("Holy Words of Harashi");
+						break;
+					default:
+						dustItem.setDisplayname("Holy Words");
+				}
+				
+				dustItems[i] = dustItem;
+			}
+			
 			// Foreach race create an ore
 			for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
 			{
 				try
 				{
-					ItemStack oreStack = new ItemStack(Material.IRON_ORE);
-					ISoliniaItem oreItem = SoliniaItemFactory.CreateItem(oreStack, true);
+					ISoliniaItem oreItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_ORE), true);
 					oreItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Ore");
 	
-					ItemStack ingotStack = new ItemStack(Material.IRON_ORE);
-					ISoliniaItem ingotItem = SoliniaItemFactory.CreateItem(ingotStack, true);
+					ISoliniaItem ingotItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_INGOT), true);
 					ingotItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Ingot");
+					
+					ISoliniaItem leatherItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEATHER), true);
+					leatherItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Raw Cattle Hide");
+					
+					ISoliniaItem preparedLeatherItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEATHER), true);
+					preparedLeatherItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Prepared Cattle Leather");
+					
+					// Iron Molds
+					// Head
+					ISoliniaItem ironheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ironheadMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					ironheadMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Helm Mold");
+					ironheadMoldItem.setWorth(35);
+					
+					ISoliniaItem ironheadItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_HELMET), true);
+					ironheadItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Helm");
+					ironheadItem.setAC(4);
+					ironheadItem.setAllowedClassNames(Arrays.asList("BARD", "CLERIC", "PALADIN", "SHADOWKNIGHT", "WARRIOR"));
+
+					// Chest
+					ISoliniaItem ironchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ironchestMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					ironchestMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Chestplate Mold");
+					ironchestMoldItem.setWorth(35);
+					
+					ISoliniaItem ironchestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_CHESTPLATE), true);
+					ironchestItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Chestplate");
+					ironchestItem.setAC(4);
+					ironchestItem.setAllowedClassNames(Arrays.asList("BARD", "CLERIC", "PALADIN", "SHADOWKNIGHT", "WARRIOR"));
+
+					// Legs
+					ISoliniaItem ironlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ironlegsMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					ironlegsMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Greaves Mold");
+					ironlegsMoldItem.setWorth(35);
+					
+					ISoliniaItem ironlegsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_LEGGINGS), true);
+					ironlegsItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Greaves");
+					ironlegsItem.setAC(4);
+					ironlegsItem.setAllowedClassNames(Arrays.asList("BARD", "CLERIC", "PALADIN", "SHADOWKNIGHT", "WARRIOR"));
+
+					// Feet
+					ISoliniaItem ironfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ironfeetMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					ironfeetMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Sabatons Mold");
+					ironfeetMoldItem.setWorth(35);
+
+					ISoliniaItem ironfeetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_BOOTS), true);
+					ironfeetItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Sabatons");
+					ironfeetItem.setAC(4);
+					ironfeetItem.setAllowedClassNames(Arrays.asList("BARD", "CLERIC", "PALADIN", "SHADOWKNIGHT", "WARRIOR"));
+
+					// Chainmail Molds
+					// Head
+					ISoliniaItem chainheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					chainheadMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					chainheadMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Helm Mold");
+					chainheadMoldItem.setWorth(35);
+					
+					ISoliniaItem chainheadItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CHAINMAIL_HELMET), true);
+					chainheadItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Helm");
+					chainheadItem.setAC(3);
+					chainheadItem.setAllowedClassNames(Arrays.asList("BERSERKER", "RANGER", "ROGUE", "SHAMAN"));
+
+					// Chest
+					ISoliniaItem chainchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					chainchestMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					chainchestMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Chestplate Mold");
+					chainchestMoldItem.setWorth(35);
+					
+					ISoliniaItem chainchestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CHAINMAIL_CHESTPLATE), true);
+					chainchestItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Chestplate");
+					chainchestItem.setAC(3);
+					chainchestItem.setAllowedClassNames(Arrays.asList("BERSERKER", "RANGER", "ROGUE", "SHAMAN"));
+
+					// Legs
+					ISoliniaItem chainlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					chainlegsMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					chainlegsMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Greaves Mold");
+					chainlegsMoldItem.setWorth(35);
+					
+					ISoliniaItem chainlegsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CHAINMAIL_LEGGINGS), true);
+					chainlegsItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Greaves");
+					chainlegsItem.setAC(3);
+					chainlegsItem.setAllowedClassNames(Arrays.asList("BERSERKER", "RANGER", "ROGUE", "SHAMAN"));
+
+					// Feet
+					ISoliniaItem chainfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					chainfeetMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					chainfeetMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Sabatons Mold");					
+					chainfeetMoldItem.setWorth(35);
+					
+					ISoliniaItem chainfeetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CHAINMAIL_BOOTS), true);
+					chainfeetItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Sabatons");					
+					chainfeetItem.setAC(3);
+					chainfeetItem.setAllowedClassNames(Arrays.asList("BERSERKER", "RANGER", "ROGUE", "SHAMAN"));
+
+					// Leather Molds
+					// Head
+					ISoliniaItem leatherheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					leatherheadMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					leatherheadMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Helmet Pattern");
+					leatherheadMoldItem.setWorth(35);
+					
+					ISoliniaItem leatherheadItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEATHER_HELMET), true);
+					leatherheadItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Helmet");
+					leatherheadItem.setAC(2);
+					leatherheadItem.setAllowedClassNames(Arrays.asList("BEASTLORD", "DRUID", "MONK", "ENCHANTER", "MAGICIAN", "NECROMANCER", "WIZARD"));
+
+					// Chest
+					ISoliniaItem leatherchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					leatherchestMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					leatherchestMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Tunic Pattern");
+					leatherchestMoldItem.setWorth(35);
+					
+					ISoliniaItem leatherchestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEATHER_CHESTPLATE), true);
+					leatherchestItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Tunic");
+					leatherchestItem.setAC(2);
+					leatherchestItem.setAllowedClassNames(Arrays.asList("BEASTLORD", "DRUID", "MONK", "ENCHANTER", "MAGICIAN", "NECROMANCER", "WIZARD"));
+
+					// Legs
+					ISoliniaItem leatherlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					leatherlegsMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					leatherlegsMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Leggings Pattern");
+					leatherlegsMoldItem.setWorth(35);
+					
+					ISoliniaItem leatherlegsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEATHER_LEGGINGS), true);
+					leatherlegsItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Leggings");
+					leatherlegsItem.setAC(2);
+					leatherlegsItem.setAllowedClassNames(Arrays.asList("BEASTLORD", "DRUID", "MONK", "ENCHANTER", "MAGICIAN", "NECROMANCER", "WIZARD"));
+
+					// Feet
+					ISoliniaItem leatherfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					leatherfeetMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					leatherfeetMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Boots Pattern");					
+					leatherfeetMoldItem.setWorth(35);
+					
+					ISoliniaItem leatherfeetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEATHER_BOOTS), true);
+					leatherfeetItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Boots");					
+					leatherfeetItem.setAC(2);
+					leatherfeetItem.setAllowedClassNames(Arrays.asList("BEASTLORD", "DRUID", "MONK", "ENCHANTER", "MAGICIAN", "NECROMANCER", "WIZARD"));
+
+					// Equipment
+					// Sword
+					ISoliniaItem swordMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					swordMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					swordMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Sword Mold");
+					swordMoldItem.setWorth(35);
+					
+					ISoliniaItem swordItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_SWORD), true);
+					swordItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Sword");
+					swordItem.setDamage(6);
+					
+					// Bow
+					ISoliniaItem bowMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					bowMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					bowMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Bow Pattern");					
+					bowMoldItem.setWorth(35);
+					
+					ISoliniaItem bowItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.BOW), true);
+					bowItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Bow");					
+					bowItem.setDamage(8);
+
+					// Shield
+					ISoliniaItem shieldMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					shieldMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					shieldMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Shield Mold");					
+					shieldMoldItem.setWorth(35);
+					
+					ISoliniaItem shieldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SHIELD), true);
+					shieldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Shield");					
+					shieldItem.setAC(5);
+					
+					// Staff
+					ISoliniaItem staffMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_SPADE), true);
+					staffMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					staffMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Staff Mold");					
+					staffMoldItem.setWorth(35);
+					
+					ISoliniaItem staffItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_SPADE), true);
+					staffItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Staff");					
+					staffItem.setDamage(5);
+					
+					// Axe
+					ISoliniaItem axeMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					axeMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					axeMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Axe Mold");					
+					axeMoldItem.setWorth(35);
+					
+					ISoliniaItem axeItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_AXE), true);
+					axeItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Axe");					
+					axeItem.setDamage(7);
+
+					// Earrings
+					ISoliniaItem earringMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					earringMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					earringMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Earring Mold");	
+					earringMoldItem.setWorth(35);
+					
+					ISoliniaItem earringItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					earringItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Earring");	
+					earringItem.setEarsItem(true);
+					earringItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
+	
+					// Necklace
+					ISoliniaItem necklaceMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					necklaceMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					necklaceMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Necklace Mold");	
+					necklaceMoldItem.setWorth(35);
+					
+					ISoliniaItem necklaceItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					necklaceItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Necklace");	
+					necklaceItem.setNeckItem(true);
+					necklaceItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
+					
+					// Cloak
+					ISoliniaItem cloakMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					cloakMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					cloakMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Cloak Pattern");	
+					cloakMoldItem.setWorth(35);
+					
+					ISoliniaItem cloakItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					cloakItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Cloak");	
+					cloakItem.setShouldersItem(true);
+					cloakItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
+
+					// Rings
+					ISoliniaItem ringMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ringMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					ringMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Ring Mold");	
+					ringMoldItem.setWorth(35);
+					
+					ISoliniaItem ringItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ringItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Ring");	
+					ringItem.setFingersItem(true);
+					ringItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
+					
+					// Weapon aug
+					ISoliniaItem weaponcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					weaponcharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					weaponcharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Weapon Charm Pattern");	
+					weaponcharmMoldItem.setWorth(35);
+					
+					ISoliniaItem weaponcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					weaponcharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Weapon Charm");	
+					weaponcharmItem.setAugmentation(true);
+					weaponcharmItem.setAugmentationFitsSlotType(AugmentationSlotType.WEAPON);
+					
+					// Helmet aug
+					ISoliniaItem hatcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					hatcharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					hatcharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Hat Charm Pattern");	
+					hatcharmMoldItem.setWorth(35);
+					
+					ISoliniaItem hatcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					hatcharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Hat Charm");	
+					hatcharmItem.setAugmentation(true);
+					hatcharmItem.setAugmentationFitsSlotType(AugmentationSlotType.HELMET);
+					
+					// Chestplate aug
+					ISoliniaItem tuniccharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					tuniccharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					tuniccharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Tunic Charm Pattern");	
+					tuniccharmMoldItem.setWorth(35);
+					
+					ISoliniaItem tuniccharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					tuniccharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Tunic Charm");	
+					tuniccharmItem.setAugmentation(true);
+					tuniccharmItem.setAugmentationFitsSlotType(AugmentationSlotType.CHESTPLATE);
+					
+					// Leggings aug
+					ISoliniaItem leggingscharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					leggingscharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					leggingscharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leggings Charm Pattern");	
+					leggingscharmMoldItem.setWorth(35);
+					
+					ISoliniaItem leggingscharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					leggingscharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leggings Charm");	
+					leggingscharmItem.setAugmentation(true);
+					leggingscharmItem.setAugmentationFitsSlotType(AugmentationSlotType.LEGGINGS);
+					
+					// Boots aug
+					ISoliniaItem bootscharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					bootscharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					bootscharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Boots Charm Pattern");	
+					bootscharmMoldItem.setWorth(35);
+					
+					ISoliniaItem bootscharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					bootscharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Boots Charm");	
+					bootscharmItem.setAugmentation(true);
+					bootscharmItem.setAugmentationFitsSlotType(AugmentationSlotType.BOOTS);
+					
+					// Shield aug
+					ISoliniaItem shieldcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					shieldcharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
+					shieldcharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Shield Charm Pattern");	
+					shieldcharmMoldItem.setWorth(35);
+					
+					ISoliniaItem shieldcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					shieldcharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Shield Charm");	
+					shieldcharmItem.setAugmentation(true);
+					shieldcharmItem.setAugmentationFitsSlotType(AugmentationSlotType.SHIELD);
 					
 					// Create smelting recipe
 					try {
 						SoliniaCraft ingotRecipe = SoliniaCraftFactory.Create(ingotItem.getDisplayname().replace(" ", "_").toUpperCase(), oreItem.getId(), portableFurnaceId, ingotItem.getId(), true);
+						ingotRecipe.setSkill("BLACKSMITHING");
+						SoliniaCraft leatherRecipe = SoliniaCraftFactory.Create(preparedLeatherItem.getDisplayname().replace(" ", "_").toUpperCase(), leatherItem.getId(), tailoringKitId, preparedLeatherItem.getId(), true);
+						leatherRecipe.setSkill("TAILORING");
 						
+						// Iron Molds
+						SoliniaCraft ironheadRecipe = SoliniaCraftFactory.Create(ironheadItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), ironheadMoldItem.getId(), ironheadItem.getId(), true);
+						ironheadRecipe.setSkill("BLACKSMITHING");
+						SoliniaCraft ironchestRecipe = SoliniaCraftFactory.Create(ironchestItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), ironchestMoldItem.getId(), ironchestItem.getId(), true);
+						ironchestRecipe.setSkill("BLACKSMITHING");
+						SoliniaCraft ironlegsRecipe = SoliniaCraftFactory.Create(ironlegsItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), ironlegsMoldItem.getId(), ironlegsItem.getId(), true);
+						ironlegsRecipe.setSkill("BLACKSMITHING");
+						SoliniaCraft ironfeetRecipe = SoliniaCraftFactory.Create(ironfeetItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), ironfeetMoldItem.getId(), ironfeetItem.getId(), true);
+						ironfeetRecipe.setSkill("BLACKSMITHING");
+
+						// Chainmail Molds
+						SoliniaCraft chainheadRecipe = SoliniaCraftFactory.Create(chainheadItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), chainheadMoldItem.getId(), chainheadItem.getId(), true);
+						chainheadRecipe.setSkill("BLACKSMITHING");
+						SoliniaCraft chainchestRecipe = SoliniaCraftFactory.Create(chainchestItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), chainchestMoldItem.getId(), chainchestItem.getId(), true);
+						chainchestRecipe.setSkill("BLACKSMITHING");
+						SoliniaCraft chainlegsRecipe = SoliniaCraftFactory.Create(chainlegsItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), chainlegsMoldItem.getId(), chainlegsItem.getId(), true);
+						chainlegsRecipe.setSkill("BLACKSMITHING");
+						SoliniaCraft chainfeetRecipe = SoliniaCraftFactory.Create(chainfeetItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), chainfeetMoldItem.getId(), chainfeetItem.getId(), true);
+						chainfeetRecipe.setSkill("BLACKSMITHING");
+
+						// Leather Molds
+						SoliniaCraft leatherheadRecipe = SoliniaCraftFactory.Create(leatherheadItem.getDisplayname().replace(" ", "_").toUpperCase(), preparedLeatherItem.getId(), leatherheadMoldItem.getId(), leatherheadItem.getId(), true);
+						leatherheadRecipe.setSkill("TAILORING");
+						SoliniaCraft leatherchestRecipe = SoliniaCraftFactory.Create(leatherchestItem.getDisplayname().replace(" ", "_").toUpperCase(), preparedLeatherItem.getId(), leatherchestMoldItem.getId(), leatherchestItem.getId(), true);
+						leatherchestRecipe.setSkill("TAILORING");
+						SoliniaCraft leatherlegsRecipe = SoliniaCraftFactory.Create(leatherlegsItem.getDisplayname().replace(" ", "_").toUpperCase(), preparedLeatherItem.getId(), leatherlegsMoldItem.getId(), leatherlegsItem.getId(), true);
+						leatherlegsRecipe.setSkill("TAILORING");
+						SoliniaCraft leatherfeetRecipe = SoliniaCraftFactory.Create(leatherfeetItem.getDisplayname().replace(" ", "_").toUpperCase(), preparedLeatherItem.getId(), leatherfeetMoldItem.getId(), leatherfeetItem.getId(), true);
+						leatherfeetRecipe.setSkill("TAILORING");
+						
+						// Equipment
+						// Sword
+						SoliniaCraft swordRecipe = SoliniaCraftFactory.Create(swordItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), swordMoldItem.getId(), swordItem.getId(), true);
+						swordRecipe.setSkill("BLACKSMITHING");
+						// Bow
+						SoliniaCraft bowRecipe = SoliniaCraftFactory.Create(bowItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), bowMoldItem.getId(), bowItem.getId(), true);
+						bowRecipe.setSkill("BLACKSMITHING");
+						// Shield
+						SoliniaCraft shieldRecipe = SoliniaCraftFactory.Create(shieldItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), shieldMoldItem.getId(), shieldItem.getId(), true);
+						shieldRecipe.setSkill("BLACKSMITHING");
+						// Staff
+						SoliniaCraft staffRecipe = SoliniaCraftFactory.Create(staffItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), staffMoldItem.getId(), staffItem.getId(), true);
+						staffRecipe.setSkill("BLACKSMITHING");
+						// Axe
+						SoliniaCraft axeRecipe = SoliniaCraftFactory.Create(axeItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), axeMoldItem.getId(), axeItem.getId(), true);
+						axeRecipe.setSkill("BLACKSMITHING");
+						// Earrings
+						SoliniaCraft earringRecipe = SoliniaCraftFactory.Create(earringItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), earringMoldItem.getId(), earringItem.getId(), true);
+						earringRecipe.setSkill("JEWELRYMAKING");
+						// Necklace
+						SoliniaCraft necklaceRecipe = SoliniaCraftFactory.Create(necklaceItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), necklaceMoldItem.getId(), necklaceItem.getId(), true);
+						necklaceRecipe.setSkill("JEWELRYMAKING");
+						// Cloak
+						SoliniaCraft cloakRecipe = SoliniaCraftFactory.Create(cloakItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), cloakMoldItem.getId(), cloakItem.getId(), true);
+						cloakRecipe.setSkill("TAILORING");
+						// Rings
+						SoliniaCraft ringRecipe = SoliniaCraftFactory.Create(ringItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), ringMoldItem.getId(), ringItem.getId(), true);
+						ringRecipe.setSkill("JEWELRYMAKING");
+						// Weapon aug
+						SoliniaCraft weaponcharmRecipe = SoliniaCraftFactory.Create(weaponcharmItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), weaponcharmMoldItem.getId(), weaponcharmItem.getId(), true);
+						weaponcharmRecipe.setSkill("TINKERING");
+						// Helmet aug
+						SoliniaCraft hatcharmRecipe = SoliniaCraftFactory.Create(hatcharmItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), hatcharmMoldItem.getId(), hatcharmItem.getId(), true);
+						hatcharmRecipe.setSkill("TINKERING");
+						// Chestplate aug
+						SoliniaCraft tuniccharmRecipe = SoliniaCraftFactory.Create(tuniccharmItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), tuniccharmMoldItem.getId(), tuniccharmItem.getId(), true);
+						tuniccharmRecipe.setSkill("TINKERING");
+						// Leggings aug
+						SoliniaCraft leggingscharmRecipe = SoliniaCraftFactory.Create(leggingscharmItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), leggingscharmMoldItem.getId(), leggingscharmItem.getId(), true);
+						leggingscharmRecipe.setSkill("TINKERING");
+						// Boots aug
+						SoliniaCraft bootscharmRecipe = SoliniaCraftFactory.Create(bootscharmItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), bootscharmMoldItem.getId(), bootscharmItem.getId(), true);
+						bootscharmRecipe.setSkill("TINKERING");
+						// Shield aug
+						SoliniaCraft shieldcharmRecipe = SoliniaCraftFactory.Create(shieldcharmItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), shieldcharmMoldItem.getId(), shieldcharmItem.getId(), true);
+						shieldcharmRecipe.setSkill("TINKERING");
+						
+						SoliniaNPCMerchantFactory.CreateNPCMerchant(race.getName().toUpperCase() + "_" + "CULTURAL");
+						ISoliniaNPCMerchant merchantList = StateManager.getInstance().getConfigurationManager().getNPCMerchant(race.getName().toUpperCase() + "_" + "CULTURAL");
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), portableFurnaceId);
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), tailoringKitId);
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), ironheadMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), ironchestMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), ironlegsMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), ironfeetMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), chainheadMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), chainchestMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), chainlegsMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), chainfeetMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), leatherheadMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), leatherchestMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), leatherlegsMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), leatherfeetMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), swordMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), bowMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), shieldMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), staffMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), axeMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), earringMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), necklaceMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), cloakMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), ringMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), weaponcharmMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), hatcharmMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), tuniccharmMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), leggingscharmMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), bootscharmMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), leggingscharmMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), shieldcharmMoldItem.getId());
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), portableFurnaceId);
+						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), tailoringKitId);
+						
+						// Generate the actual items people want
+						for (int i = 1; i < 13; i++)
+						{
+							int tier = i;
+							ISoliniaItem tierItem = dustItems[i];
+							String tierPrefix = "";
+							switch (i)
+							{
+								case 12:
+									tierPrefix = "Manandu Blessed ";
+								break;
+								case 11:
+									tierPrefix = "Ingorir Blessed ";
+								break;
+								case 10:
+									tierPrefix = "Gias Blessed ";
+								break;
+								case 9:
+									tierPrefix = "Zephyr Blessed ";
+								break;
+								case 8:
+									tierPrefix = "Zurvan Blessed ";
+								break;
+								case 7:
+									tierPrefix = "Methabeht Blessed "; //60 - 70
+								break;
+								case 6:
+									tierPrefix = "Valhas Blessed "; //50 - 60
+								break;
+								case 5:
+									tierPrefix = "Tisroeh Blessed ";// 40 - 50 
+								break;
+								case 4:
+									tierPrefix = "Boralis Blessed "; //30 - 40
+								break;
+								case 3:
+									tierPrefix = "Irduolo Blessed ";// 20 - 30
+								break;
+								case 2:
+									tierPrefix = "Lumyle Blessed "; // 10 - 20
+									break;
+								case 1:
+									tierPrefix = "Harashi Blessed "; // 0 - 10
+									break;
+								default:
+									tierPrefix = "Blessed ";
+							}						
+							
+							int tierMinSkill = i * 25;
+							
+							// Iron Molds
+							ISoliniaItem ironheadItemT = SoliniaItemFactory.CreateItemCopy(ironheadItem, true);
+							ironheadItemT.setDisplayname(tierPrefix + ironheadItemT.getDisplayname());
+							culturaliseItem(tier,race,ironheadItemT);
+							SoliniaCraft ironheadRecipeT = SoliniaCraftFactory.Create(ironheadItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), ironheadItem.getId(), ironheadItemT.getId(), true);
+							ironheadRecipeT.setSkill("BLACKSMITHING");
+							ironheadRecipeT.setMinSkill(tierMinSkill);
+
+							ISoliniaItem ironchestItemT = SoliniaItemFactory.CreateItemCopy(ironchestItem, true);
+							ironchestItemT.setDisplayname(tierPrefix + ironchestItemT.getDisplayname());
+							culturaliseItem(tier,race,ironchestItemT);
+							SoliniaCraft ironchestRecipeT = SoliniaCraftFactory.Create(ironchestItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), ironchestItem.getId(), ironchestItemT.getId(), true);
+							ironchestRecipeT.setSkill("BLACKSMITHING");
+							ironchestRecipeT.setMinSkill(tierMinSkill);
+							
+							ISoliniaItem ironlegsItemT = SoliniaItemFactory.CreateItemCopy(ironlegsItem, true);
+							ironlegsItemT.setDisplayname(tierPrefix + ironlegsItemT.getDisplayname());
+							culturaliseItem(tier,race,ironlegsItemT);
+							SoliniaCraft ironlegsRecipeT = SoliniaCraftFactory.Create(ironlegsItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), ironlegsItem.getId(), ironlegsItemT.getId(), true);
+							ironlegsRecipeT.setSkill("BLACKSMITHING");
+							ironlegsRecipeT.setMinSkill(tierMinSkill);
+							
+							ISoliniaItem ironfeetItemT = SoliniaItemFactory.CreateItemCopy(ironfeetItem, true);
+							ironfeetItemT.setDisplayname(tierPrefix + ironfeetItemT.getDisplayname());
+							culturaliseItem(tier,race,ironfeetItemT);
+							SoliniaCraft ironfeetRecipeT = SoliniaCraftFactory.Create(ironfeetItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), ironfeetItem.getId(), ironfeetItemT.getId(), true);
+							ironfeetRecipeT.setSkill("BLACKSMITHING");
+							ironfeetRecipeT.setMinSkill(tierMinSkill);
+							
+							// Chainmail Molds
+							ISoliniaItem chainheadItemT = SoliniaItemFactory.CreateItemCopy(chainheadItem, true);
+							chainheadItemT.setDisplayname(tierPrefix + chainheadItemT.getDisplayname());
+							culturaliseItem(tier,race,chainheadItemT);
+							SoliniaCraft chainheadRecipeT = SoliniaCraftFactory.Create(chainheadItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), chainheadItem.getId(), chainheadItemT.getId(), true);
+							chainheadRecipeT.setSkill("BLACKSMITHING");
+							chainheadRecipeT.setMinSkill(tierMinSkill);
+							
+							ISoliniaItem chainchestItemT = SoliniaItemFactory.CreateItemCopy(chainchestItem, true);
+							chainchestItemT.setDisplayname(tierPrefix + chainchestItemT.getDisplayname());
+							culturaliseItem(tier,race,chainchestItemT);
+							SoliniaCraft chainchestRecipeT = SoliniaCraftFactory.Create(chainchestItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), chainchestItem.getId(), chainchestItemT.getId(), true);
+							chainchestRecipeT.setSkill("BLACKSMITHING");
+							chainchestRecipeT.setMinSkill(tierMinSkill);
+							
+							ISoliniaItem chainlegsItemT = SoliniaItemFactory.CreateItemCopy(chainlegsItem, true);
+							chainlegsItemT.setDisplayname(tierPrefix + chainlegsItemT.getDisplayname());
+							culturaliseItem(tier,race,chainlegsItemT);
+							SoliniaCraft chainlegsRecipeT = SoliniaCraftFactory.Create(chainlegsItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), chainlegsItem.getId(), chainlegsItemT.getId(), true);
+							chainlegsRecipeT.setSkill("BLACKSMITHING");
+							chainlegsRecipeT.setMinSkill(tierMinSkill);
+							
+							ISoliniaItem chainfeetItemT = SoliniaItemFactory.CreateItemCopy(chainfeetItem, true);
+							chainfeetItemT.setDisplayname(tierPrefix + chainfeetItemT.getDisplayname());
+							culturaliseItem(tier,race,chainfeetItemT);
+							SoliniaCraft chainfeetRecipeT = SoliniaCraftFactory.Create(chainfeetItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), chainfeetItem.getId(), chainfeetItemT.getId(), true);
+							chainfeetRecipeT.setSkill("BLACKSMITHING");
+							chainfeetRecipeT.setMinSkill(tierMinSkill);
+							
+							// Leather Molds
+							ISoliniaItem leatherheadItemT = SoliniaItemFactory.CreateItemCopy(leatherheadItem, true);
+							leatherheadItemT.setDisplayname(tierPrefix + leatherheadItemT.getDisplayname());
+							culturaliseItem(tier,race,leatherheadItemT);
+							SoliniaCraft leatherheadRecipeT = SoliniaCraftFactory.Create(leatherheadItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), leatherheadItem.getId(), leatherheadItemT.getId(), true);
+							leatherheadRecipeT.setSkill("TAILORING");
+							leatherheadRecipeT.setMinSkill(tierMinSkill);
+							
+							ISoliniaItem leatherchestItemT = SoliniaItemFactory.CreateItemCopy(leatherchestItem, true);
+							leatherchestItemT.setDisplayname(tierPrefix + leatherchestItemT.getDisplayname());
+							culturaliseItem(tier,race,leatherchestItemT);
+							SoliniaCraft leatherchestRecipeT = SoliniaCraftFactory.Create(leatherchestItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), leatherchestItem.getId(), leatherchestItemT.getId(), true);
+							leatherchestRecipeT.setSkill("TAILORING");
+							leatherchestRecipeT.setMinSkill(tierMinSkill);
+							
+							ISoliniaItem leatherlegsItemT = SoliniaItemFactory.CreateItemCopy(leatherlegsItem, true);
+							leatherlegsItemT.setDisplayname(tierPrefix + leatherlegsItemT.getDisplayname());
+							culturaliseItem(tier,race,leatherlegsItemT);
+							SoliniaCraft leatherlegsRecipeT = SoliniaCraftFactory.Create(leatherlegsItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), leatherlegsItem.getId(), leatherlegsItemT.getId(), true);
+							leatherlegsRecipeT.setSkill("TAILORING");
+							leatherlegsRecipeT.setMinSkill(tierMinSkill);
+
+							ISoliniaItem leatherfeetItemT = SoliniaItemFactory.CreateItemCopy(leatherfeetItem, true);
+							leatherfeetItemT.setDisplayname(tierPrefix + leatherfeetItemT.getDisplayname());
+							culturaliseItem(tier,race,leatherfeetItemT);
+							SoliniaCraft leatherfeetRecipeT = SoliniaCraftFactory.Create(leatherfeetItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), leatherfeetItem.getId(), leatherfeetItemT.getId(), true);
+							leatherfeetRecipeT.setSkill("TAILORING");
+							leatherfeetRecipeT.setMinSkill(tierMinSkill);
+							
+							// Equipment
+							// Sword
+							ISoliniaItem swordItemT = SoliniaItemFactory.CreateItemCopy(swordItem, true);
+							swordItemT.setDisplayname(tierPrefix + swordItemT.getDisplayname());
+							culturaliseItem(tier,race,swordItemT);
+							SoliniaCraft swordRecipeT = SoliniaCraftFactory.Create(swordItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), swordItem.getId(), swordItemT.getId(), true);
+							swordRecipeT.setSkill("BLACKSMITHING");
+							swordRecipeT.setMinSkill(tierMinSkill);
+							// Bow
+							ISoliniaItem bowItemT = SoliniaItemFactory.CreateItemCopy(bowItem, true);
+							bowItemT.setDisplayname(tierPrefix + bowItemT.getDisplayname());
+							culturaliseItem(tier,race,bowItemT);
+							SoliniaCraft bowRecipeT = SoliniaCraftFactory.Create(bowItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), bowItem.getId(), bowItemT.getId(), true);
+							bowRecipeT.setSkill("BLACKSMITHING");
+							bowRecipeT.setMinSkill(tierMinSkill);
+							// Shield
+							ISoliniaItem shieldItemT = SoliniaItemFactory.CreateItemCopy(shieldItem, true);
+							shieldItemT.setDisplayname(tierPrefix + shieldItemT.getDisplayname());
+							culturaliseItem(tier,race,shieldItemT);
+							SoliniaCraft shieldRecipeT = SoliniaCraftFactory.Create(shieldItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), shieldItem.getId(), shieldItemT.getId(), true);
+							shieldRecipeT.setSkill("BLACKSMITHING");
+							shieldRecipeT.setMinSkill(tierMinSkill);
+							// Staff
+							ISoliniaItem staffItemT = SoliniaItemFactory.CreateItemCopy(staffItem, true);
+							staffItemT.setDisplayname(tierPrefix + staffItemT.getDisplayname());
+							culturaliseItem(tier,race,staffItemT);
+							SoliniaCraft staffRecipeT = SoliniaCraftFactory.Create(staffItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), staffItem.getId(), staffItemT.getId(), true);
+							staffRecipeT.setSkill("BLACKSMITHING");
+							staffRecipeT.setMinSkill(tierMinSkill);
+							// Axe
+							ISoliniaItem axeItemT = SoliniaItemFactory.CreateItemCopy(axeItem, true);
+							axeItemT.setDisplayname(tierPrefix + axeItemT.getDisplayname());
+							culturaliseItem(tier,race,axeItemT);
+							SoliniaCraft axeRecipeT = SoliniaCraftFactory.Create(axeItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), axeItem.getId(), axeItemT.getId(), true);
+							axeRecipeT.setSkill("BLACKSMITHING");
+							axeRecipeT.setMinSkill(tierMinSkill);
+							// Earrings
+							ISoliniaItem earringItemT = SoliniaItemFactory.CreateItemCopy(earringItem, true);
+							earringItemT.setDisplayname(tierPrefix + earringItemT.getDisplayname());
+							culturaliseItem(tier,race,earringItemT);
+							SoliniaCraft earringRecipeT = SoliniaCraftFactory.Create(earringItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), earringItem.getId(), earringItemT.getId(), true);
+							earringRecipeT.setSkill("JEWELRYMAKING");
+							earringRecipeT.setMinSkill(tierMinSkill);
+							// Necklace
+							ISoliniaItem necklaceItemT = SoliniaItemFactory.CreateItemCopy(necklaceItem, true);
+							necklaceItemT.setDisplayname(tierPrefix + necklaceItemT.getDisplayname());
+							culturaliseItem(tier,race,necklaceItemT);
+							SoliniaCraft necklaceRecipeT = SoliniaCraftFactory.Create(necklaceItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), necklaceItem.getId(), necklaceItemT.getId(), true);
+							necklaceRecipeT.setSkill("JEWELRYMAKING");
+							necklaceRecipeT.setMinSkill(tierMinSkill);
+							// Cloak
+							ISoliniaItem cloakItemT = SoliniaItemFactory.CreateItemCopy(cloakItem, true);
+							cloakItemT.setDisplayname(tierPrefix + cloakItemT.getDisplayname());
+							culturaliseItem(tier,race,cloakItemT);
+							SoliniaCraft cloakRecipeT = SoliniaCraftFactory.Create(cloakItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), cloakItem.getId(), cloakItemT.getId(), true);
+							cloakRecipeT.setSkill("TAILORING");
+							cloakRecipeT.setMinSkill(tierMinSkill);
+							// Rings
+							ISoliniaItem ringItemT = SoliniaItemFactory.CreateItemCopy(ringItem, true);
+							ringItemT.setDisplayname(tierPrefix + ringItemT.getDisplayname());
+							culturaliseItem(tier,race,ringItemT);
+							SoliniaCraft ringRecipeT = SoliniaCraftFactory.Create(ringItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), ringItem.getId(), ringItemT.getId(), true);
+							ringRecipeT.setSkill("JEWELRYMAKING");
+							ringRecipeT.setMinSkill(tierMinSkill);
+							// Weapon aug
+							ISoliniaItem weaponcharmItemT = SoliniaItemFactory.CreateItemCopy(weaponcharmItem, true);
+							weaponcharmItemT.setDisplayname(tierPrefix + weaponcharmItemT.getDisplayname());
+							culturaliseItem(tier,race,weaponcharmItemT);
+							SoliniaCraft weaponcharmRecipeT = SoliniaCraftFactory.Create(weaponcharmItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), weaponcharmItem.getId(), weaponcharmItemT.getId(), true);
+							weaponcharmRecipeT.setSkill("TINKERING");
+							weaponcharmRecipeT.setMinSkill(tierMinSkill);
+							// Helmet aug
+							ISoliniaItem hatcharmItemT = SoliniaItemFactory.CreateItemCopy(hatcharmItem, true);
+							hatcharmItemT.setDisplayname(tierPrefix + hatcharmItemT.getDisplayname());
+							culturaliseItem(tier,race,hatcharmItemT);
+							SoliniaCraft hatcharmRecipeT = SoliniaCraftFactory.Create(hatcharmItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), hatcharmItem.getId(), hatcharmItemT.getId(), true);
+							hatcharmRecipeT.setSkill("TINKERING");
+							hatcharmRecipeT.setMinSkill(tierMinSkill);
+							// Chestplate aug
+							ISoliniaItem tuniccharmItemT = SoliniaItemFactory.CreateItemCopy(tuniccharmItem, true);
+							tuniccharmItemT.setDisplayname(tierPrefix + tuniccharmItemT.getDisplayname());
+							culturaliseItem(tier,race,tuniccharmItemT);
+							SoliniaCraft tuniccharmRecipeT = SoliniaCraftFactory.Create(tuniccharmItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), tuniccharmItem.getId(), tuniccharmItemT.getId(), true);
+							tuniccharmRecipeT.setSkill("TINKERING");
+							tuniccharmRecipeT.setMinSkill(tierMinSkill);
+							// Leggings aug
+							ISoliniaItem leggingscharmItemT = SoliniaItemFactory.CreateItemCopy(leggingscharmItem, true);
+							leggingscharmItemT.setDisplayname(tierPrefix + leggingscharmItemT.getDisplayname());
+							culturaliseItem(tier,race,leggingscharmItemT);
+							SoliniaCraft leggingscharmRecipeT = SoliniaCraftFactory.Create(leggingscharmItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), leggingscharmItem.getId(), leggingscharmItemT.getId(), true);
+							leggingscharmRecipeT.setSkill("TINKERING");
+							leggingscharmRecipeT.setMinSkill(tierMinSkill);
+							// Boots aug
+							ISoliniaItem bootscharmItemT = SoliniaItemFactory.CreateItemCopy(bootscharmItem, true);
+							bootscharmItemT.setDisplayname(tierPrefix + bootscharmItemT.getDisplayname());
+							culturaliseItem(tier,race,bootscharmItemT);
+							SoliniaCraft bootscharmRecipeT = SoliniaCraftFactory.Create(bootscharmItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), bootscharmItem.getId(), bootscharmItemT.getId(), true);
+							bootscharmRecipeT.setSkill("TINKERING");
+							bootscharmRecipeT.setMinSkill(tierMinSkill);
+							// Shield aug
+							ISoliniaItem shieldcharmItemT = SoliniaItemFactory.CreateItemCopy(shieldcharmItem, true);
+							shieldcharmItemT.setDisplayname(tierPrefix + shieldcharmItemT.getDisplayname());
+							culturaliseItem(tier,race,shieldcharmItemT);
+							SoliniaCraft shieldcharmRecipeT = SoliniaCraftFactory.Create(shieldcharmItemT.getDisplayname().replace(" ", "_").toUpperCase(), tierItem.getId(), shieldcharmItem.getId(), shieldcharmItemT.getId(), true);
+							shieldcharmRecipeT.setSkill("TINKERING");
+							shieldcharmRecipeT.setMinSkill(tierMinSkill);
+						}
 						
 					} catch (SoliniaCraftCreationException e) {
 						// TODO Auto-generated catch block
@@ -3213,13 +3931,60 @@ public class Utils {
 					
 				}
 			}
-		} catch (CoreStateInitException e)
+		} catch (CoreStateInitException | SoliniaItemException e)
 		{
 			
 		}
-		*/
+	}
+
+	private static void culturaliseItem(int tier, ISoliniaRace race, ISoliniaItem item) {
+		int strength = (((race.getStrength() /2)-15)/7)*tier;
+		int stamina = (((race.getStamina() /2)-15)/7)*tier;
+		int agility = (((race.getAgility() /2)-15)/7)*tier;
+		int dexterity = (((race.getDexterity() /2)-15)/7)*tier;
+		int intelligence = (((race.getIntelligence() /2)-15)/7)*tier;
+		int wisdom = (((race.getWisdom() /2)-15)/7)*tier;
+		int charisma = (((race.getCharisma() /2)-15)/7)*tier;
 		
+		if (strength > 0)
+		{
+			item.setStrength(strength + Utils.RandomBetween(0, 7));
+		}
+		if (stamina > 0)
+		{
+			item.setStamina(stamina + Utils.RandomBetween(0, 7));
+		}
+		if (agility > 0)
+		{
+			item.setAgility(agility + Utils.RandomBetween(0, 7));
+		}
+		if (dexterity > 0)
+		{
+			item.setDexterity(dexterity + Utils.RandomBetween(0, 7));
+		}
+		if (intelligence > 0)
+		{
+			item.setIntelligence(intelligence + Utils.RandomBetween(0, 7));
+		}
+		if (wisdom > 0)
+		{
+			item.setWisdom(wisdom + Utils.RandomBetween(0, 7));
+		}
+		if (charisma > 0)
+		{
+			item.setCharisma(charisma + Utils.RandomBetween(0, 7));
+		}
 		
+		item.setMana((stamina*3)+ Utils.RandomBetween(0, 7));
+		item.setHp((intelligence*3)+ Utils.RandomBetween(0, 7));
+		
+		int damageBonus = ((strength/tier)/2) + Utils.RandomBetween(1, 3);
+		int acBonus = ((stamina/tier)/2) + Utils.RandomBetween(1, 3);
+		
+		int baseAmount = SoliniaItemFactory.getBaseAmount(item);
+		
+		SoliniaItemFactory.setMinLevel(item, tier, baseAmount, false);
+		SoliniaItemFactory.setItemDamageAndAc(item, tier, SoliniaItemFactory.getTierMin(item, tier, baseAmount), SoliniaItemFactory.getTierMax(item, tier, baseAmount), acBonus, 0, damageBonus);
 	}
 
 	public static int convertRawClassToClass(int rawClassId) {
