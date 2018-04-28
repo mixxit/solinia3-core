@@ -3,8 +3,10 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
+import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
@@ -90,15 +92,12 @@ public class SoliniaFaction implements ISoliniaFaction {
 			// Update all npcs of this faction (just change their name that should do it)
 			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
 			{
-				if (npc.getFactionid() == this.getId())
-				{
-					try {
-						npc.editSetting("name", npc.getName());
-					} catch (InvalidNpcSettingException e) {
-						
-					}
-				}
+				SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc, false);
+				Bukkit.getPluginManager().callEvent(soliniaevent);
 			}
+			
+			StateManager.getInstance().getEntityManager().getNPCEntityProvider().reloadProvider();
+			
 			break;
 		case "allygrantstitle":
 			setAllyGrantsTitle(value);
