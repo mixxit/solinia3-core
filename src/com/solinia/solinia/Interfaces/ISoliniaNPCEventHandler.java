@@ -79,5 +79,9 @@ public interface ISoliniaNPCEventHandler {
 	double getAwardsExperience();
 
 	void setAwardsExperience(double awardsExperience);
+
+	boolean isAwardsBind();
+
+	void setAwardsBind(boolean awardsBind);
 	
 }

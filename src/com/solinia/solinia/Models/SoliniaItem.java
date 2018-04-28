@@ -113,6 +113,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isEarsItem = false;
 	private boolean territoryFlag = false;
 	private String identifyMessage = "";
+	private boolean bandage = false;
 	
 	
 	@Override
@@ -888,6 +889,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
 		sender.sendMessage("- petcontrolrod: " + ChatColor.GOLD + isPetControlRod() + ChatColor.RESET);
 		sender.sendMessage("- crafting: " + ChatColor.GOLD + isCrafting() + ChatColor.RESET);
+		sender.sendMessage("- bandage: " + ChatColor.GOLD + isBandage() + ChatColor.RESET);
 		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
 		sender.sendMessage("- quest: " + ChatColor.GOLD + isQuest() + ChatColor.RESET);
 		sender.sendMessage("- artifact: " + ChatColor.GOLD + isArtifact() + ChatColor.RESET + " Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
@@ -989,6 +991,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "color":
 			setColor(Short.parseShort(value));
+			break;
+		case "bandage":
+			setBandage(Boolean.parseBoolean(value));
 			break;
 		case "damage":
 			setDamage(Integer.parseInt(value));
@@ -1561,5 +1566,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setIdentifyMessage(String identifyMessage) {
 		this.identifyMessage = identifyMessage;
+	}
+
+	@Override
+	public boolean isBandage() {
+		return bandage;
+	}
+
+	@Override
+	public void setBandage(boolean bandage) {
+		this.bandage = bandage;
 	}
 }

@@ -322,4 +322,8 @@ public interface ISoliniaItem {
 	String getIdentifyMessage();
 
 	void setIdentifyMessage(String identifyMessage);
+
+	boolean isBandage();
+
+	void setBandage(boolean bandage);
 }

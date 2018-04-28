@@ -125,6 +125,11 @@ public class ItemStackAdapter {
 			loretxt.add(ChatColor.GOLD + "Grant XP Experience!" + ChatColor.RESET);
 		}
 		
+		if (soliniaItem.isBandage())
+		{
+			loretxt.add(ChatColor.AQUA + "This item can be used to /bindwound" + ChatColor.RESET);
+		}
+		
 		if (soliniaItem.isFingersItem())
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : FINGERS" + ChatColor.RESET);

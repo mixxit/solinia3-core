@@ -1812,6 +1812,8 @@ public class SoliniaActiveSpell {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			solPlayer.setBindPoint(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + ","
 					+ player.getLocation().getY() + "," + player.getLocation().getZ());
+			player.sendMessage("You feel yourself bind to the area");
+
 		} catch (CoreStateInitException e) {
 			// skip
 		}

@@ -920,6 +920,34 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return dmg_mod;
 	}
 	
+	@Override
+	public int getMaxBindWound_SE()
+	{
+		int bindmod = 0;
+
+		int spellMaxBindWound = getSpellBonuses(SpellEffectType.MaxBindWound);
+		int aaMaxBindWound = Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.MaxBindWound);
+		
+		bindmod += spellMaxBindWound;
+		bindmod += aaMaxBindWound;
+		
+		return bindmod;
+	}
+	
+	@Override
+	public int getBindWound_SE()
+	{
+		int bindmod = 0;
+
+		int spellMaxBindWound = getSpellBonuses(SpellEffectType.ImprovedBindWound);
+		int aaMaxBindWound = Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ImprovedBindWound);
+		
+		bindmod += spellMaxBindWound;
+		bindmod += aaMaxBindWound;
+		
+		return bindmod;
+	}
+	
 	private int getMeleeDamageMod_SE(String skill)
 	{
 		int dmg_mod = 0;

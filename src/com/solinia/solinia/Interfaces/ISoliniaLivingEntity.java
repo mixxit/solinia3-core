@@ -230,4 +230,8 @@ public interface ISoliniaLivingEntity
 	boolean isPlant();
 
 	ChatColor getLevelCon(ISoliniaLivingEntity solLivingEntity);
+
+	int getMaxBindWound_SE();
+
+	int getBindWound_SE();
 }

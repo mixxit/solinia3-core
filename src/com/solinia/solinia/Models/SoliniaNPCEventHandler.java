@@ -42,6 +42,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private String title = "";
 	private String responseType = "SAY";
 	private double awardsExperience = 0;
+	private boolean awardsBind = false;
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -121,6 +122,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- chatresponse: " + ChatColor.GOLD + getChatresponse() + ChatColor.RESET);
 		sender.sendMessage("- responsetype: " + ChatColor.GOLD + getResponseType() + ChatColor.RESET);
 		sender.sendMessage("- teleportresponse: " + ChatColor.GOLD + getTeleportResponse() + ChatColor.RESET);
+		sender.sendMessage("- awardsbind: " + ChatColor.GOLD + isAwardsBind() + ChatColor.RESET);
 		sender.sendMessage("- interactiontype: " + ChatColor.GOLD + getInteractiontype() + ChatColor.RESET);
 		sender.sendMessage("- requiresquest: " + ChatColor.GOLD + getRequiresQuest() + ChatColor.RESET);
 		sender.sendMessage("- awardsquest: " + ChatColor.GOLD + getAwardsQuest() + ChatColor.RESET);
@@ -156,6 +158,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			break;
 		case "awardstitle":
 			setAwardsTitle(Boolean.parseBoolean(value));
+			break;
+		case "awardsbind":
+			setAwardsBind(Boolean.parseBoolean(value));
 			break;
 		case "triggerdata":
 			if (value.equals(""))
@@ -587,6 +592,16 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setAwardsExperience(double awardsExperience) {
 		this.awardsExperience = awardsExperience;
+	}
+
+	@Override
+	public boolean isAwardsBind() {
+		return awardsBind;
+	}
+
+	@Override
+	public void setAwardsBind(boolean awardsBind) {
+		this.awardsBind = awardsBind;
 	}
 
 }

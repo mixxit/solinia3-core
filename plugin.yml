@@ -20,6 +20,11 @@ commands:
     description: Lists todays RP time
     usage: /today
     aliases: []
+  bindwound:
+    description: Binds your wounds with bandages
+    usage: /bindwound
+    aliases: 
+    - bw
   lastname:
     description: Sets player lastname
     usage: /lastname <lastname>
