@@ -4105,8 +4105,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	{
 		ChatColor conlevel = ChatColor.WHITE;
 		
-		int mylevel = getLevel();
-		int iOtherLevel = solLivingEntity.getLevel();
+		int mylevel = solLivingEntity.getLevel();
+		int iOtherLevel = getLevel();
 		
 		int diff = iOtherLevel - mylevel;
 
