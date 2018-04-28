@@ -1065,7 +1065,15 @@ public class EntityManager implements IEntityManager {
 		// When changing target always clear auto attack
 		if (source instanceof Player)
 		{
-			this.setPlayerAutoAttack((Player)source, false);
+			if (target == null)
+			{
+				this.setPlayerAutoAttack((Player)source, false);
+			} else {
+				if (source != null && target != null && !source.getUniqueId().toString().equals(target.getUniqueId().toString()))
+				{
+					this.setPlayerAutoAttack((Player)source, false);
+				}
+			}
 		}
 		
 		if (source instanceof Creature)
