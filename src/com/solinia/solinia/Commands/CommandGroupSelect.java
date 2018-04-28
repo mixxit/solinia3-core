@@ -67,6 +67,13 @@ public class CommandGroupSelect implements CommandExecutor {
 							return true;
 						} else {
 							LivingEntity le = (LivingEntity)Bukkit.getEntity(uuid);
+
+							if (le.getLocation().distance(player.getLocation()) > 50)
+							{
+								player.sendMessage(ChatColor.RED + "That person is too far away! (max 50 blocks)");
+								return true;
+							}
+							
 							StateManager.getInstance().getEntityManager().setEntityTarget(player,le);
 							return true;
 						}
@@ -78,6 +85,12 @@ public class CommandGroupSelect implements CommandExecutor {
 								LivingEntity le = (LivingEntity)Bukkit.getEntity(uuid);
 								if (!le.getName().toUpperCase().equals(groupMemberName.toUpperCase()))
 									continue;
+								
+								if (le.getLocation().distance(player.getLocation()) > 50)
+								{
+									player.sendMessage(ChatColor.RED + "That person is too far away! (max 50 blocks)");
+									return true;
+								}
 								
 								StateManager.getInstance().getEntityManager().setEntityTarget(player,le);
 								found = true;
