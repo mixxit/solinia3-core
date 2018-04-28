@@ -7,7 +7,9 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
@@ -85,6 +87,18 @@ public class SoliniaFaction implements ISoliniaFaction {
 			if (Integer.parseInt(value) < -1500 || Integer.parseInt(value) > 1500)
 				throw new InvalidFactionSettingException("Bounds are -1500 to 1500");
 			setBase(Integer.parseInt(value));
+			// Update all npcs of this faction (just change their name that should do it)
+			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
+			{
+				if (npc.getFactionid() == this.getId())
+				{
+					try {
+						npc.editSetting("name", npc.getName());
+					} catch (InvalidNpcSettingException e) {
+						
+					}
+				}
+			}
 			break;
 		case "allygrantstitle":
 			setAllyGrantsTitle(value);

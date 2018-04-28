@@ -1062,6 +1062,12 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setEntityTarget(LivingEntity source, LivingEntity target)
 	{
+		// When changing target always clear auto attack
+		if (source instanceof Player)
+		{
+			this.setPlayerAutoAttack((Player)source, false);
+		}
+		
 		if (source instanceof Creature)
 		{
 			((Creature)source).setTarget(target);
