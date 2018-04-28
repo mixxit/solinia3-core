@@ -516,6 +516,10 @@ commands:
     usage: /gs 1
     aliases:
     - gs
+    - tg
+    - gt
+    - grouptarget
+    - targetgroup
   listquests:
     description: Lists quests
     usage: /listquests searchstring
