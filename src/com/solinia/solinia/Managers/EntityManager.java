@@ -1069,9 +1069,13 @@ public class EntityManager implements IEntityManager {
 			{
 				this.setPlayerAutoAttack((Player)source, false);
 			} else {
-				if (source != null && target != null && !source.getUniqueId().toString().equals(target.getUniqueId().toString()))
+				// get current target
+				if (entityTargets.get(source.getUniqueId()) != null)
 				{
-					this.setPlayerAutoAttack((Player)source, false);
+					if (source != null && target != null && !entityTargets.get(source.getUniqueId()).toString().equals(target.getUniqueId().toString()))
+					{
+						this.setPlayerAutoAttack((Player)source, false);
+					}
 				}
 			}
 		}

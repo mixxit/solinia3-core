@@ -433,6 +433,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									{
 										if (item.getBasename().contains("SHIELD"))
 											potentialShields.add(item);
+										else if (item.getBasename().contains("BOW"))
+											potentialBows.add(item);
 										else
 											potentialWeapons.add(item);
 										continue;
@@ -459,6 +461,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									{
 										if (item.getBasename().contains("SHIELD"))
 											potentialShields.add(item);
+										else if (item.getBasename().contains("BOW"))
+											potentialBows.add(item);
 										else
 											potentialWeapons.add(item);
 										continue;
@@ -539,7 +543,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							
 							Collections.reverse(potentialLegsArmour);
 							
-							System.out.println("Found better legs in lootdrop (" + potentialLegsArmour.get(0).getDisplayname() + "), using as weapon");
+							System.out.println("Found better legs in lootdrop (" + potentialLegsArmour.get(0).getDisplayname() + "), using as leggings");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialLegsArmour.get(0).getId() + ".yml", potentialLegsArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialLegsArmour.get(0).getId() + ":2\r\n";
 						} else {
