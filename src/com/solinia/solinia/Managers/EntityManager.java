@@ -1074,7 +1074,16 @@ public class EntityManager implements IEntityManager {
 				Entity currentTarget = Bukkit.getEntity(entityTargets.get(source.getUniqueId()));
 				if (source instanceof Player && currentTarget != null)
 				{
-					GlowAPI.setGlowing((Entity)currentTarget, false, (Player)source);
+					try {
+						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
+						
+						if (solPlayer != null && solPlayer.isGlowTargetting())
+							GlowAPI.setGlowing((Entity)currentTarget, false, (Player)source);
+					} catch (CoreStateInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 			}
 			
@@ -1100,16 +1109,37 @@ public class EntityManager implements IEntityManager {
 				Entity currentTarget = Bukkit.getEntity(entityTargets.get(source.getUniqueId()));
 				if (source instanceof Player && currentTarget != null)
 				{
-					GlowAPI.setGlowing((Entity)currentTarget, false, (Player)source);
+					try {
+						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
+						
+						if (solPlayer != null && solPlayer.isGlowTargetting())
+							GlowAPI.setGlowing((Entity)currentTarget, false, (Player)source);
+					} catch (CoreStateInitException e)
+					{
+						
+					}
 				}
 			}
 			
+			boolean toggleGlow = false;
+			
 			if (source instanceof Player && target != null)
 			{
-				GlowAPI.setGlowing((Entity)target, GlowAPI.Color.DARK_AQUA, (Player)source);
+				try {
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
+					
+					if (solPlayer != null && solPlayer.isGlowTargetting())
+					{
+						toggleGlow = solPlayer.isGlowTargetting();
+						GlowAPI.setGlowing((Entity)target, GlowAPI.Color.DARK_AQUA, (Player)source);
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
 			}
 			
-			source.sendMessage(ChatColor.GRAY + "Set target to " + target.getName());
+			source.sendMessage(ChatColor.GRAY + "Set target to " + target.getName() + " [/toggleglow: " + toggleGlow + "]");
 			entityTargets.put(source.getUniqueId(), target.getUniqueId());
 			if (source instanceof Player)
 			{
