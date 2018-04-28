@@ -55,7 +55,6 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.EntityCreature;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EntityTameableAnimal;
 import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
 import net.minecraft.server.v1_12_R1.PathfinderGoalHurtByTarget;

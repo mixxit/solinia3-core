@@ -616,8 +616,8 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				}
 
-				if (ItemStackUtils.getAugmentationItemId(targetItemStack) != null
-						&& ItemStackUtils.getAugmentationItemId(targetItemStack) != 0) {
+				if (ItemStackUtils.getNBTAugmentationItemId(targetItemStack) != null
+						&& ItemStackUtils.getNBTAugmentationItemId(targetItemStack) != 0) {
 					event.getView().getPlayer().sendMessage("This item already has an augmentation applied");
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
@@ -652,9 +652,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				}
 
-				ItemMeta newMeta = ItemStackUtils.applyAugmentationToItemStack(targetItemStack,
-						sourceAugSoliniaItem.getId());
-				targetItemStack.setItemMeta(newMeta);
+				targetItemStack = ItemStackUtils.applyAugmentation(targetSoliniaItem, targetItemStack, sourceAugSoliniaItem.getId());
 				((Player) event.getView().getPlayer()).getWorld()
 						.dropItemNaturally(((Player) event.getView().getPlayer()).getLocation(), targetItemStack);
 				((Player) event.getView().getPlayer()).getInventory().setItem(event.getSlot(), null);

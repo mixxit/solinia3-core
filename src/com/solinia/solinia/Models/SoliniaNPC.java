@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
@@ -1291,7 +1290,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 					
 					items.add(item);
 
-					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(itemstack);
 					ISoliniaItem augItem = null;
 					if (augmentationId != null && augmentationId != 0) {
 						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);

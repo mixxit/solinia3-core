@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +21,8 @@ import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_12_R1.AttributeModifier;
 import net.minecraft.server.v1_12_R1.EnumItemSlot;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagString;
 
 public class ItemStackUtils {
 	
@@ -58,7 +59,7 @@ public class ItemStackUtils {
         return damage;
     }
 	
-	public static Integer getAugmentationItemId(ItemStack itemStack)
+	public static Integer getClassicAugmentationItemId(ItemStack itemStack)
 	{
 		if (!Utils.IsSoliniaItem(itemStack))
 			return null;
@@ -74,6 +75,22 @@ public class ItemStackUtils {
 		}
 		
 		return null;
+	}
+	
+	public static Integer getNBTAugmentationItemId(ItemStack itemStack)
+	{
+		if (!Utils.IsSoliniaItem(itemStack))
+			return null;
+		
+		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+		
+		String soliniaaug1id = compound.getString("soliniaaug1id");
+		
+		if (soliniaaug1id == null || soliniaaug1id.equals(""))
+			return null;
+		
+		return Integer.parseInt(soliniaaug1id);
 	}
 	
 	public static Integer getMerchantItemWorth(ItemStack itemStack)
@@ -159,7 +176,7 @@ public class ItemStackUtils {
 		return newMeta;
 	}
 
-	public static ItemMeta applyAugmentationToItemStack(ItemStack targetItemStack,
+	private static ItemMeta applyAugmentationTextToItemStack(ItemStack targetItemStack,
 			Integer sourceItemId) {
 		ItemMeta newMeta = targetItemStack.getItemMeta();
 		List<String> lore = targetItemStack.getItemMeta().getLore();
@@ -292,5 +309,16 @@ public class ItemStackUtils {
 
 		newMeta.setLore(newLore);
 		return newMeta;
+	}
+
+	public static ItemStack applyAugmentation(ISoliniaItem soliniaItem, ItemStack itemStack, Integer augmentationItemId) {
+		itemStack.setItemMeta(ItemStackUtils.applyAugmentationTextToItemStack(itemStack,augmentationItemId));
+		
+		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+		compound.set("soliniaaug1id", new NBTTagString(Integer.toString(augmentationItemId)));
+		nmsStack.setTag(compound);
+		itemStack = CraftItemStack.asBukkitCopy(nmsStack);
+		return itemStack;
 	}
 }

@@ -15,12 +15,10 @@ import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
-import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
-import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 

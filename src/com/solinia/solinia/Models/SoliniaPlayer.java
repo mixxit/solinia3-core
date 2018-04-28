@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -20,7 +19,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -32,7 +30,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import com.google.common.collect.Multimap;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -57,14 +54,7 @@ import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_12_R1.AttributeModifier;
-import net.minecraft.server.v1_12_R1.DamageSource;
-import net.minecraft.server.v1_12_R1.EntityDamageSource;
-import net.minecraft.server.v1_12_R1.EntityHuman;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
-import net.minecraft.server.v1_12_R1.EnumItemSlot;
-import net.minecraft.server.v1_12_R1.GenericAttributes;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
@@ -2779,7 +2769,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					
 					items.add(item);
 
-					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+					Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(itemstack);
 					ISoliniaItem augItem = null;
 					if (augmentationId != null && augmentationId != 0) {
 						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);

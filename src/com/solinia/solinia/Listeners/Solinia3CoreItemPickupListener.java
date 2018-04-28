@@ -65,6 +65,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
         	}
         }
         
+        // Validate classic durability items
         if (pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 || pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) < 0)
         {
         	e.getPlayer().sendMessage("Detected an item in the old format, converting to the new format. Please drop all your old items and pick them up if you are having problems with them");
@@ -85,6 +86,26 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	}
 	            }
         	} catch (CoreStateInitException eOxy)
+        	{
+        		
+        	}
+        }
+        
+        // Validate classic augmentation items
+        Integer newaugmentationItemId = ItemStackUtils.getNBTAugmentationItemId(pickedUpItemStack);
+        Integer oldaugmentationItemId = ItemStackUtils.getClassicAugmentationItemId(pickedUpItemStack);
+        
+        if (oldaugmentationItemId != null && oldaugmentationItemId > 0 && (newaugmentationItemId == null || newaugmentationItemId == 0))
+        {
+        	try
+        	{
+	        	e.getPlayer().sendMessage("Detected an augmentation item in the old format, converting to the new format. Please drop all your old items and pick them up if you are having problems with them");
+	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
+	        	ItemStack latestitemstack = latestitem.asItemStack();
+	        	latestitemstack = ItemStackUtils.applyAugmentation(latestitem, latestitemstack, oldaugmentationItemId);
+	        	// Since we cant overwrite the item we will have to drop one and remove this
+	        	pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
+        	} catch (CoreStateInitException eAug)
         	{
         		
         	}
@@ -145,7 +166,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 					{
 						temporaryGuid = ItemStackUtils.getTemporaryItemGuid(pickedUpItemStack);
 					}
-					augmentationItemId = ItemStackUtils.getAugmentationItemId(pickedUpItemStack);
+					augmentationItemId = ItemStackUtils.getNBTAugmentationItemId(pickedUpItemStack);
 					
 					// Now go and replace the itemmeta
 					pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
@@ -169,7 +190,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	
 	            	if (augmentationItemId != null && augmentationItemId != 0)
 	        		{
-	        			pickedUpItemStack.setItemMeta(ItemStackUtils.applyAugmentationToItemStack(pickedUpItemStack,augmentationItemId));
+	            		pickedUpItemStack.setItemMeta(ItemStackUtils.applyAugmentation(latestitem, pickedUpItemStack, augmentationItemId).getItemMeta());
 	        		}
 	            }
 		    }

@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
@@ -62,9 +61,6 @@ import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
-import net.minecraft.server.v1_12_R1.MobEffect;
-import net.minecraft.server.v1_12_R1.MobEffectList;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityEffect;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
