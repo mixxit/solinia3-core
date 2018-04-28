@@ -12,9 +12,11 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.CastingSpell;
@@ -46,7 +48,19 @@ public class ScoreboardUtils {
 				LivingEntity entityTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
 				if (entityTarget != null)
 				{
-					target = entityTarget.getCustomName();
+					ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(entityTarget);
+					if (solLivingEntity != null)
+					{
+						ISoliniaLivingEntity playerLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
+						if (playerLivingEntity != null)
+						{
+							target = solLivingEntity.getLevelCon(playerLivingEntity) + entityTarget.getCustomName() + ChatColor.RESET;
+						} else {
+							target = entityTarget.getCustomName();
+						}
+					} else {
+						target = entityTarget.getCustomName();
+					}
 				}
 				
 				bossbar.setTitle("MANA: " + mana + " TARGET: " + target);

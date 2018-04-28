@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -226,4 +228,6 @@ public interface ISoliniaLivingEntity
 	boolean getDualWieldCheck();
 
 	boolean isPlant();
+
+	ChatColor getLevelCon(ISoliniaLivingEntity solLivingEntity);
 }
