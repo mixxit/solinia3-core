@@ -374,4 +374,8 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean canDualWield();
 
 	boolean getDualWieldCheck(ISoliniaLivingEntity soliniaLivingEntity);
+
+	boolean isGlowTargetting();
+
+	void setGlowTargetting(boolean glowTargetting);
 }

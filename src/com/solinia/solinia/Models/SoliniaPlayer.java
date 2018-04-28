@@ -113,6 +113,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int earsItem = 0;
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
 	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>(); 
+	private boolean glowTargetting = true;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -3134,6 +3135,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
     	
 		((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle().damageEntity(source, (int)ItemStackUtils.getWeaponDamage(itemStack));
 		*/
+	}
+
+	@Override
+	public boolean isGlowTargetting() {
+		return glowTargetting;
+	}
+
+	@Override
+	public void setGlowTargetting(boolean glowTargetting) {
+		this.glowTargetting = glowTargetting;
 	}
 	
 	

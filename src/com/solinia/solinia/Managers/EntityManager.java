@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
@@ -25,6 +26,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.inventivetalent.glow.GlowAPI;
 
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
@@ -60,6 +62,9 @@ import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
+import net.minecraft.server.v1_12_R1.MobEffect;
+import net.minecraft.server.v1_12_R1.MobEffectList;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntityEffect;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
@@ -1064,10 +1069,19 @@ public class EntityManager implements IEntityManager {
 		
 		if (target == null)
 		{
+			if (entityTargets.get(source.getUniqueId()) != null)
+			{
+				Entity currentTarget = Bukkit.getEntity(entityTargets.get(source.getUniqueId()));
+				if (source instanceof Player && currentTarget != null)
+				{
+					GlowAPI.setGlowing((Entity)currentTarget, false, (Player)source);
+				}
+			}
+			
 			source.sendMessage(ChatColor.GRAY + "Cleared your target");
 			entityTargets.remove(source.getUniqueId());
 			
-			if (source instanceof Player)
+	        if (source instanceof Player)
 			{
 				try
 				{
@@ -1079,6 +1093,22 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 		} else {
+			
+			// if already has a target turn it off
+			if (entityTargets.get(source.getUniqueId()) != null)
+			{
+				Entity currentTarget = Bukkit.getEntity(entityTargets.get(source.getUniqueId()));
+				if (source instanceof Player && currentTarget != null)
+				{
+					GlowAPI.setGlowing((Entity)currentTarget, false, (Player)source);
+				}
+			}
+			
+			if (source instanceof Player && target != null)
+			{
+				GlowAPI.setGlowing((Entity)target, GlowAPI.Color.DARK_AQUA, (Player)source);
+			}
+			
 			source.sendMessage(ChatColor.GRAY + "Set target to " + target.getName());
 			entityTargets.put(source.getUniqueId(), target.getUniqueId());
 			if (source instanceof Player)

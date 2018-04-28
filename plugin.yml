@@ -355,6 +355,10 @@ commands:
     description: Toggles experience into AA gain
     usage: /toggleaa
     aliases: []
+  toggleglow:
+    description: Toggles glow targetting
+    usage: /toggleglow
+    aliases: []
   createnpcevent:
     description: Creates an NPC event
     usage: /createnpcevent npcid eventtype trigger responsetype response
