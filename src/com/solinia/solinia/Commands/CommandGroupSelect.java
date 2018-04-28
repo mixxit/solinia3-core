@@ -27,10 +27,18 @@ public class CommandGroupSelect implements CommandExecutor {
 		if (args.length < 1)
 		{
 			player.sendMessage("Valid arguments are: /gs 1 /gs 2 etc to toggle target through your group members. Alternatively you can use the players name ie /gs mixxit");
+			return true;
 		}
 		
 		try
 		{
+			if (args[0].equals("0"))
+			{
+				player.sendMessage("Selecting yourself");
+				StateManager.getInstance().getEntityManager().setEntityTarget(player,player);
+				return true;
+			}
+			
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			if (solPlayer != null)
 			{
@@ -39,27 +47,36 @@ public class CommandGroupSelect implements CommandExecutor {
 				{
 					player.sendMessage(ChatColor.RED + "You are not in a group! Selecting yourself only");
 					StateManager.getInstance().getEntityManager().setEntityTarget(player,player);
+					return true;
 				} else {
 					try {  
 						int groupNumber = Integer.parseInt(args[0]);
 						
-						UUID uuid = group.getMembers().get(groupNumber);
+						if (group.getMembers().size() < groupNumber)
+						{
+							player.sendMessage(ChatColor.RED + "There are not that many people in your party! Selecting yourself only");
+							StateManager.getInstance().getEntityManager().setEntityTarget(player,player);
+							return true;
+						}
+						
+						UUID uuid = group.getMembers().get(groupNumber-1);
 						if (uuid == null)
 						{
 							player.sendMessage(ChatColor.RED + "That person is not in your group! Selecting yourself only");
 							StateManager.getInstance().getEntityManager().setEntityTarget(player,player);
+							return true;
 						} else {
 							LivingEntity le = (LivingEntity)Bukkit.getEntity(uuid);
 							StateManager.getInstance().getEntityManager().setEntityTarget(player,le);
+							return true;
 						}
-				         return true;  
 				      } catch (NumberFormatException e) {  
 				    	  String groupMemberName = args[0];
 				    	  boolean found = false;
 							for (UUID uuid : group.getMembers())
 							{
 								LivingEntity le = (LivingEntity)Bukkit.getEntity(uuid);
-								if (!le.getName().toUpperCase().equals(groupMemberName))
+								if (!le.getName().toUpperCase().equals(groupMemberName.toUpperCase()))
 									continue;
 								
 								StateManager.getInstance().getEntityManager().setEntityTarget(player,le);
