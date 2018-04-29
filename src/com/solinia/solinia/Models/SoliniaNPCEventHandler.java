@@ -14,11 +14,13 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -32,6 +34,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int awardsQuest = 0;
 	private String requiresQuestFlag = null;
 	private String awardsQuestFlag = null;
+	private int requiresRaceId = 0;
+	private int requiresClassId = 0;
 	private int npcId = 0;
 	private int summonsNpcId = 0;
 	private int awardsItem = 0;
@@ -129,6 +133,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- awardsquest: " + ChatColor.GOLD + getAwardsQuest() + ChatColor.RESET);
 		sender.sendMessage("- requiresquestflag: " + ChatColor.GOLD + getRequiresQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- awardsquestflag: " + ChatColor.GOLD + getAwardsQuestFlag() + ChatColor.RESET);
+		sender.sendMessage("- requiresraceid: " + ChatColor.GOLD + getRequiresRaceId() + ChatColor.RESET);
+		sender.sendMessage("- requiresclassid: " + ChatColor.GOLD + getRequiresClassId() + ChatColor.RESET);
 		sender.sendMessage("- awardsitem: " + ChatColor.GOLD + getAwardsItem() + ChatColor.RESET);
 		sender.sendMessage("- awardsrandomisedgear: " + ChatColor.GOLD + isAwardsRandomisedGear() + ChatColor.RESET);
 		sender.sendMessage("- randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
@@ -174,6 +180,42 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			if (value.equals(""))
 				throw new InvalidNPCEventSettingException("Chatresponse is empty");
 			setChatresponse(value);
+			break;
+		case "requiresclassid":
+			int classid = Integer.parseInt(value);
+			if (classid < 1)
+			{
+				setRequiresClassId(0);
+				break;
+			}
+			try
+			{
+				ISoliniaClass classObj = StateManager.getInstance().getConfigurationManager().getClassObj(classid);
+				if (classObj == null)
+					throw new InvalidNPCEventSettingException("Invalid class id");
+			} catch (CoreStateInitException e)
+			{
+				throw new InvalidNPCEventSettingException("State not initialised");
+			}
+			setRequiresClassId(classid);
+			break;
+		case "requiresraceid":
+			int raceid = Integer.parseInt(value);
+			if (raceid < 1)
+			{
+				setRequiresRaceId(0);
+				break;
+			}
+			try
+			{
+				ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(raceid);
+				if (race == null)
+					throw new InvalidNPCEventSettingException("Invalid race id");
+			} catch (CoreStateInitException e)
+			{
+				throw new InvalidNPCEventSettingException("State not initialised");
+			}
+			setRequiresRaceId(raceid);
 			break;
 		case "requiresquest":
 			int questid = Integer.parseInt(value);
@@ -280,7 +322,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			break;
 		default:
 			throw new InvalidNPCEventSettingException(
-					"Invalid NPC Event setting. Valid Options are: triggerdata,chatresponse,interactiontype,requiresquest,awardsquest,requiresquestflag,awardsquestflag,awardsitem,awardsxp");
+					"Invalid NPC Event setting. Valid Options are: triggerdata,chatresponse,interactiontype,requiresquest,awardsquest,requiresquestflag,awardsquestflag,awardsitem,awardsxp,requiresraceid,requiresclassid");
 		}
 	}
 
@@ -335,6 +377,24 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				
 				if (foundQuestFlag == false)
 					return false;
+			}
+			
+			if (getRequiresRaceId() > 0)
+			{
+				if (player.getRace() != null)
+				{
+					if (player.getRace().getId() != getRequiresRaceId())
+						return false;
+				}
+			}
+			
+			if (getRequiresClassId() > 0)
+			{
+				if (player.getClassObj() != null)
+				{
+					if (player.getClassObj().getId() != getRequiresClassId())
+						return false;
+				}
 			}
 			
 			return true;
@@ -613,6 +673,22 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setOperatorCreated(boolean operatorCreated) {
 		this.operatorCreated = operatorCreated;
+	}
+
+	public int getRequiresRaceId() {
+		return requiresRaceId;
+	}
+
+	public void setRequiresRaceId(int requiresRaceId) {
+		this.requiresRaceId = requiresRaceId;
+	}
+
+	public int getRequiresClassId() {
+		return requiresClassId;
+	}
+
+	public void setRequiresClassId(int requiresClassId) {
+		this.requiresClassId = requiresClassId;
 	}
 
 }

@@ -331,7 +331,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- raceid: " + ChatColor.GOLD + getRaceid() + ChatColor.RESET);
-		sender.sendMessage("- professionid: " + ChatColor.GOLD + getClassid() + ChatColor.RESET);
+		sender.sendMessage("- classid: " + ChatColor.GOLD + getClassid() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "STATS" + ChatColor.RESET);
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET);
