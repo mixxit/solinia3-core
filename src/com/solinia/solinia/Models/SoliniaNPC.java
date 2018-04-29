@@ -328,56 +328,26 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void sendNpcSettingsToSender(CommandSender sender) throws CoreStateInitException {
 		sender.sendMessage(ChatColor.RED + "NPC Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
-		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
-		sender.sendMessage("- raceid: " + ChatColor.GOLD + getRaceid() + ChatColor.RESET);
-		sender.sendMessage("- classid: " + ChatColor.GOLD + getClassid() + ChatColor.RESET);
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " " + "name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- raceid: " + ChatColor.GOLD + getRaceid() + ChatColor.RESET + " " + "classid: " + ChatColor.GOLD + getClassid() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "STATS" + ChatColor.RESET);
-		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
-		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET);
-		sender.sendMessage("- accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
-		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET);
-		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
+		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET + " " + "ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + " " + "forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
+		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " " + "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
 		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
-		sender.sendMessage("- pet: " + ChatColor.GOLD + isPet() + ChatColor.RESET);
-		sender.sendMessage("- guard: " + ChatColor.GOLD + isGuard() + ChatColor.RESET);
-		sender.sendMessage("- roamer: " + ChatColor.GOLD + isRoamer() + ChatColor.RESET);
-		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
+		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
+		sender.sendMessage("- pet: " + ChatColor.GOLD + isPet() + ChatColor.RESET + " " + "petcontrollable: " + ChatColor.GOLD + isPetControllable());
+		sender.sendMessage("- guard: " + ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer() + ChatColor.RESET);
 		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET);
+		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic() + " " + "- boss: " + ChatColor.GOLD + isBoss());
+		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic() + " " + "raidboss: " + ChatColor.GOLD + isRaidboss());
+		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
 		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
-		sender.sendMessage("----------------------------");
-		sender.sendMessage(ChatColor.RED + "APPEARANCE" + ChatColor.RESET);
-		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET);
-		sender.sendMessage("- usedisguise: " + ChatColor.GOLD + isUsedisguise() + ChatColor.RESET);
-		sender.sendMessage("- disguisetype: " + ChatColor.GOLD + getDisguisetype() + ChatColor.RESET);
-		sender.sendMessage("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET);
-		sender.sendMessage("- customheaddata: " + ChatColor.GOLD + getCustomheaddata() + ChatColor.RESET);
-		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET);
-		sender.sendMessage("- burning: " + ChatColor.GOLD + isBurning() + ChatColor.RESET);
-		sender.sendMessage("- invisible: " + ChatColor.GOLD + isInvisible() + ChatColor.RESET);
-		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET);
-		sender.sendMessage("- plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET);
-		sender.sendMessage("- animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
-		sender.sendMessage(ChatColor.RED + "EQUIPMENT" + ChatColor.RESET);
-		if (getLoottableid() != 0) {
-			sender.sendMessage("- loottableid: " + ChatColor.GOLD + getLoottableid() + " ("
-					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName()
-					+ ")" + ChatColor.RESET);
-		} else {
-			sender.sendMessage(
-					"- loottableid: " + ChatColor.GOLD + getLoottableid() + " (No Loot Table)" + ChatColor.RESET);
-		}
-		sender.sendMessage("- handitem: " + ChatColor.GOLD + getHanditem() + ChatColor.RESET);
-		sender.sendMessage("- offhanditem: " + ChatColor.GOLD + getOffhanditem() + ChatColor.RESET);
-		sender.sendMessage("- headitem: " + ChatColor.GOLD + getHeaditem() + ChatColor.RESET);
-		sender.sendMessage("- chestitem: " + ChatColor.GOLD + getChestitem() + ChatColor.RESET);
-		sender.sendMessage("- legsitem: " + ChatColor.GOLD + getLegsitem() + ChatColor.RESET);
-		sender.sendMessage("- feetitem: " + ChatColor.GOLD + getFeetitem() + ChatColor.RESET);
-		sender.sendMessage(ChatColor.RED + "FACTION & MERCHANT" + ChatColor.RESET);
+		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
+		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
 		if (getFactionid() != 0) {
 			sender.sendMessage("- factionid: " + ChatColor.GOLD + getFactionid() + " ("
 					+ StateManager.getInstance().getConfigurationManager().getFaction(getFactionid()).getName() + ")"
@@ -393,13 +363,26 @@ public class SoliniaNPC implements ISoliniaNPC {
 			sender.sendMessage(
 					"- merchantid: " + ChatColor.GOLD + getMerchantid() + " (No Merchant Table)" + ChatColor.RESET);
 		}
+		sender.sendMessage("----------------------------");
+		sender.sendMessage(ChatColor.RED + "APPEARANCE" + ChatColor.RESET);
+		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET);
+		sender.sendMessage("- usedisguise: " + ChatColor.GOLD + isUsedisguise() + ChatColor.RESET + " " + "disguisetype: " + ChatColor.GOLD + getDisguisetype() + ChatColor.RESET);
+		sender.sendMessage("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET + " " + "customheaddata: " + ChatColor.GOLD + getCustomheaddata() + ChatColor.RESET);
+		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET + " " + "burning: " + ChatColor.GOLD + isBurning() + ChatColor.RESET + " " + "invisible: " + ChatColor.GOLD + isInvisible() + ChatColor.RESET);
+		sender.sendMessage(ChatColor.RED + "EQUIPMENT" + ChatColor.RESET);
+		if (getLoottableid() != 0) {
+			sender.sendMessage("- loottableid: " + ChatColor.GOLD + getLoottableid() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getLoottableid()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- loottableid: " + ChatColor.GOLD + getLoottableid() + " (No Loot Table)" + ChatColor.RESET);
+		}
+		sender.sendMessage("- handitem: " + ChatColor.GOLD + getHanditem() + ChatColor.RESET + " " + "offhanditem: " + ChatColor.GOLD + getOffhanditem() + ChatColor.RESET);
+		sender.sendMessage("- headitem: " + ChatColor.GOLD + getHeaditem() + ChatColor.RESET + " " + "chestitem: " + ChatColor.GOLD + getChestitem() + ChatColor.RESET);
+		sender.sendMessage("- legsitem: " + ChatColor.GOLD + getLegsitem() + ChatColor.RESET + " " + "feetitem: " + ChatColor.GOLD + getFeetitem() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "MISC" + ChatColor.RESET);
-		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic());
-		sender.sendMessage("- boss: " + ChatColor.GOLD + isBoss());
-		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic());
-		sender.sendMessage("- raidboss: " + ChatColor.GOLD + isRaidboss());
-		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
-		sender.sendMessage("- forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
+
 		if (getNpcSpellList() > 0)
 		{
 			NPCSpellList npcSpellList = StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcSpellList());
@@ -407,7 +390,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 		} else {
 			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcSpellList() + " (Defaults to class spell list)");
 		}
-		sender.sendMessage("- petcontrollable: " + ChatColor.GOLD + isPetControllable());
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
 			sender.sendMessage(ChatColor.RED + "LOOTTABLE: " + ChatColor.RESET + "[" + getLoottableid() + "] - " + "("
