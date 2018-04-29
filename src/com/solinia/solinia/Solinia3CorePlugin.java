@@ -491,6 +491,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("spawnnpc").setExecutor(new CommandSpawnNpc());
 		this.getCommand("toggleglow").setExecutor(new CommandToggleGlow());
 		this.getCommand("bindwound").setExecutor(new CommandBindWound());
+		this.getCommand("editmerchantlist").setExecutor(new CommandEditMerchantList());
 	}
 
 	private void createConfigDir() {

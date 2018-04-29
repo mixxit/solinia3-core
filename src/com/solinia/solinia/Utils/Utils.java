@@ -3667,7 +3667,6 @@ public class Utils {
 						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), tuniccharmMoldItem.getId());
 						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), leggingscharmMoldItem.getId());
 						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), bootscharmMoldItem.getId());
-						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), leggingscharmMoldItem.getId());
 						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), shieldcharmMoldItem.getId());
 						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), portableFurnaceId);
 						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), tailoringKitId);

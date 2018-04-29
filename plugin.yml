@@ -241,7 +241,13 @@ commands:
   createmerchantlist:
     description: Creates a merchant list
     usage: /createmerchantlist name
-    aliases: []
+    aliases:
+    - createmerchant
+  editmerchantlist:
+    description: Creates a merchant list
+    usage: /editmerchantlist id setting value
+    aliases:
+    - editmerchant
   addmerchantitem:
     description: adds an item to a merchant list
     usage: /addmerchantitem merchantid itemid

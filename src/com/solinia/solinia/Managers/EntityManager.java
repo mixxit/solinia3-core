@@ -810,8 +810,22 @@ public class EntityManager implements IEntityManager {
 			if (merchant == null)
 				return combinedEntries;
 	
+			List<Integer> existingItemIds = new ArrayList<Integer>();
+			
+			// Prevents items from being listed that dont exist as an item or are already in the list
 			if (merchant.getEntries().size() > 0)
-				combinedEntries.addAll(merchant.getEntries());
+			for (ISoliniaNPCMerchantEntry entry : merchant.getEntries())
+			{
+				if (existingItemIds.contains(entry.getItemid()))
+					continue;
+				
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(entry.getItemid());
+				if (item == null)
+					continue;
+				
+				existingItemIds.add(entry.getItemid());
+				combinedEntries.add(entry);
+			}
 	
 			//List<ISoliniaNPCMerchantEntry> tempItems = getTemporaryMerchantItems(npc);
 			//if (tempItems.size() > 0)

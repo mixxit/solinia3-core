@@ -9,6 +9,7 @@ import org.bukkit.World;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
@@ -151,6 +152,8 @@ public class SoliniaAlignmentChunk {
 					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(world.getForestryLootTableId()),distance));
 				}
 			}
+			
+			List<Integer> existingItemIds = new ArrayList<Integer>();
 		
 			for (UniversalTemporarySoliniaLootTable templootTable : lootTables)
 			{
@@ -159,11 +162,19 @@ public class SoliniaAlignmentChunk {
 					ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
 					for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
 					{
+						if (existingItemIds.contains(lootdropentry.getItemid()))
+							continue;
+						
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(lootdropentry.getItemid());
+						if (item == null)
+							continue;
+						
 						UniversalMerchantEntry ume = new UniversalMerchantEntry();
 						ume.setItemid(lootdropentry.getItemid());
 						ume.setTemporaryquantitylimit(64);
 						ume.setCostMultiplier(templootTable.distance);
 						entries.add(ume);
+						existingItemIds.add(lootdropentry.getItemid());
 					}
 				}
 			}
