@@ -1670,7 +1670,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					TextComponent tc = new TextComponent();
 					tc.setText(ChatColor.YELLOW + "[QUEST] ");
 					TextComponent tc2 = new TextComponent();
-					tc2.setText(ChatColor.AQUA + "- Click here to give " + item.getDisplayname() + ChatColor.RESET);
+					tc2.setText(ChatColor.YELLOW + "- Click here to give " + item.getDisplayname() + ChatColor.RESET);
 					tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/npcgive " + itemId));
 					tc.addExtra(tc2);
 					getBukkitPlayer().spigot().sendMessage(tc);

@@ -35,8 +35,9 @@ public class CommandBindWound implements CommandExecutor {
 			
 			if (targetmob == null)
 			{
-				player.sendMessage("You must select a target to bind wound");
-				return true;
+				player.sendMessage("Selecting yourself");
+				StateManager.getInstance().getEntityManager().setEntityTarget(player,player);
+				targetmob = player;
 			}
 			
 			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(targetmob);
