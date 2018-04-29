@@ -3637,7 +3637,7 @@ public class Utils {
 						SoliniaCraft shieldcharmRecipe = SoliniaCraftFactory.Create(shieldcharmItem.getDisplayname().replace(" ", "_").toUpperCase(), ingotItem.getId(), shieldcharmMoldItem.getId(), shieldcharmItem.getId(), true);
 						shieldcharmRecipe.setSkill("TINKERING");
 						
-						SoliniaNPCMerchantFactory.CreateNPCMerchant(race.getName().toUpperCase() + "_" + "CULTURAL");
+						SoliniaNPCMerchantFactory.CreateNPCMerchant(race.getName().toUpperCase() + "_" + "CULTURAL", true);
 						ISoliniaNPCMerchant merchantList = StateManager.getInstance().getConfigurationManager().getNPCMerchant(race.getName().toUpperCase() + "_" + "CULTURAL");
 						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), portableFurnaceId);
 						SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantList.getId(), tailoringKitId);

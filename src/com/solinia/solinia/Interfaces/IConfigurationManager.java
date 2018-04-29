@@ -19,6 +19,7 @@ import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
+import com.solinia.solinia.Exceptions.InvalidNPCMerchantListSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
@@ -419,4 +420,7 @@ public interface IConfigurationManager {
 			throws InvalidQuestSettingException, NumberFormatException, CoreStateInitException;
 
 	List<ISoliniaAAAbility> getAAbilitiesBySysname(String sysname);
+
+	void editNPCMerchantList(int id, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidNPCMerchantListSettingException;
 }

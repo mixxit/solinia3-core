@@ -26,6 +26,7 @@ import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
+import com.solinia.solinia.Exceptions.InvalidNPCMerchantListSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
@@ -735,6 +736,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void editItem(int itemid, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidItemSettingException {
 		getItem(itemid).editSetting(setting, value);
+	}
+	
+	@Override
+	public void editNPCMerchantList(int id, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidNPCMerchantListSettingException {
+		getNPCMerchant(id).editSetting(setting, value);
 	}
 	
 	@Override
