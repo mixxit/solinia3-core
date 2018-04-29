@@ -43,6 +43,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private String responseType = "SAY";
 	private double awardsExperience = 0;
 	private boolean awardsBind = false;
+	private boolean operatorCreated = true;
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -602,6 +603,16 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setAwardsBind(boolean awardsBind) {
 		this.awardsBind = awardsBind;
+	}
+
+	@Override
+	public boolean isOperatorCreated() {
+		return operatorCreated;
+	}
+
+	@Override
+	public void setOperatorCreated(boolean operatorCreated) {
+		this.operatorCreated = operatorCreated;
 	}
 
 }

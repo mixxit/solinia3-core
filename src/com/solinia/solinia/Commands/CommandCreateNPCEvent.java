@@ -18,12 +18,14 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 
-		if (sender instanceof Player) {
+		if (sender instanceof Player)
+		{
 
 			Player player = (Player) sender;
-
-			if (!player.isOp()) {
-				player.sendMessage("This is an operator only command");
+			
+			if (!player.isOp() && !player.hasPermission("solinia.createnpcevent"))
+			{
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -120,7 +122,7 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 			eventhandler.setTriggerdata(trigger.toUpperCase());
 			eventhandler.setChatresponse(response);
 			eventhandler.setResponseType(responsetype);
-			npc.addEventHandler(eventhandler);
+			npc.addEventHandler(eventhandler, sender.isOp());
 			sender.sendMessage("New EventHandler added to NPC");
 		} catch (CoreStateInitException e) {
 			sender.sendMessage(e.getMessage());

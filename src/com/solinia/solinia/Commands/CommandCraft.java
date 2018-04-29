@@ -46,18 +46,6 @@ public class CommandCraft implements CommandExecutor {
         	return false;
         }
         
-        if (primaryItem.getAmount() > 1)
-        {
-        	player.sendMessage(ChatColor.GRAY+"Stack size in primary hand is too high (max 1)");
-        	return false;
-        }
-
-        if (secondaryItem.getAmount() > 1)
-        {
-        	player.sendMessage(ChatColor.GRAY+"Stack size in secondary hand is too high (max 1)");
-        	return false;
-        }
-        
         if (!Utils.IsSoliniaItem(primaryItem))
         {
         	player.sendMessage("You can only create a new item from solinia items, not minecraft items");
@@ -69,97 +57,137 @@ public class CommandCraft implements CommandExecutor {
         	player.sendMessage("You can only create a new item from solinia items, not minecraft items");
         	return true;
         }
+        
+        int amountToCraft = 1;
+        
+        if (primaryItem.getAmount() > 1 && secondaryItem.getAmount() > 1)
+        {
+        	// get the highest of the two numbers
+        	amountToCraft = Math.max(primaryItem.getAmount(), primaryItem.getAmount());
+        }
+        
+        for (int i = 0; i < amountToCraft; i++)
+        {
+        	try
+            {
+        		primaryItem = player.getInventory().getItemInMainHand();
+        		if (primaryItem == null || primaryItem.getType().equals(Material.AIR))
+        		{
+        			player.sendMessage(ChatColor.GRAY+"Empty item in offhand. You must hold the item you want to use in your crafting recipe");
+                	return false;
+        		}
+        		secondaryItem = player.getInventory().getItemInOffHand();
+        		if (secondaryItem == null || secondaryItem.getType().equals(Material.AIR))
+        		{
+        			player.sendMessage(ChatColor.GRAY+"Empty item in offhand. You must hold the item you want to use in your crafting recipe");
+                	return false;
+        		}
+        		
+        		ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+
+    	        ISoliniaItem primarysolItem = SoliniaItemAdapter.Adapt(primaryItem);
+    	        ISoliniaItem secondarysolItem = SoliniaItemAdapter.Adapt(secondaryItem);
+    	        
+    	        List<SoliniaCraft> craft = StateManager.getInstance().getConfigurationManager().getCrafts(primarysolItem.getId(),secondarysolItem.getId());
+    	        if (craft.size() < 1)
+    	        {
+    	        	player.sendMessage("You do not seem to know how to make anything with these items");
+    	        	return true;
+    	        }
+    	        
+    			int createCount = 0;
+    			
+    			for(SoliniaCraft craftEntry : craft)
+    			{
+    				if (craftEntry.getClassId() > 0)
+    				{
+    					if (solPlayer.getClassObj() == null)
+    					{
+    						player.sendMessage("You are not the correct class to produce " + craftEntry.getRecipeName());
+    						continue;
+    					}
+    					
+    					if (solPlayer.getClassObj().getId() != craftEntry.getClassId())
+    					{
+    						player.sendMessage("You are not the correct class to produce " + craftEntry.getRecipeName());
+    						continue;
+    					}
+    				}
+    				
+    				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
+    				{
+    					if (craftEntry.getMinSkill() > 0)
+    					{
+    						SoliniaPlayerSkill skill = solPlayer.getSkill(craftEntry.getSkill().toUpperCase());
+    						if (skill == null)
+    						{
+    				        	player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
+    							continue;
+    						}
+    						
+    						if (skill.getValue() < craftEntry.getMinSkill())
+    						{
+    							player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
+    							continue;
+    						}
+    					}
+    				}
+    				
+    				ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(craftEntry.getOutputItem());
+    				if (outputItem != null)
+    				{
+    					if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
+    					{
+    						solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
+
+    						if (!solPlayer.getSkillCheck(craftEntry.getSkill().toUpperCase(),craftEntry.getMinSkill()+50))
+    						{
+    							player.sendMessage("Your lack of skill resulted in failure!");
+    							// remove components
+    		    				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
+    		    				stack.setAmount(stack.getAmount() - 1);
+    		    		        player.getInventory().setItemInMainHand(stack);
+
+    		    				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
+    		    				stack2.setAmount(stack2.getAmount() - 1);
+    		    		        player.getInventory().setItemInOffHand(stack2);
+    		    				
+    							player.updateInventory();
+    							break;
+    						}
+    					}
+
+    					player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
+    					player.sendMessage("You fashion the items together to make something new!");
+    					createCount++;
+
+    				}
+    			}
+    			
+    			if (createCount > 0)
+    			{
+    				// remove components
+    				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
+    				stack.setAmount(stack.getAmount() - 1);
+    		        player.getInventory().setItemInMainHand(stack);
+
+    				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
+    				stack2.setAmount(stack2.getAmount() - 1);
+    		        player.getInventory().setItemInOffHand(stack2);
+    				
+    				player.updateInventory();
+    				
+    			}
+
+            } catch (CoreStateInitException e)
+            {
+            	
+            } catch (SoliniaItemException e) {
+    			player.sendMessage("Item no longer exists");
+    		}
+        }
 		
-        try
-        {
-    		ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-
-	        ISoliniaItem primarysolItem = SoliniaItemAdapter.Adapt(primaryItem);
-	        ISoliniaItem secondarysolItem = SoliniaItemAdapter.Adapt(secondaryItem);
-	        
-	        List<SoliniaCraft> craft = StateManager.getInstance().getConfigurationManager().getCrafts(primarysolItem.getId(),secondarysolItem.getId());
-	        if (craft.size() < 1)
-	        {
-	        	player.sendMessage("You do not seem to know how to make anything with these items");
-	        	return true;
-	        }
-	        
-			int createCount = 0;
-			
-			for(SoliniaCraft craftEntry : craft)
-			{
-				if (craftEntry.getClassId() > 0)
-				{
-					if (solPlayer.getClassObj() == null)
-					{
-						player.sendMessage("You are not the correct class to produce " + craftEntry.getRecipeName());
-						continue;
-					}
-					
-					if (solPlayer.getClassObj().getId() != craftEntry.getClassId())
-					{
-						player.sendMessage("You are not the correct class to produce " + craftEntry.getRecipeName());
-						continue;
-					}
-				}
-				
-				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
-				{
-					if (craftEntry.getMinSkill() > 0)
-					{
-						SoliniaPlayerSkill skill = solPlayer.getSkill(craftEntry.getSkill().toUpperCase());
-						if (skill == null)
-						{
-				        	player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
-							continue;
-						}
-						
-						if (skill.getValue() < craftEntry.getMinSkill())
-						{
-							player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
-							continue;
-						}
-					}
-				}
-				
-				ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(craftEntry.getOutputItem());
-				if (outputItem != null)
-				{
-					if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
-					{
-						solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
-
-						if (!solPlayer.getSkillCheck(craftEntry.getSkill().toUpperCase(),craftEntry.getMinSkill()+50))
-						{
-							player.sendMessage("Your lack of skill resulted in failure!");
-					        player.getInventory().setItemInMainHand(null);
-					        player.getInventory().setItemInOffHand(null);
-							player.updateInventory();
-							return true;
-						}
-					}
-
-					player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
-					player.sendMessage("You fashion the items together to make something new!");
-					createCount++;
-
-				}
-			}
-			
-			if (createCount > 0)
-			{
-		        player.getInventory().setItemInMainHand(null);
-		        player.getInventory().setItemInOffHand(null);
-				player.updateInventory();
-				
-			}
-
-        } catch (CoreStateInitException e)
-        {
-        	
-        } catch (SoliniaItemException e) {
-			player.sendMessage("Item no longer exists");
-		}
+        
 		return true;
 	}
 

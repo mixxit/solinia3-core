@@ -983,7 +983,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public void addEventHandler(SoliniaNPCEventHandler eventhandler) {
+	public void addEventHandler(SoliniaNPCEventHandler eventhandler, boolean operatorCreated) {
+		eventhandler.setOperatorCreated(operatorCreated);
 		this.getEventHandlers().add(eventhandler);
 		
 	}

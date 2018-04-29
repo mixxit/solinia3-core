@@ -149,7 +149,7 @@ public interface ISoliniaNPC {
 
 	void processChatInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, String data);
 
-	void addEventHandler(SoliniaNPCEventHandler eventhandler);
+	void addEventHandler(SoliniaNPCEventHandler eventhandler, boolean operatorCreated);
 
 	void sendMerchantItemListToPlayer(Player player, int pageno);
 

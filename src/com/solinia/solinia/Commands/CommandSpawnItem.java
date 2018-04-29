@@ -18,20 +18,30 @@ public class CommandSpawnItem implements CommandExecutor {
 		Player player = (Player) sender;
 
 		if (args.length < 1) {
-			player.sendMessage("Insufficient arguments (itemid)");
+			player.sendMessage("Insufficient arguments (itemid) (count)");
 			return false;
+		}
+		
+		int count = 1;
+		
+		if (args.length == 2)
+		{
+			count = Integer.parseInt(args[1]);
 		}
 
 		if (player.isOp()) {
 			int itemid = Integer.parseInt(args[0]);
 			try {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
-				if (item != null) {
-					player.getLocation().getWorld().dropItem((player).getLocation(),
-							item.asItemStack());
-				} else {
-					player.sendMessage("Cannot find item by ID");
-					return true;
+				for (int i = 0; i < count; i++)
+				{
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
+					if (item != null) {
+						player.getLocation().getWorld().dropItem((player).getLocation(),
+								item.asItemStack());
+					} else {
+						player.sendMessage("Cannot find item by ID");
+						return true;
+					}
 				}
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

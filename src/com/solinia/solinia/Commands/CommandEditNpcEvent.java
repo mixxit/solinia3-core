@@ -22,9 +22,9 @@ public class CommandEditNpcEvent implements CommandExecutor {
 
 			Player player = (Player) sender;
 			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.editnpcevent"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -137,6 +137,11 @@ public class CommandEditNpcEvent implements CommandExecutor {
 					if (handler.getTriggerdata().toUpperCase().equals(triggertext.toUpperCase()))
 					{
 						found = true;
+						if (handler.isOperatorCreated() && !sender.isOp())
+						{
+							sender.sendMessage("This npcevent was op created and you are not an op. Only ops can edit op npcevent items");
+							return false;
+						}
 					}
 				}
 				
@@ -150,6 +155,8 @@ public class CommandEditNpcEvent implements CommandExecutor {
 				sender.sendMessage("NPC ID doesnt exist");
 				return false;
 			}
+			
+			
 
 			StateManager.getInstance().getConfigurationManager().editNpcTriggerEvent(npcid,triggertext,setting,value);
 			sender.sendMessage("Updating setting on NPC Event");
