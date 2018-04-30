@@ -839,8 +839,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						}
 						
 					} else {
-						player.getBukkitPlayer()
-								.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(player.getLevel()));
+						//player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(player.getLevel()));
 					}
 
 				} else {
@@ -851,14 +850,13 @@ public class Solinia3CoreEntityListener implements Listener {
 							int tgtlevel = tgtsolplayer.getLevel();
 
 							if (tgtlevel < ilowlvl) {
-								tgtplayer.sendMessage(
-										"You were out of level range to gain experience in this group (Min: " + ilowlvl
+								tgtplayer.sendMessage(ChatColor.GRAY + "You were out of level range to gain experience in this group (Min: " + ilowlvl
 												+ " Max: " + ihighlvl + ")");
 								continue;
 							}
 
 							if (!tgtplayer.getWorld().equals(player.getBukkitPlayer().getWorld())) {
-								tgtplayer.sendMessage("You were out of range for shared group xp (world)");
+								//tgtplayer.sendMessage("You were out of range for shared group xp (world)");
 								continue;
 							}
 
@@ -882,11 +880,11 @@ public class Solinia3CoreEntityListener implements Listener {
 									}
 									
 								} else {
-									tgtplayer.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()));
+									//tgtplayer.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()));
 								}
 
 							} else {
-								tgtplayer.sendMessage("You were out of range for shared group xp (distance)");
+								//tgtplayer.sendMessage(ChatColor.GRAY + "You were out of range for shared group xp (distance)");
 								continue;
 							}
 						}
@@ -912,8 +910,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					}
 					
 				} else {
-					player.getBukkitPlayer()
-					.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(player.getLevel()));
+					//player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* The npc was too low level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " + Utils.getMinLevelFromLevel(player.getLevel()));
 				}
 			}
 

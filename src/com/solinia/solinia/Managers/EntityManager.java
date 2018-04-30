@@ -60,6 +60,8 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
 
 public class EntityManager implements IEntityManager {
@@ -1367,9 +1369,12 @@ public class EntityManager implements IEntityManager {
 		
 		if (!autoAttackState == false)
 		{
-			player.sendMessage(ChatColor.GRAY + "* You stop auto attacking");
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+					new TextComponent(ChatColor.GRAY + "* You stop auto attacking"));
 		} else {
-			player.sendMessage(ChatColor.GRAY + "* You start auto attacking");
+			
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+					new TextComponent(ChatColor.GRAY + "* You start auto attacking"));
 		}
 		
 		playerAutoAttack.put(player.getUniqueId(), !autoAttackState);
