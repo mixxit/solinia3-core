@@ -1115,7 +1115,8 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 			
-			source.sendMessage(ChatColor.GRAY + "Cleared your target");
+			// no need, is on the boss bar
+			//source.sendMessage(ChatColor.GRAY + "Cleared your target");
 			entityTargets.remove(source.getUniqueId());
 			
 	        if (source instanceof Player)
@@ -1167,7 +1168,8 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 			
-			source.sendMessage(ChatColor.GRAY + "Set target to " + target.getName() + " [/toggleglow: " + toggleGlow + "]");
+			// no need, is on the bossbar
+			//source.sendMessage(ChatColor.GRAY + "Set target to " + target.getName() + " [/toggleglow: " + toggleGlow + "]");
 			entityTargets.put(source.getUniqueId(), target.getUniqueId());
 			if (source instanceof Player)
 			{

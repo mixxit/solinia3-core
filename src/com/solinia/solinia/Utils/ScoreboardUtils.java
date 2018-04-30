@@ -62,14 +62,7 @@ public class ScoreboardUtils {
 						target = entityTarget.getCustomName();
 					}
 				}
-				
-				String sneak = "";
-				if (player.isSneaking())
-				{
-					sneak = "Sneaking";
-				}
-				
-				bossbar.setTitle("MANA: " + ChatColor.BLUE + " " + mana + " (" + sneak + ") " + ChatColor.RESET + " TARGET: " + target);
+				bossbar.setTitle("MANA: " + ChatColor.BLUE + " " + mana + ChatColor.RESET + " TARGET: " + target);
 				
 				CastingSpell casting = StateManager.getInstance().getEntityManager().getCasting(player);
 				

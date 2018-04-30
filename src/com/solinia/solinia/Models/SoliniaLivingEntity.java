@@ -339,7 +339,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				{
 					if (solplayer.getClassObj().isSneakFromCrouch())
 					{
-						player.sendMessage(ChatColor.GRAY + "* You cannot concentrate on combat while meditating or sneaking");
+						player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+								new TextComponent(ChatColor.GRAY + "* You cannot concentrate on combat while meditating or sneaking"));
+						
 						Utils.CancelEvent(event);;
 						return false;
 					}

@@ -59,6 +59,8 @@ import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.minecraft.server.v1_12_R1.EntityHuman;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
@@ -328,7 +330,9 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 			if (solplayer.getClassObj() != null) {
 				if (solplayer.getClassObj().isSneakFromCrouch()) {
-					ScoreboardUtils.UpdateScoreboard(event.getPlayer(),  solplayer.getMana());
+					// too spammy, move ot action bar
+					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You sneak, hiding from enemies that do not already know you are"));
 				}
 			}
 		} catch (CoreStateInitException e) {
