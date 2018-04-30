@@ -339,7 +339,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				{
 					if (solplayer.getClassObj().isSneakFromCrouch())
 					{
-						player.sendMessage("You cannot concentrate on combat while meditating or sneaking");
+						player.sendMessage(ChatColor.GRAY + "* You cannot concentrate on combat while meditating or sneaking");
 						Utils.CancelEvent(event);;
 						return false;
 					}
@@ -498,7 +498,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// Only players get this
 			if (getDoubleAttackCheck()) {
 				if (attackerEntity instanceof Player) {
-					((Player) attackerEntity).sendMessage(ChatColor.GRAY + "* You double attack!");
+					
+					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You double attack!"));
 					tryIncreaseSkill("DOUBLEATTACK", 1);
 				}
 				defender.damage(plugin, my_hit.damage_done, attackerEntity);
@@ -508,7 +510,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (getDualWieldCheck()) {
 				if (attackerEntity instanceof Player)
 				{
-					((Player) attackerEntity).sendMessage(ChatColor.GRAY + "* You dual wield!");
+					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You dual wield!"));
 					tryIncreaseSkill("DUALWIELD", 1);
 					
 					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer)attackerEntity).getHandle(), 3);
@@ -807,8 +810,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (hit.riposted == true && originalDamage > 0) {
 				if (defender.isPlayer()) {
-					((Player) defender.getBukkitLivingEntity())
-							.sendMessage(ChatColor.GRAY + "* You riposte the attack!");
+					
+					((Player) defender).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You riposte the attack!"));
 					defender.tryIncreaseSkill("RIPOSTE", 1);
 				}
 
@@ -821,7 +825,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (hit.dodged == true) {
 				if (defender.isPlayer()) {
-					((Player) defender.getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* You dodge the attack!");
+					((Player) defender).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You dodge the attack!"));
+					
 					defender.tryIncreaseSkill("DODGE", 1);
 				}
 

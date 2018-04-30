@@ -56,6 +56,7 @@ import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.UniversalMerchant;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -327,8 +328,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 			if (solplayer.getClassObj() != null) {
 				if (solplayer.getClassObj().isSneakFromCrouch()) {
-					((Player) event.getPlayer())
-							.sendMessage(ChatColor.GRAY + "* You toggle sneak (NPCs are less likely to see you)");
+					ScoreboardUtils.UpdateScoreboard(event.getPlayer(),  solplayer.getMana());
 				}
 			}
 		} catch (CoreStateInitException e) {

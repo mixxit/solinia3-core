@@ -1173,7 +1173,6 @@ public class EntityManager implements IEntityManager {
 			{
 				try
 				{
-					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
 					ScoreboardUtils.UpdateScoreboard((Player)source,SoliniaLivingEntityAdapter.Adapt(source).getMana());
 				} catch (CoreStateInitException e)
 				{

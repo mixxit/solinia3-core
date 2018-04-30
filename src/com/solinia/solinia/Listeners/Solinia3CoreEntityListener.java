@@ -696,6 +696,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (le.getTarget() == null)
 				{
 					ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getRightClicked());
+					
 					if (solentity.getNpcid() > 0) {
 						SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(
 								solentity.getBukkitLivingEntity().getUniqueId(),
@@ -703,7 +704,9 @@ public class Solinia3CoreEntityListener implements Listener {
 						solentity.processInteractionEvent(event.getPlayer(), InteractionType.CHAT, "hail");
 					}
 				} else {
-					event.getPlayer().sendMessage(ChatColor.GRAY + "* This npc will not respond to interactions while it is in combat (has a target)");
+					// too spammy, move ot action bar
+					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* This npc will not respond to interactions while it is in combat (has a target)"));
 				}
 			} else {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getRightClicked());
