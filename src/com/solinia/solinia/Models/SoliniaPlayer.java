@@ -1501,7 +1501,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// there are two potential mastery of the pasts
 			for (ISoliniaAAAbility aaMasteryOfThePast : StateManager.getInstance().getConfigurationManager()
 					.getAAbilitiesBySysname("MASTERYOFTHEPAST")) {
-				ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
+				ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aaMasteryOfThePast);
 				if (AArank != null) {
 					for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
 						if (rankEffect.getBase1() > no_fizzle_level)
@@ -1511,16 +1511,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 		} catch (CoreStateInitException e) {
 
-		}
-
-		if (aa != null) {
-			ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
-			if (AArank != null) {
-				for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
-					if (rankEffect.getBase1() > no_fizzle_level)
-						no_fizzle_level = rankEffect.getBase1();
-				}
-			}
 		}
 
 		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level) {
