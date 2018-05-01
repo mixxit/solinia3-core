@@ -1517,7 +1517,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
 			if (AArank != null) {
 				for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
-					no_fizzle_level = rankEffect.getBase1();
+					if (rankEffect.getBase1() > no_fizzle_level)
+						no_fizzle_level = rankEffect.getBase1();
 				}
 			}
 		}
