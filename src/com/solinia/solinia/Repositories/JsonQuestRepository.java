@@ -118,4 +118,10 @@ public class JsonQuestRepository implements IRepository<ISoliniaQuest> {
 	public ISoliniaQuest getByKey(Object key) {
 		return this.Quests.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

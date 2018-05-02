@@ -124,4 +124,10 @@ public class JsonNPCMerchantRepository implements IRepository<ISoliniaNPCMerchan
 	public ISoliniaNPCMerchant getByKey(Object key) {
 		return this.npcmerchants.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

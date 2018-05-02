@@ -1,17 +1,26 @@
 package com.solinia.solinia.Repositories;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.bukkit.Material;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -119,5 +128,96 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 	@Override
 	public ISoliniaItem getByKey(Object key) {
 		return this.items.get(key);
+	}
+	
+	@Override
+	public void writeCsv(String filePath)
+	{
+		try (
+	            BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
+	            CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
+	            		"id","displayname","basename","abilityid","strength","stamina","agility","dexterity","intelligence","wisdom","charisma","allowedClassNames","questitem","damage","weaponabilityid","attackspeed","enchantment1val","enchantment2val","enchantment3val","enchantment4val","hpregen","mpregen","worth","coreitem","fireResist","coldResist","magicResist","poisonResist","diseaseResist","spellscroll","color","dye","isTemporary","isConsumable","baneUndead","isPetControlRod","isAugmentation","isQuest","augmentationFitsSlotType","discoverer","minLevel","ac","hp","mana","isExperienceBonus","skillModType","skillModValue","reagent","throwing","artifact","artifactFound","skillModType2","skillModValue2","skillModType3","skillModValue3","skillModType4","skillModValue4","operatorCreated","isFingersItem","isNeckItem","isShouldersItem","isEarsItem","territoryFlag","identifyMessage","bandage"
+	            	));
+	        ) 
+		{
+			for(Entry<Integer, ISoliniaItem> keyValuePair : items.entrySet())
+			{
+				ISoliniaItem item =  keyValuePair.getValue();
+				
+	            csvPrinter.printRecord(item.getId(), 
+	            		item.getDisplayname(), 
+	            		item.getBasename(), 
+	            		item.getAbilityid(), 
+	            		item.getStrength(), 
+	            		item.getStamina(), 
+	            		item.getAgility(), 
+	            		item.getDexterity(), 
+	            		item.getIntelligence(), 
+	            		item.getWisdom(), 
+	            		item.getCharisma(), 
+	            		Arrays.asList(item.getAllowedClassNames().stream()
+	  					      .map(t -> t.toString())
+	  					      .collect(Collectors.joining(","))),  // comma seperated class list
+	            		item.getQuestitem(), 
+	            		item.getDamage(), 
+	            		item.getWeaponabilityid(),
+	            		item.getAttackspeed(), 
+	            		item.getEnchantment1val(), 
+	            		item.getEnchantment2val(), 
+	            		item.getEnchantment3val(), 
+	            		item.getEnchantment4val(), 
+	            		item.getHpregen(), 
+	            		item.getMpregen(), 
+	            		item.getWorth(),
+	            		item.isCoreitem(), 
+	            		item.getFireResist(), 
+	            		item.getColdResist(), 
+	            		item.getMagicResist(), 
+	            		item.getPoisonResist(), 
+	            		item.getDiseaseResist(), 
+	            		item.isSpellscroll(), 
+	            		item.getColor(), 
+	            		item.getDye(), 
+	            		item.isTemporary(), 
+	            		item.isConsumable(), 
+	            		item.getBaneUndead(), 
+	            		item.isPetControlRod(), 
+	            		item.isAugmentation(), 
+	            		item.isQuest(), 
+	            		item.getAugmentationFitsSlotType(), 
+	            		item.getDiscoverer(), 
+	            		item.getMinLevel(), 
+	            		item.getAC(), 
+	            		item.getHp(), 
+	            		item.getMana(), 
+	            		item.isExperienceBonus(), 
+	            		item.getSkillModType(), 
+	            		item.getSkillModValue(), 
+	            		item.isReagent(), 
+	            		item.isThrowing(), 
+	            		item.isArtifact(), 
+	            		item.isArtifactFound(), 
+	            		item.getSkillModType2(), 
+	            		item.getSkillModValue2(), 
+	            		item.getSkillModType3(), 
+	            		item.getSkillModValue3(), 
+	            		item.getSkillModType4(), 
+	            		item.getSkillModValue4(), 
+	            		item.isOperatorCreated(), 
+	            		item.isFingersItem(), 
+	            		item.isNeckItem(), 
+	            		item.isShouldersItem(), 
+	            		item.isEarsItem(), 
+	            		item.isTerritoryFlag(), 
+	            		item.getIdentifyMessage(), 
+	            		item.isBandage()
+	            		);
+			}
+			
+			csvPrinter.flush();            
+	    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

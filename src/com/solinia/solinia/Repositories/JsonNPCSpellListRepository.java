@@ -119,4 +119,10 @@ public class JsonNPCSpellListRepository implements IRepository<NPCSpellList> {
 		return this.npcspelllists.get(key);
 	}
 
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

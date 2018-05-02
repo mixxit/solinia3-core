@@ -124,4 +124,10 @@ public class JsonSpawnGroupRepository implements IRepository<ISoliniaSpawnGroup>
 		return this.spawngroups.get(key);
 	}
 
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -122,4 +122,11 @@ public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer> 
 	public ISoliniaPlayer getByKey(Object key) {
 		return this.CharacterLists.get(key);
 	}
+
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -119,4 +119,10 @@ public class JsonClassRepository implements IRepository<ISoliniaClass> {
 	public ISoliniaClass getByKey(Object key) {
 		return this.classes.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

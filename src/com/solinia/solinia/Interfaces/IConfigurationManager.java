@@ -423,4 +423,6 @@ public interface IConfigurationManager {
 
 	void editNPCMerchantList(int id, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidNPCMerchantListSettingException;
+
+	void commitCsvs();
 }

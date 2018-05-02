@@ -129,4 +129,10 @@ public class JsonAAAbilityRepository implements IRepository<ISoliniaAAAbility> {
 		return this.aaabilities.get(key);
 	}
 
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

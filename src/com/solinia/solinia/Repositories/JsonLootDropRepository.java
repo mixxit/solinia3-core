@@ -125,4 +125,10 @@ public class JsonLootDropRepository implements IRepository<ISoliniaLootDrop> {
 	public ISoliniaLootDrop getByKey(Object key) {
 		return this.lootdrops.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

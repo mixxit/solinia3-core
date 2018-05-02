@@ -118,4 +118,10 @@ public class JsonFactionRepository implements IRepository<ISoliniaFaction> {
 	public ISoliniaFaction getByKey(Object key) {
 		return this.Factions.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

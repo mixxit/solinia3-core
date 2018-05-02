@@ -118,4 +118,10 @@ public class JsonPatchRepository implements IRepository<ISoliniaPatch> {
 	public ISoliniaPatch getByKey(Object key) {
 		return this.patches.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

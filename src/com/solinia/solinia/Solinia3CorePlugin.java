@@ -46,6 +46,7 @@ import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
+import com.solinia.solinia.Timers.CSVGenerationTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
@@ -73,6 +74,7 @@ import sx.blah.discord.util.DiscordException;
 
 public class Solinia3CorePlugin extends JavaPlugin {
 
+	private CSVGenerationTimer csvGenerationTimer;
 	private CastingTimer castingTimer;
 	private StateCommitTimer commitTimer;
 	private PlayerRegenTickTimer playerRegenTimer;
@@ -356,6 +358,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 				discordMessageTimer.runTaskTimer(this, 20L, 20L);
 			}
 			
+			csvGenerationTimer = new CSVGenerationTimer();
+			csvGenerationTimer.runTaskTimer(this, 1 * 20L, 3600 * 20L);
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

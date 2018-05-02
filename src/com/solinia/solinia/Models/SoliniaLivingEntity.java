@@ -718,6 +718,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void damage(Plugin plugin, double damage, Entity sourceEntity)
 	{
+		if (sourceEntity == null || getBukkitLivingEntity() == null || sourceEntity.isDead() || getBukkitLivingEntity().isDead())
+			return;
+		
 		damageHook(damage, sourceEntity);
 		
 		if (damage > getBukkitLivingEntity().getHealth() && hasDeathSave() > 0)

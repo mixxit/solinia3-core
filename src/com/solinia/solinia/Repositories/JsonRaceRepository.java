@@ -119,4 +119,10 @@ public class JsonRaceRepository implements IRepository<ISoliniaRace> {
 	public ISoliniaRace getByKey(Object key) {
 		return this.races.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

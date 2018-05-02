@@ -117,4 +117,10 @@ public class JsonAccountClaimRepository implements IRepository<SoliniaAccountCla
 	public SoliniaAccountClaim getByKey(Object key) {
 		return this.AccountClaims.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

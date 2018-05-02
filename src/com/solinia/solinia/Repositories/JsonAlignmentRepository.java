@@ -118,4 +118,10 @@ public class JsonAlignmentRepository implements IRepository<ISoliniaAlignment> {
 	public ISoliniaAlignment getByKey(Object key) {
 		return this.alignments.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

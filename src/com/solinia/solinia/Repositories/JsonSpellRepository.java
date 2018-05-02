@@ -120,4 +120,10 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 		return this.spells.get(key);
 	}
 
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

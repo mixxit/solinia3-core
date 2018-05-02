@@ -117,4 +117,10 @@ public class JsonCraftRepository implements IRepository<SoliniaCraft> {
 	public SoliniaCraft getByKey(Object key) {
 		return this.Crafts.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

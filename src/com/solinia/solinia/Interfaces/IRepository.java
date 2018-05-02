@@ -21,4 +21,6 @@ public interface IRepository<T> {
     void commit();
     
     void reload();
+
+	void writeCsv(String filePath);
 }

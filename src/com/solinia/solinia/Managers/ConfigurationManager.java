@@ -1630,5 +1630,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void setItemsChanged(boolean itemsChanged) {
 		this.itemsChanged = itemsChanged;
 	}
+
+	@Override
+	public void commitCsvs() {
+		System.out.println("Writing Items CSV");
+		this.itemRepository.writeCsv("items.csv");
+		System.out.println("Writing Items CSV Finished");
+	}
 	
 }

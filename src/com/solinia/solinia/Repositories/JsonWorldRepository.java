@@ -117,4 +117,10 @@ public class JsonWorldRepository implements IRepository<SoliniaWorld>  {
 	public SoliniaWorld getByKey(Object key) {
 		return this.Worlds.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

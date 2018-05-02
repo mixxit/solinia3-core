@@ -95,4 +95,10 @@ public class JsonWorldWidePerkRepository implements IRepository<WorldWidePerk> {
 	public WorldWidePerk getByKey(Object key) {
 		return this.perks.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

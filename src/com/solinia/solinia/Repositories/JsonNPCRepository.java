@@ -135,4 +135,10 @@ public class JsonNPCRepository implements IRepository<ISoliniaNPC> {
 	public ISoliniaNPC getByKey(Object key) {
 		return this.NPCs.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }

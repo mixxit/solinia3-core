@@ -117,4 +117,10 @@ public class JsonZoneRepository implements IRepository<SoliniaZone> {
 	public SoliniaZone getByKey(Object key) {
 		return this.Zones.get(key);
 	}
+
+	@Override
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }
