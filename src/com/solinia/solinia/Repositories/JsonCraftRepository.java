@@ -1,22 +1,34 @@
 package com.solinia.solinia.Repositories;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IRepository;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaCraft;
 
 public class JsonCraftRepository implements IRepository<SoliniaCraft> {
@@ -119,8 +131,70 @@ public class JsonCraftRepository implements IRepository<SoliniaCraft> {
 	}
 
 	@Override
-	public void writeCsv(String filePath) {
-		// TODO Auto-generated method stub
-		
+	public void writeCsv(String filePath)
+	{
+		try (
+	            BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
+	            CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
+	            		"id",
+	        			"recipeName",
+	        			"item1",
+	        			"item2",
+	        			"skill",
+	        			"minSkill",
+	        			"nearForge",
+	        			"classId",
+	        			"outputItem",
+	        			"item1name",
+	        			"item2name",
+	        			"classname"
+	            	));
+	        ) 
+		{
+			
+			for(Entry<Integer, SoliniaCraft> keyValuePair : Crafts.entrySet())
+			{
+				SoliniaCraft craft =  keyValuePair.getValue();
+				
+				try
+				{
+					ISoliniaItem item1 = StateManager.getInstance().getConfigurationManager().getItem(craft.getItem1());
+					ISoliniaItem item2 = StateManager.getInstance().getConfigurationManager().getItem(craft.getItem2());
+					ISoliniaItem outitem = StateManager.getInstance().getConfigurationManager().getItem(craft.getOutputItem());
+					String classname = "";
+					if (craft.getClassId() > 0)
+					{
+						ISoliniaClass classObj = StateManager.getInstance().getConfigurationManager().getClassObj(craft.getClassId());
+						classname = classObj.getName();
+					}
+					
+		            csvPrinter.printRecord(
+		            		craft.getId(),
+		        			craft.getRecipeName(),
+		        			craft.getItem1(),
+		        			craft.getItem2(),
+		        			craft.getSkill(),
+		        			craft.getMinSkill(),
+		        			craft.isNearForge(),
+		        			craft.getClassId(),
+		        			craft.getOutputItem(),
+		        			item1.getDisplayname(),
+		        			item2.getDisplayname(),
+		        			outitem.getDisplayname(),
+		        			classname
+		            		);
+		            
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			
+			csvPrinter.flush();            
+	    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+
 }

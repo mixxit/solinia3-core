@@ -1637,8 +1637,11 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.itemRepository.writeCsv("items.csv");
 		System.out.println("Writing Items CSV Finished");
 		System.out.println("Writing Spells CSV");
-		this.itemRepository.writeCsv("spells.csv");
-		System.out.println("Writing Items Spells Finished");
+		this.spellRepository.writeCsv("spells.csv");
+		System.out.println("Writing Spells Finished");
+		System.out.println("Writing Craft CSV");
+		this.craftRepository.writeCsv("crafts.csv");
+		System.out.println("Writing Craft Finished");
 	}
 	
 }
