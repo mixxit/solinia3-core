@@ -816,7 +816,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (hit.riposted == true && originalDamage > 0) {
 				if (defender.isPlayer()) {
 					
-					((Player) defender).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+					((Player)(defender.getBukkitLivingEntity())).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You riposte the attack!"));
 					defender.tryIncreaseSkill("RIPOSTE", 1);
 				}
@@ -830,7 +830,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (hit.dodged == true) {
 				if (defender.isPlayer()) {
-					((Player) defender).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+					((Player) (defender.getBukkitLivingEntity())).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You dodge the attack!"));
 					
 					defender.tryIncreaseSkill("DODGE", 1);
