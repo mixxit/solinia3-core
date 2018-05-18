@@ -777,6 +777,53 @@ public class Utils {
 					return cap;
 				}
 		}
+		
+		if (skillname.equals("BINDWOUND")) {
+			if (profession != null)
+			{
+				if ((profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("MONK")
+						|| profession.getName().toUpperCase().equals("ROGUE")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
+						))
+				{
+					int cap = (int) ((5 * level) + 5);
+					if (cap > 210)
+						return 210;
+					return cap;
+				}
+				
+				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("BEASTLORD")
+						|| profession.getName().toUpperCase().equals("BARD")
+						|| profession.getName().toUpperCase().equals("PALADIN")
+						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("SHAMAN")
+						|| profession.getName().toUpperCase().equals("CLERIC")
+						|| profession.getName().toUpperCase().equals("DRUID")
+						))
+				{
+					int cap = (int) ((5 * level) + 5);
+					if (cap > 200)
+						return 200;
+					return cap;
+				}
+				
+				if ((profession.getName().toUpperCase().equals("ENCHANTER")
+						|| profession.getName().toUpperCase().equals("MAGICIAN")
+						|| profession.getName().toUpperCase().equals("NECROMANCER")
+						|| profession.getName().toUpperCase().equals("WIZARD")
+						))
+				{
+					int cap = (int) ((5 * level) + 5);
+					if (cap > 100)
+						return 100;
+					return cap;
+				}
+			}
+			
+			
+		}
 
 		if (skillname.equals("CRUSHING")) {
 			if (profession != null)

@@ -3186,12 +3186,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					if (playersolLivingEntity != null)
 						bonus_hp_percent = playersolLivingEntity.getBindWound_SE();
 				}
-	
-				bindhps += (bindhps * bonus_hp_percent) / 100;
+				
+				getBukkitPlayer().sendMessage("Your percentbase was " + percent_base);
+				getBukkitPlayer().sendMessage("Your spell/aa effects add a binding calculation was " + bindhps + " * " + bonus_hp_percent  + " / 100");
+				int spellModifierBenefit = (bindhps * bonus_hp_percent) / 100;
+				getBukkitPlayer().sendMessage("Your spell/aa effects add a binding addition of " + spellModifierBenefit + " hp");
+
+				
+				bindhps += spellModifierBenefit;
 	
 				if (bindhps < 3)
 					bindhps = 3;
-	
+
+				double originalHealth = solLivingEntity.getBukkitLivingEntity().getHealth();
+				
 				bindhps += solLivingEntity.getBukkitLivingEntity().getHealth();
 				if (bindhps > max_hp)
 					bindhps = max_hp;
@@ -3206,7 +3214,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (amount < 0)
 					amount = 0;
 				
-				getBukkitPlayer().sendMessage("You bind " + solLivingEntity.getName() + "'s wounds");
+				double boundHealth = amount - originalHealth;
+				
+				getBukkitPlayer().sendMessage("You bind " + solLivingEntity.getName() + "'s wounds for " + (int)boundHealth + " hp");
 				if (solLivingEntity.getBukkitLivingEntity() instanceof Player && !solLivingEntity.getBukkitLivingEntity().getUniqueId().toString().equals(getBukkitPlayer().getUniqueId().toString()))
 					solLivingEntity.getBukkitLivingEntity().sendMessage("Your wounds are being bound by " + getBukkitPlayer().getDisplayName());
 				
