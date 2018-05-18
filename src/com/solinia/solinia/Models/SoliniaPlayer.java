@@ -3198,7 +3198,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	
 				
 				
-				int amount = (int) Math.round(solLivingEntity.getBukkitLivingEntity().getHealth()) + bindhps;
+				int amount = bindhps;
 				if (amount > solLivingEntity.getBukkitLivingEntity().getMaxHealth()) {
 					amount = (int) Math.round(solLivingEntity.getBukkitLivingEntity().getMaxHealth());
 				}

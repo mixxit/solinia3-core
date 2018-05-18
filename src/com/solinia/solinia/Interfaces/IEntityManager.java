@@ -151,5 +151,4 @@ public interface IEntityManager {
 	Boolean getPlayerAutoAttack(Player player);
 
 	void setPlayerAutoAttack(Player player, boolean playerAutoAttack);
-
 }

@@ -87,6 +87,9 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, UUID> entityTargets = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, Boolean> feignedDeath = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, CastingSpell> entitySpellCasting = new ConcurrentHashMap<UUID, CastingSpell>();
+	
+	private ConcurrentHashMap<UUID, Timestamp> lastAttack = new ConcurrentHashMap<UUID, Timestamp>();
+	
 	private Plugin plugin;
 	
 	public EntityManager(Plugin plugin, INPCEntityProvider npcEntityProvider) {
@@ -1380,4 +1383,5 @@ public class EntityManager implements IEntityManager {
 		playerAutoAttack.put(player.getUniqueId(), !autoAttackState);
 		
 	}
+
 }

@@ -52,6 +52,7 @@ import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.KingCheckTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
+import com.solinia.solinia.Timers.NPCMeleeTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
 import com.solinia.solinia.Timers.NPCSummonCastTimer;
@@ -90,6 +91,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private KingCheckTimer kingCheckTimer;
 	private InvalidItemCheckerTimer invalidItemCheckerTimer;
 	private PlayerAutoAttackTimer playerAutoAttackTimer;
+	private NPCMeleeTimer npcAutoAttackTimer;
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
 	
@@ -351,6 +353,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			playerAutoAttackTimer = new PlayerAutoAttackTimer();
 			// every 500 milliseconds
 			playerAutoAttackTimer.runTaskTimer(this, 0L, 10L);
+
+			npcAutoAttackTimer = new NPCMeleeTimer();
+			// every 500 milliseconds
+			npcAutoAttackTimer.runTaskTimer(this, 0L, 10L);
+
 			
 			if (this.discordClient != null)
 			{
