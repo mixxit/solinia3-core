@@ -1567,6 +1567,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
+	public int getAttackSpeed()
+	{
+		int lowestAttackSpeedBuff = 100;
+		int highestAttackSpeedBuff = 100;
+		
+		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.AttackSpeed)) 
+		{
+			if (effect.getRemainingValue() > 100)
+			{
+				if (effect.getRemainingValue() > highestAttackSpeedBuff)
+					highestAttackSpeedBuff = effect.getRemainingValue();
+			} else {
+				if (effect.getRemainingValue() < lowestAttackSpeedBuff)
+					lowestAttackSpeedBuff = effect.getRemainingValue();
+			}
+		}
+		
+		if (lowestAttackSpeedBuff < 100)
+			return lowestAttackSpeedBuff;
+		
+		return highestAttackSpeedBuff;
+	}
+	
+	@Override
 	public int getTotalDefense() {
 		double avoidance = getDefenseByDefenseSkill() + 10;
 

@@ -225,7 +225,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			return "";
 		
 		mob = uniquename + ":\r\n";
-		mob = mob + "  Type: " + npc.getMctype() + "\r\n";
+		mob = mob + "  Type: SKELETON\r\n";
 		if (npc.isUpsidedown() == true) {
 			mob = mob + "  Display: Dinnerbone\r\n";
 		} else {
@@ -310,13 +310,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		{
 			mob = mob + "  AIGoalSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
-			mob = mob + "  - 1 skeletonbowattack\r\n";
-			mob = mob + "  - 2 meleeattack\r\n";
-			mob = mob + "  - 3 lookatplayers\r\n";
-			if (npc.isRoamer())
-			{
-				mob = mob + "  - 4 randomstroll\r\n";
-			}
 			mob = mob + "  AITargetSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 attacker\r\n";

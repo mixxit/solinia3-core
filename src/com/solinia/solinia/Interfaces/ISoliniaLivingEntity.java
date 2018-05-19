@@ -234,4 +234,6 @@ public interface ISoliniaLivingEntity
 	int getMaxBindWound_SE();
 
 	int getBindWound_SE();
+
+	int getAttackSpeed();
 }

@@ -19,6 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
@@ -41,7 +42,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaCraftCreationException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
@@ -70,6 +73,7 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
+import com.solinia.solinia.Models.MythicEntitySoliniaMob;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -99,6 +103,22 @@ public class Utils {
 		double loss = 0;
 		loss = (double) (player.getLevel() * (player.getLevel() / 18.0) * 12000);
 		return (double) loss;
+	}
+	
+	public static boolean isSoliniaMob(Entity entity)
+	{
+		if (((CraftEntity)entity).getHandle() instanceof MythicEntitySoliniaMob)
+			return true;
+		
+		return false;
+	}
+	
+	public static MythicEntitySoliniaMob GetSoliniaMob(Entity entity)
+	{
+		if (isSoliniaMob(entity))
+			return (MythicEntitySoliniaMob)((CraftEntity)entity).getHandle();
+		
+		return null;
 	}
 
 	public static void CancelEvent(Cancellable event) {
@@ -3226,9 +3246,28 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia command for console sender
 	public static void Patcher()  {
-		
-		
-		
+		try
+		{
+			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
+			{
+				if (npc.isPet())
+					continue;
+				
+				if (!npc.getMctype().toLowerCase().equals("skeleton"))
+				{
+					npc.setUsedisguise(true);
+					npc.setDisguisetype(npc.getMctype().toUpperCase());
+					npc.setMctype("SKELETON");
+					
+					System.out.println("Fixed broken NPC: " + npc.getName());
+					SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc, false);
+					Bukkit.getPluginManager().callEvent(soliniaevent);
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	private static void genCultural()

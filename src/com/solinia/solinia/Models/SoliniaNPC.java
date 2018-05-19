@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
@@ -422,7 +423,10 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setName(value);
 			break;
 		case "mctype":
-			setMctype(value);
+			if (!value.toLowerCase().equals("skeleton"))
+				throw new InvalidNpcSettingException("mctype can only be SKELETON");
+
+			setMctype(value.toUpperCase());
 			break;
 		case "level":
 			setLevel(Integer.parseInt(value));
@@ -767,6 +771,26 @@ public class SoliniaNPC implements ISoliniaNPC {
 						sendMerchantItemListToPlayer((Player)triggerentity, page);
 					}
 					return;
+				case "SHOWSTATUS":
+					if (triggerentity instanceof Player)
+					{
+						if (((Player)triggerentity).isOp())
+						{
+							Player player = (Player)triggerentity;
+							
+							if (Utils.isSoliniaMob(solentity.getBukkitLivingEntity()))
+							{
+								player.sendMessage("UUID:" + solentity.getBukkitLivingEntity().getUniqueId());
+								
+								MythicEntitySoliniaMob mob = Utils.GetSoliniaMob(solentity.getBukkitLivingEntity());
+								if (mob != null)
+								{
+									player.sendMessage("MeleeAttackPercent: " + mob.getMeleeAttackPercent());
+								}
+							}
+						}
+					}
+					return;
 				case "LISTEFFECTS":
 					if (triggerentity instanceof Player)
 					{
@@ -780,7 +804,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 									player.sendMessage(spell.getSpell().getName());
 									for (ActiveSpellEffect effect : spell.getActiveSpellEffects())
 									{
-										player.sendMessage(" - " + effect.getSpellEffectType().name() + " " + effect.getBase());
+										player.sendMessage(" - " + effect.getSpellEffectType().name() + " " + effect.getRemainingValue());
 									}
 								}
 							} catch (CoreStateInitException e)

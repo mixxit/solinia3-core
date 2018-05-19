@@ -4,12 +4,14 @@ import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
+import com.solinia.solinia.Listeners.MythicMobSpawnListener;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
 import com.solinia.solinia.Listeners.Solinia3CoreItemPickupListener;
 import com.solinia.solinia.Listeners.Solinia3CoreNPCUpdatedListener;
@@ -23,6 +25,7 @@ import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.MythicEntitySoliniaMob;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
@@ -64,10 +67,12 @@ import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
+import com.solinia.solinia.Utils.NMSUtils;
 
 import de.slikey.effectlib.EffectManager;
 import me.dadus33.chatitem.api.ChatItemAPI;
 import net.milkbowl.vault.economy.Economy;
+import net.minecraft.server.v1_12_R1.EntitySkeleton;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
@@ -143,8 +148,19 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		StateManager.getInstance().setChatItem(this.ciApi);
 		StateManager.getInstance().setDiscordClient(this.discordClient);
 		
+		RegisterEntities();
 	}
 	
+	private void RegisterEntities() {
+		NMSUtils.registerEntity("SoliniaMob", NMSUtils.Type.SKELETON, MythicEntitySoliniaMob.class, true);
+		
+		
+	}
+	
+	private void UnregisterEntities() {
+		
+	}
+
 	private void setupDiscordClient() {
 		this.discordClient = createClient(this.discordbottoken, true);
 		EventDispatcher dispatcher = this.discordClient.getDispatcher(); 
@@ -179,6 +195,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		}
 		
 		effectManager.dispose();
+		
+		UnregisterEntities();
 		
 		System.out.println("[Solinia3Core] Plugin Disabled");
 	}
@@ -384,6 +402,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVehicleListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVoteListener(this), this);
 
+		getServer().getPluginManager().registerEvents(new MythicMobSpawnListener(this), this);
+		
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());
 		this.getCommand("forename").setExecutor(new CommandForename());
