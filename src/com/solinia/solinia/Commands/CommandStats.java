@@ -27,6 +27,7 @@ public class CommandStats implements CommandExecutor {
 	            player.sendMessage("You have a maximum MP of: " + solplayer.getMana() + "/" + solentity.getMaxMP());
 	            player.sendMessage("You currently have a Armour Class Mitigation of: " + solentity.getMitigationAC());
 	            player.sendMessage("You currently have a Attack Value of: " + solentity.getAttk());
+	            player.sendMessage("You currently have a Attack Speed of: " + solentity.getAttackSpeed());
 	            player.sendMessage("You currently have a Total Rune of: " + solentity.getRune());
 	            player.sendMessage("FR: " + solplayer.getResist(SpellResistType.RESIST_FIRE) + " CR: " + solplayer.getResist(SpellResistType.RESIST_COLD) + " MR: " + solplayer.getResist(SpellResistType.RESIST_MAGIC) + " PR: " + solplayer.getResist(SpellResistType.RESIST_POISON) + " DR: " + solplayer.getResist(SpellResistType.RESIST_DISEASE));
 

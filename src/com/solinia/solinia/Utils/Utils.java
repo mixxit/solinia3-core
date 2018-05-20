@@ -5083,6 +5083,28 @@ public class Utils {
 
 		return returnEffects;
 	}
+	
+	public static List<ActiveSpellEffect> getActiveSpellEffects(LivingEntity livingEntity, List<SpellEffectType> effectTypes) {
+		List<ActiveSpellEffect> returnEffects = new ArrayList<ActiveSpellEffect>();
+
+		SoliniaEntitySpells effects;
+		try {
+			effects = StateManager.getInstance().getEntityManager().getActiveEntitySpells(livingEntity);
+
+			for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
+				for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
+					if (!(effectTypes.contains(effect.getSpellEffectType())))
+						continue;
+
+					returnEffects.add(effect);
+				}
+			}
+		} catch (CoreStateInitException e) {
+			// skip
+		}
+
+		return returnEffects;
+	}
 
 	public static int getActiveSpellEffectsRemainingValue(LivingEntity livingEntity, SpellEffectType effectType) {
 		int totalRemaining = 0;

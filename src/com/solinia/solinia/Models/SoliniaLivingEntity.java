@@ -1572,6 +1572,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int lowestAttackSpeedBuff = 100;
 		int highestAttackSpeedBuff = 100;
 		
+		List<SpellEffectType> effectTypes = new ArrayList<SpellEffectType>();
+		effectTypes.add(SpellEffectType.AttackSpeed);
+		effectTypes.add(SpellEffectType.AttackSpeed2);
+		effectTypes.add(SpellEffectType.AttackSpeed3);
+		effectTypes.add(SpellEffectType.AttackSpeed4);
+		
 		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.AttackSpeed)) 
 		{
 			if (effect.getRemainingValue() > 100)

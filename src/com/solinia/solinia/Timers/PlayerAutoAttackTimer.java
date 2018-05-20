@@ -11,6 +11,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.PlayerAutoAttack;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -20,9 +21,9 @@ public class PlayerAutoAttackTimer extends BukkitRunnable {
 		try
 		{
 			for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-				boolean autoAttacking = StateManager.getInstance().getEntityManager().getPlayerAutoAttack(player);
-				LivingEntity target = StateManager.getInstance().getEntityManager().getEntityTarget((LivingEntity)player);
-				if (autoAttacking == true)
+				PlayerAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getPlayerAutoAttack(player);
+				
+				if (autoAttack.isAutoAttacking() == true)
 				{
 					if (player.isDead())
 					{
@@ -30,6 +31,13 @@ public class PlayerAutoAttackTimer extends BukkitRunnable {
 						continue;
 					}
 					
+					if (autoAttack.getTimer() > 0)
+					{
+						autoAttack.setTimer(autoAttack.getTimer() - 1);
+						continue;
+					}
+					
+					LivingEntity target = StateManager.getInstance().getEntityManager().getEntityTarget((LivingEntity)player);
 					if (target != null)
 					{
 						if (target.isDead())
@@ -40,9 +48,13 @@ public class PlayerAutoAttackTimer extends BukkitRunnable {
 						}
 						
 						ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(target);
+						ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt(player);
 						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-						if (solLivingEntity != null && solPlayer != null)
+						
+						if (solLivingEntity != null && solPlayer != null && solLivingEntityPlayer != null)
 						{
+							// reset timer
+							autoAttack.setTimerFromAttackSpeed(solLivingEntityPlayer.getAttackSpeed());
 							solPlayer.autoAttackEnemy(solLivingEntity);
 						} else {
 							player.sendMessage(ChatColor.GRAY + "* Could not find target to attack!");
