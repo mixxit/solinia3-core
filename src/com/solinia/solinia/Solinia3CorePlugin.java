@@ -12,6 +12,7 @@ import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
 import com.solinia.solinia.Listeners.MythicMobSpawnListener;
+import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
 import com.solinia.solinia.Listeners.Solinia3CoreItemPickupListener;
 import com.solinia.solinia.Listeners.Solinia3CoreNPCUpdatedListener;
@@ -405,6 +406,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreItemPickupListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVehicleListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVoteListener(this), this);
+		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 
 		getServer().getPluginManager().registerEvents(new MythicMobSpawnListener(this), this);
 		
