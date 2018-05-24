@@ -105,6 +105,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
 	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>();
 	private boolean glowTargetting = true;
+	private Double pendingXp = 0d;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -454,7 +455,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 	}
 
-	private boolean isAAOn() {
+	@Override
+	public boolean isAAOn() {
 		if (this.getAapct() > 0)
 			return true;
 
@@ -3236,5 +3238,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return false;
+	}
+
+	@Override
+	public Double getPendingXp() {
+		return pendingXp;
+	}
+
+	@Override
+	public void setPendingXp(Double pendingXp) {
+		this.pendingXp = pendingXp;
+	}
+
+	@Override
+	public void addXpToPendingXp(Double experience) {
+		this.pendingXp += experience;
 	}
 }

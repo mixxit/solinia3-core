@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -18,6 +19,7 @@ import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.Utils;
 
 public class PlayerManager implements IPlayerManager {
 	private IRepository<ISoliniaPlayer> repository;
@@ -336,5 +338,24 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException {
 		return StateManager.getInstance().getConfigurationManager().getCharacters();
+	}
+
+	@Override
+	public void grantPlayerAttendenceBonus() {
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			ISoliniaPlayer solPlayer;
+			try {
+				solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solPlayer.getPendingXp() >= Utils.getMaxAAXP() * 2)
+				{
+					player.sendMessage("You have exceeded your maximum pending XP! Please /claimxp your additional XP before more can be gained (max: " + solPlayer.getPendingXp().longValue() + ")");
+				} else {
+					solPlayer.addXpToPendingXp(Utils.getExperienceRewardAverageForLevel(solPlayer.getLevel()));
+				}
+			} catch (Exception e) {
+				
+			}
+		}
 	}
 }

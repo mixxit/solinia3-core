@@ -44,6 +44,8 @@ public class CommandStats implements CommandExecutor {
 	    		player.sendMessage("Level progress: " + ipercenttolevel + "% into level - Have: " + solplayer.getExperience().longValue() + " Need: " + xpneededfornextlevel.longValue());
 	    		player.sendMessage("AA points: " + solplayer.getAAPoints());
 	    		player.sendMessage("Next AA progress: " + ipercenttoaa + "% into AA - Have: " + solplayer.getAAExperience().longValue() + " Need: " + Utils.getMaxAAXP().longValue());
+	    		player.sendMessage("From being online you have saved up Attendence Xp every minute: " + solplayer.getPendingXp().longValue());
+	    		player.sendMessage("Use /claimxp to claim your attendence xp");
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

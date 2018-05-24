@@ -20,6 +20,10 @@ commands:
     description: Lists todays RP time
     usage: /today
     aliases: []
+  claimxp:
+    description: Claims pending XP
+    usage: /claimxp
+    aliases: []
   bindwound:
     description: Binds your wounds with bandages
     usage: /bindwound

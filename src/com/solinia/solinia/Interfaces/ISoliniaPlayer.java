@@ -383,4 +383,12 @@ public interface ISoliniaPlayer extends Serializable {
 	List<Integer> getBandageReagents();
 
 	boolean bindWound(ISoliniaLivingEntity solLivingEntity);
+
+	public void addXpToPendingXp(Double experience);
+
+	Double getPendingXp();
+
+	void setPendingXp(Double pendingXp);
+
+	boolean isAAOn();
 }

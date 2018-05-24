@@ -34,4 +34,5 @@ public interface IPlayerManager {
 	Timestamp getPlayerLastSteed(UUID playerUUID);
 	void setPlayerLastSteed(UUID playerUUID, Timestamp timestamp);
 	IRepository<ISoliniaPlayer> getPlayersRepository();
+	public void grantPlayerAttendenceBonus();
 }

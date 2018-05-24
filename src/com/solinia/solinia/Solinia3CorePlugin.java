@@ -49,9 +49,11 @@ import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
+import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
 import com.solinia.solinia.Timers.CSVGenerationTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
+import com.solinia.solinia.Timers.HintTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.KingCheckTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
@@ -97,6 +99,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PlayerAutoAttackTimer playerAutoAttackTimer;
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
+	private AttendenceXpBonusTimer attendenceXpBonusTimer;
+	private HintTimer hintTimer;
 	
 	private Economy economy;
 	private ChatItemAPI ciApi;
@@ -359,6 +363,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			kingCheckTimer = new KingCheckTimer();
 			kingCheckTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
 
+			attendenceXpBonusTimer = new AttendenceXpBonusTimer();
+			attendenceXpBonusTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
+
 			invalidItemCheckerTimer = new InvalidItemCheckerTimer();
 			invalidItemCheckerTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
 			
@@ -370,6 +377,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			// every 500 milliseconds
 			playerAutoAttackTimer.runTaskTimer(this, 0L, 1L);
 
+			hintTimer = new HintTimer();
+			hintTimer.runTaskTimer(this, 900 * 20L, 60 * 20L);
 
 			
 			if (this.discordClient != null)
