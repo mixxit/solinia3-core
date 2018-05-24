@@ -157,7 +157,7 @@ public class MythicMobSpawnListener implements Listener {
                             }
                             
                             // look
-                            goals.a(j, (PathfinderGoal)new PathfinderGoalLookAtPlayer(e, EntityHuman.class, 5.0f, 1.0f));
+                            //goals.a(j, (PathfinderGoal)new PathfinderGoalLookAtPlayer(e, EntityHuman.class, 5.0f, 1.0f));
                             j++;
 						}
 			        } catch (Exception e)

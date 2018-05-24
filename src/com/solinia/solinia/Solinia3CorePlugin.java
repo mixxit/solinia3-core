@@ -379,7 +379,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			playerAutoAttackTimer.runTaskTimer(this, 0L, 1L);
 
 			hintTimer = new HintTimer();
-			hintTimer.runTaskTimer(this, 900 * 20L, 60 * 20L);
+			hintTimer.runTaskTimer(this, 1800 * 20L, 1800 * 20L);
 
 			
 			if (this.discordClient != null)

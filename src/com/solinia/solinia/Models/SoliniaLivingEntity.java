@@ -3238,6 +3238,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		listField.setAccessible(true);
 		list = (Set) listField.get(goals);
 		list.clear();
+		/*
 		goals.a(1,
 				(net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer) new net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer(
 						e, (Class) net.minecraft.server.v1_12_R1.EntityHuman.class, 5.0f, 1.0f));
@@ -3247,7 +3248,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		goals.a(10,
 				(net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer) new net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer(
 						e, (Class) net.minecraft.server.v1_12_R1.EntityHuman.class, 5.0f, 1.0f));
-
+						*/
 		goals.a(1, new PathfinderGoalOwnerHurtByTarget((EntityTameableAnimal) e));
 		goals.a(2, new PathfinderGoalOwnerHurtTarget((EntityTameableAnimal) e));
 		goals.a(3, new PathfinderGoalHurtByTarget((EntityCreature) e, true, new Class[0]));
