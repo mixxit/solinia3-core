@@ -1562,7 +1562,7 @@ public class SoliniaActiveSpell {
 
 		try {
 			double finalexperience = (experience / 100) * multiplier;
-			SoliniaPlayerAdapter.Adapt(targetplayer).increasePlayerNormalExperience(finalexperience);
+			SoliniaPlayerAdapter.Adapt(targetplayer).increasePlayerNormalExperience(finalexperience, false);
 			targetplayer.sendMessage("You have been resurrected by " + sourcePlayer.getCustomName() + "!");
 			targetplayer.teleport(sourcePlayer.getLocation());
 			sourcePlayer.getInventory().setItemInOffHand(new ItemStack(Material.AIR));

@@ -76,11 +76,11 @@ public interface ISoliniaPlayer extends Serializable {
 
 	Player getBukkitPlayer();
 
-	void increasePlayerExperience(Double experience);
+	void increasePlayerExperience(Double experience, boolean applyModifiers);
 
-	void increasePlayerNormalExperience(Double experience);
+	void increasePlayerNormalExperience(Double experience, boolean applyModifiers);
 	
-	void increasePlayerAAExperience(Double experience);
+	void increasePlayerAAExperience(Double experience, boolean applyModifiers);
 
 	public void giveMoney(int i);
 
@@ -391,4 +391,5 @@ public interface ISoliniaPlayer extends Serializable {
 	void setPendingXp(Double pendingXp);
 
 	boolean isAAOn();
+
 }

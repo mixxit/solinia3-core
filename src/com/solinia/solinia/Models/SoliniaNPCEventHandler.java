@@ -476,7 +476,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					if (getAwardsExperience() > 0)
 					{
 						System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
-						player.increasePlayerExperience(getAwardsExperience());
+						player.increasePlayerExperience(getAwardsExperience(), false);
 					}
 					
 					if (this.isAwardsTitle() == true)

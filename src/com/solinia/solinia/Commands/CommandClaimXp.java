@@ -22,15 +22,17 @@ public class CommandClaimXp implements CommandExecutor {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 			
 			Double pendingXp = solplayer.getPendingXp();
+			
 			sender.sendMessage("Claiming XP: " + solplayer.getPendingXp().longValue());
+			
 			if (solplayer.isAAOn())
 			{
 				if (pendingXp > Utils.getMaxAAXP())
 				{
-					solplayer.increasePlayerExperience(pendingXp);
+					solplayer.increasePlayerExperience(pendingXp, false);
 					solplayer.setPendingXp(solplayer.getPendingXp() - Utils.getMaxAAXP());
 				} else {
-					solplayer.increasePlayerExperience(pendingXp);
+					solplayer.increasePlayerExperience(pendingXp, false);
 					solplayer.setPendingXp(0d);
 				}
 			} else {
@@ -41,17 +43,25 @@ public class CommandClaimXp implements CommandExecutor {
 				}
 				
 				Double currentexperience = solplayer.getExperience();
-				double clevel = Utils.getLevelFromExperience(pendingXp);
+				double clevel = Utils.getLevelFromExperience(currentexperience);
 				double nlevel = Utils.getLevelFromExperience((currentexperience + pendingXp));
 				Double experience = 0d;
 				if (nlevel > (clevel + 1)) {
 					double xp = Utils.getExperienceRequirementForLevel((int) clevel + 1);
 					experience = xp - currentexperience;
+					sender.sendMessage("You have more experience than a levels worth, claiming some of the xp: " + experience);
+					sender.sendMessage("Remainder will be: " + (solplayer.getPendingXp()-experience));
 				} else {
-					experience = currentexperience;
+					experience = pendingXp;
 				}
 				
-				solplayer.increasePlayerExperience(experience);
+				if (experience < 0)
+				{
+					sender.sendMessage("Trouble calculating your claim xp");
+					return true;
+				}
+				
+				solplayer.increasePlayerExperience(experience, false);
 				solplayer.setPendingXp(solplayer.getPendingXp()-experience);
 			}
 

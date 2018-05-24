@@ -46,7 +46,6 @@ import net.minecraft.server.v1_12_R1.IRangedEntity;
 import net.minecraft.server.v1_12_R1.PathfinderGoal;
 import net.minecraft.server.v1_12_R1.PathfinderGoalBowShoot;
 import net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer;
-import net.minecraft.server.v1_12_R1.PathfinderGoalMeleeAttack;
 import net.minecraft.server.v1_12_R1.PathfinderGoalSelector;
 
 public class MythicMobSpawnListener implements Listener {

@@ -440,18 +440,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void increasePlayerExperience(Double experience) {
+	public void increasePlayerExperience(Double experience, boolean applyModifiers) {
 		if (!isAAOn()) {
-			increasePlayerNormalExperience(experience);
+			increasePlayerNormalExperience(experience,applyModifiers);
 		} else {
 			int normalpct = 100 - getAapct();
 			if (normalpct > 0) {
 				Double normalexperience = (experience / 100) * normalpct;
-				increasePlayerNormalExperience(normalexperience);
+				increasePlayerNormalExperience(normalexperience,applyModifiers);
 			}
 
 			Double aaexperience = (experience / 100) * getAapct();
-			increasePlayerAAExperience(aaexperience);
+			increasePlayerAAExperience(aaexperience,applyModifiers);
 		}
 	}
 
@@ -464,32 +464,39 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void increasePlayerNormalExperience(Double experience) {
-		double classxpmodifier = Utils.getClassXPModifier(getClassObj());
-		experience = experience * (classxpmodifier / 100);
-
+	public void increasePlayerNormalExperience(Double experience, boolean applyModifiers) {
+		
+		double classxpmodifier = 0;
 		boolean modified = false;
-		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
-		if (getExperienceBonusExpires() != null) {
-			LocalDateTime datetime = LocalDateTime.now();
-			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-			Timestamp expiretimestamp = getExperienceBonusExpires();
+		if (applyModifiers)
+		{
+			classxpmodifier = Utils.getClassXPModifier(getClassObj());
+			experience = experience * (classxpmodifier / 100);
 
-			if (expiretimestamp != null) {
-				if (!nowtimestamp.after(expiretimestamp)) {
-					modifier += 100;
+			
+			
+			double modifier = StateManager.getInstance().getWorldPerkXPModifier();
+			if (getExperienceBonusExpires() != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = getExperienceBonusExpires();
+	
+				if (expiretimestamp != null) {
+					if (!nowtimestamp.after(expiretimestamp)) {
+						modifier += 100;
+					}
 				}
 			}
+	
+			if (isInHotzone() == true) {
+				modifier += 100;
+			}
+	
+			if (modifier > 100) {
+				modified = true;
+			}
+			experience = experience * (modifier / 100);
 		}
-
-		if (isInHotzone() == true) {
-			modifier += 100;
-		}
-
-		if (modifier > 100) {
-			modified = true;
-		}
-		experience = experience * (modifier / 100);
 
 		Double currentexperience = getExperience();
 
@@ -728,30 +735,34 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void increasePlayerAAExperience(Double experience) {
+	public void increasePlayerAAExperience(Double experience, boolean applyModifiers) {
 
 		boolean modified = false;
-		double modifier = StateManager.getInstance().getWorldPerkXPModifier();
-		if (getExperienceBonusExpires() != null) {
-			LocalDateTime datetime = LocalDateTime.now();
-			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-			Timestamp expiretimestamp = getExperienceBonusExpires();
-
-			if (expiretimestamp != null) {
-				if (!nowtimestamp.after(expiretimestamp)) {
-					modifier += 100;
+		
+		if (applyModifiers)
+		{
+			double modifier = StateManager.getInstance().getWorldPerkXPModifier();
+			if (getExperienceBonusExpires() != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = getExperienceBonusExpires();
+	
+				if (expiretimestamp != null) {
+					if (!nowtimestamp.after(expiretimestamp)) {
+						modifier += 100;
+					}
 				}
 			}
+	
+			if (isInHotzone() == true) {
+				modifier += 100;
+			}
+	
+			if (modifier > 100) {
+				modified = true;
+			}
+			experience = experience * (modifier / 100);
 		}
-
-		if (isInHotzone() == true) {
-			modifier += 100;
-		}
-
-		if (modifier > 100) {
-			modified = true;
-		}
-		experience = experience * (modifier / 100);
 
 		// Cap at max just under a quarter of an AA experience point
 		if (experience > Utils.getMaxAAXP()) {
@@ -3242,16 +3253,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public Double getPendingXp() {
-		return pendingXp;
+		if (this.pendingXp < 0)
+			this.pendingXp = 0d;
+		return this.pendingXp;
 	}
 
 	@Override
 	public void setPendingXp(Double pendingXp) {
+		if (pendingXp < 0)
+			pendingXp = 0d;
 		this.pendingXp = pendingXp;
 	}
 
 	@Override
 	public void addXpToPendingXp(Double experience) {
+		if (experience < 0)
+			experience = 0d;
 		this.pendingXp += experience;
 	}
 }
