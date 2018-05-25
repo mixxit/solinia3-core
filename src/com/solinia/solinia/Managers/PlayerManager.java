@@ -347,11 +347,16 @@ public class PlayerManager implements IPlayerManager {
 			ISoliniaPlayer solPlayer;
 			try {
 				solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				if (solPlayer.getPendingXp() >= Utils.getMaxAAXP() * 2)
+				if (solPlayer.getPendingXp() >= Utils.getMaxAAXP())
 				{
 					player.sendMessage("You have exceeded your maximum pending XP! Please /claimxp your additional XP before more can be gained (max: " + solPlayer.getPendingXp().longValue() + ")");
 				} else {
-					solPlayer.addXpToPendingXp(Utils.getExperienceRewardAverageForLevel(solPlayer.getLevel()));
+					Double xpReward = Utils.getExperienceRewardAverageForLevel(solPlayer.getLevel()) / 10d;
+					if (xpReward < 0)
+					{
+						xpReward = 1d;
+					}
+					solPlayer.addXpToPendingXp(xpReward);
 				}
 			} catch (Exception e) {
 				
