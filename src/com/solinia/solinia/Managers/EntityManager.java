@@ -694,7 +694,7 @@ public class EntityManager implements IEntityManager {
 					mob = new MobDisguise(DisguiseType.WOLF);
 					break;
 				case "SQUID": // Water Pet
-					mob = new PlayerDisguise(entity.getCustomName(), "lSykxxh");
+					mob = new PlayerDisguise(entity.getCustomName(), "2hot2handle");
 					break;
 				case "PARROT": // Air Pet
 					mob = new PlayerDisguise(entity.getCustomName(), "BimEinsMaedchen");
@@ -706,7 +706,7 @@ public class EntityManager implements IEntityManager {
 					mob = new PlayerDisguise(entity.getCustomName(),  "xPan_Mks");
 					break;
 				case "IRON_GOLEM": // Earth Pet
-					mob = new PlayerDisguise(entity.getCustomName(), "K5N");
+					mob = new PlayerDisguise(entity.getCustomName(), "PremiumPilz");
 					break;
 				case "GUARDIAN":
 					mob = new MobDisguise(DisguiseType.PLAYER);
