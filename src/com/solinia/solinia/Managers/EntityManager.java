@@ -694,19 +694,19 @@ public class EntityManager implements IEntityManager {
 					mob = new MobDisguise(DisguiseType.WOLF);
 					break;
 				case "SQUID": // Water Pet
-					mob = new PlayerDisguise("lSykxxh");
+					mob = new PlayerDisguise(entity.getCustomName(), "lSykxxh");
 					break;
 				case "PARROT": // Air Pet
-					mob = new PlayerDisguise("BimEinsMaedchen");
+					mob = new PlayerDisguise(entity.getCustomName(), "BimEinsMaedchen");
 					break;
 				case "SKELETON":
 					mob = new MobDisguise(DisguiseType.SKELETON);
 					break;
 				case "BLAZE": // Fire Pet
-					mob = new PlayerDisguise("xPan_Mks");
+					mob = new PlayerDisguise(entity.getCustomName(),  "xPan_Mks");
 					break;
 				case "IRON_GOLEM": // Earth Pet
-					mob = new PlayerDisguise("The_Magic_Knight");
+					mob = new PlayerDisguise(entity.getCustomName(), "K5N");
 					break;
 				case "GUARDIAN":
 					mob = new MobDisguise(DisguiseType.PLAYER);
