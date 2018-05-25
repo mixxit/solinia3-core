@@ -73,7 +73,6 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
-import com.solinia.solinia.Models.MythicEntitySoliniaMob;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -103,22 +102,6 @@ public class Utils {
 		double loss = 0;
 		loss = (double) (player.getLevel() * (player.getLevel() / 18.0) * 12000);
 		return (double) loss;
-	}
-	
-	public static boolean isSoliniaMob(Entity entity)
-	{
-		if (((CraftEntity)entity).getHandle() instanceof MythicEntitySoliniaMob)
-			return true;
-		
-		return false;
-	}
-	
-	public static MythicEntitySoliniaMob GetSoliniaMob(Entity entity)
-	{
-		if (isSoliniaMob(entity))
-			return (MythicEntitySoliniaMob)((CraftEntity)entity).getHandle();
-		
-		return null;
 	}
 
 	public static void CancelEvent(Cancellable event) {

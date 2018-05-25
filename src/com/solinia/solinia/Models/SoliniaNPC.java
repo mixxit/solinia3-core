@@ -771,6 +771,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 						sendMerchantItemListToPlayer((Player)triggerentity, page);
 					}
 					return;
+					/*
 				case "SHOWSTATUS":
 					if (triggerentity instanceof Player)
 					{
@@ -790,7 +791,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 							}
 						}
 					}
-					return;
+					return;*/
 				case "LISTEFFECTS":
 					if (triggerentity instanceof Player)
 					{

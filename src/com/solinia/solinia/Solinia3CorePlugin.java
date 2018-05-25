@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
-import com.solinia.solinia.Listeners.MythicMobSpawnListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
 import com.solinia.solinia.Listeners.Solinia3CoreItemPickupListener;
@@ -26,7 +25,6 @@ import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.MythicEntitySoliniaMob;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
@@ -155,7 +153,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	}
 	
 	private void RegisterEntities() {
-		NMSUtils.registerEntity("SoliniaMob", NMSUtils.Type.SKELETON, MythicEntitySoliniaMob.class, true);
+		//NMSUtils.registerEntity("SoliniaMob", NMSUtils.Type.SKELETON, MythicEntitySoliniaMob.class, true);
 		
 		
 	}
@@ -408,8 +406,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVoteListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 
-		getServer().getPluginManager().registerEvents(new MythicMobSpawnListener(this), this);
-		
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());
 		this.getCommand("forename").setExecutor(new CommandForename());

@@ -207,7 +207,7 @@ public class SoliniaEntitySpells {
 			if (getLivingEntity() != null)
 				DisguiseAPI.undisguiseToAll(getLivingEntity());
 		}
-		
+		/*
 		if (updateAttackSpeed == true) {
 			if (getLivingEntity() != null)
 			if (Utils.isSoliniaMob(getLivingEntity()))
@@ -224,7 +224,7 @@ public class SoliniaEntitySpells {
 					
 				}
 			}
-		}
+		}*/
 
 		// Check if bard song, may need to keep singing
 		if (activeSpell.getSpell().isBardSong()) {

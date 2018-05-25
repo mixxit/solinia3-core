@@ -306,54 +306,61 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		
 
 		// Act as normal mob if without faction
-		if (npc.getFactionid() > 0 || npc.isPet())
-		{
-			mob = mob + "  AIGoalSelectors:\r\n";
-			mob = mob + "  - 0 clear\r\n";
-			mob = mob + "  AITargetSelectors:\r\n";
-			mob = mob + "  - 0 clear\r\n";
-			mob = mob + "  - 1 attacker\r\n";
-			
-			// NPC attack players
-			if (!npc.isPet())
-			{
-				try
+				if (npc.getFactionid() > 0 || npc.isPet())
 				{
-					ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
-					if (npcfaction.getBase() == -1500)
+					mob = mob + "  AIGoalSelectors:\r\n";
+					mob = mob + "  - 0 clear\r\n";
+					mob = mob + "  - 1 skeletonbowattack\r\n";
+					mob = mob + "  - 2 meleeattack\r\n";
+					mob = mob + "  - 3 lookatplayers\r\n";
+					if (npc.isRoamer())
 					{
-						mob = mob + "  - 2 players\r\n";
+						mob = mob + "  - 4 randomstroll\r\n";
 					}
-				} catch (CoreStateInitException e)
-				{
-					// skip
-				}
-			}
-			
-			// NPC attack NPCs
-			if (npc.isGuard() || npc.isPet())
-			{
-				// Always attack mobs with factionid 0
-				mob = mob + "  - 3 SpecificFaction FACTIONID_0\r\n";
-				// Attack all mobs with -1500 faction
-				try
-				{
-					int curnum = 4;
-					for(ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions())
+					mob = mob + "  AITargetSelectors:\r\n";
+					mob = mob + "  - 0 clear\r\n";
+					mob = mob + "  - 1 attacker\r\n";
+					
+					// NPC attack players
+					if (!npc.isPet())
 					{
-						if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid())
+						try
 						{
-							mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
-							curnum++;
+							ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
+							if (npcfaction.getBase() == -1500)
+							{
+								mob = mob + "  - 2 players\r\n";
+							}
+						} catch (CoreStateInitException e)
+						{
+							// skip
 						}
 					}
-				} catch (CoreStateInitException e)
-				{
-					// skip
-				}
-			}
-			
-			
+					
+					// NPC attack NPCs
+					if (npc.isGuard() || npc.isPet())
+					{
+						// Always attack mobs with factionid 0
+						mob = mob + "  - 3 SpecificFaction FACTIONID_0\r\n";
+						// Attack all mobs with -1500 faction
+						try
+						{
+							int curnum = 4;
+							for(ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions())
+							{
+								if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid())
+								{
+									mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
+									curnum++;
+								}
+							}
+						} catch (CoreStateInitException e)
+						{
+							// skip
+						}
+					}
+					
+					
 		}
 
 		// Here's the fun part, if the npc has decent loot in his loot drops to use for himself
