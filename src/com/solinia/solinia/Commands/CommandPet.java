@@ -1,9 +1,12 @@
 package com.solinia.solinia.Commands;
 
+import java.sql.Timestamp;
+
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -11,11 +14,13 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
@@ -67,6 +72,81 @@ public class CommandPet implements CommandExecutor {
 						player.setLastDamageCause(null);
 						player.sendMessage("* As you wish my master");
 						c.setTarget(null);
+					}
+					
+					if (petcommand.equals("attack"))
+					{
+						LivingEntity targetentity = Utils.getTargettedLivingEntity(player, 50);
+						if (targetentity != null && !targetentity.getUniqueId().equals(player.getUniqueId())) {
+							if (solLivingEntity != null)
+							{
+								ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+								if (npc != null)
+								if (npc.isPetControllable() == false)
+								{
+									player.sendMessage("This pet is not controllable");
+									return true;
+								}
+							}
+							
+							Wolf c = (Wolf)pet;
+							pet.teleport(player.getLocation());
+							((Wolf)pet).setTarget(null);
+
+							// Mez cancel target
+							Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed(targetentity);
+			
+							if (mezExpiry != null) {
+								((Creature) pet).setTarget(null);
+								Wolf wolf = (Wolf)pet;
+								wolf.setTarget(null);
+								player.sendMessage("You cannot send your pet to attack a mezzed player");
+								return false;
+							}
+							
+							if (pet.getUniqueId().equals(targetentity.getUniqueId()))
+							{
+								Wolf wolf = (Wolf)pet;
+								wolf.setTarget(null);
+								player.sendMessage("You cannot send your pet to attack itself");
+								return false;
+							}
+
+							if (((Wolf) pet).getOwner().getUniqueId().equals(targetentity.getUniqueId()))
+							{
+								Wolf wolf = (Wolf)pet;
+								wolf.setTarget(null);
+								player.sendMessage("You cannot send your pet to attack you!");
+								return false;
+							}
+							
+							ISoliniaPlayer tmpPlayer = SoliniaPlayerAdapter.Adapt(player);
+							if (tmpPlayer != null)
+							{
+								if (tmpPlayer.getGroup() != null)
+								if (tmpPlayer.getGroup().getMembers().contains(targetentity.getUniqueId()))
+								{
+									Wolf wolf = (Wolf)pet;
+									wolf.setTarget(null);
+									player.sendMessage("You cannot send your pet to attack your group!");
+									return false;
+								}
+							}
+							
+							if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
+							{
+								Wolf wolf = (Wolf)pet;
+								wolf.setTarget(targetentity);
+								player.sendMessage("You send your pet to attack!");
+								return true;
+							}
+							
+							player.sendMessage("* Attacking target master");
+							
+						}
+						
+						
+						return true;
 					}
 					
 					if (petcommand.equals("equip"))
@@ -122,7 +202,7 @@ public class CommandPet implements CommandExecutor {
 	            	
 	            }
 				
-				player.sendMessage("Pet subcommands: /pet back | /pet equip");
+				player.sendMessage("Pet subcommands: /pet back | /pet equip | /pet attack");
 				return true;
 			} catch (CoreStateInitException e)
 			{
