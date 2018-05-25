@@ -1129,6 +1129,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 											.equals(SpellTargetType.UndeadAE)) {
 								StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(),
 										getBukkitPlayer());
+							} else if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Pet))
+							{
+								LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(getBukkitPlayer());
+								if (pet != null)
+								{
+									StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(),
+										pet);
+								} else {
+									getBukkitPlayer().sendMessage(
+											"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+								}
 							} else {
 								getBukkitPlayer().sendMessage(
 										"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");

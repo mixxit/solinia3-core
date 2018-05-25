@@ -5,7 +5,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
 
 public class PetCheckTickTimer extends BukkitRunnable {
@@ -22,6 +24,14 @@ public class PetCheckTickTimer extends BukkitRunnable {
 					} else {
 						if (pet.getLocation().distance(player.getLocation()) > 50) {
 							StateManager.getInstance().getEntityManager().killPet(player);
+						}
+						ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+						if (solLivingEntity != null)
+						{
+							if (solLivingEntity.isPet())
+							{
+								solLivingEntity.PetThink(player);
+							}
 						}
 					}
 				}

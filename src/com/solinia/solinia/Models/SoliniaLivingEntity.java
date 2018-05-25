@@ -4342,4 +4342,42 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return conlevel;
 	}
 
+	@Override
+	public void PetThink(Player playerOwner) {
+		if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getMaxHealth())
+		{
+			// HP warning to owner
+			if (this.getHPRatio() < 10)
+			{
+				if (playerOwner != null)
+					playerOwner.sendMessage(ChatColor.GRAY + "* Your pet says 'Master I am low on health!'");
+			}
+			
+			// Mp Regen
+			if (this.getMana() < this.getMaxMP())
+			{
+				this.setMana(this.getMana() + 1);
+			}
+			
+			// Pet regen is slow			
+			this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getHealth()+1);
+			
+			if (this.getBukkitLivingEntity() instanceof Creature)
+			{
+				if (((Creature)this.getBukkitLivingEntity()).getTarget() == null)
+				for (Entity entity : playerOwner.getNearbyEntities(10, 10, 10))
+				{
+					if (!(entity instanceof Creature))
+						continue;
+					
+					// Attack mobs that have my master targetted
+					if (((Creature)entity).getTarget().getUniqueId().equals(playerOwner.getUniqueId()))
+					{
+						((Creature)this.getBukkitLivingEntity()).setTarget((Creature)entity);
+					}
+				}
+			}
+		}
+	}
+
 }

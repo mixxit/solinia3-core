@@ -236,4 +236,6 @@ public interface ISoliniaLivingEntity
 	int getBindWound_SE();
 
 	int getAttackSpeed();
+
+	public void PetThink(Player player);
 }

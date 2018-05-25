@@ -351,7 +351,7 @@ public class PlayerManager implements IPlayerManager {
 				{
 					player.sendMessage("You have exceeded your maximum pending XP! Please /claimxp your additional XP before more can be gained (max: " + solPlayer.getPendingXp().longValue() + ")");
 				} else {
-					Double xpReward = Utils.getExperienceRewardAverageForLevel(solPlayer.getLevel()) / 10d;
+					Double xpReward = Utils.getExperienceRewardAverageForLevel(solPlayer.getLevel()) / 6d;
 					if (xpReward < 0)
 					{
 						xpReward = 1d;
