@@ -886,6 +886,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			hit.damage_done = 1;
 
 		// TODO Archery head shots
+		if (hit.skill.equals("ARCHERY")) {
+			
+			int bonus = 0;
+			int spellArcheryDamageModifier = getSpellBonuses(SpellEffectType.ArcheryDamageModifier);
+			int aaArcheryDamageModifier = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArcheryDamageModifier);
+			bonus = spellArcheryDamageModifier + aaArcheryDamageModifier;
+			
+			hit.damage_done += hit.damage_done * bonus / 100;
+			int headshot = tryHeadShot(defender, hit.skill);
+			
+			if (headshot > 0) {
+				hit.damage_done = headshot;
+			}
+			
+			else if (getClassObj() != null && getClassObj().getClass().getName().equals("RANGER") && getLevel() > 50) { // no double dmg on headshot
+				if (defender.isNPC() && !defender.isRooted()) {
+					hit.damage_done *= 2;
+				}
+			}
+		}
 
 		int extra_mincap = 0;
 		int min_mod = hit.base_damage * getMeleeMinDamageMod_SE(hit.skill) / 100;
@@ -917,6 +937,42 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return hit;
 	}
 
+	private int tryHeadShot(ISoliniaLivingEntity defender, String skill) {
+		// Only works on YOUR target.
+		if (skill.equals("ARCHERY") && !getBukkitLivingEntity().getUniqueId().equals(defender.getBukkitLivingEntity().getUniqueId())) {
+			int HeadShot_Dmg = 0;
+			int spellHeadShotModifier = getSpellBonuses(SpellEffectType.HeadShot);
+			int aaHeadShotModifier = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.HeadShot);
+			HeadShot_Dmg = spellHeadShotModifier + aaHeadShotModifier;
+			
+			int HeadShot_Level = 0; // Get Highest Headshot Level
+			
+			int spellHeadShotLevelModifier = getSpellBonuses(SpellEffectType.HeadShotLevel);
+			int aaHeadShotLevelModifier = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.HeadShotLevel);
+			
+			HeadShot_Level = Math.max(spellHeadShotLevelModifier, aaHeadShotLevelModifier);
+
+			if (HeadShot_Dmg > 0 && HeadShot_Level > 0 && (defender.getLevel() <= HeadShot_Level)) {
+				int chance = getDexterity();
+				chance = 100 * chance / (chance + 3500);
+				
+				chance *= 10;
+				/* TODO reading base2 values from AAs
+				int norm = aabonuses.HSLevel[1];
+				if (norm > 0)
+					chance = chance * norm / 100;
+					*/
+				chance += aaHeadShotLevelModifier + spellHeadShotLevelModifier;
+				if (Utils.RandomBetween(1, 1000) <= chance) {
+					emote(" is hit by a fatal blow");
+					return HeadShot_Dmg;
+				}
+			}
+		}
+
+		return 0;
+	}
+
 	private int getMeleeMinDamageMod_SE(String skill) {
 		int dmg_mod = 0;
 
@@ -937,7 +993,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int bindmod = 0;
 
 		int spellMaxBindWound = getSpellBonuses(SpellEffectType.MaxBindWound);
-		int aaMaxBindWound = Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.MaxBindWound);
+		int aaMaxBindWound = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.MaxBindWound);
 		
 		bindmod += spellMaxBindWound;
 		bindmod += aaMaxBindWound;
@@ -951,7 +1007,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int bindmod = 0;
 
 		int spellMaxBindWound = getSpellBonuses(SpellEffectType.ImprovedBindWound);
-		int aaMaxBindWound = Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ImprovedBindWound);
+		int aaMaxBindWound = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ImprovedBindWound);
 		
 		bindmod += spellMaxBindWound;
 		bindmod += aaMaxBindWound;
@@ -964,7 +1020,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int dmg_mod = 0;
 
 		int spellDamageModifier = getSpellBonuses(SpellEffectType.DamageModifier);
-		int aaDamageModifier = Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.DamageModifier);
+		int aaDamageModifier = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.DamageModifier);
 		
 		dmg_mod += spellDamageModifier;
 		dmg_mod += aaDamageModifier;
@@ -3448,7 +3504,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			spell_aa_ac += getSpellBonuses(SpellEffectType.ArmorClass);
 			
-			spell_aa_ac += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
+			spell_aa_ac += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
 
 			if (getClassObj() != null) {
 				if (getClassObj().getName().equals("ENCHANTER") || getClassObj().getName().equals("ENCHANTER")) {
@@ -3465,7 +3521,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO AC AA and Spell bonuses
 			spell_aa_ac += getSpellBonuses(SpellEffectType.ArmorClass);
 
-			spell_aa_ac += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
+			spell_aa_ac += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
 
 			if (getClassObj() != null) {
 				if (getClassObj().getName().equals("ENCHANTER") || getClassObj().getName().equals("ENCHANTER")) {
@@ -3493,7 +3549,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			total_aclimitmod += getSpellBonuses(SpellEffectType.CombatStability);
 
-			total_aclimitmod += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(),
+			total_aclimitmod += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
 					SpellEffectType.CombatStability);
 
 			if (total_aclimitmod > 0)
@@ -3669,7 +3725,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// TODO take into account item,spell,aa bonuses
 		if (isPlayer()) {
-			chance += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.CriticalSpellChance);
+			chance += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.CriticalSpellChance);
 		}
 
 		// TODO Items/aabonuses
@@ -3684,7 +3740,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (Utils.RandomBetween(0, 100) < ratio) {
 				critical = true;
 				if (isPlayer()) {
-					ratio += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(),
+					ratio += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
 							SpellEffectType.SpellCritDmgIncrease);
 				}
 				// TODO add ratio bonuses from spells, aas
@@ -3744,7 +3800,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			// TODO Items/aabonuses
 			if (isPlayer()) {
-				chance += Utils.getTotalAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.CriticalHealChance);
+				chance += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.CriticalHealChance);
 			}
 
 			// TODO FOcuses

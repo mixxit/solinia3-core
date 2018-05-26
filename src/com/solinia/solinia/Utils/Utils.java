@@ -5623,7 +5623,29 @@ public class Utils {
 		return rankEffects;
 	}
 	
+	public static int getHighestAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
+		if (!(bukkitLivingEntity instanceof Player))
+			return 0;
 
+		int highest = 0;
+		
+		try {
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
+			for (SoliniaAARankEffect effect : player
+					.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType))) {
+				
+				if (effect.getBase1() > highest)
+				{
+					highest = effect.getBase1();
+				}
+			}
+			return highest;
+		} catch (CoreStateInitException e) {
+			return 0;
+		}
+
+	}
+	
 	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
