@@ -495,19 +495,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 
-			// Only players get this
 			if (getDoubleAttackCheck()) {
+				// Only players get skill rise
 				if (attackerEntity instanceof Player) {
 					
 					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You double attack!"));
 					tryIncreaseSkill("DOUBLEATTACK", 1);
+				} else {
+					this.emote(" double attacks!");
 				}
+
 				defender.damage(plugin, my_hit.damage_done, attackerEntity);
 			}
 			
-			// Only players get this
 			if (getDualWieldCheck()) {
+				// Only players get skill rise
 				if (attackerEntity instanceof Player)
 				{
 					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
@@ -524,6 +527,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			        	if (listening instanceof Player)
 			        		((CraftPlayer)listening).getHandle().playerConnection.sendPacket(packet);
 			        }
+				} else {
+					this.emote(" dual wields!");
 				}
 		        
 				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
@@ -819,6 +824,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					((Player)(defender.getBukkitLivingEntity())).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You riposte the attack!"));
 					defender.tryIncreaseSkill("RIPOSTE", 1);
+				} else {
+					this.emote(" ripostes!");
 				}
 
 				if (isPlayer()) {
@@ -834,6 +841,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							new TextComponent(ChatColor.GRAY + "* You dodge the attack!"));
 					
 					defender.tryIncreaseSkill("DODGE", 1);
+				} else {
+					this.emote(" dodges!");
 				}
 
 				if (isPlayer()) {

@@ -186,6 +186,26 @@ public class CommandPet implements CommandExecutor {
 	            player.sendMessage("Pet Attack Value: " + petLivingEntity.getAttk());
 	            player.sendMessage("Pet Total Rune of: " + petLivingEntity.getRune());
 				
+	            player.sendMessage("Skills:");
+	            if (petLivingEntity.getClassObj() != null)
+	            {
+	            	if (petLivingEntity.getClassObj().getDodgelevel() > 0)
+		            	if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getDodgelevel())
+		            		player.sendMessage(ChatColor.GRAY + "Dodge Skill: " + petLivingEntity.getSkill("DODGE"));	            	
+	            	if (petLivingEntity.getClassObj().getRipostelevel() > 0)
+		            	if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getRipostelevel())
+		            		player.sendMessage(ChatColor.GRAY + "Riposte Skill: " + petLivingEntity.getSkill("RIPOSTE"));	            	
+	            	if (petLivingEntity.getClassObj().getDoubleattacklevel() > 0)
+	            		if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getDoubleattacklevel())
+	            			player.sendMessage(ChatColor.GRAY + "Double Attack Skill: " + petLivingEntity.getSkill("DOUBLEATTACK"));	            	
+	            	if (petLivingEntity.getClassObj().getSafefalllevel() > 0)
+	            		if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getSafefalllevel())
+	            			player.sendMessage(ChatColor.GRAY + "Safefall Skill: " + petLivingEntity.getSkill("SAFEFALL"));	            	
+	            	if (petLivingEntity.getClassObj().getDualwieldlevel() > 0)
+	            		if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getDualwieldlevel())
+	            			player.sendMessage(ChatColor.GRAY + "Dual Wield: " + petLivingEntity.getSkill("DUALWIELD"));	            	
+	            }
+	            
 				player.sendMessage("Active Effects:");
 				SoliniaEntitySpells spells = StateManager.getInstance().getEntityManager().getActiveEntitySpells(pet);
 				for(SoliniaActiveSpell activeSpell : spells.getActiveSpells())
