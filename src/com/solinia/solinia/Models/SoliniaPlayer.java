@@ -3273,6 +3273,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (solLivingEntity.getBukkitLivingEntity() instanceof Player && !solLivingEntity.getBukkitLivingEntity().getUniqueId().toString().equals(getBukkitPlayer().getUniqueId().toString()))
 					solLivingEntity.getBukkitLivingEntity().sendMessage("Your wounds are being bound by " + getBukkitPlayer().getDisplayName());
 				
+				if (!solLivingEntity.getBukkitLivingEntity().isDead())
 				solLivingEntity.getBukkitLivingEntity().setHealth(amount);
 				return true;
 			}

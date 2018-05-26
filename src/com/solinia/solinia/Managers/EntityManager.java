@@ -705,6 +705,7 @@ public class EntityManager implements IEntityManager {
 			}
 			
 			entity.setMaxHealth(maxHp);
+			if (!entity.isDead())
 			entity.setHealth(maxHp);
 			net.minecraft.server.v1_12_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) entity).getHandle();
 			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solentity.getMaxDamage());

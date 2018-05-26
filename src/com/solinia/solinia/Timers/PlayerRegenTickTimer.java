@@ -149,6 +149,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			if (amount < 0)
 				amount = 0;
 
+			if (!player.isDead())
 			player.setHealth(amount);
 		}
 		

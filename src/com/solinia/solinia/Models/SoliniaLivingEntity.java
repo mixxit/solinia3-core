@@ -4420,8 +4420,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			double newHealth = this.getBukkitLivingEntity().getHealth()+1;
 			if (newHealth < this.getBukkitLivingEntity().getMaxHealth())
 			{
+				if (!this.getBukkitLivingEntity().isDead())
 				this.getBukkitLivingEntity().setHealth(newHealth);
 			} else {
+				if (!this.getBukkitLivingEntity().isDead())
 				this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getMaxHealth());
 			}
 		}

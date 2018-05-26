@@ -2172,6 +2172,7 @@ public class SoliniaActiveSpell {
 
 				if (amount < 0)
 					amount = 0;
+				if (!sourceLivingEntity.isDead())
 				sourceLivingEntity.setHealth(amount);
 			}
 		}
@@ -2196,6 +2197,7 @@ public class SoliniaActiveSpell {
 
 			if (amount < 0)
 				amount = 0;
+			if (!getLivingEntity().isDead())
 			getLivingEntity().setHealth(amount);
 		}
 	}
@@ -2247,6 +2249,7 @@ public class SoliniaActiveSpell {
 
 				if (amount < 0)
 					amount = 0;
+				if (!getLivingEntity().isDead())
 				getLivingEntity().setHealth(amount);
 			} else {
 				int amount = (int) Math.round(getLivingEntity().getHealth()) + dmg;
@@ -2256,6 +2259,8 @@ public class SoliniaActiveSpell {
 
 				if (amount < 0)
 					amount = 0;
+				
+				if (!getLivingEntity().isDead())
 				getLivingEntity().setHealth(amount);
 			}
 		} catch (CoreStateInitException e) {
