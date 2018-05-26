@@ -4431,22 +4431,47 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity() instanceof Creature)
 		{
 			if (((Creature)this.getBukkitLivingEntity()).getTarget() == null)
-			for (Entity entity : playerOwner.getNearbyEntities(10, 10, 10))
 			{
-				if (entity instanceof Player)
-					continue;
+				List<Entity> nearby = playerOwner.getNearbyEntities(10, 10, 10);
 				
-				if (!(entity instanceof Creature))
-					continue;
-				
-				if (((Creature)entity).getTarget() == null)
-					continue;
-				
-				// Attack mobs that have my master targetted
-				if (((Creature)entity).getTarget().getUniqueId().equals(playerOwner.getUniqueId()))
+				// Attack mobs that have my master targetted primary
+				for (Entity entity : nearby)
 				{
-					((Creature)this.getBukkitLivingEntity()).setTarget((Creature)entity);
-					return;
+					if (entity instanceof Player)
+						continue;
+					
+					if (!(entity instanceof Creature))
+						continue;
+					
+					if (((Creature)entity).getTarget() == null)
+						continue;
+					
+					
+					if (((Creature)entity).getTarget().getUniqueId().equals(playerOwner.getUniqueId()))
+					{
+						((Creature)this.getBukkitLivingEntity()).setTarget((Creature)entity);
+						return;
+					}
+				}
+				
+				// Attack mobs that have me targetted secondary
+				for (Entity entity : nearby)
+				{
+					if (entity instanceof Player)
+						continue;
+					
+					if (!(entity instanceof Creature))
+						continue;
+					
+					if (((Creature)entity).getTarget() == null)
+						continue;
+					
+					
+					if (((Creature)entity).getTarget().getUniqueId().equals(getBukkitLivingEntity().getUniqueId()))
+					{
+						((Creature)this.getBukkitLivingEntity()).setTarget((Creature)entity);
+						return;
+					}
 				}
 			}
 		}
