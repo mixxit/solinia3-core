@@ -2339,6 +2339,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return false;
 	}
+	
+	@Override
+	public boolean isStunned() {
+		try {
+			Timestamp stunExpiry = StateManager.getInstance().getEntityManager()
+					.getStunned((LivingEntity) getBukkitPlayer());
+
+			if (stunExpiry != null) {
+				return true;
+			}
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+
+		return false;
+	}
 
 	@Override
 	public List<PlayerQuest> getPlayerQuests() {

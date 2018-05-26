@@ -33,6 +33,8 @@ public interface IEntityManager {
 	void addMezzed(LivingEntity livingEntity, Timestamp expiretimestamp);
 
 	Timestamp getMezzed(LivingEntity livingEntity);
+	
+	Timestamp getStunned(LivingEntity livingEntity);
 
 	LivingEntity getPet(Player player);
 
@@ -152,4 +154,8 @@ public interface IEntityManager {
 	PlayerAutoAttack getPlayerAutoAttack(Player player);
 
 	void setPlayerAutoAttack(Player player, boolean playerAutoAttack);
+
+	void addStunned(LivingEntity livingEntity, Timestamp expiretimestamp);
+
+	void removeStunned(LivingEntity livingEntity, Timestamp expiretimestamp);
 }

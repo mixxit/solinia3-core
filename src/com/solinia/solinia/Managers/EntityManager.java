@@ -76,6 +76,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Timestamp> dontDotMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> entityStunned = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<String, Timestamp> entitySpellCooldown = new ConcurrentHashMap<String, Timestamp>();
 	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
@@ -565,6 +566,11 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
+	public void addStunned(LivingEntity livingEntity, Timestamp expiretimestamp) {
+		this.entityStunned.put(livingEntity.getUniqueId(), expiretimestamp);
+	}
+	
+	@Override
 	public void addEntitySpellCooldown(LivingEntity livingEntity, int spellId, Timestamp expiretimestamp)
 	{
 		this.entitySpellCooldown.put(livingEntity.getUniqueId()+"-"+spellId, expiretimestamp);
@@ -580,6 +586,11 @@ public class EntityManager implements IEntityManager {
 	public void removeMezzed(LivingEntity livingEntity, Timestamp expiretimestamp) {
 		this.entityMezzed.remove(livingEntity.getUniqueId());
 	}
+	
+	@Override
+	public void removeStunned(LivingEntity livingEntity, Timestamp expiretimestamp) {
+		this.entityStunned.remove(livingEntity.getUniqueId());
+	}
 
 	@Override
 	public Timestamp getMezzed(LivingEntity livingEntity) {
@@ -594,6 +605,21 @@ public class EntityManager implements IEntityManager {
 		}
 		
 		return entityMezzed.get(livingEntity.getUniqueId());
+	}
+	
+	@Override
+	public Timestamp getStunned(LivingEntity livingEntity) {
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		Timestamp expiretimestamp = this.entityStunned.get(livingEntity.getUniqueId());
+
+		if (expiretimestamp != null)
+		if (nowtimestamp.after(expiretimestamp))
+		{
+			entityStunned.remove(livingEntity.getUniqueId());
+		}
+		
+		return entityStunned.get(livingEntity.getUniqueId());
 	}
 	
 	@Override

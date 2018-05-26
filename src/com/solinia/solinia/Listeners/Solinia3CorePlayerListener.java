@@ -459,6 +459,25 @@ public class Solinia3CorePlayerListener implements Listener {
 				}
 				return;
 			}
+			
+			Timestamp stunExpiry = StateManager.getInstance().getEntityManager().getStunned((LivingEntity) player);
+			if (stunExpiry != null) {
+				player.sendMessage("* You are stunned!");
+				if (event.getTo().getBlockY() < event.getFrom().getBlockY()) {
+					event.getTo().setX(event.getFrom().getX());
+					event.getTo().setZ(event.getFrom().getZ());
+					event.getTo().setYaw(event.getFrom().getYaw());
+					event.getTo().setPitch(event.getFrom().getPitch());
+
+				} else {
+					event.getTo().setX(event.getFrom().getX());
+					event.getTo().setY(event.getFrom().getY());
+					event.getTo().setZ(event.getFrom().getZ());
+					event.getTo().setYaw(event.getFrom().getYaw());
+					event.getTo().setPitch(event.getFrom().getPitch());
+				}
+				return;
+			}
 
 		} catch (CoreStateInitException e) {
 			// do nothing
@@ -1239,6 +1258,19 @@ public class Solinia3CorePlayerListener implements Listener {
 					.getMezzed((LivingEntity) event.getPlayer());
 			if (mezExpiry != null) {
 				event.getPlayer().sendMessage("* You are mezzed!");
+				Utils.CancelEvent(event);
+				;
+				return;
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+		
+		try {
+			Timestamp stunExpiry = StateManager.getInstance().getEntityManager()
+					.getStunned((LivingEntity) event.getPlayer());
+			if (stunExpiry != null) {
+				event.getPlayer().sendMessage("* You are stunned!");
 				Utils.CancelEvent(event);
 				;
 				return;

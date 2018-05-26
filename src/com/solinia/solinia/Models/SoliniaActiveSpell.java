@@ -1792,11 +1792,38 @@ public class SoliniaActiveSpell {
 	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.dismountEntity(getLivingEntity());
 
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
+		if (!(getLivingEntity() instanceof LivingEntity))
+			return;
+
+		try {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
+
+			StateManager.getInstance().getEntityManager().addStunned(getLivingEntity(), expiretimestamp);
+
+			if (getLivingEntity() instanceof Creature) {
+				Creature creature = (Creature) getLivingEntity();
+				creature.setTarget(null);
+
+			}
+
+			Utils.dismountEntity(getLivingEntity());
+
+			Entity vehicle = getLivingEntity().getVehicle();
+			if (vehicle != null) {
+				vehicle.eject();
+			}
+
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
+		} catch (CoreStateInitException e) {
+			return;
+		}
 	}
 
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		Utils.dismountEntity(getLivingEntity());
+		
 		if (!(getLivingEntity() instanceof LivingEntity))
 			return;
 

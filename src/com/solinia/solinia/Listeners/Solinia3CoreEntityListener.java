@@ -103,6 +103,23 @@ public class Solinia3CoreEntityListener implements Listener {
 			
 		}
 		
+		try
+		{
+			Timestamp stExpiry = StateManager.getInstance().getEntityManager().getStunned((LivingEntity) event.getEntity());
+			if (stExpiry != null)
+			{
+				if (event.getEntity() instanceof Player)
+				{
+					event.getEntity().sendMessage("* You are stunned!");
+				}
+				Utils.CancelEvent(event);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
 		try {
 			// Me
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
@@ -379,6 +396,27 @@ public class Solinia3CoreEntityListener implements Listener {
 					
 				}
 				
+				try
+				{
+					Timestamp stExpiry = StateManager.getInstance().getEntityManager().getStunned((LivingEntity) attacker);
+					if (stExpiry != null)
+					{
+						if (attacker instanceof Player)
+						{
+							attacker.sendMessage("* You are stunned!");
+						}
+						
+						Utils.CancelEvent(event);;
+						return;
+					}
+					
+					
+					
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+				
 				List<Integer> removeSpells = new ArrayList<Integer>();
 				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
 						.getActiveEntitySpells((LivingEntity) attacker).getActiveSpells()) {
@@ -635,6 +673,23 @@ public class Solinia3CoreEntityListener implements Listener {
 		{
 			
 		}
+		
+		try
+		{
+			Timestamp stExpiry = StateManager.getInstance().getEntityManager().getStunned((LivingEntity) event.getEntity());
+			if (stExpiry != null)
+			{
+				if (event.getEntity() instanceof Player)
+				{
+					event.getEntity().sendMessage("* You are stunned!");
+				}
+				Utils.CancelEvent(event);;
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 
 		if (event.getEntity() instanceof Player) {
 			Player shooter = (Player) event.getEntity();
@@ -662,6 +717,23 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (event.getPlayer() instanceof Player)
 				{
 					event.getPlayer().sendMessage("* You are mezzed!");
+				}
+				Utils.CancelEvent(event);;
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		try
+		{
+			Timestamp stExpiry = StateManager.getInstance().getEntityManager().getStunned((LivingEntity) event.getPlayer());
+			if (stExpiry != null)
+			{
+				if (event.getPlayer() instanceof Player)
+				{
+					event.getPlayer().sendMessage("* You are stunned!");
 				}
 				Utils.CancelEvent(event);;
 				return;

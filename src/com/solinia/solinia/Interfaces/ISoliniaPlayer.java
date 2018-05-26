@@ -203,7 +203,7 @@ public interface ISoliniaPlayer extends Serializable {
 	void increaseFactionStanding(int factionId, int amount);
 
 	boolean isMezzed();
-
+	
 	List<PlayerQuest> getPlayerQuests();
 
 	void setPlayerQuests(List<PlayerQuest> playerQuests);
@@ -391,5 +391,7 @@ public interface ISoliniaPlayer extends Serializable {
 	void setPendingXp(Double pendingXp);
 
 	boolean isAAOn();
+
+	boolean isStunned();
 
 }
