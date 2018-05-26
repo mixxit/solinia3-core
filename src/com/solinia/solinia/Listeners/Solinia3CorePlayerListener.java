@@ -81,9 +81,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	    {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer());
 			if (pet != null) {
-				if (!pet.getWorld().equals(event.getPlayer().getWorld())) {
-					StateManager.getInstance().getEntityManager().killPet(event.getPlayer());
-				}
+				StateManager.getInstance().getEntityManager().killPet(event.getPlayer());
 			}
 	    } catch (CoreStateInitException e)
 		{
@@ -564,9 +562,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	    {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getEntity());
 			if (pet != null) {
-				if (!pet.getWorld().equals(event.getEntity().getWorld())) {
-					StateManager.getInstance().getEntityManager().killPet(event.getEntity());
-				}
+				StateManager.getInstance().getEntityManager().killPet(event.getEntity());
 			}
 	    } catch (CoreStateInitException e)
 		{
@@ -1104,6 +1100,18 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (solplayer != null) {
+				
+				try
+			    {
+					LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer());
+					if (pet != null) {
+							StateManager.getInstance().getEntityManager().killPet(event.getPlayer());
+					}
+			    } catch (CoreStateInitException e)
+				{
+			    	
+				}
+				
 				solplayer.updateMaxHp();
 				if (solplayer.getBindPoint() != null && !solplayer.getBindPoint().equals("")) {
 					String[] loc = solplayer.getBindPoint().split(",");
@@ -1160,6 +1168,17 @@ public class Solinia3CorePlayerListener implements Listener {
 			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,
 					StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),
 					event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game");
+			
+			try
+		    {
+				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer());
+				if (pet != null) {
+					StateManager.getInstance().getEntityManager().killPet(event.getPlayer());
+				}
+		    } catch (CoreStateInitException e)
+			{
+		    	
+			}
 
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");
