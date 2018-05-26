@@ -4409,6 +4409,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					playerOwner.sendMessage(ChatColor.GRAY + "* Your pet says 'Master I am low on health!'");
 			}
 			
+			if (this.getBukkitLivingEntity() instanceof Wolf)
+			{
+				if (((Wolf)this.getBukkitLivingEntity()).isSitting())
+					((Wolf)this.getBukkitLivingEntity()).setSitting(false);
+			}
+			
 			// Pet regen is slow			
 			double newHealth = this.getBukkitLivingEntity().getHealth()+1;
 			if (newHealth < this.getBukkitLivingEntity().getMaxHealth())
