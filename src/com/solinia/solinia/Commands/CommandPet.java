@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -172,6 +173,13 @@ public class CommandPet implements CommandExecutor {
 				EntityInsentient entityhandle = (EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) pet).getHandle();
 				double dmg = entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
 				player.sendMessage("Pet DMG: " + dmg + " (Hand to Hand)");
+				Entity target = ((Creature)pet).getTarget();
+				if (target == null)
+				{
+					player.sendMessage("Pet Target: None");
+				} else {
+					player.sendMessage("Pet Target: " + target.getCustomName() + "/" + target.getName());
+				}
 
 				player.sendMessage("STR: " + petLivingEntity.getStrength() + " STA: " + petLivingEntity.getStamina() + " AGI: " + petLivingEntity.getAgility() + " DEX: " + petLivingEntity.getDexterity() + " INT: " + petLivingEntity.getIntelligence() + " WIS: " + petLivingEntity.getWisdom() + " CHA: " + petLivingEntity.getCharisma());
 	            player.sendMessage("Pet Armour Class Mitigation : " + petLivingEntity.getMitigationAC());

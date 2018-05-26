@@ -4433,6 +4433,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (((Creature)this.getBukkitLivingEntity()).getTarget() == null)
 			for (Entity entity : playerOwner.getNearbyEntities(10, 10, 10))
 			{
+				if (entity instanceof Player)
+					continue;
+				
 				if (!(entity instanceof Creature))
 					continue;
 				
@@ -4443,6 +4446,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (((Creature)entity).getTarget().getUniqueId().equals(playerOwner.getUniqueId()))
 				{
 					((Creature)this.getBukkitLivingEntity()).setTarget((Creature)entity);
+					return;
 				}
 			}
 		}

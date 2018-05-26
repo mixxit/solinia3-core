@@ -20,6 +20,7 @@ public class PetFastCheckTimer extends BukkitRunnable {
 			{
 				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
 				if (pet != null) {
+					
 					if (!pet.getWorld().equals(player.getWorld())) {
 						StateManager.getInstance().getEntityManager().killPet(player);
 					} else {
