@@ -2571,7 +2571,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc.isRaidheroic()) {
 					totalHp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
 				}
-
+				
 				return totalHp;
 			}
 

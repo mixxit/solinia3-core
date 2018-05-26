@@ -206,15 +206,15 @@ public class SoliniaActiveSpell {
 		case AGI:
 			return;
 		case STA:
-			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player) {
-				try {
-					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
-					if (solplayer != null)
-						solplayer.updateMaxHp();
-				} catch (CoreStateInitException e) {
-
-				}
-			}
+			if (isFirstRun && getLivingEntity() != null)
+				if (getLivingEntity() instanceof LivingEntity)
+					try {
+						ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+						if (solLivingEntity != null)
+							solLivingEntity.updateMaxHp();
+					} catch (CoreStateInitException e) {
+	
+					}
 			return;
 		case INT:
 			return;
@@ -376,15 +376,15 @@ public class SoliniaActiveSpell {
 			applyReclaimPet(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case TotalHP:
-			if (isFirstRun && getLivingEntity() != null && getLivingEntity() instanceof Player) {
-				try {
-					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
-					if (solplayer != null)
-						solplayer.updateMaxHp();
-				} catch (CoreStateInitException e) {
-
-				}
-			}
+			if (isFirstRun && getLivingEntity() != null)
+				if (getLivingEntity() instanceof LivingEntity)
+					try {
+						ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+						if (solLivingEntity != null)
+							solLivingEntity.updateMaxHp();
+					} catch (CoreStateInitException e) {
+	
+					}
 			return;
 		case CorpseBomb:
 			return;

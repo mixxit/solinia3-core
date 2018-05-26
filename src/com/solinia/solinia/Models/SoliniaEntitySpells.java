@@ -192,15 +192,15 @@ public class SoliniaEntitySpells {
 		activeSpells.remove(spellId);
 
 		if (updateMaxHp == true) {
-			if (getLivingEntity() != null && getLivingEntity() instanceof Player) {
-				try {
-					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
-					if (solplayer != null)
-						solplayer.updateMaxHp();
-				} catch (CoreStateInitException e) {
-
-				}
-			}
+			if (getLivingEntity() != null)
+				if (getLivingEntity() instanceof LivingEntity)
+					try {
+						ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+						if (solLivingEntity != null)
+							solLivingEntity.updateMaxHp();
+					} catch (CoreStateInitException e) {
+	
+					}
 		}
 
 		if (updateDisguise == true) {
