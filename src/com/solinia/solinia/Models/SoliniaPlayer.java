@@ -1078,6 +1078,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return;
 				}
 
+				// Min level check
+				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) 
+				{
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+					
+					if (item.getMinLevel() > solPlayer.getLevel())
+					{
+						event.getPlayer().sendMessage("This item requires minimum level: " + item.getMinLevel());
+						return;
+					}
+				}
+				
 				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
 						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isThrowing()) {
 

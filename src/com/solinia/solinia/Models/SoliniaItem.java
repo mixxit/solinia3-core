@@ -15,6 +15,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -578,6 +579,12 @@ public class SoliniaItem implements ISoliniaItem {
 			SoliniaPlayerAdapter.Adapt(player).grantExperienceBonusFromItem();
 			System.out.println("Granted " + player.getName() + " experience bonus from item [" + SoliniaPlayerAdapter.Adapt(player).getExperienceBonusExpires().toString() + "]");
 			return true;
+		}
+		
+		if (getMinLevel() > SoliniaPlayerAdapter.Adapt(player).getLevel())
+		{
+			player.sendMessage("This item requires minimum level: " + getMinLevel());
+			return false;
 		}
 		
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(getAbilityid());

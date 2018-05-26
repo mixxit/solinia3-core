@@ -459,8 +459,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			LivingEntity attackerEntity = getBukkitLivingEntity();
 			
-			
-			
 			// Moved from player to support creatures too
 			
 			String name = defender.getBukkitLivingEntity().getName();
@@ -536,6 +534,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}			
 			
 			try {
+				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt(attackerEntity);
+				
 				if (Utils.IsSoliniaItem(attackerEntity.getEquipment().getItemInMainHand())) {
 					try {
 						ISoliniaItem soliniaitem = SoliniaItemAdapter
@@ -546,7 +546,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									&& event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
 								ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
 										.getSpell(soliniaitem.getWeaponabilityid());
-								if (procSpell != null) {
+								if (procSpell != null && attackerSolEntity.getLevel() > soliniaitem.getMinLevel()) {
 									// Chance to proc
 									int procChance = getProcChancePct();
 									int roll = Utils.RandomBetween(0, 100);
