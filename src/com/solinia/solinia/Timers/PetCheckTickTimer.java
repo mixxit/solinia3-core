@@ -1,6 +1,7 @@
 package com.solinia.solinia.Timers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,10 +23,13 @@ public class PetCheckTickTimer extends BukkitRunnable {
 					if (!pet.getWorld().equals(player.getWorld())) {
 						StateManager.getInstance().getEntityManager().killPet(player);
 					} else {
+						
 						if (pet.getLocation().distance(player.getLocation()) > 50) {
 							StateManager.getInstance().getEntityManager().killPet(player);
 						}
+						
 						ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+
 						if (solLivingEntity != null)
 						{
 							if (solLivingEntity.isPet())

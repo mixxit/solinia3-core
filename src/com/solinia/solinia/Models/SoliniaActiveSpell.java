@@ -223,7 +223,7 @@ public class SoliniaActiveSpell {
 		case CHA:
 			return;
 		case AttackSpeed:
-			//applyAttackSpeed(spellEffect, soliniaSpell, casterLevel);
+			applyAttackSpeed(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case Invisibility:
 			applyInvisibility(spellEffect, soliniaSpell, casterLevel);
@@ -460,7 +460,7 @@ public class SoliniaActiveSpell {
 		case ManaPool:
 			return;
 		case AttackSpeed2:
-			//applyAttackSpeed(spellEffect, soliniaSpell, casterLevel);
+			applyAttackSpeed(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case Root:
 			applyRootSpellEffect(spellEffect, soliniaSpell, casterLevel);
@@ -510,7 +510,7 @@ public class SoliniaActiveSpell {
 		case Amplification:
 			return;
 		case AttackSpeed3:
-			//applyAttackSpeed(spellEffect, soliniaSpell, casterLevel);
+			applyAttackSpeed(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case HealRate:
 			return;
@@ -1033,7 +1033,7 @@ public class SoliniaActiveSpell {
 		case ResistCorruption:
 			return;
 		case AttackSpeed4:
-			//applyAttackSpeed(spellEffect, soliniaSpell, casterLevel);
+			applyAttackSpeed(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case ForageSkill:
 			return;
@@ -1245,8 +1245,9 @@ public class SoliniaActiveSpell {
 			return;
 		}
 	}
-/*
+	
 	private void applyAttackSpeed(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		/*
 		if (Utils.isSoliniaMob(getLivingEntity()))
 		{
 			MythicEntitySoliniaMob mob = Utils.GetSoliniaMob(getLivingEntity());
@@ -1261,7 +1262,8 @@ public class SoliniaActiveSpell {
 				
 			}
 		}
-	}*/
+		*/
+	}
 
 	private void applyIdentify(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Player)) {

@@ -357,7 +357,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			npcSummonCastTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 			
 			petCheckTickTimer = new PetCheckTickTimer();
-			petCheckTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+			petCheckTickTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
 
 			kingCheckTimer = new KingCheckTimer();
 			kingCheckTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);

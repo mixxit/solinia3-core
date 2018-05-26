@@ -4353,31 +4353,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					playerOwner.sendMessage(ChatColor.GRAY + "* Your pet says 'Master I am low on health!'");
 			}
 			
-			// Mp Regen
-			if (this.getMana() < this.getMaxMP())
-			{
-				this.setMana(this.getMana() + 1);
-			}
-			
 			// Pet regen is slow			
 			this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getHealth()+1);
-			
-			if (this.getBukkitLivingEntity() instanceof Creature)
+		}
+		
+		// Mp Regen
+		if (this.getMana() < this.getMaxMP())
+		{
+			this.setMana(this.getMana() + 1);
+		}
+
+		if (this.getBukkitLivingEntity() instanceof Creature)
+		{
+			if (((Creature)this.getBukkitLivingEntity()).getTarget() == null)
+			for (Entity entity : playerOwner.getNearbyEntities(10, 10, 10))
 			{
-				if (((Creature)this.getBukkitLivingEntity()).getTarget() == null)
-				for (Entity entity : playerOwner.getNearbyEntities(10, 10, 10))
+				if (!(entity instanceof Creature))
+					continue;
+				
+				if (((Creature)entity).getTarget() == null)
+					continue;
+				
+				// Attack mobs that have my master targetted
+				if (((Creature)entity).getTarget().getUniqueId().equals(playerOwner.getUniqueId()))
 				{
-					if (!(entity instanceof Creature))
-						continue;
-					
-					// Attack mobs that have my master targetted
-					if (((Creature)entity).getTarget().getUniqueId().equals(playerOwner.getUniqueId()))
-					{
-						((Creature)this.getBukkitLivingEntity()).setTarget((Creature)entity);
-					}
+					((Creature)this.getBukkitLivingEntity()).setTarget((Creature)entity);
 				}
 			}
 		}
 	}
-
 }

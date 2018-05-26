@@ -3211,10 +3211,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						bonus_hp_percent = playersolLivingEntity.getBindWound_SE();
 				}
 				
-				getBukkitPlayer().sendMessage("Your percentbase was " + percent_base);
-				getBukkitPlayer().sendMessage("Your spell/aa effects add a binding calculation was " + bindhps + " * " + bonus_hp_percent  + " / 100");
+				//getBukkitPlayer().sendMessage("Your percentbase was " + percent_base);
+				//getBukkitPlayer().sendMessage("Your spell/aa effects add a binding calculation was " + bindhps + " * " + bonus_hp_percent  + " / 100");
 				int spellModifierBenefit = (bindhps * bonus_hp_percent) / 100;
-				getBukkitPlayer().sendMessage("Your spell/aa effects add a binding addition of " + spellModifierBenefit + " hp");
+				//getBukkitPlayer().sendMessage("Your spell/aa effects add a binding addition of " + spellModifierBenefit + " hp");
 
 				
 				bindhps += spellModifierBenefit;
