@@ -4410,7 +4410,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 			// Pet regen is slow			
-			this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getHealth()+1);
+			double newHealth = this.getBukkitLivingEntity().getHealth()+1;
+			if (newHealth < this.getBukkitLivingEntity().getMaxHealth())
+			{
+				this.getBukkitLivingEntity().setHealth(newHealth);
+			} else {
+				this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getMaxHealth());
+			}
 		}
 		
 		// Mp Regen

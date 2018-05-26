@@ -77,6 +77,19 @@ public class Solinia3CorePlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 
+		try
+	    {
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer());
+			if (pet != null) {
+				if (!pet.getWorld().equals(event.getPlayer().getWorld())) {
+					StateManager.getInstance().getEntityManager().killPet(event.getPlayer());
+				}
+			}
+	    } catch (CoreStateInitException e)
+		{
+	    	
+		}
+		
 		// enable knockback effects
 	    try
 	    {
@@ -547,6 +560,19 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		event.setDeathMessage("");
 
+		try
+	    {
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getEntity());
+			if (pet != null) {
+				if (!pet.getWorld().equals(event.getEntity().getWorld())) {
+					StateManager.getInstance().getEntityManager().killPet(event.getEntity());
+				}
+			}
+	    } catch (CoreStateInitException e)
+		{
+	    	
+		}
+		
 		try {
 			StateManager.getInstance().getEntityManager().clearEntityEffects(event.getEntity().getUniqueId());
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(event.getEntity());
