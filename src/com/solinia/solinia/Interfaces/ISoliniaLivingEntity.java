@@ -237,5 +237,7 @@ public interface ISoliniaLivingEntity
 
 	int getAttackSpeed();
 
-	public void PetThink(Player player);
+	public void PetThink(Player playerOwner);
+
+	public void PetFastThink(Player playerOwner);
 }

@@ -4362,7 +4362,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			this.setMana(this.getMana() + 1);
 		}
+	}
 
+	@Override
+	public void PetFastThink(Player playerOwner) {
 		if (this.getBukkitLivingEntity() instanceof Creature)
 		{
 			if (((Creature)this.getBukkitLivingEntity()).getTarget() == null)

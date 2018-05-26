@@ -11,7 +11,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
 
-public class PetCheckTickTimer extends BukkitRunnable {
+public class PetFastCheckTimer extends BukkitRunnable {
 	@Override
 	public void run() {
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
@@ -20,13 +20,30 @@ public class PetCheckTickTimer extends BukkitRunnable {
 			{
 				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
 				if (pet != null) {
-					ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+					if (!pet.getWorld().equals(player.getWorld())) {
+						StateManager.getInstance().getEntityManager().killPet(player);
+					} else {
+						
+						if (pet.getLocation().distance(player.getLocation()) > 50) {
+							if (pet instanceof Creature)
+							{
+								if (((Creature)pet).getTarget() == null)
+								{
+									pet.teleport(player);
+								}
+							} else {
+								StateManager.getInstance().getEntityManager().killPet(player);
+							}
+						}
+						
+						ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 
-					if (solLivingEntity != null)
-					{
-						if (solLivingEntity.isPet())
+						if (solLivingEntity != null)
 						{
-							solLivingEntity.PetThink(player);
+							if (solLivingEntity.isPet())
+							{
+								solLivingEntity.PetFastThink(player);
+							}
 						}
 					}
 				}
