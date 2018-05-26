@@ -74,13 +74,13 @@ public class SoliniaActiveSpell {
 		try {
 			if (Bukkit.getEntity(ownerUuid) == null)
 				return;
-			
+
 			ISoliniaLivingEntity solOwner = SoliniaLivingEntityAdapter
 					.Adapt((LivingEntity) Bukkit.getEntity(ownerUuid));
-			
+
 			if (Bukkit.getEntity(sourceUuid) == null)
 				return;
-			
+
 			ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter
 					.Adapt((LivingEntity) Bukkit.getEntity(sourceUuid));
 
@@ -1245,24 +1245,20 @@ public class SoliniaActiveSpell {
 			return;
 		}
 	}
-	
+
 	private void applyAttackSpeed(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		/*
-		if (Utils.isSoliniaMob(getLivingEntity()))
-		{
-			MythicEntitySoliniaMob mob = Utils.GetSoliniaMob(getLivingEntity());
-			if (mob != null)
-			{
-				try {
-					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-					mob.setMeleeAttackPercent(solEntity.getAttackSpeed());
-				} catch (CoreStateInitException e) {
-					
-				}
-				
-			}
-		}
-		*/
+		 * if (Utils.isSoliniaMob(getLivingEntity())) { MythicEntitySoliniaMob mob =
+		 * Utils.GetSoliniaMob(getLivingEntity()); if (mob != null) { try {
+		 * ISoliniaLivingEntity solEntity =
+		 * SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+		 * mob.setMeleeAttackPercent(solEntity.getAttackSpeed()); } catch
+		 * (CoreStateInitException e) {
+		 * 
+		 * }
+		 * 
+		 * } }
+		 */
 	}
 
 	private void applyIdentify(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -1276,44 +1272,38 @@ public class SoliniaActiveSpell {
 
 		Player sourcePlayer = (Player) source;
 
-		if (sourcePlayer.getInventory().getItemInOffHand() == null)
-		{
+		if (sourcePlayer.getInventory().getItemInOffHand() == null) {
 			sourcePlayer.sendMessage("You are not holding an item to identify in your offhand");
-			return;	
+			return;
 		}
-		
+
 		if (sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.AIR)) {
 			sourcePlayer.sendMessage("You are not holding an item to identify in your offhand");
-			return;	
+			return;
 		}
 
 		ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
-		
-		if (!Utils.IsSoliniaItem(item))
-		{
+
+		if (!Utils.IsSoliniaItem(item)) {
 			sourcePlayer.sendMessage("You do not recognise anything particularly interesting about this item");
-			return;	
+			return;
 		}
-		
-		try
-		{
+
+		try {
 			ISoliniaItem solItem = SoliniaItemAdapter.Adapt(item);
-			if (solItem == null)
-			{
+			if (solItem == null) {
 				sourcePlayer.sendMessage("You do not recognise anything particularly interesting about this item");
-				return;	
+				return;
 			}
-	
-			if (solItem.getIdentifyMessage().equals(""))
-			{
+
+			if (solItem.getIdentifyMessage().equals("")) {
 				sourcePlayer.sendMessage("You do not recognise anything particularly interesting about this item");
-				return;	
+				return;
 			}
-			
+
 			sourcePlayer.sendMessage(solItem.getIdentifyMessage());
-		} catch (CoreStateInitException | SoliniaItemException e)
-		{
-			
+		} catch (CoreStateInitException | SoliniaItemException e) {
+
 		}
 		return;
 	}
@@ -1321,42 +1311,41 @@ public class SoliniaActiveSpell {
 	private void applyFeignDeath(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Player))
 			return;
-		
+
 		ISoliniaPlayer solPlayer;
 		try {
-			solPlayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+			solPlayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
 
-			if (solPlayer != null)
-			{
+			if (solPlayer != null) {
 				solPlayer.setFeigned(true);
 			}
 
 		} catch (CoreStateInitException e) {
-			
+
 		}
 	}
 
 	private void applySuccor(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Player))
 			return;
-		
+
 		ISoliniaPlayer solPlayer;
 		try {
-			solPlayer = SoliniaPlayerAdapter.Adapt((Player)getLivingEntity());
+			solPlayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
 
 			SoliniaZone zone = solPlayer.getZone();
-			if (zone == null)
-			{
-				getLivingEntity().sendMessage("Succor failed! Your body could not be pulled by an astral anchor (not found in a zone)!");
+			if (zone == null) {
+				getLivingEntity().sendMessage(
+						"Succor failed! Your body could not be pulled by an astral anchor (not found in a zone)!");
 				return;
 			}
-			
-			if (zone.getSuccorx() == 0 && zone.getSuccory() == 0 && zone.getSuccorz() == 0)
-			{
-				getLivingEntity().sendMessage("Succor failed! Your body could not be pulled by an astral anchor (zone has no succor point)!");
+
+			if (zone.getSuccorx() == 0 && zone.getSuccory() == 0 && zone.getSuccorz() == 0) {
+				getLivingEntity().sendMessage(
+						"Succor failed! Your body could not be pulled by an astral anchor (zone has no succor point)!");
 				return;
 			}
-			
+
 			double x = (zone.getSuccorx());
 			double y = (zone.getSuccory());
 			double z = (zone.getSuccorz());
@@ -1588,12 +1577,12 @@ public class SoliniaActiveSpell {
 			return;
 
 		try {
-			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)owner);
-			
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) owner);
+
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet((Player) owner);
 			if (pet == null)
 				return;
-			
+
 			solplayer.killAllPets();
 
 			SoliniaPlayerAdapter.Adapt((Player) owner).increasePlayerMana(20);
@@ -1682,11 +1671,13 @@ public class SoliniaActiveSpell {
 
 			PlayerDisguise playerdisguise = new PlayerDisguise(getLivingEntity().getName(), disguisename);
 			DisguiseAPI.disguiseEntity(getLivingEntity(), playerdisguise);
-			getLivingEntity().sendMessage(ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
+			getLivingEntity().sendMessage(
+					ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
 		} else {
 			MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
 			DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
-			getLivingEntity().sendMessage(ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
+			getLivingEntity().sendMessage(
+					ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
 		}
 
 	}
@@ -1696,8 +1687,7 @@ public class SoliniaActiveSpell {
 			return;
 
 		try {
-			StateManager.getInstance().getEntityManager().SpawnPet(Bukkit.getPlayer(getOwnerUuid()),
-					soliniaSpell);
+			StateManager.getInstance().getEntityManager().SpawnPet(Bukkit.getPlayer(getOwnerUuid()), soliniaSpell);
 		} catch (CoreStateInitException e) {
 			return;
 		}
@@ -1794,6 +1784,18 @@ public class SoliniaActiveSpell {
 
 		if (!(getLivingEntity() instanceof LivingEntity))
 			return;
+		
+		// Interupt casting
+		try {
+			CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(getLivingEntity());
+			if (castingSpell != null) {
+				if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0) {
+					StateManager.getInstance().getEntityManager().interruptCasting(getLivingEntity());
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
 
 		try {
 			LocalDateTime datetime = LocalDateTime.now();
@@ -1823,9 +1825,21 @@ public class SoliniaActiveSpell {
 
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.dismountEntity(getLivingEntity());
-		
+
 		if (!(getLivingEntity() instanceof LivingEntity))
 			return;
+
+		// Interupt casting
+		try {
+			CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(getLivingEntity());
+			if (castingSpell != null) {
+				if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0) {
+					StateManager.getInstance().getEntityManager().interruptCasting(getLivingEntity());
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
 
 		try {
 			LocalDateTime datetime = LocalDateTime.now();
@@ -2185,7 +2199,7 @@ public class SoliniaActiveSpell {
 			getLivingEntity().setHealth(amount);
 		}
 	}
-	
+
 	private void applyManaBurn(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int caster_level) {
 		if (getLivingEntity().isDead())
 			return;
@@ -2201,11 +2215,11 @@ public class SoliniaActiveSpell {
 			return;
 
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
-		
+
 		if (!(sourceLivingEntity instanceof Player))
 			return;
-		
-		Player sourcePlayer = (Player)sourceLivingEntity;
+
+		Player sourcePlayer = (Player) sourceLivingEntity;
 		ISoliniaPlayer sourceSolPlayer;
 		try {
 			sourceSolPlayer = SoliniaPlayerAdapter.Adapt(sourcePlayer);
@@ -2217,16 +2231,15 @@ public class SoliniaActiveSpell {
 			int max_mana = spellEffect.getBase();
 			int ratio = 100; // TODO this should be Base2?
 			int dmg = 0;
-			
+
 			if (sourceSolPlayer.getMana() < sourceSoliniaLivingEntity.getMaxMP())
-				dmg = ratio * sourceSolPlayer.getMana()/10;
-			else 
-				dmg = ratio * max_mana/10;
-			
+				dmg = ratio * sourceSolPlayer.getMana() / 10;
+			else
+				dmg = ratio * max_mana / 10;
+
 			sourceSolPlayer.setMana(0);
-			
-			if (soliniaSpell.isDetrimental())
-			{
+
+			if (soliniaSpell.isDetrimental()) {
 				int amount = (int) Math.round(sourceLivingEntity.getHealth()) - dmg;
 				if (amount > sourceLivingEntity.getMaxHealth()) {
 					amount = (int) Math.round(sourceLivingEntity.getMaxHealth());
@@ -2240,7 +2253,7 @@ public class SoliniaActiveSpell {
 				if (amount > getLivingEntity().getMaxHealth()) {
 					amount = (int) Math.round(getLivingEntity().getMaxHealth());
 				}
-				
+
 				if (amount < 0)
 					amount = 0;
 				getLivingEntity().setHealth(amount);
