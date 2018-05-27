@@ -3845,6 +3845,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public int getRune() {
 		return Utils.getActiveSpellEffectsRemainingValue(this.getBukkitLivingEntity(), SpellEffectType.Rune);
 	}
+	
+	@Override
+	public void removeActiveSpellsWithEffectType(SpellEffectType spellEffectType) {
+		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+			for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
+			{
+				if (effect.getSpellEffectType().equals(spellEffectType))
+				{
+					try {
+						StateManager.getInstance().getEntityManager()
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), activeSpell.getSpellId());
+					} catch (CoreStateInitException e) {
+						
+					}
+					break;
+				}
+			}
+		}
+	}
 
 	@Override
 	public int reduceAndRemoveRunesAndReturnLeftover(Plugin plugin, int damage) {

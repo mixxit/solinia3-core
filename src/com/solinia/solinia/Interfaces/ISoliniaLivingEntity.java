@@ -240,4 +240,6 @@ public interface ISoliniaLivingEntity
 	public void PetThink(Player playerOwner);
 
 	public void PetFastThink(Player playerOwner);
+
+	void removeActiveSpellsWithEffectType(SpellEffectType spellEffectType);
 }
