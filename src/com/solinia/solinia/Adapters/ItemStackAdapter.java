@@ -333,6 +333,11 @@ public class ItemStackAdapter {
 			loretxt.addAll(generateWeaponAbilityLoreText(soliniaItem));
 	    }
 		
+		if (!soliniaItem.getLanguagePrimer().equals(""))
+		{
+			loretxt.add("Language Primer: " + soliniaItem.getLanguagePrimer());
+		}
+		
 		loretxt.add("Discovered By: " + soliniaItem.getDiscoverer());
 		
 		if ((soliniaItem.getWorth() * costmultiplier) > 0)

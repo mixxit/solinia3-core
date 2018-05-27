@@ -326,4 +326,8 @@ public interface ISoliniaItem {
 	boolean isBandage();
 
 	void setBandage(boolean bandage);
+
+	String getLanguagePrimer();
+
+	void setLanguagePrimer(String languagePrimer);
 }

@@ -29,6 +29,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.*;
@@ -93,6 +94,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int skillModValue = 0;
 	private boolean reagent = false;
 	private boolean throwing = false;
+	private String languagePrimer = "";
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -578,6 +580,12 @@ public class SoliniaItem implements ISoliniaItem {
 		{
 			SoliniaPlayerAdapter.Adapt(player).grantExperienceBonusFromItem();
 			System.out.println("Granted " + player.getName() + " experience bonus from item [" + SoliniaPlayerAdapter.Adapt(player).getExperienceBonusExpires().toString() + "]");
+			return true;
+		}
+		
+		if (isConsumable == true && !getLanguagePrimer().equals(""))
+		{
+			SoliniaPlayerAdapter.Adapt(player).setSkill(getLanguagePrimer(), 100);
 			return true;
 		}
 		
@@ -1165,8 +1173,26 @@ public class SoliniaItem implements ISoliniaItem {
 		case "identifymessage":
 			setIdentifyMessage(value);
 			break;
+		case "languageprimer":
+			boolean foundRace = false;
+			for (ISoliniaRace solRace : StateManager.getInstance().getConfigurationManager().getRaces())
+			{
+				if (solRace.getName().toUpperCase().equals(value.toUpperCase()))
+					foundRace = true;
+			}
+			
+			if (foundRace == false)
+			{
+				throw new InvalidItemSettingException("Invalid language");
+			}
+			
+			setLanguagePrimer(value.toUpperCase());
+			break;
+		case "clearlanguageprimer":
+			setLanguagePrimer("");
+			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,throwing,identifymessage");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,throwing,identifymessage,languageprimer,clearlanguageprimer");
 		}
 		
 		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
@@ -1583,5 +1609,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setBandage(boolean bandage) {
 		this.bandage = bandage;
+	}
+
+	@Override
+	public String getLanguagePrimer() {
+		return languagePrimer;
+	}
+
+	@Override
+	public void setLanguagePrimer(String languagePrimer) {
+		this.languagePrimer = languagePrimer;
 	}
 }
