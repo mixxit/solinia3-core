@@ -330,4 +330,12 @@ public interface ISoliniaItem {
 	String getLanguagePrimer();
 
 	void setLanguagePrimer(String languagePrimer);
+
+	String getBookAuthor();
+
+	void setBookAuthor(String bookAuthor);
+
+	List<String> getBookPages();
+
+	void setBookPages(List<String> bookPages);
 }

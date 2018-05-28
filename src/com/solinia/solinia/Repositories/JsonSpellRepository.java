@@ -95,7 +95,7 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		//gsonbuilder.setPrettyPrinting();
+		gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(spells.values(), new TypeToken<List<SoliniaSpell>>(){}.getType());
 		try {

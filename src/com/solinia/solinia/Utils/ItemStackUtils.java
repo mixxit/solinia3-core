@@ -64,6 +64,7 @@ public class ItemStackUtils {
 		if (!Utils.IsSoliniaItem(itemStack))
 			return null;
 		
+		if (itemStack.getItemMeta().getLore() != null)
 		for(String loreLine : itemStack.getItemMeta().getLore())
 		{
 			if (!loreLine.startsWith("Attached Augmentation: "))

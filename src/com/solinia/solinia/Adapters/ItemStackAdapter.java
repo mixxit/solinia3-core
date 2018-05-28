@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -95,6 +96,30 @@ public class ItemStackAdapter {
 
 		i.setUnbreakable(true);
 		i.setDisplayName(soliniaItem.getDisplayname());
+		
+		if (soliniaItem.getBasename().equals("WRITTEN_BOOK"))
+		{
+			List<String> loretxt = new ArrayList<String>();
+			i.setLore(loretxt);
+
+			((BookMeta) i).setAuthor("Unknown Author");
+			((BookMeta) i).setTitle(soliniaItem.getDisplayname());
+			((BookMeta) i).setPages(new ArrayList<String>());
+			
+			if (!soliniaItem.getBookAuthor().equals(""))			
+				((BookMeta) i).setAuthor(soliniaItem.getBookAuthor());
+			if (!soliniaItem.getDisplayname().equals(""))			
+				((BookMeta) i).setTitle(soliniaItem.getDisplayname());
+			if (soliniaItem.getBookPages().size() > 0)			
+				((BookMeta) i).setPages(soliniaItem.getBookPages());
+			
+			// Drop out early, set the book meta nad leave
+			
+			stack.setItemMeta(i);
+			
+			return stack;
+		}
+		
 		List<String> loretxt = new ArrayList<String>();
 
 		if (soliniaItem.getLore() != null) {
@@ -351,6 +376,7 @@ public class ItemStackAdapter {
 		}
 
 		i.setLore(loretxt);
+		
 		stack.setItemMeta(i);
 		// depcreated in favour of nbt string soliniaid
 		//stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1000 + soliniaItem.getId());

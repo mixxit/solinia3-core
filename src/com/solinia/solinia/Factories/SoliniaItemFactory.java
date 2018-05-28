@@ -5,6 +5,8 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -45,6 +47,14 @@ public class SoliniaItemFactory {
 			String texturevalue = tag.getCompound("SkullOwner").getCompound("Properties").getList("textures", 10).get(0).getString("Value");
 			
 			item.setTexturebase64(texturevalue);
+	    }
+		
+		if (itemStack.getType().name().equals("WRITTEN_BOOK"))
+	    {
+			BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+			item.setBookAuthor(bookMeta.getAuthor());
+			item.setBookPages(bookMeta.getPages());
+			item.setDisplayname(bookMeta.getTitle());
 	    }
 		
 		StateManager.getInstance().getConfigurationManager().addItem(item);
@@ -96,6 +106,14 @@ public class SoliniaItemFactory {
 			String texturevalue = tag.getCompound("SkullOwner").getCompound("Properties").getList("textures", 10).get(0).getString("Value");
 			
 			item.setTexturebase64(texturevalue);
+	    }
+		
+		if (itemStack.getType().name().equals("WRITTEN_BOOK"))
+	    {
+			BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+			item.setBookAuthor(bookMeta.getAuthor());
+			item.setBookPages(bookMeta.getPages());
+			item.setDisplayname(bookMeta.getTitle());
 	    }
 		
 		StateManager.getInstance().getConfigurationManager().addItem(item);

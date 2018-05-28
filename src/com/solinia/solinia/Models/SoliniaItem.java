@@ -118,6 +118,10 @@ public class SoliniaItem implements ISoliniaItem {
 	private String identifyMessage = "";
 	private boolean bandage = false;
 	
+	private String bookTitle = "";
+	private String bookAuthor = "";
+	private List<String> bookPages = new ArrayList<String>();
+	
 	
 	@Override
 	public ItemStack asItemStack() {
@@ -937,6 +941,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
 		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
+		sender.sendMessage("- bookauthor: " + ChatColor.GOLD + getBookAuthor() + ChatColor.RESET);
 		sender.sendMessage("- allowedclassnames: ");
 		for(String classname : this.getAllowedClassNames())
 		{
@@ -959,6 +964,9 @@ public class SoliniaItem implements ISoliniaItem {
 			if (value.length() > 36)
 				throw new InvalidItemSettingException("Name is longer than 36 characters");
 			setDisplayname(value);
+			break;
+		case "bookauthor":
+			setBookAuthor(value);
 			break;
 		case "worth":
 			setWorth(Integer.parseInt(value));
@@ -1601,5 +1609,25 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setLanguagePrimer(String languagePrimer) {
 		this.languagePrimer = languagePrimer;
+	}
+
+	@Override
+	public String getBookAuthor() {
+		return bookAuthor;
+	}
+
+	@Override
+	public void setBookAuthor(String bookAuthor) {
+		this.bookAuthor = bookAuthor;
+	}
+
+	@Override
+	public List<String> getBookPages() {
+		return bookPages;
+	}
+
+	@Override
+	public void setBookPages(List<String> bookPages) {
+		this.bookPages = bookPages;
 	}
 }
