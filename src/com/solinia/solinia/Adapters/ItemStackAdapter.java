@@ -99,9 +99,6 @@ public class ItemStackAdapter {
 		
 		if (soliniaItem.getBasename().equals("WRITTEN_BOOK"))
 		{
-			List<String> loretxt = new ArrayList<String>();
-			i.setLore(loretxt);
-
 			((BookMeta) i).setAuthor("Unknown Author");
 			((BookMeta) i).setTitle(soliniaItem.getDisplayname());
 			((BookMeta) i).setPages(new ArrayList<String>());
@@ -112,12 +109,6 @@ public class ItemStackAdapter {
 				((BookMeta) i).setTitle(soliniaItem.getDisplayname());
 			if (soliniaItem.getBookPages().size() > 0)			
 				((BookMeta) i).setPages(soliniaItem.getBookPages());
-			
-			// Drop out early, set the book meta nad leave
-			
-			stack.setItemMeta(i);
-			
-			return stack;
 		}
 		
 		List<String> loretxt = new ArrayList<String>();
