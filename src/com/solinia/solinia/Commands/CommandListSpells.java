@@ -2,6 +2,7 @@ package com.solinia.solinia.Commands;
 
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -84,7 +85,7 @@ public class CommandListSpells implements CommandExecutor {
 			} else {
 				for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
 				{
-					if (spell.getName().toUpperCase().contains(args[0].toUpperCase()))
+					if (spell.getName().toUpperCase().contains(StringUtils.join(args, " ").toUpperCase()))
 					{
 						found++;
 						String spellmessage = spell.getId() + " - " + spell.getName();

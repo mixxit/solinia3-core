@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,7 +45,7 @@ public class CommandListNPCs implements CommandExecutor {
 		// Filter for name
 		for(ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
 		{
-			if (npc.getName().toUpperCase().contains(args[0].toUpperCase()))
+			if (npc.getName().toUpperCase().contains(StringUtils.join(args, " ").toUpperCase()))
 			{
 				sender.sendMessage("NPCID: " + npc.getId() + " - " + npc.getName());
 			}

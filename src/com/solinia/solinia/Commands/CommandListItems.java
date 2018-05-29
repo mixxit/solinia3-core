@@ -2,6 +2,7 @@ package com.solinia.solinia.Commands;
 
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -87,7 +88,7 @@ public class CommandListItems implements CommandExecutor {
 				for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 				{
 					found++;
-					if (item.getDisplayname().toUpperCase().contains(args[0].toUpperCase()))
+					if (item.getDisplayname().toUpperCase().contains(StringUtils.join(args, " ").toUpperCase()))
 					{
 						String itemmessage = item.getId() + " - " + item.getDisplayname();
 						sender.sendMessage(itemmessage);
