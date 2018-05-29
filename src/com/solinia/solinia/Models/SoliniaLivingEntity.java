@@ -33,6 +33,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -530,8 +531,52 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
 				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2);
 				
+				
+				
 				DamageHitInfo my_hit2 = this.GetHitInfo(plugin, weapon2, baseDamage2, false, defender);
 				defender.damage(plugin, my_hit2.damage_done, attackerEntity);
+				
+				try
+				{
+					ISoliniaItem offhandItem = SoliniaItemAdapter.Adapt(weapon2);
+					ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt(attackerEntity);
+					// Check if item has any proc effects
+					if (offhandItem.getWeaponabilityid() > 0
+							&& event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
+						ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
+								.getSpell(offhandItem.getWeaponabilityid());
+						
+						if (procSpell != null && attackerSolEntity.getLevel() > offhandItem.getMinLevel()) {
+							// Chance to proc
+							int procChance = getProcChancePct();
+							int roll = Utils.RandomBetween(0, 100);
+	
+							if (roll < procChance) {
+	
+								// TODO - For now apply self and group to attacker, else attach to target
+								switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
+								case Self:
+									procSpell.tryApplyOnEntity(attackerEntity,
+											attackerEntity);
+									break;
+								case Group:
+									procSpell.tryApplyOnEntity(attackerEntity,
+											attackerEntity);
+									break;
+								default:
+									procSpell.tryApplyOnEntity(attackerEntity,
+											defender.getBukkitLivingEntity());
+								}
+	
+							}
+						}
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				} catch (SoliniaItemException e) {
+					
+				}
 			}			
 			
 			try {
