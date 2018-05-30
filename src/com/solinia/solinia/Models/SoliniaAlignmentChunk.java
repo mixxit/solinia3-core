@@ -169,6 +169,9 @@ public class SoliniaAlignmentChunk {
 						if (item == null)
 							continue;
 						
+						if (item.isNeverDrop())
+							continue;
+						
 						UniversalMerchantEntry ume = new UniversalMerchantEntry();
 						ume.setItemid(lootdropentry.getItemid());
 						ume.setTemporaryquantitylimit(64);

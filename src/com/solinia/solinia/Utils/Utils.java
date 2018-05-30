@@ -79,6 +79,7 @@ import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Models.SoliniaLootDropEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectIndex;
@@ -3227,30 +3228,59 @@ public class Utils {
 		return 0;
 	}
 
-	// Used for one off patching, added in /solinia command for console sender
+	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher()  {
+		
+	}
+	
+	public static void disableLootOverLevel110()
+	{
+		int fixed = 0;
 		try
 		{
-			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
+			for (ISoliniaLootDrop lootDrop : StateManager.getInstance().getConfigurationManager().getLootDrops())
 			{
-				if (npc.isPet())
-					continue;
-				
-				if (!npc.getMctype().toLowerCase().equals("skeleton"))
+				for(ISoliniaLootDropEntry lootentry : lootDrop.getEntries())
 				{
-					npc.setUsedisguise(true);
-					npc.setDisguisetype(npc.getMctype().toUpperCase());
-					npc.setMctype("SKELETON");
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(lootentry.getItemid());
 					
-					System.out.println("Fixed broken NPC: " + npc.getName());
-					SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc, false);
-					Bukkit.getPluginManager().callEvent(soliniaevent);
+					if (item == null)
+						continue;
+					
+					if (!item.isSpellscroll())
+						continue;
+					
+					if (item.getAbilityid() <= 0)
+						continue;
+					
+					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+					
+					boolean found = false;
+					
+					for(SoliniaSpellClass spellClass : spell.getAllowedClasses())
+					{
+						
+						if (spellClass.getMinlevel() > 110)
+						{
+							found = true;
+							break;
+						}
+					}
+					
+					if (found == false)
+						continue;
+					
+					// We found an entry to remove
+					
+					item.setNeverDrop(true);
+					fixed++;
 				}
 			}
 		} catch (CoreStateInitException e)
 		{
 			
 		}
+		System.out.println("Disabled loot: " + fixed);
 	}
 	
 	private static void genCultural()
@@ -6338,6 +6368,9 @@ public class Utils {
 						continue;
 					}
 					
+					if (item.isNeverDrop())
+						continue;
+					
 					randomInt = r.nextInt(100) + 1;
 					// System.out.println("Rolled a " + randomInt + " against a max of " +
 					// droptableentry.getChance()+ " for item: " + item.getDisplayname());
@@ -6372,6 +6405,9 @@ public class Utils {
 							.getItem(absoluteitems.get(i).getItemid());
 					for (int c = 0; c < absoluteitems.get(i).getCount(); c++) {
 
+						if (item.isNeverDrop())
+							continue;
+						
 						// Handle unique item checking also
 						if (item.isArtifact() == true && item.isArtifactFound() == true)
 							continue;

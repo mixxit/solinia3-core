@@ -435,7 +435,7 @@ public class EntityManager implements IEntityManager {
 	
 	@Override
 	public void doNPCCheckForEnemies() {
-		List<Integer> completedNpcsIds = new ArrayList<Integer>();
+		List<UUID> completedLivingEntities = new ArrayList<UUID>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
 			for(Entity entity : player.getNearbyEntities(50, 50, 50))
@@ -457,10 +457,10 @@ public class EntityManager implements IEntityManager {
 				
 				try {
 					ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
-					if (completedNpcsIds.contains(solle.getNpcid()))
+					if (completedLivingEntities.contains(le.getUniqueId()))
 						continue;
 					
-					completedNpcsIds.add(solle.getNpcid());
+					completedLivingEntities.add(le.getUniqueId());
 					solle.doCheckForEnemies();
 					
 				} catch (CoreStateInitException e) {

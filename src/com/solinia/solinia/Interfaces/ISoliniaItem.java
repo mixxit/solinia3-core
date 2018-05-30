@@ -342,4 +342,8 @@ public interface ISoliniaItem {
 	int getFocusEffectId();
 
 	void setFocusEffectId(int focusEffectId);
+
+	boolean isNeverDrop();
+
+	void setNeverDrop(boolean neverDrop);
 }

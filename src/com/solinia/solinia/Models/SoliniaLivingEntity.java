@@ -4084,32 +4084,77 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (faction.getName().equals("NEUTRAL") || faction.getName().equals("KOS"))
 				return;
 			
-			for(Entity entity : getBukkitLivingEntity().getNearbyEntities(10, 10, 10))
+			List<Integer> hatedFactions = new ArrayList<Integer>();
+			for(FactionStandingEntry factionEntry : faction.getFactionEntries())
 			{
-				if (!(entity instanceof Player))
+				if (factionEntry.getValue() != -1500)
 					continue;
 				
+				hatedFactions.add(((Integer)factionEntry.getFactionId()));
+			}
+			
+			for(Entity entity : getBukkitLivingEntity().getNearbyEntities(10, 10, 10))
+			{
 				if (entity.isDead())
 					continue;
 				
-				Player player = (Player)entity;
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
-				if (factionEntry != null)
+				if (!(entity instanceof Player))
 				{
-					switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValue()))
+					if (hatedFactions.size() == 0)
+						continue;
+					
+					try
 					{
-						case FACTION_THREATENLY:
-						case FACTION_SCOWLS:
-							if (Utils.isEntityInLineOfSight(player, getBukkitLivingEntity()))
-							{
-								((Creature)getBukkitLivingEntity()).setTarget(player);
-								return;
-							} else {
+						if (!(entity instanceof LivingEntity))
+							continue;
+						
+						// NPC VS NPC
+
+						LivingEntity le = (LivingEntity)entity;
+						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(le);
+
+						if (!solEntity.isNPC())
+							continue;
+						
+						ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager().getNPC(solEntity.getNpcid());
+						if (targetNpc.getFactionid() < 1)
+						{
+							continue;
+						}
+						
+						if (hatedFactions.contains((Integer)targetNpc.getFactionid()))
+						{
+							((Creature)getBukkitLivingEntity()).setTarget(le);
+							return;
+						} 
+					} catch (Exception e)
+					{
+						
+						System.out.println(npc.getName() + " " + npc.getFactionid() + " " + e.getMessage());
+						e.printStackTrace();
+					}
+					
+				} else {
+					// NPC VS PLAYER
+					Player player = (Player)entity;
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
+					if (factionEntry != null)
+					{
+						switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValue()))
+						{
+							case FACTION_THREATENLY:
+							case FACTION_SCOWLS:
+								if (Utils.isEntityInLineOfSight(player, getBukkitLivingEntity()))
+								{
+									((Creature)getBukkitLivingEntity()).setTarget(player);
+									return;
+								} else {
+									continue;
+								}
+							default:
 								continue;
-							}
-						default:
-							break;
+						}
 					}
 				}
 			}

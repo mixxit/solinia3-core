@@ -122,7 +122,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private String bookTitle = "";
 	private String bookAuthor = "";
 	private List<String> bookPages = new ArrayList<String>();
-	
+	private boolean neverDrop = false;
 	
 	@Override
 	public ItemStack asItemStack() {
@@ -1643,5 +1643,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setFocusEffectId(int focusEffectId) {
 		this.focusEffectId = focusEffectId;
+	}
+
+	@Override
+	public boolean isNeverDrop() {
+		return neverDrop;
+	}
+
+	@Override
+	public void setNeverDrop(boolean neverDrop) {
+		this.neverDrop = neverDrop;
 	}
 }

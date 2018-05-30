@@ -350,7 +350,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			npcRandomChatTimer.runTaskTimer(this, 6 * 20L, 60 * 20L);
 
 			npcCheckForEnemiesTimer = new NPCCheckForEnemiesTimer();
-			npcCheckForEnemiesTimer.runTaskTimer(this, 6 * 20L, 60 * 20L);
+			npcCheckForEnemiesTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
 			
 			npcSpellCastTimer = new NPCSpellCastTimer(this);
 			npcSpellCastTimer.runTaskTimer(this, 3 * 20L, 3 * 20L);
