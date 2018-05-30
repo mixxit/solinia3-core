@@ -106,6 +106,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>();
 	private boolean glowTargetting = true;
 	private Double pendingXp = 0d;
+	private boolean showDiscord = true;
 
 	@Override
 	public List<UUID> getIgnoredPlayers() {
@@ -3311,5 +3312,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (experience < 0)
 			experience = 0d;
 		this.pendingXp += experience;
+	}
+
+	@Override
+	public boolean isShowDiscord() {
+		return showDiscord;
+	}
+
+	@Override
+	public void setShowDiscord(boolean showDiscord) {
+		this.showDiscord = showDiscord;
 	}
 }

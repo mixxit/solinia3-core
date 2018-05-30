@@ -95,6 +95,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean reagent = false;
 	private boolean throwing = false;
 	private String languagePrimer = "";
+	private int focusEffectId = 0;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -914,7 +915,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
-		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET);
+		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET);
 		sender.sendMessage("- stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET);
@@ -1063,6 +1064,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "abilityid":
 			setAbilityid(Integer.parseInt(value));
+			break;
+		case "focuseffectid":
+			setFocusEffectId(Integer.parseInt(value));
 			break;
 		case "weaponabilityid":
 			setWeaponabilityid(Integer.parseInt(value));
@@ -1629,5 +1633,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setBookPages(List<String> bookPages) {
 		this.bookPages = bookPages;
+	}
+
+	@Override
+	public int getFocusEffectId() {
+		return focusEffectId;
+	}
+
+	@Override
+	public void setFocusEffectId(int focusEffectId) {
+		this.focusEffectId = focusEffectId;
 	}
 }

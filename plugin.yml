@@ -42,6 +42,10 @@ commands:
     description: Gets player mana
     usage: /mana
     aliases: []
+  showdiscord:
+    description: Toggles showing of discord
+    usage: /showdiscord
+    aliases: []
   settitle:
     description: Sets a title
     usage: /settitle title

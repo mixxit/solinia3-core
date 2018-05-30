@@ -32,7 +32,7 @@ public class DiscordListener {
 			{
 				StateManager.getInstance().getChannelManager().handleDiscordCommand(DiscordChannel.DEFAULT,event);
 			} else {
-				StateManager.getInstance().getChannelManager().sendToGlobalChannel(event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent());
+				StateManager.getInstance().getChannelManager().sendToGlobalChannel(event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true);
 			}
 		}
 		
@@ -79,7 +79,7 @@ public class DiscordListener {
 				}
 				
 			} else {
-				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent());
+				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true);
 			}
 		}
     }

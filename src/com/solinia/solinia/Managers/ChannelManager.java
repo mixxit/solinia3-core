@@ -343,17 +343,52 @@ public class ChannelManager implements IChannelManager {
 	}
 	
 	@Override
-	public void sendToGlobalChannel(String name, String message) {
+	public void sendToGlobalChannel(String name, String message, boolean isFromDiscord) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
+			
+			if (isFromDiscord)
+			{
+				try
+				{
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+		            if (solplayer != null)
+		            {
+		            	// showdiscord command
+		            	if (!solplayer.isShowDiscord())
+		            		continue;
+		            }
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			
 			player.sendMessage(name + ":" + message);
 		}
 	}
 	
 	@Override
-	public void sendToOps(String name, String message) {
+	public void sendToOps(String name, String message, boolean isFromDiscord) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (!player.isOp())
 				continue;
+			
+			if (isFromDiscord)
+			{
+				try
+				{
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+		            if (solplayer != null)
+		            {
+		            	// showdiscord command
+		            	if (!solplayer.isShowDiscord())
+		            		continue;
+		            }
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
 			
 			player.sendMessage(name + ":" + message);
 		}

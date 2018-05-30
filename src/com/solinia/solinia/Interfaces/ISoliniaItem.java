@@ -338,4 +338,8 @@ public interface ISoliniaItem {
 	List<String> getBookPages();
 
 	void setBookPages(List<String> bookPages);
+
+	int getFocusEffectId();
+
+	void setFocusEffectId(int focusEffectId);
 }
