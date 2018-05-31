@@ -87,6 +87,10 @@ commands:
     description: Lists online player details
     usage: /who
     aliases: []
+  editchunk:
+    description: Edits a chunk
+    usage: /editchunk
+    aliases: []
   resetplayer:
     description: Resets players to a default state
     usage: /resetplayer <mcaccountname>

@@ -411,6 +411,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVoteListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 
+		this.getCommand("editchunk").setExecutor(new CommandEditChunk());
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());
 		this.getCommand("forename").setExecutor(new CommandForename());

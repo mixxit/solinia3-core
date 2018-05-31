@@ -39,6 +39,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaChunkAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
@@ -52,6 +53,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
+import com.solinia.solinia.Models.SoliniaChunk;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.UniversalMerchant;
@@ -440,6 +442,11 @@ public class Solinia3CorePlayerListener implements Listener {
 						}
 					}
 				}
+			}
+			
+			SoliniaChunk chunk = SoliniaChunkAdapter.Adapt(player.getWorld().getChunkAt(player.getLocation()));
+			if (chunk != null && !chunk.getLore().equals("")) {
+				player.sendMessage("* " + chunk.getLore());
 			}
 
 			// Prevent jump when slowed

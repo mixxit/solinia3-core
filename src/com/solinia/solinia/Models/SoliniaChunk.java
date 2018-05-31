@@ -7,15 +7,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidChunkSettingException;
+import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaChunk {
 	private int chunkX;
 	private int chunkZ;
 	private String soliniaWorldName;
+	private String lore = "";
 	
 	public int getChunkX() {
 		return chunkX;
@@ -164,6 +171,26 @@ public class SoliniaChunk {
 		return isInZone(world);
 	}
 	
+	public void sendChunkSettingsToSender(CommandSender sender) 
+	{
+		sender.sendMessage(ChatColor.RED + "Chunk Settings for " + ChatColor.GOLD + getChunkX() + ":" + getChunkZ() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- X: " + ChatColor.GOLD + getChunkX() + ChatColor.RESET);
+		sender.sendMessage("- Z: " + ChatColor.GOLD + getChunkZ() + ChatColor.RESET);
+		sender.sendMessage("- lore: " + ChatColor.GOLD + getLore() + ChatColor.RESET);
+	}
+
+	public void editSetting(String setting, String value) throws InvalidChunkSettingException
+	{
+		switch (setting.toLowerCase()) {
+		case "lore":
+			setLore(value);
+			break;
+		default:
+			throw new InvalidChunkSettingException("Invalid Chunk setting. Valid Options are: lore");
+		}
+	}
+	
 	public boolean isAlignmentChunk() {
 		try {
 			for(ISoliniaAlignment alignmentEntry : StateManager.getInstance().getConfigurationManager().getAlignments())
@@ -220,6 +247,12 @@ public class SoliniaChunk {
 		}
 		
 		return alignment;
+	}
+	public String getLore() {
+		return lore;
+	}
+	public void setLore(String lore) {
+		this.lore = lore;
 	}
 	
 }
