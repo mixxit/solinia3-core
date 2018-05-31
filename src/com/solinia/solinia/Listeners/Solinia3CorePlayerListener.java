@@ -407,46 +407,48 @@ public class Solinia3CorePlayerListener implements Listener {
 			} 
 			
 			// territory code
-			
-			boolean playerIsInTerritory = Utils.isPlayerInTerritory(player);
-			Boolean cachedPlayerIsInTerritory = StateManager.getInstance().getEntityManager().getPlayerInTerritory()
-					.get(player.getUniqueId());
-			if (cachedPlayerIsInTerritory == null) {
-				StateManager.getInstance().getEntityManager().getPlayerInTerritory().put(player.getUniqueId(),
-						playerIsInTerritory);
-			} else {
-				if (cachedPlayerIsInTerritory != playerIsInTerritory) {
+			if (!(event.getTo().getChunk().getX()+"_"+event.getTo().getChunk().getZ()).equals(event.getFrom().getChunk().getX() + "_" + event.getFrom().getChunk().getZ()))
+			{
+				boolean playerIsInTerritory = Utils.isPlayerInTerritory(player);
+				Boolean cachedPlayerIsInTerritory = StateManager.getInstance().getEntityManager().getPlayerInTerritory()
+						.get(player.getUniqueId());
+				if (cachedPlayerIsInTerritory == null) {
 					StateManager.getInstance().getEntityManager().getPlayerInTerritory().put(player.getUniqueId(),
 							playerIsInTerritory);
-					if (playerIsInTerritory == false) {
-						player.sendMessage(ChatColor.AQUA + "* You have left the territory");
-					} else {
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-						SoliniaAlignmentChunk territory = solPlayer.getCurrentAlignmentChunk();
-						if (territory != null) {
-							System.out.println(player.getName() + " has entered territory chunk: "
-									+ territory.getChunkX() + "_" + territory.getChunkZ());
-							if (territory.getAlignmentId() > 0) {
-								ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager()
-										.getAlignment(territory.getAlignmentId());
-								player.sendMessage(ChatColor.AQUA + "* You have entered " + alignment.getName()
-										+ " territory [/trader]");
-								if (territory.isTradePost()) {
-									player.sendMessage(ChatColor.AQUA + "- This territory has a Trade Post!");
+				} else {
+					if (cachedPlayerIsInTerritory != playerIsInTerritory) {
+						StateManager.getInstance().getEntityManager().getPlayerInTerritory().put(player.getUniqueId(),
+								playerIsInTerritory);
+						if (playerIsInTerritory == false) {
+							player.sendMessage(ChatColor.AQUA + "* You have left the territory");
+						} else {
+							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+							SoliniaAlignmentChunk territory = solPlayer.getCurrentAlignmentChunk();
+							if (territory != null) {
+								System.out.println(player.getName() + " has entered territory chunk: "
+										+ territory.getChunkX() + "_" + territory.getChunkZ());
+								if (territory.getAlignmentId() > 0) {
+									ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager()
+											.getAlignment(territory.getAlignmentId());
+									player.sendMessage(ChatColor.AQUA + "* You have entered " + alignment.getName()
+											+ " territory [/trader]");
+									if (territory.isTradePost()) {
+										player.sendMessage(ChatColor.AQUA + "- This territory has a Trade Post!");
+									}
+								} else {
+									player.sendMessage(ChatColor.AQUA + "* You have entered broken territory [/trader]");
 								}
 							} else {
-								player.sendMessage(ChatColor.AQUA + "* You have entered broken territory [/trader]");
+								player.sendMessage(ChatColor.AQUA + "* You have entered territory [/trader]");
 							}
-						} else {
-							player.sendMessage(ChatColor.AQUA + "* You have entered territory [/trader]");
 						}
 					}
 				}
-			}
-			
-			SoliniaChunk chunk = SoliniaChunkAdapter.Adapt(player.getWorld().getChunkAt(player.getLocation()));
-			if (chunk != null && !chunk.getLore().equals("")) {
-				player.sendMessage("* " + chunk.getLore());
+				
+				SoliniaChunk chunk = SoliniaChunkAdapter.Adapt(player.getWorld().getChunkAt(player.getLocation()));
+				if (chunk != null && !chunk.getLore().equals("")) {
+					player.sendMessage("* " + chunk.getLore());
+				}
 			}
 
 			// Prevent jump when slowed

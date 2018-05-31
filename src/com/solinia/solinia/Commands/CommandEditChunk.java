@@ -58,7 +58,7 @@ public class CommandEditChunk implements CommandExecutor {
 				int current = 0;
 				for (String entry : args) {
 					current++;
-					if (current < 1)
+					if (current < 2)
 						continue;
 
 					value = value + entry + " ";

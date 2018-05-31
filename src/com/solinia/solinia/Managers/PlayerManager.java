@@ -336,7 +336,7 @@ public class PlayerManager implements IPlayerManager {
 	public void setPlayerLastSteed(UUID playerUUID, Timestamp timestamp) {
 		this.playerLastSummonSteed.put(playerUUID, timestamp);
 	}
-
+	
 	@Override
 	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException {
 		return StateManager.getInstance().getConfigurationManager().getCharacters();
