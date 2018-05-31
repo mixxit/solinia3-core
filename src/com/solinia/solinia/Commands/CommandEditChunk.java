@@ -48,9 +48,25 @@ public class CommandEditChunk implements CommandExecutor {
 				return false;
 			}
 
-			String setting = args[1];
+			String setting = args[0];
 
-			String value = args[2];
+			String value = args[1];
+			
+			if (args.length > 2 && (setting.toLowerCase().contains("lore")))
+			{
+				value = "";
+				int current = 0;
+				for (String entry : args) {
+					current++;
+					if (current < 1)
+						continue;
+
+					value = value + entry + " ";
+				}
+
+				value = value.trim();
+			}
+			
 
 			try {
 
