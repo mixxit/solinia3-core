@@ -12,6 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Factories.SoliniaNPCMerchantFactory;
@@ -26,7 +27,7 @@ public class CommandPublishBook implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 		
-		if (sender instanceof Player)
+		if (!(sender instanceof Player))
 		{
 			sender.sendMessage("This is a player only command");
 			return false;
@@ -59,25 +60,35 @@ public class CommandPublishBook implements CommandExecutor {
         
         try
         {
-        	List<ISoliniaItem> matchingItems = StateManager.getInstance().getConfigurationManager().getItemsByPartialName(itemstack.getItemMeta().getDisplayName());
+        	List<ISoliniaItem> matchingItems = StateManager.getInstance().getConfigurationManager().getItemsByPartialName(((BookMeta)itemstack.getItemMeta()).getTitle());
         	if (matchingItems.size() > 0)
         	{
         		player.sendMessage("An item with this name is already published");
         		return true;
         	}
         	
-        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack,sender.isOp());
+        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack,true);
+        	sender.sendMessage("Book is a brand new title! " + item.getId());
+        	
+        	List<Integer> merchantItemList = new ArrayList<Integer>();
         	
         	for(ISoliniaNPCMerchant merchant : StateManager.getInstance().getConfigurationManager().getNPCMerchants())
         	{
         		if (!merchant.isPublishedBookStore())
         			continue;
-        		
-        		SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchant.getId(), item.getId());
+
+        		merchantItemList.add(merchant.getId());
         	}
+        	
+        	for(Integer merchantId : merchantItemList)
+        	{
+        		SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantId, item.getId());
+        	}
+        	
         	sender.sendMessage("New Book Published! (ID: " + item.getId() + ")");
         } catch (Exception e)
         {
+        	e.printStackTrace();
         	sender.sendMessage(e.getMessage());
         }
 

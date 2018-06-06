@@ -1116,6 +1116,9 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public List<ISoliniaItem> getItemsByPartialName(String itemMatch) {
+		if (itemMatch == null)
+			return new ArrayList<ISoliniaItem>();
+		
 		return itemRepository.query(q -> q.getDisplayname().toUpperCase().contains(itemMatch.toUpperCase()));
 	}
 
