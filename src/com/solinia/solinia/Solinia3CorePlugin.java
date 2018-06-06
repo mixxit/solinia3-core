@@ -533,6 +533,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editmerchantlist").setExecutor(new CommandEditMerchantList());
 		this.getCommand("claimxp").setExecutor(new CommandClaimXp());
 		this.getCommand("showdiscord").setExecutor(new CommandShowDiscord());
+		this.getCommand("publishbook").setExecutor(new CommandPublishBook());
 	}
 
 	private void createConfigDir() {

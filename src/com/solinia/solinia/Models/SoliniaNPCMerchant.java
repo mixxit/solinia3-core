@@ -22,7 +22,8 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 	private String name;
 	private List<ISoliniaNPCMerchantEntry> entries = new ArrayList<ISoliniaNPCMerchantEntry>();	
 	private boolean operatorCreated = true;
-
+	private boolean publishedBookStore = false;
+	
 	@Override
 	public int getId() {
 		return id;
@@ -65,6 +66,9 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 					throw new InvalidNPCMerchantListSettingException("Name is longer than 25 characters");
 				setName(value);
 				break;
+			case "publishedbookstore":
+				setPublishedBookStore(Boolean.parseBoolean(value));
+				break;
 			case "remove":
 				int itemIdToRemove = Integer.parseInt(value);
 				if (itemIdToRemove < 1)
@@ -85,6 +89,7 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 		try
 		{
 			sender.sendMessage(ChatColor.GOLD + getName().toUpperCase() + ChatColor.RESET + "[" + getId() + "]:");
+			sender.sendMessage(" - publishedbookstore: " + ChatColor.GOLD + getName().toUpperCase() + ChatColor.RESET);
 			for(ISoliniaNPCMerchantEntry lde : getEntries())
 			{
 				ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
@@ -109,5 +114,15 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 	@Override
 	public void setOperatorCreated(boolean operatorCreated) {
 		this.operatorCreated = operatorCreated;
+	}
+
+	@Override
+	public boolean isPublishedBookStore() {
+		return publishedBookStore;
+	}
+
+	@Override
+	public void setPublishedBookStore(boolean publishedBookStore) {
+		this.publishedBookStore = publishedBookStore;
 	}
 }

@@ -28,4 +28,8 @@ public interface ISoliniaNPCMerchant {
 	boolean isOperatorCreated();
 
 	void setOperatorCreated(boolean operatorCreated);
+
+	boolean isPublishedBookStore();
+
+	void setPublishedBookStore(boolean publishedBookStore);
 }

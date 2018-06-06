@@ -551,6 +551,10 @@ commands:
     description: Edits a quest
     usage: /editquest questid setting value
     aliases: []
+  publishbook:
+    description: Publish book
+    usage: /publishbook
+    aliases: []
 depend:
 - Vault
 - MythicMobs
