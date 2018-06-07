@@ -118,14 +118,17 @@ public class Solinia3CoreItemPickupListener implements Listener {
         {
 	        if (Utils.IsSoliniaItem(pickedUpItemStack) && pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK))
 		    {
-	        	e.getPlayer().sendMessage(ChatColor.GRAY + "INFO: You have picked up an ability! To use it, hold it in your hand and right click!");
-	        	e.getPlayer().sendMessage(ChatColor.GRAY + "INFO: To target an enemy use left click when holding a spell or shift F to select yourself!");
-	        	
 	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
 	            if (pickedUpItemStack != null)
 	            {
 	            	if (latestitem != null)
 	            	{
+	            		if (latestitem.isSpellscroll())
+	            		{
+		    	        	e.getPlayer().sendMessage(ChatColor.GRAY + "INFO: You have picked up an ability! To use it, hold it in your hand and right click!");
+		    	        	e.getPlayer().sendMessage(ChatColor.GRAY + "INFO: To target an enemy use left click when holding a spell or shift F to select yourself!");
+	            		}
+	            		
 	            		ItemStack latestitemstack = latestitem.asItemStack();
 	            		pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
 	            	} else {

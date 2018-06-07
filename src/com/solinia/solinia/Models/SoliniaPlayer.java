@@ -1184,6 +1184,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						return;
 					}
 				}
+				
+				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.getLanguagePrimer().equals("")) {
+					item.useItemOnEntity(event.getPlayer(), event.getPlayer(), item.isConsumable());
+					if (item.isConsumable())
+					{
+						event.getPlayer().setItemInHand(null);
+						event.getPlayer().updateInventory();
+					}
+					return;
+				}
 
 				if (item.getAbilityid() < 1) {
 					return;
