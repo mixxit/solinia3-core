@@ -292,7 +292,7 @@ public class CommandInspiration implements CommandExecutor {
 					sender.sendMessage("https://minecraftlist.org/vote/5962");
 					sender.sendMessage("https://minecraft-server.net/vote/fallofanempire");
 					sender.sendMessage("http://minecraft-server-list.com/server/345651/vote/");
-					sender.sendMessage("http://www.minecraftforum.net/servers/6305-fall-of-an-empire-heavy-rp/vote:");
+					sender.sendMessage("http://www.minecraft-servers-list.org/index.php?a=in&u=mixxit");
 					sender.sendMessage(ChatColor.YELLOW + "You will earn 1 inspiration point for each vote");
 					break;
 				case "send":
