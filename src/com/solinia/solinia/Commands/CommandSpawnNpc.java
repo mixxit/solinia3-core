@@ -14,6 +14,16 @@ public class CommandSpawnNpc implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player))
 			return false;
+		
+		if (sender instanceof Player)
+		{
+			Player player = (Player) sender;
+			if (!player.isOp() && !player.hasPermission("solinia.spawnnpc"))
+			{
+				player.sendMessage("You do not have permission to access this command");
+				return false;
+			}
+		}
 
 		Player player = (Player) sender;
 
@@ -22,24 +32,25 @@ public class CommandSpawnNpc implements CommandExecutor {
 			return false;
 		}
 
-		if (player.isOp()) {
-			int itemid = Integer.parseInt(args[0]);
-			try {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(itemid);
-				if (npc != null) {
-					npc.Spawn(player.getLocation(), 1);
-				} else {
-					player.sendMessage("Cannot find NPC by ID");
+		int itemid = Integer.parseInt(args[0]);
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(itemid);
+			
+			if (npc != null) {
+				if (npc.isOperatorCreated() && !player.isOp())
+				{
+					player.sendMessage("You can only spawn non-OP npcs");
 					return true;
 				}
-			} catch (CoreStateInitException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
+				npc.Spawn(player.getLocation(), 1);
+			} else {
+				player.sendMessage("Cannot find NPC by ID");
+				return true;
 			}
-			
-		} else {
-			player.sendMessage("This is an OP only command");
-			return false;
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return true;
