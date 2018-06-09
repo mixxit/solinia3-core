@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 public enum FocusEffect 
 {
+	None,
 	SpellHaste,
 	SpellDuration,
 	Range,

@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Models.AugmentationSlotType;
+import com.solinia.solinia.Models.FocusEffect;
 import com.solinia.solinia.Models.SkillType;
 
 public interface ISoliniaItem {
@@ -338,11 +339,11 @@ public interface ISoliniaItem {
 	List<String> getBookPages();
 
 	void setBookPages(List<String> bookPages);
-
-	int getFocusEffectId();
-
-	void setFocusEffectId(int focusEffectId);
-
+	
+	FocusEffect getFocusEffect();
+	
+	void setFocusEffect(FocusEffect focusEffect);
+	
 	boolean isNeverDrop();
 
 	void setNeverDrop(boolean neverDrop);

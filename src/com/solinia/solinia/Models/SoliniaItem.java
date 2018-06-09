@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -95,7 +96,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean reagent = false;
 	private boolean throwing = false;
 	private String languagePrimer = "";
-	private int focusEffectId = 0;
+	private FocusEffect focusEffect = FocusEffect.None;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -900,7 +901,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
-		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): \" + ChatColor.GOLD + getDye() + ChatColor.RESET");
+		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
 		sender.sendMessage("- minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
@@ -916,7 +917,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
-		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
+		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffect: " + ChatColor.GOLD + getFocusEffect() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET);
 		sender.sendMessage("- stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET);
@@ -1066,8 +1067,24 @@ public class SoliniaItem implements ISoliniaItem {
 		case "abilityid":
 			setAbilityid(Integer.parseInt(value));
 			break;
-		case "focuseffectid":
-			setFocusEffectId(Integer.parseInt(value));
+		case "focuseffect":
+			String searchEffect = value;
+			boolean found = false;
+			for(FocusEffect effect : FocusEffect.values())
+			{
+				if (!effect.name().equalsIgnoreCase(value))
+					continue;
+				
+				searchEffect = effect.name();
+				found = true;
+			}
+			
+			if (found == false)
+			{
+				throw new InvalidItemSettingException("Focus effect not found, acceptable values: " + String.join(",", Stream.of(FocusEffect.values()).map(FocusEffect::name).toArray(String[]::new)));
+			}
+			
+			setFocusEffect(FocusEffect.valueOf(searchEffect));
 			break;
 		case "weaponabilityid":
 			setWeaponabilityid(Integer.parseInt(value));
@@ -1637,13 +1654,13 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public int getFocusEffectId() {
-		return focusEffectId;
+	public FocusEffect getFocusEffect() {
+		return focusEffect;
 	}
 
 	@Override
-	public void setFocusEffectId(int focusEffectId) {
-		this.focusEffectId = focusEffectId;
+	public void setFocusEffect(FocusEffect effect) {
+		this.focusEffect = effect;
 	}
 
 	@Override

@@ -125,6 +125,10 @@ public class ItemStackAdapter {
 	    }
 
 		if (soliniaItem.isArtifact() == true) {
+			loretxt.add(ChatColor.AQUA + "Focus Effect: " + ChatColor.GOLD + soliniaItem.getFocusEffect().name() + ChatColor.RESET);
+		}
+		
+		if (soliniaItem.isArtifact() == true) {
 			loretxt.add(ChatColor.GREEN + "This item is a unique artifact!" + ChatColor.RESET);
 		}
 		
