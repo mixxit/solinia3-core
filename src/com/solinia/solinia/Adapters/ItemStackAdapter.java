@@ -125,10 +125,6 @@ public class ItemStackAdapter {
 	    }
 
 		if (soliniaItem.isArtifact() == true) {
-			loretxt.add(ChatColor.AQUA + "Focus Effect: " + ChatColor.GOLD + soliniaItem.getFocusEffect().name() + ChatColor.RESET);
-		}
-		
-		if (soliniaItem.isArtifact() == true) {
 			loretxt.add(ChatColor.GREEN + "This item is a unique artifact!" + ChatColor.RESET);
 		}
 		
@@ -342,6 +338,11 @@ public class ItemStackAdapter {
 	    {
 			loretxt.addAll(generateSpellLoreText(soliniaItem));
 	    }
+		
+		if (soliniaItem.getFocusEffectId() > 0)
+		{
+			loretxt.addAll(generateFocusEffectLoreText(soliniaItem));
+		}
 
 		if (soliniaItem.getAbilityid() > 0 && !soliniaItem.isSpellscroll())
 	    {
@@ -440,6 +441,21 @@ public class ItemStackAdapter {
 			e.printStackTrace();
 		}
 		
+		return loreTxt;
+	}
+	
+	private static List<String> generateFocusEffectLoreText(ISoliniaItem soliniaItem)
+	{
+		List<String> loreTxt = new ArrayList<String>();
+		ISoliniaSpell spell;
+		try {
+			spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getAbilityid());
+			
+			loreTxt.add(ChatColor.WHITE + "Focus Effect: " + ChatColor.YELLOW+ spell.getName() + " " + ChatColor.RESET);
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return loreTxt;
 	}

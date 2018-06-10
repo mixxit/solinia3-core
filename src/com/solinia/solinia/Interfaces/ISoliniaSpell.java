@@ -1054,4 +1054,8 @@ public interface ISoliniaSpell {
 	List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesAAData();
 
 	int getAARecastTime(ISoliniaPlayer solPlayer);
+
+	Integer getNotFocusable();
+
+	boolean isSacrificeSpell();
 }

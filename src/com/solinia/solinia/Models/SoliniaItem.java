@@ -96,7 +96,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean reagent = false;
 	private boolean throwing = false;
 	private String languagePrimer = "";
-	private FocusEffect focusEffect = FocusEffect.None;
+	private int focusEffectId = 0;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -917,7 +917,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
-		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffect: " + ChatColor.GOLD + getFocusEffect() + ChatColor.RESET);
+		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET);
 		sender.sendMessage("- stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET);
@@ -1067,24 +1067,8 @@ public class SoliniaItem implements ISoliniaItem {
 		case "abilityid":
 			setAbilityid(Integer.parseInt(value));
 			break;
-		case "focuseffect":
-			String searchEffect = value;
-			boolean found = false;
-			for(FocusEffect effect : FocusEffect.values())
-			{
-				if (!effect.name().equalsIgnoreCase(value))
-					continue;
-				
-				searchEffect = effect.name();
-				found = true;
-			}
-			
-			if (found == false)
-			{
-				throw new InvalidItemSettingException("Focus effect not found, acceptable values: " + String.join(",", Stream.of(FocusEffect.values()).map(FocusEffect::name).toArray(String[]::new)));
-			}
-			
-			setFocusEffect(FocusEffect.valueOf(searchEffect));
+		case "focuseffectid":
+			setFocusEffectId(Integer.parseInt(value));
 			break;
 		case "weaponabilityid":
 			setWeaponabilityid(Integer.parseInt(value));
@@ -1654,13 +1638,13 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public FocusEffect getFocusEffect() {
-		return focusEffect;
+	public int getFocusEffectId() {
+		return focusEffectId;
 	}
 
 	@Override
-	public void setFocusEffect(FocusEffect effect) {
-		this.focusEffect = effect;
+	public void setFocusEffectId(int focusEffectId) {
+		this.focusEffectId = focusEffectId;
 	}
 
 	@Override

@@ -340,9 +340,9 @@ public interface ISoliniaItem {
 
 	void setBookPages(List<String> bookPages);
 	
-	FocusEffect getFocusEffect();
+	int getFocusEffectId();
 	
-	void setFocusEffect(FocusEffect focusEffect);
+	void setFocusEffectId(int focusEffectId);
 	
 	boolean isNeverDrop();
 

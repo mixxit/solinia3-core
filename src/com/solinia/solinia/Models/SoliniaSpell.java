@@ -632,7 +632,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@SerializedName("sneaking")
 	@Expose
 	private Integer sneaking;
-	@SerializedName("not_extendable")
+	@SerializedName("not_extendable") //not focusable
 	@Expose
 	private Integer notExtendable;
 	@SerializedName("field198")
@@ -2330,6 +2330,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	public Integer getNotExtendable() {
+		return notExtendable;
+	}
+	
+	@Override
+	public Integer getNotFocusable() {
 		return notExtendable;
 	}
 
@@ -5528,5 +5533,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 		
 		return getRecastTime();
+	}
+	
+	@Override
+	public boolean isSacrificeSpell()
+	{
+		return isEffectInSpell(SpellEffectType.Sacrifice);
 	}
 }

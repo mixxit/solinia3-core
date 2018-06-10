@@ -17,6 +17,7 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Models.DamageHitInfo;
+import com.solinia.solinia.Models.FocusEffect;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
@@ -242,4 +243,6 @@ public interface ISoliniaLivingEntity
 	public void PetFastThink(Player playerOwner);
 
 	void removeActiveSpellsWithEffectType(SpellEffectType spellEffectType);
+
+	int getFocusEffect(FocusEffect focusEffectType, ISoliniaSpell spell);
 }
