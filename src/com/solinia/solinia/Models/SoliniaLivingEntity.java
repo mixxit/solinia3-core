@@ -247,7 +247,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					break;
 				}
 				
-				getBukkitLivingEntity().sendMessage("* Your " + UsedItem.getDisplayname() + string_id);
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id);
 			}
 		}
 		
