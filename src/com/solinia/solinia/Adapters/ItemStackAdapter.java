@@ -447,9 +447,9 @@ public class ItemStackAdapter {
 	private static List<String> generateFocusEffectLoreText(ISoliniaItem soliniaItem)
 	{
 		List<String> loreTxt = new ArrayList<String>();
-		ISoliniaSpell spell;
+		
 		try {
-			spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getAbilityid());
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getFocusEffectId());
 			
 			loreTxt.add(ChatColor.WHITE + "Focus Effect: " + ChatColor.YELLOW+ spell.getName() + " " + ChatColor.RESET);
 		} catch (CoreStateInitException e) {
