@@ -4725,6 +4725,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean isRangedProc() {
+		if (isEffectInSpell(SpellEffectType.RangedProc))
+		{
+			return true;
+		}
+		return false;
+	}
 
 	private boolean isHarmonySpell() {
 		return isEffectInSpell(SpellEffectType.Lull) || isEffectInSpell(SpellEffectType.Harmony) || isEffectInSpell(SpellEffectType.ChangeFrenzyRad);
@@ -4962,7 +4971,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 		
 		// TODO Spell Reduction effects on items/buffs
 		// TODO Focus Effects
-
+		
+		int focus_redux = solEntity.getFocusEffect(FocusEffect.ManaCost, this);
+		PercentManaReduction += focus_redux;
 		cost -= cost * PercentManaReduction / 100;
 
 		// TODO Gift of mana AA
@@ -5542,18 +5553,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	@Override
-	public boolean isCombatProc() {
-		if ((getCastTime() == 0) && (getRecastTime() == 0) && (getRecoveryTime() == 0))
-		{
+	public boolean isCombatSkill() {
+		//Check if Discipline
+		if ((getMana() == 0 && (getEndurCost() != null || getEndurUpkeep() != null)))
+			return true;
 
-			for (int i = 0; i < Utils.getMaxProcs(); i++){
-				if (PermaProcs[i].spellID == spell_id || SpellProcs[i].spellID == spell_id
-					 || RangedProcs[i].spellID == spell_id){
-					return true;
-				}
-			}
-		}
-		
 		return false;
 	}
 }

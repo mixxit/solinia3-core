@@ -245,4 +245,8 @@ public interface ISoliniaLivingEntity
 	void removeActiveSpellsWithEffectType(SpellEffectType spellEffectType);
 
 	int getFocusEffect(FocusEffect focusEffectType, ISoliniaSpell spell);
+
+	boolean isCombatProc(ISoliniaSpell spell);
+
+	int getRaceId();
 }

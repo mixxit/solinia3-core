@@ -1059,5 +1059,7 @@ public interface ISoliniaSpell {
 
 	boolean isSacrificeSpell();
 
-	boolean isCombatProc();
+	boolean isCombatSkill();
+
+	boolean isRangedProc();
 }

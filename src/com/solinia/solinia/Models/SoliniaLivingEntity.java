@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -261,19 +262,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private int CalcFocusEffect(FocusEffect type, int focusEffectId, ISoliniaSpell spell, boolean best_focus) {
-		ISoliniaSpell focus_spell = StateManager.getInstance().getConfigurationManager().getSpell(focusEffectId);
+		ISoliniaSpell focus_spell = null;
+		
+		try
+		{
+			focus_spell = StateManager.getInstance().getConfigurationManager().getSpell(focusEffectId);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 		
 		if (focus_spell == null || spell == null)
 			return 0;
 
 		int value = 0;
 		int lvlModifier = 100;
-		int spell_level = 0;
 		int lvldiff = 0;
-		int Caston_spell_id = 0;
-		
 		int MaxLimitInclude = Utils.getMaxLimitInclude();
 		boolean[] LimitInclude = new boolean[MaxLimitInclude];
+		Arrays.fill(LimitInclude, false);
 		
 		// TODO SE Limiting
 		
@@ -367,11 +374,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			case LimitSpell:
 				if (focusSpellEffect.getBase() < 0) { // Exclude
-					if (spell_id == -focusSpellEffect.getBase())
+					if (spell.getId() == -focusSpellEffect.getBase())
 						return (0);
 				} else {
 					LimitInclude[2] = true;
-					if (spell_id == focusSpellEffect.getBase()) // Include
+					if (spell.getId() == focusSpellEffect.getBase()) // Include
 						LimitInclude[3] = true;
 				}
 				break;
@@ -431,10 +438,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			case LimitCombatSkills:
 				if (focusSpellEffect.getBase() == 0 &&
-				    (IsCombatSkill(spell_id) || spell.isCombatProc())) // Exclude Discs / Procs
+				    (spell.isCombatSkill() || isCombatProc(spell))) // Exclude Discs / Procs
 					return 0;
 				else if (focusSpellEffect.getBase() == 1 &&
-					 (!IsCombatSkill(spell_id) || !spell.isCombatProc())) // Exclude Spells
+					 (!spell.isCombatSkill() || !isCombatProc(spell))) // Exclude Spells
 					return 0;
 
 				break;
@@ -469,11 +476,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				break;
 
 			case LimitRace:
-				if (this.getRace() != null)
-				{
-					if (focusSpellEffect.getBase() != getRace().getRaceId())
-						return 0;
-				}
+				if (focusSpellEffect.getBase() != getRaceId())
+					return 0;
 				break;
 
 			case LimitUseMin:
@@ -488,7 +492,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			case CastonFocusEffect:
 				if (focusSpellEffect.getBase() > 0)
-					Caston_spell_id = focusSpellEffect.getBase();
+					focusSpellEffect.getBase();
 				break;
 
 			case LimitSpellClass:
@@ -676,7 +680,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			case SympatheticProc:
 				if (type == FocusEffect.SympatheticProc) {
-					value = focus_id;
+					value = focus_spell.getId();
 				}
 				break;
 
@@ -966,6 +970,40 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
+	public boolean isCombatProc(ISoliniaSpell spell) {
+		if ((spell.getCastTime() == 0) && (spell.getRecastTime() == 0) && (spell.getRecoveryTime() == 0))
+		{
+
+			for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+				try
+				{
+					ISoliniaSpell currentSpell = StateManager.getInstance().getConfigurationManager()
+							.getSpell(activeSpell.getSpellId());
+					if (currentSpell == null)
+						continue;
+	
+					if (!currentSpell.isWeaponProc() && !currentSpell.isRangedProc())
+						continue;
+	
+					for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
+						if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc) || spelleffect.getSpellEffectType().equals(SpellEffectType.RangedProc)) {
+							if (currentSpell.getId() == spell.getId())
+							{
+								return true;
+							}
+						}
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	@Override
 	public boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit,
 			Solinia3CorePlugin plugin) {
 		int baseDamage = (int) event.getDamage(DamageModifier.BASE);
@@ -1153,7 +1191,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (defender.isNPC())
 			{
 				try {
-					ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(defender.getNpcid());
+					StateManager.getInstance().getConfigurationManager().getNPC(defender.getNpcid());
 				} catch (CoreStateInitException e) {
 					
 				}
@@ -1369,7 +1407,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// Now figure out damage
 		my_hit.damage_done = 1;
 		my_hit.min_damage = 0;
-		int mylevel = getLevel();
+		getLevel();
 		int hate = 0;
 
 		my_hit.base_damage = baseDamage;
@@ -2843,7 +2881,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
-		float dist2 = 0;
+		
 
 		// TODO escape distance
 
@@ -3980,6 +4018,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		return null;
 	}
+	
+	@Override
+	public int getRaceId() {
+		try {
+			if (isPlayer()) {
+				return SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).getRaceId();
+			}
+
+			if (this.getNpcid() > 0) {
+				return StateManager.getInstance().getConfigurationManager().getNPC(getNpcid()).getRaceid();
+			}
+		} catch (CoreStateInitException e) {
+			return 0;
+		}
+		return 0;
+	}
 
 	public void targetSelector()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -4073,7 +4127,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public DamageHitInfo avoidDamage(SoliniaLivingEntity attacker, DamageHitInfo hit) {
-		ISoliniaLivingEntity defender = this;
+		
 
 		// TODO Block from rear check
 
@@ -4427,6 +4481,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int chance = 0;
 
 		// TODO Focus effects
+		value_BaseEffect = value + (value*getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell)/100);
 
 		// TODO Harm Touch Scaling
 
@@ -4463,6 +4518,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (critical) {
 
 				value = value_BaseEffect * ratio / 100;
+				
+				value += value_BaseEffect*getFocusEffect(FocusEffect.ImprovedDamage, soliniaSpell)/100;
+				value += value_BaseEffect*getFocusEffect(FocusEffect.ImprovedDamage2, soliniaSpell)/100;
+				value += (int)(value_BaseEffect*getFocusEffect(FocusEffect.FcDamagePctCrit, soliniaSpell)/100)*ratio/100;
 
 				// TODO Vulnerabilities
 
@@ -4479,9 +4538,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// Non Crtical Hit Calculation pathway
 		value = value_BaseEffect;
+		
+		value += value_BaseEffect*getFocusEffect(FocusEffect.ImprovedDamage, soliniaSpell)/100;
+		value += value_BaseEffect*getFocusEffect(FocusEffect.ImprovedDamage2, soliniaSpell)/100;
+
+		value += value_BaseEffect*getFocusEffect(FocusEffect.FcDamagePctCrit, soliniaSpell)/100;
 
 		// TODO Vulnerabilities
 
+		value -= getFocusEffect(FocusEffect.FcDamageAmtCrit, soliniaSpell);
+
+		value -= getFocusEffect(FocusEffect.FcDamageAmt, soliniaSpell);
+		value -= getFocusEffect(FocusEffect.FcDamageAmt2, soliniaSpell);
+		
 		// TODO SPell damage lvl restriction
 		// TODO NPC Spell Scale
 
@@ -4494,15 +4563,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getClassObj() == null)
 			return value;
 
-		// int value_BaseEffect = value;
+		int value_BaseEffect = 0;
 		int chance = 0;
 		int modifier = 1;
 		boolean critical = false;
 
 		// TODO FOcus effects
-		// value_BaseEffect = value;
-
+		
+		value_BaseEffect = value + (value*getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell)/100);
+		
+		value = value_BaseEffect;
+		
 		// TODO FOcus effects
+		value += (int)(value_BaseEffect*getFocusEffect(FocusEffect.ImprovedHeal, soliniaSpell)/100);
 
 		// Instant Heals
 		if (soliniaSpell.getBuffduration() < 1) {
@@ -4520,6 +4593,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			value *= modifier;
+
+			value += getFocusEffect(FocusEffect.FcHealAmtCrit, soliniaSpell) * modifier;
+			value += getFocusEffect(FocusEffect.FcHealAmt, soliniaSpell);
 
 			// TODO No heal items
 
