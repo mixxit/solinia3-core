@@ -6505,4 +6505,14 @@ public class Utils {
 		
 		return minlevel;
 	}
+
+	public static int getMaxLimitInclude() {
+		// TODO Auto-generated method stub
+		return 16;
+	}
+	
+	public static int getMaxProcs() {
+		// TODO Auto-generated method stub
+		return 4;
+	}
 }

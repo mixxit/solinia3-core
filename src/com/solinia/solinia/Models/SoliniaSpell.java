@@ -5540,4 +5540,20 @@ public class SoliniaSpell implements ISoliniaSpell {
 	{
 		return isEffectInSpell(SpellEffectType.Sacrifice);
 	}
+
+	@Override
+	public boolean isCombatProc() {
+		if ((getCastTime() == 0) && (getRecastTime() == 0) && (getRecoveryTime() == 0))
+		{
+
+			for (int i = 0; i < Utils.getMaxProcs(); i++){
+				if (PermaProcs[i].spellID == spell_id || SpellProcs[i].spellID == spell_id
+					 || RangedProcs[i].spellID == spell_id){
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 }

@@ -1058,4 +1058,6 @@ public interface ISoliniaSpell {
 	Integer getNotFocusable();
 
 	boolean isSacrificeSpell();
+
+	boolean isCombatProc();
 }
