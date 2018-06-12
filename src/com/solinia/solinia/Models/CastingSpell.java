@@ -2,8 +2,13 @@ package com.solinia.solinia.Models;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.LivingEntity;
+
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 
@@ -15,11 +20,21 @@ public class CastingSpell {
 	
 	public CastingSpell(UUID uuid, int spellId, int itemId)
 	{
+		this.livingEntityUUID = uuid;
+
 		try
 		{
 			if (spellId > 0)
 			{
-				timeLeftMilliseconds = StateManager.getInstance().getConfigurationManager().getSpell(spellId).getCastTime();
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+				
+				if (solLivingEntity == null)
+				{
+					timeLeftMilliseconds = spell.getCastTime();
+				} else {
+					timeLeftMilliseconds = solLivingEntity.getActSpellCasttime(spell, spell.getCastTime());
+				}
 			}
 		} catch (CoreStateInitException e)
 		{
@@ -27,8 +42,12 @@ public class CastingSpell {
 		}
 		
 		this.spellId = spellId;
-		this.livingEntityUUID = uuid;
 		this.itemId = itemId;
+	}
+	
+	private LivingEntity getLivingEntity()
+	{
+		return (LivingEntity)Bukkit.getEntity(livingEntityUUID);
 	}
 	
 	public UUID getLivingEntityUUID()

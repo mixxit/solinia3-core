@@ -249,4 +249,6 @@ public interface ISoliniaLivingEntity
 	boolean isCombatProc(ISoliniaSpell spell);
 
 	int getRaceId();
+
+	int getActSpellCasttime(ISoliniaSpell spell, int casttime);
 }

@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
@@ -23,8 +22,8 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
@@ -34,7 +33,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import com.solinia.solinia.Solinia3CorePlugin;
-import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -4568,6 +4566,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO NPC Spell Scale
 
 		return value;
+	}
+	
+	@Override
+	public int getActSpellCasttime(ISoliniaSpell spell, int casttime)
+	{
+		int cast_reducer = 0;
+		cast_reducer += getFocusEffect(FocusEffect.SpellHaste, spell);
+
+		//this function loops through the effects of spell_id many times
+		//could easily be consolidated.
+
+		if (getClassObj() != null)
+		if (getLevel() >= 51 && casttime >= 3000 && !spell.isBeneficial()
+			&& (getClassObj().getName().equals("SHADOWKNIGHT") || getClassObj().getName().equals("RANGER")
+				|| getClassObj().getName().equals("PALADIN") || getClassObj().getName().equals("BEASTLORD") ))
+			cast_reducer += (getLevel()-50)*3;
+
+		//LIVE AA SpellCastingDeftness, QuickBuff, QuickSummoning, QuickEvacuation, QuickDamage
+
+		// TODO MAX Reducer for cast time
+
+		casttime = (casttime*(100 - cast_reducer)/100);
+		
+		if (casttime < 1)
+			return 1;
+
+		return casttime;
 	}
 
 	@Override
