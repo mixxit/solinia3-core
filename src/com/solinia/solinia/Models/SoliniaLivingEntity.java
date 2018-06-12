@@ -3881,7 +3881,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		ISoliniaAAAbility aa = null;
 		try
 		{
-			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("PLANARPOWER");
+			if (getBukkitLivingEntity() instanceof Player)
+			{
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				if(solplayer != null && solplayer.getAARanks().size() > 0)
+				{
+					for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("PLANARPOWER"))
+					{
+						if (!solplayer.hasAAAbility(ability.getId()))
+							continue;
+						
+						aa = ability;
+					}
+				}
+			}
 		} catch (CoreStateInitException e)
 		{
 			

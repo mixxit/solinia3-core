@@ -4909,65 +4909,75 @@ public class SoliniaSpell implements ISoliniaSpell {
 		
 		try
 		{
-			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("SPELLCASTINGMASTERY");
+			if (solEntity.isPlayer())
+			{
+				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)solEntity.getBukkitLivingEntity());
+				if(player.getAARanks().size() > 0)
+				{
+					for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("SPELLCASTINGMASTERY"))
+					{
+						if (!player.hasAAAbility(ability.getId()))
+							continue;
+						
+						aa = ability;
+					}
+				}				
+				
+			}
 		} catch (CoreStateInitException e)
 		{
 			
 		}
 		
+		int SuccessChance = Utils.RandomBetween(0, 100);
+		
+		double PercentManaReduction = 0d;
+		
+		if(SuccessChance <= (spec * 0.3f)) 
+		{
+			PercentManaReduction = (1 + 0.05 * spec);
+			switch(rank) {
+				case 1:
+					PercentManaReduction += 2.5d;
+					break;
+				case 2:
+					PercentManaReduction += 5.0d;
+					break;
+				case 3:
+					PercentManaReduction += 10.0d;
+					break;
+			}
+		}
+		
+		// This seems wrong in EQEmu as its not supposed to be based on 
+		// the specialisation skill
+		// So i have moved this below the specialisation checks to add
+		// on top
+		// I think at some point this was lowered in its strength and made more general
+		// in eq
+	
 		if (aa != null)
 		{
 			rank = Utils.getRankPositionOfAAAbility(solEntity.getBukkitLivingEntity(),aa);
 			switch(rank)
 			{
 				case 1:
-					bonus += 0.05;
+					PercentManaReduction += 2.0d;
 					break;
 				case 2:
-					bonus += 0.15;
+					PercentManaReduction += 5.0d;
 					break;
 				case 3:
-					bonus += 0.30;
+					PercentManaReduction += 10.0d;
+					break;
+				case 4:
+					PercentManaReduction += 15.0d;
 					break;
 			}
 			
 			// TODO advanced rank
-			// bonus += (0.05 * advancedrank);
-			
 		}
-		
-		int SuccessChance = Utils.RandomBetween(0, 100);
-		double PercentManaReduction = 0;
-		
-		if(SuccessChance <= (spec * 0.3 * bonus)) 
-		{
-			PercentManaReduction = (1 + 0.05 * spec);
-			switch(rank) {
-				case 1:
-					PercentManaReduction += 2.5;
-					break;
-				case 2:
-					PercentManaReduction += 5.0;
-					break;
-				case 3:
-					PercentManaReduction += 10.0;
-					break;
-			}
 
-			/* TODO Advanced Spell Casting Mastery
-			switch(advancedrank) {
-				case 1:
-					PercentManaReduction += 2.5;
-					break;
-				case 2:
-					PercentManaReduction += 5.0;
-					break;
-				case 3:
-					PercentManaReduction += 10.0;
-					break;
-			}
-			*/
-		}
 		
 		// TODO Spell Reduction effects on items/buffs
 		// TODO Focus Effects
@@ -4983,8 +4993,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 		if(cost < 0)
 			cost = 0;
-
-		System.out.println("Debug: ACTSpellCost: " + cost + " from " + getMana() + " for " + solEntity.getName() + " " + getName());
 		
 		return cost;
 	}

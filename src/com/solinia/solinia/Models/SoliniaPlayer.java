@@ -1530,8 +1530,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int no_fizzle_level = 0;
 		ISoliniaAAAbility aa = null;
 		try {
-			aa = StateManager.getInstance().getConfigurationManager()
-					.getFirstAAAbilityBySysname("SPELLCASTINGEXPERTISE");
+			if(getAARanks().size() > 0)
+			{
+				for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("SPELLCASTINGEXPERTISE"))
+				{
+					if (!hasAAAbility(ability.getId()))
+						continue;
+					
+					aa = ability;
+				}
+			}
 		} catch (CoreStateInitException e) {
 
 		}

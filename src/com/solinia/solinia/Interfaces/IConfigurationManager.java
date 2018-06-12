@@ -323,8 +323,6 @@ public interface IConfigurationManager {
 
 	void addAlignment(String upperCase) throws Exception;
 
-	ISoliniaAAAbility getFirstAAAbilityBySysname(String string);
-
 	List<ISoliniaPlayer> getCharacters();
 
 	List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID);

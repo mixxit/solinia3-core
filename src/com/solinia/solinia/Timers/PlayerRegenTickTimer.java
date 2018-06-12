@@ -77,7 +77,15 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		try
 		{
 			if(solplayer.getAARanks().size() > 0)
-			aa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("MENTALCLARITY");
+			{
+				for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("MENTALCLARITY"))
+				{
+					if (!solplayer.hasAAAbility(ability.getId()))
+						continue;
+					
+					aa = ability;
+				}
+			}
 			
 		} catch (CoreStateInitException e)
 		{
@@ -97,8 +105,15 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		try
 		{
 			if(solplayer.getAARanks().size() > 0)
-				emaa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("MENTALCLARITY");
-			
+			{
+				for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("MENTALCLARITY"))
+				{
+					if (!solplayer.hasAAAbility(ability.getId()))
+						continue;
+					
+					emaa = ability;
+				}
+			}
 		} catch (CoreStateInitException e)
 		{
 			
@@ -121,7 +136,16 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		ISoliniaAAAbility hpaa = null;
 		try
 		{
-			hpaa = StateManager.getInstance().getConfigurationManager().getFirstAAAbilityBySysname("INNATEREGENERATION");
+			if(solplayer.getAARanks().size() > 0)
+			{
+				for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("INNATEREGENERATION"))
+				{
+					if (!solplayer.hasAAAbility(ability.getId()))
+						continue;
+					
+					hpaa = ability;
+				}
+			}
 		} catch (CoreStateInitException e)
 		{
 			

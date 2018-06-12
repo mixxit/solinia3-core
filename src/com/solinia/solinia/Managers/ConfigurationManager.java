@@ -1417,15 +1417,6 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		alignmentsRepository.add(alignment);
 	}
-
-	@Override
-	public ISoliniaAAAbility getFirstAAAbilityBySysname(String sysname) {
-		List<ISoliniaAAAbility> results = aaabilitiesRepository.query(q -> q.getSysname().equals(sysname));
-		if (results.size() != 1)
-			return null;
-		
-		return results.get(0);
-	}
 	
 	@Override
 	public List<ISoliniaAAAbility> getAAbilitiesBySysname(String sysname) {
