@@ -4884,7 +4884,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// TODO Clairevoyance
 		int cost = getMana();
 		
-		int spec = 0;
+		float spec = 0.0f;
 		
 		if (solEntity.isPlayer())
 		{
@@ -4895,14 +4895,14 @@ public class SoliniaSpell implements ISoliniaSpell {
 			if (player != null)
 				if (Utils.getSpecialisationSkills().contains(skillName.toUpperCase()))
 					if (player.getSpecialisation() != null && player.getSpecialisation().equals(skillName.toUpperCase()))
-						spec = solEntity.getSkill("SPECIALISE" + skillName.toUpperCase());
+						spec = (float)solEntity.getSkill("SPECIALISE" + skillName.toUpperCase());
 			} catch (CoreStateInitException e)
 			{
 				// skip
 			}
 		}
 		
-		float bonus = 1;
+		float bonus = 1.0f;
 		int rank = 0;
 		int advancedrank = 0;
 		ISoliniaAAAbility aa = null;
@@ -4973,7 +4973,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// TODO Focus Effects
 		
 		int focus_redux = solEntity.getFocusEffect(FocusEffect.ManaCost, this);
-		PercentManaReduction += focus_redux;
+		
+		if (focus_redux > 0)
+			PercentManaReduction += Utils.RandomBetween(1, focus_redux);
+		
 		cost -= cost * PercentManaReduction / 100;
 
 		// TODO Gift of mana AA
@@ -4981,6 +4984,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if(cost < 0)
 			cost = 0;
 
+		System.out.println("Debug: ACTSpellCost: " + cost + " from " + getMana() + " for " + solEntity.getName() + " " + getName());
+		
 		return cost;
 	}
 	
