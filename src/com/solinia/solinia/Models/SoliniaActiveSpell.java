@@ -2173,7 +2173,7 @@ public class SoliniaActiveSpell {
 				if (amount < 0)
 					amount = 0;
 				if (!sourceLivingEntity.isDead())
-				sourceLivingEntity.setHealth(amount);
+					sourceLivingEntity.setHealth(amount);
 			}
 		}
 		// Heal

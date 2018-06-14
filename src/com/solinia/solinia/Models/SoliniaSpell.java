@@ -4719,7 +4719,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isWeaponProc() {
-		if (isEffectInSpell(SpellEffectType.WeaponProc))
+		if (isEffectInSpell(SpellEffectType.WeaponProc) || isEffectInSpell(SpellEffectType.AddMeleeProc))
 		{
 			return true;
 		}

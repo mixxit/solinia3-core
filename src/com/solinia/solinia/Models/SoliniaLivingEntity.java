@@ -1230,51 +1230,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
 				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2);
 				
-				
-				
 				DamageHitInfo my_hit2 = this.GetHitInfo(plugin, weapon2, baseDamage2, false, defender);
 				defender.damage(plugin, my_hit2.damage_done, attackerEntity);
 				
-				try
+				// Offhand Proc
+				if (Utils.IsSoliniaItem(weapon2)) 
 				{
-					ISoliniaItem offhandItem = SoliniaItemAdapter.Adapt(weapon2);
-					ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt(attackerEntity);
-					// Check if item has any proc effects
-					if (offhandItem.getWeaponabilityid() > 0
-							&& event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
-						ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
-								.getSpell(offhandItem.getWeaponabilityid());
+					try
+					{
+						ISoliniaItem offhandItem = SoliniaItemAdapter.Adapt(weapon2);
+						ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt(attackerEntity);
+						TryProcItem(event.getCause(), offhandItem, attackerSolEntity, defender);
+					} catch (CoreStateInitException e)
+					{
 						
-						if (procSpell != null && attackerSolEntity.getLevel() > offhandItem.getMinLevel()) {
-							// Chance to proc
-							int procChance = getProcChancePct();
-							int roll = Utils.RandomBetween(0, 100);
-	
-							if (roll < procChance) {
-	
-								// TODO - For now apply self and group to attacker, else attach to target
-								switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
-								case Self:
-									procSpell.tryApplyOnEntity(attackerEntity,
-											attackerEntity);
-									break;
-								case Group:
-									procSpell.tryApplyOnEntity(attackerEntity,
-											attackerEntity);
-									break;
-								default:
-									procSpell.tryApplyOnEntity(attackerEntity,
-											defender.getBukkitLivingEntity());
-								}
-	
-							}
-						}
+					} catch (SoliniaItemException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (CoreStateInitException e)
-				{
-					
-				} catch (SoliniaItemException e) {
-					
 				}
 			}			
 			
@@ -1282,43 +1255,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt(attackerEntity);
 				
 				if (Utils.IsSoliniaItem(attackerEntity.getEquipment().getItemInMainHand())) {
-					try {
-						ISoliniaItem soliniaitem = SoliniaItemAdapter
-								.Adapt(attackerEntity.getEquipment().getItemInMainHand());
-						if (soliniaitem != null) {
-							// Check if item has any proc effects
-							if (soliniaitem.getWeaponabilityid() > 0
-									&& event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
-								ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
-										.getSpell(soliniaitem.getWeaponabilityid());
-								if (procSpell != null && attackerSolEntity.getLevel() > soliniaitem.getMinLevel()) {
-									// Chance to proc
-									int procChance = getProcChancePct();
-									int roll = Utils.RandomBetween(0, 100);
-
-									if (roll < procChance) {
-
-										// TODO - For now apply self and group to attacker, else attach to target
-										switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
-										case Self:
-											procSpell.tryApplyOnEntity(attackerEntity,
-													attackerEntity);
-											break;
-										case Group:
-											procSpell.tryApplyOnEntity(attackerEntity,
-													attackerEntity);
-											break;
-										default:
-											procSpell.tryApplyOnEntity(attackerEntity,
-													defender.getBukkitLivingEntity());
-										}
-
-									}
-								}
-							}
-						}
+					try
+					{
+						ISoliniaItem soliniaitem = SoliniaItemAdapter.Adapt(attackerEntity.getEquipment().getItemInMainHand());
+						TryProcItem(event.getCause(), soliniaitem, attackerSolEntity, defender);
+					} catch (CoreStateInitException e)
+					{
+						
 					} catch (SoliniaItemException e) {
-						// skip
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 
@@ -1337,7 +1283,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							continue;
 
 						for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
-							if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)) {
+							if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc) || spelleffect.getSpellEffectType().equals(SpellEffectType.AddMeleeProc)) {
 								if (spelleffect.getBase() < 0)
 									continue;
 
@@ -1349,7 +1295,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								// Chance to proc
 								int procChance = getProcChancePct();
 								int roll = Utils.RandomBetween(0, 100);
-
+								
 								if (roll < procChance) {
 									boolean itemUseSuccess = procSpell.tryApplyOnEntity(attackerEntity, defender.getBukkitLivingEntity());
 
@@ -1395,6 +1341,45 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 	
+	private void TryProcItem(DamageCause damageCause, ISoliniaItem handItem, ISoliniaLivingEntity attackerSolEntity, ISoliniaLivingEntity defenderSolEntity) {
+		try
+		{
+			if (!damageCause.equals(DamageCause.ENTITY_ATTACK))
+				return;
+			
+			// Check if item has any proc effects
+			if (handItem.getWeaponabilityid() > 0) {
+				ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager().getSpell(handItem.getWeaponabilityid());
+				
+				if (procSpell != null && attackerSolEntity.getLevel() > handItem.getMinLevel()) {
+					// Chance to proc
+					int procChance = getProcChancePct();
+					int roll = Utils.RandomBetween(0, 100);
+	
+					if (roll < procChance) {
+	
+						// TODO - For now apply self and group to attacker, else attach to target
+						switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
+						case Self:
+							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(), attackerSolEntity.getBukkitLivingEntity());
+							break;
+						case Group:
+							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(), attackerSolEntity.getBukkitLivingEntity());
+							break;
+						default:
+							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(), defenderSolEntity.getBukkitLivingEntity());
+						}
+	
+					}
+				}
+			}
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+
 	private DamageHitInfo GetHitInfo(Plugin plugin, ItemStack weapon, int baseDamage, boolean arrowHit, ISoliniaLivingEntity defender) {
 		DamageHitInfo my_hit = new DamageHitInfo();
 		my_hit.skill = Utils.getSkillForMaterial(weapon.getType().toString()).getSkillname();
