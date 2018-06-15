@@ -1025,6 +1025,7 @@ public class Solinia3CorePlayerListener implements Listener {
 								Bukkit.getOfflinePlayer(((Player) event.getView().getPlayer()).getUniqueId()), price);
 						if (responsewithdraw.transactionSuccess()) {
 							ItemStack purchase = item.asItemStack();
+							purchase.setAmount(event.getCursor().getAmount());
 							event.setCursor(new ItemStack(Material.AIR));
 							Utils.CancelEvent(event);
 							;
