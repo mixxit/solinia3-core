@@ -1,6 +1,7 @@
 package com.solinia.solinia.Listeners;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -971,7 +972,17 @@ public class Solinia3CorePlayerListener implements Listener {
 				{
 					buyStack.setAmount(64);
 				}
-				event.setCursor(buyStack);
+				
+				// Cursor events are deprecated, must be done next tick before a cancel
+				final UUID uuid = event.getView().getPlayer().getUniqueId();
+				final ItemStack cursorstack = buyStack;
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+						Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+							public void run() {
+								Bukkit.getPlayer(uuid).setItemOnCursor(cursorstack);
+								}
+						}
+				);
 
 				Utils.CancelEvent(event);
 				return;
@@ -991,7 +1002,15 @@ public class Solinia3CorePlayerListener implements Listener {
 						if (!event.getCurrentItem().getType().equals(Material.AIR)) {
 							event.getView().getPlayer()
 									.sendMessage("You must place the item you wish to buy on an empty slot");
-							event.setCursor(new ItemStack(Material.AIR));
+							// Cursor events are deprecated, must be done next tick before a cancel
+							final UUID uuid = event.getView().getPlayer().getUniqueId();
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+											}
+									}
+							);
 							Utils.CancelEvent(event);
 							return;
 						}
@@ -1016,7 +1035,16 @@ public class Solinia3CorePlayerListener implements Listener {
 								.getBalance((Player) event.getView().getPlayer())) {
 							event.getView().getPlayer().sendMessage(
 									"You do not have sufficient balance to buy this item in that quantity.");
-							event.setCursor(new ItemStack(Material.AIR));
+							
+							// Cursor events are deprecated, must be done next tick before a cancel
+							final UUID uuid = event.getView().getPlayer().getUniqueId();
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+											}
+									}
+							);
 							Utils.CancelEvent(event);
 							return;
 						}
@@ -1026,7 +1054,15 @@ public class Solinia3CorePlayerListener implements Listener {
 						if (responsewithdraw.transactionSuccess()) {
 							ItemStack purchase = item.asItemStack();
 							purchase.setAmount(event.getCursor().getAmount());
-							event.setCursor(new ItemStack(Material.AIR));
+							// Cursor events are deprecated, must be done next tick before a cancel
+							final UUID uuid = event.getView().getPlayer().getUniqueId();
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+											}
+									}
+							);
 							Utils.CancelEvent(event);
 							;
 							event.getClickedInventory().setItem(event.getSlot(), purchase);
@@ -1041,13 +1077,29 @@ public class Solinia3CorePlayerListener implements Listener {
 									.sendMessage(ChatColor.YELLOW + "* Error withdrawing money from your account "
 											+ String.format(responsewithdraw.errorMessage));
 
-							event.setCursor(new ItemStack(Material.AIR));
+							// Cursor events are deprecated, must be done next tick before a cancel
+							final UUID uuid = event.getView().getPlayer().getUniqueId();
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+											}
+									}
+							);
 							Utils.CancelEvent(event);
 							return;
 						}
 					} catch (CoreStateInitException e) {
 						event.getView().getPlayer().sendMessage("Cannot buy items from the merchant right now");
-						event.setCursor(new ItemStack(Material.AIR));
+						// Cursor events are deprecated, must be done next tick before a cancel
+						final UUID uuid = event.getView().getPlayer().getUniqueId();
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									public void run() {
+										Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+										}
+								}
+						);
 						Utils.CancelEvent(event);
 						return;
 					}
@@ -1060,7 +1112,15 @@ public class Solinia3CorePlayerListener implements Listener {
 				// Selling items or dropping item back
 				if (event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: ")) {
 					// Returning store item
-					event.setCursor(new ItemStack(Material.AIR));
+					// Cursor events are deprecated, must be done next tick before a cancel
+					final UUID uuid = event.getView().getPlayer().getUniqueId();
+					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+							Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+								public void run() {
+									Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+									}
+							}
+					);
 					Utils.CancelEvent(event);
 					return;
 
@@ -1084,7 +1144,15 @@ public class Solinia3CorePlayerListener implements Listener {
 							// item.getId(), event.getCursor().getAmount());
 							event.getView().getPlayer()
 									.sendMessage(ChatColor.YELLOW + "* You recieve $" + price + " as payment");
-							event.setCursor(new ItemStack(Material.AIR));
+							// Cursor events are deprecated, must be done next tick before a cancel
+							final UUID uuid = event.getView().getPlayer().getUniqueId();
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+											}
+									}
+							);
 							Utils.CancelEvent(event);
 							return;
 						} else {
