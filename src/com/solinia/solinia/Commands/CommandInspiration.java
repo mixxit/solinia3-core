@@ -290,6 +290,7 @@ public class CommandInspiration implements CommandExecutor {
 					sender.sendMessage("https://www.planetminecraft.com/server/fall-of-an-empire-heavyrp/vote/");
 					sender.sendMessage("https://minecraft-mp.com/server/118059/vote/");
 					sender.sendMessage("https://minecraftlist.org/vote/5962");
+					sender.sendMessage("http://minecraftservers.org/vote/464284");
 					sender.sendMessage("https://minecraft-server.net/vote/fallofanempire");
 					sender.sendMessage("http://minecraft-server-list.com/server/345651/vote/");
 					sender.sendMessage("http://www.minecraft-servers-list.org/index.php?a=in&u=mixxit");
