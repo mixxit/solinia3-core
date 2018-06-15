@@ -340,13 +340,19 @@ public class EntityManager implements IEntityManager {
 		if (entitySpells.get(targetEntity.getUniqueId()) == null)
 			entitySpells.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
 		
-		int duration = Utils.getDurationFromSpell(soliniaSpell);
-		if (soliniaSpell.isBardSong() && duration == 0)
-		{
-			duration = 18;
+		try {
+			ISoliniaLivingEntity solLivingSourceEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
+			int duration = Utils.getDurationFromSpell(solLivingSourceEntity, soliniaSpell);
+			if (soliniaSpell.isBardSong() && duration == 0)
+			{
+				duration = 18;
+			}
+			
+			return entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration);
+		} catch (CoreStateInitException e) {
 		}
 		
-		return entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration);
+		return false;
 	}
 	
 	@Override

@@ -4876,6 +4876,20 @@ public class SoliniaSpell implements ISoliniaSpell {
 		
 		return 1000;
 	}
+	
+	@Override
+	public int getActSpellDuration(ISoliniaLivingEntity solEntity, int duration)
+	{
+		int increase = 100;
+		increase += solEntity.getFocusEffect(FocusEffect.SpellDuration, this);
+		int tic_inc = 0;
+		tic_inc = solEntity.getFocusEffect(FocusEffect.SpellDurByTic, this);
+
+		float focused = ((duration * increase) / 100.0f) + tic_inc;
+		int ifocused = (int)(focused);
+
+		return ifocused;
+	}
 
 	@Override
 	public int getActSpellCost(ISoliniaLivingEntity solEntity) 
@@ -5572,5 +5586,16 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return true;
 
 		return false;
+	}
+
+	public int calcBuffDuration(ISoliniaLivingEntity solEntity, int level) {
+		// TODO do caster level overide
+
+		int res = calcBuffDurationFormula(solEntity.getLevel(), getBuffdurationformula(), getBuffduration());
+		
+		// TODO illusion spells
+		// TODO mod
+		
+		return res;
 	}
 }

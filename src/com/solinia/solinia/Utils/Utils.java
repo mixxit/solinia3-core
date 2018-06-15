@@ -3221,11 +3221,14 @@ public class Utils {
 		}
 	}
 
-	public static int getDurationFromSpell(SoliniaSpell soliniaSpell) {
-		if (soliniaSpell.isBuffSpell()) {
-			return soliniaSpell.getBuffduration();
+	public static int getDurationFromSpell(ISoliniaLivingEntity solEntity, SoliniaSpell soliniaSpell) {
+		int duration = soliniaSpell.calcBuffDuration(solEntity, solEntity.getLevel());
+		if (duration > 0)
+		{
+			duration = soliniaSpell.getActSpellDuration(solEntity, duration);
 		}
-		return 0;
+		
+		return duration;
 	}
 
 	// Used for one off patching, added in /commit patch command for console sender

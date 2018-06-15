@@ -1062,4 +1062,6 @@ public interface ISoliniaSpell {
 	boolean isCombatSkill();
 
 	boolean isRangedProc();
+
+	int getActSpellDuration(ISoliniaLivingEntity solEntity, int duration);
 }
