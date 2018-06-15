@@ -966,7 +966,12 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				// Picking up merchant item
 				// event.getView().getPlayer().sendMessage("Picking up merchant item");
-				event.setCursor(event.getCurrentItem());
+				ItemStack buyStack = event.getCurrentItem().clone();
+				if (event.isRightClick())
+				{
+					buyStack.setAmount(64);
+				}
+				event.setCursor(buyStack);
 
 				Utils.CancelEvent(event);
 				return;
@@ -1020,6 +1025,7 @@ public class Solinia3CorePlayerListener implements Listener {
 								Bukkit.getOfflinePlayer(((Player) event.getView().getPlayer()).getUniqueId()), price);
 						if (responsewithdraw.transactionSuccess()) {
 							ItemStack purchase = item.asItemStack();
+							purchase.setAmount(event.getCursor().getAmount());
 							event.setCursor(new ItemStack(Material.AIR));
 							Utils.CancelEvent(event);
 							;
