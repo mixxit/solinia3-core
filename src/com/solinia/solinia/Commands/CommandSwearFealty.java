@@ -1,5 +1,8 @@
 package com.solinia.solinia.Commands;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,6 +50,16 @@ public class CommandSwearFealty implements CommandExecutor {
 			if (sourcePlayer.getRaceId() < 1 || fealtyPlayer.getRaceId() < 1)
 			{
 				sender.sendMessage("You and your target must both have a race set");
+				return true;
+			}
+			
+			LocalDateTime datetime = LocalDateTime.now();
+			datetime.minusDays(30);
+			Timestamp earliesttimestamp = Timestamp.valueOf(datetime);
+			
+			if (fealtyPlayer.getLastLogin().before(earliesttimestamp))
+			{
+				sender.sendMessage("You can only swear fealty to players that have been online in the last 30 days");
 				return true;
 			}
 			

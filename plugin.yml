@@ -386,6 +386,10 @@ commands:
     description: Edits a race
     usage: /editrace raceid setting value
     aliases: []
+  editalignment:
+    description: Edits an alignment
+    usage: /editalignment alignmentid setting value
+    aliases: []
   editfaction:
     description: Edits a faction
     usage: /editfaction faction setting value

@@ -1,7 +1,10 @@
 package com.solinia.solinia.Managers;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -19,6 +22,7 @@ import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Events.SoliniaSpawnGroupUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidAASettingException;
+import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
@@ -966,6 +970,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
+	public void editAlignment(String alignmentid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidAlignmentSettingException 
+	{
+		getAlignment(alignmentid).editSetting(setting, value);
+	}
+	
+	@Override
 	public List<ISoliniaSpell> getSpellsByClassId(int classId) {
 		List<ISoliniaSpell> returnSpells = new ArrayList<ISoliniaSpell>();
 		
@@ -1137,11 +1147,16 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public void updateKingsAndEmperors() {
+	public void updateEmperors() {
 		
 		HashMap<UUID,Integer> goodCount = new HashMap<UUID,Integer>();
 		HashMap<UUID,Integer> neutralCount = new HashMap<UUID,Integer>();
 		HashMap<UUID,Integer> evilCount = new HashMap<UUID,Integer>();
+		
+		LocalDateTime datetime = LocalDateTime.now();
+		datetime.minusDays(30);
+		Timestamp earliesttimestamp = Timestamp.valueOf(datetime);
+		
 		
 		try {
 			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getCharacters())
@@ -1155,7 +1170,15 @@ public class ConfigurationManager implements IConfigurationManager {
 				if (player.getFealty() == null)
 					continue;
 				
+				if (player.getLastLogin().before(earliesttimestamp))
+					continue;
+				
 				ISoliniaPlayer fealtyPlayer = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getFealty());
+				
+				if (fealtyPlayer.getLastLogin().before(earliesttimestamp))
+				{
+					continue;
+				}
 				
 				if (fealtyPlayer.getRaceId() < 1)
 					continue;

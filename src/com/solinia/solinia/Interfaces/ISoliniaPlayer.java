@@ -389,4 +389,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setShowDiscord(boolean showDiscord);
 
+	Timestamp getLastLogin();
+
 }

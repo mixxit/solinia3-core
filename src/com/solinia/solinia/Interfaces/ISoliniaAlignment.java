@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.command.CommandSender;
 
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaChunk;
 import com.solinia.solinia.Models.SoliniaZone;
@@ -49,5 +51,10 @@ public interface ISoliniaAlignment {
 	List<SoliniaZone> getMaterialZones();
 
 	ConcurrentHashMap<String, SoliniaAlignmentChunk> getChunks();
+
+	void editSetting(String setting, String value)
+			throws InvalidAlignmentSettingException, NumberFormatException, CoreStateInitException;
+
+	void sendAlignmentSettingsToSender(CommandSender sender) throws CoreStateInitException;
 
 }

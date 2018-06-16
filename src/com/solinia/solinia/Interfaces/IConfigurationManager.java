@@ -16,6 +16,7 @@ import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
@@ -313,7 +314,7 @@ public interface IConfigurationManager {
 
 	void resetAARankRepository();
 
-	void updateKingsAndEmperors();
+	void updateEmperors();
 
 	int getNextAlignmentId();
 
@@ -423,4 +424,6 @@ public interface IConfigurationManager {
 			throws NumberFormatException, CoreStateInitException, InvalidNPCMerchantListSettingException;
 
 	void commitCsvs();
+
+	void editAlignment(String alignmentid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidAlignmentSettingException;
 }

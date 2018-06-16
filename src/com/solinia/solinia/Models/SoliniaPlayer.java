@@ -137,6 +137,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ChatColor.YELLOW + "* You have earned the title: " + title + ChatColor.RESET + " See /settitle");
 		return true;
 	}
+	
+	@Override
+	public Timestamp getLastLogin()
+	{
+		return new Timestamp(Bukkit.getOfflinePlayer(this.getUUID()).getLastPlayed());
+	}
 
 	@Override
 	public void setUUID(UUID uuid) {

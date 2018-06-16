@@ -10,7 +10,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
+import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -140,6 +143,29 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 		sender.sendMessage("Total Territories: " + ChatColor.GOLD + getTotalChunks() + ChatColor.RESET);
 		sender.sendMessage("Total Material Zones: " + ChatColor.GOLD + getTotalMaterialChunks() + ChatColor.RESET);
 		sender.sendMessage("Total Trade Posts: " + ChatColor.GOLD + getTotalTradePosts() + ChatColor.RESET);
+	}
+	
+	@Override
+	public void sendAlignmentSettingsToSender(CommandSender sender) throws CoreStateInitException {
+		sender.sendMessage(ChatColor.RED + "Alignment Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
+		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- emperor: " + ChatColor.GOLD + getEmperor() + ChatColor.RESET);
+		sender.sendMessage("----------------------------");
+	}
+	
+	@Override
+	public void editSetting(String setting, String value)
+			throws InvalidAlignmentSettingException, NumberFormatException, CoreStateInitException {
+
+		switch (setting.toLowerCase()) {
+		case "clearemperor":
+			setEmperor(null);
+			break;
+		default:
+			throw new InvalidAlignmentSettingException("Invalid Alignment setting. Valid Options are: clearemperor");
+		}
 	}
 
 	@Override
