@@ -54,6 +54,13 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 
 	@Override
 	public void setEmperor(UUID emperor) {
+		
+		if (emperor == null)
+		{
+			this.emperor = null;
+			return;
+		}
+		
 		try {
 			String playerName = StateManager.getInstance().getPlayerManager().getPlayerNameByUUID(emperor);
 			if (playerName != null && !playerName.equals(""))

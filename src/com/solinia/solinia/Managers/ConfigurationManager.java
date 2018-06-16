@@ -401,7 +401,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public ISoliniaAlignment getAlignment(String alignment) {
 		// TODO Auto-generated method stub
-		List<ISoliniaAlignment> list = alignmentsRepository.query(q -> q.getName().equals(alignment));
+		List<ISoliniaAlignment> list = alignmentsRepository.query(q -> q.getName().toUpperCase().equals(alignment.toUpperCase()));
 		if (list.size() > 0)
 			return list.get(0);
 
