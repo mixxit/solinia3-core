@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandSwearFealty implements CommandExecutor {
 	@Override
@@ -66,16 +67,7 @@ public class CommandSwearFealty implements CommandExecutor {
 			if (fealtyPlayer.getLastLogin().before(earliesttimestamp))
 			{
 				sender.sendMessage("You can only swear fealty to players that have been online in the last 30 days");
-				Instant instant = fealtyPlayer.getLastLogin().toInstant(); 
-				OffsetDateTime odt = OffsetDateTime.now ();
-				ZoneOffset zoneOffset = odt.getOffset ();
-				
-				ZoneId zoneId = ZoneId.of( zoneOffset.getId() );
-				ZonedDateTime zdt = ZonedDateTime.ofInstant( instant , zoneId );
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "uuuu.MM.dd.HH.mm.ss" );
-				String output = zdt.format( formatter );
-				
-				sender.sendMessage("This player was last online: " + output);
+				sender.sendMessage("This player was last online: " + Utils.getStringFromTimestamp(fealtyPlayer.getLastLogin()) + " vs " + Utils.getStringFromTimestamp(earliesttimestamp));
 				return true;
 			}
 			

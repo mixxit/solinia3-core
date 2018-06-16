@@ -5,7 +5,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -6517,5 +6523,17 @@ public class Utils {
 	public static int getMaxProcs() {
 		// TODO Auto-generated method stub
 		return 4;
+	}
+
+	public static String getStringFromTimestamp(Timestamp timestamp) {
+		Instant instant = timestamp.toInstant(); 
+		OffsetDateTime odt = OffsetDateTime.now ();
+		ZoneOffset zoneOffset = odt.getOffset ();
+		
+		ZoneId zoneId = ZoneId.of( zoneOffset.getId() );
+		ZonedDateTime zdt = ZonedDateTime.ofInstant( instant , zoneId );
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "uuuu.MM.dd.HH.mm.ss" );
+		String output = zdt.format( formatter );
+		return output;
 	}
 }
