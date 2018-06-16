@@ -50,9 +50,9 @@ public class CommandSwearFealty implements CommandExecutor {
 				return true;
 			}
 			
-			if (sourcePlayer.getRaceId() != fealtyPlayer.getRaceId())
+			if (!sourcePlayer.getRace().getAlignment().equals(fealtyPlayer.getRace().getAlignment()))
 			{
-				sender.sendMessage("You can only swear fealty to a player of the same race");
+				sender.sendMessage("You can only swear fealty to a player of the same alignment");
 				return true;
 			} else {
 				sourcePlayer.setFealty(fealtyTo.getUniqueId());

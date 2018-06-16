@@ -209,26 +209,6 @@ public class SoliniaRace implements ISoliniaRace {
 	}
 
 	@Override
-	public UUID getKing() {
-		return king;
-	}
-
-	@Override
-	public void setKing(UUID king) {
-		try {
-			String playerName = StateManager.getInstance().getPlayerManager().getPlayerNameByUUID(king);
-			if (playerName != null && !playerName.equals(""))
-			{
-				this.king = king;
-				Utils.BroadcastPlayers(playerName + " has been declared Ruler of the " + Utils.FormatAsName(getName())+"s!");
-			}
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@Override
 	public boolean isVampire() {
 		return vampire;
 	}

@@ -66,10 +66,6 @@ public interface ISoliniaRace {
 
 	void setShortName(String shortName);
 
-	UUID getKing();
-
-	void setKing(UUID king);
-
 	boolean isVampire();
 
 	void setVampire(boolean vampire);

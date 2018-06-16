@@ -492,7 +492,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("loot").setExecutor(new CommandLoot());		
 		this.getCommand("createallarmoursets").setExecutor(new CommandCreateAllArmourSets());
 		this.getCommand("swearfealty").setExecutor(new CommandSwearFealty());
-		this.getCommand("voteemperor").setExecutor(new CommandVoteEmperor());
 		this.getCommand("createalignment").setExecutor(new CommandCreateAlignment());
 		this.getCommand("specialise").setExecutor(new CommandSpecialise());
 		this.getCommand("bite").setExecutor(new CommandBite());

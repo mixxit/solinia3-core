@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -55,7 +56,7 @@ public class SoliniaAlignment implements ISoliniaAlignment {
 			if (playerName != null && !playerName.equals(""))
 			{
 				this.emperor = emperor;
-				Utils.BroadcastPlayers(playerName + " has been declared Emperor! (" + getName() + ")");
+				Bukkit.broadcastMessage(playerName + " has been declared Emperor! (" + getName() + ")");
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

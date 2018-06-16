@@ -152,10 +152,6 @@ public class ChannelManager implements IChannelManager {
 
 		String title = name;
 		ChatColor nameColour = ChatColor.YELLOW;
-		if (player.isRacialKing())
-		{
-			nameColour = ChatColor.GOLD;
-		}
 		
 		if (player.isAlignmentEmperor())
 		{
@@ -216,11 +212,7 @@ public class ChannelManager implements IChannelManager {
 
 		String title = name;
 		ChatColor nameColour = ChatColor.YELLOW;
-		if (player.isRacialKing())
-		{
-			nameColour = ChatColor.GOLD;
-		}
-		
+
 		if (player.isAlignmentEmperor())
 		{
 			nameColour = ChatColor.LIGHT_PURPLE;

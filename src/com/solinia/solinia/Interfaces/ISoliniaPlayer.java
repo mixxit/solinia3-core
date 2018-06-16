@@ -234,11 +234,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	UUID getFealty();
 
-	boolean isRacialKing();
-
-	public void setVoteEmperor(UUID uniqueId);
-	public UUID getVoteEmperor();
-
 	boolean isAlignmentEmperor();
 
 	String getSpecialisation();
@@ -338,13 +333,9 @@ public interface ISoliniaPlayer extends Serializable {
 
 	boolean canUseAASpell(ISoliniaSpell spell);
 
-	boolean isRacialKingSpouse();
-
 	boolean isAlignmentEmperorSpouse();
 
 	boolean isAlignmentEmperorChild();
-
-	boolean isRacialKingChild();
 
 	public SoliniaAlignmentChunk getCurrentAlignmentChunk();
 

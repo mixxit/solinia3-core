@@ -90,7 +90,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<PlayerQuest> playerQuests = new ArrayList<PlayerQuest>();
 	private List<String> playerQuestFlags = new ArrayList<String>();
 	private UUID fealty;
-	private UUID voteemperor;
 	private String specialisation = "";
 	private boolean vampire = false;
 	private boolean main = true;
@@ -197,41 +196,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public String getFullNameWithTitle() {
 		String king = "";
-		if (isRacialKingChild()) {
+				if (isAlignmentEmperorChild()) {
 			if (this.getGender().equals("MALE"))
 				king = "Prince ";
 			else
 				king = "Princess ";
 		}
-
-		if (isAlignmentEmperorChild()) {
-			if (this.getGender().equals("MALE"))
-				king = "Prince ";
-			else
-				king = "Princess ";
-		}
-
-		if (isRacialKingSpouse()) {
-			if (this.getGender().equals("MALE"))
-				king = "Consort ";
-			else
-				king = "Queen ";
-		}
-
 		if (isAlignmentEmperorSpouse()) {
 			if (this.getGender().equals("MALE"))
 				king = "Consort ";
 			else
 				king = "Empress ";
 		}
-
-		if (isRacialKing()) {
-			if (this.getGender().equals("MALE"))
-				king = "King ";
-			else
-				king = "Queen ";
-		}
-
 		if (isAlignmentEmperor()) {
 			if (this.getGender().equals("MALE"))
 				king = "Emperor ";
@@ -266,28 +242,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	@Override
-	public boolean isRacialKingChild() {
-
-		if (this.getMotherId() != null) {
-			try {
-				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager()
-						.getCharacterByCharacterUUID(this.getMotherId());
-				if (solPlayer == null)
-					return false;
-				if (solPlayer.isRacialKing() || solPlayer.isRacialKingSpouse()) {
-					return true;
-				}
-			} catch (CoreStateInitException e) {
-
-			}
-
-		}
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 	@Override
 	public boolean isAlignmentEmperorSpouse() {
 		if (this.getSpouseId() != null) {
@@ -305,24 +260,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		}
 		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isRacialKingSpouse() {
-		if (this.getSpouseId() != null) {
-			try {
-				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager()
-						.getCharacterByCharacterUUID(this.getSpouseId());
-				if (solPlayer == null)
-					return false;
-				if (solPlayer.isRacialKing()) {
-					return true;
-				}
-			} catch (CoreStateInitException e) {
-
-			}
-		}
 		return false;
 	}
 
@@ -2469,26 +2406,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean isRacialKing() {
-		if (!isMain())
-			return false;
-
-		try {
-			for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces()) {
-				if (race.getKing() == null)
-					continue;
-
-				if (race.getKing().equals(getUUID()))
-					return true;
-			}
-		} catch (CoreStateInitException e) {
-			return false;
-		}
-
-		return false;
-	}
-
-	@Override
 	public boolean isAlignmentEmperor() {
 		if (!isMain())
 			return false;
@@ -2513,27 +2430,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return false;
-	}
-
-	@Override
-	public UUID getVoteEmperor() {
-		return voteemperor;
-	}
-
-	@Override
-	public void setVoteEmperor(UUID uniqueId) {
-		Entity fealtyTo = Bukkit.getEntity(uniqueId);
-
-		if (uniqueId.equals(this.getUUID()))
-			return;
-
-		if (fealtyTo == null)
-			return;
-
-		if (!(fealtyTo instanceof Player))
-			return;
-
-		this.voteemperor = uniqueId;
 	}
 
 	@Override
@@ -3046,19 +2942,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						}
 				}
 
-				for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces()) {
-					if (race.getKing() != null)
-						if (race.getKing().toString().equals(solPlayer.getUUID().toString())) {
-							Utils.BroadcastPlayers("The " + race.getName() + " race no longer has a King!");
-							race.setKing(null);
-						}
-				}
-
 				for (ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager()
 						.getAlignments()) {
 					if (alignment.getEmperor() != null)
 						if (alignment.getEmperor().toString().equals(solPlayer.getUUID().toString())) {
-							Utils.BroadcastPlayers("The " + alignment.getName() + " empire no longer has an emperor!");
+							Bukkit.broadcastMessage(ChatColor.YELLOW + "The " + alignment.getName() + " empire no longer has an emperor!");
 							alignment.setEmperor(null);
 						}
 				}

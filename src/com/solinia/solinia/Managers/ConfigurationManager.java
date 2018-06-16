@@ -1139,131 +1139,67 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public void updateKingsAndEmperors() {
 		
-		List<UUID> goodkingCache = new ArrayList<UUID>();
-		List<UUID> neutralkingCache = new ArrayList<UUID>();
-		List<UUID> evilkingCache = new ArrayList<UUID>();
+		HashMap<UUID,Integer> goodCount = new HashMap<UUID,Integer>();
+		HashMap<UUID,Integer> neutralCount = new HashMap<UUID,Integer>();
+		HashMap<UUID,Integer> evilCount = new HashMap<UUID,Integer>();
 		
-		for(ISoliniaRace race : getRaces())
-		{
-			HashMap<UUID,Integer> kingCount = new HashMap<UUID,Integer>();
-			
-			try {
-				for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getCharacters())
-				{
-					if (player.getRaceId() != race.getId())
-						continue;
-					
-					if (!player.isMain())
-						continue;
-					
-					if (player.getFealty() == null)
-						continue;
-					
-					ISoliniaPlayer fealtyPlayer = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getFealty());
-					
-					if (fealtyPlayer.getRaceId() != player.getRaceId())
-						continue;
-					
-					if (!fealtyPlayer.isMain())
-						continue;
-					
-					if (fealtyPlayer.isAlignmentEmperor())
-						continue;
-					
-					if (!kingCount.containsKey(player.getFealty()))
-					{
-						kingCount.put(player.getFealty(), 1);
-					} else {
-						kingCount.put(player.getFealty(), kingCount.get(player.getFealty())+1);
-					}
-				}
-				
-				Entry<UUID,Integer> maxEntry = null;
-				for(Entry<UUID,Integer> entry : kingCount.entrySet())
-				{
-					if (maxEntry == null || entry.getValue() > maxEntry.getValue()) 
-					{
-				        maxEntry = entry;
-				    }
-				}
-				
-				if (maxEntry != null)
-				{
-					if (race.getKing() == null || !race.getKing().equals(maxEntry.getKey()))
-						StateManager.getInstance().getConfigurationManager().getRace(race.getId()).setKing(maxEntry.getKey());
-					
-					switch(race.getAlignment())
-					{
-						case "GOOD":
-							goodkingCache.add(maxEntry.getKey());
-							break;
-						case "NEUTRAL":
-							neutralkingCache.add(maxEntry.getKey());
-							break;
-						case "EVIL":
-							evilkingCache.add(maxEntry.getKey());
-							break;
-						default:
-							break;
-					}
-				}
-				
-			} catch (CoreStateInitException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		try
-		{
-			// Good
-			HashMap<UUID,Integer> goodkingCount = new HashMap<UUID,Integer>();
-			
-			if (StateManager.getInstance().getConfigurationManager().getAlignment("GOOD") != null)
-			for (UUID king : goodkingCache)
+		try {
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getCharacters())
 			{
-				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(king);
-				if (player == null)
-					continue;
-				
 				if (!player.isMain())
 					continue;
-				
-				if (player.getRace() == null)
+
+				if (player.getRaceId() < 1)
 					continue;
 				
-				if (!player.isRacialKing())
+				if (player.getFealty() == null)
 					continue;
 				
-				if (player.getVoteEmperor() == null)
+				ISoliniaPlayer fealtyPlayer = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getFealty());
+				
+				if (fealtyPlayer.getRaceId() < 1)
 					continue;
 				
-				if (player.getVoteEmperor().equals(player.getUUID()))
+				if (!fealtyPlayer.isMain())
 					continue;
 				
-				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getVoteEmperor());
-				if (fealty == null)
+				if (!player.getRace().getAlignment().equals(fealtyPlayer.getRace().getAlignment()))
 					continue;
 				
-				if (fealty.getRace() == null)
-					continue;
-				
-				if (!fealty.getRace().getAlignment().equals(player.getRace().getAlignment()))
-					continue;
-				
-				if (fealty.isRacialKing())
-					continue;
-				
-				if (!goodkingCount.containsKey(player.getVoteEmperor()))
+				switch(player.getRace().getAlignment())
 				{
-					goodkingCount.put(player.getVoteEmperor(), 1);
-				} else {
-					goodkingCount.put(player.getVoteEmperor(), goodkingCount.get(player.getVoteEmperor())+1);
+					case "GOOD":
+						if (!goodCount.containsKey(player.getFealty()))
+						{
+							goodCount.put(player.getFealty(), 1);
+						} else {
+							goodCount.put(player.getFealty(), goodCount.get(player.getFealty())+1);
+						}
+						break;
+					case "NEUTRAL":
+						if (!neutralCount.containsKey(player.getFealty()))
+						{
+							neutralCount.put(player.getFealty(), 1);
+						} else {
+							neutralCount.put(player.getFealty(), neutralCount.get(player.getFealty())+1);
+						}
+						break;
+					case "EVIL":
+						if (!evilCount.containsKey(player.getFealty()))
+						{
+							evilCount.put(player.getFealty(), 1);
+						} else {
+							evilCount.put(player.getFealty(), evilCount.get(player.getFealty())+1);
+						}
+						break;
+					default:
+						break;
 				}
 			}
 			
+			// GOOD
 			Entry<UUID,Integer> maxEntry = null;
-			for(Entry<UUID,Integer> entry : goodkingCount.entrySet())
+			for(Entry<UUID,Integer> entry : goodCount.entrySet())
 			{
 				if (maxEntry == null || entry.getValue() > maxEntry.getValue()) 
 				{
@@ -1278,51 +1214,8 @@ public class ConfigurationManager implements IConfigurationManager {
 					StateManager.getInstance().getConfigurationManager().getAlignment("GOOD").setEmperor(maxEntry.getKey());
 			}
 			
-			// Neutral
-			HashMap<UUID,Integer> neutralkingCount = new HashMap<UUID,Integer>();
-			
-			if (StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL") != null)
-			for (UUID king : neutralkingCache)
-			{
-				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(king);
-				if (player == null)
-					continue;
-				
-				if (player.getRace() == null)
-					continue;
-				
-				if (!player.isRacialKing())
-					continue;
-				
-				if (player.getVoteEmperor() == null)
-					continue;
-				
-				if (player.getVoteEmperor().equals(player.getUUID()))
-					continue;
-				
-				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getVoteEmperor());
-				if (fealty == null)
-					continue;
-				
-				if (fealty.getRace() == null)
-					continue;
-				
-				if (!fealty.getRace().getAlignment().equals(player.getRace().getAlignment()))
-					continue;
-				
-				if (fealty.isRacialKing())
-					continue;
-				
-				if (!neutralkingCount.containsKey(player.getVoteEmperor()))
-				{
-					neutralkingCount.put(player.getVoteEmperor(), 1);
-				} else {
-					neutralkingCount.put(player.getVoteEmperor(), neutralkingCount.get(player.getVoteEmperor())+1);
-				}
-			}
-			
 			maxEntry = null;
-			for(Entry<UUID,Integer> entry : neutralkingCount.entrySet())
+			for(Entry<UUID,Integer> entry : neutralCount.entrySet())
 			{
 				if (maxEntry == null || entry.getValue() > maxEntry.getValue()) 
 				{
@@ -1332,57 +1225,13 @@ public class ConfigurationManager implements IConfigurationManager {
 			
 			if (maxEntry != null)
 			{
-				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL");
+				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("GOOD");
 				if (alignment.getEmperor() == null || !alignment.getEmperor().equals(maxEntry.getKey()))
-					StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL").setEmperor(maxEntry.getKey());
-			}
-			
-			// Evil
-			HashMap<UUID,Integer> evilkingCount = new HashMap<UUID,Integer>();
-			
-			if (StateManager.getInstance().getConfigurationManager().getAlignment("EVIL") != null)
-			for (UUID king : evilkingCache)
-			{
-				ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(king);
-				if (player == null)
-					continue;
-				
-				if (player.getRace() == null)
-					continue;
-				
-				if (!player.isRacialKing())
-					continue;
-				
-				if (player.getVoteEmperor() == null)
-					continue;
-				
-				if (player.getVoteEmperor().equals(player.getUUID()))
-					continue;
-				
-				ISoliniaPlayer fealty = StateManager.getInstance().getPlayerManager().getMainCharacterDataOnly(player.getVoteEmperor());
-				if (fealty == null)
-					continue;
-				
-				if (fealty.getRace() == null)
-					continue;
-				
-				if (!fealty.getRace().getAlignment().equals(player.getRace().getAlignment()))
-					continue;
-				
-				if (fealty.isRacialKing())
-					continue;
-				
-				if (!evilkingCount.containsKey(player.getVoteEmperor()))
-				{
-					evilkingCount.put(player.getVoteEmperor(), 1);
-				} else {
-					evilkingCount.put(player.getVoteEmperor(), evilkingCount.get(player.getVoteEmperor())+1);
-				}
+					StateManager.getInstance().getConfigurationManager().getAlignment("GOOD").setEmperor(maxEntry.getKey());
 			}
 			
 			maxEntry = null;
-			
-			for(Entry<UUID,Integer> entry : evilkingCount.entrySet())
+			for(Entry<UUID,Integer> entry : evilCount.entrySet())
 			{
 				if (maxEntry == null || entry.getValue() > maxEntry.getValue()) 
 				{
@@ -1392,14 +1241,14 @@ public class ConfigurationManager implements IConfigurationManager {
 			
 			if (maxEntry != null)
 			{
-				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("EVIL");
+				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("GOOD");
 				if (alignment.getEmperor() == null || !alignment.getEmperor().equals(maxEntry.getKey()))
-					StateManager.getInstance().getConfigurationManager().getAlignment("EVIL").setEmperor(maxEntry.getKey());
+					StateManager.getInstance().getConfigurationManager().getAlignment("GOOD").setEmperor(maxEntry.getKey());
 			}
 			
-		} catch (CoreStateInitException e)
-		{
-			// try next loop
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
