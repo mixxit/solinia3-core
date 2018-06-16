@@ -1225,9 +1225,9 @@ public class ConfigurationManager implements IConfigurationManager {
 			
 			if (maxEntry != null)
 			{
-				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("GOOD");
+				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL");
 				if (alignment.getEmperor() == null || !alignment.getEmperor().equals(maxEntry.getKey()))
-					StateManager.getInstance().getConfigurationManager().getAlignment("GOOD").setEmperor(maxEntry.getKey());
+					StateManager.getInstance().getConfigurationManager().getAlignment("NEUTRAL").setEmperor(maxEntry.getKey());
 			}
 			
 			maxEntry = null;
@@ -1241,9 +1241,9 @@ public class ConfigurationManager implements IConfigurationManager {
 			
 			if (maxEntry != null)
 			{
-				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("GOOD");
+				ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager().getAlignment("EVIL");
 				if (alignment.getEmperor() == null || !alignment.getEmperor().equals(maxEntry.getKey()))
-					StateManager.getInstance().getConfigurationManager().getAlignment("GOOD").setEmperor(maxEntry.getKey());
+					StateManager.getInstance().getConfigurationManager().getAlignment("EVIL").setEmperor(maxEntry.getKey());
 			}
 			
 		} catch (CoreStateInitException e) {
