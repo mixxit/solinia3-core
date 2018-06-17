@@ -61,8 +61,7 @@ public class CommandSwearFealty implements CommandExecutor {
 			}
 			
 			LocalDateTime datetime = LocalDateTime.now();
-			datetime.minusDays(30);
-			Timestamp earliesttimestamp = Timestamp.valueOf(datetime);
+			Timestamp earliesttimestamp = Timestamp.valueOf(datetime.minusDays(30));
 			
 			if (fealtyPlayer.getLastLogin().before(earliesttimestamp))
 			{
