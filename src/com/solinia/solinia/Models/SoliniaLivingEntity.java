@@ -1323,6 +1323,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			{
 				Utils.CancelEvent(event);
 				removeDeathSaves(plugin);
+				attackerEntity.sendMessage("* Your target was protected by a death save boon!");
 				getBukkitLivingEntity().sendMessage("* Your death save boon has saved you from death!");
 				return false;
 			}
