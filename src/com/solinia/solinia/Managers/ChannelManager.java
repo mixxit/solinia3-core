@@ -52,7 +52,7 @@ public class ChannelManager implements IChannelManager {
 					{
 						player.sendMessage(message);
 					} else {
-						player.sendMessage(ChatColor.AQUA + " * " + source.getFullNameWithTitle() + " says something in a language you do not understand" + ChatColor.RESET);
+						player.sendMessage(Utils.ConvertToRunic(message));
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
 				} catch (CoreStateInitException e)
@@ -318,7 +318,7 @@ public class ChannelManager implements IChannelManager {
 					{
 						player.sendMessage(message);
 					} else {
-						player.sendMessage(ChatColor.AQUA + " * " + source.getName() + " says something in a language you do not understand" + ChatColor.RESET);
+						player.sendMessage(Utils.ConvertToRunic(message));
 						
 						if (allowlanguagelearn == true)
 						{
