@@ -1004,6 +1004,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit,
 			Solinia3CorePlugin plugin) {
+		
+		if (event.isCancelled())
+			return false;
+		
 		int baseDamage = (int) event.getDamage(DamageModifier.BASE);
 		
 		try
@@ -1183,15 +1187,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
 									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
 									+ " damage [PetHP:" + pet.getHealth() + "]"));
-				}
-			}
-			
-			if (defender.isNPC())
-			{
-				try {
-					StateManager.getInstance().getConfigurationManager().getNPC(defender.getNpcid());
-				} catch (CoreStateInitException e) {
-					
 				}
 			}
 
