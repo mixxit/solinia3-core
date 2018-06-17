@@ -36,7 +36,7 @@ public class ChannelManager implements IChannelManager {
 	private ConcurrentHashMap<Integer, QueuedDiscordMessage> queuedDiscordMessages = new ConcurrentHashMap<Integer, QueuedDiscordMessage>();
 	
 	@Override
-	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message) {
+	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage) {
 		
 		message = decorateLocalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -52,7 +52,7 @@ public class ChannelManager implements IChannelManager {
 					{
 						player.sendMessage(message);
 					} else {
-						player.sendMessage(Utils.ConvertToRunic(message));
+						player.sendMessage(ChatColor.AQUA + source.getFullNameWithTitle() + " says '" + Utils.ConvertToRunic(coremessage) + "'" + ChatColor.RESET);
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
 				} catch (CoreStateInitException e)
@@ -307,7 +307,7 @@ public class ChannelManager implements IChannelManager {
 	}
 	
 	@Override
-	public void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn)
+	public void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn, String coremessage)
 	{
 		try
 		{
@@ -318,7 +318,7 @@ public class ChannelManager implements IChannelManager {
 					{
 						player.sendMessage(message);
 					} else {
-						player.sendMessage(Utils.ConvertToRunic(message));
+						player.sendMessage(ChatColor.AQUA + source.getName() + " says '" + Utils.ConvertToRunic(coremessage) + "'" + ChatColor.RESET);
 						
 						if (allowlanguagelearn == true)
 						{

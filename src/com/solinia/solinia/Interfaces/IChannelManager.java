@@ -11,7 +11,7 @@ public interface IChannelManager {
 
 	void sendToGlobalChannel(ISoliniaPlayer source, String message);
 
-	void sendToLocalChannelDecorated(ISoliniaPlayer source, String message);
+	void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage);
 
 	void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message);
 
@@ -38,5 +38,5 @@ public interface IChannelManager {
 
 	void setDiscordInCharacterChannelId(String discordincharacterchannelid);
 
-	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn);
+	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn, String coremessage);
 }

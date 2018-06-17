@@ -841,7 +841,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				setLanguage(getRace().getName().toUpperCase());
 			}
 		}
-		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, string);
+		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, string, string);
 	}
 
 	@Override

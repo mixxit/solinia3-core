@@ -44,7 +44,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		// TODO - Support checking channel modes of player
 		if (currentChannel.equals("LOCAL"))
 		{
-			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage());
+			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage());
 		} else {
 			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage());
 		}

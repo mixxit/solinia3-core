@@ -2590,7 +2590,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
-			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage, true);
+			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage, true, message);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -2689,7 +2689,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + messageto.getName() + " '" + message + "'"
 					+ ChatColor.RESET;
-			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage, allowlanguagelearn);
+			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage, allowlanguagelearn, message);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
