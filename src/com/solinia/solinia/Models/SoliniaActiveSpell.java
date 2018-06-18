@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
@@ -22,7 +23,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Horse.Color;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -488,6 +491,7 @@ public class SoliniaActiveSpell {
 		case Familiar:
 			return;
 		case SummonItemIntoBag:
+			// handled by summonitem
 			return;
 		case IncreaseArchery:
 			return;
@@ -1630,8 +1634,45 @@ public class SoliniaActiveSpell {
 
 			if (!(ownerEntity instanceof LivingEntity))
 				return;
+			
+			ItemStack returnItem = item.asItemStack();
+			
+			if (item.getBasename().contains("SHULKER_BOX"))
+			{
+				BlockStateMeta bsm = (BlockStateMeta) returnItem.getItemMeta();
+				ShulkerBox box = (ShulkerBox) bsm.getBlockState();
+				Inventory inventory = box.getInventory();
+				
+				int count = 0;
+				
+				// Check if there are any SUMMONITEM_INTO_BAG
+				for (SpellEffect effect : soliniaSpell.getBaseSpellEffects())
+				{
+					if (effect.getSpellEffectType().equals(SpellEffectType.SummonItemIntoBag))
+					{
+						try
+						{
+							ISoliniaItem subItem = StateManager.getInstance().getConfigurationManager().getItem(effect.getBase());
+							if (subItem == null)
+								continue;
+							
+							if (!subItem.isTemporary())
+								continue;
+							
+							inventory.setItem(++count, subItem.asItemStack());
+							
+						} catch (Exception e)
+						{
+							
+						}
+					}
+				}
+				
+				bsm.setBlockState(box);
+				returnItem.setItemMeta(bsm);
+			}
 
-			ownerEntity.getWorld().dropItem(ownerEntity.getLocation(), item.asItemStack());
+			ownerEntity.getWorld().dropItem(ownerEntity.getLocation(),returnItem);
 
 		} catch (CoreStateInitException e) {
 			return;
