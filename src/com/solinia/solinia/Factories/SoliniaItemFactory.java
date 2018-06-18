@@ -77,6 +77,11 @@ public class SoliniaItemFactory {
 		item.setShouldersItem(originalItem.isShouldersItem());
 		item.setNeckItem(originalItem.isNeckItem());
 		item.setFingersItem(originalItem.isFingersItem());
+
+		item.setForearmsItem(originalItem.isForearmsItem());
+		item.setArmsItem(originalItem.isArmsItem());
+		item.setHandsItem(originalItem.isHandsItem());
+
 		
 		item.setDamage(originalItem.getDamage());
 		item.setAC(originalItem.getAC());
@@ -150,6 +155,19 @@ public class SoliniaItemFactory {
 			earsItem.setEarsItem(true);
 			earsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
 
+			// Additional Armour!
+			ISoliniaItem forearmsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			forearmsItem.setForearmsItem(true);
+			forearmsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
+			
+			ISoliniaItem armsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			armsItem.setArmsItem(true);
+			armsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
+			
+			ISoliniaItem handsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			handsItem.setHandsItem(true);
+			handsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
+			
 			items.add(headItem.getId());
 			items.add(chestItem.getId());
 			items.add(legsItem.getId());
@@ -160,6 +178,9 @@ public class SoliniaItemFactory {
 			items.add(shouldersItem.getId());
 			items.add(fingersItem.getId());
 			items.add(earsItem.getId());
+			items.add(forearmsItem.getId());
+			items.add(armsItem.getId());
+			items.add(handsItem.getId());
 			
 			for(Integer i : items)
 			{
@@ -208,26 +229,45 @@ public class SoliniaItemFactory {
 					className += " ";
 				}
 				
-				if (!item.isJewelry())
+				if (!item.isJewelry() && !item.isAdditionalArmour())
 				{
 					item.setDisplayname(rarityName + className + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
 				} else {
-					String jewelryTypeName = "Jewelry";
+					if (item.isJewelry())
+					{
+						String jewelryTypeName = "Jewelry";
+						
+						if (item.isEarsItem())
+							jewelryTypeName = "Earrings";
+	
+						if (item.isNeckItem())
+							jewelryTypeName = "Necklace";
+						
+						if (item.isFingersItem())
+							jewelryTypeName = "Rings";
+	
+						if (item.isShouldersItem())
+							jewelryTypeName = "Cloak";
+						
+						
+						item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
+					}
 					
-					if (item.isEarsItem())
-						jewelryTypeName = "Earrings";
-
-					if (item.isNeckItem())
-						jewelryTypeName = "Necklace";
-					
-					if (item.isFingersItem())
-						jewelryTypeName = "Rings";
-
-					if (item.isShouldersItem())
-						jewelryTypeName = "Cloak";
-					
-					
-					item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
+					if (item.isAdditionalArmour())
+					{
+						String jewelryTypeName = "Clothing";
+						
+						if (item.isForearmsItem())
+							jewelryTypeName = "Bracers";
+	
+						if (item.isArmsItem())
+							jewelryTypeName = "Sleeves";
+						
+						if (item.isHandsItem())
+							jewelryTypeName = "Gloves";
+	
+						item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
+					}
 				}
 				
 				int baseAmount = getBaseAmount(item);

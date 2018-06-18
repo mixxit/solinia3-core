@@ -116,11 +116,13 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isNeckItem = false;
 	private boolean isShouldersItem = false;
 	private boolean isEarsItem = false;
+	private boolean isForearmsItem = false;
+	private boolean isArmsItem = false;
+	private boolean isHandsItem = false;
 	private boolean territoryFlag = false;
 	private String identifyMessage = "";
 	private boolean bandage = false;
 	
-	private String bookTitle = "";
 	private String bookAuthor = "";
 	private List<String> bookPages = new ArrayList<String>();
 	private boolean neverDrop = false;
@@ -938,6 +940,8 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- fingersitem: " + ChatColor.GOLD + isFingersItem() + ChatColor.RESET + " neckitem: " + ChatColor.GOLD + isNeckItem() + ChatColor.RESET);
 		sender.sendMessage("- shouldersitem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET + " earsitem: " + ChatColor.GOLD + isEarsItem() + ChatColor.RESET);
+		sender.sendMessage("- forearmsitem: " + ChatColor.GOLD + isForearmsItem() + ChatColor.RESET + " armsitem: " + ChatColor.GOLD + isArmsItem() + ChatColor.RESET);
+		sender.sendMessage("- handsitem: " + ChatColor.GOLD + isHandsItem() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
 		sender.sendMessage("- territoryflag: " + ChatColor.GOLD + isTerritoryFlag() + ChatColor.RESET);
@@ -1138,24 +1142,63 @@ public class SoliniaItem implements ISoliniaItem {
 			setNeckItem(false);
 			setShouldersItem(false);
 			setEarsItem(false);
+			setForearmsItem(false);
+			setArmsItem(false);
+			setHandsItem(false);
 			break;
 		case "neckitem":
 			setNeckItem(Boolean.parseBoolean(value));
 			setFingersItem(false);
 			setShouldersItem(false);
 			setEarsItem(false);
+			setForearmsItem(false);
+			setArmsItem(false);
+			setHandsItem(false);
 			break;
 		case "shouldersitem":
 			setShouldersItem(Boolean.parseBoolean(value));
 			setFingersItem(false);
 			setNeckItem(false);
 			setEarsItem(false);
+			setForearmsItem(false);
+			setArmsItem(false);
+			setHandsItem(false);
 			break;
 		case "earsitem":
 			setEarsItem(Boolean.parseBoolean(value));
 			setShouldersItem(false);
 			setFingersItem(false);
 			setNeckItem(false);
+			setForearmsItem(false);
+			setArmsItem(false);
+			setHandsItem(false);
+			break;
+		case "forearmsitem":
+			setForearmsItem(Boolean.parseBoolean(value));
+			setEarsItem(false);
+			setShouldersItem(false);
+			setFingersItem(false);
+			setNeckItem(false);
+			setArmsItem(false);
+			setHandsItem(false);
+			break;
+		case "armsitem":
+			setArmsItem(Boolean.parseBoolean(value));
+			setEarsItem(false);
+			setShouldersItem(false);
+			setFingersItem(false);
+			setNeckItem(false);
+			setForearmsItem(false);
+			setHandsItem(false);
+			break;
+		case "handsitem":
+			setHandsItem(Boolean.parseBoolean(value));
+			setEarsItem(false);
+			setShouldersItem(false);
+			setFingersItem(false);
+			setNeckItem(false);
+			setForearmsItem(false);
+			setArmsItem(false);
 			break;
 		case "territoryflag":
 			setTerritoryFlag(Boolean.parseBoolean(value));
@@ -1655,5 +1698,41 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setNeverDrop(boolean neverDrop) {
 		this.neverDrop = neverDrop;
+	}
+
+	@Override
+	public boolean isAdditionalArmour() {
+		// TODO Auto-generated method stub
+		return (isForearmsItem() || isArmsItem() || isHandsItem());
+	}
+
+	@Override
+	public boolean isForearmsItem() {
+		return isForearmsItem;
+	}
+
+	@Override
+	public void setForearmsItem(boolean isForearmsItem) {
+		this.isForearmsItem = isForearmsItem;
+	}
+
+	@Override
+	public boolean isArmsItem() {
+		return isArmsItem;
+	}
+
+	@Override
+	public void setArmsItem(boolean isArmsItem) {
+		this.isArmsItem = isArmsItem;
+	}
+
+	@Override
+	public boolean isHandsItem() {
+		return isHandsItem;
+	}
+
+	@Override
+	public void setHandsItem(boolean isHandsItem) {
+		this.isHandsItem = isHandsItem;
 	}
 }

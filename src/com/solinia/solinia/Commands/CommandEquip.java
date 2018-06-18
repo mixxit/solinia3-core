@@ -132,6 +132,45 @@ public class CommandEquip implements CommandExecutor {
 							solPlayer.updateMaxHp();
 							return true;
 						}
+					
+					if (item.isForearmsItem())
+						if (solPlayer.getForearmsItem() > 0) {
+							player.sendMessage("You have already equipped an item in that slot");
+							return true;
+						} else {
+							solPlayer.setForearmsItem(item.getId());
+							player.getInventory().setItemInMainHand(null);
+							player.updateInventory();
+							player.sendMessage("You have equipped this item");
+							solPlayer.updateMaxHp();
+							return true;
+						}
+					
+					if (item.isArmsItem())
+						if (solPlayer.getArmsItem() > 0) {
+							player.sendMessage("You have already equipped an item in that slot");
+							return true;
+						} else {
+							solPlayer.setArmsItem(item.getId());
+							player.getInventory().setItemInMainHand(null);
+							player.updateInventory();
+							player.sendMessage("You have equipped this item");
+							solPlayer.updateMaxHp();
+							return true;
+						}
+					
+					if (item.isHandsItem())
+						if (solPlayer.getHandsItem() > 0) {
+							player.sendMessage("You have already equipped an item in that slot");
+							return true;
+						} else {
+							solPlayer.setHandsItem(item.getId());
+							player.getInventory().setItemInMainHand(null);
+							player.updateInventory();
+							player.sendMessage("You have equipped this item");
+							solPlayer.updateMaxHp();
+							return true;
+						}
 
 					return false;
 
@@ -183,6 +222,38 @@ public class CommandEquip implements CommandExecutor {
 					solPlayer.setShouldersItem(0);
 					sender.sendMessage("Your cloak has been moved to the /claim list");
 				}
+				
+				if (solPlayer.getForearmsItem() > 0) {
+					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+					newclaim.setMcname(player.getName());
+					newclaim.setItemid(solPlayer.getShouldersItem());
+					newclaim.setClaimed(false);
+					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+					solPlayer.setForearmsItem(0);
+					sender.sendMessage("Your forearms item has been moved to the /claim list");
+				}
+				if (solPlayer.getArmsItem() > 0) {
+					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+					newclaim.setMcname(player.getName());
+					newclaim.setItemid(solPlayer.getShouldersItem());
+					newclaim.setClaimed(false);
+					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+					solPlayer.setArmsItem(0);
+					sender.sendMessage("Your arms item has been moved to the /claim list");
+				}
+				if (solPlayer.getHandsItem() > 0) {
+					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+					newclaim.setMcname(player.getName());
+					newclaim.setItemid(solPlayer.getShouldersItem());
+					newclaim.setClaimed(false);
+					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+					solPlayer.setHandsItem(0);
+					sender.sendMessage("Your hands item has been moved to the /claim list");
+				}
+				
 				solPlayer.updateMaxHp();
 
 				return true;
@@ -228,6 +299,30 @@ public class CommandEquip implements CommandExecutor {
 				solPlayer.getBukkitPlayer().sendMessage("Shoulders Item: " + item.getDisplayname());
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Shoulders Item: EMPTY");
+			}
+			
+			if (solPlayer.getForearmsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(solPlayer.getForearmsItem());
+				solPlayer.getBukkitPlayer().sendMessage("Forearms Item: " + item.getDisplayname());
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Forearms Item: EMPTY");
+			}
+			
+			if (solPlayer.getArmsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(solPlayer.getArmsItem());
+				solPlayer.getBukkitPlayer().sendMessage("Arms Item: " + item.getDisplayname());
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Arms Item: EMPTY");
+			}
+			
+			if (solPlayer.getHandsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(solPlayer.getHandsItem());
+				solPlayer.getBukkitPlayer().sendMessage("Hands Item: " + item.getDisplayname());
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Hands Item: EMPTY");
 			}
 		} catch (CoreStateInitException e) {
 

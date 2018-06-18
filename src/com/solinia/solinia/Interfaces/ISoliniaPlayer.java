@@ -391,4 +391,16 @@ public interface ISoliniaPlayer extends Serializable {
 
 	Timestamp getLastLogin();
 
+	int getForearmsItem();
+
+	void setForearmsItem(int forearmsItem);
+
+	int getArmsItem();
+
+	void setArmsItem(int armsItem);
+
+	int getHandsItem();
+
+	void setHandsItem(int handsItem);
+
 }

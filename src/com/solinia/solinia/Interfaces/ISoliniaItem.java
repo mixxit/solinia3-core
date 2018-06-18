@@ -347,4 +347,18 @@ public interface ISoliniaItem {
 	boolean isNeverDrop();
 
 	void setNeverDrop(boolean neverDrop);
+
+	boolean isAdditionalArmour();
+
+	boolean isForearmsItem();
+
+	boolean isArmsItem();
+
+	boolean isHandsItem();
+
+	void setForearmsItem(boolean isForearmsItem);
+
+	void setArmsItem(boolean isArmsItem);
+
+	void setHandsItem(boolean isHandsItem);
 }

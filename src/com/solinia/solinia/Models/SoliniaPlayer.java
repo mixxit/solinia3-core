@@ -101,6 +101,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int shouldersItem = 0;
 	private int neckItem = 0;
 	private int earsItem = 0;
+
+	private int forearmsItem = 0;
+	private int armsItem = 0;
+	private int handsItem = 0;
+
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
 	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>();
 	private boolean glowTargetting = true;
@@ -2737,6 +2742,30 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						items.add(item);
 				}
 			}
+			
+			if (this.getForearmsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getForearmsItem());
+				if (item != null) {
+					if (!item.isSpellscroll())
+						items.add(item);
+				}
+			}
+			
+			if (this.getArmsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getArmsItem());
+				if (item != null) {
+					if (!item.isSpellscroll())
+						items.add(item);
+				}
+			}
+			
+			if (this.getHandsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getHandsItem());
+				if (item != null) {
+					if (!item.isSpellscroll())
+						items.add(item);
+				}
+			}
 
 		} catch (CoreStateInitException e) {
 
@@ -3235,5 +3264,35 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setShowDiscord(boolean showDiscord) {
 		this.showDiscord = showDiscord;
+	}
+
+	@Override
+	public int getForearmsItem() {
+		return forearmsItem;
+	}
+
+	@Override
+	public void setForearmsItem(int forearmsItem) {
+		this.forearmsItem = forearmsItem;
+	}
+
+	@Override
+	public int getArmsItem() {
+		return armsItem;
+	}
+
+	@Override
+	public void setArmsItem(int armsItem) {
+		this.armsItem = armsItem;
+	}
+
+	@Override
+	public int getHandsItem() {
+		return handsItem;
+	}
+
+	@Override
+	public void setHandsItem(int handsItem) {
+		this.handsItem = handsItem;
 	}
 }
