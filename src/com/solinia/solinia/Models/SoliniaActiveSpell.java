@@ -1635,47 +1635,30 @@ public class SoliniaActiveSpell {
 			if (!(ownerEntity instanceof LivingEntity))
 				return;
 			
-			ItemStack returnItem = item.asItemStack();
+			ownerEntity.getWorld().dropItem(ownerEntity.getLocation(),item.asItemStack());
 			
-			if (item.getBasename().contains("SHULKER_BOX"))
+			// Check if there are any SUMMONITEM_INTO_BAG
+			for (SpellEffect effect : soliniaSpell.getBaseSpellEffects())
 			{
-				BlockStateMeta bsm = (BlockStateMeta) returnItem.getItemMeta();
-				ShulkerBox box = (ShulkerBox) bsm.getBlockState();
-				Inventory inventory = box.getInventory();
-				
-				int count = 0;
-				
-				// Check if there are any SUMMONITEM_INTO_BAG
-				for (SpellEffect effect : soliniaSpell.getBaseSpellEffects())
+				if (effect.getSpellEffectType().equals(SpellEffectType.SummonItemIntoBag))
 				{
-					if (effect.getSpellEffectType().equals(SpellEffectType.SummonItemIntoBag))
+					try
 					{
-						try
-						{
-							ISoliniaItem subItem = StateManager.getInstance().getConfigurationManager().getItem(effect.getBase());
-							if (subItem == null)
-								continue;
-							
-							if (!subItem.isTemporary())
-								continue;
-							
-							System.out.println("Adding " + subItem.getDisplayname() + " to shulker");
-							
-							inventory.setItem(++count, subItem.asItemStack());
-							
-						} catch (Exception e)
-						{
-							System.out.println(e.getMessage() + " " + e.getStackTrace());
-						}
+						ISoliniaItem subItem = StateManager.getInstance().getConfigurationManager().getItem(effect.getBase());
+						if (subItem == null)
+							continue;
+						
+						if (!subItem.isTemporary())
+							continue;
+						
+						ownerEntity.getWorld().dropItem(ownerEntity.getLocation(),subItem.asItemStack());
+					} catch (Exception e)
+					{
+						
 					}
 				}
-				box.update();
-				bsm.setBlockState(box);
-				returnItem.setItemMeta(bsm);
-				
 			}
-
-			ownerEntity.getWorld().dropItem(ownerEntity.getLocation(),returnItem);
+			
 
 		} catch (CoreStateInitException e) {
 			return;
