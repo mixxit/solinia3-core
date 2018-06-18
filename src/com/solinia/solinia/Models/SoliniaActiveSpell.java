@@ -1659,17 +1659,20 @@ public class SoliniaActiveSpell {
 							if (!subItem.isTemporary())
 								continue;
 							
+							System.out.println("Adding " + subItem.getDisplayname() + " to shulker");
+							
 							inventory.setItem(++count, subItem.asItemStack());
 							
 						} catch (Exception e)
 						{
-							
+							System.out.println(e.getMessage() + " " + e.getStackTrace());
 						}
 					}
 				}
-				
+				box.update();
 				bsm.setBlockState(box);
 				returnItem.setItemMeta(bsm);
+				
 			}
 
 			ownerEntity.getWorld().dropItem(ownerEntity.getLocation(),returnItem);
