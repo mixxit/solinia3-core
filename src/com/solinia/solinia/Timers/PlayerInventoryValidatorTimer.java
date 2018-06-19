@@ -118,7 +118,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (i.isTemporary())
 					{
-						if (!solplayer.getEarsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solplayer.getEarsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -137,7 +137,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (i.isTemporary())
 					{
-						if (!solplayer.getNeckItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solplayer.getNeckItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -156,7 +156,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (i.isTemporary())
 					{
-						if (!solplayer.getFingersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solplayer.getFingersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -175,7 +175,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (i.isTemporary())
 					{
-						if (!solplayer.getShouldersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solplayer.getShouldersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -194,7 +194,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (i.isTemporary())
 					{
-						if (!solplayer.getForearmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solplayer.getForearmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -213,7 +213,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (i.isTemporary())
 					{
-						if (!solplayer.getArmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solplayer.getArmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -232,7 +232,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (i.isTemporary())
 					{
-						if (!solplayer.getHandsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solplayer.getHandsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");

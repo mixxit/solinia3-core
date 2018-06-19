@@ -105,16 +105,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int armsItem = 0;
 	private int handsItem = 0;
 
-	private UUID fingersItemInstance = UUID.randomUUID();
-	private UUID shouldersItemInstance = UUID.randomUUID();
-	private UUID neckItemInstance = UUID.randomUUID();
-	private UUID earsItemInstance = UUID.randomUUID();
-	private UUID forearmsItemInstance = UUID.randomUUID();
-	private UUID armsItemInstance = UUID.randomUUID();
-	private UUID handsItemInstance = UUID.randomUUID();
+	private String fingersItemInstance = "";
+	private String shouldersItemInstance = "";
+	private String neckItemInstance = "";
+	private String earsItemInstance = "";
+	private String forearmsItemInstance = "";
+	private String armsItemInstance = "";
+	private String handsItemInstance = "";
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
-	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>();
+	private ConcurrentHashMap<Integer, SoliniaReagent> reagentsPouch = new ConcurrentHashMap<Integer, SoliniaReagent>();
 	private boolean glowTargetting = true;
 	private Double pendingXp = 0d;
 	private boolean showDiscord = true;
@@ -2818,13 +2818,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public ConcurrentHashMap<Integer, Integer> getReagents() {
-		return reagents;
+	public ConcurrentHashMap<Integer, SoliniaReagent> getReagents() {
+		return reagentsPouch;
 	}
 
 	@Override
-	public void setReagents(ConcurrentHashMap<Integer, Integer> reagents) {
-		this.reagents = reagents;
+	public void setReagents(ConcurrentHashMap<Integer, SoliniaReagent> reagents) {
+		this.reagentsPouch = reagents;
 	}
 
 	@Override
@@ -2889,7 +2889,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getReagents().get(itemId) == null)
 			return false;
 
-		if (getReagents().get(itemId) < neededCount)
+		if (getReagents().get(itemId).getQty() < neededCount)
 			return false;
 
 		return true;
@@ -2899,10 +2899,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean hasSufficientBandageReagents(int countNeeded) {
 		int totalCount = 0;
 
-		for (Entry<Integer, Integer> entry : getReagents().entrySet()) {
+		for (Entry<Integer, SoliniaReagent> entry : getReagents().entrySet()) {
 			try {
 				int itemId = entry.getKey();
-				int count = entry.getValue();
+				int count = entry.getValue().getQty();
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 				if (item != null)
 					if (item.isBandage()) {
@@ -2923,7 +2923,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public List<Integer> getBandageReagents() {
 
 		List<Integer> itemIds = new ArrayList<Integer>();
-		for (Entry<Integer, Integer> entry : getReagents().entrySet()) {
+		for (Entry<Integer, SoliniaReagent> entry : getReagents().entrySet()) {
 			try {
 				int itemId = entry.getKey();
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
@@ -2944,11 +2944,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getReagents().get(itemId) == null)
 			return;
 
-		int currentCount = getReagents().get(itemId);
-		currentCount = currentCount - reduceAmount;
-		if (currentCount < 0)
-			currentCount = 0;
-		getReagents().put(itemId, currentCount);
+		getReagents().get(itemId).reduceQty(reduceAmount);
 	}
 
 	@Override
@@ -3304,72 +3300,72 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public UUID getFingersItemInstance() {
+	public String getFingersItemInstance() {
 		return fingersItemInstance;
 	}
 
 	@Override
-	public void setFingersItemInstance(UUID fingersItemInstance) {
+	public void setFingersItemInstance(String fingersItemInstance) {
 		this.fingersItemInstance = fingersItemInstance;
 	}
 
 	@Override
-	public UUID getShouldersItemInstance() {
+	public String getShouldersItemInstance() {
 		return shouldersItemInstance;
 	}
 
 	@Override
-	public void setShouldersItemInstance(UUID shouldersItemInstance) {
+	public void setShouldersItemInstance(String shouldersItemInstance) {
 		this.shouldersItemInstance = shouldersItemInstance;
 	}
 
 	@Override
-	public UUID getNeckItemInstance() {
+	public String getNeckItemInstance() {
 		return neckItemInstance;
 	}
 
 	@Override
-	public void setNeckItemInstance(UUID neckItemInstance) {
+	public void setNeckItemInstance(String neckItemInstance) {
 		this.neckItemInstance = neckItemInstance;
 	}
 
 	@Override
-	public UUID getEarsItemInstance() {
+	public String getEarsItemInstance() {
 		return earsItemInstance;
 	}
 
 	@Override
-	public void setEarsItemInstance(UUID earsItemInstance) {
+	public void setEarsItemInstance(String earsItemInstance) {
 		this.earsItemInstance = earsItemInstance;
 	}
 
 	@Override
-	public UUID getForearmsItemInstance() {
+	public String getForearmsItemInstance() {
 		return forearmsItemInstance;
 	}
 
 	@Override
-	public void setForearmsItemInstance(UUID forearmsItemInstance) {
+	public void setForearmsItemInstance(String forearmsItemInstance) {
 		this.forearmsItemInstance = forearmsItemInstance;
 	}
 
 	@Override
-	public UUID getArmsItemInstance() {
+	public String getArmsItemInstance() {
 		return armsItemInstance;
 	}
 
 	@Override
-	public void setArmsItemInstance(UUID armsItemInstance) {
+	public void setArmsItemInstance(String armsItemInstance) {
 		this.armsItemInstance = armsItemInstance;
 	}
 
 	@Override
-	public UUID getHandsItemInstance() {
+	public String getHandsItemInstance() {
 		return handsItemInstance;
 	}
 
 	@Override
-	public void setHandsItemInstance(UUID handsItemInstance) {
+	public void setHandsItemInstance(String handsItemInstance) {
 		this.handsItemInstance = handsItemInstance;
 	}
 }

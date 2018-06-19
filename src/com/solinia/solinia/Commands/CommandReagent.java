@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import java.util.UUID;
 import java.util.Map.Entry;
 
 import org.bukkit.Material;
@@ -16,6 +17,7 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaReagent;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -31,10 +33,10 @@ public class CommandReagent implements CommandExecutor {
 			Player player = (Player)sender;
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			player.sendMessage("Reagent Pouch:");
-			for(Entry<Integer, Integer> keyValuePair : solPlayer.getReagents().entrySet())
+			for(Entry<Integer, SoliniaReagent> keyValuePair : solPlayer.getReagents().entrySet())
 			{
 				int itemId = keyValuePair.getKey();
-				int count = keyValuePair.getValue();
+				int count = keyValuePair.getValue().getQty();
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 				
 				if (item != null && item.isReagent())
@@ -68,12 +70,11 @@ public class CommandReagent implements CommandExecutor {
 				        	return true;
 				        }
 				        
-				        int currentAmount = 0;
-				        if (solPlayer.getReagents().get(item.getId()) != null)
+				        if (solPlayer.getReagents().get(item.getId()) == null)
 				        {
-				        	currentAmount = solPlayer.getReagents().get(item.getId());
+				        	solPlayer.getReagents().put(item.getId(), new SoliniaReagent(item.getId(), 0, StateManager.getInstance().getInstanceGuid()));
 				        }
-				        solPlayer.getReagents().put(item.getId(),currentAmount + itemstack.getAmount());
+				        solPlayer.getReagents().get(item.getId()).addQty(itemstack.getAmount());
 				        
 				        player.sendMessage("Item added to your reagent pouch");
 		    	        player.getInventory().setItemInMainHand(null);

@@ -17,6 +17,7 @@ import com.solinia.solinia.Models.PlayerQuest;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Models.SoliniaReagent;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellResistType;
@@ -313,9 +314,9 @@ public interface ISoliniaPlayer extends Serializable {
 
 	SoliniaWorld getSoliniaWorld();
 
-	ConcurrentHashMap<Integer, Integer> getReagents();
+	ConcurrentHashMap<Integer, SoliniaReagent> getReagents();
 
-	void setReagents(ConcurrentHashMap<Integer, Integer> reagents);
+	void setReagents(ConcurrentHashMap<Integer, SoliniaReagent> reagents);
 
 	UUID getMotherId();
 
@@ -403,32 +404,31 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setHandsItem(int handsItem);
 
-	public UUID getEarsItemInstance();
+	public String getEarsItemInstance();
 
-	public UUID getNeckItemInstance();
+	public String getNeckItemInstance();
 
-	public UUID getFingersItemInstance();
+	public String getFingersItemInstance();
 
-	public UUID getShouldersItemInstance();
+	public String getShouldersItemInstance();
 
-	public UUID getForearmsItemInstance();
+	public String getForearmsItemInstance();
 
-	public UUID getArmsItemInstance();
+	public String getArmsItemInstance();
 
-	public UUID getHandsItemInstance();
+	public String getHandsItemInstance();
 
-	void setFingersItemInstance(UUID fingersItemInstance);
+	void setFingersItemInstance(String fingersItemInstance);
 
-	void setShouldersItemInstance(UUID shouldersItemInstance);
+	void setShouldersItemInstance(String shouldersItemInstance);
 
-	void setNeckItemInstance(UUID neckItemInstance);
+	void setNeckItemInstance(String neckItemInstance);
 
-	void setEarsItemInstance(UUID earsItemInstance);
+	void setEarsItemInstance(String earsItemInstance);
 
-	void setForearmsItemInstance(UUID forearmsItemInstance);
+	void setForearmsItemInstance(String forearmsItemInstance);
 
-	void setArmsItemInstance(UUID armsItemInstance);
+	void setArmsItemInstance(String armsItemInstance);
 
-	void setHandsItemInstance(UUID handsItemInstance);
-
+	void setHandsItemInstance(String handsItemInstance);
 }

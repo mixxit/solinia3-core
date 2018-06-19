@@ -103,7 +103,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setFingersItem(item.getId());
-							solPlayer.setFingersItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
+							solPlayer.setFingersItemInstance(StateManager.getInstance().getInstanceGuid());
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -117,7 +117,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setShouldersItem(item.getId());
-							solPlayer.setShouldersItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
+							solPlayer.setShouldersItemInstance(StateManager.getInstance().getInstanceGuid());
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -131,7 +131,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setEarsItem(item.getId());
-							solPlayer.setEarsItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
+							solPlayer.setEarsItemInstance(StateManager.getInstance().getInstanceGuid());
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -145,7 +145,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setNeckItem(item.getId());
-							solPlayer.setNeckItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
+							solPlayer.setNeckItemInstance(StateManager.getInstance().getInstanceGuid());
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -159,7 +159,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setForearmsItem(item.getId());
-							solPlayer.setForearmsItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
+							solPlayer.setForearmsItemInstance(StateManager.getInstance().getInstanceGuid());
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -173,7 +173,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setArmsItem(item.getId());
-							solPlayer.setArmsItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
+							solPlayer.setArmsItemInstance(StateManager.getInstance().getInstanceGuid());
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -187,7 +187,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setHandsItem(item.getId());
-							solPlayer.setHandsItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
+							solPlayer.setHandsItemInstance(StateManager.getInstance().getInstanceGuid());
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -211,7 +211,7 @@ public class CommandEquip implements CommandExecutor {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(solPlayer.getEarsItem());
 						if (item.isTemporary())
-						if (!solPlayer.getEarsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solPlayer.getEarsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -236,7 +236,7 @@ public class CommandEquip implements CommandExecutor {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(solPlayer.getNeckItem());
 						if (item.isTemporary())
-						if (!solPlayer.getNeckItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solPlayer.getNeckItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -260,7 +260,7 @@ public class CommandEquip implements CommandExecutor {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(solPlayer.getFingersItem());
 						if (item.isTemporary())
-						if (!solPlayer.getFingersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solPlayer.getFingersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -284,7 +284,7 @@ public class CommandEquip implements CommandExecutor {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(solPlayer.getShouldersItem());
 						if (item.isTemporary())
-						if (!solPlayer.getShouldersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solPlayer.getShouldersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -309,7 +309,7 @@ public class CommandEquip implements CommandExecutor {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(solPlayer.getForearmsItem());
 						if (item.isTemporary())
-						if (!solPlayer.getForearmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solPlayer.getForearmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -333,7 +333,7 @@ public class CommandEquip implements CommandExecutor {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(solPlayer.getArmsItem());
 						if (item.isTemporary())
-						if (!solPlayer.getArmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solPlayer.getArmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -357,7 +357,7 @@ public class CommandEquip implements CommandExecutor {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(solPlayer.getHandsItem());
 						if (item.isTemporary())
-						if (!solPlayer.getHandsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						if (!solPlayer.getHandsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 						{
 							// Delete temporary item
 							player.sendMessage("Your temporary item has faded from existence");
@@ -385,7 +385,7 @@ public class CommandEquip implements CommandExecutor {
 								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 										.getItem(solPlayer.getEarsItem());
 								if (item.isTemporary())
-								if (!solPlayer.getEarsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								if (!solPlayer.getEarsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 								{
 									// Delete temporary item
 									player.sendMessage("Your temporary item has faded from existence");
@@ -411,7 +411,7 @@ public class CommandEquip implements CommandExecutor {
 								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 										.getItem(solPlayer.getNeckItem());
 								if (item.isTemporary())
-								if (!solPlayer.getNeckItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								if (!solPlayer.getNeckItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 								{
 									// Delete temporary item
 									player.sendMessage("Your temporary item has faded from existence");
@@ -437,7 +437,7 @@ public class CommandEquip implements CommandExecutor {
 								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 										.getItem(solPlayer.getFingersItem());
 								if (item.isTemporary())
-								if (!solPlayer.getFingersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								if (!solPlayer.getFingersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 								{
 									// Delete temporary item
 									player.sendMessage("Your temporary item has faded from existence");
@@ -463,7 +463,7 @@ public class CommandEquip implements CommandExecutor {
 								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 										.getItem(solPlayer.getShouldersItem());
 								if (item.isTemporary())
-								if (!solPlayer.getShouldersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								if (!solPlayer.getShouldersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 								{
 									// Delete temporary item
 									player.sendMessage("Your temporary item has faded from existence");
@@ -489,7 +489,7 @@ public class CommandEquip implements CommandExecutor {
 								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 										.getItem(solPlayer.getArmsItem());
 								if (item.isTemporary())
-								if (!solPlayer.getArmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								if (!solPlayer.getArmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 								{
 									// Delete temporary item
 									player.sendMessage("Your temporary item has faded from existence");
@@ -515,7 +515,7 @@ public class CommandEquip implements CommandExecutor {
 								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 										.getItem(solPlayer.getForearmsItem());
 								if (item.isTemporary())
-								if (!solPlayer.getForearmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								if (!solPlayer.getForearmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 								{
 									// Delete temporary item
 									player.sendMessage("Your temporary item has faded from existence");
@@ -541,7 +541,7 @@ public class CommandEquip implements CommandExecutor {
 								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 										.getItem(solPlayer.getHandsItem());
 								if (item.isTemporary())
-								if (!solPlayer.getHandsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								if (!solPlayer.getHandsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
 								{
 									// Delete temporary item
 									player.sendMessage("Your temporary item has faded from existence");
