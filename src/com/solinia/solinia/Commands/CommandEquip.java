@@ -1,5 +1,7 @@
 package com.solinia.solinia.Commands;
 
+import java.util.UUID;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -101,6 +103,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setFingersItem(item.getId());
+							solPlayer.setFingersItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -114,6 +117,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setShouldersItem(item.getId());
+							solPlayer.setShouldersItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -127,6 +131,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setEarsItem(item.getId());
+							solPlayer.setEarsItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -140,6 +145,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setNeckItem(item.getId());
+							solPlayer.setNeckItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -153,6 +159,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setForearmsItem(item.getId());
+							solPlayer.setForearmsItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -166,6 +173,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setArmsItem(item.getId());
+							solPlayer.setArmsItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -179,6 +187,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						} else {
 							solPlayer.setHandsItem(item.getId());
+							solPlayer.setHandsItemInstance(UUID.fromString(StateManager.getInstance().getInstanceGuid()));
 							player.getInventory().setItemInMainHand(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
@@ -199,6 +208,17 @@ public class CommandEquip implements CommandExecutor {
 			{
 				if (args.length < 2) {
 					if (solPlayer.getEarsItem() > 0) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(solPlayer.getEarsItem());
+						if (item.isTemporary())
+						if (!solPlayer.getEarsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solPlayer.setEarsItem(0);
+							return true;
+						}
+						
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
@@ -213,6 +233,17 @@ public class CommandEquip implements CommandExecutor {
 						
 					}
 					if (solPlayer.getNeckItem() > 0) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(solPlayer.getNeckItem());
+						if (item.isTemporary())
+						if (!solPlayer.getNeckItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solPlayer.setNeckItem(0);
+							return true;
+						}
+						
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
@@ -226,6 +257,17 @@ public class CommandEquip implements CommandExecutor {
 						sender.spigot().sendMessage(tc);
 					}
 					if (solPlayer.getFingersItem() > 0) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(solPlayer.getFingersItem());
+						if (item.isTemporary())
+						if (!solPlayer.getFingersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solPlayer.setFingersItem(0);
+							return true;
+						}
+						
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
@@ -239,6 +281,17 @@ public class CommandEquip implements CommandExecutor {
 						sender.spigot().sendMessage(tc);
 					}
 					if (solPlayer.getShouldersItem() > 0) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(solPlayer.getShouldersItem());
+						if (item.isTemporary())
+						if (!solPlayer.getShouldersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solPlayer.setShouldersItem(0);
+							return true;
+						}
+						
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
@@ -253,6 +306,17 @@ public class CommandEquip implements CommandExecutor {
 					}
 					
 					if (solPlayer.getForearmsItem() > 0) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(solPlayer.getForearmsItem());
+						if (item.isTemporary())
+						if (!solPlayer.getForearmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solPlayer.setForearmsItem(0);
+							return true;
+						}
+						
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
@@ -266,6 +330,17 @@ public class CommandEquip implements CommandExecutor {
 						sender.spigot().sendMessage(tc);
 					}
 					if (solPlayer.getArmsItem() > 0) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(solPlayer.getArmsItem());
+						if (item.isTemporary())
+						if (!solPlayer.getArmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solPlayer.setArmsItem(0);
+							return true;
+						}
+						
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
@@ -279,6 +354,17 @@ public class CommandEquip implements CommandExecutor {
 						sender.spigot().sendMessage(tc);
 					}
 					if (solPlayer.getHandsItem() > 0) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(solPlayer.getHandsItem());
+						if (item.isTemporary())
+						if (!solPlayer.getHandsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solPlayer.setHandsItem(0);
+							return true;
+						}
+						
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
@@ -296,6 +382,17 @@ public class CommandEquip implements CommandExecutor {
 					{
 						case "EARS":
 							if (solPlayer.getEarsItem() > 0) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(solPlayer.getEarsItem());
+								if (item.isTemporary())
+								if (!solPlayer.getEarsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								{
+									// Delete temporary item
+									player.sendMessage("Your temporary item has faded from existence");
+									solPlayer.setEarsItem(0);
+									return true;
+								}
+								
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
@@ -311,6 +408,17 @@ public class CommandEquip implements CommandExecutor {
 							break;
 						case "NECK":
 							if (solPlayer.getNeckItem() > 0) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(solPlayer.getNeckItem());
+								if (item.isTemporary())
+								if (!solPlayer.getNeckItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								{
+									// Delete temporary item
+									player.sendMessage("Your temporary item has faded from existence");
+									solPlayer.setNeckItem(0);
+									return true;
+								}
+								
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
@@ -326,6 +434,17 @@ public class CommandEquip implements CommandExecutor {
 							break;
 						case "FINGERS":
 							if (solPlayer.getFingersItem() > 0) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(solPlayer.getFingersItem());
+								if (item.isTemporary())
+								if (!solPlayer.getFingersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								{
+									// Delete temporary item
+									player.sendMessage("Your temporary item has faded from existence");
+									solPlayer.setFingersItem(0);
+									return true;
+								}
+								
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
@@ -341,6 +460,17 @@ public class CommandEquip implements CommandExecutor {
 							break;
 						case "SHOULDERS":
 							if (solPlayer.getShouldersItem() > 0) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(solPlayer.getShouldersItem());
+								if (item.isTemporary())
+								if (!solPlayer.getShouldersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								{
+									// Delete temporary item
+									player.sendMessage("Your temporary item has faded from existence");
+									solPlayer.setShouldersItem(0);
+									return true;
+								}
+								
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
@@ -356,6 +486,17 @@ public class CommandEquip implements CommandExecutor {
 							break;
 						case "ARMS":
 							if (solPlayer.getArmsItem() > 0) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(solPlayer.getArmsItem());
+								if (item.isTemporary())
+								if (!solPlayer.getArmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								{
+									// Delete temporary item
+									player.sendMessage("Your temporary item has faded from existence");
+									solPlayer.setArmsItem(0);
+									return true;
+								}
+								
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
@@ -371,6 +512,17 @@ public class CommandEquip implements CommandExecutor {
 							break;
 						case "FOREARMS":
 							if (solPlayer.getForearmsItem() > 0) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(solPlayer.getForearmsItem());
+								if (item.isTemporary())
+								if (!solPlayer.getForearmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								{
+									// Delete temporary item
+									player.sendMessage("Your temporary item has faded from existence");
+									solPlayer.setForearmsItem(0);
+									return true;
+								}
+								
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
@@ -386,6 +538,17 @@ public class CommandEquip implements CommandExecutor {
 							break;
 						case "HANDS":
 							if (solPlayer.getHandsItem() > 0) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(solPlayer.getHandsItem());
+								if (item.isTemporary())
+								if (!solPlayer.getHandsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+								{
+									// Delete temporary item
+									player.sendMessage("Your temporary item has faded from existence");
+									solPlayer.setHandsItem(0);
+									return true;
+								}
+								
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());

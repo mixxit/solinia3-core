@@ -101,10 +101,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int shouldersItem = 0;
 	private int neckItem = 0;
 	private int earsItem = 0;
-
 	private int forearmsItem = 0;
 	private int armsItem = 0;
 	private int handsItem = 0;
+
+	private UUID fingersItemInstance = UUID.randomUUID();
+	private UUID shouldersItemInstance = UUID.randomUUID();
+	private UUID neckItemInstance = UUID.randomUUID();
+	private UUID earsItemInstance = UUID.randomUUID();
+	private UUID forearmsItemInstance = UUID.randomUUID();
+	private UUID armsItemInstance = UUID.randomUUID();
+	private UUID handsItemInstance = UUID.randomUUID();
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
 	private ConcurrentHashMap<Integer, Integer> reagents = new ConcurrentHashMap<Integer, Integer>();
@@ -3294,5 +3301,75 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setHandsItem(int handsItem) {
 		this.handsItem = handsItem;
+	}
+
+	@Override
+	public UUID getFingersItemInstance() {
+		return fingersItemInstance;
+	}
+
+	@Override
+	public void setFingersItemInstance(UUID fingersItemInstance) {
+		this.fingersItemInstance = fingersItemInstance;
+	}
+
+	@Override
+	public UUID getShouldersItemInstance() {
+		return shouldersItemInstance;
+	}
+
+	@Override
+	public void setShouldersItemInstance(UUID shouldersItemInstance) {
+		this.shouldersItemInstance = shouldersItemInstance;
+	}
+
+	@Override
+	public UUID getNeckItemInstance() {
+		return neckItemInstance;
+	}
+
+	@Override
+	public void setNeckItemInstance(UUID neckItemInstance) {
+		this.neckItemInstance = neckItemInstance;
+	}
+
+	@Override
+	public UUID getEarsItemInstance() {
+		return earsItemInstance;
+	}
+
+	@Override
+	public void setEarsItemInstance(UUID earsItemInstance) {
+		this.earsItemInstance = earsItemInstance;
+	}
+
+	@Override
+	public UUID getForearmsItemInstance() {
+		return forearmsItemInstance;
+	}
+
+	@Override
+	public void setForearmsItemInstance(UUID forearmsItemInstance) {
+		this.forearmsItemInstance = forearmsItemInstance;
+	}
+
+	@Override
+	public UUID getArmsItemInstance() {
+		return armsItemInstance;
+	}
+
+	@Override
+	public void setArmsItemInstance(UUID armsItemInstance) {
+		this.armsItemInstance = armsItemInstance;
+	}
+
+	@Override
+	public UUID getHandsItemInstance() {
+		return handsItemInstance;
+	}
+
+	@Override
+	public void setHandsItemInstance(UUID handsItemInstance) {
+		this.handsItemInstance = handsItemInstance;
 	}
 }
