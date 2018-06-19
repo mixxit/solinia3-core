@@ -2385,7 +2385,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean isMeditating() {
 		try {
-			if (getBukkitPlayer().isSneaking()
+			if (getBukkitPlayer().isSneaking() || getBukkitPlayer().getVehicle() != null
 					|| StateManager.getInstance().getEntityManager().getTrance(getUUID()) == true) {
 				return true;
 			}
