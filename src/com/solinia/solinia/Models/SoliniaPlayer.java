@@ -1647,9 +1647,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (npc.getMerchantid() > 0) {
 				try {
 					StateManager.getInstance().getEntityManager().getLivingEntity((LivingEntity) e)
-							.say("i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA
-									+ "] available if you are interested in buying or selling something",
-									getBukkitPlayer(), true);
+							.sayto(this.getBukkitPlayer(),"i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA + "] available if you are interested in buying or selling something",true);
 				} catch (CoreStateInitException cse) {
 					//
 				}
