@@ -18,6 +18,11 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+
 public class CommandEquip implements CommandExecutor {
 
 	@Override
@@ -31,11 +36,20 @@ public class CommandEquip implements CommandExecutor {
 
 			if (args.length < 1) {
 				showCurrentEquippedItems(solPlayer);
-				sender.sendMessage("Insufficient arugments  - /equip equip , /equip unequip");
+				sender.sendMessage("Insufficient arugments  - /equip equip , /equip unequip, /equip unequip neck");
 				return true;
 			}
 
-			if (args[0].toUpperCase().equals("EQUIP") || args[0].toUpperCase().equals("EARS") || args[0].toUpperCase().equals("NECK") || args[0].toUpperCase().equals("FINGERS") || args[0].toUpperCase().equals("SHOULDERS")) {
+			if (
+					args[0].toUpperCase().equals("EQUIP") || 
+					args[0].toUpperCase().equals("EARS") || 
+					args[0].toUpperCase().equals("NECK") || 
+					args[0].toUpperCase().equals("FINGERS") || 
+					args[0].toUpperCase().equals("SHOULDERS") ||
+					args[0].toUpperCase().equals("ARMS") ||
+					args[0].toUpperCase().equals("FOREARMS") ||
+					args[0].toUpperCase().equals("HANDS")
+					) {
 				try {
 					ItemStack primaryItem = player.getInventory().getItemInMainHand();
 					if (primaryItem.getType().equals(Material.AIR)) {
@@ -180,78 +194,172 @@ public class CommandEquip implements CommandExecutor {
 				}
 			}
 
+			
 			if (args[0].toUpperCase().equals("UNEQUIP")) 
 			{
-				if (solPlayer.getEarsItem() > 0) {
-					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-					newclaim.setMcname(player.getName());
-					newclaim.setItemid(solPlayer.getEarsItem());
-					newclaim.setClaimed(false);
-					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-					solPlayer.setEarsItem(0);
-					sender.sendMessage("Your earrings have been moved to the /claim list");
-				}
-				if (solPlayer.getNeckItem() > 0) {
-					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-					newclaim.setMcname(player.getName());
-					newclaim.setItemid(solPlayer.getNeckItem());
-					newclaim.setClaimed(false);
-					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-					solPlayer.setNeckItem(0);
-					sender.sendMessage("Your necklace has been moved to the /claim list");
-				}
-				if (solPlayer.getFingersItem() > 0) {
-					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-					newclaim.setMcname(player.getName());
-					newclaim.setItemid(solPlayer.getFingersItem());
-					newclaim.setClaimed(false);
-					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-					solPlayer.setFingersItem(0);
-					sender.sendMessage("Your rings have been moved to the /claim list");
-				}
-				if (solPlayer.getShouldersItem() > 0) {
-					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-					newclaim.setMcname(player.getName());
-					newclaim.setItemid(solPlayer.getShouldersItem());
-					newclaim.setClaimed(false);
-					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-					solPlayer.setShouldersItem(0);
-					sender.sendMessage("Your cloak has been moved to the /claim list");
-				}
-				
-				if (solPlayer.getForearmsItem() > 0) {
-					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-					newclaim.setMcname(player.getName());
-					newclaim.setItemid(solPlayer.getShouldersItem());
-					newclaim.setClaimed(false);
-					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-					solPlayer.setForearmsItem(0);
-					sender.sendMessage("Your forearms item has been moved to the /claim list");
-				}
-				if (solPlayer.getArmsItem() > 0) {
-					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-					newclaim.setMcname(player.getName());
-					newclaim.setItemid(solPlayer.getShouldersItem());
-					newclaim.setClaimed(false);
-					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-					solPlayer.setArmsItem(0);
-					sender.sendMessage("Your arms item has been moved to the /claim list");
-				}
-				if (solPlayer.getHandsItem() > 0) {
-					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-					newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-					newclaim.setMcname(player.getName());
-					newclaim.setItemid(solPlayer.getShouldersItem());
-					newclaim.setClaimed(false);
-					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-					solPlayer.setHandsItem(0);
-					sender.sendMessage("Your hands item has been moved to the /claim list");
+				if (args.length < 2) {
+					if (solPlayer.getEarsItem() > 0) {
+						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+						newclaim.setMcname(player.getName());
+						newclaim.setItemid(solPlayer.getEarsItem());
+						newclaim.setClaimed(false);
+						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+						solPlayer.setEarsItem(0);
+						sender.sendMessage("Your earrings have been moved to the /claim list");
+					}
+					if (solPlayer.getNeckItem() > 0) {
+						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+						newclaim.setMcname(player.getName());
+						newclaim.setItemid(solPlayer.getNeckItem());
+						newclaim.setClaimed(false);
+						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+						solPlayer.setNeckItem(0);
+						sender.sendMessage("Your necklace has been moved to the /claim list");
+					}
+					if (solPlayer.getFingersItem() > 0) {
+						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+						newclaim.setMcname(player.getName());
+						newclaim.setItemid(solPlayer.getFingersItem());
+						newclaim.setClaimed(false);
+						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+						solPlayer.setFingersItem(0);
+						sender.sendMessage("Your rings have been moved to the /claim list");
+					}
+					if (solPlayer.getShouldersItem() > 0) {
+						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+						newclaim.setMcname(player.getName());
+						newclaim.setItemid(solPlayer.getShouldersItem());
+						newclaim.setClaimed(false);
+						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+						solPlayer.setShouldersItem(0);
+						sender.sendMessage("Your cloak has been moved to the /claim list");
+					}
+					
+					if (solPlayer.getForearmsItem() > 0) {
+						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+						newclaim.setMcname(player.getName());
+						newclaim.setItemid(solPlayer.getShouldersItem());
+						newclaim.setClaimed(false);
+						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+						solPlayer.setForearmsItem(0);
+						sender.sendMessage("Your forearms item has been moved to the /claim list");
+					}
+					if (solPlayer.getArmsItem() > 0) {
+						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+						newclaim.setMcname(player.getName());
+						newclaim.setItemid(solPlayer.getShouldersItem());
+						newclaim.setClaimed(false);
+						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+						solPlayer.setArmsItem(0);
+						sender.sendMessage("Your arms item has been moved to the /claim list");
+					}
+					if (solPlayer.getHandsItem() > 0) {
+						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+						newclaim.setMcname(player.getName());
+						newclaim.setItemid(solPlayer.getShouldersItem());
+						newclaim.setClaimed(false);
+						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+						solPlayer.setHandsItem(0);
+						sender.sendMessage("Your hands item has been moved to the /claim list");
+					}
+				} else {
+					switch(args[1].toUpperCase())
+					{
+						case "EARS":
+							if (solPlayer.getEarsItem() > 0) {
+								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+								newclaim.setMcname(player.getName());
+								newclaim.setItemid(solPlayer.getEarsItem());
+								newclaim.setClaimed(false);
+								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+								solPlayer.setEarsItem(0);
+								sender.sendMessage("Your earrings have been moved to the /claim list");
+							}
+							break;
+						case "NECK":
+							if (solPlayer.getNeckItem() > 0) {
+								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+								newclaim.setMcname(player.getName());
+								newclaim.setItemid(solPlayer.getNeckItem());
+								newclaim.setClaimed(false);
+								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+								solPlayer.setNeckItem(0);
+								sender.sendMessage("Your necklace has been moved to the /claim list");
+							}
+							break;
+						case "FINGERS":
+							if (solPlayer.getFingersItem() > 0) {
+								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+								newclaim.setMcname(player.getName());
+								newclaim.setItemid(solPlayer.getFingersItem());
+								newclaim.setClaimed(false);
+								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+								solPlayer.setFingersItem(0);
+								sender.sendMessage("Your rings have been moved to the /claim list");
+							}
+							break;
+						case "SHOULDERS":
+							if (solPlayer.getShouldersItem() > 0) {
+								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+								newclaim.setMcname(player.getName());
+								newclaim.setItemid(solPlayer.getShouldersItem());
+								newclaim.setClaimed(false);
+								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+								solPlayer.setShouldersItem(0);
+								sender.sendMessage("Your cloak has been moved to the /claim list");
+							}
+							break;
+						case "ARMS":
+							if (solPlayer.getArmsItem() > 0) {
+								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+								newclaim.setMcname(player.getName());
+								newclaim.setItemid(solPlayer.getShouldersItem());
+								newclaim.setClaimed(false);
+								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+								solPlayer.setArmsItem(0);
+								sender.sendMessage("Your arms item has been moved to the /claim list");
+							}
+							break;
+						case "FOREARMS":
+							if (solPlayer.getForearmsItem() > 0) {
+								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+								newclaim.setMcname(player.getName());
+								newclaim.setItemid(solPlayer.getShouldersItem());
+								newclaim.setClaimed(false);
+								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+								solPlayer.setForearmsItem(0);
+								sender.sendMessage("Your forearms item has been moved to the /claim list");
+							}
+							break;
+						case "HANDS":
+							if (solPlayer.getHandsItem() > 0) {
+								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+								newclaim.setMcname(player.getName());
+								newclaim.setItemid(solPlayer.getShouldersItem());
+								newclaim.setClaimed(false);
+								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+								solPlayer.setHandsItem(0);
+								sender.sendMessage("Your hands item has been moved to the /claim list");
+							}
+							break;
+						default:
+							sender.sendMessage("Unknown slot to unequip");
+							break;
+					}
 				}
 				
 				solPlayer.updateMaxHp();
@@ -273,14 +381,24 @@ public class CommandEquip implements CommandExecutor {
 			if (solPlayer.getNeckItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(solPlayer.getNeckItem());
-				solPlayer.getBukkitPlayer().sendMessage("Neck Item: " + item.getDisplayname());
+				TextComponent tc = new TextComponent();
+				tc.setText("Neck Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip NECK"));
+				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+						new ComponentBuilder(item.asJsonString()).create()));
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Neck Item: EMPTY");
 			}
 			if (solPlayer.getFingersItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(solPlayer.getFingersItem());
-				solPlayer.getBukkitPlayer().sendMessage("Fingers Item: " + item.getDisplayname());
+				TextComponent tc = new TextComponent();
+				tc.setText("Fingers Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip FINGERS"));
+				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+						new ComponentBuilder(item.asJsonString()).create()));
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Fingers Item: EMPTY");
 			}
@@ -288,7 +406,12 @@ public class CommandEquip implements CommandExecutor {
 			if (solPlayer.getEarsItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(solPlayer.getEarsItem());
-				solPlayer.getBukkitPlayer().sendMessage("Ears Item: " + item.getDisplayname());
+				TextComponent tc = new TextComponent();
+				tc.setText("Ears Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip EARS"));
+				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+						new ComponentBuilder(item.asJsonString()).create()));
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Ears Item: EMPTY");
 			}
@@ -296,7 +419,12 @@ public class CommandEquip implements CommandExecutor {
 			if (solPlayer.getShouldersItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(solPlayer.getShouldersItem());
-				solPlayer.getBukkitPlayer().sendMessage("Shoulders Item: " + item.getDisplayname());
+				TextComponent tc = new TextComponent();
+				tc.setText("Shoulders Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip SHOULDERS"));
+				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+						new ComponentBuilder(item.asJsonString()).create()));
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Shoulders Item: EMPTY");
 			}
@@ -304,7 +432,12 @@ public class CommandEquip implements CommandExecutor {
 			if (solPlayer.getForearmsItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(solPlayer.getForearmsItem());
-				solPlayer.getBukkitPlayer().sendMessage("Forearms Item: " + item.getDisplayname());
+				TextComponent tc = new TextComponent();
+				tc.setText("Forearms Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip FOREARMS"));
+				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+						new ComponentBuilder(item.asJsonString()).create()));
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Forearms Item: EMPTY");
 			}
@@ -312,7 +445,12 @@ public class CommandEquip implements CommandExecutor {
 			if (solPlayer.getArmsItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(solPlayer.getArmsItem());
-				solPlayer.getBukkitPlayer().sendMessage("Arms Item: " + item.getDisplayname());
+				TextComponent tc = new TextComponent();
+				tc.setText("Arms Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip ARMS"));
+				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+						new ComponentBuilder(item.asJsonString()).create()));
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Arms Item: EMPTY");
 			}
@@ -320,7 +458,12 @@ public class CommandEquip implements CommandExecutor {
 			if (solPlayer.getHandsItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(solPlayer.getHandsItem());
-				solPlayer.getBukkitPlayer().sendMessage("Hands Item: " + item.getDisplayname());
+				TextComponent tc = new TextComponent();
+				tc.setText("Hands Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip HANDS"));
+				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+						new ComponentBuilder(item.asJsonString()).create()));
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Hands Item: EMPTY");
 			}
