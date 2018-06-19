@@ -206,7 +206,11 @@ public class CommandEquip implements CommandExecutor {
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setEarsItem(0);
-						sender.sendMessage("Your earrings have been moved to the /claim list");
+						TextComponent tc = new TextComponent();
+						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+						sender.spigot().sendMessage(tc);
+						
 					}
 					if (solPlayer.getNeckItem() > 0) {
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
@@ -216,7 +220,10 @@ public class CommandEquip implements CommandExecutor {
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setNeckItem(0);
-						sender.sendMessage("Your necklace has been moved to the /claim list");
+						TextComponent tc = new TextComponent();
+						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+						sender.spigot().sendMessage(tc);
 					}
 					if (solPlayer.getFingersItem() > 0) {
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
@@ -226,7 +233,10 @@ public class CommandEquip implements CommandExecutor {
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setFingersItem(0);
-						sender.sendMessage("Your rings have been moved to the /claim list");
+						TextComponent tc = new TextComponent();
+						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+						sender.spigot().sendMessage(tc);
 					}
 					if (solPlayer.getShouldersItem() > 0) {
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
@@ -236,7 +246,10 @@ public class CommandEquip implements CommandExecutor {
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setShouldersItem(0);
-						sender.sendMessage("Your cloak has been moved to the /claim list");
+						TextComponent tc = new TextComponent();
+						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+						sender.spigot().sendMessage(tc);
 					}
 					
 					if (solPlayer.getForearmsItem() > 0) {
@@ -247,7 +260,10 @@ public class CommandEquip implements CommandExecutor {
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setForearmsItem(0);
-						sender.sendMessage("Your forearms item has been moved to the /claim list");
+						TextComponent tc = new TextComponent();
+						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+						sender.spigot().sendMessage(tc);
 					}
 					if (solPlayer.getArmsItem() > 0) {
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
@@ -257,7 +273,10 @@ public class CommandEquip implements CommandExecutor {
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setArmsItem(0);
-						sender.sendMessage("Your arms item has been moved to the /claim list");
+						TextComponent tc = new TextComponent();
+						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+						sender.spigot().sendMessage(tc);
 					}
 					if (solPlayer.getHandsItem() > 0) {
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
@@ -267,7 +286,10 @@ public class CommandEquip implements CommandExecutor {
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setHandsItem(0);
-						sender.sendMessage("Your hands item has been moved to the /claim list");
+						TextComponent tc = new TextComponent();
+						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+						sender.spigot().sendMessage(tc);
 					}
 				} else {
 					switch(args[1].toUpperCase())
@@ -281,7 +303,10 @@ public class CommandEquip implements CommandExecutor {
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setEarsItem(0);
-								sender.sendMessage("Your earrings have been moved to the /claim list");
+								TextComponent tc = new TextComponent();
+								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+								sender.spigot().sendMessage(tc);
 							}
 							break;
 						case "NECK":
@@ -293,7 +318,10 @@ public class CommandEquip implements CommandExecutor {
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setNeckItem(0);
-								sender.sendMessage("Your necklace has been moved to the /claim list");
+								TextComponent tc = new TextComponent();
+								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+								sender.spigot().sendMessage(tc);
 							}
 							break;
 						case "FINGERS":
@@ -305,7 +333,10 @@ public class CommandEquip implements CommandExecutor {
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setFingersItem(0);
-								sender.sendMessage("Your rings have been moved to the /claim list");
+								TextComponent tc = new TextComponent();
+								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+								sender.spigot().sendMessage(tc);
 							}
 							break;
 						case "SHOULDERS":
@@ -317,7 +348,10 @@ public class CommandEquip implements CommandExecutor {
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setShouldersItem(0);
-								sender.sendMessage("Your cloak has been moved to the /claim list");
+								TextComponent tc = new TextComponent();
+								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+								sender.spigot().sendMessage(tc);
 							}
 							break;
 						case "ARMS":
@@ -329,7 +363,10 @@ public class CommandEquip implements CommandExecutor {
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setArmsItem(0);
-								sender.sendMessage("Your arms item has been moved to the /claim list");
+								TextComponent tc = new TextComponent();
+								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+								sender.spigot().sendMessage(tc);
 							}
 							break;
 						case "FOREARMS":
@@ -341,7 +378,10 @@ public class CommandEquip implements CommandExecutor {
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setForearmsItem(0);
-								sender.sendMessage("Your forearms item has been moved to the /claim list");
+								TextComponent tc = new TextComponent();
+								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+								sender.spigot().sendMessage(tc);
 							}
 							break;
 						case "HANDS":
@@ -353,7 +393,10 @@ public class CommandEquip implements CommandExecutor {
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setHandsItem(0);
-								sender.sendMessage("Your hands item has been moved to the /claim list");
+								TextComponent tc = new TextComponent();
+								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+								sender.spigot().sendMessage(tc);
 							}
 							break;
 						default:

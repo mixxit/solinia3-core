@@ -403,4 +403,18 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setHandsItem(int handsItem);
 
+	public UUID getEarsItemInstance();
+
+	public UUID getNeckItemInstance();
+
+	public UUID getFingersItemInstance();
+
+	public UUID getShouldersItemInstance();
+
+	public UUID getForearmsItemInstance();
+
+	public UUID getArmsItemInstance();
+
+	public UUID getHandsItemInstance();
+
 }

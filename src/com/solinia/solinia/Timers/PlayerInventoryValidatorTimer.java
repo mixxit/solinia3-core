@@ -39,6 +39,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			slots.add(39);
 			slots.add(40);
 			
+			// Check worn stuff
 			for (int slotId = 0; slotId < 36; slotId++)
 			{
 				if (player.getInventory().getItem(slotId) == null)
@@ -107,6 +108,143 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					continue;
 				}
 			}
+			
+			// Check worn jewelry/additional armour
+			
+			if (solplayer.getEarsItem() > 0) {
+				try
+				{
+					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(solplayer.getEarsItem()));
+					
+					if (i.isTemporary())
+					{
+						if (!solplayer.getEarsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solplayer.setEarsItem(0);
+						}
+					}
+				} catch (SoliniaItemException e) {
+					
+				}
+			}
+
+			if (solplayer.getNeckItem() > 0) {
+				try
+				{
+					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(solplayer.getNeckItem()));
+					
+					if (i.isTemporary())
+					{
+						if (!solplayer.getNeckItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solplayer.setNeckItem(0);
+						}
+					}
+				} catch (SoliniaItemException e) {
+					
+				}
+			}
+			
+			if (solplayer.getFingersItem() > 0) {
+				try
+				{
+					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(solplayer.getFingersItem()));
+					
+					if (i.isTemporary())
+					{
+						if (!solplayer.getFingersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solplayer.setFingersItem(0);
+						}
+					}
+				} catch (SoliniaItemException e) {
+					
+				}
+			}
+
+			if (solplayer.getShouldersItem() > 0) {
+				try
+				{
+					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(solplayer.getShouldersItem()));
+					
+					if (i.isTemporary())
+					{
+						if (!solplayer.getShouldersItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solplayer.setShouldersItem(0);
+						}
+					}
+				} catch (SoliniaItemException e) {
+					
+				}
+			}
+
+			if (solplayer.getForearmsItem() > 0) {
+				try
+				{
+					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(solplayer.getForearmsItem()));
+					
+					if (i.isTemporary())
+					{
+						if (!solplayer.getForearmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solplayer.setForearmsItem(0);
+						}
+					}
+				} catch (SoliniaItemException e) {
+					
+				}
+			}
+
+			if (solplayer.getArmsItem() > 0) {
+				try
+				{
+					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(solplayer.getArmsItem()));
+					
+					if (i.isTemporary())
+					{
+						if (!solplayer.getArmsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solplayer.setArmsItem(0);
+						}
+					}
+				} catch (SoliniaItemException e) {
+					
+				}
+			}
+
+			if (solplayer.getHandsItem() > 0) {
+				try
+				{
+					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(solplayer.getHandsItem()));
+					
+					if (i.isTemporary())
+					{
+						if (!solplayer.getHandsItemInstance().toString().equals(StateManager.getInstance().getInstanceGuid().toString()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solplayer.setHandsItem(0);
+						}
+					}
+				} catch (SoliniaItemException e) {
+					
+				}
+			}
+
+			// Check reagents
 		
 		} catch (CoreStateInitException e)
 		{
