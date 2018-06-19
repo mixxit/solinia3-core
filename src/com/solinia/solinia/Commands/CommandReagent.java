@@ -32,16 +32,12 @@ public class CommandReagent implements CommandExecutor {
 		{
 			Player player = (Player)sender;
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			player.sendMessage("Reagent Pouch:");
-			for(Entry<Integer, SoliniaReagent> keyValuePair : solPlayer.getReagents().entrySet())
+			
+			if (args.length == 0)
 			{
-				int itemId = keyValuePair.getKey();
-				int count = keyValuePair.getValue().getQty();
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-				
-				if (item != null && item.isReagent())
-					player.sendMessage(item.getDisplayname() + " Qty: " + ChatColor.GOLD + count + ChatColor.RESET);
+				sendReagentPouch(solPlayer);
 			}
+			
 			
 			if (args.length > 0)
 			{
@@ -98,5 +94,24 @@ public class CommandReagent implements CommandExecutor {
 		}
 		
 		return true;
+	}
+
+	private void sendReagentPouch(ISoliniaPlayer solPlayer) {
+		try
+		{
+			solPlayer.getBukkitPlayer().sendMessage("Reagent Pouch:");
+			for(Entry<Integer, SoliniaReagent> keyValuePair : solPlayer.getReagents().entrySet())
+			{
+				int itemId = keyValuePair.getKey();
+				int count = keyValuePair.getValue().getQty();
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+				
+				if (item != null && item.isReagent())
+					solPlayer.getBukkitPlayer().sendMessage(item.getDisplayname() + " Qty: " + ChatColor.GOLD + count + ChatColor.RESET);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 }

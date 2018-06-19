@@ -1,7 +1,7 @@
 package com.solinia.solinia.Models;
 
-import java.util.UUID;
-
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 
 public class SoliniaReagent  {
@@ -57,9 +57,23 @@ public class SoliniaReagent  {
 	}
 
 	private void removeOldSummonedItems() {
-		if (!this.creationstamp.equals(StateManager.getInstance().getInstanceGuid()))
+		try
 		{
-			this.qty = 0;
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getItemId());
+			if (item == null)
+			{				
+				this.qty = 0;
+				return;
+			}
+			
+			if (item.isTemporary())
+			if (!this.creationstamp.equals(StateManager.getInstance().getInstanceGuid()))
+			{
+				this.qty = 0;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 }
