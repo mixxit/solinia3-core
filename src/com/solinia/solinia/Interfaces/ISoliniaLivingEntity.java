@@ -6,11 +6,13 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -136,7 +138,7 @@ public interface ISoliniaLivingEntity
 
 	public int getMitigationAC();
 
-	boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit, Solinia3CorePlugin plugin);
+	int Attack(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage);
 
 	public int getSkillDmgTaken(String skill);
 
@@ -150,7 +152,7 @@ public interface ISoliniaLivingEntity
 
 	int getRune();
 
-	int reduceAndRemoveRunesAndReturnLeftover(Plugin plugin, int damage);
+	int reduceAndRemoveRunesAndReturnLeftover(int damage);
 
 	public boolean isInvulnerable();
 
@@ -190,13 +192,11 @@ public interface ISoliniaLivingEntity
 	
 	public void setSpeaksAllLanguages(boolean speaksAllLanguages);
 
-	void damageHook(double damage, Entity sourceEntity);
-
 	public int hasDeathSave();
 
-	void removeDeathSaves(Plugin plugin);
+	void removeDeathSaves();
 
-	void damage(Plugin plugin, double damage, Entity sourceEntity);
+	void damage(double damage, Entity sourceEntity);
 
 	public boolean isBehindEntity(LivingEntity livingEntity);
 
@@ -251,4 +251,20 @@ public interface ISoliniaLivingEntity
 	int getRaceId();
 
 	int getActSpellCasttime(ISoliniaSpell spell, int casttime);
+
+	Location getLocation();
+
+	void sendMessage(String message);
+
+	public boolean canAttackTarget(ISoliniaLivingEntity defender);
+
+	public boolean isMezzed();
+
+	boolean isStunned();
+
+	public void removeNonCombatSpells();
+
+	int calculateDamageFromDamageEvent(Entity originalDamager, boolean ismagic, int damage);
+
+	void damageAlertHook(double damage, Entity sourceEntity);
 }

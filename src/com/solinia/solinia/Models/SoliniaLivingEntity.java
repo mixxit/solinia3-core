@@ -15,15 +15,18 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
@@ -47,6 +50,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
@@ -1002,14 +1006,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
-	public boolean Attack(ISoliniaLivingEntity defender, EntityDamageEvent event, boolean arrowHit,
-			Solinia3CorePlugin plugin) {
-		
-		if (event.isCancelled())
-			return false;
-		
-		int baseDamage = (int) event.getDamage(DamageModifier.BASE);
-		
+	public int Attack(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage) {
 		try
 		{
 			if (defender.isPlayer() && isPlayer())
@@ -1021,8 +1018,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				{
 					if (defenderPlayer.getGroup().getId().equals(attackerPlayer.getGroup().getId()))
 					{
-						Utils.CancelEvent(event);;
-						return false;
+						return 0;
 					}
 				}
 			}
@@ -1045,9 +1041,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					{
 						player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 								new TextComponent(ChatColor.GRAY + "* You cannot concentrate on combat while meditating or sneaking"));
-						
-						Utils.CancelEvent(event);;
-						return false;
+						return 0;
 					}
 				}
 				} catch (CoreStateInitException e)
@@ -1058,8 +1052,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (usingValidWeapon() == false) {
-			Utils.CancelEvent(event);
-			return false;
+			return 0;
 		} else {
 			if (
 					Utils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
@@ -1071,8 +1064,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (soliniaitem.getBaneUndead() > 0 && defender.isUndead())
 						baseDamage += soliniaitem.getBaneUndead();
 				} catch (CoreStateInitException e) {
-					Utils.CancelEvent(event);
-					return false;
+					return 0;
 				}
 			}
 		}
@@ -1082,24 +1074,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (defender.getBukkitLivingEntity().isDead() || this.getBukkitLivingEntity().isDead()
 				|| this.getBukkitLivingEntity().getHealth() < 0) {
-			Utils.CancelEvent(event);;
-			return false;
+			return 0;
 		}
 
 		if (isInulvnerable()) {
-			Utils.CancelEvent(event);;
-			return false;
+			return 0;
 		}
 
 		if (isFeigned()) {
-			Utils.CancelEvent(event);;
-			return false;
+			return 0;
 		}
 
 		ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInHand();
 
 		
-		DamageHitInfo my_hit = this.GetHitInfo(plugin, weapon, baseDamage, arrowHit, defender);
+		DamageHitInfo my_hit = this.GetHitInfo(weapon, baseDamage, arrowHit, defender);
 		
 		///////////////////////////////////////////////////////////
 		////// Send Attack Damage
@@ -1108,55 +1097,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO Skill Procs
 
 		if (getBukkitLivingEntity().isDead()) {
-			Utils.CancelEvent(event);
-			return false;
+			return 0;
 		}
+		
+		int finaldamage = 0;
 		
 		if (my_hit.damage_done > 0) {
 			triggerDefensiveProcs(defender, my_hit.damage_done, arrowHit);
-
-			try {
-				event.setDamage(DamageModifier.ABSORPTION, 0);
-			} catch (UnsupportedOperationException e) {
-
-			}
-
-			try {
-				event.setDamage(DamageModifier.ARMOR, 0);
-			} catch (UnsupportedOperationException e) {
-
-			}
-
-			try {
-				event.setDamage(DamageModifier.BASE, my_hit.damage_done);
-
-			} catch (UnsupportedOperationException e) {
-				System.out.println(e.getMessage());
-
-			}
-			try {
-				event.setDamage(DamageModifier.BLOCKING, 0);
-			} catch (UnsupportedOperationException e) {
-
-			}
-
-			try {
-				event.setDamage(DamageModifier.HARD_HAT, 0);
-			} catch (UnsupportedOperationException e) {
-
-			}
-
-			try {
-				event.setDamage(DamageModifier.MAGIC, 0);
-			} catch (UnsupportedOperationException e) {
-
-			}
-
-			try {
-				event.setDamage(DamageModifier.RESISTANCE, 0);
-			} catch (UnsupportedOperationException e) {
-
-			}
+			
+			finaldamage = my_hit.damage_done;
 
 			DecimalFormat df = new DecimalFormat();
 			df.setMaximumFractionDigits(2);
@@ -1171,8 +1120,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			if (attackerEntity instanceof Player)
 			((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-					new TextComponent("You hit " + name + " for " + df.format(event.getDamage()) + " "
-							+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
+					new TextComponent("You hit " + name + " for " + df.format(finaldamage) + " "
+							+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
 							+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
 							+ " damage"));
 			
@@ -1183,8 +1132,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				{
 					Player owner = (Player)pet.getOwner();
 					owner.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent("Your pet hit " + name + " for " + df.format(event.getDamage()) + " "
-									+ df.format(defender.getBukkitLivingEntity().getHealth() - event.getDamage()) + "/"
+							new TextComponent("Your pet hit " + name + " for " + df.format(finaldamage) + " "
+									+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
 									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
 									+ " damage [PetHP:" + pet.getHealth() + "]"));
 				}
@@ -1199,7 +1148,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					tryIncreaseSkill("DOUBLEATTACK", 1);
 				} 
 
-				defender.damage(plugin, my_hit.damage_done, attackerEntity);
+				defender.damage(my_hit.damage_done, attackerEntity);
 			}
 			
 			if (getDualWieldCheck()) {
@@ -1225,8 +1174,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
 				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2);
 				
-				DamageHitInfo my_hit2 = this.GetHitInfo(plugin, weapon2, baseDamage2, false, defender);
-				defender.damage(plugin, my_hit2.damage_done, attackerEntity);
+				DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, baseDamage2, false, defender);
+				defender.damage(my_hit2.damage_done, attackerEntity);
 				
 				// Offhand Proc
 				if (Utils.IsSoliniaItem(weapon2)) 
@@ -1235,7 +1184,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					{
 						ISoliniaItem offhandItem = SoliniaItemAdapter.Adapt(weapon2);
 						ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt(attackerEntity);
-						TryProcItem(event.getCause(), offhandItem, attackerSolEntity, defender);
+						TryProcItem(offhandItem, attackerSolEntity, defender);
 					} catch (CoreStateInitException e)
 					{
 						
@@ -1253,7 +1202,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					try
 					{
 						ISoliniaItem soliniaitem = SoliniaItemAdapter.Adapt(attackerEntity.getEquipment().getItemInMainHand());
-						TryProcItem(event.getCause(), soliniaitem, attackerSolEntity, defender);
+						TryProcItem(soliniaitem, attackerSolEntity, defender);
 					} catch (CoreStateInitException e)
 					{
 						
@@ -1315,34 +1264,29 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (defender.getBukkitLivingEntity() instanceof Player) {
 				((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent("You were hit by " + getBukkitLivingEntity().getCustomName() + " for "
-								+ df.format(event.getDamage()) + " " + my_hit.skill + " damage"));
+								+ df.format(finaldamage) + " " + my_hit.skill + " damage"));
 				
 			}
 			
-			if (event.getDamage() > getBukkitLivingEntity().getHealth() && hasDeathSave() > 0)
+			if (finaldamage > getBukkitLivingEntity().getHealth() && hasDeathSave() > 0)
 			{
-				Utils.CancelEvent(event);
-				removeDeathSaves(plugin);
+				removeDeathSaves();
 				attackerEntity.sendMessage("* Your target was protected by a death save boon!");
 				getBukkitLivingEntity().sendMessage("* Your death save boon has saved you from death!");
-				return false;
+				return 0;
 			}
 
-			defender.damageHook(event.getDamage(),getBukkitLivingEntity());
+			defender.damageAlertHook(finaldamage,getBukkitLivingEntity());
 
-			return true;
+			return finaldamage;
 		} else {
-			Utils.CancelEvent(event);
-			return false;
+			return 0;
 		}
 	}
 	
-	private void TryProcItem(DamageCause damageCause, ISoliniaItem handItem, ISoliniaLivingEntity attackerSolEntity, ISoliniaLivingEntity defenderSolEntity) {
+	private void TryProcItem(ISoliniaItem handItem, ISoliniaLivingEntity attackerSolEntity, ISoliniaLivingEntity defenderSolEntity) {
 		try
 		{
-			if (!damageCause.equals(DamageCause.ENTITY_ATTACK))
-				return;
-			
 			// Check if item has any proc effects
 			if (handItem.getWeaponabilityid() > 0) {
 				ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager().getSpell(handItem.getWeaponabilityid());
@@ -1376,7 +1320,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
-	private DamageHitInfo GetHitInfo(Plugin plugin, ItemStack weapon, int baseDamage, boolean arrowHit, ISoliniaLivingEntity defender) {
+	private DamageHitInfo GetHitInfo(ItemStack weapon, int baseDamage, boolean arrowHit, ISoliniaLivingEntity defender) {
 		DamageHitInfo my_hit = new DamageHitInfo();
 		my_hit.skill = Utils.getSkillForMaterial(weapon.getType().toString()).getSkillname();
 		if (arrowHit) {
@@ -1414,7 +1358,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			my_hit.offense = getOffense(my_hit.skill); // we need this a few times
 			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
 
-			my_hit = doAttack(plugin, defender, my_hit);
+			my_hit = doAttack(defender, my_hit);
 		}
 		
 		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate);
@@ -1423,7 +1367,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void damageHook(double damage, Entity sourceEntity) {
+	public void damageAlertHook(double damage, Entity sourceEntity) {
 		if (isPlayer())
 		{
 			try {
@@ -1442,16 +1386,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	
 	@Override
-	public void damage(Plugin plugin, double damage, Entity sourceEntity)
+	public void damage(double damage, Entity sourceEntity)
 	{
 		if (sourceEntity == null || getBukkitLivingEntity() == null || sourceEntity.isDead() || getBukkitLivingEntity().isDead())
 			return;
 		
-		damageHook(damage, sourceEntity);
+		damageAlertHook(damage, sourceEntity);
 		
 		if (damage > getBukkitLivingEntity().getHealth() && hasDeathSave() > 0)
 		{
-			removeDeathSaves(plugin);
+			removeDeathSaves();
 			getBukkitLivingEntity().sendMessage("* Your death save boon has saved you from death!");
 			return;
 		}
@@ -1528,7 +1472,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
-	private DamageHitInfo doAttack(Plugin plugin, ISoliniaLivingEntity defender, DamageHitInfo hit) {
+	private DamageHitInfo doAttack(ISoliniaLivingEntity defender, DamageHitInfo hit) {
 		if (defender == null)
 			return hit;
 
@@ -1550,7 +1494,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (isPlayer()) {
 					((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* "
 							+ defender.getBukkitLivingEntity().getCustomName() + " ripostes your attack!");
-					damage(plugin, originalDamage, getBukkitLivingEntity());
+					damage(originalDamage, getBukkitLivingEntity());
 				}
 			}
 
@@ -4669,7 +4613,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int reduceAndRemoveRunesAndReturnLeftover(Plugin plugin, int damage) {
+	public int reduceAndRemoveRunesAndReturnLeftover(int damage) {
 		int dmgLeft = damage;
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		try {
@@ -4989,7 +4933,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void removeDeathSaves(Plugin plugin) {
+	public void removeDeathSaves() {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		try {
 			for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
@@ -5330,6 +5274,306 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 				}
 			}
+		}
+	}
+	
+	@Override
+	public void sendMessage(String message)
+	{
+		getBukkitLivingEntity().sendMessage(message);
+	}
+	
+	@Override
+	public Location getLocation()
+	{
+		return getBukkitLivingEntity().getLocation();
+	}
+
+	@Override
+	public int calculateDamageFromDamageEvent(Entity originalDamager, boolean ismagic, int damage) {
+		try {
+			Entity attackerEntity = originalDamager;
+			
+			// Override damager from arrow
+			if (originalDamager instanceof Arrow) 
+			{
+				Arrow arr = (Arrow) originalDamager;
+				if (arr.getShooter() instanceof LivingEntity)
+					attackerEntity = (LivingEntity) arr.getShooter();
+			}
+			
+			if (!(attackerEntity instanceof LivingEntity))
+				return 0;
+			
+			ISoliniaLivingEntity attacker = SoliniaLivingEntityAdapter.Adapt((LivingEntity)attackerEntity);
+			ISoliniaLivingEntity defender = this;
+			
+			// if this is a melee attack and the attacker is too far from the defender
+			// cancel the event
+			
+			if (!ismagic && !(originalDamager instanceof Arrow)) {
+				if (attacker.getLocation().distance(attacker.getLocation()) > 3) {
+					attacker.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
+					return 0;
+				}
+			}
+				
+			// Remove buffs on attacker (invis should drop)
+			// and check they are not mezzed
+		
+			// MEZZED
+			if (attacker.isMezzed())
+			{
+				if (attacker instanceof Player) 
+				{
+					attacker.getBukkitLivingEntity().sendMessage("* You are mezzed!");
+				}
+				return 0;
+			}
+			
+			// STUNNED
+			if (attacker.isStunned())
+			{
+				if (attacker instanceof Player) 
+				{
+					attacker.getBukkitLivingEntity().sendMessage("* You are stunned!");
+				}
+				return 0;
+			}
+			
+			// CAN ATTACK / MEZ, STUN - PETS CHECKING IF CAN ATTACK ETC
+			if (!attacker.canAttackTarget(defender))
+			{
+				return 0;
+			}
+			
+			// MODIFY DAMAGE TO BOW DAMAGE IF ARROW
+			if (originalDamager instanceof Arrow)
+			{
+				Arrow arr = (Arrow) originalDamager;
+				ItemStack mainitem = attacker.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+				if (mainitem != null && mainitem.getType() == Material.BOW) 
+				{
+					int dmgmodifier = 0;
+
+					if (Utils.IsSoliniaItem(mainitem)) {
+						try {
+							ISoliniaItem item = SoliniaItemAdapter.Adapt(mainitem);
+							if (item.getDamage() > 0 && item.getBasename().equals("BOW")) {
+								dmgmodifier = item.getDamage();
+							}
+						} catch (SoliniaItemException e) {
+							// sok just skip
+						}
+					}
+					
+					damage = damage + dmgmodifier;
+				}
+			}
+			
+			// INVULNERABILITY / DIVINE AURA			
+			if (defender.isInvulnerable())
+			{
+				if (attacker.isPlayer())
+					attacker.getBukkitLivingEntity().sendMessage("* Your attack was prevented as the target is Invulnerable!");
+				
+				if (defender.isPlayer())
+					defender.getBukkitLivingEntity().sendMessage("* Your invulnerability prevented the targets attack!");
+
+				return 0;
+			}
+			
+			// RUNE
+			if (defender.getRune() > 0)
+			{
+				damage = defender.reduceAndRemoveRunesAndReturnLeftover(damage);
+				
+				if (damage <= 0)
+				{
+					if (attacker.isPlayer())
+						attacker.getBukkitLivingEntity().sendMessage("* Your attack was absorbed by the targets Rune");
+					
+					if (defender.isPlayer()) 
+						defender.getBukkitLivingEntity().sendMessage("* Your rune spell absorbed the targets attack!");
+					
+					return 0;
+				}
+			}
+			
+			// AA MITIGATION ETC
+			damage = getDamageAfterMitigation(damage);
+
+			if (damage <= 0)
+				return 0;
+			
+			attacker.removeNonCombatSpells();
+			defender.removeNonCombatSpells();
+			
+			// DEATH SAVES
+			if (damage > defender.getBukkitLivingEntity().getHealth())
+			{
+				if (defender.hasDeathSave() > 0)
+				{
+					defender.removeDeathSaves();
+					if (defender.isPlayer())
+					{
+						defender.sendMessage("* Your death/divine save boon has saved you from death!");
+					}
+					return 0;
+				}
+			}
+			
+			// MAGIC ENDS HERE
+			if (ismagic)
+			{
+				if (attacker.isPlayer())
+				{
+					DecimalFormat df = new DecimalFormat();
+					df.setMaximumFractionDigits(2);
+					String name = defender.getBukkitLivingEntity().getName();
+					if (defender.getBukkitLivingEntity().getCustomName() != null)
+						name = defender.getBukkitLivingEntity().getCustomName();
+
+					((Player)attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent("You SPELLDMG'd " + name + " for " + df.format(damage) + " ["
+									+ df.format(defender.getBukkitLivingEntity().getHealth() - damage) + "/"
+									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + "]"));
+				}
+				
+				defender.damageAlertHook(damage, attacker.getBukkitLivingEntity());
+				return damage;
+			}
+			
+			// MELEE / BOW STARTS HERE
+			defender.damageAlertHook(damage, attacker.getBukkitLivingEntity());
+			return attacker.Attack(defender, (originalDamager instanceof Arrow), damage);
+		} catch (CoreStateInitException e) {
+			return 0;
+		}
+	}
+
+	private int getDamageAfterMitigation(int damage) {
+		if (damage <= 0)
+			return damage;
+
+		int spellMitigateMeleeDamage = 0;
+
+		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
+				SpellEffectType.MitigateMeleeDamage)) {
+			spellMitigateMeleeDamage += effect.getRemainingValue();
+		}
+
+		// We should check this in advance really
+		if (spellMitigateMeleeDamage < 1)
+			return damage;
+
+		double damage_to_reduce = damage * (spellMitigateMeleeDamage / 100);
+
+		return (int)Math.floor((damage - damage_to_reduce));
+	}
+
+	@Override
+	public boolean canAttackTarget(ISoliniaLivingEntity defender) 
+	{
+		// IM MEZZED SO CANT DO ANYTHING
+		if (isStunned())
+			return false;
+		
+		// IM STUNNED SO CANT DO ANYTHING
+		if (isMezzed())
+			return false;
+		
+		if (!(getBukkitLivingEntity() instanceof Creature))
+			return true;
+		
+		// This seems to stop players from attacking players pets
+		// unless the pet is set to attack the player
+		if (isPlayer() && defender.getBukkitLivingEntity() instanceof Wolf && defender.isPet()) {
+			Wolf wolf = (Wolf) defender.getBukkitLivingEntity();
+			if (wolf != null) {
+				if (wolf.getTarget() == null || !wolf.getTarget().equals(getBukkitLivingEntity())) {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		
+		// Player can always attack even if mob is mezzed (it will break mez)
+		if (isPlayer())
+			return true;
+		
+		// Mobs and pets wont attack mezzed creatures
+		if (defender.isMezzed())
+		{
+			if (isPet()) {
+				Wolf wolf = (Wolf) getBukkitLivingEntity();
+				wolf.setTarget(null);
+				say("Stopping attacking master, the target is mesmerized");
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean isMezzed() {
+		try {
+			Timestamp expiry = StateManager.getInstance().getEntityManager().getMezzed(getBukkitLivingEntity());
+			if (expiry != null) {
+				return true;
+			}
+
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean isStunned() {
+		try {
+			Timestamp expiry = StateManager.getInstance().getEntityManager().getStunned(getBukkitLivingEntity());
+			if (expiry != null) {
+				return true;
+			}
+
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public void removeNonCombatSpells() {
+		try
+		{
+			List<Integer> removeSpells = new ArrayList<Integer>();
+			for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
+					.getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells()) {
+				if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) 
+						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez)
+						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
+						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)
+						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2)
+						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals)
+						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat)
+						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)) {
+					if (!removeSpells.contains(spell.getSpell().getId()))
+						removeSpells.add(spell.getSpell().getId());
+	
+				}
+			}
+	
+			for (Integer spellId : removeSpells) {
+				StateManager.getInstance().getEntityManager()
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 }

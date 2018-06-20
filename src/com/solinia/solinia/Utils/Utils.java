@@ -5907,26 +5907,6 @@ public class Utils {
 		return npc.getLevel() * 3;
 	}
 
-	public static double reduceDamage(ISoliniaLivingEntity defender, double damage) {
-		if (damage <= 0)
-			return damage;
-
-		int spellMitigateMeleeDamage = 0;
-
-		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(defender.getBukkitLivingEntity(),
-				SpellEffectType.MitigateMeleeDamage)) {
-			spellMitigateMeleeDamage += effect.getRemainingValue();
-		}
-
-		// We should check this in advance really
-		if (spellMitigateMeleeDamage < 1)
-			return damage;
-
-		double damage_to_reduce = damage * (spellMitigateMeleeDamage / 100);
-
-		return (damage - damage_to_reduce);
-	}
-
 	public static List<String> getSpecialisationSkills() {
 		List<String> validSpecialisationSkills = new ArrayList<String>();
 		validSpecialisationSkills.add("ABJURATION");

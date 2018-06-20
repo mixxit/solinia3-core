@@ -214,54 +214,11 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityDamageEvent(EntityDamageEvent event) {
 		if (event.isCancelled())
 			return;
-
-		// CLOSE RANGE TARGETTING - USED TO WORK AROUND MIN TARGET DISTANCE
-
-		// Close range weapon
-		if ((event instanceof EntityDamageByEntityEvent)) {
-			EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
-			if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
-				try {
-					Player damager = (Player) damagecause.getDamager();
-					ItemStack itemstack = damager.getEquipment().getItemInMainHand();
-					if (itemstack != null && damager.isSneaking()
-							&& ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name())) {
-						StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) damager,
-								(LivingEntity) event.getEntity());
-						Utils.CancelEvent(event);
-						return;
-					}
-				} catch (CoreStateInitException e) {
-
-				}
-			}
-		}
-
-		// Close range spell/petcontrol rod
-		if ((event instanceof EntityDamageByEntityEvent)) {
-			EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
-			if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
-				try {
-					Player damager = (Player) damagecause.getDamager();
-					ItemStack itemstack = damager.getEquipment().getItemInMainHand();
-					if (itemstack != null) {
-						ISoliniaItem solItem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-						if (damager.isSneaking() && solItem != null
-								&& (solItem.isSpellscroll() || solItem.isPetControlRod())) {
-							StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) damager,
-									(LivingEntity) event.getEntity());
-							Utils.CancelEvent(event);
-							return;
-						}
-					}
-				} catch (CoreStateInitException e) {
-
-				}
-			}
-		}
-
-		// END CLOSE RANGE TARGETTING
-
+		
+		if (!(event.getEntity() instanceof LivingEntity))
+			return;
+		
+		// Fall damage
 		if ((event.getEntity() instanceof Player)) {
 			if (!(event.getCause().equals(EntityDamageEvent.DamageCause.FALL)))
 				return;
@@ -286,352 +243,80 @@ public class Solinia3CoreEntityListener implements Listener {
 				return;
 			}
 		}
-	}
-
-	@EventHandler
-	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.isCancelled())
-			return;
-
+		
 		if (!(event instanceof EntityDamageByEntityEvent)) {
 			return;
 		}
-
+		
+		// Close range weapon
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
-
-		// if this is a melee attack and the attacker is too far from the defender
-		// cancel teh event
-		if (damagecause.getDamager() instanceof LivingEntity && !event.getCause().equals(DamageCause.THORNS)
-				&& !(damagecause.getDamager() instanceof Arrow) && event.getEntity() instanceof LivingEntity) {
-
-			LivingEntity defender = (LivingEntity) event.getEntity();
-			LivingEntity attacker = (LivingEntity) damagecause.getDamager();
-			if (defender.getLocation().distance(attacker.getLocation()) > 3) {
-				attacker.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
-				Utils.CancelEvent(event);
-				return;
-			}
-		}
-
-		// If the event is being blocked by a shield negate 85% of it unless its thorns
-		// then always allow it through
-		if (damagecause.getDamage(DamageModifier.BLOCKING) < 0) {
-			if (event.getCause().equals(DamageCause.THORNS)) {
-				damagecause.setDamage(DamageModifier.BLOCKING, 0);
-			} else {
-				// Only give them 15% blocking
-				double newarmour = (damagecause.getDamage(DamageModifier.BLOCKING) / 100) * 15;
-				damagecause.setDamage(DamageModifier.BLOCKING, newarmour);
-			}
-		}
-
-		// Remove buffs on attacker (invis should drop)
-		// and check they are not mezzed
-		try {
-			if (damagecause.getDamager() instanceof LivingEntity) {
-
-				LivingEntity attacker = (LivingEntity) damagecause.getDamager();
-				// Change attacker to archer
-				if (damagecause.getDamager() instanceof Arrow) {
-					Arrow arr = (Arrow) attacker;
-					if (arr.getShooter() instanceof LivingEntity) {
-						attacker = (LivingEntity) arr.getShooter();
-					} else {
-					}
-				}
-
-				// cancel attacks on mobs mezzed
-				if (attacker instanceof Creature && attacker instanceof LivingEntity
-						&& event.getEntity() instanceof LivingEntity) {
-					ISoliniaLivingEntity solCreatureEntity = SoliniaLivingEntityAdapter.Adapt(attacker);
-					if (solCreatureEntity.isPet() || !solCreatureEntity.isPlayer()) {
-						Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
-								.getMezzed((LivingEntity) event.getEntity());
-
-						if (mezExpiry != null) {
-							((Creature) attacker).setTarget(null);
-
-							if (solCreatureEntity.isPet()) {
-								Wolf wolf = (Wolf) attacker;
-								wolf.setTarget(null);
-								solCreatureEntity.say("Stopping attacking master, the target is mesmerized");
-							}
-
-							Utils.CancelEvent(event);
-							return;
-						}
-					}
-				}
-
-				try {
-					Timestamp mzExpiry = StateManager.getInstance().getEntityManager()
-							.getMezzed((LivingEntity) attacker);
-					if (mzExpiry != null) {
-						if (attacker instanceof Player) {
-							attacker.sendMessage("* You are mezzed!");
-						}
-
-						Utils.CancelEvent(event);
-						;
-						return;
-					}
-
-				} catch (CoreStateInitException e) {
-
-				}
-
-				try {
-					Timestamp stExpiry = StateManager.getInstance().getEntityManager()
-							.getStunned((LivingEntity) attacker);
-					if (stExpiry != null) {
-						if (attacker instanceof Player) {
-							attacker.sendMessage("* You are stunned!");
-						}
-
-						Utils.CancelEvent(event);
-						;
-						return;
-					}
-
-				} catch (CoreStateInitException e) {
-
-				}
-
-				List<Integer> removeSpells = new ArrayList<Integer>();
-				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
-						.getActiveEntitySpells((LivingEntity) attacker).getActiveSpells()) {
-					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
-
-							spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)) {
-						if (!removeSpells.contains(spell.getSpell().getId()))
-							removeSpells.add(spell.getSpell().getId());
-
-					}
-				}
-
-				for (Integer spellId : removeSpells) {
-					StateManager.getInstance().getEntityManager()
-							.removeSpellEffectsOfSpellId(((LivingEntity) attacker).getUniqueId(), spellId);
-				}
-			}
-		} catch (CoreStateInitException e) {
-			// skip
-		}
-
-		// Remove buffs on recipient (invis should drop)
-		try {
-			if (event.getEntity() instanceof LivingEntity) {
-				List<Integer> removeSpells = new ArrayList<Integer>();
-				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
-						.getActiveEntitySpells((LivingEntity) event.getEntity()).getActiveSpells()) {
-					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals)
-							|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)) {
-						if (!removeSpells.contains(spell.getSpell().getId()))
-							removeSpells.add(spell.getSpell().getId());
-
-					}
-				}
-
-				for (Integer spellId : removeSpells) {
-					StateManager.getInstance().getEntityManager()
-							.removeSpellEffectsOfSpellId(((LivingEntity) event.getEntity()).getUniqueId(), spellId);
-				}
-			}
-
-			// Check for rune damage
-			if (event.getEntity() instanceof LivingEntity) {
-				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-				if (soldefender.isInvulnerable()) {
-					event.setDamage(0);
-					Utils.CancelEvent(event);
-					;
-					if (damagecause.getDamager() instanceof Player) {
-						((Player) damagecause.getDamager())
-								.sendMessage("* Your attack was prevented as the target is Invulnerable!");
-					}
-					if (event.getEntity() instanceof Player) {
-						((Player) event.getEntity())
-								.sendMessage("* Your invulnerability prevented the targets attack!");
-					}
-				}
-			}
-
-			// see if any runes want to reduce this damage
-			if (event.getEntity() instanceof LivingEntity) {
-				if (!event.getCause().equals(DamageCause.THORNS)) {
-					ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter
-							.Adapt((LivingEntity) event.getEntity());
-					event.setDamage(Utils.reduceDamage(soldefender, event.getDamage()));
-				}
-			}
-			
-			// Check for removeifcombat 
-			if (event.getEntity() instanceof LivingEntity) {
-				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-				
-				soldefender.removeActiveSpellsWithEffectType(SpellEffectType.NegateIfCombat);
-			}
-
-			// Check for rune damage
-			if (event.getEntity() instanceof LivingEntity) {
-				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-				if (soldefender.getRune() > 0) {
-					event.setDamage(soldefender.reduceAndRemoveRunesAndReturnLeftover(plugin, (int) event.getDamage()));
-
-					if (event.getDamage() <= 0) {
-						Utils.CancelEvent(event);
-						;
-						if (damagecause.getDamager() instanceof Player) {
-							((Player) damagecause.getDamager())
-									.sendMessage("* Your attack was absorbed by the targets Rune");
-						}
-						if (event.getEntity() instanceof Player) {
-							((Player) event.getEntity()).sendMessage("* Your rune spell absorbed the targets attack!");
-						}
-
-						return;
-					}
-				}
-			}
-
-		} catch (CoreStateInitException e) {
-			// skip
-		}
-
-		if ((damagecause.getDamager() instanceof LivingEntity || damagecause.getDamager() instanceof Arrow)
-				&& event.getEntity() instanceof LivingEntity) {
-			// Never forward magic spell damage (cause thorns) to melee damage calculation
-			// code
-			if (event.getCause().equals(DamageCause.THORNS)) {
-				if (damagecause.getDamager() instanceof Player) {
-					LivingEntity recipient = (LivingEntity) event.getEntity();
-					DecimalFormat df = new DecimalFormat();
-					df.setMaximumFractionDigits(2);
-					String name = recipient.getName();
-					if (recipient.getCustomName() != null)
-						name = recipient.getCustomName();
-
-					((Player) damagecause.getDamager()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent("You SPELLDMG'd " + name + " for " + df.format(event.getDamage()) + " ["
-									+ df.format(recipient.getHealth() - event.getDamage()) + "/"
-									+ df.format(recipient.getMaxHealth()) + "]"));
-				}
-
-				if (event.getEntity() instanceof LivingEntity) {
-					ISoliniaLivingEntity solentity;
-					try {
-						solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-
-						if (event.getDamage() > solentity.getBukkitLivingEntity().getHealth()
-								&& solentity.hasDeathSave() > 0) {
-							Utils.CancelEvent(event);
-							solentity.removeDeathSaves(plugin);
-							solentity.getBukkitLivingEntity()
-									.sendMessage("* Your death/divine save boon has saved you from death!");
-							return;
-						}
-
-						solentity.damageHook(event.getDamage(), damagecause.getDamager());
-					} catch (CoreStateInitException e) {
-						// skip
-					}
-				}
-				return;
-			}
+		if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
 			try {
-				Entity damager = damagecause.getDamager();
-				// Change attacker to archer
-				if (damagecause.getDamager() instanceof Arrow) {
-					Arrow arr = (Arrow) damagecause.getDamager();
-					if (arr.getShooter() instanceof LivingEntity) {
-						damager = (LivingEntity) arr.getShooter();
-
-						// Modify Player Bow Damage
-						if (arr.getShooter() instanceof Player) {
-							Player shooter = (Player) arr.getShooter();
-							ItemStack mainitem = shooter.getInventory().getItemInMainHand();
-							if (mainitem != null) {
-								if (mainitem.getType() == Material.BOW) {
-									int dmgmodifier = 0;
-
-									if (Utils.IsSoliniaItem(mainitem)) {
-										try {
-											ISoliniaItem item = SoliniaItemAdapter.Adapt(mainitem);
-											if (item.getDamage() > 0 && item.getBasename().equals("BOW")) {
-												dmgmodifier = item.getDamage();
-											}
-										} catch (SoliniaItemException e) {
-											// sok just skip
-										}
-									}
-
-									event.setDamage(event.getDamage() + dmgmodifier);
-								}
-							}
-						}
-
-					} else {
-					}
-				}
-
-				if (!(damager instanceof LivingEntity))
-					return;
-
-				LivingEntity attacker = (LivingEntity) damager;
-
-				// Change attacker to archer
-				if (damagecause.getDamager() instanceof Arrow) {
-					Arrow arr = (Arrow) damagecause.getDamager();
-					if (arr.getShooter() instanceof LivingEntity) {
-						attacker = (LivingEntity) arr.getShooter();
-					} else {
-					}
-				}
-
-				if (attacker == null)
-					return;
-
-				ISoliniaLivingEntity soldefender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-				ISoliniaLivingEntity solattacker = SoliniaLivingEntityAdapter.Adapt((LivingEntity) attacker);
-
-				if (attacker instanceof Player && event.getEntity() instanceof Wolf) {
-					if (soldefender.isPet()) {
-						Wolf wolf = (Wolf) event.getEntity();
-						if (wolf != null) {
-							if (wolf.getTarget() == null || !wolf.getTarget().equals(attacker)) {
-								Utils.CancelEvent(event);
-								return;
-							}
-						} else {
-							Utils.CancelEvent(event);
-							return;
-						}
-					}
-				}
-
-				if (!(event instanceof EntityDamageByEntityEvent)) {
-					soldefender.damageHook(event.getDamage(), damagecause.getDamager());
+				Player damager = (Player) damagecause.getDamager();
+				ItemStack itemstack = damager.getEquipment().getItemInMainHand();
+				if (itemstack != null && damager.isSneaking()
+						&& ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name())) {
+					StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) damager,
+							(LivingEntity) event.getEntity());
+					Utils.CancelEvent(event);
 					return;
 				}
-
-				solattacker.Attack(soldefender, event, damagecause.getDamager() instanceof Arrow, plugin);
-
 			} catch (CoreStateInitException e) {
 
 			}
 		}
 
+		// Close range spell/petcontrol rod
+		if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
+			try {
+				Player damager = (Player) damagecause.getDamager();
+				ItemStack itemstack = damager.getEquipment().getItemInMainHand();
+				if (itemstack != null) {
+					ISoliniaItem solItem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+					if (damager.isSneaking() && solItem != null
+							&& (solItem.isSpellscroll() || solItem.isPetControlRod())) {
+						StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) damager,
+								(LivingEntity) event.getEntity());
+						Utils.CancelEvent(event);
+						return;
+					}
+				}
+			} catch (CoreStateInitException e) {
+
+			}
+		}
+		
+		// Detect damage caused by entity collision response and cancel it
+		// We will move all damage from NPCs to the NPC combat loop
+		// This allows implementation of NPC Slow and Haste
+		if (damagecause.getDamager() instanceof Creature) {
+			// TODO
+			// ALWAYS CANCEL DAMAGE EVENTS
+			//event.setCancelled(true);
+		}
+		
+		// Negate normal modifiers
+		damagecause.setDamage(DamageModifier.ABSORPTION, 0);
+		damagecause.setDamage(DamageModifier.ARMOR, 0);
+		damagecause.setDamage(DamageModifier.BLOCKING, 0);
+		damagecause.setDamage(DamageModifier.RESISTANCE, 0);
+		damagecause.setDamage(DamageModifier.MAGIC, 0);
+		damagecause.setDamage(DamageModifier.HARD_HAT, 0);
+		damagecause.setDamage(DamageModifier.BLOCKING, 0);
+		
+		ISoliniaLivingEntity solLivingEntity;
+		try {
+			solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+			int damage = solLivingEntity.calculateDamageFromDamageEvent(damagecause.getDamager(), event.getCause().equals(EntityDamageEvent.DamageCause.THORNS), (int)Math.floor(event.getDamage()));
+			
+			event.setDamage(DamageModifier.BASE, damage);
+			
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return;
 	}
 
 	@EventHandler
