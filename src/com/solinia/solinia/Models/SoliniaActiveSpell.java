@@ -366,6 +366,7 @@ public class SoliniaActiveSpell {
 			applyWipeHateList(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case SpinTarget:
+			applySpinTarget(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case InfraVision:
 			applyVision(spellEffect, soliniaSpell, casterLevel);
@@ -1979,6 +1980,12 @@ public class SoliniaActiveSpell {
 			e.printStackTrace();
 		}
 	}
+	
+	private void applySpinTarget(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) 
+	{
+		Utils.spinLivingEntity(getLivingEntity());
+	}
+	
 
 	private void applyMovementSpeedEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.dismountEntity(getLivingEntity());

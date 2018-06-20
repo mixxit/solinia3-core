@@ -42,6 +42,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.comphenix.example.Vector3D;
@@ -6642,4 +6643,23 @@ public class Utils {
 		
 		return newmessage;
 	}
+
+	public static void spinLivingEntity(LivingEntity livingEntity) {
+		Location newLocation = livingEntity.getLocation();
+		// todo
+		newLocation.setYaw(0.0f);
+		livingEntity.teleport(newLocation);
+	}
+	
+	public static Location getLocationAroundCircle(Location center, double radius, double angleInRadian, double y) {
+        double x = center.getX() + radius * Math.cos(angleInRadian);
+        double z = center.getZ() + radius * Math.sin(angleInRadian);
+   
+
+        Location loc = new Location(center.getWorld(), x, y, z);
+        Vector difference = center.toVector().clone().subtract(loc.toVector());
+        loc.setDirection(difference);
+
+        return loc;
+    }
 }
