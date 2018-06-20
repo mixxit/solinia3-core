@@ -5312,7 +5312,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// cancel the event
 			
 			if (!ismagic && !(originalDamager instanceof Arrow)) {
-				if (attacker.getLocation().distance(attacker.getLocation()) > 3) {
+				if (attacker.getLocation().distance(defender.getLocation()) > 3) {
 					attacker.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
 					return 0;
 				}
