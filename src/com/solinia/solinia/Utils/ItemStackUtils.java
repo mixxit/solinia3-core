@@ -26,13 +26,13 @@ import net.minecraft.server.v1_12_R1.NBTTagString;
 
 public class ItemStackUtils {
 	
-	public static int getWeaponDamage(ItemStack itemStack) {
+	public static int getWeaponDamage(ItemStack itemStack, EnumItemSlot itemSlot) {
         double attackDamage = 1.0;
         UUID uuid = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
         net.minecraft.server.v1_12_R1.ItemStack craftItemStack = CraftItemStack.asNMSCopy(itemStack);
         net.minecraft.server.v1_12_R1.Item item = craftItemStack.getItem();
         if(item instanceof net.minecraft.server.v1_12_R1.ItemSword || item instanceof net.minecraft.server.v1_12_R1.ItemTool || item instanceof net.minecraft.server.v1_12_R1.ItemHoe) {
-            Multimap<String, AttributeModifier> map = item.a(EnumItemSlot.MAINHAND);
+            Multimap<String, AttributeModifier> map = item.a(itemSlot);
             Collection<AttributeModifier> attributes = map.get(GenericAttributes.ATTACK_DAMAGE.getName());
             if(!attributes.isEmpty()) {
                 for(AttributeModifier am: attributes) {

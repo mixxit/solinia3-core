@@ -61,6 +61,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.EntityCreature;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
 import net.minecraft.server.v1_12_R1.EntityTameableAnimal;
+import net.minecraft.server.v1_12_R1.EnumItemSlot;
 import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
 import net.minecraft.server.v1_12_R1.PathfinderGoalHurtByTarget;
 import net.minecraft.server.v1_12_R1.PathfinderGoalOwnerHurtByTarget;
@@ -1172,7 +1173,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 		        
 				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
-				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2);
+				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);
 				
 				DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, baseDamage2, false, defender);
 				defender.damage(my_hit2.damage_done, attackerEntity);
