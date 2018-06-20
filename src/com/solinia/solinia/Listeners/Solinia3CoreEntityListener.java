@@ -296,13 +296,41 @@ public class Solinia3CoreEntityListener implements Listener {
 		}
 		
 		// Negate normal modifiers
+		try {
 		damagecause.setDamage(DamageModifier.ABSORPTION, 0);
+		} catch (UnsupportedOperationException e) {
+
+		}
+		try {
 		damagecause.setDamage(DamageModifier.ARMOR, 0);
+		} catch (UnsupportedOperationException e) {
+
+		}
+		try {
 		damagecause.setDamage(DamageModifier.BLOCKING, 0);
+		} catch (UnsupportedOperationException e) {
+
+		}
+		try {
 		damagecause.setDamage(DamageModifier.RESISTANCE, 0);
+		} catch (UnsupportedOperationException e) {
+
+		}
+		try {
 		damagecause.setDamage(DamageModifier.MAGIC, 0);
+		} catch (UnsupportedOperationException e) {
+
+		}
+		try {
 		damagecause.setDamage(DamageModifier.HARD_HAT, 0);
+		} catch (UnsupportedOperationException e) {
+
+		}
+		try {
 		damagecause.setDamage(DamageModifier.BLOCKING, 0);
+		} catch (UnsupportedOperationException e) {
+
+		}
 		
 		ISoliniaLivingEntity solLivingEntity;
 		try {
