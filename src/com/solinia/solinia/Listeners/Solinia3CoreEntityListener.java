@@ -220,27 +220,28 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		// Fall damage
 		if ((event.getEntity() instanceof Player)) {
-			if (!(event.getCause().equals(EntityDamageEvent.DamageCause.FALL)))
-				return;
+			if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL))
+			{
 
-			Player player = (Player) event.getEntity();
-			ISoliniaPlayer solplayer;
-			try {
-				solplayer = SoliniaPlayerAdapter.Adapt(player);
-				if (solplayer == null)
-					return;
-
-				boolean cancelFall = solplayer.getSafefallCheck();
-				if (cancelFall == true) {
-					Utils.CancelEvent(event);
-					;
-					solplayer.emote(
-							ChatColor.GRAY + "* " + solplayer.getFullName() + " lands softly, breaking their fall");
-					solplayer.tryIncreaseSkill("SAFEFALL", 1);
+				Player player = (Player) event.getEntity();
+				ISoliniaPlayer solplayer;
+				try {
+					solplayer = SoliniaPlayerAdapter.Adapt(player);
+					if (solplayer == null)
+						return;
+	
+					boolean cancelFall = solplayer.getSafefallCheck();
+					if (cancelFall == true) {
+						Utils.CancelEvent(event);
+						;
+						solplayer.emote(
+								ChatColor.GRAY + "* " + solplayer.getFullName() + " lands softly, breaking their fall");
+						solplayer.tryIncreaseSkill("SAFEFALL", 1);
+						return;
+					}
+				} catch (CoreStateInitException e) {
 					return;
 				}
-			} catch (CoreStateInitException e) {
-				return;
 			}
 		}
 		
@@ -289,9 +290,20 @@ public class Solinia3CoreEntityListener implements Listener {
 		// Detect damage caused by entity collision response and cancel it
 		// We will move all damage from NPCs to the NPC combat loop
 		// This allows implementation of NPC Slow and Haste
-		if (damagecause.getDamager() instanceof Creature) {
+		
+		if (!(damagecause.getDamager() instanceof Player) && !(damagecause.getDamager() instanceof Arrow) && event.getEntity() instanceof LivingEntity) {
 			// TODO
-			// ALWAYS CANCEL DAMAGE EVENTS
+			// ALWAYS CANCEL DAMAGE EVENTS THAT ARE NOT CUSTOM CAUSE
+			
+			if (!damagecause.getCause().equals(EntityDamageEvent.DamageCause.CUSTOM))
+			{
+				if (event.getEntity() instanceof Player)
+					System.out.println("Damage from creature that wasn't thorns:" + damagecause.getDamager().getName() + " " + damagecause.getCause() + " against: " + ((LivingEntity)event.getEntity()).getCustomName());
+
+				Utils.CancelEvent(event);
+				return;
+			}
+			
 			//event.setCancelled(true);
 		}
 		

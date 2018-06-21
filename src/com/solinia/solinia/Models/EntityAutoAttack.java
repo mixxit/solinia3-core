@@ -56,6 +56,9 @@ public class EntityAutoAttack {
 		
 		LivingEntity livingEntity = getLivingEntity();
 		
+		if (getLivingEntity() == null)
+			return false;
+		
 		if (livingEntity.isDead())
 			return false;
 		

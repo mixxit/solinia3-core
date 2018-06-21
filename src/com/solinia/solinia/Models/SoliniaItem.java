@@ -995,7 +995,7 @@ public class SoliniaItem implements ISoliniaItem {
 				
 				if (foundClass == false)
 				{
-					throw new InvalidItemSettingException("Invalid class in allowedclasses array");
+					throw new InvalidItemSettingException("Invalid class in allowedclasses array [" + classname + "]");
 				}
 			}
 			
