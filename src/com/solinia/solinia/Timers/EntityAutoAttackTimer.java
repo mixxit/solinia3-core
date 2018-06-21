@@ -32,44 +32,51 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 			// Player first
 			processLivingEntityAutoAttack(player);
 			
-			// Then nearby npcs
-			for(Entity entityThatWillAutoAttack : player.getNearbyEntities(50, 50, 50))
+			try
 			{
-				if (entityThatWillAutoAttack instanceof Player)
-					continue;
-				
-				if (!(entityThatWillAutoAttack instanceof LivingEntity))
-					continue;
-				
-				LivingEntity livingEntityThatWillCast = (LivingEntity)entityThatWillAutoAttack;
-				
-				if (!(entityThatWillAutoAttack instanceof Creature))
-					continue;
-				
-				if(entityThatWillAutoAttack.isDead())
-					continue;
-				
-				Creature creatureThatWillAttack = (Creature)entityThatWillAutoAttack;
-				if (creatureThatWillAttack.getTarget() == null)
-					continue;
-				
-				if (!Utils.isLivingEntityNPC(livingEntityThatWillCast))
-					continue;
-				
-				try {
-					ISoliniaLivingEntity solLivingEntityThatWillCast = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillCast);
-					if (completedEntities.contains(solLivingEntityThatWillCast.getBukkitLivingEntity().getUniqueId().toString()))
+				// Then nearby npcs
+				for(Entity entityThatWillAutoAttack : player.getNearbyEntities(50, 50, 50))
+				{
+					if (entityThatWillAutoAttack instanceof Player)
 						continue;
 					
-					completedEntities.add(solLivingEntityThatWillCast.getBukkitLivingEntity().getUniqueId().toString());
+					if (!(entityThatWillAutoAttack instanceof LivingEntity))
+						continue;
 					
-					if (Utils.isEntityInLineOfSight(livingEntityThatWillCast, creatureThatWillAttack.getTarget()))
-						processLivingEntityAutoAttack(creatureThatWillAttack);
+					LivingEntity livingEntityThatWillCast = (LivingEntity)entityThatWillAutoAttack;
 					
-				} catch (CoreStateInitException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					if (!(entityThatWillAutoAttack instanceof Creature))
+						continue;
+					
+					if(entityThatWillAutoAttack.isDead())
+						continue;
+					
+					Creature creatureThatWillAttack = (Creature)entityThatWillAutoAttack;
+					if (creatureThatWillAttack.getTarget() == null)
+						continue;
+					
+					if (!Utils.isLivingEntityNPC(livingEntityThatWillCast))
+						continue;
+					
+					try {
+						ISoliniaLivingEntity solLivingEntityThatWillCast = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillCast);
+						if (completedEntities.contains(solLivingEntityThatWillCast.getBukkitLivingEntity().getUniqueId().toString()))
+							continue;
+						
+						completedEntities.add(solLivingEntityThatWillCast.getBukkitLivingEntity().getUniqueId().toString());
+						
+						if (Utils.isEntityInLineOfSight(livingEntityThatWillCast, creatureThatWillAttack.getTarget()))
+							processLivingEntityAutoAttack(creatureThatWillAttack);
+						
+					} catch (CoreStateInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+			
+			} catch (Exception e)
+			{
+				e.printStackTrace();
 			}
 		}
 	}
@@ -138,6 +145,9 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 				}
 			}
 		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}

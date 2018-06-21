@@ -53,6 +53,7 @@ import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
+import com.sun.glass.events.GestureEvent;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -290,16 +291,12 @@ public class Solinia3CoreEntityListener implements Listener {
 		// Detect damage caused by entity collision response and cancel it
 		// We will move all damage from NPCs to the NPC combat loop
 		// This allows implementation of NPC Slow and Haste
-		
 		if (!(damagecause.getDamager() instanceof Player) && !(damagecause.getDamager() instanceof Arrow) && event.getEntity() instanceof LivingEntity) {
 			// TODO
-			// ALWAYS CANCEL DAMAGE EVENTS THAT ARE NOT CUSTOM CAUSE
+			// ALWAYS CANCEL DAMAGE EVENTS THAT ARE NOT ENTITY SWEEP CAUSE
 			
-			if (!damagecause.getCause().equals(EntityDamageEvent.DamageCause.CUSTOM))
+			if (!damagecause.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK))
 			{
-				if (event.getEntity() instanceof Player)
-					System.out.println("Damage from creature that wasn't thorns:" + damagecause.getDamager().getName() + " " + damagecause.getCause() + " against: " + ((LivingEntity)event.getEntity()).getCustomName());
-
 				Utils.CancelEvent(event);
 				return;
 			}

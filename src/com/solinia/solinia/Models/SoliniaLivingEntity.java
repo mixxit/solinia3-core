@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -158,8 +157,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 			
-			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(getBukkitLivingEntity(),solLivingEntity.getBukkitLivingEntity(), EntityDamageEvent.DamageCause.CUSTOM, damage);
-			Bukkit.getPluginManager().callEvent(event);
+			EntityDamageSource source = new EntityDamageSource("mob",((CraftEntity) getBukkitLivingEntity()).getHandle());
+			source.sweep();
+			source.ignoresArmor();
+			
+			((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle().damageEntity(source, (float)damage);
 			
 			//solLivingEntity.getBukkitLivingEntity().damage(damage, getBukkitLivingEntity());
 		}
