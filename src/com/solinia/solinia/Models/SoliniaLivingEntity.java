@@ -121,7 +121,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 
-		EntityPlayer ep = ((CraftPlayer) getBukkitLivingEntity()).getHandle();
+		net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 		PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 		getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F,
 				1.0F);
