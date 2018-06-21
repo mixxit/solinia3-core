@@ -267,4 +267,6 @@ public interface ISoliniaLivingEntity
 	int calculateDamageFromDamageEvent(Entity originalDamager, boolean ismagic, int damage);
 
 	void damageAlertHook(double damage, Entity sourceEntity);
+
+	void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity);
 }

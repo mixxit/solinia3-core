@@ -60,6 +60,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.EntityCreature;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EntityTameableAnimal;
 import net.minecraft.server.v1_12_R1.EnumItemSlot;
 import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
@@ -88,6 +89,86 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (metaid != null)
 			if (!metaid.equals(""))
 				installNpcByMetaName(metaid);
+	}
+	
+	@Override
+	public void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity) {
+		if (getBukkitLivingEntity().isDead()) {
+			try {
+				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
+				return;
+			} catch (CoreStateInitException e) {
+
+			}
+		}
+
+		if (solLivingEntity.getBukkitLivingEntity().getUniqueId().toString()
+				.equals(getBukkitLivingEntity().getUniqueId().toString())) {
+			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack yourself!");
+			return;
+		}
+
+		if (solLivingEntity.getBukkitLivingEntity() instanceof Wolf) {
+			Wolf wolf = (Wolf) solLivingEntity.getBukkitLivingEntity();
+			if (wolf.getOwner().getUniqueId().toString().equals(getBukkitLivingEntity().getUniqueId().toString())) {
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack your pet!");
+			}
+			return;
+		}
+
+		if (solLivingEntity.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) > 3) {
+			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
+			return;
+		}
+
+		EntityPlayer ep = ((CraftPlayer) getBukkitLivingEntity()).getHandle();
+		PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+		getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F,
+				1.0F);
+		
+		if (getBukkitLivingEntity() instanceof Player)
+		((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
+
+		for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+			if (listening instanceof Player)
+				((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+		}
+
+		if (getBukkitLivingEntity() instanceof Player)
+		{
+			((CraftPlayer) getBukkitLivingEntity()).getHandle()
+				.attack(((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle());
+		} else {
+			double damage = 1;
+			
+			if (this.isNPC())
+			{
+				try
+				{
+					ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+					if (npc != null)
+					{
+						damage = Utils.getNPCDefaultDamage(npc);
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			solLivingEntity.getBukkitLivingEntity().damage(damage, getBukkitLivingEntity());
+		}
+		
+				
+		/*
+		 * DamageSource source =
+		 * EntityDamageSource.playerAttack(((CraftPlayer)getBukkitPlayer()).getHandle())
+		 * ;
+		 * 
+		 * 
+		 * ((CraftEntity)
+		 * solLivingEntity.getBukkitLivingEntity()).getHandle().damageEntity(source,
+		 * (int)ItemStackUtils.getWeaponDamage(itemStack));
+		 */
 	}
 	
 	@Override
@@ -1153,11 +1234,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 			if (getDualWieldCheck()) {
+				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
+				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);
+				
+				DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, baseDamage2, false, defender);
+				defender.damage(my_hit2.damage_done, attackerEntity);
+				
 				// Only players get skill rise
 				if (attackerEntity instanceof Player)
 				{
 					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(ChatColor.GRAY + "* You dual wield!"));
+							new TextComponent(ChatColor.GRAY + "* You dual wield [" + my_hit2.damage_done + "]!"));
 					tryIncreaseSkill("DUALWIELD", 1);
 					
 					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer)attackerEntity).getHandle(), 3);
@@ -1171,12 +1258,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			        		((CraftPlayer)listening).getHandle().playerConnection.sendPacket(packet);
 			        }
 				}
-		        
-				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
-				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);
-				
-				DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, baseDamage2, false, defender);
-				defender.damage(my_hit2.damage_done, attackerEntity);
 				
 				// Offhand Proc
 				if (Utils.IsSoliniaItem(weapon2)) 

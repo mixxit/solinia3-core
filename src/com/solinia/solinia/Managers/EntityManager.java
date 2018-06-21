@@ -42,7 +42,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.CastingSpell;
-import com.solinia.solinia.Models.PlayerAutoAttack;
+import com.solinia.solinia.Models.EntityAutoAttack;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
@@ -85,12 +85,10 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, UniversalMerchant> universalMerchant = new ConcurrentHashMap<UUID, UniversalMerchant>();
 	private ConcurrentHashMap<UUID, Boolean> playerInTerritory = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, Boolean> playerSetMain = new ConcurrentHashMap<UUID, Boolean>();
-	private ConcurrentHashMap<UUID, PlayerAutoAttack> playerAutoAttack = new ConcurrentHashMap<UUID, PlayerAutoAttack>();
+	private ConcurrentHashMap<UUID, EntityAutoAttack> entityAutoAttack = new ConcurrentHashMap<UUID, EntityAutoAttack>();
 	private ConcurrentHashMap<UUID, UUID> entityTargets = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, Boolean> feignedDeath = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, CastingSpell> entitySpellCasting = new ConcurrentHashMap<UUID, CastingSpell>();
-	
-	private ConcurrentHashMap<UUID, Timestamp> lastAttack = new ConcurrentHashMap<UUID, Timestamp>();
 	
 	private Plugin plugin;
 	
@@ -476,7 +474,7 @@ public class EntityManager implements IEntityManager {
 			}
 		}
 	}
-
+	
 	@Override
 	public void doNPCSpellCast() {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
@@ -1082,9 +1080,17 @@ public class EntityManager implements IEntityManager {
 		if (entitySource == null)
 			return null;
 		
+		// If i'm a creature, return creature target
+		if (entitySource instanceof Creature)
+		{
+			return ((Creature)entitySource).getTarget();
+		}
+		
 		UUID target = entityTargets.get(entitySource.getUniqueId());
 		if (target == null)
+		{
 			return null;
+		}
 		
 		Entity entity = Bukkit.getEntity(target);
 		if (entity == null)
@@ -1116,14 +1122,14 @@ public class EntityManager implements IEntityManager {
 		{
 			if (target == null)
 			{
-				this.setPlayerAutoAttack((Player)source, false);
+				this.setEntityAutoAttack((Player)source, false);
 			} else {
 				// get current target
 				if (entityTargets.get(source.getUniqueId()) != null)
 				{
 					if (source != null && target != null && !entityTargets.get(source.getUniqueId()).toString().equals(target.getUniqueId().toString()))
 					{
-						this.setPlayerAutoAttack((Player)source, false);
+						this.setEntityAutoAttack((Player)source, false);
 					}
 				}
 			}
@@ -1380,25 +1386,24 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public PlayerAutoAttack getPlayerAutoAttack(Player player) {
-		if (playerAutoAttack.get(player.getUniqueId()) == null)
+	public EntityAutoAttack getEntityAutoAttack(LivingEntity livingEntity) {
+		if (entityAutoAttack.get(livingEntity.getUniqueId()) == null)
 		{
 			
-			playerAutoAttack.put(player.getUniqueId(), new PlayerAutoAttack(player));
+			entityAutoAttack.put(livingEntity.getUniqueId(), new EntityAutoAttack(livingEntity));
 		} 
 		
-		return playerAutoAttack.get(player.getUniqueId());
-				
+		return entityAutoAttack.get(livingEntity.getUniqueId());
 	}
 
 	@Override
-	public void setPlayerAutoAttack(Player player, boolean autoAttacking) {
-		getPlayerAutoAttack(player).setAutoAttacking(autoAttacking);
+	public void setEntityAutoAttack(LivingEntity livingEntity, boolean autoAttacking) {
+		getEntityAutoAttack(livingEntity).setAutoAttacking(autoAttacking);
 	}
 	
 	@Override
 	public void toggleAutoAttack(Player player) {
-		Boolean autoAttackState = getPlayerAutoAttack(player).isAutoAttacking();
+		Boolean autoAttackState = getEntityAutoAttack(player).isAutoAttacking();
 		
 		if (!autoAttackState == false)
 		{
@@ -1410,8 +1415,6 @@ public class EntityManager implements IEntityManager {
 					new TextComponent(ChatColor.GRAY + "* You start auto attacking"));
 		}
 		
-		setPlayerAutoAttack(player, !autoAttackState);
-		
+		setEntityAutoAttack(player, !autoAttackState);
 	}
-
 }

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import com.solinia.solinia.Models.CastingSpell;
-import com.solinia.solinia.Models.PlayerAutoAttack;
+import com.solinia.solinia.Models.EntityAutoAttack;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
@@ -151,11 +151,11 @@ public interface IEntityManager {
 
 	void toggleAutoAttack(Player bukkitPlayer);
 
-	PlayerAutoAttack getPlayerAutoAttack(Player player);
-
-	void setPlayerAutoAttack(Player player, boolean playerAutoAttack);
-
 	void addStunned(LivingEntity livingEntity, Timestamp expiretimestamp);
 
 	void removeStunned(LivingEntity livingEntity, Timestamp expiretimestamp);
+
+	EntityAutoAttack getEntityAutoAttack(LivingEntity livingEntity);
+
+	void setEntityAutoAttack(LivingEntity livingEntity, boolean autoAttacking);
 }

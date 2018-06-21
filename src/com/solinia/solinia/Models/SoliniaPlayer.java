@@ -3038,64 +3038,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity) {
-		if (getBukkitPlayer().isDead()) {
-			try {
-				StateManager.getInstance().getEntityManager().setPlayerAutoAttack(getBukkitPlayer(), false);
-				return;
-			} catch (CoreStateInitException e) {
-
-			}
-		}
-
-		ItemStack itemStack = getBukkitPlayer().getInventory().getItemInMainHand();
-
-		if (solLivingEntity.getBukkitLivingEntity().getUniqueId().toString()
-				.equals(getBukkitPlayer().getUniqueId().toString())) {
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You cannot auto attack yourself!");
-			return;
-		}
-
-		if (solLivingEntity.getBukkitLivingEntity() instanceof Wolf) {
-			Wolf wolf = (Wolf) solLivingEntity.getBukkitLivingEntity();
-			if (wolf.getOwner().getUniqueId().toString().equals(getBukkitPlayer().getUniqueId().toString())) {
-				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You cannot auto attack your pet!");
-			}
-			return;
-		}
-
-		if (solLivingEntity.getBukkitLivingEntity().getLocation().distance(getBukkitPlayer().getLocation()) > 3) {
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
-			return;
-		}
-
-		EntityPlayer ep = ((CraftPlayer) getBukkitPlayer()).getHandle();
-		PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-		getBukkitPlayer().getWorld().playSound(getBukkitPlayer().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F,
-				1.0F);
-
-		((CraftPlayer) getBukkitPlayer()).getHandle().playerConnection.sendPacket(packet);
-
-		for (Entity listening : getBukkitPlayer().getNearbyEntities(100, 100, 100)) {
-			if (listening instanceof Player)
-				((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
-		}
-
-		((CraftPlayer) getBukkitPlayer()).getHandle()
-				.attack(((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle());
-		/*
-		 * DamageSource source =
-		 * EntityDamageSource.playerAttack(((CraftPlayer)getBukkitPlayer()).getHandle())
-		 * ;
-		 * 
-		 * 
-		 * ((CraftEntity)
-		 * solLivingEntity.getBukkitLivingEntity()).getHandle().damageEntity(source,
-		 * (int)ItemStackUtils.getWeaponDamage(itemStack));
-		 */
-	}
-
-	@Override
 	public boolean isGlowTargetting() {
 		return glowTargetting;
 	}

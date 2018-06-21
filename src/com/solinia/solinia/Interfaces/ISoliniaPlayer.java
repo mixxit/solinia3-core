@@ -360,8 +360,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void toggleAutoAttack();
 
-	public void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity);
-
 	boolean canDualWield();
 
 	boolean getDualWieldCheck(ISoliniaLivingEntity soliniaLivingEntity);

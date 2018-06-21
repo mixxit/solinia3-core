@@ -6642,4 +6642,29 @@ public class Utils {
 
         return loc;
     }
+
+	public static double getNPCDefaultDamage(ISoliniaNPC npc) {
+		int damage = Utils.getMaxDamage(npc.getLevel(), 75);
+		if (npc.isHeroic())
+		{
+			damage += (Utils.getHeroicDamageMultiplier() * npc.getLevel());
+		}
+		
+		if (npc.isBoss())
+		{
+			damage += (Utils.getBossDamageMultiplier() * npc.getLevel());
+		}
+		
+		if (npc.isRaidheroic())
+		{
+			damage += (Utils.getRaidHeroicDamageMultiplier() * npc.getLevel());
+		}
+		
+		if (npc.isRaidboss())
+		{
+			damage += (Utils.getRaidBossDamageMultiplier() * npc.getLevel());
+		}
+
+		return damage;
+	}
 }

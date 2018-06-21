@@ -52,6 +52,7 @@ import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
 import com.solinia.solinia.Timers.CSVGenerationTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
+import com.solinia.solinia.Timers.EntityAutoAttackTimer;
 import com.solinia.solinia.Timers.HintTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.KingCheckTimer;
@@ -62,7 +63,6 @@ import com.solinia.solinia.Timers.NPCSummonCastTimer;
 import com.solinia.solinia.Timers.PerkLoadTimer;
 import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PetFastCheckTimer;
-import com.solinia.solinia.Timers.PlayerAutoAttackTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
@@ -97,7 +97,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private DiscordMessageTimer discordMessageTimer;
 	private KingCheckTimer kingCheckTimer;
 	private InvalidItemCheckerTimer invalidItemCheckerTimer;
-	private PlayerAutoAttackTimer playerAutoAttackTimer;
+	private EntityAutoAttackTimer entityAutoAttackTimer;
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
@@ -377,10 +377,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			// every 100 milliseconds
 			castingTimer.runTaskTimer(this, 0L, 1 * 2L);
 			
-			playerAutoAttackTimer = new PlayerAutoAttackTimer();
-			// every 500 milliseconds
-			playerAutoAttackTimer.runTaskTimer(this, 0L, 1L);
-
+			entityAutoAttackTimer = new EntityAutoAttackTimer();
+			entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
+			
 			hintTimer = new HintTimer();
 			hintTimer.runTaskTimer(this, 1800 * 20L, 1800 * 20L);
 

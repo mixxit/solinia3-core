@@ -233,29 +233,26 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 		
 		double hp = Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75);
-		double damage = Utils.getMaxDamage(npc.getLevel(), 75);
+		double damage = Utils.getNPCDefaultDamage(npc);
+		
 		if (npc.isHeroic())
 		{
 			hp += (Utils.getHeroicHPMultiplier() * npc.getLevel());
-			damage += (Utils.getHeroicDamageMultiplier() * npc.getLevel());
 		}
-		
+
 		if (npc.isBoss())
 		{
 			hp += (Utils.getBossHPMultiplier() * npc.getLevel());
-			damage += (Utils.getBossDamageMultiplier() * npc.getLevel());
 		}
-		
+
 		if (npc.isRaidheroic())
 		{
 			hp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
-			damage += (Utils.getRaidHeroicDamageMultiplier() * npc.getLevel());
 		}
-		
+
 		if (npc.isRaidboss())
 		{
 			hp += (Utils.getRaidBossHPMultiplier() * npc.getLevel());
-			damage += (Utils.getRaidBossDamageMultiplier() * npc.getLevel());
 		}
 		
 		float movementSpeed = 0.3f;
