@@ -32,16 +32,16 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		writeRandomSpawn("plugins/MythicMobs/RandomSpawns/RANDOMSPAWNNPCID_" + npc.getId() + ".yml", npc);
 		writeCustomHead("plugins/MythicMobs/Items/CUSTOMHEADNPCID_" + npc.getId() + ".yml", npc);
 	}
-	
+
 	@Override
 	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
+				"mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 	}
-	
+
 	@Override
-	public void reloadProvider()
-	{
+	public void reloadProvider() {
 		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm reload");
 	}
 
@@ -59,7 +59,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void writeCustomHead(String fileName, ISoliniaNPC npc) {
 		String fileData = createCustomHeadFile(npc);
 		try {
@@ -74,7 +74,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void writeCustomItem(String fileName, ISoliniaItem item) {
 		String fileData = createCustomItemFile(item);
 		try {
@@ -89,7 +89,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void writeRandomSpawn(String fileName, ISoliniaNPC npc) {
 		String fileData = createRandomSpawnFile(npc);
 		try {
@@ -104,15 +104,14 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private String createRandomSpawnFile(ISoliniaNPC npc) {
 		String spawner = "";
-		
-		if (npc.isRandomSpawn())
-		{
+
+		if (npc.isRandomSpawn()) {
 			String uniquename = "RANDOMNPCID_" + npc.getId();
 			String mobtype = "NPCID_" + npc.getId();
-	
+
 			spawner = uniquename + ":\r\n";
 			spawner += "  MobType: " + mobtype + "\r\n";
 			spawner += "  Worlds: world\r\n";
@@ -125,12 +124,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	private void writeSpawnerDefinition(String fileName, ISoliniaSpawnGroup spawngroup) {
 		String fileData = createSpawnerFile(spawngroup);
-		
-		if (spawngroup.isDisabled())
-		{
+
+		if (spawngroup.isDisabled()) {
 			fileData = "";
 		}
-		
+
 		try {
 			FileOutputStream fooStream = new FileOutputStream(fileName, false);
 
@@ -143,7 +141,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private String createSpawnerFile(ISoliniaSpawnGroup spawngroup) {
 		String spawner = "";
 
@@ -167,10 +165,10 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		spawner += "  MobLevel: 1\r\n";
 		spawner += "  MobsPerSpawn: 1\r\n";
 		// todo
-		//spawner += "  Cooldown: 0\r\n";
-		//spawner += "  CooldownTimer: 0\r\n";
-		//spawner += "  Warmup: " + spawngroup.respawnseconds + "\r\n";
-		//spawner += "  WarmupTimer: 0\r\n";
+		// spawner += " Cooldown: 0\r\n";
+		// spawner += " CooldownTimer: 0\r\n";
+		// spawner += " Warmup: " + spawngroup.respawnseconds + "\r\n";
+		// spawner += " WarmupTimer: 0\r\n";
 		spawner += "  Warmup: " + respawnTime + "\r\n";
 		spawner += "  WarmupTimer: 0\r\n";
 		spawner += "  CheckForPlayers: false\r\n";
@@ -184,12 +182,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		spawner += "  ActiveMobs: 0\r\n";
 		return spawner;
 	}
-	
+
 	public String createCustomHeadFile(ISoliniaNPC npc) {
 		String customheaditem = "";
 
-		if (npc.isCustomhead())
-		{
+		if (npc.isCustomhead()) {
 			customheaditem += "CUSTOMHEADNPCID_" + npc.getId() + ":\r\n";
 			customheaditem += "  Id: 397\r\n";
 			customheaditem += "  Data: 3\r\n";
@@ -199,7 +196,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 		return customheaditem;
 	}
-	
+
 	public String createCustomItemFile(ISoliniaItem item) {
 		String customitem = "";
 
@@ -207,8 +204,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		customitem += "  Id: " + item.asItemStack().getTypeId() + "\r\n";
 		customitem += "  Display: '" + item.getDisplayname().replaceAll("[^a-zA-Z0-9]", "") + "'\r\n";
 		customitem += "  Data: " + item.getColor() + "\r\n";
-		if (item.getDamage() > 0)
-		{
+		if (item.getDamage() > 0) {
 			customitem += "  Damage: " + item.getDamage() + "\r\n";
 		}
 		customitem += "  Enchantments:\r\n";
@@ -223,7 +219,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 		if (npc.getMctype() == null)
 			return "";
-		
+
 		mob = uniquename + ":\r\n";
 		mob = mob + "  Type: SKELETON\r\n";
 		if (npc.isUpsidedown() == true) {
@@ -231,51 +227,43 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		} else {
 			mob = mob + "  Display: " + npc.getName() + "\r\n";
 		}
-		
+
 		double hp = Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75);
 		double damage = Utils.getNPCDefaultDamage(npc);
-		
-		if (npc.isHeroic())
-		{
+
+		if (npc.isHeroic()) {
 			hp += (Utils.getHeroicHPMultiplier() * npc.getLevel());
 		}
 
-		if (npc.isBoss())
-		{
+		if (npc.isBoss()) {
 			hp += (Utils.getBossHPMultiplier() * npc.getLevel());
 		}
 
-		if (npc.isRaidheroic())
-		{
+		if (npc.isRaidheroic()) {
 			hp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
 		}
 
-		if (npc.isRaidboss())
-		{
+		if (npc.isRaidboss()) {
 			hp += (Utils.getRaidBossHPMultiplier() * npc.getLevel());
 		}
-		
+
 		float movementSpeed = 0.3f;
-		if (npc.isHeroic())
-		{
+		if (npc.isHeroic()) {
 			movementSpeed = Utils.getHeroicRunSpeed();
 		}
-		
-		if (npc.isBoss())
-		{
+
+		if (npc.isBoss()) {
 			movementSpeed = Utils.getBossRunSpeed();
 		}
-		
-		if (npc.isRaidheroic())
-		{
+
+		if (npc.isRaidheroic()) {
 			movementSpeed = Utils.getRaidHeroicRunSpeed();
 		}
-		
-		if (npc.isRaidboss())
-		{
+
+		if (npc.isRaidboss()) {
 			movementSpeed = Utils.getRaidBossRunSpeed();
 		}
-		
+
 		mob = mob + "  Health: " + hp + "\r\n";
 		mob = mob + "  Damage: " + damage + "\r\n";
 		mob = mob + "  MaxCombatDistance: 25\r\n";
@@ -294,98 +282,108 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "  Modules:\r\n";
 		mob = mob + "    ThreatTable: false\r\n";
 
-		if (npc.isPet())
-		{
+		if (npc.isPet()) {
 			mob = mob + "  Faction: FACTIONID_-1\r\n";
 		} else {
 			mob = mob + "  Faction: FACTIONID_" + npc.getFactionid() + "\r\n";
 		}
 		
-
-		// Act as normal mob if without faction
-				if (npc.getFactionid() > 0 || npc.isPet())
-				{
-					mob = mob + "  AIGoalSelectors:\r\n";
-					mob = mob + "  - 0 clear\r\n";
-					mob = mob + "  - 1 skeletonbowattack\r\n";
-					mob = mob + "  - 2 meleeattack\r\n";
-					mob = mob + "  - 3 lookatplayers\r\n";
-					if (npc.isRoamer())
-					{
-						mob = mob + "  - 4 randomstroll\r\n";
-					}
-					mob = mob + "  AITargetSelectors:\r\n";
-					mob = mob + "  - 0 clear\r\n";
-					mob = mob + "  - 1 attacker\r\n";
-					
-					// NPC attack players
-					if (!npc.isPet())
-					{
-						try
-						{
-							ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
-							if (npcfaction.getBase() == -1500)
-							{
-								mob = mob + "  - 2 players\r\n";
-							}
-						} catch (CoreStateInitException e)
-						{
-							// skip
-						}
-					}
-					
-					// NPC attack NPCs
-					if (npc.isGuard() || npc.isPet())
-					{
-						// Always attack mobs with factionid 0
-						mob = mob + "  - 3 SpecificFaction FACTIONID_0\r\n";
-						// Attack all mobs with -1500 faction
-						try
-						{
-							int curnum = 4;
-							for(ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions())
-							{
-								if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid())
-								{
-									mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
-									curnum++;
-								}
-							}
-						} catch (CoreStateInitException e)
-						{
-							// skip
-						}
-					}
-					
-					
+		// KOS attack everything!!
+		if (npc.getFactionid() == 0)
+		{
+			mob = mob + "  AIGoalSelectors:\r\n";
+			mob = mob + "  - 0 clear\r\n";
+			mob = mob + "  - 1 skeletonbowattack\r\n";
+			mob = mob + "  - 2 meleeattack\r\n";
+			mob = mob + "  - 3 lookatplayers\r\n";
+			mob = mob + "  - 4 randomstroll\r\n";
+			mob = mob + "  AITargetSelectors:\r\n";
+			mob = mob + "  - 0 clear\r\n";
+			mob = mob + "  - 1 attacker\r\n";
+			mob = mob + "  - 2 players\r\n";
+			int curnum = 4;
+			try
+			{
+				for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
+					mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
+					curnum++;
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 		}
 
-		// Here's the fun part, if the npc has decent loot in his loot drops to use for himself
+		// Act as normal mob if without faction
+		if (npc.getFactionid() > 0 || npc.isPet()) {
+			mob = mob + "  AIGoalSelectors:\r\n";
+			mob = mob + "  - 0 clear\r\n";
+			mob = mob + "  - 1 skeletonbowattack\r\n";
+			mob = mob + "  - 2 meleeattack\r\n";
+			mob = mob + "  - 3 lookatplayers\r\n";
+			if (npc.isRoamer()) {
+				mob = mob + "  - 4 randomstroll\r\n";
+			}
+			mob = mob + "  AITargetSelectors:\r\n";
+			mob = mob + "  - 0 clear\r\n";
+			mob = mob + "  - 1 attacker\r\n";
+
+			// NPC attack players
+			if (!npc.isPet()) {
+				try {
+					ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager()
+							.getFaction(npc.getFactionid());
+					if (npcfaction.getBase() == -1500) {
+						mob = mob + "  - 2 players\r\n";
+					}
+				} catch (CoreStateInitException e) {
+					// skip
+				}
+			}
+
+			// NPC attack NPCs
+			if (npc.isGuard() || npc.isPet()) {
+				// Always attack mobs with factionid 0
+				mob = mob + "  - 3 SpecificFaction FACTIONID_0\r\n";
+				// Attack all mobs with -1500 faction
+				try {
+					int curnum = 4;
+					for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
+						if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid()) {
+							mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
+							curnum++;
+						}
+					}
+				} catch (CoreStateInitException e) {
+					// skip
+				}
+			}
+
+		}
+
+		// Here's the fun part, if the npc has decent loot in his loot drops to use for
+		// himself
 		// then go ahead and use it! Better than that crap we have right?
-		if (npc.getLoottableid() > 0)
-		{
+		if (npc.getLoottableid() > 0) {
 			try {
-				ISoliniaLootTable lootTable = StateManager.getInstance().getConfigurationManager().getLootTable(npc.getLoottableid());
-				if (lootTable != null)
-				{
+				ISoliniaLootTable lootTable = StateManager.getInstance().getConfigurationManager()
+						.getLootTable(npc.getLoottableid());
+				if (lootTable != null) {
 					List<ISoliniaItem> potentialChestArmour = new ArrayList<ISoliniaItem>();
 					List<ISoliniaItem> potentialLegsArmour = new ArrayList<ISoliniaItem>();
 					List<ISoliniaItem> potentialFeetArmour = new ArrayList<ISoliniaItem>();
 					List<ISoliniaItem> potentialWeapons = new ArrayList<ISoliniaItem>();
 					List<ISoliniaItem> potentialBows = new ArrayList<ISoliniaItem>();
 					List<ISoliniaItem> potentialShields = new ArrayList<ISoliniaItem>();
-					
-					
-					for(ISoliniaLootTableEntry loottableentry : lootTable.getEntries())
-					{
-						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(loottableentry.getLootdropid());
-						for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
-						{
-							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(lootdropentry.getItemid());
-							if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()))
-							{
-								if (item.getAllowedClassNames().size() == 0)
-								{
+
+					for (ISoliniaLootTableEntry loottableentry : lootTable.getEntries()) {
+						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager()
+								.getLootDrop(loottableentry.getLootdropid());
+						for (ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries()) {
+							ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+									.getItem(lootdropentry.getItemid());
+							if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase())) {
+								if (item.getAllowedClassNames().size() == 0) {
 									if (item.getBasename().contains("CHESTPLATE"))
 										potentialChestArmour.add(item);
 									if (item.getBasename().contains("LEGGINGS"))
@@ -395,10 +393,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									continue;
 								}
 
-								if (npc.getClassObj() != null)
-								{
-									if (item.getAllowedClassNames().contains(npc.getClassObj().getName()))
-									{
+								if (npc.getClassObj() != null) {
+									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("CHESTPLATE"))
 											potentialChestArmour.add(item);
 										if (item.getBasename().contains("LEGGINGS"))
@@ -408,13 +404,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 										continue;
 									}
 								}
-								
+
 							}
-							
-							if (ConfigurationManager.WeaponMaterials.contains(item.getBasename().toUpperCase()))
-							{
-								if (item.getAllowedClassNames().size() == 0)
-								{
+
+							if (ConfigurationManager.WeaponMaterials.contains(item.getBasename().toUpperCase())) {
+								if (item.getAllowedClassNames().size() == 0) {
 									if (item.getBasename().contains("SHIELD"))
 										potentialShields.add(item);
 									else if (item.getBasename().contains("BOW"))
@@ -424,10 +418,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									continue;
 								}
 
-								if (npc.getClassObj() != null)
-								{
-									if (item.getAllowedClassNames().contains(npc.getClassObj().getName()))
-									{
+								if (npc.getClassObj() != null) {
+									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))
 											potentialShields.add(item);
 										else if (item.getBasename().contains("BOW"))
@@ -438,11 +430,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									}
 								}
 							}
-							
-							if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
-							{
-								if (item.getAllowedClassNames().size() == 0)
-								{
+
+							if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase())) {
+								if (item.getAllowedClassNames().size() == 0) {
 									if (item.getBasename().contains("SHIELD"))
 										potentialShields.add(item);
 									else if (item.getBasename().contains("BOW"))
@@ -452,10 +442,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									continue;
 								}
 
-								if (npc.getClassObj() != null)
-								{
-									if (item.getAllowedClassNames().contains(npc.getClassObj().getName()))
-									{
+								if (npc.getClassObj() != null) {
+									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))
 											potentialShields.add(item);
 										else if (item.getBasename().contains("BOW"))
@@ -467,31 +455,32 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 								}
 							}
 						}
-						
+
 						mob = mob + "  Equipment:\r\n";
-						
-						if (potentialShields.size() > 0)
-						{
-							Collections.sort(potentialShields, new Comparator<ISoliniaItem>(){
-							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
-							     {
-							         if(o1.getMinLevel() == o2.getMinLevel())
-							             return 0;
-							         
-							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
-							     }
+
+						if (potentialShields.size() > 0) {
+							Collections.sort(potentialShields, new Comparator<ISoliniaItem>() {
+								public int compare(ISoliniaItem o1, ISoliniaItem o2) {
+									if (o1.getMinLevel() == o2.getMinLevel())
+										return 0;
+
+									return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+								}
 							});
-							
+
 							Collections.reverse(potentialShields);
-							
-							System.out.println("Found better shield in lootdrop (" + potentialWeapons.get(0).getDisplayname() + "), using as shield");
-							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
+
+							System.out.println("Found better shield in lootdrop ("
+									+ potentialWeapons.get(0).getDisplayname() + "), using as shield");
+							writeCustomItem(
+									"plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml",
+									potentialWeapons.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":5\r\n";
 						} else {
 							if (npc.getOffhanditem() != null)
 								mob = mob + "  - " + npc.getOffhanditem() + ":5\r\n";
 						}
-						
+
 						if (npc.isCustomhead() == true) {
 							if (npc.getCustomheaddata() != null) {
 								mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r\n";
@@ -503,109 +492,111 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							if (npc.getHeaditem() != null)
 								mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
 						}
-						
-						if (potentialChestArmour.size() > 0)
-						{
-							Collections.sort(potentialChestArmour, new Comparator<ISoliniaItem>(){
-							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
-							     {
-							         if(o1.getMinLevel() == o2.getMinLevel())
-							             return 0;
-							         
-							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
-							     }
+
+						if (potentialChestArmour.size() > 0) {
+							Collections.sort(potentialChestArmour, new Comparator<ISoliniaItem>() {
+								public int compare(ISoliniaItem o1, ISoliniaItem o2) {
+									if (o1.getMinLevel() == o2.getMinLevel())
+										return 0;
+
+									return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+								}
 							});
-							
+
 							Collections.reverse(potentialChestArmour);
-							
-							System.out.println("Found better chest in lootdrop (" + potentialChestArmour.get(0).getDisplayname() + "), using as chest");
-							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialChestArmour.get(0).getId() + ".yml", potentialChestArmour.get(0));
+
+							System.out.println("Found better chest in lootdrop ("
+									+ potentialChestArmour.get(0).getDisplayname() + "), using as chest");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID"
+									+ potentialChestArmour.get(0).getId() + ".yml", potentialChestArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialChestArmour.get(0).getId() + ":3\r\n";
 						} else {
 							if (npc.getChestitem() != null)
 								mob = mob + "  - " + npc.getChestitem() + ":3\r\n";
 						}
-						
-						if (potentialLegsArmour.size() > 0)
-						{
-							Collections.sort(potentialLegsArmour, new Comparator<ISoliniaItem>(){
-							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
-							     {
-							         if(o1.getMinLevel() == o2.getMinLevel())
-							             return 0;
-							         
-							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
-							     }
+
+						if (potentialLegsArmour.size() > 0) {
+							Collections.sort(potentialLegsArmour, new Comparator<ISoliniaItem>() {
+								public int compare(ISoliniaItem o1, ISoliniaItem o2) {
+									if (o1.getMinLevel() == o2.getMinLevel())
+										return 0;
+
+									return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+								}
 							});
-							
+
 							Collections.reverse(potentialLegsArmour);
-							
-							System.out.println("Found better legs in lootdrop (" + potentialLegsArmour.get(0).getDisplayname() + "), using as leggings");
-							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialLegsArmour.get(0).getId() + ".yml", potentialLegsArmour.get(0));
+
+							System.out.println("Found better legs in lootdrop ("
+									+ potentialLegsArmour.get(0).getDisplayname() + "), using as leggings");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialLegsArmour.get(0).getId()
+									+ ".yml", potentialLegsArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialLegsArmour.get(0).getId() + ":2\r\n";
 						} else {
 							if (npc.getLegsitem() != null)
 								mob = mob + "  - " + npc.getLegsitem() + ":2\r\n";
 						}
-						
-						if (potentialFeetArmour.size() > 0)
-						{
-							Collections.sort(potentialFeetArmour, new Comparator<ISoliniaItem>(){
-							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
-							     {
-							         if(o1.getMinLevel() == o2.getMinLevel())
-							             return 0;
-							         
-							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
-							     }
+
+						if (potentialFeetArmour.size() > 0) {
+							Collections.sort(potentialFeetArmour, new Comparator<ISoliniaItem>() {
+								public int compare(ISoliniaItem o1, ISoliniaItem o2) {
+									if (o1.getMinLevel() == o2.getMinLevel())
+										return 0;
+
+									return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+								}
 							});
-							
+
 							Collections.reverse(potentialFeetArmour);
-							
-							System.out.println("Found better feet in lootdrop (" + potentialFeetArmour.get(0).getDisplayname() + "), using as feet");
-							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialFeetArmour.get(0).getId() + ".yml", potentialFeetArmour.get(0));
+
+							System.out.println("Found better feet in lootdrop ("
+									+ potentialFeetArmour.get(0).getDisplayname() + "), using as feet");
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialFeetArmour.get(0).getId()
+									+ ".yml", potentialFeetArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialFeetArmour.get(0).getId() + ":1\r\n";
 						} else {
 							if (npc.getFeetitem() != null)
 								mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
 						}
-						
-						if (npc.getClassObj() != null && npc.getClassObj().getName().toUpperCase().equals("RANGER") && potentialBows.size() > 0)
-						{
-							Collections.sort(potentialBows, new Comparator<ISoliniaItem>(){
-							     public int compare(ISoliniaItem o1, ISoliniaItem o2)
-							     {
-							         if(o1.getMinLevel() == o2.getMinLevel())
-							             return 0;
-							         
-							         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
-							     }
+
+						if (npc.getClassObj() != null && npc.getClassObj().getName().toUpperCase().equals("RANGER")
+								&& potentialBows.size() > 0) {
+							Collections.sort(potentialBows, new Comparator<ISoliniaItem>() {
+								public int compare(ISoliniaItem o1, ISoliniaItem o2) {
+									if (o1.getMinLevel() == o2.getMinLevel())
+										return 0;
+
+									return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+								}
 							});
-							
+
 							Collections.reverse(potentialBows);
-							
-							System.out.println("Found better weapon (bow) in lootdrop (" + potentialBows.get(0).getDisplayname() + "), using as weapon");
-							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialBows.get(0).getId() + ".yml", potentialBows.get(0));
+
+							System.out.println("Found better weapon (bow) in lootdrop ("
+									+ potentialBows.get(0).getDisplayname() + "), using as weapon");
+							writeCustomItem(
+									"plugins/MythicMobs/Items/CUSTOMITEMID" + potentialBows.get(0).getId() + ".yml",
+									potentialBows.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialBows.get(0).getId() + ":0\r\n";
 						} else {
-							if (potentialWeapons.size() > 0)
-							{
-								Collections.sort(potentialWeapons, new Comparator<ISoliniaItem>(){
-								     public int compare(ISoliniaItem o1, ISoliniaItem o2)
-								     {
-								         if(o1.getMinLevel() == o2.getMinLevel())
-								             return 0;
-								         
-								         return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
-								     }
+							if (potentialWeapons.size() > 0) {
+								Collections.sort(potentialWeapons, new Comparator<ISoliniaItem>() {
+									public int compare(ISoliniaItem o1, ISoliniaItem o2) {
+										if (o1.getMinLevel() == o2.getMinLevel())
+											return 0;
+
+										return o1.getMinLevel() > o2.getMinLevel() ? -1 : 1;
+									}
 								});
-								
+
 								Collections.reverse(potentialWeapons);
-								
-								System.out.println("Found better weapon in lootdrop (" + potentialWeapons.get(0).getDisplayname() + "), using as weapon");
-								writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
+
+								System.out.println("Found better weapon in lootdrop ("
+										+ potentialWeapons.get(0).getDisplayname() + "), using as weapon");
+								writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID"
+										+ potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
 								mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":0\r\n";
-								
+
 							} else {
 								if (npc.getHanditem() != null)
 									mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
@@ -613,11 +604,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 						}
 					}
 				}
-				
+
 			} catch (CoreStateInitException e) {
 				// skip
 			}
-			
+
 		} else {
 			if (npc.getHeaditem() != null || npc.getChestitem() != null || npc.getLegsitem() != null
 					|| npc.getFeetitem() != null || npc.getHanditem() != null || npc.getOffhanditem() != null) {
@@ -645,7 +636,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 					mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
 				if (npc.getHanditem() != null)
 					mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
-			}			
+			}
 		}
 
 		if (npc.isUsedisguise() == true) {
@@ -668,20 +659,17 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		if (npc.isBoss() == true || npc.isRaidboss()) {
 			// we dont need to spam the screen
 			/*
-				mob = mob + "  BossBar:\r\n";
-				mob = mob + "    Enabled: true\r\n";
-				mob = mob + "    Title: " + npc.getName() + "\r\n";
-				mob = mob + "    Range: 200\r\n";
-				mob = mob + "    CreateFog: true\r\n";
-				mob = mob + "    DarkenSky: true\r\n";
-				mob = mob + "    PlayMusic: true\r\n";
-			*/
+			 * mob = mob + "  BossBar:\r\n"; mob = mob + "    Enabled: true\r\n"; mob = mob
+			 * + "    Title: " + npc.getName() + "\r\n"; mob = mob + "    Range: 200\r\n";
+			 * mob = mob + "    CreateFog: true\r\n"; mob = mob + "    DarkenSky: true\r\n";
+			 * mob = mob + "    PlayMusic: true\r\n";
+			 */
 			if (npc.getDisguisetype() != null)
-			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
-				String[] disguisedata = npc.getDisguisetype().split("-");
-				mob = mob + "    Player: " + npc.getName() + "\r\n";
-				mob = mob + "    Skin: '" + disguisedata[1] + "'\r\n";
-			}
+				if (npc.getDisguisetype().toLowerCase().contains("player-")) {
+					String[] disguisedata = npc.getDisguisetype().split("-");
+					mob = mob + "    Player: " + npc.getName() + "\r\n";
+					mob = mob + "    Skin: '" + disguisedata[1] + "'\r\n";
+				}
 		}
 
 		mob = mob + "  Skills:\r\n";
@@ -694,13 +682,15 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	@Override
 	public void removeSpawnGroup(ISoliniaSpawnGroup spawngroup) {
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
+				"mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 	}
-	
+
 	@Override
 	public void spawnNPC(ISoliniaNPC npc, int amount, String world, int x, int y, int z) {
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "mm mobs spawn NPCID_" + npc.getId() + " " + amount + " " + world + "," + x + "," + y + "," + z);
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
+				"mm mobs spawn NPCID_" + npc.getId() + " " + amount + " " + world + "," + x + "," + y + "," + z);
 	}
 
 }

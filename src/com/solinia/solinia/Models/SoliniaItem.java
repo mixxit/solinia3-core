@@ -491,6 +491,16 @@ public class SoliniaItem implements ISoliniaItem {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
 			if (pet != null)
 			{
+				if (pet instanceof Wolf)
+				{
+					Wolf wolf = (Wolf)pet;
+					if (wolf.isSitting())
+					{
+						player.sendMessage("You cannot control a pet which is sitting");
+						return false;
+					}
+				}
+				
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 				if (solLivingEntity  != null)
 				{

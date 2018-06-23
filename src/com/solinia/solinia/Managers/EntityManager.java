@@ -740,7 +740,7 @@ public class EntityManager implements IEntityManager {
 					mob = new PlayerDisguise(entity.getCustomName(), "PremiumPilz");
 					break;
 				case "GUARDIAN":
-					mob = new PlayerDisguise(entity.getCustomName(), "PremiumPilz");
+					mob = new PlayerDisguise(entity.getCustomName(), "yamiaka");
 					break;
 				default:
 					mob = new MobDisguise(DisguiseType.WOLF);

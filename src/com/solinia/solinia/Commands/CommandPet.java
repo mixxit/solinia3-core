@@ -51,6 +51,16 @@ public class CommandPet implements CommandExecutor {
 					return true;
 				}
 				
+				if (pet instanceof Wolf)
+				{
+					Wolf wolf = (Wolf)pet;
+					if (wolf.isSitting())
+					{
+						player.sendMessage("You cannot control a pet which is sitting");
+						return true;
+					}
+				}
+				
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 				
 				if (args.length > 0)

@@ -994,7 +994,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			// Clicking item in cursor onto a slot
 			if (event.getRawSlot() > 26) {
 				// Dropping own item or buying
-				if (event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: ")) {
+				if (event.getCursor().getItemMeta() != null &&  event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: ")) {
 					// Buying
 					// event.getView().getPlayer().sendMessage("Buying item");
 
@@ -1110,7 +1110,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			} else {
 				// Selling items or dropping item back
-				if (event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: ")) {
+				if (event.getCursor().getItemMeta() != null && event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: ")) {
 					// Returning store item
 					// Cursor events are deprecated, must be done next tick before a cancel
 					final UUID uuid = event.getView().getPlayer().getUniqueId();
