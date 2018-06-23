@@ -109,13 +109,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 
+		if (solLivingEntity.getBukkitLivingEntity() instanceof Wolf)
+		
 		if (solLivingEntity.getBukkitLivingEntity() instanceof Wolf) {
 			Wolf wolf = (Wolf) solLivingEntity.getBukkitLivingEntity();
 			if (wolf.getOwner().getUniqueId().toString().equals(getBukkitLivingEntity().getUniqueId().toString())) {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack your pet!");
+				return;
 			}
-			return;
 		}
+		
+		if (solLivingEntity.getBukkitLivingEntity() instanceof Wolf)
 
 		if (solLivingEntity.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) > 3) {
 			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
@@ -160,7 +164,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			EntityDamageSource source = new EntityDamageSource("mob",((CraftEntity) getBukkitLivingEntity()).getHandle());
 			source.sweep();
 			source.ignoresArmor();
-			
 			((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle().damageEntity(source, (float)damage);
 			
 			//solLivingEntity.getBukkitLivingEntity().damage(damage, getBukkitLivingEntity());
@@ -4185,17 +4188,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean checkHitChance(SoliniaLivingEntity attacker, DamageHitInfo hit) {
 		ISoliniaLivingEntity defender = this;
 
-		if (defender.isPlayer()) {
-			try {
-				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) defender.getBukkitLivingEntity());
-				if (player.isMeditating()) {
-					return true;
-				}
-			} catch (CoreStateInitException e) {
-				// ignore it
-			}
-		}
-
 		int avoidance = defender.getTotalDefense();
 
 		int accuracy = hit.tohit;
@@ -4232,8 +4224,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		double mods[] = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,
 				2.0 };
 
-		if (isPlayer() && isMeditating())
-			return mods[19];
+		// always meditating, ignore this
+		//if (isPlayer() && isMeditating())
+		//	return mods[19];
 
 		int atk_roll = Utils.RandomBetween(0, offense + 5);
 		int def_roll = Utils.RandomBetween(0, mitigation + 5);
@@ -5573,9 +5566,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isMezzed())
 			return false;
 		
-		if (!(getBukkitLivingEntity() instanceof Creature))
-			return true;
-		
 		// This seems to stop players from attacking players pets
 		// unless the pet is set to attack the player
 		if (isPlayer() && defender.getBukkitLivingEntity() instanceof Wolf && defender.isPet()) {
@@ -5589,6 +5579,42 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
+		// Both players are in same group
+		if (isPlayer() && (defender.getBukkitLivingEntity() instanceof Player || defender.isPet()))
+		{
+			try
+			{
+				ISoliniaPlayer solAttackerPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+				
+				if (solAttackerPlayer.getGroup() != null)
+				{
+					ISoliniaPlayer solDefenderPlayer;
+					if (defender.isPet() && defender.getBukkitLivingEntity() instanceof Wolf)
+					{
+						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)((Wolf)defender.getBukkitLivingEntity()).getOwner());
+					} else {
+						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender);
+					}
+					
+					if (solDefenderPlayer != null)
+					if (solDefenderPlayer.getGroup() != null)
+					{
+						if (solAttackerPlayer.getGroup().getId().toString().equals(solDefenderPlayer.getGroup().getId()))
+						{
+							return false;
+						}
+					}
+				}
+				
+				
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+			
+			
+		}
+		
 		// Player can always attack even if mob is mezzed (it will break mez)
 		if (isPlayer())
 			return true;
@@ -5600,6 +5626,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				Wolf wolf = (Wolf) getBukkitLivingEntity();
 				wolf.setTarget(null);
 				say("Stopping attacking master, the target is mesmerized");
+				return false;
 			}
 		}
 

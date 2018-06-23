@@ -2396,8 +2396,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean isMeditating() {
 		Location currentLocation = getBukkitPlayer().getLocation();
 		if (currentLocation.getBlockX() == lastX &&
-			currentLocation.getBlockX() == lastY &&
-			currentLocation.getBlockX() == lastZ)
+			currentLocation.getBlockY() == lastY &&
+			currentLocation.getBlockZ() == lastZ)
 			{
 				return true;
 			
