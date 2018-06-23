@@ -104,7 +104,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int forearmsItem = 0;
 	private int armsItem = 0;
 	private int handsItem = 0;
-
+	
+	private int lastX = 0;
+	private int lastY = 0;
+	private int lastZ = 0;
+	
 	private String fingersItemInstance = "";
 	private String shouldersItemInstance = "";
 	private String neckItemInstance = "";
@@ -127,6 +131,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean hasIgnored(UUID uuid) {
 		return ignoredPlayers.contains(uuid);
+	}
+
+	@Override
+	public void setLastLocation(Location location)
+	{
+		this.lastX = location.getBlockX();
+		this.lastY = location.getBlockY();
+		this.lastZ = location.getBlockZ();
 	}
 
 	@Override
@@ -2382,16 +2394,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean isMeditating() {
-		try {
-			if (getBukkitPlayer().isSneaking() || getBukkitPlayer().getVehicle() != null
-					|| StateManager.getInstance().getEntityManager().getTrance(getUUID()) == true) {
+		Location currentLocation = getBukkitPlayer().getLocation();
+		if (currentLocation.getBlockX() == lastX &&
+			currentLocation.getBlockX() == lastY &&
+			currentLocation.getBlockX() == lastZ)
+			{
 				return true;
+			
+			} else {
+				return false;
 			}
-		} catch (CoreStateInitException e) {
-			return false;
-		}
-
-		return false;
 	}
 
 	@Override

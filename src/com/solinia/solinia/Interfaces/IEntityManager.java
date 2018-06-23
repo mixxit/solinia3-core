@@ -50,12 +50,6 @@ public interface IEntityManager {
 
 	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter);
 
-	void toggleTrance(UUID uniqueId);
-
-	boolean getTrance(UUID uuid);
-
-	void setTrance(UUID uuid, Boolean enabled);
-
 	LivingEntity SpawnPet(Player owner, ISoliniaSpell spell);
 
 	void spellTick();

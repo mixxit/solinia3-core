@@ -385,12 +385,6 @@ public class Solinia3CorePlayerListener implements Listener {
 					event.getFrom().getBlockZ() != event.getTo().getBlockZ()				
 				) 
 			{
-				// stop trance if moving in any direction other than pitch yaw
-				
-				if (StateManager.getInstance().getEntityManager().getTrance(player.getUniqueId()) == true) {
-					StateManager.getInstance().getEntityManager().setTrance(player.getUniqueId(), false);
-				}
-				
 				// cancel feigned if moving
 				try
 				{

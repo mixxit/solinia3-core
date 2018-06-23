@@ -79,7 +79,6 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Timestamp> entityStunned = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<String, Timestamp> entitySpellCooldown = new ConcurrentHashMap<String, Timestamp>();
-	private ConcurrentHashMap<UUID, Boolean> trance = new ConcurrentHashMap<UUID, Boolean>();
 	//private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
 	private ConcurrentHashMap<UUID, Inventory> merchantInventories = new ConcurrentHashMap<UUID, Inventory>();
 	private ConcurrentHashMap<UUID, UniversalMerchant> universalMerchant = new ConcurrentHashMap<UUID, UniversalMerchant>();
@@ -276,40 +275,6 @@ public class EntityManager implements IEntityManager {
 	public INPCEntityProvider getNPCEntityProvider()
 	{
 		return npcEntityProvider;
-	}
-
-	@Override
-	public boolean getTrance(UUID uuid)
-	{
-		if (trance.get(uuid) == null)
-		{
-			return false;
-		} else {
-			return trance.get(uuid);
-		}
-	}
-	
-	@Override
-	public void setTrance(UUID uuid, Boolean enabled)
-	{
-		trance.put(uuid, enabled);
-		if (enabled == true)
-		{
-			Bukkit.getPlayer(uuid).sendMessage("You fall into a deep trance");
-		} else {
-			Bukkit.getPlayer(uuid).sendMessage("You fall out of your trance");
-		}
-	}
-
-	@Override
-	public void toggleTrance(UUID uuid) {
-		Boolean current = getTrance(uuid);
-		if (current == true)
-		{
-			setTrance(uuid, false);
-		} else {
-			setTrance(uuid, true);
-		}
 	}
 	
 	@Override 

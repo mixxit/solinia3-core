@@ -12,13 +12,7 @@ public class CommandTrance implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (sender instanceof Player) {
-			try
-			{
-				StateManager.getInstance().getEntityManager().toggleTrance(((Player) sender).getUniqueId());
-			} catch (CoreStateInitException e)
-			{
-				return false;
-			}
+			sender.sendMessage("You no longer need to use trance, it will happen automatically when stood still");
             return true;
 		}
 		return false;

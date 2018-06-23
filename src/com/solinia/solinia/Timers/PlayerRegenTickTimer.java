@@ -207,6 +207,10 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 
 			}
 		}
+		
+		// update last location
+		solplayer.setLastLocation(solplayer.getBukkitPlayer().getLocation());
+		
 		return manaregen;
 	}
 }
