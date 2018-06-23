@@ -94,18 +94,6 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 					return;
 				}
 				
-				if (entityForAutoAttack.getEquipment().getItemInMainHand() != null)
-				{
-					if (!ConfigurationManager.WeaponMaterials.contains(entityForAutoAttack.getEquipment().getItemInMainHand().getType().name()))
-					{
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-						return;
-					}
-				} else {
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-					return;
-				}
-				
 				if (autoAttack.getTimer() > 0)
 				{
 					autoAttack.setTimer(autoAttack.getTimer() - 1);
