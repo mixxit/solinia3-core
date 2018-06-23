@@ -383,7 +383,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				{
 					TextComponent tc = new TextComponent();
 					tc.setText(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id);
-					((Player)getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, tc);
+					((Player)getBukkitLivingEntity()).spigot().sendMessage(tc);
 				}
 			}
 		}
