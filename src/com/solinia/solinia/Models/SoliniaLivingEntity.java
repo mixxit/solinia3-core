@@ -95,7 +95,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
-	public void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity) {
+	public void autoAttackEnemy(ISoliniaLivingEntity defender) {
 		if (getBukkitLivingEntity().isDead()) {
 			try {
 				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
@@ -104,34 +104,68 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			}
 		}
-
-		if (solLivingEntity.getBukkitLivingEntity().getUniqueId().toString()
+		
+		if (defender.getBukkitLivingEntity().getUniqueId().toString()
 				.equals(getBukkitLivingEntity().getUniqueId().toString())) {
 			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack yourself!");
 			return;
 		}
 
-		if (solLivingEntity.getBukkitLivingEntity() instanceof Wolf)
+		if (defender.getBukkitLivingEntity() instanceof Wolf)
 		
-		if (solLivingEntity.getBukkitLivingEntity() instanceof Wolf) {
-			Wolf wolf = (Wolf) solLivingEntity.getBukkitLivingEntity();
+		if (defender.getBukkitLivingEntity() instanceof Wolf) {
+			Wolf wolf = (Wolf) defender.getBukkitLivingEntity();
 			if (wolf.getOwner().getUniqueId().toString().equals(getBukkitLivingEntity().getUniqueId().toString())) {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack your pet!");
 				return;
 			}
 		}
 		
-		if (solLivingEntity.getBukkitLivingEntity() instanceof Wolf)
+		if (defender.getBukkitLivingEntity() instanceof Wolf)
 
-		if (solLivingEntity.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) > 3) {
+		if (defender.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) > 3) {
 			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
+			return;
+		}
+		
+		if (this.getLocation().distance(defender.getLocation()) > 3) {
+			this.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
+			return;
+		}
+			
+		// Remove buffs on attacker (invis should drop)
+		// and check they are not mezzed
+	
+		// MEZZED
+		if (this.isMezzed())
+		{
+			if (this instanceof Player) 
+			{
+				this.getBukkitLivingEntity().sendMessage("* You are mezzed!");
+			}
+			return;
+		}
+		
+		// STUNNED
+		if (this.isStunned())
+		{
+			if (this instanceof Player) 
+			{
+				this.getBukkitLivingEntity().sendMessage("* You are stunned!");
+			}
+			return;
+		}
+		
+		// CAN ATTACK / MEZ, STUN - PETS CHECKING IF CAN ATTACK ETC
+		if (!this.canAttackTarget(defender))
+		{
 			return;
 		}
 
 		if (getBukkitLivingEntity() instanceof Player)
 		{
 			((CraftPlayer) getBukkitLivingEntity()).getHandle()
-				.attack(((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle());
+				.attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
 		} else {
 			double damage = 1;
 			
@@ -165,7 +199,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			EntityDamageSource source = new EntityDamageSource("mob",((CraftEntity) getBukkitLivingEntity()).getHandle());
 			source.sweep();
 			source.ignoresArmor();
-			((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle().damageEntity(source, (float)damage);
+			((CraftEntity) defender.getBukkitLivingEntity()).getHandle().damageEntity(source, (float)damage);
 			
 			
 			
