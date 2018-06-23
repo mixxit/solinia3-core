@@ -345,7 +345,11 @@ public class Solinia3CoreEntityListener implements Listener {
 		try {
 			solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
 			int damage = solLivingEntity.calculateDamageFromDamageEvent(damagecause.getDamager(), event.getCause().equals(EntityDamageEvent.DamageCause.THORNS), (int)Math.floor(event.getDamage()));
-			
+			if (damage < 1)
+			{
+				Utils.CancelEvent(event);
+				return;
+			}
 			event.setDamage(DamageModifier.BASE, damage);
 			
 		} catch (CoreStateInitException e) {
