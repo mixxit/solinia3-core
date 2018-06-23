@@ -57,6 +57,8 @@ import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.DamageSource;
 import net.minecraft.server.v1_12_R1.EntityCreature;
@@ -342,7 +344,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					break;
 				}
 				
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id);
+				if (getBukkitLivingEntity() instanceof Player)
+				{
+					TextComponent tc = new TextComponent();
+					tc.setText(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id);
+					((Player)getBukkitLivingEntity()).spigot().sendMessage(tc);
+				}
 			}
 		}
 		
