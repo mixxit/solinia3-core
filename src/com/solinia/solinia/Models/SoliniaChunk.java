@@ -11,9 +11,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidChunkSettingException;
-import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
-import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;

@@ -6,8 +6,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -15,8 +13,8 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
-import org.bukkit.event.block.Action;
+import org.bukkit.entity.Sittable;
+import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -491,10 +489,10 @@ public class SoliniaItem implements ISoliniaItem {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
 			if (pet != null)
 			{
-				if (pet instanceof Wolf)
+				if (pet instanceof Sittable)
 				{
-					Wolf wolf = (Wolf)pet;
-					if (wolf.isSitting())
+					Sittable sittable = (Sittable)pet;
+					if (sittable.isSitting())
 					{
 						player.sendMessage("You cannot control a pet which is sitting");
 						return false;
@@ -517,35 +515,35 @@ public class SoliniaItem implements ISoliniaItem {
 						}
 					}
 				}
-				if (pet instanceof Wolf)
+				if (pet instanceof Creature)
 				{
 					// Move pet to player
 					pet.teleport(player.getLocation());
-					((Wolf)pet).setTarget(null);
+					((Creature)pet).setTarget(null);
 					
 					// Mez cancel target
 					Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed(targetentity);
 	
 					if (mezExpiry != null) {
 						((Creature) pet).setTarget(null);
-						Wolf wolf = (Wolf)pet;
-						wolf.setTarget(null);
+						Creature creature = (Creature)pet;
+						creature.setTarget(null);
 						player.sendMessage("You cannot send your pet to attack a mezzed player");
 						return false;
 					}
 					
 					if (pet.getUniqueId().equals(targetentity.getUniqueId()))
 					{
-						Wolf wolf = (Wolf)pet;
-						wolf.setTarget(null);
+						Creature creature = (Creature)pet;
+						creature.setTarget(null);
 						player.sendMessage("You cannot send your pet to attack itself");
 						return false;
 					}
 
-					if (((Wolf) pet).getOwner().getUniqueId().equals(targetentity.getUniqueId()))
+					if (((Tameable) pet).getOwner().getUniqueId().equals(targetentity.getUniqueId()))
 					{
-						Wolf wolf = (Wolf)pet;
-						wolf.setTarget(null);
+						Creature creature = (Creature)pet;
+						creature.setTarget(null);
 						player.sendMessage("You cannot send your pet to attack you!");
 						return false;
 					}
@@ -556,8 +554,8 @@ public class SoliniaItem implements ISoliniaItem {
 						if (tmpPlayer.getGroup() != null)
 						if (tmpPlayer.getGroup().getMembers().contains(targetentity.getUniqueId()))
 						{
-							Wolf wolf = (Wolf)pet;
-							wolf.setTarget(null);
+							Creature creature = (Creature)pet;
+							creature.setTarget(null);
 							player.sendMessage("You cannot send your pet to attack your group!");
 							return false;
 						}
@@ -565,8 +563,8 @@ public class SoliniaItem implements ISoliniaItem {
 					
 					if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
 					{
-						Wolf wolf = (Wolf)pet;
-						wolf.setTarget(targetentity);
+						Creature creature = (Creature)pet;
+						creature.setTarget(targetentity);
 						player.sendMessage("You send your pet to attack!");
 						return true;
 					}

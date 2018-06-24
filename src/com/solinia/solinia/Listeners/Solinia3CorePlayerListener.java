@@ -33,10 +33,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -59,7 +57,6 @@ import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.UniversalMerchant;
 import com.solinia.solinia.Utils.ItemStackUtils;
-import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;

@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.ShulkerBox;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
@@ -21,11 +20,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Horse.Color;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -1570,10 +1567,10 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyReclaimPet(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!(getLivingEntity() instanceof Wolf))
+		if (!(getLivingEntity() instanceof Tameable))
 			return;
 
-		LivingEntity owner = (LivingEntity) ((Wolf) getLivingEntity()).getOwner();
+		LivingEntity owner = (LivingEntity) ((Tameable) getLivingEntity()).getOwner();
 
 		if (owner == null)
 			return;

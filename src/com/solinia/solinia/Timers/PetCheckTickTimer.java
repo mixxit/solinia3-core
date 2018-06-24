@@ -1,7 +1,6 @@
 package com.solinia.solinia.Timers;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

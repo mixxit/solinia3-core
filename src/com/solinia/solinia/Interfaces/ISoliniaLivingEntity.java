@@ -5,18 +5,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.FocusEffect;

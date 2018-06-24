@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -68,12 +67,9 @@ import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
-import com.solinia.solinia.Utils.NMSUtils;
-
 import de.slikey.effectlib.EffectManager;
 import me.dadus33.chatitem.api.ChatItemAPI;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_12_R1.EntitySkeleton;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;

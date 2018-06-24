@@ -17,14 +17,11 @@ import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -55,8 +52,6 @@ import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
-import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
 
@@ -1643,9 +1638,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		}
 
-		if (Bukkit.getEntity(interaction) instanceof Wolf) {
-			Wolf w = (Wolf) Bukkit.getEntity(interaction);
-			if (w.getOwner() != null)
+		if (Bukkit.getEntity(interaction) instanceof Tameable) {
+			Tameable tameable = (Tameable) Bukkit.getEntity(interaction);
+			if (tameable.getOwner() != null)
 				return;
 		}
 

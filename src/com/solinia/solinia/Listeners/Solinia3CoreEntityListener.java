@@ -1,7 +1,6 @@
 package com.solinia.solinia.Listeners;
 
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +17,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,17 +27,14 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import com.solinia.solinia.Solinia3CorePlugin;
-import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -47,14 +43,10 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.InteractionType;
-import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
-import com.sun.glass.events.GestureEvent;
-
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -553,8 +545,8 @@ public class Solinia3CoreEntityListener implements Listener {
 				player = SoliniaPlayerAdapter.Adapt((Player) damager);
 			}
 			if (soldamagerentity.isPet()) {
-				if (damager instanceof Wolf) {
-					Wolf w = (Wolf) damager;
+				if (damager instanceof Tameable) {
+					Tameable w = (Tameable) damager;
 					player = SoliniaPlayerAdapter.Adapt((Player) w.getOwner());
 				}
 			}

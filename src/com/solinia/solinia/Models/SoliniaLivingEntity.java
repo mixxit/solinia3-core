@@ -25,17 +25,13 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
+import org.bukkit.entity.Sittable;
+import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -50,20 +46,15 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
-import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_12_R1.DamageSource;
 import net.minecraft.server.v1_12_R1.EntityCreature;
 import net.minecraft.server.v1_12_R1.EntityDamageSource;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EntityTameableAnimal;
 import net.minecraft.server.v1_12_R1.EnumItemSlot;
 import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
@@ -111,18 +102,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 
-		if (defender.getBukkitLivingEntity() instanceof Wolf)
-		
-		if (defender.getBukkitLivingEntity() instanceof Wolf) {
-			Wolf wolf = (Wolf) defender.getBukkitLivingEntity();
-			if (wolf.getOwner().getUniqueId().toString().equals(getBukkitLivingEntity().getUniqueId().toString())) {
+		if (defender.getBukkitLivingEntity() instanceof Tameable) {
+			Tameable tameable = (Tameable) defender.getBukkitLivingEntity();
+			if (tameable.getOwner().getUniqueId().toString().equals(getBukkitLivingEntity().getUniqueId().toString())) {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack your pet!");
 				return;
 			}
 		}
 		
-		if (defender.getBukkitLivingEntity() instanceof Wolf)
-
 		if (defender.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) > 3) {
 			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
 			return;
@@ -1273,9 +1260,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
 							+ " damage"));
 			
-			if (attackerEntity instanceof Wolf)
+			if (attackerEntity instanceof Tameable)
 			{
-				Wolf pet = (Wolf)attackerEntity;
+				Tameable pet = (Tameable)attackerEntity;
 				if (pet.getOwner() != null && pet.getOwner() instanceof Player)
 				{
 					Player owner = (Player)pet.getOwner();
@@ -1283,7 +1270,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							new TextComponent("Your pet hit " + name + " for " + df.format(finaldamage) + " "
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
 									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
-									+ " damage [PetHP:" + pet.getHealth() + "]"));
+									+ " damage [PetHP:" + attackerEntity.getHealth() + "]"));
 				}
 			}
 
@@ -5359,10 +5346,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					playerOwner.sendMessage(ChatColor.GRAY + "* Your pet says 'Master I am low on health!'");
 			}
 			
-			if (this.getBukkitLivingEntity() instanceof Wolf)
+			if (this.getBukkitLivingEntity() instanceof Sittable)
 			{
-				if (((Wolf)this.getBukkitLivingEntity()).isSitting())
-					((Wolf)this.getBukkitLivingEntity()).setSitting(false);
+				if (((Sittable)this.getBukkitLivingEntity()).isSitting())
+					((Sittable)this.getBukkitLivingEntity()).setSitting(false);
 			}
 			
 			// Pet regen is slow			
@@ -5623,10 +5610,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		// This seems to stop players from attacking players pets
 		// unless the pet is set to attack the player
-		if (isPlayer() && defender.getBukkitLivingEntity() instanceof Wolf && defender.isPet()) {
-			Wolf wolf = (Wolf) defender.getBukkitLivingEntity();
-			if (wolf != null) {
-				if (wolf.getTarget() == null || !wolf.getTarget().equals(getBukkitLivingEntity())) {
+		if (isPlayer() && defender.getBukkitLivingEntity() instanceof Creature && defender.isPet()) {
+			Creature creature = (Creature) defender.getBukkitLivingEntity();
+			if (creature != null) {
+				if (creature.getTarget() == null || !creature.getTarget().equals(getBukkitLivingEntity())) {
 					return false;
 				}
 			} else {
@@ -5644,9 +5631,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solAttackerPlayer.getGroup() != null)
 				{
 					ISoliniaPlayer solDefenderPlayer;
-					if (defender.isPet() && defender.getBukkitLivingEntity() instanceof Wolf)
+					if (defender.isPet() && defender.getBukkitLivingEntity() instanceof Tameable)
 					{
-						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)((Wolf)defender.getBukkitLivingEntity()).getOwner());
+						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)((Tameable)defender.getBukkitLivingEntity()).getOwner());
 					} else {
 						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender);
 					}
@@ -5678,8 +5665,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (defender.isMezzed())
 		{
 			if (isPet()) {
-				Wolf wolf = (Wolf) getBukkitLivingEntity();
-				wolf.setTarget(null);
+				Creature creature = (Creature) getBukkitLivingEntity();
+				creature.setTarget(null);
 				say("Stopping attacking master, the target is mesmerized");
 				return false;
 			}

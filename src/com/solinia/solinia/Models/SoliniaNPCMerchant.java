@@ -6,15 +6,11 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCMerchantListSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
-import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {

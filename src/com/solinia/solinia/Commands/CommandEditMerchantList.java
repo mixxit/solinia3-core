@@ -6,9 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidNPCMerchantListSettingException;
-import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Managers.StateManager;
 

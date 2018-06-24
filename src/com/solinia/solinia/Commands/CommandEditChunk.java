@@ -8,11 +8,6 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaChunkAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidChunkSettingException;
-import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
-import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
-import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
-import com.solinia.solinia.Interfaces.ISoliniaRace;
-import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaChunk;
 
 public class CommandEditChunk implements CommandExecutor {
