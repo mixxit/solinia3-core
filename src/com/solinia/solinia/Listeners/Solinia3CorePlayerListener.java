@@ -1132,6 +1132,16 @@ public class Solinia3CorePlayerListener implements Listener {
 						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
 								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 									public void run() {
+											if (Bukkit.getPlayer(finaluuid).getItemOnCursor() == null)
+											{
+												return;
+											}
+											
+											if (Bukkit.getPlayer(finaluuid).getItemOnCursor().getType().equals(Material.AIR))
+											{
+												return;
+											}
+											
 											Bukkit.getPlayer(finaluuid).setItemOnCursor(new ItemStack(Material.AIR));
 											
 											
