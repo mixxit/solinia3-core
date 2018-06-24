@@ -1126,35 +1126,39 @@ public class Solinia3CorePlayerListener implements Listener {
 
 						// Total price
 						int price = individualprice * event.getCursor().getAmount();
-
-						EconomyResponse responsedeposit = StateManager.getInstance().getEconomy()
-								.depositPlayer((Player) event.getView().getPlayer(), price);
-						if (responsedeposit.transactionSuccess()) {
-							// Add to buy back list
-							// StateManager.getInstance().getEntityManager().addTemporaryMerchantItem(npc.getId(),
-							// item.getId(), event.getCursor().getAmount());
-							event.getView().getPlayer()
-									.sendMessage(ChatColor.YELLOW + "* You recieve $" + price + " as payment");
-							// Cursor events are deprecated, must be done next tick before a cancel
-							final UUID uuid = event.getView().getPlayer().getUniqueId();
-							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
-										public void run() {
-											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+						
+						final UUID finaluuid = event.getView().getPlayer().getUniqueId();
+						final int finalprice = price;
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									public void run() {
+											Bukkit.getPlayer(finaluuid).setItemOnCursor(new ItemStack(Material.AIR));
+											
+											
+											EconomyResponse responsedeposit = StateManager.getInstance().getEconomy()
+													.depositPlayer((Player) event.getView().getPlayer(), finalprice);
+											if (responsedeposit.transactionSuccess()) {
+												// Add to buy back list
+												// StateManager.getInstance().getEntityManager().addTemporaryMerchantItem(npc.getId(),
+												// item.getId(), event.getCursor().getAmount());
+												event.getView().getPlayer()
+														.sendMessage(ChatColor.YELLOW + "* You recieve $" + finalprice + " as payment");
+												// Cursor events are deprecated, must be done next tick before a cancel
+												
+											} else {
+												System.out.println("Error depositing money to users account "
+														+ String.format(responsedeposit.errorMessage));
+												event.getView().getPlayer()
+														.sendMessage(ChatColor.YELLOW + "* Error depositing money to your account "
+																+ String.format(responsedeposit.errorMessage));
 											}
-									}
-							);
-							Utils.CancelEvent(event);
-							return;
-						} else {
-							System.out.println("Error depositing money to users account "
-									+ String.format(responsedeposit.errorMessage));
-							event.getView().getPlayer()
-									.sendMessage(ChatColor.YELLOW + "* Error depositing money to your account "
-											+ String.format(responsedeposit.errorMessage));
-							Utils.CancelEvent(event);
-							return;
-						}
+										}
+								}
+						);
+						Utils.CancelEvent(event);
+						return;
+
+						
 					} catch (CoreStateInitException e) {
 						event.getView().getPlayer().sendMessage("Cannot sell item to merchant right now");
 						Utils.CancelEvent(event);
