@@ -5635,7 +5635,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					{
 						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)((Tameable)defender.getBukkitLivingEntity()).getOwner());
 					} else {
-						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender);
+						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender.getBukkitLivingEntity());
 					}
 					
 					if (solDefenderPlayer != null)

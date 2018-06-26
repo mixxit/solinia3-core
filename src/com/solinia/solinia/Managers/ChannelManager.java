@@ -52,7 +52,7 @@ public class ChannelManager implements IChannelManager {
 					{
 						player.sendMessage(message);
 					} else {
-						player.sendMessage(decorateLocalPlayerMessage(source, Utils.ConvertToRunic(coremessage)) + "[" + source.getLanguage() + "]");
+						player.sendMessage(decorateLocalPlayerMessage(source, Utils.ConvertToRunic(coremessage)) + " [" + source.getLanguage() + "]");
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
 				} catch (CoreStateInitException e)
