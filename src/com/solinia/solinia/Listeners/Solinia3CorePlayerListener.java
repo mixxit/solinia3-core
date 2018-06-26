@@ -1307,7 +1307,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				// check if player is toggling auto attack
 				// left click while sneaking
 				if (event.getPlayer().isSneaking() && 
-						ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name()) && 
+						(itemstack.getType().name().equals("BOW") || ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name())) && 
 						((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))) {
 					ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 					if (soliniaPlayer != null)
@@ -1330,7 +1330,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				solItem = SoliniaItemAdapter.Adapt(itemstack);
 				
 				// also allow targetting via pet control rod
-				if (event.getPlayer().isSneaking() && solItem != null && (solItem.isSpellscroll() || solItem.isPetControlRod()))
+				if (event.getPlayer().isSneaking() && solItem != null && (itemstack.getType().name().equals("BOW") || solItem.isSpellscroll() || solItem.isPetControlRod()))
 				{
 					if ((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK))) {
 						LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);

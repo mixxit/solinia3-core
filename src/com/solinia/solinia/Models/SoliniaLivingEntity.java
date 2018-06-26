@@ -27,6 +27,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sittable;
 import org.bukkit.entity.Tameable;
+import org.bukkit.entity.Arrow.PickupStatus;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
@@ -110,11 +111,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
+		if (!getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW"))
 		if (defender.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) > 3) {
 			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
 			return;
 		}
 		
+		if (!getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW"))
 		if (this.getLocation().distance(defender.getLocation()) > 3) {
 			this.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
 			return;
@@ -151,21 +154,44 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (getBukkitLivingEntity() instanceof Player)
 		{
-			net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F,
-					1.0F);
-			
-			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-				if (listening instanceof Player)
-					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+			// BOW
+			if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW"))
+			{
+				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_ARROW_SHOOT, 1.0F,
+						1.0F);
+				
+				for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+					if (listening instanceof Player)
+						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+				}
+				
+				if (getBukkitLivingEntity() instanceof Player)
+				((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
+				
+				Arrow projectile = getBukkitLivingEntity().launchProjectile(Arrow.class);
+				projectile.setPickupStatus(PickupStatus.DISALLOWED);
+				projectile.setVelocity(defender.getBukkitLivingEntity().getEyeLocation().toVector().subtract(projectile.getLocation().toVector()).normalize().multiply(4));
+					//.attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
+
+			} else {
+				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F,
+						1.0F);
+				
+				for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+					if (listening instanceof Player)
+						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+				}
+				
+				if (getBukkitLivingEntity() instanceof Player)
+				((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
+				
+				((CraftPlayer) getBukkitLivingEntity()).getHandle()
+					.attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
 			}
-			
-			if (getBukkitLivingEntity() instanceof Player)
-			((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
-			
-			((CraftPlayer) getBukkitLivingEntity()).getHandle()
-				.attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
 		} else {
 			double damage = 1;
 			
@@ -184,23 +210,50 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 			
-			net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F,
-					1.0F);
+			// BOW
+			if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW"))
+			{
 			
-			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-				if (listening instanceof Player)
-					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_ARROW_SHOOT, 1.0F,
+						1.0F);
+				
+				for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+					if (listening instanceof Player)
+						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+				}
+				
+				if (getBukkitLivingEntity() instanceof Player)
+				((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
+				EntityDamageSource source = new EntityDamageSource("mob",((CraftEntity) getBukkitLivingEntity()).getHandle());
+				source.sweep();
+				source.ignoresArmor();
+				
+				Arrow projectile = getBukkitLivingEntity().launchProjectile(Arrow.class);
+				projectile.setVelocity(defender.getBukkitLivingEntity().getEyeLocation().toVector().subtract(projectile.getLocation().toVector()).normalize().multiply(4));
+				projectile.setPickupStatus(PickupStatus.DISALLOWED);
+
+				//((CraftEntity) defender.getBukkitLivingEntity()).getHandle().damageEntity(source, (float)damage);
+			
+			} else {
+				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F,
+						1.0F);
+				
+				for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+					if (listening instanceof Player)
+						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+				}
+				
+				if (getBukkitLivingEntity() instanceof Player)
+				((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
+				EntityDamageSource source = new EntityDamageSource("mob",((CraftEntity) getBukkitLivingEntity()).getHandle());
+				source.sweep();
+				source.ignoresArmor();
+				((CraftEntity) defender.getBukkitLivingEntity()).getHandle().damageEntity(source, (float)damage);
 			}
-			
-			if (getBukkitLivingEntity() instanceof Player)
-			((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
-			EntityDamageSource source = new EntityDamageSource("mob",((CraftEntity) getBukkitLivingEntity()).getHandle());
-			source.sweep();
-			source.ignoresArmor();
-			((CraftEntity) defender.getBukkitLivingEntity()).getHandle().damageEntity(source, (float)damage);
-			
 			
 			
 			//solLivingEntity.getBukkitLivingEntity().damage(damage, getBukkitLivingEntity());
@@ -5436,7 +5489,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// if this is a melee attack and the attacker is too far from the defender
 			// cancel the event
 			
-			if (!ismagic && !(originalDamager instanceof Arrow)) {
+			if (!ismagic && !(originalDamager instanceof Arrow) && !((LivingEntity)attackerEntity).getEquipment().getItemInMainHand().getType().name().equals("BOW")) {
 				if (attacker.getLocation().distance(defender.getLocation()) > 3) {
 					attacker.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
 					return 0;
