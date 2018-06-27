@@ -370,7 +370,11 @@ public interface ISoliniaPlayer extends Serializable {
 	void setGlowTargetting(boolean glowTargetting);
 
 	public boolean hasSufficientBandageReagents(int count);
+	
+	public boolean hasSufficientArrowReagents(int count);
 
+	List<Integer> getArrowReagents();
+	
 	List<Integer> getBandageReagents();
 
 	boolean bindWound(ISoliniaLivingEntity solLivingEntity);

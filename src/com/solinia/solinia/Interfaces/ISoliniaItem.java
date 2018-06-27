@@ -360,4 +360,6 @@ public interface ISoliniaItem {
 	void setArmsItem(boolean isArmsItem);
 
 	void setHandsItem(boolean isHandsItem);
+
+	boolean isArrow();
 }

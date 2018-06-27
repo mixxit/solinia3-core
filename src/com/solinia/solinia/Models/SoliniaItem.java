@@ -1743,4 +1743,16 @@ public class SoliniaItem implements ISoliniaItem {
 	public void setHandsItem(boolean isHandsItem) {
 		this.isHandsItem = isHandsItem;
 	}
+	
+	@Override
+	public boolean isArrow()
+	{
+		if (this.getBasename() == null)
+			return false;
+		
+		if (this.getBasename().toUpperCase().equals("ARROW"))
+			return true;
+		
+		return false;
+	}
 }

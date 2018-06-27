@@ -157,23 +157,41 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// BOW
 			if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW"))
 			{
-				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_ARROW_SHOOT, 1.0F,
-						1.0F);
-				
-				for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-					if (listening instanceof Player)
-						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+				try
+				{
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+					
+					if (!solPlayer.hasSufficientArrowReagents(1))
+					{
+						getBukkitLivingEntity().sendMessage("* You do not have sufficient arrows in your /reagents to auto fire your bow!");
+						return;
+					}
+					
+					// Remove one of the reagents
+					int itemid = solPlayer.getArrowReagents().get(0);
+					solPlayer.reduceReagents(itemid, 1);
+					
+					net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+					getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_ARROW_SHOOT, 1.0F,
+							1.0F);
+					
+					for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+						if (listening instanceof Player)
+							((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+					}
+					
+					if (getBukkitLivingEntity() instanceof Player)
+					((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
+					
+					Arrow projectile = getBukkitLivingEntity().launchProjectile(Arrow.class);
+					projectile.setPickupStatus(PickupStatus.DISALLOWED);
+					projectile.setVelocity(defender.getBukkitLivingEntity().getEyeLocation().toVector().subtract(projectile.getLocation().toVector()).normalize().multiply(4));
+						//.attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
+				} catch (CoreStateInitException e)
+				{
+					
 				}
-				
-				if (getBukkitLivingEntity() instanceof Player)
-				((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
-				
-				Arrow projectile = getBukkitLivingEntity().launchProjectile(Arrow.class);
-				projectile.setPickupStatus(PickupStatus.DISALLOWED);
-				projectile.setVelocity(defender.getBukkitLivingEntity().getEyeLocation().toVector().subtract(projectile.getLocation().toVector()).normalize().multiply(4));
-					//.attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
 
 			} else {
 				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();

@@ -2899,6 +2899,31 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return true;
 	}
+	
+
+	@Override
+	public boolean hasSufficientArrowReagents(int countNeeded) {
+		int totalCount = 0;
+
+		for (Entry<Integer, SoliniaReagent> entry : getReagents().entrySet()) {
+			try {
+				int itemId = entry.getKey();
+				int count = entry.getValue().getQty();
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+				if (item != null)
+					if (item.isArrow()) {
+						totalCount += count;
+					}
+			} catch (CoreStateInitException e) {
+
+			}
+		}
+
+		if (totalCount >= countNeeded)
+			return true;
+
+		return false;
+	}
 
 	@Override
 	public boolean hasSufficientBandageReagents(int countNeeded) {
@@ -2922,6 +2947,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return true;
 
 		return false;
+	}
+	
+	@Override
+	public List<Integer> getArrowReagents() {
+
+		List<Integer> itemIds = new ArrayList<Integer>();
+		for (Entry<Integer, SoliniaReagent> entry : getReagents().entrySet()) {
+			try {
+				int itemId = entry.getKey();
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+				if (item != null)
+					if (item.isArrow()) {
+						itemIds.add(item.getId());
+					}
+			} catch (CoreStateInitException e) {
+
+			}
+		}
+
+		return itemIds;
 	}
 
 	@Override
@@ -3315,4 +3360,5 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setHandsItemInstance(String handsItemInstance) {
 		this.handsItemInstance = handsItemInstance;
 	}
+
 }
