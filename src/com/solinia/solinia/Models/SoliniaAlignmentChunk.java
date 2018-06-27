@@ -120,6 +120,7 @@ public class SoliniaAlignmentChunk {
 				
 				if (zone.getMiningLootTableId() > 0)
 				{
+					System.out.println("Adding mining zone distance: " + distance);
 					lootTables.add(new UniversalTemporarySoliniaLootTable(StateManager.getInstance().getConfigurationManager().getLootTable(zone.getMiningLootTableId()),distance));
 				}
 				
@@ -167,7 +168,9 @@ public class SoliniaAlignmentChunk {
 						if (existingItemIds.containsKey(lootdropentry.getItemid()))
 						{
 							if (existingItemIds.get(lootdropentry.getItemid()) < templootTable.distance)
+							{
 								continue;
+							}
 							
 							existingItemIds.remove(lootdropentry.getItemid());
 						}
@@ -192,7 +195,7 @@ public class SoliniaAlignmentChunk {
 			
 		} catch (CoreStateInitException e)
 		{
-			
+			e.printStackTrace();
 		}
 		
 		return entries;

@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,6 +16,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaChunk;
+import com.solinia.solinia.Models.SoliniaZone;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -96,12 +98,36 @@ public class CommandTrader implements CommandExecutor {
 			
 			if (alignment != null && alignment.getName().toUpperCase().equals(solPlayer.getRace().getAlignment().toUpperCase()))
 			{
-				if (alignmentChunk.isTradePost())
+				// Should not happen
+				if (alignmentChunk.isTradePost() && isInMaterialZone)
+				{
+					alignmentChunk.setTradePost(false);
+					player.sendMessage("This territory tradepost flag has been flipped to " + alignmentChunk.isTradePost() + "!");
+				}
+				
+				if (alignmentChunk.isTradePost() && !isInMaterialZone)
 				{
 					createTradePostText = "- /trader browse";
 				}
 			}
 			
+			String curzone = "!WILDERNESS";
+			try {
+				for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
+					if (player.getLocation().distance(
+							new Location(player.getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
+									.getSize())
+					{
+						curzone += " " + zone.getName();
+						break;
+					}
+				}
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			player.sendMessage("Zone Identifier: @@" + curzone);
 			player.sendMessage("Economic Zone: [" + chunk.getChunkX() + "," + chunk.getChunkZ() + "] ["+player.getLocation().getChunk().getX() + "," + player.getLocation().getChunk().getZ()+"]");
 			player.sendMessage("Material Zone: " + ChatColor.GOLD + isInMaterialZone + ChatColor.RESET);
 			
@@ -167,6 +193,7 @@ public class CommandTrader implements CommandExecutor {
 						if (isInMaterialZone)
 						{
 							player.sendMessage("You cannot make material territory a trade post");
+							return true;
 						}
 	
 						if (!(solPlayer.isAlignmentEmperor() || player.isOp()))

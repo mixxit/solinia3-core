@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -48,6 +49,7 @@ import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Adapters.SoliniaWorldAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaCraftCreationException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
@@ -80,10 +82,12 @@ import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
+import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
+import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
@@ -6449,13 +6453,12 @@ public class Utils {
 		}
 	}
 
-	public static boolean isPlayerInTerritory(Player player) {
+	public static boolean isChunkInTerritory(Chunk chunkTo) {
 		try
 		{
 			for (ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager().getAlignments())
 			{
-				Chunk chunk = player.getLocation().getChunk();
-				if (alignment.getChunks().get(chunk.getWorld().getName().toUpperCase()+ "_" + chunk.getX() + "_" + chunk.getZ()) != null)
+				if (alignment.getChunks().get(chunkTo.getWorld().getName().toUpperCase()+ "_" + chunkTo.getX() + "_" + chunkTo.getZ()) != null)
 					return true;
 			}
 		} catch (CoreStateInitException e)

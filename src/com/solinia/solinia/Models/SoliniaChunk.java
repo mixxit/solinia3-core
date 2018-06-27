@@ -8,6 +8,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidChunkSettingException;
@@ -77,13 +78,11 @@ public class SoliniaChunk {
 		if (!isInZone(world))
 			return false;
 		
-		SoliniaZone zone = getFirstZone();
-		
-		if (zone == null)
-			return false;
-		
-		if (zone.getMiningLootTableId() > 0 || zone.getFishingLootTableId() > 0 || zone.getForagingLootTableId() > 0 || zone.getForestryMinSkill() > 0)
-			return true;
+		for (SoliniaZone zone : getZones(world))
+		{
+			if (zone.getMiningLootTableId() > 0 || zone.getFishingLootTableId() > 0 || zone.getForagingLootTableId() > 0 || zone.getForestryMinSkill() > 0)
+				return true;
+		}
 		
 		return false;
 	}
@@ -99,7 +98,7 @@ public class SoliniaChunk {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (getFirstBlockLocation(world).distance(
-						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
+						new Location(world, zone.getX(), 0, zone.getZ())) < zone.getSize())
 					return true;
 			}
 		} catch (CoreStateInitException e) {
@@ -108,31 +107,6 @@ public class SoliniaChunk {
 		}
 
 		return false;
-	}
-	
-	public SoliniaZone getFirstZone() {
-		
-		World world = getWorld();
-		
-		if (world == null)
-			return null;
-		
-		return getFirstZone(world);
-	}
-	
-	public SoliniaZone getFirstZone(World world) {
-		
-		try {
-			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
-				if (getFirstBlockLocation(world).distance(
-						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
-					return zone;
-			}
-		} catch (CoreStateInitException e) {
-			return null;
-		}
-		
-		return null;
 	}
 	
 	public List<SoliniaZone> getZones() {
@@ -149,7 +123,7 @@ public class SoliniaChunk {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (getFirstBlockLocation(world).distance(
-						new Location(world, zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
+						new Location(world, zone.getX(), 0, zone.getZ())) < zone.getSize())
 					zones.add(zone);
 			}
 		} catch (CoreStateInitException e) {
@@ -176,6 +150,15 @@ public class SoliniaChunk {
 		sender.sendMessage("- X: " + ChatColor.GOLD + getChunkX() + ChatColor.RESET);
 		sender.sendMessage("- Z: " + ChatColor.GOLD + getChunkZ() + ChatColor.RESET);
 		sender.sendMessage("- lore: " + ChatColor.GOLD + getLore() + ChatColor.RESET);
+		
+		if (sender instanceof Player)
+		{
+			Player player = (Player)sender;
+			for(SoliniaZone zone : getZones(player.getWorld()))
+			{
+				player.sendMessage("In Zone: " + zone.getName());
+			}
+		}
 	}
 
 	public void editSetting(String setting, String value) throws InvalidChunkSettingException
