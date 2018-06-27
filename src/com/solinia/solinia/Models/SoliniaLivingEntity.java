@@ -1326,7 +1326,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									+ " damage [PetHP:" + attackerEntity.getHealth() + "]"));
 				}
 			}
-
+			
+			if(!arrowHit)
 			if (getDoubleAttackCheck()) {
 				// Only players get skill rise
 				if (attackerEntity instanceof Player) {
@@ -1339,6 +1340,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				defender.damage(my_hit.damage_done, attackerEntity);
 			}
 			
+			if(!arrowHit)
 			if (getDualWieldCheck()) {
 				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
 				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);

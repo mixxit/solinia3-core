@@ -721,6 +721,8 @@ public class Utils {
 	}
 
 	public static int getSkillCap(String skillname, ISoliniaClass profession, int level, String specialisation) {
+		skillname = skillname.toUpperCase();
+		
 		if (!Utils.isValidSkill(skillname.toUpperCase()))
 			return 0;
 
@@ -742,7 +744,7 @@ public class Utils {
 		// TODO - Move all these skill cap bonuses to the race configuration
 		// classes
 
-		if (skillname.equals("SLASHING")) {
+		if (skillname.toUpperCase().equals("SLASHING")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("PALADIN")
@@ -759,7 +761,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("BACKSTAB")) {
+		if (skillname.toUpperCase().equals("BACKSTAB")) {
 			if (profession != null)
 				if (profession.getName().toUpperCase().equals("ROGUE")) {
 					int cap = (int) ((5 * level) + 5);
@@ -769,7 +771,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("TAUNT")) {
+		if (skillname.toUpperCase().equals("TAUNT")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("RANGER")
@@ -784,7 +786,7 @@ public class Utils {
 				}
 		}
 		
-		if (skillname.equals("BINDWOUND")) {
+		if (skillname.toUpperCase().equals("BINDWOUND")) {
 			if (profession != null)
 			{
 				if ((profession.getName().toUpperCase().equals("WARRIOR")
@@ -831,7 +833,7 @@ public class Utils {
 			
 		}
 
-		if (skillname.equals("CRUSHING")) {
+		if (skillname.toUpperCase().equals("CRUSHING")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
@@ -851,7 +853,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("DODGE")) {
+		if (skillname.toUpperCase().equals("DODGE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
@@ -871,7 +873,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("RIPOSTE")) {
+		if (skillname.toUpperCase().equals("RIPOSTE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
@@ -891,7 +893,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("DOUBLEATTACK")) {
+		if (skillname.toUpperCase().equals("DOUBLEATTACK")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
@@ -910,7 +912,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("ARCHERY")) {
+		if (skillname.toUpperCase().equals("ARCHERY")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
@@ -923,7 +925,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("MEDITATION")) {
+		if (skillname.toUpperCase().equals("MEDITATION")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("DRUID")
 						|| profession.getName().toUpperCase().equals("WIZARD")
@@ -941,7 +943,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("OFFENSE")) {
+		if (skillname.toUpperCase().equals("OFFENSE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
@@ -961,7 +963,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("DEFENSE")) {
+		if (skillname.toUpperCase().equals("DEFENSE")) {
 			if (profession != null)
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("ROGUE")
@@ -981,7 +983,7 @@ public class Utils {
 				}
 		}
 
-		if (skillname.equals("SPECIALISEABJURATION")) {
+		if (skillname.toUpperCase().equals("SPECIALISEABJURATION")) {
 			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
@@ -1001,7 +1003,7 @@ public class Utils {
 			}
 		}
 
-		if (skillname.equals("SPECIALISEALTERATION")) {
+		if (skillname.toUpperCase().equals("SPECIALISEALTERATION")) {
 			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
@@ -1021,7 +1023,7 @@ public class Utils {
 			}
 		}
 
-		if (skillname.equals("SPECIALISECONJURATION")) {
+		if (skillname.toUpperCase().equals("SPECIALISECONJURATION")) {
 			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
@@ -1041,7 +1043,7 @@ public class Utils {
 			}
 		}
 
-		if (skillname.equals("SPECIALISEDIVINATION")) {
+		if (skillname.toUpperCase().toUpperCase().equals("SPECIALISEDIVINATION")) {
 			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
@@ -1061,7 +1063,7 @@ public class Utils {
 			}
 		}
 		
-		if (skillname.equals("ALCHEMY")) {
+		if (skillname.toUpperCase().equals("ALCHEMY")) {
 			return 255;
 		}
 		
@@ -1069,11 +1071,11 @@ public class Utils {
 			return 255;
 		}
 		
-		if (skillname.equals("TAILORING")) {
+		if (skillname.toUpperCase().equals("TAILORING")) {
 			return 255;
 		}
 		
-		if (skillname.equals("FLETCHING")) {
+		if (skillname.toUpperCase().equals("FLETCHING")) {
 			return 255;
 		}
 		
@@ -1081,15 +1083,15 @@ public class Utils {
 			return 255;
 		}
 		
-		if (skillname.equals("TINKERING")) {
+		if (skillname.toUpperCase().equals("TINKERING")) {
 			return 255;
 		}
 		
-		if (skillname.equals("MAKEPOISON")) {
+		if (skillname.toUpperCase().equals("MAKEPOISON")) {
 			return 255;
 		}
 
-		if (skillname.equals("SPECIALISEEVOCATION")) {
+		if (skillname.toUpperCase().equals("SPECIALISEEVOCATION")) {
 			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
