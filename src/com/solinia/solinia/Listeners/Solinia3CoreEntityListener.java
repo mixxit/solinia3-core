@@ -31,6 +31,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
+
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -279,6 +281,30 @@ public class Solinia3CoreEntityListener implements Listener {
 
 			}
 		}
+		
+		if (damagecause.getDamager() instanceof LivingEntity)
+		if (damagecause.getDamager().getLocation().distance(event.getEntity().getLocation()) > 15)
+		{
+			if (damagecause.getDamager() instanceof Player)
+				damagecause.getDamager().sendMessage("You were too far to cause damage");
+			
+			Utils.CancelEvent(event);
+			return;
+		}
+		
+		if (damagecause.getDamager() instanceof Arrow)
+		{
+			ProjectileSource source = ((Arrow)damagecause.getDamager()).getShooter();
+			if (source instanceof LivingEntity)
+			if (((LivingEntity)source).getLocation().distance(event.getEntity().getLocation()) > 15)
+			{
+				if (source instanceof Player)
+					((Player)source).sendMessage("You were too far to cause damage");
+				
+				Utils.CancelEvent(event);
+				return;
+			}
+		}		
 		
 		// Detect damage caused by entity collision response and cancel it
 		// We will move all damage from NPCs to the NPC combat loop
