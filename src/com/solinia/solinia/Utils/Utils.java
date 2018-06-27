@@ -1060,6 +1060,34 @@ public class Utils {
 				}
 			}
 		}
+		
+		if (skillname.equals("ALCHEMY")) {
+			return 255;
+		}
+		
+		if (skillname.equals("JEWELRYMAKING")) {
+			return 255;
+		}
+		
+		if (skillname.equals("TAILORING")) {
+			return 255;
+		}
+		
+		if (skillname.equals("FLETCHING")) {
+			return 255;
+		}
+		
+		if (skillname.equals("BLACKSMITHING")) {
+			return 255;
+		}
+		
+		if (skillname.equals("TINKERING")) {
+			return 255;
+		}
+		
+		if (skillname.equals("MAKEPOISON")) {
+			return 255;
+		}
 
 		if (skillname.equals("SPECIALISEEVOCATION")) {
 			if (profession != null) {
