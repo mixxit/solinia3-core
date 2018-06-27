@@ -102,7 +102,7 @@ public class CommandTrader implements CommandExecutor {
 				}
 			}
 			
-			player.sendMessage("Economic Zone: [" + chunk.getChunkX() + "," + chunk.getChunkZ() + "]");
+			player.sendMessage("Economic Zone: [" + chunk.getChunkX() + "," + chunk.getChunkZ() + "] ["+player.getLocation().getChunk().getX() + "," + player.getLocation().getChunk().getZ()+"]");
 			player.sendMessage("Material Zone: " + ChatColor.GOLD + isInMaterialZone + ChatColor.RESET);
 			
 			if (alignmentChunk != null)

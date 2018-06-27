@@ -1008,7 +1008,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(event.getCursor());
-						int individualprice = item.getWorth();
+						long individualprice = item.getWorth();
 
 						// Try to read from the itemstack worth
 						Integer merchantworth = ItemStackUtils.getMerchantItemWorth(event.getCursor());
@@ -1020,7 +1020,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 						// Total price
 
-						int price = individualprice * event.getCursor().getAmount();
+						long price = individualprice * event.getCursor().getAmount();
 
 						if (price > StateManager.getInstance().getEconomy()
 								.getBalance((Player) event.getView().getPlayer())) {
@@ -1122,13 +1122,13 @@ public class Solinia3CorePlayerListener implements Listener {
 					try {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(event.getCursor());
-						int individualprice = item.getWorth();
+						long individualprice = item.getWorth();
 
 						// Total price
-						int price = individualprice * event.getCursor().getAmount();
+						long price = individualprice * event.getCursor().getAmount();
 						
 						final UUID finaluuid = event.getView().getPlayer().getUniqueId();
-						final int finalprice = price;
+						final long finalprice = price;
 						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
 								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 									public void run() {

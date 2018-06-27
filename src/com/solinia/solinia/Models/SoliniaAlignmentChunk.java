@@ -1,9 +1,11 @@
 package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -97,11 +99,11 @@ public class SoliniaAlignmentChunk {
 			for (SoliniaZone zone : alignment.getMaterialZones())
 			{
 				Location locationfrom = new Location(bukkitworld, alignmentChunk.getChunkX(), 0, alignmentChunk.getChunkZ());
-				Location locationto = new Location(bukkitworld, zone.getX(), 0, zone.getZ());
-				
-				int tmpdistance = (int) locationfrom.distance(locationto);
-				int distance = tmpdistance / 16;
-				System.out.println("Item distance was: " + distance);
+				Location tmplocationto = new Location(bukkitworld, zone.getX(), 0, zone.getZ());
+				Chunk chunk = bukkitworld.getChunkAt(tmplocationto);
+				Location locationto = new Location(bukkitworld, chunk.getX(), 0, chunk.getZ());
+
+				int distance = (int) locationfrom.distance(locationto);
 				
 				if (distance < 1)
 					distance = 1;
@@ -153,7 +155,7 @@ public class SoliniaAlignmentChunk {
 				}
 			}
 			
-			List<Integer> existingItemIds = new ArrayList<Integer>();
+			HashMap<Integer, Long> existingItemIds = new HashMap<Integer, Long>();
 		
 			for (UniversalTemporarySoliniaLootTable templootTable : lootTables)
 			{
@@ -162,8 +164,13 @@ public class SoliniaAlignmentChunk {
 					ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
 					for(ISoliniaLootDropEntry lootdropentry : lootdrop.getEntries())
 					{
-						if (existingItemIds.contains(lootdropentry.getItemid()))
-							continue;
+						if (existingItemIds.containsKey(lootdropentry.getItemid()))
+						{
+							if (existingItemIds.get(lootdropentry.getItemid()) < templootTable.distance)
+								continue;
+							
+							existingItemIds.remove(lootdropentry.getItemid());
+						}
 						
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(lootdropentry.getItemid());
 						if (item == null)
@@ -175,9 +182,10 @@ public class SoliniaAlignmentChunk {
 						UniversalMerchantEntry ume = new UniversalMerchantEntry();
 						ume.setItemid(lootdropentry.getItemid());
 						ume.setTemporaryquantitylimit(64);
+						
 						ume.setCostMultiplier(templootTable.distance);
 						entries.add(ume);
-						existingItemIds.add(lootdropentry.getItemid());
+						existingItemIds.put(lootdropentry.getItemid(), templootTable.distance);
 					}
 				}
 			}

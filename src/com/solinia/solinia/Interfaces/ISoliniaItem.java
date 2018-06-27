@@ -145,7 +145,7 @@ public interface ISoliniaItem {
 
 	void setMagicResist(int magicResist);
 
-	int getWorth();
+	long getWorth();
 
 	void setWorth(int worth);
 
@@ -303,7 +303,7 @@ public interface ISoliniaItem {
 
 	void setTerritoryFlag(boolean territoryFlag);
 
-	ItemStack asItemStackForMerchant(int costmultiplier);
+	ItemStack asItemStackForMerchant(long costmultiplier);
 
 	boolean isReagent();
 

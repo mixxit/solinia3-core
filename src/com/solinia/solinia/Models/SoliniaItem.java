@@ -451,7 +451,7 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public int getWorth() {
+	public long getWorth() {
 		return worth;
 	}
 
@@ -1587,7 +1587,7 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public ItemStack asItemStackForMerchant(int costmultiplier) {
+	public ItemStack asItemStackForMerchant(long costmultiplier) {
 		return ItemStackAdapter.Adapt(this, costmultiplier);
 	}
 

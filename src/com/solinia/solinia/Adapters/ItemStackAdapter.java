@@ -40,7 +40,7 @@ import net.minecraft.server.v1_12_R1.NBTTagList;
 import net.minecraft.server.v1_12_R1.NBTTagString;
 
 public class ItemStackAdapter {
-	public static ItemStack Adapt(ISoliniaItem soliniaItem, int costmultiplier) {
+	public static ItemStack Adapt(ISoliniaItem soliniaItem, long costmultiplier) {
 		
 		ItemStack stack = new ItemStack(Material.valueOf(soliniaItem.getBasename().toUpperCase()), 1, soliniaItem.getColor());
 		
