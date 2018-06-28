@@ -249,4 +249,8 @@ public interface ISoliniaNPC {
 	boolean isPlant();
 
 	void setPlant(boolean isPlant);
+
+	int getChanceToRespawnOnDeath();
+
+	void setChanceToRespawnOnDeath(int chanceToRespawnOnDeath);
 }

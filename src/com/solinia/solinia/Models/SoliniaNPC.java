@@ -79,6 +79,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isPetControllable = true;
 	private int forcedMaxHp = 0;
 	private int npcSpellList = 0;
+	private int chanceToRespawnOnDeath = 0;
 	
 	@Override
 	public int getId() {
@@ -334,7 +335,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " " + "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
-		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET);
+		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD + getChanceToRespawnOnDeath() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
 		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
@@ -428,6 +429,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "level":
 			setLevel(Integer.parseInt(value));
+			break;
+		case "chancetorespawnondeath":
+			setChanceToRespawnOnDeath(Integer.parseInt(value));
 			break;
 		case "factionid":
 			if (Integer.parseInt(value) == 0) {
@@ -1376,6 +1380,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setPlant(boolean isPlant) {
 		this.isPlant = isPlant;
+	}
+
+	@Override
+	public int getChanceToRespawnOnDeath() {
+		return chanceToRespawnOnDeath;
+	}
+
+	@Override
+	public void setChanceToRespawnOnDeath(int chanceToRespawnOnDeath) {
+		this.chanceToRespawnOnDeath = chanceToRespawnOnDeath;
 	}
 }
 

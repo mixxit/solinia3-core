@@ -728,20 +728,30 @@ public class Solinia3CoreEntityListener implements Listener {
 
 			if (livingEntity.getNpcid() > 0) {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
-				if (npc != null && !npc.getDeathGrantsTitle().equals("")) {
-					player.grantTitle(npc.getDeathGrantsTitle());
-				}
-
-				if (npc.isBoss() || npc.isRaidboss()) {
-					player.grantTitle("the Vanquisher");
-				}
-
-				if (npc.isBoss() || npc.isRaidboss()) {
-					Utils.BroadcastPlayers("[VICTORY] The foundations of the earth shake following the destruction of "
-							+ npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!");
+				
+				if (npc != null)
+				{
+					if (npc.getChanceToRespawnOnDeath() > 0)
+					if (Utils.RandomBetween(1, 100) <= npc.getChanceToRespawnOnDeath())
+					{
+							npc.Spawn(player.getBukkitPlayer().getLocation(), 1);
+					}
+					
+					if (!npc.getDeathGrantsTitle().equals("")) {
+						player.grantTitle(npc.getDeathGrantsTitle());
+					}
+	
+					if (npc.isBoss() || npc.isRaidboss()) {
+						player.grantTitle("the Vanquisher");
+					}
+	
+					if (npc.isBoss() || npc.isRaidboss()) {
+						Utils.BroadcastPlayers("[VICTORY] The foundations of the earth shake following the destruction of "
+								+ npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!");
+					}
 				}
 			}
-
+			
 			player.giveMoney(1);
 			livingEntity.dropLoot();
 		} catch (CoreStateInitException e) {
