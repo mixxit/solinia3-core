@@ -1064,4 +1064,8 @@ public interface ISoliniaSpell {
 	boolean isRangedProc();
 
 	int getActSpellDuration(ISoliniaLivingEntity solEntity, int duration);
+
+	boolean isBossApplyable();
+
+	boolean isRaidApplyable();
 }

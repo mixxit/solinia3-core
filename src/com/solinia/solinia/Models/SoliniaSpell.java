@@ -4127,6 +4127,30 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		}
 		
+		if (solLivingEntity.isNPC())
+		{
+			if (source instanceof Player || source instanceof Tameable)
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+				if (npc != null)
+				{
+					if (npc.isBoss() || npc.isRaidboss())
+						if (!soliniaSpell.isBossApplyable())
+						{
+							source.sendMessage(ChatColor.RED + "This NPC is immune to runspeed and mezmersization changes");
+							return false;
+						}
+					
+					if (npc.isRaidheroic())
+						if (!soliniaSpell.isRaidApplyable())
+						{
+							source.sendMessage(ChatColor.RED + "This NPC is immune to runspeed and mezmersization changes");
+							return false;
+						}
+				}
+			}
+		}
+		
 		// Always allow self only spells if the target and source is the self
 		if (source.getUniqueId().equals(target.getUniqueId()) && 
 				Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
@@ -5597,5 +5621,31 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// TODO mod
 		
 		return res;
+	}
+
+	@Override
+	public boolean isBossApplyable() {
+		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed) ||
+				getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed) ||
+				getSpellEffectTypes().contains(SpellEffectType.Mez) || 
+				getSpellEffectTypes().contains(SpellEffectType.Charm) ||
+				getSpellEffectTypes().contains(SpellEffectType.Root)
+		)
+			return false;
+		
+		return true;
+	}
+
+	@Override
+	public boolean isRaidApplyable() {
+		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed) ||
+				getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed) ||
+				getSpellEffectTypes().contains(SpellEffectType.Mez) ||
+				getSpellEffectTypes().contains(SpellEffectType.Charm) ||
+				getSpellEffectTypes().contains(SpellEffectType.Root)
+		)
+			return false;
+		
+		return true;
 	}
 }
