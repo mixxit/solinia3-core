@@ -318,7 +318,7 @@ public class CommandEquip implements CommandExecutor {
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getShouldersItem());
+						newclaim.setItemid(solPlayer.getForearmsItem());
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setForearmsItem(0);
@@ -342,7 +342,7 @@ public class CommandEquip implements CommandExecutor {
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getShouldersItem());
+						newclaim.setItemid(solPlayer.getArmsItem());
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setArmsItem(0);
@@ -366,7 +366,7 @@ public class CommandEquip implements CommandExecutor {
 						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getShouldersItem());
+						newclaim.setItemid(solPlayer.getHandsItem());
 						newclaim.setClaimed(false);
 						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 						solPlayer.setHandsItem(0);
@@ -498,7 +498,7 @@ public class CommandEquip implements CommandExecutor {
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getShouldersItem());
+								newclaim.setItemid(solPlayer.getArmsItem());
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setArmsItem(0);
@@ -524,7 +524,7 @@ public class CommandEquip implements CommandExecutor {
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getShouldersItem());
+								newclaim.setItemid(solPlayer.getForearmsItem());
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setForearmsItem(0);
@@ -550,7 +550,7 @@ public class CommandEquip implements CommandExecutor {
 								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getShouldersItem());
+								newclaim.setItemid(solPlayer.getHandsItem());
 								newclaim.setClaimed(false);
 								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 								solPlayer.setHandsItem(0);
