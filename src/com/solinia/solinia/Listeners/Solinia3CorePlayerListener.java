@@ -1261,7 +1261,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			String players = "";
 			try
 			{
-				solplayer.getWorld().getPlayerIpNameMappings().get(event.getPlayer().getAddress().getAddress().toString()).add(event.getPlayer().getUniqueId().toString());
+				if (!solplayer.getWorld().getPlayerIpNameMappings().get(event.getPlayer().getAddress().getAddress().toString()).contains(event.getPlayer().getUniqueId().toString()))
+					solplayer.getWorld().getPlayerIpNameMappings().get(event.getPlayer().getAddress().getAddress().toString()).add(event.getPlayer().getUniqueId().toString());
 				
 				ArrayList<String> playerUuids = solplayer.getWorld().getPlayerIpNameMappings().get(event.getPlayer().getAddress().getAddress().toString());
 				
@@ -1270,7 +1271,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				{
 					try
 					{
-						players += Bukkit.getOfflinePlayer(playerUuid).getName() + " ";
+						players += Bukkit.getOfflinePlayer(UUID.fromString(playerUuid)).getName() + " ";
 					} catch (Exception e)
 					{
 						

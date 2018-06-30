@@ -116,7 +116,7 @@ public class SoliniaWorld {
 				+ ")" + ChatColor.RESET);
 		} else {
 			sender.sendMessage(
-					"- miningloottableid: " + ChatColor.GOLD + getPlayerStartLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+					"- playerstartloottableid: " + ChatColor.GOLD + getPlayerStartLootTableId() + " (No Loot Table)" + ChatColor.RESET);
 		}
 	}
 
