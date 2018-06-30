@@ -436,4 +436,6 @@ public interface ISoliniaPlayer extends Serializable {
 	void setHandsItemInstance(String handsItemInstance);
 
 	void setLastLocation(Location location);
+
+	SoliniaWorld getWorld();
 }

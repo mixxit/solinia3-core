@@ -6,9 +6,16 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaPlayer;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaPlayerFactory {
 
@@ -38,7 +45,37 @@ public class SoliniaPlayerFactory {
 		soliniaPlayer.setAAExperience(0d);
 		soliniaPlayer.setMana(0);
 		
+		// give newbie items
+		int loottableId = soliniaPlayer.getWorld().getPlayerStartLootTableId();
+		if (loottableId > 0)
+		{
+			dropNewLootItems(player, loottableId);
+		}
+		
 		return soliniaPlayer;
+	}
+
+	private static void dropNewLootItems(Player player, int loottableId) {
+		try
+		{
+		ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager()
+				.getLootTable(loottableId);
+		for (ISoliniaLootTableEntry le : StateManager.getInstance().getConfigurationManager()
+				.getLootTable(loottable.getId()).getEntries()) {
+			ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager()
+					.getLootDrop(le.getLootdropid());
+			for(ISoliniaLootDropEntry lde : ld.getEntries())
+			{
+				ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
+				player.getWorld().dropItemNaturally(player.getLocation(), i.asItemStack());
+			}
+			
+			}
+		
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	public static String[] getRandomNames(final int characterLength, final int generateSize) {

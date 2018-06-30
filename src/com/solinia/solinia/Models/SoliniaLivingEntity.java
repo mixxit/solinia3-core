@@ -87,6 +87,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
+	public SoliniaWorld getWorld()
+	{
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().getWorld(getBukkitLivingEntity().getWorld().getName().toUpperCase());
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
+	
+	@Override
 	public void autoAttackEnemy(ISoliniaLivingEntity defender) {
 		if (getBukkitLivingEntity().isDead()) {
 			try {

@@ -140,6 +140,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setIgnoredPlayers(List<UUID> ignoredPlayers) {
 		this.ignoredPlayers = ignoredPlayers;
 	}
+	
+	@Override
+	public SoliniaWorld getWorld()
+	{
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().getWorld(getBukkitPlayer().getWorld().getName().toUpperCase());
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
 
 	@Override
 	public UUID getUUID() {

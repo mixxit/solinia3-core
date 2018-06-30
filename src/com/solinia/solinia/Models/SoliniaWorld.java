@@ -1,5 +1,6 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Chunk;
@@ -25,8 +26,9 @@ public class SoliniaWorld {
 	private int miningLootTableId = 0;
 	private int foragingMinSkill = 0;
 	private int foragingLootTableId = 0;
-
-
+	private int playerStartLootTableId = 0;
+	private ConcurrentHashMap<String, ArrayList<String>> playerIpNameMappings = new ConcurrentHashMap<String, ArrayList<String>>(); 
+	
 	public Integer getId() {
 		return id;
 	}
@@ -106,6 +108,10 @@ public class SoliniaWorld {
 			sender.sendMessage(
 					"- miningloottableid: " + ChatColor.GOLD + getMiningLootTableId() + " (No Loot Table)" + ChatColor.RESET);
 		}
+		
+		sender.sendMessage("- playerstartloottableid: " + ChatColor.GOLD + getPlayerStartLootTableId() + " ("
+				+ StateManager.getInstance().getConfigurationManager().getLootTable(getPlayerStartLootTableId()).getName()
+				+ ")" + ChatColor.RESET);
 	}
 
 	public void editSetting(String setting, String value)
@@ -176,9 +182,22 @@ public class SoliniaWorld {
 				throw new InvalidWorldSettingException("Loottable ID does not exist");
 			setMiningLootTableId(Integer.parseInt(value));
 			break;
+		case "playerstartloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setPlayerStartLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable4 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable4 == null)
+				throw new InvalidWorldSettingException("Loottable ID does not exist");
+			setPlayerStartLootTableId(Integer.parseInt(value));
+			break;
 		default:
 			throw new InvalidWorldSettingException(
-					"Invalid setting. Valid Options are: forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill");
+					"Invalid setting. Valid Options are: forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill,playerstartloottableid");
 		}
 	}
 	
@@ -246,5 +265,21 @@ public class SoliniaWorld {
 		}
 		
 		return null;
+	}
+
+	public int getPlayerStartLootTableId() {
+		return playerStartLootTableId;
+	}
+
+	public void setPlayerStartLootTableId(int playerStartLootTableId) {
+		this.playerStartLootTableId = playerStartLootTableId;
+	}
+
+	public ConcurrentHashMap<String, ArrayList<String>> getPlayerIpNameMappings() {
+		return playerIpNameMappings;
+	}
+
+	public void setPlayerIpNameMappings(ConcurrentHashMap<String, ArrayList<String>> playerIpNameMappings) {
+		this.playerIpNameMappings = playerIpNameMappings;
 	}
 }

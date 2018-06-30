@@ -265,4 +265,6 @@ public interface ISoliniaLivingEntity
 	void damageAlertHook(double damage, Entity sourceEntity);
 
 	void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity);
+
+	SoliniaWorld getWorld();
 }

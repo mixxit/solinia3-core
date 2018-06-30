@@ -1,6 +1,7 @@
 package com.solinia.solinia.Listeners;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -1252,9 +1253,39 @@ public class Solinia3CorePlayerListener implements Listener {
 			else
 				solplayer.setChosenRace(false);
 
+			if (solplayer.getWorld().getPlayerIpNameMappings().get(event.getPlayer().getAddress().getAddress().toString()) == null)
+			{
+				solplayer.getWorld().getPlayerIpNameMappings().put(event.getPlayer().getAddress().getAddress().toString(), new ArrayList<String>());
+			}
+			
+			String players = "";
+			try
+			{
+				solplayer.getWorld().getPlayerIpNameMappings().get(event.getPlayer().getAddress().getAddress().toString()).add(event.getPlayer().getUniqueId().toString());
+				
+				ArrayList<String> playerUuids = solplayer.getWorld().getPlayerIpNameMappings().get(event.getPlayer().getAddress().getAddress().toString());
+				
+				
+				for(String playerUuid : playerUuids)
+				{
+					try
+					{
+						players += Bukkit.getOfflinePlayer(playerUuid).getName() + " ";
+					} catch (Exception e)
+					{
+						
+					}
+				}
+			
+			} catch (Exception e)
+			{
+				// not vital if this fails
+			}
+
+			
 			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,
 					StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),
-					event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game");
+					event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game (" + players.trim() + ")");
 			
 			try
 		    {
