@@ -109,9 +109,15 @@ public class SoliniaWorld {
 					"- miningloottableid: " + ChatColor.GOLD + getMiningLootTableId() + " (No Loot Table)" + ChatColor.RESET);
 		}
 		
+		if (getPlayerStartLootTableId() > 0)
+		{
 		sender.sendMessage("- playerstartloottableid: " + ChatColor.GOLD + getPlayerStartLootTableId() + " ("
 				+ StateManager.getInstance().getConfigurationManager().getLootTable(getPlayerStartLootTableId()).getName()
 				+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- miningloottableid: " + ChatColor.GOLD + getPlayerStartLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
 	}
 
 	public void editSetting(String setting, String value)
