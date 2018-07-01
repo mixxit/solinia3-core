@@ -65,7 +65,7 @@ public class CommandCharacter implements CommandExecutor {
 					
 					if (character.getClassObj() != null)
 					{
-						charclass = character.getClass().getName();
+						charclass = character.getClassObj().getName();
 					}
 					
 					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + ChatColor.RESET;
