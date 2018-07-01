@@ -623,7 +623,7 @@ public class SoliniaItem implements ISoliniaItem {
 
 		if (!isConsumable)
 		if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
-			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E] (Hold crouch or use /trance to meditate)");
+			player.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
 			return false;
 		}
 		
@@ -781,7 +781,7 @@ public class SoliniaItem implements ISoliniaItem {
 
 		if (!isConsumable)
 		if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
-			player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]  (Hold crouch or use /trance to meditate)");
+			player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]");
 			return false;
 		}
 		

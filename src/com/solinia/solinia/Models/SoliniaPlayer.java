@@ -1220,7 +1220,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getPlayer());
 					if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(event.getPlayer()).getMana()) {
 						event.getPlayer().sendMessage(
-								ChatColor.GRAY + "Insufficient Mana  [E] (Hold crouch or use /trance to meditate)");
+								ChatColor.GRAY + "Insufficient Mana  [E]");
 						return;
 					}
 
@@ -1362,7 +1362,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 
 			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
-				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]  (Hold crouch or use /trance to meditate)");
+				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]");
 				return;
 			}
 
