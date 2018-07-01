@@ -408,6 +408,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				getBukkitPlayer().setMaxHealth(calculatedhp);
 				getBukkitPlayer().setHealthScaled(true);
 				getBukkitPlayer().setHealthScale(40D);
+				
+				ScoreboardUtils.UpdateGroupScoreboardForEveryone(getBukkitPlayer().getUniqueId(), getGroup());
 			} catch (CoreStateInitException e) {
 
 			}
@@ -632,12 +634,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
 
-			if (getGroup() != null) {
-				for (UUID uuid : getGroup().getMembers()) {
-					ScoreboardUtils.UpdateGroupScoreboard(uuid, getGroup());
-				}
-			}
-
 			// Title rewards
 			if (newlevel >= 10) {
 				if (!getAvailableTitles().contains("the Apprentice")) {
@@ -698,13 +694,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (Double.compare(newlevel, level) < 0) {
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You lost a level (" + newlevel + ")!");
-
-			if (getGroup() != null) {
-				for (UUID uuid : getGroup().getMembers()) {
-					ScoreboardUtils.UpdateGroupScoreboard(uuid, getGroup());
-				}
-			}
-
 			updateMaxHp();
 		}
 	}
@@ -3224,7 +3213,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					solLivingEntity.getBukkitLivingEntity().sendMessage("Your wounds are being bound by " + getBukkitPlayer().getDisplayName());
 				
 				if (!solLivingEntity.getBukkitLivingEntity().isDead())
-				solLivingEntity.getBukkitLivingEntity().setHealth(amount);
+				{
+					solLivingEntity.setHealth(amount);
+				}
 				return true;
 			}
 			else {
@@ -3371,6 +3362,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setHandsItemInstance(String handsItemInstance) {
 		this.handsItemInstance = handsItemInstance;
+	}
+
+	@Override
+	public ISoliniaLivingEntity getSoliniaLivingEntity() {
+		try {
+			return SoliniaLivingEntityAdapter.Adapt((LivingEntity)getBukkitPlayer());
+		} catch (CoreStateInitException e) {
+			return null;
+		}
 	}
 
 }

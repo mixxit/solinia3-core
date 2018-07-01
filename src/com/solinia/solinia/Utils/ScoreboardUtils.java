@@ -23,6 +23,7 @@ import com.solinia.solinia.Models.CastingSpell;
 import net.md_5.bungee.api.ChatColor;
 
 public class ScoreboardUtils {
+
 	public static void UpdateScoreboard(Player player, int mana) {
 
 		if (player != null) {
@@ -46,15 +47,13 @@ public class ScoreboardUtils {
 
 				String target = "";
 				LivingEntity entityTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
-				if (entityTarget != null)
-				{
+				if (entityTarget != null) {
 					ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(entityTarget);
-					if (solLivingEntity != null)
-					{
+					if (solLivingEntity != null) {
 						ISoliniaLivingEntity playerLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
-						if (playerLivingEntity != null)
-						{
-							target = solLivingEntity.getLevelCon(playerLivingEntity) + entityTarget.getCustomName() + ChatColor.RESET;
+						if (playerLivingEntity != null) {
+							target = solLivingEntity.getLevelCon(playerLivingEntity) + entityTarget.getCustomName()
+									+ ChatColor.RESET;
 						} else {
 							target = entityTarget.getCustomName();
 						}
@@ -63,18 +62,18 @@ public class ScoreboardUtils {
 					}
 				}
 				bossbar.setTitle("MANA: " + ChatColor.BLUE + " " + mana + ChatColor.RESET + " TARGET: " + target);
-				
+
 				CastingSpell casting = StateManager.getInstance().getEntityManager().getCasting(player);
-				
+
 				double progress = 0d;
-				if (casting != null && casting.timeLeftMilliseconds > 0 && casting.getSpell() != null)
-				{
-					double progressmilliseconds = ((double)casting.getSpell().getCastTime() - casting.timeLeftMilliseconds);
-					progress = (double)((double)progressmilliseconds / (double)casting.getSpell().getCastTime());
-					
+				if (casting != null && casting.timeLeftMilliseconds > 0 && casting.getSpell() != null) {
+					double progressmilliseconds = ((double) casting.getSpell().getCastTime()
+							- casting.timeLeftMilliseconds);
+					progress = (double) ((double) progressmilliseconds / (double) casting.getSpell().getCastTime());
+
 					if (progress < 0d)
 						progress = 0d;
-					
+
 					if (progress > 1d)
 						progress = 1d;
 				}
@@ -99,21 +98,44 @@ public class ScoreboardUtils {
 				.registerNewObjective("health", "health");
 		health.setDisplayName(ChatColor.RED + "❤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
-
-		if (group != null)
-		for (UUID groupmemberuuid : group.getMembers()) {
-			try {
-				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(groupmemberuuid));
-				if (groupmemberuuid.equals(group.getOwner())) {
-					Score score = objective.getScore(ChatColor.GOLD + solplayer.getFullName() + "");
-					score.setScore(solplayer.getLevel());
-				} else {
-					Score score = objective.getScore(ChatColor.WHITE + solplayer.getFullName() + "");
-					score.setScore(solplayer.getLevel());
-				}
-			} catch (CoreStateInitException e) {
-				e.printStackTrace();
+		try {
+			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(uuid));
+			Score playerscore = objective.getScore(ChatColor.WHITE + solplayer.getFullName() + "");
+			playerscore.setScore((int) solplayer.getSoliniaLivingEntity().getHPRatio());
+			
+			LivingEntity playerpet = StateManager.getInstance().getEntityManager().getPet(Bukkit.getPlayer(uuid));
+			if (playerpet != null)
+			{
+				ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt(playerpet);
+				Score score = objective.getScore(ChatColor.GRAY + playerpet.getCustomName() + "");
+				score.setScore((int) solPet.getHPRatio());
 			}
+			
+			if (group != null)
+				for (UUID groupmemberuuid : group.getMembers()) {
+					if (groupmemberuuid.toString().equals(uuid))
+						continue;
+
+					solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(groupmemberuuid));
+					if (groupmemberuuid.equals(group.getOwner())) {
+						Score score = objective.getScore(ChatColor.GOLD + solplayer.getFullName() + "");
+						score.setScore((int) solplayer.getSoliniaLivingEntity().getHPRatio());
+					} else {
+						Score score = objective.getScore(ChatColor.WHITE + solplayer.getFullName() + "");
+						score.setScore((int) solplayer.getSoliniaLivingEntity().getHPRatio());
+					}
+					
+					LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(Bukkit.getPlayer(groupmemberuuid));
+					if (pet != null)
+					{
+						ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt(pet);
+						Score score = objective.getScore(ChatColor.GRAY + pet.getCustomName() + "");
+						score.setScore((int) solPet.getHPRatio());
+					}
+
+				}
+		} catch (CoreStateInitException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -135,9 +157,19 @@ public class ScoreboardUtils {
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(uuid));
 			Score score = objective.getScore(ChatColor.GOLD + solplayer.getFullName() + "");
-			score.setScore(solplayer.getLevel());
+			score.setScore((int) solplayer.getSoliniaLivingEntity().getHPRatio());
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void UpdateGroupScoreboardForEveryone(UUID uniqueId, ISoliniaGroup group) {
+		ScoreboardUtils.UpdateGroupScoreboard(uniqueId, group);
+		if (group != null) {
+			for (UUID uuid : group.getMembers()) {
+				ScoreboardUtils.UpdateGroupScoreboard(uuid, group);
+			}
+		}
+
 	}
 }

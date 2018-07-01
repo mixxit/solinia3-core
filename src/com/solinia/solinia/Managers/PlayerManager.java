@@ -273,7 +273,7 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer = SoliniaPlayerFactory.CreatePlayer(player,false);
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
-				player.setHealth(player.getMaxHealth());
+				solPlayer.getSoliniaLivingEntity().setHealth(player.getMaxHealth());
 			return solPlayer;
 		} catch (CoreStateInitException e) {
 			return null;
@@ -310,7 +310,7 @@ public class PlayerManager implements IPlayerManager {
 			updatePlayer(player, altSolPlayer);
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
-			player.setHealth(player.getMaxHealth());
+				solPlayer.getSoliniaLivingEntity().setHealth(player.getMaxHealth());
 			return altSolPlayer;
 		} catch (CoreStateInitException e) {
 			return null;

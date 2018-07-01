@@ -267,4 +267,6 @@ public interface ISoliniaLivingEntity
 	void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity);
 
 	SoliniaWorld getWorld();
+
+	public void setHealth(double health);
 }

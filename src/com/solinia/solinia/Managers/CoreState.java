@@ -441,10 +441,7 @@ public class CoreState {
 		group.getMembers().add(player.getUniqueId());
 		System.out.println("group: " + group.getId() + " gained a member: " + player.getDisplayName());
 		
-		for(UUID uuid : group.getMembers())
-		{
-			ScoreboardUtils.UpdateGroupScoreboard(uuid,group);
-		}
+		ScoreboardUtils.UpdateGroupScoreboardForEveryone(player.getUniqueId(),group);
 		
 		sendGroupMessage(player, "has joined the group!");
 		groups.put(group.getId(), group);

@@ -20,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -49,6 +50,7 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -1588,10 +1590,38 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void damageAlertHook(double damage, Entity sourceEntity) {
+		if (isPet()) 
+		{
+			LivingEntity owner = (LivingEntity) ((Tameable)getBukkitLivingEntity()).getOwner();
+			if (owner != null)
+			{
+				if (owner != null && owner instanceof Player)
+				{
+					try
+					{
+						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)owner);	
+						// HP warning to owner
+						if (this.getHPRatio() < 10)
+						{
+							owner.sendMessage(ChatColor.GRAY + "* Your pet says 'Master I am low on health!'");
+						}
+						
+					} catch (CoreStateInitException e)
+					{
+						
+					}
+				}
+			}
+		}
+		
 		if (isPlayer())
 		{
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+
+				ScoreboardUtils.UpdateGroupScoreboardForEveryone(getBukkitLivingEntity().getUniqueId(), solPlayer.getGroup());
+
+				// Update group
 				if (solPlayer.getGroup() != null)
 				{
 					if (this.getBukkitLivingEntity().getHealth() < ((this.getBukkitLivingEntity().getMaxHealth() / 100) * 10))
@@ -5422,30 +5452,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void PetThink(Player playerOwner) {
+		if (this.getBukkitLivingEntity() instanceof Sittable)
+		{
+			if (((Sittable)this.getBukkitLivingEntity()).isSitting())
+				((Sittable)this.getBukkitLivingEntity()).setSitting(false);
+		}
+		
 		if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getMaxHealth())
 		{
-			// HP warning to owner
-			if (this.getHPRatio() < 10)
-			{
-				if (playerOwner != null)
-					playerOwner.sendMessage(ChatColor.GRAY + "* Your pet says 'Master I am low on health!'");
-			}
-			
-			if (this.getBukkitLivingEntity() instanceof Sittable)
-			{
-				if (((Sittable)this.getBukkitLivingEntity()).isSitting())
-					((Sittable)this.getBukkitLivingEntity()).setSitting(false);
-			}
 			
 			// Pet regen is slow			
 			double newHealth = this.getBukkitLivingEntity().getHealth()+1;
 			if (newHealth < this.getBukkitLivingEntity().getMaxHealth())
 			{
 				if (!this.getBukkitLivingEntity().isDead())
-				this.getBukkitLivingEntity().setHealth(newHealth);
+				setHealth(newHealth);
 			} else {
 				if (!this.getBukkitLivingEntity().isDead())
-				this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getMaxHealth());
+				setHealth(this.getBukkitLivingEntity().getMaxHealth());
 			}
 		}
 		
@@ -5818,6 +5842,41 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e)
 		{
 			
+		}
+	}
+
+	@Override
+	public void setHealth(double health) {
+		if (!getBukkitLivingEntity().isDead())
+			getBukkitLivingEntity().setHealth(health);
+		
+		if (isPet())
+		{
+			Tameable tameable = (Tameable)getBukkitLivingEntity();
+			AnimalTamer tamer = tameable.getOwner();
+			if (tamer instanceof Player)
+			{
+				try
+				{
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)tamer);
+					ScoreboardUtils.UpdateGroupScoreboardForEveryone(solPlayer.getUUID(), solPlayer.getGroup());
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		}
+		
+		if (getBukkitLivingEntity() instanceof Player)
+		{
+			try
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity());
+				ScoreboardUtils.UpdateGroupScoreboardForEveryone(getBukkitLivingEntity().getUniqueId(), solPlayer.getGroup());
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 		}
 	}
 }

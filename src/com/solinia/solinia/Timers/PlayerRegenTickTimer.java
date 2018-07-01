@@ -174,7 +174,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 				amount = 0;
 
 			if (!player.isDead())
-			player.setHealth(amount);
+			solplayer.getSoliniaLivingEntity().setHealth(amount);
 		}
 		
 		// Process Mana Regeneration

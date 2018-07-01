@@ -60,7 +60,15 @@ public class CommandCharacter implements CommandExecutor {
 					
 					TextComponent tc = new TextComponent();
 					tc.setText("- " + ChatColor.LIGHT_PURPLE + character.getFullNameWithTitle() + ChatColor.RESET + " " + main + " - ");
-					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " Level: " + character.getLevel() + ChatColor.RESET;
+					
+					String charclass = "";
+					
+					if (character.getClassObj() != null)
+					{
+						charclass = character.getClass().getName();
+					}
+					
+					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + ChatColor.RESET;
 					
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getCharacterId().toString();
