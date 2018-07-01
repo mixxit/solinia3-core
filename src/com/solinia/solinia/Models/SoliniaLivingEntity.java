@@ -3486,11 +3486,38 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public int getProcChancePct() {
 		// (Dexterity / 35) / 25
 		int dexterity = 75;
+		int procchanceextra = 0;
 		if (this.getBukkitLivingEntity() instanceof Player) {
 			try {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
 				if (player != null)
 					dexterity = getDexterity();
+				
+				ISoliniaAAAbility procchanceaa = null;
+				try
+				{
+					if(player.getAARanks().size() > 0)
+					{
+						for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("WEAPONAFFINITY"))
+						{
+							if (!player.hasAAAbility(ability.getId()))
+								continue;
+							
+							procchanceaa = ability;
+						}
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+				
+				if (procchanceaa != null)
+				{
+					int procchancerank = Utils.getRankPositionOfAAAbility(this.getBukkitLivingEntity(), procchanceaa);
+					procchanceextra += (procchancerank * 10);
+				}
+				
+				
 			} catch (CoreStateInitException e) {
 
 			}
@@ -3501,7 +3528,29 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		float dexdiv = (dexterity / 35);
 		float fina = ((dexdiv / 25) * 100);
-		return (int) Math.floor(fina);
+		int procChance = (int) Math.floor(fina);
+		
+		int lowestProcChanceSpellBuff = 100;
+		int highestProcChanceSpellBuff = 100;
+		
+		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.ProcChance)) 
+		{
+			if (effect.getRemainingValue() > 100)
+			{
+				if (effect.getRemainingValue() > highestProcChanceSpellBuff)
+					highestProcChanceSpellBuff = effect.getRemainingValue();
+			} else {
+				if (effect.getRemainingValue() < lowestProcChanceSpellBuff)
+					lowestProcChanceSpellBuff = effect.getRemainingValue();
+			}
+		}
+		
+		if (lowestProcChanceSpellBuff < 100)
+			procchanceextra += lowestProcChanceSpellBuff;
+		else
+			procchanceextra += highestProcChanceSpellBuff;
+		
+		return procChance + procchanceextra;
 	}
 
 	@Override
