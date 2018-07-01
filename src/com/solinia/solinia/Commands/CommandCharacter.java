@@ -87,7 +87,7 @@ public class CommandCharacter implements CommandExecutor {
 				switch(args[0].toUpperCase())
 				{
 					case "NEW":
-						if (!player.isOp() && StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
+						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
 						{
 							player.sendMessage("You can only change your character once per server session. Please wait for the next 4 hourly restart");
 							return true;
@@ -110,7 +110,7 @@ public class CommandCharacter implements CommandExecutor {
 							return true;
 						}
 						
-						if (!player.isOp() && StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
+						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
 						{
 							player.sendMessage("You can only change your character once per server session. Please wait for the next 4 hourly restart");
 							return true;
