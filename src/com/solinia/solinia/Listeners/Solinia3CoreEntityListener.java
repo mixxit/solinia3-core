@@ -323,15 +323,16 @@ public class Solinia3CoreEntityListener implements Listener {
 			//event.setCancelled(true);
 		}
 		
-		if (damagecause.getDamager() instanceof Player)
+		if (damagecause.getDamager() instanceof Player && !event.getCause().equals(EntityDamageEvent.DamageCause.THORNS))
 		{
 			Player player = (Player) damagecause.getDamager();
 			if (player.getName().equals("trains211"))
 			{
-				System.out.println("DEBUG: [trains211] Minecraft is adding [" + damagecause.getDamage(DamageModifier.BASE) + "] before we do our actual EQ damage calculation");
+				System.out.println("DEBUG: [trains211] Minecraft is adding [" + damagecause.getDamage(DamageModifier.BASE) + "/" + damagecause.getOriginalDamage(DamageModifier.BASE) + "/" + damagecause.getFinalDamage() + "] before we do our actual EQ damage calculation");
 			}
 		}
-				
+		
+		
 		
 		// Negate normal modifiers
 		try {
