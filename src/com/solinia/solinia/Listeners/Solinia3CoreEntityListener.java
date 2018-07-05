@@ -293,6 +293,18 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 		}
 		
+		// Disable jumping crits for melee
+		if (!event.getCause().equals(EntityDamageEvent.DamageCause.THORNS) && damagecause.getDamager() instanceof LivingEntity)
+		{
+			LivingEntity damager = (LivingEntity)damagecause.getDamager();
+			 boolean flag = damager.getFallDistance() > 0.0F && !damager.isOnGround();
+
+			 double f = damagecause.getDamage(DamageModifier.BASE);
+            if (flag && f > 0.0D) {
+           	 damagecause.setDamage(DamageModifier.BASE, f/1.5D);
+            }
+		}
+		
 		if (damagecause.getDamager() instanceof Arrow)
 		{
 			ProjectileSource source = ((Arrow)damagecause.getDamager()).getShooter();
@@ -304,6 +316,18 @@ public class Solinia3CoreEntityListener implements Listener {
 				
 				Utils.CancelEvent(event);
 				return;
+			}
+			
+			// cancel crit jump damage for bows
+			if (!event.getCause().equals(EntityDamageEvent.DamageCause.THORNS) && source instanceof LivingEntity)
+			{
+				LivingEntity damager = (LivingEntity)source;
+				 boolean flag = damager.getFallDistance() > 0.0F && !damager.isOnGround();
+
+				 double f = damagecause.getDamage(DamageModifier.BASE);
+	             if (flag && f > 0.0D) {
+	            	 damagecause.setDamage(DamageModifier.BASE, f/1.5D);
+	             }
 			}
 		}		
 		
@@ -322,17 +346,6 @@ public class Solinia3CoreEntityListener implements Listener {
 			
 			//event.setCancelled(true);
 		}
-		
-		if (damagecause.getDamager() instanceof Player && !event.getCause().equals(EntityDamageEvent.DamageCause.THORNS))
-		{
-			Player player = (Player) damagecause.getDamager();
-			if (player.getName().equals("trains211"))
-			{
-				System.out.println("DEBUG: [trains211] Minecraft is adding [" + damagecause.getDamage(DamageModifier.BASE) + "/" + damagecause.getOriginalDamage(DamageModifier.BASE) + "/" + damagecause.getFinalDamage() + "] before we do our actual EQ damage calculation");
-			}
-		}
-		
-		
 		
 		// Negate normal modifiers
 		try {
@@ -370,6 +383,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		} catch (UnsupportedOperationException e) {
 
 		}
+		
 		
 		ISoliniaLivingEntity solLivingEntity;
 		try {
