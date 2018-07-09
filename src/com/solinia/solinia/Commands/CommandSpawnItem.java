@@ -29,7 +29,7 @@ public class CommandSpawnItem implements CommandExecutor {
 			count = Integer.parseInt(args[1]);
 		}
 
-		if (player.isOp()) {
+		if (player.isOp() || player.hasPermission("solinia.spawnitem")) {
 			int itemid = Integer.parseInt(args[0]);
 			try {
 				for (int i = 0; i < count; i++)
