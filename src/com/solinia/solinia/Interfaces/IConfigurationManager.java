@@ -429,4 +429,10 @@ public interface IConfigurationManager {
 	void editAlignment(String alignmentid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidAlignmentSettingException;
 
 	List<Oath> getOaths();
+
+	List<String> getTraits();
+
+	List<String> getBonds();
+
+	List<String> getFlaws();
 }
