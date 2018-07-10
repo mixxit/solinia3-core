@@ -60,6 +60,7 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.NPCSpellList;
+import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaCraft;
@@ -1506,6 +1507,40 @@ public class ConfigurationManager implements IConfigurationManager {
 		System.out.println("Writing Craft CSV");
 		this.craftRepository.writeCsv("crafts.csv");
 		System.out.println("Writing Craft Finished");
+	}
+
+	@Override
+	public List<Oath> getOaths() {
+		List<Oath> oaths = new ArrayList<Oath>();
+		
+		Oath devotion = new Oath(1, "OATHOFDEVOTION",new ArrayList<String>() {{
+	    add("Honesty: Don’t lie or cheat. Let your word be your promise.");
+	    add("Courage: Never fear to act, though caution is wise.");
+	    add("Compassion: Aid others, protect the weak, and punish those who threaten them. Show mercy to your foes, but temper it with Wisdom.");
+	    add("Honor: Treat others with fairness, and let your honorable deeds be an example to them. Do as much good as possible while causing the least amount of harm.");
+	    add("Duty: Be responsible for your actions and their consequences, protect those entrusted to your care, and obey those who have just authority over you.");
+		}});
+		
+		oaths.add(devotion);
+		
+		Oath ancients = new Oath(2, "OATHOFTHEANCIENTS", new ArrayList<String>() {{
+	    add("Kindle the Light. Through your acts of mercy, kindness, and forgiveness, kindle the light of hope in the world, beating back despair.");
+	    add("Shelter the Light. Where there is good, beauty, love, and laughter in the world, stand against the wickedness that would swallow it. Where life flourishes, stand against the forces that would render it barren.");
+	    add("Preserve Your Own Light. Delight in song and laughter, in beauty and art. If you allow the light to die in your own heart, you can't preserve it in the world.");
+	    add("Be the Light. Be a glorious beacon for all who live in despair. Let the light of your joy and courage shine forth in all your deeds.");
+		}});
+		
+		oaths.add(ancients);
+		
+		Oath vengeance = new Oath(3, "OATHOFVENGEANCE", new ArrayList<String>() {{
+		add("Fight the Greater Evil. Faced with a choice of fighting my sworn foes or combating a lesser evil, I choose the greater evil.");
+		add("No Mercy for the Wicked. Ordinary foes might win my mercy, but my sworn enemies do not.");
+		add("By Any Means Necessary. My qualms can't get in the way of exterminating my foes.");
+		add("Restitution. If my foes wreak ruin on the world, it is because I failed to stop them. I must help those harmed by their misdeeds.");
+		}});
+		
+		oaths.add(vengeance);
+		return oaths;
 	}
 	
 }

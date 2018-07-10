@@ -150,4 +150,8 @@ public interface ISoliniaClass {
 
 	void setDualwieldlevel(int dualwieldlevel);
 
+	List<Integer> getOaths();
+
+	void setOaths(List<Integer> oaths);
+
 }

@@ -1474,12 +1474,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 
 			if (solplayer.getLanguage() == null || solplayer.getLanguage().equals("UNKNOWN")) {
-				if (solplayer.getRace() == null) {
-					event.getPlayer().sendMessage("You cannot speak until you set a race /setrace");
-					Utils.CancelEvent(event);
-					;
-					return;
-				} else {
+				if (solplayer.getRace() != null) {
 					solplayer.setLanguage(solplayer.getRace().getName().toUpperCase());
 				}
 			}
