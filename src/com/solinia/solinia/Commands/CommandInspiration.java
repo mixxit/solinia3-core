@@ -344,7 +344,7 @@ public class CommandInspiration implements CommandExecutor {
 							return true;
 						}
 						
-						if (sender.isOp() || player.hasPermission("solinia.inspirationgrant"))
+						if (sender.isOp() || sender.hasPermission("solinia.inspirationgrant"))
 						{
 							ISoliniaPlayer targetPlayer = SoliniaPlayerAdapter.Adapt(player);
 							targetPlayer.setInspiration(targetPlayer.getInspiration() + amount);
@@ -353,6 +353,7 @@ public class CommandInspiration implements CommandExecutor {
 							return true;
 						} else {
 							sender.sendMessage("You do not have permission to perform this command");
+							return true;
 						}
 					} else {
 						sender.sendMessage("You must specify how many you wish to grant and the mc account name of the person you want to send it to (ie /inspiration grant mixxit 1)");
