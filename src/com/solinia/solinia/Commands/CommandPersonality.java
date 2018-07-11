@@ -275,12 +275,12 @@ public class CommandPersonality implements CommandExecutor {
 		{
 			sender.sendMessage(ChatColor.GOLD + "FLAWS:" + ChatColor.RESET);
 			TextComponent tc = new TextComponent();
-			tc.setText(ChatColor.AQUA + "[Click to select any] " + ChatColor.RESET);
+			tc.setText(ChatColor.AQUA + "[Click-to-Select] " + ChatColor.RESET);
 			for(Flaw flaw : StateManager.getInstance().getConfigurationManager().getFlaws())
 			{
 				TextComponent tc2 = new TextComponent();
-				int maxLength = 8;
-				if (flaw.description.length() < 15)
+				int maxLength = 6;
+				if (flaw.description.length() < 6)
 					maxLength = flaw.description.length();
 				
 				tc2.setText("[" + flaw.description.substring(0, maxLength) + "....] ");
@@ -303,21 +303,22 @@ public class CommandPersonality implements CommandExecutor {
 		{
 			sender.sendMessage(ChatColor.GOLD + "TRAITS:" + ChatColor.RESET);
 			TextComponent tc = new TextComponent();
-			tc.setText(ChatColor.AQUA + "[Click to select any] " + ChatColor.RESET);
+			tc.setText(ChatColor.AQUA + "[Click-to-Select] " + ChatColor.RESET);
 			for(Trait trait : StateManager.getInstance().getConfigurationManager().getTraits())
 			{
 				TextComponent tc2 = new TextComponent();
-				int maxLength = 15;
-				if (trait.description.length() < 15)
+				int maxLength = 6;
+				if (trait.description.length() < 6)
 					maxLength = trait.description.length();
 				
-				tc2.setText("[" + trait.description.substring(0, maxLength) + "....] ");
+				tc2.setText("[" + trait.description.substring(0, maxLength) + "..] ");
 				String changetext = "/personality trait " + trait.id;
 				tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
 				tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(trait.description).create()));
 
 				tc.addExtra(tc2);
 			}
+			sender.spigot().sendMessage(tc);
 		} catch (CoreStateInitException e)
 		{
 			sender.sendMessage("Choices are not available right now");
@@ -330,12 +331,12 @@ public class CommandPersonality implements CommandExecutor {
 		{
 			sender.sendMessage(ChatColor.GOLD + "IDEALS:" + ChatColor.RESET);
 			TextComponent tc = new TextComponent();
-			tc.setText(ChatColor.AQUA + "[Click to select any] " + ChatColor.RESET);
+			tc.setText(ChatColor.AQUA + "[Click-to-Select] " + ChatColor.RESET);
 			for(Ideal ideal : StateManager.getInstance().getConfigurationManager().getIdeals())
 			{
 				TextComponent tc2 = new TextComponent();
-				int maxLength = 15;
-				if (ideal.description.length() < 15)
+				int maxLength = 6;
+				if (ideal.description.length() < 6)
 					maxLength = ideal.description.length();
 				
 				tc2.setText("[" + ideal.description.substring(0, maxLength) + "....] ");
@@ -345,6 +346,7 @@ public class CommandPersonality implements CommandExecutor {
 
 				tc.addExtra(tc2);
 			}
+			sender.spigot().sendMessage(tc);
 		} catch (CoreStateInitException e)
 		{
 			sender.sendMessage("Choices are not available right now");
@@ -357,12 +359,12 @@ public class CommandPersonality implements CommandExecutor {
 		{
 			sender.sendMessage(ChatColor.GOLD + "BONDS:" + ChatColor.RESET);
 			TextComponent tc = new TextComponent();
-			tc.setText(ChatColor.AQUA + "[Click to select any] " + ChatColor.RESET);
+			tc.setText(ChatColor.AQUA + "[Click-to-Select] " + ChatColor.RESET);
 			for(Bond bond : StateManager.getInstance().getConfigurationManager().getBonds())
 			{
 				TextComponent tc2 = new TextComponent();
-				int maxLength = 15;
-				if (bond.description.length() < 15)
+				int maxLength = 6;
+				if (bond.description.length() < 6)
 					maxLength = bond.description.length();
 				
 				tc2.setText("[" + bond.description.substring(0, maxLength) + "....] ");
@@ -372,6 +374,7 @@ public class CommandPersonality implements CommandExecutor {
 
 				tc.addExtra(tc2);
 			}
+			sender.spigot().sendMessage(tc);
 		} catch (CoreStateInitException e)
 		{
 			sender.sendMessage("Choices are not available right now");
