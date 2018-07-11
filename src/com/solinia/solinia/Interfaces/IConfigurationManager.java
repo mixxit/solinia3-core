@@ -459,4 +459,6 @@ public interface IConfigurationManager {
 	Ideal getIdeal(int idealId);
 
 	Trait getTrait(int firstTraitId);
+
+	Oath getOath(int oathId);
 }

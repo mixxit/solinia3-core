@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.CastingSpell;
+import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.PlayerQuest;
@@ -449,4 +450,6 @@ public interface ISoliniaPlayer extends Serializable {
 	Personality getPersonality();
 
 	void setPersonality(Personality personality);
+
+	Oath getOath();
 }

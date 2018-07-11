@@ -131,6 +131,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
+	public Oath getOath()
+	{
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().getOath(this.getOathId());
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
+	
+	@Override
 	public void setLastLocation(Location location)
 	{
 		this.lastX = location.getBlockX();

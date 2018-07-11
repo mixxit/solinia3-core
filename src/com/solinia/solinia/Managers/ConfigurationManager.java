@@ -2019,6 +2019,12 @@ public class ConfigurationManager implements IConfigurationManager {
 		// TODO Auto-generated method stub
 		return getBonds().stream().filter(e -> e.id == bondId).findFirst().orElse(null);
 	}
+	
+	@Override
+	public Oath getOath(int oathId) {
+		// TODO Auto-generated method stub
+		return getOaths().stream().filter(e -> e.id == oathId).findFirst().orElse(null);
+	}
 
 	@Override
 	public Flaw getFlaw(int flawId) {

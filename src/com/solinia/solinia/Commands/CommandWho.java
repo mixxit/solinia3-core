@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 
@@ -56,6 +57,7 @@ public class CommandWho implements CommandExecutor {
 					String trait2 = "Trait: I have no secondary trait\n";
 					String bond = "Bond: I have no bond\n";
 					String flaw = "Flaw: I have no flaw\n";
+					String oath = "Oath: I have no oath\n";
 					
 					if (solplayer.getPersonality().getIdealId() > 0)
 					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + "\n";
@@ -67,14 +69,22 @@ public class CommandWho implements CommandExecutor {
 					bond = "Bond:" + solplayer.getPersonality().getBond().description + "\n";
 					if (solplayer.getPersonality().getFlawId() > 0)
 					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + "\n";
-
+					if (solplayer.getClassObj() != null && solplayer.getClassObj().getOaths().size() > 0 && solplayer.getOathId() != 0)
+					{
+						oath = "Oath: " + solplayer.getOath().oathname + "\n";
+						for(String tenet : solplayer.getOath().tenets)
+						{
+							oath += "- " + tenet + "\n";
+						}
+					}
 					
-					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level: " + lvl + ChatColor.RESET + "\n" + 
+					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + "\n" + 
 					ideal +
 					trait1 +
 					trait2 + 
 					bond +
-					flaw;
+					flaw + 
+					oath;
 					
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 					player.spigot().sendMessage(tc);
@@ -116,6 +126,7 @@ public class CommandWho implements CommandExecutor {
 					String trait2 = "Trait: I have no secondary trait\n";
 					String bond = "Bond: I have no bond\n";
 					String flaw = "Flaw: I have no flaw\n";
+					String oath = "Oath: I have no oath\n";
 					
 					if (solplayer.getPersonality().getIdealId() > 0)
 					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + "\n";
@@ -127,14 +138,22 @@ public class CommandWho implements CommandExecutor {
 					bond = "Bond:" + solplayer.getPersonality().getBond().description + "\n";
 					if (solplayer.getPersonality().getFlawId() > 0)
 					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + "\n";
-
+					if (solplayer.getClassObj() != null && solplayer.getClassObj().getOaths().size() > 0 && solplayer.getOathId() != 0)
+					{
+						oath = "Oath: " + solplayer.getOath().oathname + "\n";
+						for(String tenet : solplayer.getOath().tenets)
+						{
+							oath += "- " + tenet + "\n";
+						}
+					}
 					
-					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level: " + lvl + ChatColor.RESET + "\n" + 
+					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + "\n" + 
 					ideal +
 					trait1 +
 					trait2 + 
 					bond +
-					flaw;
+					flaw +
+					oath;
 					
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 					player.spigot().sendMessage(tc);
