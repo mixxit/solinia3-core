@@ -440,4 +440,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void setLastLocation(Location location);
 
 	SoliniaWorld getWorld();
+
+	int getOathId();
+
+	void setOathId(int oathId);
 }

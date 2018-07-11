@@ -555,6 +555,10 @@ commands:
     description: Publish book
     usage: /publishbook
     aliases: []
+  oath:
+    description: Select oath
+    usage: /oath <select>
+    aliases: []
 depend:
 - Vault
 - MythicMobs

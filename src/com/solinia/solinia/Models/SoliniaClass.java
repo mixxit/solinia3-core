@@ -1,6 +1,7 @@
 package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
@@ -56,6 +57,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private String level51Title = "";
 	private String level55Title = "";
 	private String level60Title = "";
+	private List<Integer> oaths = new ArrayList<Integer>();
 	
 	@Override
 	public String getName() {
@@ -194,6 +196,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
 		sender.sendMessage("- dualwieldlevel: " + ChatColor.GOLD + getDualwieldlevel() + ChatColor.RESET);
 		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
+		sender.sendMessage("- oaths: " + ChatColor.GOLD + getOaths().toString() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- level51title: " + ChatColor.GOLD + getLevel51Title() + ChatColor.RESET);
 		sender.sendMessage("- level55title: " + ChatColor.GOLD + getLevel55Title() + ChatColor.RESET);
@@ -345,6 +348,16 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "level60title":
 			this.setLevel60Title(value);
+			break;
+		case "oaths":
+			List<Integer> oathIdsList = new ArrayList<Integer>();
+			int[] oathIds = Arrays.stream(value.split(",")).mapToInt(Integer::parseInt).toArray();
+			for(int i = 0; i < oathIds.length; i++)
+			{
+				oathIdsList.add(oathIds[i]);
+			}
+			
+			this.setOaths(oathIdsList);
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel,level51title,level55title,level60title");
@@ -790,5 +803,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setDualwieldlevel(int dualwieldlevel) {
 		this.dualwieldlevel = dualwieldlevel;
+	}
+
+	@Override
+	public List<Integer> getOaths() {
+		return oaths;
+	}
+
+	@Override
+	public void setOaths(List<Integer> oaths) {
+		this.oaths = oaths;
 	}
 }

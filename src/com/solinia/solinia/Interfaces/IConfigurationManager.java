@@ -27,6 +27,7 @@ import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Models.NPCSpellList;
+import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
@@ -426,4 +427,12 @@ public interface IConfigurationManager {
 	void commitCsvs();
 
 	void editAlignment(String alignmentid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidAlignmentSettingException;
+
+	List<Oath> getOaths();
+
+	List<String> getTraits();
+
+	List<String> getBonds();
+
+	List<String> getFlaws();
 }

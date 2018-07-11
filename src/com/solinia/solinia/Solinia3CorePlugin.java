@@ -529,6 +529,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("showdiscord").setExecutor(new CommandShowDiscord());
 		this.getCommand("publishbook").setExecutor(new CommandPublishBook());
 		this.getCommand("editalignment").setExecutor(new CommandEditAlignment());
+		this.getCommand("oath").setExecutor(new CommandOath());
 	}
 
 	private void createConfigDir() {

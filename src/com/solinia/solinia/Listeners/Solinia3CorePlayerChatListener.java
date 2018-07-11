@@ -44,9 +44,21 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		// TODO - Support checking channel modes of player
 		if (currentChannel.equals("LOCAL"))
 		{
+			if (event.getPlayer().getRace() == null)
+			{
+				event.getPlayer().getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /race");
+				return;
+			}
 			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage());
 		} else {
 			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage());
+			return;
+		}
+		
+		if (event.getPlayer().getRace() == null)
+		{
+			event.getPlayer().getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /race");
+			return;
 		}
 		
 		// NPC responses (if applicable)

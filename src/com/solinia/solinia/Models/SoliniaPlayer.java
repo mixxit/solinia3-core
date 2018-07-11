@@ -117,7 +117,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean glowTargetting = true;
 	private Double pendingXp = 0d;
 	private boolean showDiscord = true;
-
+	private int oathId = 0;
+	
 	@Override
 	public List<UUID> getIgnoredPlayers() {
 		return ignoredPlayers;
@@ -3371,6 +3372,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public int getOathId() {
+		return oathId;
+	}
+
+	@Override
+	public void setOathId(int oathId) {
+		this.oathId = oathId;
 	}
 
 }
