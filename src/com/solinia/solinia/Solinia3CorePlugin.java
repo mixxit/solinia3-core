@@ -67,6 +67,8 @@ import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
+import com.solinia.solinia.Timers.UnsetPersonalityTimer;
+
 import de.slikey.effectlib.EffectManager;
 import me.dadus33.chatitem.api.ChatItemAPI;
 import net.milkbowl.vault.economy.Economy;
@@ -97,6 +99,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
+	private UnsetPersonalityTimer unsetPersonalityTimer;
 	private HintTimer hintTimer;
 	
 	private Economy economy;
@@ -388,6 +391,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			
 			csvGenerationTimer = new CSVGenerationTimer();
 			csvGenerationTimer.runTaskTimer(this, 1 * 20L, 3600 * 20L);
+			
+			unsetPersonalityTimer = new UnsetPersonalityTimer(this);
+			unsetPersonalityTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -531,6 +537,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editalignment").setExecutor(new CommandEditAlignment());
 		this.getCommand("oath").setExecutor(new CommandOath());
 		this.getCommand("personality").setExecutor(new CommandPersonality());
+		this.getCommand("resetpersonality").setExecutor(new CommandPersonality());
 	}
 
 	private void createConfigDir() {

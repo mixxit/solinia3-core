@@ -35,4 +35,5 @@ public interface IPlayerManager {
 	void setPlayerLastSteed(UUID playerUUID, Timestamp timestamp);
 	IRepository<ISoliniaPlayer> getPlayersRepository();
 	public void grantPlayerAttendenceBonus();
+	public void resetPersonality(Player player) throws CoreStateInitException;
 }

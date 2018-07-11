@@ -14,6 +14,10 @@ import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandWho implements CommandExecutor {
 	@Override
@@ -43,8 +47,37 @@ public class CommandWho implements CommandExecutor {
 		        		racename = solplayer.getRace().getName();
 		        	if (solplayer.getClassObj() != null)
 			        	classname = solplayer.getClassObj().getName();
-	
-		        	player.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+		        	
+		        	TextComponent tc = new TextComponent();
+					tc.setText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+					
+					String ideal = "Ideal: I have no ideal\n";
+					String trait1 = "Trait: I have no primary trait\n";
+					String trait2 = "Trait: I have no secondary trait\n";
+					String bond = "Bond: I have no bond\n";
+					String flaw = "Flaw: I have no flaw\n";
+					
+					if (solplayer.getPersonality().getIdealId() > 0)
+					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + "\n";
+					if (solplayer.getPersonality().getFirstTraitId() > 0)
+					trait1 = "Trait:" + solplayer.getPersonality().getFirstTrait().description + "\n";
+					if (solplayer.getPersonality().getSecondTraitId() > 0)
+					trait2 = "Trait:" + solplayer.getPersonality().getSecondTrait().description + "\n";
+					if (solplayer.getPersonality().getBondId() > 0)
+					bond = "Bond:" + solplayer.getPersonality().getBond().description + "\n";
+					if (solplayer.getPersonality().getFlawId() > 0)
+					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + "\n";
+
+					
+					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level: " + lvl + ChatColor.RESET + "\n" + 
+					ideal +
+					trait1 +
+					trait2 + 
+					bond +
+					flaw;
+					
+					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+					player.spigot().sendMessage(tc);
 			    } catch (CoreStateInitException e) {
 					
 				}
@@ -75,7 +108,36 @@ public class CommandWho implements CommandExecutor {
 		        	if (solplayer.getClassObj() != null)
 			        	classname = solplayer.getClassObj().getName();
 		        	
-		        	player.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+		        	TextComponent tc = new TextComponent();
+					tc.setText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+					
+					String ideal = "Ideal: I have no ideal\n";
+					String trait1 = "Trait: I have no primary trait\n";
+					String trait2 = "Trait: I have no secondary trait\n";
+					String bond = "Bond: I have no bond\n";
+					String flaw = "Flaw: I have no flaw\n";
+					
+					if (solplayer.getPersonality().getIdealId() > 0)
+					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + "\n";
+					if (solplayer.getPersonality().getFirstTraitId() > 0)
+					trait1 = "Trait:" + solplayer.getPersonality().getFirstTrait().description + "\n";
+					if (solplayer.getPersonality().getSecondTraitId() > 0)
+					trait2 = "Trait:" + solplayer.getPersonality().getSecondTrait().description + "\n";
+					if (solplayer.getPersonality().getBondId() > 0)
+					bond = "Bond:" + solplayer.getPersonality().getBond().description + "\n";
+					if (solplayer.getPersonality().getFlawId() > 0)
+					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + "\n";
+
+					
+					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level: " + lvl + ChatColor.RESET + "\n" + 
+					ideal +
+					trait1 +
+					trait2 + 
+					bond +
+					flaw;
+					
+					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+					player.spigot().sendMessage(tc);
 				} catch (CoreStateInitException e) {
 					
 				}

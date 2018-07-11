@@ -563,6 +563,10 @@ commands:
     description: View/set personality
     usage: /personality
     aliases: []
+  resetpersonality:
+    description: Resets players to a default personality state
+    usage: /resetpersonality <mcaccountname>
+    aliases: []
 depend:
 - Vault
 - MythicMobs

@@ -113,7 +113,7 @@ public class ScoreboardUtils {
 			
 			if (group != null)
 				for (UUID groupmemberuuid : group.getMembers()) {
-					if (groupmemberuuid.toString().equals(uuid))
+					if (groupmemberuuid.toString().equals(uuid.toString()))
 						continue;
 
 					solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(groupmemberuuid));

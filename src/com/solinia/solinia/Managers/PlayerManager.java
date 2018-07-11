@@ -19,6 +19,7 @@ import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Utils.Utils;
 
 public class PlayerManager implements IPlayerManager {
@@ -364,5 +365,11 @@ public class PlayerManager implements IPlayerManager {
 				
 			}
 		}
+	}
+
+	@Override
+	public void resetPersonality(Player player) throws CoreStateInitException {
+		ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+		solplayer.setPersonality(new Personality());
 	}
 }
