@@ -49,6 +49,12 @@ public class CommandWho implements CommandExecutor {
 		        	if (solplayer.getClassObj() != null)
 			        	classname = solplayer.getClassObj().getName();
 		        	
+		        	if (sender instanceof ConsoleCommandSender)
+		        	{
+		        		sender.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+		        		continue;
+		        	}
+		        	
 		        	TextComponent tc = new TextComponent();
 					tc.setText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
 					
@@ -117,6 +123,12 @@ public class CommandWho implements CommandExecutor {
 		        		racename = solplayer.getRace().getName();
 		        	if (solplayer.getClassObj() != null)
 			        	classname = solplayer.getClassObj().getName();
+		        	
+		        	if (sender instanceof ConsoleCommandSender)
+		        	{
+		        		sender.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+		        		continue;
+		        	}
 		        	
 		        	TextComponent tc = new TextComponent();
 					tc.setText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
