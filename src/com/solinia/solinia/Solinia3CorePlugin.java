@@ -536,7 +536,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("publishbook").setExecutor(new CommandPublishBook());
 		this.getCommand("editalignment").setExecutor(new CommandEditAlignment());
 		this.getCommand("oath").setExecutor(new CommandOath());
-		this.getCommand("personality").setExecutor(new CommandPersonality());
+		this.getCommand("personality").setExecutor(new CommandResetPersonality());
 		this.getCommand("resetpersonality").setExecutor(new CommandPersonality());
 	}
 

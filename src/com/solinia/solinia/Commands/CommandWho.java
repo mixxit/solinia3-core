@@ -74,7 +74,7 @@ public class CommandWho implements CommandExecutor {
 						oath = "Oath: " + solplayer.getOath().oathname + "\n";
 						for(String tenet : solplayer.getOath().tenets)
 						{
-							oath += "- " + tenet + "\n";
+							oath += " " + tenet;
 						}
 					}
 					
