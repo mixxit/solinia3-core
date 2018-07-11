@@ -274,19 +274,23 @@ public class CommandPersonality implements CommandExecutor {
 		try
 		{
 			sender.sendMessage(ChatColor.GOLD + "FLAWS:" + ChatColor.RESET);
+			TextComponent tc = new TextComponent();
+			tc.setText(ChatColor.AQUA + "[Click to select any] " + ChatColor.RESET);
 			for(Flaw flaw : StateManager.getInstance().getConfigurationManager().getFlaws())
 			{
-				TextComponent tc = new TextComponent();
-				tc.setText("- " + flaw.description + " ");
-				
 				TextComponent tc2 = new TextComponent();
-				tc2.setText(ChatColor.AQUA + "[Click to Select]" + ChatColor.RESET);
+				int maxLength = 8;
+				if (flaw.description.length() < 15)
+					maxLength = flaw.description.length();
+				
+				tc2.setText("[" + flaw.description.substring(0, maxLength) + "....] ");
 				String changetext = "/personality flaw " + flaw.id;
 				tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
+				tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(flaw.description).create()));
 
 				tc.addExtra(tc2);
-				sender.spigot().sendMessage(tc);
 			}
+			sender.spigot().sendMessage(tc);
 		} catch (CoreStateInitException e)
 		{
 			sender.sendMessage("Choices are not available right now");
@@ -298,18 +302,21 @@ public class CommandPersonality implements CommandExecutor {
 		try
 		{
 			sender.sendMessage(ChatColor.GOLD + "TRAITS:" + ChatColor.RESET);
+			TextComponent tc = new TextComponent();
+			tc.setText(ChatColor.AQUA + "[Click to select any] " + ChatColor.RESET);
 			for(Trait trait : StateManager.getInstance().getConfigurationManager().getTraits())
 			{
-				TextComponent tc = new TextComponent();
-				tc.setText("- " + trait.description + " ");
-				
 				TextComponent tc2 = new TextComponent();
-				tc2.setText(ChatColor.AQUA + "[Click to Select]" + ChatColor.RESET);
+				int maxLength = 15;
+				if (trait.description.length() < 15)
+					maxLength = trait.description.length();
+				
+				tc2.setText("[" + trait.description.substring(0, maxLength) + "....] ");
 				String changetext = "/personality trait " + trait.id;
 				tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
+				tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(trait.description).create()));
 
 				tc.addExtra(tc2);
-				sender.spigot().sendMessage(tc);
 			}
 		} catch (CoreStateInitException e)
 		{
@@ -322,18 +329,21 @@ public class CommandPersonality implements CommandExecutor {
 		try
 		{
 			sender.sendMessage(ChatColor.GOLD + "IDEALS:" + ChatColor.RESET);
+			TextComponent tc = new TextComponent();
+			tc.setText(ChatColor.AQUA + "[Click to select any] " + ChatColor.RESET);
 			for(Ideal ideal : StateManager.getInstance().getConfigurationManager().getIdeals())
 			{
-				TextComponent tc = new TextComponent();
-				tc.setText("- " + ideal.description + " ");
-				
 				TextComponent tc2 = new TextComponent();
-				tc2.setText(ChatColor.AQUA + "[Click to Select]" + ChatColor.RESET);
+				int maxLength = 15;
+				if (ideal.description.length() < 15)
+					maxLength = ideal.description.length();
+				
+				tc2.setText("[" + ideal.description.substring(0, maxLength) + "....] ");
 				String changetext = "/personality ideal " + ideal.id;
 				tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
+				tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ideal.description).create()));
 
 				tc.addExtra(tc2);
-				sender.spigot().sendMessage(tc);
 			}
 		} catch (CoreStateInitException e)
 		{
@@ -346,18 +356,21 @@ public class CommandPersonality implements CommandExecutor {
 		try
 		{
 			sender.sendMessage(ChatColor.GOLD + "BONDS:" + ChatColor.RESET);
+			TextComponent tc = new TextComponent();
+			tc.setText(ChatColor.AQUA + "[Click to select any] " + ChatColor.RESET);
 			for(Bond bond : StateManager.getInstance().getConfigurationManager().getBonds())
 			{
-				TextComponent tc = new TextComponent();
-				tc.setText("- " + bond.description + " ");
-				
 				TextComponent tc2 = new TextComponent();
-				tc2.setText(ChatColor.AQUA + "[Click to Select]" + ChatColor.RESET);
+				int maxLength = 15;
+				if (bond.description.length() < 15)
+					maxLength = bond.description.length();
+				
+				tc2.setText("[" + bond.description.substring(0, maxLength) + "....] ");
 				String changetext = "/personality bond " + bond.id;
 				tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
+				tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(bond.description).create()));
 
 				tc.addExtra(tc2);
-				sender.spigot().sendMessage(tc);
 			}
 		} catch (CoreStateInitException e)
 		{
