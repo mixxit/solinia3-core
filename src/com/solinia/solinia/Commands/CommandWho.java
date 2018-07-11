@@ -49,7 +49,7 @@ public class CommandWho implements CommandExecutor {
 		        	if (solplayer.getClassObj() != null)
 			        	classname = solplayer.getClassObj().getName();
 		        	
-		        	if (sender instanceof ConsoleCommandSender)
+		        	if (!(sender instanceof Player))
 		        	{
 		        		sender.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
 		        		continue;
@@ -124,7 +124,7 @@ public class CommandWho implements CommandExecutor {
 		        	if (solplayer.getClassObj() != null)
 			        	classname = solplayer.getClassObj().getName();
 		        	
-		        	if (sender instanceof ConsoleCommandSender)
+		        	if (!(sender instanceof Player))
 		        	{
 		        		sender.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
 		        		continue;
