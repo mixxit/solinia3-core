@@ -26,12 +26,16 @@ import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
+import com.solinia.solinia.Models.Bond;
+import com.solinia.solinia.Models.Flaw;
+import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaWorld;
@@ -430,9 +434,29 @@ public interface IConfigurationManager {
 
 	List<Oath> getOaths();
 
-	List<String> getTraits();
+	List<Trait> getTraits();
 
-	List<String> getBonds();
+	List<Bond> getBonds();
 
-	List<String> getFlaws();
+	List<Flaw> getFlaws();
+
+	void setBonds(List<Bond> bonds);
+
+	void setFlaws(List<Flaw> flaws);
+
+	void setOaths(List<Oath> oaths);
+
+	void setTraits(List<Trait> traits);
+
+	List<Ideal> getIdeals();
+
+	void setIdeals(List<Ideal> ideals);
+
+	Bond getBond(int bondId);
+
+	Flaw getFlaw(int flawId);
+
+	Ideal getIdeal(int idealId);
+
+	Trait getTrait(int firstTraitId);
 }

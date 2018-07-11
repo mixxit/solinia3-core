@@ -99,6 +99,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int forearmsItem = 0;
 	private int armsItem = 0;
 	private int handsItem = 0;
+	private Personality personality = new Personality();
 	
 	private int lastX = 0;
 	private int lastY = 0;
@@ -3382,6 +3383,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setOathId(int oathId) {
 		this.oathId = oathId;
+	}
+
+	@Override
+	public Personality getPersonality() {
+		return personality;
+	}
+
+	@Override
+	public void setPersonality(Personality personality) {
+		this.personality = personality;
 	}
 
 }

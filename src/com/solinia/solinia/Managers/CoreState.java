@@ -26,9 +26,15 @@ import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.AlignmentType;
+import com.solinia.solinia.Models.Bond;
+import com.solinia.solinia.Models.Flaw;
+import com.solinia.solinia.Models.Ideal;
+import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
@@ -604,5 +610,4 @@ public class CoreState {
 		// TODO Auto-generated method stub
 		return this.discordInCharacterChannelCommandSender;
 	}
-
 }

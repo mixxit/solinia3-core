@@ -559,6 +559,10 @@ commands:
     description: Select oath
     usage: /oath <select>
     aliases: []
+  personality:
+    description: View/set personality
+    usage: /personality
+    aliases: []
 depend:
 - Vault
 - MythicMobs
