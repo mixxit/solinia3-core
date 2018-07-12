@@ -266,7 +266,6 @@ public class ChannelManager implements IChannelManager {
 		{
 			try
 			{
-				
 				StateManager.getInstance().getDiscordClient().getChannelByID(message.getChannelId()).sendMessage(message.getMessage());
 			} catch (Exception e)
 			{

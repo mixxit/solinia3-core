@@ -1,5 +1,8 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 
@@ -9,6 +12,8 @@ public class Personality {
 	private int flawId = 0;
 	private int firstTraitId = 0;
 	private int secondTraitId = 0;
+	private List<String> customPersonalityTraits = new ArrayList<String>();
+
 	public int getIdealId() {
 		return idealId;
 	}
@@ -39,6 +44,7 @@ public class Personality {
 	public void setSecondTraitId(int secondTraitId) {
 		this.secondTraitId = secondTraitId;
 	}
+	
 	public Bond getBond()
 	{
 		try
@@ -94,5 +100,10 @@ public class Personality {
 		}
 	}
 	
-	
+	public List<String> getCustomPersonalityTraits() {
+		return customPersonalityTraits;
+	}
+	public void setCustomPersonalityTraits(List<String> customPersonalityTraits) {
+		this.customPersonalityTraits = customPersonalityTraits;
+	}
 }

@@ -75,6 +75,11 @@ public class CommandWho implements CommandExecutor {
 					bond = "Bond:" + solplayer.getPersonality().getBond().description + "\n";
 					if (solplayer.getPersonality().getFlawId() > 0)
 					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + "\n";
+					String custom = "";
+					for(String customTrait : solplayer.getPersonality().getCustomPersonalityTraits())
+					{
+						custom += "Custom:" + customTrait + "\n";
+					}
 					if (solplayer.getClassObj() != null && solplayer.getClassObj().getOaths().size() > 0 && solplayer.getOathId() != 0)
 					{
 						oath = "Oath: " + solplayer.getOath().oathname + "\n";
@@ -90,6 +95,7 @@ public class CommandWho implements CommandExecutor {
 					trait2 + 
 					bond +
 					flaw + 
+					custom +
 					oath;
 					
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
@@ -150,6 +156,11 @@ public class CommandWho implements CommandExecutor {
 					bond = "Bond:" + solplayer.getPersonality().getBond().description + "\n";
 					if (solplayer.getPersonality().getFlawId() > 0)
 					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + "\n";
+					String custom = "";
+					for(String customTrait : solplayer.getPersonality().getCustomPersonalityTraits())
+					{
+						custom += "Custom:" + customTrait + "\n";
+					}
 					if (solplayer.getClassObj() != null && solplayer.getClassObj().getOaths().size() > 0 && solplayer.getOathId() != 0)
 					{
 						oath = "Oath: " + solplayer.getOath().oathname + "\n";
@@ -165,6 +176,7 @@ public class CommandWho implements CommandExecutor {
 					trait2 + 
 					bond +
 					flaw +
+					custom +
 					oath;
 					
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));

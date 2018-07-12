@@ -2,6 +2,7 @@ package com.solinia.solinia.Commands;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,6 +41,9 @@ public class CommandPersonality implements CommandExecutor {
 		
 		switch(args[0])
 		{
+			case "award":
+				awardCustomTrait(sender,args);
+			break;
 			case "bond":
 				if (args.length == 1)
 					sendBondChoices(sender);
@@ -72,6 +76,48 @@ public class CommandPersonality implements CommandExecutor {
 		return true;
 	}
 	
+	private void awardCustomTrait(CommandSender sender, String[] args) {
+		if (!sender.isOp())
+		{
+			sender.sendMessage("This is an OP only command");
+			return;
+		}
+		
+		String target = args[1];
+		
+		if (Bukkit.getPlayer(target) == null)
+		{
+			sender.sendMessage("Cannot find player");
+			return;
+		}
+		
+		try
+		{
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(target));
+			if (solPlayer == null)
+			{
+				sender.sendMessage("That player does not exist");
+				return;
+			}
+			String trait = "";
+			for(int i = 0; i < args.length; i++)
+			{
+				if (i < 2)
+					continue;
+				
+				trait += args[i] + " ";
+			}
+			
+			trait = trait.trim();
+			solPlayer.getPersonality().getCustomPersonalityTraits().add(trait);
+			sender.sendMessage("Custom trait added");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+	}
+
 	private void setTraitChoice(CommandSender sender, int id) {
 		try {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
@@ -262,6 +308,11 @@ public class CommandPersonality implements CommandExecutor {
 				sender.spigot().sendMessage(tc);
 			}
 			
+			sender.sendMessage(ChatColor.GOLD + "CUSTOM" + ChatColor.RESET);
+			for(String customTrait : solPlayer.getPersonality().getCustomPersonalityTraits())
+			{
+				sender.sendMessage("- " + customTrait);
+			}
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
