@@ -269,4 +269,6 @@ public interface ISoliniaLivingEntity
 	SoliniaWorld getWorld();
 
 	public void setHealth(double health);
+
+	boolean canUseItem(ItemStack itemInMainHand);
 }

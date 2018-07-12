@@ -34,6 +34,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -164,6 +165,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!this.canAttackTarget(defender))
 		{
 			return;
+		}
+		
+		if (!this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+		{
+			if(getBukkitLivingEntity() instanceof Player)
+			{
+				getBukkitLivingEntity().sendMessage("Your cannot use this item (level or class)");
+			}
 		}
 
 		if (getBukkitLivingEntity() instanceof Player)
@@ -304,6 +313,41 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		 */
 	}
 	
+	@Override
+	public boolean canUseItem(ItemStack itemStack) {
+		try
+		{
+			ISoliniaItem item = SoliniaItemAdapter.Adapt(itemStack);
+			if (item == null)
+				return true;
+			
+			
+			
+			if (item.getAllowedClassNames().size() > 0) {
+				if (getClassObj() == null) {
+					return false;
+				}
+	
+				if (!item.getAllowedClassNames().contains(getClassObj().getName())) {
+					return false;
+				}
+			}
+	
+			if (item.getMinLevel() > 0) {
+				if (item.getMinLevel() > getLevel()) {
+					return false;
+				}
+			}
+			
+			return true;
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		} catch (SoliniaItemException e) {
+			return true;
+		}
+	}
+
 	@Override
 	public boolean isFeignedDeath()
 	{
