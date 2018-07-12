@@ -729,7 +729,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 						PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 						if (factionEntry != null)
 						{
-							switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValue()))
+							switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValueWithEffectsOnEntity(solentity.getBukkitLivingEntity(), solPlayer.getBukkitPlayer())))
 							{
 								case FACTION_THREATENLY:
 								case FACTION_SCOWLS:

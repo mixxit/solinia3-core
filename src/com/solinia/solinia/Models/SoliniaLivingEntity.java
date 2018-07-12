@@ -5176,7 +5176,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 					if (factionEntry != null)
 					{
-						switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValue()))
+						switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(),player)))
 						{
 							case FACTION_THREATENLY:
 							case FACTION_SCOWLS:
