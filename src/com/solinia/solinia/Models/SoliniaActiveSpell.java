@@ -1055,6 +1055,7 @@ public class SoliniaActiveSpell {
 			applyShadowStep(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case Knockdown:
+			applyKnockback(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case KnockTowardCaster:
 			return;
@@ -1365,8 +1366,22 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyTossUpEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		getLivingEntity().setVelocity(new Vector(0, 5, 0));
 		Utils.dismountEntity(getLivingEntity());
+		getLivingEntity().setVelocity(new Vector(0, 5, 0));
+
+		return;
+	}
+	
+	private void applyKnockback(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		double pitch = ((90 - getLivingEntity().getLocation().getPitch()) * Math.PI) / 180;
+		double yaw  = ((getLivingEntity().getLocation().getYaw() + 90 + 180) * Math.PI) / 180;
+		
+		double x = Math.sin(pitch) * Math.cos(yaw);
+		double y = Math.sin(pitch) * Math.sin(yaw);
+		double z = Math.cos(pitch);
+		
+		Utils.dismountEntity(getLivingEntity());
+		getLivingEntity().setVelocity(new Vector(x, z, y));
 
 		return;
 	}
