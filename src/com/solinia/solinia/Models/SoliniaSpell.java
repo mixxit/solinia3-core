@@ -5629,7 +5629,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 				getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed) ||
 				getSpellEffectTypes().contains(SpellEffectType.Mez) || 
 				getSpellEffectTypes().contains(SpellEffectType.Charm) ||
-				getSpellEffectTypes().contains(SpellEffectType.Root)
+				getSpellEffectTypes().contains(SpellEffectType.Root) ||
+				getSpellEffectTypes().contains(SpellEffectType.Stun)
 		)
 			return false;
 		
@@ -5642,7 +5643,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 				getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed) ||
 				getSpellEffectTypes().contains(SpellEffectType.Mez) ||
 				getSpellEffectTypes().contains(SpellEffectType.Charm) ||
-				getSpellEffectTypes().contains(SpellEffectType.Root)
+				getSpellEffectTypes().contains(SpellEffectType.Root) ||
+				getSpellEffectTypes().contains(SpellEffectType.Stun)
 		)
 			return false;
 		
