@@ -1146,6 +1146,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 				LivingEntity targetmob = StateManager.getInstance().getEntityManager()
 						.getEntityTarget(getBukkitPlayer());
+				
+				if (targetmob != null)
+				if (getBukkitPlayer().getLocation().distance(targetmob.getLocation()) > 15)
+				{
+					getBukkitPlayer().sendMessage("You were too far to interact with that entity");
+					return;
+				}
 
 				// we should probably check line of sight here for detrimentals, or maybe in the
 				// spell
@@ -1335,6 +1342,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			targetmob = StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer());
 		} catch (CoreStateInitException e) {
 
+		}
+		
+		if (targetmob != null)
+		if (getBukkitPlayer().getLocation().distance(targetmob.getLocation()) > 15)
+		{
+			getBukkitPlayer().sendMessage("You were too far to interact with that entity");
+			return;
 		}
 
 		if (spell.getAllowedClasses().size() > 0) {
