@@ -1561,6 +1561,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// Chance to proc
 					int procChance = getProcChancePct();
 					int roll = Utils.RandomBetween(0, 100);
+					if (attackerSolEntity.getBukkitLivingEntity() instanceof Player)
+					{
+						if (attackerSolEntity.getBukkitLivingEntity().isOp())
+						{
+							System.out.println(attackerSolEntity.getName() + " chance to proc on hit: " + procChance + " roll: " + roll);
+						}
+					}
 	
 					if (roll < procChance) {
 	
@@ -3574,7 +3581,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		float fina = ((dexdiv / 25) * 100);
 		int procChance = (int) Math.floor(fina);
 		
-		int lowestProcChanceSpellBuff = 100;
+		int lowestProcChanceSpellBuff = 0;
 		int highestProcChanceSpellBuff = 100;
 		
 		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.ProcChance)) 
