@@ -230,10 +230,11 @@ public class SoliniaEntitySpells {
 				try {
 					if (getLivingEntity() != null) {
 						if (StateManager.getInstance().getEntityManager()
-								.getEntitySinging(getLivingEntity().getUniqueId()) != null) {
+								.getEntitySinging(getLivingEntity().getUniqueId()) != null) 
+						{
 							Integer singingId = StateManager.getInstance().getEntityManager()
 									.getEntitySinging(getLivingEntity().getUniqueId());
-							if (singingId != activeSpell.getSpellId()) {
+							if (singingId != activeSpell.getSpellId() || activeSpell.getSpell().getRecastTime() > 0) {
 								ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
 								solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close ["
 										+ activeSpell.getSpell().getName() + "]");

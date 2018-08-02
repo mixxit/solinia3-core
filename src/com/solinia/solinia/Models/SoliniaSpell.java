@@ -2683,7 +2683,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- teleport_zone: " + ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
 		sender.sendMessage("- mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
-		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET);
+		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET + " - recasttime: " + ChatColor.GOLD + getRecastTime() + ChatColor.RESET);
 		sender.sendMessage("- resisttype: " + ChatColor.GOLD + Utils.getSpellResistType(getResisttype()).name() + " [" + getResisttype() + "]" + ChatColor.RESET);
 		sender.sendMessage("- range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
