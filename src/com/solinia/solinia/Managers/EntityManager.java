@@ -106,6 +106,19 @@ public class EntityManager implements IEntityManager {
 		{
 			ISoliniaNPCMerchant soliniaNpcMerchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(npc.getMerchantid());
 			
+			if (!soliniaNpcMerchant.getRequiresPermissionNode().equals(""))
+			{
+				Player player = Bukkit.getPlayer(playerUUID);
+				if (player != null)
+				{
+					if (!player.hasPermission(soliniaNpcMerchant.getRequiresPermissionNode()))
+					{					
+						player.sendMessage("This requires a permission node you do not have");
+						return null;
+					}
+				}
+			}
+			
 			List<ISoliniaNPCMerchantEntry> fullmerchantentries = StateManager.getInstance().getEntityManager()
 					.getNPCMerchantCombinedEntries(npc);
 			

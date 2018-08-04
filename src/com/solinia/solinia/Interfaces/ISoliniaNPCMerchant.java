@@ -32,4 +32,8 @@ public interface ISoliniaNPCMerchant {
 	boolean isPublishedBookStore();
 
 	void setPublishedBookStore(boolean publishedBookStore);
+
+	String getRequiresPermissionNode();
+
+	void setRequiresPermissionNode(String requiresPermissionNode);
 }

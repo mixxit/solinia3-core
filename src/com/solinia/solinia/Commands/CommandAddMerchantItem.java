@@ -17,12 +17,10 @@ public class CommandAddMerchantItem implements CommandExecutor {
 		
 		if (sender instanceof Player)
 		{
-
 			Player player = (Player) sender;
-			
-			if (!player.isOp())
+			if (!player.isOp() && !player.hasPermission("solinia.addmerchantitem"))
 			{
-				player.sendMessage("This is an operator only command");
+				player.sendMessage("You do not have permission to access this command");
 				return false;
 			}
 		}
@@ -50,7 +48,7 @@ public class CommandAddMerchantItem implements CommandExecutor {
 				return true;
 			}
 			
-			SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantid, itemid);
+			SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantid, itemid, sender.isOp());
 			sender.sendMessage("MerchantList updated");
 		} catch (CoreStateInitException e)
 		{

@@ -79,7 +79,7 @@ public class CommandPublishBook implements CommandExecutor {
         	
         	for(Integer merchantId : merchantItemList)
         	{
-        		SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantId, item.getId());
+        		SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantId, item.getId(), false);
         	}
         	
         	sender.sendMessage("New Book Published! (ID: " + item.getId() + ")");

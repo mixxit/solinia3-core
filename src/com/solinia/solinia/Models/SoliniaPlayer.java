@@ -1244,6 +1244,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 								ChatColor.GRAY + "Insufficient Mana  [E]");
 						return;
 					}
+					
+					if (!spell.getRequiresPermissionNode().equals(""))
+					{
+						if (!event.getPlayer().hasPermission(spell.getRequiresPermissionNode()))
+						{
+							event.getPlayer().sendMessage("This requires a permission node you do not have");
+							return;
+						}
+					}
 
 					if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(event.getPlayer(),
 							spell.getId()) != null) {

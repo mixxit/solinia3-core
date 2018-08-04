@@ -752,6 +752,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@SerializedName("field236")
 	@Expose
 	private Integer field236;
+	
+	private String requiresPermissionNode = "";
 
 	public Integer getId() {
 		return id;
@@ -2688,6 +2690,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name() + ")" + ChatColor.RESET);
+		sender.sendMessage("- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 		SpellEffectIndex sei = Utils.getSpellEffectIndex(getSpellAffectIndex());
 		if (sei != null)
 		{
@@ -2844,6 +2847,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			if (Integer.parseInt(value) < 0)
 				throw new InvalidSpellSettingException("Component count must be 0 or higher");
 			setComponentCounts3(Integer.parseInt(value));
+			break;
+		case "requirespermissionnode":
+			setRequiresPermissionNode(value);
 			break;
 		case "componentcounts4":
 			if (Integer.parseInt(value) < 0)
@@ -5649,5 +5655,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return false;
 		
 		return true;
+	}
+
+	@Override
+	public String getRequiresPermissionNode() {
+		return requiresPermissionNode;
+	}
+
+	@Override
+	public void setRequiresPermissionNode(String requiresPermissionNode) {
+		this.requiresPermissionNode = requiresPermissionNode;
 	}
 }

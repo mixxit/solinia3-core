@@ -18,4 +18,8 @@ public interface ISoliniaNPCMerchantEntry {
 
 	void setTemporaryquantitylimit(int temporaryquantitylimit);
 
+	boolean isOperatorCreated();
+
+	void setOperatorCreated(boolean operatorCreated);
+
 }

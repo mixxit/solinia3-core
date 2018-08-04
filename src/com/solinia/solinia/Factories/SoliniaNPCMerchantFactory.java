@@ -16,7 +16,7 @@ public class SoliniaNPCMerchantFactory {
 		StateManager.getInstance().getConfigurationManager().addNPCMerchant(merchant);
 	}
 	
-	public static void AddNPCMerchantItem(int merchantid, int itemid)
+	public static void AddNPCMerchantItem(int merchantid, int itemid, boolean operatorCreated)
 	{
 		try
 		{
@@ -32,6 +32,7 @@ public class SoliniaNPCMerchantFactory {
 			merchantentry.setId(id);
 			merchantentry.setMerchantid(merchantid);
 			merchantentry.setItemid(itemid);
+			merchantentry.setOperatorCreated(operatorCreated);
 			StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchantid).getEntries().add(merchantentry);
 		} catch (CoreStateInitException e)
 		{

@@ -7,6 +7,7 @@ public class SoliniaNPCMerchantEntry implements ISoliniaNPCMerchantEntry {
 	private int itemid;
 	private int merchantid;
 	private int temporaryquantitylimit;
+	private boolean operatorCreated = true;
 	
 	@Override
 	public int getId() {
@@ -46,5 +47,15 @@ public class SoliniaNPCMerchantEntry implements ISoliniaNPCMerchantEntry {
 	@Override
 	public void setTemporaryquantitylimit(int temporaryquantitylimit) {
 		this.temporaryquantitylimit = temporaryquantitylimit;
+	}
+
+	@Override
+	public boolean isOperatorCreated() {
+		return operatorCreated;
+	}
+
+	@Override
+	public void setOperatorCreated(boolean operatorCreated) {
+		this.operatorCreated = operatorCreated;
 	}
 }

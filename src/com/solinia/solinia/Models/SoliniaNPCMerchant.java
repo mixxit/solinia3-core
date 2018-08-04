@@ -19,7 +19,7 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 	private List<ISoliniaNPCMerchantEntry> entries = new ArrayList<ISoliniaNPCMerchantEntry>();	
 	private boolean operatorCreated = true;
 	private boolean publishedBookStore = false;
-	
+	private String requiresPermissionNode = "";
 	@Override
 	public int getId() {
 		return id;
@@ -65,6 +65,9 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 			case "publishedbookstore":
 				setPublishedBookStore(Boolean.parseBoolean(value));
 				break;
+			case "requirespermissionnode":
+				setRequiresPermissionNode(value);
+				break;
 			case "remove":
 				int itemIdToRemove = Integer.parseInt(value);
 				if (itemIdToRemove < 1)
@@ -86,6 +89,7 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 		{
 			sender.sendMessage(ChatColor.GOLD + getName().toUpperCase() + ChatColor.RESET + "[" + getId() + "]:");
 			sender.sendMessage(" - publishedbookstore: " + ChatColor.GOLD + getName().toUpperCase() + ChatColor.RESET);
+			sender.sendMessage(" - requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 			for(ISoliniaNPCMerchantEntry lde : getEntries())
 			{
 				ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
@@ -120,5 +124,15 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 	@Override
 	public void setPublishedBookStore(boolean publishedBookStore) {
 		this.publishedBookStore = publishedBookStore;
+	}
+
+	@Override
+	public String getRequiresPermissionNode() {
+		return requiresPermissionNode;
+	}
+
+	@Override
+	public void setRequiresPermissionNode(String requiresPermissionNode) {
+		this.requiresPermissionNode = requiresPermissionNode;
 	}
 }

@@ -48,6 +48,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private double awardsExperience = 0;
 	private boolean awardsBind = false;
 	private boolean operatorCreated = true;
+	private String requiresPermissionNode = "";
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -141,7 +142,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- title: " + ChatColor.GOLD + this.getTitle() + ChatColor.RESET);
 		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
 		sender.sendMessage("- summonsnpcid: " + ChatColor.GOLD + this.getSummonsNpcId() + ChatColor.RESET);
-		
+		sender.sendMessage("- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
+
 		DecimalFormat df = new DecimalFormat("#");
         df.setMaximumFractionDigits(8);
 		sender.sendMessage("- awardsxp: " + ChatColor.GOLD + df.format(getAwardsExperience()) + ChatColor.RESET);
@@ -165,6 +167,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			break;
 		case "awardstitle":
 			setAwardsTitle(Boolean.parseBoolean(value));
+			break;
+		case "requirespermissionnode":
+			setRequiresPermissionNode(value);
 			break;
 		case "awardsbind":
 			setAwardsBind(Boolean.parseBoolean(value));
@@ -349,6 +354,14 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		try
 		{
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(triggerentity);
+			if (!getRequiresPermissionNode().equals(""))
+			{
+				if (!triggerentity.hasPermission(getRequiresPermissionNode()))
+				{
+					triggerentity.sendMessage("This requires a permission node you do not have");
+					return false;
+				}
+			}
 			if (getRequiresQuest() > 0)
 			{
 				boolean foundQuest = false;
@@ -689,6 +702,14 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 
 	public void setRequiresClassId(int requiresClassId) {
 		this.requiresClassId = requiresClassId;
+	}
+
+	public String getRequiresPermissionNode() {
+		return requiresPermissionNode;
+	}
+
+	public void setRequiresPermissionNode(String requiresPermissionNode) {
+		this.requiresPermissionNode = requiresPermissionNode;
 	}
 
 }

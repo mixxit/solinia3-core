@@ -1068,4 +1068,8 @@ public interface ISoliniaSpell {
 	boolean isBossApplyable();
 
 	boolean isRaidApplyable();
+
+	String getRequiresPermissionNode();
+
+	void setRequiresPermissionNode(String requiresPermissionNode);
 }
