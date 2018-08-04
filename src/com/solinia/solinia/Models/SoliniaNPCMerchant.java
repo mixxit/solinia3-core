@@ -88,7 +88,7 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 		try
 		{
 			sender.sendMessage(ChatColor.GOLD + getName().toUpperCase() + ChatColor.RESET + "[" + getId() + "]:");
-			sender.sendMessage(" - publishedbookstore: " + ChatColor.GOLD + getName().toUpperCase() + ChatColor.RESET);
+			sender.sendMessage(" - publishedbookstore: " + ChatColor.GOLD + this.isPublishedBookStore() + ChatColor.RESET);
 			sender.sendMessage(" - requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 			for(ISoliniaNPCMerchantEntry lde : getEntries())
 			{
