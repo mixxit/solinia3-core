@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -475,8 +476,18 @@ public class ChannelManager implements IChannelManager {
         		String characterRace = "Unknown";
         		if (character.getRace() != null)
         			characterRace = character.getRace().getName();
+        		
+        		String accountName = "";
+        		try
+        		{
+        			OfflinePlayer l = Bukkit.getOfflinePlayer(character.getUUID());
+        			accountName = l.getName();
+        		} catch (Exception e)
+        		{
         			
-        		sendToDiscordMC(null,targetChannelId,character.getFullName() + " the Level " + character.getLevel() + " " + characterRace + " " + characterClass);
+        		}
+        			
+        		sendToDiscordMC(null,targetChannelId,"[" + accountName + "] " + character.getFullName() + " the Level " + character.getLevel() + " " + characterRace + " " + characterClass);
         	}
         } catch (Exception e)
         {
