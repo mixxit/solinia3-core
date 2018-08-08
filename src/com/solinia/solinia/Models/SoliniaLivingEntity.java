@@ -2371,6 +2371,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return total;
 		}
 	}
+	
+	@Override
+	public int getMaxItemAttackSpeedPct() {
+		int max = 0;
+
+		try {
+			List<ISoliniaItem> items = new ArrayList<ISoliniaItem>();
+			items = getEquippedSoliniaItems();
+
+			for(ISoliniaItem item : items)
+			{
+				if (item.getAttackspeed() > 0 && item.getAttackspeed() > max)
+					max = item.getAttackspeed();
+			}
+			
+			return max;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return max;
+		}
+	}
 
 	@Override
 	public int getOffense(String skillname) {
@@ -2604,6 +2625,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		effectTypes.add(SpellEffectType.AttackSpeed2);
 		effectTypes.add(SpellEffectType.AttackSpeed3);
 		effectTypes.add(SpellEffectType.AttackSpeed4);
+		
+		int maxItemAttackSpeed = getMaxItemAttackSpeedPct();
+		
+		// Include item passive hastes
+		if (maxItemAttackSpeed > 100)
+		{
+			if (maxItemAttackSpeed > highestAttackSpeedBuff)
+				highestAttackSpeedBuff = maxItemAttackSpeed;
+		} else {
+			if (maxItemAttackSpeed < lowestAttackSpeedBuff)
+				lowestAttackSpeedBuff = maxItemAttackSpeed;
+		}
 		
 		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.AttackSpeed)) 
 		{

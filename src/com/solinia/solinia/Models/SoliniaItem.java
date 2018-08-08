@@ -936,6 +936,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
 		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + ChatColor.RESET);
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET);
 		sender.sendMessage("- stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET);
 		sender.sendMessage("- agility: " + ChatColor.GOLD + getAgility() + ChatColor.RESET);
@@ -989,6 +990,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "bookauthor":
 			setBookAuthor(value);
+			break;
+		case "attackspeedpct":
+			setAttackspeed(Integer.parseInt(value));
 			break;
 		case "worth":
 			setWorth(Integer.parseInt(value));

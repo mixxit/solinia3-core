@@ -271,4 +271,6 @@ public interface ISoliniaLivingEntity
 	public void setHealth(double health);
 
 	boolean canUseItem(ItemStack itemInMainHand);
+
+	int getMaxItemAttackSpeedPct();
 }
