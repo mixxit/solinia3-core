@@ -279,5 +279,21 @@ public interface ISoliniaLivingEntity
 
 	void setLastDualWield();
 
+	Timestamp getLastDoubleAttack();
+
+	void setLastDoubleAttack();
+
+	Timestamp getLastRiposte();
+
+	void setLastRiposte();
+
+	void doRiposte(UUID defenderUuid, int originalDamage);
+
+	public void doDoubleAttack(UUID defenderUUID, int final_damagedone);
+
+	public void doDualWield(UUID defenderUUID, int final_damagedone, int offHandItemId);
+
+	void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID);
+
 
 }

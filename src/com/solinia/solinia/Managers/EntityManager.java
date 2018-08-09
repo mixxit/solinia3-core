@@ -70,6 +70,8 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, Integer> entitySinging = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> lastRiposte = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontHealMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontRootMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontBuffMe = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1405,5 +1407,25 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setLastDualWield(UUID uuid, Timestamp lasttimestamp) {
 		this.lastDualWield.put(uuid, lasttimestamp);
+	}
+	
+	@Override
+	public ConcurrentHashMap<UUID, Timestamp> getLastDoubleAttack() {
+		return lastDoubleAttack;
+	}
+
+	@Override
+	public void setLastDoubleAttack(UUID uuid, Timestamp lasttimestamp) {
+		this.lastDoubleAttack.put(uuid, lasttimestamp);
+	}
+	
+	@Override
+	public ConcurrentHashMap<UUID, Timestamp> getLastRiposte() {
+		return lastRiposte;
+	}
+
+	@Override
+	public void setLastRiposte(UUID uuid, Timestamp lasttimestamp) {
+		this.lastRiposte.put(uuid, lasttimestamp);
 	}
 }

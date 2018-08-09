@@ -156,4 +156,12 @@ public interface IEntityManager {
 	ConcurrentHashMap<UUID, Timestamp> getLastDualWield();
 
 	void setLastDualWield(UUID uuid, Timestamp timestamp);
+
+	ConcurrentHashMap<UUID, Timestamp> getLastDoubleAttack();
+
+	void setLastDoubleAttack(UUID uuid, Timestamp lasttimestamp);
+
+	ConcurrentHashMap<UUID, Timestamp> getLastRiposte();
+
+	void setLastRiposte(UUID uuid, Timestamp lasttimestamp);
 }
