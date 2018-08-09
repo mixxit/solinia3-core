@@ -2628,16 +2628,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		int maxItemAttackSpeed = getMaxItemAttackSpeedPct();
 		
-		// Include item passive hastes
+		// Include item passive hastes but only if the item provides more than 1%
 		if (maxItemAttackSpeed > 100)
 		{
 			if (maxItemAttackSpeed > highestAttackSpeedBuff)
 				highestAttackSpeedBuff = maxItemAttackSpeed;
-		} else {
-			if (maxItemAttackSpeed < lowestAttackSpeedBuff)
-				lowestAttackSpeedBuff = maxItemAttackSpeed;
 		}
 		
+		// Takes into account slows (< 100 attackspeed)
 		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), SpellEffectType.AttackSpeed)) 
 		{
 			if (effect.getRemainingValue() > 100)
