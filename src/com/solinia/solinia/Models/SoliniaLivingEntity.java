@@ -1395,7 +1395,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				name = defender.getBukkitLivingEntity().getCustomName();
 			
 			if (attackerEntity instanceof Player)
-			((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+			((Player) attackerEntity).spigot().sendMessage(ChatMessageType.CHAT,
 					new TextComponent("You hit " + name + " for " + df.format(finaldamage) + " "
 							+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
 							+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
@@ -1420,7 +1420,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				// Only players get skill rise
 				if (attackerEntity instanceof Player) {
 					
-					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.CHAT,
 							new TextComponent(ChatColor.GRAY + "* You double attack!"));
 					tryIncreaseSkill("DOUBLEATTACK", 1);
 				} 
@@ -1439,9 +1439,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				// Only players get skill rise
 				if (attackerEntity instanceof Player)
 				{
-					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+					((Player) attackerEntity).spigot().sendMessage(ChatMessageType.CHAT,
 							new TextComponent(ChatColor.GRAY + "* You dual wield [" + my_hit2.damage_done + "]!"));
 					tryIncreaseSkill("DUALWIELD", 1);
+					
+					setLastDualWield();
 					
 					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer)attackerEntity).getHandle(), 3);
 			        ((CraftPlayer)attackerEntity).getHandle().playerConnection.sendPacket(packet);
@@ -3721,6 +3723,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getNpcid() < 1 && !isPlayer())
 			return false;
 		
+		// If dual wield less than a second ago
+		// Ugly hack to work around looping dual wields (cant get source of offhand on damage event)
+		Timestamp expiretimestamp = getLastDualWield();
+		if (expiretimestamp != null)
+		{
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+
+			if (!nowtimestamp.after(Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus(1,ChronoUnit.SECONDS))))
+				return false;
+		}
+		
 		try {
 			if (getNpcid() > 0) {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
@@ -3746,6 +3760,31 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public Timestamp getLastDualWield() {
+		try
+		{
+			return StateManager.getInstance().getEntityManager().getLastDualWield().get(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e)
+		{
+		}
+		return null;
+	}
+	
+	
+	@Override
+	public void setLastDualWield() {
+		try
+		{
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			StateManager.getInstance().getEntityManager().setLastDualWield(this.getBukkitLivingEntity().getUniqueId(),nowtimestamp);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	@Override

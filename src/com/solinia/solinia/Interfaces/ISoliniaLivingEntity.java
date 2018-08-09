@@ -1,5 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -273,4 +274,10 @@ public interface ISoliniaLivingEntity
 	boolean canUseItem(ItemStack itemInMainHand);
 
 	int getMaxItemAttackSpeedPct();
+
+	Timestamp getLastDualWield();
+
+	void setLastDualWield();
+
+
 }

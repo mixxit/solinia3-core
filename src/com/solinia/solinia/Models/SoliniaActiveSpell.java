@@ -168,7 +168,7 @@ public class SoliniaActiveSpell {
 			if (isFirstRun) {
 				if (soliniaSpell.getCastOnYou() != null && !soliniaSpell.getCastOnYou().equals("") && isOwnerPlayer) {
 					Player player = Bukkit.getPlayer(getOwnerUuid());
-					player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+					player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou() + "[" + player.isDead() + "]");
 				}
 
 				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals(""))

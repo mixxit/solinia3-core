@@ -69,6 +69,7 @@ public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, Integer> entitySinging = new ConcurrentHashMap<UUID, Integer>();
+	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontHealMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontRootMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontBuffMe = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1394,5 +1395,15 @@ public class EntityManager implements IEntityManager {
 		}
 		
 		setEntityAutoAttack(player, !autoAttackState);
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, Timestamp> getLastDualWield() {
+		return lastDualWield;
+	}
+
+	@Override
+	public void setLastDualWield(UUID uuid, Timestamp lasttimestamp) {
+		this.lastDualWield.put(uuid, lasttimestamp);
 	}
 }
