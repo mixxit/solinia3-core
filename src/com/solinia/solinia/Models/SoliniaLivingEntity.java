@@ -110,6 +110,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			} catch (CoreStateInitException e) {
 
 			}
+			return;
+		}
+		
+		if (defender.getBukkitLivingEntity().isDead())
+		{
+			try {
+				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
+				return;
+			} catch (CoreStateInitException e) {
+
+			}
+			return;
 		}
 		
 		if (defender.getBukkitLivingEntity().getUniqueId().toString()
@@ -1404,7 +1416,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 			if(!arrowHit)
-			if (getDoubleAttackCheck()) {
+			if (getDoubleAttackCheck() && !attackerEntity.isDead() && !defender.getBukkitLivingEntity().isDead()) {
 				// Only players get skill rise
 				if (attackerEntity instanceof Player) {
 					
@@ -1417,7 +1429,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 			if(!arrowHit)
-			if (getDualWieldCheck()) {
+			if (getDualWieldCheck() && !attackerEntity.isDead() && !defender.getBukkitLivingEntity().isDead()) {
 				ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
 				int baseDamage2 = (int)ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);
 				
@@ -1720,6 +1732,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		if (arrowHit)
+			return;
+		
+		if (this.getBukkitLivingEntity().isDead() || defender.getBukkitLivingEntity().isDead())
 			return;
 
 		try {

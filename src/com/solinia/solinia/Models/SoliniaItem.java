@@ -484,6 +484,9 @@ public class SoliniaItem implements ISoliniaItem {
 	public boolean useItemOnEntity(Player player, LivingEntity targetentity, boolean isConsumable)
 			throws CoreStateInitException {
 		
+		if (targetentity.isDead() || player.isDead())
+			return false;
+		
 		if (player.getLocation().distance(targetentity.getLocation()) > 15)
 		{
 			player.sendMessage("You were too far to use this item on that entity");

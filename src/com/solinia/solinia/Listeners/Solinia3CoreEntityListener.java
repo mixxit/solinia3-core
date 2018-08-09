@@ -541,6 +541,11 @@ public class Solinia3CoreEntityListener implements Listener {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
+		if (event.getEntity().isOp())
+		{
+			System.out.println("DEBUG: OP Death - isDead: " + event.getEntity().isDead());
+		}
+		
 		if ((event.getEntity() instanceof ArmorStand)) {
 			return;
 		}
