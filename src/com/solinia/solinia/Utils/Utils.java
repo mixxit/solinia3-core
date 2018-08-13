@@ -635,6 +635,46 @@ public class Utils {
 			xp = 1;
 			skill = "CRUSHING";
 			break;
+		case "WOOD_HOE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "STONE_HOE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "IRON_HOE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "GOLD_HOE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "DIAMOND_HOE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "WOOD_PICKAXE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "STONE_PICKAXE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "IRON_PICKAXE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "GOLD_PICKAXE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
+		case "DIAMOND_PICKAXE":
+			xp = 1;
+			skill = "CRUSHING";
+			break;
 		case "BOW":
 			xp = 1;
 			skill = "ARCHERY";
@@ -5616,6 +5656,26 @@ public class Utils {
 		case "GOLD_SPADE":
 			return AugmentationSlotType.WEAPON;
 		case "DIAMOND_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_PICKAXE":
 			return AugmentationSlotType.WEAPON;
 		case "LEATHER_HELMET":
 			return AugmentationSlotType.HELMET;

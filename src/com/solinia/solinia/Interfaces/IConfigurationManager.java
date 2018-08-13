@@ -59,6 +59,14 @@ public interface IConfigurationManager {
 		add("IRON_SPADE"); 
 		add("GOLD_SPADE"); 
 		add("DIAMOND_SPADE"); 
+		add("STONE_HOE");
+		add("IRON_HOE");
+		add("GOLD_HOE");
+		add("DIAMOND_HOE");
+		add("STONE_PICKAXE");
+		add("IRON_PICKAXE");
+		add("GOLD_PICKAXE");
+		add("DIAMOND_PICKAXE");
 		}};
 		
 	public List<String> MiningMaterials = new ArrayList<String>() {{
@@ -140,6 +148,14 @@ public interface IConfigurationManager {
 			add("IRON_SPADE");
 			add("GOLD_SPADE");
 			add("DIAMOND_SPADE");
+			add("STONE_HOE");
+			add("IRON_HOE");
+			add("GOLD_HOE");
+			add("DIAMOND_HOE");
+			add("STONE_PICKAXE");
+			add("IRON_PICKAXE");
+			add("GOLD_PICKAXE");
+			add("DIAMOND_PICKAXE");
 			add("SHIELD");
 			add("BOW");
 		}};

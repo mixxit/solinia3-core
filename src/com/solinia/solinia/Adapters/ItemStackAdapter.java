@@ -57,6 +57,10 @@ public class ItemStackAdapter {
 					|| soliniaItem.getBasename().equals("DIAMOND_SWORD") || soliniaItem.getBasename().equals("WOOD_AXE")
 					|| soliniaItem.getBasename().equals("STONE_AXE") || soliniaItem.getBasename().equals("IRON_AXE")
 					|| soliniaItem.getBasename().equals("GOLD_AXE") || soliniaItem.getBasename().equals("DIAMOND_AXE")
+					|| soliniaItem.getBasename().equals("WOOD_HOE") || soliniaItem.getBasename().equals("STONE_HOE")
+					|| soliniaItem.getBasename().equals("IRON_HOE") || soliniaItem.getBasename().equals("GOLD_HOE")
+					|| soliniaItem.getBasename().equals("WOOD_PICKAXE") || soliniaItem.getBasename().equals("STONE_PICKAXE")
+					|| soliniaItem.getBasename().equals("IRON_PICKAXE") || soliniaItem.getBasename().equals("GOLD_PICKAXE")
 					|| soliniaItem.getBasename().equals("WOOD_SPADE") || soliniaItem.getBasename().equals("STONE_SPADE")
 					|| soliniaItem.getBasename().equals("IRON_SPADE") || soliniaItem.getBasename().equals("GOLD_SPADE")
 					|| soliniaItem.getBasename().equals("DIAMOND_SPADE")) {
