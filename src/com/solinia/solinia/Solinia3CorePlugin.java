@@ -263,9 +263,17 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			spawngrouprepo.setJsonFile(getDataFolder() + "/" + "spawngroups.json");
 			spawngrouprepo.reload();
 
-			JsonWorldWidePerkRepository perkrepo = new JsonWorldWidePerkRepository();
-			perkrepo.setJsonFile(getDataFolder() + "/" + "worldwideperks.json");
-			perkrepo.reload();
+			// May be being written
+			JsonWorldWidePerkRepository perkrepo = null;
+			try
+			{
+				perkrepo = new JsonWorldWidePerkRepository();
+				perkrepo.setJsonFile(getDataFolder() + "/" + "worldwideperks.json");
+				perkrepo.reload();
+			} catch (Exception e)
+			{
+				perkrepo = new JsonWorldWidePerkRepository();
+			}
 
 			JsonAAAbilityRepository aaabilityrepo = new JsonAAAbilityRepository();
 			aaabilityrepo.setJsonFile(getDataFolder() + "/" + "aaabilities.json");
