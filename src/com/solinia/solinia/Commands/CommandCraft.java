@@ -15,6 +15,8 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaCraft;
@@ -133,52 +135,71 @@ public class CommandCraft implements CommandExecutor {
     					}
     				}
     				
-    				ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(craftEntry.getOutputItem());
-    				if (outputItem != null)
+    				int outputItemId = 0;
+    				if (craftEntry.getOutputItem() > 0)
     				{
-    					if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
+    					outputItemId = 0;
+    				} else {
+    					if (craftEntry.getOutputLootTableId() > 0)
     					{
-    						solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
-
-    						if (!solPlayer.getSkillCheck(craftEntry.getSkill().toUpperCase(),craftEntry.getMinSkill()+50))
+    						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craftEntry.getOutputLootTableId());
+    						if (loottable != null)
     						{
-    							player.sendMessage("Your lack of skill resulted in failure!");
-    							// remove components
-    		    				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
-    		    				stack.setAmount(stack.getAmount() - 1);
-    		    		        player.getInventory().setItemInMainHand(stack);
-
-    		    				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
-    		    				stack2.setAmount(stack2.getAmount() - 1);
-    		    		        player.getInventory().setItemInOffHand(stack2);
-    		    				
-    							player.updateInventory();
-    							break;
+    							Utils.DropLoot(loottable.getId(), player.getWorld(), player.getLocation());
     						}
     					}
+    				}
+    				
+    				if (outputItemId > 0)
+    				{
+    					ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(outputItemId);
+	    				if (outputItem != null)
+	    				{
+	    					if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
+	    					{
+	    						solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
+	
+	    						if (!solPlayer.getSkillCheck(craftEntry.getSkill().toUpperCase(),craftEntry.getMinSkill()+50))
+	    						{
+	    							player.sendMessage("Your lack of skill resulted in failure!");
+	    							// remove components
+	    		    				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
+	    		    				stack.setAmount(stack.getAmount() - 1);
+	    		    		        player.getInventory().setItemInMainHand(stack);
+	
+	    		    				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
+	    		    				stack2.setAmount(stack2.getAmount() - 1);
+	    		    		        player.getInventory().setItemInOffHand(stack2);
+	    		    				
+	    							player.updateInventory();
+	    							break;
+	    						}
+	    					}
+	
+	    					player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
+	    					player.sendMessage("You fashion the items together to make something new!");
+	    					createCount++;
+	
+	    				}
+	    				
+	    				if (createCount > 0)
+	        			{
+	        				// remove components
+	        				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
+	        				stack.setAmount(stack.getAmount() - 1);
+	        		        player.getInventory().setItemInMainHand(stack);
 
-    					player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
-    					player.sendMessage("You fashion the items together to make something new!");
-    					createCount++;
-
+	        				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
+	        				stack2.setAmount(stack2.getAmount() - 1);
+	        		        player.getInventory().setItemInOffHand(stack2);
+	        				
+	        				player.updateInventory();
+	        				
+	        			}
+    				} else {
+    					player.sendMessage("This craft is not possible");
     				}
     			}
-    			
-    			if (createCount > 0)
-    			{
-    				// remove components
-    				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
-    				stack.setAmount(stack.getAmount() - 1);
-    		        player.getInventory().setItemInMainHand(stack);
-
-    				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
-    				stack2.setAmount(stack2.getAmount() - 1);
-    		        player.getInventory().setItemInOffHand(stack2);
-    				
-    				player.updateInventory();
-    				
-    			}
-
             } catch (CoreStateInitException e)
             {
             	

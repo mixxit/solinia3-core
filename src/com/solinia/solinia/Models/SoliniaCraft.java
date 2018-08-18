@@ -6,6 +6,8 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -21,6 +23,7 @@ public class SoliniaCraft {
 	private boolean nearForge = false;
 	private int classId = 0;
 	private int outputItem = 0;
+	private int outputLootTableId = 0;
 	
 	public int getItem1() {
 		return item1;
@@ -81,6 +84,7 @@ public class SoliniaCraft {
 		sender.sendMessage("- item1: " + ChatColor.GOLD + getItem1() + ChatColor.RESET);
 		sender.sendMessage("- item2: " + ChatColor.GOLD + getItem2() + ChatColor.RESET);
 		sender.sendMessage("- outputitem: " + ChatColor.GOLD + getOutputItem() + ChatColor.RESET);
+		sender.sendMessage("- outputloottableid: " + ChatColor.GOLD + getOutputLootTableId() + ChatColor.RESET);
 		sender.sendMessage("- classid: " + ChatColor.GOLD + getClassId() + ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + ChatColor.RESET);
 		sender.sendMessage("- minskill: " + ChatColor.GOLD + getMinSkill() + ChatColor.RESET);
@@ -134,6 +138,13 @@ public class SoliniaCraft {
 			break;
 		case "outputitem":
 			int outputitem = Integer.parseInt(value);
+			
+			if (outputitem == 0)
+			{
+				setOutputItem(0);
+				break;
+			}
+			
 			ISoliniaItem soloutitem = StateManager.getInstance().getConfigurationManager().getItem(outputitem);
 			if (soloutitem == null)
 			{
@@ -142,9 +153,25 @@ public class SoliniaCraft {
 
 			setOutputItem(outputitem);
 			break;
+		case "outputloottableid":
+			int outputloottableid = Integer.parseInt(value);
+			if (outputloottableid == 0)
+			{
+				setOutputLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable solloottable = StateManager.getInstance().getConfigurationManager().getLootTable(outputloottableid);
+			if (solloottable == null)
+			{
+				throw new InvalidCraftSettingException("Invalid item outputloottableid (out loottable)");
+			}
+
+			setOutputLootTableId(outputloottableid);
+			break;
 		default:
 			throw new InvalidCraftSettingException(
-					"Invalid zone setting. Valid Options are: recipename,item1,item2,outputitem,skill,classid,minskill");
+					"Invalid craft setting. Valid Options are: recipename,item1,item2,outputitem,outputloottableid,skill,classid,minskill");
 		}
 	}
 	public String getRecipeName() {
@@ -158,5 +185,11 @@ public class SoliniaCraft {
 	}
 	public void setOperatorCreated(boolean operatorCreated) {
 		this.operatorCreated = operatorCreated;
+	}
+	public int getOutputLootTableId() {
+		return outputLootTableId;
+	}
+	public void setOutputLootTableId(int outputLootTableId) {
+		this.outputLootTableId = outputLootTableId;
 	}
 }
