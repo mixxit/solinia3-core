@@ -16,7 +16,9 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaCraft;
@@ -135,70 +137,116 @@ public class CommandCraft implements CommandExecutor {
     					}
     				}
     				
-    				int outputItemId = 0;
-    				if (craftEntry.getOutputItem() > 0)
+    				if (craftEntry.getOutputItem() > 0 || craftEntry.getOutputLootTableId() > 0)
     				{
-    					outputItemId = 0;
-    				} else {
-    					if (craftEntry.getOutputLootTableId() > 0)
+    					if (craftEntry.getOutputItem() > 0)
     					{
-    						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craftEntry.getOutputLootTableId());
-    						if (loottable != null)
+    						ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(craftEntry.getOutputItem());
+    						if (outputItem == null)
     						{
-    							Utils.DropLoot(loottable.getId(), player.getWorld(), player.getLocation());
+    							player.sendMessage("That craft is not possible as the recipe is for an item that no longer is possible");
+    							continue;
     						}
     					}
-    				}
-    				
-    				if (outputItemId > 0)
-    				{
-    					ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(outputItemId);
-	    				if (outputItem != null)
-	    				{
-	    					if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
-	    					{
-	    						solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
-	
-	    						if (!solPlayer.getSkillCheck(craftEntry.getSkill().toUpperCase(),craftEntry.getMinSkill()+50))
+    					
+    					if (craftEntry.getOutputLootTableId() > 0)
+    					{
+    						ISoliniaLootTable outputLootTable = StateManager.getInstance().getConfigurationManager().getLootTable(craftEntry.getOutputLootTableId());
+    						if (outputLootTable == null)
+    						{
+    							player.sendMessage("That craft is not possible as the recipe is for a random loot list that no longer exists");
+    							continue;
+    						}
+    						
+    						if (outputLootTable.getEntries().size() < 1)
+    						{
+    							player.sendMessage("That craft is not possible as the recipe is for a random loot list that is empty");
+    							continue;
+    						}
+    						
+    						int lootdropcount = 0;
+    						
+    						for(ISoliniaLootTableEntry entry : outputLootTable.getEntries())
+    						{
+	    						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
+	    						if (lootdrop == null)
+	    							continue;
+	    						
+	    						if (lootdrop.getEntries().size() < 1)
+	    							continue;
+	    						
+	    						for (ISoliniaLootDropEntry lentry : lootdrop.getEntries())
 	    						{
-	    							player.sendMessage("Your lack of skill resulted in failure!");
-	    							// remove components
-	    		    				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
-	    		    				stack.setAmount(stack.getAmount() - 1);
-	    		    		        player.getInventory().setItemInMainHand(stack);
+	    							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(lentry.getItemid());
+	    							if (item == null)
+	    								continue;
+	    							
+	    							lootdropcount++;
+	    						}
+    						}
+    						
+    						if (lootdropcount < 1)
+    						{
+    							player.sendMessage("That craft is not possible as the recipe is for a random loot list with loot drops that are empty");
+    							continue;
+    						}
+    					}
+    					
+	    				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
+						{
+							solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
 	
-	    		    				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
-	    		    				stack2.setAmount(stack2.getAmount() - 1);
-	    		    		        player.getInventory().setItemInOffHand(stack2);
-	    		    				
-	    							player.updateInventory();
-	    							break;
+							if (!solPlayer.getSkillCheck(craftEntry.getSkill().toUpperCase(),craftEntry.getMinSkill()+50))
+							{
+								player.sendMessage("Your lack of skill resulted in failure!");
+								// remove components
+			    				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
+			    				stack.setAmount(stack.getAmount() - 1);
+			    		        player.getInventory().setItemInMainHand(stack);
+	
+			    				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
+			    				stack2.setAmount(stack2.getAmount() - 1);
+			    		        player.getInventory().setItemInOffHand(stack2);
+			    				
+								player.updateInventory();
+								break;
+							}
+						}
+	    				
+	    				if (craftEntry.getOutputItem() > 0)
+	    				{
+	    					ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(craftEntry.getOutputItem());
+		    				player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
+							player.sendMessage("You fashion the items together to make something new!");
+							createCount++;
+	    				} else {
+		    				if (craftEntry.getOutputLootTableId() > 0)
+	    					{
+	    						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craftEntry.getOutputLootTableId());
+	    						if (loottable != null)
+	    						{
+	    							Utils.DropLoot(loottable.getId(), player.getWorld(), player.getLocation());
+	    							player.sendMessage("You fashion the items together to attempt to make something random!");
+	    							createCount++;
 	    						}
 	    					}
-	
-	    					player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
-	    					player.sendMessage("You fashion the items together to make something new!");
-	    					createCount++;
-	
 	    				}
-	    				
-	    				if (createCount > 0)
-	        			{
-	        				// remove components
-	        				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
-	        				stack.setAmount(stack.getAmount() - 1);
-	        		        player.getInventory().setItemInMainHand(stack);
-
-	        				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
-	        				stack2.setAmount(stack2.getAmount() - 1);
-	        		        player.getInventory().setItemInOffHand(stack2);
-	        				
-	        				player.updateInventory();
-	        				
-	        			}
-    				} else {
-    					player.sendMessage("This craft is not possible");
     				}
+
+    				if (createCount > 0)
+        			{
+        				// remove components
+        				ItemStack stack = ((Player) sender).getEquipment().getItemInMainHand();
+        				stack.setAmount(stack.getAmount() - 1);
+        		        player.getInventory().setItemInMainHand(stack);
+
+        				ItemStack stack2 = ((Player) sender).getEquipment().getItemInOffHand();
+        				stack2.setAmount(stack2.getAmount() - 1);
+        		        player.getInventory().setItemInOffHand(stack2);
+        				
+        				player.updateInventory();
+        				
+        			}
     			}
             } catch (CoreStateInitException e)
             {

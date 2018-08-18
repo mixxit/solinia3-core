@@ -27,6 +27,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaCraft;
 
@@ -159,7 +160,20 @@ public class JsonCraftRepository implements IRepository<SoliniaCraft> {
 				{
 					ISoliniaItem item1 = StateManager.getInstance().getConfigurationManager().getItem(craft.getItem1());
 					ISoliniaItem item2 = StateManager.getInstance().getConfigurationManager().getItem(craft.getItem2());
-					ISoliniaItem outitem = StateManager.getInstance().getConfigurationManager().getItem(craft.getOutputItem());
+					
+					String outname = "";
+					
+					if (craft.getOutputItem() > 0)
+					{
+						ISoliniaItem outitem = StateManager.getInstance().getConfigurationManager().getItem(craft.getOutputItem());
+						outname = outitem.getDisplayname();
+					}
+					
+					if (craft.getOutputLootTableId() > 0)
+					{
+						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craft.getOutputLootTableId());
+						outname = loottable.getName();
+					}
 					String classname = "";
 					if (craft.getClassId() > 0)
 					{
@@ -179,7 +193,7 @@ public class JsonCraftRepository implements IRepository<SoliniaCraft> {
 		        			craft.getOutputItem(),
 		        			item1.getDisplayname(),
 		        			item2.getDisplayname(),
-		        			outitem.getDisplayname(),
+		        			outname,
 		        			classname
 		            		);
 		            
