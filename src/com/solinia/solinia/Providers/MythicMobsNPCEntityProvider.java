@@ -266,10 +266,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 		mob = mob + "  Health: " + hp + "\r\n";
 		mob = mob + "  Damage: " + damage + "\r\n";
-		mob = mob + "  MaxCombatDistance: 25\r\n";
 		mob = mob + "  PreventOtherDrops: true\r\n";
 		mob = mob + "  PreventRandomEquipment: true\r\n";
 		mob = mob + "  Options:\r\n";
+		mob = mob + "    MaxCombatDistance: "+Utils.MAX_ENTITY_AGGRORANGE+"\r\n";
+		mob = mob + "    FollowRange: "+Utils.MAX_ENTITY_AGGRORANGE+"\r\n";
 		mob = mob + "    MovementSpeed: " + movementSpeed + "\r\n";
 		mob = mob + "    KnockbackResistance: 1\r\n";
 		mob = mob + "    PreventMobKillDrops: true\r\n";

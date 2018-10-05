@@ -66,9 +66,24 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityTargetEvent(EntityTargetEvent event) {
 		if (event.isCancelled())
 			return;
-
+		
 		if (!(event.getEntity() instanceof Creature))
 			return;
+		
+		try
+		{
+			if (event.getEntity() instanceof LivingEntity)
+			if (StateManager.getInstance().getEntityManager().getHateListEntry(event.getEntity().getUniqueId(), event.getTarget().getUniqueId()) < 1)
+			if (!Utils.isEntityInLineOfSightCone((LivingEntity)event.getEntity(), event.getTarget(), 90, Utils.MAX_ENTITY_AGGRORANGE))
+			{
+				Utils.CancelEvent(event);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+				
 
 		// cancel feigened if targetting
 		try {
@@ -203,6 +218,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.getEntity() instanceof LivingEntity) {
 			// if this is a skeleton entity, remove the chase task frmo the mobs AI
 			event.getEntity().spigot();
+			((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity)event.getEntity()).getHandle().getAttributeInstance(net.minecraft.server.v1_12_R1.GenericAttributes.FOLLOW_RANGE).setValue(Utils.MAX_ENTITY_AGGRORANGE);
 		}
 	}
 
@@ -283,14 +299,17 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 		}
 		
-		if (damagecause.getDamager() instanceof LivingEntity)
-		if (damagecause.getDamager().getLocation().distance(event.getEntity().getLocation()) > 15)
+		if (damagecause.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity)
 		{
-			if (damagecause.getDamager() instanceof Player)
-				damagecause.getDamager().sendMessage("You were too far to cause damage");
-			
-			Utils.CancelEvent(event);
-			return;
+			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity)damagecause.getDamager(), (LivingEntity)event.getEntity());
+			if (distanceOverLimit > 0)
+			{
+				if (damagecause.getDamager() instanceof Player)
+					damagecause.getDamager().sendMessage("You were too far to cause damage [" + distanceOverLimit + " blocks too far]");
+				
+				Utils.CancelEvent(event);
+				return;
+			}
 		}
 		
 		// Disable jumping crits for melee
@@ -308,14 +327,18 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (damagecause.getDamager() instanceof Arrow)
 		{
 			ProjectileSource source = ((Arrow)damagecause.getDamager()).getShooter();
-			if (source instanceof LivingEntity)
-			if (((LivingEntity)source).getLocation().distance(event.getEntity().getLocation()) > 15)
+			if (source instanceof LivingEntity && event.getEntity() instanceof LivingEntity)
 			{
-				if (source instanceof Player)
-					((Player)source).sendMessage("You were too far to cause damage");
+				double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity)source, (LivingEntity)event.getEntity());
 				
-				Utils.CancelEvent(event);
-				return;
+				if (distanceOverLimit > 0D)
+				{
+					if (source instanceof Player)
+						((Player)source).sendMessage("You were too far to cause damage [" + distanceOverLimit + " blocks too far]");
+					
+					Utils.CancelEvent(event);
+					return;
+				}
 			}
 			
 			// cancel crit jump damage for bows

@@ -14,6 +14,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -26,6 +28,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
@@ -46,6 +50,7 @@ import org.bukkit.util.Vector;
 import com.comphenix.example.Vector3D;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rit.sucy.player.TargetHelper;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -98,9 +103,13 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_12_R1.EntityHuman;
+import net.minecraft.server.v1_12_R1.GenericAttributes;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 
 public class Utils {
+	public static final int MAX_ENTITY_AGGRORANGE = 100;
+
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));
 	}
@@ -1305,17 +1314,15 @@ public class Utils {
 			return "N";
 		}
 	}
-
-	public static List<LivingEntity> getLivingEntitiesInCone(Player player) {
-		List<LivingEntity> le = new ArrayList<LivingEntity>();
-		for (Entity e : player.getNearbyEntities(200, 200, 200)) {
-			if (e instanceof LivingEntity) {
-				if (isEntityInLineOfSight(player, e)) {
-					le.add((LivingEntity) e);
-				}
-			}
-		}
-		return le;
+	
+	public static boolean isEntityInLineOfSightCone(LivingEntity entity, Entity target, int arc, int range) {
+		if (!TargetHelper.getConeTargets(entity, arc, range).contains(target))
+			return false;
+		
+		if (entity.hasLineOfSight(target))
+			return true;
+		
+		return false;
 	}
 
 	public static LivingEntity getTargettedLivingEntity(LivingEntity observer, int reach) {
@@ -1390,7 +1397,7 @@ public class Utils {
 
 		return false;
 	}
-
+	
 	public static int getEffectIdFromEffectType(SpellEffectType spellEffectType) {
 		switch (spellEffectType) {
 		case CurrentHP:
@@ -6609,87 +6616,87 @@ public class Utils {
 	public static List<String> GetRunic()
 	{
 		List<String> runic = new ArrayList<String>();
-		runic.add("ᚠ");
-		runic.add("ᚡ");
-		runic.add("ᚢ");
-		runic.add("ᚣ");
-		runic.add("ᚤ");
-		runic.add("ᚥ");
-		runic.add("ᚦ");
-		runic.add("ᚧ");
-		runic.add("ᚨ");
-		runic.add("ᚩ");
-		runic.add("ᚪ");
-		runic.add("ᚫ");
-		runic.add("ᚬ");
-		runic.add("ᚭ");
-		runic.add("ᚮ");
-		runic.add("ᚯ");
-		runic.add("ᚰ");
-		runic.add("ᚱ");
-		runic.add("ᚲ");
-		runic.add("ᚳ");
-		runic.add("ᚴ");
-		runic.add("ᚵ");
-		runic.add("ᚶ");
-		runic.add("ᚷ");
-		runic.add("ᚸ");
-		runic.add("ᚹ");
-		runic.add("ᚺ");
-		runic.add("ᚻ");
-		runic.add("ᚼ");
-		runic.add("ᚽ");
-		runic.add("ᚾ");
-		runic.add("ᚿ");
-		runic.add("ᛀ");
-		runic.add("ᛁ");
-		runic.add("ᛂ");
-		runic.add("ᛃ");
-		runic.add("ᛄ");
-		runic.add("ᛅ");
-		runic.add("ᛆ");
-		runic.add("ᛇ");
-		runic.add("ᛈ");
-		runic.add("ᛉ");
-		runic.add("ᛊ");
-		runic.add("ᛋ");
-		runic.add("ᛌ");
-		runic.add("ᛍ");
-		runic.add("ᛎ");
-		runic.add("ᛏ");
-		runic.add("ᛐ");
-		runic.add("ᛑ");
-		runic.add("ᛒ");
-		runic.add("ᛓ");
-		runic.add("ᛔ");
-		runic.add("ᛕ");
-		runic.add("ᛖ");
-		runic.add("ᛗ");
-		runic.add("ᛘ");
-		runic.add("ᛙ");
-		runic.add("ᛚ");
-		runic.add("ᛛ");
-		runic.add("ᛜ");
-		runic.add("ᛝ");
-		runic.add("ᛞ");
-		runic.add("ᛟ");
-		runic.add("ᛠ");
-		runic.add("ᛡ");
-		runic.add("ᛢ");
-		runic.add("ᛣ");
-		runic.add("ᛤ");
-		runic.add("ᛥ");
-		runic.add("ᛦ");
-		runic.add("ᛧ");
-		runic.add("ᛨ");
-		runic.add("ᛩ");
-		runic.add("ᛪ");
-		runic.add("᛫");
-		runic.add("᛬");
-		runic.add("᛭");
-		runic.add("ᛮ");
-		runic.add("ᛯ");
-		runic.add("ᛰ");
+		runic.add("áš ");
+		runic.add("áš¡");
+		runic.add("áš¢");
+		runic.add("áš£");
+		runic.add("áš¤");
+		runic.add("áš¥");
+		runic.add("áš¦");
+		runic.add("áš§");
+		runic.add("áš¨");
+		runic.add("áš©");
+		runic.add("ášª");
+		runic.add("áš«");
+		runic.add("áš¬");
+		runic.add("áš­");
+		runic.add("áš®");
+		runic.add("áš¯");
+		runic.add("áš°");
+		runic.add("áš±");
+		runic.add("áš²");
+		runic.add("áš³");
+		runic.add("áš´");
+		runic.add("ášµ");
+		runic.add("áš¶");
+		runic.add("áš·");
+		runic.add("áš¸");
+		runic.add("áš¹");
+		runic.add("ášº");
+		runic.add("áš»");
+		runic.add("áš¼");
+		runic.add("áš½");
+		runic.add("áš¾");
+		runic.add("áš¿");
+		runic.add("á›€");
+		runic.add("á›�");
+		runic.add("á›‚");
+		runic.add("á›ƒ");
+		runic.add("á›„");
+		runic.add("á›…");
+		runic.add("á›†");
+		runic.add("á›‡");
+		runic.add("á›ˆ");
+		runic.add("á›‰");
+		runic.add("á›Š");
+		runic.add("á›‹");
+		runic.add("á›Œ");
+		runic.add("á›�");
+		runic.add("á›Ž");
+		runic.add("á›�");
+		runic.add("á›�");
+		runic.add("á›‘");
+		runic.add("á›’");
+		runic.add("á›“");
+		runic.add("á›”");
+		runic.add("á›•");
+		runic.add("á›–");
+		runic.add("á›—");
+		runic.add("á›˜");
+		runic.add("á›™");
+		runic.add("á›š");
+		runic.add("á››");
+		runic.add("á›œ");
+		runic.add("á›�");
+		runic.add("á›ž");
+		runic.add("á›Ÿ");
+		runic.add("á› ");
+		runic.add("á›¡");
+		runic.add("á›¢");
+		runic.add("á›£");
+		runic.add("á›¤");
+		runic.add("á›¥");
+		runic.add("á›¦");
+		runic.add("á›§");
+		runic.add("á›¨");
+		runic.add("á›©");
+		runic.add("á›ª");
+		runic.add("á›«");
+		runic.add("á›¬");
+		runic.add("á›­");
+		runic.add("á›®");
+		runic.add("á›¯");
+		runic.add("á›°");
 		return runic;
 	}
 
@@ -6752,5 +6759,25 @@ public class Utils {
 		}
 
 		return damage;
+	}
+
+	public static double DistanceOverAggroLimit(LivingEntity attacker, LivingEntity aggroCheckEntity) 
+	{
+		double distance = attacker.getLocation().distance(aggroCheckEntity.getLocation());
+		if (distance > 100D)
+			return 100D-distance;
+		
+		net.minecraft.server.v1_12_R1.EntityLiving entity = ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity)aggroCheckEntity).getHandle();
+		double distanceLimit = entity.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).getValue();
+		
+		if (attacker.isOp())
+		{
+			System.out.println("OP Attacker Distance check: " + distanceLimit);
+		}
+		
+		if (distance > distanceLimit)
+			return distance-distanceLimit;
+		
+		return 0D;
 	}
 }

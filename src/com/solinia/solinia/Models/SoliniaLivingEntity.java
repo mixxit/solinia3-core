@@ -4737,7 +4737,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void addToHateList(UUID uniqueId, int hate) {
-		// TODO
+		try {
+			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(), uniqueId, hate);
+		} catch (CoreStateInitException e) {
+		}
 	}
 
 	@Override

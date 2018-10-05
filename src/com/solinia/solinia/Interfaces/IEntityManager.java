@@ -164,4 +164,8 @@ public interface IEntityManager {
 	ConcurrentHashMap<UUID, Timestamp> getLastRiposte();
 
 	void setLastRiposte(UUID uuid, Timestamp lasttimestamp);
+
+	void addToHateList(UUID entity, UUID provoker, int hate);
+
+	Integer getHateListEntry(UUID entity, UUID provoker);
 }

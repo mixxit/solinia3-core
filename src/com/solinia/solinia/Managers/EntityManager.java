@@ -71,6 +71,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Integer> entitySinging = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Integer>> hateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Integer>>();
 	private ConcurrentHashMap<UUID, Timestamp> lastRiposte = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontHealMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontRootMe = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1427,5 +1428,37 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setLastRiposte(UUID uuid, Timestamp lasttimestamp) {
 		this.lastRiposte.put(uuid, lasttimestamp);
+	}
+
+	@Override
+	public void addToHateList(UUID entity, UUID provoker, int hate) {
+		if (hateList.get(entity) == null)
+			hateList.put(entity, new ConcurrentHashMap<UUID, Integer>());
+		
+		if (hateList.get(entity).get(provoker) == null)
+		{
+			hateList.get(entity).put(provoker, hate);
+			return;
+		}
+		
+		int newvalue = hateList.get(entity).get(provoker);
+		if ((newvalue + hate) > Integer.MAX_VALUE)
+			newvalue = Integer.MAX_VALUE;
+		else
+			newvalue += hate;
+		
+		hateList.get(entity).put(provoker, newvalue);
+	}
+	
+	@Override
+	public Integer getHateListEntry(UUID entity, UUID provoker)
+	{
+		if (hateList.get(entity) == null)
+			hateList.put(entity, new ConcurrentHashMap<UUID, Integer>());
+		
+		if (hateList.get(entity).get(provoker) == null)
+			return 0;
+		
+		return hateList.get(entity).get(provoker);
 	}
 }
