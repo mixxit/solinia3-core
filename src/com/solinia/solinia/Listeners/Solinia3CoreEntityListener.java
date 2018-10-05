@@ -67,6 +67,12 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
+		if (event.getEntity() == null || event.getTarget() == null)
+			return;
+		
+		if (event.getEntity().isDead() || event.getTarget().isDead())
+			return;
+		
 		if (!(event.getEntity() instanceof Creature))
 			return;
 		
