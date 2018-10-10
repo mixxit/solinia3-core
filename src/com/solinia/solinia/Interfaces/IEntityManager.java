@@ -168,4 +168,6 @@ public interface IEntityManager {
 	void addToHateList(UUID entity, UUID provoker, int hate);
 
 	Integer getHateListEntry(UUID entity, UUID provoker);
+
+	void doNPCTeleportAttack();
 }

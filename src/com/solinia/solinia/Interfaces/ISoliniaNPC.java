@@ -253,4 +253,12 @@ public interface ISoliniaNPC {
 	int getChanceToRespawnOnDeath();
 
 	void setChanceToRespawnOnDeath(int chanceToRespawnOnDeath);
+
+	boolean isTeleportAttack();
+
+	void setTeleportAttack(boolean teleportAttack);
+
+	String getTeleportAttackLocation();
+
+	void setTeleportAttackLocation(String teleportAttackLocation);
 }

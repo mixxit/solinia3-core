@@ -921,6 +921,51 @@ public class EntityManager implements IEntityManager {
 			}
 		}
 	}
+	
+	@Override
+	public void doNPCTeleportAttack() {
+		List<Integer> completedNpcsIds = new ArrayList<Integer>();
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			for(Entity entityThatWillTeleportAttack : player.getNearbyEntities(50, 50, 50))
+			{
+				if (entityThatWillTeleportAttack instanceof Player)
+					continue;
+				
+				if (!(entityThatWillTeleportAttack instanceof LivingEntity))
+					continue;
+				
+				LivingEntity livingEntityThatWillTeleportAttack = (LivingEntity)entityThatWillTeleportAttack;
+				
+				if (!(entityThatWillTeleportAttack instanceof Creature))
+					continue;
+				
+				if(entityThatWillTeleportAttack.isDead())
+					continue;
+				
+				Creature creatureThatWillTeleportAttack = (Creature)entityThatWillTeleportAttack;
+				if (creatureThatWillTeleportAttack.getTarget() == null)
+					continue;
+				
+				if (!Utils.isLivingEntityNPC(livingEntityThatWillTeleportAttack))
+					continue;
+				
+				try {
+					ISoliniaLivingEntity solLivingEntityThatWillTeleportAttack = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillTeleportAttack);
+					if (completedNpcsIds.contains(solLivingEntityThatWillTeleportAttack.getNpcid()))
+						continue;
+					
+					completedNpcsIds.add(solLivingEntityThatWillTeleportAttack.getNpcid());
+					
+					solLivingEntityThatWillTeleportAttack.doSummon(creatureThatWillTeleportAttack.getTarget());
+					
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	@Override
 	public int getAIEngagedBeneficialSelfChance() {

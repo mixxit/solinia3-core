@@ -6,9 +6,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 
-public class NPCSummonCastTimer extends BukkitRunnable {
+public class NPCSummonAndTeleportCastTimer extends BukkitRunnable {
 	Plugin plugin;
-	public NPCSummonCastTimer(Plugin plugin)
+	public NPCSummonAndTeleportCastTimer(Plugin plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -17,6 +17,8 @@ public class NPCSummonCastTimer extends BukkitRunnable {
 
 		try {
 			StateManager.getInstance().getEntityManager().doNPCSummon();
+			StateManager.getInstance().getEntityManager().doNPCTeleportAttack();
+			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

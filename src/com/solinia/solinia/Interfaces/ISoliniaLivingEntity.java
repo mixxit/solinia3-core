@@ -295,5 +295,7 @@ public interface ISoliniaLivingEntity
 
 	void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID);
 
+	void doTeleportAttack(LivingEntity teleportedEntity);
+
 
 }

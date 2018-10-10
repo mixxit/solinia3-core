@@ -80,6 +80,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int forcedMaxHp = 0;
 	private int npcSpellList = 0;
 	private int chanceToRespawnOnDeath = 0;
+	private boolean teleportAttack = false;
+	private String teleportAttackLocation = "";
 	
 	@Override
 	public int getId() {
@@ -348,6 +350,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
 		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
+		sender.sendMessage("- teleportattack: " + ChatColor.GOLD + isTeleportAttack() + " " + ChatColor.GOLD + " teleportattacklocation: " + getTeleportAttackLocation() + ChatColor.RESET);
 		if (getFactionid() != 0) {
 			sender.sendMessage("- factionid: " + ChatColor.GOLD + getFactionid() + " ("
 					+ StateManager.getInstance().getConfigurationManager().getFaction(getFactionid()).getName() + ")"
@@ -427,6 +430,25 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 			setMctype(value.toUpperCase());
 			break;
+		case "teleportattack":
+			setTeleportAttack(Boolean.parseBoolean(value));
+			break;
+		case "teleportattacklocation":
+			try
+			{
+				String[] zonedata = value.split(",");
+				// Dissasemble the value to ensure it is correct
+				String world = zonedata[0];
+				double x = Double.parseDouble(zonedata[1]);
+				double y = Double.parseDouble(zonedata[2]);
+				double z = Double.parseDouble(zonedata[3]);
+				
+				setTeleportAttackLocation(world+","+x+","+y+","+z);
+				break;
+			} catch (Exception e)
+			{
+				throw new InvalidNpcSettingException("Teleport attack location value must be in format: world,x,y,z");
+			}
 		case "level":
 			setLevel(Integer.parseInt(value));
 			break;
@@ -1390,6 +1412,26 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setChanceToRespawnOnDeath(int chanceToRespawnOnDeath) {
 		this.chanceToRespawnOnDeath = chanceToRespawnOnDeath;
+	}
+
+	@Override
+	public boolean isTeleportAttack() {
+		return teleportAttack;
+	}
+
+	@Override
+	public void setTeleportAttack(boolean teleportAttack) {
+		this.teleportAttack = teleportAttack;
+	}
+
+	@Override
+	public String getTeleportAttackLocation() {
+		return teleportAttackLocation;
+	}
+
+	@Override
+	public void setTeleportAttackLocation(String teleportAttackLocation) {
+		this.teleportAttackLocation = teleportAttackLocation;
 	}
 }
 

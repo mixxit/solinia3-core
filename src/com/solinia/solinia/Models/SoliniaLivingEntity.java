@@ -4734,6 +4734,43 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void doTeleportAttack(LivingEntity teleportedEntity) {
+		if (isPlayer())
+			return;
+
+		if (teleportedEntity == null || this.livingentity == null)
+			return;
+
+		ISoliniaNPC npc;
+		try {
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (!npc.isTeleportAttack())
+				return;
+			
+			if (npc.getTeleportAttackLocation() == null || npc.getTeleportAttackLocation().equals(""))
+				return;
+			
+			String[] zonedata = npc.getTeleportAttackLocation().split(",");
+			// Dissasemble the value to ensure it is correct
+			String world = zonedata[0];
+			double x = Double.parseDouble(zonedata[1]);
+			double y = Double.parseDouble(zonedata[2]);
+			double z = Double.parseDouble(zonedata[3]);
+			Location loc = new Location(Bukkit.getWorld(world),x,y,z);
+
+			int chanceToSummon = Utils.RandomBetween(1, 10);
+
+			if (chanceToSummon > 8) {
+				teleportedEntity.teleport(getBukkitLivingEntity().getLocation());
+				teleportedEntity.sendMessage("You have been taken!");
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void addToHateList(UUID uniqueId, int hate) {
