@@ -82,6 +82,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int chanceToRespawnOnDeath = 0;
 	private boolean teleportAttack = false;
 	private String teleportAttackLocation = "";
+	private boolean nocturnal = false;
 	
 	@Override
 	public int getId() {
@@ -338,6 +339,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
 		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD + getChanceToRespawnOnDeath() + ChatColor.RESET);
+		sender.sendMessage("- nocturnal: " + ChatColor.GOLD + isNocturnal() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
 		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
@@ -469,6 +471,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "usedisguise":
 			setUsedisguise(Boolean.parseBoolean(value));
+			break;
+		case "nocturnal":
+			setNocturnal(Boolean.parseBoolean(value));
 			break;
 		case "disguisetype":
 			setDisguisetype(value);
@@ -1432,6 +1437,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setTeleportAttackLocation(String teleportAttackLocation) {
 		this.teleportAttackLocation = teleportAttackLocation;
+	}
+
+	@Override
+	public boolean isNocturnal() {
+		return nocturnal;
+	}
+
+	@Override
+	public void setNocturnal(boolean nocturnal) {
+		this.nocturnal = nocturnal;
 	}
 }
 

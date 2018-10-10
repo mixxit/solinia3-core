@@ -222,8 +222,23 @@ public class Solinia3CoreEntityListener implements Listener {
 	@EventHandler
 	public void onEntitySpawn(EntitySpawnEvent event) {
 		if (event.getEntity() instanceof LivingEntity) {
+			if (Utils.isLivingEntityNPC((LivingEntity)event.getEntity()))
+			{
+				try
+				{
+					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+					if (solEntity.doCheckForDespawn())
+					{
+						Utils.CancelEvent(event);
+						return;
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			
 			// if this is a skeleton entity, remove the chase task frmo the mobs AI
-			event.getEntity().spigot();
 			((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity)event.getEntity()).getHandle().getAttributeInstance(net.minecraft.server.v1_12_R1.GenericAttributes.FOLLOW_RANGE).setValue(Utils.MAX_ENTITY_AGGRORANGE);
 		}
 	}

@@ -6780,4 +6780,10 @@ public class Utils {
 		
 		return 0D;
 	}
+
+	public static boolean IsNight(World world) {
+	    long time = world.getTime();
+
+	    return time > 0 && time < 12300;
+	}
 }

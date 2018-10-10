@@ -261,4 +261,8 @@ public interface ISoliniaNPC {
 	String getTeleportAttackLocation();
 
 	void setTeleportAttackLocation(String teleportAttackLocation);
+
+	boolean isNocturnal();
+
+	void setNocturnal(boolean nocturnal);
 }

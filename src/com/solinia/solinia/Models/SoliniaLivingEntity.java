@@ -5481,6 +5481,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (!(getBukkitLivingEntity() instanceof Creature))
 			return;
+		
+		if (doCheckForDespawn() == true)
+			return;
 
 		if (((Creature) getBukkitLivingEntity()).getTarget() != null)
 			return;
@@ -5566,6 +5569,35 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean doCheckForDespawn() {
+		if (despawnIfNight())
+			return true;
+		
+		return false;
+	}
+
+	private boolean despawnIfNight() {
+		if (Utils.isLivingEntityNPC(this.getBukkitLivingEntity()))
+		{
+			try
+			{
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitLivingEntity());
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solEntity.getNpcid());
+				if (npc.isNocturnal() && Utils.IsNight(this.getBukkitLivingEntity().getWorld()))
+				{
+					this.getBukkitLivingEntity().remove();
+					return true;
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		
+		return false;
 	}
 
 	@Override

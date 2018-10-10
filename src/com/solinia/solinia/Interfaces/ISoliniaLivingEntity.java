@@ -297,5 +297,7 @@ public interface ISoliniaLivingEntity
 
 	void doTeleportAttack(LivingEntity teleportedEntity);
 
+	boolean doCheckForDespawn();
+
 
 }
