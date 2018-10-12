@@ -14,6 +14,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.PlayerQuest;
 import com.solinia.solinia.Models.QuestStep;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandQuests implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -24,7 +26,8 @@ public class CommandQuests implements CommandExecutor {
 		{
 			Player player = (Player)sender;
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
-			player.sendMessage("Aquired Quest Flags:");
+			if (player.isOp() || player.hasPermission("solinia.editquest"))
+			player.sendMessage("Debug: Aquired Quest Flags:");
 			String flags = "";
 			
 			for(String questFlag : solplayer.getPlayerQuestFlags())
@@ -37,6 +40,7 @@ public class CommandQuests implements CommandExecutor {
 				flags = flags.substring(0, 32760) + "...";
 			}
 			
+			if (player.isOp() || player.hasPermission("solinia.editquest"))
 			player.sendMessage(flags.trim());
 			
 			player.sendMessage("Active Quests:");
@@ -47,7 +51,7 @@ public class CommandQuests implements CommandExecutor {
 				if (questFlags.contains(playerQuest.getQuest().getQuestFlagCompletion()))
 					continue;
 				
-				player.sendMessage(playerQuest.getQuest().getName() + " Complete: " + playerQuest.isComplete());
+				player.sendMessage(ChatColor.LIGHT_PURPLE + playerQuest.getQuest().getName() + ChatColor.RESET + " Complete: " + playerQuest.isComplete());
 				sendQuestSteps(player,playerQuest,questFlags);
 			}
 		} catch (CoreStateInitException e)
@@ -68,7 +72,7 @@ public class CommandQuests implements CommandExecutor {
 			if (questFlags.contains(questStep.getCompleteQuestFlag()))
 				continue;
 			
-			player.sendMessage("  [" +  questStep.getSequence() + "] - Description: " + questStep.getDescription());
+			player.sendMessage("- Step " +  ChatColor.YELLOW + questStep.getSequence() + ChatColor.RESET +  " - Description: " + questStep.getDescription());
 		}
 	}
 
