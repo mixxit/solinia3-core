@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -939,9 +940,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public void editQuest(int id, String setting, String value, String[] additional) 
+	public void editQuest(CommandSender sender, int id, String setting, String value, String[] additional) 
 		throws InvalidQuestSettingException, NumberFormatException, CoreStateInitException {
-			getQuest(id).editSetting(setting, value, additional);
+			getQuest(id).editSetting(sender, setting, value, additional);
 	}
 	
 	@Override

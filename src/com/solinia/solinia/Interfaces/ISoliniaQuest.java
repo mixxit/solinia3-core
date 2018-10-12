@@ -1,8 +1,12 @@
 package com.solinia.solinia.Interfaces;
 
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
+import com.solinia.solinia.Models.QuestStep;
 
 public interface ISoliniaQuest {
 
@@ -22,8 +26,15 @@ public interface ISoliniaQuest {
 
 	void setQuestFlagCompletion(String questFlagCompletion);
 
-	void editSetting(String setting, String value, String[] additional) throws InvalidQuestSettingException;
-
 	void sendQuestSettingsToSender(CommandSender sender);
+
+	ConcurrentHashMap<Integer, QuestStep> getQuestSteps();
+
+	void setQuestSteps(ConcurrentHashMap<Integer, QuestStep> questSteps);
+
+	void setQuestStep(int stepId, String property, List<String> data) throws InvalidQuestSettingException;
+
+	void editSetting(CommandSender sender, String setting, String value, String[] additional)
+			throws InvalidQuestSettingException;
 	
 }

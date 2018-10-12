@@ -2405,7 +2405,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		quest.setQuestId(questId);
 		this.getPlayerQuests().add(quest);
 		this.getBukkitPlayer().sendMessage(
-				ChatColor.YELLOW + " * You have received a new Quest [" + quest.getQuest().getName() + "]!");
+				ChatColor.YELLOW + " * You have received a new Quest [" + quest.getQuest().getName() + "]! See /quests for more info");
 	}
 
 	@Override
@@ -2422,7 +2422,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void addPlayerQuestFlag(String questFlag) {
 		playerQuestFlags.add(questFlag);
-		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + " * You have received a new Quest Flag!");
+		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + " * You have received a new Quest Flag! See /quests for more info");
 	}
 
 	@Override

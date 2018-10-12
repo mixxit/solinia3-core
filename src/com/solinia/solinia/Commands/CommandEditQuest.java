@@ -103,7 +103,7 @@ public class CommandEditQuest implements CommandExecutor {
 				return false;
 			}
 
-			StateManager.getInstance().getConfigurationManager().editQuest(id,setting,value,additional);
+			StateManager.getInstance().getConfigurationManager().editQuest(sender, id,setting,value,additional);
 			sender.sendMessage("Updating setting");
 		} catch (InvalidQuestSettingException ne)
 		{

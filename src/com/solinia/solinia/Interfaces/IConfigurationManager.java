@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -436,9 +437,6 @@ public interface IConfigurationManager {
 
 	void setItemsChanged(boolean itemsChanged);
 
-	void editQuest(int id, String setting, String value, String[] additional)
-			throws InvalidQuestSettingException, NumberFormatException, CoreStateInitException;
-
 	List<ISoliniaAAAbility> getAAbilitiesBySysname(String sysname);
 
 	void editNPCMerchantList(int id, String setting, String value)
@@ -477,4 +475,7 @@ public interface IConfigurationManager {
 	Trait getTrait(int firstTraitId);
 
 	Oath getOath(int oathId);
+
+	void editQuest(CommandSender sender, int id, String setting, String value, String[] additional)
+			throws InvalidQuestSettingException, NumberFormatException, CoreStateInitException;
 }
