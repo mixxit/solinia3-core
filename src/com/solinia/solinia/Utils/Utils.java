@@ -6741,6 +6741,9 @@ public class Utils {
 			return 100D-distance;
 		
 		net.minecraft.server.v1_12_R1.EntityLiving entity = ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity)aggroCheckEntity).getHandle();
+		if (entity == null)
+			return 0D;
+			
 		double distanceLimit = entity.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).getValue();
 		
 		if (attacker.isOp())
