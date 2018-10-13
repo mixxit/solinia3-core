@@ -48,7 +48,6 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SpellEffectType;
-import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;

@@ -1,18 +1,10 @@
 package com.solinia.solinia.Models;
 
-import java.util.UUID;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
-import com.solinia.solinia.Managers.StateManager;
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaAlignment implements ISoliniaAlignment {

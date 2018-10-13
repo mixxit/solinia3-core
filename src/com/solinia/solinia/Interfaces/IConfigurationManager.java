@@ -44,7 +44,9 @@ import com.solinia.solinia.Models.WorldWidePerk;
 
 public interface IConfigurationManager {
 	
-	public List<String> WeaponMaterials = new ArrayList<String>() {{ 
+	public List<String> WeaponMaterials = new ArrayList<String>() {
+		private static final long serialVersionUID = 4699754456865065676L;
+	{ 
 		add("WOOD_SWORD"); 
 		add("STONE_SWORD"); 
 		add("IRON_SWORD"); 
@@ -70,7 +72,12 @@ public interface IConfigurationManager {
 		add("DIAMOND_PICKAXE");
 		}};
 		
-	public List<String> MiningMaterials = new ArrayList<String>() {{
+	public List<String> MiningMaterials = new ArrayList<String>() {/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8581780572124514662L;
+
+	{
 		add("COAL_ORE");
 		add("DIAMOND_ORE");
 		add("EMERALD_ORE");
@@ -92,7 +99,12 @@ public interface IConfigurationManager {
 		add("GLOWING_REDSTONE_ORE");
 	}};
 	
-	public List<String> ForagingMaterials = new ArrayList<String>() {{
+	public List<String> ForagingMaterials = new ArrayList<String>() {/**
+		 * 
+		 */
+		private static final long serialVersionUID = -8843603586328168943L;
+
+	{
 		add("GRASS");
 		add("LONG_GRASS");
 		add("DOUBLE_PLANT");
@@ -101,7 +113,12 @@ public interface IConfigurationManager {
 		add("CHORUS_FLOWER");
 	}};
 	
-	public List<String> LumberingMaterials = new ArrayList<String>() {{
+	public List<String> LumberingMaterials = new ArrayList<String>() {/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3746642763197880376L;
+
+	{
 		add("LOG");
 		add("LOG_2");
 		add("HUGE_MUSHROOM_1");
@@ -110,7 +127,12 @@ public interface IConfigurationManager {
 		add("LEAVES_2");
 	}};
 	
-	public List<String> ArmourMaterials = new ArrayList<String>() {{ 
+	public List<String> ArmourMaterials = new ArrayList<String>() {/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3600386258510381521L;
+
+	{ 
 		add("LEATHER_HELMET");
 		add("LEATHER_CHESTPLATE");
 		add("LEATHER_LEGGINGS");
@@ -133,7 +155,12 @@ public interface IConfigurationManager {
 		add("GOLD_BOOTS");
 		}};
 		
-		public List<String> HandMaterials = new ArrayList<String>() {{ 
+		public List<String> HandMaterials = new ArrayList<String>() {/**
+			 * 
+			 */
+			private static final long serialVersionUID = -3933524056654169744L;
+
+		{ 
 			add("WOOD_SWORD");
 			add("STONE_SWORD");
 			add("IRON_SWORD");

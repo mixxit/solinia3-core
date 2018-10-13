@@ -30,6 +30,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.*;
 
@@ -1603,24 +1604,12 @@ public class SoliniaItem implements ISoliniaItem {
 
 	@Override
 	public boolean isWeaponOrBowOrShield() {
-		try
-		{
-			return StateManager.getInstance().getConfigurationManager().HandMaterials.contains(this.getBasename().toUpperCase());
-		} catch (CoreStateInitException e)
-		{
-			return false;
-		}
+		return ConfigurationManager.HandMaterials.contains(this.getBasename().toUpperCase());
 	}
 
 	@Override
 	public boolean isArmour() {
-		try
-		{
-			return StateManager.getInstance().getConfigurationManager().ArmourMaterials.contains(this.getBasename().toUpperCase());
-		} catch (CoreStateInitException e)
-		{
-			return false;
-		}
+		return ConfigurationManager.ArmourMaterials.contains(this.getBasename().toUpperCase());
 	}
 
 	@Override

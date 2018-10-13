@@ -16,8 +16,6 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaPlayer;
 import com.solinia.solinia.Utils.Utils;
 
-import net.md_5.bungee.api.ChatColor;
-
 public class SoliniaPlayerFactory {
 
 	public static ISoliniaPlayer CreatePlayer(Player player, boolean main) throws CoreStateInitException {

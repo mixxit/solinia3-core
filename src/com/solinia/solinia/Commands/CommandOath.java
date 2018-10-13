@@ -10,11 +10,8 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.SoliniaRaceCreationException;
-import com.solinia.solinia.Factories.SoliniaRaceFactory;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.Oath;
 

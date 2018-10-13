@@ -20,7 +20,12 @@ public class InvalidItemCheckerTimer  extends BukkitRunnable {
 		
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			List<ItemStack> itemStackBonuses = new ArrayList<ItemStack>() {{ add(player.getInventory().getItemInMainHand()); add(player.getInventory().getItemInOffHand()); addAll(Arrays.asList(player.getInventory().getArmorContents())); }};
+			List<ItemStack> itemStackBonuses = new ArrayList<ItemStack>() {/**
+				 * 
+				 */
+				private static final long serialVersionUID = -7448639939554936637L;
+
+			{ add(player.getInventory().getItemInMainHand()); add(player.getInventory().getItemInOffHand()); addAll(Arrays.asList(player.getInventory().getArmorContents())); }};
 			
 			for (ItemStack itemstack : itemStackBonuses) {
 				if (itemstack == null)

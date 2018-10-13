@@ -1,7 +1,6 @@
 package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 

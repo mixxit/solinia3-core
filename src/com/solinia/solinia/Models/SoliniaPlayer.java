@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,7 +32,6 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
-import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -2616,6 +2614,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		try {
 			List<ItemStack> itemStacks = new ArrayList<ItemStack>() {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 2958027330481470950L;
+
 				{
 					if (excludeMainHand == false) {
 						add(getBukkitPlayer().getInventory().getItemInMainHand());

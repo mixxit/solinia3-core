@@ -1321,6 +1321,11 @@ public class SoliniaNPC implements ISoliniaNPC {
 		
 		try {
 			List<ItemStack> itemStacks = new ArrayList<ItemStack>() {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 233580886660639519L;
+
 				{
 					if (excludeMainHand == false)
 					{
