@@ -21,22 +21,29 @@ public interface IChannelManager {
 
 	void sendToDiscordMC(ISoliniaPlayer source, String channelId, String message);
 
-	String getDefaultDiscordChannel();
-
-	String getAdminDiscordChannel();
-
-	String getInCharacterDiscordChannel();
-
 	void handleDiscordCommand(DiscordChannel default1, MessageReceivedEvent event);
 
-	void setDiscordMainChannelId(String discordmainchannelid);
-
-	void setDiscordAdminChannelId(String discordadminchannelid);
 	void sendToDiscordQueuedMessage(Integer messageId);
 
 	void processNextDiscordMessage();
 
-	void setDiscordInCharacterChannelId(String discordincharacterchannelid);
-
 	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn, String coremessage);
+
+	String getChannelId(DiscordChannel discordChannel);
+
+	String getDiscordMainChannelId();
+
+	void setDiscordMainChannelId(String discordMainChannelId);
+
+	String getDiscordAdminChannelId();
+
+	void setDiscordAdminChannelId(String discordAdminChannelId);
+
+	String getDiscordContentTeamChannelId();
+
+	void setDiscordContentTeamChannelId(String discordContentTeamChannelId);
+
+	String getDiscordInCharacterChannelId();
+
+	void setDiscordInCharacterChannelId(String discordInCharacterChannelId);
 }

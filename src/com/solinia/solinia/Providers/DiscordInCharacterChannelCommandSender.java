@@ -103,7 +103,7 @@ public class DiscordInCharacterChannelCommandSender implements CommandSender {
 
 	@Override
 	public void sendMessage(String message) {
-		StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getInCharacterDiscordChannel(), message);
+		StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getDiscordInCharacterChannelId(), message);
 	}
 
 	@Override

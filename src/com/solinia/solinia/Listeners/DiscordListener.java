@@ -25,7 +25,7 @@ public class DiscordListener {
 	@EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) { // This method is NOT called because it doesn't have the @EventSubscriber annotation
 		System.out.println(event.getAuthor().getName()+"@"+event.getChannel().getName()+":"+event.getMessage().getContent());
-		if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDefaultDiscordChannel()))
+		if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDiscordMainChannelId()))
 		{
 			// Handle command messaging here
 			if (event.getMessage().getContent().startsWith("?"))
@@ -36,12 +36,21 @@ public class DiscordListener {
 			}
 		}
 		
-		if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getInCharacterDiscordChannel()))
+		if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDiscordInCharacterChannelId()))
 		{
 			// Handle command messaging here
 			if (event.getMessage().getContent().startsWith("?"))
 			{
 				StateManager.getInstance().getChannelManager().handleDiscordCommand(DiscordChannel.INCHARACTER,event);
+			}
+		}
+		
+		if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDiscordContentTeamChannelId()))
+		{
+			// Handle command messaging here
+			if (event.getMessage().getContent().startsWith("?"))
+			{
+				StateManager.getInstance().getChannelManager().handleDiscordCommand(DiscordChannel.CONTENTTEAM,event);
 			}
 		}
 		
@@ -71,7 +80,7 @@ public class DiscordListener {
 					}
 				}
 				
-				if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDefaultDiscordChannel()))
+				if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDiscordMainChannelId()))
 				{
 					Bukkit.getServer().dispatchCommand(StateManager.getInstance().getDiscordDefaultChannelCommandSender(), command.trim());
 				} else {

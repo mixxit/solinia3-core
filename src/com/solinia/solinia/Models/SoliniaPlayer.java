@@ -637,7 +637,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				classname = getClassObj().getName();
 
 			StateManager.getInstance().getChannelManager().sendToDiscordMC(null,
-					StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),
+					StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),
 					getFullName() + " has reached new heights as a level " + (int) Math.floor(newlevel) + " "
 							+ classname.toLowerCase() + "!");
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");

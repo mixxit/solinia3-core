@@ -107,7 +107,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 
 		StateManager.getInstance().getChannelManager().sendToDiscordMC(null,
-				StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),
+				StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),
 				event.getPlayer().getName() + " has quit the game");
 	}
 	
@@ -1285,7 +1285,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			
 			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,
-					StateManager.getInstance().getChannelManager().getDefaultDiscordChannel(),
+					StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),
 					event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game (" + players.trim() + ")");
 			
 			try

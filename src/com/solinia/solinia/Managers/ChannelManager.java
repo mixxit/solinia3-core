@@ -31,9 +31,10 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 public class ChannelManager implements IChannelManager {
 
 	private AtomicInteger discordMessageCount = new AtomicInteger(0);
-	private String discordmainchannelid;
-	private String discordadminchannelid;
-	private String discordincharacterchannelid;
+	private String discordMainChannelId;
+	private String discordAdminChannelId;
+	private String discordContentTeamChannelId;
+	private String discordInCharacterChannelId;
 	private ConcurrentHashMap<Integer, QueuedDiscordMessage> queuedDiscordMessages = new ConcurrentHashMap<Integer, QueuedDiscordMessage>();
 	
 	@Override
@@ -89,22 +90,7 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
-		sendToDiscordMC(source,getDefaultDiscordChannel(),source.getFullNameWithTitle() + ": " + originalmessage);
-	}
-
-	@Override
-	public String getDefaultDiscordChannel() {
-		return this.discordmainchannelid;
-	}
-
-	@Override
-	public String getAdminDiscordChannel() {
-		return this.discordadminchannelid;
-	}
-
-	@Override
-	public String getInCharacterDiscordChannel() {
-		return this.discordincharacterchannelid;
+		sendToDiscordMC(source,getDiscordMainChannelId(),source.getFullNameWithTitle() + ": " + originalmessage);
 	}
 	
 	private String decorateLocalPlayerMessage(ISoliniaPlayer player, String message) {
@@ -255,7 +241,7 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 		System.out.println(message);
-		sendToDiscordMC(source,getDefaultDiscordChannel(),source.getFullNameWithTitle() + ": " + message);
+		sendToDiscordMC(source,getDiscordMainChannelId(),source.getFullNameWithTitle() + ": " + message);
 	}
 	
 	@Override
@@ -444,11 +430,7 @@ public class ChannelManager implements IChannelManager {
 	}
 	
 	private void sendCharacterToDiscordChannel(DiscordChannel discordChannel, String argument) {
-		String targetChannelId = getDefaultDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.ADMIN))
-			targetChannelId = getAdminDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.INCHARACTER))
-			targetChannelId = getInCharacterDiscordChannel();
+		String targetChannelId = getChannelId(discordChannel);
 		
 		if (argument == null || argument.equals(""))
         {
@@ -495,13 +477,23 @@ public class ChannelManager implements IChannelManager {
         	return;            	
         }
 	}
+	
+	@Override
+	public String getChannelId(DiscordChannel discordChannel)
+	{
+		String targetChannelId = getDiscordMainChannelId();
+		if (discordChannel.equals(DiscordChannel.ADMIN))
+			targetChannelId = this.getDiscordAdminChannelId();
+		if (discordChannel.equals(DiscordChannel.INCHARACTER))
+			targetChannelId = getDiscordInCharacterChannelId();
+		if (discordChannel.equals(DiscordChannel.CONTENTTEAM))
+			targetChannelId = getDiscordContentTeamChannelId();
+		
+		return targetChannelId;
+	}
 
 	private void sendRollToDiscordChannel(DiscordChannel discordChannel, String argument) {
-		String targetChannelId = getDefaultDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.ADMIN))
-			targetChannelId = getAdminDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.INCHARACTER))
-			targetChannelId = getInCharacterDiscordChannel();
+		String targetChannelId = getChannelId(discordChannel);
 
 		if (argument == null || argument.equals(""))
         {
@@ -532,11 +524,7 @@ public class ChannelManager implements IChannelManager {
 	}
 
 	private void sendSkillCheckToDiscordChannel(DiscordChannel discordChannel, String argument) {
-		String targetChannelId = getDefaultDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.ADMIN))
-			targetChannelId = getAdminDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.INCHARACTER))
-			targetChannelId = getInCharacterDiscordChannel();
+		String targetChannelId = getChannelId(discordChannel);
 
 		List<String> skills = new ArrayList<String>();
 		skills.add("athletics");
@@ -579,12 +567,8 @@ public class ChannelManager implements IChannelManager {
 
 	private void sendOnlineToDiscordChannel(DiscordChannel discordChannel) {
 		String list = "";
-		String targetChannelId = getDefaultDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.ADMIN))
-			targetChannelId = getAdminDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.INCHARACTER))
-			targetChannelId = getInCharacterDiscordChannel();
-		
+		String targetChannelId = getChannelId(discordChannel);
+
 		try
 		{
 			for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
@@ -617,11 +601,7 @@ public class ChannelManager implements IChannelManager {
 	
 	private void sendHotzonesToDiscordChannel(DiscordChannel discordChannel) {
 		String list = "";
-		String targetChannelId = getDefaultDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.ADMIN))
-			targetChannelId = getAdminDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.INCHARACTER))
-			targetChannelId = getInCharacterDiscordChannel();
+		String targetChannelId = getChannelId(discordChannel);
 
 		try
 		{
@@ -640,11 +620,7 @@ public class ChannelManager implements IChannelManager {
 	
 	private void sendDonationToDiscordChannel(DiscordChannel discordChannel) {
 		String list = "";
-		String targetChannelId = getDefaultDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.ADMIN))
-			targetChannelId = getAdminDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.INCHARACTER))
-			targetChannelId = getInCharacterDiscordChannel();
+		String targetChannelId = getChannelId(discordChannel);
 
 		try
 		{
@@ -691,11 +667,7 @@ public class ChannelManager implements IChannelManager {
 
 	private void sendMobLvlToDiscordChannel(DiscordChannel discordChannel, int mobmin, int mobmax) {
 		String list = "";
-		String targetChannelId = getDefaultDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.ADMIN))
-			targetChannelId = getAdminDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.INCHARACTER))
-			targetChannelId = getInCharacterDiscordChannel();
+		String targetChannelId = getChannelId(discordChannel);
 
 		try
 		{
@@ -728,11 +700,7 @@ public class ChannelManager implements IChannelManager {
 	private void sendItemListToDiscordChannel(DiscordChannel discordChannel, String itemMatch) {
 		try
 		{
-			String targetChannelId = getDefaultDiscordChannel();
-			if (discordChannel.equals(DiscordChannel.ADMIN))
-				targetChannelId = getAdminDiscordChannel();
-			if (discordChannel.equals(DiscordChannel.INCHARACTER))
-				targetChannelId = getInCharacterDiscordChannel();
+			String targetChannelId = getChannelId(discordChannel);
 
 			int itemId = 0;
 			try
@@ -804,11 +772,7 @@ public class ChannelManager implements IChannelManager {
 
 	
 	private void sendItemToDiscordChannel(DiscordChannel discordChannel, ISoliniaItem item) {
-		String targetChannelId = getDefaultDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.ADMIN))
-			targetChannelId = getAdminDiscordChannel();
-		if (discordChannel.equals(DiscordChannel.INCHARACTER))
-			targetChannelId = getInCharacterDiscordChannel();
+		String targetChannelId = getChannelId(discordChannel);
 
 		String proc = "";
 		if (item.getWeaponabilityid() > 0)
@@ -840,11 +804,7 @@ public class ChannelManager implements IChannelManager {
 	private void sendLootListToDiscordChannel(DiscordChannel discordChannel, String itemMatch) {
 		try
 		{
-			String targetChannelId = getDefaultDiscordChannel();
-			if (discordChannel.equals(DiscordChannel.ADMIN))
-				targetChannelId = getAdminDiscordChannel();
-			if (discordChannel.equals(DiscordChannel.INCHARACTER))
-				targetChannelId = getInCharacterDiscordChannel();
+			String targetChannelId = getChannelId(discordChannel);
 
 			if (itemMatch.length() < 3)
 			{
@@ -946,11 +906,7 @@ public class ChannelManager implements IChannelManager {
 	private void sendTopToDiscordChannel(DiscordChannel discordChannel, String classname) {
 		try
 		{
-			String targetChannelId = getDefaultDiscordChannel();
-			if (discordChannel.equals(DiscordChannel.ADMIN))
-				targetChannelId = getAdminDiscordChannel();
-			if (discordChannel.equals(DiscordChannel.INCHARACTER))
-				targetChannelId = getInCharacterDiscordChannel();
+			String targetChannelId = getChannelId(discordChannel);
 
 			int rank = 1;
 			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getTopLevelPlayers(classname))
@@ -965,21 +921,6 @@ public class ChannelManager implements IChannelManager {
 		}
 		
 	}
-
-	@Override
-	public void setDiscordMainChannelId(String discordmainchannelid) {
-		this.discordmainchannelid = discordmainchannelid;
-	}
-
-	@Override
-	public void setDiscordAdminChannelId(String discordadminchannelid) {
-		this.discordadminchannelid = discordadminchannelid;
-	}
-
-	@Override
-	public void setDiscordInCharacterChannelId(String discordincharacterchannelid) {
-		this.discordincharacterchannelid = discordincharacterchannelid;
-	}
 	
 	@Override
 	public void processNextDiscordMessage() {
@@ -991,4 +932,43 @@ public class ChannelManager implements IChannelManager {
 		sendToDiscordQueuedMessage(minIndex);
 	}
 
+	@Override
+	public String getDiscordMainChannelId() {
+		return discordMainChannelId;
+	}
+
+	@Override
+	public void setDiscordMainChannelId(String discordMainChannelId) {
+		this.discordMainChannelId = discordMainChannelId;
+	}
+
+	@Override
+	public String getDiscordAdminChannelId() {
+		return discordAdminChannelId;
+	}
+
+	@Override
+	public void setDiscordAdminChannelId(String discordAdminChannelId) {
+		this.discordAdminChannelId = discordAdminChannelId;
+	}
+
+	@Override
+	public String getDiscordContentTeamChannelId() {
+		return discordContentTeamChannelId;
+	}
+
+	@Override
+	public void setDiscordContentTeamChannelId(String discordContentTeamChannelId) {
+		this.discordContentTeamChannelId = discordContentTeamChannelId;
+	}
+
+	@Override
+	public String getDiscordInCharacterChannelId() {
+		return discordInCharacterChannelId;
+	}
+
+	@Override
+	public void setDiscordInCharacterChannelId(String discordInCharacterChannelId) {
+		this.discordInCharacterChannelId = discordInCharacterChannelId;
+	}
 }
