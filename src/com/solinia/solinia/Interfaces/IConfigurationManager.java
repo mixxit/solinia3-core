@@ -336,8 +336,6 @@ public interface IConfigurationManager {
 
 	void resetAARankRepository();
 
-	void updateEmperors();
-
 	int getNextAlignmentId();
 
 	ISoliniaAlignment getAlignment(int Id);

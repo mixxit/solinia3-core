@@ -44,7 +44,6 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
-import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.UniversalMerchant;
@@ -144,18 +143,6 @@ public class EntityManager implements IEntityManager {
 		{
 			return null;
 		}
-	}
-	
-	@Override
-	public Inventory getTradeShopMerchantInventory(UUID playerUUID, SoliniaAlignmentChunk alignmentChunk, int pageno)
-	{
-		UniversalMerchant merchant = new UniversalMerchant();
-		merchant.fullmerchantentries = alignmentChunk.getUniversalMerchantEntries(alignmentChunk);
-		merchant.merchantName = alignmentChunk.getChunkX() + "_" + alignmentChunk.getChunkZ() + "_TradeShop";
-		
-		// Cache
-		universalMerchant.put(merchant.universalMerchant, merchant);
-		return getMerchantInventory(playerUUID, pageno, merchant);
 	}
 	
 	@Override

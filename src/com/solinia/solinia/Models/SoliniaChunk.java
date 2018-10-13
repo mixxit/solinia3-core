@@ -172,63 +172,6 @@ public class SoliniaChunk {
 		}
 	}
 	
-	public boolean isAlignmentChunk() {
-		try {
-			for(ISoliniaAlignment alignmentEntry : StateManager.getInstance().getConfigurationManager().getAlignments())
-			{
-				SoliniaAlignmentChunk temporaryChunk = alignmentEntry.getChunk(this);
-				if (temporaryChunk == null)
-					continue;
-			}
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return false;
-	}
-	
-	public SoliniaAlignmentChunk getAlignmentChunk() {
-		SoliniaAlignmentChunk alignmentChunk = null;
-		ISoliniaAlignment alignment = null;
-		try {
-			
-			for(ISoliniaAlignment alignmentEntry : StateManager.getInstance().getConfigurationManager().getAlignments())
-			{
-				SoliniaAlignmentChunk temporaryChunk = alignmentEntry.getChunk(this);
-				if (temporaryChunk == null)
-					continue;
-				
-				alignmentChunk = temporaryChunk;
-				alignment = alignmentEntry;
-			}
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return alignmentChunk;
-	}
-	
-	public ISoliniaAlignment getChunkAlignment() {
-		ISoliniaAlignment alignment = null;
-		try {
-			
-			for(ISoliniaAlignment alignmentEntry : StateManager.getInstance().getConfigurationManager().getAlignments())
-			{
-				SoliniaAlignmentChunk temporaryChunk = alignmentEntry.getChunk(this);
-				if (temporaryChunk == null)
-					continue;
-				
-				alignment = alignmentEntry;
-			}
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return alignment;
-	}
 	public String getLore() {
 		return lore;
 	}

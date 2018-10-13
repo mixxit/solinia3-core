@@ -963,7 +963,6 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- handsitem: " + ChatColor.GOLD + isHandsItem() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
-		sender.sendMessage("- territoryflag: " + ChatColor.GOLD + isTerritoryFlag() + ChatColor.RESET);
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
 		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
@@ -1221,9 +1220,6 @@ public class SoliniaItem implements ISoliniaItem {
 			setNeckItem(false);
 			setForearmsItem(false);
 			setArmsItem(false);
-			break;
-		case "territoryflag":
-			setTerritoryFlag(Boolean.parseBoolean(value));
 			break;
 		case "reagent":
 			setReagent(Boolean.parseBoolean(value));
@@ -1590,16 +1586,6 @@ public class SoliniaItem implements ISoliniaItem {
 		this.isEarsItem = isEarsItem;
 	}
 	
-	@Override
-	public boolean isTerritoryFlag() {
-		return territoryFlag;
-	}
-
-	@Override
-	public void setTerritoryFlag(boolean territoryFlag) {
-		this.territoryFlag = territoryFlag;
-	}
-
 	@Override
 	public ItemStack asItemStackForMerchant(long costmultiplier) {
 		return ItemStackAdapter.Adapt(this, costmultiplier);

@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
-import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaChunk;
 import com.solinia.solinia.Models.SoliniaZone;
 
@@ -21,36 +20,6 @@ public interface ISoliniaAlignment {
 	String getName();
 
 	void setName(String name);
-
-	UUID getEmperor();
-
-	void setEmperor(UUID emperor);
-
-	int getCoffers();
-
-	void setCoffers(int coffers);
-
-	int getUpkeepCost();
-
-	void sendAlignmentStats(CommandSender sender);
-
-	int getTotalMaterialChunks();
-
-	SoliniaAlignmentChunk getChunk(SoliniaChunk chunk);
-
-	int getTotalTradePosts();
-
-	void setChunk(String worldChunkPositionCode, SoliniaAlignmentChunk alignmentChunk);
-
-	void removeChunk(SoliniaChunk chunk);
-
-	int getTotalChunks();
-
-	List<SoliniaAlignmentChunk> getMaterialChunks();
-
-	List<SoliniaZone> getMaterialZones();
-
-	ConcurrentHashMap<String, SoliniaAlignmentChunk> getChunks();
 
 	void editSetting(String setting, String value)
 			throws InvalidAlignmentSettingException, NumberFormatException, CoreStateInitException;

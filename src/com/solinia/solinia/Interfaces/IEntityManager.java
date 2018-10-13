@@ -11,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
-import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
@@ -106,8 +105,6 @@ public interface IEntityManager {
 	Inventory getMerchantInventory(UUID playerUUID, int pageno, UniversalMerchant universalMerchant);
 
 	Inventory getNPCMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno);
-
-	Inventory getTradeShopMerchantInventory(UUID playerUUID, SoliniaAlignmentChunk alignmentChunk, int pageno);
 
 	ConcurrentHashMap<UUID, Boolean> getPlayerInTerritory();
 

@@ -52,7 +52,6 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaChunk;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
@@ -399,50 +398,6 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			} 
 			
-			// territory code
-			if (!(event.getTo().getChunk().getX()+"_"+event.getTo().getChunk().getZ()).equals(event.getFrom().getChunk().getX() + "_" + event.getFrom().getChunk().getZ()))
-			{
-				boolean playerIsInTerritory = Utils.isChunkInTerritory(event.getTo().getChunk());
-				Boolean cachedPlayerIsInTerritory = StateManager.getInstance().getEntityManager().getPlayerInTerritory().get(player.getUniqueId());
-				if (cachedPlayerIsInTerritory == null) {
-					StateManager.getInstance().getEntityManager().getPlayerInTerritory().put(player.getUniqueId(), playerIsInTerritory);
-					cachedPlayerIsInTerritory = StateManager.getInstance().getEntityManager().getPlayerInTerritory().get(player.getUniqueId());
-				}
-					
-				if (cachedPlayerIsInTerritory != playerIsInTerritory) {
-					StateManager.getInstance().getEntityManager().getPlayerInTerritory().put(player.getUniqueId(),
-							playerIsInTerritory);
-					if (playerIsInTerritory == false) {
-						player.sendMessage(ChatColor.AQUA + "* You have left the territory");
-					} else {
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-						SoliniaAlignmentChunk territory = solPlayer.getCurrentAlignmentChunk();
-						if (territory != null) {
-							System.out.println(player.getName() + " has entered territory chunk: "
-									+ territory.getChunkX() + "_" + territory.getChunkZ());
-							if (territory.getAlignmentId() > 0) {
-								ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager()
-										.getAlignment(territory.getAlignmentId());
-								player.sendMessage(ChatColor.AQUA + "* You have entered " + alignment.getName()
-										+ " territory [/trader] [" + territory.getChunkX() + "," + territory.getChunkZ() + "]");
-								if (territory.isTradePost()) {
-									player.sendMessage(ChatColor.AQUA + "- This territory has a Trade Post!");
-								}
-							} else {
-								player.sendMessage(ChatColor.AQUA + "* You have entered broken territory [/trader]");
-							}
-						} else {
-							player.sendMessage(ChatColor.AQUA + "* You have entered territory [/trader]");
-						}
-					}
-				}
-				
-				SoliniaChunk chunk = SoliniaChunkAdapter.Adapt(player.getWorld().getChunkAt(player.getLocation()));
-				if (chunk != null && !chunk.getLore().equals("")) {
-					player.sendMessage("* " + chunk.getLore());
-				}
-			}
-
 			// Prevent jump when slowed
 			if (event.getTo().getBlockY() > event.getFrom().getBlockY()) {
 				if (event.getPlayer().hasPotionEffect(PotionEffectType.SLOW)) {

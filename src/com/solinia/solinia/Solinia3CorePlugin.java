@@ -54,7 +54,6 @@ import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.EntityAutoAttackTimer;
 import com.solinia.solinia.Timers.HintTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
-import com.solinia.solinia.Timers.KingCheckTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
@@ -93,7 +92,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private PetCheckTickTimer petCheckTickTimer;
 	private PetFastCheckTimer petFastCheckTickTimer;
 	private DiscordMessageTimer discordMessageTimer;
-	private KingCheckTimer kingCheckTimer;
 	private InvalidItemCheckerTimer invalidItemCheckerTimer;
 	private EntityAutoAttackTimer entityAutoAttackTimer;
 	FileConfiguration config = getConfig();
@@ -380,9 +378,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			petFastCheckTickTimer = new PetFastCheckTimer();
 			petFastCheckTickTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
 			
-			kingCheckTimer = new KingCheckTimer();
-			kingCheckTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
-
 			attendenceXpBonusTimer = new AttendenceXpBonusTimer();
 			attendenceXpBonusTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
 
@@ -509,7 +504,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("editaa").setExecutor(new CommandEditAA());		
 		this.getCommand("loot").setExecutor(new CommandLoot());		
 		this.getCommand("createallarmoursets").setExecutor(new CommandCreateAllArmourSets());
-		this.getCommand("swearfealty").setExecutor(new CommandSwearFealty());
 		this.getCommand("createalignment").setExecutor(new CommandCreateAlignment());
 		this.getCommand("specialise").setExecutor(new CommandSpecialise());
 		this.getCommand("bite").setExecutor(new CommandBite());
@@ -532,8 +526,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listcrafts").setExecutor(new CommandListCrafts());
 		this.getCommand("editcraft").setExecutor(new CommandEditCraft());
 		this.getCommand("npcsay").setExecutor(new CommandNPCSay());
-		this.getCommand("plantflag").setExecutor(new CommandPlantFlag());
-		this.getCommand("trader").setExecutor(new CommandTrader());
 		this.getCommand("listworlds").setExecutor(new CommandListWorlds());
 		this.getCommand("editworld").setExecutor(new CommandEditWorld());
 		this.getCommand("reagent").setExecutor(new CommandReagent());

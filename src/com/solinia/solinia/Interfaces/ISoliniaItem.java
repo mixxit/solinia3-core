@@ -299,10 +299,6 @@ public interface ISoliniaItem {
 
 	void setEarsItem(boolean isEarsItem);
 
-	boolean isTerritoryFlag();
-
-	void setTerritoryFlag(boolean territoryFlag);
-
 	ItemStack asItemStackForMerchant(long costmultiplier);
 
 	boolean isReagent();

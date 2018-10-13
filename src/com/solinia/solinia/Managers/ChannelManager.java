@@ -140,11 +140,6 @@ public class ChannelManager implements IChannelManager {
 		String title = name;
 		ChatColor nameColour = ChatColor.YELLOW;
 		
-		if (player.isAlignmentEmperor())
-		{
-			nameColour = ChatColor.LIGHT_PURPLE;
-		}
-
 		String messageheader = ChatColor.RESET + "[" + channel + gender + vampire + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
@@ -199,11 +194,6 @@ public class ChannelManager implements IChannelManager {
 
 		String title = name;
 		ChatColor nameColour = ChatColor.YELLOW;
-
-		if (player.isAlignmentEmperor())
-		{
-			nameColour = ChatColor.LIGHT_PURPLE;
-		}
 
 		String messageheader = ChatColor.RESET + "[" + channel + gender + vampire + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "

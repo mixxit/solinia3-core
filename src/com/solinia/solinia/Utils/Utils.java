@@ -87,7 +87,6 @@ import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
-import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
@@ -6518,22 +6517,6 @@ public class Utils {
 		} catch (CoreStateInitException e) {
 			//
 		}
-	}
-
-	public static boolean isChunkInTerritory(Chunk chunkTo) {
-		try
-		{
-			for (ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager().getAlignments())
-			{
-				if (alignment.getChunks().get(chunkTo.getWorld().getName().toUpperCase()+ "_" + chunkTo.getX() + "_" + chunkTo.getZ()) != null)
-					return true;
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-		
-		return false;
 	}
 
 	public static ItemStack getTargetingItemStack() {

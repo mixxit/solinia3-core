@@ -43,7 +43,6 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
-import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.ScoreboardUtils;
@@ -84,7 +83,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String title = "";
 	private List<PlayerQuest> playerQuests = new ArrayList<PlayerQuest>();
 	private List<String> playerQuestFlags = new ArrayList<String>();
-	private UUID fealty;
 	private String specialisation = "";
 	private boolean vampire = false;
 	private boolean main = true;
@@ -246,72 +244,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public String getFullNameWithTitle() {
-		String king = "";
-				if (isAlignmentEmperorChild()) {
-			if (this.getGender().equals("MALE"))
-				king = "Prince ";
-			else
-				king = "Princess ";
-		}
-		if (isAlignmentEmperorSpouse()) {
-			if (this.getGender().equals("MALE"))
-				king = "Consort ";
-			else
-				king = "Empress ";
-		}
-		if (isAlignmentEmperor()) {
-			if (this.getGender().equals("MALE"))
-				king = "Emperor ";
-			else
-				king = "Empress ";
-		}
-
-		String displayName = king + getFullName();
+		String displayName = getFullName();
 		if (getTitle() != null && !(getTitle().equals(""))) {
 			displayName += " " + getTitle();
 		}
 
 		return displayName;
-	}
-
-	@Override
-	public boolean isAlignmentEmperorChild() {
-		if (this.getMotherId() != null) {
-			try {
-				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager()
-						.getCharacterByCharacterUUID(this.getMotherId());
-				if (solPlayer == null)
-					return false;
-				if (solPlayer.isAlignmentEmperor() || solPlayer.isAlignmentEmperorSpouse()) {
-					return true;
-				}
-			} catch (CoreStateInitException e) {
-
-			}
-
-		}
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	@Override
-	public boolean isAlignmentEmperorSpouse() {
-		if (this.getSpouseId() != null) {
-			try {
-				ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager()
-						.getCharacterByCharacterUUID(this.getSpouseId());
-				if (solPlayer == null)
-					return false;
-				if (solPlayer.isAlignmentEmperor()) {
-					return true;
-				}
-			} catch (CoreStateInitException e) {
-
-			}
-
-		}
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -2443,56 +2381,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setSkills(List<SoliniaPlayerSkill> skills) {
 		this.skills = skills;
 	}
-
-	@Override
-	public void setFealty(UUID uniqueId) {
-		Entity fealtyTo = Bukkit.getEntity(uniqueId);
-
-		if (uniqueId.equals(this.getUUID()))
-			return;
-
-		if (fealtyTo == null)
-			return;
-
-		if (!(fealtyTo instanceof Player))
-			return;
-
-		fealty = fealtyTo.getUniqueId();
-		getBukkitPlayer().sendMessage("* You have sworn fealty to " + fealtyTo.getCustomName() + "!");
-	}
-
-	@Override
-	public UUID getFealty() {
-		return fealty;
-	}
-
-	@Override
-	public boolean isAlignmentEmperor() {
-		if (!isMain())
-			return false;
-
-		try {
-			if (getRace() == null)
-				return false;
-
-			ISoliniaAlignment alignment = StateManager.getInstance().getConfigurationManager()
-					.getAlignment(getRace().getAlignment());
-
-			if (alignment == null)
-				return false;
-
-			if (alignment.getEmperor() == null)
-				return false;
-
-			if (alignment.getEmperor().equals(getUUID()))
-				return true;
-		} catch (CoreStateInitException e) {
-			return false;
-		}
-
-		return false;
-	}
-
+	
 	@Override
 	public String getSpecialisation() {
 		return specialisation;
@@ -3036,46 +2925,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public SoliniaAlignmentChunk getCurrentAlignmentChunk() {
-		SoliniaAlignmentChunk alignmentChunk = null;
-		try {
-			for (ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager().getAlignments()) {
-				Chunk chunk = getBukkitPlayer().getLocation().getChunk();
-				if (alignment.getChunks().get(
-						chunk.getWorld().getName().toUpperCase() + "_" + chunk.getX() + "_" + chunk.getZ()) != null)
-					return alignment.getChunks()
-							.get(chunk.getWorld().getName().toUpperCase() + "_" + chunk.getX() + "_" + chunk.getZ());
-			}
-		} catch (CoreStateInitException e) {
-
-		}
-		return alignmentChunk;
-	}
-
-	@Override
 	public void setMainAndCleanup() {
 		try {
 			// Set alt to all other characters
 			for (ISoliniaPlayer solPlayer : StateManager.getInstance().getConfigurationManager()
 					.getCharactersByPlayerUUID(this.getBukkitPlayer().getUniqueId())) {
 				solPlayer.setMain(false);
-
-				for (ISoliniaPlayer otherSolPlayer : StateManager.getInstance().getConfigurationManager()
-						.getCharacters()) {
-					if (otherSolPlayer.getFealty() != null)
-						if (otherSolPlayer.getFealty().toString().equals(solPlayer.getCharacterId().toString())) {
-							otherSolPlayer.setFealty(null);
-						}
-				}
-
-				for (ISoliniaAlignment alignment : StateManager.getInstance().getConfigurationManager()
-						.getAlignments()) {
-					if (alignment.getEmperor() != null)
-						if (alignment.getEmperor().toString().equals(solPlayer.getUUID().toString())) {
-							Bukkit.broadcastMessage(ChatColor.YELLOW + "The " + alignment.getName() + " empire no longer has an emperor!");
-							alignment.setEmperor(null);
-						}
-				}
 
 				// Set current to main
 				setMain(true);

@@ -206,7 +206,7 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 	            		item.isNeckItem(), 
 	            		item.isShouldersItem(), 
 	            		item.isEarsItem(), 
-	            		item.isTerritoryFlag(), 
+	            		false, 
 	            		item.getIdentifyMessage(), 
 	            		item.isBandage()
 	            		);

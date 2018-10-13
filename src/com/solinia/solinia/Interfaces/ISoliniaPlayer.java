@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
-import com.solinia.solinia.Models.SoliniaAlignmentChunk;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.Personality;
@@ -236,12 +235,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void reducePlayerNormalExperience(Double experience);
 
-	public void setFealty(UUID uniqueId);
-
-	UUID getFealty();
-
-	boolean isAlignmentEmperor();
-
 	String getSpecialisation();
 
 	void setSpecialisation(String specialisation);
@@ -338,12 +331,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public void reduceReagents(Integer components1, Integer componentCounts1);
 
 	boolean canUseAASpell(ISoliniaSpell spell);
-
-	boolean isAlignmentEmperorSpouse();
-
-	boolean isAlignmentEmperorChild();
-
-	public SoliniaAlignmentChunk getCurrentAlignmentChunk();
 
 	public void setMainAndCleanup();
 
