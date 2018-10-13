@@ -405,7 +405,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			csvGenerationTimer.runTaskTimer(this, 1 * 20L, 3600 * 20L);
 			
 			unsetPersonalityTimer = new UnsetPersonalityTimer(this);
-			unsetPersonalityTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
+			unsetPersonalityTimer.runTaskTimer(this, 300 * 20L, 300 * 20L);
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
