@@ -337,7 +337,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			{
 				channelManager.setDiscordMainChannelId(discordmainchannelid);
 				channelManager.setDiscordAdminChannelId(discordadminchannelid);
-				channelManager.setDiscordContentTeamChannelId(discordadminchannelid);
+				channelManager.setDiscordContentTeamChannelId(discordcontentteamchannelid);
 				channelManager.setDiscordInCharacterChannelId(discordincharacterchannelid);
 			}
 

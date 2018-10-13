@@ -1,6 +1,7 @@
 package com.solinia.solinia.Listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Managers.StateManager;
@@ -80,16 +81,27 @@ public class DiscordListener {
 					}
 				}
 				
-				if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDiscordMainChannelId()))
-				{
-					Bukkit.getServer().dispatchCommand(StateManager.getInstance().getDiscordDefaultChannelCommandSender(), command.trim());
-				} else {
-					Bukkit.getServer().dispatchCommand(StateManager.getInstance().getDiscordAdminChannelCommandSender(), command.trim());
-				}
+				Bukkit.getServer().dispatchCommand(getCommandHandlerForChannelId(event.getChannel().getStringID()), command.trim());
 				
 			} else {
 				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true);
 			}
 		}
     }
+
+	private CommandSender getCommandHandlerForChannelId(String channelId) {
+		if (channelId.equals(StateManager.getInstance().getChannelManager().getDiscordMainChannelId()))
+			return StateManager.getInstance().getDiscordDefaultChannelCommandSender();
+		
+		if (channelId.equals(StateManager.getInstance().getChannelManager().getDiscordInCharacterChannelId()))
+			return StateManager.getInstance().getDiscordInCharacterChannelCommandSender();
+		
+		if (channelId.equals(StateManager.getInstance().getChannelManager().getDiscordContentTeamChannelId()))
+			return StateManager.getInstance().getDiscordContentTeamChannelCommandSender();
+		
+		if (channelId.equals(StateManager.getInstance().getChannelManager().getDiscordAdminChannelId()))
+			return StateManager.getInstance().getDiscordAdminChannelCommandSender();
+			
+		return StateManager.getInstance().getDiscordDefaultChannelCommandSender();
+	}
 }

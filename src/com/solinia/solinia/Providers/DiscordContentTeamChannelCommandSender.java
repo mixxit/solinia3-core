@@ -103,7 +103,7 @@ public class DiscordContentTeamChannelCommandSender implements CommandSender {
 
 	@Override
 	public void sendMessage(String message) {
-		StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getDiscordInCharacterChannelId(), message);
+		StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getDiscordContentTeamChannelId(), message);
 	}
 
 	@Override
