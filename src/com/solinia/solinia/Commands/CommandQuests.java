@@ -47,7 +47,7 @@ public class CommandQuests implements CommandExecutor {
 			
 			for(PlayerQuest playerQuest : solplayer.getPlayerQuests())
 			{
-				if (questFlags.contains(playerQuest.getQuest().getQuestFlagCompletion()))
+				if (questFlags.contains(playerQuest.getQuest().getQuestFlagCompletion().toUpperCase()))
 					continue;
 				
 				player.sendMessage(ChatColor.LIGHT_PURPLE + playerQuest.getQuest().getName() + ChatColor.RESET + " Complete: " + playerQuest.isComplete());
@@ -65,7 +65,7 @@ public class CommandQuests implements CommandExecutor {
 		for(int stepId : playerQuest.getQuest().getQuestSteps().keySet())
 		{
 			QuestStep questStep = playerQuest.getQuest().getQuestSteps().get(stepId);
-			if (!questFlags.contains(questStep.getTriggerQuestFlag()))
+			if (!questFlags.contains(questStep.getTriggerQuestFlag().toUpperCase()))
 				continue;
 			
 			if (questFlags.contains(questStep.getCompleteQuestFlag()))
