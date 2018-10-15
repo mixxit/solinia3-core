@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -43,7 +44,12 @@ public class CommandQuests implements CommandExecutor {
 			player.sendMessage(flags.trim());
 			
 			player.sendMessage("Active Quests:");
-			List<String> questFlags = solplayer.getPlayerQuestFlags();
+			List<String> questFlags = new ArrayList<String>();
+			
+			for(String questFlag : solplayer.getPlayerQuestFlags())
+			{
+				questFlags.add(questFlag.toUpperCase());
+			}
 			
 			for(PlayerQuest playerQuest : solplayer.getPlayerQuests())
 			{
@@ -68,7 +74,7 @@ public class CommandQuests implements CommandExecutor {
 			if (!questFlags.contains(questStep.getTriggerQuestFlag().toUpperCase()))
 				continue;
 			
-			if (questFlags.contains(questStep.getCompleteQuestFlag()))
+			if (questFlags.contains(questStep.getCompleteQuestFlag().toUpperCase()))
 				continue;
 			
 			player.sendMessage("- Step " +  ChatColor.YELLOW + questStep.getSequence() + ChatColor.RESET +  " - Description: " + questStep.getDescription());
