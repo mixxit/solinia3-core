@@ -153,7 +153,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// MEZZED
 		if (this.isMezzed()) {
 			if (this instanceof Player) {
-				this.getBukkitLivingEntity().sendMessage("* You are mezzed!");
+				((Player)this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 			}
 			return;
 		}
@@ -161,7 +161,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// STUNNED
 		if (this.isStunned()) {
 			if (this instanceof Player) {
-				this.getBukkitLivingEntity().sendMessage("* You are stunned!");
+				((Player)this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are stunned!"));
 			}
 			return;
 		}
@@ -5998,7 +5998,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// MEZZED
 			if (attacker.isMezzed()) {
 				if (attacker instanceof Player) {
-					attacker.getBukkitLivingEntity().sendMessage("* You are mezzed!");
+					((Player)attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 				}
 				return 0;
 			}

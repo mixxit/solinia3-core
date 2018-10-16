@@ -407,7 +407,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed((LivingEntity) player);
 			if (mezExpiry != null) {
-				player.sendMessage("* You are mezzed!");
+				player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 				if (event.getTo().getBlockY() < event.getFrom().getBlockY()) {
 					event.getTo().setX(event.getFrom().getX());
 					event.getTo().setZ(event.getFrom().getZ());
@@ -1373,7 +1373,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
 					.getMezzed((LivingEntity) event.getPlayer());
 			if (mezExpiry != null) {
-				event.getPlayer().sendMessage("* You are mezzed!");
+				event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 				Utils.CancelEvent(event);
 				;
 				return;
@@ -1386,7 +1386,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			Timestamp stunExpiry = StateManager.getInstance().getEntityManager()
 					.getStunned((LivingEntity) event.getPlayer());
 			if (stunExpiry != null) {
-				event.getPlayer().sendMessage("* You are stunned!");
+				event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are stunned!"));
 				Utils.CancelEvent(event);
 				;
 				return;
