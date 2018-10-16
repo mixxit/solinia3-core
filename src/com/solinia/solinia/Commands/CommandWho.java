@@ -103,6 +103,28 @@ public class CommandWho implements CommandExecutor {
 					
 				}
 		    }
+	        
+	        try
+	        {
+		        ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solPlayer.getPersonality().getBondId() == 0 || 
+						solPlayer.getPersonality().getFirstTraitId() == 0 ||
+						solPlayer.getPersonality().getSecondTraitId() == 0 ||
+						solPlayer.getPersonality().getFlawId() == 0 ||
+						solPlayer.getPersonality().getIdealId() == 0
+						)
+				{
+					player.sendMessage("* You have not set your personality. Please see /personality");
+				}
+				
+				if (solPlayer.getClassObj() != null && solPlayer.getClassObj().getOaths().size() > 0 && solPlayer.getOathId() == 0)
+				{
+					player.sendMessage("* You have not set your Oath. Please see /oath");
+				}
+	        } catch (CoreStateInitException e)
+	        {
+	        	
+	        }
 	    }
 		
 		if ((

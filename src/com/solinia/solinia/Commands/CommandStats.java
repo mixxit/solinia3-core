@@ -47,6 +47,22 @@ public class CommandStats implements CommandExecutor {
 	    		player.sendMessage("From being online you have saved up Attendence Xp every minute: " + solplayer.getPendingXp().longValue());
 	    		player.sendMessage("Use /claimxp to claim your attendence xp");
 	    		player.sendMessage("Trancing/Meditating: " + solplayer.isMeditating());
+	    		
+	    		ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solPlayer.getPersonality().getBondId() == 0 || 
+						solPlayer.getPersonality().getFirstTraitId() == 0 ||
+						solPlayer.getPersonality().getSecondTraitId() == 0 ||
+						solPlayer.getPersonality().getFlawId() == 0 ||
+						solPlayer.getPersonality().getIdealId() == 0
+						)
+				{
+					player.sendMessage("* You have not set your personality. Please see /personality");
+				}
+				
+				if (solPlayer.getClassObj() != null && solPlayer.getClassObj().getOaths().size() > 0 && solPlayer.getOathId() == 0)
+				{
+					player.sendMessage("* You have not set your Oath. Please see /oath");
+				}
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

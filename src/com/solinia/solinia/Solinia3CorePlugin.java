@@ -52,7 +52,6 @@ import com.solinia.solinia.Timers.CSVGenerationTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.EntityAutoAttackTimer;
-import com.solinia.solinia.Timers.HintTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
@@ -66,7 +65,6 @@ import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
-import com.solinia.solinia.Timers.UnsetPersonalityTimer;
 
 import de.slikey.effectlib.EffectManager;
 import me.dadus33.chatitem.api.ChatItemAPI;
@@ -97,8 +95,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
-	private UnsetPersonalityTimer unsetPersonalityTimer;
-	private HintTimer hintTimer;
 	
 	private Economy economy;
 	private ChatItemAPI ciApi;
@@ -391,10 +387,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			entityAutoAttackTimer = new EntityAutoAttackTimer();
 			entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
 			
-			hintTimer = new HintTimer();
-			hintTimer.runTaskTimer(this, 1800 * 20L, 1800 * 20L);
-
-			
 			if (this.discordClient != null)
 			{
 				discordMessageTimer = new DiscordMessageTimer();
@@ -403,9 +395,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			
 			csvGenerationTimer = new CSVGenerationTimer();
 			csvGenerationTimer.runTaskTimer(this, 1 * 20L, 3600 * 20L);
-			
-			unsetPersonalityTimer = new UnsetPersonalityTimer(this);
-			unsetPersonalityTimer.runTaskTimer(this, 300 * 20L, 300 * 20L);
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
