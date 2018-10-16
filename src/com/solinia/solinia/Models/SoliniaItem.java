@@ -708,6 +708,8 @@ public class SoliniaItem implements ISoliniaItem {
 		
 		try
 		{
+			// only if non consumable
+			if (!this.isConsumable())
 			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(player, spell.getId()) != null)
 			{
 				LocalDateTime datetime = LocalDateTime.now();
