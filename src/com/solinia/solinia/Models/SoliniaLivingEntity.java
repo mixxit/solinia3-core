@@ -2144,7 +2144,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				 */
 				chance += aaHeadShotLevelModifier + spellHeadShotLevelModifier;
 				if (Utils.RandomBetween(1, 1000) <= chance) {
-					emote(" is hit by a fatal blow");
+					emote(" is hit by a fatal blow",false);
 					return HeadShot_Dmg;
 				}
 			}
@@ -3024,8 +3024,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void emote(String message) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message);
+	public void emote(String message, boolean isBardSongFilterable) {
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message, isBardSongFilterable);
 	}
 
 	@Override
@@ -3186,7 +3186,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc.getKillTriggerText() == null || npc.getKillTriggerText().equals(""))
 				return;
 
-			this.emote(npc.getName() + " says '" + npc.getKillTriggerText() + "'" + ChatColor.RESET);
+			this.emote(npc.getName() + " says '" + npc.getKillTriggerText() + "'" + ChatColor.RESET, false);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -5312,7 +5312,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (effect.getSpellEffectType().equals(spellEffectType)) {
 					try {
 						StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(
-								getBukkitLivingEntity().getUniqueId(), activeSpell.getSpellId());
+								getBukkitLivingEntity().getUniqueId(), activeSpell.getSpellId(), false);
 					} catch (CoreStateInitException e) {
 
 					}
@@ -5353,7 +5353,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false);
 
 			}
 		} catch (CoreStateInitException e) {
@@ -5679,7 +5679,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false);
 
 			}
 		} catch (CoreStateInitException e) {
@@ -6254,7 +6254,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false);
 			}
 		} catch (CoreStateInitException e) {
 
@@ -6287,6 +6287,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			} catch (CoreStateInitException e) {
 
 			}
+		}
+	}
+
+	@Override
+	public void StopSinging() {
+		try
+		{
+			Integer singingId = StateManager.getInstance().getEntityManager().getEntitySinging(getBukkitLivingEntity().getUniqueId());
+			if (singingId != null)
+			{
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(singingId);
+				StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), singingId, true);
+				emote(getBukkitLivingEntity().getCustomName() + "'s song comes to a close ["
+						+ spell.getName() + "]", true);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 }

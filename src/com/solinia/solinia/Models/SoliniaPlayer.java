@@ -87,6 +87,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int inspiration = 0;
 	private Timestamp experienceBonusExpires;
 	private boolean oocEnabled = true;
+	private boolean songsEnabled = true;
 	private String bindPoint;
 	private int fingersItem = 0;
 	private int shouldersItem = 0;
@@ -784,8 +785,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void emote(String string) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + string);
+	public void emote(String string, boolean isBardSongFilterable) {
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + string, isBardSongFilterable);
 	}
 
 	@Override
@@ -1402,7 +1403,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			if (!checkDoesntFizzle(spell)) {
-				emote("* " + getFullName() + "'s spell fizzles");
+				emote("* " + getFullName() + "'s spell fizzles", false);
 				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
 				return;
 			}
@@ -3286,6 +3287,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setPersonality(Personality personality) {
 		this.personality = personality;
+	}
+
+	@Override
+	public void StopSinging() {
+		ISoliniaLivingEntity solLivingEntity = getSoliniaLivingEntity();
+		if (solLivingEntity != null)
+			solLivingEntity.StopSinging();
+	}
+
+	@Override
+	public boolean isSongsEnabled() {
+		return songsEnabled;
+	}
+
+	@Override
+	public void setSongsEnabled(boolean songsEnabled) {
+		this.songsEnabled = songsEnabled;
 	}
 
 }

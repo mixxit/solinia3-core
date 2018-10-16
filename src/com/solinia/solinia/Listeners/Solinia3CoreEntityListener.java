@@ -266,8 +266,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					if (cancelFall == true) {
 						Utils.CancelEvent(event);
 						;
-						solplayer.emote(
-								ChatColor.AQUA + "* " + solplayer.getFullName() + " lands softly, breaking their fall");
+						solplayer.emote(ChatColor.AQUA + "* " + solplayer.getFullName() + " lands softly, breaking their fall", false);
 						solplayer.tryIncreaseSkill("SAFEFALL", 1);
 						return;
 					}

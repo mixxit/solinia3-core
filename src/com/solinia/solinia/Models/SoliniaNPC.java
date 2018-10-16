@@ -760,7 +760,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 							{
 								case FACTION_THREATENLY:
 								case FACTION_SCOWLS:
-									solentity.emote(npc.getName() + " scowls angrily at " + solPlayer.getFullName());
+									solentity.emote(npc.getName() + " scowls angrily at " + solPlayer.getFullName(), false);
 									return;
 								default:
 									break;
@@ -880,12 +880,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 							if (handler.getResponseType().equals("SAY"))
 								solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), true);
 							if (handler.getResponseType().equals("EMOTE"))
-								solentity.emote(replaceChatWordsWithHints(response));
+								solentity.emote(replaceChatWordsWithHints(response), false);
 						} else {
 							if (handler.getResponseType().equals("SAY"))
 								solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
 							if (handler.getResponseType().equals("EMOTE"))
-								solentity.emote(replaceChatWordsWithHints(response));
+								solentity.emote(replaceChatWordsWithHints(response), false);
 						}
 					} else {
 						if ((triggerentity instanceof Player))
@@ -893,7 +893,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 							if (handler.getResponseType().equals("SAY"))
 								solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), true);
 							if (handler.getResponseType().equals("EMOTE"))
-								solentity.emote(replaceChatWordsWithHints(response));
+								solentity.emote(replaceChatWordsWithHints(response), false);
 						} else {
 							solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
 						}
@@ -904,12 +904,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 						if (handler.getResponseType().equals("SAY"))
 							solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response),true);
 						if (handler.getResponseType().equals("EMOTE"))
-							solentity.emote(replaceChatWordsWithHints(response));
+							solentity.emote(replaceChatWordsWithHints(response), false);
 					} else {
 						if (handler.getResponseType().equals("SAY"))
 							solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
 						if (handler.getResponseType().equals("EMOTE"))
-							solentity.emote(replaceChatWordsWithHints(response));
+							solentity.emote(replaceChatWordsWithHints(response), false);
 						}
 				}
 				

@@ -434,6 +434,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("tarot").setExecutor(new CommandTarot());
 		this.getCommand("skills").setExecutor(new CommandSkills());
 		this.getCommand("createitem").setExecutor(new CommandCreateItem());
+		this.getCommand("hidesongs").setExecutor(new CommandHideSongs());
 		this.getCommand("listitems").setExecutor(new CommandListItems());
 		this.getCommand("spawnitem").setExecutor(new CommandSpawnItem());
 		this.getCommand("raceinfo").setExecutor(new CommandRaceInfo());
@@ -455,6 +456,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("createmerchantlist").setExecutor(new CommandCreateMerchantList());
 		this.getCommand("addmerchantitem").setExecutor(new CommandAddMerchantItem());
 		this.getCommand("listmerchantlists").setExecutor(new CommandListMerchantLists());
+		this.getCommand("stopsinging").setExecutor(new CommandStopSinging());
 		this.getCommand("edititem").setExecutor(new CommandEditItem());
 		this.getCommand("createspawngroup").setExecutor(new CommandCreateSpawnGroup());
 		this.getCommand("listspawngroups").setExecutor(new CommandListSpawnGroups());

@@ -42,7 +42,7 @@ public interface ISoliniaLivingEntity
 
 	void setNpcid(int npcid);
 
-	public void emote(String message);
+	public void emote(String message, boolean isBardSongFilterable);
 
 	public void doRandomChat();
 
@@ -299,5 +299,5 @@ public interface ISoliniaLivingEntity
 
 	boolean doCheckForDespawn();
 
-
+	public void StopSinging();
 }

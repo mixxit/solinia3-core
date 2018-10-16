@@ -5,9 +5,9 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 
 public interface IChannelManager {
 
-	void sendToLocalChannel(ISoliniaPlayer source, String message);
+	void sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable);
 
-	void sendToLocalChannel(ISoliniaLivingEntity source, String message);
+	void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable);
 
 	void sendToGlobalChannel(ISoliniaPlayer source, String message);
 

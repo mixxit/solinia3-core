@@ -347,7 +347,7 @@ public class EntityManager implements IEntityManager {
 		
 		for(UUID uuid : uuidRemoval)
 		{
-			removeSpellEffects(uuid);
+			removeSpellEffects(uuid, false);
 		}
 		
 		
@@ -358,19 +358,19 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override 
-	public void removeSpellEffects(UUID uuid)
+	public void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell)
 	{
 		if (entitySpells.get(uuid) != null)
-			entitySpells.get(uuid).removeAllSpells(plugin);
+			entitySpells.get(uuid).removeAllSpells(plugin, forceDoNotLoopBardSpell);
 		
 		entitySpells.remove(uuid);
 	}
 	
 	@Override 
-	public void removeSpellEffectsOfSpellId(UUID uuid, int spellId)
+	public void removeSpellEffectsOfSpellId(UUID uuid, int spellId, boolean forceDoNotLoopBardSpell)
 	{
 		if (entitySpells.get(uuid) != null)
-			entitySpells.get(uuid).removeAllSpellsOfId(plugin, spellId);
+			entitySpells.get(uuid).removeAllSpellsOfId(plugin, spellId, forceDoNotLoopBardSpell);
 	}
 	
 	@Override
@@ -751,15 +751,15 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void clearEntityEffects(UUID uniqueId) {
 		if (entitySpells.get(uniqueId) != null)
-			removeSpellEffects(uniqueId);
+			removeSpellEffects(uniqueId, false);
 	}
 
 	@Override
-	public void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type) {
+	public void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type, boolean forceDoNotLoopBardSpell) {
 		if (entitySpells.get(livingEntity.getUniqueId()) == null)
 			return;
 		
-		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(plugin, type);
+		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(plugin, type, forceDoNotLoopBardSpell);
 	}
 	
 	@Override
@@ -767,7 +767,7 @@ public class EntityManager implements IEntityManager {
 		if (entitySpells.get(livingEntity.getUniqueId()) == null)
 			return;
 		
-		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpell(plugin);
+		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpell(plugin, false);
 	}
 	/*
 	@Override

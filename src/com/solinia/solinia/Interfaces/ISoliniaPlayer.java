@@ -117,8 +117,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void increasePlayerMana(int mana);
 
-	void emote(String string);
-
 	UUID getInteraction();
 
 	public void ooc(String message);
@@ -439,4 +437,12 @@ public interface ISoliniaPlayer extends Serializable {
 	void setPersonality(Personality personality);
 
 	Oath getOath();
+
+	public void StopSinging();
+
+	boolean isSongsEnabled();
+
+	void setSongsEnabled(boolean songsEnabled);
+
+	void emote(String string, boolean isBardSongFilterable);
 }

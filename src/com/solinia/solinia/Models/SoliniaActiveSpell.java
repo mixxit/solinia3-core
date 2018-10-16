@@ -168,12 +168,20 @@ public class SoliniaActiveSpell {
 			if (isFirstRun) {
 				if (soliniaSpell.getCastOnYou() != null && !soliniaSpell.getCastOnYou().equals("") && isOwnerPlayer) {
 					Player player = Bukkit.getPlayer(getOwnerUuid());
-					player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou() + "[" + player.isDead() + "]");
+					if (soliniaSpell.isBardSong())
+					{
+						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+						if (solPlayer.isSongsEnabled())
+							player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+					} else {
+						player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+					}
 				}
 
 				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals(""))
-					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(
-							ChatColor.GRAY + "* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther());
+				{
+					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(ChatColor.GRAY + "* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther(), soliniaSpell.isBardSong());
+				}
 			}
 
 			for (ActiveSpellEffect spellEffect : getActiveSpellEffects()) {
@@ -2042,7 +2050,7 @@ public class SoliniaActiveSpell {
 
 		try {
 			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),
-					SpellEffectType.PoisonCounter);
+					SpellEffectType.PoisonCounter, false);
 			if (isOwnerPlayer()) {
 				Player player = (Player) Bukkit.getPlayer(getOwnerUuid());
 				if (player != null) {
@@ -2070,7 +2078,7 @@ public class SoliniaActiveSpell {
 
 		try {
 			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),
-					SpellEffectType.DiseaseCounter);
+					SpellEffectType.DiseaseCounter, false);
 			if (isOwnerPlayer()) {
 				Player player = (Player) Bukkit.getPlayer(getOwnerUuid());
 				if (player != null)

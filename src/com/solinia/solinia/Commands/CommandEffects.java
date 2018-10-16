@@ -111,7 +111,7 @@ public class CommandEffects implements CommandExecutor {
 	            		return true;
 	            	}
 	            	
-	            	StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(player.getUniqueId(), spell.getId());
+	            	StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(player.getUniqueId(), spell.getId(), true);
 	            	
 	            	if (!spell.isBeneficial())
 	            	{

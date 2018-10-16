@@ -20,6 +20,15 @@ commands:
     description: Lists todays RP time
     usage: /today
     aliases: []
+  hidesongs:
+    description: Hides songs
+    usage: /hidesongs
+    aliases: []
+  stopsinging:
+    description: Stops singing
+    usage: /stopsinging
+    aliases:
+    - stopsong
   claimxp:
     description: Claims pending XP
     usage: /claimxp

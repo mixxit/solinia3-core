@@ -203,7 +203,7 @@ public class ChannelManager implements IChannelManager {
 	}
 
 	@Override
-	public void sendToLocalChannel(ISoliniaPlayer source, String message) {
+	public void sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 100)
 			{
@@ -273,10 +273,20 @@ public class ChannelManager implements IChannelManager {
 	}
 
 	@Override
-	public void sendToLocalChannel(ISoliniaLivingEntity source, String message) {
+	public void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
 			{
+				try
+				{
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					if (isBardSongFilterable && !solPlayer.isSongsEnabled())
+						continue;
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+				
 				player.sendMessage(message);
 			}
 		}

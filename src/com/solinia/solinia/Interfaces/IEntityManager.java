@@ -47,7 +47,7 @@ public interface IEntityManager {
 
 	void clearEntityEffects(UUID uniqueId);
 
-	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter);
+	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter, boolean forceDoNotLoopBardSpell);
 
 	LivingEntity SpawnPet(Player owner, ISoliniaSpell spell);
 
@@ -58,15 +58,9 @@ public interface IEntityManager {
 
 	void doNPCSpellCast();
 
-	void removeSpellEffects(UUID uuid);
-
-	//void addTemporaryMerchantItem(int npcid, int itemid, int amount);
-
-	//void removeTemporaryMerchantItem(int npcid, int itemid, int amount) throws InsufficientTemporaryMerchantItemException;
+	void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell);
 
 	List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc);
-
-	//List<ISoliniaNPCMerchantEntry> getTemporaryMerchantItems(ISoliniaNPC npc);
 
 	boolean hasEntityEffectType(LivingEntity livingEntity, SpellEffectType type);
 
@@ -96,7 +90,7 @@ public interface IEntityManager {
 
 	void setEntitySinging(UUID entityUUID, Integer spellId);
 
-	void removeSpellEffectsOfSpellId(UUID uuid, int spellId);
+	void removeSpellEffectsOfSpellId(UUID uuid, int spellId, boolean forceDoNotLoopBardSpell);
 
 	void doNPCCheckForEnemies();
 

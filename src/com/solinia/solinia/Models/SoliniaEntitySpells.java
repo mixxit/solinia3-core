@@ -128,10 +128,8 @@ public class SoliniaEntitySpells {
 			if (getLivingEntityUUID().equals(sourceEntity.getUniqueId())) {
 				try {
 					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
-					solEntity.emote(sourceEntity.getCustomName() + " starts to sing "
-							+ soliniaSpell.getName());
-					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(),
-							soliniaSpell.getId());
+					solEntity.emote(sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName() + " /hidesongs", true);
+					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(), soliniaSpell.getId());
 				} catch (CoreStateInitException e) {
 					// ignore
 				}
@@ -151,7 +149,7 @@ public class SoliniaEntitySpells {
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	public void removeSpell(Plugin plugin, Integer spellId) {
+	public void removeSpell(Plugin plugin, Integer spellId, boolean forceDoNotLoopBardSpell) {
 		// Effect has worn off
 		SoliniaActiveSpell activeSpell = activeSpells.get(spellId);
 
@@ -160,7 +158,6 @@ public class SoliniaEntitySpells {
 
 		boolean updateMaxHp = false;
 		boolean updateDisguise = false;
-		boolean updateAttackSpeed = false;
 
 		// Handle any effect removals needed
 		for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
@@ -177,12 +174,6 @@ public class SoliniaEntitySpells {
 			case IllusionPersistence:
 			case IllusionaryTarget:
 				updateDisguise = true;
-				break;
-			case AttackSpeed:
-			case AttackSpeed2:
-			case AttackSpeed3:
-			case AttackSpeed4:
-				updateAttackSpeed = true;
 				break;
 			}
 		}
@@ -205,26 +196,9 @@ public class SoliniaEntitySpells {
 			if (getLivingEntity() != null)
 				DisguiseAPI.undisguiseToAll(getLivingEntity());
 		}
-		/*
-		if (updateAttackSpeed == true) {
-			if (getLivingEntity() != null)
-			if (Utils.isSoliniaMob(getLivingEntity()))
-			{
-				MythicEntitySoliniaMob mob = Utils.GetSoliniaMob(getLivingEntity());
-				if (mob != null)
-				{
-					try {
-						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-						mob.setMeleeAttackPercent(solEntity.getAttackSpeed());
-					} catch (CoreStateInitException e) {
-						
-					}
-					
-				}
-			}
-		}*/
-
+		
 		// Check if bard song, may need to keep singing
+		if (forceDoNotLoopBardSpell == false)
 		if (activeSpell.getSpell().isBardSong()) {
 			if (getLivingEntityUUID().equals(activeSpell.getSourceUuid())) {
 				try {
@@ -236,8 +210,7 @@ public class SoliniaEntitySpells {
 									.getEntitySinging(getLivingEntity().getUniqueId());
 							if (singingId != activeSpell.getSpellId() || activeSpell.getSpell().getRecastTime() > 0) {
 								ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-								solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close ["
-										+ activeSpell.getSpell().getName() + "]");
+								solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
 							} else {
 								// Continue singing!
 								if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity
@@ -259,14 +232,14 @@ public class SoliniaEntitySpells {
 		}
 	}
 
-	public void removeAllSpells(Plugin plugin) {
+	public void removeAllSpells(Plugin plugin, boolean forceDoNotLoopBardSpell) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
 			removeSpells.add(activeSpell.getSpellId());
 		}
 
 		for (Integer spellId : removeSpells) {
-			removeSpell(plugin, spellId);
+			removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
 		}
 	}
 
@@ -286,7 +259,7 @@ public class SoliniaEntitySpells {
 			}
 
 		for (Integer spellId : removeSpells) {
-			removeSpell(plugin, spellId);
+			removeSpell(plugin, spellId, false);
 		}
 
 		for (SoliniaActiveSpell activeSpell : updateSpells) {
@@ -295,7 +268,7 @@ public class SoliniaEntitySpells {
 	}
 
 	// Mainly used for cures
-	public void removeFirstSpellOfEffectType(Plugin plugin, SpellEffectType type) {
+	public void removeFirstSpellOfEffectType(Plugin plugin, SpellEffectType type, boolean forceDoNotLoopBardSpell) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
 
@@ -310,7 +283,7 @@ public class SoliniaEntitySpells {
 		}
 
 		for (Integer spellId : removeSpells) {
-			removeSpell(plugin, spellId);
+			removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
 		}
 
 		for (SoliniaActiveSpell activeSpell : updateSpells) {
@@ -319,11 +292,11 @@ public class SoliniaEntitySpells {
 
 	}
 
-	public void removeAllSpellsOfId(Plugin plugin, int spellId) {
-		removeSpell(plugin, spellId);
+	public void removeAllSpellsOfId(Plugin plugin, int spellId, boolean forceDoNotLoopBardSpell) {
+		removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
 	}
 
-	public void removeFirstSpell(Plugin plugin) {
+	public void removeFirstSpell(Plugin plugin, boolean forceDoNotLoopBardSpell) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
 
@@ -338,7 +311,7 @@ public class SoliniaEntitySpells {
 		}
 
 		for (Integer spellId : removeSpells) {
-			removeSpell(plugin, spellId);
+			removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
 		}
 
 		for (SoliniaActiveSpell activeSpell : updateSpells) {
