@@ -760,7 +760,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 							{
 								case FACTION_THREATENLY:
 								case FACTION_SCOWLS:
-									solentity.emote("* " + npc.getName() + " scowls angrily at " + solPlayer.getFullName());
+									solentity.emote(npc.getName() + " scowls angrily at " + solPlayer.getFullName());
 									return;
 								default:
 									break;

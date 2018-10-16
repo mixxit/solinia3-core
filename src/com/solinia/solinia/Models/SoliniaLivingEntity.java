@@ -3025,7 +3025,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void emote(String message) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, message);
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message);
 	}
 
 	@Override
@@ -3186,7 +3186,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc.getKillTriggerText() == null || npc.getKillTriggerText().equals(""))
 				return;
 
-			this.emote(ChatColor.AQUA + npc.getName() + " says '" + npc.getKillTriggerText() + "'" + ChatColor.RESET);
+			this.emote(npc.getName() + " says '" + npc.getKillTriggerText() + "'" + ChatColor.RESET);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

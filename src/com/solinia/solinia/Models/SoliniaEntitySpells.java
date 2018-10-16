@@ -128,7 +128,7 @@ public class SoliniaEntitySpells {
 			if (getLivingEntityUUID().equals(sourceEntity.getUniqueId())) {
 				try {
 					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
-					solEntity.emote(ChatColor.GRAY + "* " + sourceEntity.getCustomName() + " starts to sing "
+					solEntity.emote(sourceEntity.getCustomName() + " starts to sing "
 							+ soliniaSpell.getName());
 					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(),
 							soliniaSpell.getId());

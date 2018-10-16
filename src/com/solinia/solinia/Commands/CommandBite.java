@@ -10,6 +10,8 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandBite implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -39,7 +41,7 @@ public class CommandBite implements CommandExecutor {
 			ISoliniaPlayer sourcePlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
 			ISoliniaPlayer bitenPlayer = SoliniaPlayerAdapter.Adapt(biten);
 			
-			sourcePlayer.emote("* " + sourcePlayer.getFullNameWithTitle() + " sinks their teeth into " + bitenPlayer.getFullNameWithTitle());
+			sourcePlayer.emote(sourcePlayer.getFullNameWithTitle() + " sinks their teeth into " + bitenPlayer.getFullNameWithTitle());
 			if (sourcePlayer.isVampire())
 			{
 				bitenPlayer.setVampire(true);

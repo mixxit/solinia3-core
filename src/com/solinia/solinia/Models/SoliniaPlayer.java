@@ -785,7 +785,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void emote(String string) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, string);
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + string);
 	}
 
 	@Override
