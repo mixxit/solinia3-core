@@ -1085,6 +1085,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						.getEntityTarget(getBukkitPlayer());
 				
 				if (targetmob != null)
+				if (!item.isPetControlRod())
 				if (getBukkitPlayer().getLocation().distance(targetmob.getLocation()) > 15)
 				{
 					getBukkitPlayer().sendMessage("You were too far to interact with that entity");
