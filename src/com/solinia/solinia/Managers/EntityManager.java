@@ -1476,10 +1476,24 @@ public class EntityManager implements IEntityManager {
 		int newvalue = hateList.get(entity).get(provoker);
 		if ((newvalue + hate) > Integer.MAX_VALUE)
 			newvalue = Integer.MAX_VALUE;
+		else if ((newvalue + hate) < 0)
+			newvalue = 0;
 		else
 			newvalue += hate;
 		
-		hateList.get(entity).put(provoker, newvalue);
+		if (newvalue == 0)
+			hateList.get(entity).remove(provoker);
+		else
+			hateList.get(entity).put(provoker, newvalue);
+	}
+	
+	@Override
+	public ConcurrentHashMap<UUID, Integer> getHateList(UUID entity)
+	{
+		if (hateList.get(entity) == null)
+			hateList.put(entity, new ConcurrentHashMap<UUID, Integer>());
+		
+		return hateList.get(entity);
 	}
 	
 	@Override
@@ -1492,5 +1506,10 @@ public class EntityManager implements IEntityManager {
 			return 0;
 		
 		return hateList.get(entity).get(provoker);
+	}
+
+	@Override
+	public void clearHateList(UUID entity) {
+		hateList.put(entity,  new ConcurrentHashMap<UUID, Integer>());
 	}
 }

@@ -161,4 +161,8 @@ public interface IEntityManager {
 	Integer getHateListEntry(UUID entity, UUID provoker);
 
 	void doNPCTeleportAttack();
+
+	ConcurrentHashMap<UUID, Integer> getHateList(UUID entity);
+
+	void clearHateList(UUID uuid);
 }

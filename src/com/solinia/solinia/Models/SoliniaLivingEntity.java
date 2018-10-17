@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -4777,7 +4778,70 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void addToHateList(UUID uniqueId, int hate) {
 		try {
 			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(), uniqueId, hate);
+			checkHateTargets();
 		} catch (CoreStateInitException e) {
+		}
+	}
+	
+	public ConcurrentHashMap<UUID, Integer> getHateList()
+	{
+		try {
+			return StateManager.getInstance().getEntityManager().getHateList(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e) {
+		}
+		
+		return null;
+	}
+
+	@Override
+	public void clearHateList()
+	{
+		try {
+			StateManager.getInstance().getEntityManager().clearHateList(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e) {
+		}
+	}
+	
+	@Override
+	public void checkHateTargets() {
+		if (this.getBukkitLivingEntity().isDead())
+			return;
+		
+		if (!(this.getBukkitLivingEntity() instanceof Creature))
+			return;
+		
+		if (this.getHateList().keySet().size() == 0)
+		{
+			((Creature)this.getBukkitLivingEntity()).setTarget(null);
+			return;
+		}
+		
+		int maxHate = 0;
+		UUID bestUUID = null;
+		for (UUID uuid : this.getHateList().keySet())
+		{
+			int hate = this.getHateList().get(uuid);
+			if (hate < 1)
+				continue;
+			
+			if (hate > maxHate)
+			{
+				Entity entity = Bukkit.getEntity(uuid);
+				if (!(entity instanceof LivingEntity))
+					continue;
+				
+				if (entity.isDead())
+					continue;
+
+				maxHate = hate;
+				bestUUID = uuid;
+			}
+		}
+		
+		if (bestUUID != null)
+		{
+			LivingEntity entity = (LivingEntity)Bukkit.getEntity(bestUUID);
+			((Creature)this.getBukkitLivingEntity()).setTarget(entity);
 		}
 	}
 

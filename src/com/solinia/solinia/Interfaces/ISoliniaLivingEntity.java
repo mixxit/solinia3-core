@@ -300,4 +300,8 @@ public interface ISoliniaLivingEntity
 	boolean doCheckForDespawn();
 
 	public void StopSinging();
+
+	void checkHateTargets();
+
+	void clearHateList();
 }

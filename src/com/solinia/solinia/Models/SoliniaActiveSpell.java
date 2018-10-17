@@ -1745,10 +1745,18 @@ public class SoliniaActiveSpell {
 		if (!(getLivingEntity() instanceof Creature))
 			return;
 
-		Creature creature = (Creature) getLivingEntity();
 		Entity source = Bukkit.getEntity(getSourceUuid());
 		if (source instanceof LivingEntity)
-			creature.setTarget((LivingEntity) source);
+		{
+			try
+			{
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) source);
+				solLivingEntity.addToHateList(getLivingEntity().getUniqueId(), spellEffect.getBase());
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
 	}
 
 	private void applySummonGroup(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -1820,11 +1828,17 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyWipeHateList(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!(getLivingEntity() instanceof Creature))
-			return;
-
-		Creature creature = (Creature) getLivingEntity();
-		creature.setTarget(null);
+		try
+		{
+			StateManager.getInstance().getEntityManager().clearHateList(getLivingEntity().getUniqueId());
+			if (!(getLivingEntity() instanceof Creature))
+				return;
+			
+			((Creature)getLivingEntity()).setTarget(null);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
