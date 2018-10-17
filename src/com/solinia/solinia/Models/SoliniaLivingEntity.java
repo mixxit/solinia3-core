@@ -1353,7 +1353,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				name = defender.getBukkitLivingEntity().getCustomName();
 
 			if (attackerEntity instanceof Player)
-				((Player) attackerEntity).spigot().sendMessage(ChatMessageType.CHAT,
+				((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent("You hit " + name + " for " + df.format(finaldamage) + " "
 								+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
 								+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
