@@ -488,6 +488,7 @@ public class SoliniaItem implements ISoliniaItem {
 		if (targetentity.isDead() || player.isDead())
 			return false;
 		
+		if (!this.isPetControlRod())
 		if (player.getLocation().distance(targetentity.getLocation()) > 15)
 		{
 			player.sendMessage("You were too far to use this item on that entity");
