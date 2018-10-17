@@ -530,31 +530,27 @@ public class SoliniaItem implements ISoliniaItem {
 				{
 					// Move pet to player
 					pet.teleport(player.getLocation());
-					((Creature)pet).setTarget(null);
+					solLivingEntity.clearHateList();
 					
 					// Mez cancel target
 					Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed(targetentity);
 	
 					if (mezExpiry != null) {
-						((Creature) pet).setTarget(null);
-						Creature creature = (Creature)pet;
-						creature.setTarget(null);
+						solLivingEntity.setAttackTarget(null);
 						player.sendMessage("You cannot send your pet to attack a mezzed player");
 						return false;
 					}
 					
 					if (pet.getUniqueId().equals(targetentity.getUniqueId()))
 					{
-						Creature creature = (Creature)pet;
-						creature.setTarget(null);
+						solLivingEntity.setAttackTarget(null);
 						player.sendMessage("You cannot send your pet to attack itself");
 						return false;
 					}
 
 					if (((Tameable) pet).getOwner().getUniqueId().equals(targetentity.getUniqueId()))
 					{
-						Creature creature = (Creature)pet;
-						creature.setTarget(null);
+						solLivingEntity.setAttackTarget(null);
 						player.sendMessage("You cannot send your pet to attack you!");
 						return false;
 					}
@@ -565,8 +561,7 @@ public class SoliniaItem implements ISoliniaItem {
 						if (tmpPlayer.getGroup() != null)
 						if (tmpPlayer.getGroup().getMembers().contains(targetentity.getUniqueId()))
 						{
-							Creature creature = (Creature)pet;
-							creature.setTarget(null);
+							solLivingEntity.setAttackTarget(null);
 							player.sendMessage("You cannot send your pet to attack your group!");
 							return false;
 						}
@@ -574,8 +569,7 @@ public class SoliniaItem implements ISoliniaItem {
 					
 					if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
 					{
-						Creature creature = (Creature)pet;
-						creature.setTarget(targetentity);
+						solLivingEntity.setAttackTarget(targetentity);
 						player.sendMessage("You send your pet to attack!");
 						return true;
 					}

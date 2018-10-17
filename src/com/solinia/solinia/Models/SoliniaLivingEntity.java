@@ -4812,7 +4812,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		if (this.getHateList().keySet().size() == 0)
 		{
-			((Creature)this.getBukkitLivingEntity()).setTarget(null);
+			setAttackTarget(null);
 			return;
 		}
 		
@@ -4841,7 +4841,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (bestUUID != null)
 		{
 			LivingEntity entity = (LivingEntity)Bukkit.getEntity(bestUUID);
-			((Creature)this.getBukkitLivingEntity()).setTarget(entity);
+			setAttackTarget(entity);
 		}
 	}
 
@@ -5532,6 +5532,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return effectmod;
 	}
+	
+	@Override
+	public void setAttackTarget(LivingEntity entity)
+	{
+		if (this.getBukkitLivingEntity().isDead())
+			return;
+		
+		if (this.getBukkitLivingEntity() instanceof Creature)
+			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
+	}
 
 	@Override
 	public void doCheckForEnemies() {
@@ -5540,7 +5550,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (this.getNpcid() < 1)
 			return;
-
+		
 		if (getBukkitLivingEntity().isDead())
 			return;
 
@@ -5553,6 +5563,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (((Creature) getBukkitLivingEntity()).getTarget() != null)
 			return;
 
+		// Go for hate list first
+		checkHateTargets();
+		
 		try {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc.getFactionid() == 0)
@@ -5598,7 +5611,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						}
 
 						if (hatedFactions.contains((Integer) targetNpc.getFactionid())) {
-							((Creature) getBukkitLivingEntity()).setTarget(le);
+							setAttackTarget(le);
 							return;
 						}
 					} catch (Exception e) {
@@ -5618,7 +5631,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						case FACTION_THREATENLY:
 						case FACTION_SCOWLS:
 							if (Utils.isEntityInLineOfSight(player, getBukkitLivingEntity())) {
-								((Creature) getBukkitLivingEntity()).setTarget(player);
+								setAttackTarget(player);
 								return;
 							} else {
 								continue;
@@ -6009,7 +6022,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						continue;
 
 					if (((Creature) entity).getTarget().getUniqueId().equals(playerOwner.getUniqueId())) {
-						((Creature) this.getBukkitLivingEntity()).setTarget((Creature) entity);
+						setAttackTarget((Creature) entity);
 						return;
 					}
 				}
@@ -6256,8 +6269,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// Mobs and pets wont attack mezzed creatures
 		if (defender.isMezzed()) {
 			if (isPet()) {
-				Creature creature = (Creature) getBukkitLivingEntity();
-				creature.setTarget(null);
+				setAttackTarget(null);
 				say("Stopping attacking master, the target is mesmerized");
 				return false;
 			}

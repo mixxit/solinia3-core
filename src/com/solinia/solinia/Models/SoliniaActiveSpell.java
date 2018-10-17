@@ -1621,7 +1621,8 @@ public class SoliniaActiveSpell {
 		try {
 			if (!SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).isPlayer())
 				for (Entity nearbyEntity : getLivingEntity().getNearbyEntities(20, 20, 20)) {
-					((CraftCreature) getLivingEntity()).setTarget(null);
+					StateManager.getInstance().getEntityManager().clearHateList(this.getLivingEntity().getUniqueId());
+					
 					((CraftCreature) getLivingEntity()).getHandle().getNavigation().a(nearbyEntity.getLocation().getX(),
 							nearbyEntity.getLocation().getY(), nearbyEntity.getLocation().getZ(), 1.5);
 					return;
@@ -1831,10 +1832,6 @@ public class SoliniaActiveSpell {
 		try
 		{
 			StateManager.getInstance().getEntityManager().clearHateList(getLivingEntity().getUniqueId());
-			if (!(getLivingEntity() instanceof Creature))
-				return;
-			
-			((Creature)getLivingEntity()).setTarget(null);
 		} catch (CoreStateInitException e)
 		{
 			
@@ -1866,9 +1863,7 @@ public class SoliniaActiveSpell {
 			StateManager.getInstance().getEntityManager().addStunned(getLivingEntity(), expiretimestamp);
 
 			if (getLivingEntity() instanceof Creature) {
-				Creature creature = (Creature) getLivingEntity();
-				creature.setTarget(null);
-
+				SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).setAttackTarget(null);
 			}
 
 			Utils.dismountEntity(getLivingEntity());
@@ -1910,8 +1905,7 @@ public class SoliniaActiveSpell {
 			StateManager.getInstance().getEntityManager().addMezzed(getLivingEntity(), expiretimestamp);
 
 			if (getLivingEntity() instanceof Creature) {
-				Creature creature = (Creature) getLivingEntity();
-				creature.setTarget(null);
+				SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).setAttackTarget(null);
 
 			}
 

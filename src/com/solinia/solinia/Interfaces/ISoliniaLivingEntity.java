@@ -304,4 +304,6 @@ public interface ISoliniaLivingEntity
 	void checkHateTargets();
 
 	void clearHateList();
+
+	void setAttackTarget(LivingEntity entity);
 }

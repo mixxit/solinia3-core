@@ -138,7 +138,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						SpellEffectType.InvisVsUndead)
 						|| StateManager.getInstance().getEntityManager().hasEntityEffectType(
 								(LivingEntity) event.getTarget(), SpellEffectType.InvisVsUndead2)) {
-					((Creature) event.getEntity()).setTarget(null);
+					solEntity.setAttackTarget(null);
 					Utils.CancelEvent(event);
 					return;
 				}
@@ -150,7 +150,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						SpellEffectType.Invisibility)
 						|| StateManager.getInstance().getEntityManager()
 								.hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.Invisibility2)) {
-					((Creature) event.getEntity()).setTarget(null);
+					solEntity.setAttackTarget(null);
 					Utils.CancelEvent(event);
 					return;
 				}
@@ -162,7 +162,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						SpellEffectType.InvisVsAnimals)
 						|| StateManager.getInstance().getEntityManager().hasEntityEffectType(
 								(LivingEntity) event.getTarget(), SpellEffectType.ImprovedInvisAnimals)) {
-					((Creature) event.getEntity()).setTarget(null);
+					solEntity.setAttackTarget(null);
 					Utils.CancelEvent(event);
 					return;
 				}
@@ -189,7 +189,7 @@ public class Solinia3CoreEntityListener implements Listener {
 							.getMezzed((LivingEntity) event.getTarget());
 
 					if (mezExpiry != null) {
-						((Creature) event.getEntity()).setTarget(null);
+						solEntity.setAttackTarget(null);
 						event.getEntity().sendMessage("The target is mezzed, you cannot hit it");
 						Utils.CancelEvent(event);
 						return;
@@ -204,7 +204,7 @@ public class Solinia3CoreEntityListener implements Listener {
 							.isFeignedDeath(event.getTarget().getUniqueId());
 
 					if (feigned == true) {
-						((Creature) event.getEntity()).setTarget(null);
+						solEntity.setAttackTarget(null);
 						event.getEntity().sendMessage("The target is feigned, you cannot hit it");
 						Utils.CancelEvent(event);
 						return;

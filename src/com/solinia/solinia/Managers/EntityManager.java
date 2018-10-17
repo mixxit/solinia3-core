@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.inventivetalent.glow.GlowAPI;
@@ -1151,7 +1152,10 @@ public class EntityManager implements IEntityManager {
 		
 		if (source instanceof Creature)
 		{
-			((Creature)source).setTarget(target);
+			try {
+				SoliniaLivingEntityAdapter.Adapt(source).setAttackTarget(target);
+			} catch (CoreStateInitException e) {
+			}
 		}
 		
 		if (target == null)
@@ -1509,7 +1513,18 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void clearHateList(UUID entity) {
-		hateList.put(entity,  new ConcurrentHashMap<UUID, Integer>());
+	public void clearHateList(UUID entityUuid) {
+		hateList.put(entityUuid,  new ConcurrentHashMap<UUID, Integer>());
+		Entity entity = Bukkit.getEntity(entityUuid);
+		if (entity == null)
+			return;
+		
+		if (entity instanceof Creature)
+		{	
+			try {
+				SoliniaLivingEntityAdapter.Adapt((Creature)entity).setAttackTarget(null);
+			} catch (CoreStateInitException e) {
+			}
+		}
 	}
 }

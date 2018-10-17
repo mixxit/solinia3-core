@@ -78,12 +78,12 @@ public class CommandPet implements CommandExecutor {
 								player.sendMessage("This pet is not controllable");
 								return true;
 							}
+							
+							player.setLastDamageCause(null);
+							solLivingEntity.clearHateList();
+							player.sendMessage("* As you wish my master");
 						}
 						
-						Creature c = (Creature)pet;
-						player.setLastDamageCause(null);
-						player.sendMessage("* As you wish my master");
-						c.setTarget(null);
 					}
 					
 					if (petcommand.equals("attack"))
@@ -101,33 +101,28 @@ public class CommandPet implements CommandExecutor {
 								}
 							}
 							
-							Creature c = (Creature)pet;
 							pet.teleport(player.getLocation());
-							((Creature)pet).setTarget(null);
+							solLivingEntity.setAttackTarget(null);
 
 							// Mez cancel target
 							Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed(targetentity);
 			
 							if (mezExpiry != null) {
-								((Creature) pet).setTarget(null);
-								Creature creature = (Creature)pet;
-								creature.setTarget(null);
+								solLivingEntity.setAttackTarget(null);
 								player.sendMessage("You cannot send your pet to attack a mezzed player");
 								return false;
 							}
 							
 							if (pet.getUniqueId().equals(targetentity.getUniqueId()))
 							{
-								Creature creature = (Creature)pet;
-								creature.setTarget(null);
+								solLivingEntity.setAttackTarget(null);
 								player.sendMessage("You cannot send your pet to attack itself");
 								return false;
 							}
 
 							if (((Tameable) pet).getOwner().getUniqueId().equals(targetentity.getUniqueId()))
 							{
-								Creature creature = (Creature)pet;
-								creature.setTarget(null);
+								solLivingEntity.setAttackTarget(null);
 								player.sendMessage("You cannot send your pet to attack you!");
 								return false;
 							}
@@ -138,8 +133,7 @@ public class CommandPet implements CommandExecutor {
 								if (tmpPlayer.getGroup() != null)
 								if (tmpPlayer.getGroup().getMembers().contains(targetentity.getUniqueId()))
 								{
-									Creature creature = (Creature)pet;
-									creature.setTarget(null);
+									solLivingEntity.setAttackTarget(null);
 									player.sendMessage("You cannot send your pet to attack your group!");
 									return false;
 								}
@@ -147,8 +141,7 @@ public class CommandPet implements CommandExecutor {
 							
 							if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
 							{
-								Creature creature = (Creature)pet;
-								creature.setTarget(targetentity);
+								solLivingEntity.setAttackTarget(targetentity);
 								player.sendMessage("You send your pet to attack!");
 								return true;
 							}
