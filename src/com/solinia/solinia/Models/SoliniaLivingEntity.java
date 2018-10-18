@@ -5539,8 +5539,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity().isDead())
 			return;
 		
+		if (entity.isDead())
+			return;
+		
 		if (this.getBukkitLivingEntity() instanceof Creature)
+		{
 			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
+		}
 	}
 
 	@Override
@@ -5611,7 +5616,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						}
 
 						if (hatedFactions.contains((Integer) targetNpc.getFactionid())) {
-							setAttackTarget(le);
+							addToHateList(le.getUniqueId(), 1);
 							return;
 						}
 					} catch (Exception e) {
@@ -5631,7 +5636,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						case FACTION_THREATENLY:
 						case FACTION_SCOWLS:
 							if (Utils.isEntityInLineOfSight(player, getBukkitLivingEntity())) {
-								setAttackTarget(player);
+								addToHateList(player.getUniqueId(), 1);
 								return;
 							} else {
 								continue;

@@ -95,7 +95,7 @@ public class SoliniaEntitySpells {
 						try {
 							StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) creature,
 									(LivingEntity) sourceEntity);
-							SoliniaLivingEntityAdapter.Adapt(creature).setAttackTarget(sourceEntity);
+							SoliniaLivingEntityAdapter.Adapt(creature).addToHateList(sourceEntity.getUniqueId(), 1);
 						} catch (CoreStateInitException e) {
 
 						}
