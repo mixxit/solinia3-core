@@ -3,6 +3,7 @@ package com.solinia.solinia.Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -38,6 +39,15 @@ public class CommandBindWound implements CommandExecutor {
 				player.sendMessage("Selecting yourself");
 				StateManager.getInstance().getEntityManager().setEntityTarget(player,player);
 				targetmob = player;
+			}
+			
+			if (targetmob instanceof Creature)
+			{
+				if (((Creature)targetmob).getTarget().getUniqueId().equals(player.getUniqueId()))
+				{
+					player.sendMessage("You cannot bind wound a mob that is currently trying to attack you! Perhaps you meant to target yourself first? [Shift-F]");
+					return true;
+				}
 			}
 			
 			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(targetmob);
