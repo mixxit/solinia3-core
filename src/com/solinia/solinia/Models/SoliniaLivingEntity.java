@@ -4816,26 +4816,48 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
+		List<UUID> removeUuids = new ArrayList<UUID>();
+		
 		int maxHate = 0;
 		UUID bestUUID = null;
 		for (UUID uuid : this.getHateList().keySet())
 		{
 			int hate = this.getHateList().get(uuid);
 			if (hate < 1)
+			{
+				removeUuids.add(uuid);
 				continue;
+			}
 			
 			if (hate > maxHate)
 			{
 				Entity entity = Bukkit.getEntity(uuid);
 				if (!(entity instanceof LivingEntity))
+				{
+					removeUuids.add(uuid);
 					continue;
+				}
 				
 				if (entity.isDead())
+				{
+					removeUuids.add(uuid);
 					continue;
+				}
+				
+				if (entity.getLocation().distance(this.getBukkitLivingEntity().getLocation()) > 200)
+				{
+					removeUuids.add(uuid);
+					continue;
+				}
 
 				maxHate = hate;
 				bestUUID = uuid;
 			}
+		}
+		
+		for (UUID uuid : removeUuids)
+		{
+			this.getHateList().remove(uuid);		
 		}
 		
 		if (bestUUID != null)

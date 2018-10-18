@@ -105,6 +105,9 @@ public class CommandCharacter implements CommandExecutor {
 						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
 						if (newPlayer != null)
 						{
+							newPlayer.setBindPoint(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + ","
+									+ player.getLocation().getY() + "," + player.getLocation().getZ());
+							
 							player.sendMessage("Your character has been stored and a new character created");
 							player.sendMessage("Please check you have not dropped any items due to your character change");
 						} else {
