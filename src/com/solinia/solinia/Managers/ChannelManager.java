@@ -260,7 +260,7 @@ public class ChannelManager implements IChannelManager {
 		if (channelId == null || channelId.equals(""))
 			return;
 		
-		if (message.startsWith("[AutoRestart]"))
+		if (message.contains("[AutoRestart]"))
 			return;
 		
 		UUID uuid = null;
