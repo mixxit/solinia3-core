@@ -5536,6 +5536,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void setAttackTarget(LivingEntity entity)
 	{
+		if (entity == null)
+			return;
+
+		if (this.getBukkitLivingEntity() == null)
+			return;
+		
 		if (this.getBukkitLivingEntity().isDead())
 			return;
 		
