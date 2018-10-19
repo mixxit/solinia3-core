@@ -260,8 +260,11 @@ public class ChannelManager implements IChannelManager {
 		if (channelId == null || channelId.equals(""))
 			return;
 		
-		if (message.contains("[AutoRestart]"))
+		if (message.contains("AutoRestart"))
+		{
+			System.out.println("Skipped AutoRestart message");
 			return;
+		}
 		
 		UUID uuid = null;
 		if (source != null)
