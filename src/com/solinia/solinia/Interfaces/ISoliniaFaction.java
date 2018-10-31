@@ -49,5 +49,7 @@ public interface ISoliniaFaction {
 	boolean isOperatorCreated();
 
 	void setOperatorCreated(boolean operatorCreated);
+
+	void removeFactionStandingEntry(int factionId);
 	
 }

@@ -107,12 +107,19 @@ public class SoliniaFaction implements ISoliniaFaction {
 		case "factionentry":
 			String[] data = value.split(" ");
 			if (data.length < 2)
-				throw new InvalidFactionSettingException("Missing factionid and base value to set factionstanding (ie -1500 > 1500)");
+				throw new InvalidFactionSettingException("Missing factionid and base value to set factionstanding (ie -1500 > 1500 or remove)");
+			
 			int factionId = Integer.parseInt(data[0]);
 			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(factionId);
 			if (faction == null)
 				throw new InvalidFactionSettingException("Faction doesnt exist");
 
+			if (data[1].equals("remove") || Integer.parseInt(data[1]) == 0)
+			{
+				this.removeFactionStandingEntry(faction.getId());
+				break;
+			}
+			
 			if (Integer.parseInt(data[1]) < -1500 || Integer.parseInt(data[1]) > 1500)
 				throw new InvalidFactionSettingException("Bounds are -1500 to 1500");
 			setFactionEntry(faction.getId(), Integer.parseInt(data[1]));
@@ -150,6 +157,16 @@ public class SoliniaFaction implements ISoliniaFaction {
 		if (factionEntry == null)
 			factionEntry = createFactionStandingEntry(factionId);
 		factionEntry.setValue(value);
+	}
+	
+	@Override
+	public void removeFactionStandingEntry(int factionId)
+	{
+		for(int i = 0; i < getFactionEntries().size(); i++)
+		{
+			if (getFactionEntries().get(i).getFactionId() == factionId);
+				getFactionEntries().remove(i);
+		}
 	}
 	
 	@Override
