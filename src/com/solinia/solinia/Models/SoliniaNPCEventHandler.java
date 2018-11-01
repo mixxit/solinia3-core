@@ -529,6 +529,17 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 							playertier = 5;
 						if (player.getLevel() >= 51 && player.getLevel() < 61)
 							playertier = 6;
+						if (player.getLevel() >= 61 && player.getLevel() < 71)
+							playertier = 7;
+						if (player.getLevel() >= 71 && player.getLevel() < 81)
+							playertier = 8;
+						if (player.getLevel() >= 81 && player.getLevel() < 91)
+							playertier = 9;
+						if (player.getLevel() >= 91 && player.getLevel() < 101)
+							playertier = 10;
+						if (player.getLevel() >= 101 && player.getLevel() < 111)
+							playertier = 11;
+
 						
 						try {
 							

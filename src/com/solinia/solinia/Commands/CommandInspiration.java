@@ -90,6 +90,11 @@ public class CommandInspiration implements CommandExecutor {
 										playertier = 8;
 									if (player.getLevel() >= 81 && player.getLevel() < 91)
 										playertier = 9;
+									if (player.getLevel() >= 91 && player.getLevel() < 101)
+										playertier = 10;
+									if (player.getLevel() >= 101 && player.getLevel() < 111)
+										playertier = 11;
+
 									
 									try {
 										

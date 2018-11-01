@@ -298,6 +298,11 @@ public class ItemStackAdapter {
 			}
 		}
 		
+		if (soliniaItem.getAttackspeed() > 0)
+		{
+			loretxt.add(ChatColor.WHITE + "Modifies Melee Attack Speed % by: " + ChatColor.YELLOW + soliniaItem.getAttackspeed() + ChatColor.RESET);
+		}
+		
 		if (!(soliniaItem.getSkillModType().equals(SkillType.None)))
 		{
 			loretxt.add(ChatColor.WHITE + "Modifies skill checks for: " + ChatColor.YELLOW + soliniaItem.getSkillModType().toString() + "  +(" + soliniaItem.getSkillModValue() + ")" + ChatColor.RESET);
