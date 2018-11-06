@@ -9,7 +9,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.*;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
 
 public class SoliniaItem implements ISoliniaItem {
 
@@ -894,7 +894,7 @@ public class SoliniaItem implements ISoliniaItem {
 
 	private String convertItemStackToJsonRegular() {
         // First we convert the item stack into an NMS itemstack
-        net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(asItemStack());
+        net.minecraft.server.v1_13_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(asItemStack());
         NBTTagCompound compound = new NBTTagCompound();
         compound = nmsItemStack.save(compound);
 
@@ -1740,5 +1740,24 @@ public class SoliniaItem implements ISoliniaItem {
 			return true;
 		
 		return false;
+	}
+
+	@Override
+	public boolean isSkullItem() {
+		if (this.getBasename() == null)
+			return false;
+
+		if (this.getBasename().toUpperCase().equals("SKULL_ITEM"))
+			return true;
+
+		if (this.getBasename().toUpperCase().equals("LEGACY_SKULL_ITEM"))
+			return true;
+		
+		return false;
+	}
+
+	@Override
+	public boolean isMeleeWeapon() {
+		return ConfigurationManager.HandMaterials.contains(this.getBasename().toUpperCase());
 	}
 }

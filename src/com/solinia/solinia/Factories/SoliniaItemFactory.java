@@ -3,10 +3,13 @@ package com.solinia.solinia.Factories;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import com.google.common.collect.Iterables;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -14,9 +17,12 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaItem;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.GameProfileSerializer;
+import net.minecraft.server.v1_13_R2.NBTBase;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
 
 public class SoliniaItemFactory {
 	public static ISoliniaItem CreateItem(ItemStack itemStack, boolean operatorCreated) throws SoliniaItemException, CoreStateInitException {
@@ -38,16 +44,8 @@ public class SoliniaItemFactory {
 			}
 		}
 		
-		if (itemStack.getType().name().equals("SKULL_ITEM"))
-	    {
-			net.minecraft.server.v1_12_R1.ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
-			NBTTagCompound tag = stack.hasTag() ? stack.getTag() : new NBTTagCompound();
-
-			tag.getCompound("SkullOwner").getString("Id");
-			String texturevalue = tag.getCompound("SkullOwner").getCompound("Properties").getList("textures", 10).get(0).getString("Value");
-			
-			item.setTexturebase64(texturevalue);
-	    }
+		if (Utils.isSkullItem(itemStack))
+			item.setTexturebase64(ItemStackUtils.getSkullTexture(itemStack));
 		
 		if (itemStack.getType().name().equals("WRITTEN_BOOK"))
 	    {
@@ -102,16 +100,8 @@ public class SoliniaItemFactory {
 			}
 		}
 		
-		if (itemStack.getType().name().equals("SKULL_ITEM"))
-	    {
-			net.minecraft.server.v1_12_R1.ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
-			NBTTagCompound tag = stack.hasTag() ? stack.getTag() : new NBTTagCompound();
-
-			tag.getCompound("SkullOwner").getString("Id");
-			String texturevalue = tag.getCompound("SkullOwner").getCompound("Properties").getList("textures", 10).get(0).getString("Value");
-			
-			item.setTexturebase64(texturevalue);
-	    }
+		if (Utils.isSkullItem(itemStack))
+			item.setTexturebase64(ItemStackUtils.getSkullTexture(itemStack));
 		
 		if (itemStack.getType().name().equals("WRITTEN_BOOK"))
 	    {
@@ -142,29 +132,29 @@ public class SoliniaItemFactory {
 			ISoliniaItem offhandItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultoffHandMaterial().toUpperCase())),operatorCreated);
 			
 			// Jewelry!
-			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
 			neckItem.setNeckItem(true);
 			neckItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
-			ISoliniaItem shouldersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			ISoliniaItem shouldersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
 			shouldersItem.setShouldersItem(true);
 			shouldersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
-			ISoliniaItem fingersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			ISoliniaItem fingersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
 			fingersItem.setFingersItem(true);
 			fingersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
-			ISoliniaItem earsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			ISoliniaItem earsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
 			earsItem.setEarsItem(true);
 			earsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
 
 			// Additional Armour!
-			ISoliniaItem forearmsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			ISoliniaItem forearmsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
 			forearmsItem.setForearmsItem(true);
 			forearmsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
-			ISoliniaItem armsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			ISoliniaItem armsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
 			armsItem.setArmsItem(true);
 			armsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
-			ISoliniaItem handsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), operatorCreated);
+			ISoliniaItem handsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
 			handsItem.setHandsItem(true);
 			handsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			

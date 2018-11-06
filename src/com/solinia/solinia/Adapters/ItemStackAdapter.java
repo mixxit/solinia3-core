@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -34,10 +34,10 @@ import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.NBTTagInt;
-import net.minecraft.server.v1_12_R1.NBTTagList;
-import net.minecraft.server.v1_12_R1.NBTTagString;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.NBTTagInt;
+import net.minecraft.server.v1_13_R2.NBTTagList;
+import net.minecraft.server.v1_13_R2.NBTTagString;
 
 public class ItemStackAdapter {
 	public static ItemStack Adapt(ISoliniaItem soliniaItem, long costmultiplier) {
@@ -45,25 +45,14 @@ public class ItemStackAdapter {
 		ItemStack stack = new ItemStack(Material.valueOf(soliniaItem.getBasename().toUpperCase()), 1, soliniaItem.getColor());
 		
 		// New Item ID storage system
-		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		compound.set("soliniaid", new NBTTagString(Integer.toString(soliniaItem.getId())));
 		nmsStack.setTag(compound);
 		stack = CraftItemStack.asBukkitCopy(nmsStack);
 
 		if (soliniaItem.getDamage() > 0) {
-			if (soliniaItem.getBasename().equals("WOOD_SWORD") || soliniaItem.getBasename().equals("STONE_SWORD")
-					|| soliniaItem.getBasename().equals("IRON_SWORD") || soliniaItem.getBasename().equals("GOLD_SWORD")
-					|| soliniaItem.getBasename().equals("DIAMOND_SWORD") || soliniaItem.getBasename().equals("WOOD_AXE")
-					|| soliniaItem.getBasename().equals("STONE_AXE") || soliniaItem.getBasename().equals("IRON_AXE")
-					|| soliniaItem.getBasename().equals("GOLD_AXE") || soliniaItem.getBasename().equals("DIAMOND_AXE")
-					|| soliniaItem.getBasename().equals("WOOD_HOE") || soliniaItem.getBasename().equals("STONE_HOE")
-					|| soliniaItem.getBasename().equals("IRON_HOE") || soliniaItem.getBasename().equals("GOLD_HOE")
-					|| soliniaItem.getBasename().equals("WOOD_PICKAXE") || soliniaItem.getBasename().equals("STONE_PICKAXE")
-					|| soliniaItem.getBasename().equals("IRON_PICKAXE") || soliniaItem.getBasename().equals("GOLD_PICKAXE")
-					|| soliniaItem.getBasename().equals("WOOD_SPADE") || soliniaItem.getBasename().equals("STONE_SPADE")
-					|| soliniaItem.getBasename().equals("IRON_SPADE") || soliniaItem.getBasename().equals("GOLD_SPADE")
-					|| soliniaItem.getBasename().equals("DIAMOND_SPADE")) {
+			if (soliniaItem.isMeleeWeapon()) {
 				nmsStack = CraftItemStack.asNMSCopy(stack);
 
 				compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
@@ -93,7 +82,7 @@ public class ItemStackAdapter {
 		}
 
 		if (soliniaItem.getTexturebase64() != null && !soliniaItem.getTexturebase64().equals("")
-				&& soliniaItem.getBasename().equals("SKULL_ITEM")) {
+				&& soliniaItem.isSkullItem()) {
 			UUID skinuuid = getUUIDFromString(soliniaItem.getTexturebase64());
 			i = buildSkull((SkullMeta) i, skinuuid, soliniaItem.getTexturebase64(), null);
 		}
@@ -446,7 +435,7 @@ public class ItemStackAdapter {
 		}
 
 		if (soliniaItem.getTexturebase64() != null && !soliniaItem.getTexturebase64().equals("")
-				&& soliniaItem.getBasename().equals("SKULL_ITEM")) {
+				&& soliniaItem.isSkullItem()) {
 			stack.setDurability((short) 3);
 		}
 

@@ -24,7 +24,9 @@ import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.IPlayerManager;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
@@ -211,8 +213,143 @@ public class CoreState {
 		}
 		
 		StateManager.getInstance().setRandomHotzones();
+		
+		StateManager.getInstance().patchVersion();
 	}
 	
+	private void patchVersion() {
+		patchItems1_13();
+		patchClasses1_13();
+		
+	}
+	
+	private void patchClasses1_13() {
+		try {
+			for(ISoliniaClass baseClass : StateManager.getInstance().getConfigurationManager().getClasses())
+			{
+				patchClass1_13(baseClass);
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void patchClass1_13(ISoliniaClass baseClass) {
+		if (!getNewMaterialName(baseClass.getDefaulthandMaterial()).equals(baseClass.getDefaulthandMaterial()))
+		{
+			baseClass.setDefaulthandMaterial(getNewMaterialName(baseClass.getDefaulthandMaterial()));
+		}
+		
+		if (!getNewMaterialName(baseClass.getDefaultoffHandMaterial()).equals(baseClass.getDefaultoffHandMaterial()))
+		{
+			baseClass.setDefaultoffHandMaterial(getNewMaterialName(baseClass.getDefaultoffHandMaterial()));
+		}
+		
+		if (!getNewMaterialName(baseClass.getDefaultHeadMaterial()).equals(baseClass.getDefaultHeadMaterial()))
+		{
+			baseClass.setDefaultHeadMaterial(getNewMaterialName(baseClass.getDefaultHeadMaterial()));
+		}
+		
+		if (!getNewMaterialName(baseClass.getDefaultChestMaterial()).equals(baseClass.getDefaultChestMaterial()))
+		{
+			baseClass.setDefaultChestMaterial(getNewMaterialName(baseClass.getDefaultChestMaterial()));
+		}
+		
+		if (!getNewMaterialName(baseClass.getDefaultLegsMaterial()).equals(baseClass.getDefaultLegsMaterial()))
+		{
+			baseClass.setDefaultLegsMaterial(getNewMaterialName(baseClass.getDefaultLegsMaterial()));
+		}
+		
+		if (!getNewMaterialName(baseClass.getDefaultFeetMaterial()).equals(baseClass.getDefaultFeetMaterial()))
+		{
+			baseClass.setDefaultFeetMaterial(getNewMaterialName(baseClass.getDefaultFeetMaterial()));
+		}
+	}
+
+	private String getNewMaterialName(String materialName) {
+		if (materialName.toUpperCase().equals("WATCH"))
+			return("CLOCK");
+		
+		if (materialName.toUpperCase().equals("WOOD_HOE"))
+			return("WOODEN_HOE");
+
+		if (materialName.toUpperCase().equals("WOOD_AXE"))
+			return("WOODEN_AXE");
+		
+		if (materialName.toUpperCase().equals("WOOD_SWORD"))
+			return("WOODEN_SWORD");
+		
+		if (materialName.toUpperCase().equals("WOOD_PICKAXE"))
+			return("WOODEN_PICKAXE");
+		
+		if (materialName.toUpperCase().equals("GOLD_HOE"))
+			return("GOLDEN_HOE");
+		
+		if (materialName.toUpperCase().equals("GOLD_AXE"))
+			return("GOLDEN_AXE");
+		
+		if (materialName.toUpperCase().equals("GOLD_SWORD"))
+			return("GOLDEN_SWORD");
+		
+		if (materialName.toUpperCase().equals("GOLD_PICKAXE"))
+			return("GOLDEN_PICKAXE");
+		
+		if (materialName.toUpperCase().equals("WOOD_SPADE"))
+			return("WOODEN_SHOVEL");
+		
+		if (materialName.toUpperCase().equals("STONE_SPADE"))
+			return("STONE_SHOVEL");
+		
+		if (materialName.toUpperCase().equals("IRON_SPADE"))
+			return("IRON_SHOVEL");
+			
+		if (materialName.toUpperCase().equals("GOLD_SPADE"))
+			return("GOLDEN_SHOVEL");
+		
+		if (materialName.toUpperCase().equals("DIAMOND_SPADE"))
+			return("DIAMOND_SHOVEL");
+		
+		// Gold to Golden
+		if (materialName.toUpperCase().equals("GOLD_HELMET"))
+			return("GOLDEN_HELMET");
+		
+		if (materialName.toUpperCase().equals("GOLD_CHESTPLATE"))
+			return("GOLDEN_CHESTPLATE");
+		
+		if (materialName.toUpperCase().equals("GOLD_LEGGINGS"))
+			return("GOLDEN_LEGGINGS");
+		
+		if (materialName.toUpperCase().equals("GOLD_BOOTS"))
+			return "GOLDEN_BOOTS";
+		
+		return materialName.toUpperCase();
+	}
+
+	private void patchItems1_13() {
+		try {
+			boolean updated = false;
+			
+			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
+			{
+				if (!getNewMaterialName(item.getBasename()).equals(item.getBasename()))
+				{
+					item.setBasename(getNewMaterialName(item.getBasename()));
+					updated = true;
+				}
+			}
+			
+			if (updated == true)
+			{
+				System.out.println("Detected some internal item changes, recommitting npcs (this may take some time)...");
+				Utils.RecommitNpcs();
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public IPlayerManager getPlayerManager() throws CoreStateInitException
 	{
 		if (isInitialised == false)

@@ -48,27 +48,46 @@ public interface IConfigurationManager {
 		private static final long serialVersionUID = 4699754456865065676L;
 	{ 
 		add("WOOD_SWORD"); 
+		add("WOODEN_SWORD"); 
 		add("STONE_SWORD"); 
 		add("IRON_SWORD"); 
 		add("GOLD_SWORD"); 
+		add("GOLDEN_SWORD"); 
 		add("DIAMOND_SWORD"); 
 		add("WOOD_AXE"); 
+		add("WOODEN_AXE"); 
 		add("STONE_AXE"); 
 		add("IRON_AXE"); 
 		add("GOLD_AXE");
+		add("GOLDEN_AXE");
 		add("DIAMOND_AXE"); 
+		add("WOOD_SHOVEL"); 
+		add("WOODEN_SHOVEL"); 
+		add("STONE_SHOVEL"); 
+		add("IRON_SHOVEL"); 
+		add("GOLD_SHOVEL"); 
+		add("GOLDEN_SHOVEL"); 
+		add("DIAMOND_SHOVEL"); 
 		add("WOOD_SPADE"); 
+		add("WOODEN_SPADE"); 
 		add("STONE_SPADE"); 
 		add("IRON_SPADE"); 
 		add("GOLD_SPADE"); 
+		add("GOLDEN_SPADE"); 
 		add("DIAMOND_SPADE"); 
+		add("WOOD_HOE");
+		add("WOODEN_HOE");
 		add("STONE_HOE");
 		add("IRON_HOE");
 		add("GOLD_HOE");
+		add("GOLDEN_HOE");
 		add("DIAMOND_HOE");
+		add("WOOD_PICKAXE");
+		add("WOODEN_PICKAXE");
 		add("STONE_PICKAXE");
 		add("IRON_PICKAXE");
 		add("GOLD_PICKAXE");
+		add("GOLDEN_PICKAXE");
 		add("DIAMOND_PICKAXE");
 		}};
 		
@@ -153,8 +172,13 @@ public interface IConfigurationManager {
 		add("GOLD_CHESTPLATE");
 		add("GOLD_LEGGINGS");
 		add("GOLD_BOOTS");
+		add("GOLDEN_HELMET");
+		add("GOLDEN_CHESTPLATE");
+		add("GOLDEN_LEGGINGS");
+		add("GOLDEN_BOOTS");
 		}};
 		
+
 		public List<String> HandMaterials = new ArrayList<String>() {/**
 			 * 
 			 */
@@ -162,27 +186,46 @@ public interface IConfigurationManager {
 
 		{ 
 			add("WOOD_SWORD");
+			add("WOODEN_SWORD");
 			add("STONE_SWORD");
 			add("IRON_SWORD");
 			add("GOLD_SWORD");
+			add("GOLDEN_SWORD");
 			add("DIAMOND_SWORD");
 			add("WOOD_AXE");
+			add("WOODEN_AXE");
 			add("STONE_AXE");
 			add("IRON_AXE");
 			add("GOLD_AXE");
+			add("GOLDEN_AXE");
 			add("DIAMOND_AXE");
 			add("WOOD_SPADE");
+			add("WOODEN_SPADE");
 			add("STONE_SPADE");
 			add("IRON_SPADE");
 			add("GOLD_SPADE");
+			add("GOLDEN_SPADE");
 			add("DIAMOND_SPADE");
+			add("WOOD_SHOVEL");
+			add("WOODEN_SHOVEL");
+			add("STONE_SHOVEL");
+			add("IRON_SHOVEL");
+			add("GOLD_SHOVEL");
+			add("GOLDEN_SHOVEL");
+			add("DIAMOND_SHOVEL");
+			add("WOOD_HOE");
+			add("WOODEN_HOE");
 			add("STONE_HOE");
 			add("IRON_HOE");
 			add("GOLD_HOE");
+			add("GOLDEN_HOE");
 			add("DIAMOND_HOE");
+			add("WOOD_PICKAXE");
+			add("WOODEN_PICKAXE");
 			add("STONE_PICKAXE");
 			add("IRON_PICKAXE");
 			add("GOLD_PICKAXE");
+			add("GOLDEN_PICKAXE");
 			add("DIAMOND_PICKAXE");
 			add("SHIELD");
 			add("BOW");

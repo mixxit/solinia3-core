@@ -52,26 +52,8 @@ public class CommandCommit implements CommandExecutor {
 				|| sender instanceof DiscordAdminChannelCommandSender
 				)) {
 			if (args[0].equals("provider")) {
-				try {
-					System.out.println("Recommiting all NPCs via provider");
-					for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs()) {
-						try {
-							npc.editSetting("name", npc.getName());
-							StateManager.getInstance().getEntityManager().getNPCEntityProvider().updateNpc(npc);
-						} catch (NumberFormatException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InvalidNpcSettingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				} catch (CoreStateInitException e) {
-
-				}
+				Utils.RecommitNpcs();
+				
 			}
 			
 			if (args[0].equals("patch")) {

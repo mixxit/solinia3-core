@@ -20,8 +20,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
@@ -58,14 +58,14 @@ import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_12_R1.EntityCreature;
-import net.minecraft.server.v1_12_R1.EntityDamageSource;
-import net.minecraft.server.v1_12_R1.EntityTameableAnimal;
-import net.minecraft.server.v1_12_R1.EnumItemSlot;
-import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
-import net.minecraft.server.v1_12_R1.PathfinderGoalHurtByTarget;
-import net.minecraft.server.v1_12_R1.PathfinderGoalOwnerHurtByTarget;
-import net.minecraft.server.v1_12_R1.PathfinderGoalOwnerHurtTarget;
+import net.minecraft.server.v1_13_R2.EntityCreature;
+import net.minecraft.server.v1_13_R2.EntityDamageSource;
+import net.minecraft.server.v1_13_R2.EntityTameableAnimal;
+import net.minecraft.server.v1_13_R2.EnumItemSlot;
+import net.minecraft.server.v1_13_R2.PacketPlayOutAnimation;
+import net.minecraft.server.v1_13_R2.PathfinderGoalHurtByTarget;
+import net.minecraft.server.v1_13_R2.PathfinderGoalOwnerHurtByTarget;
+import net.minecraft.server.v1_13_R2.PathfinderGoalOwnerHurtTarget;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -194,7 +194,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int itemid = solPlayer.getArrowReagents().get(0);
 					solPlayer.reduceReagents(itemid, 1);
 
-					net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+					net.minecraft.server.v1_13_R2.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 					getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 							Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
@@ -217,7 +217,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 
 			} else {
-				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				net.minecraft.server.v1_13_R2.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 						Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
@@ -250,7 +250,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// BOW
 			if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW")) {
 
-				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				net.minecraft.server.v1_13_R2.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 						Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
@@ -277,7 +277,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				// (float)damage);
 
 			} else {
-				net.minecraft.server.v1_12_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				net.minecraft.server.v1_13_R2.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 						Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
@@ -4654,36 +4654,36 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	public void targetSelector()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		final net.minecraft.server.v1_12_R1.EntityInsentient e = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) getBukkitLivingEntity())
+		final net.minecraft.server.v1_13_R2.EntityInsentient e = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) getBukkitLivingEntity())
 				.getHandle();
-		if (!(e instanceof net.minecraft.server.v1_12_R1.EntityCreature)
-				&& !(e instanceof net.minecraft.server.v1_12_R1.EntityTameableAnimal))
+		if (!(e instanceof net.minecraft.server.v1_13_R2.EntityCreature)
+				&& !(e instanceof net.minecraft.server.v1_13_R2.EntityTameableAnimal))
 			return;
 
-		final Field goalsField = net.minecraft.server.v1_12_R1.EntityInsentient.class
+		final Field goalsField = net.minecraft.server.v1_13_R2.EntityInsentient.class
 				.getDeclaredField("targetSelector");
 		goalsField.setAccessible(true);
 
-		final net.minecraft.server.v1_12_R1.PathfinderGoalSelector goals = (net.minecraft.server.v1_12_R1.PathfinderGoalSelector) goalsField
+		final net.minecraft.server.v1_13_R2.PathfinderGoalSelector goals = (net.minecraft.server.v1_13_R2.PathfinderGoalSelector) goalsField
 				.get(e);
-		Field listField = net.minecraft.server.v1_12_R1.PathfinderGoalSelector.class.getDeclaredField("b");
+		Field listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("b");
 		listField.setAccessible(true);
 		Set list = (Set) listField.get(goals);
 		list.clear();
-		listField = net.minecraft.server.v1_12_R1.PathfinderGoalSelector.class.getDeclaredField("c");
+		listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("c");
 		listField.setAccessible(true);
 		list = (Set) listField.get(goals);
 		list.clear();
 		/*
-		 * goals.a(1, (net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_12_R1.EntityHuman.class, 5.0f, 1.0f)); goals.a(2,
-		 * (net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_12_R1.EntityHuman.class, 5.0f, 1.0f)); goals.a(10,
-		 * (net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_12_R1.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_12_R1.EntityHuman.class, 5.0f, 1.0f));
+		 * goals.a(1, (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
+		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
+		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f)); goals.a(2,
+		 * (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
+		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
+		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f)); goals.a(10,
+		 * (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
+		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
+		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f));
 		 */
 		goals.a(1, new PathfinderGoalOwnerHurtByTarget((EntityTameableAnimal) e));
 		goals.a(2, new PathfinderGoalOwnerHurtTarget((EntityTameableAnimal) e));

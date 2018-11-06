@@ -201,7 +201,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		String customitem = "";
 
 		customitem += "CUSTOMITEMID_" + item.getId() + ":\r\n";
-		customitem += "  Id: " + item.asItemStack().getTypeId() + "\r\n";
+		customitem += "  Id: " + item.asItemStack().getType().getId() + "\r\n";
 		customitem += "  Display: '" + item.getDisplayname().replaceAll("[^a-zA-Z0-9]", "") + "'\r\n";
 		customitem += "  Data: " + item.getColor() + "\r\n";
 		if (item.getDamage() > 0) {
@@ -471,12 +471,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							Collections.reverse(potentialShields);
 
-							System.out.println("Found better shield in lootdrop ("
-									+ potentialWeapons.get(0).getDisplayname() + "), using as shield");
-							writeCustomItem(
-									"plugins/MythicMobs/Items/CUSTOMITEMID" + potentialWeapons.get(0).getId() + ".yml",
-									potentialWeapons.get(0));
-							mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":5\r\n";
+							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialShields.get(0).getId() + ".yml",potentialShields.get(0));
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialShields.get(0).getId() + ":5\r\n";
 						} else {
 							if (npc.getOffhanditem() != null)
 								mob = mob + "  - " + npc.getOffhanditem() + ":5\r\n";
@@ -506,8 +502,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							Collections.reverse(potentialChestArmour);
 
-							System.out.println("Found better chest in lootdrop ("
-									+ potentialChestArmour.get(0).getDisplayname() + "), using as chest");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID"
 									+ potentialChestArmour.get(0).getId() + ".yml", potentialChestArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialChestArmour.get(0).getId() + ":3\r\n";
@@ -528,8 +522,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							Collections.reverse(potentialLegsArmour);
 
-							System.out.println("Found better legs in lootdrop ("
-									+ potentialLegsArmour.get(0).getDisplayname() + "), using as leggings");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialLegsArmour.get(0).getId()
 									+ ".yml", potentialLegsArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialLegsArmour.get(0).getId() + ":2\r\n";
@@ -550,8 +542,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							Collections.reverse(potentialFeetArmour);
 
-							System.out.println("Found better feet in lootdrop ("
-									+ potentialFeetArmour.get(0).getDisplayname() + "), using as feet");
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialFeetArmour.get(0).getId()
 									+ ".yml", potentialFeetArmour.get(0));
 							mob = mob + "  - " + "CUSTOMITEMID_" + potentialFeetArmour.get(0).getId() + ":1\r\n";
@@ -573,8 +563,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							Collections.reverse(potentialBows);
 
-							System.out.println("Found better weapon (bow) in lootdrop ("
-									+ potentialBows.get(0).getDisplayname() + "), using as weapon");
 							writeCustomItem(
 									"plugins/MythicMobs/Items/CUSTOMITEMID" + potentialBows.get(0).getId() + ".yml",
 									potentialBows.get(0));
@@ -592,8 +580,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 								Collections.reverse(potentialWeapons);
 
-								System.out.println("Found better weapon in lootdrop ("
-										+ potentialWeapons.get(0).getDisplayname() + "), using as weapon");
 								writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID"
 										+ potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
 								mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":0\r\n";

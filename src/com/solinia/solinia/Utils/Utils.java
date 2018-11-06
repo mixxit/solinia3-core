@@ -24,7 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -49,6 +49,7 @@ import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.SoliniaCraftCreationException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaCraftFactory;
@@ -93,8 +94,8 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_12_R1.GenericAttributes;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.GenericAttributes;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
 
 public class Utils {
 	public static final int MAX_ENTITY_AGGRORANGE = 100;
@@ -565,7 +566,7 @@ public class Utils {
 		String skill = "";
 
 		switch (materialstring) {
-		case "WOOD_SWORD":
+		case "WOODEN_SWORD":
 			xp = 1;
 			skill = "SLASHING";
 			break;
@@ -577,7 +578,7 @@ public class Utils {
 			xp = 1;
 			skill = "SLASHING";
 			break;
-		case "GOLD_SWORD":
+		case "GOLDEN_SWORD":
 			xp = 1;
 			skill = "SLASHING";
 			break;
@@ -585,7 +586,7 @@ public class Utils {
 			xp = 1;
 			skill = "SLASHING";
 			break;
-		case "WOOD_AXE":
+		case "WOODEN_AXE":
 			xp = 1;
 			skill = "SLASHING";
 			break;
@@ -597,7 +598,7 @@ public class Utils {
 			xp = 1;
 			skill = "SLASHING";
 			break;
-		case "GOLD_AXE":
+		case "GOLDEN_AXE":
 			xp = 1;
 			skill = "SLASHING";
 			break;
@@ -613,27 +614,27 @@ public class Utils {
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "WOOD_SPADE":
+		case "WOODEN_SHOVEL":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "STONE_SPADE":
+		case "STONE_SHOVEL":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "IRON_SPADE":
+		case "IRON_SHOVEL":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "GOLD_SPADE":
+		case "GOLDEN_SHOVEL":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "DIAMOND_SPADE":
+		case "DIAMOND_SHOVEL":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "WOOD_HOE":
+		case "WOODEN_HOE":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
@@ -645,7 +646,7 @@ public class Utils {
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "GOLD_HOE":
+		case "GOLDEN_HOE":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
@@ -653,7 +654,7 @@ public class Utils {
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "WOOD_PICKAXE":
+		case "WOODEN_PICKAXE":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
@@ -665,7 +666,7 @@ public class Utils {
 			xp = 1;
 			skill = "CRUSHING";
 			break;
-		case "GOLD_PICKAXE":
+		case "GOLDEN_PICKAXE":
 			xp = 1;
 			skill = "CRUSHING";
 			break;
@@ -1227,7 +1228,7 @@ public class Utils {
 		ItemStack itemstack = event.getItem();
 		if (itemstack == null)
 			return;
-		if (!(CraftItemStack.asNMSCopy(itemstack).getItem() instanceof net.minecraft.server.v1_12_R1.ItemArmor)) {
+		if (!(CraftItemStack.asNMSCopy(itemstack).getItem() instanceof net.minecraft.server.v1_13_R2.ItemArmor)) {
 			return;
 		}
 
@@ -3433,7 +3434,7 @@ public class Utils {
 					
 					// Iron Molds
 					// Head
-					ISoliniaItem ironheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem ironheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					ironheadMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					ironheadMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Helm Mold");
 					ironheadMoldItem.setWorth(35);
@@ -3444,7 +3445,7 @@ public class Utils {
 					ironheadItem.setAllowedClassNames(Arrays.asList("BARD", "CLERIC", "PALADIN", "SHADOWKNIGHT", "WARRIOR"));
 
 					// Chest
-					ISoliniaItem ironchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem ironchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					ironchestMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					ironchestMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Chestplate Mold");
 					ironchestMoldItem.setWorth(35);
@@ -3455,7 +3456,7 @@ public class Utils {
 					ironchestItem.setAllowedClassNames(Arrays.asList("BARD", "CLERIC", "PALADIN", "SHADOWKNIGHT", "WARRIOR"));
 
 					// Legs
-					ISoliniaItem ironlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem ironlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					ironlegsMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					ironlegsMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Greaves Mold");
 					ironlegsMoldItem.setWorth(35);
@@ -3466,7 +3467,7 @@ public class Utils {
 					ironlegsItem.setAllowedClassNames(Arrays.asList("BARD", "CLERIC", "PALADIN", "SHADOWKNIGHT", "WARRIOR"));
 
 					// Feet
-					ISoliniaItem ironfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem ironfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					ironfeetMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					ironfeetMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Iron Sabatons Mold");
 					ironfeetMoldItem.setWorth(35);
@@ -3478,7 +3479,7 @@ public class Utils {
 
 					// Chainmail Molds
 					// Head
-					ISoliniaItem chainheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem chainheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					chainheadMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					chainheadMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Helm Mold");
 					chainheadMoldItem.setWorth(35);
@@ -3489,7 +3490,7 @@ public class Utils {
 					chainheadItem.setAllowedClassNames(Arrays.asList("BERSERKER", "RANGER", "ROGUE", "SHAMAN"));
 
 					// Chest
-					ISoliniaItem chainchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem chainchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					chainchestMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					chainchestMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Chestplate Mold");
 					chainchestMoldItem.setWorth(35);
@@ -3500,7 +3501,7 @@ public class Utils {
 					chainchestItem.setAllowedClassNames(Arrays.asList("BERSERKER", "RANGER", "ROGUE", "SHAMAN"));
 
 					// Legs
-					ISoliniaItem chainlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem chainlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					chainlegsMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					chainlegsMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Greaves Mold");
 					chainlegsMoldItem.setWorth(35);
@@ -3511,7 +3512,7 @@ public class Utils {
 					chainlegsItem.setAllowedClassNames(Arrays.asList("BERSERKER", "RANGER", "ROGUE", "SHAMAN"));
 
 					// Feet
-					ISoliniaItem chainfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem chainfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					chainfeetMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					chainfeetMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Chainmail Sabatons Mold");					
 					chainfeetMoldItem.setWorth(35);
@@ -3523,7 +3524,7 @@ public class Utils {
 
 					// Leather Molds
 					// Head
-					ISoliniaItem leatherheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem leatherheadMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					leatherheadMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					leatherheadMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Helmet Pattern");
 					leatherheadMoldItem.setWorth(35);
@@ -3534,7 +3535,7 @@ public class Utils {
 					leatherheadItem.setAllowedClassNames(Arrays.asList("BEASTLORD", "DRUID", "MONK", "ENCHANTER", "MAGICIAN", "NECROMANCER", "WIZARD"));
 
 					// Chest
-					ISoliniaItem leatherchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem leatherchestMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					leatherchestMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					leatherchestMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Tunic Pattern");
 					leatherchestMoldItem.setWorth(35);
@@ -3545,7 +3546,7 @@ public class Utils {
 					leatherchestItem.setAllowedClassNames(Arrays.asList("BEASTLORD", "DRUID", "MONK", "ENCHANTER", "MAGICIAN", "NECROMANCER", "WIZARD"));
 
 					// Legs
-					ISoliniaItem leatherlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem leatherlegsMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					leatherlegsMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					leatherlegsMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Leggings Pattern");
 					leatherlegsMoldItem.setWorth(35);
@@ -3556,7 +3557,7 @@ public class Utils {
 					leatherlegsItem.setAllowedClassNames(Arrays.asList("BEASTLORD", "DRUID", "MONK", "ENCHANTER", "MAGICIAN", "NECROMANCER", "WIZARD"));
 
 					// Feet
-					ISoliniaItem leatherfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem leatherfeetMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					leatherfeetMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					leatherfeetMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leather Boots Pattern");					
 					leatherfeetMoldItem.setWorth(35);
@@ -3568,7 +3569,7 @@ public class Utils {
 
 					// Equipment
 					// Sword
-					ISoliniaItem swordMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem swordMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					swordMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					swordMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Sword Mold");
 					swordMoldItem.setWorth(35);
@@ -3578,7 +3579,7 @@ public class Utils {
 					swordItem.setDamage(6);
 					
 					// Bow
-					ISoliniaItem bowMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem bowMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					bowMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					bowMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Bow Pattern");					
 					bowMoldItem.setWorth(35);
@@ -3588,7 +3589,7 @@ public class Utils {
 					bowItem.setDamage(8);
 
 					// Shield
-					ISoliniaItem shieldMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem shieldMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					shieldMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					shieldMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Shield Mold");					
 					shieldMoldItem.setWorth(35);
@@ -3598,17 +3599,17 @@ public class Utils {
 					shieldItem.setAC(5);
 					
 					// Staff
-					ISoliniaItem staffMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_SPADE), true);
+					ISoliniaItem staffMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_SHOVEL), true);
 					staffMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					staffMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Staff Mold");					
 					staffMoldItem.setWorth(35);
 					
-					ISoliniaItem staffItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_SPADE), true);
+					ISoliniaItem staffItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.IRON_SHOVEL), true);
 					staffItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Staff");					
 					staffItem.setDamage(5);
 					
 					// Axe
-					ISoliniaItem axeMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem axeMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					axeMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					axeMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Axe Mold");					
 					axeMoldItem.setWorth(35);
@@ -3618,111 +3619,111 @@ public class Utils {
 					axeItem.setDamage(7);
 
 					// Earrings
-					ISoliniaItem earringMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem earringMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					earringMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					earringMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Earring Mold");	
 					earringMoldItem.setWorth(35);
 					
-					ISoliniaItem earringItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem earringItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					earringItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Earring");	
 					earringItem.setEarsItem(true);
 					earringItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
 	
 					// Necklace
-					ISoliniaItem necklaceMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem necklaceMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					necklaceMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					necklaceMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Necklace Mold");	
 					necklaceMoldItem.setWorth(35);
 					
-					ISoliniaItem necklaceItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem necklaceItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					necklaceItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Necklace");	
 					necklaceItem.setNeckItem(true);
 					necklaceItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
 					
 					// Cloak
-					ISoliniaItem cloakMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem cloakMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					cloakMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					cloakMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Cloak Pattern");	
 					cloakMoldItem.setWorth(35);
 					
-					ISoliniaItem cloakItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem cloakItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					cloakItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Cloak");	
 					cloakItem.setShouldersItem(true);
 					cloakItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
 
 					// Rings
-					ISoliniaItem ringMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem ringMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					ringMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					ringMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Ring Mold");	
 					ringMoldItem.setWorth(35);
 					
-					ISoliniaItem ringItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem ringItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					ringItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Ring");	
 					ringItem.setFingersItem(true);
 					ringItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
 					
 					// Weapon aug
-					ISoliniaItem weaponcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem weaponcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					weaponcharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					weaponcharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Weapon Charm Pattern");	
 					weaponcharmMoldItem.setWorth(35);
 					
-					ISoliniaItem weaponcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					ISoliniaItem weaponcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CLOCK), true);
 					weaponcharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Weapon Charm");	
 					weaponcharmItem.setAugmentation(true);
 					weaponcharmItem.setAugmentationFitsSlotType(AugmentationSlotType.WEAPON);
 					
 					// Helmet aug
-					ISoliniaItem hatcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem hatcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					hatcharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					hatcharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Hat Charm Pattern");	
 					hatcharmMoldItem.setWorth(35);
 					
-					ISoliniaItem hatcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					ISoliniaItem hatcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CLOCK), true);
 					hatcharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Hat Charm");	
 					hatcharmItem.setAugmentation(true);
 					hatcharmItem.setAugmentationFitsSlotType(AugmentationSlotType.HELMET);
 					
 					// Chestplate aug
-					ISoliniaItem tuniccharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem tuniccharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					tuniccharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					tuniccharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Tunic Charm Pattern");	
 					tuniccharmMoldItem.setWorth(35);
 					
-					ISoliniaItem tuniccharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					ISoliniaItem tuniccharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CLOCK), true);
 					tuniccharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Tunic Charm");	
 					tuniccharmItem.setAugmentation(true);
 					tuniccharmItem.setAugmentationFitsSlotType(AugmentationSlotType.CHESTPLATE);
 					
 					// Leggings aug
-					ISoliniaItem leggingscharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem leggingscharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					leggingscharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					leggingscharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leggings Charm Pattern");	
 					leggingscharmMoldItem.setWorth(35);
 					
-					ISoliniaItem leggingscharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					ISoliniaItem leggingscharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CLOCK), true);
 					leggingscharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Leggings Charm");	
 					leggingscharmItem.setAugmentation(true);
 					leggingscharmItem.setAugmentationFitsSlotType(AugmentationSlotType.LEGGINGS);
 					
 					// Boots aug
-					ISoliniaItem bootscharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem bootscharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					bootscharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					bootscharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Boots Charm Pattern");	
 					bootscharmMoldItem.setWorth(35);
 					
-					ISoliniaItem bootscharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					ISoliniaItem bootscharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CLOCK), true);
 					bootscharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Boots Charm");	
 					bootscharmItem.setAugmentation(true);
 					bootscharmItem.setAugmentationFitsSlotType(AugmentationSlotType.BOOTS);
 					
 					// Shield aug
-					ISoliniaItem shieldcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.SKULL_ITEM), true);
+					ISoliniaItem shieldcharmMoldItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), true);
 					shieldcharmMoldItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzc2YWQ5ZmY3ZDYwNmYzMWFkYjYyNGIxNDk2ZjY3ZWI2ZDI2OTk0NGUxNDcwNTJlNTdlNDg3NDFiMTQ4MmE0In19fQ==");
 					shieldcharmMoldItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Shield Charm Pattern");	
 					shieldcharmMoldItem.setWorth(35);
 					
-					ISoliniaItem shieldcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.WATCH), true);
+					ISoliniaItem shieldcharmItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.CLOCK), true);
 					shieldcharmItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Shield Charm");	
 					shieldcharmItem.setAugmentation(true);
 					shieldcharmItem.setAugmentationFitsSlotType(AugmentationSlotType.SHIELD);
@@ -5623,6 +5624,8 @@ public class Utils {
 			return AugmentationSlotType.NONE;
 
 		switch (basename.toUpperCase()) {
+		case "WOODEN_SWORD":
+			return AugmentationSlotType.WEAPON;
 		case "WOOD_SWORD":
 			return AugmentationSlotType.WEAPON;
 		case "STONE_SWORD":
@@ -5631,7 +5634,11 @@ public class Utils {
 			return AugmentationSlotType.WEAPON;
 		case "GOLD_SWORD":
 			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_SWORD":
+			return AugmentationSlotType.WEAPON;
 		case "DIAMOND_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_AXE":
 			return AugmentationSlotType.WEAPON;
 		case "WOOD_AXE":
 			return AugmentationSlotType.WEAPON;
@@ -5641,7 +5648,11 @@ public class Utils {
 			return AugmentationSlotType.WEAPON;
 		case "GOLD_AXE":
 			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_AXE":
+			return AugmentationSlotType.WEAPON;
 		case "DIAMOND_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_SPADE":
 			return AugmentationSlotType.WEAPON;
 		case "WOOD_SPADE":
 			return AugmentationSlotType.WEAPON;
@@ -5651,7 +5662,11 @@ public class Utils {
 			return AugmentationSlotType.WEAPON;
 		case "GOLD_SPADE":
 			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_SPADE":
+			return AugmentationSlotType.WEAPON;
 		case "DIAMOND_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_HOE":
 			return AugmentationSlotType.WEAPON;
 		case "WOOD_HOE":
 			return AugmentationSlotType.WEAPON;
@@ -5659,15 +5674,21 @@ public class Utils {
 			return AugmentationSlotType.WEAPON;
 		case "IRON_HOE":
 			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_HOE":
+			return AugmentationSlotType.WEAPON;
 		case "GOLD_HOE":
 			return AugmentationSlotType.WEAPON;
 		case "DIAMOND_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_PICKAXE":
 			return AugmentationSlotType.WEAPON;
 		case "WOOD_PICKAXE":
 			return AugmentationSlotType.WEAPON;
 		case "STONE_PICKAXE":
 			return AugmentationSlotType.WEAPON;
 		case "IRON_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_PICKAXE":
 			return AugmentationSlotType.WEAPON;
 		case "GOLD_PICKAXE":
 			return AugmentationSlotType.WEAPON;
@@ -5712,6 +5733,14 @@ public class Utils {
 		case "GOLD_LEGGINGS":
 			return AugmentationSlotType.LEGGINGS;
 		case "GOLD_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "GOLDEN_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "GOLDEN_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "GOLDEN_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "GOLDEN_BOOTS":
 			return AugmentationSlotType.BOOTS;
 		case "SHIELD":
 			return AugmentationSlotType.SHIELD;
@@ -6380,7 +6409,7 @@ public class Utils {
 	}
 
 	public static boolean IsSoliniaItem(ItemStack itemStack) {
-		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		
 		String soliniaid = compound.getString("soliniaid");
@@ -6510,7 +6539,7 @@ public class Utils {
 	}
 
 	public static ItemStack getTargetingItemStack() {
-		ItemStack itemStack = new ItemStack(Material.SKULL_ITEM);
+		ItemStack itemStack = new ItemStack(Material.LEGACY_SKULL_ITEM);
 		itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFlNDI1YzViYTlmM2MyOTYyYjM4MTc4Y2JjMjMxNzJhNmM2MjE1YTExYWNjYjkyNzc0YTQ3MTZlOTZjYWRhIn19fQ==", null));
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		List<String> lore = new ArrayList<String>();
@@ -6530,13 +6559,13 @@ public class Utils {
 	public static void despawnBoatIfNotNearWater(Boat entity) {
 		int y = (int)entity.getLocation().getY();
 		if (!(
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y+1,(int)entity.getLocation().getZ()).getType().equals(Material.STATIONARY_WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y+1,(int)entity.getLocation().getZ()).getType().equals(Material.LEGACY_STATIONARY_WATER) ||
 			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y+1,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().equals(Material.STATIONARY_WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().equals(Material.LEGACY_STATIONARY_WATER) ||
 			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-1,(int)entity.getLocation().getZ()).getType().equals(Material.STATIONARY_WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-1,(int)entity.getLocation().getZ()).getType().equals(Material.LEGACY_STATIONARY_WATER) ||
 			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-1,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-2,(int)entity.getLocation().getZ()).getType().equals(Material.STATIONARY_WATER) ||
+			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-2,(int)entity.getLocation().getZ()).getType().equals(Material.LEGACY_STATIONARY_WATER) ||
 			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-2,(int)entity.getLocation().getZ()).getType().equals(Material.WATER)
 				))
 		{
@@ -6740,7 +6769,7 @@ public class Utils {
 		if (distance > 100D)
 			return 100D-distance;
 		
-		net.minecraft.server.v1_12_R1.EntityLiving entity = ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity)aggroCheckEntity).getHandle();
+		net.minecraft.server.v1_13_R2.EntityLiving entity = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity)aggroCheckEntity).getHandle();
 		if (entity == null)
 			return 0D;
 		
@@ -6764,5 +6793,38 @@ public class Utils {
 	    long time = world.getTime();
 
 	    return time > 0 && time < 12300;
+	}
+
+	public static boolean isSkullItem(ItemStack itemStack) {
+		if (itemStack.getType().name().equals("SKULL_ITEM"))
+			return true;
+		
+		if (itemStack.getType().name().equals("LEGACY_SKULL_ITEM"))
+			return true;
+		
+		return false;
+	}
+
+	public static void RecommitNpcs() {
+		try {
+			System.out.println("Recommiting all NPCs via provider");
+			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs()) {
+				try {
+					npc.editSetting("name", npc.getName());
+					StateManager.getInstance().getEntityManager().getNPCEntityProvider().updateNpc(npc);
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidNpcSettingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
 	}
 }

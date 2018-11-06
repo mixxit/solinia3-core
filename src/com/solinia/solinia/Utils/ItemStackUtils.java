@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
@@ -18,20 +21,21 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_12_R1.AttributeModifier;
-import net.minecraft.server.v1_12_R1.EnumItemSlot;
-import net.minecraft.server.v1_12_R1.GenericAttributes;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.NBTTagString;
+import net.minecraft.server.v1_13_R2.AttributeModifier;
+import net.minecraft.server.v1_13_R2.EnumItemSlot;
+import net.minecraft.server.v1_13_R2.GameProfileSerializer;
+import net.minecraft.server.v1_13_R2.GenericAttributes;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.NBTTagString;
 
 public class ItemStackUtils {
 	
 	public static int getWeaponDamage(ItemStack itemStack, EnumItemSlot itemSlot) {
         double attackDamage = 1.0;
         UUID uuid = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-        net.minecraft.server.v1_12_R1.ItemStack craftItemStack = CraftItemStack.asNMSCopy(itemStack);
-        net.minecraft.server.v1_12_R1.Item item = craftItemStack.getItem();
-        if(item instanceof net.minecraft.server.v1_12_R1.ItemSword || item instanceof net.minecraft.server.v1_12_R1.ItemTool || item instanceof net.minecraft.server.v1_12_R1.ItemHoe) {
+        net.minecraft.server.v1_13_R2.ItemStack craftItemStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_13_R2.Item item = craftItemStack.getItem();
+        if(item instanceof net.minecraft.server.v1_13_R2.ItemSword || item instanceof net.minecraft.server.v1_13_R2.ItemTool || item instanceof net.minecraft.server.v1_13_R2.ItemHoe) {
             Multimap<String, AttributeModifier> map = item.a(itemSlot);
             Collection<AttributeModifier> attributes = map.get(GenericAttributes.ATTACK_DAMAGE.getName());
             if(!attributes.isEmpty()) {
@@ -83,7 +87,7 @@ public class ItemStackUtils {
 		if (!Utils.IsSoliniaItem(itemStack))
 			return null;
 		
-		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		
 		String soliniaaug1id = compound.getString("soliniaaug1id");
@@ -92,6 +96,28 @@ public class ItemStackUtils {
 			return null;
 		
 		return Integer.parseInt(soliniaaug1id);
+	}
+	
+	public static String getSkullTexture(ItemStack itemStack)
+	{
+		String textureValue = "";
+		if (Utils.isSkullItem(itemStack))
+	    {
+			net.minecraft.server.v1_13_R2.ItemStack rawItemStack = CraftItemStack.asNMSCopy(itemStack);
+	        if (rawItemStack.hasTag()) {
+	            NBTTagCompound tag = rawItemStack.getTag();
+	            if (tag.hasKeyOfType("SkullOwner", 10)) {
+	                GameProfile profile = GameProfileSerializer.deserialize(tag.getCompound("SkullOwner"));
+	                if (profile != null) {
+	                    Property property = Iterables.getFirst(profile.getProperties().get("textures"), null);
+	                    if (property != null)
+	                    	textureValue = property.getValue();
+	                }
+	            }
+	        }
+	    }
+		
+		return textureValue;
 	}
 	
 	public static Integer getMerchantItemWorth(ItemStack itemStack)
@@ -138,18 +164,18 @@ public class ItemStackUtils {
 	}
 
 	public static boolean isMeleeWeapon(ItemStack itemStack) {
-		if (itemStack.getType().equals(Material.WOOD_SWORD) || itemStack.getType().equals(Material.STONE_SWORD)
-				|| itemStack.getType().equals(Material.IRON_SWORD) || itemStack.getType().equals(Material.GOLD_SWORD)
-				|| itemStack.getType().equals(Material.DIAMOND_SWORD) || itemStack.getType().equals(Material.WOOD_AXE)
+		if (itemStack.getType().equals(Material.WOODEN_SWORD) || itemStack.getType().equals(Material.STONE_SWORD)
+				|| itemStack.getType().equals(Material.IRON_SWORD) || itemStack.getType().equals(Material.GOLDEN_SWORD)
+				|| itemStack.getType().equals(Material.DIAMOND_SWORD) || itemStack.getType().equals(Material.WOODEN_AXE)
 				|| itemStack.getType().equals(Material.STONE_AXE) || itemStack.getType().equals(Material.IRON_AXE)
-				|| itemStack.getType().equals(Material.GOLD_AXE) || itemStack.getType().equals(Material.DIAMOND_AXE)
-				|| itemStack.getType().equals(Material.WOOD_HOE) || itemStack.getType().equals(Material.STONE_HOE)
-				|| itemStack.getType().equals(Material.IRON_HOE) || itemStack.getType().equals(Material.GOLD_HOE) || itemStack.getType().equals(Material.DIAMOND_HOE)
-				|| itemStack.getType().equals(Material.WOOD_PICKAXE) || itemStack.getType().equals(Material.STONE_PICKAXE)
-				|| itemStack.getType().equals(Material.IRON_PICKAXE) || itemStack.getType().equals(Material.GOLD_PICKAXE) || itemStack.getType().equals(Material.DIAMOND_PICKAXE)
-				|| itemStack.getType().equals(Material.WOOD_SPADE) || itemStack.getType().equals(Material.STONE_SPADE)
-				|| itemStack.getType().equals(Material.IRON_SPADE) || itemStack.getType().equals(Material.GOLD_SPADE)
-				|| itemStack.getType().equals(Material.DIAMOND_SPADE))
+				|| itemStack.getType().equals(Material.GOLDEN_AXE) || itemStack.getType().equals(Material.DIAMOND_AXE)
+				|| itemStack.getType().equals(Material.WOODEN_HOE) || itemStack.getType().equals(Material.STONE_HOE)
+				|| itemStack.getType().equals(Material.IRON_HOE) || itemStack.getType().equals(Material.GOLDEN_HOE) || itemStack.getType().equals(Material.DIAMOND_HOE)
+				|| itemStack.getType().equals(Material.WOODEN_PICKAXE) || itemStack.getType().equals(Material.STONE_PICKAXE)
+				|| itemStack.getType().equals(Material.IRON_PICKAXE) || itemStack.getType().equals(Material.GOLDEN_PICKAXE) || itemStack.getType().equals(Material.DIAMOND_PICKAXE)
+				|| itemStack.getType().equals(Material.WOODEN_SHOVEL) || itemStack.getType().equals(Material.STONE_SHOVEL)
+				|| itemStack.getType().equals(Material.IRON_SHOVEL) || itemStack.getType().equals(Material.GOLDEN_SHOVEL)
+				|| itemStack.getType().equals(Material.DIAMOND_SHOVEL))
 			return true;
 
 		return false;
@@ -319,7 +345,7 @@ public class ItemStackUtils {
 	public static ItemStack applyAugmentation(ISoliniaItem soliniaItem, ItemStack itemStack, Integer augmentationItemId) {
 		itemStack.setItemMeta(ItemStackUtils.applyAugmentationTextToItemStack(itemStack,augmentationItemId));
 		
-		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		compound.set("soliniaaug1id", new NBTTagString(Integer.toString(augmentationItemId)));
 		nmsStack.setTag(compound);

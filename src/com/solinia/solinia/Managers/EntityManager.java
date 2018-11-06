@@ -63,7 +63,7 @@ import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_12_R1.GenericAttributes;
+import net.minecraft.server.v1_13_R2.GenericAttributes;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
@@ -209,7 +209,7 @@ public class EntityManager implements IEntityManager {
 					{
 						if (pageno != 0)
 						{
-							itemStack = new ItemStack(Material.SKULL_ITEM);
+							itemStack = new ItemStack(Material.LEGACY_SKULL_ITEM);
 							itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("1226610a-b7f8-47e5-a15d-126c4ef18635"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjg0ZjU5NzEzMWJiZTI1ZGMwNThhZjg4OGNiMjk4MzFmNzk1OTliYzY3Yzk1YzgwMjkyNWNlNGFmYmEzMzJmYyJ9fX0=", null));
 							itemStack.setDurability((short) 3);
 							itemMeta = itemStack.getItemMeta();
@@ -221,7 +221,7 @@ public class EntityManager implements IEntityManager {
 					// Identifier Block
 					if(i == 19)
 					{
-						itemStack = new ItemStack(Material.SKULL_ITEM);
+						itemStack = new ItemStack(Material.LEGACY_SKULL_ITEM);
 						itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI5NWE5MjkyMzZjMTc3OWVhYjhmNTcyNTdhODYwNzE0OThhNDg3MDE5Njk0MWY0YmZlMTk1MWU4YzZlZTIxYSJ9fX0=", null));
 						itemMeta = itemStack.getItemMeta();
 						List<String> lore = new ArrayList<String>();
@@ -250,7 +250,7 @@ public class EntityManager implements IEntityManager {
 					{
 						if ((pageno + 1) < lastpage)
 						{
-							itemStack = new ItemStack(Material.SKULL_ITEM);
+							itemStack = new ItemStack(Material.LEGACY_SKULL_ITEM);
 							itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("94fbab2d-668a-4a42-860a-c357f7acc19a"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmNmZTg4NDVhOGQ1ZTYzNWZiODc3MjhjY2M5Mzg5NWQ0MmI0ZmMyZTZhNTNmMWJhNzhjODQ1MjI1ODIyIn19fQ==", null));
 							itemMeta = itemStack.getItemMeta();
 							itemStack.setDurability((short) 3);
@@ -681,7 +681,7 @@ public class EntityManager implements IEntityManager {
 			entity.setMaxHealth(maxHp);
 			if (!entity.isDead())
 			entity.setHealth(maxHp);
-			net.minecraft.server.v1_12_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_12_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity) entity).getHandle();
+			net.minecraft.server.v1_13_R2.EntityInsentient entityhandle = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) entity).getHandle();
 			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solentity.getMaxDamage());
 			entityhandle.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double)0.4D);
 			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + solentity.getMaxDamage() + " dmg");

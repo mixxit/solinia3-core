@@ -1,6 +1,7 @@
 package com.solinia.solinia.Utils;
 
 import org.bukkit.Color;
+import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 
 import com.solinia.solinia.Managers.StateManager;
@@ -21,7 +22,7 @@ public class SpecialEffectUtils {
 	public static void playLegacy(Entity entity, SoliniaActiveSpell activeSpell) {
 		AnimatedBallEffect effect = new AnimatedBallEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
-		effect.particle = ParticleEffect.FIREWORKS_SPARK;
+		effect.particle = Particle.FIREWORKS_SPARK;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
@@ -61,7 +62,7 @@ public class SpecialEffectUtils {
 	public static void playBleedEffect(Entity entity, SoliniaActiveSpell activeSpell) {
 		AnimatedBallEffect effect = new AnimatedBallEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
-		effect.particle = ParticleEffect.DAMAGE_INDICATOR;
+		effect.particle = Particle.DAMAGE_INDICATOR;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
@@ -69,7 +70,7 @@ public class SpecialEffectUtils {
 	public static void playPoisonEffect(Entity entity, SoliniaActiveSpell activeSpell) {
 		AnimatedBallEffect effect = new AnimatedBallEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
-		effect.particle = ParticleEffect.SLIME;
+		effect.particle = Particle.SLIME;
 		effect.iterations = 1 * 20;
 		effect.start();
 	}
@@ -77,7 +78,7 @@ public class SpecialEffectUtils {
 	public static void playShieldEffect(Entity entity, SoliniaActiveSpell activeSpell) {
 		WarpEffect effect = new WarpEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity);
-		effect.particle = ParticleEffect.SPELL_MOB; 
+		effect.particle = Particle.SPELL_MOB; 
 		effect.color = Color.TEAL;
 		effect.iterations = 1 * 20;
 		effect.start();
@@ -93,7 +94,7 @@ public class SpecialEffectUtils {
 	public static void playStunEffect(Entity entity, SoliniaActiveSpell activeSpell) {
 		AnimatedBallEffect effect = new AnimatedBallEffect(StateManager.getInstance().getEffectManager()); 
 		effect.setEntity(entity); 
-		effect.particle = ParticleEffect.SPELL_MOB;
+		effect.particle = Particle.SPELL_MOB;
 		effect.color = Color.SILVER;
 		effect.iterations = 1 * 20;
 		effect.start();

@@ -1,6 +1,7 @@
 name: Solinia3Core
 main: com.solinia.solinia.Solinia3CorePlugin
 version: 1.0
+api-version: 1.13
 commands:
   solinia:
     description: Displays additional information about Solinia3Core

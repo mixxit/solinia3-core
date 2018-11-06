@@ -27,6 +27,8 @@ public interface ISoliniaItem {
 
 	int getAbilityid();
 
+	boolean isSkullItem();
+	
 	void setAbilityid(int abilityid);
 
 	String getBasename();
@@ -358,4 +360,6 @@ public interface ISoliniaItem {
 	void setHandsItem(boolean isHandsItem);
 
 	boolean isArrow();
+
+	boolean isMeleeWeapon();
 }
