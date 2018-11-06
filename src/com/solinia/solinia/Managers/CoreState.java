@@ -270,6 +270,9 @@ public class CoreState {
 	private String getNewMaterialName(String materialName) {
 		if (materialName.toUpperCase().equals("WATCH"))
 			return("CLOCK");
+
+		if (materialName.toUpperCase().equals("SKULL_ITEM"))
+			return("LEGACY_SKULL_ITEM");
 		
 		if (materialName.toUpperCase().equals("WOOD_HOE"))
 			return("WOODEN_HOE");
