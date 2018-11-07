@@ -118,6 +118,9 @@ public class SoliniaItemFactory {
 	}
 
 	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname, boolean prefixClassName, boolean operatorCreated) throws SoliniaItemException {
+		if (classtype == null)
+			return new ArrayList<Integer>();
+		
 		List<Integer> items = new ArrayList<Integer>();
 		
 		try
