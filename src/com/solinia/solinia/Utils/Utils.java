@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
@@ -37,6 +38,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -6826,5 +6828,25 @@ public class Utils {
 		} catch (CoreStateInitException e) {
 
 		}
+	}
+
+	public static boolean dispatchCommand(Plugin plugin, CommandSender commandSender, String command) {
+		boolean success = false;
+		
+		try {
+			success = Bukkit.getScheduler().callSyncMethod(plugin, () -> 
+				Bukkit.getServer().dispatchCommand(commandSender,command)
+			).get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		return success;
 	}
 }

@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
@@ -273,6 +274,9 @@ public class CoreState {
 
 		if (materialName.toUpperCase().equals("SKULL_ITEM"))
 			return("LEGACY_SKULL_ITEM");
+		
+		if (materialName.toUpperCase().equals("RAW_FISH"))
+			return("LEGACY_RAW_FISH");
 		
 		if (materialName.toUpperCase().equals("WOOD_HOE"))
 			return("WOODEN_HOE");

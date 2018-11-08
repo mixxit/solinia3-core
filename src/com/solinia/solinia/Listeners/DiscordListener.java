@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.DiscordChannel;
+import com.solinia.solinia.Utils.Utils;
+
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -81,7 +83,7 @@ public class DiscordListener {
 					}
 				}
 				
-				Bukkit.getServer().dispatchCommand(getCommandHandlerForChannelId(event.getChannel().getStringID()), command.trim());
+				Utils.dispatchCommand(plugin,getCommandHandlerForChannelId(event.getChannel().getStringID()), command.trim());
 				
 			} else {
 				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true);
