@@ -271,6 +271,30 @@ public class CoreState {
 	private String getNewMaterialName(String materialName) {
 		if (materialName.toUpperCase().equals("WATCH"))
 			return("CLOCK");
+		
+		if (materialName.toUpperCase().equals("RECORD_3"))
+			return("LEGACY_RECORD_3");
+		if (materialName.toUpperCase().equals("RECORD_4"))
+			return("LEGACY_RECORD_4");
+		if (materialName.toUpperCase().equals("RECORD_5"))
+			return("LEGACY_RECORD_5");
+		if (materialName.toUpperCase().equals("RECORD_6"))
+			return("LEGACY_RECORD_6");
+		if (materialName.toUpperCase().equals("RECORD_7"))
+			return("LEGACY_RECORD_7");
+		if (materialName.toUpperCase().equals("RECORD_8"))
+			return("LEGACY_RECORD_8");
+		if (materialName.toUpperCase().equals("RECORD_9"))
+			return("LEGACY_RECORD_9");
+		if (materialName.toUpperCase().equals("RECORD_10"))
+			return("LEGACY_RECORD_10");
+		if (materialName.toUpperCase().equals("RECORD_11"))
+			return("LEGACY_RECORD_11");
+		if (materialName.toUpperCase().equals("RECORD_12"))
+			return("LEGACY_RECORD_12");
+		
+		if (materialName.toUpperCase().equals("WATCH"))
+			return("CLOCK");
 
 		if (materialName.toUpperCase().equals("SKULL_ITEM"))
 			return("LEGACY_SKULL_ITEM");
