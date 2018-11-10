@@ -1700,7 +1700,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void damageAlertHook(double damage, Entity sourceEntity) {
-		if (isPet()) {
+		if (isPet() && this.getBukkitLivingEntity() instanceof Tameable) {
 			LivingEntity owner = (LivingEntity) ((Tameable) getBukkitLivingEntity()).getOwner();
 			if (owner != null) {
 				if (owner != null && owner instanceof Player) {
@@ -2879,7 +2879,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean isPet() {
 		if (isPlayer())
 			return false;
-
+		
 		if (this.getNpcid() < 1)
 			return false;
 

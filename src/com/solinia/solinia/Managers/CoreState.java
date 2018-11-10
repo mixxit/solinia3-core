@@ -272,6 +272,12 @@ public class CoreState {
 		if (materialName.toUpperCase().equals("WATCH"))
 			return("CLOCK");
 		
+		if (materialName.toUpperCase().equals("WOOL"))
+			return("LEGACY_WOOL");
+		
+		if (materialName.toUpperCase().equals("NETHER_STALK"))
+			return("LEGACY_NETHER_STALK");
+		
 		if (materialName.toUpperCase().equals("RECORD_3"))
 			return("LEGACY_RECORD_3");
 		if (materialName.toUpperCase().equals("RECORD_4"))
