@@ -6283,7 +6283,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (solDefenderPlayer != null)
 						if (solDefenderPlayer.getGroup() != null) {
 							if (solAttackerPlayer.getGroup().getId().toString()
-									.equals(solDefenderPlayer.getGroup().getId())) {
+									.equals(solDefenderPlayer.getGroup().getId().toString())) {
 								return false;
 							}
 						}
