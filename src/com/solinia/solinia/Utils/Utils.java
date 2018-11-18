@@ -41,6 +41,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.comphenix.example.Vector3D;
@@ -6831,24 +6832,34 @@ public class Utils {
 
 		}
 	}
-
-	public static boolean dispatchCommand(Plugin plugin, CommandSender commandSender, String command) {
-		boolean success = false;
+	
+	public static void dispatchCommandLater(Plugin plugin, String command) {
+		final Plugin pluginToSend = plugin;
+		final CommandSender senderToSend = pluginToSend.getServer().getConsoleSender();
+		final String commandToSend = command;
+		new BukkitRunnable() {
+	        
+            @Override
+            public void run() {
+            	pluginToSend.getServer().dispatchCommand(senderToSend,commandToSend);
+            }
+            
+        }.runTaskLater(plugin, 10);
+	}
+	
+	public static void dispatchCommandLater(Plugin plugin, CommandSender sender, String command) {
+		final Plugin pluginToSend = plugin;
+		final CommandSender senderToSend = sender;
+		final String commandToSend = command;
+		new BukkitRunnable() {
+	        
+            @Override
+            public void run() {
+    			pluginToSend.getServer().dispatchCommand(senderToSend,commandToSend);
+            }
+            
+        }.runTaskLater(plugin, 10);
 		
-		try {
-			success = Bukkit.getScheduler().callSyncMethod(plugin, () -> 
-				Bukkit.getServer().dispatchCommand(commandSender,command)
-			).get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
 		
-		return success;
 	}
 }

@@ -83,7 +83,7 @@ public class DiscordListener {
 					}
 				}
 				
-				Utils.dispatchCommand(plugin,getCommandHandlerForChannelId(event.getChannel().getStringID()), command.trim());
+				Utils.dispatchCommandLater(plugin,getCommandHandlerForChannelId(event.getChannel().getStringID()), command.trim());
 				
 			} else {
 				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true);
