@@ -15,6 +15,7 @@ import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
@@ -49,6 +50,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private boolean awardsBind = false;
 	private boolean operatorCreated = true;
 	private String requiresPermissionNode = "";
+	private int awardsFactionValue = 0;
+	private int awardsFactionId = 0;
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -143,6 +146,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
 		sender.sendMessage("- summonsnpcid: " + ChatColor.GOLD + this.getSummonsNpcId() + ChatColor.RESET);
 		sender.sendMessage("- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
+		sender.sendMessage("- awardsfactionid: " + ChatColor.GOLD + this.getAwardsFactionId() + ChatColor.RESET);
+		sender.sendMessage("- awardsfactionvalue: " + ChatColor.GOLD + this.getAwardsFactionValue() + ChatColor.RESET);
 
 		DecimalFormat df = new DecimalFormat("#");
         df.setMaximumFractionDigits(8);
@@ -185,6 +190,27 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			if (value.equals(""))
 				throw new InvalidNPCEventSettingException("Chatresponse is empty");
 			setChatresponse(value);
+			break;
+		case "awardsfactionid":
+			if (value.equals(""))
+				throw new InvalidNPCEventSettingException("Faction ID is empty");
+
+			try
+			{
+				ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(Integer.parseInt(value));
+				if (faction == null)
+					throw new InvalidNPCEventSettingException("Invalid faction");
+			} catch (CoreStateInitException e)
+			{
+				throw new InvalidNPCEventSettingException("Faction data not available");
+			}
+			
+			setAwardsFactionId(Integer.parseInt(value));
+			break;
+		case "awardsfactionvalue":
+			if (value.equals(""))
+				throw new InvalidNPCEventSettingException("Faction value is empty");
+			setAwardsFactionValue(Integer.parseInt(value));
 			break;
 		case "requiresclassid":
 			int classid = Integer.parseInt(value);
@@ -721,6 +747,22 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 
 	public void setRequiresPermissionNode(String requiresPermissionNode) {
 		this.requiresPermissionNode = requiresPermissionNode;
+	}
+
+	public int getAwardsFactionValue() {
+		return awardsFactionValue;
+	}
+
+	public void setAwardsFactionValue(int awardsFactionValue) {
+		this.awardsFactionValue = awardsFactionValue;
+	}
+
+	public int getAwardsFactionId() {
+		return awardsFactionId;
+	}
+
+	public void setAwardsFactionId(int awardsFactionId) {
+		this.awardsFactionId = awardsFactionId;
 	}
 
 }
