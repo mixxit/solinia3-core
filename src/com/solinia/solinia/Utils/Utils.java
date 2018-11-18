@@ -5127,6 +5127,8 @@ public class Utils {
 			return new DisguisePackage(DisguiseType.PLAYER, "Bones");
 		case 384:
 			return new DisguisePackage(DisguiseType.PLAYER, "Joker");
+		case 454:
+			return new DisguisePackage(DisguiseType.PLAYER, "Apiii");
 		default:
 			return new DisguisePackage(DisguiseType.UNKNOWN, "Unknown");
 		}

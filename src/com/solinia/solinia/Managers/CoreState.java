@@ -278,6 +278,9 @@ public class CoreState {
 		if (materialName.toUpperCase().equals("NETHER_STALK"))
 			return("LEGACY_NETHER_STALK");
 		
+		if (materialName.toUpperCase().equals("INK_SACK"))
+			return("LEGACY_INK_SACK");
+		
 		if (materialName.toUpperCase().equals("RECORD_3"))
 			return("LEGACY_RECORD_3");
 		if (materialName.toUpperCase().equals("RECORD_4"))
@@ -367,8 +370,20 @@ public class CoreState {
 		try {
 			boolean updated = false;
 			
+			List<String> unknownMaterialNames = new ArrayList<String>();
+			
 			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 			{
+				// Try to find new materials we dont know about
+				try
+				{
+					Material.getMaterial(item.getBasename());
+				} catch (Exception e)
+				{
+					if (!unknownMaterialNames.contains(item.getBasename()))
+						unknownMaterialNames.add(item.getBasename());
+				}
+				
 				if (!getNewMaterialName(item.getBasename()).equals(item.getBasename()))
 				{
 					item.setBasename(getNewMaterialName(item.getBasename()));
@@ -381,6 +396,13 @@ public class CoreState {
 				System.out.println("Detected some internal item changes, recommitting npcs (this may take some time)...");
 				Utils.RecommitNpcs();
 			}
+			
+			System.out.println("[Solinia3Core] UNKNOWN MATERIAL NAMES:");
+			for(String unknownMaterialName : unknownMaterialNames)
+			{
+				System.out.println("[UNKNOWNMAPPING] " + unknownMaterialName);
+			}
+			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
