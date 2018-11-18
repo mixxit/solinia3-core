@@ -465,6 +465,14 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					player.addPlayerQuest(getAwardsQuest());
 			}
 			
+			if (getAwardsFactionId() > 0)
+			{
+				if (getAwardsFactionValue() > 0)
+				player.increaseFactionStanding(getAwardsFactionId(), getAwardsFactionValue());
+				if (getAwardsFactionValue() < 0)
+				player.decreaseFactionStanding(getAwardsFactionId(), -1*getAwardsFactionValue());
+			}
+			
 			if (getAwardsQuestFlag() != null && !getAwardsQuestFlag().equals(""))
 			{
 				boolean foundQuestFlag = false;
