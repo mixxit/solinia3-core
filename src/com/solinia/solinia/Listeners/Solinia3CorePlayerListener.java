@@ -676,9 +676,8 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (item != null && !item.getType().equals(Material.AIR)) {
 					if (Utils.IsSoliniaItem(item)) {
 						ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(item);
-						// ((Player)event.getView().getPlayer()).sendMessage("* Debug found removal on
-						// soliniaitem: " + soliniaitem.getDisplayname());
 						if (soliniaitem.getHp() > 0 || soliniaitem.getStamina() > 0) {
+							//((Player)event.getView().getPlayer()).sendMessage("* Debug found removal on soliniaitem: " + soliniaitem.getDisplayname() + " slot: " + event.getSlot() + " slot type: " + event.getSlotType().name());
 							solplayer.scheduleUpdateMaxHp();
 						}
 					}
@@ -695,8 +694,19 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				if (Utils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-					if (soliniaitem.getAllowedClassNames().size() == 0)
+					
+					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
+						Utils.CancelEvent(event);
+						event.getView().getPlayer()
+								.sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
 						return;
+					}
+					
+					if (soliniaitem.getAllowedClassNames().size() == 0)
+					{
+						solplayer.scheduleUpdateMaxHp();
+						return;
+					}
 
 					if (solplayer.getClassObj() == null) {
 						Utils.CancelEvent(event);
@@ -707,13 +717,6 @@ public class Solinia3CorePlayerListener implements Listener {
 					if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
 						Utils.CancelEvent(event);
 						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-						return;
-					}
-
-					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
-						Utils.CancelEvent(event);
-						event.getView().getPlayer()
-								.sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
 						return;
 					}
 
@@ -739,7 +742,10 @@ public class Solinia3CorePlayerListener implements Listener {
 					}
 
 					if (soliniaitem.getAllowedClassNames().size() == 0)
+					{
+						solplayer.scheduleUpdateMaxHp();
 						return;
+					}
 
 					if (solplayer.getClassObj() == null) {
 						Utils.CancelEvent(event);
@@ -754,6 +760,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 						return;
 					}
+					((Player)event.getView().getPlayer()).sendMessage("* Debug found armour add on soliniaitem: " + soliniaitem.getDisplayname() + " slot: " + event.getSlot() + " slot type: " + event.getSlotType().name());
 
 					solplayer.scheduleUpdateMaxHp();
 				}
@@ -766,8 +773,20 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				if (Utils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-					if (soliniaitem.getAllowedClassNames().size() == 0)
+					
+					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
+						Utils.CancelEvent(event);
+						;
+						event.getView().getPlayer()
+								.sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
 						return;
+					}
+					
+					if (soliniaitem.getAllowedClassNames().size() == 0)
+					{
+						solplayer.scheduleUpdateMaxHp();
+						return;
+					}
 
 					if (solplayer.getClassObj() == null) {
 						Utils.CancelEvent(event);
@@ -780,14 +799,6 @@ public class Solinia3CorePlayerListener implements Listener {
 						Utils.CancelEvent(event);
 						;
 						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-						return;
-					}
-
-					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
-						Utils.CancelEvent(event);
-						;
-						event.getView().getPlayer()
-								.sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
 						return;
 					}
 
