@@ -1231,6 +1231,7 @@ public class Utils {
 		ItemStack itemstack = event.getItem();
 		if (itemstack == null)
 			return;
+		
 		if (!(CraftItemStack.asNMSCopy(itemstack).getItem() instanceof net.minecraft.server.v1_13_R2.ItemArmor)) {
 			return;
 		}
@@ -1252,7 +1253,6 @@ public class Utils {
 
 				if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName())) {
 					Utils.CancelEvent(event);
-					;
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 					return;

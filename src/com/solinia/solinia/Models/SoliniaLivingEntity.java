@@ -20,6 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.AnimalTamer;
@@ -1356,7 +1357,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent("You hit " + name + " for " + df.format(finaldamage) + " "
 								+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
-								+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
+								+ df.format(defender.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + " " + my_hit.skill
 								+ " damage"));
 
 			if (attackerEntity instanceof Tameable) {
@@ -1366,7 +1367,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					owner.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent("Your pet hit " + name + " for " + df.format(finaldamage) + " "
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
-									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + " " + my_hit.skill
+									+ df.format(defender.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + " " + my_hit.skill
 									+ " damage [PetHP:" + attackerEntity.getHealth() + "]"));
 				}
 			}
@@ -1728,7 +1729,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				// Update group
 				if (solPlayer.getGroup() != null) {
 					if (this.getBukkitLivingEntity()
-							.getHealth() < ((this.getBukkitLivingEntity().getMaxHealth() / 100) * 10))
+							.getHealth() < ((this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10))
 						solPlayer.getGroup().sendGroupMessage(solPlayer.getBukkitPlayer(),
 								"[Notification] I am low on health!");
 				}
@@ -1814,7 +1815,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 												+ df.format(spelleffect.getCalculatedValue() * -1) + "["
 												+ df.format(this.getBukkitLivingEntity().getHealth()
 														- (spelleffect.getCalculatedValue() * -1))
-												+ "/" + df.format(this.getBukkitLivingEntity().getMaxHealth()) + "]"));
+												+ "/" + df.format(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + "]"));
 							}
 						}
 					}
@@ -2740,7 +2741,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean isBerserk() {
 		// if less than 10% health and warrior, is in berserk mode
-		if (this.getBukkitLivingEntity().getHealth() < ((this.getBukkitLivingEntity().getMaxHealth() / 100) * 10))
+		if (this.getBukkitLivingEntity().getHealth() < ((this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10))
 			if (this.getClassObj() != null) {
 				if (this.getClassObj().getName().equals("WARRIOR"))
 					return true;
@@ -3144,8 +3145,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public double getHPRatio() {
-		return getBukkitLivingEntity().getMaxHealth() == 0 ? 0
-				: (getBukkitLivingEntity().getHealth() / getBukkitLivingEntity().getMaxHealth() * 100);
+		return getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() == 0 ? 0
+				: (getBukkitLivingEntity().getHealth() / getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 100);
 	}
 
 	@Override
@@ -6018,16 +6019,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				((Sittable) this.getBukkitLivingEntity()).setSitting(false);
 		}
 
-		if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getMaxHealth()) {
+		if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
 
 			// Pet regen is slow
 			double newHealth = this.getBukkitLivingEntity().getHealth() + 1;
-			if (newHealth < this.getBukkitLivingEntity().getMaxHealth()) {
+			if (newHealth < this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
 				if (!this.getBukkitLivingEntity().isDead())
 					setHealth(newHealth);
 			} else {
 				if (!this.getBukkitLivingEntity().isDead())
-					setHealth(this.getBukkitLivingEntity().getMaxHealth());
+					setHealth(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 			}
 		}
 
@@ -6208,7 +6209,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					((Player) attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent("You SPELLDMG'd " + name + " for " + df.format(damage) + " ["
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - damage) + "/"
-									+ df.format(defender.getBukkitLivingEntity().getMaxHealth()) + "]"));
+									+ df.format(defender.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + "]"));
 				}
 
 				defender.damageAlertHook(damage, attacker.getBukkitLivingEntity());

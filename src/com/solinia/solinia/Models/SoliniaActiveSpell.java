@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
@@ -2226,8 +2227,8 @@ public class SoliniaActiveSpell {
 						return;
 	
 					int amount = (int) Math.round(sourceLivingEntity.getHealth()) + hpToAdd;
-					if (amount > sourceLivingEntity.getMaxHealth()) {
-						amount = (int) Math.round(sourceLivingEntity.getMaxHealth());
+					if (amount > sourceLivingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+						amount = (int) Math.round(sourceLivingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 					}
 	
 					if (amount < 0)
@@ -2244,8 +2245,8 @@ public class SoliniaActiveSpell {
 				}
 	
 				int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToAdd;
-				if (amount > getLivingEntity().getMaxHealth()) {
-					amount = (int) Math.round(getLivingEntity().getMaxHealth());
+				if (amount > getLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+					amount = (int) Math.round(getLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 				}
 	
 				if (amount < 0)
@@ -2300,8 +2301,8 @@ public class SoliniaActiveSpell {
 
 			if (soliniaSpell.isDetrimental()) {
 				int amount = (int) Math.round(sourceLivingEntity.getHealth()) - dmg;
-				if (amount > sourceLivingEntity.getMaxHealth()) {
-					amount = (int) Math.round(sourceLivingEntity.getMaxHealth());
+				if (amount > sourceLivingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+					amount = (int) Math.round(sourceLivingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 				}
 
 				if (amount < 0)
@@ -2310,8 +2311,8 @@ public class SoliniaActiveSpell {
 					targetSoliniaLivingEntity.setHealth(amount);
 			} else {
 				int amount = (int) Math.round(getLivingEntity().getHealth()) + dmg;
-				if (amount > getLivingEntity().getMaxHealth()) {
-					amount = (int) Math.round(getLivingEntity().getMaxHealth());
+				if (amount > getLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+					amount = (int) Math.round(getLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 				}
 
 				if (amount < 0)

@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -274,7 +275,7 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer = SoliniaPlayerFactory.CreatePlayer(player,false);
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
-				solPlayer.getSoliniaLivingEntity().setHealth(player.getMaxHealth());
+				solPlayer.getSoliniaLivingEntity().setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 			return solPlayer;
 		} catch (CoreStateInitException e) {
 			return null;
@@ -311,7 +312,7 @@ public class PlayerManager implements IPlayerManager {
 			updatePlayer(player, altSolPlayer);
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
-				solPlayer.getSoliniaLivingEntity().setHealth(player.getMaxHealth());
+				solPlayer.getSoliniaLivingEntity().setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 			return altSolPlayer;
 		} catch (CoreStateInitException e) {
 			return null;

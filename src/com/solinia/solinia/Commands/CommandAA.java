@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -165,7 +166,7 @@ public class CommandAA implements CommandExecutor {
 				try {
 					ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
 
-					if (player.getMaxHealth() < solentity.getMaxHP()) {
+					if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() < solentity.getMaxHP()) {
 						solplayer.updateMaxHp();
 					}
 				} catch (CoreStateInitException e) {

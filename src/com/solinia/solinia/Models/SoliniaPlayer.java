@@ -16,6 +16,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -3058,11 +3059,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (max_percent > 100)
 				max_percent = 100;
 	
-			int max_hp = (int)Math.floor((solLivingEntity.getBukkitLivingEntity().getMaxHealth() * max_percent) / 100);
-			if (max_hp > (int)Math.floor(solLivingEntity.getBukkitLivingEntity().getMaxHealth()))
-				max_hp = (int)Math.floor(solLivingEntity.getBukkitLivingEntity().getMaxHealth());
+			int max_hp = (int)Math.floor((solLivingEntity.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * max_percent) / 100);
+			if (max_hp > (int)Math.floor(solLivingEntity.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()))
+				max_hp = (int)Math.floor(solLivingEntity.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 	
-			if (solLivingEntity.getBukkitLivingEntity().getHealth() < solLivingEntity.getBukkitLivingEntity().getMaxHealth() && solLivingEntity.getBukkitLivingEntity().getHealth() < max_hp) {
+			if (solLivingEntity.getBukkitLivingEntity().getHealth() < solLivingEntity.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() && solLivingEntity.getBukkitLivingEntity().getHealth() < max_hp) {
 				int bindhps = 3; // base bind hp
 				if (percent_base >= 70)
 					bindhps = (getSkill("BINDWOUND").getValue() * 4) / 10; // 8:5 skill-to-hp ratio
@@ -3096,8 +3097,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				
 				
 				int amount = bindhps;
-				if (amount > solLivingEntity.getBukkitLivingEntity().getMaxHealth()) {
-					amount = (int) Math.round(solLivingEntity.getBukkitLivingEntity().getMaxHealth());
+				if (amount > solLivingEntity.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+					amount = (int) Math.round(solLivingEntity.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 				}
 	
 				if (amount < 0)

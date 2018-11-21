@@ -3,6 +3,7 @@ package com.solinia.solinia.Commands;
 import java.sql.Timestamp;
 
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -172,7 +173,7 @@ public class CommandPet implements CommandExecutor {
 				}
 				
 				player.sendMessage("Pet Name: " + pet.getName());
-				player.sendMessage("Pet HP: " + pet.getHealth() + "/" + pet.getMaxHealth());
+				player.sendMessage("Pet HP: " + pet.getHealth() + "/" + pet.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 				ISoliniaLivingEntity petLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 				EntityInsentient entityhandle = (EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) pet).getHandle();
 				double dmg = entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();

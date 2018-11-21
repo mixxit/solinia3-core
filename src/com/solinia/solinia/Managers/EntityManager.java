@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
@@ -684,7 +685,7 @@ public class EntityManager implements IEntityManager {
 			net.minecraft.server.v1_13_R2.EntityInsentient entityhandle = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) entity).getHandle();
 			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solentity.getMaxDamage());
 			entityhandle.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double)0.4D);
-			owner.sendMessage("New Pet spawned with HP: " + entity.getMaxHealth() + " and " + solentity.getMaxDamage() + " dmg");
+			owner.sendMessage("New Pet spawned with HP: " + entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " and " + solentity.getMaxDamage() + " dmg");
 			
 
 			TargetedDisguise mob = new MobDisguise(DisguiseType.WOLF);

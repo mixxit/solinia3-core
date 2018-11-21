@@ -670,6 +670,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getView().getPlayer());
 
 			// REMOVING EVENTS
+			
 			if (event.getSlotType().equals(SlotType.ARMOR) || event.getSlot() == 40) {
 				ItemStack item = event.getWhoClicked().getInventory().getItem(event.getSlot());
 				if (item != null && !item.getType().equals(Material.AIR)) {
@@ -1281,7 +1282,11 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (event.getHand() != null)
 		if (!event.getHand().equals(EquipmentSlot.HAND))
 			return;
-			
+		
+		HandleHandInteraction(event);
+	}
+
+	private void HandleHandInteraction(PlayerInteractEvent event) {
 		ItemStack itemstack = event.getItem();
 		if (itemstack != null)
 		{

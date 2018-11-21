@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -166,8 +167,8 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		// Process HP Regeneration
 		if (hpregen > 0) {
 			int amount = (int) Math.round(player.getHealth()) + hpregen;
-			if (amount > player.getMaxHealth()) {
-				amount = (int) Math.round(player.getMaxHealth());
+			if (amount > player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+				amount = (int) Math.round(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 			}
 			
 			if (amount < 0)

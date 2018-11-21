@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -3718,11 +3719,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 			break;
 
 		case 137:
-			result = ubase - (int) ((ubase * (targetEntity.getHealth()/targetEntity.getMaxHealth())));
+			result = ubase - (int) ((ubase * (targetEntity.getHealth()/targetEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())));
 			break;
 
 		case 138: {
-			int maxhps = (int) Math.floor(targetEntity.getMaxHealth() / 2);
+			int maxhps = (int) Math.floor(targetEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 2);
 			if (targetEntity.getHealth() <= maxhps)
 				result = -(ubase * (int) Math.floor(targetEntity.getHealth() / maxhps));
 			else
