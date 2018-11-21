@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
@@ -1409,7 +1410,10 @@ public class SoliniaActiveSpell {
 					h.setCustomNameVisible(true);
 					h.setBreed(false);
 					h.setColor(Color.WHITE);
-					h.setMaxHealth(1000);
+					
+					AttributeInstance healthAttribute = h.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+					healthAttribute.setBaseValue(1000);
+					
 					h.setHealth(1000);
 					h.setTamed(true);
 					h.setOwner(player);

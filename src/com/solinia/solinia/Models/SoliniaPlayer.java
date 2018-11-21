@@ -17,6 +17,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -357,7 +358,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			try {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
 				double calculatedhp = solentity.getMaxHP();
-				getBukkitPlayer().setMaxHealth(calculatedhp);
+				
+				AttributeInstance healthAttribute = getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+				healthAttribute.setBaseValue(calculatedhp);
+				
 				getBukkitPlayer().setHealthScaled(true);
 				getBukkitPlayer().setHealthScale(40D);
 				

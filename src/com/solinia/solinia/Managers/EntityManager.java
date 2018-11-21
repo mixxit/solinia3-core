@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
@@ -679,7 +680,9 @@ public class EntityManager implements IEntityManager {
 				maxHp = (double)npc.getForcedMaxHp();
 			}
 			
-			entity.setMaxHealth(maxHp);
+			AttributeInstance healthAttribute = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+			healthAttribute.setBaseValue(maxHp);
+			
 			if (!entity.isDead())
 			entity.setHealth(maxHp);
 			net.minecraft.server.v1_13_R2.EntityInsentient entityhandle = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) entity).getHandle();

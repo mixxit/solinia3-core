@@ -21,6 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.AnimalTamer;
@@ -4145,7 +4146,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void updateMaxHp() {
 		double calculatedhp = getMaxHP();
-		getBukkitLivingEntity().setMaxHealth(calculatedhp);
+		AttributeInstance healthAttribute = getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+		healthAttribute.setBaseValue(calculatedhp);
 	}
 
 	@Override
