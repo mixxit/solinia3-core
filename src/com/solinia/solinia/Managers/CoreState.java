@@ -41,7 +41,6 @@ import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import de.slikey.effectlib.EffectManager;
-import me.dadus33.chatitem.api.ChatItemAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -59,7 +58,6 @@ public class CoreState {
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
 	private String instanceGuid;
-	private ChatItemAPI chatitemapi;
 	private IDiscordClient discordClient;
 	private DiscordAdminChannelCommandSender discordAdminChannelCommandSender;
 	private DiscordDefaultChannelCommandSender discordDefaultChannelCommandSender;
@@ -487,14 +485,6 @@ public class CoreState {
 
 	public void spellTick(Plugin plugin) {
 		entityManager.spellTick();
-	}
-
-	public ChatItemAPI getChatItem() {
-		return chatitemapi;
-	}
-
-	public void setChatItem(ChatItemAPI chatitemapi) {
-		this.chatitemapi = chatitemapi;
 	}
 
 	public ISoliniaGroup getGroupByMember(UUID uniqueId) {

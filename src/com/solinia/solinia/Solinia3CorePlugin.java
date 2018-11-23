@@ -67,7 +67,6 @@ import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 
 import de.slikey.effectlib.EffectManager;
-import me.dadus33.chatitem.api.ChatItemAPI;
 import net.milkbowl.vault.economy.Economy;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -97,7 +96,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
 	
 	private Economy economy;
-	private ChatItemAPI ciApi;
 	private PerkLoadTimer perkLoadTimer;
 	private IDiscordClient discordClient;
 	
@@ -146,10 +144,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		registerEvents();
 
 		setupEconomy();
-		setupChatItem();
 
 		StateManager.getInstance().setEconomy(this.economy);
-		StateManager.getInstance().setChatItem(this.ciApi);
 		StateManager.getInstance().setDiscordClient(this.discordClient);
 		
 		RegisterEntities();
@@ -203,10 +199,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		UnregisterEntities();
 		
 		System.out.println("[Solinia3Core] Plugin Disabled");
-	}
-
-	private void setupChatItem() {
-		ciApi = Bukkit.getServicesManager().getRegistration(ChatItemAPI.class).getProvider();
 	}
 
 	private boolean setupEconomy() {
