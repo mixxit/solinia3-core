@@ -238,7 +238,17 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 			
 			// if this is a skeleton entity, remove the chase task frmo the mobs AI
-			((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity)event.getEntity()).getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE).setValue(Utils.MAX_ENTITY_AGGRORANGE);
+			org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity cle = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity)event.getEntity());
+			if (cle == null)
+				return;
+			
+			if (cle.getHandle() == null)
+				return;
+			
+			if (cle.getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE) == null)
+				return;
+			
+			cle.getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE).setValue(Utils.MAX_ENTITY_AGGRORANGE);
 		}
 	}
 
