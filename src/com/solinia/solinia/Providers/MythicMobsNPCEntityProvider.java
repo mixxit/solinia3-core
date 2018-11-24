@@ -204,7 +204,10 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		customitem += "  Id: " + item.asItemStack().getType().name() + "\r\n";
 		customitem += "  Display: '" + item.getDisplayname().replaceAll("[^a-zA-Z0-9]", "") + "'\r\n";
 		if (item.getBasename().toUpperCase().equals("SHIELD"))
-			customitem += "  Color: SILVER\r\n";
+		{
+			customitem += "  Options:\r\n";
+			customitem += "    Color: SILVER\r\n";
+		}
 		customitem += "  Data: " + item.getColor() + "\r\n";
 		if (item.getDamage() > 0) {
 			customitem += "  Damage: " + item.getDamage() + "\r\n";
