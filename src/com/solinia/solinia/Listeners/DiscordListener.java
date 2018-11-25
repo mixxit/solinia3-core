@@ -1,6 +1,7 @@
 package com.solinia.solinia.Listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -35,7 +36,7 @@ public class DiscordListener {
 			{
 				StateManager.getInstance().getChannelManager().handleDiscordCommand(DiscordChannel.DEFAULT,event);
 			} else {
-				StateManager.getInstance().getChannelManager().sendToGlobalChannel(event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true);
+				StateManager.getInstance().getChannelManager().sendToGlobalChannel("[O" + ChatColor.AQUA + "DISC" + ChatColor.RESET + "|" + ChatColor.YELLOW + event.getChannel().getName().toUpperCase().substring(0, 2) + ChatColor.RESET + "]" + ChatColor.YELLOW + "~"+event.getAuthor().getName() + ChatColor.RESET, event.getMessage().getContent(), true);
 			}
 		}
 		

@@ -2210,8 +2210,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		int newValue = playerFactionEntry.getValue() + amount;
 		boolean hitCap = false;
-		if (newValue > 1500) {
-			newValue = 1500;
+		int upperCap = 1500-playerFactionEntry.getFaction().getBase();
+		
+		if (newValue > upperCap) {
+			newValue = upperCap;
 			hitCap = true;
 
 			if (!playerFactionEntry.getFaction().getAllyGrantsTitle().equals("")) {
@@ -2249,8 +2251,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		int newValue = playerFactionEntry.getValue() - amount;
 		boolean hitCap = false;
-		if (newValue < -1500) {
-			newValue = -1500;
+		int lowerCap = -1500-playerFactionEntry.getFaction().getBase();
+
+		if (newValue < lowerCap) {
+			newValue = lowerCap;
 			hitCap = true;
 
 			if (!playerFactionEntry.getFaction().getScowlsGrantsTitle().equals("")) {

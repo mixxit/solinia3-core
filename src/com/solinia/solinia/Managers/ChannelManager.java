@@ -347,7 +347,7 @@ public class ChannelManager implements IChannelManager {
 				}
 			}
 			
-			player.sendMessage(name + ":" + message);
+			player.sendMessage(name + ": " + message);
 		}
 	}
 	
