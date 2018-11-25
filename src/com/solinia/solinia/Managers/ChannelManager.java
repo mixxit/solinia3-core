@@ -92,7 +92,8 @@ public class ChannelManager implements IChannelManager {
 			tc.setHoverEvent(
 					new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(itemStack)).create())
 							);
-			tc.setText(tc.getText().replaceAll("itemlink","[" + itemStack.getItemMeta().getDisplayName()) + "]");
+			String title = "<" + itemStack.getItemMeta().getDisplayName() + ">";
+			tc.setText(tc.getText().replaceAll("itemlink",title));
 			} catch (Exception e)
 			{
 				System.out.println("Could not create itemlink for message: " + tc.getText() + " with itemStack");
