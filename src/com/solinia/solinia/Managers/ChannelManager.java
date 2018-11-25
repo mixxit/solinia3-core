@@ -89,11 +89,12 @@ public class ChannelManager implements IChannelManager {
 		{
 			try
 			{
-			tc.setHoverEvent(
-					new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(itemStack)).create())
-							);
-			String title = "<" + itemStack.getItemMeta().getDisplayName() + ">";
-			tc.setText(tc.getText().replaceAll("itemlink",title));
+				TextComponent itemLinkComponent = new TextComponent();
+				String title = " <" + itemStack.getItemMeta().getDisplayName() + ">";
+				itemLinkComponent.setText(title);
+				itemLinkComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(itemStack)).create()));
+				tc.setText(tc.getText().replaceAll("itemlink",""));
+				tc.addExtra(itemLinkComponent);
 			} catch (Exception e)
 			{
 				System.out.println("Could not create itemlink for message: " + tc.getText() + " with itemStack");

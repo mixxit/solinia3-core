@@ -224,6 +224,7 @@ public class CoreState {
 	
 	private void fixState()
 	{
+		System.out.println("Fixing max levels");
 		enforceMaxLevel();
 	}
 	
@@ -292,6 +293,9 @@ public class CoreState {
 	private String getNewMaterialName(String materialName) {
 		if (materialName.toUpperCase().equals("WATCH"))
 			return("CLOCK");
+		
+		if (materialName.toUpperCase().equals("CARROT_ITEM"))
+			return("LEGACY_CARROT_ITEM");
 		
 		if (materialName.toUpperCase().equals("WOOL"))
 			return("LEGACY_WOOL");
@@ -390,6 +394,8 @@ public class CoreState {
 	private void patchItems1_13() {
 		try {
 			boolean updated = false;
+			
+			System.out.println("Attempting to fix 1.13 items");
 			
 			List<String> unknownMaterialNames = new ArrayList<String>();
 			
