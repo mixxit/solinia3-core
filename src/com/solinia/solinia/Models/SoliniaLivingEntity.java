@@ -5836,7 +5836,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 0;
 
 		for (ISoliniaItem item : getEquippedSoliniaItems(true)) {
-			if (item.getHp() > 0) {
+			if (item.getMana() > 0) {
 				total += item.getMana();
 			}
 		}
