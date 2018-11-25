@@ -54,8 +54,7 @@ public class CommandWho implements CommandExecutor {
 		        		continue;
 		        	}
 		        	
-		        	TextComponent tc = new TextComponent();
-					tc.setText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET));
 					
 					String ideal = "Ideal: I have no ideal\n";
 					String trait1 = "Trait: I have no primary trait\n";

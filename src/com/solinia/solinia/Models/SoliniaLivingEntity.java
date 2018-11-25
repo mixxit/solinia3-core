@@ -498,8 +498,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 
 				if (getBukkitLivingEntity() instanceof Player) {
-					TextComponent tc = new TextComponent();
-					tc.setText(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id);
+					TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id));
 					((Player) getBukkitLivingEntity()).spigot().sendMessage(tc);
 				}
 			}

@@ -63,20 +63,18 @@ public class CommandAA implements CommandExecutor {
 
 					if (aarank.getCost() <= solplayer.getAAPoints()) {
 						if (solplayer.canPurchaseAlternateAdvancementRank(aaAbility, aarank)) {
-							TextComponent tc = new TextComponent();
-							tc.setText(ChatColor.LIGHT_PURPLE + aaAbility.getName() + " Rank " + aarank.getPosition()
-									+ ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost()
-									+ ChatColor.RESET + " AA points /aa buy " + aarank.getId());
+							TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.LIGHT_PURPLE + aaAbility.getName() + " Rank " + aarank.getPosition()
+							+ ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost()
+							+ ChatColor.RESET + " AA points /aa buy " + aarank.getId()));
 							String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()
 									+ ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
 							tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 									new ComponentBuilder(details).create()));
 							sender.spigot().sendMessage(tc);
 						} else {
-							TextComponent tc = new TextComponent();
-							tc.setText(ChatColor.GRAY + "[NB] " + aaAbility.getName() + " Rank " + aarank.getPosition()
-									+ ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost() + ChatColor.GRAY
-									+ " Cannot purchase yet");
+							TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + "[NB] " + aaAbility.getName() + " Rank " + aarank.getPosition()
+							+ ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost() + ChatColor.GRAY
+							+ " Cannot purchase yet"));
 							String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()
 									+ ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
 							tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -84,10 +82,9 @@ public class CommandAA implements CommandExecutor {
 							sender.spigot().sendMessage(tc);
 						}
 					} else {
-						TextComponent tc = new TextComponent();
-						tc.setText(ChatColor.GRAY + "[NA] " + aaAbility.getName() + " Rank " + aarank.getPosition()
-								+ ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost() + ChatColor.GRAY
-								+ " Insufficient AA points");
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + "[NA] " + aaAbility.getName() + " Rank " + aarank.getPosition()
+						+ ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost() + ChatColor.GRAY
+						+ " Insufficient AA points"));
 						String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()
 								+ ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
 						tc.setHoverEvent(

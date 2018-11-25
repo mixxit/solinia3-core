@@ -122,9 +122,7 @@ public class CommandSpellBook implements CommandExecutor {
 					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 					sender.sendMessage("");
 					
-					TextComponent tc = new TextComponent();
-					
-					tc.setText("Added " + item.getDisplayname() + " to your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("Added " + item.getDisplayname() + " to your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET));
 					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
 					sender.spigot().sendMessage(tc);
 				}
