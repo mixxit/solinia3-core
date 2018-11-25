@@ -3028,7 +3028,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void emote(String message, boolean isBardSongFilterable) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message, isBardSongFilterable);
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message, isBardSongFilterable, getBukkitLivingEntity().getEquipment().getItemInMainHand());
 	}
 
 	@Override
@@ -3070,7 +3070,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
 			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage,
-					true, message);
+					true, message, getBukkitLivingEntity().getEquipment().getItemInMainHand());
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -3171,7 +3171,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + messageto.getName() + " '"
 					+ message + "'" + ChatColor.RESET;
 			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage,
-					allowlanguagelearn, message);
+					allowlanguagelearn, message, getBukkitLivingEntity().getEquipment().getItemInMainHand());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

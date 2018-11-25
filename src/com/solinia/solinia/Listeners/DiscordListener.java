@@ -36,7 +36,7 @@ public class DiscordListener {
 			{
 				StateManager.getInstance().getChannelManager().handleDiscordCommand(DiscordChannel.DEFAULT,event);
 			} else {
-				StateManager.getInstance().getChannelManager().sendToGlobalChannel("[O" + ChatColor.AQUA + "DISC" + ChatColor.RESET + "|" + ChatColor.YELLOW + event.getChannel().getName().toUpperCase().substring(0, 2) + ChatColor.RESET + "]" + ChatColor.YELLOW + "~"+event.getAuthor().getName() + ChatColor.RESET, event.getMessage().getContent(), true);
+				StateManager.getInstance().getChannelManager().sendToGlobalChannel("[O" + ChatColor.AQUA + "DISC" + ChatColor.RESET + "|" + ChatColor.YELLOW + event.getChannel().getName().toUpperCase().substring(0, 2) + ChatColor.RESET + "]" + ChatColor.YELLOW + "~"+event.getAuthor().getName() + ChatColor.RESET, event.getMessage().getContent(), true, null);
 			}
 		}
 		
@@ -87,7 +87,7 @@ public class DiscordListener {
 				Utils.dispatchCommandLater(plugin,getCommandHandlerForChannelId(event.getChannel().getStringID()), command.trim());
 				
 			} else {
-				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true);
+				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true, null);
 			}
 		}
     }

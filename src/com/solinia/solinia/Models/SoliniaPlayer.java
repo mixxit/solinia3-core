@@ -791,7 +791,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void emote(String string, boolean isBardSongFilterable) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + string, isBardSongFilterable);
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + string, isBardSongFilterable, getBukkitPlayer().getInventory().getItemInMainHand());
 	}
 
 	@Override
@@ -804,7 +804,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				setLanguage(getRace().getName().toUpperCase());
 			}
 		}
-		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this, string);
+		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this, string, getBukkitPlayer().getInventory().getItemInMainHand());
 	}
 
 	@Override
@@ -817,7 +817,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				setLanguage(getRace().getName().toUpperCase());
 			}
 		}
-		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, string, string);
+		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, string, string, getBukkitPlayer().getInventory().getItemInMainHand());
 	}
 
 	@Override

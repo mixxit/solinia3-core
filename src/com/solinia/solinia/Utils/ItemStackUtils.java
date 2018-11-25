@@ -63,6 +63,15 @@ public class ItemStackUtils {
         return damage;
     }
 	
+	public static String ConvertItemStackToJsonRegular(ItemStack itemStack) {
+        // First we convert the item stack into an NMS itemstack
+        net.minecraft.server.v1_13_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound compound = new NBTTagCompound();
+        compound = nmsItemStack.save(compound);
+
+        return compound.toString();
+    }
+	
 	public static Integer getClassicAugmentationItemId(ItemStack itemStack)
 	{
 		if (!Utils.IsSoliniaItem(itemStack))

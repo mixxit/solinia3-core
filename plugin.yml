@@ -581,6 +581,5 @@ depend:
 - Vault
 - MythicMobs
 - Votifier
-- ChatItem
 - EffectLib
 - Towny

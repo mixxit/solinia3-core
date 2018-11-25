@@ -891,19 +891,10 @@ public class SoliniaItem implements ISoliniaItem {
 
 		return itemUseSuccess;
 	}
-
-	private String convertItemStackToJsonRegular() {
-        // First we convert the item stack into an NMS itemstack
-        net.minecraft.server.v1_13_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(asItemStack());
-        NBTTagCompound compound = new NBTTagCompound();
-        compound = nmsItemStack.save(compound);
-
-        return compound.toString();
-    }
 	
 	@Override
 	public String asJsonString() {
-		String out = convertItemStackToJsonRegular();
+		String out = ItemStackUtils.ConvertItemStackToJsonRegular(asItemStack());
 		return out;
 	}
 

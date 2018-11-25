@@ -217,9 +217,32 @@ public class CoreState {
 	}
 	
 	private void patchVersion() {
+		fixState();
 		patchItems1_13();
 		patchClasses1_13();
-		
+	}
+	
+	private void fixState()
+	{
+		enforceMaxLevel();
+	}
+	
+	private void enforceMaxLevel()
+	{
+		try {
+			for(ISoliniaPlayer solPlayer : StateManager.getInstance().getPlayerManager().getPlayers())
+			{
+				if (solPlayer.getLevel() > Utils.getMaxLevel())
+				{
+					double maxXp = (Utils.getExperienceRequirementForLevel(Utils.getMaxLevel()) / Utils.getMaxLevel());
+					solPlayer.setExperience(maxXp);
+					System.out.println(solPlayer.getFullName() + " was greater than max level, setting to max level");
+				}
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void patchClasses1_13() {

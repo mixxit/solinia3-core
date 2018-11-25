@@ -1,23 +1,25 @@
 package com.solinia.solinia.Interfaces;
 
+import org.bukkit.inventory.ItemStack;
+
 import com.solinia.solinia.Models.DiscordChannel;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 public interface IChannelManager {
 
-	void sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable);
+	void sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable, ItemStack itemStack);
 
-	void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable);
+	void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable, ItemStack itemStack);
 
-	void sendToGlobalChannel(ISoliniaPlayer source, String message);
+	void sendToGlobalChannel(ISoliniaPlayer source, String message, ItemStack itemStack);
 
-	void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage);
+	void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack);
 
-	void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message);
+	void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message, ItemStack itemStack);
 
-	void sendToGlobalChannel(String name, String message, boolean isFromDiscord);
+	void sendToGlobalChannel(String name, String message, boolean isFromDiscord, ItemStack itemStack);
 
-	void sendToOps(String name, String message, boolean isFromDiscord);
+	void sendToOps(String name, String message, boolean isFromDiscord, ItemStack itemStack);
 
 	void sendToDiscordMC(ISoliniaPlayer source, String channelId, String message);
 
@@ -27,7 +29,7 @@ public interface IChannelManager {
 
 	void processNextDiscordMessage();
 
-	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn, String coremessage);
+	void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn, String coremessage, ItemStack itemStack);
 
 	String getChannelId(DiscordChannel discordChannel);
 

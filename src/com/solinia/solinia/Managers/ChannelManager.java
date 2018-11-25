@@ -12,6 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IChannelManager;
@@ -24,8 +26,12 @@ import com.solinia.solinia.Models.DiscordChannel;
 import com.solinia.solinia.Models.QueuedDiscordMessage;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.WorldWidePerk;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 public class ChannelManager implements IChannelManager {
@@ -38,7 +44,7 @@ public class ChannelManager implements IChannelManager {
 	private ConcurrentHashMap<Integer, QueuedDiscordMessage> queuedDiscordMessages = new ConcurrentHashMap<Integer, QueuedDiscordMessage>();
 	
 	@Override
-	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage) {
+	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack) {
 		
 		message = decorateLocalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -52,14 +58,24 @@ public class ChannelManager implements IChannelManager {
 					
 					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
 					{
-						player.sendMessage(message);
+						TextComponent tc = new TextComponent();
+						tc.setText(message);
+						tc = decorateTextComponentsWithHovers(tc, itemStack);
+						player.spigot().sendMessage(tc);
 					} else {
-						player.sendMessage(decorateLocalPlayerMessage(source, Utils.ConvertToRunic(coremessage)) + " [" + source.getLanguage() + "]");
+						TextComponent tc = new TextComponent();
+						tc.setText(decorateLocalPlayerMessage(source, Utils.ConvertToRunic(coremessage)) + " [" + source.getLanguage() + "]");
+						tc = decorateTextComponentsWithHovers(tc, itemStack);
+						player.spigot().sendMessage(tc);
+
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
 				} catch (CoreStateInitException e)
 				{
-					player.sendMessage("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised");
+					TextComponent tc = new TextComponent();
+					tc.setText("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised");
+					tc = decorateTextComponentsWithHovers(tc, itemStack);
+					player.spigot().sendMessage(tc);
 					e.printStackTrace();
 				}
 			}
@@ -68,8 +84,26 @@ public class ChannelManager implements IChannelManager {
 		System.out.println(message);
 	}
 
+	private TextComponent decorateTextComponentsWithHovers(TextComponent tc, ItemStack itemStack) {
+		if (itemStack != null && tc.getText().contains("itemlink"))
+		{
+			try
+			{
+			tc.setHoverEvent(
+					new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(itemStack)).create())
+							);
+			tc.setText(tc.getText().replaceAll("itemlink","[" + itemStack.getItemMeta().getDisplayName()) + "]");
+			} catch (Exception e)
+			{
+				System.out.println("Could not create itemlink for message: " + tc.getText() + " with itemStack");
+			}
+		}
+		
+		return tc;
+	}
+
 	@Override
-	public void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message) {
+	public void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message, ItemStack itemStack) {
 		String originalmessage = message;
 		message = decorateGlobalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -86,7 +120,10 @@ public class ChannelManager implements IChannelManager {
 				continue;
 			}
 				
-			player.sendMessage(message);
+			TextComponent tc = new TextComponent();
+			tc.setText(message);
+			tc = decorateTextComponentsWithHovers(tc, itemStack);
+			player.spigot().sendMessage(tc);
 		}
 		
 		System.out.println(message);
@@ -203,7 +240,7 @@ public class ChannelManager implements IChannelManager {
 	}
 
 	@Override
-	public void sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable) {
+	public void sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 100)
 			{
@@ -217,7 +254,10 @@ public class ChannelManager implements IChannelManager {
 					continue;
 				}
 
-				player.sendMessage(message);
+				TextComponent tc = new TextComponent();
+				tc.setText(message);
+				tc = decorateTextComponentsWithHovers(tc, itemStack);
+				player.spigot().sendMessage(tc);
 			}
 		}
 		
@@ -225,9 +265,12 @@ public class ChannelManager implements IChannelManager {
 	}
 
 	@Override
-	public void sendToGlobalChannel(ISoliniaPlayer source, String message) {
+	public void sendToGlobalChannel(ISoliniaPlayer source, String message, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			player.sendMessage(message);
+			TextComponent tc = new TextComponent();
+			tc.setText(message);
+			tc = decorateTextComponentsWithHovers(tc, itemStack);
+			player.spigot().sendMessage(tc);
 		}
 		
 		System.out.println(message);
@@ -279,7 +322,7 @@ public class ChannelManager implements IChannelManager {
 	}
 
 	@Override
-	public void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable) {
+	public void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
 			{
@@ -293,13 +336,16 @@ public class ChannelManager implements IChannelManager {
 					
 				}
 				
-				player.sendMessage(message);
+				TextComponent tc = new TextComponent();
+				tc.setText(message);
+				tc = decorateTextComponentsWithHovers(tc, itemStack);
+				player.spigot().sendMessage(tc);
 			}
 		}
 	}
 	
 	@Override
-	public void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn, String coremessage)
+	public void sendToLocalChannelLivingEntityChat(ISoliniaLivingEntity source, String message, boolean allowlanguagelearn, String coremessage, ItemStack itemStack)
 	{
 		try
 		{
@@ -308,9 +354,15 @@ public class ChannelManager implements IChannelManager {
 				{
 					if (player.isOp() || (source.getLanguage() == null || source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
 					{
-						player.sendMessage(message);
+						TextComponent tc = new TextComponent();
+						tc.setText(message);
+						tc = decorateTextComponentsWithHovers(tc, itemStack);
+						player.spigot().sendMessage(tc);
 					} else {
-						player.sendMessage(ChatColor.AQUA + source.getName() + " says '" + Utils.ConvertToRunic(coremessage) + "' [" + source.getLanguage() + "]" + ChatColor.RESET);
+						TextComponent tc = new TextComponent();
+						tc.setText(ChatColor.AQUA + source.getName() + " says '" + Utils.ConvertToRunic(coremessage) + "' [" + source.getLanguage() + "]" + ChatColor.RESET);
+						tc = decorateTextComponentsWithHovers(tc, itemStack);
+						player.spigot().sendMessage(tc);
 						
 						if (allowlanguagelearn == true)
 						{
@@ -327,7 +379,7 @@ public class ChannelManager implements IChannelManager {
 	}
 	
 	@Override
-	public void sendToGlobalChannel(String name, String message, boolean isFromDiscord) {
+	public void sendToGlobalChannel(String name, String message, boolean isFromDiscord, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			
 			if (isFromDiscord)
@@ -346,13 +398,15 @@ public class ChannelManager implements IChannelManager {
 					
 				}
 			}
-			
-			player.sendMessage(name + ": " + message);
+			TextComponent tc = new TextComponent();
+			tc.setText(name + ": " + message);
+			tc = decorateTextComponentsWithHovers(tc, itemStack);
+			player.spigot().sendMessage(tc);
 		}
 	}
 	
 	@Override
-	public void sendToOps(String name, String message, boolean isFromDiscord) {
+	public void sendToOps(String name, String message, boolean isFromDiscord, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (!player.isOp())
 				continue;
@@ -374,7 +428,11 @@ public class ChannelManager implements IChannelManager {
 				}
 			}
 			
-			player.sendMessage(name + ":" + message);
+			TextComponent tc = new TextComponent();
+			tc.setText(name + ": " + message);
+			tc = decorateTextComponentsWithHovers(tc, itemStack);
+			player.spigot().sendMessage(tc);
+
 		}
 	}
 

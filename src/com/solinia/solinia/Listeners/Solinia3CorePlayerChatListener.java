@@ -49,9 +49,9 @@ public class Solinia3CorePlayerChatListener implements Listener {
 				event.getPlayer().getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /race");
 				return;
 			}
-			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage());
+			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
 		} else {
-			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage());
+			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
 			return;
 		}
 		
