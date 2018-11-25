@@ -1448,7 +1448,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			}
 
 			soliniaevent = new SoliniaAsyncPlayerChatEvent(event, solplayer, event.getMessage());
-			Bukkit.getPluginManager().callEvent(soliniaevent);
+			if (soliniaevent != null && Bukkit.getPluginManager() != null)
+				Bukkit.getPluginManager().callEvent(soliniaevent);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

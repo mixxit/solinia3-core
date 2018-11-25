@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -296,6 +297,9 @@ public class CoreState {
 		
 		if (materialName.toUpperCase().equals("CARROT_ITEM"))
 			return("LEGACY_CARROT_ITEM");
+
+		if (materialName.toUpperCase().equals("POTATO_ITEM"))
+			return("LEGACY_POTATO_ITEM");
 		
 		if (materialName.toUpperCase().equals("WOOL"))
 			return("LEGACY_WOOL");
@@ -388,6 +392,69 @@ public class CoreState {
 		if (materialName.toUpperCase().equals("GOLD_BOOTS"))
 			return "GOLDEN_BOOTS";
 		
+		if (materialName.toUpperCase().equals("RED_ROSE"))
+			return "LEGACY_RED_ROSE";
+		
+		if (materialName.toUpperCase().equals("RAW_BEEF"))
+			return "LEGACY_RAW_BEEF";
+
+		if (materialName.toUpperCase().equals("WEB"))
+			return "LEGACY_WEB";
+
+		if (materialName.toUpperCase().equals("COOKED_FISH"))
+			return "LEGACY_COOKED_FISH";
+		
+		if (materialName.toUpperCase().equals("POTATO_ITEM"))
+			return "LEGACY_POTATO_ITEM";
+
+		if (materialName.toUpperCase().equals("SNOW_BALL"))
+			return "LEGACY_SNOW_BALL";
+
+		if (materialName.toUpperCase().equals("SKULL"))
+			return "LEGACY_SKULL";
+
+		if (materialName.toUpperCase().equals("FIREWORK"))
+			return "LEGACY_FIREWORK";
+		
+		if (materialName.toUpperCase().equals("SULPHUR"))
+			return "LEGACY_SULPHUR";
+
+		if (materialName.toUpperCase().equals("GREEN_RECORD"))
+			return "LEGACY_GREEN_RECORD";
+
+		if (materialName.toUpperCase().equals("QUARTZ_ORE"))
+			return "LEGACY_QUARTZ_ORE";
+
+		if (materialName.toUpperCase().equals("BANNER"))
+			return "LEGACY_BANNER";
+
+		if (materialName.toUpperCase().equals("LOG"))
+			return "LEGACY_LOG";
+
+		if (materialName.toUpperCase().equals("SEEDS"))
+			return "LEGACY_SEEDS";
+		
+		if (materialName.toUpperCase().equals("LOG_2"))
+			return "LEGACY_LOG_2";
+
+		if (materialName.toUpperCase().equals("BOAT"))
+			return "LEGACY_BOAT";
+
+		if (materialName.toUpperCase().equals("SAPLING"))
+			return "LEGACY_SAPLING";
+
+		if (materialName.toUpperCase().equals("CARROT_ITEM"))
+			return "LEGACY_CARROT_ITEM";
+
+		if (materialName.toUpperCase().equals("MONSTER_EGG"))
+			return "LEGACY_MONSTER_EGG";
+
+		if (materialName.toUpperCase().equals("REDSTONE_TORCH_ON"))
+			return "LEGACY_REDSTONE_TORCH_ON";
+
+		if (materialName.toUpperCase().equals("LONG_GRASS"))
+			return "LEGACY_LONG_GRASS";
+
 		return materialName.toUpperCase();
 	}
 
@@ -404,7 +471,7 @@ public class CoreState {
 				// Try to find new materials we dont know about
 				try
 				{
-					Material.getMaterial(item.getBasename());
+					ItemStack stack = new ItemStack(Material.valueOf(item.getBasename().toUpperCase()), 1, item.getColor());
 				} catch (Exception e)
 				{
 					if (!unknownMaterialNames.contains(item.getBasename()))
