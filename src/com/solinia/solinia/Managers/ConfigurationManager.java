@@ -1834,7 +1834,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			private static final long serialVersionUID = 8645556480079434489L;
 
 		{
-	    add("Honesty: Don’t lie or cheat. Let your word be your promise.");
+	    add("Honesty: Don't lie or cheat. Let your word be your promise.");
 	    add("Courage: Never fear to act, though caution is wise.");
 	    add("Compassion: Aid others, protect the weak, and punish those who threaten them. Show mercy to your foes, but temper it with Wisdom.");
 	    add("Honor: Treat others with fairness, and let your honorable deeds be an example to them. Do as much good as possible while causing the least amount of harm.");
