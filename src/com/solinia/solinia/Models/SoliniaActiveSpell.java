@@ -2362,4 +2362,24 @@ public class SoliniaActiveSpell {
 	public void setNumHits(int numHits) {
 		this.numHits = numHits;
 	}
+
+	public void tryFadeEffect() {
+		try
+		{
+			Entity owner = Bukkit.getEntity(ownerUuid);
+			if (owner == null)
+				return;
+			
+			if (!(owner instanceof LivingEntity))
+				return;
+			
+			if (owner.isDead())
+				return;
+			
+			StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(ownerUuid, spellId, true);
+		} catch (Exception e)
+		{
+			
+		}
+	}
 }
