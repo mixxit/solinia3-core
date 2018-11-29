@@ -1,0 +1,15 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Nov 29 12:50:41 GMT 2018
+http\://maven.elmakers.com/repository/.error=
+@default-3_dmulloy2-repo-http\://repo.dmulloy2.net/nexus/repository/public/.lastUpdated=1543495835686
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.error=
+http\://maven.elmakers.com/repository/.lastUpdated=1543495839094
+http\://play.fallofanempire.com\:8081/nexus/content/repositories/Releases/.lastUpdated=1543495817170
+https\://repo.md-5.net/content/repositories/snapshots/.error=
+http\://repo.dmulloy2.net/nexus/repository/public/.error=Could not transfer artifact net.java.dev.jna\:jna\:jar\:4.5.0 from/to 3_dmulloy2-repo (http\://repo.dmulloy2.net/nexus/repository/public/)\: GET request of\: net/java/dev/jna/jna/4.5.0/jna-4.5.0.jar from 3_dmulloy2-repo failed
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.lastUpdated=1543495838250
+https\://repo.md-5.net/content/repositories/snapshots/.lastUpdated=1543495837329
+https\://repo.md-5.net/content/repositories/releases/.lastUpdated=1543495836564
+https\://repo.md-5.net/content/repositories/releases/.error=
+https\://repo.parallelblock.com/repository/maven-public/.lastUpdated=1543495841880
+http\://play.fallofanempire.com\:8081/nexus/content/repositories/Releases/.error=

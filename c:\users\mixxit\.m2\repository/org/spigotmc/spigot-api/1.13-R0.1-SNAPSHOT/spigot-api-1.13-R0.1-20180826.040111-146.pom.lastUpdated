@@ -1,0 +1,11 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Nov 29 12:49:14 GMT 2018
+https\://repo.md-5.net/content/repositories/snapshots/.error=
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.lastUpdated=1543495754582
+http\://repo.dmulloy2.net/nexus/repository/public/.error=
+https\://repo.md-5.net/content/repositories/snapshots/.lastUpdated=1543495754279
+http\://repo.dmulloy2.net/nexus/repository/public/.lastUpdated=1543495753895
+https\://repo.md-5.net/content/repositories/releases/.lastUpdated=1543495754051
+https\://repo.md-5.net/content/repositories/releases/.error=
+http\://play.fallofanempire.com\:8081/nexus/content/repositories/Snapshots/.lastUpdated=1543495753703
+http\://play.fallofanempire.com\:8081/nexus/content/repositories/Snapshots/.error=

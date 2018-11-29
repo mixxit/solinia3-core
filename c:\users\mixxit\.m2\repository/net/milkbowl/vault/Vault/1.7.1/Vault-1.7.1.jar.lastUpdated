@@ -1,0 +1,15 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Nov 29 12:50:41 GMT 2018
+http\://maven.elmakers.com/repository/.error=
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.error=
+http\://maven.elmakers.com/repository/.lastUpdated=1543495839133
+http\://play.fallofanempire.com\:8081/nexus/content/repositories/Releases/.lastUpdated=1543495817381
+https\://repo.md-5.net/content/repositories/snapshots/.error=
+http\://repo.dmulloy2.net/nexus/repository/public/.error=
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.lastUpdated=1543495838287
+https\://repo.md-5.net/content/repositories/snapshots/.lastUpdated=1543495837371
+https\://repo.md-5.net/content/repositories/releases/.lastUpdated=1543495836604
+http\://repo.dmulloy2.net/nexus/repository/public/.lastUpdated=1543495835882
+https\://repo.md-5.net/content/repositories/releases/.error=
+https\://repo.parallelblock.com/repository/maven-public/.lastUpdated=1543495841934
+http\://play.fallofanempire.com\:8081/nexus/content/repositories/Releases/.error=

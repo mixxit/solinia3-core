@@ -1,0 +1,40 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
+
+    <groupId>org.spigotmc</groupId>
+    <artifactId>spigot-parent</artifactId>
+    <version>dev-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Spigot-Parent</name>
+    <description>Parent project for all Spigot modules.</description>
+    <url>https://hub.spigotmc.org/stash/projects/SPIGOT/repos/spigot</url>
+
+    <modules>
+        <module>Spigot-Server</module>
+        <module>Spigot-API</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+	
+    <distributionManagement>
+        <repository>
+            <id>dmulloy2-releases</id>
+            <url>http://repo.dmulloy2.net/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>dmulloy2-snapshots</id>
+            <url>http://repo.dmulloy2.net/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
