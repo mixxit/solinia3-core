@@ -24,7 +24,7 @@
 	<repositories>
 			<repository>
 			<id>1_solinia-releases</id>
-			<url>http://play.fallofanempire.com:8081/nexus/content/repositories/Releases/</url>
+			<url>http://play.fallofanempire.com:8081/nexus/content/repositories/releases/</url>
             <snapshots>
             	<enabled>false</enabled>
             </snapshots>
@@ -34,7 +34,7 @@
 		</repository>
 		<repository>
 			<id>2_solinia-snapshots</id>
-			<url>http://play.fallofanempire.com:8081/nexus/content/repositories/Snapshots/</url>
+			<url>http://play.fallofanempire.com:8081/nexus/content/repositories/snapshots/</url>
             <snapshots>
             	<enabled>true</enabled>
             </snapshots>
