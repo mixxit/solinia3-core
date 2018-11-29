@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>solinia3-core</groupId>
+	<groupId>com.solinia</groupId>
 	<artifactId>solinia3-core</artifactId>
 	<version>1.13.2-R0.1-SNAPSHOT</version>
 	<name>solinia3-core</name>
