@@ -2113,8 +2113,45 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		hit.damage_done += (hit.damage_done * defender.getSkillDmgTaken(hit.skill) / 100)
 				+ (defender.getFcDamageAmtIncoming(this, 0, true, hit.skill));
-
+		
+		checkNumHitsRemaining(NumHit.OutgoingHitSuccess);
 		return hit;
+	}
+	
+	private void checkNumHitsRemaining(NumHit type)
+	{
+		checkNumHitsRemaining(NumHit.OutgoingHitSuccess, -1, null);
+	}
+
+	private void checkNumHitsRemaining(NumHit type, int buffSlot, Integer spellId)
+	{
+		try
+		{
+			boolean depleted = false;
+			if (spellId == null)
+			{
+				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
+						.getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells()) {
+					if (spell.getSpell().getNumhits() < 1)
+						continue;
+					
+					if (!Utils.getNumHitsType(spell.getSpell().getNumhitstype()).name().toLowerCase().equals(type.name().toLowerCase()))
+						continue;
+					
+					spell.setNumHits(spell.getNumHits()-1);
+					
+					if (spell.getNumHits() < 1)
+					{
+						spell.tryFadeEffect();
+					}
+					
+					
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	private int tryHeadShot(ISoliniaLivingEntity defender, String skill) {

@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -79,6 +80,7 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
+import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -6861,5 +6863,37 @@ public class Utils {
         }.runTaskLater(plugin, 10);
 		
 		
+	}
+
+	public static NumHit getNumHitsType(Integer numhitstype) {
+		switch(numhitstype)
+		{
+			case 0:
+				return NumHit.None;
+			case 1:
+				return NumHit.IncomingHitAttempts;  // Attempted incoming melee attacks (hit or miss) on YOU.
+			case 2:
+				return NumHit.OutgoingHitAttempts;  // Attempted outgoing melee attacks (hit or miss) on YOUR TARGET.
+			case 3:
+				return NumHit.IncomingSpells;       // Incoming detrimental spells
+			case 4:
+				return NumHit.OutgoingSpells;       // Outgoing detrimental spells
+			case 5:
+				return NumHit.OutgoingHitSuccess;   // Successful outgoing melee attack HIT on YOUR TARGET.
+			case 6:
+				return NumHit.IncomingHitSuccess;   // Successful incoming melee attack HIT on YOU.
+			case 7:
+				return NumHit.MatchingSpells;       // Any casted spell matching/triggering a focus effect.
+			case 8:
+				return NumHit.IncomingDamage;       // Successful incoming spell or melee dmg attack on YOU
+			case 9:
+				return NumHit.ReflectSpell;	 // Incoming Reflected spells.
+			case 10:
+				return NumHit.DefensiveSpellProcs; // Defensive buff procs
+			case 11:
+				return NumHit.OffensiveSpellProcs;  // Offensive buff procs
+			default:
+				return NumHit.None;
+		}
 	}
 }

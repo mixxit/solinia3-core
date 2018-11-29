@@ -118,7 +118,7 @@ public class SoliniaEntitySpells {
 		}
 
 		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer,
-				sourceEntity.getUniqueId(), true, duration);
+				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits());
 		if (duration > 0)
 			activeSpells.put(soliniaSpell.getId(), activeSpell);
 

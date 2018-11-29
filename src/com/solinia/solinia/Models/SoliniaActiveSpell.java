@@ -58,9 +58,10 @@ public class SoliniaActiveSpell {
 	private UUID ownerUuid;
 	private boolean isFirstRun = true;
 	private List<ActiveSpellEffect> activeSpellEffects = new ArrayList<ActiveSpellEffect>();
+	private int numHits = 0;
 
 	public SoliniaActiveSpell(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid,
-			boolean sourceIsPlayer, int ticksLeft) {
+			boolean sourceIsPlayer, int ticksLeft, int numHits) {
 		setOwnerUuid(owneruuid);
 		setOwnerPlayer(isOwnerPlayer);
 		setSourceUuid(sourceuuid);
@@ -68,6 +69,7 @@ public class SoliniaActiveSpell {
 		setSpellId(spellId);
 		setTicksLeft(ticksLeft);
 		setActiveSpellEffects();
+		setNumHits(numHits);
 	}
 
 	private void setActiveSpellEffects() {
@@ -2351,5 +2353,13 @@ public class SoliniaActiveSpell {
 
 	public void setSourcePlayer(boolean isSourcePlayer) {
 		this.isSourcePlayer = isSourcePlayer;
+	}
+
+	public int getNumHits() {
+		return numHits;
+	}
+
+	public void setNumHits(int numHits) {
+		this.numHits = numHits;
 	}
 }
