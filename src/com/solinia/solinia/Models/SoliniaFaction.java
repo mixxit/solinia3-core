@@ -56,7 +56,7 @@ public class SoliniaFaction implements ISoliniaFaction {
 	
 	@Override
 	public void sendFactionSettingsToSender(CommandSender sender) throws CoreStateInitException {
-		sender.sendMessage(ChatColor.RED + "SpawnGroup Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage(ChatColor.RED + "Faction Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);

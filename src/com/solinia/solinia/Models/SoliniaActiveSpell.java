@@ -2376,6 +2376,8 @@ public class SoliniaActiveSpell {
 			if (owner.isDead())
 				return;
 			
+			System.out.println("Attempting fade effect for " + this.getSpellId() + " for owner: " + owner.getCustomName());
+			
 			StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(ownerUuid, spellId, true);
 		} catch (Exception e)
 		{
