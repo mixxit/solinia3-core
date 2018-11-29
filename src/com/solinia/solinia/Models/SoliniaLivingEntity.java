@@ -2136,7 +2136,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void checkNumHitsRemaining(NumHit type)
 	{
-		checkNumHitsRemaining(NumHit.OutgoingHitSuccess, -1, null);
+		checkNumHitsRemaining(type, -1, null);
 	}
 
 	@Override
