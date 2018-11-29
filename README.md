@@ -1,6 +1,9 @@
 # solinia3-core
 Core RPG Plugin
 
+# Libraries required
+Please see Manifest for required files
+
 # Commands
 
 **/createfaction**
