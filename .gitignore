@@ -2,6 +2,7 @@
 *.pydevproject
 .metadata
 .gradle
+'c:\users\mixxit\.m2\repository'
 bin/
 tmp/
 *.tmp

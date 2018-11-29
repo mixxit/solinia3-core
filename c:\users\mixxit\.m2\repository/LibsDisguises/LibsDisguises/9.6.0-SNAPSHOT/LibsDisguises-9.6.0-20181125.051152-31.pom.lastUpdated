@@ -1,9 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Thu Nov 29 12:49:05 GMT 2018
-http\://play.fallofanempire.com\:8081/nexus/content/repositories/Snapshots/.lastUpdated=1543495744256
-https\://repo.md-5.net/content/repositories/snapshots/.lastUpdated=1543495745029
-https\://repo.md-5.net/content/repositories/releases/.error=
-http\://repo.dmulloy2.net/nexus/repository/public/.lastUpdated=1543495744451
-https\://repo.md-5.net/content/repositories/releases/.lastUpdated=1543495744579
-http\://repo.dmulloy2.net/nexus/repository/public/.error=
-http\://play.fallofanempire.com\:8081/nexus/content/repositories/Snapshots/.error=
