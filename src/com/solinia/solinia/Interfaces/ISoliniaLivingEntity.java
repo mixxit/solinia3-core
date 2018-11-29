@@ -18,6 +18,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.FocusEffect;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
@@ -306,4 +307,8 @@ public interface ISoliniaLivingEntity
 	void clearHateList();
 
 	void setAttackTarget(LivingEntity entity);
+
+	void checkNumHitsRemaining(NumHit type);
+
+	void checkNumHitsRemaining(NumHit type, int buffSlot, Integer spellId);
 }

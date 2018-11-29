@@ -1763,6 +1763,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		getBukkitLivingEntity().damage(damage, sourceEntity);
+		
+		checkNumHitsRemaining(NumHit.IncomingHitAttempts);
+		if (!sourceEntity.isDead() && sourceEntity instanceof LivingEntity)
+		{
+			ISoliniaLivingEntity solLivingEntity = null;
+			try
+			{
+				solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sourceEntity);
+				solLivingEntity.checkNumHitsRemaining(NumHit.OutgoingHitAttempts);
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+			
+		}
 	}
 
 	private void triggerDefensiveProcs(ISoliniaLivingEntity defender, int damage, boolean arrowHit) {
@@ -2118,12 +2133,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return hit;
 	}
 	
-	private void checkNumHitsRemaining(NumHit type)
+	@Override
+	public void checkNumHitsRemaining(NumHit type)
 	{
 		checkNumHitsRemaining(NumHit.OutgoingHitSuccess, -1, null);
 	}
 
-	private void checkNumHitsRemaining(NumHit type, int buffSlot, Integer spellId)
+	@Override
+	public  void checkNumHitsRemaining(NumHit type, int buffSlot, Integer spellId)
 	{
 		try
 		{
