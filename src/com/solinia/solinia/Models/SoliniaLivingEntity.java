@@ -1506,6 +1506,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								if (roll < procChance) {
 									boolean itemUseSuccess = procSpell.tryApplyOnEntity(attackerEntity,
 											defender.getBukkitLivingEntity());
+									
+									if (itemUseSuccess)
+									{
+										checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0,procSpell.getId());
+									}
 
 									if (procSpell.getActSpellCost(this) > 0)
 										if (itemUseSuccess) {
@@ -1822,6 +1827,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							DecimalFormat df = new DecimalFormat();
 							df.setMaximumFractionDigits(2);
 
+							defender.checkNumHitsRemaining(NumHit.DefensiveSpellProcs, 0,activeSpell.getSpellId());
+							
 							if (defender instanceof Player) {
 								((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(
 										ChatMessageType.ACTION_BAR,
@@ -2149,6 +2156,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			{
 				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
 						.getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells()) {
+					
+					if (spellId != null && spellId > 0)
+						if (spell.getSpellId() != spellId)
+							continue;
+					
 					if (spell.getSpell().getNumhits() < 1)
 						continue;
 					
@@ -6237,6 +6249,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (damage <= 0)
 				return 0;
+			
+			// We should move all this to commonDamage
+			if (!ismagic)
+			checkNumHitsRemaining(NumHit.IncomingHitSuccess);
 
 			attacker.removeNonCombatSpells();
 			defender.removeNonCombatSpells();
@@ -6252,6 +6268,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 
+			checkNumHitsRemaining(NumHit.IncomingDamage);
+			
 			// MAGIC ENDS HERE
 			if (ismagic) {
 				if (attacker.isPlayer()) {
