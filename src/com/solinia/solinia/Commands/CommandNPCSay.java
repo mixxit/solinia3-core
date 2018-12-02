@@ -64,9 +64,7 @@ public class CommandNPCSay implements CommandExecutor {
 			return false;
 		}
 		
-		String setting = args[1];
-		
-		String message = args[2];
+		String message = args[1];
 		
 		// for 'text' based npc settings like trigger texts etc, get the whole thing as a string
 		if (args.length > 2)
