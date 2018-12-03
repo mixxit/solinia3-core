@@ -338,14 +338,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " " + "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
-		sender.sendMessage("- randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD + getChanceToRespawnOnDeath() + ChatColor.RESET);
-		sender.sendMessage("- nocturnal: " + ChatColor.GOLD + isNocturnal() + ChatColor.RESET);
+		sender.sendMessage("- nocturnal: " + ChatColor.GOLD + isNocturnal() + ChatColor.RESET + " - randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD + getChanceToRespawnOnDeath() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
 		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
 		sender.sendMessage("- pet: " + ChatColor.GOLD + isPet() + ChatColor.RESET + " " + "petcontrollable: " + ChatColor.GOLD + isPetControllable());
-		sender.sendMessage("- guard: " + ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer() + ChatColor.RESET);
-		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET);
+		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET + " - guard: " + ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer() + ChatColor.RESET);
 		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic() + " " + "- boss: " + ChatColor.GOLD + isBoss());
 		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic() + " " + "raidboss: " + ChatColor.GOLD + isRaidboss());
 		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
@@ -370,8 +368,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		}
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "APPEARANCE" + ChatColor.RESET);
-		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET);
-		sender.sendMessage("- usedisguise: " + ChatColor.GOLD + isUsedisguise() + ChatColor.RESET + " " + "disguisetype: " + ChatColor.GOLD + getDisguisetype() + ChatColor.RESET);
+		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET + " - usedisguise: " + ChatColor.GOLD + isUsedisguise() + ChatColor.RESET + " " + "disguisetype: " + ChatColor.GOLD + getDisguisetype() + ChatColor.RESET);
 		sender.sendMessage("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET + " " + "customheaddata: " + ChatColor.GOLD + getCustomheaddata() + ChatColor.RESET);
 		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET + " " + "burning: " + ChatColor.GOLD + isBurning() + ChatColor.RESET + " " + "invisible: " + ChatColor.GOLD + isInvisible() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "EQUIPMENT" + ChatColor.RESET);
