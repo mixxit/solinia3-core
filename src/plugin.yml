@@ -414,6 +414,10 @@ commands:
     description: Grants a title
     usage: /granttitle playername title
     aliases: []
+  playeremote:
+    description: Forces a player to emote a message
+    usage: /playeremote minecraftname message
+    aliases: []
   editnpcevent:
     description: Edits an npc event
     usage: /editnpcevent npcid triggername setting value
