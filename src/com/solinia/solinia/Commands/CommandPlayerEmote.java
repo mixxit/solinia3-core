@@ -32,6 +32,7 @@ public class CommandPlayerEmote implements CommandExecutor {
 		if (args.length < 2)
 			return false;
 		
+		if (!args[0].equals("*"))
 		if (Bukkit.getPlayer(args[0]) == null)
 		{
 			sender.sendMessage("Cannot find player");
@@ -51,8 +52,11 @@ public class CommandPlayerEmote implements CommandExecutor {
 		emote = emote.trim();
 		
 		try {
-			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(args[0]));
-			solplayer.emote(emote, false);
+			if (!args[0].equals("*"))
+				SendEmote(Bukkit.getPlayer(args[0]), emote);
+			else
+				SendEmoteAll(emote);
+
 			sender.sendMessage("Forced player emote");
 				
 			return true;
@@ -62,5 +66,18 @@ public class CommandPlayerEmote implements CommandExecutor {
 			sender.sendMessage(e.getMessage());
 			return true;
 		}
+	}
+
+	private void SendEmoteAll(String emote) {
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			SendEmote(player, emote);
+		}
+		
+	}
+
+	private void SendEmote(Player player, String emote) throws CoreStateInitException {
+		ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+		solplayer.emote(emote, false);
 	}
 }
