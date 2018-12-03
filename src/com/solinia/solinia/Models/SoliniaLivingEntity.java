@@ -1383,24 +1383,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					Bukkit.getScheduler().scheduleSyncDelayedTask(
 							Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 								public void run() {
-									Entity entity = Bukkit.getEntity(attackerUUID);
-									
-									if (entity == null || !(entity instanceof LivingEntity))
-										return;
-									
-									ISoliniaLivingEntity solLivingEntity = null;
 									try
 									{
-										solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-									} catch (CoreStateInitException e)
-									{
+										Entity entity = Bukkit.getEntity(attackerUUID);
 										
+										if (entity == null || !(entity instanceof LivingEntity))
+											return;
+										
+										ISoliniaLivingEntity solLivingEntity = null;
+										try
+										{
+											solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+										} catch (CoreStateInitException e)
+										{
+											
+										}
+										
+										if (solLivingEntity == null)
+											return;
+										
+										solLivingEntity.doDoubleAttack(defenderUUID, final_damagedone);
+									} catch (Exception e)
+									{
+										System.out.println("An error occured during the doDoubleAttack scheduler: " + e.getMessage() + " " + e.getStackTrace());
 									}
-									
-									if (solLivingEntity == null)
-										return;
-									
-									solLivingEntity.doDoubleAttack(defenderUUID, final_damagedone);
 								}
 							});
 				}
@@ -1434,24 +1440,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					Bukkit.getScheduler().scheduleSyncDelayedTask(
 							Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 								public void run() {
-									Entity entity = Bukkit.getEntity(attackerUUID);
-									
-									if (entity == null || !(entity instanceof LivingEntity))
-										return;
-									
-									ISoliniaLivingEntity solLivingEntity = null;
 									try
 									{
-										solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-									} catch (CoreStateInitException e)
-									{
+										Entity entity = Bukkit.getEntity(attackerUUID);
 										
+										if (entity == null || !(entity instanceof LivingEntity))
+											return;
+										
+										ISoliniaLivingEntity solLivingEntity = null;
+										try
+										{
+											solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+										} catch (CoreStateInitException e)
+										{
+											
+										}
+										
+										if (solLivingEntity == null)
+											return;
+										
+										solLivingEntity.doDualWield(defenderUUID, final_damagedone,final_offhandItemId);
+									} catch (Exception e)
+									{
+										System.out.println("An error occured during the doDualWield scheduler: " + e.getMessage() + " " + e.getStackTrace());
 									}
-									
-									if (solLivingEntity == null)
-										return;
-									
-									solLivingEntity.doDualWield(defenderUUID, final_damagedone,final_offhandItemId);
 								}
 							});
 					
@@ -1562,6 +1574,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(
 				Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 					public void run() {
+						try
+						{
 						Entity entity = Bukkit.getEntity(attackerUUID);
 						
 						if (entity == null || !(entity instanceof LivingEntity))
@@ -1580,6 +1594,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							return;
 						
 						solLivingEntity.doProcItem(finalitemid, attackerUUID, defenderUUID);
+						} catch (Exception e)
+						{
+							System.out.println("An error occured during the doProcItem scheduler: " + e.getMessage() + " " + e.getStackTrace());
+						}
 					}
 				});
 	}
@@ -1867,24 +1885,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(
 						Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 							public void run() {
-								Entity entity = Bukkit.getEntity(attackerUUID);
-								
-								if (entity == null || !(entity instanceof LivingEntity))
-									return;
-								
-								ISoliniaLivingEntity solLivingEntity = null;
 								try
 								{
-									solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-								} catch (CoreStateInitException e)
-								{
+									Entity entity = Bukkit.getEntity(attackerUUID);
 									
+									if (entity == null || !(entity instanceof LivingEntity))
+										return;
+									
+									ISoliniaLivingEntity solLivingEntity = null;
+									try
+									{
+										solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+									} catch (CoreStateInitException e)
+									{
+										
+									}
+									
+									if (solLivingEntity == null)
+										return;
+									
+									solLivingEntity.doRiposte(defenderUUID, finaloriginaldamage);
+								} catch (Exception e)
+								{
+									System.out.println("An error occured during the doRiposte scheduler: " + e.getMessage() + " " + e.getStackTrace());
 								}
-								
-								if (solLivingEntity == null)
-									return;
-								
-								solLivingEntity.doRiposte(defenderUUID, finaloriginaldamage);
 							}
 						});
 				
