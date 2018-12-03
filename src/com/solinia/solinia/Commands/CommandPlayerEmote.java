@@ -68,7 +68,7 @@ public class CommandPlayerEmote implements CommandExecutor {
 		}
 	}
 
-	private void SendEmoteAll(String emote) {
+	private void SendEmoteAll(String emote) throws CoreStateInitException {
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
 			SendEmote(player, emote);
