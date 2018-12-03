@@ -908,38 +908,33 @@ public class SoliniaItem implements ISoliniaItem {
 	public void sendItemSettingsToSender(CommandSender sender) throws CoreStateInitException {
 		sender.sendMessage(ChatColor.RED + "Item Settings for " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET);
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET + " - minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
-		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
-		sender.sendMessage("- minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
-		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
-		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET);		
-		sender.sendMessage("- consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
+		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
+		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET + " - throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
+		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
 		sender.sendMessage("- petcontrolrod: " + ChatColor.GOLD + isPetControlRod() + ChatColor.RESET + " crafting: " + ChatColor.GOLD + isCrafting() + ChatColor.RESET + " quest: " + ChatColor.GOLD + isQuest() + ChatColor.RESET);
 		sender.sendMessage("- bandage: " + ChatColor.GOLD + isBandage() + ChatColor.RESET + " languageprimer: " + ChatColor.GOLD + getLanguagePrimer() + ChatColor.RESET);
 		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
-		sender.sendMessage("- artifact: " + ChatColor.GOLD + isArtifact() + ChatColor.RESET + " Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
+		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET + " - artifact: " + ChatColor.GOLD + isArtifact() + ChatColor.RESET + " Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
+		sender.sendMessage("----------------------------");
 		sender.sendMessage("- acceptsaugmentationslottype: " + ChatColor.GOLD + getAcceptsAugmentationSlotType() + ChatColor.RESET);
 		sender.sendMessage("- augmentationfitsslottype: " + ChatColor.GOLD + this.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
-		sender.sendMessage("----------------------------");
-		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
-		sender.sendMessage("- weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
-		sender.sendMessage("----------------------------");
-		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + ChatColor.RESET);
-		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET);
-		sender.sendMessage("- stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET);
-		sender.sendMessage("- agility: " + ChatColor.GOLD + getAgility() + ChatColor.RESET);
-		sender.sendMessage("- dexterity: " + ChatColor.GOLD + getDexterity() + ChatColor.RESET);
-		sender.sendMessage("- intelligence: " + ChatColor.GOLD + getIntelligence() + ChatColor.RESET);
-		sender.sendMessage("- wisdom: " + ChatColor.GOLD + getWisdom() + ChatColor.RESET);
-		sender.sendMessage("- charisma: " + ChatColor.GOLD + getCharisma() + ChatColor.RESET);
-		sender.sendMessage("----------------------------");
-		sender.sendMessage("- MR: " + ChatColor.GOLD + getMagicResist() + ChatColor.RESET + " CR: " + ChatColor.GOLD + getColdResist() + ChatColor.RESET + " FR: " + ChatColor.GOLD + getFireResist() + ChatColor.RESET + " DR: " + ChatColor.GOLD + getDiseaseResist() + ChatColor.RESET + " PR: " + ChatColor.GOLD + getPoisonResist() + ChatColor.RESET);
-		sender.sendMessage("----------------------------");
 		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpregen() + ChatColor.RESET + " mpregen: " + ChatColor.GOLD + getMpregen() + ChatColor.RESET);
+		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
+		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
+		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET + " - weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
+		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + ChatColor.RESET);
+		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET +
+		" - stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET + 
+		" - agility: " + ChatColor.GOLD + getAgility() + ChatColor.RESET + 
+		" - dexterity: " + ChatColor.GOLD + getDexterity() + ChatColor.RESET);
+		sender.sendMessage("- intelligence: " + ChatColor.GOLD + getIntelligence() + ChatColor.RESET +
+		" - wisdom: " + ChatColor.GOLD + getWisdom() + ChatColor.RESET + 
+		" - charisma: " + ChatColor.GOLD + getCharisma() + ChatColor.RESET);
+		sender.sendMessage("- MR: " + ChatColor.GOLD + getMagicResist() + ChatColor.RESET + " CR: " + ChatColor.GOLD + getColdResist() + ChatColor.RESET + " FR: " + ChatColor.GOLD + getFireResist() + ChatColor.RESET + " DR: " + ChatColor.GOLD + getDiseaseResist() + ChatColor.RESET + " PR: " + ChatColor.GOLD + getPoisonResist() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- skillmodtype: " + ChatColor.GOLD + getSkillModType().toString() + ChatColor.RESET + " skillmodvalue: " + ChatColor.GOLD + getSkillModValue() + ChatColor.RESET);
 		sender.sendMessage("- skillmodtype2: " + ChatColor.GOLD + getSkillModType2().toString() + ChatColor.RESET + " skillmodvalue2: " + ChatColor.GOLD + getSkillModValue2() + ChatColor.RESET);
@@ -951,16 +946,14 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- forearmsitem: " + ChatColor.GOLD + isForearmsItem() + ChatColor.RESET + " armsitem: " + ChatColor.GOLD + isArmsItem() + ChatColor.RESET);
 		sender.sendMessage("- handsitem: " + ChatColor.GOLD + isHandsItem() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET);
-		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
-		sender.sendMessage("- throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
 		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
 		sender.sendMessage("- bookauthor: " + ChatColor.GOLD + getBookAuthor() + ChatColor.RESET);
-		sender.sendMessage("- allowedclassnames: ");
+		String allowedClassNames = "";
 		for(String classname : this.getAllowedClassNames())
 		{
-			sender.sendMessage(" - " + ChatColor.GOLD + classname + ChatColor.RESET);
+			allowedClassNames += classname + ",";
 		}
+		sender.sendMessage("- allowedclassnames: " + allowedClassNames.trim());
 
 	}
 
