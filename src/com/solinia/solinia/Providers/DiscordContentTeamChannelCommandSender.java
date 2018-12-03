@@ -5,6 +5,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -13,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Managers.StateManager;
 
-public class DiscordContentTeamChannelCommandSender implements CommandSender {
+public class DiscordContentTeamChannelCommandSender implements RemoteConsoleCommandSender {
 	private final PermissibleBase perm;
 	
 	public DiscordContentTeamChannelCommandSender()
