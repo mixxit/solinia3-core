@@ -78,10 +78,16 @@ public class CommandCharacter implements CommandExecutor {
 						tc2.setText(ChatColor.RED + "Already changed this session" + ChatColor.RESET);
 					} else {
 						tc2.setText(ChatColor.AQUA + "[Click to Switch]" + ChatColor.RESET);
-						tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));						
+						tc2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, changetext));						
 					}
 					
 					tc.addExtra(tc2);
+					
+					TextComponent tc3 = new TextComponent();
+					String transfertext = "/transfercharacter " + character.getCharacterId().toString() + " playername";
+					tc3.setText(ChatColor.LIGHT_PURPLE + " [Transfer]" + ChatColor.RESET);
+					tc3.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, transfertext));
+					tc.addExtra(tc3);
 					
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 							new ComponentBuilder(details).create()));
