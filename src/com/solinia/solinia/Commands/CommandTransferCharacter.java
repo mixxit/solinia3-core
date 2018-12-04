@@ -57,7 +57,7 @@ public class CommandTransferCharacter implements CommandExecutor {
         	}
         	
         	solPlayerToSell.setUUID(targetPlayer.getUniqueId());
-        	targetPlayer.sendMessage("* You have sent character to " + targetPlayer.getCustomName());
+        	player.sendMessage("* You have sent character to " + targetPlayer.getCustomName());
         	targetPlayer.sendMessage("* You have received a new character from " + player.getCustomName());
         } catch (Exception e)
         {
