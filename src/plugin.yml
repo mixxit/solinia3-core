@@ -11,6 +11,10 @@ commands:
     description: Commits Solinia3Core State Data
     usage: /commit
     aliases: []
+  transfercharacter:
+    description: Transfers a character to another player
+    usage: /transfercharacter <characteruuid> <playername>
+    aliases: []
   forename:
     description: Sets player forename
     usage: /forename <forename>

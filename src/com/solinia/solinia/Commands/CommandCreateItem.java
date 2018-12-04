@@ -72,7 +72,7 @@ public class CommandCreateItem implements CommandExecutor {
         	sender.sendMessage("Use /edititem ID to further edit this item");
         } catch (Exception e)
         {
-        	sender.sendMessage(e.getMessage());
+        	sender.sendMessage(e.getMessage() + " " + e.getStackTrace());
         }
 
 		return true;
