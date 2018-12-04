@@ -50,6 +50,12 @@ public class CommandTransferCharacter implements CommandExecutor {
 			}
 			
         	ISoliniaPlayer solPlayerToSell = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+        	if (!(solPlayerToSell.getUUID().equals(player.getUniqueId())))
+        	{
+        		player.sendMessage("This is not your character to transfer");
+        		return true;
+        	}
+        	
         	solPlayerToSell.setUUID(targetPlayer.getUniqueId());
         	targetPlayer.sendMessage("* You have sent character to " + targetPlayer.getCustomName());
         	targetPlayer.sendMessage("* You have received a new character from " + player.getCustomName());

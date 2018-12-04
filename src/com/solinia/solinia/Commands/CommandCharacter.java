@@ -129,6 +129,13 @@ public class CommandCharacter implements CommandExecutor {
 						
 						UUID characterUUID = UUID.fromString(args[1]);
 						
+						ISoliniaPlayer targetCharacter = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+			        	if (!(targetCharacter.getUUID().equals(player.getUniqueId())))
+			        	{
+			        		player.sendMessage("This is not your character to load");
+			        		return true;
+			        	}
+
 						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(plugin, player,characterUUID);
 						if (loadedPlayer != null)
 						{
