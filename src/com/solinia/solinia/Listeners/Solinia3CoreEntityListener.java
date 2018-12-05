@@ -21,6 +21,7 @@ import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -221,60 +222,61 @@ public class Solinia3CoreEntityListener implements Listener {
 	}
 
 	@EventHandler
-	public void onEntitySpawn(EntitySpawnEvent event) {
-		if (event.getEntity() instanceof LivingEntity) {
-			if (Utils.isLivingEntityNPC((LivingEntity)event.getEntity()))
+	public void onCreatureSpawn(CreatureSpawnEvent event) {
+		if (!(event.getEntity() instanceof LivingEntity))
+			return;
+		
+		if (Utils.isLivingEntityNPC((LivingEntity)event.getEntity()))
+		{
+			try
 			{
-				try
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+				if (solEntity.doCheckForDespawn())
 				{
-					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-					if (solEntity.doCheckForDespawn())
-					{
-						Utils.CancelEvent(event);
-						return;
-					}
-					
-					if (!solEntity.isPet())
-					{					
-						LivingEntity le = (LivingEntity)event.getEntity();
-						String location = le.getLocation().getWorld().getName() + "," + le.getLocation().getX() + "," + le.getLocation().getY() + "," + le.getLocation().getZ();
-						le.setMetadata("spawnpoint", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("Solinia3Core"),location));
-						
-						
-						// Debugging
-						if (solEntity.getBukkitLivingEntity().hasMetadata("mobname"))
-						{
-							String metadata = "";
-							for (MetadataValue val : solEntity.getBukkitLivingEntity().getMetadata("mobname")) {
-								metadata = val.asString();
-							}
-							
-							if (metadata.equals("NPCID_339"))
-								System.out.println("Detected spawn event for: " + metadata);
-							
-						}
-					}
-
-					
-				} catch (CoreStateInitException e)
-				{
-					
+					Utils.CancelEvent(event);
+					return;
 				}
+				
+				if (!solEntity.isPet())
+				{					
+					LivingEntity le = (LivingEntity)event.getEntity();
+					String location = le.getLocation().getWorld().getName() + "," + le.getLocation().getX() + "," + le.getLocation().getY() + "," + le.getLocation().getZ();
+					le.setMetadata("spawnpoint", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("Solinia3Core"),location));
+					
+					
+					// Debugging
+					if (solEntity.getBukkitLivingEntity().hasMetadata("mobname"))
+					{
+						String metadata = "";
+						for (MetadataValue val : solEntity.getBukkitLivingEntity().getMetadata("mobname")) {
+							metadata = val.asString();
+						}
+						
+						if (metadata.equals("NPCID_339"))
+							System.out.println("Detected spawn event for: " + metadata);
+						
+					}
+				}
+
+				
+			} catch (CoreStateInitException e)
+			{
+				
 			}
-			
-			// if this is a skeleton entity, remove the chase task frmo the mobs AI
-			org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity cle = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity)event.getEntity());
-			if (cle == null)
-				return;
-			
-			if (cle.getHandle() == null)
-				return;
-			
-			if (cle.getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE) == null)
-				return;
-			
-			cle.getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE).setValue(Utils.MAX_ENTITY_AGGRORANGE);
 		}
+		
+		// if this is a skeleton entity, remove the chase task frmo the mobs AI
+		org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity cle = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity)event.getEntity());
+		if (cle == null)
+			return;
+		
+		if (cle.getHandle() == null)
+			return;
+		
+		if (cle.getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE) == null)
+			return;
+		
+		cle.getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE).setValue(Utils.MAX_ENTITY_AGGRORANGE);
 	}
 
 	@EventHandler
