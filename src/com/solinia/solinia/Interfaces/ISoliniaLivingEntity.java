@@ -302,7 +302,7 @@ public interface ISoliniaLivingEntity
 
 	public void StopSinging();
 
-	void checkHateTargets();
+	boolean checkHateTargets();
 
 	void clearHateList();
 

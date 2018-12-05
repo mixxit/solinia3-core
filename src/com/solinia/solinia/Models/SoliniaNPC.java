@@ -3,6 +3,9 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -879,7 +882,20 @@ public class SoliniaNPC implements ISoliniaNPC {
 					}
 				}
 				return;
-				
+			case "HATELIST":
+				triggerentity.sendMessage("HateList:");
+				if (triggerentity instanceof Player && ((Player) triggerentity).isOp()) {
+					for(UUID uuid : solentity.getHateList().keySet())
+					{
+						int hate = solentity.getHateList().get(uuid);
+						String name = "";
+						org.bukkit.entity.Entity entity = Bukkit.getEntity(uuid);
+						if (entity != null)
+							name = entity.getName();
+						System.out.println("UUID: " + uuid + "(" + name + ") Value: " + hate);
+					}
+				}
+				return;
 			default:
 				break;
 			}

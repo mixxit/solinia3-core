@@ -4898,19 +4898,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
-	public void checkHateTargets() {
+	public boolean checkHateTargets() {
 		if (this.getBukkitLivingEntity().isDead())
-			return;
+			return false;
 		
 		if (!(this.getBukkitLivingEntity() instanceof Creature))
-			return;
+			return false;
 		
 		if (this.getAttackTarget() != null)
 		if (this.getHateList().keySet().size() == 0)
 		{
 			setAttackTarget(null);
 			resetPosition();
-			return;
+			return false;
 		}
 		
 		List<UUID> removeUuids = new ArrayList<UUID>();
@@ -4961,8 +4961,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			LivingEntity entity = (LivingEntity)Bukkit.getEntity(bestUUID);
 			setAttackTarget(entity);
-			return;
+			return true;
 		}
+		
+		return false;
 	}
 
 	@Override
@@ -5712,7 +5714,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		// Go for hate list first
-		checkHateTargets();
+		if (checkHateTargets() == true)
+			return;
 		
 		try {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
@@ -5795,6 +5798,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.resetPosition();
 	}
 
 	@Override
@@ -6552,6 +6557,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			this.getBukkitLivingEntity().remove();
 			return;
 		}
+		
+		if (this.getBukkitLivingEntity().getLocation().distance(getSpawnPoint()) < 2)
+			return;
 		
 		this.getBukkitLivingEntity().teleport(getSpawnPoint());
 	}
