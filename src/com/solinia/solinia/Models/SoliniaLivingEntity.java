@@ -4905,6 +4905,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!(this.getBukkitLivingEntity() instanceof Creature))
 			return;
 		
+		if (this.getAttackTarget() != null)
 		if (this.getHateList().keySet().size() == 0)
 		{
 			setAttackTarget(null);
@@ -5650,6 +5651,23 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			effectmod = effectmodcap;
 
 		return effectmod;
+	}
+	
+	@Override
+	public LivingEntity getAttackTarget()
+	{
+		if (this.getBukkitLivingEntity() == null)
+			return null;
+		
+		if (this.getBukkitLivingEntity().isDead())
+			return null;
+		
+		if (this.getBukkitLivingEntity() instanceof Creature)
+		{
+			((Creature) this.getBukkitLivingEntity()).getTarget();
+		}
+		
+		return null;
 	}
 	
 	@Override
