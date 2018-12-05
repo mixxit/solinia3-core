@@ -4909,7 +4909,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getHateList().keySet().size() == 0)
 		{
 			setAttackTarget(null);
-			resetPosition();
+			resetPosition(true);
 			return false;
 		}
 		
@@ -5799,7 +5799,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 		
-		this.resetPosition();
+		this.resetPosition(true);
 	}
 
 	@Override
@@ -6544,7 +6544,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void resetPosition() {
+	public void resetPosition(boolean resetHealth) {
+		if (this.getBukkitLivingEntity().isDead())
+			return;
+
 		if (!isNPC())
 			return;
 		
@@ -6557,10 +6560,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			this.getBukkitLivingEntity().remove();
 			return;
 		}
+
+		if (resetHealth == true)
+			if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+				this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 		
 		if (this.getBukkitLivingEntity().getLocation().distance(getSpawnPoint()) < 2)
 			return;
-		
+			
 		this.getBukkitLivingEntity().teleport(getSpawnPoint());
 	}
 
