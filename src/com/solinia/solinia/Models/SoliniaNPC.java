@@ -836,8 +836,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 				}
 				return;
 			case "METADATA":
+				triggerentity.sendMessage("MetaData:");
 				if (triggerentity instanceof Player && ((Player) triggerentity).isOp()) {
-					if (triggerentity.hasMetadata("mobname"))
+					if (solentity.getBukkitLivingEntity().hasMetadata("mobname"))
 					{
 						String metadata = "";
 						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("mobname")) {
@@ -847,7 +848,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 						triggerentity.sendMessage("mobname: " + metadata);
 					}
 					
-					if (triggerentity.hasMetadata("spawnpoint"))
+					if (solentity.getBukkitLivingEntity().hasMetadata("spawnpoint"))
 					{
 						String metadata = "";
 						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("spawnpoint")) {
@@ -857,7 +858,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 						triggerentity.sendMessage("spawnpoint: " + metadata);
 					}
 					
-					if (triggerentity.hasMetadata("mythicmob"))
+					if (solentity.getBukkitLivingEntity().hasMetadata("mythicmob"))
 					{
 						String metadata = "";
 						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("mythicmob")) {
@@ -867,7 +868,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 						triggerentity.sendMessage("mythicmob: " + metadata);
 					}
 					
-					if (triggerentity.hasMetadata("Faction"))
+					if (solentity.getBukkitLivingEntity().hasMetadata("Faction"))
 					{
 						String metadata = "";
 						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("Faction")) {
