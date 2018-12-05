@@ -6,10 +6,12 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -83,7 +85,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean teleportAttack = false;
 	private String teleportAttackLocation = "";
 	private boolean nocturnal = false;
-	
+
 	@Override
 	public int getId() {
 		return id;
@@ -313,12 +315,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setClassid(int classid) {
 		this.classid = classid;
 	}
-	
+
 	@Override
-	public void sendMerchantItemListToPlayer(Player player, int pageno) 
-	{
+	public void sendMerchantItemListToPlayer(Player player, int pageno) {
 		try {
-			Inventory merchantInventory = StateManager.getInstance().getEntityManager().getNPCMerchantInventory(player.getUniqueId(),this, pageno);
+			Inventory merchantInventory = StateManager.getInstance().getEntityManager()
+					.getNPCMerchantInventory(player.getUniqueId(), this, pageno);
 			if (merchantInventory != null)
 				player.openInventory(merchantInventory);
 		} catch (CoreStateInitException e) {
@@ -331,26 +333,39 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void sendNpcSettingsToSender(CommandSender sender) throws CoreStateInitException {
 		sender.sendMessage(ChatColor.RED + "NPC Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " " + "name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
-		sender.sendMessage("- raceid: " + ChatColor.GOLD + getRaceid() + ChatColor.RESET + " " + "classid: " + ChatColor.GOLD + getClassid() + ChatColor.RESET);
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " " + "name: " + ChatColor.GOLD
+				+ getName() + ChatColor.RESET);
+		sender.sendMessage("- raceid: " + ChatColor.GOLD + getRaceid() + ChatColor.RESET + " " + "classid: "
+				+ ChatColor.GOLD + getClassid() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "STATS" + ChatColor.RESET);
-		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET + " " + "ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + " " + "forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
-		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " " + "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
+		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET + " " + "ac: " + ChatColor.GOLD
+				+ getAC() + ChatColor.RESET + " " + "forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
+		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " "
+				+ "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
-		sender.sendMessage("- nocturnal: " + ChatColor.GOLD + isNocturnal() + ChatColor.RESET + " - randomspawn: " + ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD + getChanceToRespawnOnDeath() + ChatColor.RESET);
+		sender.sendMessage("- nocturnal: " + ChatColor.GOLD + isNocturnal() + ChatColor.RESET + " - randomspawn: "
+				+ ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD
+				+ getChanceToRespawnOnDeath() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
-		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
-		sender.sendMessage("- pet: " + ChatColor.GOLD + isPet() + ChatColor.RESET + " " + "petcontrollable: " + ChatColor.GOLD + isPetControllable());
-		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET + " - guard: " + ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer() + ChatColor.RESET);
+		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: "
+				+ ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal()
+				+ ChatColor.RESET);
+		sender.sendMessage("- pet: " + ChatColor.GOLD + isPet() + ChatColor.RESET + " " + "petcontrollable: "
+				+ ChatColor.GOLD + isPetControllable());
+		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET + " - guard: "
+				+ ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer()
+				+ ChatColor.RESET);
 		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic() + " " + "- boss: " + ChatColor.GOLD + isBoss());
-		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic() + " " + "raidboss: " + ChatColor.GOLD + isRaidboss());
+		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic() + " " + "raidboss: " + ChatColor.GOLD
+				+ isRaidboss());
 		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
 		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
 		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
-		sender.sendMessage("- teleportattack: " + ChatColor.GOLD + isTeleportAttack() + " " + ChatColor.GOLD + " teleportattacklocation: " + getTeleportAttackLocation() + ChatColor.RESET);
+		sender.sendMessage("- teleportattack: " + ChatColor.GOLD + isTeleportAttack() + " " + ChatColor.GOLD
+				+ " teleportattacklocation: " + getTeleportAttackLocation() + ChatColor.RESET);
 		if (getFactionid() != 0) {
 			sender.sendMessage("- factionid: " + ChatColor.GOLD + getFactionid() + " ("
 					+ StateManager.getInstance().getConfigurationManager().getFaction(getFactionid()).getName() + ")"
@@ -368,9 +383,14 @@ public class SoliniaNPC implements ISoliniaNPC {
 		}
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "APPEARANCE" + ChatColor.RESET);
-		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET + " - usedisguise: " + ChatColor.GOLD + isUsedisguise() + ChatColor.RESET + " " + "disguisetype: " + ChatColor.GOLD + getDisguisetype() + ChatColor.RESET);
-		sender.sendMessage("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET + " " + "customheaddata: " + ChatColor.GOLD + getCustomheaddata() + ChatColor.RESET);
-		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET + " " + "burning: " + ChatColor.GOLD + isBurning() + ChatColor.RESET + " " + "invisible: " + ChatColor.GOLD + isInvisible() + ChatColor.RESET);
+		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET + " - usedisguise: "
+				+ ChatColor.GOLD + isUsedisguise() + ChatColor.RESET + " " + "disguisetype: " + ChatColor.GOLD
+				+ getDisguisetype() + ChatColor.RESET);
+		sender.sendMessage("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET + " "
+				+ "customheaddata: " + ChatColor.GOLD + getCustomheaddata() + ChatColor.RESET);
+		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET + " " + "burning: "
+				+ ChatColor.GOLD + isBurning() + ChatColor.RESET + " " + "invisible: " + ChatColor.GOLD + isInvisible()
+				+ ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "EQUIPMENT" + ChatColor.RESET);
 		if (getLoottableid() != 0) {
 			sender.sendMessage("- loottableid: " + ChatColor.GOLD + getLoottableid() + " ("
@@ -380,17 +400,21 @@ public class SoliniaNPC implements ISoliniaNPC {
 			sender.sendMessage(
 					"- loottableid: " + ChatColor.GOLD + getLoottableid() + " (No Loot Table)" + ChatColor.RESET);
 		}
-		sender.sendMessage("- handitem: " + ChatColor.GOLD + getHanditem() + ChatColor.RESET + " " + "offhanditem: " + ChatColor.GOLD + getOffhanditem() + ChatColor.RESET);
-		sender.sendMessage("- headitem: " + ChatColor.GOLD + getHeaditem() + ChatColor.RESET + " " + "chestitem: " + ChatColor.GOLD + getChestitem() + ChatColor.RESET);
-		sender.sendMessage("- legsitem: " + ChatColor.GOLD + getLegsitem() + ChatColor.RESET + " " + "feetitem: " + ChatColor.GOLD + getFeetitem() + ChatColor.RESET);
+		sender.sendMessage("- handitem: " + ChatColor.GOLD + getHanditem() + ChatColor.RESET + " " + "offhanditem: "
+				+ ChatColor.GOLD + getOffhanditem() + ChatColor.RESET);
+		sender.sendMessage("- headitem: " + ChatColor.GOLD + getHeaditem() + ChatColor.RESET + " " + "chestitem: "
+				+ ChatColor.GOLD + getChestitem() + ChatColor.RESET);
+		sender.sendMessage("- legsitem: " + ChatColor.GOLD + getLegsitem() + ChatColor.RESET + " " + "feetitem: "
+				+ ChatColor.GOLD + getFeetitem() + ChatColor.RESET);
 		sender.sendMessage(ChatColor.RED + "MISC" + ChatColor.RESET);
 
-		if (getNpcSpellList() > 0)
-		{
-			NPCSpellList npcSpellList = StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcSpellList());
+		if (getNpcSpellList() > 0) {
+			NPCSpellList npcSpellList = StateManager.getInstance().getConfigurationManager()
+					.getNPCSpellList(getNpcSpellList());
 			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + npcSpellList.getName());
 		} else {
-			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcSpellList() + " (Defaults to class spell list)");
+			sender.sendMessage(
+					"- npcspelllist: " + ChatColor.GOLD + getNpcSpellList() + " (Defaults to class spell list)");
 		}
 		sender.sendMessage("----------------------------");
 		if (getLoottableid() != 0) {
@@ -403,9 +427,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 					.getLootTable(loottable.getId()).getEntries()) {
 				ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager()
 						.getLootDrop(le.getLootdropid());
-				sender.sendMessage(
-						"- LOOTDROP: " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "[" + ld.getId() + "]:");
-				}
+				sender.sendMessage("- LOOTDROP: " + ChatColor.GOLD + ld.getName().toUpperCase() + ChatColor.RESET + "["
+						+ ld.getId() + "]:");
+			}
 		}
 
 	}
@@ -433,19 +457,17 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setTeleportAttack(Boolean.parseBoolean(value));
 			break;
 		case "teleportattacklocation":
-			try
-			{
+			try {
 				String[] zonedata = value.split(",");
 				// Dissasemble the value to ensure it is correct
 				String world = zonedata[0];
 				double x = Double.parseDouble(zonedata[1]);
 				double y = Double.parseDouble(zonedata[2]);
 				double z = Double.parseDouble(zonedata[3]);
-				
-				setTeleportAttackLocation(world+","+x+","+y+","+z);
+
+				setTeleportAttackLocation(world + "," + x + "," + y + "," + z);
 				break;
-			} catch (Exception e)
-			{
+			} catch (Exception e) {
 				throw new InvalidNpcSettingException("Teleport attack location value must be in format: world,x,y,z");
 			}
 		case "level":
@@ -542,7 +564,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 				setMerchantid(Integer.parseInt(value));
 				break;
 			}
-			
+
 			if (StateManager.getInstance().getConfigurationManager().getNPCMerchant(Integer.parseInt(value)) == null)
 				throw new InvalidNpcSettingException("MerchantID does not exist");
 			setMerchantid(Integer.parseInt(value));
@@ -554,17 +576,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setNpcSpellList(Integer.parseInt(value));
 			break;
 		case "loottableid":
-			if (Integer.parseInt(value) == 0)
-			{
+			if (Integer.parseInt(value) == 0) {
 				setLoottableid(0);
 				break;
 			}
-			
+
 			ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager()
-			.getLootTable(Integer.parseInt(value));
+					.getLootTable(Integer.parseInt(value));
 			if (loottable == null)
 				throw new InvalidNpcSettingException("Loottable ID does not exist");
-			
+
 			setLoottableid(Integer.parseInt(value));
 			break;
 		case "raceid":
@@ -632,17 +653,16 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void disableAllSpawners(boolean parseBoolean) {
 		try {
-			for(ISoliniaSpawnGroup group : StateManager.getInstance().getConfigurationManager().getSpawnGroups())
-			{
-				if (group.getNpcid() == this.getId())
-				{
-					System.out.println("Set Spawner Disabled Status: " + group.getId() + ":" + group.getName() + " - " + parseBoolean);
+			for (ISoliniaSpawnGroup group : StateManager.getInstance().getConfigurationManager().getSpawnGroups()) {
+				if (group.getNpcid() == this.getId()) {
+					System.out.println("Set Spawner Disabled Status: " + group.getId() + ":" + group.getName() + " - "
+							+ parseBoolean);
 					group.setDisabled(parseBoolean);
 					StateManager.getInstance().getEntityManager().getNPCEntityProvider().removeSpawnGroup(group);
 				}
 			}
 		} catch (CoreStateInitException e) {
-			
+
 		}
 	}
 
@@ -695,22 +715,19 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setRoamer(boolean isRoamer) {
 		this.isRoamer = isRoamer;
 	}
-	
+
 	@Override
-	public ISoliniaClass getClassObj()
-	{
+	public ISoliniaClass getClassObj() {
 		if (getClassid() < 1)
 			return null;
-		
-		try
-		{
+
+		try {
 			return StateManager.getInstance().getConfigurationManager().getClassObj(getClassid());
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public boolean isPet() {
 		return isPet;
@@ -722,160 +739,175 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public void processInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, InteractionType type, String data) {
-		switch(type)
-		{
-			case CHAT:
-				processChatInteractionEvent(solentity, triggerentity, data);
-			default:
-				return;
+	public void processInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, InteractionType type,
+			String data) {
+		switch (type) {
+		case CHAT:
+			processChatInteractionEvent(solentity, triggerentity, data);
+		default:
+			return;
 		}
 	}
-	
+
 	@Override
-	public void processChatInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, String data)
-	{
+	public void processChatInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, String data) {
 		String words[] = data.split(" ");
-		
+
 		// Merchant special commands
-		if (words.length > 0)
-		{
+		if (words.length > 0) {
 			// Check player has sufficient faction
 			if (triggerentity instanceof Player)
-			if (solentity.getNpcid() > 0)
-			{
-				try
-				{
-					ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
-					if (npc.getFactionid() > 0)
-					{
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)triggerentity);
-						PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
-						if (factionEntry != null)
-						{
-							switch (Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValueWithEffectsOnEntity(solentity.getBukkitLivingEntity(), solPlayer.getBukkitPlayer())))
-							{
+				if (solentity.getNpcid() > 0) {
+					try {
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+								.getNPC(solentity.getNpcid());
+						if (npc.getFactionid() > 0) {
+							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) triggerentity);
+							PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
+							if (factionEntry != null) {
+								switch (Utils.getFactionStandingType(factionEntry.getFactionId(),
+										factionEntry.getValueWithEffectsOnEntity(solentity.getBukkitLivingEntity(),
+												solPlayer.getBukkitPlayer()))) {
 								case FACTION_THREATENLY:
 								case FACTION_SCOWLS:
-									solentity.emote(npc.getName() + " scowls angrily at " + solPlayer.getFullName(), false);
+									solentity.emote(npc.getName() + " scowls angrily at " + solPlayer.getFullName(),
+											false);
 									return;
 								default:
 									break;
+								}
 							}
 						}
+					} catch (CoreStateInitException e) {
+
 					}
-				} catch (CoreStateInitException e)
-				{
-					
 				}
-			}
-			
-			switch(words[0].toUpperCase())
-			{
-				case "SHOP":
-					if (triggerentity instanceof Player)
-					if (getMerchantid() > 0)
-					{
-						if (words.length == 1)
-						{
-							sendMerchantItemListToPlayer((Player)triggerentity, 1);
+
+			switch (words[0].toUpperCase()) {
+			case "SHOP":
+				if (triggerentity instanceof Player)
+					if (getMerchantid() > 0) {
+						if (words.length == 1) {
+							sendMerchantItemListToPlayer((Player) triggerentity, 1);
 							return;
 						}
-						
+
 						int page = 1;
-						try
-						{
+						try {
 							page = Integer.parseInt(words[1]);
-						} catch (Exception e)
-						{
-							
+						} catch (Exception e) {
+
 						}
-						
+
 						if (page < 1)
 							page = 1;
+
+						sendMerchantItemListToPlayer((Player) triggerentity, page);
+					}
+				return;
+			/*
+			 * case "SHOWSTATUS": if (triggerentity instanceof Player) { if
+			 * (((Player)triggerentity).isOp()) { Player player = (Player)triggerentity;
+			 * 
+			 * if (Utils.isSoliniaMob(solentity.getBukkitLivingEntity())) {
+			 * player.sendMessage("UUID:" +
+			 * solentity.getBukkitLivingEntity().getUniqueId());
+			 * 
+			 * MythicEntitySoliniaMob mob =
+			 * Utils.GetSoliniaMob(solentity.getBukkitLivingEntity()); if (mob != null) {
+			 * player.sendMessage("MeleeAttackPercent: " + mob.getMeleeAttackPercent()); } }
+			 * } } return;
+			 */
+			case "LISTEFFECTS":
+				if (triggerentity instanceof Player && ((Player) triggerentity).isOp()) {
+					Player player = (Player) triggerentity;
+					try {
+						for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
+								.getActiveEntitySpells(solentity.getBukkitLivingEntity()).getActiveSpells()) {
+							player.sendMessage(spell.getSpell().getName());
+							for (ActiveSpellEffect effect : spell.getActiveSpellEffects()) {
+								player.sendMessage(
+										" - " + effect.getSpellEffectType().name() + " " + effect.getRemainingValue());
+							}
+						}
+					} catch (CoreStateInitException e) {
+						//
+					}
+				}
+				return;
+			case "METADATA":
+				if (triggerentity instanceof Player && ((Player) triggerentity).isOp()) {
+					if (triggerentity.hasMetadata("mobname"))
+					{
+						String metadata = "";
+						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("mobname")) {
+							metadata = val.asString();
+						}
 						
-						sendMerchantItemListToPlayer((Player)triggerentity, page);
+						triggerentity.sendMessage("mobname: " + metadata);
 					}
-					return;
-					/*
-				case "SHOWSTATUS":
-					if (triggerentity instanceof Player)
+					
+					if (triggerentity.hasMetadata("spawnpoint"))
 					{
-						if (((Player)triggerentity).isOp())
-						{
-							Player player = (Player)triggerentity;
-							
-							if (Utils.isSoliniaMob(solentity.getBukkitLivingEntity()))
-							{
-								player.sendMessage("UUID:" + solentity.getBukkitLivingEntity().getUniqueId());
-								
-								MythicEntitySoliniaMob mob = Utils.GetSoliniaMob(solentity.getBukkitLivingEntity());
-								if (mob != null)
-								{
-									player.sendMessage("MeleeAttackPercent: " + mob.getMeleeAttackPercent());
-								}
-							}
+						String metadata = "";
+						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("spawnpoint")) {
+							metadata = val.asString();
 						}
+						
+						triggerentity.sendMessage("spawnpoint: " + metadata);
 					}
-					return;*/
-				case "LISTEFFECTS":
-					if (triggerentity instanceof Player)
+					
+					if (triggerentity.hasMetadata("mythicmob"))
 					{
-						if (((Player)triggerentity).isOp())
-						{
-							Player player = (Player)triggerentity;
-							try
-							{
-								for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(solentity.getBukkitLivingEntity()).getActiveSpells())
-								{
-									player.sendMessage(spell.getSpell().getName());
-									for (ActiveSpellEffect effect : spell.getActiveSpellEffects())
-									{
-										player.sendMessage(" - " + effect.getSpellEffectType().name() + " " + effect.getRemainingValue());
-									}
-								}
-							} catch (CoreStateInitException e)
-							{
-								// 
-							}
+						String metadata = "";
+						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("mythicmob")) {
+							metadata = val.asString();
 						}
+						
+						triggerentity.sendMessage("mythicmob: " + metadata);
 					}
-					return;
-				default:
-					break;
+					
+					if (triggerentity.hasMetadata("Faction"))
+					{
+						String metadata = "";
+						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("Faction")) {
+							metadata = val.asString();
+						}
+						
+						triggerentity.sendMessage("Faction: " + metadata);
+					}
+				}
+				return;
+				
+			default:
+				break;
 			}
 		}
-		
+
 		// Normal text matching
-		for(ISoliniaNPCEventHandler handler : getEventHandlers())
-		{
+		for (ISoliniaNPCEventHandler handler : getEventHandlers()) {
 			if (!handler.getInteractiontype().equals(InteractionType.CHAT))
 				continue;
-			
+
 			if (!data.toUpperCase().contains(handler.getTriggerdata().toUpperCase()))
 				continue;
-			
-			if (handler.getChatresponse() != null && !handler.getChatresponse().equals(""))
-			{
-				if ((triggerentity instanceof Player))
-				{
-					if (!handler.playerMeetsRequirements((Player)triggerentity))
-					{
-						((Player)triggerentity).sendMessage(ChatColor.GRAY + "[Hint] You do not meet the requirements to for a response. Either you are missing a quest step, have already completed this step");
+
+			if (handler.getChatresponse() != null && !handler.getChatresponse().equals("")) {
+				if ((triggerentity instanceof Player)) {
+					if (!handler.playerMeetsRequirements((Player) triggerentity)) {
+						((Player) triggerentity).sendMessage(ChatColor.GRAY
+								+ "[Hint] You do not meet the requirements to for a response. Either you are missing a quest step, have already completed this step");
 						return;
 					}
 				}
-				
+
 				// stop players spamming hail to learn a language
 				String response = handler.getChatresponse();
-				if (words.length > 0)
-				{
-					if (words[0].toLowerCase().equals("hail"))
-					{
-						if ((triggerentity instanceof Player))
-						{
+				if (words.length > 0) {
+					if (words[0].toLowerCase().equals("hail")) {
+						if ((triggerentity instanceof Player)) {
 							if (handler.getResponseType().equals("SAY"))
-								solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), true);
+								solentity.sayto((Player) triggerentity, replaceChatWordsWithHints(response), true);
 							if (handler.getResponseType().equals("EMOTE"))
 								solentity.emote(replaceChatWordsWithHints(response), false);
 						} else {
@@ -885,10 +917,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 								solentity.emote(replaceChatWordsWithHints(response), false);
 						}
 					} else {
-						if ((triggerentity instanceof Player))
-						{
+						if ((triggerentity instanceof Player)) {
 							if (handler.getResponseType().equals("SAY"))
-								solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response), true);
+								solentity.sayto((Player) triggerentity, replaceChatWordsWithHints(response), true);
 							if (handler.getResponseType().equals("EMOTE"))
 								solentity.emote(replaceChatWordsWithHints(response), false);
 						} else {
@@ -896,10 +927,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 						}
 					}
 				} else {
-					if ((triggerentity instanceof Player))
-					{
+					if ((triggerentity instanceof Player)) {
 						if (handler.getResponseType().equals("SAY"))
-							solentity.sayto((Player)triggerentity, replaceChatWordsWithHints(response),true);
+							solentity.sayto((Player) triggerentity, replaceChatWordsWithHints(response), true);
 						if (handler.getResponseType().equals("EMOTE"))
 							solentity.emote(replaceChatWordsWithHints(response), false);
 					} else {
@@ -907,87 +937,79 @@ public class SoliniaNPC implements ISoliniaNPC {
 							solentity.say(replaceChatWordsWithHints(response), triggerentity, true);
 						if (handler.getResponseType().equals("EMOTE"))
 							solentity.emote(replaceChatWordsWithHints(response), false);
-						}
+					}
 				}
-				
+
 				if (triggerentity instanceof Player)
-					handler.awardPlayer((Player)triggerentity);
-				
-				if (handler.getNpcId() > 0 && handler.getInteractiontype().equals(InteractionType.ITEM))
-				{
+					handler.awardPlayer((Player) triggerentity);
+
+				if (handler.getNpcId() > 0 && handler.getInteractiontype().equals(InteractionType.ITEM)) {
 					try {
-						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(handler.getNpcId());
-						if (npc != null)
-						{
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+								.getNPC(handler.getNpcId());
+						if (npc != null) {
 							// Spawn Npc
 							npc.Spawn(triggerentity.getLocation(), 1);
 						}
-						
+
 					} catch (CoreStateInitException e) {
 					}
 				}
-				
-				if (handler.getTeleportResponse() != null && !handler.getTeleportResponse().equals(""))
-				{
-					if (triggerentity instanceof Player)
-					{
+
+				if (handler.getTeleportResponse() != null && !handler.getTeleportResponse().equals("")) {
+					if (triggerentity instanceof Player) {
 						String[] zonedata = handler.getTeleportResponse().split(",");
 						// Dissasemble the value to ensure it is correct
 						String world = zonedata[0];
 						double x = Double.parseDouble(zonedata[1]);
 						double y = Double.parseDouble(zonedata[2]);
 						double z = Double.parseDouble(zonedata[3]);
-						Location loc = new Location(Bukkit.getWorld(world),x,y,z);
-						((Player)triggerentity).teleport(loc);
+						Location loc = new Location(Bukkit.getWorld(world), x, y, z);
+						((Player) triggerentity).teleport(loc);
 					}
-					
+
 				}
-				
-				if (handler.isAwardsBind() == true)
-				{
-					if (triggerentity instanceof Player)
-					{
+
+				if (handler.isAwardsBind() == true) {
+					if (triggerentity instanceof Player) {
 						Player player = (Player) triggerentity;
 						try {
 							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-							solPlayer.setBindPoint(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + ","
-									+ player.getLocation().getY() + "," + player.getLocation().getZ());
+							solPlayer.setBindPoint(
+									player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + ","
+											+ player.getLocation().getY() + "," + player.getLocation().getZ());
 							player.sendMessage("You feel yourself bind to the area");
 						} catch (CoreStateInitException e) {
 							// skip
 						}
 					}
-					
+
 				}
 			}
 		}
 		return;
 	}
-	
+
 	@Override
-	public String replaceChatWordsWithHints(String message)
-	{
+	public String replaceChatWordsWithHints(String message) {
 		List<String> messages = Arrays.asList(message.toUpperCase().split(" "));
-		
-		if (getEventHandlers().size() > 0)
-		{
+
+		if (getEventHandlers().size() > 0) {
 			String searchlist = "";
-			for(String messageword : messages)
-			{
+			for (String messageword : messages) {
 				searchlist += messageword + ",";
 			}
 		}
-		
-		for(ISoliniaNPCEventHandler handler : getEventHandlers())
-		{
+
+		for (ISoliniaNPCEventHandler handler : getEventHandlers()) {
 			if (!handler.getInteractiontype().equals(InteractionType.CHAT))
 				continue;
 
 			if (!messages.contains(handler.getTriggerdata().toUpperCase()))
 				continue;
 
-
-			message = message.toLowerCase().replace(handler.getTriggerdata().toLowerCase(), "["+handler.getTriggerdata().toLowerCase()+"]");
+			message = message.toLowerCase().replace(handler.getTriggerdata().toLowerCase(),
+					"[" + handler.getTriggerdata().toLowerCase() + "]");
 		}
 		message = message.replace("[", "[" + ChatColor.LIGHT_PURPLE);
 		message = message.replace("]", ChatColor.AQUA + "]");
@@ -998,15 +1020,14 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public List<ISoliniaNPCEventHandler> getEventHandlers() {
 		return eventHandlers;
 	}
-	
+
 	@Override
 	public List<String> getEventHandlerTriggerDatas() {
 		List<String> eventHandlerTriggerDatas = new ArrayList<String>();
-		for(ISoliniaNPCEventHandler handler : getEventHandlers())
-		{
+		for (ISoliniaNPCEventHandler handler : getEventHandlers()) {
 			eventHandlerTriggerDatas.add(handler.getTriggerdata());
 		}
-		
+
 		return eventHandlerTriggerDatas;
 	}
 
@@ -1019,20 +1040,20 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void addEventHandler(SoliniaNPCEventHandler eventhandler, boolean operatorCreated) {
 		eventhandler.setOperatorCreated(operatorCreated);
 		this.getEventHandlers().add(eventhandler);
-		
+
 	}
 
 	@Override
 	public boolean canDodge() {
 		if (getClassObj() == null)
 			return false;
-		
+
 		if (getClassObj().canDodge() == false)
 			return false;
-		
+
 		if (getClassObj().getDodgelevel() > getLevel())
 			return false;
-		
+
 		return true;
 	}
 
@@ -1046,7 +1067,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 		if (getClassObj().getRipostelevel() > getLevel())
 			return false;
-		
+
 		return true;
 	}
 
@@ -1057,56 +1078,52 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 		if (getClassObj().canDoubleAttack() == false)
 			return false;
-		
+
 		if (getClassObj().getDoubleattacklevel() > getLevel())
 			return false;
 
 		return true;
 	}
-	
-	@Override 
-	public boolean getDodgeCheck()
-	{
+
+	@Override
+	public boolean getDodgeCheck() {
 		if (canDodge() == false)
 			return false;
-		
+
 		int chance = getLevel();
 		chance += 100;
 		chance /= 45;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
-	
-	@Override 
-	public boolean getRiposteCheck()
-	{
+
+	@Override
+	public boolean getRiposteCheck() {
 		if (canRiposte() == false)
 			return false;
-		
+
 		int chance = getLevel();
 		chance += 100;
 		chance /= 50;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
-	
-	@Override 
-	public boolean getDoubleAttackCheck()
-	{
+
+	@Override
+	public boolean getDoubleAttackCheck() {
 		if (canDoubleAttack() == false)
 			return false;
-		
+
 		int chance = getLevel();
 		chance += getLevel();
-		if (getLevel() > 35)
-		{
+		if (getLevel() > 35) {
 			chance += getLevel();
 		}
 		chance /= 5;
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
-	
+
 	@Override
 	public boolean canDualWield() {
 		if (getClassObj() == null)
@@ -1120,26 +1137,24 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 		return true;
 	}
-	
+
 	@Override
-	public boolean getDualWieldCheck(ISoliniaLivingEntity solLivingEntity)
-	{
+	public boolean getDualWieldCheck(ISoliniaLivingEntity solLivingEntity) {
 		if (canDualWield() == false)
 			return false;
-		
+
 		int chance = getLevel();
 
-		if (solLivingEntity != null)
-		{
+		if (solLivingEntity != null) {
 			int spellAmbidexterity = solLivingEntity.getSpellBonuses(SpellEffectType.Ambidexterity);
 			int spellDualWieldChance = solLivingEntity.getSpellBonuses(SpellEffectType.DualWieldChance);
-			
+
 			chance += spellAmbidexterity;
 			int per_inc = spellDualWieldChance;
 			if (per_inc > 0)
 				chance += chance * per_inc / 100;
 		}
-		
+
 		return Utils.RandomBetween(1, 375) <= chance;
 	}
 
@@ -1152,7 +1167,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setUndead(boolean isUndead) {
 		this.isUndead = isUndead;
 	}
-	
+
 	@Override
 	public boolean isAnimal() {
 		return isAnimal;
@@ -1175,31 +1190,29 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 	@Override
 	public void sendNPCEvent(CommandSender sender, String triggertext) {
-		for (ISoliniaNPCEventHandler eventHandler : eventHandlers)
-		{
+		for (ISoliniaNPCEventHandler eventHandler : eventHandlers) {
 			if (!eventHandler.getTriggerdata().toUpperCase().equals(triggertext.toUpperCase()))
 				continue;
-			
+
 			eventHandler.sendNPCEvent(sender);
 		}
 	}
 
 	@Override
 	public void sendNPCEvents(CommandSender sender) {
-		for(ISoliniaNPCEventHandler eventHandler : eventHandlers)
-		{
+		for (ISoliniaNPCEventHandler eventHandler : eventHandlers) {
 			eventHandler.sendNPCEvent(sender);
 		}
 	}
 
 	@Override
-	public void editTriggerEventSetting(String triggertext, String setting, String value) throws InvalidNPCEventSettingException {
-		for(ISoliniaNPCEventHandler eventHandler : eventHandlers)
-		{
+	public void editTriggerEventSetting(String triggertext, String setting, String value)
+			throws InvalidNPCEventSettingException {
+		for (ISoliniaNPCEventHandler eventHandler : eventHandlers) {
 			if (!eventHandler.getTriggerdata().toUpperCase().equals(triggertext.toUpperCase()))
 				continue;
-			
-			eventHandler.editTriggerEventSetting(setting,value);
+
+			eventHandler.editTriggerEventSetting(setting, value);
 		}
 	}
 
@@ -1212,7 +1225,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setSummoner(boolean isSummoner) {
 		this.isSummoner = isSummoner;
 	}
-	
+
 	@Override
 	public int getSkillCap(String skillName) {
 		return Utils.getSkillCap(skillName, getClassObj(), getLevel(), "");
@@ -1220,12 +1233,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 	@Override
 	public int getSkill(String skillName) {
-		
+
 		int skillLevel = getLevel() * 5;
-		
+
 		if (skillLevel > getSkillCap(skillName))
 			skillLevel = getSkillCap(skillName);
-			
+
 		return skillLevel;
 	}
 
@@ -1298,7 +1311,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setOperatorCreated(boolean operatorCreated) {
 		// TODO Auto-generated method stub
-		this.operatorCreated  = operatorCreated;
+		this.operatorCreated = operatorCreated;
 	}
 
 	@Override
@@ -1315,7 +1328,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity, boolean excludeMainHand) {
 		List<ISoliniaItem> items = new ArrayList<ISoliniaItem>();
-		
+
 		try {
 			List<ItemStack> itemStacks = new ArrayList<ItemStack>() {
 				/**
@@ -1324,9 +1337,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 				private static final long serialVersionUID = 233580886660639519L;
 
 				{
-					if (excludeMainHand == false)
-					{
-						
+					if (excludeMainHand == false) {
+
 						add(livingEntity.getEquipment().getItemInMainHand());
 					}
 					add(livingEntity.getEquipment().getItemInOffHand());
@@ -1341,10 +1353,10 @@ public class SoliniaNPC implements ISoliniaNPC {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					if (item == null)
 						continue;
-					
+
 					if (item.isSpellscroll())
 						continue;
-					
+
 					items.add(item);
 
 					Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(itemstack);
@@ -1356,7 +1368,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 				}
 			}
 		} catch (CoreStateInitException e) {
-			
+
 		}
 
 		return items;
@@ -1385,9 +1397,10 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void Spawn(Location location, int amount) {
 		try {
-			StateManager.getInstance().getEntityManager().getNPCEntityProvider().spawnNPC(this, amount, location.getWorld().getName(), (int)location.getX(), (int)location.getY(), (int)location.getZ());
+			StateManager.getInstance().getEntityManager().getNPCEntityProvider().spawnNPC(this, amount,
+					location.getWorld().getName(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
 		} catch (CoreStateInitException e) {
-			
+
 		}
 	}
 
@@ -1400,7 +1413,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setNpcSpellList(int npcSpellList) {
 		this.npcSpellList = npcSpellList;
 	}
-	
+
 	@Override
 	public boolean isPlant() {
 		return isPlant;
@@ -1451,5 +1464,3 @@ public class SoliniaNPC implements ISoliniaNPC {
 		this.nocturnal = nocturnal;
 	}
 }
-
-	

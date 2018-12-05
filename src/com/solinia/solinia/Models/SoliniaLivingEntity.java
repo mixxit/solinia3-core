@@ -79,9 +79,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		String metaid = "";
 		if (livingentity != null)
+		{
+			
 			for (MetadataValue val : livingentity.getMetadata("mobname")) {
 				metaid = val.asString();
 			}
+		}
 
 		for (MetadataValue val : livingentity.getMetadata("npcid")) {
 			metaid = val.asString();
@@ -4905,6 +4908,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getHateList().keySet().size() == 0)
 		{
 			setAttackTarget(null);
+			resetPosition();
 			return;
 		}
 		
@@ -4956,6 +4960,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			LivingEntity entity = (LivingEntity)Bukkit.getEntity(bestUUID);
 			setAttackTarget(entity);
+			return;
 		}
 	}
 
@@ -6513,5 +6518,48 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			
 		}
+	}
+
+	@Override
+	public void resetPosition() {
+		if (!isNPC())
+			return;
+		
+		if (isPet())
+			return;
+		
+		if (!hasSpawnPoint())
+		{
+			// Why would this have no spawn point? Despawn
+			this.getBukkitLivingEntity().remove();
+			return;
+		}
+		
+		this.getBukkitLivingEntity().teleport(getSpawnPoint());
+	}
+
+	private Location getSpawnPoint() {
+		if(!hasSpawnPoint())
+			return null;
+		
+		String metadata = "";
+		for (MetadataValue val : livingentity.getMetadata("spawnpoint")) {
+			metadata = val.asString();
+		}
+		
+		if (metadata.equals(""))
+			return null;
+		
+		String[] loc = metadata.split(",");
+		if (loc.length == 0)
+			return null;
+		
+		Location location = new Location(Bukkit.getWorld(loc[0]), Double.parseDouble(loc[1]),
+		Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
+		return location;
+	}
+
+	private boolean hasSpawnPoint() {
+		return getBukkitLivingEntity().hasMetadata("spawnpoint");
 	}
 }

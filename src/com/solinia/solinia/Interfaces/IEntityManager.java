@@ -165,4 +165,6 @@ public interface IEntityManager {
 	ConcurrentHashMap<UUID, Integer> getHateList(UUID entity);
 
 	void clearHateList(UUID uuid);
+
+	List<UUID> getActiveHateListUUIDs();
 }

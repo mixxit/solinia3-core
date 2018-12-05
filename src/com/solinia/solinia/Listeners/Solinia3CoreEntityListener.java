@@ -31,6 +31,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.projectiles.ProjectileSource;
 
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -231,6 +232,17 @@ public class Solinia3CoreEntityListener implements Listener {
 						Utils.CancelEvent(event);
 						return;
 					}
+					
+					if (!solEntity.isPet())
+					{					
+						LivingEntity le = (LivingEntity)event.getEntity();
+						le.setMetadata(
+								"spawnpoint", 
+								new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("Solinia3Core"),le.getLocation().getWorld().getName() + "," + le.getLocation().getX() + "," + le.getLocation().getY() + "," + le.getLocation().getZ())
+								);
+					}
+
+					
 				} catch (CoreStateInitException e)
 				{
 					

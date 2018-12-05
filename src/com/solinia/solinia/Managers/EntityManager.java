@@ -3,6 +3,8 @@ package com.solinia.solinia.Managers;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -412,6 +414,8 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void doNPCCheckForEnemies() {
 		List<UUID> completedLivingEntities = new ArrayList<UUID>();
+		List<UUID> entitiesNearPlayers = new ArrayList<UUID>();
+		
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
 			for(Entity entity : player.getNearbyEntities(50, 50, 50))
@@ -431,6 +435,9 @@ public class EntityManager implements IEntityManager {
 				if (!Utils.isLivingEntityNPC(le))
 					continue;
 				
+				if (!entitiesNearPlayers.contains(le.getUniqueId()))
+					entitiesNearPlayers.add(le.getUniqueId());
+				
 				try {
 					ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
 					if (completedLivingEntities.contains(le.getUniqueId()))
@@ -445,6 +452,9 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 		}
+		
+		// Clear and reset all entities that are not near players
+		Utils.ClearHateAndResetNpcsNotInList(entitiesNearPlayers);
 	}
 	
 	@Override
@@ -1502,6 +1512,12 @@ public class EntityManager implements IEntityManager {
 			hateList.put(entity, new ConcurrentHashMap<UUID, Integer>());
 		
 		return hateList.get(entity);
+	}
+
+	@Override
+	public List<UUID> getActiveHateListUUIDs()
+	{
+		return Collections.list(hateList.keys());
 	}
 	
 	@Override

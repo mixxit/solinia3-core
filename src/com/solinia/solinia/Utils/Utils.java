@@ -51,6 +51,7 @@ import com.google.gson.JsonParser;
 import com.rit.sucy.player.TargetHelper;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
@@ -6894,6 +6895,43 @@ public class Utils {
 				return NumHit.OffensiveSpellProcs;  // Offensive buff procs
 			default:
 				return NumHit.None;
+		}
+	}
+
+	public static void ClearHateAndResetNpcsNotInList(List<UUID> entitiesNearPlayers) {
+		try
+		{
+			List<UUID> activeHateLists = StateManager.getInstance().getEntityManager().getActiveHateListUUIDs();
+			for(UUID uuid : activeHateLists)
+			{
+				try
+				{
+					if (entitiesNearPlayers.contains(uuid))
+						continue;
+					
+					Entity entity = Bukkit.getEntity(uuid);
+					if (entity == null)
+					{
+						StateManager.getInstance().getEntityManager().clearHateList(uuid);
+						continue;
+					}
+					
+					if (!(entity instanceof LivingEntity))
+					{
+						continue;
+					}
+					
+					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+					solEntity.clearHateList();
+					solEntity.resetPosition();
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 }

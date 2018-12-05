@@ -311,4 +311,6 @@ public interface ISoliniaLivingEntity
 	void checkNumHitsRemaining(NumHit type);
 
 	void checkNumHitsRemaining(NumHit type, int buffSlot, Integer spellId);
+
+	public void resetPosition();
 }
