@@ -32,6 +32,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.projectiles.ProjectileSource;
 
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -236,10 +237,22 @@ public class Solinia3CoreEntityListener implements Listener {
 					if (!solEntity.isPet())
 					{					
 						LivingEntity le = (LivingEntity)event.getEntity();
-						le.setMetadata(
-								"spawnpoint", 
-								new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("Solinia3Core"),le.getLocation().getWorld().getName() + "," + le.getLocation().getX() + "," + le.getLocation().getY() + "," + le.getLocation().getZ())
-								);
+						String location = le.getLocation().getWorld().getName() + "," + le.getLocation().getX() + "," + le.getLocation().getY() + "," + le.getLocation().getZ();
+						le.setMetadata("spawnpoint", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("Solinia3Core"),location));
+						
+						
+						// Debugging
+						if (solEntity.getBukkitLivingEntity().hasMetadata("mobname"))
+						{
+							String metadata = "";
+							for (MetadataValue val : solEntity.getBukkitLivingEntity().getMetadata("mobname")) {
+								metadata = val.asString();
+							}
+							
+							if (metadata.equals("NPCID_339"))
+								System.out.println("Detected spawn event for: " + metadata);
+							
+						}
 					}
 
 					
