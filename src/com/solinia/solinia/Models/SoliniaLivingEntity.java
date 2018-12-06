@@ -6565,7 +6565,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
 				this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 		
-		if (this.getBukkitLivingEntity().getLocation().distance(getSpawnPoint()) < 2)
+		if (this.getBukkitLivingEntity().getLocation().distance(getSpawnPoint()) < 5)
 			return;
 			
 		this.getBukkitLivingEntity().teleport(getSpawnPoint());
