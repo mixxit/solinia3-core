@@ -537,10 +537,14 @@ public class Solinia3CoreEntityListener implements Listener {
 		damage = damage * (getLavaDamageEffectiveness((Player)le) / 100);
 		if (damage > 0)
 		{
-			event.setDamage(damage);
+			if (damage > Integer.MAX_VALUE)
+				damage = Integer.MAX_VALUE;
+			
+			int finalDamage = (int)Math.round(damage);
+			event.setDamage(finalDamage);
+			le.sendMessage(ChatColor.GRAY + "* You have been hit for " + finalDamage + " points of LAVA damage!");
 		}
 		
-		le.sendMessage(ChatColor.GRAY + "* You have been hit for " + damage + " points of LAVA damage!");
 	}
 
 	private void onEntityDrowningDamageEvent(EntityDamageEvent event) {
@@ -550,15 +554,25 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) == null)
 			return;
 
-		// 10% damage per hit
-		event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10);
+		// 128 dmg per hit
+		int drowningdamage = 128;
+		event.setDamage(drowningdamage);
+		le.sendMessage(ChatColor.GRAY + "* You have been hit for " + drowningdamage + " points of DROWNING damage!");
 	}
 
 	private void onEntityFallDamageEvent(EntityDamageEvent event) {
 		if ((event.getEntity() instanceof Player)) {
 			LivingEntity le = (LivingEntity) event.getEntity();
+			int finalDamage = 0;
 			if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null)
-				event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10);
+			{
+				double damage = (le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * (event.getDamage() * 10);
+				if (damage > Integer.MAX_VALUE)
+					damage = Integer.MAX_VALUE;
+				
+				finalDamage = (int)Math.round(damage);
+				event.setDamage(finalDamage);
+			}
 
 			Player player = (Player) event.getEntity();
 			ISoliniaPlayer solplayer;
@@ -580,6 +594,8 @@ public class Solinia3CoreEntityListener implements Listener {
 			} catch (CoreStateInitException e) {
 				return;
 			}
+			
+			le.sendMessage(ChatColor.GRAY + "* You have been hit for " + finalDamage + " points of FALL damage!");
 		}
 	}
 
