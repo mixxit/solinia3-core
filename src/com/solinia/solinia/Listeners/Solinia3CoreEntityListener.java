@@ -481,57 +481,63 @@ public class Solinia3CoreEntityListener implements Listener {
 	}
 
 	private float getLavaDamageEffectiveness(Player victim) {
-		// TODO Auto-generated method stub
-		int environmentallevel = 40;
-		int victimlevel = SoliniaPlayerAdapter.Adapt((Player) victim).getLevel();
-		int targetresist = SoliniaPlayerAdapter.Adapt((Player) victim).getResist(SpellResistType.RESIST_FIRE);
-
-		int resist_chance = 0;
-		int level_mod = 0;
-		int temp_level_diff = victimlevel - environmentallevel;
-
-		if (victimlevel >= 21 && temp_level_diff > 15) {
-			temp_level_diff = 15;
-		}
-
-		level_mod = temp_level_diff * temp_level_diff / 2;
-		if (temp_level_diff < 0) {
-			level_mod = -level_mod;
-		}
-
-		resist_chance += level_mod;
-		resist_chance += targetresist;
-
-		if (resist_chance > 255) {
-			resist_chance = 255;
-		}
-
-		if (resist_chance < 0) {
-			resist_chance = 0;
-		}
-
-		int roll = Utils.RandomBetween(0, 200);
-
-		if (roll > resist_chance) {
-			return 100;
-		} else {
-			if (resist_chance < 1) {
-				resist_chance = 1;
+		try
+		{
+			// TODO Auto-generated method stub
+			int environmentallevel = 40;
+			int victimlevel = SoliniaPlayerAdapter.Adapt((Player) victim).getLevel();
+			int targetresist = SoliniaPlayerAdapter.Adapt((Player) victim).getResist(SpellResistType.RESIST_FIRE);
+	
+			int resist_chance = 0;
+			int level_mod = 0;
+			int temp_level_diff = victimlevel - environmentallevel;
+	
+			if (victimlevel >= 21 && temp_level_diff > 15) {
+				temp_level_diff = 15;
 			}
-
-			int partial_modifier = ((150 * (resist_chance - roll)) / resist_chance);
-
-			if ((victimlevel - environmentallevel) >= 20) {
-				partial_modifier += (victimlevel - environmentallevel) * 1.5;
+	
+			level_mod = temp_level_diff * temp_level_diff / 2;
+			if (temp_level_diff < 0) {
+				level_mod = -level_mod;
 			}
-
-			if (partial_modifier <= 0) {
-				return 100F;
-			} else if (partial_modifier >= 100) {
-				return 0;
+	
+			resist_chance += level_mod;
+			resist_chance += targetresist;
+	
+			if (resist_chance > 255) {
+				resist_chance = 255;
 			}
-
-			return (100.0f - partial_modifier);
+	
+			if (resist_chance < 0) {
+				resist_chance = 0;
+			}
+	
+			int roll = Utils.RandomBetween(0, 200);
+	
+			if (roll > resist_chance) {
+				return 100;
+			} else {
+				if (resist_chance < 1) {
+					resist_chance = 1;
+				}
+	
+				int partial_modifier = ((150 * (resist_chance - roll)) / resist_chance);
+	
+				if ((victimlevel - environmentallevel) >= 20) {
+					partial_modifier += (victimlevel - environmentallevel) * 1.5;
+				}
+	
+				if (partial_modifier <= 0) {
+					return 100F;
+				} else if (partial_modifier >= 100) {
+					return 0;
+				}
+	
+				return (100.0f - partial_modifier);
+			}
+		} catch (CoreStateInitException e)
+		{
+			return 100f;
 		}
 	}
 
@@ -544,9 +550,10 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 
 		// 20% damage per hit
-		double damage = le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 20;
+		double damage = (le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 20;
 		damage = damage * (getLavaDamageEffectiveness((Player)le) / 100);
-		event.setDamage(damage);
+		if (damage > 0)
+			event.setDamage(damage);
 	}
 
 	private void onEntityDrowningDamageEvent(EntityDamageEvent event) {
