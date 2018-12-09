@@ -106,7 +106,9 @@ commands:
   who:
     description: Lists online player details
     usage: /who
-    aliases: []
+    aliases:
+    - online
+    - list
   editchunk:
     description: Edits a chunk
     usage: /editchunk

@@ -630,6 +630,9 @@ public class ChannelManager implements IChannelManager {
 		{
 			for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
 		    {
+	        	if (currentplayer.hasPermission("essentials.silentjoin"))
+	        		continue;
+	        	
         		ISoliniaPlayer solplayer;
 				try {
 					solplayer = SoliniaPlayerAdapter.Adapt(currentplayer);

@@ -32,6 +32,9 @@ public class CommandWho implements CommandExecutor {
 	        
 	        for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
 		    {
+	        	if (currentplayer.hasPermission("essentials.silentjoin"))
+	        		continue;
+	        	
 	        	if (!player.canSee(currentplayer))
 	        		continue;
 	        	

@@ -101,6 +101,11 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (group != null) {
 			StateManager.getInstance().removePlayerFromGroup(event.getPlayer());
 		}
+		
+		if (!event.getPlayer().hasPermission("essentials.silentquit"))
+		StateManager.getInstance().getChannelManager().sendToDiscordMC(null,
+				StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),
+				event.getPlayer().getName() + " has quit the game");
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -1242,6 +1247,11 @@ public class Solinia3CorePlayerListener implements Listener {
 			{
 				// not vital if this fails
 			}
+			
+			if (!event.getPlayer().hasPermission("essentials.silentjoin"))
+			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,
+					StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),
+					event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game (" + players.trim() + ")");
 
 			try
 		    {
