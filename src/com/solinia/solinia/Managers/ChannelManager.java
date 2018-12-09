@@ -458,7 +458,7 @@ public class ChannelManager implements IChannelManager {
 			case "?donation":
 					sendDonationToDiscordChannel(discordChannel);
 				break;
-			case "?vote":
+			case "?votes":
 				sendVotesToDiscordChannel(discordChannel);
 			break;
 			case "?skillcheck":

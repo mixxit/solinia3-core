@@ -166,7 +166,7 @@ public class CommandInspiration implements CommandExecutor {
 								if (sender instanceof Player)
 								{
 									ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sender);
-									cost = 35;
+									cost = 6;
 									if (player.getInspiration() >= cost)
 									{
 										
