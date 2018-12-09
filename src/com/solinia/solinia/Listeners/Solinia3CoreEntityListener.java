@@ -566,7 +566,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			int finalDamage = 0;
 			if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null)
 			{
-				double damage = (le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * (event.getDamage() * 10);
+				double damage = (le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * (event.getDamage() * 3);
 				if (damage > Integer.MAX_VALUE)
 					damage = Integer.MAX_VALUE;
 				
