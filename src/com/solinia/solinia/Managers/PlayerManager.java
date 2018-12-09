@@ -141,6 +141,19 @@ public class PlayerManager implements IPlayerManager {
 		return new ArrayList<ISoliniaPlayer>();
 		
 	}
+	
+	@Override
+	public List<ISoliniaPlayer> getTopVotingPlayers() {
+		List<ISoliniaPlayer> playerList = getPlayers();
+		
+		Collections.sort(playerList,(o1, o2) -> o1.getMonthlyVote().compareTo(o2.getMonthlyVote()));
+		Collections.reverse(playerList);
+		int to = 5;
+		if (playerList.size() < 5)
+			to = playerList.size();
+		
+		return playerList.subList(0, to);
+	}
 
 	@Override
 	public List<ISoliniaPlayer> getTopLevelPlayers(String classname) {

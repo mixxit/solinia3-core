@@ -36,4 +36,5 @@ public interface IPlayerManager {
 	IRepository<ISoliniaPlayer> getPlayersRepository();
 	public void grantPlayerAttendenceBonus();
 	public void resetPersonality(Player player) throws CoreStateInitException;
+	public List<ISoliniaPlayer> getTopVotingPlayers();
 }

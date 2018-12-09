@@ -458,6 +458,9 @@ public class ChannelManager implements IChannelManager {
 			case "?donation":
 					sendDonationToDiscordChannel(discordChannel);
 				break;
+			case "?vote":
+				sendVotesToDiscordChannel(discordChannel);
+			break;
 			case "?skillcheck":
 				sendSkillCheckToDiscordChannel(discordChannel,commands[1]);
 				break;
@@ -667,6 +670,24 @@ public class ChannelManager implements IChannelManager {
 			
 			
 		} catch (Exception e)
+		{
+			// ignore it
+		}
+	}
+	
+	private void sendVotesToDiscordChannel(DiscordChannel discordChannel) {
+		try
+		{
+			String targetChannelId = getChannelId(discordChannel);
+
+			int rank = 1;
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getTopVotingPlayers())
+			{
+				sendToDiscordMC(null,targetChannelId,rank + ": " + player.getFullName() + " " + player.getMonthlyVote());
+				rank++;
+			}
+			
+		} catch (CoreStateInitException e)
 		{
 			// ignore it
 		}

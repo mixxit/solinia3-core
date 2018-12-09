@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -113,6 +114,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String handsItemInstance = "";
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
+	private ConcurrentHashMap<String, Integer> monthlyVote = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, SoliniaReagent> reagentsPouch = new ConcurrentHashMap<Integer, SoliniaReagent>();
 	private boolean glowTargetting = true;
 	private Double pendingXp = 0d;
@@ -3312,6 +3314,28 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSongsEnabled(boolean songsEnabled) {
 		this.songsEnabled = songsEnabled;
+	}
+
+	@Override
+	public void increaseMonthlyVote(Integer amount) {
+		Calendar now = Calendar.getInstance();
+		String month = now.get(Calendar.YEAR) + "-" + now.get(Calendar.MONTH);
+		if (this.monthlyVote.get(month) == null)
+		{
+			this.monthlyVote.put(month, 0);
+		}
+		this.monthlyVote.put(month, this.monthlyVote.get(month)+amount);
+	}
+	
+	@Override
+	public Integer getMonthlyVote() {
+		Calendar now = Calendar.getInstance();
+		String month = now.get(Calendar.YEAR) + "-" + now.get(Calendar.MONTH);
+		if (this.monthlyVote.get(month) == null)
+		{
+			return 0;
+		}
+		return this.monthlyVote.get(month);
 	}
 
 }

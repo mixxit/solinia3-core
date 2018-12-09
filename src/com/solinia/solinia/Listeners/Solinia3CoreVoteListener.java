@@ -64,6 +64,7 @@ public class Solinia3CoreVoteListener implements Listener {
 			if (solplayer != null)
 			{
 				solplayer.setInspiration(solplayer.getInspiration()+1);
+				solplayer.increaseMonthlyVote(1);
 				
 				if (player != null)
 				{
