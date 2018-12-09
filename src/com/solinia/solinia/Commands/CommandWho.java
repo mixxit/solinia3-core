@@ -32,6 +32,9 @@ public class CommandWho implements CommandExecutor {
 	        
 	        for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
 		    {
+	        	if (!player.canSee(currentplayer))
+	        		continue;
+	        	
 	        	if (!filter.equals(""))
 	        		if (!currentplayer.getDisplayName().contains(filter))
 	        			continue;

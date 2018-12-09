@@ -1630,9 +1630,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.interaction = interaction;
 
 		if (npc != null) {
+			String spawngroupId = "";
+			
 			this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* You are now interacting with "
-					+ Bukkit.getEntity(interaction).getName() + " [" + npc.getId()
-					+ "] - Anything you type will be heared by the NPC and possibly responded to. Words in pink are trigger words you can type");
+					+ Bukkit.getEntity(interaction).getName() + " NID: " + npc.getId()
+					+ " SID: " + spawngroupId +" - Anything you type will be heared by the NPC and possibly responded to. Words in pink are trigger words you can type");
 
 			if (npc.getMerchantid() > 0) {
 				try {

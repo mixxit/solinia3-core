@@ -36,6 +36,9 @@ import org.bukkit.entity.Arrow.PickupStatus;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -6595,4 +6598,5 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private boolean hasSpawnPoint() {
 		return getBukkitLivingEntity().hasMetadata("spawnpoint");
 	}
+
 }
