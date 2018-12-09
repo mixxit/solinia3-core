@@ -65,7 +65,7 @@ public class CommandCreateArmourSet implements CommandExecutor {
 				return false;
 			}
 
-			List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classtype, armourtier, partialname, false, sender.isOp());
+			List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classtype, armourtier, partialname, false, sender.isOp(),"");
 			String itemscreated = "";
 			for (Integer item : items) {
 				itemscreated += item + " ";

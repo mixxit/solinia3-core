@@ -102,7 +102,7 @@ public class CommandInspiration implements CommandExecutor {
 										// always give the next tier up
 										// this ability is for special seasonal rewards only
 										playertier += 1;
-										List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, true);
+										List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, true, player.getBukkitPlayer().getName());
 										
 										for(int itemid : items)
 										{
@@ -205,7 +205,7 @@ public class CommandInspiration implements CommandExecutor {
 											if (playertier < 1)
 												playertier = 1;
 											
-											List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, true);
+											List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, true, player.getBukkitPlayer().getName());
 											
 											for(int itemid : items)
 											{

@@ -85,7 +85,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			String itemscreated = "";
 			for(ISoliniaClass classEntry : StateManager.getInstance().getConfigurationManager().getClasses())
 			{
-				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true, sender.isOp());
+				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true, sender.isOp(),"");
 				for (Integer item : items) {
 					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, 1, false, chance, sender.isOp());
 					itemscreated += item + " ";
