@@ -62,6 +62,16 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			
 		}
 		
+		
+		int sleephpregen = 0;
+		int sleepmpregen = 0;
+		// Sleep regen
+		if (player.isSleeping())
+		{
+			sleephpregen += 50;
+			sleepmpregen += 50;
+		}
+		
 		SoliniaZone zone = solplayer.isInZone();
 		if (zone != null)
 		{
@@ -70,6 +80,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		}
 		
 		manaregen += zonempregen;
+		manaregen += sleepmpregen;
 		
 		// a players mana regen based on if they are meditating (sneaking)
 		manaregen += getPlayerMeditatingManaBonus(solplayer);
@@ -161,6 +172,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		}
 		
 		hpregen += zonehpregen;
+		hpregen += sleephpregen;
 		
 		hpregen += solplayer.getItemHpRegenBonuses();
 

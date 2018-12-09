@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
@@ -69,30 +70,28 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityTargetEvent(EntityTargetEvent event) {
 		if (event.isCancelled())
 			return;
-		
+
 		if (event.getEntity() == null || event.getTarget() == null)
 			return;
-		
+
 		if (event.getEntity().isDead() || event.getTarget().isDead())
 			return;
-		
+
 		if (!(event.getEntity() instanceof Creature))
 			return;
-		
-		try
-		{
+
+		try {
 			if (event.getEntity() instanceof LivingEntity)
-			if (StateManager.getInstance().getEntityManager().getHateListEntry(event.getEntity().getUniqueId(), event.getTarget().getUniqueId()) < 1)
-			if (!Utils.isEntityInLineOfSightCone((LivingEntity)event.getEntity(), event.getTarget(), 90, Utils.MAX_ENTITY_AGGRORANGE))
-			{
-				Utils.CancelEvent(event);
-				return;
-			}
-		} catch (CoreStateInitException e)
-		{
-			
+				if (StateManager.getInstance().getEntityManager().getHateListEntry(event.getEntity().getUniqueId(),
+						event.getTarget().getUniqueId()) < 1)
+					if (!Utils.isEntityInLineOfSightCone((LivingEntity) event.getEntity(), event.getTarget(), 90,
+							Utils.MAX_ENTITY_AGGRORANGE)) {
+						Utils.CancelEvent(event);
+						return;
+					}
+		} catch (CoreStateInitException e) {
+
 		}
-				
 
 		// cancel feigened if targetting
 		try {
@@ -110,7 +109,8 @@ public class Solinia3CoreEntityListener implements Listener {
 					.getMezzed((LivingEntity) event.getEntity());
 			if (mzExpiry != null) {
 				if (event.getEntity() instanceof Player) {
-					((Player)event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
+					((Player) event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 				}
 				Utils.CancelEvent(event);
 				return;
@@ -124,7 +124,8 @@ public class Solinia3CoreEntityListener implements Listener {
 					.getStunned((LivingEntity) event.getEntity());
 			if (stExpiry != null) {
 				if (event.getEntity() instanceof Player) {
-					((Player)event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are stunned!"));
+					((Player) event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You are stunned!"));
 				}
 				Utils.CancelEvent(event);
 				return;
@@ -226,64 +227,65 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
-		
+
 		if (event.isCancelled())
 			return;
-		
+
 		final UUID entityUUID = event.getEntity().getUniqueId();
-		
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-				Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+				new Runnable() {
 					public void run() {
 						Entity entity = Bukkit.getEntity(entityUUID);
 						if (entity == null)
 							return;
-						
+
 						if (!(entity instanceof LivingEntity))
 							return;
-						
+
 						if (entity.isDead())
 							return;
-						
-						if (Utils.isLivingEntityNPC((LivingEntity)entity))
-						{
-							try
-							{
-								ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
 
-								if (solEntity.doCheckForDespawn())
-								{
+						if (Utils.isLivingEntityNPC((LivingEntity) entity)) {
+							try {
+								ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter
+										.Adapt((LivingEntity) entity);
+
+								if (solEntity.doCheckForDespawn()) {
 									entity.remove();
 									return;
 								}
-								
-								if (!solEntity.isPet())
-								{					
-									LivingEntity le = (LivingEntity)entity;
-									String location = le.getLocation().getWorld().getName() + "," + le.getLocation().getX() + "," + le.getLocation().getY() + "," + le.getLocation().getZ();
-									le.setMetadata("spawnpoint", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("Solinia3Core"),location));
-									
+
+								if (!solEntity.isPet()) {
+									LivingEntity le = (LivingEntity) entity;
+									String location = le.getLocation().getWorld().getName() + ","
+											+ le.getLocation().getX() + "," + le.getLocation().getY() + ","
+											+ le.getLocation().getZ();
+									le.setMetadata("spawnpoint", new FixedMetadataValue(
+											Bukkit.getPluginManager().getPlugin("Solinia3Core"), location));
+
 								}
 
-								
-							} catch (CoreStateInitException e)
-							{
-								
+							} catch (CoreStateInitException e) {
+
 							}
 						}
-						
+
 						// if this is a skeleton entity, remove the chase task frmo the mobs AI
-						org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity cle = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity)entity);
+						org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity cle = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) entity);
 						if (cle == null)
 							return;
-						
+
 						if (cle.getHandle() == null)
 							return;
-						
-						if (cle.getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE) == null)
+
+						if (cle.getHandle().getAttributeInstance(
+								net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE) == null)
 							return;
-						
-						cle.getHandle().getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE).setValue(Utils.MAX_ENTITY_AGGRORANGE);
+
+						cle.getHandle()
+								.getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE)
+								.setValue(Utils.MAX_ENTITY_AGGRORANGE);
 					}
 				});
 	}
@@ -292,40 +294,28 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityDamageEvent(EntityDamageEvent event) {
 		if (event.isCancelled())
 			return;
-		
+
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
-		
-		// Fall damage
-		if ((event.getEntity() instanceof Player)) {
-			if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL))
-			{
 
-				Player player = (Player) event.getEntity();
-				ISoliniaPlayer solplayer;
-				try {
-					solplayer = SoliniaPlayerAdapter.Adapt(player);
-					if (solplayer == null)
-						return;
-	
-					boolean cancelFall = solplayer.getSafefallCheck();
-					if (cancelFall == true) {
-						Utils.CancelEvent(event);
-						;
-						solplayer.emote(ChatColor.AQUA + "* " + solplayer.getFullName() + " lands softly, breaking their fall", false);
-						solplayer.tryIncreaseSkill("SAFEFALL", 1);
-						return;
-					}
-				} catch (CoreStateInitException e) {
-					return;
-				}
-			}
+		// Fall damage
+
+		if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+			onEntityFallDamageEvent(event);
+		}
+		
+		if (event.getCause().equals(EntityDamageEvent.DamageCause.DROWNING)) {
+			onEntityDrowningDamageEvent(event);
+		}
+
+		if (event.getCause().equals(EntityDamageEvent.DamageCause.LAVA)) {
+			onEntityLavaDamageEvent(event);
 		}
 		
 		if (!(event instanceof EntityDamageByEntityEvent)) {
 			return;
 		}
-		
+
 		// Close range weapon
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
 		if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
@@ -363,133 +353,187 @@ public class Solinia3CoreEntityListener implements Listener {
 
 			}
 		}
-		
-		if (damagecause.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity)
-		{
-			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity)damagecause.getDamager(), (LivingEntity)event.getEntity());
-			if (distanceOverLimit > 0)
-			{
+
+		if (damagecause.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
+			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) damagecause.getDamager(),
+					(LivingEntity) event.getEntity());
+			if (distanceOverLimit > 0) {
 				if (damagecause.getDamager() instanceof Player)
-					damagecause.getDamager().sendMessage("You were too far to cause damage [" + distanceOverLimit + " blocks too far]");
-				
+					damagecause.getDamager()
+							.sendMessage("You were too far to cause damage [" + distanceOverLimit + " blocks too far]");
+
 				Utils.CancelEvent(event);
 				return;
 			}
 		}
-		
-		// Disable jumping crits for melee
-		if (!event.getCause().equals(EntityDamageEvent.DamageCause.THORNS) && damagecause.getDamager() instanceof LivingEntity)
-		{
-			LivingEntity damager = (LivingEntity)damagecause.getDamager();
-			 boolean flag = damager.getFallDistance() > 0.0F && !damager.isOnGround();
 
-			 double f = damagecause.getDamage(DamageModifier.BASE);
-            if (flag && f > 0.0D) {
-           	 damagecause.setDamage(DamageModifier.BASE, f/1.5D);
-            }
+		// Disable jumping crits for melee
+		if (!event.getCause().equals(EntityDamageEvent.DamageCause.THORNS)
+				&& damagecause.getDamager() instanceof LivingEntity) {
+			LivingEntity damager = (LivingEntity) damagecause.getDamager();
+			boolean flag = damager.getFallDistance() > 0.0F && !damager.isOnGround();
+
+			double f = damagecause.getDamage(DamageModifier.BASE);
+			if (flag && f > 0.0D) {
+				damagecause.setDamage(DamageModifier.BASE, f / 1.5D);
+			}
 		}
-		
-		if (damagecause.getDamager() instanceof Arrow)
-		{
-			ProjectileSource source = ((Arrow)damagecause.getDamager()).getShooter();
-			if (source instanceof LivingEntity && event.getEntity() instanceof LivingEntity)
-			{
-				double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity)source, (LivingEntity)event.getEntity());
-				
-				if (distanceOverLimit > 0D)
-				{
+
+		if (damagecause.getDamager() instanceof Arrow) {
+			ProjectileSource source = ((Arrow) damagecause.getDamager()).getShooter();
+			if (source instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
+				double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) source,
+						(LivingEntity) event.getEntity());
+
+				if (distanceOverLimit > 0D) {
 					if (source instanceof Player)
-						((Player)source).sendMessage("You were too far to cause damage [" + distanceOverLimit + " blocks too far]");
-					
+						((Player) source).sendMessage(
+								"You were too far to cause damage [" + distanceOverLimit + " blocks too far]");
+
 					Utils.CancelEvent(event);
 					return;
 				}
 			}
-			
-			// cancel crit jump damage for bows
-			if (!event.getCause().equals(EntityDamageEvent.DamageCause.THORNS) && source instanceof LivingEntity)
-			{
-				LivingEntity damager = (LivingEntity)source;
-				 boolean flag = damager.getFallDistance() > 0.0F && !damager.isOnGround();
 
-				 double f = damagecause.getDamage(DamageModifier.BASE);
-	             if (flag && f > 0.0D) {
-	            	 damagecause.setDamage(DamageModifier.BASE, f/1.5D);
-	             }
+			// cancel crit jump damage for bows
+			if (!event.getCause().equals(EntityDamageEvent.DamageCause.THORNS) && source instanceof LivingEntity) {
+				LivingEntity damager = (LivingEntity) source;
+				boolean flag = damager.getFallDistance() > 0.0F && !damager.isOnGround();
+
+				double f = damagecause.getDamage(DamageModifier.BASE);
+				if (flag && f > 0.0D) {
+					damagecause.setDamage(DamageModifier.BASE, f / 1.5D);
+				}
 			}
-		}		
-		
+		}
+
 		// Detect damage caused by entity collision response and cancel it
 		// We will move all damage from NPCs to the NPC combat loop
 		// This allows implementation of NPC Slow and Haste
-		if (!(damagecause.getDamager() instanceof Player) && !(damagecause.getDamager() instanceof Arrow) && event.getEntity() instanceof LivingEntity) {
+		if (!(damagecause.getDamager() instanceof Player) && !(damagecause.getDamager() instanceof Arrow)
+				&& event.getEntity() instanceof LivingEntity) {
 			// TODO
 			// ALWAYS CANCEL DAMAGE EVENTS THAT ARE NOT ENTITY SWEEP CAUSE
-			
-			if (!damagecause.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK))
-			{
+
+			if (!damagecause.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)) {
 				Utils.CancelEvent(event);
 				return;
 			}
-			
-			//event.setCancelled(true);
+
+			// event.setCancelled(true);
 		}
-		
+
 		// Negate normal modifiers
 		try {
-		damagecause.setDamage(DamageModifier.ABSORPTION, 0);
+			damagecause.setDamage(DamageModifier.ABSORPTION, 0);
 		} catch (UnsupportedOperationException e) {
 
 		}
 		try {
-		damagecause.setDamage(DamageModifier.ARMOR, 0);
+			damagecause.setDamage(DamageModifier.ARMOR, 0);
 		} catch (UnsupportedOperationException e) {
 
 		}
 		try {
-		damagecause.setDamage(DamageModifier.BLOCKING, 0);
+			damagecause.setDamage(DamageModifier.BLOCKING, 0);
 		} catch (UnsupportedOperationException e) {
 
 		}
 		try {
-		damagecause.setDamage(DamageModifier.RESISTANCE, 0);
+			damagecause.setDamage(DamageModifier.RESISTANCE, 0);
 		} catch (UnsupportedOperationException e) {
 
 		}
 		try {
-		damagecause.setDamage(DamageModifier.MAGIC, 0);
+			damagecause.setDamage(DamageModifier.MAGIC, 0);
 		} catch (UnsupportedOperationException e) {
 
 		}
 		try {
-		damagecause.setDamage(DamageModifier.HARD_HAT, 0);
+			damagecause.setDamage(DamageModifier.HARD_HAT, 0);
 		} catch (UnsupportedOperationException e) {
 
 		}
 		try {
-		damagecause.setDamage(DamageModifier.BLOCKING, 0);
+			damagecause.setDamage(DamageModifier.BLOCKING, 0);
 		} catch (UnsupportedOperationException e) {
 
 		}
-		
-		
+
 		ISoliniaLivingEntity solLivingEntity;
 		try {
-			solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-			int damage = solLivingEntity.calculateDamageFromDamageEvent(damagecause.getDamager(), event.getCause().equals(EntityDamageEvent.DamageCause.THORNS), (int)Math.floor(event.getDamage()));
-			if (damage < 1)
-			{
+			solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
+			int damage = solLivingEntity.calculateDamageFromDamageEvent(damagecause.getDamager(),
+					event.getCause().equals(EntityDamageEvent.DamageCause.THORNS), (int) Math.floor(event.getDamage()));
+			if (damage < 1) {
 				Utils.CancelEvent(event);
 				return;
 			}
 			event.setDamage(DamageModifier.BASE, damage);
-			
+
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return;
+	}
+
+	private void onEntityLavaDamageEvent(EntityDamageEvent event) {
+		if (!(event.getEntity() instanceof LivingEntity))
+			return;
+		
+		LivingEntity le = (LivingEntity)event.getEntity();
+		if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) == null)
+			return;
+
+		// 20% damage per hit
+		event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/100)*20);
+	}
+
+	private void onEntityDrowningDamageEvent(EntityDamageEvent event) {
+		if (!(event.getEntity() instanceof LivingEntity))
+			return;
+		LivingEntity le = (LivingEntity)event.getEntity();
+		if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) == null)
+			return;
+
+		// 10% damage per hit
+		event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/100)*10);
+	}
+
+	private void onEntityFallDamageEvent(EntityDamageEvent event) {
+		
+		if ((event.getEntity() instanceof LivingEntity))
+		{
+			LivingEntity le = (LivingEntity)event.getEntity();
+			if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null)
+				event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/100)*10);
+		}
+		
+		if ((event.getEntity() instanceof Player)) {
+
+			Player player = (Player) event.getEntity();
+			ISoliniaPlayer solplayer;
+			try {
+				solplayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solplayer == null)
+					return;
+
+				boolean cancelFall = solplayer.getSafefallCheck();
+				if (cancelFall == true) {
+					Utils.CancelEvent(event);
+					;
+					solplayer.emote(
+							ChatColor.AQUA + "* " + solplayer.getFullName() + " lands softly, breaking their fall",
+							false);
+					solplayer.tryIncreaseSkill("SAFEFALL", 1);
+					return;
+				}
+			} catch (CoreStateInitException e) {
+				return;
+			}
+		}
 	}
 
 	@EventHandler
@@ -502,7 +546,8 @@ public class Solinia3CoreEntityListener implements Listener {
 					.getMezzed((LivingEntity) event.getEntity());
 			if (mzExpiry != null) {
 				if (event.getEntity() instanceof Player) {
-					((Player)event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
+					((Player) event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 				}
 				Utils.CancelEvent(event);
 				;
@@ -517,7 +562,8 @@ public class Solinia3CoreEntityListener implements Listener {
 					.getStunned((LivingEntity) event.getEntity());
 			if (stExpiry != null) {
 				if (event.getEntity() instanceof Player) {
-					((Player)event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are stunned!"));
+					((Player) event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You are stunned!"));
 				}
 				Utils.CancelEvent(event);
 				;
@@ -551,7 +597,8 @@ public class Solinia3CoreEntityListener implements Listener {
 					.getMezzed((LivingEntity) event.getPlayer());
 			if (mzExpiry != null) {
 				if (event.getPlayer() instanceof Player) {
-					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
+					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 				}
 				Utils.CancelEvent(event);
 				;
@@ -566,7 +613,8 @@ public class Solinia3CoreEntityListener implements Listener {
 					.getStunned((LivingEntity) event.getPlayer());
 			if (stExpiry != null) {
 				if (event.getPlayer() instanceof Player) {
-					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are stunned!"));
+					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You are stunned!"));
 				}
 				Utils.CancelEvent(event);
 				;
@@ -842,31 +890,30 @@ public class Solinia3CoreEntityListener implements Listener {
 
 			if (livingEntity.getNpcid() > 0) {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
-				
-				if (npc != null)
-				{
+
+				if (npc != null) {
 					if (npc.getChanceToRespawnOnDeath() > 0)
-					if (Utils.RandomBetween(1, 100) <= npc.getChanceToRespawnOnDeath())
-					{
+						if (Utils.RandomBetween(1, 100) <= npc.getChanceToRespawnOnDeath()) {
 							npc.Spawn(player.getBukkitPlayer().getLocation(), 1);
-					}
-					
+						}
+
 					if (!npc.getDeathGrantsTitle().equals("")) {
 						player.grantTitle(npc.getDeathGrantsTitle());
 					}
-	
+
 					if (npc.isBoss() || npc.isRaidboss()) {
 						player.grantTitle("the Vanquisher");
 					}
-	
+
 					/*
-					if (npc.isBoss() || npc.isRaidboss()) {
-						Utils.BroadcastPlayers("[VICTORY] The foundations of the earth shake following the destruction of "
-								+ npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!");
-					}*/
+					 * if (npc.isBoss() || npc.isRaidboss()) { Utils.
+					 * BroadcastPlayers("[VICTORY] The foundations of the earth shake following the destruction of "
+					 * + npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!");
+					 * }
+					 */
 				}
 			}
-			
+
 			player.giveMoney(1);
 			livingEntity.dropLoot();
 		} catch (CoreStateInitException e) {
