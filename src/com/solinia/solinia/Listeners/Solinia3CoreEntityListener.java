@@ -480,7 +480,7 @@ public class Solinia3CoreEntityListener implements Listener {
 	}
 
 	private void onEntityLavaDamageEvent(EntityDamageEvent event) {
-		if (!(event.getEntity() instanceof LivingEntity))
+		if (!(event.getEntity() instanceof Player))
 			return;
 		
 		LivingEntity le = (LivingEntity)event.getEntity();
@@ -492,7 +492,7 @@ public class Solinia3CoreEntityListener implements Listener {
 	}
 
 	private void onEntityDrowningDamageEvent(EntityDamageEvent event) {
-		if (!(event.getEntity() instanceof LivingEntity))
+		if (!(event.getEntity() instanceof Player))
 			return;
 		LivingEntity le = (LivingEntity)event.getEntity();
 		if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) == null)
@@ -503,15 +503,10 @@ public class Solinia3CoreEntityListener implements Listener {
 	}
 
 	private void onEntityFallDamageEvent(EntityDamageEvent event) {
-		
-		if ((event.getEntity() instanceof LivingEntity))
-		{
+		if ((event.getEntity() instanceof Player)) {
 			LivingEntity le = (LivingEntity)event.getEntity();
 			if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null)
 				event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/100)*10);
-		}
-		
-		if ((event.getEntity() instanceof Player)) {
 
 			Player player = (Player) event.getEntity();
 			ISoliniaPlayer solplayer;
