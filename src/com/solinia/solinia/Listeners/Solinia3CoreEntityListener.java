@@ -53,6 +53,7 @@ import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -303,7 +304,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			onEntityFallDamageEvent(event);
 		}
-		
+
 		if (event.getCause().equals(EntityDamageEvent.DamageCause.DROWNING)) {
 			onEntityDrowningDamageEvent(event);
 		}
@@ -311,7 +312,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.getCause().equals(EntityDamageEvent.DamageCause.LAVA)) {
 			onEntityLavaDamageEvent(event);
 		}
-		
+
 		if (!(event instanceof EntityDamageByEntityEvent)) {
 			return;
 		}
@@ -479,34 +480,91 @@ public class Solinia3CoreEntityListener implements Listener {
 		return;
 	}
 
+	private float getLavaDamageEffectiveness(Player victim) {
+		// TODO Auto-generated method stub
+		int environmentallevel = 40;
+		int victimlevel = SoliniaPlayerAdapter.Adapt((Player) victim).getLevel();
+		int targetresist = SoliniaPlayerAdapter.Adapt((Player) victim).getResist(SpellResistType.RESIST_FIRE);
+
+		int resist_chance = 0;
+		int level_mod = 0;
+		int temp_level_diff = victimlevel - environmentallevel;
+
+		if (victimlevel >= 21 && temp_level_diff > 15) {
+			temp_level_diff = 15;
+		}
+
+		level_mod = temp_level_diff * temp_level_diff / 2;
+		if (temp_level_diff < 0) {
+			level_mod = -level_mod;
+		}
+
+		resist_chance += level_mod;
+		resist_chance += targetresist;
+
+		if (resist_chance > 255) {
+			resist_chance = 255;
+		}
+
+		if (resist_chance < 0) {
+			resist_chance = 0;
+		}
+
+		int roll = Utils.RandomBetween(0, 200);
+
+		if (roll > resist_chance) {
+			return 100;
+		} else {
+			if (resist_chance < 1) {
+				resist_chance = 1;
+			}
+
+			int partial_modifier = ((150 * (resist_chance - roll)) / resist_chance);
+
+			if ((victimlevel - environmentallevel) >= 20) {
+				partial_modifier += (victimlevel - environmentallevel) * 1.5;
+			}
+
+			if (partial_modifier <= 0) {
+				return 100F;
+			} else if (partial_modifier >= 100) {
+				return 0;
+			}
+
+			return (100.0f - partial_modifier);
+		}
+	}
+
 	private void onEntityLavaDamageEvent(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
-		
-		LivingEntity le = (LivingEntity)event.getEntity();
+
+		LivingEntity le = (LivingEntity) event.getEntity();
 		if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) == null)
 			return;
 
 		// 20% damage per hit
-		event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/100)*20);
+		double damage = le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 20;
+		damage = damage * (getLavaDamageEffectiveness((Player)le) / 100);
+		event.setDamage(damage);
 	}
 
 	private void onEntityDrowningDamageEvent(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
-		LivingEntity le = (LivingEntity)event.getEntity();
+		LivingEntity le = (LivingEntity) event.getEntity();
 		if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) == null)
 			return;
 
 		// 10% damage per hit
-		event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/100)*10);
+		event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10);
 	}
 
 	private void onEntityFallDamageEvent(EntityDamageEvent event) {
 		if ((event.getEntity() instanceof Player)) {
-			LivingEntity le = (LivingEntity)event.getEntity();
+			LivingEntity le = (LivingEntity) event.getEntity();
 			if (le.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null)
-				event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/100)*10);
+				event.setDamage((le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10);
 
 			Player player = (Player) event.getEntity();
 			ISoliniaPlayer solplayer;
