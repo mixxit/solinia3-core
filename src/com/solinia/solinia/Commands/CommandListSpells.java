@@ -58,7 +58,7 @@ public class CommandListSpells implements CommandExecutor {
 						{
 							String matchedValue = f.get(spell).toString(); 
 							
-							if (matchedValue.contains(value))
+							if (matchedValue.toLowerCase().equals(value.toLowerCase()))
 							{
 								found++;
 								String spellmessage = spell.getId() + " - " + spell.getName();

@@ -59,7 +59,7 @@ public class CommandListItems implements CommandExecutor {
 						{
 							String matchedValue = f.get(item).toString(); 
 							
-							if (matchedValue.contains(value))
+							if (matchedValue.toLowerCase().equals(value.toLowerCase()))
 							{
 								found++;
 								String itemmessage = item.getId() + " - " + item.getDisplayname();
