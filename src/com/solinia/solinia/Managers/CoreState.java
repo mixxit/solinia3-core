@@ -236,6 +236,9 @@ public class CoreState {
 			try
 			{
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(key);
+				if (npc == null)
+					continue;
+				
 				if (npc.getForcedMaxHp() != hp)
 				{
 					npc.setForcedMaxHp(hp);
