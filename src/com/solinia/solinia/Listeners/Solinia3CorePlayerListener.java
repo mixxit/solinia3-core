@@ -1249,9 +1249,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			}
 			
 			if (!event.getPlayer().hasPermission("essentials.silentjoin"))
-			StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,
-					StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),
-					event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game (" + players.trim() + ")");
+				StateManager.getInstance().getChannelManager().sendToDiscordMC(solplayer,StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),event.getPlayer().getName() + "(" + solplayer.getFullName() + ") has joined the game (" + players.trim() + ")");
 
 			try
 		    {

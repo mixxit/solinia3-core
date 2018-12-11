@@ -3057,11 +3057,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 	
 			int percent_bonus = 0;
-			if (percent_base >= 70)
-			{
+			// how could this possibly work for other classes
+			//if (percent_base >= 70)
+			//{
 				if (playersolLivingEntity != null)
-				percent_bonus = playersolLivingEntity.getMaxBindWound_SE();
-			}
+					percent_bonus = playersolLivingEntity.getMaxBindWound_SE();
+			//}
 	
 			int max_percent = percent_base + percent_bonus;
 			if (max_percent < 0)
@@ -3081,11 +3082,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					bindhps = getSkill("BINDWOUND").getValue() / 4; // 4:1 skill-to-hp ratio
 	
 				int bonus_hp_percent = 0;
-				if (percent_base >= 70)
-				{
+				//if (percent_base >= 70)
+				//{
 					if (playersolLivingEntity != null)
 						bonus_hp_percent = playersolLivingEntity.getBindWound_SE();
-				}
+				//}
 				
 				//getBukkitPlayer().sendMessage("Your percentbase was " + percent_base);
 				//getBukkitPlayer().sendMessage("Your spell/aa effects add a binding calculation was " + bindhps + " * " + bonus_hp_percent  + " / 100");
