@@ -25,8 +25,4 @@ public interface ISoliniaLootDropEntry {
 	int getLootdropid();
 
 	void setLootdropid(int lootdropid);
-
-	void setOperatorCreated(boolean operatorCreated);
-
-	boolean isOperatorCreated();
 }

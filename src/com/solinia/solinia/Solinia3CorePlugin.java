@@ -415,6 +415,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("mana").setExecutor(new CommandMana());
 		this.getCommand("addrace").setExecutor(new CommandAddRace());
 		this.getCommand("setrace").setExecutor(new CommandSetRace());
+		this.getCommand("flushdiscord").setExecutor(new CommandFlushDiscord());
 		this.getCommand("addclass").setExecutor(new CommandAddClass());
 		this.getCommand("setclass").setExecutor(new CommandSetClass());
 		this.getCommand("addraceclass").setExecutor(new CommandAddRaceClass());

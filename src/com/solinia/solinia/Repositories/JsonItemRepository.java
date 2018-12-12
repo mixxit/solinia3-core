@@ -134,7 +134,7 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 		try (
 	            BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
 	            CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
-	            		"id","displayname","basename","abilityid","strength","stamina","agility","dexterity","intelligence","wisdom","charisma","allowedClassNames","questitem","damage","weaponabilityid","attackspeed","enchantment1val","enchantment2val","enchantment3val","enchantment4val","hpregen","mpregen","worth","coreitem","fireResist","coldResist","magicResist","poisonResist","diseaseResist","spellscroll","color","dye","isTemporary","isConsumable","baneUndead","isPetControlRod","isAugmentation","isQuest","augmentationFitsSlotType","discoverer","minLevel","ac","hp","mana","isExperienceBonus","skillModType","skillModValue","reagent","throwing","artifact","artifactFound","skillModType2","skillModValue2","skillModType3","skillModValue3","skillModType4","skillModValue4","operatorCreated","isFingersItem","isNeckItem","isShouldersItem","isEarsItem","territoryFlag","identifyMessage","bandage"
+	            		"id","displayname","basename","abilityid","strength","stamina","agility","dexterity","intelligence","wisdom","charisma","allowedClassNames","questitem","damage","weaponabilityid","attackspeed","enchantment1val","enchantment2val","enchantment3val","enchantment4val","hpregen","mpregen","worth","coreitem","fireResist","coldResist","magicResist","poisonResist","diseaseResist","spellscroll","color","dye","isTemporary","isConsumable","baneUndead","isPetControlRod","isAugmentation","isQuest","augmentationFitsSlotType","discoverer","minLevel","ac","hp","mana","isExperienceBonus","skillModType","skillModValue","reagent","throwing","artifact","artifactFound","skillModType2","skillModValue2","skillModType3","skillModValue3","skillModType4","skillModValue4","isFingersItem","isNeckItem","isShouldersItem","isEarsItem","territoryFlag","identifyMessage","bandage"
 	            	));
 	        ) 
 		{
@@ -201,7 +201,6 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 	            		item.getSkillModValue3(), 
 	            		item.getSkillModType4(), 
 	            		item.getSkillModValue4(), 
-	            		item.isOperatorCreated(), 
 	            		item.isFingersItem(), 
 	            		item.isNeckItem(), 
 	            		item.isShouldersItem(), 

@@ -91,12 +91,6 @@ public class CommandEditFaction implements CommandExecutor {
 				return false;
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getFaction(factionid).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This faction was op created and you are not an op. Only ops can faction op items");
-				return false;
-			}
-
 			StateManager.getInstance().getConfigurationManager().editFaction(factionid, setting, value);
 			sender.sendMessage("Updating setting on faction");
 		} catch (InvalidFactionSettingException ne) {

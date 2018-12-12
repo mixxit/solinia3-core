@@ -8,15 +8,14 @@ import com.solinia.solinia.Models.SoliniaNPCMerchant;
 import com.solinia.solinia.Models.SoliniaNPCMerchantEntry;
 
 public class SoliniaNPCMerchantFactory {
-	public static void CreateNPCMerchant(String name, boolean operatorCreated) throws CoreStateInitException {
+	public static void CreateNPCMerchant(String name) throws CoreStateInitException {
 		SoliniaNPCMerchant merchant = new SoliniaNPCMerchant();
 		merchant.setId(StateManager.getInstance().getConfigurationManager().getNextNPCMerchantId());
 		merchant.setName(name);
-		merchant.setOperatorCreated(operatorCreated);
 		StateManager.getInstance().getConfigurationManager().addNPCMerchant(merchant);
 	}
 	
-	public static void AddNPCMerchantItem(int merchantid, int itemid, boolean operatorCreated)
+	public static void AddNPCMerchantItem(int merchantid, int itemid)
 	{
 		try
 		{
@@ -32,7 +31,6 @@ public class SoliniaNPCMerchantFactory {
 			merchantentry.setId(id);
 			merchantentry.setMerchantid(merchantid);
 			merchantentry.setItemid(itemid);
-			merchantentry.setOperatorCreated(operatorCreated);
 			StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchantid).getEntries().add(merchantentry);
 		} catch (CoreStateInitException e)
 		{

@@ -73,8 +73,6 @@ public class SoliniaCraft {
 		this.id = id;
 	}
 	
-	private boolean operatorCreated = true;
-	
 	public void sendCraftSettingsToSender(CommandSender sender) throws CoreStateInitException {
 		sender.sendMessage(ChatColor.RED + "Craft Settings for Recipe " + ChatColor.GOLD + getRecipeName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -178,12 +176,6 @@ public class SoliniaCraft {
 	}
 	public void setRecipeName(String recipeName) {
 		this.recipeName = recipeName;
-	}
-	public boolean isOperatorCreated() {
-		return operatorCreated;
-	}
-	public void setOperatorCreated(boolean operatorCreated) {
-		this.operatorCreated = operatorCreated;
 	}
 	public int getOutputLootTableId() {
 		return outputLootTableId;

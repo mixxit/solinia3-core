@@ -122,7 +122,7 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 			eventhandler.setTriggerdata(trigger.toUpperCase());
 			eventhandler.setChatresponse(response);
 			eventhandler.setResponseType(responsetype);
-			npc.addEventHandler(eventhandler, sender.isOp());
+			npc.addEventHandler(eventhandler);
 			sender.sendMessage("New EventHandler added to NPC");
 		} catch (CoreStateInitException e) {
 			sender.sendMessage(e.getMessage());

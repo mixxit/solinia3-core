@@ -58,18 +58,25 @@ public class DiscordListener {
 			}
 		}
 		
-		IRole role = null;
+		IRole adminRole = null;
+		IRole contentTeamRole = null;
+		
 		for(IRole currentRole : event.getGuild().getRoles())
 		{
-			if (!currentRole.getName().equals("Admin"))
-				continue;
+			if (currentRole.getName().equals("Admin"))
+			{
+				adminRole = currentRole;
+			}
 			
-			role = currentRole;
+			if (currentRole.getName().equals("Content Team"))
+			{
+				contentTeamRole = currentRole;
+			}
 		}
 		
-		if (event.getAuthor().getRolesForGuild(event.getGuild()).contains(role))
+		if (event.getAuthor().getRolesForGuild(event.getGuild()).contains(adminRole))
 		{
-			if (event.getMessage().getContent().startsWith("?"))
+			if (event.getMessage().getContent().startsWith("^"))
 			{
 				String[] words = event.getMessage().getContent().split(" "); 
 				
@@ -86,8 +93,100 @@ public class DiscordListener {
 				
 				Utils.dispatchCommandLater(plugin,getCommandHandlerForChannelId(event.getChannel().getStringID()), command.trim());
 				
-			} else {
-				StateManager.getInstance().getChannelManager().sendToOps("[OPONLY]"+event.getAuthor().getName()+"@"+event.getChannel().getName(), event.getMessage().getContent(), true, null);
+			}
+		}
+		
+		if (event.getAuthor().getRolesForGuild(event.getGuild()).contains(contentTeamRole))
+		{
+			if (event.getMessage().getContent().startsWith("?"))
+			{
+				String[] words = event.getMessage().getContent().split(" "); 
+				
+				String commandName = "";
+				String command = "";
+				for (int i = 0; i < words.length; i++)
+				{
+					if (i == 0)
+					{
+						command += words[i].replace("?","") + " ";
+						commandName = words[i].replace("?","");
+					} else {
+						command += words[i] + " ";
+					}
+				}
+				
+				boolean hasAccessToCommand = false;
+				
+				switch (commandName.trim())
+				{
+					case "flushdiscord":
+					case "time":
+					case "broadcast":
+					case "ban":
+					case "kick":
+					case "dmarker":
+					case "tp":
+					case "weather":
+					case "addlootdropitem":
+					case "addloottablelootdrop":
+					case "addmerchantitem":
+					case "characternewunlimited":
+					case "convertmerchanttolootdrop":
+					case "createallarmorsets":
+					case "createcraft":
+					case "createfaction":
+					case "createitem":
+					case "createloottable":
+					case "createmerchantlist":
+					case "createnpc":
+					case "createnpccopy":
+					case "createnpcevent":
+					case "createspawngroup":
+					case "createzone":
+					case "editchunk":
+					case "editcraft":
+					case "editfaction":
+					case "edititem":
+					case "editlootdrop":
+					case "editloottable":
+					case "editmerchantlist":
+					case "editnpc":
+					case "editnpcevent":
+					case "editquest":
+					case "editspawngroup":
+					case "editzone":
+					case "forcelevel":
+					case "gmnpc":
+					case "gmspells":
+					case "granttitle":
+					case "inspirationgrant":
+					case "listclasses":
+					case "listcrafts":
+					case "listfactions":
+					case "listitems":
+					case "listlootdrops":
+					case "listmerchantlists":
+					case "listnpcs":
+					case "listnpcspells":
+					case "listquests":
+					case "listraces":
+					case "listspawngroups":
+					case "listspells":
+					case "listzones":
+					case "npcsay":
+					case "playeremote":
+					case "resetpersonality":
+					case "spawnitem":
+					case "spawnnpc":
+						hasAccessToCommand = true;
+					break;
+					default:
+						hasAccessToCommand = false;
+				}
+				
+				if (hasAccessToCommand)
+					Utils.dispatchCommandLater(plugin,getCommandHandlerForChannelId(event.getChannel().getStringID()), command.trim());
+				
 			}
 		}
     }

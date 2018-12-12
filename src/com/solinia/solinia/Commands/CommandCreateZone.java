@@ -51,7 +51,7 @@ public class CommandCreateZone implements CommandExecutor {
 		}
 		
 		try {
-			SoliniaZone zone = SoliniaZoneFactory.Create(zonename,x, y, z, sender.isOp());
+			SoliniaZone zone = SoliniaZoneFactory.Create(zonename,x, y, z);
 			
 			sender.sendMessage("Created Zone: " + zone.getId());
 		} catch (CoreStateInitException | SoliniaZoneCreationException e) {

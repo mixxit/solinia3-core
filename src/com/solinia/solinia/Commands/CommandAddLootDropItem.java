@@ -50,12 +50,6 @@ public class CommandAddLootDropItem implements CommandExecutor {
 				return true;
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This lootdrop was op created and you are not an op. Only ops can edit op lootdrop items");
-				return false;
-			}
-			
 			if (StateManager.getInstance().getConfigurationManager().getItem(itemid) == null)
 			{
 				sender.sendMessage("Item does not exist");
@@ -73,7 +67,7 @@ public class CommandAddLootDropItem implements CommandExecutor {
 				}
 			}
 			
-			SoliniaLootFactory.CreateLootDropItem(lootdropid, itemid, count, always, chance, sender.isOp());
+			SoliniaLootFactory.CreateLootDropItem(lootdropid, itemid, count, always, chance);
 			sender.sendMessage("Item added to loot drop");
 		} catch (CoreStateInitException e)
 		{

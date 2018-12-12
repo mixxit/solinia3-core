@@ -22,7 +22,6 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	private double pitch;
 	private int respawntime = 900;
 	private boolean disabled = false;
-	private boolean operatorCreated = true;
 	
 	@Override
 	public int getId() {
@@ -184,15 +183,5 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	@Override
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
-	}
-	
-	@Override
-	public void setOperatorCreated(boolean operatorCreated) {
-		this.operatorCreated  = operatorCreated;
-	}
-	
-	@Override
-	public boolean isOperatorCreated() {
-		return this.operatorCreated;
 	}
 }

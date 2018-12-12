@@ -269,10 +269,6 @@ public interface ISoliniaItem {
 
 	int getSkillModValue4();
 
-	boolean isOperatorCreated();
-
-	void setOperatorCreated(boolean operatorCreated);
-
 	boolean isArtifact();
 
 	void setArtifact(boolean artifact);

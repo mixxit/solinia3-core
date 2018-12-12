@@ -14,7 +14,6 @@ import net.md_5.bungee.api.ChatColor;
 public class SoliniaQuest implements ISoliniaQuest {
 	private int Id;
 	private String name = "";
-	private boolean isOperatorCreated = true;
 	private String questFlagCompletion = "";
 	private ConcurrentHashMap<Integer, QuestStep> questSteps = new ConcurrentHashMap<Integer, QuestStep>();
 	
@@ -36,16 +35,6 @@ public class SoliniaQuest implements ISoliniaQuest {
 	@Override
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	@Override
-	public boolean isOperatorCreated() {
-		return isOperatorCreated;
-	}
-
-	@Override
-	public void setOperatorCreated(boolean isOperatorCreated) {
-		this.isOperatorCreated = isOperatorCreated;
 	}
 
 	@Override

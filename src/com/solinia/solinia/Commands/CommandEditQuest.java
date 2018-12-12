@@ -97,12 +97,6 @@ public class CommandEditQuest implements CommandExecutor {
 				return false;
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getQuest(id).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This was op created and you are not an op. Only ops can edit op entries");
-				return false;
-			}
-
 			StateManager.getInstance().getConfigurationManager().editQuest(sender, id,setting,value,additional);
 			sender.sendMessage("Updating setting");
 		} catch (InvalidQuestSettingException ne)

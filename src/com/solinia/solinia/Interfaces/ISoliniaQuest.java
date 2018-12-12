@@ -18,10 +18,6 @@ public interface ISoliniaQuest {
 
 	void setName(String name);
 
-	boolean isOperatorCreated();
-
-	void setOperatorCreated(boolean isOperatorCreated);
-
 	String getQuestFlagCompletion();
 
 	void setQuestFlagCompletion(String questFlagCompletion);

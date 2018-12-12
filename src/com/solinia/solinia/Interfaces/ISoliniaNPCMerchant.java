@@ -25,10 +25,6 @@ public interface ISoliniaNPCMerchant {
 
 	void sendMerchantSettingsToSender(CommandSender sender);
 
-	boolean isOperatorCreated();
-
-	void setOperatorCreated(boolean operatorCreated);
-
 	boolean isPublishedBookStore();
 
 	void setPublishedBookStore(boolean publishedBookStore);

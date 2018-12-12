@@ -80,7 +80,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int accuracyRating = 0;
 	private int ac = 0;
 	private boolean speaksAllLanguages = false;
-	private boolean operatorCreated = true;
 	private boolean isPetControllable = true;
 	private int forcedMaxHp = 0;
 	private int npcSpellList = 0;
@@ -1054,8 +1053,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public void addEventHandler(SoliniaNPCEventHandler eventhandler, boolean operatorCreated) {
-		eventhandler.setOperatorCreated(operatorCreated);
+	public void addEventHandler(SoliniaNPCEventHandler eventhandler) {
 		this.getEventHandlers().add(eventhandler);
 
 	}
@@ -1323,18 +1321,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setSpeaksAllLanguages(boolean speaksAllLanguages) {
 		this.speaksAllLanguages = speaksAllLanguages;
-	}
-
-	@Override
-	public void setOperatorCreated(boolean operatorCreated) {
-		// TODO Auto-generated method stub
-		this.operatorCreated = operatorCreated;
-	}
-
-	@Override
-	public boolean isOperatorCreated() {
-		// TODO Auto-generated method stub
-		return this.operatorCreated;
 	}
 
 	@Override

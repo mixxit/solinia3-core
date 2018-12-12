@@ -48,7 +48,7 @@ public class CommandAddMerchantItem implements CommandExecutor {
 				return true;
 			}
 			
-			SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantid, itemid, sender.isOp());
+			SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantid, itemid);
 			sender.sendMessage("MerchantList updated");
 		} catch (CoreStateInitException e)
 		{

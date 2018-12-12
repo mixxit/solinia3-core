@@ -62,7 +62,7 @@ public class CommandCreateCraft implements CommandExecutor {
 				return false;
 			}
 			
-			SoliniaCraft craft = SoliniaCraftFactory.Create(craftname,item1, item2, outputitem, sender.isOp());
+			SoliniaCraft craft = SoliniaCraftFactory.Create(craftname,item1, item2, outputitem);
 			
 			sender.sendMessage("Created Craft: " + craft.getId());
 		} catch (CoreStateInitException | SoliniaCraftCreationException e) {

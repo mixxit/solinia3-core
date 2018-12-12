@@ -104,12 +104,6 @@ public class CommandEditItem implements CommandExecutor {
 				return false;
 			}
 			
-			if (item.isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This item was op created and you are not an op. Only ops can edit op items");
-				return false;
-			}
-			
 
 			StateManager.getInstance().getConfigurationManager().editItem(itemid,setting,value);
 			sender.sendMessage("Updating setting on item");

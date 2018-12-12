@@ -51,7 +51,7 @@ public class CommandCreateQuest implements CommandExecutor {
 			SoliniaQuest quest = new SoliniaQuest();
 			quest.setId(StateManager.getInstance().getConfigurationManager().getNextQuestId());
 			quest.setName(questname);
-			StateManager.getInstance().getConfigurationManager().addQuest(quest,sender.isOp());
+			StateManager.getInstance().getConfigurationManager().addQuest(quest);
 			sender.sendMessage("Quest created! [" + quest.getId() + "]");
 		} catch (CoreStateInitException e) {
 			sender.sendMessage(e.getMessage());

@@ -44,28 +44,14 @@ public class CommandAddLootTableLootDrop implements CommandExecutor {
 				return true;
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getLootTable(loottableid).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This loottable was op created and you are not an op. Only ops can edit op loottable items");
-				return false;
-			}
-			
 			if (StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid) == null)
 			{
 				sender.sendMessage("LootDrop does not exist");
 				return true;
 			}
 			
-			// Editting the loot tbale so this shouldnt be necessary
-			/*
-			if (StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This lootdrop was op created and you are not an op. Only ops can edit op lootdrop items");
-				return false;
-			}
-			*/
 			
-			SoliniaLootFactory.CreateLootTableDrop(loottableid, lootdropid, sender.isOp());
+			SoliniaLootFactory.CreateLootTableDrop(loottableid, lootdropid);
 			sender.sendMessage("LootTable updated");
 		} catch (CoreStateInitException e)
 		{

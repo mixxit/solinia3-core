@@ -50,12 +50,6 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 				return true;
 			}
 			
-			if (lootdrop.isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This lootdrop was op created and you are not an op. Only ops can edit op lootdrop items");
-				return false;
-			}
-			
 			int chance = Integer.parseInt(args[2]);
 			if (chance < 1 || chance > 100)
 			{
@@ -85,9 +79,9 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			String itemscreated = "";
 			for(ISoliniaClass classEntry : StateManager.getInstance().getConfigurationManager().getClasses())
 			{
-				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true, sender.isOp(),"");
+				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true,"");
 				for (Integer item : items) {
-					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, 1, false, chance, sender.isOp());
+					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, 1, false, chance);
 					itemscreated += item + " ";
 				}
 			}

@@ -25,10 +25,9 @@ import net.minecraft.server.v1_13_R2.NBTBase;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 
 public class SoliniaItemFactory {
-	public static ISoliniaItem CreateItem(ItemStack itemStack, boolean operatorCreated) throws SoliniaItemException, CoreStateInitException {
+	public static ISoliniaItem CreateItem(ItemStack itemStack) throws SoliniaItemException, CoreStateInitException {
 		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 		SoliniaItem item = new SoliniaItem();
-		item.setOperatorCreated(operatorCreated);
 		item.setId(StateManager.getInstance().getConfigurationManager().getNextItemId());
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(itemStack.getType().name());
@@ -61,12 +60,11 @@ public class SoliniaItemFactory {
 		return item;
 	}
 	
-	public static ISoliniaItem CreateItemCopy(ISoliniaItem originalItem, boolean operatorCreated) throws SoliniaItemException, CoreStateInitException {
+	public static ISoliniaItem CreateItemCopy(ISoliniaItem originalItem) throws SoliniaItemException, CoreStateInitException {
 		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 		ItemStack itemStack = originalItem.asItemStack();		
 		
 		SoliniaItem item = new SoliniaItem();
-		item.setOperatorCreated(operatorCreated);
 		item.setId(StateManager.getInstance().getConfigurationManager().getNextItemId());
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(originalItem.getDisplayname());
@@ -117,7 +115,7 @@ public class SoliniaItemFactory {
 		return item;
 	}
 
-	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname, boolean prefixClassName, boolean operatorCreated, String discoverer) throws SoliniaItemException {
+	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname, boolean prefixClassName, String discoverer) throws SoliniaItemException {
 		if (classtype == null)
 			return new ArrayList<Integer>();
 		
@@ -127,49 +125,49 @@ public class SoliniaItemFactory {
 		{
 			StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 			// Get the appropriate material for the class and generate the base item
-			ISoliniaItem headItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultHeadMaterial().toUpperCase())),operatorCreated);
+			ISoliniaItem headItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultHeadMaterial().toUpperCase())));
 			headItem.setDiscoverer(discoverer);
-			ISoliniaItem chestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultChestMaterial().toUpperCase())),operatorCreated);
+			ISoliniaItem chestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultChestMaterial().toUpperCase())));
 			chestItem.setDiscoverer(discoverer);
-			ISoliniaItem legsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultLegsMaterial().toUpperCase())),operatorCreated);
+			ISoliniaItem legsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultLegsMaterial().toUpperCase())));
 			legsItem.setDiscoverer(discoverer);
-			ISoliniaItem feetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultFeetMaterial().toUpperCase())),operatorCreated);
+			ISoliniaItem feetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultFeetMaterial().toUpperCase())));
 			feetItem.setDiscoverer(discoverer);
-			ISoliniaItem handItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaulthandMaterial().toUpperCase())),operatorCreated);
+			ISoliniaItem handItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaulthandMaterial().toUpperCase())));
 			handItem.setDiscoverer(discoverer);
-			ISoliniaItem offhandItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultoffHandMaterial().toUpperCase())),operatorCreated);
+			ISoliniaItem offhandItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultoffHandMaterial().toUpperCase())));
 			offhandItem.setDiscoverer(discoverer);
 			
 			// Jewelry!
-			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
+			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 			neckItem.setNeckItem(true);
 			neckItem.setDiscoverer(discoverer);
 			neckItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
-			ISoliniaItem shouldersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
+			ISoliniaItem shouldersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 			shouldersItem.setShouldersItem(true);
 			shouldersItem.setDiscoverer(discoverer);
 			shouldersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
-			ISoliniaItem fingersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
+			ISoliniaItem fingersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 			fingersItem.setFingersItem(true);
 			fingersItem.setDiscoverer(discoverer);
 			fingersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
-			ISoliniaItem earsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
+			ISoliniaItem earsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 			earsItem.setEarsItem(true);
 			earsItem.setDiscoverer(discoverer);
 			earsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
 
 			// Additional Armour!
-			ISoliniaItem forearmsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
+			ISoliniaItem forearmsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 			forearmsItem.setForearmsItem(true);
 			forearmsItem.setDiscoverer(discoverer);
 			forearmsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
-			ISoliniaItem armsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
+			ISoliniaItem armsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 			armsItem.setArmsItem(true);
 			armsItem.setDiscoverer(discoverer);
 			armsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
-			ISoliniaItem handsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM), operatorCreated);
+			ISoliniaItem handsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 			handsItem.setHandsItem(true);
 			handsItem.setDiscoverer(discoverer);
 			handsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");

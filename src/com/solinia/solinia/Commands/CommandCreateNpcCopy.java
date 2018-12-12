@@ -80,7 +80,7 @@ public class CommandCreateNpcCopy implements CommandExecutor {
 			
 			name = name.replace(" ", "_");
 		
-			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPCCopy(npcid,name, sender.isOp());
+			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPCCopy(npcid,name);
 			sender.sendMessage("Created NPC Copy: " + npc.getId());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

@@ -101,11 +101,6 @@ public class CommandEditSpawngroup implements CommandExecutor {
 				return false;
 			}
 
-			if (StateManager.getInstance().getConfigurationManager().getSpawnGroup(spawngroupid).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This spawngroup was op created and you are not an op. Only ops can edit spawngroup npcs");
-				return false;
-			}
 			
 			try
 			{

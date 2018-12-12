@@ -64,7 +64,7 @@ public class CommandPublishBook implements CommandExecutor {
         		return true;
         	}
         	
-        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack,true);
+        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack);
         	sender.sendMessage("Book is a brand new title! " + item.getId());
         	
         	List<Integer> merchantItemList = new ArrayList<Integer>();
@@ -79,7 +79,7 @@ public class CommandPublishBook implements CommandExecutor {
         	
         	for(Integer merchantId : merchantItemList)
         	{
-        		SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantId, item.getId(), false);
+        		SoliniaNPCMerchantFactory.AddNPCMerchantItem(merchantId, item.getId());
         	}
         	
         	sender.sendMessage("New Book Published! (ID: " + item.getId() + ")");

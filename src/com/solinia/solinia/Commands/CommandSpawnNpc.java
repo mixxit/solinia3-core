@@ -37,11 +37,6 @@ public class CommandSpawnNpc implements CommandExecutor {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(itemid);
 			
 			if (npc != null) {
-				if (npc.isOperatorCreated() && !player.isOp())
-				{
-					player.sendMessage("You can only spawn non-OP npcs");
-					return true;
-				}
 				
 				npc.Spawn(player.getLocation(), 1);
 			} else {

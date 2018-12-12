@@ -64,7 +64,7 @@ public class CommandCreateFaction implements CommandExecutor {
 				return true;
 			}
 
-			ISoliniaFaction faction = SoliniaFactionFactory.CreateFaction(factionname, base, sender.isOp());
+			ISoliniaFaction faction = SoliniaFactionFactory.CreateFaction(factionname, base);
 			sender.sendMessage("Created faction: " + faction.getId());
 			return true;
 		} catch (CoreStateInitException e) {

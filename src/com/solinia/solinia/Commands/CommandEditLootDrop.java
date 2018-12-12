@@ -90,12 +90,6 @@ public class CommandEditLootDrop implements CommandExecutor {
 				return false;
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getLootDrop(LootDropid).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This lootdrop was op created and you are not an op. Only ops can edit op lootdrop items");
-				return false;
-			}
-
 			StateManager.getInstance().getConfigurationManager().editLootDrop(LootDropid,setting,value);
 			sender.sendMessage("Updating setting on LootDrop");
 		} catch (InvalidLootDropSettingException ne)

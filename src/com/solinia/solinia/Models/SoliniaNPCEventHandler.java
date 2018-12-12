@@ -48,7 +48,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private String responseType = "SAY";
 	private double awardsExperience = 0;
 	private boolean awardsBind = false;
-	private boolean operatorCreated = true;
 	private String requiresPermissionNode = "";
 	private int awardsFactionValue = 0;
 	private int awardsFactionId = 0;
@@ -580,7 +579,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 							// always give the next tier up and then we will reset the player requirements ot current level
 							// this ability is for special seasonal rewards only
 							playertier += 1;
-							List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, true, player.getBukkitPlayer().getName());
+							List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, player.getBukkitPlayer().getName());
 							
 							for(int itemid : items)
 							{
@@ -721,16 +720,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setAwardsBind(boolean awardsBind) {
 		this.awardsBind = awardsBind;
-	}
-
-	@Override
-	public boolean isOperatorCreated() {
-		return operatorCreated;
-	}
-
-	@Override
-	public void setOperatorCreated(boolean operatorCreated) {
-		this.operatorCreated = operatorCreated;
 	}
 
 	public int getRequiresRaceId() {

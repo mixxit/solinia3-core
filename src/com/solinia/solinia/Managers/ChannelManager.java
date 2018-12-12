@@ -292,6 +292,13 @@ public class ChannelManager implements IChannelManager {
 		}
 	}
 	
+	@Override 
+	public void clearDiscordQueue()
+	{
+		if (queuedDiscordMessages != null)
+		queuedDiscordMessages.clear();
+	}
+	
 	@Override
 	public void sendToDiscordMC(ISoliniaPlayer source, String channelId, String message)
 	{

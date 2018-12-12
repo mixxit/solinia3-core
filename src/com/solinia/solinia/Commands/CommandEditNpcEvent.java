@@ -137,11 +137,6 @@ public class CommandEditNpcEvent implements CommandExecutor {
 					if (handler.getTriggerdata().toUpperCase().equals(triggertext.toUpperCase()))
 					{
 						found = true;
-						if (handler.isOperatorCreated() && !sender.isOp())
-						{
-							sender.sendMessage("This npcevent was op created and you are not an op. Only ops can edit op npcevent items");
-							return false;
-						}
 					}
 				}
 				

@@ -48,4 +48,6 @@ public interface IChannelManager {
 	String getDiscordInCharacterChannelId();
 
 	void setDiscordInCharacterChannelId(String discordInCharacterChannelId);
+
+	void clearDiscordQueue();
 }

@@ -1126,8 +1126,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
-	public ISoliniaQuest addQuest(SoliniaQuest quest, boolean isOperatorCreated) {
-		quest.setOperatorCreated(isOperatorCreated);
+	public ISoliniaQuest addQuest(SoliniaQuest quest) {
 		this.questRepository.add(quest);
 		return getQuest(quest.getId());
 	}

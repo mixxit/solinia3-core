@@ -385,7 +385,7 @@ public interface IConfigurationManager {
 
 	int getNextQuestId();
 
-	ISoliniaQuest addQuest(SoliniaQuest quest, boolean operatorCreated);
+	ISoliniaQuest addQuest(SoliniaQuest quest);
 
 	void editLootDrop(int lootDropid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidLootDropSettingException;
 

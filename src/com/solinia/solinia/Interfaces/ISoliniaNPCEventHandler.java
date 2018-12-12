@@ -83,9 +83,5 @@ public interface ISoliniaNPCEventHandler {
 	boolean isAwardsBind();
 
 	void setAwardsBind(boolean awardsBind);
-
-	boolean isOperatorCreated();
-
-	void setOperatorCreated(boolean operatorCreated);
 	
 }

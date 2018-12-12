@@ -96,7 +96,7 @@ public class CommandCreateNpc implements CommandExecutor {
 		name = name.replace(" ", "_");
 		
 		try {
-			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level, factionid, sender.isOp());
+			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level, factionid);
 			
 			sender.sendMessage("Created NPC: " + npc.getId());
 		} catch (CoreStateInitException e) {

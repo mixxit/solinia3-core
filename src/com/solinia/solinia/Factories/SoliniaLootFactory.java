@@ -15,15 +15,14 @@ import com.solinia.solinia.Models.SoliniaLootTableEntry;
 
 public class SoliniaLootFactory {
 
-	public static void CreateLootDrop(String lootdropname, boolean operatorCreated) throws CoreStateInitException {
+	public static void CreateLootDrop(String lootdropname) throws CoreStateInitException {
 		SoliniaLootDrop lootdrop = new SoliniaLootDrop();
 		lootdrop.setId(StateManager.getInstance().getConfigurationManager().getNextLootDropId());
 		lootdrop.setName(lootdropname);
-		lootdrop.setOperatorCreated(operatorCreated);
 		StateManager.getInstance().getConfigurationManager().addLootDrop(lootdrop);
 	}
 
-	public static void CreateLootDropFromMerchant(ISoliniaNPCMerchant merchant, String name, int count, boolean always, int chance, boolean operatorCreated) throws CoreStateInitException
+	public static void CreateLootDropFromMerchant(ISoliniaNPCMerchant merchant, String name, int count, boolean always, int chance) throws CoreStateInitException
 	{
 		if (merchant.getEntries().size() == 0)
 			return;
@@ -31,24 +30,23 @@ public class SoliniaLootFactory {
 		if (StateManager.getInstance().getConfigurationManager().getLootDrop(name.toUpperCase()) != null)
 			return;
 		
-		CreateLootDrop(name, operatorCreated);
+		CreateLootDrop(name);
 		
 		ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(name.toUpperCase());
 		for(ISoliniaNPCMerchantEntry item : merchant.getEntries())
 		{
-			CreateLootDropItem(lootdrop.getId(), item.getItemid(), count, always, chance, operatorCreated);
+			CreateLootDropItem(lootdrop.getId(), item.getItemid(), count, always, chance);
 		}
 	}
 	
-	public static void CreateLootTable(String loottablename, boolean operatorCreated) throws CoreStateInitException {
+	public static void CreateLootTable(String loottablename) throws CoreStateInitException {
 		SoliniaLootTable loottable = new SoliniaLootTable();
 		loottable.setId(StateManager.getInstance().getConfigurationManager().getNextLootTableId());
 		loottable.setName(loottablename);
-		loottable.setOperatorCreated(operatorCreated);
 		StateManager.getInstance().getConfigurationManager().addLootTable(loottable);
 	}
 
-	public static void CreateLootTableDrop(int loottableid, int lootdropid, boolean operatorCreated) throws CoreStateInitException {
+	public static void CreateLootTableDrop(int loottableid, int lootdropid) throws CoreStateInitException {
 		ISoliniaLootTable loottabletable = StateManager.getInstance().getConfigurationManager().getLootTable(loottableid);
 		SoliniaLootTableEntry loottable = new SoliniaLootTableEntry();
 		int id = 1;
@@ -61,11 +59,10 @@ public class SoliniaLootFactory {
 		loottable.setId(id);
 		loottable.setLoottableid(loottableid);
 		loottable.setLootdropid(lootdropid);
-		loottable.setOperatorCreated(operatorCreated);
 		StateManager.getInstance().getConfigurationManager().getLootTable(loottableid).getEntries().add(loottable);
 	}
 
-	public static void CreateLootDropItem(int lootdropid, int itemid, int count, boolean always, int chance, boolean operatorCreated) throws CoreStateInitException {
+	public static void CreateLootDropItem(int lootdropid, int itemid, int count, boolean always, int chance) throws CoreStateInitException {
 		ISoliniaLootDrop lootdroptable = StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid);
 		SoliniaLootDropEntry lootdrop = new SoliniaLootDropEntry();
 		int id = 1;
@@ -81,7 +78,6 @@ public class SoliniaLootFactory {
 		lootdrop.setCount(count);
 		lootdrop.setAlways(always);
 		lootdrop.setChance(chance);
-		lootdrop.setOperatorCreated(operatorCreated);
 		StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid).getEntries().add(lootdrop);
 	}
 

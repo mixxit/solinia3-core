@@ -89,12 +89,6 @@ public class CommandEditCraft implements CommandExecutor {
 				sender.sendMessage("Cannot locate craft id: " + craftid);
 				return false;
 			}
-			
-			/*if (StateManager.getInstance().getConfigurationManager().getCraft(craftid).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This craft was op created and you are not an op. Only ops can edit op craft items");
-				return false;
-			}*/
 
 			StateManager.getInstance().getConfigurationManager().editCraft(craftid,setting,value);
 			sender.sendMessage("Updating setting on Craft");

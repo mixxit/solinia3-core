@@ -61,7 +61,7 @@ public class CommandCreateLootTable implements CommandExecutor {
 				return true;
 			}
 
-			SoliniaLootFactory.CreateLootTable(loottablename, sender.isOp());
+			SoliniaLootFactory.CreateLootTable(loottablename);
 			sender.sendMessage("Loot Table created as " + StateManager.getInstance().getConfigurationManager().getLootTable(loottablename).getId());
 		} catch (CoreStateInitException e)
 		{

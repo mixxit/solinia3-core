@@ -19,7 +19,6 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 	private int id;
 	private String name;
 	private List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();	
-	private boolean operatorCreated = true;
 
 	@Override
 	public int getId() {
@@ -204,18 +203,6 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			throw new InvalidLootDropSettingException(
 					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemchance,setallcount,setallitemminlevel,setallitemfireresist,setallitemcoldresist,setallitemmagicresist,setallitempoisonresist,setallitemdiseaseresist");
 		}
-	}
-	
-	@Override
-	public void setOperatorCreated(boolean operatorCreated)
-	{
-		this.operatorCreated = operatorCreated;
-	}
-	
-	@Override
-	public boolean isOperatorCreated()
-	{
-		return this.operatorCreated;
 	}
 	
 }

@@ -17,7 +17,6 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 	private int id;
 	private String name;
 	private List<ISoliniaNPCMerchantEntry> entries = new ArrayList<ISoliniaNPCMerchantEntry>();	
-	private boolean operatorCreated = true;
 	private boolean publishedBookStore = false;
 	private String requiresPermissionNode = "";
 	@Override
@@ -104,16 +103,6 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 		{
 			sender.sendMessage(e.getMessage());
 		}
-	}
-
-	@Override
-	public boolean isOperatorCreated() {
-		return operatorCreated;
-	}
-
-	@Override
-	public void setOperatorCreated(boolean operatorCreated) {
-		this.operatorCreated = operatorCreated;
 	}
 
 	@Override

@@ -90,12 +90,6 @@ public class CommandEditLootTable implements CommandExecutor {
 				return false;
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getLootTable(LootTableid).isOperatorCreated() && !sender.isOp())
-			{
-				sender.sendMessage("This loottable was op created and you are not an op. Only ops can edit op loottable items");
-				return false;
-			}
-
 			StateManager.getInstance().getConfigurationManager().editLootTable(LootTableid,setting,value);
 			sender.sendMessage("Updating setting on LootTable");
 		} catch (InvalidLootTableSettingException ne)

@@ -15,7 +15,6 @@ public class SoliniaZone {
 	private int x;
 	private int y;
 	private int z;
-	private boolean operatorCreated = true;
 	private boolean hotzone = false;
 	private int succorx;
 	private int succory;
@@ -61,14 +60,6 @@ public class SoliniaZone {
 	}
 	public void setZ(int z) {
 		this.z = z;
-	}
-	public void setOperatorCreated(boolean operatorCreated) {
-		this.operatorCreated = operatorCreated;
-	}
-	
-	public boolean isOperatorCreated()
-	{
-		return this.operatorCreated;
 	}
 	
 	public boolean isHotzone() {

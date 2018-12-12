@@ -148,7 +148,7 @@ public interface ISoliniaNPC {
 
 	void processChatInteractionEvent(SoliniaLivingEntity solentity, LivingEntity triggerentity, String data);
 
-	void addEventHandler(SoliniaNPCEventHandler eventhandler, boolean operatorCreated);
+	void addEventHandler(SoliniaNPCEventHandler eventhandler);
 
 	void sendMerchantItemListToPlayer(Player player, int pageno);
 
@@ -219,10 +219,6 @@ public interface ISoliniaNPC {
 	boolean isSpeaksAllLanguages();
 
 	void setSpeaksAllLanguages(boolean speaksAllLanguages);
-
-	void setOperatorCreated(boolean operatorCreated);
-
-	boolean isOperatorCreated();
 
 	List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity, boolean excludeMainHand);
 

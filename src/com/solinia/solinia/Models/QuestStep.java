@@ -3,7 +3,6 @@ package com.solinia.solinia.Models;
 public class QuestStep {
 	private int sequence = 0;
 	private String description = "";
-	private boolean isOperatorCreated = true;
 	private int questId;
 	private String triggerQuestFlag = "";
 	private String completeQuestFlag = "";
@@ -21,12 +20,6 @@ public class QuestStep {
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public boolean isOperatorCreated() {
-		return isOperatorCreated;
-	}
-	public void setOperatorCreated(boolean isOperatorCreated) {
-		this.isOperatorCreated = isOperatorCreated;
 	}
 	public int getQuestId() {
 		return questId;

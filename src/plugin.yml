@@ -31,6 +31,10 @@ commands:
     description: Lists todays RP time
     usage: /today
     aliases: []
+  flushdiscord:
+    description: Empties discord queue
+    usage: /flushdiscord
+    aliases: []
   hidesongs:
     description: Hides songs
     usage: /hidesongs

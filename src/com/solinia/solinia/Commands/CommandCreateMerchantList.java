@@ -53,7 +53,7 @@ public class CommandCreateMerchantList implements CommandExecutor {
 				return true;
 			}
 			
-			SoliniaNPCMerchantFactory.CreateNPCMerchant(merchantlistname, sender.isOp());
+			SoliniaNPCMerchantFactory.CreateNPCMerchant(merchantlistname);
 			sender.sendMessage("MerchantList created");
 		} catch (CoreStateInitException e)
 		{

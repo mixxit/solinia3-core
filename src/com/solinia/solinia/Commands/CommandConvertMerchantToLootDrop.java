@@ -60,7 +60,7 @@ public class CommandConvertMerchantToLootDrop implements CommandExecutor {
 				return true;
 			}
 		
-			SoliniaLootFactory.CreateLootDropFromMerchant(StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchant), name, count, always, chance, sender.isOp());
+			SoliniaLootFactory.CreateLootDropFromMerchant(StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchant), name, count, always, chance);
 			sender.sendMessage("LootDrop Created: " + StateManager.getInstance().getConfigurationManager().getLootDrop(name.toUpperCase()).getId());
 			return true;
 		} catch (CoreStateInitException e)

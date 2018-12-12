@@ -108,9 +108,7 @@ public class SoliniaItem implements ISoliniaItem {
 	
 	private SkillType skillModType4 = SkillType.None;
 	private int skillModValue4 = 0;
-	
-	private boolean operatorCreated = true;
-	
+
 	private boolean isFingersItem = false;
 	private boolean isNeckItem = false;
 	private boolean isShouldersItem = false;
@@ -1486,16 +1484,6 @@ public class SoliniaItem implements ISoliniaItem {
 
 	public void setSkillModValue4(int skillModValue4) {
 		this.skillModValue4 = skillModValue4;
-	}
-
-	@Override
-	public boolean isOperatorCreated() {
-		return operatorCreated;
-	}
-
-	@Override
-	public void setOperatorCreated(boolean operatorCreated) {
-		this.operatorCreated = operatorCreated;
 	}
 
 	@Override

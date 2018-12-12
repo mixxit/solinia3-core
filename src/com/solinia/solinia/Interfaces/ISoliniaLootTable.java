@@ -25,7 +25,4 @@ public interface ISoliniaLootTable {
 
 	void editSetting(String setting, String value) throws InvalidLootTableSettingException, NumberFormatException, CoreStateInitException;
 
-	void setOperatorCreated(boolean operatorCreated);
-
-	boolean isOperatorCreated();
 }

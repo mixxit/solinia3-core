@@ -63,7 +63,7 @@ public class CommandCreateLootDrop implements CommandExecutor {
 				return true;
 			}
 			
-			SoliniaLootFactory.CreateLootDrop(lootdropname, sender.isOp());
+			SoliniaLootFactory.CreateLootDrop(lootdropname);
 			sender.sendMessage("LootDrop created as " + StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropname).getId());
 			
 		} catch (CoreStateInitException e)
