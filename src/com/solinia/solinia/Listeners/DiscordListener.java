@@ -85,7 +85,7 @@ public class DiscordListener {
 				{
 					if (i == 0)
 					{
-						command += words[i].replace("?","") + " ";
+						command += words[i].replace("^","") + " ";
 					} else {
 						command += words[i] + " ";
 					}
