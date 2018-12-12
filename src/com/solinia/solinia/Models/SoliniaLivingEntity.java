@@ -61,6 +61,9 @@ import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
+import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_13_R2.EntityCreature;
@@ -6557,46 +6560,43 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isPet())
 			return;
 		
-		if (!hasSpawnPoint())
+		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
+		if (activeMob == null)
+		{
+			// Why does this npc exist without a MM entity?
+			this.getBukkitLivingEntity().remove();
+			return;
+		}
+		
+		if (activeMob.getSpawner() == null || activeMob.getSpawner().getLocation() == null)
 		{
 			// Why would this have no spawn point? Despawn
 			this.getBukkitLivingEntity().remove();
 			return;
 		}
-
+		
 		if (resetHealth == true)
 			if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
 				this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 		
-		if (this.getBukkitLivingEntity().getLocation().distance(getSpawnPoint()) < 5)
+		if (this.getBukkitLivingEntity().getLocation().distance(BukkitAdapter.adapt(activeMob.getSpawner().getLocation())) < 5)
 			return;
 			
-		this.getBukkitLivingEntity().teleport(getSpawnPoint());
+		this.getBukkitLivingEntity().teleport(BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
 	}
-
-	private Location getSpawnPoint() {
-		if(!hasSpawnPoint())
+	
+	public Location getSpawnPoint()
+	{
+		if (!isNPC())
 			return null;
 		
-		String metadata = "";
-		for (MetadataValue val : livingentity.getMetadata("spawnpoint")) {
-			metadata = val.asString();
-		}
-		
-		if (metadata.equals(""))
+		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
+		if (activeMob == null)
 			return null;
 		
-		String[] loc = metadata.split(",");
-		if (loc.length == 0)
+		if (activeMob.getSpawner() == null || activeMob.getSpawner().getLocation() == null)
 			return null;
 		
-		Location location = new Location(Bukkit.getWorld(loc[0]), Double.parseDouble(loc[1]),
-		Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
-		return location;
+		return BukkitAdapter.adapt(activeMob.getSpawner().getLocation());
 	}
-
-	private boolean hasSpawnPoint() {
-		return getBukkitLivingEntity().hasMetadata("spawnpoint");
-	}
-
 }

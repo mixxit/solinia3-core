@@ -262,9 +262,6 @@ public class Solinia3CoreEntityListener implements Listener {
 									String location = le.getLocation().getWorld().getName() + ","
 											+ le.getLocation().getX() + "," + le.getLocation().getY() + ","
 											+ le.getLocation().getZ();
-									le.setMetadata("spawnpoint", new FixedMetadataValue(
-											Bukkit.getPluginManager().getPlugin("Solinia3Core"), location));
-
 								}
 
 							} catch (CoreStateInitException e) {

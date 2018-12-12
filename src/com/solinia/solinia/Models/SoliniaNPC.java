@@ -852,12 +852,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 					
 					if (solentity.getBukkitLivingEntity().hasMetadata("spawnpoint"))
 					{
-						String metadata = "";
-						for (MetadataValue val : solentity.getBukkitLivingEntity().getMetadata("spawnpoint")) {
-							metadata = val.asString();
+						if (solentity.getSpawnPoint() == null)
+						{
+							triggerentity.sendMessage("spawnpoint: null");
+						} else {
+							triggerentity.sendMessage("spawnpoint: " + solentity.getSpawnPoint().getWorld().getName() + "," + solentity.getSpawnPoint().getX() + "," + solentity.getSpawnPoint().getY() + "," + solentity.getSpawnPoint().getZ());
 						}
-						
-						triggerentity.sendMessage("spawnpoint: " + metadata);
 					}
 					
 					if (solentity.getBukkitLivingEntity().hasMetadata("mythicmob"))

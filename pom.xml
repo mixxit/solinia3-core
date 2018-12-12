@@ -59,7 +59,10 @@
         <enabled>false</enabled>
       </releases>
     </repository>
-
+    <repository>
+        <id>lumine-repo</id>
+    	<url>http://mvn.lumine.io/repository/maven-snapshots/</url>
+    </repository>
     <repository>
       <id>3_dmulloy2-repo</id>
       <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
@@ -154,5 +157,11 @@
       <artifactId>glowapi</artifactId>
       <version>1.4.7-SNAPSHOT</version>
     </dependency>
+    <dependency>
+        <groupId>io.lumine.xikage</groupId>
+        <artifactId>MythicMobs</artifactId>
+        <version>4.5.2-SNAPSHOT</version>
+    	<scope>provided</scope>
+	</dependency>
   </dependencies>
 </project>
