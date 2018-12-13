@@ -760,7 +760,7 @@ public class ChannelManager implements IChannelManager {
 			
 			for(ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
 			{
-				if (npc.isPet())
+				if (npc.isCorePet())
 					continue;
 								
 				if (npc.getLevel() >= mobmin && npc.getLevel() <= mobmax)

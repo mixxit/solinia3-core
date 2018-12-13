@@ -9,12 +9,10 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sittable;
-import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -512,7 +510,7 @@ public class SoliniaItem implements ISoliniaItem {
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 				if (solLivingEntity  != null)
 				{
-					if (solLivingEntity.isNPC() && solLivingEntity.isPet())
+					if (solLivingEntity.isNPC() && solLivingEntity.isCurrentlyNPCPet() && !solLivingEntity.isCharmed())
 					{
 						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
 						if (npc != null)
@@ -547,7 +545,7 @@ public class SoliniaItem implements ISoliniaItem {
 						return false;
 					}
 
-					if (((Tameable) pet).getOwner().getUniqueId().equals(targetentity.getUniqueId()))
+					if (solLivingEntity.getOwnerEntity().getUniqueId().equals(targetentity.getUniqueId()))
 					{
 						solLivingEntity.setAttackTarget(null);
 						player.sendMessage("You cannot send your pet to attack you!");

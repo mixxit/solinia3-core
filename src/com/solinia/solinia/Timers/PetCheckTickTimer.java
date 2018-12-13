@@ -23,7 +23,7 @@ public class PetCheckTickTimer extends BukkitRunnable {
 
 					if (solLivingEntity != null)
 					{
-						if (solLivingEntity.isPet())
+						if (solLivingEntity.isCurrentlyNPCPet())
 						{
 							solLivingEntity.PetThink(player);
 						}

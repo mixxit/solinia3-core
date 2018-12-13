@@ -361,7 +361,7 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public ISoliniaNPC getPetNPCByName(String name) {
-		List<ISoliniaNPC> results = npcRepository.query(q -> q.isPet() == true && q.getName().equals(name));
+		List<ISoliniaNPC> results = npcRepository.query(q -> q.isCorePet() == true && q.getName().equals(name));
 		if (results.size() != 1)
 			return null;
 		

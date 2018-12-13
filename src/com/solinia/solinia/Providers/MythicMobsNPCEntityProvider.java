@@ -288,7 +288,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "  Modules:\r\n";
 		mob = mob + "    ThreatTable: false\r\n";
 
-		if (npc.isPet()) {
+		if (npc.isCorePet()) {
 			mob = mob + "  Faction: FACTIONID_-1\r\n";
 		} else {
 			mob = mob + "  Faction: FACTIONID_" + npc.getFactionid() + "\r\n";
@@ -301,8 +301,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 skeletonbowattack\r\n";
 			mob = mob + "  - 2 meleeattack\r\n";
-			mob = mob + "  - 3 lookatplayers\r\n";
-			mob = mob + "  - 4 randomstroll\r\n";
+			mob = mob + "  - 3 gotoowner\r\n";
+			mob = mob + "  - 4 lookatplayers\r\n";
+			mob = mob + "  - 5 randomstroll\r\n";
 			mob = mob + "  AITargetSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 attacker\r\n";
@@ -321,21 +322,22 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 
 		// Act as normal mob if without faction
-		if (npc.getFactionid() > 0 || npc.isPet()) {
+		if (npc.getFactionid() > 0 || npc.isCorePet()) {
 			mob = mob + "  AIGoalSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 skeletonbowattack\r\n";
 			mob = mob + "  - 2 meleeattack\r\n";
-			mob = mob + "  - 3 lookatplayers\r\n";
+			mob = mob + "  - 3 gotoowner\r\n";
+			mob = mob + "  - 4 lookatplayers\r\n";
 			if (npc.isRoamer()) {
-				mob = mob + "  - 4 randomstroll\r\n";
+				mob = mob + "  - 5 randomstroll\r\n";
 			}
 			mob = mob + "  AITargetSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 attacker\r\n";
 
 			// NPC attack players
-			if (!npc.isPet()) {
+			if (!npc.isCorePet()) {
 				try {
 					ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager()
 							.getFaction(npc.getFactionid());
@@ -348,7 +350,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			}
 
 			// NPC attack NPCs
-			if (npc.isGuard() || npc.isPet()) {
+			if (npc.isGuard() || npc.isCorePet()) {
 				// Always attack mobs with factionid 0
 				mob = mob + "  - 3 SpecificFaction FACTIONID_0\r\n";
 				// Attack all mobs with -1500 faction

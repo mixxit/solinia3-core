@@ -354,7 +354,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: "
 				+ ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal()
 				+ ChatColor.RESET);
-		sender.sendMessage("- pet: " + ChatColor.GOLD + isPet() + ChatColor.RESET + " " + "petcontrollable: "
+		sender.sendMessage("- pet: " + ChatColor.GOLD + isCorePet() + ChatColor.RESET + " " + "petcontrollable: "
 				+ ChatColor.GOLD + isPetControllable());
 		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET + " - guard: "
 				+ ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer()
@@ -611,7 +611,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setGuard(Boolean.parseBoolean(value));
 			break;
 		case "pet":
-			setPet(Boolean.parseBoolean(value));
+			setCorePet(Boolean.parseBoolean(value));
 			break;
 		case "roamer":
 			setRoamer(Boolean.parseBoolean(value));
@@ -731,13 +731,13 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public boolean isPet() {
+	public boolean isCorePet() {
 		return isPet;
 	}
 
 	@Override
-	public void setPet(boolean isPet) {
-		this.isPet = isPet;
+	public void setCorePet(boolean isCorePet) {
+		this.isPet = isCorePet;
 	}
 
 	@Override

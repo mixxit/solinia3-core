@@ -24,14 +24,12 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
-import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sittable;
-import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Arrow.PickupStatus;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
@@ -68,7 +66,6 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_13_R2.EntityCreature;
 import net.minecraft.server.v1_13_R2.EntityDamageSource;
-import net.minecraft.server.v1_13_R2.EntityTameableAnimal;
 import net.minecraft.server.v1_13_R2.EnumItemSlot;
 import net.minecraft.server.v1_13_R2.PacketPlayOutAnimation;
 import net.minecraft.server.v1_13_R2.PathfinderGoalHurtByTarget;
@@ -139,9 +136,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 
-		if (defender.getBukkitLivingEntity() instanceof Tameable) {
-			Tameable tameable = (Tameable) defender.getBukkitLivingEntity();
-			if (tameable.getOwner().getUniqueId().toString().equals(getBukkitLivingEntity().getUniqueId().toString())) {
+		if (defender.isCurrentlyNPCPet()) {
+			if (defender.getOwnerEntity().getUniqueId().toString().equals(getBukkitLivingEntity().getUniqueId().toString())) {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack your pet!");
 				return;
 			}
@@ -1190,7 +1186,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	public boolean usingValidWeapon() {
-		if (this.isPet() || this.isNPC())
+		if (this.isCurrentlyNPCPet() || this.isNPC())
 			return true;
 
 		if (Utils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
@@ -1369,10 +1365,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								+ df.format(defender.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + " " + my_hit.skill
 								+ " damage"));
 
-			if (attackerEntity instanceof Tameable) {
-				Tameable pet = (Tameable) attackerEntity;
-				if (pet.getOwner() != null && pet.getOwner() instanceof Player) {
-					Player owner = (Player) pet.getOwner();
+			if (this.isCurrentlyNPCPet()) {
+				if (getOwnerEntity() != null && getOwnerEntity() instanceof Player) {
+					Player owner = (Player) getOwnerEntity();
 					owner.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent("Your pet hit " + name + " for " + df.format(finaldamage) + " "
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
@@ -1733,19 +1728,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void damageAlertHook(double damage, Entity sourceEntity) {
-		if (isPet() && this.getBukkitLivingEntity() instanceof Tameable) {
-			LivingEntity owner = (LivingEntity) ((Tameable) getBukkitLivingEntity()).getOwner();
+		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getActiveMob().getOwner() != null) {
+			Player owner = this.getOwnerEntity();
 			if (owner != null) {
 				if (owner != null && owner instanceof Player) {
-					try {
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) owner);
-						// HP warning to owner
-						if (this.getHPRatio() < 10) {
-							owner.sendMessage(ChatColor.GRAY + "* Your pet says 'Master I am low on health!'");
-						}
-
-					} catch (CoreStateInitException e) {
-
+					// HP warning to owner
+					if (this.getHPRatio() < 10) {
+						owner.sendMessage(ChatColor.GRAY + "* Your pet says 'Master I am low on health!'");
 					}
 				}
 			}
@@ -2974,27 +2963,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return (int) Math.floor(avoidance);
 	}
-
-	@Override
-	public boolean isPet() {
-		if (isPlayer())
-			return false;
-		
-		if (this.getNpcid() < 1)
-			return false;
-
-		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.isPet())
-				return true;
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return false;
-	}
-
+	
 	@Override
 	public boolean isUndead() {
 		if (isPlayer())
@@ -3309,7 +3278,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int engagedDetrimentalOtherChance = StateManager.getInstance().getEntityManager()
 				.getAIEngagedDetrimentalChance();
 
-		if (npc.isPet()) {
+		if (npc.isCorePet()) {
 			engagedBeneficialSelfChance = 10;
 			engagedBeneficialOtherChance = 0;
 			engagedDetrimentalOtherChance = 90;
@@ -3455,7 +3424,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		List<NPCSpellListEntry> spells = new ArrayList<NPCSpellListEntry>();
 		for (NPCSpellListEntry entry : npcSpellList.getSpellListEntry()) {
-			if (npc.isPet())
+			if (npc.isCorePet())
 				spells.add(entry);
 			else if (npc.getLevel() >= entry.getMinlevel() && npc.getLevel() <= entry.getMaxlevel()) {
 				spells.add(entry);
@@ -3504,7 +3473,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									|| target.getUniqueId().equals(getBukkitLivingEntity().getUniqueId()))
 							&& (nowtimestamp.after(StateManager.getInstance().getEntityManager()
 									.getDontSpellTypeMeBefore(target, SpellType.Heal)))
-							&& !(soltarget.isPet())) {
+							&& !(soltarget.isCurrentlyNPCPet())) {
 						double hpr = soltarget.getHPRatio();
 						// TODO player healing and non engaged healing of less than 50% hp
 						if (hpr <= 35) {
@@ -4753,66 +4722,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return 0;
 	}
 
-	public void targetSelector()
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		final net.minecraft.server.v1_13_R2.EntityInsentient e = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) getBukkitLivingEntity())
-				.getHandle();
-		if (!(e instanceof net.minecraft.server.v1_13_R2.EntityCreature)
-				&& !(e instanceof net.minecraft.server.v1_13_R2.EntityTameableAnimal))
-			return;
-
-		final Field goalsField = net.minecraft.server.v1_13_R2.EntityInsentient.class
-				.getDeclaredField("targetSelector");
-		goalsField.setAccessible(true);
-
-		final net.minecraft.server.v1_13_R2.PathfinderGoalSelector goals = (net.minecraft.server.v1_13_R2.PathfinderGoalSelector) goalsField
-				.get(e);
-		Field listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("b");
-		listField.setAccessible(true);
-		Set list = (Set) listField.get(goals);
-		list.clear();
-		listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("c");
-		listField.setAccessible(true);
-		list = (Set) listField.get(goals);
-		list.clear();
-		/*
-		 * goals.a(1, (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f)); goals.a(2,
-		 * (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f)); goals.a(10,
-		 * (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f));
-		 */
-		goals.a(1, new PathfinderGoalOwnerHurtByTarget((EntityTameableAnimal) e));
-		goals.a(2, new PathfinderGoalOwnerHurtTarget((EntityTameableAnimal) e));
-		goals.a(3, new PathfinderGoalHurtByTarget((EntityCreature) e, true, new Class[0]));
-	}
-
-	@Override
-	public void configurePetGoals() {
-		if (!isPet())
-			return;
-
-		System.out.println("Reconfiguring Pet Goals");
-
-		try {
-			targetSelector();
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 	@Override
 	public void doSummon(LivingEntity summoningEntity) {
 		if (isPlayer())
 			return;
 
 		if (summoningEntity == null || this.livingentity == null)
+			return;
+		
+		if (summoningEntity.isDead() || this.livingentity.isDead())
+			return;
+		
+		if (summoningEntity.getLocation().distance(this.livingentity.getLocation()) > 150)
 			return;
 
 		ISoliniaNPC npc;
@@ -4947,7 +4868,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					continue;
 				}
 				
-				if (entity.getLocation().distance(this.getBukkitLivingEntity().getLocation()) > 200)
+				if (entity.getLocation().distance(this.getBukkitLivingEntity().getLocation()) > 150)
 				{
 					removeUuids.add(uuid);
 					continue;
@@ -5716,7 +5637,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (doCheckForDespawn() == true)
 			return;
 
-		if (((Creature) getBukkitLivingEntity()).getTarget() != null)
+		if (((Creature) getBukkitLivingEntity()).getTarget() != null && ((Creature)getBukkitLivingEntity()).getTarget().getLocation().distance(this.getBukkitLivingEntity().getLocation()) < 150)
 			return;
 
 		// Go for hate list first
@@ -6387,7 +6308,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// This seems to stop players from attacking players pets
 		// unless the pet is set to attack the player
-		if (isPlayer() && defender.getBukkitLivingEntity() instanceof Creature && defender.isPet()) {
+		if (isPlayer() && defender.getBukkitLivingEntity() instanceof Creature && defender.isCurrentlyNPCPet()) {
 			Creature creature = (Creature) defender.getBukkitLivingEntity();
 			if (creature != null) {
 				if (creature.getTarget() == null || !creature.getTarget().equals(getBukkitLivingEntity())) {
@@ -6399,15 +6320,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// Both players are in same group
-		if (isPlayer() && (defender.getBukkitLivingEntity() instanceof Player || defender.isPet())) {
+		if (isPlayer() && (defender.getBukkitLivingEntity() instanceof Player || defender.isCurrentlyNPCPet())) {
 			try {
 				ISoliniaPlayer solAttackerPlayer = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
 
 				if (solAttackerPlayer.getGroup() != null) {
-					ISoliniaPlayer solDefenderPlayer;
-					if (defender.isPet() && defender.getBukkitLivingEntity() instanceof Tameable) {
-						solDefenderPlayer = SoliniaPlayerAdapter
-								.Adapt((Player) ((Tameable) defender.getBukkitLivingEntity()).getOwner());
+					ISoliniaPlayer solDefenderPlayer = null;
+					if (defender.isCurrentlyNPCPet()) {
+						if (defender.getActiveMob() != null)
+							solDefenderPlayer = SoliniaPlayerAdapter.Adapt(defender.getOwnerEntity());
 					} else {
 						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player) defender.getBukkitLivingEntity());
 					}
@@ -6433,7 +6354,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// Mobs and pets wont attack mezzed creatures
 		if (defender.isMezzed()) {
-			if (isPet()) {
+			if (isCurrentlyNPCPet()) {
 				setAttackTarget(null);
 				say("Stopping attacking master, the target is mesmerized");
 				return false;
@@ -6507,16 +6428,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!getBukkitLivingEntity().isDead())
 			getBukkitLivingEntity().setHealth(health);
 
-		if (isPet()) {
-			Tameable tameable = (Tameable) getBukkitLivingEntity();
-			AnimalTamer tamer = tameable.getOwner();
-			if (tamer instanceof Player) {
-				try {
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) tamer);
-					ScoreboardUtils.UpdateGroupScoreboardForEveryone(solPlayer.getUUID(), solPlayer.getGroup());
-				} catch (CoreStateInitException e) {
+		if (isCurrentlyNPCPet() && this.getActiveMob() != null) {
+			
+			try {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(this.getOwnerEntity());
+				ScoreboardUtils.UpdateGroupScoreboardForEveryone(solPlayer.getUUID(), solPlayer.getGroup());
+			} catch (CoreStateInitException e) {
 
-				}
 			}
 		}
 
@@ -6557,7 +6475,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!isNPC())
 			return;
 		
-		if (isPet())
+		if (isCurrentlyNPCPet())
 			return;
 		
 		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
@@ -6598,5 +6516,45 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return null;
 		
 		return BukkitAdapter.adapt(activeMob.getSpawner().getLocation());
+	}
+
+	@Override
+	public ActiveMob getActiveMob() {
+		return MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
+	}
+
+	@Override
+	public boolean isCurrentlyNPCPet() {
+		if (this.getActiveMob().getOwner() != null)
+		{
+			Entity ownerEntity = Bukkit.getEntity(this.getActiveMob().getOwner().get());
+			if (ownerEntity == null)
+				return false;
+			
+			if (ownerEntity.isDead())
+			{
+				this.getActiveMob().removeOwner();
+				return false;
+			}
+			
+			if (ownerEntity instanceof Player)
+				return true;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean isCharmed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Player getOwnerEntity() {
+		if (!isCurrentlyNPCPet())
+			return null;
+			
+		return (Player)Bukkit.getEntity(this.getActiveMob().getOwner().get());
 	}
 }

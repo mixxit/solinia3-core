@@ -12,7 +12,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sittable;
-import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -121,7 +120,7 @@ public class CommandPet implements CommandExecutor {
 								return false;
 							}
 
-							if (((Tameable) pet).getOwner().getUniqueId().equals(targetentity.getUniqueId()))
+							if (solLivingEntity.getOwnerEntity().getUniqueId().equals(targetentity.getUniqueId()))
 							{
 								solLivingEntity.setAttackTarget(null);
 								player.sendMessage("You cannot send your pet to attack you!");

@@ -135,9 +135,7 @@ public interface ISoliniaNPC {
 
 	ISoliniaClass getClassObj();
 	
-	boolean isPet();
-
-	void setPet(boolean isPet);
+	void setCorePet(boolean isCorePet);
 
 	List<ISoliniaNPCEventHandler> getEventHandlers();
 
@@ -261,4 +259,6 @@ public interface ISoliniaNPC {
 	boolean isNocturnal();
 
 	void setNocturnal(boolean nocturnal);
+
+	boolean isCorePet();
 }

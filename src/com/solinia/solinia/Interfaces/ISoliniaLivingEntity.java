@@ -27,11 +27,11 @@ import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 
+import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
+
 public interface ISoliniaLivingEntity 
 {
 	public LivingEntity getBukkitLivingEntity();
-
-	public boolean isPet();
 
 	int getLevel();
 
@@ -97,8 +97,6 @@ public interface ISoliniaLivingEntity
 
 	boolean isUndead();
 	boolean isAnimal();
-
-	void configurePetGoals();
 
 	public void doSummon(LivingEntity target);
 
@@ -316,4 +314,12 @@ public interface ISoliniaLivingEntity
 	LivingEntity getAttackTarget();
 
 	void resetPosition(boolean resetHealth);
+
+	public ActiveMob getActiveMob();
+
+	public boolean isCurrentlyNPCPet();
+
+	public boolean isCharmed();
+
+	public Player getOwnerEntity();
 }

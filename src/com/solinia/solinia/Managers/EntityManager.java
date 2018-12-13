@@ -27,7 +27,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.inventivetalent.glow.GlowAPI;
@@ -666,7 +665,7 @@ public class EntityManager implements IEntityManager {
 			if (npc == null)
 				return null;
 
-			if (npc.isPet() == false)
+			if (npc.isCorePet() == false)
 				return null;
 			
 			Wolf entity = (Wolf) owner.getWorld().spawnEntity(owner.getLocation(), EntityType.WOLF);
@@ -682,7 +681,6 @@ public class EntityManager implements IEntityManager {
 			entity.setCanPickupItems(false);
 			
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(entity);
-			solentity.configurePetGoals();
 			
 			double maxHp = solentity.getMaxHP();
 			if (npc.getForcedMaxHp() > 0)
@@ -732,8 +730,6 @@ public class EntityManager implements IEntityManager {
 			}
 						
 			DisguiseAPI.disguiseEntity(entity, mob);
-			
-			solentity.configurePetGoals();
 			
 			return entity;
 		} catch (CoreStateInitException e)

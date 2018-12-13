@@ -16,7 +16,6 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -4085,46 +4084,46 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (source.isDead() || target.isDead())
 			return false;
 		
-		ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(target);
-		if (solLivingEntity != null)
+		ISoliniaLivingEntity solTarget = SoliniaLivingEntityAdapter.Adapt(target);
+		if (solTarget != null)
 		{
 			switch (Utils.getSpellTargetType(soliniaSpell.getTargettype()))
 			{
 				case SummonedAE:
-					if (!solLivingEntity.isUndead())
+					if (!solTarget.isUndead())
 					{
 						return false;
 					}
 				break;
 				case UndeadAE:
-					if (!solLivingEntity.isUndead())
+					if (!solTarget.isUndead())
 					{
 						return false;
 					}
 				break;
 				case Undead:
-					if (!solLivingEntity.isUndead())
+					if (!solTarget.isUndead())
 					{
 						source.sendMessage("This spell is only effective on Undead");
 						return false;
 					}
 					break;
 				case Summoned:
-					if (!solLivingEntity.isPet())
+					if (!solTarget.isCurrentlyNPCPet() && !solTarget.isCharmed())
 					{
 						source.sendMessage("This spell is only effective on Summoned");
 						return false;
 					}
 					break;
 				case Animal:
-					if (!solLivingEntity.isAnimal())
+					if (!solTarget.isAnimal())
 					{
 						source.sendMessage("This spell is only effective on Animals");
 						return false;
 					}
 					break;
 				case Plant:
-					if (!solLivingEntity.isPlant())
+					if (!solTarget.isPlant())
 					{
 						source.sendMessage("This spell is only effective on Plants");
 						return false;
@@ -4135,11 +4134,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		}
 		
-		if (solLivingEntity.isNPC())
+		ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter.Adapt(source);
+		if (solTarget.isNPC())
 		{
-			if (source instanceof Player || source instanceof Tameable)
+			if (source instanceof Player || solSource.isCurrentlyNPCPet())
 			{
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solTarget.getNpcid());
 				if (npc != null)
 				{
 					if (npc.isBoss() || npc.isRaidboss())
@@ -4222,18 +4222,14 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return false;
 		
 		// Try not to kill potentially friendly player tameables with hostile spells
-		if (target instanceof Tameable && target instanceof Creature && !soliniaSpell.isBeneficial())
+		if (solTarget.isCurrentlyNPCPet() && target instanceof Creature && !soliniaSpell.isBeneficial())
 		{
-			Tameable t = (Tameable)target;
 			Creature cr = (Creature)target;
-			if (t.getOwner() != null)
-			{
-				if (cr.getTarget() == null) 
-					return false;
-				
-				if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
-					return false;
-			}
+			if (cr.getTarget() == null) 
+				return false;
+			
+			if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
+				return false;
 
 		}
 		
@@ -4371,7 +4367,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					if (!(target instanceof Player))
 					{
 						ISoliniaLivingEntity soltargetentity = SoliniaLivingEntityAdapter.Adapt(target);
-						if (!soltargetentity.isPet())
+						if (!soltargetentity.isCurrentlyNPCPet())
 						{
 							if (effect.getBase() > 0)
 								return false;
@@ -4477,7 +4473,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					return false;
 			}
 			
-			if (effect.getSpellEffectType().equals(SpellEffectType.DamageShield) && !(target instanceof Player) && !SoliniaLivingEntityAdapter.Adapt(target).isPet())
+			if (effect.getSpellEffectType().equals(SpellEffectType.DamageShield) && !(target instanceof Player) && !SoliniaLivingEntityAdapter.Adapt(target).isCurrentlyNPCPet())
 			{
 				// If the effect is a mez, cancel out
 				if (target.equals(source))
@@ -4520,7 +4516,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						{
 							return false;
 						}
-						if (npc.isPet() == false)
+						if (npc.isCorePet() == false)
 						{
 							System.out.print("NPC " + soliniaSpell.getTeleportZone() + " is not defined as a pet");
 							return false;

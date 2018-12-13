@@ -23,7 +23,6 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -1621,12 +1620,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		}
 
-		if (Bukkit.getEntity(interaction) instanceof Tameable) {
-			Tameable tameable = (Tameable) Bukkit.getEntity(interaction);
-			if (tameable.getOwner() != null)
-				return;
+		if (e instanceof LivingEntity)
+		{
+			try
+			{			
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+				if (solLivingEntity.isCurrentlyNPCPet()) {
+					return;
+				}
+			} catch (CoreStateInitException eGetNpcPet)
+			{
+				
+			}
 		}
-
 		this.interaction = interaction;
 
 		if (npc != null) {

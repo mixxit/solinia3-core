@@ -18,7 +18,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -256,14 +255,6 @@ public class Solinia3CoreEntityListener implements Listener {
 									entity.remove();
 									return;
 								}
-
-								if (!solEntity.isPet()) {
-									LivingEntity le = (LivingEntity) entity;
-									String location = le.getLocation().getWorld().getName() + ","
-											+ le.getLocation().getX() + "," + le.getLocation().getY() + ","
-											+ le.getLocation().getZ();
-								}
-
 							} catch (CoreStateInitException e) {
 
 							}
@@ -783,7 +774,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			soldamagerentity.doSlayChat();
 		}
 
-		if (!(damager instanceof Player) && !soldamagerentity.isPet())
+		if (!(damager instanceof Player) && !soldamagerentity.isCurrentlyNPCPet())
 			return;
 
 		try {
@@ -792,11 +783,9 @@ public class Solinia3CoreEntityListener implements Listener {
 			if (damager instanceof Player) {
 				player = SoliniaPlayerAdapter.Adapt((Player) damager);
 			}
-			if (soldamagerentity.isPet()) {
-				if (damager instanceof Tameable) {
-					Tameable w = (Tameable) damager;
-					player = SoliniaPlayerAdapter.Adapt((Player) w.getOwner());
-				}
+			if (soldamagerentity.isCurrentlyNPCPet()) {
+				if (soldamagerentity.getActiveMob() != null)
+					player = SoliniaPlayerAdapter.Adapt((Player)soldamagerentity.getOwnerEntity());
 			}
 			if (player == null) {
 				return;
