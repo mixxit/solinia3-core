@@ -46,7 +46,7 @@ public class CommandCommit implements CommandExecutor {
 
 		if (args.length > 0 && 
 				(
-						sender instanceof ConsoleCommandSender 
+						sender.isOp() || sender instanceof ConsoleCommandSender 
 				|| sender instanceof DiscordDefaultChannelCommandSender 
 				|| sender instanceof DiscordContentTeamChannelCommandSender 
 				|| sender instanceof DiscordAdminChannelCommandSender

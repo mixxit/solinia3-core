@@ -6578,7 +6578,7 @@ public class Utils {
 				))
 		{
 			System.out.println("Despawned Boat on: " + entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().name());
-			entity.remove();
+			Utils.RemoveEntity(entity,"DESPAWNBOAT");
 		}
 		
 	}
@@ -6933,5 +6933,13 @@ public class Utils {
 		{
 			
 		}
+	}
+
+	public static void RemoveEntity(Entity entity, String caller) {
+		//System.out.println("removing entity via caller: " + caller + " " + entity.getName());
+		if (entity instanceof Player)
+			return;
+		
+		entity.remove();
 	}
 }

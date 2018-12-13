@@ -58,6 +58,8 @@ import com.solinia.solinia.Models.SpellType;
 import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.api.exceptions.InvalidMobTypeException;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
@@ -628,7 +630,7 @@ public class EntityManager implements IEntityManager {
 
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
 		if (entity != null)
-			entity.remove();
+			Utils.RemoveEntity(entity,"KILLPET");
 		this.playerpetsdata.remove(player.getUniqueId());
 		player.sendMessage("Your pet has been removed");
 	}
@@ -668,35 +670,32 @@ public class EntityManager implements IEntityManager {
 			if (npc.isCorePet() == false)
 				return null;
 			
-			Wolf entity = (Wolf) owner.getWorld().spawnEntity(owner.getLocation(), EntityType.WOLF);
-			entity.setMetadata("npcid", new FixedMetadataValue(plugin, "NPCID_" + npc.getId()));
-			StateManager.getInstance().getEntityManager().setPet(owner,entity);
-			entity.setAdult();
-			entity.setTamed(true);
-			entity.setOwner(owner);
-			entity.setBreed(false);
+			LivingEntity spawnedMob = (LivingEntity)MythicMobs.inst().getAPIHelper().spawnMythicMob("NPCID_" + npc.getId(), owner.getLocation());
+			ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt((LivingEntity)spawnedMob);
+			solPet.getActiveMob().setOwner(owner.getUniqueId());
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(owner);
-			entity.setCustomName(solplayer.getForename() + "'s Pet");
-			entity.setCustomNameVisible(true);
-			entity.setCanPickupItems(false);
+			StateManager.getInstance().getEntityManager().setPet(owner,spawnedMob);
+			spawnedMob.setCustomName(solplayer.getForename() + "'s Pet");
+			spawnedMob.setCustomNameVisible(true);
+			spawnedMob.setCanPickupItems(false);
+			solPet.configurePetGoals();
 			
-			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(entity);
-			
-			double maxHp = solentity.getMaxHP();
+			double maxHp = solPet.getMaxHP();
 			if (npc.getForcedMaxHp() > 0)
 			{
 				maxHp = (double)npc.getForcedMaxHp();
 			}
 			
-			AttributeInstance healthAttribute = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+			AttributeInstance healthAttribute = spawnedMob.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 			healthAttribute.setBaseValue(maxHp);
 			
-			if (!entity.isDead())
-			entity.setHealth(maxHp);
-			net.minecraft.server.v1_13_R2.EntityInsentient entityhandle = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) entity).getHandle();
-			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solentity.getMaxDamage());
+			if (!spawnedMob.isDead())
+				spawnedMob.setHealth(maxHp);
+			
+			net.minecraft.server.v1_13_R2.EntityInsentient entityhandle = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) spawnedMob).getHandle();
+			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solPet.getMaxDamage());
 			entityhandle.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double)0.4D);
-			owner.sendMessage("New Pet spawned with HP: " + entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " and " + solentity.getMaxDamage() + " dmg");
+			owner.sendMessage("New Pet spawned with HP: " + spawnedMob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " and " + solPet.getMaxDamage() + " dmg");
 			
 
 			TargetedDisguise mob = new MobDisguise(DisguiseType.WOLF);
@@ -707,33 +706,35 @@ public class EntityManager implements IEntityManager {
 					mob = new MobDisguise(DisguiseType.WOLF);
 					break;
 				case "SQUID": // Water Pet
-					mob = new PlayerDisguise(entity.getCustomName(), "2hot2handle");
+					mob = new PlayerDisguise(spawnedMob.getCustomName(), "2hot2handle");
 					break;
 				case "PARROT": // Air Pet
-					mob = new PlayerDisguise(entity.getCustomName(), "BimEinsMaedchen");
+					mob = new PlayerDisguise(spawnedMob.getCustomName(), "BimEinsMaedchen");
 					break;
 				case "SKELETON":
 					mob = new MobDisguise(DisguiseType.SKELETON);
 					break;
 				case "BLAZE": // Fire Pet
-					mob = new PlayerDisguise(entity.getCustomName(),  "xPan_Mks");
+					mob = new PlayerDisguise(spawnedMob.getCustomName(),  "xPan_Mks");
 					break;
 				case "IRON_GOLEM": // Earth Pet
-					mob = new PlayerDisguise(entity.getCustomName(), "PremiumPilz");
+					mob = new PlayerDisguise(spawnedMob.getCustomName(), "PremiumPilz");
 					break;
 				case "GUARDIAN":
-					mob = new PlayerDisguise(entity.getCustomName(), "yamiaka");
+					mob = new PlayerDisguise(spawnedMob.getCustomName(), "yamiaka");
 					break;
 				default:
 					mob = new MobDisguise(DisguiseType.WOLF);
 					break;
 			}
 						
-			DisguiseAPI.disguiseEntity(entity, mob);
-			
-			return entity;
+			DisguiseAPI.disguiseEntity(spawnedMob, mob);
+			solPet.configurePetGoals();
+			return spawnedMob;
 		} catch (CoreStateInitException e)
 		{
+			return null;
+		} catch (InvalidMobTypeException e) {
 			return null;
 		}
 	}

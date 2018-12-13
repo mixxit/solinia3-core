@@ -252,7 +252,7 @@ public class Solinia3CoreEntityListener implements Listener {
 										.Adapt((LivingEntity) entity);
 
 								if (solEntity.doCheckForDespawn()) {
-									entity.remove();
+									Utils.RemoveEntity(entity,"ONCREATURESPAWN");
 									return;
 								}
 							} catch (CoreStateInitException e) {

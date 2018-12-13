@@ -44,6 +44,7 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Goals.PathfinderGoalGoToOwner;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
@@ -87,15 +88,66 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			for (MetadataValue val : livingentity.getMetadata("mobname")) {
 				metaid = val.asString();
 			}
-		}
-
-		for (MetadataValue val : livingentity.getMetadata("npcid")) {
-			metaid = val.asString();
+			
+			for (MetadataValue val : livingentity.getMetadata("npcid")) {
+				metaid = val.asString();
+			}
 		}
 
 		if (metaid != null)
 			if (!metaid.equals(""))
 				installNpcByMetaName(metaid);
+	}
+	
+	public void targetSelector()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		final net.minecraft.server.v1_13_R2.EntityInsentient e = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) getBukkitLivingEntity())
+				.getHandle();
+		if (!(e instanceof net.minecraft.server.v1_13_R2.EntityCreature))
+			return;
+
+		System.out.println("Reconfiguring Pet Goals");
+
+		final Field goalsField = net.minecraft.server.v1_13_R2.EntityInsentient.class
+				.getDeclaredField("targetSelector");
+		goalsField.setAccessible(true);
+		final net.minecraft.server.v1_13_R2.PathfinderGoalSelector goals = (net.minecraft.server.v1_13_R2.PathfinderGoalSelector) goalsField
+				.get(e);
+		Field listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("b");
+		listField.setAccessible(true);
+		Set list = (Set) listField.get(goals);
+		list.clear();
+		listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("c");
+		listField.setAccessible(true);
+		list = (Set) listField.get(goals);
+		list.clear();
+		/*
+		 * goals.a(1, (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
+		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
+		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f)); goals.a(2,
+		 * (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
+		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
+		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f)); goals.a(10,
+		 * (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
+		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
+		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f));
+		 */
+		goals.a(1, new PathfinderGoalHurtByTarget((EntityCreature) e, true, new Class[0]));
+		goals.a(2, new PathfinderGoalGoToOwner(e, 4D));
+		System.out.println("Pet Goals Reconfigured");
+	}
+	
+	@Override
+	public void configurePetGoals() {
+		if (!this.isCurrentlyNPCPet())
+			return;
+		
+		try {
+			targetSelector();
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -5746,7 +5798,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solEntity.getNpcid());
 				if (npc.isNocturnal() && Utils.IsNight(this.getBukkitLivingEntity().getWorld()))
 				{
-					this.getBukkitLivingEntity().remove();
+					Utils.RemoveEntity(this.getBukkitLivingEntity(),"DESPAWNIFNIGHT");
 					return true;
 				}
 			} catch (CoreStateInitException e)
@@ -6482,14 +6534,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (activeMob == null)
 		{
 			// Why does this npc exist without a MM entity?
-			this.getBukkitLivingEntity().remove();
+			Utils.RemoveEntity(this.getBukkitLivingEntity(),"RESETPOSITION");
 			return;
 		}
 		
 		if (activeMob.getSpawner() == null || activeMob.getSpawner().getLocation() == null)
 		{
 			// Why would this have no spawn point? Despawn
-			this.getBukkitLivingEntity().remove();
+			Utils.RemoveEntity(this.getBukkitLivingEntity(),"RESETPOSITION2");
 			return;
 		}
 		
@@ -6525,8 +6577,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean isCurrentlyNPCPet() {
+		if (!this.isNPC())
+			return false;
+		
+		if (this.getActiveMob() == null)
+		{
+			// How can this be?
+			Utils.RemoveEntity(this.getBukkitLivingEntity(),"ISCURRENTLYNPCPET");
+			return false;
+		}
+		
 		if (this.getActiveMob().getOwner() != null)
 		{
+			if (!this.getActiveMob().getOwner().isPresent())
+				return false;
+			
 			Entity ownerEntity = Bukkit.getEntity(this.getActiveMob().getOwner().get());
 			if (ownerEntity == null)
 				return false;

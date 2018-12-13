@@ -49,7 +49,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		String fileData = createNpcFile(npc);
 		try {
 			FileOutputStream fooStream = new FileOutputStream(fileName, false);
-
 			byte[] myBytes = fileData.getBytes();
 			fooStream.write(myBytes);
 			fooStream.close();
@@ -295,13 +294,14 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 		
 		// KOS attack everything!!
-		if (npc.getFactionid() == 0)
+		if (npc.getFactionid() == 0 && !npc.isCorePet())
 		{
 			mob = mob + "  AIGoalSelectors:\r\n";
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 skeletonbowattack\r\n";
 			mob = mob + "  - 2 meleeattack\r\n";
-			mob = mob + "  - 3 gotoowner\r\n";
+			// waiting on mm patch
+			//mob = mob + "  - 3 gotoowner\r\n";
 			mob = mob + "  - 4 lookatplayers\r\n";
 			mob = mob + "  - 5 randomstroll\r\n";
 			mob = mob + "  AITargetSelectors:\r\n";
@@ -327,7 +327,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  - 0 clear\r\n";
 			mob = mob + "  - 1 skeletonbowattack\r\n";
 			mob = mob + "  - 2 meleeattack\r\n";
-			mob = mob + "  - 3 gotoowner\r\n";
+			// waiting on mm patch
+			//mob = mob + "  - 3 gotoowner\r\n";
 			mob = mob + "  - 4 lookatplayers\r\n";
 			if (npc.isRoamer()) {
 				mob = mob + "  - 5 randomstroll\r\n";
