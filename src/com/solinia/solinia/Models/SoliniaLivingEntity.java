@@ -6612,7 +6612,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean isCharmed() {
 		// TODO Auto-generated method stub
-		return false;
+		try {
+			return StateManager.getInstance().getEntityManager().hasEntityEffectType(getBukkitLivingEntity(), SpellEffectType.Charm);
+		} catch (CoreStateInitException e) {
+			return false;
+		}
 	}
 
 	@Override

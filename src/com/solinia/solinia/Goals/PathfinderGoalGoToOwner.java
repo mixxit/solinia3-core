@@ -39,6 +39,7 @@ extends PathfinderGoal {
             if (owner == null) {
                 return false;
             }
+            
             AbstractLocation destination = BukkitAdapter.adapt(owner.getLocation());
             AbstractLocation eLocation = new AbstractLocation(destination.getWorld(), this.entity.locX, this.entity.locY, this.entity.locZ);
             if (eLocation.distanceSquared(destination) > 1024.0) {

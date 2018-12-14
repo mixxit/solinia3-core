@@ -37,9 +37,7 @@ public interface IEntityManager {
 
 	LivingEntity getPet(Player player);
 
-	void killPet(Player player);
-
-	void killAllPets();
+	void removeAllPets();
 
 	LivingEntity setPet(Player player, LivingEntity entity);
 
@@ -167,4 +165,6 @@ public interface IEntityManager {
 	void clearHateList(UUID uuid);
 
 	List<UUID> getActiveHateListUUIDs();
+
+	void removePet(Player player, boolean kill);
 }

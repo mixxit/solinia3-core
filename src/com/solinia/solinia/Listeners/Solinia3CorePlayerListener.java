@@ -40,6 +40,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
@@ -47,6 +48,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
@@ -78,7 +80,8 @@ public class Solinia3CorePlayerListener implements Listener {
 	    {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer());
 			if (pet != null) {
-				StateManager.getInstance().getEntityManager().killPet(event.getPlayer());
+				ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+				StateManager.getInstance().getEntityManager().removePet(event.getPlayer(), !petsolEntity.isCharmed());
 			}
 	    } catch (CoreStateInitException e)
 		{
@@ -516,7 +519,8 @@ public class Solinia3CorePlayerListener implements Listener {
 	    {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getEntity());
 			if (pet != null) {
-				StateManager.getInstance().getEntityManager().killPet(event.getEntity());
+				ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+				StateManager.getInstance().getEntityManager().removePet(event.getEntity(), !petsolEntity.isCharmed());
 			}
 	    } catch (CoreStateInitException e)
 		{
@@ -1158,7 +1162,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			    {
 					LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer());
 					if (pet != null) {
-							StateManager.getInstance().getEntityManager().killPet(event.getPlayer());
+						ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+							StateManager.getInstance().getEntityManager().removePet(event.getPlayer(), !petsolEntity.isCharmed());
 					}
 			    } catch (CoreStateInitException e)
 				{
@@ -1255,7 +1260,8 @@ public class Solinia3CorePlayerListener implements Listener {
 		    {
 				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer());
 				if (pet != null) {
-					StateManager.getInstance().getEntityManager().killPet(event.getPlayer());
+					ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+					StateManager.getInstance().getEntityManager().removePet(event.getPlayer(), !petsolEntity.isCharmed());
 				}
 		    } catch (CoreStateInitException e)
 			{

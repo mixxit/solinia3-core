@@ -22,7 +22,8 @@ public class PetFastCheckTimer extends BukkitRunnable {
 				if (pet != null) {
 					
 					if (!pet.getWorld().equals(player.getWorld())) {
-						StateManager.getInstance().getEntityManager().killPet(player);
+						ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+						StateManager.getInstance().getEntityManager().removePet(player,!petsolEntity.isCharmed());
 					} else {
 						
 						if (pet.getLocation().distance(player.getLocation()) > 50) {
@@ -33,7 +34,8 @@ public class PetFastCheckTimer extends BukkitRunnable {
 									pet.teleport(player);
 								}
 							} else {
-								StateManager.getInstance().getEntityManager().killPet(player);
+								ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+								StateManager.getInstance().getEntityManager().removePet(player,!petsolEntity.isCharmed());
 							}
 						}
 						

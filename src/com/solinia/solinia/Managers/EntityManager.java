@@ -621,18 +621,19 @@ public class EntityManager implements IEntityManager {
 		
 		return null;
 	}
-
+	
 	@Override
-	public void killPet(Player player) {
+	public void removePet(Player player, boolean kill) {
 		UUID entityuuid = this.playerpetsdata.get(player.getUniqueId());
 		if (this.playerpetsdata.get(player.getUniqueId()) == null)
 			return;
 
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
-		if (entity != null)
+		if (entity != null && kill == true)
 			Utils.RemoveEntity(entity,"KILLPET");
+			
 		this.playerpetsdata.remove(player.getUniqueId());
-		player.sendMessage("Your pet has been removed");
+		player.sendMessage("You have lost your pet");
 	}
 
 	@Override
@@ -659,7 +660,8 @@ public class EntityManager implements IEntityManager {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(owner);
 			if (pet != null)
 			{
-				StateManager.getInstance().getEntityManager().killPet(owner);
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+				StateManager.getInstance().getEntityManager().removePet(owner, !solLivingEntity.isCharmed());
 			}
 			
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(spell.getTeleportZone());
@@ -672,13 +674,11 @@ public class EntityManager implements IEntityManager {
 			
 			LivingEntity spawnedMob = (LivingEntity)MythicMobs.inst().getAPIHelper().spawnMythicMob("NPCID_" + npc.getId(), owner.getLocation());
 			ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt((LivingEntity)spawnedMob);
-			solPet.getActiveMob().setOwner(owner.getUniqueId());
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(owner);
 			StateManager.getInstance().getEntityManager().setPet(owner,spawnedMob);
 			spawnedMob.setCustomName(solplayer.getForename() + "'s Pet");
 			spawnedMob.setCustomNameVisible(true);
 			spawnedMob.setCanPickupItems(false);
-			solPet.configurePetGoals();
 			
 			double maxHp = solPet.getMaxHP();
 			if (npc.getForcedMaxHp() > 0)
@@ -740,23 +740,35 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void killAllPets() {
+	public void removeAllPets() {
 		for (Map.Entry<UUID, UUID> entry : playerpetsdata.entrySet()) {
 			UUID key = entry.getKey();
-			LivingEntity entity = (LivingEntity)Bukkit.getEntity(entry.getValue());
-			if (entity != null)
-				entity.remove();
+			LivingEntity livingEntityPet = (LivingEntity)Bukkit.getEntity(entry.getValue());
+			if (livingEntityPet != null)
+				livingEntityPet.remove();
 			this.playerpetsdata.remove(key);
 		}
 	}
 
 	@Override
 	public LivingEntity setPet(Player player, LivingEntity entity) {
-		if (getPet(player) != null) {
-			killPet(player);
+		try
+		{
+			if (getPet(player) != null) {
+				ISoliniaLivingEntity solPetEntity = SoliniaLivingEntityAdapter.Adapt(getPet(player));
+				removePet(player, !solPetEntity.isCharmed());
+			}
+		
+			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(entity);
+			solEntity.getActiveMob().setOwner(player.getUniqueId());
+			solEntity.configurePetGoals();
+		
+			player.sendMessage("You have a new pet!");
+			this.playerpetsdata.put(player.getUniqueId(), entity.getUniqueId());
+		} catch (CoreStateInitException e)
+		{
+		
 		}
-		player.sendMessage("You have summoned a new pet");
-		this.playerpetsdata.put(player.getUniqueId(), entity.getUniqueId());
 		return entity;
 	}
 

@@ -158,6 +158,7 @@ public class SoliniaEntitySpells {
 
 		boolean updateMaxHp = false;
 		boolean updateDisguise = false;
+		boolean removeCharm = true;
 
 		// Handle any effect removals needed
 		for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
@@ -174,6 +175,9 @@ public class SoliniaEntitySpells {
 			case IllusionPersistence:
 			case IllusionaryTarget:
 				updateDisguise = true;
+				break;
+			case Charm:
+				removeCharm = true;
 				break;
 			}
 		}
@@ -195,6 +199,11 @@ public class SoliniaEntitySpells {
 		if (updateDisguise == true) {
 			if (getLivingEntity() != null)
 				DisguiseAPI.undisguiseToAll(getLivingEntity());
+		}
+		
+		if (removeCharm == true)
+		{
+			
 		}
 		
 		// Check if bard song, may need to keep singing

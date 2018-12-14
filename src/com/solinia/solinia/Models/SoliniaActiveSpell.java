@@ -262,6 +262,7 @@ public class SoliniaActiveSpell {
 			applyStunSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case Charm:
+			applyCharm(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case Fear:
 			applyFear(spellEffect, soliniaSpell, casterLevel);
@@ -1258,6 +1259,79 @@ public class SoliniaActiveSpell {
 		default:
 			return;
 		}
+	}
+
+	private void applyCharm(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		
+
+		if (!(getLivingEntity() instanceof LivingEntity))
+			return;
+
+		// Cannot be cast by NPCs
+		Entity source = Bukkit.getEntity(getSourceUuid());
+		if (!(source instanceof Player))
+			return;
+
+		// Not possible for players right now
+		if (getLivingEntity() instanceof Player)
+		{
+			source.sendMessage("Your target is too strong willed to be charmed (charm does not work on players)");
+			return;
+		}
+		
+
+		try {
+			Player playerSource = (Player)source;
+			// Already has a pet
+			LivingEntity currentPet = StateManager.getInstance().getEntityManager().getPet(playerSource);
+			if (currentPet != null && !currentPet.getUniqueId().toString().equals(getLivingEntity().getUniqueId().toString()))
+			{
+				playerSource.sendMessage("You already have a pet");
+				return;
+			}
+			
+			ISoliniaLivingEntity targetsolLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			// Cannot charm a mob that is already a pet
+			if (targetsolLivingEntity.isCurrentlyNPCPet() && !currentPet.getUniqueId().toString().equals(getLivingEntity().getUniqueId().toString()))
+			{
+				playerSource.sendMessage("This is pet is already a pet");
+				return;
+			}
+			
+			Utils.dismountEntity(getLivingEntity());
+			
+			// Interrupt casting
+			try {
+				CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(getLivingEntity());
+				if (castingSpell != null) {
+					if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0) {
+						StateManager.getInstance().getEntityManager().interruptCasting(getLivingEntity());
+					}
+				}
+			} catch (CoreStateInitException e) {
+
+			}
+			
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
+
+			StateManager.getInstance().getEntityManager().setPet(playerSource, getLivingEntity());
+
+			if (getLivingEntity() instanceof Creature) {
+				SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).setAttackTarget(null);
+			}
+
+			Utils.dismountEntity(getLivingEntity());
+
+			Entity vehicle = getLivingEntity().getVehicle();
+			if (vehicle != null) {
+				vehicle.eject();
+			}
+
+		} catch (CoreStateInitException e) {
+			return;
+		}
+
 	}
 
 	private void applyAttackSpeed(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

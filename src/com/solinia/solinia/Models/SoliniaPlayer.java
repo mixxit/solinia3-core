@@ -2533,7 +2533,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (pet == null)
 				return;
 
-			StateManager.getInstance().getEntityManager().killPet(this.getBukkitPlayer());
+			ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+			StateManager.getInstance().getEntityManager().removePet(this.getBukkitPlayer(), !petsolEntity.isCharmed());
 		} catch (CoreStateInitException e) {
 
 		}
