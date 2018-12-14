@@ -203,7 +203,15 @@ public class SoliniaEntitySpells {
 		
 		if (removeCharm == true)
 		{
-			
+			try {
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null && solLivingEntity.getActiveMob().getOwner().isPresent())
+				{
+					StateManager.getInstance().getEntityManager().removePet((Player)Bukkit.getEntity(solLivingEntity.getActiveMob().getOwner().get()), false);
+				}
+			} catch (CoreStateInitException e) {
+
+			}
 		}
 		
 		// Check if bard song, may need to keep singing
