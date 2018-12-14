@@ -1274,29 +1274,19 @@ public class SoliniaActiveSpell {
 
 		// Not possible for players right now
 		if (getLivingEntity() instanceof Player)
-		{
-			source.sendMessage("Your target is too strong willed to be charmed (charm does not work on players)");
 			return;
-		}
-		
 
 		try {
 			Player playerSource = (Player)source;
 			// Already has a pet
 			LivingEntity currentPet = StateManager.getInstance().getEntityManager().getPet(playerSource);
-			if (currentPet != null && !currentPet.getUniqueId().toString().equals(getLivingEntity().getUniqueId().toString()))
-			{
-				playerSource.sendMessage("You already have a pet");
+			if (currentPet != null)
 				return;
-			}
 			
 			ISoliniaLivingEntity targetsolLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
 			// Cannot charm a mob that is already a pet
 			if (targetsolLivingEntity.isCurrentlyNPCPet() && !currentPet.getUniqueId().toString().equals(getLivingEntity().getUniqueId().toString()))
-			{
-				playerSource.sendMessage("This is pet is already a pet");
 				return;
-			}
 			
 			Utils.dismountEntity(getLivingEntity());
 			

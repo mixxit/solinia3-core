@@ -309,11 +309,14 @@ public class EntityManager implements IEntityManager {
 	
 	@Override
 	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
-		
-		if (entitySpells.get(targetEntity.getUniqueId()) == null)
-			entitySpells.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
-		
 		try {
+			if (soliniaSpell.getSpellEffectTypes().contains(SpellEffectType.Charm) && sourceEntity instanceof Player && getPet((Player)sourceEntity) != null)
+				return false;
+		
+			if (entitySpells.get(targetEntity.getUniqueId()) == null)
+				entitySpells.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
+		
+		
 			ISoliniaLivingEntity solLivingSourceEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
 			int duration = Utils.getDurationFromSpell(solLivingSourceEntity, soliniaSpell);
 			if (soliniaSpell.isBardSong() && duration == 0)
