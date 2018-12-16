@@ -323,5 +323,5 @@ public interface ISoliniaLivingEntity
 
 	public Player getOwnerEntity();
 
-	void configurePetGoals();
+	void configureNpcGoals();
 }

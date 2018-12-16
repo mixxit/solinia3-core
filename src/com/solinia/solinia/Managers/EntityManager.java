@@ -637,6 +637,15 @@ public class EntityManager implements IEntityManager {
 			
 		this.playerpetsdata.remove(player.getUniqueId());
 		player.sendMessage("You have lost your pet");
+		
+		if (kill != true)
+			try {
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(entity);
+				if (solLivingEntity != null)
+					solLivingEntity.configureNpcGoals();
+			} catch (CoreStateInitException e) {
+
+			}
 	}
 
 	@Override
@@ -732,7 +741,7 @@ public class EntityManager implements IEntityManager {
 			}
 						
 			DisguiseAPI.disguiseEntity(spawnedMob, mob);
-			solPet.configurePetGoals();
+			solPet.configureNpcGoals();
 			return spawnedMob;
 		} catch (CoreStateInitException e)
 		{
@@ -764,7 +773,7 @@ public class EntityManager implements IEntityManager {
 		
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(entity);
 			solEntity.getActiveMob().setOwner(player.getUniqueId());
-			solEntity.configurePetGoals();
+			solEntity.configureNpcGoals();
 		
 			player.sendMessage("You have a new pet!");
 			this.playerpetsdata.put(player.getUniqueId(), entity.getUniqueId());

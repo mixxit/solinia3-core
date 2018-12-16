@@ -63,15 +63,25 @@ import com.solinia.solinia.Utils.Utils;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
+import io.lumine.xikage.mythicmobs.volatilecode.VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_13_R2.EntityCreature;
 import net.minecraft.server.v1_13_R2.EntityDamageSource;
+import net.minecraft.server.v1_13_R2.EntityMonster;
+import net.minecraft.server.v1_13_R2.EntitySkeleton;
 import net.minecraft.server.v1_13_R2.EnumItemSlot;
+import net.minecraft.server.v1_13_R2.IRangedEntity;
 import net.minecraft.server.v1_13_R2.PacketPlayOutAnimation;
+import net.minecraft.server.v1_13_R2.PathfinderGoal;
+import net.minecraft.server.v1_13_R2.PathfinderGoalBowShoot;
 import net.minecraft.server.v1_13_R2.PathfinderGoalHurtByTarget;
+import net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer;
+import net.minecraft.server.v1_13_R2.PathfinderGoalMeleeAttack;
 import net.minecraft.server.v1_13_R2.PathfinderGoalOwnerHurtByTarget;
 import net.minecraft.server.v1_13_R2.PathfinderGoalOwnerHurtTarget;
+import net.minecraft.server.v1_13_R2.PathfinderGoalRandomStroll;
+import net.minecraft.server.v1_13_R2.EntityHuman;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -99,52 +109,109 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				installNpcByMetaName(metaid);
 	}
 	
-	public void targetSelector()
+	public void targetSelector(ISoliniaNPC npc)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		final net.minecraft.server.v1_13_R2.EntityInsentient e = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) getBukkitLivingEntity())
 				.getHandle();
 		if (!(e instanceof net.minecraft.server.v1_13_R2.EntityCreature))
 			return;
-
-		System.out.println("Reconfiguring Pet Goals");
-
-		final Field goalsField = net.minecraft.server.v1_13_R2.EntityInsentient.class
-				.getDeclaredField("targetSelector");
-		goalsField.setAccessible(true);
-		final net.minecraft.server.v1_13_R2.PathfinderGoalSelector goals = (net.minecraft.server.v1_13_R2.PathfinderGoalSelector) goalsField
-				.get(e);
-		Field listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("b");
-		listField.setAccessible(true);
-		Set list = (Set) listField.get(goals);
-		list.clear();
-		listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("c");
-		listField.setAccessible(true);
-		list = (Set) listField.get(goals);
-		list.clear();
-		/*
-		 * goals.a(1, (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f)); goals.a(2,
-		 * (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f)); goals.a(10,
-		 * (net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer) new
-		 * net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer( e, (Class)
-		 * net.minecraft.server.v1_13_R2.EntityHuman.class, 5.0f, 1.0f));
-		 */
-		goals.a(1, new PathfinderGoalHurtByTarget((EntityCreature) e, true, new Class[0]));
-		goals.a(2, new PathfinderGoalGoToOwner(e, 4D));
-		System.out.println("Pet Goals Reconfigured");
+		
+		try
+		{
+			System.out.println("Reconfiguring Pet Goals");
+	
+			final Field goalsField = net.minecraft.server.v1_13_R2.EntityInsentient.class
+					.getDeclaredField("targetSelector");
+			goalsField.setAccessible(true);
+			final net.minecraft.server.v1_13_R2.PathfinderGoalSelector goals = (net.minecraft.server.v1_13_R2.PathfinderGoalSelector) goalsField
+					.get(e);
+			Field listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("b");
+			listField.setAccessible(true);
+			Set list = (Set) listField.get(goals);
+			list.clear();
+			listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("c");
+			listField.setAccessible(true);
+			list = (Set) listField.get(goals);
+			list.clear();
+	
+			// Target Selectors
+			// "attacker"
+			int curnum = 0;
+			goals.a(curnum++, new PathfinderGoalHurtByTarget((EntityCreature) e, true, new Class[0]));
+			
+			if (!this.isCurrentlyNPCPet())
+		        if (e instanceof EntityCreature)
+		        {
+		        	// "players"
+		        	ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
+					if (npcfaction.getBase() == -1500) {
+			        	goals.a(curnum++, (PathfinderGoal)new net.minecraft.server.v1_13_R2.PathfinderGoalNearestAttackableTarget((EntityCreature)e, EntityHuman.class, true));
+					}
+					
+					// "faction"
+					
+					if(npc.isGuard() || npc.isCorePet())
+					{
+						// always attack faction ID 0
+						goals.a(curnum++, (PathfinderGoal)new PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + 0, 0, false));
+						
+						// Attack all mobs with -1500 faction
+						for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
+							if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid()) {
+								goals.a(curnum++, (PathfinderGoal)new PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + faction.getId(), 0, false));
+							}
+						}
+					}
+					
+					//KOS attack everything
+					if (npc.getFactionid() == 0 && !npc.isCorePet())
+					for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
+						goals.a(curnum++, (PathfinderGoal)new PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + faction.getId(), 0, false));
+					}
+		        }
+	
+			// Goal Selectors
+			// skeletonbowattack
+			if (e instanceof IRangedEntity)
+	        	goals.a(curnum++, (PathfinderGoal)new PathfinderGoalBowShoot((EntityMonster)((EntitySkeleton)e), 1.0, 20, 15.0f));
+	
+			// melee attack
+			if (e instanceof EntityCreature)
+	        	goals.a(curnum++, (PathfinderGoal)new PathfinderGoalMeleeAttack((EntityCreature)e, 1.0, true));
+			
+			// goto owner
+			if (this.isCurrentlyNPCPet())
+				goals.a(curnum++, new PathfinderGoalGoToOwner(e, 4D));
+			
+			// lookatplayer
+			goals.a(curnum++, (PathfinderGoal)new PathfinderGoalLookAtPlayer(e, EntityHuman.class, 5.0f, 1.0f));
+			
+			// randomstroll
+			if (e instanceof EntityCreature && npc.isRoamer())
+	        	goals.a(curnum++, (PathfinderGoal)new PathfinderGoalRandomStroll((EntityCreature)e, 1.0));
+			
+			System.out.println("Pet Goals Reconfigured");
+		} catch (CoreStateInitException cse)
+		{
+			
+		}
 	}
 	
 	@Override
-	public void configurePetGoals() {
-		if (!this.isCurrentlyNPCPet())
-			return;
-		
+	public void configureNpcGoals() {
 		try {
-			targetSelector();
+			if (this.getNpcid() == 0)
+				return;
+			
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc == null)
+				return;
+			
+			targetSelector(npc);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -6538,10 +6605,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
-		if (activeMob.getSpawner() == null || activeMob.getSpawner().getLocation() == null)
+		if (activeMob.getSpawner() == null)
 		{
-			// Why would this have no spawn point? Despawn
-			Utils.RemoveEntity(this.getBukkitLivingEntity(),"RESETPOSITION2");
+			// Why would this have no spawn point?
+			// BECAUSE IT MAY HAVE BEEN NPCSPAWNED, SKIP
 			return;
 		}
 		
