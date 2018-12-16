@@ -6521,6 +6521,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), singingId, true);
 				emote(getBukkitLivingEntity().getCustomName() + "'s song comes to a close ["
 						+ spell.getName() + "]", true);
+				StateManager.getInstance().getEntityManager().setEntitySinging(getBukkitLivingEntity().getUniqueId(), null);
 			}
 		} catch (CoreStateInitException e)
 		{

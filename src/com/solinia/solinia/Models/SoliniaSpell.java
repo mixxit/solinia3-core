@@ -4220,13 +4220,18 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// Try not to kill potentially friendly player tameables with hostile spells
 		if (solTarget.isCurrentlyNPCPet() && target instanceof Creature && !soliniaSpell.isBeneficial())
 		{
-			Creature cr = (Creature)target;
-			if (cr.getTarget() == null) 
-				return false;
-			
-			if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
-				return false;
-
+			if (soliniaSpell.getSpellEffectTypes().contains(SpellEffectType.Charm) && source.getUniqueId().equals(solTarget.getOwnerEntity().getUniqueId()))
+			{
+				// Our owner wants to renew his charm
+				return true;
+			} else {
+					Creature cr = (Creature)target;
+					if (cr.getTarget() == null) 
+						return false;
+					
+					if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
+						return false;
+			}
 		}
 		
 		for(SpellEffect effect : soliniaSpell.getBaseSpellEffects())

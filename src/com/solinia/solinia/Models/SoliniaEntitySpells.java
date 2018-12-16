@@ -67,9 +67,9 @@ public class SoliniaEntitySpells {
 
 		try {
 			if (!SoliniaSpell.isValidEffectForEntity(getLivingEntity(), sourceEntity, soliniaSpell)) {
-				// System.out.println("Spell: " + soliniaSpell.getName() + "[" +
-				// soliniaSpell.getId() + "] found to have invalid target (" +
-				// getLivingEntity().getName() + ")");
+				System.out.println("Spell: " + soliniaSpell.getName() + "[" +
+				soliniaSpell.getId() + "] found to have invalid target (" +
+				getLivingEntity().getName() + ")");
 				return false;
 			}
 		} catch (CoreStateInitException e) {
@@ -215,6 +215,7 @@ public class SoliniaEntitySpells {
 					if (singingId != activeSpell.getSpellId() || activeSpell.getSpell().getRecastTime() > 0 && Bukkit.getEntity(activeSpell.getSourceUuid()) != null && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity) {
 						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()));
 						solEntity.emote(solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
+						
 						if (solEntity.getBukkitLivingEntity().isOp())
 							System.out.println("Debug: " + solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]");
 					} else {
@@ -223,9 +224,10 @@ public class SoliniaEntitySpells {
 							boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity(
 									(LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid()),
 									(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()));
-							if (((LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid())).isOp())
-								System.out.println("Debug: " + ((LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid())).getName() + "'s song continues");
-							return;
+							if (!itemUseSuccess)
+								Bukkit.getEntity(activeSpell.getSourceUuid()).sendMessage(ChatColor.GRAY + "* Your song failed to apply to the entity!");
+							else
+								return;
 						}
 					}
 				} else {

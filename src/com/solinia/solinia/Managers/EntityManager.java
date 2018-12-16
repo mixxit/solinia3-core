@@ -1104,6 +1104,9 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void setEntitySinging(UUID entityUUID, Integer spellId) {
+		if (spellId == null || spellId == 0)
+			this.entitySinging.remove(entityUUID);
+		else
 		this.entitySinging.put(entityUUID,spellId);
 	}
 
