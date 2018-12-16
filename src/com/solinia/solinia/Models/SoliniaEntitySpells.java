@@ -19,6 +19,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
+import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitItemStack;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
 
@@ -201,6 +202,35 @@ public class SoliniaEntitySpells {
 				DisguiseAPI.undisguiseToAll(getLivingEntity());
 		}
 		
+		// Check if bard song, may need to keep singing
+		if (forceDoNotLoopBardSpell == false)
+		if (activeSpell.getSpell().isBardSong()) {
+			try
+			{
+				if (StateManager.getInstance().getEntityManager().getEntitySinging(activeSpell.getSourceUuid()) != null) 
+				{
+					Integer singingId = StateManager.getInstance().getEntityManager().getEntitySinging(activeSpell.getSourceUuid());
+					if (singingId != activeSpell.getSpellId() || activeSpell.getSpell().getRecastTime() > 0 && Bukkit.getEntity(activeSpell.getSourceUuid()) != null && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity) {
+						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()));
+						solEntity.emote(solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
+					} else {
+						// Continue singing!
+						if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity && !Bukkit.getEntity(activeSpell.getOwnerUuid()).isDead() && !Bukkit.getEntity(activeSpell.getSourceUuid()).isDead()) {
+							boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity(
+									(LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid()),
+									(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()));
+							return;
+						}
+					}
+				} else {
+					// skip
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		
 		if (removeCharm == true)
 		{
 			try {
@@ -215,40 +245,6 @@ public class SoliniaEntitySpells {
 				}
 			} catch (CoreStateInitException e) {
 
-			}
-		}
-		
-		// Check if bard song, may need to keep singing
-		if (forceDoNotLoopBardSpell == false)
-		if (activeSpell.getSpell().isBardSong()) {
-			if (getLivingEntityUUID().equals(activeSpell.getSourceUuid())) {
-				try {
-					if (getLivingEntity() != null) {
-						if (StateManager.getInstance().getEntityManager()
-								.getEntitySinging(getLivingEntity().getUniqueId()) != null) 
-						{
-							Integer singingId = StateManager.getInstance().getEntityManager()
-									.getEntitySinging(getLivingEntity().getUniqueId());
-							if (singingId != activeSpell.getSpellId() || activeSpell.getSpell().getRecastTime() > 0) {
-								ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-								solEntity.emote(getLivingEntity().getCustomName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
-							} else {
-								// Continue singing!
-								if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity
-										&& Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity) {
-									boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity(
-											(LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid()),
-											(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()));
-									return;
-								}
-							}
-						} else {
-							// skip
-						}
-					}
-				} catch (CoreStateInitException e) {
-					// ignore
-				}
 			}
 		}
 	}

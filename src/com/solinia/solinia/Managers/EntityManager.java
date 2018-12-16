@@ -636,10 +636,27 @@ public class EntityManager implements IEntityManager {
 		UUID entityuuid = this.petownerdata.get(petOwnerUUID);
 		if (this.petownerdata.get(petOwnerUUID) == null)
 			return;
-
+		
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
-		if (entity != null && kill == true)
-			Utils.RemoveEntity(entity,"KILLPET");
+		if (entity != null)
+		{			
+			if (entity instanceof LivingEntity)
+			{
+				// Remove MM pet
+				try
+				{
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null)
+					solLivingEntity.getActiveMob().removeOwner();
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			
+			if (kill == true)
+				Utils.RemoveEntity(entity,"KILLPET");
+		}
 			
 		this.petownerdata.remove(petOwnerUUID);
 		Entity owner = Bukkit.getEntity(petOwnerUUID);
