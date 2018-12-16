@@ -262,8 +262,6 @@ public class Solinia3CoreEntityListener implements Listener {
 
 						// if this is a skeleton entity, remove the chase task frmo the mobs AI
 						org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity cle = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) entity);
-						if (cle == null)
-							return;
 
 						if (cle.getHandle() == null)
 							return;

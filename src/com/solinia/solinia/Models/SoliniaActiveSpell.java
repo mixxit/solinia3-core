@@ -1285,7 +1285,7 @@ public class SoliniaActiveSpell {
 			
 			ISoliniaLivingEntity targetsolLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
 			// Cannot charm a mob that is already a pet
-			if (targetsolLivingEntity.isCurrentlyNPCPet() && !currentPet.getUniqueId().toString().equals(getLivingEntity().getUniqueId().toString()))
+			if (targetsolLivingEntity.isCurrentlyNPCPet())
 				return;
 			
 			Utils.dismountEntity(getLivingEntity());
