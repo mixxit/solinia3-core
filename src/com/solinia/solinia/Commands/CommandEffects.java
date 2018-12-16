@@ -47,6 +47,13 @@ public class CommandEffects implements CommandExecutor {
 		            player.sendMessage(ChatColor.GOLD + "Active Spell Effects on you:" + ChatColor.WHITE);
 		            
 		            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+		            
+		            if (StateManager.getInstance().getEntityManager().getEntitySinging(solplayer.getBukkitPlayer().getUniqueId()) != null)
+		            {
+		            	System.out.println("Singing Spell ID: " + StateManager.getInstance().getEntityManager().getEntitySinging(solplayer.getBukkitPlayer().getUniqueId()));
+		            } else {
+		            	System.out.println("Singing Spell ID: None");
+		            }
 
 	            	if (solplayer.getExperienceBonusExpires() != null)
 	            	{

@@ -4811,6 +4811,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
+		Entity entity = Bukkit.getEntity(uniqueId);
+		if (entity.isInvulnerable() || entity.isDead())
+			return;
 		
 		try {
 			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(), uniqueId, hate);
@@ -4867,27 +4870,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				continue;
 			}
 			
+			Entity entity = Bukkit.getEntity(uuid);
+			if (entity == null)
+			{
+				removeUuids.add(uuid);
+				continue;
+			}
+			
+			if (entity.isDead() || entity.isInvulnerable())
+			{
+				removeUuids.add(uuid);
+				continue;
+			}
+			
+			if (entity.getLocation().distance(this.getBukkitLivingEntity().getLocation()) > 150)
+			{
+				removeUuids.add(uuid);
+				continue;
+			}
+
+			if (!(entity instanceof LivingEntity))
+			{
+				removeUuids.add(uuid);
+				continue;
+			}
+			
 			if (hate > maxHate)
 			{
-				Entity entity = Bukkit.getEntity(uuid);
-				if (!(entity instanceof LivingEntity))
-				{
-					removeUuids.add(uuid);
-					continue;
-				}
-				
-				if (entity.isDead())
-				{
-					removeUuids.add(uuid);
-					continue;
-				}
-				
-				if (entity.getLocation().distance(this.getBukkitLivingEntity().getLocation()) > 150)
-				{
-					removeUuids.add(uuid);
-					continue;
-				}
-
 				maxHate = hate;
 				bestUUID = uuid;
 			}
@@ -4895,7 +4904,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		for (UUID uuid : removeUuids)
 		{
-			this.getHateList().remove(uuid);		
+			this.getHateList().remove(uuid);
 		}
 		
 		if (bestUUID != null)
@@ -5624,7 +5633,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
-		if (entity != null && entity.isDead())
+		if (entity != null && (entity.isDead() || entity.isInvulnerable()))
 		{
 			if (this.getBukkitLivingEntity() instanceof Creature)
 			{
@@ -6248,7 +6257,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			// INVULNERABILITY / DIVINE AURA
-			if (defender.isInvulnerable()) {
+			if (defender.isInvulnerable() || defender.getBukkitLivingEntity().isInvulnerable()) {
 				if (attacker.isPlayer())
 					attacker.getBukkitLivingEntity()
 							.sendMessage("* Your attack was prevented as the target is Invulnerable!");

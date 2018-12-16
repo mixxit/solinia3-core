@@ -130,6 +130,7 @@ public class SoliniaEntitySpells {
 				try {
 					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
 					solEntity.emote(sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName() + " /hidesongs", true);
+					System.out.println(sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName() + " /hidesongs");
 					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(), soliniaSpell.getId());
 				} catch (CoreStateInitException e) {
 					// ignore
@@ -213,12 +214,16 @@ public class SoliniaEntitySpells {
 					if (singingId != activeSpell.getSpellId() || activeSpell.getSpell().getRecastTime() > 0 && Bukkit.getEntity(activeSpell.getSourceUuid()) != null && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity) {
 						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()));
 						solEntity.emote(solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
+						if (solEntity.getBukkitLivingEntity().isOp())
+							System.out.println("Debug: " + solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]");
 					} else {
 						// Continue singing!
 						if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity && !Bukkit.getEntity(activeSpell.getOwnerUuid()).isDead() && !Bukkit.getEntity(activeSpell.getSourceUuid()).isDead()) {
 							boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity(
 									(LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid()),
 									(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()));
+							if (((LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid())).isOp())
+								System.out.println("Debug: " + ((LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid())).getName() + "'s song continues");
 							return;
 						}
 					}

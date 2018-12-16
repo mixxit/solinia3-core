@@ -2678,17 +2678,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// TODO Auto-generated method stub
 		sender.sendMessage(ChatColor.RED + "Spell Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
-		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
-		sender.sendMessage("- castonyou: " + ChatColor.GOLD + this.getCastOnYou() + ChatColor.RESET);
-		sender.sendMessage("- castonother: " + ChatColor.GOLD + this.getCastOnOther() + ChatColor.RESET);
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " BardSong: " + this.isBardSong());
+		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET + " range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
+		sender.sendMessage("- castonyou: " + ChatColor.GOLD + this.getCastOnYou() + ChatColor.RESET + " castonother: " + ChatColor.GOLD + this.getCastOnOther() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- teleport_zone: " + ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
-		sender.sendMessage("- mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
+		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET + " teleport_zone: " + ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
 		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET + " - recasttime: " + ChatColor.GOLD + getRecastTime() + ChatColor.RESET);
 		sender.sendMessage("- resisttype: " + ChatColor.GOLD + Utils.getSpellResistType(getResisttype()).name() + " [" + getResisttype() + "]" + ChatColor.RESET);
-		sender.sendMessage("- range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
-		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name() + ")" + ChatColor.RESET);
 		sender.sendMessage("- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 		SpellEffectIndex sei = Utils.getSpellEffectIndex(getSpellAffectIndex());
