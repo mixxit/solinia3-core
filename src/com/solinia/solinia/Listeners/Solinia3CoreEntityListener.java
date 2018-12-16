@@ -92,7 +92,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		} catch (CoreStateInitException e) {
 
 		}
-
+		
 		// cancel feigened if targetting
 		try {
 			boolean feigned = StateManager.getInstance().getEntityManager()
@@ -216,11 +216,24 @@ public class Solinia3CoreEntityListener implements Listener {
 					}
 				}
 			}
+			
+			if (event.getEntity() instanceof LivingEntity && event.getEntity() != null && event.getTarget() != null) {
+				ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+				if (soliniaLivingEntity.isCurrentlyNPCPet())
+				{
+					if (soliniaLivingEntity.getOwnerEntity().getUniqueId().equals(event.getTarget().getUniqueId()))
+					{
+						// Cancel owner attack
+						solEntity.setAttackTarget(null);
+						Utils.CancelEvent(event);
+					}
+				}
+			}
 
 		} catch (CoreStateInitException e) {
 			return;
 		}
-
+		
 	}
 
 	@EventHandler
@@ -456,6 +469,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				Utils.CancelEvent(event);
 				return;
 			}
+
 			event.setDamage(DamageModifier.BASE, damage);
 
 		} catch (CoreStateInitException e) {

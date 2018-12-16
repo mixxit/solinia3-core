@@ -287,88 +287,15 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "  Modules:\r\n";
 		mob = mob + "    ThreatTable: false\r\n";
 
-		if (npc.isCorePet()) {
-			mob = mob + "  Faction: FACTIONID_-1\r\n";
-		} else {
-			mob = mob + "  Faction: FACTIONID_" + npc.getFactionid() + "\r\n";
-		}
-		
-		// KOS attack everything!!
-		if (npc.getFactionid() == 0 && !npc.isCorePet())
-		{
-			mob = mob + "  AIGoalSelectors:\r\n";
-			mob = mob + "  - 0 clear\r\n";
-			mob = mob + "  - 1 skeletonbowattack\r\n";
-			mob = mob + "  - 2 meleeattack\r\n";
-			// waiting on mm patch
-			mob = mob + "  - 3 gotoowner\r\n";
-			mob = mob + "  - 4 lookatplayers\r\n";
-			mob = mob + "  - 5 randomstroll\r\n";
-			mob = mob + "  AITargetSelectors:\r\n";
-			mob = mob + "  - 0 clear\r\n";
-			mob = mob + "  - 1 attacker\r\n";
-			mob = mob + "  - 2 players\r\n";
-			int curnum = 4;
-			try
-			{
-				for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
-					mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
-					curnum++;
-				}
-			} catch (CoreStateInitException e)
-			{
-				
-			}
-		}
-
-		// Act as normal mob if without faction
-		if (npc.getFactionid() > 0 || npc.isCorePet()) {
-			mob = mob + "  AIGoalSelectors:\r\n";
-			mob = mob + "  - 0 clear\r\n";
-			mob = mob + "  - 1 skeletonbowattack\r\n";
-			mob = mob + "  - 2 meleeattack\r\n";
-			// waiting on mm patch
-			mob = mob + "  - 3 gotoowner\r\n";
-			mob = mob + "  - 4 lookatplayers\r\n";
-			if (npc.isRoamer()) {
-				mob = mob + "  - 5 randomstroll\r\n";
-			}
-			mob = mob + "  AITargetSelectors:\r\n";
-			mob = mob + "  - 0 clear\r\n";
-			mob = mob + "  - 1 attacker\r\n";
-
-			// NPC attack players
-			if (!npc.isCorePet()) {
-				try {
-					ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager()
-							.getFaction(npc.getFactionid());
-					if (npcfaction.getBase() == -1500) {
-						mob = mob + "  - 2 players\r\n";
-					}
-				} catch (CoreStateInitException e) {
-					// skip
-				}
-			}
-
-			// NPC attack NPCs
-			if (npc.isGuard() || npc.isCorePet()) {
-				// Always attack mobs with factionid 0
-				mob = mob + "  - 3 SpecificFaction FACTIONID_0\r\n";
-				// Attack all mobs with -1500 faction
-				try {
-					int curnum = 4;
-					for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
-						if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid()) {
-							mob = mob + "  - " + curnum + " SpecificFaction FACTIONID_" + faction.getId() + "\r\n";
-							curnum++;
-						}
-					}
-				} catch (CoreStateInitException e) {
-					// skip
-				}
-			}
-
-		}
+		mob = mob + "  AIGoalSelectors:\r\n";
+		mob = mob + "  - 0 clear\r\n";
+		mob = mob + "  - 1 skeletonbowattack\r\n";
+		mob = mob + "  - 2 meleeattack\r\n";
+		mob = mob + "  - 3 gotoowner\r\n";
+		mob = mob + "  - 4 lookatplayers\r\n";
+		mob = mob + "  AITargetSelectors:\r\n";
+		mob = mob + "  - 0 clear\r\n";
+		mob = mob + "  - 1 attacker\r\n";
 
 		// Here's the fun part, if the npc has decent loot in his loot drops to use for
 		// himself

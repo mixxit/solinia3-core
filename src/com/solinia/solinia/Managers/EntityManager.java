@@ -424,34 +424,40 @@ public class EntityManager implements IEntityManager {
 		{
 			for(Entity entity : player.getNearbyEntities(50, 50, 50))
 			{
-				if (entity instanceof Player)
-					continue;
-				
-				if (entity instanceof Boat)
+				try
 				{
-					Utils.despawnBoatIfNotNearWater((Boat)entity);
-				}
-				
-				if (!(entity instanceof LivingEntity))
-					continue;
-				
-				LivingEntity le = (LivingEntity)entity;
-				if (!Utils.isLivingEntityNPC(le))
-					continue;
-				
-				if (!entitiesNearPlayers.contains(le.getUniqueId()))
-					entitiesNearPlayers.add(le.getUniqueId());
-				
-				try {
-					ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
-					if (completedLivingEntities.contains(le.getUniqueId()))
+					if (entity instanceof Player)
 						continue;
 					
-					completedLivingEntities.add(le.getUniqueId());
-					solle.doCheckForEnemies();
+					if (entity instanceof Boat)
+					{
+						Utils.despawnBoatIfNotNearWater((Boat)entity);
+					}
 					
-				} catch (CoreStateInitException e) {
-					// TODO Auto-generated catch block
+					if (!(entity instanceof LivingEntity))
+						continue;
+					
+					LivingEntity le = (LivingEntity)entity;
+					if (!Utils.isLivingEntityNPC(le))
+						continue;
+					
+					if (!entitiesNearPlayers.contains(le.getUniqueId()))
+						entitiesNearPlayers.add(le.getUniqueId());
+					
+					try {
+						ISoliniaLivingEntity solle = SoliniaLivingEntityAdapter.Adapt(le);
+						if (completedLivingEntities.contains(le.getUniqueId()))
+							continue;
+						
+						completedLivingEntities.add(le.getUniqueId());
+						solle.doCheckForEnemies();
+						
+					} catch (CoreStateInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (Exception e)
+				{
 					e.printStackTrace();
 				}
 			}
@@ -760,9 +766,11 @@ public class EntityManager implements IEntityManager {
 				ISoliniaLivingEntity solPetEntity = SoliniaLivingEntityAdapter.Adapt(getPet(player));
 				removePet(player, !solPetEntity.isCharmed());
 			}
-		
+			
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(entity);
 			solEntity.getActiveMob().setOwner(player.getUniqueId());
+			solEntity.clearHateList();
+			solEntity.setAttackTarget(null);
 		
 			player.sendMessage("You have a new pet!");
 			this.playerpetsdata.put(player.getUniqueId(), entity.getUniqueId());

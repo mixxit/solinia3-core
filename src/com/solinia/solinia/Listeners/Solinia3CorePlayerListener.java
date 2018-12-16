@@ -682,7 +682,6 @@ public class Solinia3CorePlayerListener implements Listener {
 					if (Utils.IsSoliniaItem(item)) {
 						ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(item);
 						if (soliniaitem.getHp() > 0 || soliniaitem.getStamina() > 0) {
-							//((Player)event.getView().getPlayer()).sendMessage("* Debug found removal on soliniaitem: " + soliniaitem.getDisplayname() + " slot: " + event.getSlot() + " slot type: " + event.getSlotType().name());
 							solplayer.scheduleUpdateMaxHp();
 						}
 					}
@@ -765,7 +764,6 @@ public class Solinia3CorePlayerListener implements Listener {
 						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 						return;
 					}
-					//((Player)event.getView().getPlayer()).sendMessage("* Debug found armour add on soliniaitem: " + soliniaitem.getDisplayname() + " slot: " + event.getSlot() + " slot type: " + event.getSlotType().name());
 
 					solplayer.scheduleUpdateMaxHp();
 				}

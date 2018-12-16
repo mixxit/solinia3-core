@@ -47,6 +47,7 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
@@ -62,26 +63,11 @@ import com.solinia.solinia.Utils.Utils;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
-import io.lumine.xikage.mythicmobs.volatilecode.VolatileCodeEnabled_v1_13_R2;
-import io.lumine.xikage.mythicmobs.volatilecode.VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_13_R2.EntityCreature;
 import net.minecraft.server.v1_13_R2.EntityDamageSource;
-import net.minecraft.server.v1_13_R2.EntityMonster;
-import net.minecraft.server.v1_13_R2.EntitySkeleton;
 import net.minecraft.server.v1_13_R2.EnumItemSlot;
-import net.minecraft.server.v1_13_R2.IRangedEntity;
 import net.minecraft.server.v1_13_R2.PacketPlayOutAnimation;
-import net.minecraft.server.v1_13_R2.PathfinderGoal;
-import net.minecraft.server.v1_13_R2.PathfinderGoalBowShoot;
-import net.minecraft.server.v1_13_R2.PathfinderGoalHurtByTarget;
-import net.minecraft.server.v1_13_R2.PathfinderGoalLookAtPlayer;
-import net.minecraft.server.v1_13_R2.PathfinderGoalMeleeAttack;
-import net.minecraft.server.v1_13_R2.PathfinderGoalOwnerHurtByTarget;
-import net.minecraft.server.v1_13_R2.PathfinderGoalOwnerHurtTarget;
-import net.minecraft.server.v1_13_R2.PathfinderGoalRandomStroll;
-import net.minecraft.server.v1_13_R2.EntityHuman;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -3384,8 +3370,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		boolean success = false;
 		if (getMana() > spell.getActSpellCost(this)) {
 			success = spell.tryApplyOnEntity(this.getBukkitLivingEntity(), target.getBukkitLivingEntity());
-			Utils.DebugMessage("aiDoSpellCast had a sucess of : " + success + " against entity: "
-					+ target.getBukkitLivingEntity().getName() + " for spell: " + spell.getName());
 		}
 
 		if (success) {
@@ -4809,8 +4793,28 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void addToHateList(UUID uniqueId, int hate) {
+		if (this.isCurrentlyNPCPet())
+		{
+			// Never add a member to hate list that is a friend of owner or pet
+			if (this.getOwnerEntity().getUniqueId().equals(uniqueId))
+				return;
+			
+			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(this.getOwnerEntity().getUniqueId());
+			if (group !=null)
+			{
+				if (group.getMembers().contains(uniqueId))
+					return;
+			}
+		}
+		
+		
 		try {
 			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(), uniqueId, hate);
+			Entity entity = Bukkit.getEntity(uniqueId);
+			if (entity instanceof Player)
+			{
+				System.out.println("Debug Added : " + entity.getName() + " to my (" + this.getName() + ") hate list");
+			}
 			checkHateTargets();
 		} catch (CoreStateInitException e) {
 		}
@@ -5613,20 +5617,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void setAttackTarget(LivingEntity entity)
 	{
-		if (entity == null)
-			return;
-
 		if (this.getBukkitLivingEntity() == null)
 			return;
 		
 		if (this.getBukkitLivingEntity().isDead())
+		{
 			return;
+		}
 		
-		if (entity.isDead())
+		if (entity != null && entity.isDead())
+		{
+			if (this.getBukkitLivingEntity() instanceof Creature)
+			{
+				((Creature) this.getBukkitLivingEntity()).setTarget(null);
+			}
 			return;
+		}
 		
 		if (this.getBukkitLivingEntity() instanceof Creature)
 		{
+			if (entity != null && !this.getHateList().containsKey(entity.getUniqueId()))
+			{
+				this.addToHateList(entity.getUniqueId(), 1);
+			}
+			
 			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
 		}
 	}
@@ -5655,22 +5669,41 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (checkHateTargets() == true)
 			return;
 		
+		if (this.isCurrentlyNPCPet() == true)
+			return;
+		
 		try {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc.getFactionid() == 0)
 				return;
-
+			
 			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
 					.getFaction(npc.getFactionid());
-			if (faction.getName().equals("NEUTRAL") || faction.getName().equals("KOS"))
+			if (faction.getName().equals("NEUTRAL"))
 				return;
-
+			
 			List<Integer> hatedFactions = new ArrayList<Integer>();
-			for (FactionStandingEntry factionEntry : faction.getFactionEntries()) {
-				if (factionEntry.getValue() != -1500)
-					continue;
+			if (faction.getName().equals("KOS"))
+			{
+				for (ISoliniaFaction targetFaction : StateManager.getInstance().getConfigurationManager().getFactions()) {
+					if (targetFaction.getId() != faction.getId())
+						hatedFactions.add(((Integer) targetFaction.getId()));
+				}
+			} else {
+				for (FactionStandingEntry factionEntry : faction.getFactionEntries()) {
+					if (factionEntry.getValue() != -1500)
+						continue;
+					
+					
 
-				hatedFactions.add(((Integer) factionEntry.getFactionId()));
+					hatedFactions.add(((Integer) factionEntry.getFactionId()));
+				}
+				
+				// then add KOS on top
+				for (ISoliniaFaction targetFaction : StateManager.getInstance().getConfigurationManager().getFactions()) {
+					if (targetFaction.getName().equals("KOS"))
+						hatedFactions.add(((Integer) targetFaction.getId()));
+				}
 			}
 
 			for (Entity entity : getBukkitLivingEntity().getNearbyEntities(10, 10, 10)) {
@@ -5678,6 +5711,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					continue;
 
 				if (!(entity instanceof Player)) {
+					if (!npc.isGuard() && !faction.getName().equals("KOS"))
+						continue;
+					
 					if (hatedFactions.size() == 0)
 						continue;
 
@@ -5692,7 +5728,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 						if (!solEntity.isNPC())
 							continue;
-
+						
 						ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager()
 								.getNPC(solEntity.getNpcid());
 						if (targetNpc.getFactionid() < 1) {
@@ -5712,6 +5748,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				} else {
 					// NPC VS PLAYER
 					Player player = (Player) entity;
+					if (faction.getName().equals("KOS"))
+					{
+						addToHateList(player.getUniqueId(), 1);
+						return;
+					}
+					
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 					if (factionEntry != null) {
@@ -6487,6 +6529,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		
 		if (isCurrentlyNPCPet())
+			return;
+		
+		if (this.getHateList().size() > 0)
 			return;
 		
 		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
