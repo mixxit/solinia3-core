@@ -322,6 +322,4 @@ public interface ISoliniaLivingEntity
 	public boolean isCharmed();
 
 	public Player getOwnerEntity();
-
-	void configureNpcGoals();
 }

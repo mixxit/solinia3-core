@@ -301,7 +301,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  - 1 skeletonbowattack\r\n";
 			mob = mob + "  - 2 meleeattack\r\n";
 			// waiting on mm patch
-			//mob = mob + "  - 3 gotoowner\r\n";
+			mob = mob + "  - 3 gotoowner\r\n";
 			mob = mob + "  - 4 lookatplayers\r\n";
 			mob = mob + "  - 5 randomstroll\r\n";
 			mob = mob + "  AITargetSelectors:\r\n";
@@ -328,7 +328,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  - 1 skeletonbowattack\r\n";
 			mob = mob + "  - 2 meleeattack\r\n";
 			// waiting on mm patch
-			//mob = mob + "  - 3 gotoowner\r\n";
+			mob = mob + "  - 3 gotoowner\r\n";
 			mob = mob + "  - 4 lookatplayers\r\n";
 			if (npc.isRoamer()) {
 				mob = mob + "  - 5 randomstroll\r\n";

@@ -44,7 +44,6 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
-import com.solinia.solinia.Goals.PathfinderGoalGoToOwner;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
@@ -110,116 +109,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				installNpcByMetaName(metaid);
 	}
 	
-	
-	public void targetSelector(ISoliniaNPC npc)
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		final net.minecraft.server.v1_13_R2.EntityInsentient e = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) getBukkitLivingEntity())
-				.getHandle();
-		if (!(e instanceof net.minecraft.server.v1_13_R2.EntityCreature))
-			return;
-		
-		try
-		{
-			System.out.println("Reconfiguring Pet Goals");
-	
-			final Field goalsField = net.minecraft.server.v1_13_R2.EntityInsentient.class
-					.getDeclaredField("targetSelector");
-			goalsField.setAccessible(true);
-			final net.minecraft.server.v1_13_R2.PathfinderGoalSelector goals = (net.minecraft.server.v1_13_R2.PathfinderGoalSelector) goalsField
-					.get(e);
-			Field listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("b");
-			listField.setAccessible(true);
-			Set list = (Set) listField.get(goals);
-			list.clear();
-			listField = net.minecraft.server.v1_13_R2.PathfinderGoalSelector.class.getDeclaredField("c");
-			listField.setAccessible(true);
-			list = (Set) listField.get(goals);
-			list.clear();
-	
-			// Target Selectors
-			// "attacker"
-			int curnum = 0;
-			goals.a(curnum++, new PathfinderGoalHurtByTarget((EntityCreature) e, true, new Class[0]));
-			
-			if (!this.isCurrentlyNPCPet())
-		        if (e instanceof EntityCreature)
-		        {
-		        	// "players"
-		        	ISoliniaFaction npcfaction = StateManager.getInstance().getConfigurationManager().getFaction(npc.getFactionid());
-					if (npcfaction.getBase() == -1500) {
-			        	goals.a(curnum++, (PathfinderGoal)new net.minecraft.server.v1_13_R2.PathfinderGoalNearestAttackableTarget((EntityCreature)e, EntityHuman.class, true));
-					}
-					
-					// "faction"
-					/*
-					if(npc.isGuard() || npc.isCorePet())
-					{
-						// always attack faction ID 0
-						goals.a(curnum++, (PathfinderGoal)new VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_0", 0, false));
-						
-						// Attack all mobs with -1500 faction
-						for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
-							if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid()) {
-								goals.a(curnum++, (PathfinderGoal)new VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + faction.getId(), 0, false));
-							}
-						}
-					}
-					//KOS attack everything
-					if (npc.getFactionid() == 0 && !npc.isCorePet())
-					for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
-						goals.a(curnum++, (PathfinderGoal)new VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + faction.getId(), 0, false));
-					}
-					*/
-
-		        }
-	
-			// Goal Selectors
-			// skeletonbowattack
-			if (e instanceof IRangedEntity)
-	        	goals.a(curnum++, (PathfinderGoal)new PathfinderGoalBowShoot((EntityMonster)((EntitySkeleton)e), 1.0, 20, 15.0f));
-	
-			// melee attack
-			if (e instanceof EntityCreature)
-	        	goals.a(curnum++, (PathfinderGoal)new PathfinderGoalMeleeAttack((EntityCreature)e, 1.0, true));
-			
-			// goto owner
-			if (this.isCurrentlyNPCPet())
-				goals.a(curnum++, new PathfinderGoalGoToOwner(e, 4D));
-			
-			// lookatplayer
-			goals.a(curnum++, (PathfinderGoal)new PathfinderGoalLookAtPlayer(e, EntityHuman.class, 5.0f, 1.0f));
-			
-			// randomstroll
-			if (e instanceof EntityCreature && npc.isRoamer())
-	        	goals.a(curnum++, (PathfinderGoal)new PathfinderGoalRandomStroll((EntityCreature)e, 1.0));
-			
-			System.out.println("Pet Goals Reconfigured");
-		} catch (CoreStateInitException cse)
-		{
-			
-		}
-	}
-	
-	@Override
-	public void configureNpcGoals() {
-		try {
-			if (this.getNpcid() == 0)
-				return;
-			
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc == null)
-				return;
-			
-			targetSelector(npc);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public SoliniaWorld getWorld() {
 		try {
