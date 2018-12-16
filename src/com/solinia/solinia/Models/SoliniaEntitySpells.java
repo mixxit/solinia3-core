@@ -125,16 +125,17 @@ public class SoliniaEntitySpells {
 
 		// System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
 
-		if (activeSpell.getSpell().isBardSong()) {
-			if (getLivingEntityUUID().equals(sourceEntity.getUniqueId())) {
-				try {
-					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
+		if (activeSpell.getSpell().isBardSong() && sourceEntity != null && !sourceEntity.isDead()) {
+			try {
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
+				if (solEntity != null)
+				{
 					solEntity.emote(sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName() + " /hidesongs", true);
 					System.out.println(sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName() + " /hidesongs");
 					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(), soliniaSpell.getId());
-				} catch (CoreStateInitException e) {
-					// ignore
 				}
+			} catch (CoreStateInitException e) {
+				// ignore
 			}
 		}
 

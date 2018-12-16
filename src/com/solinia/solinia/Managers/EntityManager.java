@@ -310,7 +310,7 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		try {
-			if (soliniaSpell.getSpellEffectTypes().contains(SpellEffectType.Charm) && sourceEntity instanceof Player && getPet(sourceEntity.getUniqueId()) != null)
+			if (soliniaSpell.getSpellEffectTypes().contains(SpellEffectType.Charm) && getPet(sourceEntity.getUniqueId()) != null && !getPet(sourceEntity.getUniqueId()).getUniqueId().equals(targetEntity.getUniqueId()))
 				return false;
 		
 			if (entitySpells.get(targetEntity.getUniqueId()) == null)
