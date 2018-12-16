@@ -1092,10 +1092,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				
 				if (targetmob != null)
 				if (!item.isPetControlRod())
-				if (getBukkitPlayer().getLocation().distance(targetmob.getLocation()) > 15)
 				{
-					getBukkitPlayer().sendMessage("You were too far to interact with that entity");
-					return;
+					double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) getBukkitPlayer(),
+							targetmob);
+					
+					if (distanceOverLimit > 0)
+					{
+						getBukkitPlayer().sendMessage("You were too far to interact with that entity");
+						return;
+					}
 				}
 
 				// we should probably check line of sight here for detrimentals, or maybe in the
@@ -1298,10 +1303,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		if (targetmob != null)
-		if (getBukkitPlayer().getLocation().distance(targetmob.getLocation()) > 15)
 		{
-			getBukkitPlayer().sendMessage("You were too far to interact with that entity");
-			return;
+			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) getBukkitPlayer(),
+					targetmob);
+			
+			if (distanceOverLimit > 0)
+			{
+				getBukkitPlayer().sendMessage("You were too far to interact with that entity");
+				return;
+			}
 		}
 
 		if (spell.getAllowedClasses().size() > 0) {

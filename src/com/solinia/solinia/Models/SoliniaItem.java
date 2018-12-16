@@ -485,11 +485,15 @@ public class SoliniaItem implements ISoliniaItem {
 			return false;
 		
 		if (!this.isPetControlRod())
-		if (player.getLocation().distance(targetentity.getLocation()) > 15)
 		{
-			player.sendMessage("You were too far to use this item on that entity");
-			
-			return false;
+			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) player,
+					targetentity);
+
+			if (distanceOverLimit > 0)
+			{
+				player.sendMessage("You were too far to use this item on that entity");
+				return false;
+			}
 		}
 		
 		if (isPetControlRod())
