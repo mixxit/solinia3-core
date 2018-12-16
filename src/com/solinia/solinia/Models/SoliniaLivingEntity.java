@@ -63,6 +63,7 @@ import com.solinia.solinia.Utils.Utils;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
+import io.lumine.xikage.mythicmobs.volatilecode.VolatileCodeEnabled_v1_13_R2;
 import io.lumine.xikage.mythicmobs.volatilecode.VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -109,6 +110,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				installNpcByMetaName(metaid);
 	}
 	
+	
 	public void targetSelector(ISoliniaNPC npc)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		final net.minecraft.server.v1_13_R2.EntityInsentient e = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) getBukkitLivingEntity())
@@ -149,25 +151,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					
 					// "faction"
-					
+					/*
 					if(npc.isGuard() || npc.isCorePet())
 					{
 						// always attack faction ID 0
-						goals.a(curnum++, (PathfinderGoal)new PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + 0, 0, false));
+						goals.a(curnum++, (PathfinderGoal)new VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_0", 0, false));
 						
 						// Attack all mobs with -1500 faction
 						for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
 							if (faction.getBase() == -1500 && faction.getId() != npc.getFactionid()) {
-								goals.a(curnum++, (PathfinderGoal)new PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + faction.getId(), 0, false));
+								goals.a(curnum++, (PathfinderGoal)new VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + faction.getId(), 0, false));
 							}
 						}
 					}
-					
 					//KOS attack everything
 					if (npc.getFactionid() == 0 && !npc.isCorePet())
 					for (ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions()) {
-						goals.a(curnum++, (PathfinderGoal)new PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + faction.getId(), 0, false));
+						goals.a(curnum++, (PathfinderGoal)new VolatileCodeEnabled_v1_13_R2.PathfinderGoalNearestAttackableSpecificFactionTarget((EntityCreature)e, net.minecraft.server.v1_13_R2.EntityInsentient.class, "FACTIONID_" + faction.getId(), 0, false));
 					}
+					*/
+
 		        }
 	
 			// Goal Selectors
