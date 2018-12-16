@@ -3111,7 +3111,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 						Player player = (Player)sourceEntity;
 						try
 						{
-							LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
+							LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player.getUniqueId());
 							if (pet != null) {
 								return StateManager.getInstance().getEntityManager().addActiveEntitySpell(pet,this,sourceEntity);
 							}

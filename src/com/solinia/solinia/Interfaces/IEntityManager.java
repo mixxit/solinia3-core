@@ -35,11 +35,9 @@ public interface IEntityManager {
 	
 	Timestamp getStunned(LivingEntity livingEntity);
 
-	LivingEntity getPet(Player player);
-
 	void removeAllPets();
 
-	LivingEntity setPet(Player player, LivingEntity entity);
+	LivingEntity setPet(UUID petOwnerUUID, LivingEntity entity);
 
 	List<LivingEntity> getAllWorldPets();
 
@@ -166,5 +164,7 @@ public interface IEntityManager {
 
 	List<UUID> getActiveHateListUUIDs();
 
-	void removePet(Player player, boolean kill);
+	void removePet(UUID petOwner, boolean kill);
+
+	LivingEntity getPet(UUID ownerUuid);
 }

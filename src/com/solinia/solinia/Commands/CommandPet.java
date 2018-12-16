@@ -44,7 +44,7 @@ public class CommandPet implements CommandExecutor {
 			try
 			{
 				Player player = (Player)sender;
-				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
+				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player.getUniqueId());
 				
 				if (pet == null)
 				{

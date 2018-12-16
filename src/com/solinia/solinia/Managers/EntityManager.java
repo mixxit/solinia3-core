@@ -86,7 +86,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Integer> entityManaLevels = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> entityMezzed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> entityStunned = new ConcurrentHashMap<UUID, Timestamp>();
-	private ConcurrentHashMap<UUID, UUID> playerpetsdata = new ConcurrentHashMap<UUID, UUID>();
+	private ConcurrentHashMap<UUID, UUID> petownerdata = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<String, Timestamp> entitySpellCooldown = new ConcurrentHashMap<String, Timestamp>();
 	//private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>> temporaryMerchantItems = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Integer>>();
 	private ConcurrentHashMap<UUID, Inventory> merchantInventories = new ConcurrentHashMap<UUID, Inventory>();
@@ -310,7 +310,7 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
 		try {
-			if (soliniaSpell.getSpellEffectTypes().contains(SpellEffectType.Charm) && sourceEntity instanceof Player && getPet((Player)sourceEntity) != null)
+			if (soliniaSpell.getSpellEffectTypes().contains(SpellEffectType.Charm) && sourceEntity instanceof Player && getPet(sourceEntity.getUniqueId()) != null)
 				return false;
 		
 			if (entitySpells.get(targetEntity.getUniqueId()) == null)
@@ -619,9 +619,9 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public LivingEntity getPet(Player player) {
-		UUID entityuuid = this.playerpetsdata.get(player.getUniqueId());
-		if (this.playerpetsdata.get(player.getUniqueId()) == null)
+	public LivingEntity getPet(UUID ownerUuid) {
+		UUID entityuuid = this.petownerdata.get(ownerUuid);
+		if (this.petownerdata.get(ownerUuid) == null)
 			return null;
 		
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
@@ -632,24 +632,26 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public void removePet(Player player, boolean kill) {
-		UUID entityuuid = this.playerpetsdata.get(player.getUniqueId());
-		if (this.playerpetsdata.get(player.getUniqueId()) == null)
+	public void removePet(UUID petOwnerUUID, boolean kill) {
+		UUID entityuuid = this.petownerdata.get(petOwnerUUID);
+		if (this.petownerdata.get(petOwnerUUID) == null)
 			return;
 
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
 		if (entity != null && kill == true)
 			Utils.RemoveEntity(entity,"KILLPET");
 			
-		this.playerpetsdata.remove(player.getUniqueId());
-		player.sendMessage("You have lost your pet");
+		this.petownerdata.remove(petOwnerUUID);
+		Entity owner = Bukkit.getEntity(petOwnerUUID);
+		if (owner != null)
+			owner.sendMessage("You have lost your pet");
 	}
 
 	@Override
 	public List<LivingEntity> getAllWorldPets() {
 		List<LivingEntity> pets = new ArrayList<LivingEntity>();
 
-		for (Map.Entry<UUID, UUID> entry : playerpetsdata.entrySet()) {
+		for (Map.Entry<UUID, UUID> entry : petownerdata.entrySet()) {
 			// UUID key = entry.getKey();
 			if (entry.getValue() == null)
 				continue;
@@ -666,11 +668,11 @@ public class EntityManager implements IEntityManager {
 	{
 		try
 		{
-			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(owner);
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(owner.getUniqueId());
 			if (pet != null)
 			{
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
-				StateManager.getInstance().getEntityManager().removePet(owner, !solLivingEntity.isCharmed());
+				StateManager.getInstance().getEntityManager().removePet(owner.getUniqueId(), !solLivingEntity.isCharmed());
 			}
 			
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(spell.getTeleportZone());
@@ -684,7 +686,7 @@ public class EntityManager implements IEntityManager {
 			LivingEntity spawnedMob = (LivingEntity)MythicMobs.inst().getAPIHelper().spawnMythicMob("NPCID_" + npc.getId(), owner.getLocation());
 			ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt((LivingEntity)spawnedMob);
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(owner);
-			StateManager.getInstance().getEntityManager().setPet(owner,spawnedMob);
+			StateManager.getInstance().getEntityManager().setPet(owner.getUniqueId(),spawnedMob);
 			spawnedMob.setCustomName(solplayer.getForename() + "'s Pet");
 			spawnedMob.setCustomNameVisible(true);
 			spawnedMob.setCanPickupItems(false);
@@ -749,31 +751,34 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void removeAllPets() {
-		for (Map.Entry<UUID, UUID> entry : playerpetsdata.entrySet()) {
+		for (Map.Entry<UUID, UUID> entry : petownerdata.entrySet()) {
 			UUID key = entry.getKey();
 			LivingEntity livingEntityPet = (LivingEntity)Bukkit.getEntity(entry.getValue());
 			if (livingEntityPet != null)
 				livingEntityPet.remove();
-			this.playerpetsdata.remove(key);
+			this.petownerdata.remove(key);
 		}
 	}
 
 	@Override
-	public LivingEntity setPet(Player player, LivingEntity entity) {
+	public LivingEntity setPet(UUID petOwnerUuid, LivingEntity entity) {
 		try
 		{
-			if (getPet(player) != null) {
-				ISoliniaLivingEntity solPetEntity = SoliniaLivingEntityAdapter.Adapt(getPet(player));
-				removePet(player, !solPetEntity.isCharmed());
+			if (getPet(petOwnerUuid) != null) {
+				ISoliniaLivingEntity solPetEntity = SoliniaLivingEntityAdapter.Adapt(getPet(petOwnerUuid));
+				removePet(petOwnerUuid, !solPetEntity.isCharmed());
 			}
 			
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(entity);
-			solEntity.getActiveMob().setOwner(player.getUniqueId());
+			solEntity.getActiveMob().setOwner(petOwnerUuid);
 			solEntity.clearHateList();
 			solEntity.setAttackTarget(null);
 		
-			player.sendMessage("You have a new pet!");
-			this.playerpetsdata.put(player.getUniqueId(), entity.getUniqueId());
+			Entity petOwner = Bukkit.getEntity(petOwnerUuid);
+			if (petOwner != null)
+				petOwner.sendMessage("You have a new pet!");
+			
+			this.petownerdata.put(petOwnerUuid, entity.getUniqueId());
 		} catch (CoreStateInitException e)
 		{
 		

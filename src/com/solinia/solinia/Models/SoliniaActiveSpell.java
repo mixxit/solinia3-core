@@ -1277,9 +1277,8 @@ public class SoliniaActiveSpell {
 			return;
 
 		try {
-			Player playerSource = (Player)source;
 			// Already has a pet
-			LivingEntity currentPet = StateManager.getInstance().getEntityManager().getPet(playerSource);
+			LivingEntity currentPet = StateManager.getInstance().getEntityManager().getPet(source.getUniqueId());
 			if (currentPet != null)
 				return;
 			
@@ -1305,7 +1304,7 @@ public class SoliniaActiveSpell {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
 
-			StateManager.getInstance().getEntityManager().setPet(playerSource, getLivingEntity());
+			StateManager.getInstance().getEntityManager().setPet(source.getUniqueId(), getLivingEntity());
 
 			if (getLivingEntity() instanceof Creature) {
 				SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).setAttackTarget(null);
@@ -1675,7 +1674,7 @@ public class SoliniaActiveSpell {
 
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) owner);
 
-			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet((Player) owner);
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(owner.getUniqueId());
 			if (pet == null)
 				return;
 

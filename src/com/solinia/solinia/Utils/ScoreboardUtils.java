@@ -96,14 +96,14 @@ public class ScoreboardUtils {
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("health").unregister();
 		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
 				.registerNewObjective("health", "health");
-		health.setDisplayName(ChatColor.RED + "❤");
+		health.setDisplayName(ChatColor.RED + "â�¤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(uuid));
 			Score playerscore = objective.getScore(ChatColor.WHITE + solplayer.getFullName() + "");
 			playerscore.setScore((int) solplayer.getSoliniaLivingEntity().getHPRatio());
 			
-			LivingEntity playerpet = StateManager.getInstance().getEntityManager().getPet(Bukkit.getPlayer(uuid));
+			LivingEntity playerpet = StateManager.getInstance().getEntityManager().getPet(uuid);
 			if (playerpet != null)
 			{
 				ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt(playerpet);
@@ -125,7 +125,7 @@ public class ScoreboardUtils {
 						score.setScore((int) solplayer.getSoliniaLivingEntity().getHPRatio());
 					}
 					
-					LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(Bukkit.getPlayer(groupmemberuuid));
+					LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(groupmemberuuid);
 					if (pet != null)
 					{
 						ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt(pet);
@@ -151,7 +151,7 @@ public class ScoreboardUtils {
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("showhealth").unregister();
 		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
 				.registerNewObjective("showhealth", "health");
-		health.setDisplayName(ChatColor.RED + "❤");
+		health.setDisplayName(ChatColor.RED + "â�¤");
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
 		try {

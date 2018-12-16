@@ -17,7 +17,7 @@ public class PetCheckTickTimer extends BukkitRunnable {
 			// Check Pets
 			try
 			{
-				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
+				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player.getUniqueId());
 				if (pet != null) {
 					ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 

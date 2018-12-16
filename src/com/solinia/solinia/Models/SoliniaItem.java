@@ -494,7 +494,7 @@ public class SoliniaItem implements ISoliniaItem {
 		
 		if (isPetControlRod())
 		{
-			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player);
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player.getUniqueId());
 			if (pet != null)
 			{
 				if (pet instanceof Sittable)

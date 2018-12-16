@@ -1370,6 +1370,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
 									+ df.format(defender.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + " " + my_hit.skill
 									+ " damage [PetHP:" + attackerEntity.getHealth() + "]"));
+					
+					if (owner.isOp())
+					{
+						System.out.println("Debug output for OP pet:");
+						try
+						{
+							for(UUID uuid : StateManager.getInstance().getEntityManager().getHateList(defender.getBukkitLivingEntity().getUniqueId()).keySet())
+							{
+								System.out.println("UUID: " + uuid + " " + StateManager.getInstance().getEntityManager().getHateList(defender.getBukkitLivingEntity().getUniqueId()).get(uuid));						
+							}
+						} catch (CoreStateInitException e)
+						{
+							
+						}
+					}
 				}
 			}
 

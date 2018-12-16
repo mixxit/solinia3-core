@@ -206,10 +206,9 @@ public class SoliniaEntitySpells {
 			try {
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
 				System.out.println("End of charm, attempting removal of pet");
-				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null && solLivingEntity.getActiveMob().getOwner() != null && solLivingEntity.getActiveMob().getOwner().isPresent())
+				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null)
 				{
-					UUID ownerUuid = solLivingEntity.getActiveMob().getOwner().get();
-					StateManager.getInstance().getEntityManager().removePet((Player)Bukkit.getEntity(ownerUuid), false);
+					StateManager.getInstance().getEntityManager().removePet(activeSpell.getSourceUuid(), false);
 					System.out.println("Pet being removed");
 				} else {
 					System.out.println("Could not remove pet");
