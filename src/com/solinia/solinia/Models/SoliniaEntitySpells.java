@@ -205,9 +205,14 @@ public class SoliniaEntitySpells {
 		{
 			try {
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null && solLivingEntity.getActiveMob().getOwner().isPresent())
+				System.out.println("End of charm, attempting removal of pet");
+				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null && solLivingEntity.getActiveMob().getOwner() != null && solLivingEntity.getActiveMob().getOwner().isPresent())
 				{
-					StateManager.getInstance().getEntityManager().removePet((Player)Bukkit.getEntity(solLivingEntity.getActiveMob().getOwner().get()), false);
+					UUID ownerUuid = solLivingEntity.getActiveMob().getOwner().get();
+					StateManager.getInstance().getEntityManager().removePet((Player)Bukkit.getEntity(ownerUuid), false);
+					System.out.println("Pet being removed");
+				} else {
+					System.out.println("Could not remove pet");
 				}
 			} catch (CoreStateInitException e) {
 
@@ -256,7 +261,13 @@ public class SoliniaEntitySpells {
 		}
 
 		for (Integer spellId : removeSpells) {
-			removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
+			try
+			{
+				removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 

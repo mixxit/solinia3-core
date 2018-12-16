@@ -4810,11 +4810,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		try {
 			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(), uniqueId, hate);
-			Entity entity = Bukkit.getEntity(uniqueId);
-			if (entity instanceof Player)
-			{
-				System.out.println("Debug Added : " + entity.getName() + " to my (" + this.getName() + ") hate list");
-			}
 			checkHateTargets();
 		} catch (CoreStateInitException e) {
 		}
@@ -6576,7 +6571,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public ActiveMob getActiveMob() {
-		return MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
+		if (MythicMobs.inst().getAPIHelper() != null && this.getBukkitLivingEntity() != null)
+			return MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
+		
+		return null;
 	}
 
 	@Override
