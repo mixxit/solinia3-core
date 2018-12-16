@@ -1378,7 +1378,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						{
 							for(UUID uuid : StateManager.getInstance().getEntityManager().getHateList(defender.getBukkitLivingEntity().getUniqueId()).keySet())
 							{
-								System.out.println("UUID: " + uuid + " " + StateManager.getInstance().getEntityManager().getHateList(defender.getBukkitLivingEntity().getUniqueId()).get(uuid));						
+								Entity entity = Bukkit.getEntity(uuid);
+								if (entity != null)
+									System.out.println("UUID: " + entity.getName() + " " + StateManager.getInstance().getEntityManager().getHateList(defender.getBukkitLivingEntity().getUniqueId()).get(uuid));						
 							}
 						} catch (CoreStateInitException e)
 						{
@@ -1710,6 +1712,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (hate == 0 && my_hit.base_damage > 1)
 			hate = my_hit.base_damage;
 
+		
 		if (my_hit.base_damage > 0) {
 			my_hit.base_damage = getDamageCaps(my_hit.base_damage);
 
@@ -1717,7 +1720,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			tryIncreaseSkill("OFFENSE", 1);
 
 			int ucDamageBonus = 0;
-
+			
 			if (getClassObj() != null && getClassObj().isWarriorClass() && getLevel() >= 28) {
 				ucDamageBonus = getWeaponDamageBonus(weapon);
 				my_hit.min_damage = ucDamageBonus;
@@ -1733,6 +1736,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			my_hit = doAttack(defender, my_hit);
 		}
 
+		if (my_hit.damage_done > 0 && hate < 1)
+			hate = 1;
+		
 		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate);
 
 		return my_hit;
@@ -1741,7 +1747,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void damageAlertHook(double damage, Entity sourceEntity) {
 		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getActiveMob().getOwner() != null) {
-			Player owner = this.getOwnerEntity();
+			Entity owner = this.getOwnerEntity();
 			if (owner != null) {
 				if (owner != null && owner instanceof Player) {
 					// HP warning to owner
@@ -6390,8 +6396,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solAttackerPlayer.getGroup() != null) {
 					ISoliniaPlayer solDefenderPlayer = null;
 					if (defender.isCurrentlyNPCPet()) {
-						if (defender.getActiveMob() != null)
-							solDefenderPlayer = SoliniaPlayerAdapter.Adapt(defender.getOwnerEntity());
+						if (defender.getActiveMob() != null && defender.getOwnerEntity() instanceof Player)
+							solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender.getOwnerEntity());
 					} else {
 						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player) defender.getBukkitLivingEntity());
 					}
@@ -6491,10 +6497,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!getBukkitLivingEntity().isDead())
 			getBukkitLivingEntity().setHealth(health);
 
-		if (isCurrentlyNPCPet() && this.getActiveMob() != null) {
+		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
 			
 			try {
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(this.getOwnerEntity());
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getOwnerEntity());
 				ScoreboardUtils.UpdateGroupScoreboardForEveryone(solPlayer.getUUID(), solPlayer.getGroup());
 			} catch (CoreStateInitException e) {
 
@@ -6637,10 +6643,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public Player getOwnerEntity() {
+	public Entity getOwnerEntity() {
 		if (!isCurrentlyNPCPet())
 			return null;
 			
-		return (Player)Bukkit.getEntity(this.getActiveMob().getOwner().get());
+		return Bukkit.getEntity(this.getActiveMob().getOwner().get());
 	}
 }

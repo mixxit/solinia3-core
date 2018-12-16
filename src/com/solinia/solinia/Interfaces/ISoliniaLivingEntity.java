@@ -321,5 +321,5 @@ public interface ISoliniaLivingEntity
 
 	public boolean isCharmed();
 
-	public Player getOwnerEntity();
+	public Entity getOwnerEntity();
 }
