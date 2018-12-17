@@ -5456,7 +5456,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// TODO Harm Touch Scaling
 		if ((soliniaSpell.getName().startsWith("Harm Touch")) && getLevel() > 40)
+		{
 			value -= (getLevel() - 40) * 20;
+			this.getBukkitLivingEntity().sendMessage("Debug: Scaling Harm Touch bonus: " + value);
+		}
 
 		chance = 0;
 
