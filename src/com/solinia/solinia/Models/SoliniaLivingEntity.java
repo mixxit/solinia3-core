@@ -5450,16 +5450,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int value_BaseEffect = 0;
 		value_BaseEffect = value;
 		int chance = 0;
+		
+		// TODO Focus effects
+		value_BaseEffect = value + (value * getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell) / 100);
 
 		// TODO Harm Touch Scaling
 		if ((soliniaSpell.getName().startsWith("Harm Touch")) && getLevel() > 40)
 		{
-			value -= (getLevel() - 40) * 20;
-			this.getBukkitLivingEntity().sendMessage("Debug: Scaling Harm Touch bonus: " + value);
+			value_BaseEffect += (getLevel() - 40) * 20;
 		}
-
-		// TODO Focus effects
-		value_BaseEffect = value + (value * getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell) / 100);
 		
 		chance = 0;
 
