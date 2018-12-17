@@ -5574,7 +5574,7 @@ public class Utils {
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.TeleporttoAnchor)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.Translocate)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.TranslocatetoAnchor)
-				|| spell.getSpellEffectTypes().contains(SpellEffectType.Charm)
+				|| spell.isCharmSpell()
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.SummonItem)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.BindAffinity)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.Levitate)

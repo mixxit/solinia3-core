@@ -2434,4 +2434,51 @@ public class SoliniaActiveSpell {
 
 		}
 	}
+
+	public void buffTick() {
+		for(ActiveSpellEffect spellEffect : this.getActiveSpellEffects())
+		{
+			buffEffectTick(spellEffect);
+		}
+	}
+
+	private void buffEffectTick(ActiveSpellEffect spellEffect) {
+		try {
+			switch(spellEffect.getSpellEffectType())
+			{
+				case Charm:
+					Entity source = Bukkit.getEntity(this.getSourceUuid());
+					if (source == null)
+					{
+						removeActiveSpellNextTick();
+						return;
+					}
+				
+					ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)source);
+					if (solLivingEntity == null)
+					{
+						removeActiveSpellNextTick();
+						return;
+					}
+					
+					if (!solLivingEntity.passCharismaCheck(this.getLivingEntity(), this.getSpell()))
+					{
+						removeActiveSpellNextTick();
+						return;
+					}
+				
+					break;
+				default:
+					break;
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void removeActiveSpellNextTick()
+	{
+		this.setTicksLeft(0);
+	}
 }

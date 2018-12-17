@@ -1009,8 +1009,6 @@ public interface ISoliniaSpell {
 
 	boolean isLifetapSpell();
 
-	float getSpellEffectiveness(LivingEntity caster, LivingEntity victim) throws CoreStateInitException;
-
 	boolean isDamageShield();
 
 	boolean isDot();
@@ -1072,4 +1070,6 @@ public interface ISoliniaSpell {
 	String getRequiresPermissionNode();
 
 	void setRequiresPermissionNode(String requiresPermissionNode);
+
+	boolean isCharmSpell();
 }

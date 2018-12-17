@@ -4220,7 +4220,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// Try not to kill potentially friendly player tameables with hostile spells
 		if (solTarget.isCurrentlyNPCPet() && target instanceof Creature && !soliniaSpell.isBeneficial())
 		{
-			if (soliniaSpell.getSpellEffectTypes().contains(SpellEffectType.Charm) && source.getUniqueId().equals(solTarget.getOwnerEntity().getUniqueId()))
+			if (soliniaSpell.isCharmSpell() && source.getUniqueId().equals(solTarget.getOwnerEntity().getUniqueId()))
 			{
 				// Our owner wants to renew his charm
 				return true;
@@ -4542,145 +4542,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 	
 	@Override
-	public float getSpellEffectiveness(LivingEntity caster, LivingEntity victim) throws CoreStateInitException {
-		// TODO Auto-generated method stub
-		int resistmodifier = getResistDiff();
-		int casterlevel = 1;
-		int targetresist = 0;
-		
-		boolean isnpccaster = false;
-		
-		if (caster instanceof Player)
-		{
-			casterlevel = SoliniaPlayerAdapter.Adapt((Player)caster).getLevel();
-		} else {
-			if (Utils.isLivingEntityNPC(caster))
-			{
-				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)caster);
-				ISoliniaNPC casternpc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
-				casterlevel = casternpc.getLevel();
-				isnpccaster = true;
-			}
-		}
-		
-		boolean isnpcvictim = false;
-		int victimlevel = 1;
-		
-		if (victim instanceof Player)
-		{
-			victimlevel = SoliniaPlayerAdapter.Adapt((Player)victim).getLevel();
-			targetresist = SoliniaPlayerAdapter.Adapt((Player)victim).getResist(Utils.getSpellResistType(getResisttype()));
-		} else {
-			if (Utils.isLivingEntityNPC(victim))
-			{
-				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)victim);
-				ISoliniaNPC victimnpc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
-				targetresist = solentity.getResists(Utils.getSpellResistType(getResisttype()));
-				victimlevel = victimnpc.getLevel();
-				isnpcvictim = true;
-			}
-		}
-		
-		int resist_chance = 0;
-		int level_mod = 0;
-		int temp_level_diff = victimlevel - casterlevel;
-
-		if(isnpcvictim == false && victimlevel >= 21 && temp_level_diff > 15)
-		{
-			temp_level_diff = 15;
-		}
-		
-		if(isnpcvictim == true && temp_level_diff < -9)
-		{
-			temp_level_diff = -9;
-		}
-		
-		level_mod = temp_level_diff * temp_level_diff / 2;
-		if(temp_level_diff < 0)
-		{
-			level_mod = -level_mod;
-		}
-		
-		if(isnpcvictim && (casterlevel - victimlevel < -20))
-		{
-			level_mod = 1000;
-		}
-
-		//Even more level stuff this time dealing with damage spells
-		if(isnpcvictim && isDamageSpell() && victimlevel >= 17)
-		{
-			int level_diff;
-			level_diff = victimlevel - casterlevel;
-			level_mod += (2 * level_diff);
-		}
-		
-		resist_chance += level_mod;
-		resist_chance += resistmodifier;
-		resist_chance += targetresist;
-		
-		if (resist_chance > 255)
-		{
-			resist_chance = 255;
-		}
-		
-		if (resist_chance < 0)
-		{
-			resist_chance = 0;
-		}
-		
-		int roll = Utils.RandomBetween(0, 200);
-		
-		if(roll > resist_chance)
-		{
-			return 100;
-		} else {
-			if(resist_chance < 1)
-			{
-				resist_chance = 1;
-			}
-			
-			int partial_modifier = ((150 * (resist_chance - roll)) / resist_chance);
-			
-			if(isnpcvictim == true)
-			{
-				if(victimlevel > casterlevel && victimlevel >= 17 && casterlevel <= 50)
-				{
-					partial_modifier += 5;
-				}
-
-				if(victimlevel >= 30 && casterlevel < 50)
-				{
-					partial_modifier += (casterlevel - 25);
-				}
-
-				if(victimlevel < 15)
-				{
-					partial_modifier -= 5;
-				}
-			}
-			
-			if(isnpccaster)
-			{
-				if((victimlevel - casterlevel) >= 20)
-				{
-					partial_modifier += (victimlevel - casterlevel) * 1.5;
-				}
-			}
-
-			if(partial_modifier <= 0)
-			{
-				return 100F;
-			}
-			else if(partial_modifier >= 100)
-			{
-				return 0;
-			}
-
-			return (100.0f - partial_modifier);
-		}
-	}
-
-	@Override
 	public boolean isResistable() {
 		if (isDetrimental() && !isResistDebuffSpell() && !Utils.getSpellResistType(this.getResisttype()).name().equals("RESIST_NONE"))
 			return true;
@@ -4821,7 +4682,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return isEffectInSpell(SpellEffectType.Stun);
 	}
 
-	private boolean isCharmSpell() {
+	@Override
+	public boolean isCharmSpell() {
 		return isEffectInSpell(SpellEffectType.Charm);
 	}
 	
@@ -5633,7 +5495,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed) ||
 				getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed) ||
 				getSpellEffectTypes().contains(SpellEffectType.Mez) || 
-				getSpellEffectTypes().contains(SpellEffectType.Charm) ||
+				isCharmSpell() ||
 				getSpellEffectTypes().contains(SpellEffectType.Root) ||
 				getSpellEffectTypes().contains(SpellEffectType.Stun)
 		)
@@ -5647,7 +5509,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed) ||
 				getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed) ||
 				getSpellEffectTypes().contains(SpellEffectType.Mez) ||
-				getSpellEffectTypes().contains(SpellEffectType.Charm) ||
+				isCharmSpell() ||
 				getSpellEffectTypes().contains(SpellEffectType.Root) ||
 				getSpellEffectTypes().contains(SpellEffectType.Stun)
 		)

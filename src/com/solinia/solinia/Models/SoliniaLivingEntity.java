@@ -96,6 +96,196 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
+	public boolean passCharismaCheck(LivingEntity caster, ISoliniaSpell spell) throws CoreStateInitException
+	{
+		if (caster == null)
+			return false;
+		
+		if (spell.getResistDiff() <= -600)
+			return true;
+		
+		double resist_check = 0;
+		int charmBreakChance = 25; //25%
+		
+		if (spell.isCharmSpell())
+		{
+			if (!spell.isResistable()) //If charm spell has this set(-1), it can not break till end of duration.
+				return true;
+
+			//1: The mob has a default 25% chance of being allowed a resistance check against the charm.
+			if (Utils.RandomBetween(0, 99) > charmBreakChance)
+				return true;
+
+			resist_check = getResistSpell(spell, caster);
+
+			//2: The mob makes a resistance check against the charm
+			if (resist_check == 100)
+				return true;
+
+			else
+			{
+				if (caster instanceof Player)
+				{
+					//3: At maxed ability, Total Domination has a 50% chance of preventing the charm break that otherwise would have occurred.
+					int totalDominationBonus = 0;
+
+					totalDominationBonus += getSpellBonuses(SpellEffectType.CharmBreakChance);
+					totalDominationBonus += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.CharmBreakChance);
+					
+					if (Utils.RandomBetween(0, 99) < totalDominationBonus)
+						return true;
+
+				}
+			}
+		} else {
+			resist_check = getResistSpell(spell, caster);
+			if (resist_check == 100)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public float getResistSpell(ISoliniaSpell spell, LivingEntity caster) throws CoreStateInitException {
+		// TODO Auto-generated method stub
+		int resistmodifier = spell.getResistDiff();
+		int casterlevel = 1;
+		int targetresist = 0;
+		
+		boolean isnpccaster = false;
+		
+		if (caster instanceof Player)
+		{
+			casterlevel = SoliniaPlayerAdapter.Adapt((Player)caster).getLevel();
+		} else {
+			if (Utils.isLivingEntityNPC(caster))
+			{
+				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)caster);
+				ISoliniaNPC casternpc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
+				casterlevel = casternpc.getLevel();
+				isnpccaster = true;
+			}
+		}
+		
+		boolean isnpcvictim = false;
+		int victimlevel = 1;
+		
+		if (getBukkitLivingEntity() instanceof Player)
+		{
+			victimlevel = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity()).getLevel();
+			targetresist = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity()).getResist(Utils.getSpellResistType(spell.getResisttype()));
+		} else {
+			if (this.isNPC())
+			{
+				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)getBukkitLivingEntity());
+				ISoliniaNPC victimnpc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
+				targetresist = solentity.getResists(Utils.getSpellResistType(spell.getResisttype()));
+				victimlevel = victimnpc.getLevel();
+				isnpcvictim = true;
+			}
+		}
+		
+		int resist_chance = 0;
+		int level_mod = 0;
+		int temp_level_diff = victimlevel - casterlevel;
+
+		if(isnpcvictim == false && victimlevel >= 21 && temp_level_diff > 15)
+		{
+			temp_level_diff = 15;
+		}
+		
+		if(isnpcvictim == true && temp_level_diff < -9)
+		{
+			temp_level_diff = -9;
+		}
+		
+		level_mod = temp_level_diff * temp_level_diff / 2;
+		if(temp_level_diff < 0)
+		{
+			level_mod = -level_mod;
+		}
+		
+		if(isnpcvictim && (casterlevel - victimlevel < -20))
+		{
+			level_mod = 1000;
+		}
+
+		//Even more level stuff this time dealing with damage spells
+		if(isnpcvictim && spell.isDamageSpell() && victimlevel >= 17)
+		{
+			int level_diff;
+			level_diff = victimlevel - casterlevel;
+			level_mod += (2 * level_diff);
+		}
+		
+		resist_chance += level_mod;
+		resist_chance += resistmodifier;
+		resist_chance += targetresist;
+		
+		if (resist_chance > 255)
+		{
+			resist_chance = 255;
+		}
+		
+		if (resist_chance < 0)
+		{
+			resist_chance = 0;
+		}
+		
+		int roll = Utils.RandomBetween(0, 200);
+		
+		if(roll > resist_chance)
+		{
+			return 100;
+		} else {
+			if(resist_chance < 1)
+			{
+				resist_chance = 1;
+			}
+			
+			int partial_modifier = ((150 * (resist_chance - roll)) / resist_chance);
+			
+			if(isnpcvictim == true)
+			{
+				if(victimlevel > casterlevel && victimlevel >= 17 && casterlevel <= 50)
+				{
+					partial_modifier += 5;
+				}
+
+				if(victimlevel >= 30 && casterlevel < 50)
+				{
+					partial_modifier += (casterlevel - 25);
+				}
+
+				if(victimlevel < 15)
+				{
+					partial_modifier -= 5;
+				}
+			}
+			
+			if(isnpccaster)
+			{
+				if((victimlevel - casterlevel) >= 20)
+				{
+					partial_modifier += (victimlevel - casterlevel) * 1.5;
+				}
+			}
+
+			if(partial_modifier <= 0)
+			{
+				return 100F;
+			}
+			else if(partial_modifier >= 100)
+			{
+				return 0;
+			}
+
+			return (100.0f - partial_modifier);
+		}
+	}
+	
+	@Override
 	public SoliniaWorld getWorld() {
 		try {
 			return StateManager.getInstance().getConfigurationManager()

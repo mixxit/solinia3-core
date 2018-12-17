@@ -322,4 +322,8 @@ public interface ISoliniaLivingEntity
 	public boolean isCharmed();
 
 	public Entity getOwnerEntity();
+
+	boolean passCharismaCheck(LivingEntity caster, ISoliniaSpell spell) throws CoreStateInitException;
+
+	float getResistSpell(ISoliniaSpell spell, LivingEntity caster) throws CoreStateInitException;
 }

@@ -82,7 +82,8 @@ public class SoliniaEntitySpells {
 
 			// If state is active, try to use spell effectiveness (resists)
 			try {
-				effectiveness = soliniaSpell.getSpellEffectiveness(sourceEntity, getLivingEntity());
+				ISoliniaLivingEntity solVictimEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+				effectiveness = solVictimEntity.getResistSpell(soliniaSpell, sourceEntity);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -283,6 +284,7 @@ public class SoliniaEntitySpells {
 				if (activeSpell.getTicksLeft() == 0) {
 					removeSpells.add(activeSpell.getSpellId());
 				} else {
+					activeSpell.buffTick();
 					activeSpell.apply(plugin);
 					activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
 					updateSpells.add(activeSpell);

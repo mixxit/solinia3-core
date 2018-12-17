@@ -561,7 +561,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 
 		// 128 dmg per hit
-		int drowningdamage = 128;
+		double drowningdamage = Math.round(le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/8D);
 		event.setDamage(drowningdamage);
 		le.sendMessage(ChatColor.GRAY + "* You have been hit for " + drowningdamage + " points of DROWNING damage!");
 	}
