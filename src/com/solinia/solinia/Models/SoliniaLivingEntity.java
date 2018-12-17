@@ -5455,6 +5455,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		value_BaseEffect = value + (value * getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell) / 100);
 
 		// TODO Harm Touch Scaling
+		if ((soliniaSpell.getName().startsWith("Harm Touch")) && getLevel() > 40)
+			value -= (getLevel() - 40) * 20;
 
 		chance = 0;
 
