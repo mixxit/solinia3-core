@@ -3056,7 +3056,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return false;
 			}
 			
-			tryIncreaseSkill("BINDWOUND", 1);
+			// give some chance to try to bind wound early on in life
+			// later on only do this after success
+			boolean triedSkillIncrease = false;
+			if (this.getSkill("BINDWOUND").getValue() < 30)
+			{
+				tryIncreaseSkill("BINDWOUND", 1);
+				triedSkillIncrease = true;
+			}
 			
 			int percent_base = 50;
 			
@@ -3133,6 +3140,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					amount = 0;
 				
 				double boundHealth = amount - originalHealth;
+				
+				if (triedSkillIncrease == false)
+				{
+					tryIncreaseSkill("BINDWOUND", 1);
+					triedSkillIncrease = true;
+				}
+
 				
 				getBukkitPlayer().sendMessage("You bind " + solLivingEntity.getName() + "'s wounds for " + (int)boundHealth + " hp");
 				if (solLivingEntity.getBukkitLivingEntity() instanceof Player && !solLivingEntity.getBukkitLivingEntity().getUniqueId().toString().equals(getBukkitPlayer().getUniqueId().toString()))
