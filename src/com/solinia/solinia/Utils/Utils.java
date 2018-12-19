@@ -1,8 +1,11 @@
 package com.solinia.solinia.Utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -6939,5 +6942,29 @@ public class Utils {
 			return;
 		
 		entity.remove();
+	}
+
+	public static String getHttpUrlAsString(String urlLink) {
+		try
+		{
+			URL url = new URL(urlLink);
+			URLConnection con = url.openConnection();
+	        InputStream is =con.getInputStream();
+	        BufferedReader in = new BufferedReader(
+	                new InputStreamReader(
+	                		con.getInputStream()));
+	
+	        StringBuilder response = new StringBuilder();
+	        String inputLine;
+	
+	        while ((inputLine = in.readLine()) != null) 
+	            response.append(inputLine);
+	        
+	        in.close();
+	        return response.toString();
+		} catch (Exception e)
+		{
+			return "";
+		}
 	}
 }

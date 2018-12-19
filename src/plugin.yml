@@ -21,6 +21,10 @@ commands:
     aliases:
     - name
     - nick
+  givehead:
+    description: Gives a head from minecraft-heads.com
+    usage: /givehead player headurl
+    aliases: []
   pray:
     description: Makes a prayer to the gods
     usage: /pray <prayer>

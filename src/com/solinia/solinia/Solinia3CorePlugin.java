@@ -534,6 +534,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("personality").setExecutor(new CommandPersonality());
 		this.getCommand("resetpersonality").setExecutor(new CommandResetPersonality());
 		this.getCommand("pray").setExecutor(new CommandPray());
+		this.getCommand("givehead").setExecutor(new CommandGiveHead(this));
 	}
 
 	private void createConfigDir() {
