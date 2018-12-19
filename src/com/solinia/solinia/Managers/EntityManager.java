@@ -78,6 +78,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Integer>> hateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Integer>>();
 	private ConcurrentHashMap<UUID, Timestamp> lastRiposte = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> lastBindwound = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontHealMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontRootMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontBuffMe = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1523,6 +1524,17 @@ public class EntityManager implements IEntityManager {
 		this.lastRiposte.put(uuid, lasttimestamp);
 	}
 
+	@Override
+	public ConcurrentHashMap<UUID, Timestamp> getLastBindwound() {
+		return this.lastBindwound;
+	}
+
+	@Override
+	public void setLastBindwound(UUID uuid, Timestamp lasttimestamp) {
+		this.lastBindwound.put(uuid, lasttimestamp);
+	}
+
+	
 	@Override
 	public void addToHateList(UUID entity, UUID provoker, int hate) {
 		if (hateList.get(entity) == null)

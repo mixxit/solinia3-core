@@ -49,6 +49,7 @@ import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
+import io.lumine.xikage.mythicmobs.mobs.EntityManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -3039,6 +3040,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return false;
 		}
 		
+		if (this.isBindWoundCountdown())
+		{
+			getBukkitPlayer().sendMessage("You are still applying your previous bandages, you must wait before attempting to bandage more (10 seconds to complete)");
+			return false;
+		}
+		
 		if (this.isFeignedDeath())
 		{
 			getBukkitPlayer().sendMessage("You cannot bind while feigned");
@@ -3146,7 +3153,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					tryIncreaseSkill("BINDWOUND", 1);
 					triedSkillIncrease = true;
 				}
-
+				
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				StateManager.getInstance().getEntityManager().setLastBindwound(this.getBukkitPlayer().getUniqueId(),nowtimestamp);
 				
 				getBukkitPlayer().sendMessage("You bind " + solLivingEntity.getName() + "'s wounds for " + (int)boundHealth + " hp");
 				if (solLivingEntity.getBukkitLivingEntity() instanceof Player && !solLivingEntity.getBukkitLivingEntity().getUniqueId().toString().equals(getBukkitPlayer().getUniqueId().toString()))
@@ -3170,6 +3180,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 		}
 
+		return false;
+	}
+
+	private boolean isBindWoundCountdown() {
+		try
+		{
+			Timestamp expiretimestamp = StateManager.getInstance().getEntityManager().getLastBindwound().get(this.getBukkitPlayer().getUniqueId());
+			if (expiretimestamp != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus(10, ChronoUnit.SECONDS));
+	
+				if (nowtimestamp.before(mintimestamp))
+					return true;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
 		return false;
 	}
 

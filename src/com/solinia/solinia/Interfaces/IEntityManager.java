@@ -167,4 +167,8 @@ public interface IEntityManager {
 	void removePet(UUID petOwner, boolean kill);
 
 	LivingEntity getPet(UUID ownerUuid);
+
+	ConcurrentHashMap<UUID, Timestamp> getLastBindwound();
+
+	void setLastBindwound(UUID uuid, Timestamp lasttimestamp);
 }
