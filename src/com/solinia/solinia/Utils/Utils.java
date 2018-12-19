@@ -105,7 +105,8 @@ import net.minecraft.server.v1_13_R2.NBTTagCompound;
 
 public class Utils {
 	public static final int MAX_ENTITY_AGGRORANGE = 100;
-
+	public static final int DMG_INVULNERABLE = -5;
+	
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));
 	}
@@ -6804,10 +6805,7 @@ public class Utils {
 	}
 
 	public static boolean isSkullItem(ItemStack itemStack) {
-		if (itemStack.getType().name().equals("SKULL_ITEM"))
-			return true;
-		
-		if (itemStack.getType().name().equals("LEGACY_SKULL_ITEM"))
+		if (itemStack.getType().name().equals("SKULL_ITEM") || itemStack.getType().name().equals("PLAYER_HEAD") || itemStack.getType().name().equals("LEGACY_SKULL_ITEM"))
 			return true;
 		
 		return false;

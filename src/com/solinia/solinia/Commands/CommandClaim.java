@@ -53,7 +53,7 @@ public class CommandClaim implements CommandExecutor {
 				
 				return true;
 			case "give":
-				if (!sender.isOp())
+				if (!sender.isOp() && !sender.hasPermission("solinia.claim.give"))
 					return false;
 				
 				if (args.length < 3) {

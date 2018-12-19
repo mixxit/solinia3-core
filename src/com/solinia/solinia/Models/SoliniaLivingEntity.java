@@ -78,13 +78,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		this.livingentity = livingentity;
 
 		String metaid = "";
-		if (livingentity != null)
-		{
-			
+		if (livingentity != null) {
+
 			for (MetadataValue val : livingentity.getMetadata("mobname")) {
 				metaid = val.asString();
 			}
-			
+
 			for (MetadataValue val : livingentity.getMetadata("npcid")) {
 				metaid = val.asString();
 			}
@@ -94,44 +93,43 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (!metaid.equals(""))
 				installNpcByMetaName(metaid);
 	}
-	
+
 	@Override
-	public boolean passCharismaCheck(LivingEntity caster, ISoliniaSpell spell) throws CoreStateInitException
-	{
+	public boolean passCharismaCheck(LivingEntity caster, ISoliniaSpell spell) throws CoreStateInitException {
 		if (caster == null)
 			return false;
-		
+
 		if (spell.getResistDiff() <= -600)
 			return true;
-		
+
 		double resist_check = 0;
-		int charmBreakChance = 25; //25%
-		
-		if (spell.isCharmSpell())
-		{
-			if (!spell.isResistable()) //If charm spell has this set(-1), it can not break till end of duration.
+		int charmBreakChance = 25; // 25%
+
+		if (spell.isCharmSpell()) {
+			if (!spell.isResistable()) // If charm spell has this set(-1), it can not break till end of duration.
 				return true;
 
-			//1: The mob has a default 25% chance of being allowed a resistance check against the charm.
+			// 1: The mob has a default 25% chance of being allowed a resistance check
+			// against the charm.
 			if (Utils.RandomBetween(0, 99) > charmBreakChance)
 				return true;
 
 			resist_check = getResistSpell(spell, caster);
 
-			//2: The mob makes a resistance check against the charm
+			// 2: The mob makes a resistance check against the charm
 			if (resist_check == 100)
 				return true;
 
-			else
-			{
-				if (caster instanceof Player)
-				{
-					//3: At maxed ability, Total Domination has a 50% chance of preventing the charm break that otherwise would have occurred.
+			else {
+				if (caster instanceof Player) {
+					// 3: At maxed ability, Total Domination has a 50% chance of preventing the
+					// charm break that otherwise would have occurred.
 					int totalDominationBonus = 0;
 
 					totalDominationBonus += getSpellBonuses(SpellEffectType.CharmBreakChance);
-					totalDominationBonus += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.CharmBreakChance);
-					
+					totalDominationBonus += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
+							SpellEffectType.CharmBreakChance);
+
 					if (Utils.RandomBetween(0, 99) < totalDominationBonus)
 						return true;
 
@@ -142,149 +140,131 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (resist_check == 100)
 				return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public float getResistSpell(ISoliniaSpell spell, LivingEntity caster) throws CoreStateInitException {
 		// TODO Auto-generated method stub
 		int resistmodifier = spell.getResistDiff();
 		int casterlevel = 1;
 		int targetresist = 0;
-		
+
 		boolean isnpccaster = false;
-		
-		if (caster instanceof Player)
-		{
-			casterlevel = SoliniaPlayerAdapter.Adapt((Player)caster).getLevel();
+
+		if (caster instanceof Player) {
+			casterlevel = SoliniaPlayerAdapter.Adapt((Player) caster).getLevel();
 		} else {
-			if (Utils.isLivingEntityNPC(caster))
-			{
-				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)caster);
-				ISoliniaNPC casternpc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
+			if (Utils.isLivingEntityNPC(caster)) {
+				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) caster);
+				ISoliniaNPC casternpc = StateManager.getInstance().getConfigurationManager()
+						.getNPC(solentity.getNpcid());
 				casterlevel = casternpc.getLevel();
 				isnpccaster = true;
 			}
 		}
-		
+
 		boolean isnpcvictim = false;
 		int victimlevel = 1;
-		
-		if (getBukkitLivingEntity() instanceof Player)
-		{
-			victimlevel = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity()).getLevel();
-			targetresist = SoliniaPlayerAdapter.Adapt((Player)getBukkitLivingEntity()).getResist(Utils.getSpellResistType(spell.getResisttype()));
+
+		if (getBukkitLivingEntity() instanceof Player) {
+			victimlevel = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).getLevel();
+			targetresist = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity())
+					.getResist(Utils.getSpellResistType(spell.getResisttype()));
 		} else {
-			if (this.isNPC())
-			{
-				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)getBukkitLivingEntity());
-				ISoliniaNPC victimnpc = StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid());
+			if (this.isNPC()) {
+				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter
+						.Adapt((LivingEntity) getBukkitLivingEntity());
+				ISoliniaNPC victimnpc = StateManager.getInstance().getConfigurationManager()
+						.getNPC(solentity.getNpcid());
 				targetresist = solentity.getResists(Utils.getSpellResistType(spell.getResisttype()));
 				victimlevel = victimnpc.getLevel();
 				isnpcvictim = true;
 			}
 		}
-		
+
 		int resist_chance = 0;
 		int level_mod = 0;
 		int temp_level_diff = victimlevel - casterlevel;
 
-		if(isnpcvictim == false && victimlevel >= 21 && temp_level_diff > 15)
-		{
+		if (isnpcvictim == false && victimlevel >= 21 && temp_level_diff > 15) {
 			temp_level_diff = 15;
 		}
-		
-		if(isnpcvictim == true && temp_level_diff < -9)
-		{
+
+		if (isnpcvictim == true && temp_level_diff < -9) {
 			temp_level_diff = -9;
 		}
-		
+
 		level_mod = temp_level_diff * temp_level_diff / 2;
-		if(temp_level_diff < 0)
-		{
+		if (temp_level_diff < 0) {
 			level_mod = -level_mod;
 		}
-		
-		if(isnpcvictim && (casterlevel - victimlevel < -20))
-		{
+
+		if (isnpcvictim && (casterlevel - victimlevel < -20)) {
 			level_mod = 1000;
 		}
 
-		//Even more level stuff this time dealing with damage spells
-		if(isnpcvictim && spell.isDamageSpell() && victimlevel >= 17)
-		{
+		// Even more level stuff this time dealing with damage spells
+		if (isnpcvictim && spell.isDamageSpell() && victimlevel >= 17) {
 			int level_diff;
 			level_diff = victimlevel - casterlevel;
 			level_mod += (2 * level_diff);
 		}
-		
+
 		resist_chance += level_mod;
 		resist_chance += resistmodifier;
 		resist_chance += targetresist;
-		
-		if (resist_chance > 255)
-		{
+
+		if (resist_chance > 255) {
 			resist_chance = 255;
 		}
-		
-		if (resist_chance < 0)
-		{
+
+		if (resist_chance < 0) {
 			resist_chance = 0;
 		}
-		
+
 		int roll = Utils.RandomBetween(0, 200);
-		
-		if(roll > resist_chance)
-		{
+
+		if (roll > resist_chance) {
 			return 100;
 		} else {
-			if(resist_chance < 1)
-			{
+			if (resist_chance < 1) {
 				resist_chance = 1;
 			}
-			
+
 			int partial_modifier = ((150 * (resist_chance - roll)) / resist_chance);
-			
-			if(isnpcvictim == true)
-			{
-				if(victimlevel > casterlevel && victimlevel >= 17 && casterlevel <= 50)
-				{
+
+			if (isnpcvictim == true) {
+				if (victimlevel > casterlevel && victimlevel >= 17 && casterlevel <= 50) {
 					partial_modifier += 5;
 				}
 
-				if(victimlevel >= 30 && casterlevel < 50)
-				{
+				if (victimlevel >= 30 && casterlevel < 50) {
 					partial_modifier += (casterlevel - 25);
 				}
 
-				if(victimlevel < 15)
-				{
+				if (victimlevel < 15) {
 					partial_modifier -= 5;
 				}
 			}
-			
-			if(isnpccaster)
-			{
-				if((victimlevel - casterlevel) >= 20)
-				{
+
+			if (isnpccaster) {
+				if ((victimlevel - casterlevel) >= 20) {
 					partial_modifier += (victimlevel - casterlevel) * 1.5;
 				}
 			}
 
-			if(partial_modifier <= 0)
-			{
+			if (partial_modifier <= 0) {
 				return 100F;
-			}
-			else if(partial_modifier >= 100)
-			{
+			} else if (partial_modifier >= 100) {
 				return 0;
 			}
 
 			return (100.0f - partial_modifier);
 		}
 	}
-	
+
 	@Override
 	public SoliniaWorld getWorld() {
 		try {
@@ -324,7 +304,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (defender.isCurrentlyNPCPet()) {
-			if (defender.getOwnerEntity().getUniqueId().toString().equals(getBukkitLivingEntity().getUniqueId().toString())) {
+			if (defender.getOwnerEntity().getUniqueId().toString()
+					.equals(getBukkitLivingEntity().getUniqueId().toString())) {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack your pet!");
 				return;
 			}
@@ -348,7 +329,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// MEZZED
 		if (this.isMezzed()) {
 			if (this instanceof Player) {
-				((Player)this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
+				((Player) this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+						new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 			}
 			return;
 		}
@@ -356,7 +338,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// STUNNED
 		if (this.isStunned()) {
 			if (this instanceof Player) {
-				((Player)this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are stunned!"));
+				((Player) this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+						new TextComponent(ChatColor.GRAY + "* You are stunned!"));
 			}
 			return;
 		}
@@ -690,7 +673,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 
 				if (getBukkitLivingEntity() instanceof Player) {
-					TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id));
+					TextComponent tc = new TextComponent(TextComponent
+							.fromLegacyText(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id));
 					((Player) getBukkitLivingEntity()).spigot().sendMessage(tc);
 				}
 			}
@@ -1546,11 +1530,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				name = defender.getBukkitLivingEntity().getCustomName();
 
 			if (attackerEntity instanceof Player)
-				((Player) attackerEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-						new TextComponent("You hit " + name + " for " + df.format(finaldamage) + " "
-								+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
-								+ df.format(defender.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + " " + my_hit.skill
-								+ " damage"));
+				((Player) attackerEntity).spigot()
+						.sendMessage(ChatMessageType.ACTION_BAR,
+								new TextComponent("You hit " + name + " for " + df.format(finaldamage) + " "
+										+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
+										+ df.format(defender.getBukkitLivingEntity()
+												.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+										+ " " + my_hit.skill + " damage"));
 
 			if (this.isCurrentlyNPCPet()) {
 				if (getOwnerEntity() != null && getOwnerEntity() instanceof Player) {
@@ -1558,45 +1544,42 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					owner.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent("Your pet hit " + name + " for " + df.format(finaldamage) + " "
 									+ df.format(defender.getBukkitLivingEntity().getHealth() - finaldamage) + "/"
-									+ df.format(defender.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + " " + my_hit.skill
-									+ " damage [PetHP:" + attackerEntity.getHealth() + "]"));
+									+ df.format(defender.getBukkitLivingEntity()
+											.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+									+ " " + my_hit.skill + " damage [PetHP:" + attackerEntity.getHealth() + "]"));
 				}
 			}
 
 			if (!arrowHit)
 				if (getDoubleAttackCheck() && !attackerEntity.isDead() && !defender.getBukkitLivingEntity().isDead()) {
-					
-					
+
 					final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
 					final UUID attackerUUID = this.getBukkitLivingEntity().getUniqueId();
 					final int final_damagedone = my_hit.damage_done;
 
-					Bukkit.getScheduler().scheduleSyncDelayedTask(
-							Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+							new Runnable() {
 								public void run() {
-									try
-									{
+									try {
 										Entity entity = Bukkit.getEntity(attackerUUID);
-										
+
 										if (entity == null || !(entity instanceof LivingEntity))
 											return;
-										
+
 										ISoliniaLivingEntity solLivingEntity = null;
-										try
-										{
-											solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-										} catch (CoreStateInitException e)
-										{
-											
+										try {
+											solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
+										} catch (CoreStateInitException e) {
+
 										}
-										
+
 										if (solLivingEntity == null)
 											return;
-										
+
 										solLivingEntity.doDoubleAttack(defenderUUID, final_damagedone);
-									} catch (Exception e)
-									{
-										System.out.println("An error occured during the doDoubleAttack scheduler: " + e.getMessage() + " " + e.getStackTrace());
+									} catch (Exception e) {
+										System.out.println("An error occured during the doDoubleAttack scheduler: "
+												+ e.getMessage() + " " + e.getStackTrace());
 									}
 								}
 							});
@@ -1608,15 +1591,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int baseDamage2 = (int) ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);
 
 					DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, baseDamage2, false, defender);
-					
+
 					final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
 					final UUID attackerUUID = this.getBukkitLivingEntity().getUniqueId();
 					final int final_damagedone = my_hit2.damage_done;
-					
+
 					int offHandItemId = 0;
-					if (Utils.IsSoliniaItem(weapon2))
-					{
-						
+					if (Utils.IsSoliniaItem(weapon2)) {
+
 						try {
 							ISoliniaItem item = SoliniaItemAdapter.Adapt(weapon2);
 							offHandItemId = item.getId();
@@ -1624,41 +1606,38 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+
 					}
 					final int final_offhandItemId = offHandItemId;
 
-					Bukkit.getScheduler().scheduleSyncDelayedTask(
-							Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+							new Runnable() {
 								public void run() {
-									try
-									{
+									try {
 										Entity entity = Bukkit.getEntity(attackerUUID);
-										
+
 										if (entity == null || !(entity instanceof LivingEntity))
 											return;
-										
+
 										ISoliniaLivingEntity solLivingEntity = null;
-										try
-										{
-											solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-										} catch (CoreStateInitException e)
-										{
-											
+										try {
+											solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
+										} catch (CoreStateInitException e) {
+
 										}
-										
+
 										if (solLivingEntity == null)
 											return;
-										
-										solLivingEntity.doDualWield(defenderUUID, final_damagedone,final_offhandItemId);
-									} catch (Exception e)
-									{
-										System.out.println("An error occured during the doDualWield scheduler: " + e.getMessage() + " " + e.getStackTrace());
+
+										solLivingEntity.doDualWield(defenderUUID, final_damagedone,
+												final_offhandItemId);
+									} catch (Exception e) {
+										System.out.println("An error occured during the doDualWield scheduler: "
+												+ e.getMessage() + " " + e.getStackTrace());
 									}
 								}
 							});
-					
-					
+
 				}
 
 			try {
@@ -1709,10 +1688,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								if (roll < procChance) {
 									boolean itemUseSuccess = procSpell.tryApplyOnEntity(attackerEntity,
 											defender.getBukkitLivingEntity());
-									
-									if (itemUseSuccess)
-									{
-										checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0,procSpell.getId());
+
+									if (itemUseSuccess) {
+										checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
 									}
 
 									if (procSpell.getActSpellCost(this) > 0)
@@ -1759,35 +1737,32 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ISoliniaLivingEntity defender) {
 		final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
 		final UUID attackerUUID = attackerSolEntity.getBukkitLivingEntity().getUniqueId();
-		
+
 		final int finalitemid = soliniaitem.getId();
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(
-				Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+				new Runnable() {
 					public void run() {
-						try
-						{
-						Entity entity = Bukkit.getEntity(attackerUUID);
-						
-						if (entity == null || !(entity instanceof LivingEntity))
-							return;
-						
-						ISoliniaLivingEntity solLivingEntity = null;
-						try
-						{
-							solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-						} catch (CoreStateInitException e)
-						{
-							
-						}
-						
-						if (solLivingEntity == null)
-							return;
-						
-						solLivingEntity.doProcItem(finalitemid, attackerUUID, defenderUUID);
-						} catch (Exception e)
-						{
-							System.out.println("An error occured during the doProcItem scheduler: " + e.getMessage() + " " + e.getStackTrace());
+						try {
+							Entity entity = Bukkit.getEntity(attackerUUID);
+
+							if (entity == null || !(entity instanceof LivingEntity))
+								return;
+
+							ISoliniaLivingEntity solLivingEntity = null;
+							try {
+								solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
+							} catch (CoreStateInitException e) {
+
+							}
+
+							if (solLivingEntity == null)
+								return;
+
+							solLivingEntity.doProcItem(finalitemid, attackerUUID, defenderUUID);
+						} catch (Exception e) {
+							System.out.println("An error occured during the doProcItem scheduler: " + e.getMessage()
+									+ " " + e.getStackTrace());
 						}
 					}
 				});
@@ -1797,33 +1772,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID) {
 		if (procItemId < 1)
 			return;
-		
+
 		Entity attackerEntity = Bukkit.getEntity(attackerEntityUUID);
 		Entity defenderEntity = Bukkit.getEntity(defenderEntityUUID);
-		
+
 		if (attackerEntity == null || defenderEntity == null)
 			return;
-		
+
 		if (attackerEntity.isDead() || defenderEntity.isDead())
 			return;
-		
+
 		if (!(attackerEntity instanceof LivingEntity) || !(defenderEntity instanceof LivingEntity))
 			return;
-		
+
 		ISoliniaLivingEntity attackerSolEntity = null;
 		ISoliniaLivingEntity defenderSolEntity = null;
-		
+
 		try {
-			attackerSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)attackerEntity);
-			defenderSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)defenderEntity);
-			
+			attackerSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) attackerEntity);
+			defenderSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) defenderEntity);
+
 			if (attackerSolEntity == null || defenderSolEntity == null)
 				return;
-			
+
 			ISoliniaItem handItem = StateManager.getInstance().getConfigurationManager().getItem(procItemId);
 			if (handItem == null)
 				return;
-			
+
 			// Check if item has any proc effects
 			if (handItem.getWeaponabilityid() > 0) {
 				ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
@@ -1885,7 +1860,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (hate == 0 && my_hit.base_damage > 1)
 			hate = my_hit.base_damage;
 
-		
 		if (my_hit.base_damage > 0) {
 			my_hit.base_damage = getDamageCaps(my_hit.base_damage);
 
@@ -1893,7 +1867,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			tryIncreaseSkill("OFFENSE", 1);
 
 			int ucDamageBonus = 0;
-			
+
 			if (getClassObj() != null && getClassObj().isWarriorClass() && getLevel() >= 28) {
 				ucDamageBonus = getWeaponDamageBonus(weapon);
 				my_hit.min_damage = ucDamageBonus;
@@ -1911,7 +1885,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (my_hit.damage_done > 0 && hate < 1)
 			hate = 1;
-		
+
 		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate);
 
 		return my_hit;
@@ -1940,8 +1914,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				// Update group
 				if (solPlayer.getGroup() != null) {
-					if (this.getBukkitLivingEntity()
-							.getHealth() < ((this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10))
+					if (this.getBukkitLivingEntity().getHealth() < ((this.getBukkitLivingEntity()
+							.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10))
 						solPlayer.getGroup().sendGroupMessage(solPlayer.getBukkitPlayer(),
 								"[Notification] I am low on health!");
 				}
@@ -1975,20 +1949,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		getBukkitLivingEntity().damage(damage, sourceEntity);
-		
+
 		checkNumHitsRemaining(NumHit.IncomingHitAttempts);
-		if (!sourceEntity.isDead() && sourceEntity instanceof LivingEntity)
-		{
+		if (!sourceEntity.isDead() && sourceEntity instanceof LivingEntity) {
 			ISoliniaLivingEntity solLivingEntity = null;
-			try
-			{
-				solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sourceEntity);
+			try {
+				solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) sourceEntity);
 				solLivingEntity.checkNumHitsRemaining(NumHit.OutgoingHitAttempts);
-			} catch (CoreStateInitException e)
-			{
-				
+			} catch (CoreStateInitException e) {
+
 			}
-			
+
 		}
 	}
 
@@ -2034,8 +2005,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							DecimalFormat df = new DecimalFormat();
 							df.setMaximumFractionDigits(2);
 
-							defender.checkNumHitsRemaining(NumHit.DefensiveSpellProcs, 0,activeSpell.getSpellId());
-							
+							defender.checkNumHitsRemaining(NumHit.DefensiveSpellProcs, 0, activeSpell.getSpellId());
+
 							if (defender instanceof Player) {
 								((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(
 										ChatMessageType.ACTION_BAR,
@@ -2044,7 +2015,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 												+ df.format(spelleffect.getCalculatedValue() * -1) + "["
 												+ df.format(this.getBukkitLivingEntity().getHealth()
 														- (spelleffect.getCalculatedValue() * -1))
-												+ "/" + df.format(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + "]"));
+												+ "/" + df.format(this.getBukkitLivingEntity()
+														.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+												+ "]"));
 							}
 						}
 					}
@@ -2071,36 +2044,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				final UUID attackerUUID = this.getBukkitLivingEntity().getUniqueId();
 				final int finaloriginaldamage = originalDamage;
 
-				Bukkit.getScheduler().scheduleSyncDelayedTask(
-						Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+						new Runnable() {
 							public void run() {
-								try
-								{
+								try {
 									Entity entity = Bukkit.getEntity(attackerUUID);
-									
+
 									if (entity == null || !(entity instanceof LivingEntity))
 										return;
-									
+
 									ISoliniaLivingEntity solLivingEntity = null;
-									try
-									{
-										solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-									} catch (CoreStateInitException e)
-									{
-										
+									try {
+										solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
+									} catch (CoreStateInitException e) {
+
 									}
-									
+
 									if (solLivingEntity == null)
 										return;
-									
+
 									solLivingEntity.doRiposte(defenderUUID, finaloriginaldamage);
-								} catch (Exception e)
-								{
-									System.out.println("An error occured during the doRiposte scheduler: " + e.getMessage() + " " + e.getStackTrace());
+								} catch (Exception e) {
+									System.out.println("An error occured during the doRiposte scheduler: "
+											+ e.getMessage() + " " + e.getStackTrace());
 								}
 							}
 						});
-				
+
 			}
 
 			if (hit.dodged == true) {
@@ -2149,30 +2119,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return hit;
 	}
-	
+
 	@Override
-	public void doDualWield(UUID defenderUuid, int damageDone, int offhandItemId)
-	{
+	public void doDualWield(UUID defenderUuid, int damageDone, int offhandItemId) {
 		// HACK: This should happen first to prevent multi firing endless loop
 		setLastDualWield();
-		
+
 		Entity defenderEntity = Bukkit.getEntity(defenderUuid);
 		if (defenderEntity == null || !(defenderEntity instanceof LivingEntity))
 			return;
-		
+
 		ISoliniaLivingEntity defender = null;
-		
-		try
-		{
-			defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity)defenderEntity);
-		} catch (CoreStateInitException e)
-		{
-			
+
+		try {
+			defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) defenderEntity);
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 		if (defender == null)
 			return;
-		
+
 		if (defender.getBukkitLivingEntity().isDead())
 			return;
 
@@ -2198,44 +2165,41 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// Offhand Proc
-		if (offhandItemId > 0)
-		{
+		if (offhandItemId > 0) {
 			try {
 				ISoliniaItem offhandItem = StateManager.getInstance().getConfigurationManager().getItem(offhandItemId);
-				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)getBukkitLivingEntity());
+				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter
+						.Adapt((LivingEntity) getBukkitLivingEntity());
 				TryProcItem(offhandItem, attackerSolEntity, defender);
 			} catch (CoreStateInitException e) {
-	
+
 			}
 		}
 	}
-	
+
 	@Override
-	public void doDoubleAttack(UUID defenderUuid, int damageDone)
-	{
+	public void doDoubleAttack(UUID defenderUuid, int damageDone) {
 		// HACK: This should happen first to prevent multi firing endless loop
 		setLastDoubleAttack();
-		
+
 		Entity defenderEntity = Bukkit.getEntity(defenderUuid);
 		if (defenderEntity == null || !(defenderEntity instanceof LivingEntity))
 			return;
-		
+
 		ISoliniaLivingEntity defender = null;
-		
-		try
-		{
-			defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity)defenderEntity);
-		} catch (CoreStateInitException e)
-		{
-			
+
+		try {
+			defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) defenderEntity);
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 		if (defender == null)
 			return;
-		
+
 		if (defender.getBukkitLivingEntity().isDead())
 			return;
-		
+
 		// Only players get skill rise
 		if (getBukkitLivingEntity() instanceof Player) {
 
@@ -2254,23 +2218,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		Entity defenderEntity = Bukkit.getEntity(defenderUuid);
 		if (defenderEntity == null || !(defenderEntity instanceof LivingEntity))
 			return;
-		
+
 		ISoliniaLivingEntity defender = null;
-		
-		try
-		{
-			defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity)defenderEntity);
-		} catch (CoreStateInitException e)
-		{
-			
+
+		try {
+			defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity) defenderEntity);
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 		if (defender == null)
 			return;
-		
+
 		if (defender.getBukkitLivingEntity().isDead())
 			return;
-		
+
 		if (defender.isPlayer()) {
 
 			((Player) (defender.getBukkitLivingEntity())).spigot().sendMessage(ChatMessageType.CHAT,
@@ -2348,51 +2310,45 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		hit.damage_done += (hit.damage_done * defender.getSkillDmgTaken(hit.skill) / 100)
 				+ (defender.getFcDamageAmtIncoming(this, 0, true, hit.skill));
-		
+
 		checkNumHitsRemaining(NumHit.OutgoingHitSuccess);
 		return hit;
 	}
-	
+
 	@Override
-	public void checkNumHitsRemaining(NumHit type)
-	{
+	public void checkNumHitsRemaining(NumHit type) {
 		checkNumHitsRemaining(type, -1, null);
 	}
 
 	@Override
-	public  void checkNumHitsRemaining(NumHit type, int buffSlot, Integer spellId)
-	{
-		try
-		{
+	public void checkNumHitsRemaining(NumHit type, int buffSlot, Integer spellId) {
+		try {
 			boolean depleted = false;
-			if (spellId == null)
-			{
+			if (spellId == null) {
 				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
 						.getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells()) {
-					
+
 					if (spellId != null && spellId > 0)
 						if (spell.getSpellId() != spellId)
 							continue;
-					
+
 					if (spell.getSpell().getNumhits() < 1)
 						continue;
-					
-					if (!Utils.getNumHitsType(spell.getSpell().getNumhitstype()).name().toLowerCase().equals(type.name().toLowerCase()))
+
+					if (!Utils.getNumHitsType(spell.getSpell().getNumhitstype()).name().toLowerCase()
+							.equals(type.name().toLowerCase()))
 						continue;
-					
-					spell.setNumHits(spell.getNumHits()-1);
-					
-					if (spell.getNumHits() < 1)
-					{
+
+					spell.setNumHits(spell.getNumHits() - 1);
+
+					if (spell.getNumHits() < 1) {
 						spell.tryFadeEffect();
 					}
-					
-					
+
 				}
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 
@@ -2425,7 +2381,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				 */
 				chance += aaHeadShotLevelModifier + spellHeadShotLevelModifier;
 				if (Utils.RandomBetween(1, 1000) <= chance) {
-					emote(" is hit by a fatal blow",false);
+					emote(" is hit by a fatal blow", false);
 					return HeadShot_Dmg;
 				}
 			}
@@ -3020,7 +2976,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean isBerserk() {
 		// if less than 10% health and warrior, is in berserk mode
-		if (this.getBukkitLivingEntity().getHealth() < ((this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 100) * 10))
+		if (this.getBukkitLivingEntity()
+				.getHealth() < ((this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()
+						/ 100) * 10))
 			if (this.getClassObj() != null) {
 				if (this.getClassObj().getName().equals("WARRIOR"))
 					return true;
@@ -3154,7 +3112,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return (int) Math.floor(avoidance);
 	}
-	
+
 	@Override
 	public boolean isUndead() {
 		if (isPlayer())
@@ -3286,7 +3244,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void emote(String message, boolean isBardSongFilterable) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message, isBardSongFilterable, getBukkitLivingEntity().getEquipment().getItemInMainHand());
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message,
+				isBardSongFilterable, getBukkitLivingEntity().getEquipment().getItemInMainHand());
 	}
 
 	@Override
@@ -3405,7 +3364,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public double getHPRatio() {
 		return getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() == 0 ? 0
-				: (getBukkitLivingEntity().getHealth() / getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 100);
+				: (getBukkitLivingEntity().getHealth()
+						/ getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 100);
 	}
 
 	@Override
@@ -4229,7 +4189,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		}
 	}
-	
+
 	@Override
 	public Timestamp getLastDoubleAttack() {
 		try {
@@ -4245,13 +4205,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-			StateManager.getInstance().getEntityManager().setLastDoubleAttack(this.getBukkitLivingEntity().getUniqueId(),
-					nowtimestamp);
+			StateManager.getInstance().getEntityManager()
+					.setLastDoubleAttack(this.getBukkitLivingEntity().getUniqueId(), nowtimestamp);
 		} catch (CoreStateInitException e) {
 
 		}
 	}
-	
+
 	@Override
 	public Timestamp getLastRiposte() {
 		try {
@@ -4756,19 +4716,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean getRiposteCheck() {
 		if (getNpcid() < 1 && !isPlayer())
 			return false;
-		
-		// If dual wield less than 3 second ago return false
-				// Ugly hack to work around looping dual wields (cant get source of offhand on
-				// damage event)
-				Timestamp expiretimestamp = getLastRiposte();
-				if (expiretimestamp != null) {
-					LocalDateTime datetime = LocalDateTime.now();
-					Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-					Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus(3, ChronoUnit.SECONDS));
 
-					if (nowtimestamp.before(mintimestamp))
-						return false;
-				}
+		// If dual wield less than 3 second ago return false
+		// Ugly hack to work around looping dual wields (cant get source of offhand on
+		// damage event)
+		Timestamp expiretimestamp = getLastRiposte();
+		if (expiretimestamp != null) {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus(3, ChronoUnit.SECONDS));
+
+			if (nowtimestamp.before(mintimestamp))
+				return false;
+		}
 
 		try {
 			if (getNpcid() > 0) {
@@ -4918,10 +4878,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (summoningEntity == null || this.livingentity == null)
 			return;
-		
+
 		if (summoningEntity.isDead() || this.livingentity.isDead())
 			return;
-		
+
 		if (summoningEntity.getLocation().distance(this.livingentity.getLocation()) > 150)
 			return;
 
@@ -4947,7 +4907,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void doTeleportAttack(LivingEntity teleportedEntity) {
 		if (isPlayer())
@@ -4961,17 +4921,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (!npc.isTeleportAttack())
 				return;
-			
+
 			if (npc.getTeleportAttackLocation() == null || npc.getTeleportAttackLocation().equals(""))
 				return;
-			
+
 			String[] zonedata = npc.getTeleportAttackLocation().split(",");
 			// Dissasemble the value to ensure it is correct
 			String world = zonedata[0];
 			double x = Double.parseDouble(zonedata[1]);
 			double y = Double.parseDouble(zonedata[2]);
 			double z = Double.parseDouble(zonedata[3]);
-			Location loc = new Location(Bukkit.getWorld(world),x,y,z);
+			Location loc = new Location(Bukkit.getWorld(world), x, y, z);
 
 			int chanceToSummon = Utils.RandomBetween(1, 10);
 
@@ -4987,123 +4947,111 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void addToHateList(UUID uniqueId, int hate) {
-		if (this.isCurrentlyNPCPet())
-		{
+		if (this.isCurrentlyNPCPet()) {
 			// Never add a member to hate list that is a friend of owner or pet
 			if (this.getOwnerEntity().getUniqueId().equals(uniqueId))
 				return;
-			
+
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(this.getOwnerEntity().getUniqueId());
-			if (group !=null)
-			{
+			if (group != null) {
 				if (group.getMembers().contains(uniqueId))
 					return;
 			}
 		}
-		
+
 		Entity entity = Bukkit.getEntity(uniqueId);
 		if (entity.isInvulnerable() || entity.isDead())
 			return;
-		
+
 		try {
-			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(), uniqueId, hate);
+			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(),
+					uniqueId, hate);
 			checkHateTargets();
 		} catch (CoreStateInitException e) {
 		}
 	}
-	
-	public ConcurrentHashMap<UUID, Integer> getHateList()
-	{
+
+	public ConcurrentHashMap<UUID, Integer> getHateList() {
 		try {
-			return StateManager.getInstance().getEntityManager().getHateList(this.getBukkitLivingEntity().getUniqueId());
+			return StateManager.getInstance().getEntityManager()
+					.getHateList(this.getBukkitLivingEntity().getUniqueId());
 		} catch (CoreStateInitException e) {
 		}
-		
+
 		return null;
 	}
 
 	@Override
-	public void clearHateList()
-	{
+	public void clearHateList() {
 		try {
 			StateManager.getInstance().getEntityManager().clearHateList(this.getBukkitLivingEntity().getUniqueId());
 		} catch (CoreStateInitException e) {
 		}
 	}
-	
+
 	@Override
 	public boolean checkHateTargets() {
 		if (this.getBukkitLivingEntity().isDead())
 			return false;
-		
+
 		if (!(this.getBukkitLivingEntity() instanceof Creature))
 			return false;
-		
+
 		if (this.getAttackTarget() != null)
-		if (this.getHateList().keySet().size() == 0)
-		{
-			setAttackTarget(null);
-			resetPosition(true);
-			return false;
-		}
-		
+			if (this.getHateList().keySet().size() == 0) {
+				setAttackTarget(null);
+				resetPosition(true);
+				return false;
+			}
+
 		List<UUID> removeUuids = new ArrayList<UUID>();
-		
+
 		int maxHate = 0;
 		UUID bestUUID = null;
-		for (UUID uuid : this.getHateList().keySet())
-		{
+		for (UUID uuid : this.getHateList().keySet()) {
 			int hate = this.getHateList().get(uuid);
-			if (hate < 1)
-			{
-				removeUuids.add(uuid);
-				continue;
-			}
-			
-			Entity entity = Bukkit.getEntity(uuid);
-			if (entity == null)
-			{
-				removeUuids.add(uuid);
-				continue;
-			}
-			
-			if (entity.isDead() || entity.isInvulnerable())
-			{
-				removeUuids.add(uuid);
-				continue;
-			}
-			
-			if (entity.getLocation().distance(this.getBukkitLivingEntity().getLocation()) > 150)
-			{
+			if (hate < 1) {
 				removeUuids.add(uuid);
 				continue;
 			}
 
-			if (!(entity instanceof LivingEntity))
-			{
+			Entity entity = Bukkit.getEntity(uuid);
+			if (entity == null) {
 				removeUuids.add(uuid);
 				continue;
 			}
-			
-			if (hate > maxHate)
-			{
+
+			if (entity.isDead() || entity.isInvulnerable()) {
+				removeUuids.add(uuid);
+				continue;
+			}
+
+			if (entity.getLocation().distance(this.getBukkitLivingEntity().getLocation()) > 150) {
+				removeUuids.add(uuid);
+				continue;
+			}
+
+			if (!(entity instanceof LivingEntity)) {
+				removeUuids.add(uuid);
+				continue;
+			}
+
+			if (hate > maxHate) {
 				maxHate = hate;
 				bestUUID = uuid;
 			}
 		}
-		
-		for (UUID uuid : removeUuids)
-		{
+
+		for (UUID uuid : removeUuids) {
 			this.getHateList().remove(uuid);
 		}
-		
-		if (bestUUID != null)
-		{
-			LivingEntity entity = (LivingEntity)Bukkit.getEntity(bestUUID);
+
+		if (bestUUID != null) {
+			LivingEntity entity = (LivingEntity) Bukkit.getEntity(bestUUID);
 			setAttackTarget(entity);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -5450,16 +5398,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int value_BaseEffect = 0;
 		value_BaseEffect = value;
 		int chance = 0;
-		
+
 		// TODO Focus effects
 		value_BaseEffect = value + (value * getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell) / 100);
 
 		// TODO Harm Touch Scaling
-		if ((soliniaSpell.getName().startsWith("Harm Touch")) && getLevel() > 40)
-		{
+		if ((soliniaSpell.getName().startsWith("Harm Touch")) && getLevel() > 40) {
 			value_BaseEffect += (getLevel() - 40) * 20;
 		}
-		
+
 		chance = 0;
 
 		// TODO take into account item,spell,aa bonuses
@@ -5694,6 +5641,99 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
+	public void doMeleeSkillAttackDmg(LivingEntity other, int weapon_damage, SkillType skillinuse, int chance_mod,
+			int focus, boolean canRiposte, int reuseTime) {
+		try {
+			/*
+			 * if (!canDoSpecialAttack(other)) return;
+			 */
+
+			ISoliniaLivingEntity solOther = SoliniaLivingEntityAdapter.Adapt(other);
+			if (solOther == null)
+				return;
+
+			if (skillinuse == SkillType.Begging)
+				skillinuse = SkillType.Offense;
+
+			int damage = 0;
+			int hate = 0;
+			if (hate == 0 && weapon_damage > 1)
+				hate = weapon_damage;
+
+			if (weapon_damage > 0) {
+				if (focus > 0) // From FcBaseEffects
+					weapon_damage += weapon_damage * focus / 100;
+
+				/*
+				 * if (skillinuse == SkillType.Bash) { if (isPlayer()) { ItemStack item =
+				 * this.getBukkitLivingEntity().getEquipment().getItemInOffHand(); if (item !=
+				 * null) { try { ISoliniaItem solItem = SoliniaItemAdapter.Adapt(item); if
+				 * (solItem != null) { if (item.getType().equals(Material.SHIELD)) { hate +=
+				 * solItem.getAC(); } hate = hate * (100 +
+				 * getFuriousBash(solItem.getFocusEffectId())) / 100; } } catch
+				 * (SoliniaItemException si) {
+				 * 
+				 * } } } }
+				 */
+
+				DamageHitInfo my_hit = new DamageHitInfo();
+				my_hit.base_damage = weapon_damage;
+				my_hit.min_damage = 0;
+				my_hit.damage_done = 1;
+
+				my_hit.skill = skillinuse.name().toUpperCase();
+				my_hit.offense = getOffense(my_hit.skill);
+				my_hit.tohit = getTotalToHit(my_hit.skill, chance_mod);
+				// slot range exclude ripe etc ...
+
+				if (this.getClassObj() != null && this.getClassObj().canRiposte())
+					my_hit.hand = 1;
+				else
+					my_hit.hand = 0;
+
+				if (isNPC())
+					my_hit.min_damage = 1;
+
+				doAttack(solOther, my_hit);
+				damage = my_hit.damage_done;
+			} else {
+				damage = Utils.DMG_INVULNERABLE;
+			}
+
+			boolean CanSkillProc = true;
+			if (skillinuse == SkillType.Offense) { // Hack to allow damage to display.
+				skillinuse = SkillType.TigerClaw; // 'strike' your opponent - Arbitrary choice for message.
+				CanSkillProc = false; // Disable skill procs
+			}
+
+			solOther.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate);
+			/*
+			 * skill attack proc AAs) if (damage > 0 && aabonuses.SkillAttackProc[0] &&
+			 * aabonuses.SkillAttackProc[1] == skillinuse &&
+			 * IsValidSpell(aabonuses.SkillAttackProc[2])) { float chance =
+			 * aabonuses.SkillAttackProc[0] / 1000.0f; if (zone->random.Roll(chance))
+			 * SpellFinished(aabonuses.SkillAttackProc[2], other, EQEmu::CastingSlot::Item,
+			 * 0, -1, spells[aabonuses.SkillAttackProc[2]].ResistDiff); }
+			 */
+
+			other.damage(damage, (Entity) this.getBukkitLivingEntity());
+
+			if (this.getBukkitLivingEntity().isDead())
+				return;
+
+			/*
+			 * skill procs if (CanSkillProc && HasSkillProcs()) TrySkillProc(other,
+			 * skillinuse, ReuseTime);
+			 * 
+			 * if (CanSkillProc && (damage > 0) && HasSkillProcSuccess())
+			 * TrySkillProc(other, skillinuse, ReuseTime, true);
+			 */
+		} catch (CoreStateInitException e) {
+
+		}
+	}
+
+	@Override
 	public boolean isInvulnerable() {
 		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
 				SpellEffectType.DivineAura)) {
@@ -5798,51 +5838,43 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return effectmod;
 	}
-	
+
 	@Override
-	public LivingEntity getAttackTarget()
-	{
+	public LivingEntity getAttackTarget() {
 		if (this.getBukkitLivingEntity() == null)
 			return null;
-		
+
 		if (this.getBukkitLivingEntity().isDead())
 			return null;
-		
-		if (this.getBukkitLivingEntity() instanceof Creature)
-		{
+
+		if (this.getBukkitLivingEntity() instanceof Creature) {
 			((Creature) this.getBukkitLivingEntity()).getTarget();
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
-	public void setAttackTarget(LivingEntity entity)
-	{
+	public void setAttackTarget(LivingEntity entity) {
 		if (this.getBukkitLivingEntity() == null)
 			return;
-		
-		if (this.getBukkitLivingEntity().isDead())
-		{
+
+		if (this.getBukkitLivingEntity().isDead()) {
 			return;
 		}
-		
-		if (entity != null && (entity.isDead() || entity.isInvulnerable()))
-		{
-			if (this.getBukkitLivingEntity() instanceof Creature)
-			{
+
+		if (entity != null && (entity.isDead() || entity.isInvulnerable())) {
+			if (this.getBukkitLivingEntity() instanceof Creature) {
 				((Creature) this.getBukkitLivingEntity()).setTarget(null);
 			}
 			return;
 		}
-		
-		if (this.getBukkitLivingEntity() instanceof Creature)
-		{
-			if (entity != null && !this.getHateList().containsKey(entity.getUniqueId()))
-			{
+
+		if (this.getBukkitLivingEntity() instanceof Creature) {
+			if (entity != null && !this.getHateList().containsKey(entity.getUniqueId())) {
 				this.addToHateList(entity.getUniqueId(), 1);
 			}
-			
+
 			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
 		}
 	}
@@ -5854,40 +5886,41 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (this.getNpcid() < 1)
 			return;
-		
+
 		if (getBukkitLivingEntity().isDead())
 			return;
 
 		if (!(getBukkitLivingEntity() instanceof Creature))
 			return;
-		
+
 		if (doCheckForDespawn() == true)
 			return;
 
-		if (((Creature) getBukkitLivingEntity()).getTarget() != null && ((Creature)getBukkitLivingEntity()).getTarget().getLocation().distance(this.getBukkitLivingEntity().getLocation()) < 150)
+		if (((Creature) getBukkitLivingEntity()).getTarget() != null && ((Creature) getBukkitLivingEntity()).getTarget()
+				.getLocation().distance(this.getBukkitLivingEntity().getLocation()) < 150)
 			return;
 
 		// Go for hate list first
 		if (checkHateTargets() == true)
 			return;
-		
+
 		if (this.isCurrentlyNPCPet() == true)
 			return;
-		
+
 		try {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc.getFactionid() == 0)
 				return;
-			
+
 			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
 					.getFaction(npc.getFactionid());
 			if (faction.getName().equals("NEUTRAL"))
 				return;
-			
+
 			List<Integer> hatedFactions = new ArrayList<Integer>();
-			if (faction.getName().equals("KOS"))
-			{
-				for (ISoliniaFaction targetFaction : StateManager.getInstance().getConfigurationManager().getFactions()) {
+			if (faction.getName().equals("KOS")) {
+				for (ISoliniaFaction targetFaction : StateManager.getInstance().getConfigurationManager()
+						.getFactions()) {
 					if (targetFaction.getId() != faction.getId())
 						hatedFactions.add(((Integer) targetFaction.getId()));
 				}
@@ -5895,14 +5928,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				for (FactionStandingEntry factionEntry : faction.getFactionEntries()) {
 					if (factionEntry.getValue() != -1500)
 						continue;
-					
-					
 
 					hatedFactions.add(((Integer) factionEntry.getFactionId()));
 				}
-				
+
 				// then add KOS on top
-				for (ISoliniaFaction targetFaction : StateManager.getInstance().getConfigurationManager().getFactions()) {
+				for (ISoliniaFaction targetFaction : StateManager.getInstance().getConfigurationManager()
+						.getFactions()) {
 					if (targetFaction.getName().equals("KOS"))
 						hatedFactions.add(((Integer) targetFaction.getId()));
 				}
@@ -5915,7 +5947,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (!(entity instanceof Player)) {
 					if (!npc.isGuard() && !faction.getName().equals("KOS"))
 						continue;
-					
+
 					if (hatedFactions.size() == 0)
 						continue;
 
@@ -5930,7 +5962,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 						if (!solEntity.isNPC())
 							continue;
-						
+
 						ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager()
 								.getNPC(solEntity.getNpcid());
 						if (targetNpc.getFactionid() < 1) {
@@ -5950,12 +5982,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				} else {
 					// NPC VS PLAYER
 					Player player = (Player) entity;
-					if (faction.getName().equals("KOS"))
-					{
+					if (faction.getName().equals("KOS")) {
 						addToHateList(player.getUniqueId(), 1);
 						return;
 					}
-					
+
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 					if (factionEntry != null) {
@@ -5980,7 +6011,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		this.resetPosition(true);
 	}
 
@@ -5988,28 +6019,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean doCheckForDespawn() {
 		if (despawnIfNight())
 			return true;
-		
+
 		return false;
 	}
 
 	private boolean despawnIfNight() {
-		if (Utils.isLivingEntityNPC(this.getBukkitLivingEntity()))
-		{
-			try
-			{
+		if (Utils.isLivingEntityNPC(this.getBukkitLivingEntity())) {
+			try {
 				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitLivingEntity());
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solEntity.getNpcid());
-				if (npc.isNocturnal() && Utils.IsNight(this.getBukkitLivingEntity().getWorld()))
-				{
-					Utils.RemoveEntity(this.getBukkitLivingEntity(),"DESPAWNIFNIGHT");
+				if (npc.isNocturnal() && Utils.IsNight(this.getBukkitLivingEntity().getWorld())) {
+					Utils.RemoveEntity(this.getBukkitLivingEntity(), "DESPAWNIFNIGHT");
 					return true;
 				}
-			} catch (CoreStateInitException e)
-			{
-				
+			} catch (CoreStateInitException e) {
+
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -6320,7 +6347,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				((Sittable) this.getBukkitLivingEntity()).setSitting(false);
 		}
 
-		if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+		if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity()
+				.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
 
 			// Pet regen is slow
 			double newHealth = this.getBukkitLivingEntity().getHealth() + 1;
@@ -6410,7 +6438,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// MEZZED
 			if (attacker.isMezzed()) {
 				if (attacker instanceof Player) {
-					((Player)attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
+					((Player) attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 				}
 				return 0;
 			}
@@ -6483,10 +6512,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (damage <= 0)
 				return 0;
-			
+
 			// We should move all this to commonDamage
 			if (!ismagic)
-			checkNumHitsRemaining(NumHit.IncomingHitSuccess);
+				checkNumHitsRemaining(NumHit.IncomingHitSuccess);
 
 			attacker.removeNonCombatSpells();
 			defender.removeNonCombatSpells();
@@ -6503,7 +6532,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			checkNumHitsRemaining(NumHit.IncomingDamage);
-			
+
 			// MAGIC ENDS HERE
 			if (ismagic) {
 				if (attacker.isPlayer()) {
@@ -6513,10 +6542,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (defender.getBukkitLivingEntity().getCustomName() != null)
 						name = defender.getBukkitLivingEntity().getCustomName();
 
-					((Player) attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent("You SPELLDMG'd " + name + " for " + df.format(damage) + " ["
-									+ df.format(defender.getBukkitLivingEntity().getHealth() - damage) + "/"
-									+ df.format(defender.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) + "]"));
+					((Player) attacker.getBukkitLivingEntity()).spigot()
+							.sendMessage(ChatMessageType.ACTION_BAR,
+									new TextComponent(
+											"You SPELLDMG'd " + name + " for " + df.format(damage) + " ["
+													+ df.format(defender.getBukkitLivingEntity().getHealth() - damage)
+													+ "/"
+													+ df.format(defender.getBukkitLivingEntity()
+															.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+													+ "]"));
 				}
 
 				defender.damageAlertHook(damage, attacker.getBukkitLivingEntity());
@@ -6583,7 +6617,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					ISoliniaPlayer solDefenderPlayer = null;
 					if (defender.isCurrentlyNPCPet()) {
 						if (defender.getActiveMob() != null && defender.getOwnerEntity() instanceof Player)
-							solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player)defender.getOwnerEntity());
+							solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player) defender.getOwnerEntity());
 					} else {
 						solDefenderPlayer = SoliniaPlayerAdapter.Adapt((Player) defender.getBukkitLivingEntity());
 					}
@@ -6684,9 +6718,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			getBukkitLivingEntity().setHealth(health);
 
 		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
-			
+
 			try {
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getOwnerEntity());
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) this.getOwnerEntity());
 				ScoreboardUtils.UpdateGroupScoreboardForEveryone(solPlayer.getUUID(), solPlayer.getGroup());
 			} catch (CoreStateInitException e) {
 
@@ -6706,20 +6740,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void StopSinging() {
-		try
-		{
-			Integer singingId = StateManager.getInstance().getEntityManager().getEntitySinging(getBukkitLivingEntity().getUniqueId());
-			if (singingId != null)
-			{
+		try {
+			Integer singingId = StateManager.getInstance().getEntityManager()
+					.getEntitySinging(getBukkitLivingEntity().getUniqueId());
+			if (singingId != null) {
 				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(singingId);
-				StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), singingId, true);
-				emote(getBukkitLivingEntity().getCustomName() + "'s song comes to a close ["
-						+ spell.getName() + "]", true);
-				StateManager.getInstance().getEntityManager().setEntitySinging(getBukkitLivingEntity().getUniqueId(), null);
+				StateManager.getInstance().getEntityManager()
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), singingId, true);
+				emote(getBukkitLivingEntity().getCustomName() + "'s song comes to a close [" + spell.getName() + "]",
+						true);
+				StateManager.getInstance().getEntityManager().setEntitySinging(getBukkitLivingEntity().getUniqueId(),
+						null);
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 
@@ -6730,50 +6764,50 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (!isNPC())
 			return;
-		
+
 		if (isCurrentlyNPCPet())
 			return;
-		
+
 		if (this.getHateList().size() > 0)
 			return;
-		
+
 		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
-		if (activeMob == null)
-		{
+		if (activeMob == null) {
 			// Why does this npc exist without a MM entity?
-			Utils.RemoveEntity(this.getBukkitLivingEntity(),"RESETPOSITION");
+			Utils.RemoveEntity(this.getBukkitLivingEntity(), "RESETPOSITION");
 			return;
 		}
-		
-		if (activeMob.getSpawner() == null)
-		{
+
+		if (activeMob.getSpawner() == null) {
 			// Why would this have no spawn point?
 			// BECAUSE IT MAY HAVE BEEN NPCSPAWNED, SKIP
 			return;
 		}
-		
+
 		if (resetHealth == true)
-			if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
-				this.getBukkitLivingEntity().setHealth(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-		
-		if (this.getBukkitLivingEntity().getLocation().distance(BukkitAdapter.adapt(activeMob.getSpawner().getLocation())) < 5)
+			if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity()
+					.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+				this.getBukkitLivingEntity()
+						.setHealth(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+
+		if (this.getBukkitLivingEntity().getLocation()
+				.distance(BukkitAdapter.adapt(activeMob.getSpawner().getLocation())) < 5)
 			return;
-			
+
 		this.getBukkitLivingEntity().teleport(BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
 	}
-	
-	public Location getSpawnPoint()
-	{
+
+	public Location getSpawnPoint() {
 		if (!isNPC())
 			return null;
-		
+
 		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
 		if (activeMob == null)
 			return null;
-		
+
 		if (activeMob.getSpawner() == null || activeMob.getSpawner().getLocation() == null)
 			return null;
-		
+
 		return BukkitAdapter.adapt(activeMob.getSpawner().getLocation());
 	}
 
@@ -6781,7 +6815,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public ActiveMob getActiveMob() {
 		if (MythicMobs.inst().getAPIHelper() != null && this.getBukkitLivingEntity() != null)
 			return MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
-		
+
 		return null;
 	}
 
@@ -6789,33 +6823,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean isCurrentlyNPCPet() {
 		if (!this.isNPC())
 			return false;
-		
-		if (this.getActiveMob() == null)
-		{
+
+		if (this.getActiveMob() == null) {
 			// How can this be?
-			Utils.RemoveEntity(this.getBukkitLivingEntity(),"ISCURRENTLYNPCPET");
+			Utils.RemoveEntity(this.getBukkitLivingEntity(), "ISCURRENTLYNPCPET");
 			return false;
 		}
-		
-		if (this.getActiveMob().getOwner() != null)
-		{
+
+		if (this.getActiveMob().getOwner() != null) {
 			if (!this.getActiveMob().getOwner().isPresent())
 				return false;
-			
+
 			Entity ownerEntity = Bukkit.getEntity(this.getActiveMob().getOwner().get());
 			if (ownerEntity == null)
 				return false;
-			
-			if (ownerEntity.isDead())
-			{
+
+			if (ownerEntity.isDead()) {
 				this.getActiveMob().removeOwner();
 				return false;
 			}
-			
+
 			if (ownerEntity instanceof Player)
 				return true;
 		}
-		
+
 		return false;
 	}
 
@@ -6823,7 +6854,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean isCharmed() {
 		// TODO Auto-generated method stub
 		try {
-			return StateManager.getInstance().getEntityManager().hasEntityEffectType(getBukkitLivingEntity(), SpellEffectType.Charm);
+			return StateManager.getInstance().getEntityManager().hasEntityEffectType(getBukkitLivingEntity(),
+					SpellEffectType.Charm);
 		} catch (CoreStateInitException e) {
 			return false;
 		}
@@ -6833,7 +6865,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public Entity getOwnerEntity() {
 		if (!isCurrentlyNPCPet())
 			return null;
-			
+
 		return Bukkit.getEntity(this.getActiveMob().getOwner().get());
 	}
 }

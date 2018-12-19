@@ -11,5 +11,6 @@ public class DamageHitInfo {
 	public boolean avoided = false;
 	public boolean dodged = false;
 	public boolean riposted = false;
+	public int hand = 0; // 0 = primary, 1 = secondary
 
 }
