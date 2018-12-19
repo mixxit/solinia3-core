@@ -68,6 +68,40 @@ public class CommandGiveHead implements CommandExecutor {
 		}
 		
 		Document doc = Jsoup.parse(httpSite);
+		
+		if (!trySendCustomHead(sender, doc,args[0]))
+			if (!trySendPlayerHead(sender, doc, args[0]))
+			{
+				sender.sendMessage("Could not send head, element not found");
+			}
+		
+		return true;
+	}
+
+	private boolean trySendPlayerHead(CommandSender sender, Document doc, String playerName) {
+		try
+		{
+			Element link = doc.select("textarea[id=ACC-Code-1-13]").first();
+			if (link != null)
+			{
+				String data = link.html();
+				data = data.replaceAll("/give", "minecraft:give");
+				data = data.replaceAll("@p", playerName);
+				Utils.dispatchCommandLater(plugin, data);
+				sender.sendMessage("Debug: " + data);
+				sender.sendMessage("Head sent to " + playerName);
+				return true;
+			} else {
+				
+			}
+		} catch (Exception e)
+		{
+			
+		}
+		return false;
+	}
+
+	private boolean trySendCustomHead(CommandSender sender, Document doc, String playerName) {
 		try
 		{
 			Element link = doc.select("textarea[id=UUID-Code-MC1-13]").first();
@@ -75,17 +109,19 @@ public class CommandGiveHead implements CommandExecutor {
 			{
 				String data = link.html();
 				data = data.replaceAll("/give", "minecraft:give");
-				data = data.replaceAll("@p", args[0]);
+				data = data.replaceAll("@p", playerName);
 				Utils.dispatchCommandLater(plugin, data);
 				sender.sendMessage("Debug: " + data);
-				sender.sendMessage("Head sent to " + args[0]);
+				sender.sendMessage("Head sent to " + playerName);
+				return true;
 			} else {
-				sender.sendMessage("could not fetch head, no valid element found");
+				
 			}
 		} catch (Exception e)
 		{
-			sender.sendMessage("could not fetch head, exception occured");
+			
 		}
-		return true;
+		return false;
+
 	}
 }
