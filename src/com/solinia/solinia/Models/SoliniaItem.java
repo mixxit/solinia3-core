@@ -1727,6 +1727,9 @@ public class SoliniaItem implements ISoliniaItem {
 		if (this.getBasename().toUpperCase().equals("LEGACY_SKULL_ITEM"))
 			return true;
 		
+		if (this.getBasename().toUpperCase().equals("PLAYER_HEAD"))
+			return true;
+		
 		return false;
 	}
 
