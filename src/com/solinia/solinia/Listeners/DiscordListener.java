@@ -164,6 +164,7 @@ public class DiscordListener {
 					case "listcrafts":
 					case "listfactions":
 					case "listitems":
+					case "givehead":
 					case "listlootdrops":
 					case "listmerchantlists":
 					case "listnpcs":
