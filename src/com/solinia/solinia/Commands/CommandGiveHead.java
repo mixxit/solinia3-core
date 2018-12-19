@@ -68,14 +68,24 @@ public class CommandGiveHead implements CommandExecutor {
 		}
 		
 		Document doc = Jsoup.parse(httpSite);
-		Element link = doc.select("textarea[name=UUID-Code-MC1-13]").first();
-		String data = link.html();
-		data = data.replaceAll("/give", "/minecraft:give");
-		data = data.replaceAll("@p", args[0]);
-		Utils.dispatchCommandLater(plugin, data);
-		sender.sendMessage("Debug: " + data);
-		sender.sendMessage("Head sent to " + args[0]);
-		
+		try
+		{
+			Element link = doc.select("textarea[id=UUID-Code-MC1-13]").first();
+			if (link != null)
+			{
+				String data = link.html();
+				data = data.replaceAll("/give", "minecraft:give");
+				data = data.replaceAll("@p", args[0]);
+				Utils.dispatchCommandLater(plugin, data);
+				sender.sendMessage("Debug: " + data);
+				sender.sendMessage("Head sent to " + args[0]);
+			} else {
+				sender.sendMessage("could not fetch head, no valid element found");
+			}
+		} catch (Exception e)
+		{
+			sender.sendMessage("could not fetch head, exception occured");
+		}
 		return true;
 	}
 }

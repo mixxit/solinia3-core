@@ -6949,6 +6949,10 @@ public class Utils {
 		{
 			URL url = new URL(urlLink);
 			URLConnection con = url.openConnection();
+			con.setConnectTimeout(15000);
+			con.setReadTimeout(15000);
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.0.11) Gecko/2009060215 Firefox/3.0.11 (.NET CLR 3.5.30729)");
+			con.connect();
 	        InputStream is =con.getInputStream();
 	        BufferedReader in = new BufferedReader(
 	                new InputStreamReader(
@@ -6959,7 +6963,7 @@ public class Utils {
 	
 	        while ((inputLine = in.readLine()) != null) 
 	            response.append(inputLine);
-	        
+	        is.close();
 	        in.close();
 	        return response.toString();
 		} catch (Exception e)
