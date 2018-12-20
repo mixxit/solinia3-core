@@ -2198,7 +2198,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return entry;
 		}
 
-		return null;
+		// If we get here go ahead and create a faction entry
+		return createPlayerFactionEntry(factionId);
 	}
 
 	@Override

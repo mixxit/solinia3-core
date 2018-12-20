@@ -35,6 +35,7 @@ public class CommandDebugger implements CommandExecutor {
 		if (!(sender instanceof Player))
 		{
 			sender.sendMessage("Only a sender of type Player can use this command");
+			return false;
 		}
 		try
 		{

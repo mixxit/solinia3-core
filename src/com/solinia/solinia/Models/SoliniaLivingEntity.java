@@ -6002,12 +6002,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						return;
 					}
 					
-					Utils.DebugLog("SolinigLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Checking for hate against player: " + player.getName() + ":" + player.getUniqueId());
+					Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Checking for hate against player: " + player.getName() + ":" + player.getUniqueId());
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 					if (factionEntry != null) {
-						Utils.DebugLog("SolinigLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Found faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId() + " with standing: " + Utils.getFactionStandingType(factionEntry.getFactionId(),
-								factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player)).name());
+						Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Found faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId() + " with standing: " + Utils.getFactionStandingType(factionEntry.getFactionId(),factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player)).name());
 						
 						switch (Utils.getFactionStandingType(factionEntry.getFactionId(),
 								factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player))) {
@@ -6023,7 +6022,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							continue;
 						}
 					} else {
-						Utils.DebugLog("SolinigLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Failed to find faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId());
+						Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Failed to find faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId());
+						
 					}
 				}
 			}
