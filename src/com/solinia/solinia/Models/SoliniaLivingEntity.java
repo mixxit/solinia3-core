@@ -5644,10 +5644,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void doMeleeSkillAttackDmg(LivingEntity other, int weapon_damage, SkillType skillinuse, int chance_mod,
 			int focus, boolean canRiposte, int reuseTime) {
 		try {
-			/*
-			 * if (!canDoSpecialAttack(other)) return;
-			 */
-
+			if (!canDoSpecialAttack(other)) return;
+			 
 			ISoliniaLivingEntity solOther = SoliniaLivingEntityAdapter.Adapt(other);
 			if (solOther == null)
 				return;
@@ -5731,6 +5729,23 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e) {
 
 		}
+	}
+
+	@Override
+	public boolean canDoSpecialAttack(LivingEntity other) {
+		//Make sure everything is valid before doing any attacks.
+		if (other == null) {
+			return false;
+		}
+
+		if (other.isDead())
+			return false;
+		
+		if (other.isInvulnerable())
+			return false;
+		
+		// TODO check things like divine aura
+		return true;
 	}
 
 	@Override

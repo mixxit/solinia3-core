@@ -10,6 +10,7 @@ public class ActiveSpellEffect extends SpellEffect {
 	
 	public ActiveSpellEffect(ISoliniaSpell spell, SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity, int sourceLevel, int ticksleft) {
 		setBase(spellEffect.getBase());
+		setBase2(spellEffect.getBase2());
 		setFormula(spellEffect.getFormula());
 		setLimit(spellEffect.getLimit());
 		setMax(spellEffect.getMax());

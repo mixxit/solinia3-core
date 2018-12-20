@@ -678,6 +678,7 @@ public class SoliniaActiveSpell {
 			applyTauntSpell(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case SkillAttack:
+			applySkillAttack(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case FadingMemories:
 			applyWipeHateList(spellEffect, soliniaSpell, casterLevel);
@@ -1258,6 +1259,24 @@ public class SoliniaActiveSpell {
 			return;
 		default:
 			return;
+		}
+	}
+
+	private void applySkillAttack(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+
+		Entity source = Bukkit.getEntity(getSourceUuid());
+		if (source instanceof LivingEntity) {
+			try {
+				int focus = 0;
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) source);
+				focus = solLivingEntity.getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell);
+				int reuseTime = soliniaSpell.getRecastTime() + soliniaSpell.getRecoveryTime();
+				solLivingEntity.doMeleeSkillAttackDmg(getLivingEntity(), spellEffect.getBase(), Utils.getSkillType(soliniaSpell.getSkill()), spellEffect.getBase2(), focus, false, reuseTime);
+			} catch (CoreStateInitException e) {
+
+			}
 		}
 	}
 

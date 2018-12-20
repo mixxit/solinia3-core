@@ -8,6 +8,7 @@ public class SpellEffect {
 	private int spellEffectNo;
 	private int formula;
 	private int max;
+	private int base2;
 	
 	public SpellEffectType getSpellEffectType() {
 		return spellEffectType;
@@ -23,6 +24,14 @@ public class SpellEffect {
 	
 	public void setBase(int base) {
 		this.base = base;
+	}
+	
+	public int getBase2() {
+		return base2;
+	}
+	
+	public void setBase2(int base2) {
+		this.base2 = base2;
 	}
 	
 	public int getSpellEffectId() {

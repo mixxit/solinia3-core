@@ -3332,7 +3332,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 		int effectno;
 		int formula;
 		int max;
-
+		int base2;
+		
 		switch (no) {
 		case 1:
 			effectid = getEffectid1();
@@ -3341,6 +3342,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula1();
 			max = getMax1();
 			effectno = 1;
+			base2 = limit;
 			break;
 		case 2:
 			effectid = getEffectid2();
@@ -3349,6 +3351,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula2();
 			max = getMax2();
 			effectno = 2;
+			base2 = limit;
 			break;
 		case 3:
 			effectid = getEffectid3();
@@ -3357,6 +3360,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula3();
 			max = getMax3();
 			effectno = 3;
+			base2 = limit;
 			break;
 		case 4:
 			effectid = getEffectid4();
@@ -3365,6 +3369,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula4();
 			max = getMax4();
 			effectno = 4;
+			base2 = limit;
 			break;
 		case 5:
 			effectid = getEffectid5();
@@ -3373,6 +3378,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula5();
 			max = getMax5();
 			effectno = 5;
+			base2 = limit;
 			break;
 		case 6:
 			effectid = getEffectid6();
@@ -3381,6 +3387,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula6();
 			max = getMax6();
 			effectno = 6;
+			base2 = limit;
 			break;
 		case 7:
 			effectid = getEffectid7();
@@ -3389,6 +3396,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula7();
 			max = getMax7();
 			effectno = 7;
+			base2 = limit;
 			break;
 		case 8:
 			effectid = getEffectid8();
@@ -3397,6 +3405,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula8();
 			max = getMax8();
 			effectno = 8;
+			base2 = limit;
 			break;
 		case 9:
 			effectid = getEffectid9();
@@ -3405,6 +3414,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula9();
 			max = getMax9();
 			effectno = 9;
+			base2 = limit;
 			break;
 		case 10:
 			effectid = getEffectid10();
@@ -3413,6 +3423,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula10();
 			max = getMax10();
 			effectno = 10;
+			base2 = limit;
 			break;
 		case 11:
 			effectid = getEffectid11();
@@ -3421,6 +3432,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula11();
 			max = getMax11();
 			effectno = 11;
+			base2 = limit;
 			break;
 		case 12:
 			effectid = getEffectid12();
@@ -3429,6 +3441,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			formula = getFormula12();
 			max = getMax12();
 			effectno = 12;
+			base2 = limit;
 			break;
 		default:
 			return null;
@@ -3439,6 +3452,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		spellEffect.setSpellEffectId(effectid);
 		spellEffect.setSpellEffectType(Utils.getSpellEffectType(effectid));
 		spellEffect.setBase(base);
+		spellEffect.setBase2(base2);
 		spellEffect.setLimit(limit);
 		spellEffect.setFormula(formula);
 		spellEffect.setMax(max);

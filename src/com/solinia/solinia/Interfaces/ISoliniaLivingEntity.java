@@ -329,4 +329,6 @@ public interface ISoliniaLivingEntity
 
 	void doMeleeSkillAttackDmg(LivingEntity other, int weapon_damage, SkillType skillinuse, int chance_mod, int focus,
 			boolean canRiposte, int reuseTime);
+
+	boolean canDoSpecialAttack(LivingEntity other);
 }
