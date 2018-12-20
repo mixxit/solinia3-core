@@ -18,14 +18,10 @@ public class CommandConvertMerchantToLootDrop implements CommandExecutor {
 			return false;
 		}
 		
-		if (sender instanceof Player)
+		if (!sender.isOp() && !sender.hasPermission("solinia.convertmerchanttolootdrop"))
 		{
-			Player player = (Player)sender;
-			if (!player.isOp() && !player.hasPermission("solinia.convertmerchanttolootdrop"))
-			{
-				player.sendMessage("You do not have permission to access this command");
-				return false;
-			}
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
 		}
 		
 		if (args.length < 5)

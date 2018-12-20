@@ -18,14 +18,10 @@ public class CommandCreateNpc implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 		
-		if (sender instanceof Player)
+		if (!sender.isOp() && !sender.hasPermission("solinia.createnpc"))
 		{
-			Player player = (Player) sender;
-			if (!player.isOp() && !player.hasPermission("solinia.createnpc"))
-			{
-				player.sendMessage("You do not have permission to access this command");
-				return false;
-			}
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
 		}
 		
 		// Args

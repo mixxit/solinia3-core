@@ -20,6 +20,7 @@ import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Utils.Utils;
 
@@ -29,6 +30,7 @@ public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, Integer> playerActiveBardSong = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> playerLastChangeChar = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> playerLastSummonSteed = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, DebuggerSettings> playerDebugger = new ConcurrentHashMap<UUID, DebuggerSettings>();
 
 	public PlayerManager(IRepository<ISoliniaPlayer> context)
 	{
@@ -385,5 +387,18 @@ public class PlayerManager implements IPlayerManager {
 	public void resetPersonality(Player player) throws CoreStateInitException {
 		ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 		solplayer.setPersonality(new Personality());
+	}
+	
+	@Override
+	public ConcurrentHashMap<UUID, DebuggerSettings> getDebugger() {
+		return this.playerDebugger;
+	}
+
+	@Override
+	public void toggleDebugger(UUID uniqueId, String classToDebug, String methodToDebug, String focusId) {
+		if (this.playerDebugger.get(uniqueId) == null)
+			this.playerDebugger.put(uniqueId, new DebuggerSettings());
+		
+		this.playerDebugger.get(uniqueId).toggleDebug(classToDebug,methodToDebug,focusId);
 	}
 }

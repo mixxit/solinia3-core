@@ -3,11 +3,13 @@ package com.solinia.solinia.Interfaces;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Models.DebuggerSettings;
 
 public interface IPlayerManager {
 	public ISoliniaPlayer getPlayer(Player player);
@@ -37,4 +39,6 @@ public interface IPlayerManager {
 	public void grantPlayerAttendenceBonus();
 	public void resetPersonality(Player player) throws CoreStateInitException;
 	public List<ISoliniaPlayer> getTopVotingPlayers();
+	public void toggleDebugger(UUID uniqueId, String classToDebug, String methodToDebug, String focusId);
+	ConcurrentHashMap<UUID, DebuggerSettings> getDebugger();
 }

@@ -19,14 +19,10 @@ public class CommandGrantTitle implements CommandExecutor {
 			return false;
 		}
 		
-		if (sender instanceof Player)
+		if (!sender.isOp() && !sender.hasPermission("solinia.granttitle"))
 		{
-			Player player = (Player)sender;
-			if (!player.isOp() && !player.hasPermission("solinia.granttitle"))
-			{
-				player.sendMessage("You do not have permission to access this command");
-				return true;
-			}
+			sender.sendMessage("You do not have permission to access this command");
+			return true;
 		}
 		
 		if (args.length < 2)

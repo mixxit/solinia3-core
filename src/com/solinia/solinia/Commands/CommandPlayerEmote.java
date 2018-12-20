@@ -19,14 +19,10 @@ public class CommandPlayerEmote implements CommandExecutor {
 			return false;
 		}
 		
-		if (sender instanceof Player)
+		if (!sender.isOp() && !sender.hasPermission("solinia.playeremote"))
 		{
-			Player player = (Player)sender;
-			if (!player.isOp() && !player.hasPermission("solinia.playeremote"))
-			{
-				player.sendMessage("You do not have permission to access this command");
-				return true;
-			}
+			sender.sendMessage("You do not have permission to access this command");
+			return true;
 		}
 		
 		if (args.length < 2)

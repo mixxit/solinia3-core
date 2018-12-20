@@ -18,15 +18,10 @@ public class CommandEditFaction implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 
-		if (sender instanceof Player) {
-
-			Player player = (Player) sender;
-
-			if (!player.isOp() && !player.hasPermission("solinia.editfaction"))
-			{
-				player.sendMessage("You do not have permission to access this command");
-				return false;
-			}
+		if (!sender.isOp() && !sender.hasPermission("solinia.editfaction"))
+		{
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
 		}
 
 		// Args

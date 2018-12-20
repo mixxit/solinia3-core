@@ -18,15 +18,10 @@ public class CommandCreateFaction implements CommandExecutor {
 
 		try {
 
-			if (sender instanceof Player) {
-
-				Player player = (Player) sender;
-
-				if (!player.isOp() && !player.hasPermission("solinia.createfaction"))
-				{
-					player.sendMessage("You do not have permission to access this command");
-					return false;
-				}
+			if (!sender.isOp() && !sender.hasPermission("solinia.createfaction"))
+			{
+				sender.sendMessage("You do not have permission to access this command");
+				return false;
 			}
 
 			if (args.length < 2) {

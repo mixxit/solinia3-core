@@ -15,16 +15,10 @@ public class CommandCreateLootDrop implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 		
-		if (sender instanceof Player)
+		if (!sender.isOp() && !sender.hasPermission("solinia.createlootdrop"))
 		{
-
-			Player player = (Player) sender;
-			
-			if (!player.isOp() && !player.hasPermission("solinia.createlootdrop"))
-			{
-				player.sendMessage("You do not have permission to access this command");
-				return false;
-			}
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
 		}
 		
 		if (args.length < 1)

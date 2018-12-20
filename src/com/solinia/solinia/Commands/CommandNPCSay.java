@@ -21,7 +21,7 @@ public class CommandNPCSay implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		if (!player.isOp() && !player.hasPermission("solinia.npcsay"))
+		if (!sender.isOp() && !sender.hasPermission("solinia.npcsay"))
 		{
 			player.sendMessage("You do not have permission to access this command");
 			return false;

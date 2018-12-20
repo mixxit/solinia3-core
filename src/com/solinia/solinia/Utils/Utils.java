@@ -82,6 +82,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
+import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.NumHit;
@@ -6970,5 +6971,31 @@ public class Utils {
 		{
 			return "";
 		}
+	}
+
+	public static void DebugLog(String coreclass, String method, String focusid, String message) {
+		coreclass = coreclass.toUpperCase();
+		method = method.toUpperCase();
+		focusid = focusid.toUpperCase();
+		try
+		{
+			for (UUID debuggerUuid : StateManager.getInstance().getPlayerManager().getDebugger().keySet())
+			{
+				Entity entity = Bukkit.getEntity(debuggerUuid);
+				if (entity == null)
+					continue;
+				
+				DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger().get(debuggerUuid);
+				if (!settings.isDebugging(coreclass, method))
+					continue;
+				
+				entity.sendMessage(coreclass + ":" + method + ":" + focusid + ":" + message);
+				
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
 	}
 }

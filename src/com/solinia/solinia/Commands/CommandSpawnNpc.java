@@ -15,14 +15,10 @@ public class CommandSpawnNpc implements CommandExecutor {
 		if (!(sender instanceof Player))
 			return false;
 		
-		if (sender instanceof Player)
+		if (!sender.isOp() && !sender.hasPermission("solinia.spawnnpc"))
 		{
-			Player player = (Player) sender;
-			if (!player.isOp() && !player.hasPermission("solinia.spawnnpc"))
-			{
-				player.sendMessage("You do not have permission to access this command");
-				return false;
-			}
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
 		}
 
 		Player player = (Player) sender;

@@ -22,16 +22,12 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			return false;
 
 		try {
-			if (sender instanceof Player) {
-				Player player = (Player) sender;
-
-				if (!player.isOp() && !player.hasPermission("solinia.createallarmorsets"))
-				{
-					player.sendMessage("You do not have permission to access this command");
-					return false;
-				}
+			if (!sender.isOp() && !sender.hasPermission("solinia.createallarmorsets"))
+			{
+				sender.sendMessage("You do not have permission to access this command");
+				return false;
 			}
-
+			
 			if (args.length < 3) {
 				return false;
 			}

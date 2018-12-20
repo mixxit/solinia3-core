@@ -6001,10 +6001,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						addToHateList(player.getUniqueId(), 1);
 						return;
 					}
-
+					
+					Utils.DebugLog("SolinigLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Checking for hate against player: " + player.getName() + ":" + player.getUniqueId());
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 					if (factionEntry != null) {
+						Utils.DebugLog("SolinigLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Found faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId() + " with standing: " + Utils.getFactionStandingType(factionEntry.getFactionId(),
+								factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player)).name());
+						
 						switch (Utils.getFactionStandingType(factionEntry.getFactionId(),
 								factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player))) {
 						case FACTION_THREATENLY:
@@ -6018,6 +6022,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						default:
 							continue;
 						}
+					} else {
+						Utils.DebugLog("SolinigLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Failed to find faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId());
 					}
 				}
 			}

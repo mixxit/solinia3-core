@@ -11,6 +11,10 @@ commands:
     description: Commits Solinia3Core State Data
     usage: /commit
     aliases: []
+  debugger:
+    description: Debugs Solinia Core Functions
+    usage: /debugger classname methodname focusid
+    aliases: []
   transfercharacter:
     description: Transfers a character to another player
     usage: /transfercharacter <characteruuid> <playername>
