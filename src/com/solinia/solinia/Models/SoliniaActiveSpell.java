@@ -1281,7 +1281,11 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyCharm(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (getLivingEntity() == null)
+			return;
 		
+		if (getLivingEntity().isDead())
+			return;
 
 		if (!(getLivingEntity() instanceof LivingEntity))
 			return;

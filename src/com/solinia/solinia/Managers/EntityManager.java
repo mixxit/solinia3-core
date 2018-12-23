@@ -705,6 +705,9 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public LivingEntity SpawnPet(Player owner, ISoliniaSpell spell)
 	{
+		if (owner.isDead())
+			return null;
+		
 		try
 		{
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(owner.getUniqueId());
@@ -803,21 +806,27 @@ public class EntityManager implements IEntityManager {
 	public LivingEntity setPet(UUID petOwnerUuid, LivingEntity entity) {
 		try
 		{
+			if (Bukkit.getEntity(petOwnerUuid) == null)
+				return null;
+			
 			if (getPet(petOwnerUuid) != null) {
 				ISoliniaLivingEntity solPetEntity = SoliniaLivingEntityAdapter.Adapt(getPet(petOwnerUuid));
 				removePet(petOwnerUuid, !solPetEntity.isCharmed());
 			}
 			
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(entity);
-			solEntity.getActiveMob().setOwner(petOwnerUuid);
-			solEntity.clearHateList();
-			solEntity.setAttackTarget(null);
-		
-			Entity petOwner = Bukkit.getEntity(petOwnerUuid);
-			if (petOwner != null)
-				petOwner.sendMessage("You have a new pet!");
+			if (solEntity != null)
+			{
+				solEntity.getActiveMob().setOwner(petOwnerUuid);
+				solEntity.clearHateList();
+				solEntity.setAttackTarget(null);
 			
-			this.petownerdata.put(petOwnerUuid, entity.getUniqueId());
+				Entity petOwner = Bukkit.getEntity(petOwnerUuid);
+				if (petOwner != null)
+					petOwner.sendMessage("You have a new pet!");
+				
+				this.petownerdata.put(petOwnerUuid, entity.getUniqueId());
+			}
 		} catch (CoreStateInitException e)
 		{
 		

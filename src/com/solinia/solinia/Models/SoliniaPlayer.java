@@ -1432,7 +1432,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// Reroute action depending on target
 		//
 		try {
-			if (targetmob != null) {
+			if (player != null && !player.isDead())
+			if (targetmob != null && !targetmob.isDead()) {
 				boolean success = spellSourceItem.useItemOnEntity(player, targetmob, false);
 				if (success == true) {
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
