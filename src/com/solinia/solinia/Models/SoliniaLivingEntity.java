@@ -4075,7 +4075,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		double totalHp = statHp + itemHp;
 
 		try {
-			if (getNpcid() > 0) {
+			if (getNpcid() > 0) 
+			{
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
 				if (npc == null)
 					return totalHp;
@@ -4083,7 +4084,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc.getForcedMaxHp() > 0) {
 					return npc.getForcedMaxHp();
 				}
-
+				
 				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());
 
 				if (npc.isBoss()) {
@@ -4101,8 +4102,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc.isRaidheroic()) {
 					totalHp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
 				}
+				
+				int percentHP = 100;
+				if (this.isCurrentlyNPCPet() && !this.isCharmed() && npc.isCorePet())
+				{
+					if (this.getActiveMob().getOwner().isPresent() && Bukkit.getEntity(this.getActiveMob().getOwner().get()) != null)
+					{
+						Entity playerEntity = Bukkit.getEntity(this.getActiveMob().getOwner().get());
+						if (playerEntity != null && playerEntity instanceof Player)
+						{
+							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)playerEntity);
+							int effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.PetMaxHP);
+							if (effectIdLookup > 0)
+							for (SoliniaAARankEffect effect : solPlayer.getRanksEffectsOfEffectType(effectIdLookup)) 
+							{
+								percentHP += effect.getBase1();
+							}
+						}
+					}
+				}
 
-				return totalHp;
+				return (totalHp/100) * percentHP;
 			}
 
 			if (isPlayer()) {
