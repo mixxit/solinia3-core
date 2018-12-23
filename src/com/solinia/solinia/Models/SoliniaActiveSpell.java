@@ -1310,6 +1310,12 @@ public class SoliniaActiveSpell {
 			if (targetsolLivingEntity.isCurrentlyNPCPet())
 				return;
 			
+			if (targetsolLivingEntity.getLevel() > spellEffect.getMax())
+			{
+				source.sendMessage("This is too high for this spell");
+				return;
+			}
+			
 			Utils.dismountEntity(getLivingEntity());
 			
 			// Interrupt casting
