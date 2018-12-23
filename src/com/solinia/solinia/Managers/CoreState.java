@@ -870,7 +870,6 @@ public class CoreState {
 	public void reloadPerks() {
 		try {
 			StateManager.getInstance().getConfigurationManager().reloadPerks();
-			Utils.broadcastPerks();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

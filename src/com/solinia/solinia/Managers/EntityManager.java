@@ -442,6 +442,11 @@ public class EntityManager implements IEntityManager {
 					if (!Utils.isLivingEntityNPC(le))
 						continue;
 					
+					if(!Utils.ValidatePet(le))
+					{
+						continue;
+					}
+					
 					if (!entitiesNearPlayers.contains(le.getUniqueId()))
 						entitiesNearPlayers.add(le.getUniqueId());
 					
@@ -627,7 +632,23 @@ public class EntityManager implements IEntityManager {
 		
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
 		if (entity != null)
+		{
+			if(!Utils.ValidatePet(entity))
+			{
+				this.petownerdata.remove(ownerUuid);
+				if (Bukkit.getEntity(ownerUuid) != null)
+				{
+					Bukkit.getEntity(ownerUuid).sendMessage("Your pet was broken, please tell Mixxit (getPet)");
+				}
+				return null;
+			}
+		}
+		
+		entity = (LivingEntity)Bukkit.getEntity(entityuuid);
+		if (entity != null)
+		{
 			return entity;
+		}
 		
 		return null;
 	}

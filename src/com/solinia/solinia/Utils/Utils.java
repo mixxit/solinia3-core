@@ -329,15 +329,6 @@ public class Utils {
 		return diffSeconds;
 	}
 
-	public static void broadcastPerks() {
-		for (WorldWidePerk perk : getActiveWorldWidePerks()) {
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				player.sendMessage("* You are currently receiving " + perk.getPerkname() + " from contributor "
-						+ perk.getContributor());
-			}
-		}
-	}
-
 	public static String getUUIDFromPlayerName(String playerName) throws IOException {
 		URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
 		InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
@@ -6997,5 +6988,31 @@ public class Utils {
 			
 		}
 		
+	}
+
+	public static boolean ValidatePet(LivingEntity entity) {
+		try
+		{
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(entity);
+			if (solLivingEntity.isNPC())
+			{
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+				if (npc.isCorePet())
+				{
+					if (!solLivingEntity.getActiveMob().getOwner().isPresent())
+					{
+						Utils.RemoveEntity(entity,"VALIDATEPET");
+						System.out.println("ERROR - A pet had no owner but was marked as a pet!");
+						return false;
+					}
+				}
+			}
+				
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return true;
 	}
 }

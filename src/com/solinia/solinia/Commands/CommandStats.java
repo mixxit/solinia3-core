@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +12,9 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -36,6 +39,9 @@ public class CommandStats implements CommandExecutor {
 						);
 	            player.sendMessage("You have a maximum HP of: " + ChatColor.RED + player.getHealth() + "/" + player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + ChatColor.RESET);
 	            player.sendMessage("You have a maximum MP of: " + ChatColor.AQUA +solplayer.getMana() + "/" + solentity.getMaxMP() + " (" + solplayer.getSoliniaLivingEntity().getItemMana() + " of this is from items)" + ChatColor.RESET);
+	            for (WorldWidePerk perk : Utils.getActiveWorldWidePerks()) {
+	            	player.sendMessage("* You are currently receiving " + perk.getPerkname() + " from contributor " + perk.getContributor());
+	    		}
 	            player.sendMessage("You currently have a Armour Class Mitigation of: " + ChatColor.GOLD + solentity.getMitigationAC() + ChatColor.RESET);
 	            player.sendMessage("You currently have a Attack Value of: " + ChatColor.GOLD+ solentity.getAttk() + ChatColor.RESET);
 	            player.sendMessage("You currently have a Attack Speed of: " + ChatColor.GOLD+ solentity.getAttackSpeed() + ChatColor.RESET);
