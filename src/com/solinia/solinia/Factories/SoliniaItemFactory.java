@@ -68,6 +68,7 @@ public class SoliniaItemFactory {
 		item.setId(StateManager.getInstance().getConfigurationManager().getNextItemId());
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(originalItem.getDisplayname());
+		item.setEquipmentSlot(originalItem.getEquipmentSlot());
 		
 		item.setEarsItem(originalItem.isEarsItem());
 		item.setShouldersItem(originalItem.isShouldersItem());

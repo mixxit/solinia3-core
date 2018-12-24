@@ -117,6 +117,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean territoryFlag = false;
 	private String identifyMessage = "";
 	private boolean bandage = false;
+	private EquipmentSlot equipmentSlot = EquipmentSlot.None;
 	
 	private String bookAuthor = "";
 	private List<String> bookPages = new ArrayList<String>();
@@ -941,6 +942,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- skillmodtype3: " + ChatColor.GOLD + getSkillModType3().toString() + ChatColor.RESET + " skillmodvalue3: " + ChatColor.GOLD + getSkillModValue3() + ChatColor.RESET);
 		sender.sendMessage("- skillmodtype4: " + ChatColor.GOLD + getSkillModType4().toString() + ChatColor.RESET + " skillmodvalue4: " + ChatColor.GOLD + getSkillModValue4() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- equipmentslot: " + ChatColor.GOLD + getEquipmentSlot().name() + ChatColor.RESET);
 		sender.sendMessage("- fingersitem: " + ChatColor.GOLD + isFingersItem() + ChatColor.RESET + " neckitem: " + ChatColor.GOLD + isNeckItem() + ChatColor.RESET);
 		sender.sendMessage("- shouldersitem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET + " earsitem: " + ChatColor.GOLD + isEarsItem() + ChatColor.RESET);
 		sender.sendMessage("- forearmsitem: " + ChatColor.GOLD + isForearmsItem() + ChatColor.RESET + " armsitem: " + ChatColor.GOLD + isArmsItem() + ChatColor.RESET);
@@ -1139,6 +1141,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "skillmodvalue4":
 			setSkillModValue4(Integer.parseInt(value));
+			break;
+		case "equipmentslot":
+			setEquipmentSlot(EquipmentSlot.valueOf(value));
 			break;
 		case "fingersitem":
 			setFingersItem(Boolean.parseBoolean(value));
@@ -1736,5 +1741,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public boolean isMeleeWeapon() {
 		return ConfigurationManager.HandMaterials.contains(this.getBasename().toUpperCase());
+	}
+
+	@Override
+	public EquipmentSlot getEquipmentSlot() {
+		return equipmentSlot;
+	}
+
+	@Override
+	public void setEquipmentSlot(EquipmentSlot equipmentSlot) {
+		this.equipmentSlot = equipmentSlot;
 	}
 }

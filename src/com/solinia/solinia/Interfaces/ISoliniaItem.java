@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Models.AugmentationSlotType;
+import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.SkillType;
 
 public interface ISoliniaItem {
@@ -358,4 +359,8 @@ public interface ISoliniaItem {
 	boolean isArrow();
 
 	boolean isMeleeWeapon();
+
+	EquipmentSlot getEquipmentSlot();
+
+	void setEquipmentSlot(EquipmentSlot equipmentSlot);
 }
