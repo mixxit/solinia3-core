@@ -16,6 +16,7 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -69,17 +70,6 @@ public class SoliniaItemFactory {
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(originalItem.getDisplayname());
 		item.setEquipmentSlot(originalItem.getEquipmentSlot());
-		
-		item.setEarsItem(originalItem.isEarsItem());
-		item.setShouldersItem(originalItem.isShouldersItem());
-		item.setNeckItem(originalItem.isNeckItem());
-		item.setFingersItem(originalItem.isFingersItem());
-
-		item.setForearmsItem(originalItem.isForearmsItem());
-		item.setArmsItem(originalItem.isArmsItem());
-		item.setHandsItem(originalItem.isHandsItem());
-
-		
 		item.setDamage(originalItem.getDamage());
 		item.setAC(originalItem.getAC());
 
@@ -141,35 +131,35 @@ public class SoliniaItemFactory {
 			
 			// Jewelry!
 			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
-			neckItem.setNeckItem(true);
+			neckItem.setEquipmentSlot(EquipmentSlot.Neck);
 			neckItem.setDiscoverer(discoverer);
 			neckItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
 			ISoliniaItem shouldersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
-			shouldersItem.setShouldersItem(true);
+			shouldersItem.setEquipmentSlot(EquipmentSlot.Shoulders);
 			shouldersItem.setDiscoverer(discoverer);
 			shouldersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
 			ISoliniaItem fingersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
-			fingersItem.setFingersItem(true);
+			fingersItem.setEquipmentSlot(EquipmentSlot.Fingers);
 			fingersItem.setDiscoverer(discoverer);
 			fingersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
 			ISoliniaItem earsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
-			earsItem.setEarsItem(true);
+			earsItem.setEquipmentSlot(EquipmentSlot.Ears);
 			earsItem.setDiscoverer(discoverer);
 			earsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
 
 			// Additional Armour!
 			ISoliniaItem forearmsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
-			forearmsItem.setForearmsItem(true);
+			forearmsItem.setEquipmentSlot(EquipmentSlot.Forearms);
 			forearmsItem.setDiscoverer(discoverer);
 			forearmsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
 			ISoliniaItem armsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
-			armsItem.setArmsItem(true);
+			armsItem.setEquipmentSlot(EquipmentSlot.Arms);
 			armsItem.setDiscoverer(discoverer);
 			armsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
 			ISoliniaItem handsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
-			handsItem.setHandsItem(true);
+			handsItem.setEquipmentSlot(EquipmentSlot.Hands);
 			handsItem.setDiscoverer(discoverer);
 			handsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
@@ -242,16 +232,16 @@ public class SoliniaItemFactory {
 					{
 						String jewelryTypeName = "Jewelry";
 						
-						if (item.isEarsItem())
+						if (item.getEquipmentSlot().equals(EquipmentSlot.Ears))
 							jewelryTypeName = "Earrings";
 	
-						if (item.isNeckItem())
+						if (item.getEquipmentSlot().equals(EquipmentSlot.Neck))
 							jewelryTypeName = "Necklace";
 						
-						if (item.isFingersItem())
+						if (item.getEquipmentSlot().equals(EquipmentSlot.Fingers))
 							jewelryTypeName = "Rings";
 	
-						if (item.isShouldersItem())
+						if (item.getEquipmentSlot().equals(EquipmentSlot.Shoulders))
 							jewelryTypeName = "Cloak";
 						
 						
@@ -262,13 +252,13 @@ public class SoliniaItemFactory {
 					{
 						String jewelryTypeName = "Clothing";
 						
-						if (item.isForearmsItem())
+						if (item.getEquipmentSlot().equals(EquipmentSlot.Forearms))
 							jewelryTypeName = "Bracers";
 	
-						if (item.isArmsItem())
+						if (item.getEquipmentSlot().equals(EquipmentSlot.Arms))
 							jewelryTypeName = "Sleeves";
 						
-						if (item.isHandsItem())
+						if (item.getEquipmentSlot().equals(EquipmentSlot.Hands))
 							jewelryTypeName = "Gloves";
 	
 						item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);

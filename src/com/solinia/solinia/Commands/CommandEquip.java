@@ -15,6 +15,7 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Utils.Utils;
 
@@ -95,7 +96,7 @@ public class CommandEquip implements CommandExecutor {
 						return true;
 					}
 
-					if (item.isFingersItem())
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Fingers))
 						if (solPlayer.getFingersItem() > 0) {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
@@ -109,7 +110,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						}
 
-					if (item.isShouldersItem())
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Shoulders))
 						if (solPlayer.getShouldersItem() > 0) {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
@@ -123,7 +124,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						}
 
-					if (item.isEarsItem())
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Ears))
 						if (solPlayer.getEarsItem() > 0) {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
@@ -137,7 +138,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						}
 
-					if (item.isNeckItem())
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Neck))
 						if (solPlayer.getNeckItem() > 0) {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
@@ -151,7 +152,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						}
 					
-					if (item.isForearmsItem())
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Forearms))
 						if (solPlayer.getForearmsItem() > 0) {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
@@ -165,7 +166,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						}
 					
-					if (item.isArmsItem())
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Arms))
 						if (solPlayer.getArmsItem() > 0) {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
@@ -179,7 +180,7 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						}
 					
-					if (item.isHandsItem())
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Hands))
 						if (solPlayer.getHandsItem() > 0) {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;

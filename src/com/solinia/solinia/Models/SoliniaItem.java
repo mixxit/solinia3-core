@@ -107,13 +107,6 @@ public class SoliniaItem implements ISoliniaItem {
 	private SkillType skillModType4 = SkillType.None;
 	private int skillModValue4 = 0;
 
-	private boolean isFingersItem = false;
-	private boolean isNeckItem = false;
-	private boolean isShouldersItem = false;
-	private boolean isEarsItem = false;
-	private boolean isForearmsItem = false;
-	private boolean isArmsItem = false;
-	private boolean isHandsItem = false;
 	private boolean territoryFlag = false;
 	private String identifyMessage = "";
 	private boolean bandage = false;
@@ -943,10 +936,6 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- skillmodtype4: " + ChatColor.GOLD + getSkillModType4().toString() + ChatColor.RESET + " skillmodvalue4: " + ChatColor.GOLD + getSkillModValue4() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- equipmentslot: " + ChatColor.GOLD + getEquipmentSlot().name() + ChatColor.RESET);
-		sender.sendMessage("- fingersitem: " + ChatColor.GOLD + isFingersItem() + ChatColor.RESET + " neckitem: " + ChatColor.GOLD + isNeckItem() + ChatColor.RESET);
-		sender.sendMessage("- shouldersitem: " + ChatColor.GOLD + isShouldersItem() + ChatColor.RESET + " earsitem: " + ChatColor.GOLD + isEarsItem() + ChatColor.RESET);
-		sender.sendMessage("- forearmsitem: " + ChatColor.GOLD + isForearmsItem() + ChatColor.RESET + " armsitem: " + ChatColor.GOLD + isArmsItem() + ChatColor.RESET);
-		sender.sendMessage("- handsitem: " + ChatColor.GOLD + isHandsItem() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
 		sender.sendMessage("- bookauthor: " + ChatColor.GOLD + getBookAuthor() + ChatColor.RESET);
@@ -1119,94 +1108,31 @@ public class SoliniaItem implements ISoliniaItem {
 			setExperienceBonus(Boolean.parseBoolean(value));
 			break;
 		case "skillmodtype":
-			setSkillModType(SkillType.valueOf(value));
+			setSkillModType(SkillType.valueOf(Utils.CapitaliseFirstLetter(value)));
 			break;
 		case "skillmodvalue":
 			setSkillModValue(Integer.parseInt(value));
 			break;
 		case "skillmodtype2":
-			setSkillModType2(SkillType.valueOf(value));
+			setSkillModType2(SkillType.valueOf(Utils.CapitaliseFirstLetter(value)));
 			break;
 		case "skillmodvalue2":
 			setSkillModValue2(Integer.parseInt(value));
 			break;
 		case "skillmodtype3":
-			setSkillModType3(SkillType.valueOf(value));
+			setSkillModType3(SkillType.valueOf(Utils.CapitaliseFirstLetter(value)));
 			break;
 		case "skillmodvalue3":
 			setSkillModValue3(Integer.parseInt(value));
 			break;
 		case "skillmodtype4":
-			setSkillModType4(SkillType.valueOf(value));
+			setSkillModType4(SkillType.valueOf(Utils.CapitaliseFirstLetter(value)));
 			break;
 		case "skillmodvalue4":
 			setSkillModValue4(Integer.parseInt(value));
 			break;
 		case "equipmentslot":
-			setEquipmentSlot(EquipmentSlot.valueOf(value));
-			break;
-		case "fingersitem":
-			setFingersItem(Boolean.parseBoolean(value));
-			setNeckItem(false);
-			setShouldersItem(false);
-			setEarsItem(false);
-			setForearmsItem(false);
-			setArmsItem(false);
-			setHandsItem(false);
-			break;
-		case "neckitem":
-			setNeckItem(Boolean.parseBoolean(value));
-			setFingersItem(false);
-			setShouldersItem(false);
-			setEarsItem(false);
-			setForearmsItem(false);
-			setArmsItem(false);
-			setHandsItem(false);
-			break;
-		case "shouldersitem":
-			setShouldersItem(Boolean.parseBoolean(value));
-			setFingersItem(false);
-			setNeckItem(false);
-			setEarsItem(false);
-			setForearmsItem(false);
-			setArmsItem(false);
-			setHandsItem(false);
-			break;
-		case "earsitem":
-			setEarsItem(Boolean.parseBoolean(value));
-			setShouldersItem(false);
-			setFingersItem(false);
-			setNeckItem(false);
-			setForearmsItem(false);
-			setArmsItem(false);
-			setHandsItem(false);
-			break;
-		case "forearmsitem":
-			setForearmsItem(Boolean.parseBoolean(value));
-			setEarsItem(false);
-			setShouldersItem(false);
-			setFingersItem(false);
-			setNeckItem(false);
-			setArmsItem(false);
-			setHandsItem(false);
-			break;
-		case "armsitem":
-			setArmsItem(Boolean.parseBoolean(value));
-			setEarsItem(false);
-			setShouldersItem(false);
-			setFingersItem(false);
-			setNeckItem(false);
-			setForearmsItem(false);
-			setHandsItem(false);
-			break;
-		case "handsitem":
-			setHandsItem(Boolean.parseBoolean(value));
-			setEarsItem(false);
-			setShouldersItem(false);
-			setFingersItem(false);
-			setNeckItem(false);
-			setForearmsItem(false);
-			setArmsItem(false);
+			setEquipmentSlot(EquipmentSlot.valueOf(Utils.CapitaliseFirstLetter(value)));
 			break;
 		case "reagent":
 			setReagent(Boolean.parseBoolean(value));
@@ -1524,46 +1450,6 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public boolean isFingersItem() {
-		return isFingersItem;
-	}
-
-	@Override
-	public void setFingersItem(boolean isFingersItem) {
-		this.isFingersItem = isFingersItem;
-	}
-
-	@Override
-	public boolean isNeckItem() {
-		return isNeckItem;
-	}
-
-	@Override
-	public void setNeckItem(boolean isNeckItem) {
-		this.isNeckItem = isNeckItem;
-	}
-
-	@Override
-	public boolean isShouldersItem() {
-		return isShouldersItem;
-	}
-
-	@Override
-	public void setShouldersItem(boolean isShouldersItem) {
-		this.isShouldersItem = isShouldersItem;
-	}
-
-	@Override
-	public boolean isEarsItem() {
-		return isEarsItem;
-	}
-
-	@Override
-	public void setEarsItem(boolean isEarsItem) {
-		this.isEarsItem = isEarsItem;
-	}
-	
-	@Override
 	public ItemStack asItemStackForMerchant(long costmultiplier) {
 		return ItemStackAdapter.Adapt(this, costmultiplier);
 	}
@@ -1590,9 +1476,10 @@ public class SoliniaItem implements ISoliniaItem {
 
 	@Override
 	public boolean isJewelry() {
-		return (this.isFingersItem() || this.isNeckItem() || this.isShouldersItem() || this.isEarsItem());
+		return (this.getEquipmentSlot().equals(EquipmentSlot.Fingers) || this.getEquipmentSlot().equals(EquipmentSlot.Neck) || this.getEquipmentSlot().equals(EquipmentSlot.Shoulders) || this.getEquipmentSlot().equals(EquipmentSlot.Ears));
 	}
 
+	
 	@Override
 	public boolean isThrowing() {
 		return throwing;
@@ -1676,39 +1563,9 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public boolean isAdditionalArmour() {
 		// TODO Auto-generated method stub
-		return (isForearmsItem() || isArmsItem() || isHandsItem());
+		return (equipmentSlot.equals(EquipmentSlot.Forearms) || equipmentSlot.equals(EquipmentSlot.Arms) || equipmentSlot.equals(EquipmentSlot.Hands));
 	}
 
-	@Override
-	public boolean isForearmsItem() {
-		return isForearmsItem;
-	}
-
-	@Override
-	public void setForearmsItem(boolean isForearmsItem) {
-		this.isForearmsItem = isForearmsItem;
-	}
-
-	@Override
-	public boolean isArmsItem() {
-		return isArmsItem;
-	}
-
-	@Override
-	public void setArmsItem(boolean isArmsItem) {
-		this.isArmsItem = isArmsItem;
-	}
-
-	@Override
-	public boolean isHandsItem() {
-		return isHandsItem;
-	}
-
-	@Override
-	public void setHandsItem(boolean isHandsItem) {
-		this.isHandsItem = isHandsItem;
-	}
-	
 	@Override
 	public boolean isArrow()
 	{

@@ -25,6 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.SoliniaItem;
 
 public class JsonItemRepository implements IRepository<ISoliniaItem> {
@@ -201,10 +202,10 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 	            		item.getSkillModValue3(), 
 	            		item.getSkillModType4(), 
 	            		item.getSkillModValue4(), 
-	            		item.isFingersItem(), 
-	            		item.isNeckItem(), 
-	            		item.isShouldersItem(), 
-	            		item.isEarsItem(), 
+	            		item.getEquipmentSlot().equals(EquipmentSlot.Fingers), 
+	            		item.getEquipmentSlot().equals(EquipmentSlot.Neck), 
+	            		item.getEquipmentSlot().equals(EquipmentSlot.Shoulders), 
+	            		item.getEquipmentSlot().equals(EquipmentSlot.Ears), 
 	            		false, 
 	            		item.getIdentifyMessage(), 
 	            		item.isBandage()

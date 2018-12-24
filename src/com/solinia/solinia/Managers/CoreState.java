@@ -225,7 +225,6 @@ public class CoreState {
 		patchItems1_13();
 		patchClasses1_13();
 		fixPets();
-		patchEquipmentSlots();
 	}
 	
 	private void fixPets()
@@ -488,40 +487,6 @@ public class CoreState {
 		return materialName.toUpperCase();
 	}
 
-	
-	private void patchEquipmentSlots()
-	{
-		try {
-			System.out.println("Attempting to apply equipment slots to items");
-			int updated = 0;
-			
-			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
-			{
-				if (item.isEarsItem())
-					item.setEquipmentSlot(EquipmentSlot.Ears);
-				if (item.isShouldersItem())
-					item.setEquipmentSlot(EquipmentSlot.Shoulders);
-				if (item.isNeckItem())
-					item.setEquipmentSlot(EquipmentSlot.Neck);
-				if (item.isFingersItem())
-					item.setEquipmentSlot(EquipmentSlot.Fingers);
-				if (item.isForearmsItem())
-					item.setEquipmentSlot(EquipmentSlot.Forearms);
-				if (item.isArmsItem())
-					item.setEquipmentSlot(EquipmentSlot.Arms);
-				if (item.isHandsItem())
-					item.setEquipmentSlot(EquipmentSlot.Hands);
-				updated++;
-			}
-			
-			System.out.println("Updated " + updated + " equipment slots");
-			
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	private void patchItems1_13() {
 		try {
 			boolean updated = false;

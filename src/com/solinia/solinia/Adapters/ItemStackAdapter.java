@@ -28,6 +28,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.AugmentationSlotType;
+import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
@@ -139,37 +140,37 @@ public class ItemStackAdapter {
 			loretxt.add(ChatColor.AQUA + "This item can be used to /bindwound" + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.isFingersItem())
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Fingers))
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : FINGERS" + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.isNeckItem())
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Neck))
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : NECK" + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.isShouldersItem())
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Shoulders))
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : SHOULDERS" + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.isEarsItem())
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Ears))
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : EARS" + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.isForearmsItem())
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Forearms))
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : FOREARMS" + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.isArmsItem())
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Arms))
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : ARMS" + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.isHandsItem())
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Hands))
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : HANDS" + ChatColor.RESET);
 		}

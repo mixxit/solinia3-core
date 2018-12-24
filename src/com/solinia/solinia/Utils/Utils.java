@@ -84,6 +84,7 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
+import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.SkillReward;
@@ -3628,7 +3629,7 @@ public class Utils {
 					
 					ISoliniaItem earringItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 					earringItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Earring");	
-					earringItem.setEarsItem(true);
+					earringItem.setEquipmentSlot(EquipmentSlot.Ears);
 					earringItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
 	
 					// Necklace
@@ -3639,7 +3640,7 @@ public class Utils {
 					
 					ISoliniaItem necklaceItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 					necklaceItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Necklace");	
-					necklaceItem.setNeckItem(true);
+					necklaceItem.setEquipmentSlot(EquipmentSlot.Neck);
 					necklaceItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
 					
 					// Cloak
@@ -3650,7 +3651,7 @@ public class Utils {
 					
 					ISoliniaItem cloakItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 					cloakItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Cloak");	
-					cloakItem.setShouldersItem(true);
+					cloakItem.setEquipmentSlot(EquipmentSlot.Shoulders);
 					cloakItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
 
 					// Rings
@@ -3661,7 +3662,7 @@ public class Utils {
 					
 					ISoliniaItem ringItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 					ringItem.setDisplayname(Utils.CapitaliseFirstLetter(race.getName()) + " Ring");	
-					ringItem.setFingersItem(true);
+					ringItem.setEquipmentSlot(EquipmentSlot.Fingers);
 					ringItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
 					
 					// Weapon aug

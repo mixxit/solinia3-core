@@ -282,22 +282,6 @@ public interface ISoliniaItem {
 
 	void setDye(int dye);
 
-	boolean isFingersItem();
-
-	void setFingersItem(boolean isFingersItem);
-
-	boolean isNeckItem();
-
-	void setNeckItem(boolean isNeckItem);
-
-	boolean isShouldersItem();
-
-	void setShouldersItem(boolean isEarsItem);
-	
-	boolean isEarsItem();
-
-	void setEarsItem(boolean isEarsItem);
-
 	ItemStack asItemStackForMerchant(long costmultiplier);
 
 	boolean isReagent();
@@ -343,18 +327,6 @@ public interface ISoliniaItem {
 	void setNeverDrop(boolean neverDrop);
 
 	boolean isAdditionalArmour();
-
-	boolean isForearmsItem();
-
-	boolean isArmsItem();
-
-	boolean isHandsItem();
-
-	void setForearmsItem(boolean isForearmsItem);
-
-	void setArmsItem(boolean isArmsItem);
-
-	void setHandsItem(boolean isHandsItem);
 
 	boolean isArrow();
 
