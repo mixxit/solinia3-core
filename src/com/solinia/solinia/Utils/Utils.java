@@ -696,7 +696,7 @@ public class Utils {
 	}
 
 	public static int getMaxLevel() {
-		return 65;
+		return 70;
 	}
 
 	public static Double getExperienceRewardAverageForLevel(int level) {

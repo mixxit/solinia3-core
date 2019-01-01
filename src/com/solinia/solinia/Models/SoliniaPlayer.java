@@ -2694,8 +2694,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			if (this.getShouldersItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(this.getShouldersItem());
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getShouldersItem());
 				if (item != null) {
 					if (!item.isSpellscroll())
 						items.add(item);
