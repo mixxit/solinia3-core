@@ -1311,7 +1311,13 @@ public class EntityManager implements IEntityManager {
 					if (solPlayer != null && solPlayer.isGlowTargetting())
 					{
 						toggleGlow = solPlayer.isGlowTargetting();
-						GlowAPI.setGlowing((Entity)target, GlowAPI.Color.DARK_AQUA, (Player)source);
+						try
+						{
+							GlowAPI.setGlowing((Entity)target, GlowAPI.Color.DARK_AQUA, (Player)source);
+						} catch (Exception e)
+						{
+							e.printStackTrace();
+						}
 					}
 				} catch (CoreStateInitException e)
 				{
