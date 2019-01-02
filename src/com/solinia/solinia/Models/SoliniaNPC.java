@@ -359,8 +359,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET + " - guard: "
 				+ ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer()
 				+ ChatColor.RESET);
-		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic() + " " + "- boss: " + ChatColor.GOLD + isBoss());
-		sender.sendMessage("- raidheroic: " + ChatColor.GOLD + isRaidheroic() + " " + "raidboss: " + ChatColor.GOLD
+		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic() + " " + ChatColor.RESET + "- boss: " + ChatColor.GOLD + isBoss() + ChatColor.RESET + " - raidheroic: " + ChatColor.GOLD + isRaidheroic() + " " + ChatColor.RESET +  "raidboss: " + ChatColor.GOLD
 				+ isRaidboss());
 		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
 		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());

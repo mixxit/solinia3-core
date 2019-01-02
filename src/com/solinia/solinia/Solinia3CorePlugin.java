@@ -387,7 +387,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			if (this.discordClient != null)
 			{
 				discordMessageTimer = new DiscordMessageTimer();
-				discordMessageTimer.runTaskTimer(this, 20L, 20L);
+				discordMessageTimer.runTaskTimer(this, 40L, 40L);
 			}
 			
 			csvGenerationTimer = new CSVGenerationTimer();

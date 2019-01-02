@@ -160,6 +160,7 @@ public class DiscordListener {
 					case "editloottable":
 					case "editmerchantlist":
 					case "editnpc":
+					case "editspell":
 					case "editnpcevent":
 					case "editquest":
 					case "editspawngroup":

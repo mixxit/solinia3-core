@@ -561,7 +561,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			}
 		}
 
-		if (npc.isUsedisguise() == true) {
+		if (npc.isUsedisguise() == true && npc.getDisguisetype() != null) {
 			mob = mob + "  Disguise:\r\n";
 			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
 				mob = mob + "    Type: player\r\n";
@@ -586,7 +586,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			 * mob = mob + "    CreateFog: true\r\n"; mob = mob + "    DarkenSky: true\r\n";
 			 * mob = mob + "    PlayMusic: true\r\n";
 			 */
-			if (npc.getDisguisetype() != null)
+			if (npc.isUsedisguise() == true && npc.getDisguisetype() != null)
 				if (npc.getDisguisetype().toLowerCase().contains("player-")) {
 					String[] disguisedata = npc.getDisguisetype().split("-");
 					mob = mob + "    Player: " + npc.getName() + "\r\n";
