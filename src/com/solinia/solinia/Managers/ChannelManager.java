@@ -40,6 +40,7 @@ public class ChannelManager implements IChannelManager {
 	private String discordMainChannelId;
 	private String discordAdminChannelId;
 	private String discordContentTeamChannelId;
+	private String discordBotspamChannelId;
 	private String discordInCharacterChannelId;
 	private ConcurrentHashMap<Integer, QueuedDiscordMessage> queuedDiscordMessages = new ConcurrentHashMap<Integer, QueuedDiscordMessage>();
 	
@@ -552,6 +553,8 @@ public class ChannelManager implements IChannelManager {
 			targetChannelId = getDiscordInCharacterChannelId();
 		if (discordChannel.equals(DiscordChannel.CONTENTTEAM))
 			targetChannelId = getDiscordContentTeamChannelId();
+		if (discordChannel.equals(DiscordChannel.BOTSPAM))
+			targetChannelId = getDiscordBotspamChannelId();
 		
 		return targetChannelId;
 	}
@@ -951,5 +954,15 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void setDiscordInCharacterChannelId(String discordInCharacterChannelId) {
 		this.discordInCharacterChannelId = discordInCharacterChannelId;
+	}
+
+	@Override
+	public String getDiscordBotspamChannelId() {
+		return discordBotspamChannelId;
+	}
+
+	@Override
+	public void setDiscordBotspamChannelId(String discordBotspamChannelId) {
+		this.discordBotspamChannelId = discordBotspamChannelId;
 	}
 }

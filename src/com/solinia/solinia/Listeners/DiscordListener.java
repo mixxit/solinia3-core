@@ -58,6 +58,15 @@ public class DiscordListener {
 			}
 		}
 		
+		if (event.getChannel().getStringID().equals(StateManager.getInstance().getChannelManager().getDiscordBotspamChannelId()))
+		{
+			// Handle command messaging here
+			if (event.getMessage().getContent().startsWith("?"))
+			{
+				StateManager.getInstance().getChannelManager().handleDiscordCommand(DiscordChannel.BOTSPAM,event);
+			}
+		}
+		
 		IRole adminRole = null;
 		IRole contentTeamRole = null;
 		
@@ -201,6 +210,9 @@ public class DiscordListener {
 		
 		if (channelId.equals(StateManager.getInstance().getChannelManager().getDiscordContentTeamChannelId()))
 			return StateManager.getInstance().getDiscordContentTeamChannelCommandSender();
+
+		if (channelId.equals(StateManager.getInstance().getChannelManager().getDiscordBotspamChannelId()))
+			return StateManager.getInstance().getDiscordBotspamChannelCommandSender();
 		
 		if (channelId.equals(StateManager.getInstance().getChannelManager().getDiscordAdminChannelId()))
 			return StateManager.getInstance().getDiscordAdminChannelCommandSender();

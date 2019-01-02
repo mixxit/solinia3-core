@@ -102,6 +102,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	String discordbottoken = "";
 	String discordmainchannelid;
 	String discordcontentteamchannelid;
+	String discordbotspamchannelid;
 	String discordadminchannelid;
 	String discordincharacterchannelid;
 
@@ -114,6 +115,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		config.addDefault("discordmainchannelid", "");
 		config.addDefault("discordadminchannelid", "");
 		config.addDefault("discordcontentteamchannelid", "");
+		config.addDefault("discordbotspamchannelid", "");
 		config.addDefault("discordincharacterchannelid", "");
 		config.options().copyDefaults(true);
 		saveConfig();
@@ -123,12 +125,14 @@ public class Solinia3CorePlugin extends JavaPlugin {
 				!config.getString("discordmainchannelid").equals("") && 
 				!config.getString("discordadminchannelid").equals("") &&  
 				!config.getString("discordcontentteamchannelid").equals("") &&  
+				!config.getString("discordbotspamchannelid").equals("") &&  
 				!config.getString("discordincharacterchannelid").equals(""))
 		{
 			discordbottoken = config.getString("discordbottoken");
 			discordmainchannelid = config.getString("discordmainchannelid");
 			discordadminchannelid = config.getString("discordadminchannelid");
 			discordcontentteamchannelid = config.getString("discordcontentteamchannelid");
+			discordbotspamchannelid = config.getString("discordbotspamchannelid");
 			discordincharacterchannelid = config.getString("discordincharacterchannelid");
 			setupDiscordClient();
 		}
@@ -324,6 +328,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 				channelManager.setDiscordMainChannelId(discordmainchannelid);
 				channelManager.setDiscordAdminChannelId(discordadminchannelid);
 				channelManager.setDiscordContentTeamChannelId(discordcontentteamchannelid);
+				channelManager.setDiscordBotspamChannelId(discordbotspamchannelid);
 				channelManager.setDiscordInCharacterChannelId(discordincharacterchannelid);
 			}
 

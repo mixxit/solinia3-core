@@ -17,16 +17,10 @@ public class CommandEditSpell implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 		
-		if (sender instanceof Player)
+		if (!sender.isOp() && !sender.hasPermission("solinia.editspell"))
 		{
-
-			Player player = (Player) sender;
-			
-			if (!player.isOp())
-			{
-				player.sendMessage("This is an operator only command");
-				return false;
-			}
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
 		}
 		
 		// Args
@@ -58,7 +52,6 @@ public class CommandEditSpell implements CommandExecutor {
 				sender.sendMessage(e.getMessage());
 			}
 		}
-
 		
 		if (args.length < 3)
 		{

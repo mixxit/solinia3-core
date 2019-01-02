@@ -17,6 +17,7 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
+import com.solinia.solinia.Providers.DiscordBotspamChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordContentTeamChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 
@@ -37,6 +38,7 @@ public class CommandSetClass implements CommandExecutor {
 					sender instanceof ConsoleCommandSender || 
 					sender instanceof DiscordDefaultChannelCommandSender || 
 					sender instanceof DiscordContentTeamChannelCommandSender || 
+					sender instanceof DiscordBotspamChannelCommandSender ||
 					sender instanceof DiscordAdminChannelCommandSender
 					))
 			{

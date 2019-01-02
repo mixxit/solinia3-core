@@ -44,10 +44,14 @@ public interface IChannelManager {
 	String getDiscordContentTeamChannelId();
 
 	void setDiscordContentTeamChannelId(String discordContentTeamChannelId);
-
+	
+	String getDiscordBotspamChannelId();
+	
 	String getDiscordInCharacterChannelId();
 
 	void setDiscordInCharacterChannelId(String discordInCharacterChannelId);
 
 	void clearDiscordQueue();
+
+	void setDiscordBotspamChannelId(String discordBotspamChannelId);
 }
