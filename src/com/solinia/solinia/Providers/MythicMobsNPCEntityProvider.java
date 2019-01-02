@@ -267,6 +267,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		if (npc.isRaidboss()) {
 			movementSpeed = Utils.getRaidBossRunSpeed();
 		}
+		
+		if (npc.getForcedMaxHp() > 0)
+			hp = npc.getForcedMaxHp();
 
 		mob = mob + "  Health: " + hp + "\r\n";
 		mob = mob + "  Damage: " + damage + "\r\n";
