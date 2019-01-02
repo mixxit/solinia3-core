@@ -12,6 +12,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandToggleGlow implements CommandExecutor {
 	@Override
@@ -39,7 +40,7 @@ public class CommandToggleGlow implements CommandExecutor {
 	    				Entity currentTarget = Bukkit.getEntity(StateManager.getInstance().getEntityManager().getEntityTargets().get(player.getUniqueId()));
 	    				if (currentTarget != null)
 	    				{
-	    					GlowAPI.setGlowing((Entity)currentTarget, false, player);
+	    					Utils.setGlowing((Entity)currentTarget, false, player);
 	    				}
 	    			}
 	            }

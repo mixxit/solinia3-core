@@ -47,6 +47,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.inventivetalent.glow.GlowAPI;
 
 import com.comphenix.example.Vector3D;
 import com.google.gson.JsonObject;
@@ -7015,5 +7016,30 @@ public class Utils {
 		}
 		
 		return true;
+	}
+
+	public static void setGlowing(Entity target, boolean b, Player source) {
+		if (source == null || target == null || source.isDead() || target.isDead())
+			return;
+		
+		try
+		{
+			GlowAPI.setGlowing(target,b,source);
+		} catch (Exception e)
+		{
+			System.out.println("Issue with glowAPI");			
+		}
+	}
+	public static void setGlowing(Entity target, GlowAPI.Color color, Player source) {
+		if (source == null || target == null || source.isDead() || target.isDead())
+			return;
+
+		try
+		{
+			GlowAPI.setGlowing(target,color,source);
+		} catch (Exception e)
+		{
+			System.out.println("Issue with glowAPI");			
+		}
 	}
 }

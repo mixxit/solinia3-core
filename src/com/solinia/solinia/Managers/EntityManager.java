@@ -1257,7 +1257,7 @@ public class EntityManager implements IEntityManager {
 						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
 						
 						if (solPlayer != null && solPlayer.isGlowTargetting())
-							GlowAPI.setGlowing((Entity)currentTarget, false, (Player)source);
+							Utils.setGlowing((Entity)currentTarget, false, (Player)source);
 					} catch (CoreStateInitException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -1293,7 +1293,7 @@ public class EntityManager implements IEntityManager {
 						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
 						
 						if (solPlayer != null && solPlayer.isGlowTargetting())
-							GlowAPI.setGlowing((Entity)currentTarget, false, (Player)source);
+							Utils.setGlowing((Entity)currentTarget, false, (Player)source);
 					} catch (CoreStateInitException e)
 					{
 						
@@ -1311,13 +1311,7 @@ public class EntityManager implements IEntityManager {
 					if (solPlayer != null && solPlayer.isGlowTargetting())
 					{
 						toggleGlow = solPlayer.isGlowTargetting();
-						try
-						{
-							GlowAPI.setGlowing((Entity)target, GlowAPI.Color.DARK_AQUA, (Player)source);
-						} catch (Exception e)
-						{
-							e.printStackTrace();
-						}
+						Utils.setGlowing((Entity)target, GlowAPI.Color.DARK_AQUA, (Player)source);
 					}
 				} catch (CoreStateInitException e)
 				{
