@@ -7024,7 +7024,7 @@ public class Utils {
 		
 		try
 		{
-			GlowAPI.setGlowing(target,b,source);
+			//GlowAPI.setGlowing(target,b,source);
 		} catch (Exception e)
 		{
 			System.out.println("Issue with glowAPI");			
@@ -7036,7 +7036,7 @@ public class Utils {
 
 		try
 		{
-			GlowAPI.setGlowing(target,color,source);
+			//GlowAPI.setGlowing(target,color,source);
 		} catch (Exception e)
 		{
 			System.out.println("Issue with glowAPI");			
