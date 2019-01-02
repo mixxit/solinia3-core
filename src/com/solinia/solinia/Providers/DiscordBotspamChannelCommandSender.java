@@ -104,7 +104,7 @@ public class DiscordBotspamChannelCommandSender implements RemoteConsoleCommandS
 
 	@Override
 	public void sendMessage(String message) {
-		StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getDiscordAdminChannelId(), message);
+		StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getDiscordBotspamChannelId(), message);
 	}
 
 	@Override

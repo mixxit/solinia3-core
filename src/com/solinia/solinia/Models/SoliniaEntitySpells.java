@@ -242,11 +242,11 @@ public class SoliniaEntitySpells {
 		{
 			try {
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-				System.out.println("End of charm, attempting removal of pet");
+				//System.out.println("End of charm, attempting removal of pet");
 				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null)
 				{
 					StateManager.getInstance().getEntityManager().removePet(activeSpell.getSourceUuid(), false);
-					System.out.println("Pet being removed");
+					//System.out.println("Pet being removed");
 				} else {
 					System.out.println("Could not remove pet");
 				}
