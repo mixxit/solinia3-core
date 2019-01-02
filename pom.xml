@@ -50,6 +50,10 @@
       </releases>
     </repository>
     <repository>
+		<id>inventive-repo</id>
+		<url>https://repo.inventivetalent.org/content/groups/public/</url>
+	</repository>
+    <repository>
       <id>2_solinia-snapshots</id>
       <url>http://play.fallofanempire.com:8081/nexus/content/repositories/snapshots/</url>
       <snapshots>
