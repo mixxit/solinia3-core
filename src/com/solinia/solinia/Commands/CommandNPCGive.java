@@ -1,6 +1,7 @@
 package com.solinia.solinia.Commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -124,6 +125,17 @@ public class CommandNPCGive implements CommandExecutor {
 						
 					eventHandler.awardPlayer((Player)player);
 					Utils.removeItemsFromInventory(player, itemid, 1);
+					
+					if (eventHandler.getTeleportResponse() != null && !eventHandler.getTeleportResponse().equals("")) {
+						String[] zonedata = eventHandler.getTeleportResponse().split(",");
+						// Dissasemble the value to ensure it is correct
+						String world = zonedata[0];
+						double x = Double.parseDouble(zonedata[1]);
+						double y = Double.parseDouble(zonedata[2]);
+						double z = Double.parseDouble(zonedata[3]);
+						Location loc = new Location(Bukkit.getWorld(world), x, y, z);
+						player.teleport(loc);
+					}
 				}
 			}
 			
