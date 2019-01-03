@@ -412,6 +412,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 		this.getCommand("transfercharacter").setExecutor(new CommandTransferCharacter());
 		this.getCommand("playeremote").setExecutor(new CommandPlayerEmote());
+		this.getCommand("consider").setExecutor(new CommandConsider());
 		this.getCommand("editchunk").setExecutor(new CommandEditChunk());
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("commit").setExecutor(new CommandCommit());

@@ -1307,11 +1307,13 @@ public class EntityManager implements IEntityManager {
 			{
 				try {
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
+					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(target);
+					ISoliniaLivingEntity solPlayerEntity = SoliniaLivingEntityAdapter.Adapt((Player)source);
 					
-					if (solPlayer != null && solPlayer.isGlowTargetting())
+					if (solPlayer != null && solEntity != null && solPlayerEntity != null && solPlayer.isGlowTargetting())
 					{
 						toggleGlow = solPlayer.isGlowTargetting();
-						Utils.setGlowing((Entity)target, GlowAPI.Color.DARK_AQUA, (Player)source);
+						Utils.setGlowing((Entity)target, Utils.getGlowColor(solEntity.getLevelCon(solPlayerEntity)), (Player)source);
 					}
 				} catch (CoreStateInitException e)
 				{

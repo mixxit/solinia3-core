@@ -11,6 +11,11 @@ commands:
     description: Commits Solinia3Core State Data
     usage: /commit
     aliases: []
+  consider:
+    description: Considers the faction standing of your target
+    usage: /consider
+    aliases:
+    - con   
   debugger:
     description: Debugs Solinia Core Functions
     usage: /debugger classname methodname focusid

@@ -48,6 +48,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.inventivetalent.glow.GlowAPI;
+import org.inventivetalent.glow.GlowAPI.Color;
 
 import com.comphenix.example.Vector3D;
 import com.google.gson.JsonObject;
@@ -7040,6 +7041,47 @@ public class Utils {
 		} catch (Exception e)
 		{
 			System.out.println("Issue with glowAPI");			
+		}
+	}
+
+	public static Color getGlowColor(org.bukkit.ChatColor color) {
+		
+		switch (color)
+		{
+			case AQUA:
+				return Color.AQUA;
+			case BLACK:
+				return Color.BLACK;
+			case BLUE:
+				return Color.BLUE;
+			case DARK_AQUA:
+				return Color.DARK_AQUA;
+			case DARK_BLUE:
+				return Color.DARK_BLUE;
+			case DARK_GRAY:
+				return Color.DARK_GRAY;
+			case DARK_GREEN:
+				return Color.DARK_GREEN;
+			case DARK_PURPLE:
+				return Color.DARK_PURPLE;
+			case DARK_RED:
+				return Color.DARK_RED;
+			case GOLD:
+				return Color.GOLD;
+			case GRAY:
+				return Color.GRAY;
+			case GREEN:
+				return Color.GREEN;
+			case LIGHT_PURPLE:
+				return Color.PURPLE;
+			case RED:
+				return Color.RED;
+			case WHITE:
+				return Color.WHITE;
+			case YELLOW:
+				return Color.YELLOW;
+			default:
+				return Color.WHITE;
 		}
 	}
 }
