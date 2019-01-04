@@ -3996,9 +3996,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getProcChancePct() {
-		// (Dexterity / 35) / 25
 		int dexterity = 75;
 		int procchanceextra = 0;
+		
 		if (this.getBukkitLivingEntity() instanceof Player) {
 			try {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
@@ -4032,10 +4032,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (this.getNpcid() > 0)
 			dexterity = getDexterity();
-
-		float dexdiv = (dexterity / 35);
-		float fina = ((dexdiv / 25) * 100);
-		int procChance = (int) Math.floor(fina);
+		
+		// settings
+		int averageProcsPerMinute = 2;
+		float procsPerMinDexContrib = 0.07f;
+		int weaponSpeed = 35;
+		float procChance = (weaponSpeed * averageProcsPerMinute) / 6;
+		float procBonus = dexterity * procsPerMinDexContrib;
+		int procChanceFinal = (int)Math.floor(procChance + procBonus);
 
 		int lowestProcChanceSpellBuff = 0;
 		int highestProcChanceSpellBuff = 100;
@@ -4056,7 +4060,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		else
 			procchanceextra += highestProcChanceSpellBuff;
 
-		return procChance + procchanceextra;
+		int finalprocchanceextra = (int)Math.floor(procchanceextra / 100);
+		
+		return (int)Math.floor(procChance + finalprocchanceextra);
 	}
 
 	@Override
