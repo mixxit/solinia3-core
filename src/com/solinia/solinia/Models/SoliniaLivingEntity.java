@@ -4062,7 +4062,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		int finalprocchanceextra = (int)Math.floor(procchanceextra / 10);
 		
-		return (int)Math.floor(procChance + finalprocchanceextra);
+		return (int)Math.floor(procChanceFinal + finalprocchanceextra);
 	}
 
 	@Override
