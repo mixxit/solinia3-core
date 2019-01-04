@@ -1504,6 +1504,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
 			if (AArank != null) {
 				for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
+					Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(), "FoundSpellCastingExpertise level: " + rankEffect.getBase1());
+
 					if (rankEffect.getBase1() > no_fizzle_level)
 						no_fizzle_level = rankEffect.getBase1();
 				}
@@ -1517,6 +1519,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aaMasteryOfThePast);
 				if (AArank != null) {
 					for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
+						Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(), "FoundMasteryOfPast level: " + rankEffect.getBase1());
+
 						if (rankEffect.getBase1() > no_fizzle_level)
 							no_fizzle_level = rankEffect.getBase1();
 					}
@@ -1526,6 +1530,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		}
 
+		Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(), "MinLevelClass check: " + spell.getMinLevelClass(getClassObj().getName()) + " is less than no_fizzle_level " + no_fizzle_level + "?");
 		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level) {
 			return true;
 		}

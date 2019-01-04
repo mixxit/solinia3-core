@@ -1812,11 +1812,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// Chance to proc
 					int procChance = getProcChancePct();
 					int roll = Utils.RandomBetween(0, 100);
-					if (attackerSolEntity.getBukkitLivingEntity() instanceof Player) {
-						if (attackerSolEntity.getBukkitLivingEntity().isOp()) {
-							System.out.println(attackerSolEntity.getName() + " chance to proc on hit: " + procChance + " roll: " + roll + " Riposte: " + isRiposte + " Doubleattack: " + isDoubleAttack);
-						}
-					}
+					
+					Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerSolEntity.getName(), "FoundSpellCastingExpertise level: " + "Chance to proc on hit: " + procChance + " roll: " + roll + " Riposte: " + isRiposte + " Doubleattack: " + isDoubleAttack);
 
 					if (roll < procChance) {
 
