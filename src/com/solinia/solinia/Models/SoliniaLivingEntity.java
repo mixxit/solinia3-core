@@ -1647,7 +1647,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					try {
 						ISoliniaItem soliniaitem = SoliniaItemAdapter
 								.Adapt(attackerEntity.getEquipment().getItemInMainHand());
-						TryProcItem(soliniaitem, attackerSolEntity, defender);
+						TryProcItem(soliniaitem, attackerSolEntity, defender, false, false, false);
 					} catch (CoreStateInitException e) {
 
 					} catch (SoliniaItemException e) {
@@ -1734,11 +1734,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private void TryProcItem(ISoliniaItem soliniaitem, ISoliniaLivingEntity attackerSolEntity,
-			ISoliniaLivingEntity defender) {
+			ISoliniaLivingEntity defender, boolean isRiposte,
+			boolean isDoubleAttack, boolean isDualWield) {
 		final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
 		final UUID attackerUUID = attackerSolEntity.getBukkitLivingEntity().getUniqueId();
 
 		final int finalitemid = soliniaitem.getId();
+		final boolean fisRiposte = isRiposte;
+		final boolean fisDoubleAttack = isDoubleAttack;
+		final boolean fisDualWield = isDualWield;
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
 				new Runnable() {
@@ -1759,7 +1763,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							if (solLivingEntity == null)
 								return;
 
-							solLivingEntity.doProcItem(finalitemid, attackerUUID, defenderUUID);
+							solLivingEntity.doProcItem(finalitemid, attackerUUID, defenderUUID, fisRiposte, fisDoubleAttack, fisDualWield);
 						} catch (Exception e) {
 							System.out.println("An error occured during the doProcItem scheduler: " + e.getMessage()
 									+ " " + e.getStackTrace());
@@ -1769,7 +1773,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID) {
+	public void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean isRiposte, boolean isDoubleAttack, boolean isDualWield) {
 		if (procItemId < 1)
 			return;
 
@@ -1810,8 +1814,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int roll = Utils.RandomBetween(0, 100);
 					if (attackerSolEntity.getBukkitLivingEntity() instanceof Player) {
 						if (attackerSolEntity.getBukkitLivingEntity().isOp()) {
-							System.out.println(attackerSolEntity.getName() + " chance to proc on hit: " + procChance
-									+ " roll: " + roll);
+							System.out.println(attackerSolEntity.getName() + " chance to proc on hit: " + procChance + " roll: " + roll + " Riposte: " + isRiposte + " Doubleattack: " + isDoubleAttack);
 						}
 					}
 
@@ -2170,7 +2173,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaItem offhandItem = StateManager.getInstance().getConfigurationManager().getItem(offhandItemId);
 				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter
 						.Adapt((LivingEntity) getBukkitLivingEntity());
-				TryProcItem(offhandItem, attackerSolEntity, defender);
+				TryProcItem(offhandItem, attackerSolEntity, defender, false, false, true);
 			} catch (CoreStateInitException e) {
 
 			}

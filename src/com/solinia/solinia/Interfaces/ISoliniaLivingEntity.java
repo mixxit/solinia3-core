@@ -292,7 +292,7 @@ public interface ISoliniaLivingEntity
 
 	public void doDualWield(UUID defenderUUID, int final_damagedone, int offHandItemId);
 
-	void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID);
+	void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean isRiposte, boolean isDoubleAttack, boolean offHand);
 
 	void doTeleportAttack(LivingEntity teleportedEntity);
 
