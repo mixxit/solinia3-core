@@ -4060,7 +4060,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		else
 			procchanceextra += highestProcChanceSpellBuff;
 
-		int finalprocchanceextra = (int)Math.floor(procchanceextra / 100);
+		int finalprocchanceextra = (int)Math.floor(procchanceextra / 10);
 		
 		return (int)Math.floor(procChance + finalprocchanceextra);
 	}
