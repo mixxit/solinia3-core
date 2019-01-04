@@ -1776,13 +1776,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean isRiposte, boolean isDoubleAttack, boolean isDualWield) {
 		if (procItemId < 1)
 			return;
-
+		
 		Entity attackerEntity = Bukkit.getEntity(attackerEntityUUID);
 		Entity defenderEntity = Bukkit.getEntity(defenderEntityUUID);
 
 		if (attackerEntity == null || defenderEntity == null)
 			return;
 
+		Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), "Starting doProcItem for ");
+		
 		if (attackerEntity.isDead() || defenderEntity.isDead())
 			return;
 
@@ -1813,7 +1815,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int procChance = getProcChancePct();
 					int roll = Utils.RandomBetween(0, 100);
 					
-					Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerSolEntity.getName(), "FoundSpellCastingExpertise level: " + "Chance to proc on hit: " + procChance + " roll: " + roll + " Riposte: " + isRiposte + " Doubleattack: " + isDoubleAttack);
+					Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), "Chance to proc on hit: " + procChance + " roll: " + roll + " Riposte: " + isRiposte + " Doubleattack: " + isDoubleAttack);
 
 					if (roll < procChance) {
 

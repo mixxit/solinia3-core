@@ -1478,9 +1478,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean checkDoesntFizzle(ISoliniaSpell spell) {
+		Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(), "Starting checkDoesntFizzle for " + getBukkitPlayer().getName());
+		
 		if (getBukkitPlayer().isOp())
+		{
+			Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(), "checkDoesntFizzle was never fizzle as player is an Op");
 			return true;
-
+		}
+			
 		// todo fizzle free features
 
 		int no_fizzle_level = 0;
