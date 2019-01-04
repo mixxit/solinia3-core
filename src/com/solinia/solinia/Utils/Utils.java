@@ -6784,12 +6784,7 @@ public class Utils {
 			return 0D;
 		
 		double distanceLimit = entity.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).getValue();
-		
-		if (attacker.isOp())
-		{
-			System.out.println("OP Attacker Distance check: " + distanceLimit);
-		}
-		
+				
 		if (distance > distanceLimit)
 			return distance-distanceLimit;
 		
