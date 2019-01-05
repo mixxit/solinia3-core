@@ -6975,7 +6975,7 @@ public class Utils {
 					continue;
 				
 				DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger().get(debuggerUuid);
-				if (!settings.isDebugging(coreclass, method))
+				if (!settings.isDebugging(coreclass, method, focusid))
 					continue;
 				
 				entity.sendMessage(coreclass + ":" + method + ":" + focusid + ":" + message);

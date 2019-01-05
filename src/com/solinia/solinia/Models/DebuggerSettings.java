@@ -21,13 +21,16 @@ public class DebuggerSettings {
 			debugValues.remove(key);
 	}
 	
-	public boolean isDebugging(String classToDebug, String methodToDebug)
+	public boolean isDebugging(String classToDebug, String methodToDebug, String focusId)
 	{
 		String key = classToDebug+"-"+methodToDebug;
 		if (!this.debugValues.containsKey(key))
 			return false;
 		
 		if (this.debugValues.get(key).equals("0"))
+			return false;
+
+		if (!this.debugValues.get(key).equals(focusId))
 			return false;
 		
 		return true;
