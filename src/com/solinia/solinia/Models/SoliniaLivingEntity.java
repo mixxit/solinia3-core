@@ -1815,7 +1815,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int procChance = getProcChancePct();
 					int roll = Utils.RandomBetween(0, 100);
 					
-					Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), "Chance to proc on hit: " + procChance + " roll: " + roll + " Riposte: " + isRiposte + " Doubleattack: " + isDoubleAttack + " isDualWield: " isDualWield);
+					Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), "Chance to proc on hit: " + procChance + " roll: " + roll + " Riposte: " + isRiposte + " Doubleattack: " + isDoubleAttack + " isDualWield: " + isDualWield);
 
 					if (roll < procChance) {
 
