@@ -99,6 +99,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int forearmsItem = 0;
 	private int armsItem = 0;
 	private int handsItem = 0;
+	private int waistItem = 0;
 	private Personality personality = new Personality();
 	
 	private int lastX = 0;
@@ -112,6 +113,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String forearmsItemInstance = "";
 	private String armsItemInstance = "";
 	private String handsItemInstance = "";
+	private String waistItemInstance = "";
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
 	private ConcurrentHashMap<String, Integer> monthlyVote = new ConcurrentHashMap<String, Integer>();
@@ -3276,6 +3278,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
+	public int getWaistItem() {
+		return waistItem;
+	}
+
+	@Override
+	public void setWaistItem(int waistItem) {
+		this.waistItem = handsItem;
+	}
+
+	
+	@Override
 	public String getFingersItemInstance() {
 		return fingersItemInstance;
 	}
@@ -3344,6 +3357,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setHandsItemInstance(String handsItemInstance) {
 		this.handsItemInstance = handsItemInstance;
 	}
+	
+	@Override
+	public String getWaistItemInstance() {
+		return waistItemInstance;
+	}
+
+	@Override
+	public void setWaistItemInstance(String waistItemInstance) {
+		this.waistItemInstance = waistItemInstance;
+	}
+
 
 	@Override
 	public ISoliniaLivingEntity getSoliniaLivingEntity() {

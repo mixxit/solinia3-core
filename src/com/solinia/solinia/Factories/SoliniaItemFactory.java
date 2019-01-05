@@ -162,6 +162,11 @@ public class SoliniaItemFactory {
 			handsItem.setEquipmentSlot(EquipmentSlot.Hands);
 			handsItem.setDiscoverer(discoverer);
 			handsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
+
+			ISoliniaItem waistItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			waistItem.setEquipmentSlot(EquipmentSlot.Waist);
+			waistItem.setDiscoverer(discoverer);
+			waistItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
 			items.add(headItem.getId());
 			items.add(chestItem.getId());
@@ -176,6 +181,7 @@ public class SoliniaItemFactory {
 			items.add(forearmsItem.getId());
 			items.add(armsItem.getId());
 			items.add(handsItem.getId());
+			items.add(waistItem.getId());
 			
 			for(Integer i : items)
 			{
@@ -261,6 +267,9 @@ public class SoliniaItemFactory {
 						if (item.getEquipmentSlot().equals(EquipmentSlot.Hands))
 							jewelryTypeName = "Gloves";
 	
+						if (item.getEquipmentSlot().equals(EquipmentSlot.Waist))
+							jewelryTypeName = "Belt";
+						
 						item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
 					}
 				}

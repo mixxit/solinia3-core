@@ -145,6 +145,11 @@ public class ItemStackAdapter {
 			loretxt.add(ChatColor.AQUA + "/EQUIP : FINGERS" + ChatColor.RESET);
 		}
 		
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Waist))
+		{
+			loretxt.add(ChatColor.AQUA + "/EQUIP : WAIST" + ChatColor.RESET);
+		}
+		
 		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Neck))
 		{
 			loretxt.add(ChatColor.AQUA + "/EQUIP : NECK" + ChatColor.RESET);

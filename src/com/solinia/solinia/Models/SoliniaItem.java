@@ -1563,7 +1563,7 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public boolean isAdditionalArmour() {
 		// TODO Auto-generated method stub
-		return (equipmentSlot.equals(EquipmentSlot.Forearms) || equipmentSlot.equals(EquipmentSlot.Arms) || equipmentSlot.equals(EquipmentSlot.Hands));
+		return (equipmentSlot.equals(EquipmentSlot.Forearms) || equipmentSlot.equals(EquipmentSlot.Arms) || equipmentSlot.equals(EquipmentSlot.Hands) || equipmentSlot.equals(EquipmentSlot.Waist));
 	}
 
 	@Override

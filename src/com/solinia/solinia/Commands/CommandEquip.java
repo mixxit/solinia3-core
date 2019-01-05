@@ -109,6 +109,20 @@ public class CommandEquip implements CommandExecutor {
 							solPlayer.updateMaxHp();
 							return true;
 						}
+					
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Waist))
+						if (solPlayer.getWaistItem() > 0) {
+							player.sendMessage("You have already equipped an item in that slot");
+							return true;
+						} else {
+							solPlayer.setWaistItem(item.getId());
+							solPlayer.setWaistItemInstance(StateManager.getInstance().getInstanceGuid());
+							player.getInventory().setItemInMainHand(null);
+							player.updateInventory();
+							player.sendMessage("You have equipped this item");
+							solPlayer.updateMaxHp();
+							return true;
+						}
 
 					if (item.getEquipmentSlot().equals(EquipmentSlot.Shoulders))
 						if (solPlayer.getShouldersItem() > 0) {

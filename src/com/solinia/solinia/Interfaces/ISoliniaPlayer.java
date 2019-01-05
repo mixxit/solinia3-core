@@ -449,4 +449,12 @@ public interface ISoliniaPlayer extends Serializable {
 	void increaseMonthlyVote(Integer amount);
 
 	Integer getMonthlyVote();
+
+	int getWaistItem();
+
+	void setWaistItem(int waistItem);
+
+	String getWaistItemInstance();
+
+	void setWaistItemInstance(String waistItemInstance);
 }
