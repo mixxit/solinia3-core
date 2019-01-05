@@ -192,7 +192,7 @@ public interface ISoliniaLivingEntity
 
 	void removeDeathSaves();
 
-	void damage(double damage, Entity sourceEntity);
+	void damage(double damage, Entity sourceEntity, boolean tryProc, boolean isMelee, boolean isOffhand);
 
 	public boolean isBehindEntity(LivingEntity livingEntity);
 
@@ -292,7 +292,7 @@ public interface ISoliniaLivingEntity
 
 	public void doDualWield(UUID defenderUUID, int final_damagedone, int offHandItemId);
 
-	void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean isRiposte, boolean isDoubleAttack, boolean offHand);
+	void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean offHand);
 
 	void doTeleportAttack(LivingEntity teleportedEntity);
 
@@ -331,4 +331,5 @@ public interface ISoliniaLivingEntity
 			boolean canRiposte, int reuseTime);
 
 	boolean canDoSpecialAttack(LivingEntity other);
+
 }

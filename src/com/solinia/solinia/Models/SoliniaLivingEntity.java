@@ -1586,128 +1586,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 
 			if (!arrowHit)
-				if (getDualWieldCheck() && !attackerEntity.isDead() && !defender.getBukkitLivingEntity().isDead()) {
-					ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
-					int baseDamage2 = (int) ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);
-
-					DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, baseDamage2, false, defender);
-
-					final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
-					final UUID attackerUUID = this.getBukkitLivingEntity().getUniqueId();
-					final int final_damagedone = my_hit2.damage_done;
-
-					int offHandItemId = 0;
-					if (Utils.IsSoliniaItem(weapon2)) {
-
-						try {
-							ISoliniaItem item = SoliniaItemAdapter.Adapt(weapon2);
-							offHandItemId = item.getId();
-						} catch (SoliniaItemException | CoreStateInitException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
-					final int final_offhandItemId = offHandItemId;
-
-					Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
-							new Runnable() {
-								public void run() {
-									try {
-										Entity entity = Bukkit.getEntity(attackerUUID);
-
-										if (entity == null || !(entity instanceof LivingEntity))
-											return;
-
-										ISoliniaLivingEntity solLivingEntity = null;
-										try {
-											solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
-										} catch (CoreStateInitException e) {
-
-										}
-
-										if (solLivingEntity == null)
-											return;
-
-										solLivingEntity.doDualWield(defenderUUID, final_damagedone,
-												final_offhandItemId);
-									} catch (Exception e) {
-										System.out.println("An error occured during the doDualWield scheduler: "
-												+ e.getMessage() + " " + e.getStackTrace());
-									}
-								}
-							});
-
-				}
-
-			try {
-				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt(attackerEntity);
-
-				if (Utils.IsSoliniaItem(attackerEntity.getEquipment().getItemInMainHand())) {
-					try {
-						ISoliniaItem soliniaitem = SoliniaItemAdapter
-								.Adapt(attackerEntity.getEquipment().getItemInMainHand());
-						TryProcItem(soliniaitem, attackerSolEntity, defender, false, false, false);
-					} catch (CoreStateInitException e) {
-
-					} catch (SoliniaItemException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-				// Check if attacker has any WeaponProc effects
-				SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
-						.getActiveEntitySpells(attackerEntity);
-
-				if (effects != null) {
-					for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
-						ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-								.getSpell(activeSpell.getSpellId());
-						if (spell == null)
-							continue;
-
-						if (!spell.isWeaponProc())
-							continue;
-
-						for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
-							if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)
-									|| spelleffect.getSpellEffectType().equals(SpellEffectType.AddMeleeProc)) {
-								if (spelleffect.getBase() < 0)
-									continue;
-
-								ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
-										.getSpell(spelleffect.getBase());
-								if (spell == null)
-									continue;
-
-								// Chance to proc
-								int procChance = getProcChancePct();
-								int roll = Utils.RandomBetween(0, 100);
-
-								if (roll < procChance) {
-									boolean itemUseSuccess = procSpell.tryApplyOnEntity(attackerEntity,
-											defender.getBukkitLivingEntity());
-
-									if (itemUseSuccess) {
-										checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
-									}
-
-									if (procSpell.getActSpellCost(this) > 0)
-										if (itemUseSuccess) {
-											if (attackerEntity instanceof Player) {
-												SoliniaPlayerAdapter.Adapt((Player) attackerEntity)
-														.reducePlayerMana(procSpell.getActSpellCost(this));
-											}
-										}
-								}
-							}
-						}
-					}
-				}
-			} catch (CoreStateInitException e) {
-
-			}
+				TryDualWield(this.getBukkitLivingEntity(),defender);
 
 			// end of what was old only player code
 
@@ -1733,15 +1612,68 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
+	private void TryDualWield(LivingEntity attackerEntity, ISoliniaLivingEntity defender) {
+		if (getDualWieldCheck() && !attackerEntity.isDead() && !defender.getBukkitLivingEntity().isDead()) {
+			ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
+			int baseDamage2 = (int) ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);
+
+			DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, baseDamage2, false, defender);
+
+			final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
+			final UUID attackerUUID = this.getBukkitLivingEntity().getUniqueId();
+			final int final_damagedone = my_hit2.damage_done;
+
+			int offHandItemId = 0;
+			if (Utils.IsSoliniaItem(weapon2)) {
+
+				try {
+					ISoliniaItem item = SoliniaItemAdapter.Adapt(weapon2);
+					offHandItemId = item.getId();
+				} catch (SoliniaItemException | CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			final int final_offhandItemId = offHandItemId;
+
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+					new Runnable() {
+						public void run() {
+							try {
+								Entity entity = Bukkit.getEntity(attackerUUID);
+
+								if (entity == null || !(entity instanceof LivingEntity))
+									return;
+
+								ISoliniaLivingEntity solLivingEntity = null;
+								try {
+									solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
+								} catch (CoreStateInitException e) {
+
+								}
+
+								if (solLivingEntity == null)
+									return;
+
+								solLivingEntity.doDualWield(defenderUUID, final_damagedone,
+										final_offhandItemId);
+							} catch (Exception e) {
+								System.out.println("An error occured during the doDualWield scheduler: "
+										+ e.getMessage() + " " + e.getStackTrace());
+							}
+						}
+					});
+
+		}
+	}
+
 	private void TryProcItem(ISoliniaItem soliniaitem, ISoliniaLivingEntity attackerSolEntity,
-			ISoliniaLivingEntity defender, boolean isRiposte,
-			boolean isDoubleAttack, boolean isDualWield) {
+			ISoliniaLivingEntity defender, boolean isDualWield) {
 		final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
 		final UUID attackerUUID = attackerSolEntity.getBukkitLivingEntity().getUniqueId();
 
 		final int finalitemid = soliniaitem.getId();
-		final boolean fisRiposte = isRiposte;
-		final boolean fisDoubleAttack = isDoubleAttack;
 		final boolean fisDualWield = isDualWield;
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
@@ -1763,7 +1695,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							if (solLivingEntity == null)
 								return;
 
-							solLivingEntity.doProcItem(finalitemid, attackerUUID, defenderUUID, fisRiposte, fisDoubleAttack, fisDualWield);
+							solLivingEntity.doProcItem(finalitemid, attackerUUID, defenderUUID, fisDualWield);
 						} catch (Exception e) {
 							System.out.println("An error occured during the doProcItem scheduler: " + e.getMessage()
 									+ " " + e.getStackTrace());
@@ -1773,7 +1705,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean isRiposte, boolean isDoubleAttack, boolean isDualWield) {
+	public void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean isDualWield) {
 		if (procItemId < 1)
 			return;
 		
@@ -1815,7 +1747,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int procChance = getProcChancePct();
 					int roll = Utils.RandomBetween(0, 100);
 					
-					Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), "Chance to proc on hit: " + procChance + " roll: " + roll + " Riposte: " + isRiposte + " Doubleattack: " + isDoubleAttack + " isDualWield: " + isDualWield);
+					Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), "Chance to proc on hit: " + procChance + " roll: " + roll + " isDualWield: " + isDualWield);
 
 					if (roll < procChance) {
 
@@ -1929,7 +1861,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void damage(double damage, Entity sourceEntity) {
+	public void damage(double damage, Entity sourceEntity, boolean tryProc, boolean isMelee, boolean isOffhand) {
 		if (sourceEntity == null || getBukkitLivingEntity() == null || sourceEntity.isDead()
 				|| getBukkitLivingEntity().isDead())
 			return;
@@ -1949,8 +1881,37 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e) {
 
 		}
-
+		
 		getBukkitLivingEntity().damage(damage, sourceEntity);
+		
+		// Try melee procs
+		if (isMelee && sourceEntity instanceof LivingEntity && !this.getBukkitLivingEntity().isDead() && !sourceEntity.isDead())
+		{
+			try {
+				ISoliniaItem attackItem = null;
+				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sourceEntity);
+				
+				if (!isOffhand && Utils.IsSoliniaItem(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+					attackItem = SoliniaItemAdapter.Adapt(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInMainHand());
+				}
+	
+				if (isOffhand && Utils.IsSoliniaItem(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand())) {
+					attackItem = SoliniaItemAdapter.Adapt(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand());
+				}
+				
+				if (attackItem != null) {
+					TryProcItem(attackItem, attackerSolEntity, this, isOffhand);
+				}
+			} catch (CoreStateInitException e) {
+				
+			} catch (SoliniaItemException e) {
+				
+			} catch (Exception e)
+			{
+				System.out.println("Failed to perform proc in damage routine");
+				e.printStackTrace(arg0);
+			}
+		}
 
 		checkNumHitsRemaining(NumHit.IncomingHitAttempts);
 		if (!sourceEntity.isDead() && sourceEntity instanceof LivingEntity) {
@@ -2145,7 +2106,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (defender.getBukkitLivingEntity().isDead())
 			return;
 
-		defender.damage(damageDone, getBukkitLivingEntity());
+		defender.damage(damageDone, getBukkitLivingEntity(), true, true, true);
 
 		// Only players get skill rise
 		if (getBukkitLivingEntity() instanceof Player) {
@@ -2163,18 +2124,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(100, 100, 100)) {
 				if (listening instanceof Player)
 					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
-			}
-		}
-
-		// Offhand Proc
-		if (offhandItemId > 0) {
-			try {
-				ISoliniaItem offhandItem = StateManager.getInstance().getConfigurationManager().getItem(offhandItemId);
-				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter
-						.Adapt((LivingEntity) getBukkitLivingEntity());
-				TryProcItem(offhandItem, attackerSolEntity, defender, false, false, true);
-			} catch (CoreStateInitException e) {
-
 			}
 		}
 	}
@@ -2210,7 +2159,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			tryIncreaseSkill("DOUBLEATTACK", 1);
 		}
 
-		defender.damage(damageDone, getBukkitLivingEntity());
+		defender.damage(damageDone, getBukkitLivingEntity(), false, true, false);
 	}
 
 	@Override
@@ -2245,7 +2194,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isPlayer()) {
 			((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* "
 					+ defender.getBukkitLivingEntity().getCustomName() + " ripostes your attack!");
-			damage(originalDamage, getBukkitLivingEntity());
+			damage(originalDamage, getBukkitLivingEntity(), false, true, false);
 		}
 	}
 
