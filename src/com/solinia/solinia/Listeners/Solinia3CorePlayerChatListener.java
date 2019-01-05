@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import com.solinia.solinia.Solinia3CorePlugin;
-import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
+import com.solinia.solinia.Events.SoliniaSyncPlayerChatEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
@@ -22,16 +22,9 @@ public class Solinia3CorePlayerChatListener implements Listener {
 	}
 	
 	@EventHandler
-	public void OnChat(SoliniaAsyncPlayerChatEvent event) {
+	public void OnChat(SoliniaSyncPlayerChatEvent event) {
 		if (event.isCancelled())
 			return;
-		
-		if (!(event.getRawEvent() instanceof AsyncPlayerChatEvent))
-			return;
-		
-		// We control all chat!
-		AsyncPlayerChatEvent rawEvent = (AsyncPlayerChatEvent)event.getRawEvent();
-		Utils.CancelEvent(rawEvent);
 		
 		String currentChannel = event.getPlayer().getCurrentChannel();
 		

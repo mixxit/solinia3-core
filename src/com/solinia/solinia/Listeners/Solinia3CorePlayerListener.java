@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,8 +43,8 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
-import com.solinia.solinia.Events.SoliniaAsyncPlayerChatEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
+import com.solinia.solinia.Events.SoliniaSyncPlayerChatEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
@@ -1439,24 +1440,43 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onChat(AsyncPlayerChatEvent event) {
 		if (event.isCancelled())
 			return;
+		
+		final UUID playerUuid = event.getPlayer().getUniqueId();
+		final String message = event.getMessage();
+		
+		// We control all chat!
+		AsyncPlayerChatEvent rawEvent = (AsyncPlayerChatEvent)event;
+		Utils.CancelEvent(rawEvent);
+		
+		Bukkit.getScheduler().runTask(plugin, new Runnable() {
+		    @Override
+		    public void run() {
+		    	SoliniaSyncPlayerChatEvent soliniaevent;
+				try {
+					Entity playerEntity = Bukkit.getEntity(playerUuid);
+					if (playerEntity == null)
+						return;
+					
+					if (!(playerEntity instanceof Player))
+						return;
+					
+					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)playerEntity);
 
-		SoliniaAsyncPlayerChatEvent soliniaevent;
-		try {
-			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+					if (solplayer.getLanguage() == null || solplayer.getLanguage().equals("UNKNOWN")) {
+						if (solplayer.getRace() != null) {
+							solplayer.setLanguage(solplayer.getRace().getName().toUpperCase());
+						}
+					}
 
-			if (solplayer.getLanguage() == null || solplayer.getLanguage().equals("UNKNOWN")) {
-				if (solplayer.getRace() != null) {
-					solplayer.setLanguage(solplayer.getRace().getName().toUpperCase());
+					soliniaevent = new SoliniaSyncPlayerChatEvent(solplayer, message);
+					if (soliniaevent != null && Bukkit.getPluginManager() != null)
+						Bukkit.getPluginManager().callEvent(soliniaevent);
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}
-
-			soliniaevent = new SoliniaAsyncPlayerChatEvent(event, solplayer, event.getMessage());
-			if (soliniaevent != null && Bukkit.getPluginManager() != null)
-				Bukkit.getPluginManager().callEvent(soliniaevent);
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		    }
+		});
 	}
 
 }

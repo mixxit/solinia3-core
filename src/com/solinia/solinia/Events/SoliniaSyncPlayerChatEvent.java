@@ -6,19 +6,17 @@ import org.bukkit.event.HandlerList;
 
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
-public class SoliniaAsyncPlayerChatEvent extends Event implements Cancellable  {
+public class SoliniaSyncPlayerChatEvent extends Event implements Cancellable  {
 
 	private boolean cancelled;
 	private static final HandlerList handlers = new HandlerList();
 	private ISoliniaPlayer player;
-	private Event rawevent;
 	private String message;
 
-	public SoliniaAsyncPlayerChatEvent(Event rawevent, ISoliniaPlayer player, String message) 
+	public SoliniaSyncPlayerChatEvent(ISoliniaPlayer player, String message) 
     {
 		this.player = player;
 		this.cancelled = false;
-		this.rawevent = rawevent;
 		this.message = message;
     }
 	
@@ -41,11 +39,6 @@ public class SoliniaAsyncPlayerChatEvent extends Event implements Cancellable  {
     public ISoliniaPlayer getPlayer()
     {
     	return this.player;
-    }
-    
-    public Event getRawEvent()
-    {
-    	return this.rawevent;
     }
     
     public String getMessage()
