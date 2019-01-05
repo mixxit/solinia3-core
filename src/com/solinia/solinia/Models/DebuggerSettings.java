@@ -30,6 +30,9 @@ public class DebuggerSettings {
 		if (this.debugValues.get(key).equals("0"))
 			return false;
 
+		if (this.debugValues.get(key).equals(""))
+			return false;
+		
 		if (!this.debugValues.get(key).equals(focusId))
 			return false;
 		
