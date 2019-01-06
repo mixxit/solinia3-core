@@ -335,4 +335,8 @@ public interface ISoliniaItem {
 	EquipmentSlot getEquipmentSlot();
 
 	void setEquipmentSlot(EquipmentSlot equipmentSlot);
+
+	boolean isHalfening();
+
+	void setHalfening(boolean halfening);
 }

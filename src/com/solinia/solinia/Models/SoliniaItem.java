@@ -94,6 +94,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean throwing = false;
 	private String languagePrimer = "";
 	private int focusEffectId = 0;
+	private boolean halfening = false;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -1608,5 +1609,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setEquipmentSlot(EquipmentSlot equipmentSlot) {
 		this.equipmentSlot = equipmentSlot;
+	}
+
+	@Override
+	public boolean isHalfening() {
+		return halfening;
+	}
+
+	@Override
+	public void setHalfening(boolean halfening) {
+		this.halfening = halfening;
 	}
 }

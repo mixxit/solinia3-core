@@ -63,7 +63,7 @@ public class CommandEditItem implements CommandExecutor {
 		
 		String value = args[2];
 		
-		if (args.length > 3 && (setting.toLowerCase().contains("lore") || setting.toLowerCase().contains("identifymessage")))
+		if (args.length > 3 && (setting.toLowerCase().contains("lore") || setting.toLowerCase().contains("identifymessage") || setting.toLowerCase().contains("displayname")))
 		{
 			value = "";
 			int current = 0;
