@@ -48,9 +48,6 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			{
 				if (player.getInventory().getItem(slotId) == null)
 				{
-					if (slots.contains(slotId))
-						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Monitored Slot is null: " + slotId);
-
 					continue;
 				}
 				
@@ -87,16 +84,38 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Checking isItemStackUptoDate: " + ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i));
 					if (!ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i))
 		    		{
+						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
+						{
+							Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId));
+							ISoliniaItem augItem = null;
+							if (augmentationId != null && augmentationId != 0) {
+								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+								Utils.AddAccountClaim(player.getName(),augItem.getId());
+							}
+						}
+						
 						Utils.AddAccountClaim(player.getName(),i.getId());
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
 						player.sendMessage(ChatColor.GRAY + "Your out of date item " + i.getDisplayname() + " has been added to your claims");
 						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Moved out of date item to claims: " + i.getDisplayname());
+						
+						
 						continue;
 		    		}
 					
 					if (i.getMinLevel() > solplayer.getLevel())
 		    		{
+						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
+						{
+							Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId));
+							ISoliniaItem augItem = null;
+							if (augmentationId != null && augmentationId != 0) {
+								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+								Utils.AddAccountClaim(player.getName(),augItem.getId());
+							}
+						}
+						
 						Utils.AddAccountClaim(player.getName(),i.getId());
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
@@ -110,6 +129,16 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (solplayer.getClassObj() == null)
 					{
+						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
+						{
+							Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId));
+							ISoliniaItem augItem = null;
+							if (augmentationId != null && augmentationId != 0) {
+								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+								Utils.AddAccountClaim(player.getName(),augItem.getId());
+							}
+						}
+						
 						Utils.AddAccountClaim(player.getName(),i.getId());
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
@@ -120,6 +149,16 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (!i.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
 					{
+						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
+						{
+							Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId));
+							ISoliniaItem augItem = null;
+							if (augmentationId != null && augmentationId != 0) {
+								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+								Utils.AddAccountClaim(player.getName(),augItem.getId());
+							}
+						}
+						
 						Utils.AddAccountClaim(player.getName(),i.getId());
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
