@@ -113,11 +113,10 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						}
 						
 						
-						player.sendMessage(ChatColor.GRAY + "Your out of date item " + i.getDisplayname() + " has been added to your claims " + solUp + " vs " + stackUp);
+						player.sendMessage(ChatColor.GRAY + "Your out of date item " + i.getDisplayname() + " has been added to your claims");
+						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Moved out of date item to claims: " + i.getId() + " " + i.getDisplayname() + solUp + " vs " + stackUp);
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
-						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Moved out of date item to claims: " + i.getDisplayname());
-						
 						
 						continue;
 		    		}
