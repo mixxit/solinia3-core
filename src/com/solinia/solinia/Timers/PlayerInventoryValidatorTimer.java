@@ -1,5 +1,7 @@
 package com.solinia.solinia.Timers;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,9 +97,25 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						}
 						
 						Utils.AddAccountClaim(player.getName(),i.getId());
+						Timestamp lastUpdatedTimeSolItem = i.getLastUpdatedTime();
+						
+						String solUp = "";
+						String stackUp = "";
+
+						if (lastUpdatedTimeSolItem != null)
+						{
+							solUp = new SimpleDateFormat("yyyyMMdd").format(lastUpdatedTimeSolItem);
+						}
+						Timestamp lastUpdatedTimeStack = Utils.GetSolLastUpdated(player.getInventory().getItem(slotId));
+						if (lastUpdatedTimeStack != null)
+						{
+							stackUp = new SimpleDateFormat("yyyyMMdd").format(lastUpdatedTimeSolItem);
+						}
+						
+						
+						player.sendMessage(ChatColor.GRAY + "Your out of date item " + i.getDisplayname() + " has been added to your claims " + solUp + " vs " + stackUp);
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
-						player.sendMessage(ChatColor.GRAY + "Your out of date item " + i.getDisplayname() + " has been added to your claims");
 						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Moved out of date item to claims: " + i.getDisplayname());
 						
 						
