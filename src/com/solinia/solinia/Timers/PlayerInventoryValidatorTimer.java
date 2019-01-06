@@ -44,11 +44,13 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			slots.add(40);
 			
 			// Check worn stuff
-			for (int slotId = 0; slotId < 36; slotId++)
+			for (int slotId = 0; slotId <= 40; slotId++)
 			{
 				if (player.getInventory().getItem(slotId) == null)
 				{
-					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Slot is null: " + slotId);
+					if (slots.contains(slotId))
+						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Monitored Slot is null: " + slotId);
+
 					continue;
 				}
 				
