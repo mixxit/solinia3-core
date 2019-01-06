@@ -109,7 +109,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						Timestamp lastUpdatedTimeStack = Utils.GetSolLastUpdated(player.getInventory().getItem(slotId));
 						if (lastUpdatedTimeStack != null)
 						{
-							stackUp = new SimpleDateFormat("yyyyMMdd").format(lastUpdatedTimeSolItem);
+							stackUp = new SimpleDateFormat("yyyyMMdd").format(lastUpdatedTimeStack);
 						}
 						
 						
