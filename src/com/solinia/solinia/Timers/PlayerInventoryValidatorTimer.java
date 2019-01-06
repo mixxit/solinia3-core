@@ -39,10 +39,23 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 			
 			List<Integer> slots = new ArrayList<Integer>();
+			// hot bar
+			slots.add(0);
+			slots.add(1);
+			slots.add(2);
+			slots.add(3);
+			slots.add(4);
+			slots.add(5);
+			slots.add(6);
+			slots.add(7);
+			slots.add(8);
+			
+			// armor
 			slots.add(36);
 			slots.add(37);
 			slots.add(38);
 			slots.add(39);
+			// offhand
 			slots.add(40);
 			
 			// Check worn stuff
