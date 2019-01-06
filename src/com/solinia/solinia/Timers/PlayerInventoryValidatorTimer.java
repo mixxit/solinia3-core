@@ -47,7 +47,10 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			for (int slotId = 0; slotId < 36; slotId++)
 			{
 				if (player.getInventory().getItem(slotId) == null)
+				{
+					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Slot is null: " + slotId);
 					continue;
+				}
 				
 				try
 				{
