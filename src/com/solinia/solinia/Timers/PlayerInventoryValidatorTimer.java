@@ -49,8 +49,6 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 				if (player.getInventory().getItem(slotId) == null)
 					continue;
 				
-				Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Validating player slot: " + slotId);
-				
 				try
 				{
 					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(slotId));
@@ -79,6 +77,9 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					if (!slots.contains(slotId))
 						continue;
 					
+					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Validating player slot: " + slotId);
+					
+					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Checking isItemStackUptoDate: " + ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i));
 					if (!ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i))
 		    		{
 						Utils.AddAccountClaim(player.getName(),i.getId());
@@ -121,6 +122,9 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Moved wrong class item to claims: " + i.getDisplayname());
 						continue;
 					}
+					
+					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Finished validating player slot: " + slotId);
+					
 				} catch (SoliniaItemException e) {
 					continue;
 				}
