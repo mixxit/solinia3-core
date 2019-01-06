@@ -1,5 +1,8 @@
 package com.solinia.solinia.Utils;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -360,5 +363,22 @@ public class ItemStackUtils {
 		nmsStack.setTag(compound);
 		itemStack = CraftItemStack.asBukkitCopy(nmsStack);
 		return itemStack;
+	}
+
+	public static boolean isItemStackUptoDate(ItemStack item, ISoliniaItem solitem) {
+		if (!Utils.IsSoliniaItem(item))
+			return true;
+		
+		Timestamp itemStackTimestamp = Utils.GetSolLastUpdated(item);
+		if (itemStackTimestamp == null)
+			return false;
+		
+		Timestamp latesttimestamp = solitem.getLastUpdatedTime();
+		if (latesttimestamp != null) {
+			if (itemStackTimestamp.before(latesttimestamp))
+				return false;
+		}
+		
+		return true;
 	}
 }

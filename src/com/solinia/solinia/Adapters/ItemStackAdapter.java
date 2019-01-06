@@ -4,9 +4,12 @@ import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,6 +52,13 @@ public class ItemStackAdapter {
 		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		compound.set("soliniaid", new NBTTagString(Integer.toString(soliniaItem.getId())));
+		
+		Timestamp lastItemTimestamp = soliniaItem.getLastUpdatedTime();
+		if (lastItemTimestamp != null)
+		{
+			String lastItemTimestampAsString= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(new Date(lastItemTimestamp.getTime()));
+			compound.set("solupdatedtime", new NBTTagString(lastItemTimestampAsString));
+		}
 		nmsStack.setTag(compound);
 		stack = CraftItemStack.asBukkitCopy(nmsStack);
 

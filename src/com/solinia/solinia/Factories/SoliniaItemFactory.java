@@ -32,7 +32,8 @@ public class SoliniaItemFactory {
 		item.setId(StateManager.getInstance().getConfigurationManager().getNextItemId());
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(itemStack.getType().name());
-		
+		item.setLastUpdatedTimeNow();
+		item.setHalfening(true);
 		if (itemStack.getData() != null)
 		{
 			try
@@ -72,6 +73,8 @@ public class SoliniaItemFactory {
 		item.setEquipmentSlot(originalItem.getEquipmentSlot());
 		item.setDamage(originalItem.getDamage());
 		item.setAC(originalItem.getAC());
+		item.setLastUpdatedTimeNow();
+		item.setHalfening(true);
 
 		item.setAugmentation(originalItem.isAugmentation());
 		item.setAugmentationFitsSlotType(originalItem.getAugmentationFitsSlotType());
@@ -189,6 +192,9 @@ public class SoliniaItemFactory {
 				List<String> classNames = new ArrayList<String>();
 				classNames.add(classtype.getName().toUpperCase());
 				item.setAllowedClassNames(classNames);
+				
+				item.setHalfening(true);
+				item.setLastUpdatedTimeNow();
 
 				item.setWorth(armourtier*25);
 				// Randomise the stats of the class armour so we get more unique content in each dungeon
@@ -203,22 +209,22 @@ public class SoliniaItemFactory {
 
 				if (rarityChance > 85) {
 					rarityName = "Rare ";
-					rarityBonus = 3;
+					rarityBonus = 2;
 				}
 
 				if (rarityChance > 92) {
 					rarityName = "Legendary ";
-					rarityBonus = 5;
+					rarityBonus = 3;
 				}
 				
 				if (rarityChance > 96) {
 					rarityName = "Mythical ";
-					rarityBonus = 6;
+					rarityBonus = 4;
 				}
 
 				if (rarityChance > 98) {
 					rarityName = "Ancient ";
-					rarityBonus = 7;
+					rarityBonus = 5;
 				}
 
 				
@@ -352,11 +358,11 @@ public class SoliniaItemFactory {
 	}
 
 	public static int getBaseAmount(ISoliniaItem item) {
-		int baseAmount = 5;
+		int baseAmount = 2;
 		
 		if (item.isJewelry())
 		{
-			baseAmount = 2;
+			baseAmount = 1;
 		}
 		return baseAmount;
 	}

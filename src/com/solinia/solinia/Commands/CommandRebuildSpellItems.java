@@ -121,6 +121,8 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 						item.setAllowedClassNames(new ArrayList<String>());
 						item.setLore("This appears to be some sort of   magical spell that could be       learned");
 						item.setWorth(worth);
+						item.setHalfening(true);
+						item.setLastUpdatedTimeNow();
 						StateManager.getInstance().getConfigurationManager().updateItem(item);
 						updated++;
 					}
@@ -133,6 +135,8 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 					item.setAllowedClassNames(new ArrayList<String>());
 					item.setLore("This appears to be some sort of   magical spell that could be       learned");
 					item.setWorth(worth);
+					item.setHalfening(true);
+					item.setLastUpdatedTimeNow();
 					StateManager.getInstance().getConfigurationManager().updateItem(item);
 					updated++;
 				}

@@ -11,6 +11,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -64,14 +65,8 @@ public class CommandClaim implements CommandExecutor {
 				String mcaccountname = args[1];
 				int itemId = Integer.parseInt(args[2].toUpperCase());
 				
-				SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-				newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-				newclaim.setMcname(mcaccountname);
-				newclaim.setItemid(itemId);
-				newclaim.setClaimed(false);
-				
-				StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-				sender.sendMessage("Account claim added!");
+				if (Utils.AddAccountClaim(mcaccountname,itemId))
+					sender.sendMessage("Account claim added!");
 				return true;
 			case "claim":
 				if (!(sender instanceof Player))

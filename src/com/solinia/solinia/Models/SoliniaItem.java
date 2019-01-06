@@ -1,10 +1,12 @@
 package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -34,6 +36,7 @@ import com.solinia.solinia.Utils.*;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.NBTTagString;
 
 public class SoliniaItem implements ISoliniaItem {
 
@@ -108,7 +111,6 @@ public class SoliniaItem implements ISoliniaItem {
 	private SkillType skillModType4 = SkillType.None;
 	private int skillModValue4 = 0;
 
-	private boolean territoryFlag = false;
 	private String identifyMessage = "";
 	private boolean bandage = false;
 	private EquipmentSlot equipmentSlot = EquipmentSlot.None;
@@ -116,6 +118,8 @@ public class SoliniaItem implements ISoliniaItem {
 	private String bookAuthor = "";
 	private List<String> bookPages = new ArrayList<String>();
 	private boolean neverDrop = false;
+	
+	private Timestamp lastUpdatedTime;
 	
 	@Override
 	public ItemStack asItemStack() {
@@ -905,6 +909,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET + " - minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
+		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
 		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET + " - throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
@@ -947,6 +952,15 @@ public class SoliniaItem implements ISoliniaItem {
 		}
 		sender.sendMessage("- allowedclassnames: " + allowedClassNames.trim());
 
+	}
+
+	private String getLastUpdatedTimeAsString() {
+		if (this.lastUpdatedTime == null)
+			return null;
+		
+		String lastItemTimestampAsString= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(new Date(this.getLastUpdatedTime().getTime()));
+		return lastItemTimestampAsString;
+	    
 	}
 
 	@Override
@@ -1166,6 +1180,7 @@ public class SoliniaItem implements ISoliniaItem {
 			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,throwing,identifymessage,languageprimer,clearlanguageprimer");
 		}
 		
+		this.setLastUpdatedTimeNow();
 		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 	}
 
@@ -1619,5 +1634,22 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setHalfening(boolean halfening) {
 		this.halfening = halfening;
+	}
+
+	@Override
+	public Timestamp getLastUpdatedTime() {
+		return lastUpdatedTime;
+	}
+
+	@Override
+	public void setLastUpdatedTime(Timestamp lastUpdatedTime) {
+		this.lastUpdatedTime = lastUpdatedTime;
+	}
+	
+	@Override
+	public void setLastUpdatedTimeNow() {
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		this.setLastUpdatedTime(nowtimestamp);
 	}
 }

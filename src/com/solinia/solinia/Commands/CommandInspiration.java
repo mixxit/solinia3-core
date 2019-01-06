@@ -120,6 +120,7 @@ public class CommandInspiration implements CommandExecutor {
 																{
 																	ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(finalitemid);
 																	item.setMinLevel(minLevel);
+																	item.setLastUpdatedTimeNow();
 																	SoliniaAccountClaim claim = new SoliniaAccountClaim();
 																	claim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 																	claim.setMcname(playerName);
@@ -223,6 +224,7 @@ public class CommandInspiration implements CommandExecutor {
 																	{
 																		ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(finalitemid);
 																		item.setMinLevel(minLevel);
+																		item.setLastUpdatedTimeNow();
 																		SoliniaAccountClaim claim = new SoliniaAccountClaim();
 																		claim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 																		claim.setMcname(playerName);

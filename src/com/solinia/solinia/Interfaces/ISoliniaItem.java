@@ -1,5 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.bukkit.block.Block;
@@ -339,4 +340,10 @@ public interface ISoliniaItem {
 	boolean isHalfening();
 
 	void setHalfening(boolean halfening);
+
+	Timestamp getLastUpdatedTime();
+
+	void setLastUpdatedTime(Timestamp lastUpdatedTime);
+
+	void setLastUpdatedTimeNow();
 }

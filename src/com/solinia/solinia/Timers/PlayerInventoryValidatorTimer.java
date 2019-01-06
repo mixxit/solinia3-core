@@ -14,6 +14,9 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.Utils;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerInventoryValidatorTimer extends BukkitRunnable {
@@ -75,12 +78,21 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					if (!slots.contains(slotId))
 						continue;
 					
-					if (i.getMinLevel() > solplayer.getLevel())
+					if (!ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i))
 		    		{
-						player.getWorld().dropItemNaturally(player.getLocation(), player.getInventory().getItem(slotId));
+						Utils.AddAccountClaim(player.getName(),i.getId());
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
-						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been dropped");
+						player.sendMessage(ChatColor.GRAY + "Your out of date item " + i.getDisplayname() + " has been added to your claims");
+						continue;
+		    		}
+					
+					if (i.getMinLevel() > solplayer.getLevel())
+		    		{
+						Utils.AddAccountClaim(player.getName(),i.getId());
+						player.getInventory().setItem(slotId, null);
+						player.updateInventory();
+						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
 						continue;
 		    		}
 					
@@ -89,19 +101,19 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (solplayer.getClassObj() == null)
 					{
-						player.getWorld().dropItemNaturally(player.getLocation(), player.getInventory().getItem(slotId));
+						Utils.AddAccountClaim(player.getName(),i.getId());
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
-						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been dropped");
+						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
 						continue;
 					}
 					
 					if (!i.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
 					{
-						player.getWorld().dropItemNaturally(player.getLocation(), player.getInventory().getItem(slotId));
+						Utils.AddAccountClaim(player.getName(),i.getId());
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
-						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been dropped");
+						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
 						continue;
 					}
 				} catch (SoliniaItemException e) {
