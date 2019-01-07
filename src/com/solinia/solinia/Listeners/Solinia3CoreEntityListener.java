@@ -269,6 +269,9 @@ public class Solinia3CoreEntityListener implements Listener {
 							try {
 								ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter
 										.Adapt((LivingEntity) entity);
+								
+								// Set max HP
+								solEntity.updateMaxHp();
 
 								if (solEntity.doCheckForDespawn()) {
 									Utils.RemoveEntity(entity,"ONCREATURESPAWN");
