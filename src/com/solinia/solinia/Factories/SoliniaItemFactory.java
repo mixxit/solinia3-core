@@ -33,7 +33,7 @@ public class SoliniaItemFactory {
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(itemStack.getType().name());
 		item.setLastUpdatedTimeNow();
-		item.setHalfening(true);
+		item.setHalfening2(true);
 		if (itemStack.getData() != null)
 		{
 			try
@@ -74,7 +74,7 @@ public class SoliniaItemFactory {
 		item.setDamage(originalItem.getDamage());
 		item.setAC(originalItem.getAC());
 		item.setLastUpdatedTimeNow();
-		item.setHalfening(true);
+		item.setHalfening2(true);
 
 		item.setAugmentation(originalItem.isAugmentation());
 		item.setAugmentationFitsSlotType(originalItem.getAugmentationFitsSlotType());
@@ -193,7 +193,7 @@ public class SoliniaItemFactory {
 				classNames.add(classtype.getName().toUpperCase());
 				item.setAllowedClassNames(classNames);
 				
-				item.setHalfening(true);
+				item.setHalfening2(true);
 				item.setLastUpdatedTimeNow();
 
 				item.setWorth(armourtier*25);
@@ -317,17 +317,17 @@ public class SoliniaItemFactory {
 				setItemDamageAndAc(item, armourtier, tierMin, tierMax, classAcBonus, rarityBonus, classStrBonus);
 				
 				// mana
-				item.setMana(Utils.RandomBetween(0,armourtier + rarityBonus)*10);
+				item.setMana(Utils.RandomBetween(0,armourtier * 20)+rarityBonus);
 								
 				// hp
-				item.setHp(Utils.RandomBetween(0,armourtier + rarityBonus)*10);
+				item.setHp(Utils.RandomBetween(0,armourtier * 20)+rarityBonus);
 				
 				// resists
-				item.setColdResist(Utils.RandomBetween(0,armourtier + rarityBonus));
-				item.setFireResist(Utils.RandomBetween(0,armourtier + rarityBonus));
-				item.setMagicResist(Utils.RandomBetween(0,armourtier + rarityBonus));
-				item.setPoisonResist(Utils.RandomBetween(0,armourtier + rarityBonus));
-				item.setDiseaseResist(Utils.RandomBetween(0,armourtier + rarityBonus));
+				item.setColdResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setFireResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setMagicResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setPoisonResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setDiseaseResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
 				
 				// TODO class procs?
 				StateManager.getInstance().getConfigurationManager().setItemsChanged(true);

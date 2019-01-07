@@ -544,7 +544,7 @@ public class CoreState {
 			
 			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 			{
-				if (item.isHalfening() == true)
+				if (item.isHalfening2() == true)
 					continue;
 				
 				halfeningItem(item);
@@ -563,6 +563,8 @@ public class CoreState {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	private void halfeningItem(ISoliniaItem item) throws CoreStateInitException {
 		int tier = 1;
@@ -599,73 +601,36 @@ public class CoreState {
 			rarity = 5;
 		}
 		
-		int strengthclassbonus = 0;
-		int staminaclassbonus = 0;
-		int agilityclassbonus = 0;
-		int dexterityclassbonus = 0;
-		int intelligenceclassbous = 0;
-		int wisdomclassbonus = 0;
-		int charismaclassbonus = 0;
-		int acclassbonus = 0;
-		
-		if (item.getAllowedClassNames().size() == 1)
+		if (item.getBaneUndead() > item.getDamage())
 		{
-			String className = item.getAllowedClassNames().get(0);
-			ISoliniaClass classtype = StateManager.getInstance().getConfigurationManager().getClassObj(className.toUpperCase());
-			if (classtype != null)
-			{
-				strengthclassbonus = classtype.getItemGenerationBonus("strength");
-				staminaclassbonus = classtype.getItemGenerationBonus("stamina");
-				agilityclassbonus = classtype.getItemGenerationBonus("agility");
-				dexterityclassbonus = classtype.getItemGenerationBonus("dexterity");
-				intelligenceclassbous = classtype.getItemGenerationBonus("intelligence");
-				wisdomclassbonus = classtype.getItemGenerationBonus("wisdom");
-				charismaclassbonus = classtype.getItemGenerationBonus("charisma");
-				acclassbonus = classtype.getItemGenerationBonus("ac");
-			}
+			item.setBaneUndead(item.getDamage());
 		}
 		
-		// Update damage
-		if (item.getDamage() > getHalfeningUpperBoundStat(strengthclassbonus,rarity,tier))
-			item.setDamage(getHalfeningUpperBoundStat(strengthclassbonus,rarity,tier));
+		if (item.getHp() > ((tier * 20) + rarity))
+			item.setHp((tier * 20) + rarity);
+		if (item.getMana() > ((tier * 20) + rarity))
+			item.setMana((tier * 20) + rarity);
+		
+		int resistcap = (int)Math.floor(tier * 2) + rarity;
+		if (item.getMagicResist() > resistcap)
+			item.setMagicResist(resistcap);
+		if (item.getDiseaseResist() > resistcap)
+			item.setDiseaseResist(resistcap);
+		if (item.getPoisonResist() > resistcap)
+			item.setPoisonResist(resistcap);
+		if (item.getColdResist() > resistcap)
+			item.setColdResist(resistcap);
+		if (item.getFireResist() > resistcap)
+			item.setFireResist(resistcap);
 
-		// Update str
-		if (item.getStrength() > getHalfeningUpperBoundStat(strengthclassbonus,rarity,tier))
-			item.setStrength(getHalfeningUpperBoundStat(strengthclassbonus,rarity,tier));
+		int regencap = (int)Math.floor(tier * 0.7) + rarity;
+		if (item.getMpregen() > regencap)
+			item.setMpregen(regencap);
 
-		// Update sta
-		if (item.getStamina() > getHalfeningUpperBoundStat(staminaclassbonus,rarity,tier))
-			item.setStamina(getHalfeningUpperBoundStat(staminaclassbonus,rarity,tier));
-
-		// Update agi
-		if (item.getAgility() > getHalfeningUpperBoundStat(agilityclassbonus,rarity,tier))
-			item.setAgility(getHalfeningUpperBoundStat(agilityclassbonus,rarity,tier));
-
-		// Update dex
-		if (item.getDexterity() > getHalfeningUpperBoundStat(dexterityclassbonus,rarity,tier))
-			item.setDexterity(getHalfeningUpperBoundStat(dexterityclassbonus,rarity,tier));
-
-		// Update int
-		if (item.getIntelligence() > getHalfeningUpperBoundStat(intelligenceclassbous,rarity,tier))
-			item.setIntelligence(getHalfeningUpperBoundStat(intelligenceclassbous,rarity,tier));
-
-		// Update wis
-		if (item.getWisdom() > getHalfeningUpperBoundStat(wisdomclassbonus,rarity,tier))
-			item.setWisdom(getHalfeningUpperBoundStat(wisdomclassbonus,rarity,tier));
-
-		// Update cha
-		if (item.getCharisma() > getHalfeningUpperBoundStat(charismaclassbonus,rarity,tier))
-			item.setCharisma(getHalfeningUpperBoundStat(charismaclassbonus,rarity,tier));
-
-		// Update AC
-		if (item.getAC() > getHalfeningUpperBoundStat(acclassbonus,rarity,tier))
-			item.setAC(getHalfeningUpperBoundStat(acclassbonus,rarity,tier));
+		if (item.getHpregen() > regencap)
+			item.setHpregen(regencap);
 		
 		item.setLastUpdatedTimeNow();
-	}
-
-	private int getHalfeningUpperBoundStat(int classbonus, int rarity, int tier) {
-		return (tier * 2) + rarity;
 	}
 
 	public IPlayerManager getPlayerManager() throws CoreStateInitException

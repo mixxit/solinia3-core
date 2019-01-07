@@ -337,13 +337,13 @@ public interface ISoliniaItem {
 
 	void setEquipmentSlot(EquipmentSlot equipmentSlot);
 
-	boolean isHalfening();
-
-	void setHalfening(boolean halfening);
-
 	Timestamp getLastUpdatedTime();
 
 	void setLastUpdatedTime(Timestamp lastUpdatedTime);
 
 	void setLastUpdatedTimeNow();
+
+	boolean isHalfening2();
+
+	void setHalfening2(boolean halfening2);
 }
