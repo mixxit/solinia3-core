@@ -4992,6 +4992,15 @@ public class Utils {
 	}
 	
 	public static int getHighestAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
+		
+		// This is actually read from the CriticalSpellChance 
+		boolean enforceSpellCritFormula = false;
+		if (effectType.equals(SpellEffectType.SpellCritDmgIncrease))
+		{
+			effectType = SpellEffectType.CriticalSpellChance;
+			enforceSpellCritFormula = true;
+		}
+		
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
 
@@ -5002,9 +5011,21 @@ public class Utils {
 			for (SoliniaAARankEffect effect : player
 					.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType))) {
 				
-				if (effect.getBase1() > highest)
+				// Special formula for taking the spell crit damage from the spell crit chance
+				if (enforceSpellCritFormula)
 				{
-					highest = effect.getBase1();
+					int base = 0;
+					if (effect.getBase2() > 100)
+						base = effect.getBase2() - 100;
+					
+					if (base > highest)
+						highest = base;
+				} else {
+					// Everything else
+					if (effect.getBase1() > highest)
+					{
+						highest = effect.getBase1();
+					}
 				}
 			}
 			return highest;
