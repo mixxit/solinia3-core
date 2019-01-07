@@ -5668,7 +5668,7 @@ public class Utils {
 		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		
-		String solupdatedtime = compound.getString("solupdatedtime");
+		String solupdatedtime = compound.getString("sollastupdated");
 		if (solupdatedtime == null || solupdatedtime.equals(""))
 			return null;
 		
