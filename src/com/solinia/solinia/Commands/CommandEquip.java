@@ -49,7 +49,8 @@ public class CommandEquip implements CommandExecutor {
 					args[0].toUpperCase().equals("SHOULDERS") ||
 					args[0].toUpperCase().equals("ARMS") ||
 					args[0].toUpperCase().equals("FOREARMS") ||
-					args[0].toUpperCase().equals("HANDS")
+					args[0].toUpperCase().equals("HANDS") ||
+					args[0].toUpperCase().equals("WAIST")
 					) {
 				try {
 					ItemStack primaryItem = player.getInventory().getItemInMainHand();
@@ -390,6 +391,31 @@ public class CommandEquip implements CommandExecutor {
 						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
 						sender.spigot().sendMessage(tc);
 					}
+					
+					if (solPlayer.getWaistItem() > 0) {
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(solPlayer.getWaistItem());
+						if (item.isTemporary())
+						if (!solPlayer.getWaistItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
+						{
+							// Delete temporary item
+							player.sendMessage("Your temporary item has faded from existence");
+							solPlayer.setWaistItem(0);
+							return true;
+						}
+						
+						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+						newclaim.setMcname(player.getName());
+						newclaim.setItemid(solPlayer.getWaistItem());
+						newclaim.setClaimed(false);
+						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+						solPlayer.setWaistItem(0);
+						TextComponent tc = new TextComponent();
+						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+						sender.spigot().sendMessage(tc);
+					}
 				} else {
 					switch(args[1].toUpperCase())
 					{
@@ -575,6 +601,32 @@ public class CommandEquip implements CommandExecutor {
 								sender.spigot().sendMessage(tc);
 							}
 							break;
+						case "WAIST":
+							if (solPlayer.getWaistItem() > 0) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(solPlayer.getWaistItem());
+								if (item.isTemporary())
+								if (!solPlayer.getWaistItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
+								{
+									// Delete temporary item
+									player.sendMessage("Your temporary item has faded from existence");
+									solPlayer.setWaistItem(0);
+									return true;
+								}
+								
+								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+								newclaim.setMcname(player.getName());
+								newclaim.setItemid(solPlayer.getWaistItem());
+								newclaim.setClaimed(false);
+								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+								solPlayer.setWaistItem(0);
+								TextComponent tc = new TextComponent();
+								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+								sender.spigot().sendMessage(tc);
+							}
+							break;
 						default:
 							sender.sendMessage("Unknown slot to unequip");
 							break;
@@ -685,6 +737,19 @@ public class CommandEquip implements CommandExecutor {
 				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Hands Item: EMPTY");
+			}
+			
+			if (solPlayer.getWaistItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(solPlayer.getWaistItem());
+				TextComponent tc = new TextComponent();
+				tc.setText("Waist Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip WAIST"));
+				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+						new ComponentBuilder(item.asJsonString()).create()));
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Waist Item: EMPTY");
 			}
 		} catch (CoreStateInitException e) {
 
