@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.CastingSpell;
+import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Models.PlayerFactionEntry;
@@ -457,4 +458,6 @@ public interface ISoliniaPlayer extends Serializable {
 	String getWaistItemInstance();
 
 	void setWaistItemInstance(String waistItemInstance);
+
+	public void setEquipSlotItem(EquipmentSlot slot, int itemId);
 }

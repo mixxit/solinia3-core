@@ -261,39 +261,17 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					{
 						// Delete temporary item
 						solPlayer.getBukkitPlayer().sendMessage("Your temporary item has faded from existence");
-						
-						switch(slot)
-						{
-							case Arms:
-								solPlayer.setArmsItem(0);
-								break;
-							case Ears:
-								solPlayer.setEarsItem(0);
-								break;
-							case Fingers:
-								solPlayer.setFingersItem(0);
-								break;
-							case Forearms:
-								solPlayer.setForearmsItem(0);
-								break;
-							case Hands:
-								solPlayer.setHandsItem(0);
-								break;
-							case Neck:
-								solPlayer.setNeckItem(0);
-								break;
-							case Shoulders:
-								solPlayer.setShouldersItem(0);
-								break;
-							case Waist:
-								solPlayer.setWaistItem(0);
-								break;
-							case None:
-							default:
-								break;
-						}
+						solPlayer.setEquipSlotItem(slot, 0);
 					}
 				}
+				
+				if (i.getMinLevel() > solPlayer.getLevel())
+	    		{
+					solPlayer.setEquipSlotItem(slot, 0);
+					Utils.AddAccountClaim(solPlayer.getBukkitPlayer().getName(),i.getId());
+					solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY + "You cannot wear equip item " + i.getDisplayname() + " so it has been added to your claims");
+					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",solPlayer.getBukkitPlayer().getName(),"Moved minlevel item to claims (equip): " + i.getDisplayname());
+	    		}
 				
 			} catch (CoreStateInitException e) {
 				

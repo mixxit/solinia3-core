@@ -3437,4 +3437,40 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return this.monthlyVote.get(month);
 	}
 
+	@Override
+	public void setEquipSlotItem(com.solinia.solinia.Models.EquipmentSlot slot, int itemId) {
+		
+		
+		switch(slot)
+		{
+			case Arms:
+				setArmsItem(0);
+				break;
+			case Ears:
+				setEarsItem(0);
+				break;
+			case Fingers:
+				setFingersItem(0);
+				break;
+			case Forearms:
+				setForearmsItem(0);
+				break;
+			case Hands:
+				setHandsItem(0);
+				break;
+			case Neck:
+				setNeckItem(0);
+				break;
+			case Shoulders:
+				setShouldersItem(0);
+				break;
+			case Waist:
+				setWaistItem(0);
+				break;
+			case None:
+			default:
+				break;
+		}
+	}
+
 }
