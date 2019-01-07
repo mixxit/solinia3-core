@@ -109,7 +109,13 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							}
 						}
 						
-						Utils.AddAccountClaim(player.getName(),i.getId());
+						int count = player.getInventory().getItem(slotId).getAmount();
+						if (count == 0)
+							count = 1;
+						for (int x = 0; x < count; x++)
+						{
+							Utils.AddAccountClaim(player.getName(),i.getId());
+						}
 						Timestamp lastUpdatedTimeSolItem = i.getLastUpdatedTime();
 						
 						String solUp = "";
@@ -146,7 +152,13 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							}
 						}
 						
-						Utils.AddAccountClaim(player.getName(),i.getId());
+						int count = player.getInventory().getItem(slotId).getAmount();
+						if (count == 0)
+							count = 1;
+						for (int x = 0; x < count; x++)
+						{
+							Utils.AddAccountClaim(player.getName(),i.getId());
+						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
 						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
@@ -169,7 +181,13 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							}
 						}
 						
-						Utils.AddAccountClaim(player.getName(),i.getId());
+						int count = player.getInventory().getItem(slotId).getAmount();
+						if (count == 0)
+							count = 1;
+						for (int x = 0; x < count; x++)
+						{
+							Utils.AddAccountClaim(player.getName(),i.getId());
+						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
 						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
@@ -189,7 +207,13 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							}
 						}
 						
-						Utils.AddAccountClaim(player.getName(),i.getId());
+						int count = player.getInventory().getItem(slotId).getAmount();
+						if (count == 0)
+							count = 1;
+						for (int x = 0; x < count; x++)
+						{
+							Utils.AddAccountClaim(player.getName(),i.getId());
+						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
 						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
