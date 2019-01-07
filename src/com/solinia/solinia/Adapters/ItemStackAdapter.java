@@ -56,7 +56,7 @@ public class ItemStackAdapter {
 		Timestamp lastItemTimestamp = soliniaItem.getLastUpdatedTime();
 		if (lastItemTimestamp != null)
 		{
-			String lastItemTimestampAsString= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(lastItemTimestamp.getTime());
+			String lastItemTimestampAsString= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(lastItemTimestamp);
 			compound.set("solupdatedtime", new NBTTagString(lastItemTimestampAsString));
 		}
 		nmsStack.setTag(compound);
