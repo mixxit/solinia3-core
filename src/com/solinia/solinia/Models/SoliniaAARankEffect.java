@@ -37,5 +37,4 @@ public class SoliniaAARankEffect {
 	public void setBase2(int base2) {
 		this.base2 = base2;
 	}
-	
 }

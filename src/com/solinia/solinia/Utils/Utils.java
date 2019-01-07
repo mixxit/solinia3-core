@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.codec.binary.Base64;
@@ -5119,9 +5120,21 @@ public class Utils {
 			if (effectIdLookup == 0)
 				return 0;
 
+			ConcurrentHashMap<Integer, Integer> abilityMaxValue = new ConcurrentHashMap<Integer,Integer>();
+			
 			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
-				total += effect.getBase1();
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager()
+						.getAARank(effect.getRankId());
+				
+				if (rank != null)
+					abilityMaxValue.put(rank.getAbilityid(), effect.getBase1());
 			}
+			
+			for(Integer key : abilityMaxValue.keySet())
+			{
+				total += abilityMaxValue.get(key);
+			}
+			
 			return total;
 		} catch (CoreStateInitException e) {
 			return 0;
