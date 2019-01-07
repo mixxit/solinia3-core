@@ -228,7 +228,6 @@ public class CoreState {
 		patchItems1_13();
 		patchClasses1_13();
 		fixPets();
-		halfening();
 	}
 	
 	private void fixPets()
@@ -536,104 +535,7 @@ public class CoreState {
 		}
 	}
 	
-	private void halfening() {
-		try {
-			boolean updated = false;
-			
-			System.out.println("The halfening");
-			
-			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
-			{
-				if (item.isHalfening2() == true)
-					continue;
-				
-				halfeningItem(item);
-				
-				updated = true;
-			}
-			
-			if (updated == true)
-			{
-				System.out.println("Detected some internal item changes, recommitting npcs (this may take some time)...");
-				Utils.RecommitNpcs();
-			}
-			
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
-	
-
-	private void halfeningItem(ISoliniaItem item) throws CoreStateInitException {
-		int tier = 1;
-		if (item.getMinLevel() > 1)
-		{
-			tier = (int)Math.floor((item.getMinLevel() / 10)) + 1;
-		} else {
-			tier = 1;
-		}
-		
-		int rarity = 0;
-		if (item.getDisplayname().startsWith("Uncommon"))
-		{
-			rarity = 1;
-		}
-
-		if (item.getDisplayname().startsWith("Rare"))
-		{
-			rarity = 2;
-		}
-
-		if (item.getDisplayname().startsWith("Legendary"))
-		{
-			rarity = 3;
-		}
-
-		if (item.getDisplayname().startsWith("Mythical"))
-		{
-			rarity = 4;
-		}
-
-		if (item.getDisplayname().startsWith("Ancient"))
-		{
-			rarity = 5;
-		}
-		
-		if (item.getBaneUndead() > item.getDamage())
-		{
-			item.setBaneUndead(item.getDamage());
-		}
-		
-		if (item.getHp() > ((tier * 20) + rarity))
-			item.setHp((tier * 20) + rarity);
-		if (item.getMana() > ((tier * 20) + rarity))
-			item.setMana((tier * 20) + rarity);
-		
-		int resistcap = (int)Math.floor(tier * 2) + rarity;
-		if (item.getMagicResist() > resistcap)
-			item.setMagicResist(resistcap);
-		if (item.getDiseaseResist() > resistcap)
-			item.setDiseaseResist(resistcap);
-		if (item.getPoisonResist() > resistcap)
-			item.setPoisonResist(resistcap);
-		if (item.getColdResist() > resistcap)
-			item.setColdResist(resistcap);
-		if (item.getFireResist() > resistcap)
-			item.setFireResist(resistcap);
-
-		int regencap = (int)Math.floor(tier * 0.7) + rarity;
-		if (item.getMpregen() > regencap)
-			item.setMpregen(regencap);
-
-		if (item.getHpregen() > regencap)
-			item.setHpregen(regencap);
-		
-		item.setLastUpdatedTimeNow();
-		item.setHalfening2(true);
-	}
-
 	public IPlayerManager getPlayerManager() throws CoreStateInitException
 	{
 		if (isInitialised == false)

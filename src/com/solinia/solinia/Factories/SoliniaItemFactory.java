@@ -33,7 +33,6 @@ public class SoliniaItemFactory {
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(itemStack.getType().name());
 		item.setLastUpdatedTimeNow();
-		item.setHalfening2(true);
 		if (itemStack.getData() != null)
 		{
 			try
@@ -74,8 +73,6 @@ public class SoliniaItemFactory {
 		item.setDamage(originalItem.getDamage());
 		item.setAC(originalItem.getAC());
 		item.setLastUpdatedTimeNow();
-		item.setHalfening2(true);
-
 		item.setAugmentation(originalItem.isAugmentation());
 		item.setAugmentationFitsSlotType(originalItem.getAugmentationFitsSlotType());
 		
@@ -193,9 +190,6 @@ public class SoliniaItemFactory {
 				classNames.add(classtype.getName().toUpperCase());
 				item.setAllowedClassNames(classNames);
 				
-				item.setHalfening2(true);
-				item.setLastUpdatedTimeNow();
-
 				item.setWorth(armourtier*25);
 				// Randomise the stats of the class armour so we get more unique content in each dungeon
 				int rarityChance = Utils.RandomBetween(1, 100);

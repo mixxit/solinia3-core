@@ -342,8 +342,4 @@ public interface ISoliniaItem {
 	void setLastUpdatedTime(Timestamp lastUpdatedTime);
 
 	void setLastUpdatedTimeNow();
-
-	boolean isHalfening2();
-
-	void setHalfening2(boolean halfening2);
 }

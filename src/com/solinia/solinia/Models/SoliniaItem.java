@@ -99,8 +99,6 @@ public class SoliniaItem implements ISoliniaItem {
 	private String languagePrimer = "";
 	private int focusEffectId = 0;
 	
-	private boolean halfening2 = false;
-	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
 	
@@ -1644,15 +1642,5 @@ public class SoliniaItem implements ISoliniaItem {
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		System.out.println("Set LastUpdatedTime on " + getId());
 		this.setLastUpdatedTime(nowtimestamp);
-	}
-
-	@Override
-	public boolean isHalfening2() {
-		return halfening2;
-	}
-
-	@Override
-	public void setHalfening2(boolean halfening2) {
-		this.halfening2 = halfening2;
 	}
 }
