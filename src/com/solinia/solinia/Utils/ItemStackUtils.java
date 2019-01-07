@@ -1,6 +1,7 @@
 package com.solinia.solinia.Utils;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -371,12 +372,26 @@ public class ItemStackUtils {
 		
 		Timestamp itemStackTimestamp = Utils.GetSolLastUpdated(item);
 		if (itemStackTimestamp == null)
+		{
+			Utils.DebugLog("ItemStackUtils","isItemStackUptoDate",String.valueOf(solitem.getId()),"ItemStack was null so returning false");
 			return false;
+		}
 		
 		Timestamp latesttimestamp = solitem.getLastUpdatedTime();
 		if (latesttimestamp != null) {
 			if (itemStackTimestamp.before(latesttimestamp))
+			{
+				String solUp = "";
+				String stackUp = "";
+				if (latesttimestamp != null)
+				{
+					solUp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(latesttimestamp);
+				}
+				stackUp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(itemStackTimestamp);
+				
+				Utils.DebugLog("ItemStackUtils","isItemStackUptoDate",String.valueOf(solitem.getId()),"ItemStack [" + stackUp  + "] was before [" + solUp + "]");
 				return false;
+			}
 		}
 		
 		return true;
