@@ -4083,7 +4083,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		double statHp = Utils.getStatMaxHP(getClassObj(), getLevel(), getStamina());
 		double itemHp = getItemHp();
 		double totalHp = statHp + itemHp;
-
+		Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "getMaxHP called with statHp: " + statHp + " itemHp " + itemHp + " totalHp:" + totalHp);
 		try {
 			if (getNpcid() > 0) 
 			{
@@ -4092,6 +4092,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return totalHp;
 
 				if (npc.getForcedMaxHp() > 0) {
+					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Forced getMaxHp to " + npc.getForcedMaxHp());
 					return npc.getForcedMaxHp();
 				}
 				
@@ -4099,17 +4100,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				if (npc.isBoss()) {
 					totalHp += (Utils.getBossHPMultiplier() * npc.getLevel());
+					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Boss hp is now: " + totalHp);
 				}
 
 				if (npc.isHeroic()) {
 					totalHp += (Utils.getHeroicHPMultiplier() * npc.getLevel());
+					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Heroic hp is now: " + totalHp);
 				}
 
 				if (npc.isRaidboss()) {
+					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Raidboss hp is now: " + totalHp);
 					totalHp += (Utils.getRaidBossHPMultiplier() * npc.getLevel());
 				}
 
 				if (npc.isRaidheroic()) {
+					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Raid heroic hp is now: " + totalHp);
 					totalHp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
 				}
 				
@@ -4132,6 +4137,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 				}
 
+				Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Final Hp is now: " + (totalHp/100) * percentHP);
 				return (totalHp/100) * percentHP;
 			}
 
