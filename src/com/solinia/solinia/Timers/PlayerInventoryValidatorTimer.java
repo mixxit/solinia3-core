@@ -140,7 +140,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						continue;
 		    		}
 					
-					if (i.getMinLevel() > solplayer.getLevel())
+					if (i.getMinLevel() > solplayer.getLevel() && !i.isSpellscroll())
 		    		{
 						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
@@ -169,7 +169,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					if (i.getAllowedClassNames().size() < 1)
 						continue;
 					
-					if (solplayer.getClassObj() == null)
+					if (solplayer.getClassObj() == null && !i.isSpellscroll())
 					{
 						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
@@ -195,7 +195,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						continue;
 					}
 					
-					if (!i.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()))
+					if (!i.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()) && !i.isSpellscroll())
 					{
 						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{

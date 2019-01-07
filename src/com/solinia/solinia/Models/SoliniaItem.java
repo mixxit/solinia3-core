@@ -35,6 +35,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.*;
 
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_13_R2.Item;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import net.minecraft.server.v1_13_R2.NBTTagString;
 
@@ -1650,6 +1651,7 @@ public class SoliniaItem implements ISoliniaItem {
 	public void setLastUpdatedTimeNow() {
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		System.out.println("Set LastUpdatedTime on " + getId());
 		this.setLastUpdatedTime(nowtimestamp);
 	}
 }
