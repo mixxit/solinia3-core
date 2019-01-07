@@ -631,6 +631,7 @@ public class CoreState {
 			item.setHpregen(regencap);
 		
 		item.setLastUpdatedTimeNow();
+		item.setHalfening2(true);
 	}
 
 	public IPlayerManager getPlayerManager() throws CoreStateInitException
