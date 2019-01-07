@@ -56,7 +56,7 @@ public class ItemStackAdapter {
 		Timestamp lastItemTimestamp = soliniaItem.getLastUpdatedTime();
 		if (lastItemTimestamp != null)
 		{
-			compound.set("solupdatedtime", new NBTTagString(String.valueOf(lastItemTimestamp.getTime()));
+			compound.set("solupdatedtime", new NBTTagString(String.valueOf(lastItemTimestamp.getTime())));
 		}
 		nmsStack.setTag(compound);
 		stack = CraftItemStack.asBukkitCopy(nmsStack);
