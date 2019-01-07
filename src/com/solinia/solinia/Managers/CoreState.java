@@ -544,6 +544,11 @@ public class CoreState {
 			
 			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 			{
+				if (item.getDamage() > 0 && item.getDamage() < 6)
+				{
+					item.setDamage(6);
+				}
+				
 				if (item.isHalfening2() == true)
 					continue;
 				
