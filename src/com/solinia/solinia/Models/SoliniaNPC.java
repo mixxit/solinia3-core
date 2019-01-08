@@ -1347,11 +1347,20 @@ public class SoliniaNPC implements ISoliniaNPC {
 			for (ItemStack itemstack : itemStacks) {
 				if (itemstack == null)
 					continue;
+				
+				
+				
+				if (itemstack.getItemMeta() != null && itemstack.getItemMeta().getDisplayName() != null)
+				{
+					Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Checking if itemStack is SoliniaItem: " + itemstack.getItemMeta().getDisplayName());
+				}
 
 				if (Utils.IsSoliniaItem(itemstack)) {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					if (item == null)
 						continue;
+					
+					Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Found SoliniaItem: " + item.getId());
 
 					if (item.isSpellscroll())
 						continue;
