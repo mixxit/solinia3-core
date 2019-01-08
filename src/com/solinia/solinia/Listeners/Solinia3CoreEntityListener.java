@@ -296,7 +296,7 @@ public class Solinia3CoreEntityListener implements Listener {
 								.getAttributeInstance(net.minecraft.server.v1_13_R2.GenericAttributes.FOLLOW_RANGE)
 								.setValue(Utils.MAX_ENTITY_AGGRORANGE);
 					}
-				});
+				}, 100L);
 	}
 
 	@EventHandler
