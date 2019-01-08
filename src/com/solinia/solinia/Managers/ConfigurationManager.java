@@ -503,7 +503,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public ISoliniaItem getItem(ItemStack itemStack) {
 		String soliniaid = null;
-		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
+		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null && itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
 		{
 			soliniaid = itemStack.getItemMeta().getDisplayName().split("_")[1];
 		}

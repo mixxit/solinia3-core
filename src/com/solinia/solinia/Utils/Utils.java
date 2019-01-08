@@ -5656,6 +5656,7 @@ public class Utils {
 	}
 
 	public static boolean IsSoliniaItem(ItemStack itemStack) {
+		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
 		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
 			return true;
 		
@@ -5668,6 +5669,7 @@ public class Utils {
 	}
 	
 	public static Timestamp GetSolLastUpdated(ItemStack itemStack) {
+		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
 		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
 			return null;
 
