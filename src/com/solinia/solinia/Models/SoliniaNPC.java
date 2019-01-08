@@ -1329,26 +1329,18 @@ public class SoliniaNPC implements ISoliniaNPC {
 		List<ISoliniaItem> items = new ArrayList<ISoliniaItem>();
 
 		try {
-			List<ItemStack> itemStacks = new ArrayList<ItemStack>() {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 233580886660639519L;
+			List<ItemStack> itemStacks = new ArrayList<ItemStack>();
+			if (excludeMainHand == false) {
 
-				{
-					if (excludeMainHand == false) {
-
-						add(livingEntity.getEquipment().getItemInMainHand());
-					}
-					add(livingEntity.getEquipment().getItemInOffHand());
-					addAll(Arrays.asList(livingEntity.getEquipment().getArmorContents()));
-				}
-			};
+				itemStacks.add(livingEntity.getEquipment().getItemInMainHand());
+			}
+			itemStacks.add(livingEntity.getEquipment().getItemInOffHand());
+			itemStacks.addAll(Arrays.asList(livingEntity.getEquipment().getArmorContents()));
+			
+			Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Checking for soliniaItems in equipment stack of: " + itemStacks);
 			for (ItemStack itemstack : itemStacks) {
 				if (itemstack == null)
 					continue;
-				
-				
 				
 				if (itemstack.getItemMeta() != null && itemstack.getItemMeta().getDisplayName() != null)
 				{
