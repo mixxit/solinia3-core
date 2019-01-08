@@ -2770,6 +2770,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			else
 				items = getEquippedSoliniaItems(true);
 
+			Utils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity().getName(), "Found Equipped Item Count" + items.size());
+			
 			for (ISoliniaItem item : items) {
 				Utils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity().getName(), "Found Equipped Item for TotalItemStat: " + item.getId());
 
