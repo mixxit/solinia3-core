@@ -4439,11 +4439,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return 1;
 
 				int stat = npc.getLevel() * 5;
-				stat += getTotalItemStat("STAMINA");
-				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				int totalItemStat = getTotalItemStat("STAMINA");
+				int totalEffectStat = Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				int maxStat = getMaxStat("STAMINA");
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "Getting stamina for NPC - base level*5: " + stat + " totalItemStat: " + totalItemStat + " totalEffectStat: " + totalEffectStat + " maxStat: " + maxStat);
+				stat += totalItemStat;
+				stat += totalEffectStat;
 
-				if (stat > getMaxStat("STAMINA"))
-					stat = getMaxStat("STAMINA");
+				if (stat > maxStat)
+					stat = maxStat;
 
 				return stat;
 			}
