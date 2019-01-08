@@ -502,10 +502,17 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public ISoliniaItem getItem(ItemStack itemStack) {
-		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-		
-		String soliniaid = compound.getString("soliniaid");
+		String soliniaid = null;
+		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
+		{
+			soliniaid = itemStack.getItemMeta().getDisplayName().split("_")[1];
+		}
+		else 
+		{
+			net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+			NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+			soliniaid = compound.getString("soliniaid");
+		}
 		
 		if (soliniaid == null || soliniaid.equals(""))
 			return null;

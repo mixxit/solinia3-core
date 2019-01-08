@@ -5656,6 +5656,9 @@ public class Utils {
 	}
 
 	public static boolean IsSoliniaItem(ItemStack itemStack) {
+		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
+			return true;
+		
 		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		
@@ -5665,6 +5668,9 @@ public class Utils {
 	}
 	
 	public static Timestamp GetSolLastUpdated(ItemStack itemStack) {
+		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
+			return null;
+
 		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		
