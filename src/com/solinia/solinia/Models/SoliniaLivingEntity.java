@@ -2770,7 +2770,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			else
 				items = getEquippedSoliniaItems(true);
 
-			Utils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity().getName(), "Found Equipped Item Count" + items.size());
+			Utils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity().getName(), "Found Equipped Item Count: " + items.size());
 			
 			for (ISoliniaItem item : items) {
 				Utils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity().getName(), "Found Equipped Item for TotalItemStat: " + item.getId());
@@ -4380,6 +4380,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand) {
 		if (isPlayer()) {
 			try {
+				Utils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity().getName(), "Found Player, seeking equipped soliniaitems");
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
 				return solplayer.getEquippedSoliniaItems(ignoreMainhand);
 			} catch (CoreStateInitException e) {
@@ -4389,6 +4390,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (isNPC()) {
 			try {
+				Utils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity().getName(), "Found NPC, seeking equipped soliniaitems");
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 				return npc.getEquippedSoliniaItems(getBukkitLivingEntity(), ignoreMainhand);
 			} catch (CoreStateInitException e) {

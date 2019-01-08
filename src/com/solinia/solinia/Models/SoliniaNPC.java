@@ -888,6 +888,17 @@ public class SoliniaNPC implements ISoliniaNPC {
 						if (entity != null)
 							name = entity.getName();
 						System.out.println("UUID: " + uuid + "(" + name + ") Value: " + hate);
+						triggerentity.sendMessage("UUID: " + uuid + "(" + name + ") Value: " + hate);
+					}
+				}
+				return;
+			case "EQUIPMENT":
+				triggerentity.sendMessage("Equipment:");
+				if (triggerentity instanceof Player && ((Player) triggerentity).isOp()) {
+					for(ISoliniaItem solItem : solentity.getEquippedSoliniaItems())
+					{
+						System.out.println("SolItemId: " + solItem.getId() + " " + solItem.getDisplayname());
+						triggerentity.sendMessage("SolItemId: " + solItem.getId() + " " + solItem.getDisplayname());
 					}
 				}
 				return;
@@ -1337,7 +1348,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			itemStacks.add(livingEntity.getEquipment().getItemInOffHand());
 			itemStacks.addAll(Arrays.asList(livingEntity.getEquipment().getArmorContents()));
 			
-			Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Checking for soliniaItems in equipment stack of: " + itemStacks);
+			Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Checking for soliniaItems in equipment stack of: " + itemStacks.size());
 			for (ItemStack itemstack : itemStacks) {
 				if (itemstack == null)
 					continue;
@@ -1370,7 +1381,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 		} catch (CoreStateInitException e) {
 
 		}
-
+		Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "getEquippedSoliniaItems finished with items count: " + items.size());
 		return items;
 	}
 
