@@ -293,7 +293,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "  AIGoalSelectors:\r\n";
 		mob = mob + "  - 0 clear\r\n";
 		mob = mob + "  - 1 skeletonbowattack\r\n";
-		mob = mob + "  - 2 meleeattack\r\n";
+		mob = mob + "  - 2 spiderattack\r\n";
 		mob = mob + "  - 3 gotoowner\r\n";
 		mob = mob + "  - 4 lookatplayers\r\n";
 		mob = mob + "  AITargetSelectors:\r\n";
