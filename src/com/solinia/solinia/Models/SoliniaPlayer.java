@@ -3284,7 +3284,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void setWaistItem(int waistItem) {
-		this.waistItem = handsItem;
+		this.waistItem = waistItem;
 	}
 
 	
