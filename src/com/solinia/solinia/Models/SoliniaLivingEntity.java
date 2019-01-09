@@ -1603,6 +1603,83 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				getBukkitLivingEntity().sendMessage("* Your death save boon has saved you from death!");
 				return 0;
 			}
+			
+			// This is the only place to hook ranged proc attacks
+			if (arrowHit)
+			{
+				try {
+					// try weapon item procs
+
+					ISoliniaItem attackItem = null;
+					
+					if (Utils.IsSoliniaItem(this.getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+						attackItem = SoliniaItemAdapter.Adapt(this.getBukkitLivingEntity().getEquipment().getItemInMainHand());
+					}
+					
+					if (attackItem != null) {
+						TryProcItem(attackItem, this, defender, false);
+					}
+					
+					// try spell procs
+					// Check if attacker has any WeaponProc effects
+					SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
+							.getActiveEntitySpells(this.getBukkitLivingEntity());
+
+					if (effects != null) {
+						for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
+							ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+									.getSpell(activeSpell.getSpellId());
+							if (spell == null)
+								continue;
+
+							if (!spell.isWeaponProc())
+								continue;
+
+							for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
+								if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)
+										|| spelleffect.getSpellEffectType().equals(SpellEffectType.AddMeleeProc)) {
+									if (spelleffect.getBase() < 0)
+										continue;
+
+									ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
+											.getSpell(spelleffect.getBase());
+									if (spell == null)
+										continue;
+
+									// Chance to proc
+									int procChance = getProcChancePct();
+									int roll = Utils.RandomBetween(0, 100);
+
+									if (roll < procChance) {
+										boolean itemUseSuccess = procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
+												defender.getBukkitLivingEntity());
+
+										if (itemUseSuccess) {
+											checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
+										}
+
+										if (procSpell.getActSpellCost(this) > 0)
+											if (itemUseSuccess) {
+												if (this.getBukkitLivingEntity() instanceof Player) {
+													SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity())
+															.reducePlayerMana(procSpell.getActSpellCost(this));
+												}
+											}
+									}
+								}
+							}
+						}
+					}
+				} catch (CoreStateInitException e) {
+					
+				} catch (SoliniaItemException e) {
+					
+				} catch (Exception e)
+				{
+					System.out.println("Failed to perform proc in damage routine");
+					e.printStackTrace();
+				}
+			}
 
 			defender.damageAlertHook(finaldamage, getBukkitLivingEntity());
 
