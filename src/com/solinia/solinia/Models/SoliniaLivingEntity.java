@@ -1813,6 +1813,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ISoliniaItem handItem = StateManager.getInstance().getConfigurationManager().getItem(procItemId);
 			if (handItem == null)
 				return;
+			
+			Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), " is using Weapon : " + handItem.getDisplayname() + " with weapon ability id: " + handItem.getWeaponabilityid());
 
 			// Check if item has any proc effects
 			if (handItem.getWeaponabilityid() > 0) {
