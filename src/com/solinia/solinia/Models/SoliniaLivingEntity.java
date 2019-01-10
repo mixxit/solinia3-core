@@ -5252,6 +5252,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// always meditating, ignore this
 		// if (isPlayer() && isMeditating())
 		// return mods[19];
+		
+		if (offense < 1)
+			offense = 1;
+		
+		if (mitigation < 1)
+			mitigation = 1;
 
 		int atk_roll = Utils.RandomBetween(0, offense + 5);
 		int def_roll = Utils.RandomBetween(0, mitigation + 5);
