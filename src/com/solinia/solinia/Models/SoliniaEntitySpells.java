@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -124,9 +125,6 @@ public class SoliniaEntitySpells {
 			return false;
 		}
 		
-		if (containsSpellId(soliniaSpell.getId()))
-			return false;
-
 		// Resist spells!
 		if (soliniaSpell.isResistable() && !soliniaSpell.isBeneficial()) {
 			float effectiveness = 100;
@@ -178,7 +176,7 @@ public class SoliniaEntitySpells {
 			return false;
 		
 		if (duration > 0)
-			slots.put(slot, activeSpell);
+			putSlot(slot, activeSpell);
 
 		// System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
 
@@ -346,17 +344,18 @@ public class SoliniaEntitySpells {
 
 	public void run(Plugin plugin) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
-		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
+		HashMap<Short, SoliniaActiveSpell> updateSpellsSlots = new HashMap<Short, SoliniaActiveSpell>();
 
 		if (!getLivingEntity().isDead())
-			for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+			for (Entry<Short, SoliniaActiveSpell> slot : this.slots.entrySet()) {
+				SoliniaActiveSpell activeSpell = slot.getValue();
 				if (activeSpell.getTicksLeft() == 0) {
 					removeSpells.add(activeSpell.getSpellId());
 				} else {
 					activeSpell.buffTick();
 					activeSpell.apply(plugin);
 					activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
-					updateSpells.add(activeSpell);
+					updateSpellsSlots.put(slot.getKey(), activeSpell);
 				}
 			}
 
@@ -364,13 +363,20 @@ public class SoliniaEntitySpells {
 			removeSpell(plugin, spellId, false);
 		}
 
-		for (SoliniaActiveSpell activeSpell : updateSpells) {
-			Short slot = getNextAvailableSlot();
-			if (slot  == null)
-				continue;
-			
-			slots.put(slot, activeSpell);
+		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : updateSpellsSlots.entrySet()) {
+			putSlot(activeSpellSlot.getKey(), activeSpellSlot.getValue());
 		}
+	}
+	
+	private void putSlot(Short slot, SoliniaActiveSpell activeSpell)
+	{
+		if (containsSpellId(activeSpell.getSpellId()))
+		{
+			System.out.println("Error: tried to put a spell [" + activeSpell.getSpellId() + "] in a slot [" + slot + "] that we already have! Cancelling...");
+			return;
+		}
+		
+		slots.put(slot, activeSpell);
 	}
 
 	private Short getNextAvailableSlot() {
@@ -409,7 +415,7 @@ public class SoliniaEntitySpells {
 			if (slot  == null)
 				continue;
 			
-			slots.put(slot, activeSpell);
+			putSlot(slot, activeSpell);
 		}
 
 	}
@@ -441,7 +447,7 @@ public class SoliniaEntitySpells {
 			if (slot  == null)
 				continue;
 			
-			slots.put(slot, activeSpell);
+			putSlot(slot, activeSpell);
 		}
 	}
 }
