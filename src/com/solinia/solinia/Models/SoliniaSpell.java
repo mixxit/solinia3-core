@@ -4144,9 +4144,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		}
 		
-		if (!solTarget.canAcceptSpellBuffSlots(soliniaSpell))
-			return false;
-		
 		ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter.Adapt(source);
 		if (solTarget.isNPC())
 		{

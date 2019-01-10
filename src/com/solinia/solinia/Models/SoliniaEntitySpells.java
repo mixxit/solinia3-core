@@ -22,7 +22,6 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
-import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitItemStack;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
 
@@ -125,6 +124,9 @@ public class SoliniaEntitySpells {
 			return false;
 		}
 		
+		if(!canStack(soliniaSpell))
+			return false;
+		
 		// Resist spells!
 		if (soliniaSpell.isResistable() && !soliniaSpell.isBeneficial()) {
 			float effectiveness = 100;
@@ -203,6 +205,29 @@ public class SoliniaEntitySpells {
 			if (slots.get(slot) != null)
 				slots.get(slot).setFirstRun(false);
 		}
+		return true;
+	}
+
+	private boolean canStack(SoliniaSpell soliniaSpell) {
+		for(SoliniaActiveSpell activeSpell : getActiveSpells())
+		for(ActiveSpellEffect activeEffect : activeSpell.getActiveSpellEffects())
+		{
+			for(SpellEffect newEffect : soliniaSpell.getBaseSpellEffects())
+			{
+				// if effects are not same SPA (same effect) they stack 
+				if (!newEffect.getSpellEffectType().equals(activeEffect.getSpellEffectType()))
+					continue;
+				
+				// if effects are not in the same position they stack
+				if (newEffect.getSpellEffectNo() != activeEffect.getSpellEffectNo())
+					continue;
+				
+				// Does the SPA allow stacking
+				if (!newEffect.allowsStacking(activeEffect))
+					return false;
+			}
+		}
+			
 		return true;
 	}
 

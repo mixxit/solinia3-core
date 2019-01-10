@@ -73,4 +73,14 @@ public class SpellEffect {
 	public void setMax(int max) {
 		this.max = max;
 	}
+
+	public boolean allowsStacking(ActiveSpellEffect activeEffect) {
+		if (this.getSpellEffectType().equals(SpellEffectType.Screech))
+		{
+			if (this.getBase() == -1 && activeEffect.getBase() < 1)
+				return true;
+		}
+		
+		return false;
+	}
 }

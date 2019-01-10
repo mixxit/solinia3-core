@@ -7022,15 +7022,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public boolean canAcceptSpellBuffSlots(ISoliniaSpell soliniaSpell) {
-		if (!soliniaSpell.isBuffSpell())
-			return true;
-		
-		// todo check buff slots
-		return true;
-	}
-
-	@Override
 	public int getMaxTotalSlots() {
 		return Utils.TotalBuffs;
 	}
