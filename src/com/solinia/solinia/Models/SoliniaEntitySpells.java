@@ -176,7 +176,7 @@ public class SoliniaEntitySpells {
 			return false;
 		
 		if (duration > 0)
-			putSlot(slot, activeSpell);
+			putSlot(slot, activeSpell, true);
 
 		// System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
 
@@ -364,13 +364,13 @@ public class SoliniaEntitySpells {
 		}
 
 		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : updateSpellsSlots.entrySet()) {
-			putSlot(activeSpellSlot.getKey(), activeSpellSlot.getValue());
+			putSlot(activeSpellSlot.getKey(), activeSpellSlot.getValue(),false);
 		}
 	}
 	
-	private void putSlot(Short slot, SoliniaActiveSpell activeSpell)
+	private void putSlot(Short slot, SoliniaActiveSpell activeSpell, boolean checkExists)
 	{
-		if (containsSpellId(activeSpell.getSpellId()))
+		if (checkExists == true && containsSpellId(activeSpell.getSpellId()))
 		{
 			System.out.println("Error: tried to put a spell [" + activeSpell.getSpellId() + "] in a slot [" + slot + "] that we already have! Cancelling...");
 			return;
@@ -394,15 +394,15 @@ public class SoliniaEntitySpells {
 	// Mainly used for cures
 	public void removeFirstSpellOfEffectType(Plugin plugin, SpellEffectType type, boolean forceDoNotLoopBardSpell) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
-		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
+		HashMap<Short, SoliniaActiveSpell> updateSpells = new HashMap<Short, SoliniaActiveSpell>();
 
 		boolean foundToRemove = false;
-		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
-			if (foundToRemove == false && activeSpell.getSpell().isEffectInSpell(type)) {
-				removeSpells.add(activeSpell.getSpellId());
+		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : slots.entrySet()) {
+			if (foundToRemove == false && activeSpellSlot.getValue().getSpell().isEffectInSpell(type)) {
+				removeSpells.add(activeSpellSlot.getValue().getSpellId());
 				foundToRemove = true;
 			} else {
-				updateSpells.add(activeSpell);
+				updateSpells.put(activeSpellSlot.getKey(), activeSpellSlot.getValue());
 			}
 		}
 
@@ -410,12 +410,8 @@ public class SoliniaEntitySpells {
 			removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
 		}
 
-		for (SoliniaActiveSpell activeSpell : updateSpells) {
-			Short slot = getNextAvailableSlot();
-			if (slot  == null)
-				continue;
-			
-			putSlot(slot, activeSpell);
+		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : updateSpells.entrySet()) {
+			putSlot(activeSpellSlot.getKey(), activeSpellSlot.getValue(), false);
 		}
 
 	}
@@ -426,15 +422,15 @@ public class SoliniaEntitySpells {
 
 	public void removeFirstSpell(Plugin plugin, boolean forceDoNotLoopBardSpell) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
-		List<SoliniaActiveSpell> updateSpells = new ArrayList<SoliniaActiveSpell>();
+		HashMap<Short, SoliniaActiveSpell> updateSpells = new HashMap<Short, SoliniaActiveSpell>();
 
 		boolean foundToRemove = false;
-		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+		for (Entry<Short,SoliniaActiveSpell> activeSpellSlot : slots.entrySet()) {
 			if (foundToRemove == false) {
-				removeSpells.add(activeSpell.getSpellId());
+				removeSpells.add(activeSpellSlot.getValue().getSpellId());
 				foundToRemove = true;
 			} else {
-				updateSpells.add(activeSpell);
+				updateSpells.put(activeSpellSlot.getKey(), activeSpellSlot.getValue());
 			}
 		}
 
@@ -442,12 +438,8 @@ public class SoliniaEntitySpells {
 			removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
 		}
 
-		for (SoliniaActiveSpell activeSpell : updateSpells) {
-			Short slot = getNextAvailableSlot();
-			if (slot  == null)
-				continue;
-			
-			putSlot(slot, activeSpell);
+		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : updateSpells.entrySet()) {
+			putSlot(activeSpellSlot.getKey(), activeSpellSlot.getValue(), false);
 		}
 	}
 }
