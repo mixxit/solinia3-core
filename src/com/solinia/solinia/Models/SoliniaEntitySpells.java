@@ -170,7 +170,9 @@ public class SoliniaEntitySpells {
 		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer,
 				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits());
 		
-		Short slot = getAvailableSlot();
+		Short slot = getNextAvailableSlot();
+		if (slot == null)
+			return false;
 		
 		if (duration > 0)
 			slots.put(slot, activeSpell);
@@ -201,11 +203,6 @@ public class SoliniaEntitySpells {
 				slots.get(slot).setFirstRun(false);
 		}
 		return true;
-	}
-
-	private Short getAvailableSlot() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@SuppressWarnings("incomplete-switch")
