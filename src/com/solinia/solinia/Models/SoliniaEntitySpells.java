@@ -214,6 +214,9 @@ public class SoliniaEntitySpells {
 		{
 			for(SpellEffect newEffect : soliniaSpell.getBaseSpellEffects())
 			{
+				if (newEffect.getSpellEffectType().equals(SpellEffectType.CHA) && newEffect.getBase() == 0)
+					continue;
+				
 				// if effects are not same SPA (same effect) they stack 
 				if (!newEffect.getSpellEffectType().equals(activeEffect.getSpellEffectType()))
 					continue;
