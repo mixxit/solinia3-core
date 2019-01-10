@@ -117,6 +117,12 @@ import net.minecraft.server.v1_13_R2.NBTTagCompound;
 public class Utils {
 	public static final int MAX_ENTITY_AGGRORANGE = 100;
 	public static final int DMG_INVULNERABLE = -5;
+	public static final int LongBuffs = 25;
+	public static final int ShortBuffs = 12;
+	public static final int DiscBuffs = 1;
+	public static final int TotalBuffs = LongBuffs + ShortBuffs + DiscBuffs;
+	public static final int NPCBuffs = 60;
+	public static final int PetBuffs = 30;
 	
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));

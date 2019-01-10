@@ -3,12 +3,14 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -26,13 +28,48 @@ import net.md_5.bungee.api.ChatColor;
 public class SoliniaEntitySpells {
 
 	private UUID livingEntityUUID;
-	private ConcurrentHashMap<Integer, SoliniaActiveSpell> activeSpells = new ConcurrentHashMap<Integer, SoliniaActiveSpell>();
+	private ConcurrentHashMap<Short, SoliniaActiveSpell> slots = new ConcurrentHashMap<Short, SoliniaActiveSpell>();
 	private boolean isPlayer;
 
 	public SoliniaEntitySpells(LivingEntity livingEntity) {
 		setLivingEntityUUID(livingEntity.getUniqueId());
 		if (livingEntity instanceof Player)
 			isPlayer = true;
+	}
+	
+	private LivingEntity getBukkitLivingEntity()
+	{
+		Entity entity = Bukkit.getEntity(livingEntityUUID);
+		if (!(entity instanceof LivingEntity))
+			return null;
+		
+		return (LivingEntity)entity;		
+	}
+	
+	private ISoliniaLivingEntity getSoliniaLivingEntity()
+	{
+		if (getBukkitLivingEntity() == null)
+			return null;
+		
+		try
+		{
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getBukkitLivingEntity());
+			return solLivingEntity;
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return null;
+	}
+	
+	private int getMaxTotalSlots()
+	{
+		ISoliniaLivingEntity solLivingEntity = getSoliniaLivingEntity();
+		if (solLivingEntity == null)
+			return 0;
+		
+		return solLivingEntity.getMaxTotalSlots();
 	}
 
 	public UUID getLivingEntityUUID() {
@@ -48,12 +85,25 @@ public class SoliniaEntitySpells {
 	}
 
 	public Collection<SoliniaActiveSpell> getActiveSpells() {
-		return activeSpells.values();
+		return slots.values();
+	}
+	
+	private Boolean containsSpellId(int spellId)
+	{
+		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+			if (activeSpell.getSpellId() == spellId)
+				return true;
+		}
+		
+		return false;
 	}
 
 	public boolean addSpell(Plugin plugin, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration) {
 		// This spell ID is already active
-		if (activeSpells.get(soliniaSpell.getId()) != null)
+		if (containsSpellId(soliniaSpell.getId()))
+			return false;
+		
+		if ((slots.size() + 1) > getMaxTotalSlots())
 			return false;
 
 		if (this.getLivingEntity() == null)
@@ -119,8 +169,11 @@ public class SoliniaEntitySpells {
 
 		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer,
 				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits());
+		
+		Short slot = getAvailableSlot();
+		
 		if (duration > 0)
-			activeSpells.put(soliniaSpell.getId(), activeSpell);
+			slots.put(slot, activeSpell);
 
 		// System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
 
@@ -144,17 +197,31 @@ public class SoliniaEntitySpells {
 		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 0);
 
 		if (duration > 0) {
-			if (activeSpells.get(soliniaSpell.getId()) != null)
-				activeSpells.get(soliniaSpell.getId()).setFirstRun(false);
+			if (slots.get(slot) != null)
+				slots.get(slot).setFirstRun(false);
 		}
 		return true;
+	}
+
+	private Short getAvailableSlot() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@SuppressWarnings("incomplete-switch")
 	public void removeSpell(Plugin plugin, Integer spellId, boolean forceDoNotLoopBardSpell) {
 		// Effect has worn off
-		SoliniaActiveSpell activeSpell = activeSpells.get(spellId);
-
+		
+		SoliniaActiveSpell activeSpell = null;
+		for (SoliniaActiveSpell curSpell : getActiveSpells())
+		{
+			if (curSpell.getSpellId() != spellId)
+				continue;
+			
+			activeSpell = curSpell;
+			break;
+		}
+		
 		if (activeSpell == null)
 			return;
 
@@ -184,7 +251,11 @@ public class SoliniaEntitySpells {
 			}
 		}
 
-		activeSpells.remove(spellId);
+		for (Entry<Short, SoliniaActiveSpell> slot : slots.entrySet())
+		{
+			if (slot.getValue().getSpellId() == spellId)
+				slots.remove(slot.getKey());
+		}
 
 		if (updateMaxHp == true) {
 			if (getLivingEntity() != null)
@@ -294,8 +365,24 @@ public class SoliniaEntitySpells {
 		}
 
 		for (SoliniaActiveSpell activeSpell : updateSpells) {
-			activeSpells.put(activeSpell.getSpellId(), activeSpell);
+			Short slot = getNextAvailableSlot();
+			if (slot  == null)
+				continue;
+			
+			slots.put(slot, activeSpell);
 		}
+	}
+
+	private Short getNextAvailableSlot() {
+		for (Short slot = 0; slot < getMaxTotalSlots(); slot++)
+		{
+			if (slots.containsKey(slot))
+				continue;
+			
+			return slot;
+		}
+		
+		return null;
 	}
 
 	// Mainly used for cures
@@ -318,7 +405,11 @@ public class SoliniaEntitySpells {
 		}
 
 		for (SoliniaActiveSpell activeSpell : updateSpells) {
-			activeSpells.put(activeSpell.getSpellId(), activeSpell);
+			Short slot = getNextAvailableSlot();
+			if (slot  == null)
+				continue;
+			
+			slots.put(slot, activeSpell);
 		}
 
 	}
@@ -346,7 +437,11 @@ public class SoliniaEntitySpells {
 		}
 
 		for (SoliniaActiveSpell activeSpell : updateSpells) {
-			activeSpells.put(activeSpell.getSpellId(), activeSpell);
+			Short slot = getNextAvailableSlot();
+			if (slot  == null)
+				continue;
+			
+			slots.put(slot, activeSpell);
 		}
 	}
 }

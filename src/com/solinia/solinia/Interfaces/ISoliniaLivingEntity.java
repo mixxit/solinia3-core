@@ -334,4 +334,6 @@ public interface ISoliniaLivingEntity
 
 	public boolean canAcceptSpellBuffSlots(ISoliniaSpell soliniaSpell);
 
+	public int getMaxTotalSlots();
+
 }

@@ -7023,4 +7023,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// todo check buff slots
 		return true;
 	}
+
+	@Override
+	public int getMaxTotalSlots() {
+		return Utils.TotalBuffs;
+	}
 }
