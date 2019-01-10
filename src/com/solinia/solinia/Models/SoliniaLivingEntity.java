@@ -1821,7 +1821,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
 						.getSpell(handItem.getWeaponabilityid());
 
-				if (procSpell != null && attackerSolEntity.getLevel() > handItem.getMinLevel()) {
+				if (procSpell != null && attackerSolEntity.getLevel() >= handItem.getMinLevel()) {
 					// Chance to proc
 					int procChance = getProcChancePct();
 					int roll = Utils.RandomBetween(0, 100);
@@ -7013,5 +7013,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return null;
 
 		return Bukkit.getEntity(this.getActiveMob().getOwner().get());
+	}
+
+	@Override
+	public boolean canAcceptSpellBuffSlots(ISoliniaSpell soliniaSpell) {
+		if (!soliniaSpell.isBuffSpell())
+			return true;
+		
+		// todo check buff slots
+		return true;
 	}
 }

@@ -332,4 +332,6 @@ public interface ISoliniaLivingEntity
 
 	boolean canDoSpecialAttack(LivingEntity other);
 
+	public boolean canAcceptSpellBuffSlots(ISoliniaSpell soliniaSpell);
+
 }
