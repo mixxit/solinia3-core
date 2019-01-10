@@ -123,6 +123,9 @@ public class SoliniaEntitySpells {
 		} catch (CoreStateInitException e) {
 			return false;
 		}
+		
+		if (containsSpellId(soliniaSpell.getId()))
+			return false;
 
 		// Resist spells!
 		if (soliniaSpell.isResistable() && !soliniaSpell.isBeneficial()) {
@@ -166,7 +169,7 @@ public class SoliniaEntitySpells {
 				return true;
 			}
 		}
-
+		
 		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer,
 				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits());
 		
