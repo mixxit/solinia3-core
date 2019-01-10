@@ -122,6 +122,10 @@ public class ItemStackAdapter {
 			loretxt.addAll(Arrays.asList(lorestr));
 		}
 		
+		if (soliniaItem.getDamage() > 0) {
+			loretxt.add("Damage: " + ChatColor.GREEN + soliniaItem.getDamage() + ChatColor.RESET);
+		}
+		
 		if (soliniaItem.isThrowing() == true && !soliniaItem.isSpellscroll())
 	    {
 			loretxt.add("This item can be thrown!");
