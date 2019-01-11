@@ -36,6 +36,7 @@ import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_13_R2.WorldGenVillagePieces.Material;
 
 public class SoliniaNPC implements ISoliniaNPC {
 	private int id;
@@ -499,22 +500,64 @@ public class SoliniaNPC implements ISoliniaNPC {
 			setDisguisetype(value);
 			break;
 		case "headitem":
-			setHeaditem(value);
+			try
+			{
+				Material.valueOf(value.toUpperCase());
+			} catch (IllegalArgumentException e)
+			{
+				throw new InvalidNpcSettingException("This is not a valid minecraft item type: " + value.toUpperCase() + " See: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html");
+			}
+			setHeaditem(value.toUpperCase());
 			break;
 		case "chestitem":
-			setChestitem(value);
+			try
+			{
+				Material.valueOf(value.toUpperCase());
+			} catch (IllegalArgumentException e)
+			{
+				throw new InvalidNpcSettingException("This is not a valid minecraft item type: " + value.toUpperCase() + " See: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html");
+			}
+			setChestitem(value.toUpperCase());
 			break;
 		case "legsitem":
-			setLegsitem(value);
+			try
+			{
+				Material.valueOf(value.toUpperCase());
+			} catch (IllegalArgumentException e)
+			{
+				throw new InvalidNpcSettingException("This is not a valid minecraft item type: " + value.toUpperCase() + " See: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html");
+			}
+			setLegsitem(value.toUpperCase());
 			break;
 		case "feetitem":
-			setFeetitem(value);
+			try
+			{
+				Material.valueOf(value.toUpperCase());
+			} catch (IllegalArgumentException e)
+			{
+				throw new InvalidNpcSettingException("This is not a valid minecraft item type: " + value.toUpperCase() + " See: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html");
+			}
+			setFeetitem(value.toUpperCase());
 			break;
 		case "handitem":
-			setHanditem(value);
+			try
+			{
+				Material.valueOf(value.toUpperCase());
+			} catch (IllegalArgumentException e)
+			{
+				throw new InvalidNpcSettingException("This is not a valid minecraft item type: " + value.toUpperCase() + " See: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html");
+			}
+			setHanditem(value.toUpperCase());
 			break;
 		case "offhanditem":
-			setOffhanditem(value);
+			try
+			{
+				Material.valueOf(value.toUpperCase());
+			} catch (IllegalArgumentException e)
+			{
+				throw new InvalidNpcSettingException("This is not a valid minecraft item type: " + value.toUpperCase() + " See: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html");
+			}
+			setOffhanditem(value.toUpperCase());
 			break;
 		case "clearitems":
 			setHeaditem(null);
