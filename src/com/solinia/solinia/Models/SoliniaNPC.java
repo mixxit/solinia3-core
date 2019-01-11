@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.entity.LivingEntity;
@@ -36,7 +37,6 @@ import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_13_R2.WorldGenVillagePieces.Material;
 
 public class SoliniaNPC implements ISoliniaNPC {
 	private int id;
