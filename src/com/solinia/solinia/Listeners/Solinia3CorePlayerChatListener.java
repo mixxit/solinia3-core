@@ -34,23 +34,18 @@ public class Solinia3CorePlayerChatListener implements Listener {
 			currentChannel = "LOCAL";
 		}
 		
-		// TODO - Support checking channel modes of player
-		if (currentChannel.equals("LOCAL"))
+		if (event.getPlayer().getRace() == null)
 		{
-			if (event.getPlayer().getRace() == null)
-			{
-				event.getPlayer().getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /race");
-				return;
-			}
-			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
-		} else {
-			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
+			event.getPlayer().getBukkitPlayer().sendMessage("You must set your race to speak in chat - /race");
 			return;
 		}
 		
-		if (event.getPlayer().getRace() == null)
+		// TODO - Support checking channel modes of player
+		if (currentChannel.equals("LOCAL"))
 		{
-			event.getPlayer().getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /race");
+			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
+		} else {
+			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
 			return;
 		}
 		
