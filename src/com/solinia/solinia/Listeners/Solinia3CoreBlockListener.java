@@ -3,11 +3,18 @@ package com.solinia.solinia.Listeners;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.inventory.ItemStack;
+
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -27,11 +34,32 @@ public class Solinia3CoreBlockListener implements Listener {
 						new Location(event.getEntity().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
 								.getSize())
 					event.getEntity().sendMessage(ChatColor.GRAY + "* Blocks cannot be formed in defined Zones (Frostwalk etc)");
-					event.setCancelled(true);
+					Utils.CancelEvent(event);
 			}
 		} catch (CoreStateInitException e) {
 
 		}
 		
+	}
+	
+	@EventHandler
+	public void onBlockPlaceEvent(BlockPlaceEvent event)
+	{
+		try
+		{
+			ItemStack itemStack = event.getPlayer().getItemInHand();
+			ISoliniaItem item = SoliniaItemAdapter.Adapt(itemStack);
+			if (item != null && !item.isPlaceable())
+			{
+				Utils.CancelEvent(event);
+				event.getPlayer().sendMessage("This item has been marked as not placeable");
+			}
+			
+		} catch (CoreStateInitException e)
+		{
+			Utils.CancelEvent(event);
+		} catch (SoliniaItemException e) {
+			
+		}
 	}
 }

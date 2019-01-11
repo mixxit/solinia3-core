@@ -342,4 +342,8 @@ public interface ISoliniaItem {
 	void setLastUpdatedTime(Timestamp lastUpdatedTime);
 
 	void setLastUpdatedTimeNow();
+
+	boolean isPlaceable();
+
+	void setPlaceable(boolean placeable);
 }

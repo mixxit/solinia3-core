@@ -50,6 +50,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int stamina = 0;
 	private int agility = 0;
 	private int dexterity = 0;
+	private boolean placeable = true;
 	private int intelligence = 0;
 	private int wisdom = 0;
 	private int charisma = 0;
@@ -910,7 +911,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET + " - minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
 		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET);
-		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET);
+		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET + " placeable: " + ChatColor.GOLD + isPlaceable() + ChatColor.RESET);
 		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET + " - throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
@@ -926,7 +927,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET + " - weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
-		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + ChatColor.RESET);
+		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + "%" + ChatColor.RESET);
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET +
 		" - stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET + 
 		" - agility: " + ChatColor.GOLD + getAgility() + ChatColor.RESET + 
@@ -1021,6 +1022,9 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "spellscroll":
 			this.setSpellscroll(Boolean.parseBoolean(value));
+			break;
+		case "placeable":
+			this.setPlaceable(Boolean.parseBoolean(value));
 			break;
 		case "artifact":
 			setArtifact(Boolean.parseBoolean(value));
@@ -1642,5 +1646,15 @@ public class SoliniaItem implements ISoliniaItem {
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		System.out.println("Set LastUpdatedTime on " + getId());
 		this.setLastUpdatedTime(nowtimestamp);
+	}
+
+	@Override
+	public boolean isPlaceable() {
+		return placeable;
+	}
+
+	@Override
+	public void setPlaceable(boolean placeable) {
+		this.placeable = placeable;
 	}
 }
