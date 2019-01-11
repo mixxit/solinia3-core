@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -19,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -29,6 +31,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -52,6 +57,7 @@ import com.solinia.solinia.Utils.Utils;
 import io.lumine.xikage.mythicmobs.mobs.EntityManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
 
@@ -73,6 +79,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int classid = 0;
 	private String language;
 	private String gender = "MALE";
+	private String base64InventoryContents = "";
+	private String base64ArmorContents = "";
+	
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
 	private UUID interaction;
 	private String currentChannel = "OOC";
@@ -3471,6 +3480,78 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			default:
 				break;
 		}
+	}
+
+	@Override
+	public String getBase64InventoryContents() {
+		return base64InventoryContents;
+	}
+
+	@Override
+	public void setBase64InventoryContents(String base64InventoryContents) {
+		this.base64InventoryContents = base64InventoryContents;
+	}
+
+	@Override
+	public String getBase64ArmorContents() {
+		return base64ArmorContents;
+	}
+
+	@Override
+	public void setBase64ArmorContents(String base64ArmorContents) {
+		this.base64ArmorContents = base64ArmorContents;
+	}
+	
+	@Override
+	public List<CraftItemStack> getStoredArmorContents() {
+		if (getBase64ArmorContents() == null || getBase64ArmorContents().equals(""))
+			return new ArrayList<CraftItemStack>();
+		
+		try
+		{
+			String jsonOutput = new String(Base64.decodeBase64(getBase64ArmorContents().getBytes()));
+			GsonBuilder gsonbuilder = new GsonBuilder();
+			Gson gson = gsonbuilder.create();
+			return gson.fromJson(jsonOutput, new TypeToken<List<CraftItemStack>>(){}.getType());
+		} catch (Exception e)
+		{
+			System.out.println("Exception converting base64 to item array - Player: " + this.getBukkitPlayer().getName() + " Base64: " + getBase64ArmorContents());
+			return new ArrayList<CraftItemStack>();
+		}
+	}
+	
+	@Override
+	public List<CraftItemStack> getStoredInventoryContents() {
+		if (getBase64InventoryContents() == null || getBase64InventoryContents().equals(""))
+			return new ArrayList<CraftItemStack>();
+		
+		try
+		{
+			String jsonOutput = new String(Base64.decodeBase64(getBase64InventoryContents().getBytes()));
+			GsonBuilder gsonbuilder = new GsonBuilder();
+			Gson gson = gsonbuilder.create();
+			return gson.fromJson(jsonOutput, new TypeToken<List<CraftItemStack>>(){}.getType());
+		} catch (Exception e)
+		{
+			System.out.println("Exception converting base64 to item array - Player: " + this.getBukkitPlayer().getName() + " Base64: " + getBase64InventoryContents());
+			return new ArrayList<CraftItemStack>();
+		}
+	}
+
+	@Override
+	public void storeInventoryContents() {
+		GsonBuilder gsonbuilder = new GsonBuilder();
+		Gson gson = gsonbuilder.create();
+		String jsonOutput = gson.toJson(getBukkitPlayer().getInventory().getContents(), new TypeToken<List<CraftItemStack>>(){}.getType());
+		this.setBase64InventoryContents(new String(Base64.encodeBase64(jsonOutput.getBytes())));
+	}
+
+	@Override
+	public void storeArmorContents() {
+		GsonBuilder gsonbuilder = new GsonBuilder();
+		Gson gson = gsonbuilder.create();
+		String jsonOutput = gson.toJson(getBukkitPlayer().getInventory().getArmorContents(), new TypeToken<List<CraftItemStack>>(){}.getType());
+		this.setBase64ArmorContents(new String(Base64.encodeBase64(jsonOutput.getBytes())));
 	}
 
 }

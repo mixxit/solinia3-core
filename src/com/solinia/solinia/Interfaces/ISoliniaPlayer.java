@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
@@ -460,4 +461,20 @@ public interface ISoliniaPlayer extends Serializable {
 	void setWaistItemInstance(String waistItemInstance);
 
 	public void setEquipSlotItem(EquipmentSlot slot, int itemId);
+
+	String getBase64InventoryContents();
+
+	void setBase64InventoryContents(String base64InventoryContents);
+
+	String getBase64ArmorContents();
+
+	void setBase64ArmorContents(String base64ArmorContents);
+
+	public void storeInventoryContents();
+
+	public void storeArmorContents();
+
+	List<CraftItemStack> getStoredArmorContents();
+
+	List<CraftItemStack> getStoredInventoryContents();
 }
