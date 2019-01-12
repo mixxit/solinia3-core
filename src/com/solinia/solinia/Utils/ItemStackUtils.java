@@ -9,10 +9,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+import org.bukkit.inventory.meta.tags.ItemTagType;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
@@ -66,6 +70,43 @@ public class ItemStackUtils {
         
         return damage;
     }
+	
+	public static String getSoliniaItemId(ItemStack itemStack)
+	{
+		if (itemStack == null)
+			return null;
+
+		if (itemStack.getItemMeta() == null)
+			return null;
+		
+		NamespacedKey soliniaIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaid");
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
+		if(tagContainer.hasCustomTag(soliniaIdKey , ItemTagType.STRING)) {
+		    return tagContainer.getCustomTag(soliniaIdKey, ItemTagType.STRING);
+		}
+		
+		return null;
+	}
+	
+	public static String getSoliniaLastUpdated(ItemStack itemStack)
+	{
+		if (itemStack == null)
+			return null;
+
+		if (itemStack.getItemMeta() == null)
+			return null;
+		
+		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "sollastupdated");
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
+		
+		if(tagContainer.hasCustomTag(soliniaLastUpdatedKey , ItemTagType.STRING)) {
+		    return tagContainer.getCustomTag(soliniaLastUpdatedKey, ItemTagType.STRING);
+		}
+		
+		return null;
+	}
 	
 	public static String ConvertItemStackToJsonRegular(ItemStack itemStack) {
         // First we convert the item stack into an NMS itemstack

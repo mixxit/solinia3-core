@@ -13,7 +13,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +23,8 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
@@ -48,16 +52,19 @@ public class ItemStackAdapter {
 		
 		ItemStack stack = new ItemStack(Material.valueOf(soliniaItem.getBasename().toUpperCase()), 1, soliniaItem.getColor());
 		
+		Timestamp lastItemTimestamp = soliniaItem.getLastUpdatedTime();
+		
 		// New Item ID storage system
+		NamespacedKey soliniaIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaid");
+		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "sollastupdated");
+		ItemMeta itemMeta = stack.getItemMeta();
+		itemMeta.getCustomTagContainer().setCustomTag(soliniaIdKey, ItemTagType.STRING, Integer.toString(soliniaItem.getId()));
+		if (lastItemTimestamp != null)
+			itemMeta.getCustomTagContainer().setCustomTag(soliniaLastUpdatedKey, ItemTagType.STRING, String.valueOf(lastItemTimestamp.getTime()));
+		stack.setItemMeta(itemMeta);
+		
 		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-		compound.set("soliniaid", new NBTTagString(Integer.toString(soliniaItem.getId())));
-		
-		Timestamp lastItemTimestamp = soliniaItem.getLastUpdatedTime();
-		if (lastItemTimestamp != null)
-		{
-			compound.set("sollastupdated", new NBTTagString(String.valueOf(lastItemTimestamp.getTime())));
-		}
 		nmsStack.setTag(compound);
 		stack = CraftItemStack.asBukkitCopy(nmsStack);
 

@@ -5666,6 +5666,13 @@ public class Utils {
 		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
 			return true;
 		
+		// New method
+		if (ItemStackUtils.getSoliniaItemId(itemStack) != null)
+		{
+			return true;
+		}
+		
+		// Classic method
 		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		
@@ -5679,10 +5686,7 @@ public class Utils {
 		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
 			return null;
 
-		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-		
-		String solupdatedtime = compound.getString("sollastupdated");
+		String solupdatedtime = ItemStackUtils.getSoliniaLastUpdated(itemStack);
 		if (solupdatedtime == null || solupdatedtime.equals(""))
 			return null;
 		

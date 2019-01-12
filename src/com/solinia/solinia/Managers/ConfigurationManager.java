@@ -80,6 +80,7 @@ import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
+import com.solinia.solinia.Utils.ItemStackUtils;
 
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
@@ -507,8 +508,13 @@ public class ConfigurationManager implements IConfigurationManager {
 		{
 			soliniaid = itemStack.getItemMeta().getDisplayName().split("_")[1];
 		}
+		else if (ItemStackUtils.getSoliniaItemId(itemStack) != null)
+		{
+			soliniaid = ItemStackUtils.getSoliniaItemId(itemStack);
+		}
 		else 
 		{
+			// Classic method, to be removed
 			net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 			NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 			soliniaid = compound.getString("soliniaid");

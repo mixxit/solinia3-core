@@ -957,7 +957,7 @@ public class SoliniaItem implements ISoliniaItem {
 
 	private String getLastUpdatedTimeAsString() {
 		if (this.lastUpdatedTime == null)
-			return null;
+			setLastUpdatedTimeNow();
 		
 		String lastItemTimestampAsString= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(this.getLastUpdatedTime());
 		return lastItemTimestampAsString;
@@ -1632,6 +1632,9 @@ public class SoliniaItem implements ISoliniaItem {
 
 	@Override
 	public Timestamp getLastUpdatedTime() {
+		if (lastUpdatedTime == null)
+			setLastUpdatedTimeNow();
+		
 		return lastUpdatedTime;
 	}
 

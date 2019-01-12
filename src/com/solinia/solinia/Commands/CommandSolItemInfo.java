@@ -1,18 +1,24 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+import org.bukkit.inventory.meta.tags.ItemTagType;
 
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Utils.ItemStackUtils;
 
-public class CommandItemInfo implements CommandExecutor {
+public class CommandSolItemInfo implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player))
@@ -39,6 +45,13 @@ public class CommandItemInfo implements CommandExecutor {
 			// TODO Auto-generated catch block
 			player.sendMessage("SoliniaItemID: " + "Not a solinia item");
 		}
+		
+		if (ItemStackUtils.getSoliniaItemId(itemStack) != null)
+			player.sendMessage("SoliniaItemId (Tag):" + ItemStackUtils.getSoliniaItemId(itemStack));
+
+		if (ItemStackUtils.getSoliniaLastUpdated(itemStack) != null)
+			player.sendMessage("SoliniaLastUpdated (Tag):" + ItemStackUtils.getSoliniaLastUpdated(itemStack));
+		
 		return true;
 	}
 }
