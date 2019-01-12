@@ -11,6 +11,10 @@ commands:
     description: Commits Solinia3Core State Data
     usage: /commit
     aliases: []
+  iteminfo:
+    description: Gets item info in main hand
+    usage: /iteminfo
+    aliases: []
   consider:
     description: Considers the faction standing of your target
     usage: /consider
