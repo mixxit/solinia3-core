@@ -123,7 +123,7 @@ public class Utils {
 	public static final int TotalBuffs = LongBuffs + ShortBuffs + DiscBuffs;
 	public static final int NPCBuffs = 60;
 	public static final int PetBuffs = 30;
-	public static final Boolean GlowApiEnabled = false;
+	public static final Boolean GlowApiEnabled = true;
 	
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));
