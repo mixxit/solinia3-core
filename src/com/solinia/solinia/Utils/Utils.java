@@ -123,6 +123,7 @@ public class Utils {
 	public static final int TotalBuffs = LongBuffs + ShortBuffs + DiscBuffs;
 	public static final int NPCBuffs = 60;
 	public static final int PetBuffs = 30;
+	public static final Boolean GlowApiEnabled = false;
 	
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));
@@ -6292,6 +6293,9 @@ public class Utils {
 	}
 
 	public static void setGlowing(Entity target, boolean b, Player source) {
+		if (Utils.GlowApiEnabled == false)
+			return;
+		
 		if (source == null || target == null || source.isDead() || target.isDead())
 			return;
 		
@@ -6304,6 +6308,9 @@ public class Utils {
 		}
 	}
 	public static void setGlowing(Entity target, GlowAPI.Color color, Player source) {
+		if (Utils.GlowApiEnabled == false)
+			return;
+
 		if (source == null || target == null || source.isDead() || target.isDead())
 			return;
 
