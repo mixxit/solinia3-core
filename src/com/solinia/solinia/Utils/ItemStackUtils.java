@@ -108,6 +108,11 @@ public class ItemStackUtils {
 		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "sollastupdated");
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
+		// old system
+		if(tagContainer.hasCustomTag(soliniaLastUpdatedKey , ItemTagType.STRING)) {
+			itemMeta.getCustomTagContainer().setCustomTag(soliniaLastUpdatedKey, ItemTagType.LONG, Long.parseLong(tagContainer.getCustomTag(soliniaLastUpdatedKey, ItemTagType.STRING)));
+			itemStack.setItemMeta(itemMeta);
+		}		
 		
 		if(tagContainer.hasCustomTag(soliniaLastUpdatedKey , ItemTagType.LONG)) {
 		    return tagContainer.getCustomTag(soliniaLastUpdatedKey, ItemTagType.LONG);
