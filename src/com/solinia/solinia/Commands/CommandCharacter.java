@@ -11,6 +11,8 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.Utils;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -101,9 +103,9 @@ public class CommandCharacter implements CommandExecutor {
 				switch(args[0].toUpperCase())
 				{
 					case "NEW":
-						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
+						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
 						{
-							player.sendMessage("You can only change your character once per server session. Please wait for the next 4 hourly restart");
+							player.sendMessage("You can only change your character every 10 minutes");
 							return true;
 						}
 							
@@ -115,7 +117,6 @@ public class CommandCharacter implements CommandExecutor {
 									+ player.getLocation().getY() + "," + player.getLocation().getZ());
 							
 							player.sendMessage("Your character has been stored and a new character created");
-							player.sendMessage("Please check you have not dropped any items due to your character change");
 						} else {
 							player.sendMessage("Problem creating your new character");
 						}
@@ -127,9 +128,9 @@ public class CommandCharacter implements CommandExecutor {
 							return true;
 						}
 						
-						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
+						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
 						{
-							player.sendMessage("You can only change your character once per server session. Please wait for the next 4 hourly restart");
+							player.sendMessage("You can only change your character every 10 minutes");
 							return true;
 						}
 						
@@ -146,7 +147,6 @@ public class CommandCharacter implements CommandExecutor {
 						if (loadedPlayer != null)
 						{
 							player.sendMessage("Your character has been stored and your new character loaded");
-							player.sendMessage("Please check you have not dropped any items due to your character change");
 						} else {
 							player.sendMessage("Problem loading requested character");
 						}

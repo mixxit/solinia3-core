@@ -6384,5 +6384,31 @@ public class Utils {
 		}
 		return false;
 	}
+
+	public static boolean canChangeCharacter(Player player) {
+		Timestamp lastChange = null;
+		
+		try
+		{
+			lastChange = StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId());
+		
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+		
+		if (lastChange == null)
+			return true;
+		
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		Timestamp mintimestamp = Timestamp.valueOf(lastChange.toLocalDateTime().plus(10, ChronoUnit.MINUTES));
+
+		if (nowtimestamp.before(mintimestamp))
+			return false;
+		
+		return true;
+			
+	}
 }
 
