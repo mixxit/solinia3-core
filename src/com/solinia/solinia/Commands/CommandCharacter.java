@@ -75,9 +75,9 @@ public class CommandCharacter implements CommandExecutor {
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getCharacterId().toString();
 					
-					if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId()) != null)
+					if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
 					{
-						tc2.setText(ChatColor.RED + "Already changed this session" + ChatColor.RESET);
+						tc2.setText(ChatColor.RED + "Wait 10 mins to change char" + ChatColor.RESET);
 					} else {
 						tc2.setText(ChatColor.AQUA + "[Click to Switch]" + ChatColor.RESET);
 						tc2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, changetext));						

@@ -27,7 +27,21 @@ public class CommandStats implements CommandExecutor {
 	            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 	            ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
 
-				player.sendMessage("Your Level: " + solplayer.getLevel());
+				player.sendMessage("Level: " + ChatColor.GOLD + solplayer.getLevel() + ChatColor.RESET);
+
+				if (solplayer.getClassObj() != null)
+				{
+					player.sendMessage("Your Class: " + ChatColor.GOLD + solplayer.getClassObj().getName() + ChatColor.RESET);
+				} else {
+					player.sendMessage("Your Class: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET);
+				}
+				if (solplayer.getRace() != null)
+				{
+					player.sendMessage("Your Race: " + ChatColor.GOLD + solplayer.getRace().getName() + ChatColor.RESET);
+				} else {
+					player.sendMessage("Your Race: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET);
+				}
+				
 				player.sendMessage(
 						"STR: " + ChatColor.GOLD + solentity.getStrength() + ChatColor.RESET + 
 						" STA: " + ChatColor.GOLD + solentity.getStamina() + ChatColor.RESET + 
