@@ -3505,7 +3505,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public ItemStack[] getStoredArmorContents() {
 		if (getBase64ArmorContents() == null || getBase64ArmorContents().equals(""))
-			return (ItemStack[]) new ArrayList<ItemStack>().toArray();
+			return new ItemStack[0];
 		
 		try
 		{
@@ -3522,7 +3522,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public ItemStack[] getStoredInventoryContents() {
 		if (getBase64InventoryContents() == null || getBase64InventoryContents().equals(""))
-			return (ItemStack[]) new ArrayList<ItemStack>().toArray();
+			return new ItemStack[0];
 		
 		try
 		{
