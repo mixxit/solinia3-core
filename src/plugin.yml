@@ -239,6 +239,10 @@ commands:
     description: Makes npcs of this ID nearby say something
     usage: /npcsay npcid message
     aliases: []
+  npcattack:
+    description: Makes npcs of this ID add a nearby entity to a hate list
+    usage: /npcattack npcid targetentityname
+    aliases: []
   editspawngroup:
     description: Edits a spawngroup
     usage: /editspawngroup spawngroupid setting value

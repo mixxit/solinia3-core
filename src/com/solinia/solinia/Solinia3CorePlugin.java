@@ -520,6 +520,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listcrafts").setExecutor(new CommandListCrafts());
 		this.getCommand("editcraft").setExecutor(new CommandEditCraft());
 		this.getCommand("npcsay").setExecutor(new CommandNPCSay());
+		this.getCommand("npcattack").setExecutor(new CommandNPCAttack());
 		this.getCommand("listworlds").setExecutor(new CommandListWorlds());
 		this.getCommand("editworld").setExecutor(new CommandEditWorld());
 		this.getCommand("reagent").setExecutor(new CommandReagent());
