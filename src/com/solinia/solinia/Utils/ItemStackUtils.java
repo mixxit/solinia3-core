@@ -87,7 +87,8 @@ public class ItemStackUtils {
 		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
 		// old system
 		if(tagContainer.hasCustomTag(soliniaIdKey , ItemTagType.STRING)) {
-		    return tagContainer.getCustomTag(soliniaIdKey, ItemTagType.INTEGER);
+			itemMeta.getCustomTagContainer().setCustomTag(soliniaIdKey, ItemTagType.INTEGER, Integer.parseInt(tagContainer.getCustomTag(soliniaIdKey, ItemTagType.STRING)));
+			itemStack.setItemMeta(itemMeta);
 		}
 		if(tagContainer.hasCustomTag(soliniaIdKey , ItemTagType.INTEGER)) {
 		    return tagContainer.getCustomTag(soliniaIdKey, ItemTagType.INTEGER);
