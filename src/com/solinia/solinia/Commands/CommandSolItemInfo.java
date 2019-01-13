@@ -64,37 +64,7 @@ public class CommandSolItemInfo implements CommandExecutor {
 		if (args.length > 0 && args[0].equals("write"))
 		{
 			String fileData = ItemStackUtils.itemStackToYamlString(itemStack);
-			String fileName = UUID.randomUUID().toString();
-			try {
-				FileOutputStream fooStream = new FileOutputStream(fileName, false);
-				byte[] myBytes = fileData.getBytes();
-				fooStream.write(myBytes);
-				fooStream.close();
-				
-				player.sendMessage("Debug Wrote to File: " + fileName);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if (args.length > 0 && args[0].equals("inventory"))
-		{
-			String fileData = ItemStackUtils.itemStackArrayToYamlString(player.getInventory().getContents());
-			String fileName = UUID.randomUUID().toString();
-			try {
-				FileOutputStream fooStream = new FileOutputStream(fileName, false);
-				byte[] myBytes = fileData.getBytes();
-				fooStream.write(myBytes);
-				fooStream.close();
-				
-				player.sendMessage("Debug Wrote to File: " + fileName);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			player.sendMessage(fileData);
 		}
 
 		return true;
