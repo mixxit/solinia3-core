@@ -283,16 +283,17 @@ public class PlayerManager implements IPlayerManager {
 		ISoliniaPlayer solPlayer;
 		try {
 			solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			//solPlayer.storeInventoryContents();
-			//solPlayer.storeArmorContents();
+			solPlayer.storeInventoryContents();
+			solPlayer.storeArmorContents();
 			
 			solPlayer.removeAllEntityEffects(plugin);
 			solPlayer.killAllPets();
 			
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
 			solPlayer = SoliniaPlayerFactory.CreatePlayer(player,false);
-			//player.getInventory().clear();
-            //player.getInventory().setArmorContents(null);
+			player.getInventory().clear();
+            player.getInventory().setArmorContents(null);
+            player.updateInventory();
 
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
@@ -311,8 +312,8 @@ public class PlayerManager implements IPlayerManager {
 		ISoliniaPlayer solPlayer;
 		try {
 			solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			//solPlayer.storeInventoryContents();
-			//solPlayer.storeArmorContents();
+			solPlayer.storeInventoryContents();
+			solPlayer.storeArmorContents();
 			
 			// if its the same, why bother?
 			if (solPlayer.getCharacterId().equals(characterUUID))
@@ -334,14 +335,12 @@ public class PlayerManager implements IPlayerManager {
 			// Now clear the player and load the old one
 			updatePlayer(player, altSolPlayer);
 
-			//player.getInventory().clear();
-            //player.getInventory().setArmorContents(null);
-            //CraftItemStack[] invArray = new CraftItemStack[altSolPlayer.getStoredInventoryContents().size()];
-            //invArray = altSolPlayer.getStoredInventoryContents().toArray(invArray);
-            //player.getInventory().setContents(invArray);
-            //CraftItemStack[] armArray = new CraftItemStack[altSolPlayer.getStoredArmorContents().size()];
-            //armArray = altSolPlayer.getStoredArmorContents().toArray(armArray);
-			//player.getInventory().setArmorContents(armArray);
+			player.getInventory().clear();
+            player.getInventory().setArmorContents(null);
+            player.updateInventory();
+            player.getInventory().setContents(altSolPlayer.getStoredInventoryContents());
+			player.getInventory().setArmorContents(altSolPlayer.getStoredArmorContents());
+            player.updateInventory();
 			
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())

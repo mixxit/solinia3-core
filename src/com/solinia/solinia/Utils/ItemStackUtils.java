@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -71,25 +72,27 @@ public class ItemStackUtils {
         return damage;
     }
 	
-	public static String getSoliniaItemId(ItemStack itemStack)
+	public static Integer getSoliniaItemId(ItemStack itemStack)
 	{
 		if (itemStack == null)
 			return null;
 
 		if (itemStack.getItemMeta() == null)
+		{
 			return null;
+		}
 		
 		NamespacedKey soliniaIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaid");
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
-		if(tagContainer.hasCustomTag(soliniaIdKey , ItemTagType.STRING)) {
-		    return tagContainer.getCustomTag(soliniaIdKey, ItemTagType.STRING);
+		if(tagContainer.hasCustomTag(soliniaIdKey , ItemTagType.INTEGER)) {
+		    return tagContainer.getCustomTag(soliniaIdKey, ItemTagType.INTEGER);
 		}
 		
 		return null;
 	}
 	
-	public static String getSoliniaLastUpdated(ItemStack itemStack)
+	public static Long getSoliniaLastUpdated(ItemStack itemStack)
 	{
 		if (itemStack == null)
 			return null;
@@ -101,8 +104,8 @@ public class ItemStackUtils {
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
 		
-		if(tagContainer.hasCustomTag(soliniaLastUpdatedKey , ItemTagType.STRING)) {
-		    return tagContainer.getCustomTag(soliniaLastUpdatedKey, ItemTagType.STRING);
+		if(tagContainer.hasCustomTag(soliniaLastUpdatedKey , ItemTagType.LONG)) {
+		    return tagContainer.getCustomTag(soliniaLastUpdatedKey, ItemTagType.LONG);
 		}
 		
 		return null;
@@ -406,7 +409,61 @@ public class ItemStackUtils {
 		itemStack = CraftItemStack.asBukkitCopy(nmsStack);
 		return itemStack;
 	}
+	
+	public static ItemStack[] itemStackArrayFromYamlString(String yamlString)
+	{
+		YamlConfiguration config = new YamlConfiguration();
+		try {
+            config.loadFromString(yamlString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ItemStack[0];
+        }
+		
+		
+		ArrayList<ItemStack> content = (ArrayList<ItemStack>) config.getList("serialized-item-stack-array");
+		if (content == null)
+			return new ItemStack[0];
+		
+		ItemStack[] items = new ItemStack[content.size()];
+		for (int i = 0; i < content.size(); i++) {
+		    ItemStack item = content.get(i);
+		    if (item != null) {
+		        items[i] = item;
+		    } else {
+		        items[i] = null;
+		    }
+		}
+		
+        return items;
+	}
+	
+	public static String itemStackArrayToYamlString(ItemStack[] itemStackArray)
+	{
+		YamlConfiguration config = new YamlConfiguration();
+        config.set("serialized-item-stack-array", itemStackArray);
+        return config.saveToString();
+	}
+	
+	public static String itemStackToYamlString(ItemStack itemStack)
+	{
+		YamlConfiguration config = new YamlConfiguration();
+        config.set("serialized-item-stack", itemStack);
+        return config.saveToString();
+	}
 
+	public static ItemStack itemStackFromYamlString(String yamlString)
+	{
+		YamlConfiguration config = new YamlConfiguration();
+		try {
+            config.loadFromString(yamlString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return config.getItemStack("serialized-item-stack", null);
+	}
+	
 	public static boolean isItemStackUptoDate(ItemStack item, ISoliniaItem solitem) {
 		if (!Utils.IsSoliniaItem(item))
 			return true;

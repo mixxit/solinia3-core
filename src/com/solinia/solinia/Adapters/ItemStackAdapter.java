@@ -58,9 +58,9 @@ public class ItemStackAdapter {
 		NamespacedKey soliniaIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaid");
 		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "sollastupdated");
 		ItemMeta itemMeta = stack.getItemMeta();
-		itemMeta.getCustomTagContainer().setCustomTag(soliniaIdKey, ItemTagType.STRING, Integer.toString(soliniaItem.getId()));
+		itemMeta.getCustomTagContainer().setCustomTag(soliniaIdKey, ItemTagType.INTEGER, soliniaItem.getId());
 		if (lastItemTimestamp != null)
-			itemMeta.getCustomTagContainer().setCustomTag(soliniaLastUpdatedKey, ItemTagType.STRING, String.valueOf(lastItemTimestamp.getTime()));
+			itemMeta.getCustomTagContainer().setCustomTag(soliniaLastUpdatedKey, ItemTagType.LONG, lastItemTimestamp.getTime());
 		stack.setItemMeta(itemMeta);
 		
 		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);

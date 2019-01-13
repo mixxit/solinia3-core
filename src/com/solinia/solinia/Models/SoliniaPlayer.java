@@ -3503,55 +3503,47 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	@Override
-	public List<CraftItemStack> getStoredArmorContents() {
+	public ItemStack[] getStoredArmorContents() {
 		if (getBase64ArmorContents() == null || getBase64ArmorContents().equals(""))
-			return new ArrayList<CraftItemStack>();
+			return (ItemStack[]) new ArrayList<ItemStack>().toArray();
 		
 		try
 		{
-			String jsonOutput = new String(Base64.decodeBase64(getBase64ArmorContents().getBytes()));
-			GsonBuilder gsonbuilder = new GsonBuilder();
-			Gson gson = gsonbuilder.create();
-			return gson.fromJson(jsonOutput, new TypeToken<List<CraftItemStack>>(){}.getType());
+		String yaml = new String(Base64.decodeBase64(getBase64ArmorContents().getBytes()));
+		return ItemStackUtils.itemStackArrayFromYamlString(yaml);
 		} catch (Exception e)
 		{
-			System.out.println("Exception converting base64 to item array - Player: " + this.getBukkitPlayer().getName() + " Base64: " + getBase64ArmorContents());
-			return new ArrayList<CraftItemStack>();
+			System.out.println("Exception converting base64 to itemstack array [armorcontents] for player " + getBukkitPlayer().getName() + ": " + getBase64InventoryContents());
+			e.printStackTrace();
+			return new ItemStack[0];
 		}
 	}
 	
 	@Override
-	public List<CraftItemStack> getStoredInventoryContents() {
+	public ItemStack[] getStoredInventoryContents() {
 		if (getBase64InventoryContents() == null || getBase64InventoryContents().equals(""))
-			return new ArrayList<CraftItemStack>();
+			return (ItemStack[]) new ArrayList<ItemStack>().toArray();
 		
 		try
 		{
-			String jsonOutput = new String(Base64.decodeBase64(getBase64InventoryContents().getBytes()));
-			GsonBuilder gsonbuilder = new GsonBuilder();
-			Gson gson = gsonbuilder.create();
-			return gson.fromJson(jsonOutput, new TypeToken<List<CraftItemStack>>(){}.getType());
+			String yaml = new String(Base64.decodeBase64(getBase64InventoryContents().getBytes()));
+			return ItemStackUtils.itemStackArrayFromYamlString(yaml);
 		} catch (Exception e)
 		{
-			System.out.println("Exception converting base64 to item array - Player: " + this.getBukkitPlayer().getName() + " Base64: " + getBase64InventoryContents());
-			return new ArrayList<CraftItemStack>();
+			System.out.println("Exception converting base64 to itemstack array [inventorycontents] for player " + getBukkitPlayer().getName() + ": " + getBase64InventoryContents());
+			e.printStackTrace();
+			return new ItemStack[0];
 		}
 	}
 
 	@Override
 	public void storeInventoryContents() {
-		GsonBuilder gsonbuilder = new GsonBuilder();
-		Gson gson = gsonbuilder.create();
-		String jsonOutput = gson.toJson(getBukkitPlayer().getInventory().getContents(), new TypeToken<List<CraftItemStack>>(){}.getType());
-		this.setBase64InventoryContents(new String(Base64.encodeBase64(jsonOutput.getBytes())));
+		this.setBase64InventoryContents(new String(Base64.encodeBase64(ItemStackUtils.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getContents()).getBytes())));
 	}
 
 	@Override
 	public void storeArmorContents() {
-		GsonBuilder gsonbuilder = new GsonBuilder();
-		Gson gson = gsonbuilder.create();
-		String jsonOutput = gson.toJson(getBukkitPlayer().getInventory().getArmorContents(), new TypeToken<List<CraftItemStack>>(){}.getType());
-		this.setBase64ArmorContents(new String(Base64.encodeBase64(jsonOutput.getBytes())));
+		this.setBase64ArmorContents(new String(Base64.encodeBase64(ItemStackUtils.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getArmorContents()).getBytes())));
 	}
 
 }

@@ -510,7 +510,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 		else if (ItemStackUtils.getSoliniaItemId(itemStack) != null)
 		{
-			soliniaid = ItemStackUtils.getSoliniaItemId(itemStack);
+			soliniaid = Long.toString(ItemStackUtils.getSoliniaItemId(itemStack));
 		}
 		else 
 		{

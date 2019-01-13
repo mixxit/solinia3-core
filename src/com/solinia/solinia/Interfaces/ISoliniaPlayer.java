@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.CastingSpell;
@@ -474,7 +475,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void storeArmorContents();
 
-	List<CraftItemStack> getStoredArmorContents();
+	ItemStack[] getStoredArmorContents();
 
-	List<CraftItemStack> getStoredInventoryContents();
+	ItemStack[] getStoredInventoryContents();
 }

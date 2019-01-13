@@ -5690,13 +5690,13 @@ public class Utils {
 		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
 			return null;
 
-		String solupdatedtime = ItemStackUtils.getSoliniaLastUpdated(itemStack);
-		if (solupdatedtime == null || solupdatedtime.equals(""))
+		Long solupdatedtime = ItemStackUtils.getSoliniaLastUpdated(itemStack);
+		if (solupdatedtime == null)
 			return null;
 		
 		try
 		{
-		    Timestamp timestamp = new java.sql.Timestamp(Long.parseLong(solupdatedtime));
+		    Timestamp timestamp = new java.sql.Timestamp(solupdatedtime);
 		    return timestamp;
 		} catch (Exception e)
 		{

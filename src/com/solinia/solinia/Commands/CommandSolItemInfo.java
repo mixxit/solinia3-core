@@ -1,10 +1,20 @@
 package com.solinia.solinia.Commands;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.tags.CraftCustomItemTagContainer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -52,6 +62,42 @@ public class CommandSolItemInfo implements CommandExecutor {
 		if (ItemStackUtils.getSoliniaLastUpdated(itemStack) != null)
 			player.sendMessage("SoliniaLastUpdated (Tag):" + ItemStackUtils.getSoliniaLastUpdated(itemStack));
 		
+		if (args.length > 0 && args[0].equals("write"))
+		{
+			String fileData = ItemStackUtils.itemStackToYamlString(itemStack);
+			String fileName = UUID.randomUUID().toString();
+			try {
+				FileOutputStream fooStream = new FileOutputStream(fileName, false);
+				byte[] myBytes = fileData.getBytes();
+				fooStream.write(myBytes);
+				fooStream.close();
+				
+				player.sendMessage("Debug Wrote to File: " + fileName);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (args.length > 0 && args[0].equals("inventory"))
+		{
+			String fileData = ItemStackUtils.itemStackArrayToYamlString(player.getInventory().getContents());
+			String fileName = UUID.randomUUID().toString();
+			try {
+				FileOutputStream fooStream = new FileOutputStream(fileName, false);
+				byte[] myBytes = fileData.getBytes();
+				fooStream.write(myBytes);
+				fooStream.close();
+				
+				player.sendMessage("Debug Wrote to File: " + fileName);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return true;
 	}
 }
