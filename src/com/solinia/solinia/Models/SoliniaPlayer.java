@@ -2696,7 +2696,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 					items.add(item);
 
-					Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(itemstack);
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
 					ISoliniaItem augItem = null;
 					if (augmentationId != null && augmentationId != 0) {
 						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);

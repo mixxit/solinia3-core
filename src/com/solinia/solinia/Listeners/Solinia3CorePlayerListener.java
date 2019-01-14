@@ -620,8 +620,8 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				}
 
-				if (ItemStackUtils.getNBTAugmentationItemId(targetItemStack) != null
-						&& ItemStackUtils.getNBTAugmentationItemId(targetItemStack) != 0) {
+				if (ItemStackUtils.getAugmentationItemId(targetItemStack) != null
+						&& ItemStackUtils.getAugmentationItemId(targetItemStack) != 0) {
 					event.getView().getPlayer().sendMessage("This item already has an augmentation applied");
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);

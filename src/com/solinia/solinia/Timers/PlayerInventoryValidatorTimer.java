@@ -100,9 +100,9 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Checking isItemStackUptoDate: " + ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i));
 					if (!ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i))
 		    		{
-						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
+						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
-							Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId));
+							Integer augmentationId = ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId));
 							ISoliniaItem augItem = null;
 							if (augmentationId != null && augmentationId != 0) {
 								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
@@ -143,9 +143,9 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (i.getMinLevel() > solplayer.getLevel() && !i.isSpellscroll())
 		    		{
-						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
+						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
-							Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId));
+							Integer augmentationId = ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId));
 							ISoliniaItem augItem = null;
 							if (augmentationId != null && augmentationId != 0) {
 								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
@@ -172,9 +172,9 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (solplayer.getClassObj() == null && !i.isSpellscroll())
 					{
-						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
+						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
-							Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId));
+							Integer augmentationId = ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId));
 							ISoliniaItem augItem = null;
 							if (augmentationId != null && augmentationId != 0) {
 								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
@@ -198,9 +198,9 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					if (!i.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()) && !i.isSpellscroll())
 					{
-						if (ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId)) != null)
+						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
-							Integer augmentationId = ItemStackUtils.getNBTAugmentationItemId(player.getInventory().getItem(slotId));
+							Integer augmentationId = ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId));
 							ISoliniaItem augItem = null;
 							if (augmentationId != null && augmentationId != 0) {
 								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);

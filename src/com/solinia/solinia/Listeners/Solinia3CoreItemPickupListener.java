@@ -91,26 +91,6 @@ public class Solinia3CoreItemPickupListener implements Listener {
         	}
         }
         
-        // Validate classic augmentation items
-        Integer newaugmentationItemId = ItemStackUtils.getNBTAugmentationItemId(pickedUpItemStack);
-        Integer oldaugmentationItemId = ItemStackUtils.getClassicAugmentationItemId(pickedUpItemStack);
-        
-        if (oldaugmentationItemId != null && oldaugmentationItemId > 0 && (newaugmentationItemId == null || newaugmentationItemId == 0))
-        {
-        	try
-        	{
-	        	e.getPlayer().sendMessage("Detected an augmentation item in the old format, converting to the new format. Please drop all your old items and pick them up if you are having problems with them");
-	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
-	        	ItemStack latestitemstack = latestitem.asItemStack();
-	        	latestitemstack = ItemStackUtils.applyAugmentation(latestitem, latestitemstack, oldaugmentationItemId);
-	        	// Since we cant overwrite the item we will have to drop one and remove this
-	        	pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
-        	} catch (CoreStateInitException eAug)
-        	{
-        		
-        	}
-        }
-        
         String temporaryGuid = null;
         Integer augmentationItemId = null;
         
@@ -169,7 +149,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 					{
 						temporaryGuid = ItemStackUtils.getTemporaryItemGuid(pickedUpItemStack);
 					}
-					augmentationItemId = ItemStackUtils.getNBTAugmentationItemId(pickedUpItemStack);
+					augmentationItemId = ItemStackUtils.getAugmentationItemId(pickedUpItemStack);
 					
 					// Now go and replace the itemmeta
 					pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());

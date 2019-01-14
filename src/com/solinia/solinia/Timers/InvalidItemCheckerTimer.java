@@ -40,15 +40,6 @@ public class InvalidItemCheckerTimer  extends BukkitRunnable {
 		        {
 		        	player.sendMessage(ChatColor.RED + "* You appear to have items in your inventory that contain a durability enchantment greater than 999 or less than 0, please drop and pick this item back up");
 		        }
-		        
-		     // Validate classic augmentation items
-		        Integer newaugmentationItemId = ItemStackUtils.getNBTAugmentationItemId(itemstack);
-		        Integer oldaugmentationItemId = ItemStackUtils.getClassicAugmentationItemId(itemstack);
-		        
-		        if (oldaugmentationItemId != null && oldaugmentationItemId > 0 && (newaugmentationItemId == null || newaugmentationItemId == 0))
-		        {
-		        	player.sendMessage(ChatColor.RED + "* You appear to have items with augmentations on them that need to be updated. They will not apply to your stats until you drop and pick these items back up");
-		        }
 			}
 		}
 	}

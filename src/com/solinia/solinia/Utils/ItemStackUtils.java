@@ -130,26 +130,35 @@ public class ItemStackUtils {
         return compound.toString();
     }
 	
-	public static Integer getClassicAugmentationItemId(ItemStack itemStack)
+	public static Integer getAugmentationItemId(ItemStack itemStack)
 	{
 		if (!Utils.IsSoliniaItem(itemStack))
 			return null;
 		
-		if (itemStack.getItemMeta().getLore() != null)
-		for(String loreLine : itemStack.getItemMeta().getLore())
+		NamespacedKey soliniaAugIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaaug1id");
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
+		
+		if(tagContainer.hasCustomTag(soliniaAugIdKey , ItemTagType.INTEGER)) {
+			return itemMeta.getCustomTagContainer().getCustomTag(soliniaAugIdKey, ItemTagType.INTEGER);
+		}
+		
+		// if we got this far then its likely it is storing in the old format
+		Integer nbtTag = getOldNBTAugmentationItemId(itemStack);
+		if (nbtTag != null)
 		{
-			if (!loreLine.startsWith("Attached Augmentation: "))
-				continue;
-			
-			String[] temporaryData = loreLine.split(" ");
-			
-			return Integer.parseInt(temporaryData[2]);
+			itemMeta.getCustomTagContainer().setCustomTag(soliniaAugIdKey, ItemTagType.INTEGER, nbtTag);
+			itemStack.setItemMeta(itemMeta);
+			// try again
+			if(tagContainer.hasCustomTag(soliniaAugIdKey , ItemTagType.INTEGER)) {
+				return itemMeta.getCustomTagContainer().getCustomTag(soliniaAugIdKey, ItemTagType.INTEGER);
+			}
 		}
 		
 		return null;
 	}
 	
-	public static Integer getNBTAugmentationItemId(ItemStack itemStack)
+	public static Integer getOldNBTAugmentationItemId(ItemStack itemStack)
 	{
 		if (!Utils.IsSoliniaItem(itemStack))
 			return null;
@@ -412,11 +421,10 @@ public class ItemStackUtils {
 	public static ItemStack applyAugmentation(ISoliniaItem soliniaItem, ItemStack itemStack, Integer augmentationItemId) {
 		itemStack.setItemMeta(ItemStackUtils.applyAugmentationTextToItemStack(itemStack,augmentationItemId));
 		
-		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-		compound.set("soliniaaug1id", new NBTTagString(Integer.toString(augmentationItemId)));
-		nmsStack.setTag(compound);
-		itemStack = CraftItemStack.asBukkitCopy(nmsStack);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		NamespacedKey soliniaAugIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaaug1id");
+		itemMeta.getCustomTagContainer().setCustomTag(soliniaAugIdKey, ItemTagType.INTEGER, augmentationItemId);
+		itemStack.setItemMeta(itemMeta);
 		return itemStack;
 	}
 	
