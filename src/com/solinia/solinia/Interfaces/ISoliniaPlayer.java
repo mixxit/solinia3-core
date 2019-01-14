@@ -488,4 +488,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void tryCastFromItemInSlot(int slotId);
 
+	public void tryCastFromSpellbook(ISoliniaItem solItem);
+
 }

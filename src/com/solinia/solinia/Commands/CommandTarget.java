@@ -28,7 +28,7 @@ public class CommandTarget implements CommandExecutor {
 
 		if (args.length < 1)
 		{
-			player.sendMessage("Valid arguments are: /target entityname OR /target targetnearestnpc OR /target self OR '/target 2' etc for group member no 2 OR '/target pet' for target pet");
+			player.sendMessage("Valid arguments are: /target entityname OR /target nearestnpc OR /target self OR /target 2 etc for group member no 2 OR /target pet for target pet OR /target clear to clear target");
 			return true;
 		}
 		
@@ -36,6 +36,13 @@ public class CommandTarget implements CommandExecutor {
 		
 		try
 		{
+			if (target.equals("clear"))
+			{
+				player.sendMessage("Clearing target");
+				StateManager.getInstance().getEntityManager().setEntityTarget(player,null);
+				return true;
+			}
+			
 			if (target.equals("self"))
 			{
 				player.sendMessage("Selecting yourself");
@@ -43,7 +50,7 @@ public class CommandTarget implements CommandExecutor {
 				return true;
 			}
 			
-			if (target.equals("targetnearestnpc"))
+			if (target.equals("nearestnpc"))
 			{
 				player.sendMessage("Selecting nearest npc");
 
@@ -136,12 +143,18 @@ public class CommandTarget implements CommandExecutor {
 			}
 			
 			// IF WE GET THIS FAR TRY TO FIND BY ENTITY NAME
+			LivingEntity currentTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
+			
 			for (Entity entity : player.getNearbyEntities(64.0D, 64.0D, 64.0D)) 
 			{
 				if (!(entity instanceof LivingEntity))
 					continue;
 				
 				if (!entity.getName().equals(target))
+					continue;
+				
+				// Skip over existing target
+				if (currentTarget != null && currentTarget.getUniqueId().equals(entity.getUniqueId()))
 					continue;
 				
 				StateManager.getInstance().getEntityManager().setEntityTarget(player,(LivingEntity)entity);

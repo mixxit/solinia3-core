@@ -980,6 +980,88 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	@Override
+	public void tryCastFromSpellbook(ISoliniaItem item) {
+		try
+		{
+			if (item == null) {
+				return;
+			}
+
+			if (item.getAbilityid() < 1) {
+				return;
+			}
+			
+			// Some spells auto target self, if they don't have a target try to do that
+			if (getTarget() == null) {
+				if (item.getAbilityid() > 0) {
+					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+							.getSpell(item.getAbilityid());
+					if (spell != null) {
+						if (!tryFixSpellTarget(spell))
+						{
+							getBukkitPlayer().sendMessage(
+									"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+							return;
+						}
+					}
+				}
+			}
+
+			if (getTarget() == null)
+			{
+				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /ts for group or shift-f for self");
+				return;
+			}
+			
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+			
+			// Spellbooks dont contain consumables
+			if (item.isConsumable()) {
+				return;
+			}
+	
+			// Reroute action depending on target
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
+			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
+				getBukkitPlayer().sendMessage(
+						ChatColor.GRAY + "Insufficient Mana  [E]");
+				return;
+			}
+			
+			if (!spell.getRequiresPermissionNode().equals(""))
+			{
+				if (!getBukkitPlayer().hasPermission(spell.getRequiresPermissionNode()))
+				{
+					getBukkitPlayer().sendMessage("This requires a permission node you do not have");
+					return;
+				}
+			}
+	
+			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
+					spell.getId()) != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+						.getEntitySpellCooldown(getBukkitPlayer(), spell.getId());
+	
+				if (expiretimestamp != null)
+					if (!nowtimestamp.after(expiretimestamp)) {
+						getBukkitPlayer()
+								.sendMessage("You do not have enough willpower to cast " + spell.getName()
+										+ " (Wait: "
+										+ ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+						return;
+					}
+			}
+	
+			startCasting(spell, getBukkitPlayer(), item);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	@Override
 	public void tryCastFromItemInSlot(int slotId) {
 		try
 		{

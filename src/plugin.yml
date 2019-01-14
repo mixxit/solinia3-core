@@ -38,6 +38,10 @@ commands:
     description: Casts a spell in a hotbat slot from 1 to 9
     usage: /castslot <hotbarnumber>
     aliases: []
+  castspellbook:
+    description: Casts a spell in a spellbook
+    usage: /castspellbook itemid
+    aliases: []
   givehead:
     description: Gives a head from minecraft-heads.com
     usage: /givehead player headurl
@@ -591,7 +595,7 @@ commands:
     - spells
   target:
     description: Selects a target
-    usage: /target entityname OR /target targetnearestnpc OR /target self OR '/target 2' etc for group member no 2 OR '/target pet' for target pet
+    usage: /target entityname OR /target nearestnpc OR /target self OR /target 2 etc for group member no 2 OR /target pet for target pet
     aliases:
     - gs
     - groupselect

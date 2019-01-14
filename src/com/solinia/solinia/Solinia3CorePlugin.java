@@ -442,6 +442,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("spawnitem").setExecutor(new CommandSpawnItem());
 		this.getCommand("debugger").setExecutor(new CommandDebugger());
 		this.getCommand("raceinfo").setExecutor(new CommandRaceInfo());
+		this.getCommand("castspellbook").setExecutor(new CommandCastSpellbook());
 		this.getCommand("rebuildspellitems").setExecutor(new CommandRebuildSpellItems());
 		this.getCommand("createfaction").setExecutor(new CommandCreateFaction());
 		this.getCommand("createnpc").setExecutor(new CommandCreateNpc());

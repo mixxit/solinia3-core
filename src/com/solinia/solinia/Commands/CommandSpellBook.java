@@ -83,7 +83,7 @@ public class CommandSpellBook implements CommandExecutor {
 
 					TextComponent tc = new TextComponent();
 					
-					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+					tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + " (/castspellbook " + item.getId() + ") " + ChatColor.AQUA + " [ Click here to remove ]");
 					tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/spellbook remove " + itemId));
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 							new ComponentBuilder(item.asJsonString()).create()));
