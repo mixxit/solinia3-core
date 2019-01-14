@@ -27,7 +27,7 @@ public class CommandCastSlot implements CommandExecutor {
 			return false;
 		
 		int hotBar = Integer.parseInt(args[0]);
-		if (hotBar < 0 || hotBar > 9)
+		if (hotBar < 1 || hotBar > 9)
 			return false;
 		
 		// Check item in slot is a spell
@@ -68,8 +68,6 @@ public class CommandCastSlot implements CommandExecutor {
 	private int hotBarToSlotId(int hotBar) {
 		switch(hotBar)
 		{
-			case 0:
-				return 9;
 			case 1:
 				return 0;
 			case 2:

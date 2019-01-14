@@ -35,7 +35,7 @@ commands:
     - name
     - nick
   castslot:
-    description: Casts a spell in a hotbat slot from 1 to 0
+    description: Casts a spell in a hotbat slot from 1 to 9
     usage: /castslot <hotbarnumber>
     aliases: []
   givehead:
