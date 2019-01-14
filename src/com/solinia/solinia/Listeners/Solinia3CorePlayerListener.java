@@ -1301,71 +1301,64 @@ public class Solinia3CorePlayerListener implements Listener {
 		HandleHandInteraction(event);
 	}
 
-	private void HandleHandInteraction(PlayerInteractEvent event) {
-		ItemStack itemstack = event.getItem();
-		if (itemstack != null)
+	private boolean tryRightClickAutoAttack(Player player, ItemStack itemStackInHand)
+	{
+		try
 		{
-			try
+			// check if player is toggling auto attack
+			// left click while sneaking
+			if (player.isSneaking() && 
+					(itemStackInHand.getType().name().equals("BOW") || ConfigurationManager.WeaponMaterials.contains(itemStackInHand.getType().name()))) 
 			{
-				// check if player is toggling auto attack
-				// left click while sneaking
-				if (event.getPlayer().isSneaking() && 
-						(itemstack.getType().name().equals("BOW") || ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name())) && 
-						((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))) {
-					ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
-					if (soliniaPlayer != null)
-					{
-						soliniaPlayer.toggleAutoAttack();
-						Utils.CancelEvent(event);
-						return;
-					}
-				}
-			} catch (CoreStateInitException e)
-			{
-				
-			}
-			
-			// Left clicking with spell to target
-			ISoliniaItem solItem = null;
-			
-			try
-			{
-				solItem = SoliniaItemAdapter.Adapt(itemstack);
-				
-				// also allow targetting via pet control rod
-				if (event.getPlayer().isSneaking() && solItem != null && (itemstack.getType().name().equals("BOW") || solItem.isSpellscroll() || solItem.isPetControlRod()))
+				ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (soliniaPlayer != null)
 				{
-					if ((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK))) {
-						LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
-						
-						StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(),
-								targetmob);
-						Utils.CancelEvent(event);
-						return;
-					}
+					soliniaPlayer.toggleAutoAttack();
+					return true;
 				}
-			} catch (CoreStateInitException | SoliniaItemException e)
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return false;
+	}
+	
+	private boolean tryLeftClickTarget(Player player)
+	{
+		try
+		{
+			// also allow targetting via pet control rod
+			if (player.isSneaking())
 			{
+					LivingEntity targetmob = Utils.getTargettedLivingEntity(player, 50);
+					
+					StateManager.getInstance().getEntityManager().setEntityTarget(player,
+							targetmob);
+					return true;
 				
 			}
+		} catch (CoreStateInitException e)
+		{
 			
-			// Shift Left clicking with a weapon to set target to damage recipient
-			try
+		}
+		return false;
+	}
+	
+	private void HandleHandInteraction(PlayerInteractEvent event) {
+		if (event.getItem() != null && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
+			if (tryRightClickAutoAttack(event.getPlayer(), event.getItem()))
 			{
-				if (event.getPlayer().isSneaking() && 
-						ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name()) && 
-						((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)))) 
-				{
-					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
-					StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(),targetmob);
-					Utils.CancelEvent(event);
-					return;
-				}
-			} catch (CoreStateInitException e)
-			{
-				
+				Utils.CancelEvent(event);
+				return;
 			}
 			
+		if ((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)))
+		if (tryLeftClickTarget(event.getPlayer()))
+		{
+			Utils.CancelEvent(event);
+			return;
 		}
 		
 		// Right click air is a cancelled event so we have to ignore it when checking
