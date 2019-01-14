@@ -34,6 +34,10 @@ commands:
     aliases:
     - name
     - nick
+  castslot:
+    description: Casts a spell in a hotbat slot from 1 to 0
+    usage: /castslot <hotbarnumber>
+    aliases: []
   givehead:
     description: Gives a head from minecraft-heads.com
     usage: /givehead player headurl

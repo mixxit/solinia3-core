@@ -410,6 +410,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVoteListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 
+		this.getCommand("castslot").setExecutor(new CommandCastSlot());
 		this.getCommand("transfercharacter").setExecutor(new CommandTransferCharacter());
 		this.getCommand("playeremote").setExecutor(new CommandPlayerEmote());
 		this.getCommand("consider").setExecutor(new CommandConsider());

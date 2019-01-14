@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -158,7 +159,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	boolean hasAAAbility(int abilityid);
 
-	void interact(Plugin plugin, PlayerInteractEvent event);
+	void interact(PlayerInteractEvent event);
 
 	void setInteraction(UUID interaction, ISoliniaNPC npc);
 
@@ -347,7 +348,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setFeigned(boolean feigned);
 
-	void startCasting(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem item);
+	void startCasting(ISoliniaSpell spell, Player player, ISoliniaItem item);
 
 	void castingComplete(CastingSpell castingSpell);
 
@@ -478,4 +479,13 @@ public interface ISoliniaPlayer extends Serializable {
 	ItemStack[] getStoredArmorContents();
 
 	ItemStack[] getStoredInventoryContents();
+
+	void tryApplyAugmentation(ISoliniaItem item);
+
+	void tryThrowItemInMainHand();
+
+	Entity getTarget();
+
+	void tryCastFromItemInSlot(int slotId);
+
 }

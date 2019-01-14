@@ -155,6 +155,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	@Override
+	public LivingEntity getTarget()
+	{
+		try {
+			return StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer());
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
+	
+	@Override
 	public void setLastLocation(Location location)
 	{
 		this.lastX = location.getBlockX();
@@ -968,280 +978,356 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		setMana(currentmana);
 	}
-
+	
 	@Override
-	public void interact(Plugin plugin, PlayerInteractEvent event) {
-		// TODO Auto-generated method stub
-		ItemStack itemstack = event.getItem();
+	public void tryCastFromItemInSlot(int slotId) {
+		try
+		{
+			ItemStack itemstack = this.getBukkitPlayer().getInventory().getItem(slotId);
+			if (itemstack == null || itemstack.getType().equals(Material.AIR))
+				return;
+			
+			if ((!Utils.IsSoliniaItem(itemstack)))
+				return;
+			
+			if (ItemStackUtils.isPotion(itemstack))
+			{
+				return;
+			}
 
-		try {
-			// this is the item not in offhand
-			if (event.getHand() == EquipmentSlot.HAND
-					&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-				if (itemstack == null) {
-					return;
-				}
+			// We have our custom item id, lets check it exists
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
-				if ((!Utils.IsSoliniaItem(itemstack)))
-					return;
+			if (item == null) {
+				return;
+			}
 
-				// We have our custom item id, lets check it exists
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-
-				if (item == null) {
-					return;
-				}
-
-				// Start applying an augmentation
-				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isAugmentation()) {
-					if (StateManager.getInstance().getPlayerManager()
-							.getApplyingAugmentation(event.getPlayer().getUniqueId()) == null
-							|| StateManager.getInstance().getPlayerManager()
-									.getApplyingAugmentation(event.getPlayer().getUniqueId()) == 0) {
-						StateManager.getInstance().getPlayerManager()
-								.setApplyingAugmentation(event.getPlayer().getUniqueId(), item.getId());
-						event.getPlayer().sendMessage("* Applying " + item.getDisplayname()
-								+ " to an item, please right click the item you wish to apply this augmentation to. . To cancel applying, right click while holding this item again");
-					} else {
-						StateManager.getInstance().getPlayerManager()
-								.setApplyingAugmentation(event.getPlayer().getUniqueId(), 0);
-						event.getPlayer().sendMessage("* Cancelled applying augmentation");
-					}
-					return;
-				}
-
-				// Min level check
-				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) 
-				{
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
-					
-					if (item.getMinLevel() > solPlayer.getLevel())
-					{
-						event.getPlayer().sendMessage("This item requires minimum level: " + item.getMinLevel());
-						return;
-					}
-				}
-				
-				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isThrowing()) {
-
-					if (itemstack.getAmount() > 1) {
-						event.getPlayer().sendMessage(
-								"Tried to use an entire stack at once! Cancelling, did you forget to split them?");
-						return;
-					}
-
-					LivingEntity targetmob = Utils.getTargettedLivingEntity(event.getPlayer(), 50);
-					if (targetmob != null && !targetmob.getUniqueId().equals(event.getPlayer().getUniqueId())) {
-						if (item.useItemOnEntity(event.getPlayer(), targetmob, false) == true) {
-							event.getPlayer().setItemInHand(null);
-							event.getPlayer().updateInventory();
-							return;
-						} else {
-							return;
-						}
-					}
-				}
-
-				// This now all uses the targetting system
-				// If the player is using a self only spell or AE switch target to themselves if
-				// they have no target right now
-				if (StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer()) == null) {
-					if (item.getAbilityid() > 0) {
-						ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-								.getSpell(item.getAbilityid());
-						if (spell != null) {
-							if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
-									|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
-									|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
-									|| Utils.getSpellTargetType(spell.getTargettype())
-											.equals(SpellTargetType.AEClientV1)
-									|| Utils.getSpellTargetType(spell.getTargettype())
-											.equals(SpellTargetType.AreaClientOnly)
-									|| Utils.getSpellTargetType(spell.getTargettype())
-											.equals(SpellTargetType.Directional)
-									|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
-									|| Utils.getSpellTargetType(spell.getTargettype())
-											.equals(SpellTargetType.GroupClientAndPet)
-									|| Utils.getSpellTargetType(spell.getTargettype())
-											.equals(SpellTargetType.GroupNoPets)
-									|| Utils.getSpellTargetType(spell.getTargettype())
-											.equals(SpellTargetType.GroupTeleport)
-									|| Utils.getSpellTargetType(spell.getTargettype())
-											.equals(SpellTargetType.TargetOptional)
-									|| Utils.getSpellTargetType(spell.getTargettype())
-											.equals(SpellTargetType.UndeadAE)) {
-								StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(),
-										getBukkitPlayer());
-							} else if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Pet))
-							{
-								LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(getBukkitPlayer().getUniqueId());
-								if (pet != null)
-								{
-									StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(),
-										pet);
-								} else {
-									getBukkitPlayer().sendMessage(
-											"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
-								}
-							} else {
-								getBukkitPlayer().sendMessage(
-										"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
-								return;
-							}
-						} else {
+			if (item.getAbilityid() < 1) {
+				return;
+			}
+			
+			// Some spells auto target self, if they don't have a target try to do that
+			if (getTarget() == null) {
+				if (item.getAbilityid() > 0) {
+					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+							.getSpell(item.getAbilityid());
+					if (spell != null) {
+						if (!tryFixSpellTarget(spell))
+						{
 							getBukkitPlayer().sendMessage(
 									"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
 							return;
 						}
 					}
 				}
+			}
 
-				LivingEntity targetmob = StateManager.getInstance().getEntityManager()
-						.getEntityTarget(getBukkitPlayer());
-				
-				if (targetmob != null)
-				if (!item.isPetControlRod())
+			if (getTarget() == null)
+			{
+				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /ts for group or shift-f for self");
+				return;
+			}
+			
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+			
+			// Only applies to consumable items
+			if (item.isConsumable()) {
+	
+				if (itemstack.getAmount() > 1) {
+					getBukkitPlayer().sendMessage(
+							"Tried to use an entire stack at once! Cancelling, did you forget to split them?");
+					return;
+				}
+	
+				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
+				getBukkitPlayer().getInventory().setItem(slotId, null);
+				getBukkitPlayer().updateInventory();
+				return;
+			}
+	
+			// Only applies to non-consumable items
+			if (item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
+				return;
+			}
+	
+			// Only applies to spell effects
+			if (!itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				return;
+			}
+	
+			// Reroute action depending on target
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
+			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
+				getBukkitPlayer().sendMessage(
+						ChatColor.GRAY + "Insufficient Mana  [E]");
+				return;
+			}
+			
+			if (!spell.getRequiresPermissionNode().equals(""))
+			{
+				if (!getBukkitPlayer().hasPermission(spell.getRequiresPermissionNode()))
 				{
-					double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) getBukkitPlayer(),
-							targetmob);
-					
-					if (distanceOverLimit > 0)
-					{
-						getBukkitPlayer().sendMessage("You were too far to interact with that entity");
-						return;
-					}
-				}
-
-				// we should probably check line of sight here for detrimentals, or maybe in the
-				// spell
-
-				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isPetControlRod()) {
-					if (targetmob != null) {
-						item.useItemOnEntity(event.getPlayer(), targetmob, false);
-						return;
-					} else {
-						getBukkitPlayer().sendMessage(
-								"* You must select a target (shift+left click with pet control rod or use /ts for group or shift-f for self");
-						return;
-					}
-				}
-				
-				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.getLanguagePrimer().equals("")) {
-					item.useItemOnEntity(event.getPlayer(), event.getPlayer(), item.isConsumable());
-					if (item.isConsumable())
-					{
-						event.getPlayer().setItemInHand(null);
-						event.getPlayer().updateInventory();
-					}
+					getBukkitPlayer().sendMessage("This requires a permission node you do not have");
 					return;
 				}
+			}
+	
+			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
+					spell.getId()) != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+						.getEntitySpellCooldown(getBukkitPlayer(), spell.getId());
+	
+				if (expiretimestamp != null)
+					if (!nowtimestamp.after(expiretimestamp)) {
+						getBukkitPlayer()
+								.sendMessage("You do not have enough willpower to cast " + spell.getName()
+										+ " (Wait: "
+										+ ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+						return;
+					}
+			}
+	
+			startCasting(spell, getBukkitPlayer(), item);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	@Override
+	public void tryThrowItemInMainHand()
+	{
+		try
+		{
+			ItemStack itemstack = this.getBukkitPlayer().getEquipment().getItemInMainHand();
+			if ((!Utils.IsSoliniaItem(itemstack)))
+				return;
 
-				if (item.getAbilityid() < 1) {
+			// We have our custom item id, lets check it exists
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+
+			if (item == null) {
+				return;
+			}
+			
+			if (!item.isThrowing())
+				return;
+			
+			if (itemstack.getAmount() > 1) {
+				getBukkitPlayer().sendMessage(
+						"Tried to use an entire stack at once! Cancelling, did you forget to split them?");
+				return;
+			}
+	
+			LivingEntity targetmob = Utils.getTargettedLivingEntity(getBukkitPlayer(), 50);
+			if (targetmob != null && !targetmob.getUniqueId().equals(getBukkitPlayer().getUniqueId())) {
+				if (item.useItemOnEntity(getBukkitPlayer(), targetmob, false) == true) {
+					getBukkitPlayer().getEquipment().setItemInMainHand(null);
+					getBukkitPlayer().updateInventory();
+					return;
+				} else {
 					return;
 				}
-
-				if (ItemStackUtils.isPotion(itemstack)) {
-					// Handled by on consume event
-					return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	@Override
+	public void tryApplyAugmentation(ISoliniaItem item)
+	{
+		try
+		{
+			// Start applying an augmentation
+			if (item.isAugmentation()) {
+				if (StateManager.getInstance().getPlayerManager().getApplyingAugmentation(getBukkitPlayer().getUniqueId()) == null
+						|| StateManager.getInstance().getPlayerManager().getApplyingAugmentation(getBukkitPlayer().getUniqueId()) == 0) 
+				{
+					StateManager.getInstance().getPlayerManager().setApplyingAugmentation(getBukkitPlayer().getUniqueId(), item.getId());
+					getBukkitPlayer().sendMessage("* Applying " + item.getDisplayname() + " to an item, please right click the item you wish to apply this augmentation to. . To cancel applying, right click while holding this item again");
+				} else {
+					StateManager.getInstance().getPlayerManager()
+							.setApplyingAugmentation(getBukkitPlayer().getUniqueId(), 0);
+					getBukkitPlayer().sendMessage("* Cancelled applying augmentation");
 				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return;
+	}
 
-				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-						.getSpell(item.getAbilityid());
+	@Override
+	public void interact(PlayerInteractEvent event) {
+		// TODO Auto-generated method stub
+		ItemStack itemstack = event.getItem();
+		
+		if (itemstack == null)
+			return;
+		
+		if (event.getHand() != EquipmentSlot.HAND)
+			return;
+		
+		if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
+			return;
+			
+		if (!Utils.IsSoliniaItem(itemstack))
+			return;			
+			
+		try {
+			// We have our custom item id, lets check it exists
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
-				// Only applies to consumable items
-				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && item.isConsumable()) {
+			if (ItemStackUtils.isPotion(itemstack)) {
+				// Handled by on consume event
+				return;
+			}
+			
+			if (item == null)
+				return;
 
-					if (itemstack.getAmount() > 1) {
-						event.getPlayer().sendMessage(
-								"Tried to use an entire stack at once! Cancelling, did you forget to split them?");
-						return;
-					}
+			if (item.isAugmentation())
+			{
+				tryApplyAugmentation(item);
+				return;
+			}
 
-					if (targetmob != null) {
-						item.useItemOnEntity(event.getPlayer(), targetmob, true);
-						event.getPlayer().setItemInHand(null);
-						event.getPlayer().updateInventory();
-						return;
-					} else {
-						getBukkitPlayer().sendMessage(
-								"* You must select a target (shift+left click with consumable or use /ts for group or shift-f for self");
-						return;
-					}
-				}
+			if (item.getMinLevel() > getLevel())
+			{
+				getBukkitPlayer().sendMessage("This item requires minimum level: " + item.getMinLevel());
+				return;
+			}
+			
+			if (item.isThrowing()) {
+				tryThrowItemInMainHand();
+				return;
+			}
 
-				// Only applies to non-consumable items
-				if ((event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !item.isConsumable()
-						&& !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-					if (targetmob != null) {
-						item.useItemOnEntity(event.getPlayer(), targetmob, true);
-						return;
-					} else {
-						getBukkitPlayer().sendMessage(
-								"* You must select a target (shift+left click with usable item or use /ts for group or shift-f for self");
-						return;
-					}
-				}
-
-				// Only applies to spell effects
-				if (!itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-					return;
-				}
-
-				// Reroute action depending on target
-				if (event.getAction().equals(Action.RIGHT_CLICK_AIR)
-						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-					// This now attempts casting
-
-					ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getPlayer());
-					if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(event.getPlayer()).getMana()) {
-						event.getPlayer().sendMessage(
-								ChatColor.GRAY + "Insufficient Mana  [E]");
-						return;
-					}
-					
-					if (!spell.getRequiresPermissionNode().equals(""))
-					{
-						if (!event.getPlayer().hasPermission(spell.getRequiresPermissionNode()))
+			// Some spells auto target self, if they don't have a target try to do that
+			if (getTarget() == null) {
+				if (item.getAbilityid() > 0) {
+					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+							.getSpell(item.getAbilityid());
+					if (spell != null) {
+						if (!tryFixSpellTarget(spell))
 						{
-							event.getPlayer().sendMessage("This requires a permission node you do not have");
+							getBukkitPlayer().sendMessage(
+									"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
 							return;
 						}
 					}
-
-					if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(event.getPlayer(),
-							spell.getId()) != null) {
-						LocalDateTime datetime = LocalDateTime.now();
-						Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-						Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
-								.getEntitySpellCooldown(event.getPlayer(), spell.getId());
-
-						if (expiretimestamp != null)
-							if (!nowtimestamp.after(expiretimestamp)) {
-								event.getPlayer()
-										.sendMessage("You do not have enough willpower to cast " + spell.getName()
-												+ " (Wait: "
-												+ ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
-								return;
-							}
-					}
-
-					startCasting(plugin, spell, event.getPlayer(), item);
 				}
 			}
-		} catch (CoreStateInitException e) {
+
+			if (getTarget() == null)
+			{
+				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+				return;
+			}
+			
+			if (!item.isPetControlRod())
+				if (isOverAggroDistance(getTarget()))
+				{
+					getBukkitPlayer().sendMessage("You were too far to interact with that entity");
+					return;
+				}
+
+			// we should probably check line of sight here for detrimentals, or maybe in the
+			// spell
+
+			if (item.isPetControlRod()) {
+				item.useItemOnEntity(getBukkitPlayer(), getTarget(), false);
+				return;
+			}
+			
+			// try consume language primer
+			if (!item.getLanguagePrimer().equals("")) {
+				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
+				if (item.isConsumable())
+				{
+					getBukkitPlayer().setItemInHand(null);
+					getBukkitPlayer().updateInventory();
+				}
+				return;
+			}
+
+			tryCastFromItemInSlot(getBukkitPlayer().getInventory().getHeldItemSlot());
+		} catch (CoreStateInitException e) 
+		{
 			e.printStackTrace();
 		}
 	}
 
+	private boolean isOverAggroDistance(LivingEntity target) {
+		double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) getBukkitPlayer(),
+				target);
+		
+		if (distanceOverLimit > 0)
+			return true;
+		
+		return false;
+	}
+
+	private boolean tryFixSpellTarget(ISoliniaSpell spell) {
+		try
+		{
+			if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
+					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
+					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
+					|| Utils.getSpellTargetType(spell.getTargettype())
+							.equals(SpellTargetType.AEClientV1)
+					|| Utils.getSpellTargetType(spell.getTargettype())
+							.equals(SpellTargetType.AreaClientOnly)
+					|| Utils.getSpellTargetType(spell.getTargettype())
+							.equals(SpellTargetType.Directional)
+					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
+					|| Utils.getSpellTargetType(spell.getTargettype())
+							.equals(SpellTargetType.GroupClientAndPet)
+					|| Utils.getSpellTargetType(spell.getTargettype())
+							.equals(SpellTargetType.GroupNoPets)
+					|| Utils.getSpellTargetType(spell.getTargettype())
+							.equals(SpellTargetType.GroupTeleport)
+					|| Utils.getSpellTargetType(spell.getTargettype())
+							.equals(SpellTargetType.TargetOptional)
+					|| Utils.getSpellTargetType(spell.getTargettype())
+							.equals(SpellTargetType.UndeadAE)) {
+				StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(),
+						getBukkitPlayer());
+				return true;
+			} else if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Pet))
+			{
+				LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(getBukkitPlayer().getUniqueId());
+				if (pet != null)
+				{
+					StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(),
+						pet);
+					return true;
+				} else {
+					getBukkitPlayer().sendMessage(
+							"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+					return false;
+				}
+			} else {
+				getBukkitPlayer().sendMessage(
+						"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+				return false;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return false;
+	}
+
 	@Override
-	public void startCasting(Plugin plugin, ISoliniaSpell spell, Player player, ISoliniaItem item) {
+	public void startCasting(ISoliniaSpell spell, Player player, ISoliniaItem item) {
 		try {
 
 			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), item.getId());
@@ -1288,7 +1374,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// If the player is using a self only spell or AE switch target to themselves if
 		// they have no target right now
 		try {
-			if (StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer()) == null) {
+			if (getTarget() == null) {
 				if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
 						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
 						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
@@ -1309,7 +1395,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 
-			targetmob = StateManager.getInstance().getEntityManager().getEntityTarget(getBukkitPlayer());
+			targetmob = getTarget();
 		} catch (CoreStateInitException e) {
 
 		}

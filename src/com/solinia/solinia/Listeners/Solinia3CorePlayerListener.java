@@ -1416,7 +1416,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 
 		try {
-			SoliniaPlayerAdapter.Adapt(event.getPlayer()).interact(plugin, event);
+			SoliniaPlayerAdapter.Adapt(event.getPlayer()).interact(event);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
