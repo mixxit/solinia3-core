@@ -529,7 +529,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("setmother").setExecutor(new CommandSetMother());
 		this.getCommand("setmain").setExecutor(new CommandSetMain());
 		this.getCommand("spellbook").setExecutor(new CommandSpellBook());
-		this.getCommand("groupselect").setExecutor(new CommandGroupSelect());
+		this.getCommand("target").setExecutor(new CommandTarget());
 		this.getCommand("listquests").setExecutor(new CommandListQuests());
 		this.getCommand("editquest").setExecutor(new CommandEditQuest());
 		this.getCommand("spawnnpc").setExecutor(new CommandSpawnNpc());

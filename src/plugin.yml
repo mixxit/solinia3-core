@@ -589,15 +589,18 @@ commands:
     aliases:
     - spell
     - spells
-  groupselect:
-    description: Selects a group by group position number or name
-    usage: /gs 1
+  target:
+    description: Selects a target
+    usage: /target entityname OR /target targetnearestnpc OR /target self OR '/target 2' etc for group member no 2 OR '/target pet' for target pet
     aliases:
     - gs
+    - groupselect
     - tg
     - gt
     - grouptarget
     - targetgroup
+    - targ
+    - tgt
   listquests:
     description: Lists quests
     usage: /listquests searchstring
