@@ -59,7 +59,7 @@ public class CommandTarget implements CommandExecutor {
 				LivingEntity currentTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
 				
 				List<Entity> nearbyEntities = player.getNearbyEntities(25.0D, 25.0D, 25.0D);
-				Collections.shuffle(nearbyEntities);
+				Collections.sort(nearbyEntities, (e1, e2) -> ((Double)e1.getLocation().distance(player.getLocation())).compareTo(((Double)e2.getLocation().distance(player.getLocation()))));
 				for (Entity entity : nearbyEntities) 
 				{
 					if (entity instanceof Player)
@@ -150,7 +150,7 @@ public class CommandTarget implements CommandExecutor {
 			LivingEntity currentTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
 			
 			List<Entity> nearbyEntities = player.getNearbyEntities(25.0D, 25.0D, 25.0D);
-			Collections.shuffle(nearbyEntities);
+			Collections.sort(nearbyEntities, (e1, e2) -> ((Double)e1.getLocation().distance(player.getLocation())).compareTo(((Double)e2.getLocation().distance(player.getLocation()))));
 			for (Entity entity : nearbyEntities) 
 			{
 				if (!(entity instanceof LivingEntity))
