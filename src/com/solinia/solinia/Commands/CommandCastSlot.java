@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +14,6 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
-import net.minecraft.server.v1_13_R1.Material;
 
 public class CommandCastSlot implements CommandExecutor {
 	@Override
