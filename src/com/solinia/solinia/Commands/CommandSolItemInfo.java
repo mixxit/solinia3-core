@@ -60,6 +60,10 @@ public class CommandSolItemInfo implements CommandExecutor {
 
 		if (ItemStackUtils.getSoliniaLastUpdated(itemStack) != null)
 			player.sendMessage("SoliniaLastUpdated (Tag):" + ItemStackUtils.getSoliniaLastUpdated(itemStack));
+
+		if (ItemStackUtils.getAugmentationItemId(itemStack) != null)
+			player.sendMessage("SoliniaAugmentationItemId (Tag):" + ItemStackUtils.getAugmentationItemId(itemStack));
+
 		
 		if (args.length > 0 && args[0].equals("write"))
 		{
