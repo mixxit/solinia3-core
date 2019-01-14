@@ -330,9 +330,8 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
 			try {
 				Player damager = (Player) damagecause.getDamager();
-				ItemStack itemstack = damager.getEquipment().getItemInMainHand();
-				if (itemstack != null && damager.isSneaking()
-						&& ConfigurationManager.WeaponMaterials.contains(itemstack.getType().name())) {
+				if (damager.isSneaking()) 
+				{
 					StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) damager,
 							(LivingEntity) event.getEntity());
 					Utils.CancelEvent(event);
