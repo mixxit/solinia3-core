@@ -1,5 +1,7 @@
 package com.solinia.solinia.Commands;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -55,8 +57,10 @@ public class CommandTarget implements CommandExecutor {
 				player.sendMessage("Selecting nearest npc");
 
 				LivingEntity currentTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
-
-				for (Entity entity : player.getNearbyEntities(64.0D, 64.0D, 64.0D)) 
+				
+				List<Entity> nearbyEntities = player.getNearbyEntities(25.0D, 25.0D, 25.0D);
+				Collections.shuffle(nearbyEntities);
+				for (Entity entity : nearbyEntities) 
 				{
 					if (entity instanceof Player)
 						continue;
@@ -145,7 +149,9 @@ public class CommandTarget implements CommandExecutor {
 			// IF WE GET THIS FAR TRY TO FIND BY ENTITY NAME
 			LivingEntity currentTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
 			
-			for (Entity entity : player.getNearbyEntities(64.0D, 64.0D, 64.0D)) 
+			List<Entity> nearbyEntities = player.getNearbyEntities(25.0D, 25.0D, 25.0D);
+			Collections.shuffle(nearbyEntities);
+			for (Entity entity : nearbyEntities) 
 			{
 				if (!(entity instanceof LivingEntity))
 					continue;
