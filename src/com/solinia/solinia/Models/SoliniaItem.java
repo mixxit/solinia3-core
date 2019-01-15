@@ -580,8 +580,6 @@ public class SoliniaItem implements ISoliniaItem {
 		
 		if (isThrowing())
 		{
-			player.sendMessage("You throw a " + getDisplayname());
-			
 			if (targetentity instanceof Player)
 			{
 				ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt(player);
@@ -594,6 +592,7 @@ public class SoliniaItem implements ISoliniaItem {
 				}
 			}
 			
+			player.sendMessage("You throw a " + getDisplayname() + " for [" + getDamage() + "] damage");
 			targetentity.damage(getDamage());
 			return true;
 		}
