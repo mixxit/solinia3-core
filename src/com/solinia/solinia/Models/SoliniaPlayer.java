@@ -1115,16 +1115,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// Only applies to consumable items
 			if (item.isConsumable()) {
 	
-				if (itemstack.getAmount() > 1) {
-					getBukkitPlayer().sendMessage(
-							"Tried to use an entire stack at once! Cancelling, did you forget to split them?");
+				int newAmount = itemstack.getAmount() -1;
+				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
+				if (newAmount < 1)
+				{
+					getBukkitPlayer().getInventory().setItem(slotId, null);
+					getBukkitPlayer().updateInventory();
+					return;
+				} else {
+					itemstack.setAmount(newAmount);
+					getBukkitPlayer().getInventory().setItem(slotId, null);
+					getBukkitPlayer().updateInventory();
 					return;
 				}
-	
-				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
-				getBukkitPlayer().getInventory().setItem(slotId, null);
-				getBukkitPlayer().updateInventory();
-				return;
 			}
 	
 			// Only applies to non-consumable items
@@ -1198,17 +1201,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!item.isThrowing())
 				return;
 			
-			if (itemstack.getAmount() > 1) {
-				getBukkitPlayer().sendMessage(
-						"Tried to use an entire stack at once! Cancelling, did you forget to split them?");
-				return;
-			}
-	
+			int newAmount = itemstack.getAmount() -1;
+			
 			LivingEntity targetmob = Utils.getTargettedLivingEntity(getBukkitPlayer(), 50);
 			if (targetmob != null && !targetmob.getUniqueId().equals(getBukkitPlayer().getUniqueId())) {
 				if (item.useItemOnEntity(getBukkitPlayer(), targetmob, false) == true) {
-					getBukkitPlayer().getEquipment().setItemInMainHand(null);
-					getBukkitPlayer().updateInventory();
+					if (newAmount < 1)
+					{
+						getBukkitPlayer().getEquipment().setItemInMainHand(null);
+						getBukkitPlayer().updateInventory();
+					} else {
+						itemstack.setAmount(newAmount);
+						getBukkitPlayer().getEquipment().setItemInMainHand(itemstack);
+						getBukkitPlayer().updateInventory();
+					}
 					return;
 				} else {
 					return;
