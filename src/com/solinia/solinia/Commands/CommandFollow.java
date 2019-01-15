@@ -6,7 +6,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
@@ -19,7 +21,6 @@ public class CommandFollow implements CommandExecutor {
 			return false;
 
 		Player player = (Player)sender;
-		
 		try
 		{
 			boolean following = StateManager.getInstance().getEntityManager().isFollowing(player.getUniqueId());
@@ -47,6 +48,37 @@ public class CommandFollow implements CommandExecutor {
 				if (!(targetmob instanceof Player))
 				{
 					player.sendMessage("You can only follow players");
+					return true;
+				}
+				
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solPlayer == null)
+				{
+					player.sendMessage("You cannot follow this player at this time");
+					return true;
+				}
+
+				ISoliniaPlayer soltargetPlayer = SoliniaPlayerAdapter.Adapt((Player)targetmob);
+				if (soltargetPlayer == null)
+				{
+					player.sendMessage("You cannot follow this player at this time");
+					return true;
+				}
+				
+				if (solPlayer.getGroup() == null)
+				{
+					player.sendMessage("That player isn't in your group");
+					return true;
+				}
+				if (soltargetPlayer.getGroup() == null)
+				{
+					player.sendMessage("That player isn't in your group");
+					return true;
+				}
+				
+				if (!solPlayer.getGroup().getMembers().contains(targetmob.getUniqueId()))
+				{
+					player.sendMessage("That player isn't in your group");
 					return true;
 				}
 				
