@@ -1401,7 +1401,10 @@ public class EntityManager implements IEntityManager {
 			return;
 		
 		if (following == null)
+		{
 			this.following.remove(entityUuid);
+			return;
+		}
 		
 		this.following.put(entityUuid, following);
 	}
