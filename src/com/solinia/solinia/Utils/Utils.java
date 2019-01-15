@@ -125,6 +125,7 @@ public class Utils {
 	public static final int NPCBuffs = 60;
 	public static final int PetBuffs = 30;
 	public static final Boolean GlowApiEnabled = true;
+	public static final String HeartSymbol = "❤";
 
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));

@@ -96,7 +96,7 @@ public class ScoreboardUtils {
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("health").unregister();
 		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
 				.registerNewObjective("health", "health");
-		health.setDisplayName(ChatColor.RED + "♥");
+		health.setDisplayName(ChatColor.RED + Utils.HeartSymbol);
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(uuid));
@@ -151,7 +151,7 @@ public class ScoreboardUtils {
 			StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid)).getObjective("showhealth").unregister();
 		Objective health = StateManager.getInstance().getScoreboard(Bukkit.getPlayer(uuid))
 				.registerNewObjective("showhealth", "health");
-		health.setDisplayName(ChatColor.RED + "♥");
+		health.setDisplayName(ChatColor.RED + Utils.HeartSymbol);
 		health.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
 		try {
