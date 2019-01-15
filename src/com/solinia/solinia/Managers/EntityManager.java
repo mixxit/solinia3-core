@@ -1367,6 +1367,9 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public UUID getFollowing(UUID entityUuid)
 	{
+		if (entityUuid == null)
+			return null;
+		
 		UUID followingSomeone = this.following.get(entityUuid);
 		if (followingSomeone == null)
 		{
@@ -1379,6 +1382,9 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public Boolean isFollowing(UUID entityUuid)
 	{
+		if (entityUuid == null)
+			return false;
+		
 		UUID followingSomeone = this.following.get(entityUuid);
 		if (followingSomeone == null)
 		{
@@ -1391,6 +1397,12 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setFollowing(UUID entityUuid, UUID following)
 	{
+		if (entityUuid == null)
+			return;
+		
+		if (following == null)
+			this.following.remove(entityUuid);
+		
 		this.following.put(entityUuid, following);
 	}
 	
