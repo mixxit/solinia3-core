@@ -447,9 +447,41 @@ public class Solinia3CorePlayerListener implements Listener {
 				}
 				return;
 			}
+			
+			tryUpdateFollowers(player);
 
 		} catch (CoreStateInitException e) {
 			// do nothing
+		}
+	}
+
+	private void tryUpdateFollowers(Player player) {
+		try
+		{
+			for(UUID follower : StateManager.getInstance().getEntityManager().getFollowers(player.getUniqueId()))
+			{
+				Entity ent = Bukkit.getEntity(follower);
+				if (ent == null)
+					continue;
+				
+				if (!(ent instanceof Player))
+					continue;
+				
+				if (ent.isDead())
+					continue;
+				
+				if (player.getLocation().distance(ent.getLocation()) > 20)
+				{
+					ent.sendMessage("You are too far from your target, follow cancelled");
+					StateManager.getInstance().getEntityManager().setFollowing(player.getUniqueId(), null);
+					continue;
+				}
+				
+				Utils.tryFollow(player, (Player)ent, 4);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 

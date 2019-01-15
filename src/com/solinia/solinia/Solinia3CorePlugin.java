@@ -427,6 +427,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("setclass").setExecutor(new CommandSetClass());
 		this.getCommand("addraceclass").setExecutor(new CommandAddRaceClass());
 		this.getCommand("stats").setExecutor(new CommandStats());
+		this.getCommand("follow").setExecutor(new CommandFollow());
 		this.getCommand("resetplayer").setExecutor(new CommandResetPlayer());
 		this.getCommand("who").setExecutor(new CommandWho());
 		this.getCommand("soliteminfo").setExecutor(new CommandSolItemInfo());

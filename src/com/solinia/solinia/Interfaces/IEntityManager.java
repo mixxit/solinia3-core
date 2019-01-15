@@ -171,4 +171,12 @@ public interface IEntityManager {
 	ConcurrentHashMap<UUID, Timestamp> getLastBindwound();
 
 	void setLastBindwound(UUID uuid, Timestamp lasttimestamp);
+
+	UUID getFollowing(UUID entityUuid);
+
+	void setFollowing(UUID entityUuid, UUID following);
+
+	Boolean isFollowing(UUID entityUuid);
+
+	List<UUID> getFollowers(UUID uniqueId);
 }

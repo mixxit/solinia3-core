@@ -18,14 +18,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -57,6 +60,11 @@ import com.solinia.solinia.Utils.Utils;
 import io.lumine.xikage.mythicmobs.mobs.EntityManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_13_R2.BlockPosition;
+import net.minecraft.server.v1_13_R2.EnumBlockFaceShape;
+import net.minecraft.server.v1_13_R2.EnumDirection;
+import net.minecraft.server.v1_13_R2.IBlockData;
+import net.minecraft.server.v1_13_R2.MathHelper;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
@@ -141,7 +149,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean hasIgnored(UUID uuid) {
 		return ignoredPlayers.contains(uuid);
 	}
-
+	
 	@Override
 	public Oath getOath()
 	{

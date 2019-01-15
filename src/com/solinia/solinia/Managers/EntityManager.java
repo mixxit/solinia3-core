@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -97,6 +98,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, EntityAutoAttack> entityAutoAttack = new ConcurrentHashMap<UUID, EntityAutoAttack>();
 	private ConcurrentHashMap<UUID, UUID> entityTargets = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, Boolean> feignedDeath = new ConcurrentHashMap<UUID, Boolean>();
+	private ConcurrentHashMap<UUID, UUID> following = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, CastingSpell> entitySpellCasting = new ConcurrentHashMap<UUID, CastingSpell>();
 	
 	private Plugin plugin;
@@ -1361,7 +1363,37 @@ public class EntityManager implements IEntityManager {
 		}
 
 	}
-
+	
+	@Override
+	public UUID getFollowing(UUID entityUuid)
+	{
+		UUID followingSomeone = this.following.get(entityUuid);
+		if (followingSomeone == null)
+		{
+			return null;
+		}
+		
+		return this.following.get(entityUuid);
+	}
+	
+	@Override
+	public Boolean isFollowing(UUID entityUuid)
+	{
+		UUID followingSomeone = this.following.get(entityUuid);
+		if (followingSomeone == null)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public void setFollowing(UUID entityUuid, UUID following)
+	{
+		this.following.put(entityUuid, following);
+	}
+	
 	public ConcurrentHashMap<UUID, Boolean> getFeignedDeath() {
 		return feignedDeath;
 	}
@@ -1633,5 +1665,23 @@ public class EntityManager implements IEntityManager {
 			} catch (CoreStateInitException e) {
 			}
 		}
+	}
+
+	@Override
+	public List<UUID> getFollowers(UUID uniqueId) {
+		if (!this.following.containsValue(uniqueId))
+			return new ArrayList<UUID>();
+		
+		// this could get laggy on onmove we should probably reverse the storage key and value
+		List<UUID> followers = new ArrayList<UUID>();
+		for(Entry<UUID, UUID> uuid : this.following.entrySet())
+		{
+			if (!uuid.getValue().equals(uniqueId))
+				continue;
+			
+			followers.add(uuid.getKey());
+		}
+		
+		return followers;
 	}
 }

@@ -31,6 +31,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
@@ -124,9 +125,168 @@ public class Utils {
 	public static final int NPCBuffs = 60;
 	public static final int PetBuffs = 30;
 	public static final Boolean GlowApiEnabled = true;
-	
+
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));
+	}
+	
+	public static void tryFollow(Player source, Player target, int preferredDistance) {
+		Location stalkerLocation = source.getLocation();
+		
+		World w = target.getWorld();
+		if (!stalkerLocation.getWorld().getName().equalsIgnoreCase(w.getName()))
+		{
+		  stalkerLocation.setWorld(w);
+		}
+		
+		double deltax = target.getLocation().getX() - stalkerLocation.getX();
+		double deltaz = target.getLocation().getZ() - stalkerLocation.getZ();
+		
+		
+		double actualDistance = Math.sqrt(deltax * deltax + deltaz * deltaz);
+		double ratio = preferredDistance / actualDistance;
+		
+		
+		double x = target.getLocation().getX() - deltax * ratio;
+		double z = target.getLocation().getZ() - deltaz * ratio;
+		double y = target.getLocation().getY();
+		
+		y = Utils.makeSafeFollowY(w, x, y, z, source.isFlying());
+		
+		if (y < 1.0D)
+		{
+		
+		  y = w.getHighestBlockYAt((int)Math.round(Math.floor(x)), (int)Math.round(Math.floor(z)));
+		}
+		
+		double deltay = target.getLocation().getY() - y;
+		
+		stalkerLocation.setX(x);
+	    stalkerLocation.setY(y);
+	    stalkerLocation.setZ(z);
+	    stalkerLocation.setYaw((float)Utils.calculateYaw(deltax, deltaz));
+	    stalkerLocation.setPitch((float)Utils.calculatePitch(deltax, deltay, deltaz));
+	    
+	    source.teleport(stalkerLocation);
+    }
+	
+	public static boolean safeFollow(World w, int x, int y, int z)
+	  {
+	    Block bottom = w.getBlockAt(x, y, z);
+	    Block top = w.getBlockAt(x, y + 1, z);
+	    
+
+	    Material bottomMaterial = bottom.getType();
+	    Material topMaterial = top.getType();
+	    
+
+	    boolean safe = ((bottom.isEmpty()) || (SAFE_TO_SHARE.contains(bottomMaterial))) && (
+	      (top.isEmpty()) || (SAFE_TO_SHARE.contains(topMaterial)));
+	    
+	    return safe;
+	  }
+
+	public static double makeSafeFollowY(World w, double dx, double dy, double dz, boolean flying) {
+		int x = (int) Math.floor(dx);
+		int y = (int) Math.floor(dy);
+		int z = (int) Math.floor(dz);
+
+		Double newy = Double.valueOf(0.0D);
+
+		while ((!safeFollow(w, x, y, z)) && (y <= w.getHighestBlockYAt(x, z))) {
+			y++;
+		}
+
+		do {
+			y--;
+		} while ((safeFollow(w, x, y, z)) && (y > 1) && (!flying));
+
+		if (y < w.getMaxHeight()) {
+			if (DONT_STAND_ON.contains(w.getBlockAt(x, y, z).getType())) {
+				newy = Double.valueOf(0.0D);
+			} else if (HALF_HEIGHT.contains(w.getBlockAt(x, y, z).getType())) {
+				newy = Double.valueOf(y + 0.5626D);
+			} else if (HEIGHT_AND_HALF.contains(w.getBlockAt(x, y, z).getType())) {
+				newy = Double.valueOf(y + 1.5001D);
+			} else {
+				newy = Double.valueOf(y + 1.0D);
+			}
+		}
+
+		return newy.doubleValue();
+	}
+
+	private static final List<Material> SAFE_TO_SHARE;
+	private static final List<Material> DONT_STAND_ON;
+	private static final List<Material> HALF_HEIGHT;
+	private static final List<Material> HEIGHT_AND_HALF;
+	
+	static
+	  {
+	    SAFE_TO_SHARE = new ArrayList();
+	    DONT_STAND_ON = new ArrayList();
+	    HALF_HEIGHT = new ArrayList();
+	    HEIGHT_AND_HALF = new ArrayList();
+	    SAFE_TO_SHARE.add(Material.RED_MUSHROOM);
+	    SAFE_TO_SHARE.add(Material.BROWN_MUSHROOM);
+	    SAFE_TO_SHARE.add(Material.SNOW);
+	    SAFE_TO_SHARE.add(Material.LEGACY_SAPLING);
+	    SAFE_TO_SHARE.add(Material.TORCH);
+	    SAFE_TO_SHARE.add(Material.REDSTONE);
+	    SAFE_TO_SHARE.add(Material.LEGACY_RED_ROSE);
+	    SAFE_TO_SHARE.add(Material.LEGACY_YELLOW_FLOWER);
+	    SAFE_TO_SHARE.add(Material.WHEAT);
+	    SAFE_TO_SHARE.add(Material.PUMPKIN_STEM);
+	    SAFE_TO_SHARE.add(Material.LEGACY_WATER_LILY);
+	    SAFE_TO_SHARE.add(Material.MELON_STEM);
+	    SAFE_TO_SHARE.add(Material.SUGAR_CANE);
+	    SAFE_TO_SHARE.add(Material.DEAD_BUSH);
+	    SAFE_TO_SHARE.add(Material.LEGACY_LONG_GRASS);
+	    SAFE_TO_SHARE.add(Material.SIGN);
+	    SAFE_TO_SHARE.add(Material.LEGACY_SIGN_POST);
+	    SAFE_TO_SHARE.add(Material.STONE_BUTTON);
+	    SAFE_TO_SHARE.add(Material.LEVER);
+	    SAFE_TO_SHARE.add(Material.LEGACY_RAILS);
+	    SAFE_TO_SHARE.add(Material.LEGACY_WOOD_PLATE);
+	    SAFE_TO_SHARE.add(Material.LEGACY_STONE_PLATE);
+	    
+	    DONT_STAND_ON.add(Material.WATER);
+	    DONT_STAND_ON.add(Material.LAVA);
+	    DONT_STAND_ON.add(Material.FIRE);
+	    DONT_STAND_ON.add(Material.CACTUS);
+	    DONT_STAND_ON.add(Material.LEGACY_STATIONARY_LAVA);
+	    DONT_STAND_ON.add(Material.LEGACY_STATIONARY_WATER);
+	    
+	    HALF_HEIGHT.add(Material.LEGACY_STEP);
+	    HALF_HEIGHT.add(Material.LEGACY_BED);
+	    
+	    HEIGHT_AND_HALF.add(Material.LEGACY_FENCE);
+	    HEIGHT_AND_HALF.add(Material.LEGACY_FENCE_GATE);
+	  }
+	
+	public static double calculateYaw(double deltax, double deltaz) {
+		double viewDirection = 90.0D;
+		if (deltaz != 0.0D) {
+			viewDirection = Math.toDegrees(Math.atan(-deltax / deltaz));
+		}
+		if (deltaz < 0.0D) {
+
+			viewDirection += 180.0D;
+		} else if ((deltax > 0.0D) && (deltaz > 0.0D)) {
+
+			viewDirection += 360.0D;
+		}
+
+		return viewDirection;
+	}
+
+	public static double calculatePitch(double x, double y, double z) {
+		double pitch = 0.0D;
+		double a = Math.sqrt(x * x + z * z);
+		double theta = Math.atan(y / a);
+		pitch = -Math.toDegrees(theta);
+
+		return pitch;
 	}
 
 	public static double calculateExpLoss(ISoliniaPlayer player) {
@@ -386,7 +546,7 @@ public class Utils {
 				continue;
 
 			int tmpitemid = 0;
-			
+
 			try {
 				tmpitemid = SoliniaItemAdapter.Adapt(itemstack).getId();
 			} catch (SoliniaItemException e) {
@@ -718,36 +878,27 @@ public class Utils {
 		if (experience < 1) {
 			experience = 1d;
 		}
-		
-		if (level < 10)
-		{
+
+		if (level < 10) {
 			return experience * 6d;
 		}
-		
-		if (level < 20)
-		{
+
+		if (level < 20) {
 			return experience * 5d;
 		}
 
-		
-		if (level < 30)
-		{
+		if (level < 30) {
 			return experience * 4d;
 		}
 
-		
-		if (level < 40)
-		{
+		if (level < 40) {
 			return experience * 3d;
 		}
 
-		
-		if (level < 50)
-		{
+		if (level < 50) {
 			return experience * 2d;
 		}
 
-		
 		return experience;
 	}
 
@@ -781,7 +932,7 @@ public class Utils {
 
 	public static int getSkillCap(String skillname, ISoliniaClass profession, int level, String specialisation) {
 		skillname = skillname.toUpperCase();
-		
+
 		if (!Utils.isValidSkill(skillname.toUpperCase()))
 			return 0;
 
@@ -844,22 +995,19 @@ public class Utils {
 					return cap;
 				}
 		}
-		
+
 		if (skillname.toUpperCase().equals("BINDWOUND")) {
-			if (profession != null)
-			{
+			if (profession != null) {
 				if ((profession.getName().toUpperCase().equals("WARRIOR")
 						|| profession.getName().toUpperCase().equals("MONK")
 						|| profession.getName().toUpperCase().equals("ROGUE")
-						|| profession.getName().toUpperCase().equals("BERSERKER")
-						))
-				{
+						|| profession.getName().toUpperCase().equals("BERSERKER"))) {
 					int cap = (int) ((5 * level) + 5);
 					if (cap > 210)
 						return 210;
 					return cap;
 				}
-				
+
 				if ((profession.getName().toUpperCase().equals("RANGER")
 						|| profession.getName().toUpperCase().equals("BEASTLORD")
 						|| profession.getName().toUpperCase().equals("BARD")
@@ -867,29 +1015,24 @@ public class Utils {
 						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
 						|| profession.getName().toUpperCase().equals("SHAMAN")
 						|| profession.getName().toUpperCase().equals("CLERIC")
-						|| profession.getName().toUpperCase().equals("DRUID")
-						))
-				{
+						|| profession.getName().toUpperCase().equals("DRUID"))) {
 					int cap = (int) ((5 * level) + 5);
 					if (cap > 200)
 						return 200;
 					return cap;
 				}
-				
+
 				if ((profession.getName().toUpperCase().equals("ENCHANTER")
 						|| profession.getName().toUpperCase().equals("MAGICIAN")
 						|| profession.getName().toUpperCase().equals("NECROMANCER")
-						|| profession.getName().toUpperCase().equals("WIZARD")
-						))
-				{
+						|| profession.getName().toUpperCase().equals("WIZARD"))) {
 					int cap = (int) ((5 * level) + 5);
 					if (cap > 100)
 						return 100;
 					return cap;
 				}
 			}
-			
-			
+
 		}
 
 		if (skillname.toUpperCase().equals("CRUSHING")) {
@@ -1121,31 +1264,31 @@ public class Utils {
 				}
 			}
 		}
-		
+
 		if (skillname.toUpperCase().equals("ALCHEMY")) {
 			return 255;
 		}
-		
+
 		if (skillname.equals("JEWELRYMAKING")) {
 			return 255;
 		}
-		
+
 		if (skillname.toUpperCase().equals("TAILORING")) {
 			return 255;
 		}
-		
+
 		if (skillname.toUpperCase().equals("FLETCHING")) {
 			return 255;
 		}
-		
+
 		if (skillname.equals("BLACKSMITHING")) {
 			return 255;
 		}
-		
+
 		if (skillname.toUpperCase().equals("TINKERING")) {
 			return 255;
 		}
-		
+
 		if (skillname.toUpperCase().equals("MAKEPOISON")) {
 			return 255;
 		}
@@ -1244,7 +1387,7 @@ public class Utils {
 		ItemStack itemstack = event.getItem();
 		if (itemstack == null)
 			return;
-		
+
 		if (!(CraftItemStack.asNMSCopy(itemstack).getItem() instanceof net.minecraft.server.v1_13_R2.ItemArmor)) {
 			return;
 		}
@@ -1291,9 +1434,8 @@ public class Utils {
 		// TODO Auto-generated method stub
 		return CapitaliseFirstLetter(name);
 	}
-	
-	public static String CapitaliseFirstLetter(String word)
-	{
+
+	public static String CapitaliseFirstLetter(String word) {
 		return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
 	}
 
@@ -1320,14 +1462,14 @@ public class Utils {
 			return "N";
 		}
 	}
-	
+
 	public static boolean isEntityInLineOfSightCone(LivingEntity entity, Entity target, int arc, int range) {
 		if (!TargetHelper.getConeTargets(entity, arc, range).contains(target))
 			return false;
-		
+
 		if (entity.hasLineOfSight(target))
 			return true;
-		
+
 		return false;
 	}
 
@@ -1403,7 +1545,7 @@ public class Utils {
 
 		return false;
 	}
-	
+
 	public static int getEffectIdFromEffectType(SpellEffectType spellEffectType) {
 		switch (spellEffectType) {
 		case CurrentHP:
@@ -3312,69 +3454,63 @@ public class Utils {
 
 	public static int getDurationFromSpell(ISoliniaLivingEntity solEntity, SoliniaSpell soliniaSpell) {
 		int duration = soliniaSpell.calcBuffDuration(solEntity, solEntity.getLevel());
-		if (duration > 0)
-		{
+		if (duration > 0) {
 			duration = soliniaSpell.getActSpellDuration(solEntity, duration);
 		}
-		
+
 		return duration;
 	}
 
 	// Used for one off patching, added in /commit patch command for console sender
-	public static void Patcher()  {
-		
+	public static void Patcher() {
+
 	}
-	
-	public static void disableLootOverLevel110()
-	{
+
+	public static void disableLootOverLevel110() {
 		int fixed = 0;
-		try
-		{
-			for (ISoliniaLootDrop lootDrop : StateManager.getInstance().getConfigurationManager().getLootDrops())
-			{
-				for(ISoliniaLootDropEntry lootentry : lootDrop.getEntries())
-				{
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(lootentry.getItemid());
-					
+		try {
+			for (ISoliniaLootDrop lootDrop : StateManager.getInstance().getConfigurationManager().getLootDrops()) {
+				for (ISoliniaLootDropEntry lootentry : lootDrop.getEntries()) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+							.getItem(lootentry.getItemid());
+
 					if (item == null)
 						continue;
-					
+
 					if (!item.isSpellscroll())
 						continue;
-					
+
 					if (item.getAbilityid() <= 0)
 						continue;
-					
-					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-					
+
+					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+							.getSpell(item.getAbilityid());
+
 					boolean found = false;
-					
-					for(SoliniaSpellClass spellClass : spell.getAllowedClasses())
-					{
-						
-						if (spellClass.getMinlevel() > 110)
-						{
+
+					for (SoliniaSpellClass spellClass : spell.getAllowedClasses()) {
+
+						if (spellClass.getMinlevel() > 110) {
 							found = true;
 							break;
 						}
 					}
-					
+
 					if (found == false)
 						continue;
-					
+
 					// We found an entry to remove
-					
+
 					item.setNeverDrop(true);
 					fixed++;
 				}
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 		System.out.println("Disabled loot: " + fixed);
 	}
-	
+
 	public static int convertRawClassToClass(int rawClassId) {
 		switch (rawClassId) {
 		case 1: // war
@@ -4393,8 +4529,9 @@ public class Utils {
 
 		return returnEffects;
 	}
-	
-	public static List<ActiveSpellEffect> getActiveSpellEffects(LivingEntity livingEntity, List<SpellEffectType> effectTypes) {
+
+	public static List<ActiveSpellEffect> getActiveSpellEffects(LivingEntity livingEntity,
+			List<SpellEffectType> effectTypes) {
 		List<ActiveSpellEffect> returnEffects = new ArrayList<ActiveSpellEffect>();
 
 		SoliniaEntitySpells effects;
@@ -4786,8 +4923,7 @@ public class Utils {
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.Teleport2)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.TeleporttoAnchor)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.Translocate)
-				|| spell.getSpellEffectTypes().contains(SpellEffectType.TranslocatetoAnchor)
-				|| spell.isCharmSpell()
+				|| spell.getSpellEffectTypes().contains(SpellEffectType.TranslocatetoAnchor) || spell.isCharmSpell()
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.SummonItem)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.BindAffinity)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.Levitate)
@@ -4969,68 +5105,61 @@ public class Utils {
 			return AugmentationSlotType.NONE;
 		}
 	}
-	
-	public static List<SoliniaAARankEffect> getHighestRankEffectsForEffectId(ISoliniaPlayer soliniaPlayer, int effectId)
-	{
+
+	public static List<SoliniaAARankEffect> getHighestRankEffectsForEffectId(ISoliniaPlayer soliniaPlayer,
+			int effectId) {
 		List<SoliniaAARankEffect> rankEffects = new ArrayList<SoliniaAARankEffect>();
-		
-		for (ISoliniaAAAbility aaAbility : soliniaPlayer.getAAAbilitiesWithEffectType(effectId)) 
-		{
+
+		for (ISoliniaAAAbility aaAbility : soliniaPlayer.getAAAbilitiesWithEffectType(effectId)) {
 			int currentRank = 0;
 			SoliniaAARankEffect highestEffect = null;
-			for (ISoliniaAARank rank : aaAbility.getRanks())
-			{
+			for (ISoliniaAARank rank : aaAbility.getRanks()) {
 				if (soliniaPlayer.hasRank(rank))
-					if (rank.getPosition() > currentRank)
-					{
+					if (rank.getPosition() > currentRank) {
 						currentRank = rank.getPosition();
 						for (SoliniaAARankEffect effect : rank.getEffects())
 							if (effect.getEffectId() == effectId)
 								highestEffect = effect;
 					}
 			}
-			
-			if (highestEffect != null)
-			{
+
+			if (highestEffect != null) {
 				rankEffects.add(highestEffect);
 			}
 		}
 		return rankEffects;
 	}
-	
+
 	public static int getHighestAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
-		
-		// This is actually read from the CriticalSpellChance 
+
+		// This is actually read from the CriticalSpellChance
 		boolean enforceSpellCritFormula = false;
-		if (effectType.equals(SpellEffectType.SpellCritDmgIncrease))
-		{
+		if (effectType.equals(SpellEffectType.SpellCritDmgIncrease)) {
 			effectType = SpellEffectType.CriticalSpellChance;
 			enforceSpellCritFormula = true;
 		}
-		
+
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
 
 		int highest = 0;
-		
+
 		try {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
 			for (SoliniaAARankEffect effect : player
 					.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType))) {
-				
+
 				// Special formula for taking the spell crit damage from the spell crit chance
-				if (enforceSpellCritFormula)
-				{
+				if (enforceSpellCritFormula) {
 					int base = 0;
 					if (effect.getBase2() > 100)
 						base = effect.getBase2() - 100;
-					
+
 					if (base > highest)
 						highest = base;
 				} else {
 					// Everything else
-					if (effect.getBase1() > highest)
-					{
+					if (effect.getBase1() > highest) {
 						highest = effect.getBase1();
 					}
 				}
@@ -5041,7 +5170,7 @@ public class Utils {
 		}
 
 	}
-	
+
 	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
@@ -5059,13 +5188,13 @@ public class Utils {
 		}
 
 	}
-	
+
 	public static ISoliniaAARank getRankOfAAAbility(LivingEntity bukkitLivingEntity, ISoliniaAAAbility aa) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return null;
 
 		ISoliniaAARank foundRank = null;
-		
+
 		int position = 0;
 
 		try {
@@ -5074,8 +5203,7 @@ public class Utils {
 				if (aa.getId() != rank.getAbilityid())
 					continue;
 
-				if (rank.getPosition() > position)
-				{
+				if (rank.getPosition() > position) {
 					position = rank.getPosition();
 					foundRank = rank;
 				}
@@ -5148,21 +5276,20 @@ public class Utils {
 			if (effectIdLookup == 0)
 				return 0;
 
-			ConcurrentHashMap<Integer, Integer> abilityMaxValue = new ConcurrentHashMap<Integer,Integer>();
-			
+			ConcurrentHashMap<Integer, Integer> abilityMaxValue = new ConcurrentHashMap<Integer, Integer>();
+
 			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager()
 						.getAARank(effect.getRankId());
-				
+
 				if (rank != null)
 					abilityMaxValue.put(rank.getAbilityid(), effect.getBase1());
 			}
-			
-			for(Integer key : abilityMaxValue.keySet())
-			{
+
+			for (Integer key : abilityMaxValue.keySet()) {
 				total += abilityMaxValue.get(key);
 			}
-			
+
 			return total;
 		} catch (CoreStateInitException e) {
 			return 0;
@@ -5221,7 +5348,7 @@ public class Utils {
 	public static boolean isValidSkill(String skillname) {
 		if (skillname == null || skillname.equals(""))
 			return false;
-		
+
 		try {
 			for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces()) {
 				if (skillname.toUpperCase().equals(race.getName().toUpperCase()))
@@ -5667,39 +5794,36 @@ public class Utils {
 			return false;
 
 		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
-		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
-			return true;
-		
+			if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
+				return true;
+
 		// New method
-		if (ItemStackUtils.getSoliniaItemId(itemStack) != null)
-		{
+		if (ItemStackUtils.getSoliniaItemId(itemStack) != null) {
 			return true;
 		}
-		
+
 		// Classic method
 		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-		
+
 		String soliniaid = compound.getString("soliniaid");
-		
+
 		return soliniaid.matches("-?\\d+");
 	}
-	
+
 	public static Timestamp GetSolLastUpdated(ItemStack itemStack) {
 		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
-		if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
-			return null;
+			if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
+				return null;
 
 		Long solupdatedtime = ItemStackUtils.getSoliniaLastUpdated(itemStack);
 		if (solupdatedtime == null)
 			return null;
-		
-		try
-		{
-		    Timestamp timestamp = new java.sql.Timestamp(solupdatedtime);
-		    return timestamp;
-		} catch (Exception e)
-		{
+
+		try {
+			Timestamp timestamp = new java.sql.Timestamp(solupdatedtime);
+			return timestamp;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -5753,16 +5877,16 @@ public class Utils {
 					ISoliniaLootDropEntry droptableentry = rollitems.get(new Random().nextInt(rollitems.size()));
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 							.getItem(droptableentry.getItemid());
-					
-					if (item == null)
-					{
-						System.out.println("Missing item id [" + droptableentry.getItemid() + "] in lootdrop id [" + droptableentry.getLootdropid() + "].. skipping..");
+
+					if (item == null) {
+						System.out.println("Missing item id [" + droptableentry.getItemid() + "] in lootdrop id ["
+								+ droptableentry.getLootdropid() + "].. skipping..");
 						continue;
 					}
-					
+
 					if (item.isNeverDrop())
 						continue;
-					
+
 					randomInt = r.nextInt(100) + 1;
 					// System.out.println("Rolled a " + randomInt + " against a max of " +
 					// droptableentry.getChance()+ " for item: " + item.getDisplayname());
@@ -5774,15 +5898,14 @@ public class Utils {
 					if (randomInt <= droptableentry.getChance()) {
 
 						// Handle unique item setting also
-						if (item.isArtifact() == true && item.isArtifactFound() == false)
-						{
+						if (item.isArtifact() == true && item.isArtifactFound() == false) {
 							item.setArtifactFound(true);
 							StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 						}
 
-						if (item.isArtifact() == true)
-						{
-							Utils.BroadcastPlayers("A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+						if (item.isArtifact() == true) {
+							Utils.BroadcastPlayers(
+									"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
 						}
 						world.dropItem(location, item.asItemStack());
 
@@ -5799,21 +5922,20 @@ public class Utils {
 
 						if (item.isNeverDrop())
 							continue;
-						
+
 						// Handle unique item checking also
 						if (item.isArtifact() == true && item.isArtifactFound() == true)
 							continue;
 
-						if (item.isArtifact() == true)
-						{
-							Utils.BroadcastPlayers("A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+						if (item.isArtifact() == true) {
+							Utils.BroadcastPlayers(
+									"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
 						}
-						
+
 						world.dropItem(location, item.asItemStack());
 
 						// Handle unique item setting also
-						if (item.isArtifact() == true && item.isArtifactFound() == false)
-						{
+						if (item.isArtifact() == true && item.isArtifactFound() == false) {
 							StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 							item.setArtifactFound(true);
 						}
@@ -5828,14 +5950,17 @@ public class Utils {
 
 	public static ItemStack getTargetingItemStack() {
 		ItemStack itemStack = new ItemStack(Material.LEGACY_SKULL_ITEM);
-		itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(), UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFlNDI1YzViYTlmM2MyOTYyYjM4MTc4Y2JjMjMxNzJhNmM2MjE1YTExYWNjYjkyNzc0YTQ3MTZlOTZjYWRhIn19fQ==", null));
+		itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(),
+				UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"),
+				"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFlNDI1YzViYTlmM2MyOTYyYjM4MTc4Y2JjMjMxNzJhNmM2MjE1YTExYWNjYjkyNzc0YTQ3MTZlOTZjYWRhIn19fQ==",
+				null));
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		List<String> lore = new ArrayList<String>();
 		lore.add("This is a targetting tool");
 		lore.add("Right click on an entity with this");
 		lore.add("Left click to target self");
 		lore.add("To clear, right click on nothing");
-		
+
 		itemMeta.setLore(lore);
 		itemStack.setDurability((short) 3);
 		itemMeta.setDisplayName("Targetting Tool");
@@ -5845,39 +5970,50 @@ public class Utils {
 	}
 
 	public static void despawnBoatIfNotNearWater(Boat entity) {
-		int y = (int)entity.getLocation().getY();
-		if (!(
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y+1,(int)entity.getLocation().getZ()).getType().equals(Material.LEGACY_STATIONARY_WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y+1,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().equals(Material.LEGACY_STATIONARY_WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-1,(int)entity.getLocation().getZ()).getType().equals(Material.LEGACY_STATIONARY_WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-1,(int)entity.getLocation().getZ()).getType().equals(Material.WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-2,(int)entity.getLocation().getZ()).getType().equals(Material.LEGACY_STATIONARY_WATER) ||
-			entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y-2,(int)entity.getLocation().getZ()).getType().equals(Material.WATER)
-				))
-		{
-			System.out.println("Despawned Boat on: " + entity.getWorld().getBlockAt((int)entity.getLocation().getX(),y,(int)entity.getLocation().getZ()).getType().name());
-			Utils.RemoveEntity(entity,"DESPAWNBOAT");
+		int y = (int) entity.getLocation().getY();
+		if (!(entity.getWorld().getBlockAt((int) entity.getLocation().getX(), y + 1, (int) entity.getLocation().getZ())
+				.getType().equals(Material.LEGACY_STATIONARY_WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y + 1, (int) entity.getLocation().getZ())
+						.getType().equals(Material.WATER)
+				|| entity.getWorld().getBlockAt((int) entity.getLocation().getX(), y, (int) entity.getLocation().getZ())
+						.getType().equals(Material.LEGACY_STATIONARY_WATER)
+				|| entity.getWorld().getBlockAt((int) entity.getLocation().getX(), y, (int) entity.getLocation().getZ())
+						.getType().equals(Material.WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y - 1, (int) entity.getLocation().getZ())
+						.getType().equals(Material.LEGACY_STATIONARY_WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y - 1, (int) entity.getLocation().getZ())
+						.getType().equals(Material.WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y - 2, (int) entity.getLocation().getZ())
+						.getType().equals(Material.LEGACY_STATIONARY_WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y - 2, (int) entity.getLocation().getZ())
+						.getType().equals(Material.WATER))) {
+			System.out.println("Despawned Boat on: " + entity.getWorld()
+					.getBlockAt((int) entity.getLocation().getX(), y, (int) entity.getLocation().getZ()).getType()
+					.name());
+			Utils.RemoveEntity(entity, "DESPAWNBOAT");
 		}
-		
+
 	}
 
 	public static int getMinLevelFromLevel(int highestlevel) {
 		int minlevel = 1;
-		if (highestlevel <= 14)
-		{
+		if (highestlevel <= 14) {
 			minlevel = highestlevel - 5;
 			if (minlevel < 1)
 				return 1;
-			
+
 			return minlevel;
 		}
-		
-		minlevel = (highestlevel / 3)*2;
+
+		minlevel = (highestlevel / 3) * 2;
 		if (minlevel < 1)
 			return 1;
-		
+
 		return minlevel;
 	}
 
@@ -5885,125 +6021,122 @@ public class Utils {
 		// TODO Auto-generated method stub
 		return 16;
 	}
-	
+
 	public static int getMaxProcs() {
 		// TODO Auto-generated method stub
 		return 4;
 	}
 
 	public static String getStringFromTimestamp(Timestamp timestamp) {
-		Instant instant = timestamp.toInstant(); 
-		OffsetDateTime odt = OffsetDateTime.now ();
-		ZoneOffset zoneOffset = odt.getOffset ();
-		
-		ZoneId zoneId = ZoneId.of( zoneOffset.getId() );
-		ZonedDateTime zdt = ZonedDateTime.ofInstant( instant , zoneId );
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "uuuu.MM.dd.HH.mm.ss" );
-		String output = zdt.format( formatter );
+		Instant instant = timestamp.toInstant();
+		OffsetDateTime odt = OffsetDateTime.now();
+		ZoneOffset zoneOffset = odt.getOffset();
+
+		ZoneId zoneId = ZoneId.of(zoneOffset.getId());
+		ZonedDateTime zdt = ZonedDateTime.ofInstant(instant, zoneId);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu.MM.dd.HH.mm.ss");
+		String output = zdt.format(formatter);
 		return output;
 	}
-	
-	public static List<String> GetRunic()
-	{
+
+	public static List<String> GetRunic() {
 		List<String> runic = new ArrayList<String>();
-		runic.add("áš ");
-		runic.add("áš¡");
-		runic.add("áš¢");
-		runic.add("áš£");
-		runic.add("áš¤");
-		runic.add("áš¥");
-		runic.add("áš¦");
-		runic.add("áš§");
-		runic.add("áš¨");
-		runic.add("áš©");
-		runic.add("ášª");
-		runic.add("áš«");
-		runic.add("áš¬");
-		runic.add("áš­");
-		runic.add("áš®");
-		runic.add("áš¯");
-		runic.add("áš°");
-		runic.add("áš±");
-		runic.add("áš²");
-		runic.add("áš³");
-		runic.add("áš´");
-		runic.add("ášµ");
-		runic.add("áš¶");
-		runic.add("áš·");
-		runic.add("áš¸");
-		runic.add("áš¹");
-		runic.add("ášº");
-		runic.add("áš»");
-		runic.add("áš¼");
-		runic.add("áš½");
-		runic.add("áš¾");
-		runic.add("áš¿");
-		runic.add("á›€");
-		runic.add("á›�");
-		runic.add("á›‚");
-		runic.add("á›ƒ");
-		runic.add("á›„");
-		runic.add("á›…");
-		runic.add("á›†");
-		runic.add("á›‡");
-		runic.add("á›ˆ");
-		runic.add("á›‰");
-		runic.add("á›Š");
-		runic.add("á›‹");
-		runic.add("á›Œ");
-		runic.add("á›�");
-		runic.add("á›Ž");
-		runic.add("á›�");
-		runic.add("á›�");
-		runic.add("á›‘");
-		runic.add("á›’");
-		runic.add("á›“");
-		runic.add("á›”");
-		runic.add("á›•");
-		runic.add("á›–");
-		runic.add("á›—");
-		runic.add("á›˜");
-		runic.add("á›™");
-		runic.add("á›š");
-		runic.add("á››");
-		runic.add("á›œ");
-		runic.add("á›�");
-		runic.add("á›ž");
-		runic.add("á›Ÿ");
-		runic.add("á› ");
-		runic.add("á›¡");
-		runic.add("á›¢");
-		runic.add("á›£");
-		runic.add("á›¤");
-		runic.add("á›¥");
-		runic.add("á›¦");
-		runic.add("á›§");
-		runic.add("á›¨");
-		runic.add("á›©");
-		runic.add("á›ª");
-		runic.add("á›«");
-		runic.add("á›¬");
-		runic.add("á›­");
-		runic.add("á›®");
-		runic.add("á›¯");
-		runic.add("á›°");
+		runic.add("Ã¡Å¡Â ");
+		runic.add("Ã¡Å¡Â¡");
+		runic.add("Ã¡Å¡Â¢");
+		runic.add("Ã¡Å¡Â£");
+		runic.add("Ã¡Å¡Â¤");
+		runic.add("Ã¡Å¡Â¥");
+		runic.add("Ã¡Å¡Â¦");
+		runic.add("Ã¡Å¡Â§");
+		runic.add("Ã¡Å¡Â¨");
+		runic.add("Ã¡Å¡Â©");
+		runic.add("Ã¡Å¡Âª");
+		runic.add("Ã¡Å¡Â«");
+		runic.add("Ã¡Å¡Â¬");
+		runic.add("Ã¡Å¡Â­");
+		runic.add("Ã¡Å¡Â®");
+		runic.add("Ã¡Å¡Â¯");
+		runic.add("Ã¡Å¡Â°");
+		runic.add("Ã¡Å¡Â±");
+		runic.add("Ã¡Å¡Â²");
+		runic.add("Ã¡Å¡Â³");
+		runic.add("Ã¡Å¡Â´");
+		runic.add("Ã¡Å¡Âµ");
+		runic.add("Ã¡Å¡Â¶");
+		runic.add("Ã¡Å¡Â·");
+		runic.add("Ã¡Å¡Â¸");
+		runic.add("Ã¡Å¡Â¹");
+		runic.add("Ã¡Å¡Âº");
+		runic.add("Ã¡Å¡Â»");
+		runic.add("Ã¡Å¡Â¼");
+		runic.add("Ã¡Å¡Â½");
+		runic.add("Ã¡Å¡Â¾");
+		runic.add("Ã¡Å¡Â¿");
+		runic.add("Ã¡â€ºâ‚¬");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºâ€š");
+		runic.add("Ã¡â€ºÆ’");
+		runic.add("Ã¡â€ºâ€ž");
+		runic.add("Ã¡â€ºâ€¦");
+		runic.add("Ã¡â€ºâ€ ");
+		runic.add("Ã¡â€ºâ€¡");
+		runic.add("Ã¡â€ºË†");
+		runic.add("Ã¡â€ºâ€°");
+		runic.add("Ã¡â€ºÅ ");
+		runic.add("Ã¡â€ºâ€¹");
+		runic.add("Ã¡â€ºÅ’");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºÅ½");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºâ€˜");
+		runic.add("Ã¡â€ºâ€™");
+		runic.add("Ã¡â€ºâ€œ");
+		runic.add("Ã¡â€ºâ€�");
+		runic.add("Ã¡â€ºâ€¢");
+		runic.add("Ã¡â€ºâ€“");
+		runic.add("Ã¡â€ºâ€”");
+		runic.add("Ã¡â€ºËœ");
+		runic.add("Ã¡â€ºâ„¢");
+		runic.add("Ã¡â€ºÅ¡");
+		runic.add("Ã¡â€ºâ€º");
+		runic.add("Ã¡â€ºÅ“");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºÅ¾");
+		runic.add("Ã¡â€ºÅ¸");
+		runic.add("Ã¡â€ºÂ ");
+		runic.add("Ã¡â€ºÂ¡");
+		runic.add("Ã¡â€ºÂ¢");
+		runic.add("Ã¡â€ºÂ£");
+		runic.add("Ã¡â€ºÂ¤");
+		runic.add("Ã¡â€ºÂ¥");
+		runic.add("Ã¡â€ºÂ¦");
+		runic.add("Ã¡â€ºÂ§");
+		runic.add("Ã¡â€ºÂ¨");
+		runic.add("Ã¡â€ºÂ©");
+		runic.add("Ã¡â€ºÂª");
+		runic.add("Ã¡â€ºÂ«");
+		runic.add("Ã¡â€ºÂ¬");
+		runic.add("Ã¡â€ºÂ­");
+		runic.add("Ã¡â€ºÂ®");
+		runic.add("Ã¡â€ºÂ¯");
+		runic.add("Ã¡â€ºÂ°");
 		return runic;
-}
+	}
 
 	public static String ConvertToRunic(String message) {
 		List<String> runicChars = GetRunic();
-		
+
 		String newmessage = "";
-		for(int i = 0; i < message.length(); i++)
-		{
-			if (message.toCharArray()[i] == ' ')
-			{
+		for (int i = 0; i < message.length(); i++) {
+			if (message.toCharArray()[i] == ' ') {
 				newmessage += message.toCharArray()[i];
 			} else {
 				newmessage += getRandomItemFromList(runicChars);
 			}
 		}
-		
+
 		return newmessage;
 	}
 
@@ -6013,75 +6146,71 @@ public class Utils {
 		newLocation.setYaw(0.0f);
 		livingEntity.teleport(newLocation);
 	}
-	
+
 	public static Location getLocationAroundCircle(Location center, double radius, double angleInRadian, double y) {
-        double x = center.getX() + radius * Math.cos(angleInRadian);
-        double z = center.getZ() + radius * Math.sin(angleInRadian);
-   
+		double x = center.getX() + radius * Math.cos(angleInRadian);
+		double z = center.getZ() + radius * Math.sin(angleInRadian);
 
-        Location loc = new Location(center.getWorld(), x, y, z);
-        Vector difference = center.toVector().clone().subtract(loc.toVector());
-        loc.setDirection(difference);
+		Location loc = new Location(center.getWorld(), x, y, z);
+		Vector difference = center.toVector().clone().subtract(loc.toVector());
+		loc.setDirection(difference);
 
-        return loc;
-    }
+		return loc;
+	}
 
 	public static double getNPCDefaultDamage(ISoliniaNPC npc) {
 		int damage = Utils.getMaxDamage(npc.getLevel(), 75);
-		if (npc.isHeroic())
-		{
+		if (npc.isHeroic()) {
 			damage += (Utils.getHeroicDamageMultiplier() * npc.getLevel());
 		}
-		
-		if (npc.isBoss())
-		{
+
+		if (npc.isBoss()) {
 			damage += (Utils.getBossDamageMultiplier() * npc.getLevel());
 		}
-		
-		if (npc.isRaidheroic())
-		{
+
+		if (npc.isRaidheroic()) {
 			damage += (Utils.getRaidHeroicDamageMultiplier() * npc.getLevel());
 		}
-		
-		if (npc.isRaidboss())
-		{
+
+		if (npc.isRaidboss()) {
 			damage += (Utils.getRaidBossDamageMultiplier() * npc.getLevel());
 		}
 
 		return damage;
 	}
 
-	public static double DistanceOverAggroLimit(LivingEntity attacker, LivingEntity aggroCheckEntity) 
-	{
+	public static double DistanceOverAggroLimit(LivingEntity attacker, LivingEntity aggroCheckEntity) {
 		double distance = attacker.getLocation().distance(aggroCheckEntity.getLocation());
 		if (distance > 100D)
-			return 100D-distance;
-		
-		net.minecraft.server.v1_13_R2.EntityLiving entity = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity)aggroCheckEntity).getHandle();
+			return 100D - distance;
+
+		net.minecraft.server.v1_13_R2.EntityLiving entity = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) aggroCheckEntity)
+				.getHandle();
 		if (entity == null)
 			return 0D;
-		
+
 		if (entity.getAttributeInstance(GenericAttributes.FOLLOW_RANGE) == null)
 			return 0D;
-		
+
 		double distanceLimit = entity.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).getValue();
-				
+
 		if (distance > distanceLimit)
-			return distance-distanceLimit;
-		
+			return distance - distanceLimit;
+
 		return 0D;
 	}
 
 	public static boolean IsNight(World world) {
-	    long time = world.getTime();
+		long time = world.getTime();
 
-	    return time > 0 && time < 12300;
+		return time > 0 && time < 12300;
 	}
 
 	public static boolean isSkullItem(ItemStack itemStack) {
-		if (itemStack.getType().name().equals("SKULL_ITEM") || itemStack.getType().name().equals("PLAYER_HEAD") || itemStack.getType().name().equals("LEGACY_SKULL_ITEM"))
+		if (itemStack.getType().name().equals("SKULL_ITEM") || itemStack.getType().name().equals("PLAYER_HEAD")
+				|| itemStack.getType().name().equals("LEGACY_SKULL_ITEM"))
 			return true;
-		
+
 		return false;
 	}
 
@@ -6107,138 +6236,127 @@ public class Utils {
 
 		}
 	}
-	
+
 	public static void dispatchCommandLater(Plugin plugin, String command) {
 		final Plugin pluginToSend = plugin;
 		final CommandSender senderToSend = pluginToSend.getServer().getConsoleSender();
 		final String commandToSend = command;
 		new BukkitRunnable() {
-	        
-            @Override
-            public void run() {
-            	pluginToSend.getServer().dispatchCommand(senderToSend,commandToSend);
-            }
-            
-        }.runTaskLater(plugin, 10);
+
+			@Override
+			public void run() {
+				pluginToSend.getServer().dispatchCommand(senderToSend, commandToSend);
+			}
+
+		}.runTaskLater(plugin, 10);
 	}
-	
+
 	public static void dispatchCommandLater(Plugin plugin, CommandSender sender, String command) {
 		final Plugin pluginToSend = plugin;
 		final CommandSender senderToSend = sender;
 		final String commandToSend = command;
 		new BukkitRunnable() {
-	        
-            @Override
-            public void run() {
-    			pluginToSend.getServer().dispatchCommand(senderToSend,commandToSend);
-            }
-            
-        }.runTaskLater(plugin, 10);
-		
-		
+
+			@Override
+			public void run() {
+				pluginToSend.getServer().dispatchCommand(senderToSend, commandToSend);
+			}
+
+		}.runTaskLater(plugin, 10);
+
 	}
 
 	public static NumHit getNumHitsType(Integer numhitstype) {
-		switch(numhitstype)
-		{
-			case 0:
-				return NumHit.None;
-			case 1:
-				return NumHit.IncomingHitAttempts;  // Attempted incoming melee attacks (hit or miss) on YOU.
-			case 2:
-				return NumHit.OutgoingHitAttempts;  // Attempted outgoing melee attacks (hit or miss) on YOUR TARGET.
-			case 3:
-				return NumHit.IncomingSpells;       // Incoming detrimental spells
-			case 4:
-				return NumHit.OutgoingSpells;       // Outgoing detrimental spells
-			case 5:
-				return NumHit.OutgoingHitSuccess;   // Successful outgoing melee attack HIT on YOUR TARGET.
-			case 6:
-				return NumHit.IncomingHitSuccess;   // Successful incoming melee attack HIT on YOU.
-			case 7:
-				return NumHit.MatchingSpells;       // Any casted spell matching/triggering a focus effect.
-			case 8:
-				return NumHit.IncomingDamage;       // Successful incoming spell or melee dmg attack on YOU
-			case 9:
-				return NumHit.ReflectSpell;	 // Incoming Reflected spells.
-			case 10:
-				return NumHit.DefensiveSpellProcs; // Defensive buff procs
-			case 11:
-				return NumHit.OffensiveSpellProcs;  // Offensive buff procs
-			default:
-				return NumHit.None;
+		switch (numhitstype) {
+		case 0:
+			return NumHit.None;
+		case 1:
+			return NumHit.IncomingHitAttempts; // Attempted incoming melee attacks (hit or miss) on YOU.
+		case 2:
+			return NumHit.OutgoingHitAttempts; // Attempted outgoing melee attacks (hit or miss) on YOUR TARGET.
+		case 3:
+			return NumHit.IncomingSpells; // Incoming detrimental spells
+		case 4:
+			return NumHit.OutgoingSpells; // Outgoing detrimental spells
+		case 5:
+			return NumHit.OutgoingHitSuccess; // Successful outgoing melee attack HIT on YOUR TARGET.
+		case 6:
+			return NumHit.IncomingHitSuccess; // Successful incoming melee attack HIT on YOU.
+		case 7:
+			return NumHit.MatchingSpells; // Any casted spell matching/triggering a focus effect.
+		case 8:
+			return NumHit.IncomingDamage; // Successful incoming spell or melee dmg attack on YOU
+		case 9:
+			return NumHit.ReflectSpell; // Incoming Reflected spells.
+		case 10:
+			return NumHit.DefensiveSpellProcs; // Defensive buff procs
+		case 11:
+			return NumHit.OffensiveSpellProcs; // Offensive buff procs
+		default:
+			return NumHit.None;
 		}
 	}
 
 	public static void ClearHateAndResetNpcsNotInList(List<UUID> entitiesNearPlayers) {
-		try
-		{
+		try {
 			List<UUID> activeHateLists = StateManager.getInstance().getEntityManager().getActiveHateListUUIDs();
-			for(UUID uuid : activeHateLists)
-			{
-				try
-				{
+			for (UUID uuid : activeHateLists) {
+				try {
 					if (entitiesNearPlayers.contains(uuid))
 						continue;
-					
+
 					Entity entity = Bukkit.getEntity(uuid);
-					if (entity == null)
-					{
+					if (entity == null) {
 						StateManager.getInstance().getEntityManager().clearHateList(uuid);
 						continue;
 					}
-					
-					if (!(entity instanceof LivingEntity))
-					{
+
+					if (!(entity instanceof LivingEntity)) {
 						continue;
 					}
-					
-					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+
+					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
 					solEntity.clearHateList();
 					solEntity.resetPosition(true);
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 
 	public static void RemoveEntity(Entity entity, String caller) {
-		//System.out.println("removing entity via caller: " + caller + " " + entity.getName());
+		// System.out.println("removing entity via caller: " + caller + " " +
+		// entity.getName());
 		if (entity instanceof Player)
 			return;
-		
+
 		entity.remove();
 	}
 
 	public static String getHttpUrlAsString(String urlLink) {
-		try
-		{
+		try {
 			URL url = new URL(urlLink);
 			URLConnection con = url.openConnection();
 			con.setConnectTimeout(15000);
 			con.setReadTimeout(15000);
-			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.0.11) Gecko/2009060215 Firefox/3.0.11 (.NET CLR 3.5.30729)");
+			con.setRequestProperty("User-Agent",
+					"Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.0.11) Gecko/2009060215 Firefox/3.0.11 (.NET CLR 3.5.30729)");
 			con.connect();
-	        InputStream is =con.getInputStream();
-	        BufferedReader in = new BufferedReader(
-	                new InputStreamReader(
-	                		con.getInputStream()));
-	
-	        StringBuilder response = new StringBuilder();
-	        String inputLine;
-	
-	        while ((inputLine = in.readLine()) != null) 
-	            response.append(inputLine);
-	        is.close();
-	        in.close();
-	        return response.toString();
-		} catch (Exception e)
-		{
+			InputStream is = con.getInputStream();
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+			StringBuilder response = new StringBuilder();
+			String inputLine;
+
+			while ((inputLine = in.readLine()) != null)
+				response.append(inputLine);
+			is.close();
+			in.close();
+			return response.toString();
+		} catch (Exception e) {
 			return "";
 		}
 	}
@@ -6247,69 +6365,62 @@ public class Utils {
 		coreclass = coreclass.toUpperCase();
 		method = method.toUpperCase();
 		focusid = focusid.toUpperCase();
-		try
-		{
-			for (UUID debuggerUuid : StateManager.getInstance().getPlayerManager().getDebugger().keySet())
-			{
+		try {
+			for (UUID debuggerUuid : StateManager.getInstance().getPlayerManager().getDebugger().keySet()) {
 				Entity entity = Bukkit.getEntity(debuggerUuid);
 				if (entity == null)
 					continue;
-				
-				DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger().get(debuggerUuid);
+
+				DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger()
+						.get(debuggerUuid);
 				if (!settings.isDebugging(coreclass, method, focusid))
 					continue;
-				
+
 				entity.sendMessage(coreclass + ":" + method + ":" + focusid + ":" + message);
-				
+
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 	}
 
 	public static boolean ValidatePet(LivingEntity entity) {
-		try
-		{
+		try {
 			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(entity);
-			if (solLivingEntity.isNPC())
-			{
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
-				if (npc.isCorePet())
-				{
-					if (!solLivingEntity.getActiveMob().getOwner().isPresent())
-					{
-						Utils.RemoveEntity(entity,"VALIDATEPET");
+			if (solLivingEntity.isNPC()) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+						.getNPC(solLivingEntity.getNpcid());
+				if (npc.isCorePet()) {
+					if (!solLivingEntity.getActiveMob().getOwner().isPresent()) {
+						Utils.RemoveEntity(entity, "VALIDATEPET");
 						System.out.println("ERROR - A pet had no owner but was marked as a pet!");
 						return false;
 					}
 				}
 			}
-				
-		} catch (CoreStateInitException e)
-		{
-			
+
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 		return true;
 	}
 
 	public static void setGlowing(Entity target, boolean b, Player source) {
 		if (Utils.GlowApiEnabled == false)
 			return;
-		
+
 		if (source == null || target == null || source.isDead() || target.isDead())
 			return;
-		
-		try
-		{
-			GlowAPI.setGlowing(target,b,source);
-		} catch (Exception e)
-		{
-			System.out.println("Issue with glowAPI");			
+
+		try {
+			GlowAPI.setGlowing(target, b, source);
+		} catch (Exception e) {
+			System.out.println("Issue with glowAPI");
 		}
 	}
+
 	public static void setGlowing(Entity target, GlowAPI.Color color, Player source) {
 		if (Utils.GlowApiEnabled == false)
 			return;
@@ -6317,98 +6428,90 @@ public class Utils {
 		if (source == null || target == null || source.isDead() || target.isDead())
 			return;
 
-		try
-		{
-			GlowAPI.setGlowing(target,color,source);
-		} catch (Exception e)
-		{
-			System.out.println("Issue with glowAPI");			
+		try {
+			GlowAPI.setGlowing(target, color, source);
+		} catch (Exception e) {
+			System.out.println("Issue with glowAPI");
 		}
 	}
 
 	public static Color getGlowColor(org.bukkit.ChatColor color) {
-		
-		switch (color)
-		{
-			case AQUA:
-				return Color.AQUA;
-			case BLACK:
-				return Color.BLACK;
-			case BLUE:
-				return Color.BLUE;
-			case DARK_AQUA:
-				return Color.DARK_AQUA;
-			case DARK_BLUE:
-				return Color.DARK_BLUE;
-			case DARK_GRAY:
-				return Color.DARK_GRAY;
-			case DARK_GREEN:
-				return Color.DARK_GREEN;
-			case DARK_PURPLE:
-				return Color.DARK_PURPLE;
-			case DARK_RED:
-				return Color.DARK_RED;
-			case GOLD:
-				return Color.GOLD;
-			case GRAY:
-				return Color.GRAY;
-			case GREEN:
-				return Color.GREEN;
-			case LIGHT_PURPLE:
-				return Color.PURPLE;
-			case RED:
-				return Color.RED;
-			case WHITE:
-				return Color.WHITE;
-			case YELLOW:
-				return Color.YELLOW;
-			default:
-				return Color.WHITE;
+
+		switch (color) {
+		case AQUA:
+			return Color.AQUA;
+		case BLACK:
+			return Color.BLACK;
+		case BLUE:
+			return Color.BLUE;
+		case DARK_AQUA:
+			return Color.DARK_AQUA;
+		case DARK_BLUE:
+			return Color.DARK_BLUE;
+		case DARK_GRAY:
+			return Color.DARK_GRAY;
+		case DARK_GREEN:
+			return Color.DARK_GREEN;
+		case DARK_PURPLE:
+			return Color.DARK_PURPLE;
+		case DARK_RED:
+			return Color.DARK_RED;
+		case GOLD:
+			return Color.GOLD;
+		case GRAY:
+			return Color.GRAY;
+		case GREEN:
+			return Color.GREEN;
+		case LIGHT_PURPLE:
+			return Color.PURPLE;
+		case RED:
+			return Color.RED;
+		case WHITE:
+			return Color.WHITE;
+		case YELLOW:
+			return Color.YELLOW;
+		default:
+			return Color.WHITE;
 		}
 	}
 
 	public static boolean AddAccountClaim(String mcaccountname, int itemId) {
-		try
-		{
+		try {
 			SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
 			newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
 			newclaim.setMcname(mcaccountname);
 			newclaim.setItemid(itemId);
 			newclaim.setClaimed(false);
-			
+
 			StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
 			return true;
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 		return false;
 	}
 
 	public static boolean canChangeCharacter(Player player) {
 		Timestamp lastChange = null;
-		
-		try
-		{
+
+		try {
 			lastChange = StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId());
-		
-		} catch (CoreStateInitException e)
-		{
+
+		} catch (CoreStateInitException e) {
 			return false;
 		}
-		
+
 		if (lastChange == null)
 			return true;
-		
+
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		Timestamp mintimestamp = Timestamp.valueOf(lastChange.toLocalDateTime().plus(10, ChronoUnit.MINUTES));
 
 		if (nowtimestamp.before(mintimestamp))
 			return false;
-		
+
 		return true;
-			
+
 	}
 }
-

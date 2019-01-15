@@ -11,6 +11,10 @@ commands:
     description: Commits Solinia3Core State Data
     usage: /commit
     aliases: []
+  follow:
+    description: Follows target
+    usage: /follow
+    aliases: []
   soliteminfo:
     description: Gets item info in main hand
     usage: /soliteminfo
