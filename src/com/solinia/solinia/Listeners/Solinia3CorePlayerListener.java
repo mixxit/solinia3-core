@@ -477,7 +477,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					continue;
 				}
 				
-				Utils.tryFollow(player, (Player)ent, 4);
+				Utils.tryFollow((Player)ent, player, 4);
 			}
 		} catch (CoreStateInitException e)
 		{

@@ -38,6 +38,12 @@ public class CommandFollow implements CommandExecutor {
 					return true;
 				}
 
+				if (targetmob.getUniqueId().equals(player.getUniqueId()))
+				{
+					player.sendMessage("You can't follow yourself!");
+					return true;
+				}
+				
 				if (!(targetmob instanceof Player))
 				{
 					player.sendMessage("You can only follow players");
