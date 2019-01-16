@@ -2144,7 +2144,7 @@ public class SoliniaActiveSpell {
 
 		try {
 			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),
-					SpellEffectType.PoisonCounter, false);
+					SpellEffectType.PoisonCounter, false, false);
 			if (isOwnerPlayer()) {
 				Player player = (Player) Bukkit.getPlayer(getOwnerUuid());
 				if (player != null) {
@@ -2172,7 +2172,7 @@ public class SoliniaActiveSpell {
 
 		try {
 			StateManager.getInstance().getEntityManager().clearEntityFirstEffectOfType(getLivingEntity(),
-					SpellEffectType.DiseaseCounter, false);
+					SpellEffectType.DiseaseCounter, false, false);
 			if (isOwnerPlayer()) {
 				Player player = (Player) Bukkit.getPlayer(getOwnerUuid());
 				if (player != null)
@@ -2456,7 +2456,7 @@ public class SoliniaActiveSpell {
 			System.out.println(
 					"Attempting fade effect for " + this.getSpellId() + " for owner: " + owner.getCustomName());
 
-			StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(ownerUuid, spellId, true);
+			StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(ownerUuid, spellId, true, true);
 		} catch (Exception e) {
 
 		}

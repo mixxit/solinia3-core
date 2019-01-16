@@ -43,8 +43,6 @@ public interface IEntityManager {
 
 	void clearEntityEffects(UUID uniqueId);
 
-	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType poisoncounter, boolean forceDoNotLoopBardSpell);
-
 	LivingEntity SpawnPet(Player owner, ISoliniaSpell spell);
 
 	void spellTick();
@@ -53,8 +51,6 @@ public interface IEntityManager {
 			LivingEntity sourceEntity);
 
 	void doNPCSpellCast();
-
-	void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell);
 
 	List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc);
 
@@ -84,7 +80,7 @@ public interface IEntityManager {
 
 	void setEntitySinging(UUID entityUUID, Integer spellId);
 
-	void removeSpellEffectsOfSpellId(UUID uuid, int spellId, boolean forceDoNotLoopBardSpell);
+	void removeSpellEffectsOfSpellId(UUID uuid, int spellId, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects);
 
 	void doNPCCheckForEnemies();
 
@@ -179,4 +175,10 @@ public interface IEntityManager {
 	void removeMezzed(LivingEntity livingEntity);
 
 	void removeStunned(LivingEntity livingEntity);
+
+
+	void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type, boolean forceDoNotLoopBardSpell,
+			boolean removeNonCombatEffects);
+
+	void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects);
 }

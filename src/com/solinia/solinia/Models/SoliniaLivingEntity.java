@@ -5720,7 +5720,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (effect.getSpellEffectType().equals(spellEffectType)) {
 					try {
 						StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(
-								getBukkitLivingEntity().getUniqueId(), activeSpell.getSpellId(), false);
+								getBukkitLivingEntity().getUniqueId(), activeSpell.getSpellId(), false, false);
 					} catch (CoreStateInitException e) {
 
 					}
@@ -5761,7 +5761,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false, false);
 
 			}
 		} catch (CoreStateInitException e) {
@@ -6270,7 +6270,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false, false);
 
 			}
 		} catch (CoreStateInitException e) {
@@ -6856,7 +6856,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false, true);
 			}
 		} catch (CoreStateInitException e) {
 
@@ -6897,7 +6897,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (singingId != null) {
 				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(singingId);
 				StateManager.getInstance().getEntityManager()
-						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), singingId, true);
+						.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), singingId, true, true);
 				emote(getBukkitLivingEntity().getCustomName() + "'s song comes to a close [" + spell.getName() + "]",
 						true);
 				StateManager.getInstance().getEntityManager().setEntitySinging(getBukkitLivingEntity().getUniqueId(),

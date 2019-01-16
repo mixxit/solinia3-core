@@ -359,7 +359,7 @@ public class EntityManager implements IEntityManager {
 		
 		for(UUID uuid : uuidRemoval)
 		{
-			removeSpellEffects(uuid, false);
+			removeSpellEffects(uuid, false, false);
 		}
 		
 		
@@ -370,19 +370,19 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override 
-	public void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell)
+	public void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects)
 	{
 		if (entitySpells.get(uuid) != null)
-			entitySpells.get(uuid).removeAllSpells(plugin, forceDoNotLoopBardSpell);
+			entitySpells.get(uuid).removeAllSpells(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects);
 		
 		entitySpells.remove(uuid);
 	}
 	
 	@Override 
-	public void removeSpellEffectsOfSpellId(UUID uuid, int spellId, boolean forceDoNotLoopBardSpell)
+	public void removeSpellEffectsOfSpellId(UUID uuid, int spellId, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects)
 	{
 		if (entitySpells.get(uuid) != null)
-			entitySpells.get(uuid).removeAllSpellsOfId(plugin, spellId, forceDoNotLoopBardSpell);
+			entitySpells.get(uuid).removeAllSpellsOfId(plugin, spellId, forceDoNotLoopBardSpell, removeNonCombatEffects);
 	}
 	
 	@Override
@@ -839,15 +839,15 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void clearEntityEffects(UUID uniqueId) {
 		if (entitySpells.get(uniqueId) != null)
-			removeSpellEffects(uniqueId, false);
+			removeSpellEffects(uniqueId, false, false);
 	}
 
 	@Override
-	public void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type, boolean forceDoNotLoopBardSpell) {
+	public void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {
 		if (entitySpells.get(livingEntity.getUniqueId()) == null)
 			return;
 		
-		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(plugin, type, forceDoNotLoopBardSpell);
+		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(plugin, type, forceDoNotLoopBardSpell, removeNonCombatEffects);
 	}
 	
 	@Override

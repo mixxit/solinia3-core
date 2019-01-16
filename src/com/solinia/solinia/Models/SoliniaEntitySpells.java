@@ -236,7 +236,7 @@ public class SoliniaEntitySpells {
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	public void removeSpell(Plugin plugin, Integer spellId, boolean forceDoNotLoopBardSpell) {
+	public void removeSpell(Plugin plugin, Integer spellId, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {
 		// Effect has worn off
 		
 		SoliniaActiveSpell activeSpell = null;
@@ -301,7 +301,7 @@ public class SoliniaEntitySpells {
 				DisguiseAPI.undisguiseToAll(getLivingEntity());
 		}
 		
-		if (!activeSpell.getSpell().isBardSong() || forceDoNotLoopBardSpell == true)
+		if (!activeSpell.getSpell().isBardSong() || removeNonCombatEffects == true)
 		{
 			// THIS IS FOR REMOVING EFFECTS INSTANTLY INSTEAD OF WAITING FOR NEXT TICK
 			
@@ -400,7 +400,7 @@ public class SoliniaEntitySpells {
 		}
 	}
 
-	public void removeAllSpells(Plugin plugin, boolean forceDoNotLoopBardSpell) {
+	public void removeAllSpells(Plugin plugin, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
 			removeSpells.add(activeSpell.getSpellId());
@@ -409,7 +409,7 @@ public class SoliniaEntitySpells {
 		for (Integer spellId : removeSpells) {
 			try
 			{
-				removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
+				removeSpell(plugin, spellId, forceDoNotLoopBardSpell, removeNonCombatEffects);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -435,7 +435,7 @@ public class SoliniaEntitySpells {
 			}
 
 		for (Integer spellId : removeSpells) {
-			removeSpell(plugin, spellId, false);
+			removeSpell(plugin, spellId, false, false);
 		}
 
 		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : updateSpellsSlots.entrySet()) {
@@ -467,7 +467,7 @@ public class SoliniaEntitySpells {
 	}
 
 	// Mainly used for cures
-	public void removeFirstSpellOfEffectType(Plugin plugin, SpellEffectType type, boolean forceDoNotLoopBardSpell) {
+	public void removeFirstSpellOfEffectType(Plugin plugin, SpellEffectType type, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		HashMap<Short, SoliniaActiveSpell> updateSpells = new HashMap<Short, SoliniaActiveSpell>();
 
@@ -482,7 +482,7 @@ public class SoliniaEntitySpells {
 		}
 
 		for (Integer spellId : removeSpells) {
-			removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
+			removeSpell(plugin, spellId, forceDoNotLoopBardSpell, removeNonCombatEffects);
 		}
 
 		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : updateSpells.entrySet()) {
@@ -491,8 +491,8 @@ public class SoliniaEntitySpells {
 
 	}
 
-	public void removeAllSpellsOfId(Plugin plugin, int spellId, boolean forceDoNotLoopBardSpell) {
-		removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
+	public void removeAllSpellsOfId(Plugin plugin, int spellId, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {
+		removeSpell(plugin, spellId, forceDoNotLoopBardSpell, removeNonCombatEffects);
 	}
 
 	public void removeFirstSpell(Plugin plugin, boolean forceDoNotLoopBardSpell) {
@@ -510,7 +510,7 @@ public class SoliniaEntitySpells {
 		}
 
 		for (Integer spellId : removeSpells) {
-			removeSpell(plugin, spellId, forceDoNotLoopBardSpell);
+			removeSpell(plugin, spellId, forceDoNotLoopBardSpell, forceDoNotLoopBardSpell);
 		}
 
 		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : updateSpells.entrySet()) {

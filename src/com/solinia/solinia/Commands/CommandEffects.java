@@ -117,14 +117,14 @@ public class CommandEffects implements CommandExecutor {
 	            		player.sendMessage("That spell does not exist");
 	            		return true;
 	            	}
-	            	
-	            	StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(player.getUniqueId(), spell.getId(), true);
-	            	
+
 	            	if (!spell.isBeneficial())
 	            	{
 	            		player.sendMessage("Can only remove beneficial spells");
 	            		return true;
 	            	}
+
+	            	StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(player.getUniqueId(), spell.getId(), true, true);
 	            	
 	            	player.sendMessage("Spell Effect removed");
 	            }
