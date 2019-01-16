@@ -724,7 +724,7 @@ public class SoliniaItem implements ISoliniaItem {
 		}
 		
 
-		boolean itemUseSuccess = spell.tryApplyOnEntity(player, targetentity);
+		boolean itemUseSuccess = spell.tryApplyOnEntity(player, targetentity, true);
 
 		if (itemUseSuccess) {
 			
@@ -861,7 +861,7 @@ public class SoliniaItem implements ISoliniaItem {
 
 		boolean itemUseSuccess = false;
 
-		itemUseSuccess = spell.tryApplyOnBlock(player, clickedBlock);
+		itemUseSuccess = spell.tryApplyOnBlock(player, clickedBlock, true);
 
 		if (itemUseSuccess) {
 			SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));

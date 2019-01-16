@@ -48,7 +48,7 @@ public interface IEntityManager {
 	void spellTick();
 
 	boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell,
-			LivingEntity sourceEntity);
+			LivingEntity sourceEntity, boolean sendMessages);
 
 	void doNPCSpellCast();
 

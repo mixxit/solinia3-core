@@ -969,7 +969,7 @@ public interface ISoliniaSpell {
 
 	void editSetting(String setting, String value, String[] additional) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException;
 
-	boolean tryApplyOnBlock(LivingEntity sourceEntity, Block clickedBlock);
+	boolean tryApplyOnBlock(LivingEntity sourceEntity, Block clickedBlock, boolean sendMessages);
 
 	SpellEffectType getEffectType1();
 
@@ -1017,7 +1017,7 @@ public interface ISoliniaSpell {
 
 	boolean isEffectInSpell(SpellEffectType effecttype);
 
-	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity);
+	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages);
 
 	boolean isWeaponProc();
 

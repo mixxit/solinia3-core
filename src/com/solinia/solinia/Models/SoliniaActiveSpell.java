@@ -152,7 +152,7 @@ public class SoliniaActiveSpell {
 		this.spellId = spellId;
 	}
 
-	public void apply(Plugin plugin) {
+	public void apply(Plugin plugin, boolean sendMessages) {
 		try {
 			ISoliniaSpell soliniaSpell = StateManager.getInstance().getConfigurationManager().getSpell(getSpellId());
 			if (soliniaSpell == null) {
@@ -173,22 +173,24 @@ public class SoliniaActiveSpell {
 					Player player = Bukkit.getPlayer(getOwnerUuid());
 					if (soliniaSpell.isBardSong()) {
 						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-						if (solPlayer.isSongsEnabled())
-							player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+						if (solPlayer.isSongsEnabled() && sendMessages)
+							player.sendMessage("[Y] * " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
 					} else {
-						player.sendMessage("* " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+						if (sendMessages)
+						player.sendMessage("[Y] * " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
 					}
 				}
 
 				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals("")) {
+					if (sendMessages)
 					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(
-							ChatColor.GRAY + "* " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther(),
+							ChatColor.GRAY + "[O] * " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther(),
 							soliniaSpell.isBardSong());
 				}
 			}
 
 			for (ActiveSpellEffect spellEffect : getActiveSpellEffects()) {
-				applySpellEffect(plugin, spellEffect, soliniaSpell, isFirstRun, solsource.getLevel());
+				applySpellEffect(plugin, spellEffect, soliniaSpell, isFirstRun, solsource.getLevel(), sendMessages);
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -197,7 +199,7 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applySpellEffect(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell,
-			boolean isFirstRun, int casterLevel) {
+			boolean isFirstRun, int casterLevel, boolean sendMessages) {
 
 		switch (spellEffect.getSpellEffectType()) {
 		case CurrentHP:
@@ -1311,7 +1313,7 @@ public class SoliniaActiveSpell {
 				return;
 			
 			if (targetsolLivingEntity.getLevel() > spellEffect.getMax())
-			{
+			{			
 				source.sendMessage("This is too high for this spell");
 				return;
 			}

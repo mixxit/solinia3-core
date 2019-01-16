@@ -1652,7 +1652,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 									if (roll < procChance) {
 										boolean itemUseSuccess = procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
-												defender.getBukkitLivingEntity());
+												defender.getBukkitLivingEntity(), true);
 
 										if (itemUseSuccess) {
 											checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
@@ -1834,15 +1834,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
 						case Self:
 							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									attackerSolEntity.getBukkitLivingEntity());
+									attackerSolEntity.getBukkitLivingEntity(), true);
 							break;
 						case Group:
 							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									attackerSolEntity.getBukkitLivingEntity());
+									attackerSolEntity.getBukkitLivingEntity(), true);
 							break;
 						default:
 							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									defenderSolEntity.getBukkitLivingEntity());
+									defenderSolEntity.getBukkitLivingEntity(), true);
 						}
 
 					}
@@ -2016,7 +2016,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 								if (roll < procChance) {
 									boolean itemUseSuccess = procSpell.tryApplyOnEntity((LivingEntity)sourceEntity,
-											getBukkitLivingEntity());
+											getBukkitLivingEntity(), true);
 
 									if (itemUseSuccess) {
 										checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
@@ -3610,7 +3610,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		boolean success = false;
 		if (getMana() > spell.getActSpellCost(this)) {
-			success = spell.tryApplyOnEntity(this.getBukkitLivingEntity(), target.getBukkitLivingEntity());
+			success = spell.tryApplyOnEntity(this.getBukkitLivingEntity(), target.getBukkitLivingEntity(), true);
 		}
 
 		if (success) {

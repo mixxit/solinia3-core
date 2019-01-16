@@ -99,7 +99,7 @@ public class SoliniaEntitySpells {
 		return false;
 	}
 
-	public boolean addSpell(Plugin plugin, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration) {
+	public boolean addSpell(Plugin plugin, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages) {
 		// This spell ID is already active
 		if (containsSpellId(soliniaSpell.getId()))
 			return false;
@@ -198,7 +198,7 @@ public class SoliniaEntitySpells {
 		}
 
 		// Initial run
-		activeSpell.apply(plugin);
+		activeSpell.apply(plugin, sendMessages);
 		Utils.playSpecialEffect(getLivingEntity(), activeSpell);
 		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 0);
 
@@ -315,9 +315,7 @@ public class SoliniaEntitySpells {
 						solEntity.emote(solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
 						
 						if (removeNonCombatEffects == true)
-						{
 							tryRemoveNonCombatEffects(activeSpell);
-						}
 						
 						if (solEntity.getBukkitLivingEntity().isOp())
 							System.out.println("Debug: " + solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]");
@@ -326,21 +324,17 @@ public class SoliniaEntitySpells {
 						if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity && !Bukkit.getEntity(activeSpell.getOwnerUuid()).isDead() && !Bukkit.getEntity(activeSpell.getSourceUuid()).isDead()) {
 							boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity(
 									(LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid()),
-									(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()));
+									(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()),!removeNonCombatEffects);
 							if (!itemUseSuccess)
 							{
 								Bukkit.getEntity(activeSpell.getSourceUuid()).sendMessage(ChatColor.GRAY + "* Your song failed to apply to the entity!");
 								if (removeNonCombatEffects == true)
-								{
 									tryRemoveNonCombatEffects(activeSpell);
-								}
 							}
 							else
 							{
 								if (removeNonCombatEffects == true)
-								{
 									tryRemoveNonCombatEffects(activeSpell);
-								}
 								return;
 							}
 						}
@@ -354,26 +348,26 @@ public class SoliniaEntitySpells {
 			}
 		} else {
 			if (removeNonCombatEffects == true)
-			{
 				tryRemoveNonCombatEffects(activeSpell);
-			}
 		}
 		
 		if (removeCharm == true)
 		{
-			try {
-				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-				//System.out.println("End of charm, attempting removal of pet");
-				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null)
-				{
-					StateManager.getInstance().getEntityManager().removePet(activeSpell.getSourceUuid(), false);
-					//System.out.println("Pet being removed");
-				} else {
-					System.out.println("Could not remove pet");
-				}
-			} catch (CoreStateInitException e) {
+			tryRemoveCharm(activeSpell);
+		}
+	}
+	
+	public void tryRemoveCharm(SoliniaActiveSpell activeSpell)
+	{
+		try {
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			//System.out.println("End of charm, attempting removal of pet");
+			if (solLivingEntity != null && solLivingEntity.getActiveMob() != null)
+				StateManager.getInstance().getEntityManager().removePet(activeSpell.getSourceUuid(), false);
+			else
+				System.out.println("Could not remove pet");
+		} catch (CoreStateInitException e) {
 
-			}
 		}
 	}
 	
@@ -435,7 +429,7 @@ public class SoliniaEntitySpells {
 		}
 	}
 
-	public void run(Plugin plugin) {
+	public void run(Plugin plugin, boolean sendMessages) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		HashMap<Short, SoliniaActiveSpell> updateSpellsSlots = new HashMap<Short, SoliniaActiveSpell>();
 
@@ -446,7 +440,7 @@ public class SoliniaEntitySpells {
 					removeSpells.add(activeSpell.getSpellId());
 				} else {
 					activeSpell.buffTick();
-					activeSpell.apply(plugin);
+					activeSpell.apply(plugin,sendMessages);
 					activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
 					updateSpellsSlots.put(slot.getKey(), activeSpell);
 				}

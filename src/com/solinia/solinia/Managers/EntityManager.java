@@ -311,7 +311,7 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
+	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages) {
 		try {
 			if (soliniaSpell.isCharmSpell() && getPet(sourceEntity.getUniqueId()) != null && !getPet(sourceEntity.getUniqueId()).getUniqueId().equals(targetEntity.getUniqueId()))
 				return false;
@@ -327,7 +327,7 @@ public class EntityManager implements IEntityManager {
 				duration = 18;
 			}
 			
-			return entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration);
+			return entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages);
 		} catch (CoreStateInitException e) {
 		}
 		
@@ -365,7 +365,7 @@ public class EntityManager implements IEntityManager {
 		
 		for(SoliniaEntitySpells entityEffects : entitySpells.values())
 		{
-			entityEffects.run(plugin);
+			entityEffects.run(plugin, true);
 		}
 	}
 	
