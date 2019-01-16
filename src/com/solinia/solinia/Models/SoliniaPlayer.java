@@ -1008,7 +1008,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						if (!tryFixSpellTarget(spell))
 						{
 							getBukkitPlayer().sendMessage(
-									"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+									"* You must select a target (shift+left click with spell or use /target for group or shift-f for self (tryCastFromSpellbook-tryFixSpellTarget)");
 							return;
 						}
 					}
@@ -1017,7 +1017,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			if (getTarget() == null)
 			{
-				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /ts for group or shift-f for self");
+				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /target for group or shift-f for self (tryCastFromSpellbook)");
 				return;
 			}
 			
@@ -1073,7 +1073,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void tryCastFromItemInSlot(int slotId) {
 		try
 		{
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "Trying to cast from item in slot: " + slotId);
+			
 			ItemStack itemstack = this.getBukkitPlayer().getInventory().getItem(slotId);
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "Item in slot: " + slotId + " null status: " + (itemstack == null));
 			if (itemstack == null || itemstack.getType().equals(Material.AIR))
 				return;
 			
@@ -1087,6 +1090,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			// We have our custom item id, lets check it exists
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " null status: " + (item == null));
 
 			if (item == null) {
 				return;
@@ -1096,6 +1100,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 			
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " target status: " + (getTarget() == null));
+
 			// Some spells auto target self, if they don't have a target try to do that
 			if (getTarget() == null) {
 				if (item.getAbilityid() > 0) {
@@ -1105,7 +1111,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						if (!tryFixSpellTarget(spell))
 						{
 							getBukkitPlayer().sendMessage(
-									"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+									"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self (tryCastFromItemInSlot-tryFixSpellTarget)");
 							return;
 						}
 					}
@@ -1114,16 +1120,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			if (getTarget() == null)
 			{
-				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /ts for group or shift-f for self");
+				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /target for group or shift-f for self (tryCastFromItemInSlot)");
 				return;
 			}
 			
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-			
+
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " consumable status: " + item.isConsumable());
+
 			// Only applies to consumable items
 			if (item.isConsumable()) {
 	
 				int newAmount = itemstack.getAmount() -1;
+				Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " using consumable item");
 				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
 				if (newAmount < 1)
 				{
@@ -1139,7 +1148,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 	
 			// Only applies to non-consumable items
-			if (item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+			if (!item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " using non consumable item");
 				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
 				return;
 			}
@@ -1315,7 +1325,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						if (!tryFixSpellTarget(spell))
 						{
 							getBukkitPlayer().sendMessage(
-									"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+									"* You must select a target (shift+left click with spell or use /target for group or shift-f for self (interact-tryFixSpellTarget)");
 							return;
 						}
 					}
@@ -1324,7 +1334,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			if (getTarget() == null)
 			{
-				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with spell or use /target for group or shift-f for self (interact)");
 				return;
 			}
 			
@@ -1407,12 +1417,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return true;
 				} else {
 					getBukkitPlayer().sendMessage(
-							"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+							"* You must select a target (shift+left click with spell or use /target for group or shift-f for self (fixspelltarget I)");
 					return false;
 				}
 			} else {
 				getBukkitPlayer().sendMessage(
-						"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+						"* You must select a target (shift+left click with spell or use /target for group or shift-f for self (fixspelltarget II)");
 				return false;
 			}
 		} catch (CoreStateInitException e)
@@ -1486,7 +1496,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					StateManager.getInstance().getEntityManager().setEntityTarget(getBukkitPlayer(), getBukkitPlayer());
 				} else {
 					getBukkitPlayer().sendMessage(
-							"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self");
+							"* You must select a target (shift+left click with spell or use /target for group or shift-f for self (spell item)");
 					return;
 				}
 			}
