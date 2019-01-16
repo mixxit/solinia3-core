@@ -300,6 +300,50 @@ public class SoliniaEntitySpells {
 				DisguiseAPI.undisguiseToAll(getLivingEntity());
 		}
 		
+		if (!activeSpell.getSpell().isBardSong() || forceDoNotLoopBardSpell == true)
+		{
+			// THIS IS FOR REMOVING EFFECTS INSTANTLY INSTEAD OF WAITING FOR NEXT TICK
+			
+			try
+			{
+				// Listen out for mez type spells here to remove the effect instantly
+				if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez))
+				{
+					// Instantly remove effect
+					if (StateManager.getInstance().getEntityManager().getMezzed(this.getBukkitLivingEntity()) != null)
+					{
+						StateManager.getInstance().getEntityManager().removeMezzed(this.getBukkitLivingEntity());
+						this.getBukkitLivingEntity().sendMessage("You are not longer mezzed (removed)");
+					}
+				}
+	
+				// Listen out for NegateIfCombat that are Feign Death status
+				if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat) && activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.FeignDeath))
+				{
+					// Instantly remove effect
+					if (StateManager.getInstance().getEntityManager().isFeignedDeath(this.getBukkitLivingEntity().getUniqueId()))
+					{
+						StateManager.getInstance().getEntityManager().setFeignedDeath(this.getBukkitLivingEntity().getUniqueId(), false);
+						this.getBukkitLivingEntity().sendMessage("You are not longer feigned (NegateIfCombat)");
+					}
+				}
+				
+				// Listen out for NegateIfCombat that are Stun status
+				if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat) && activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Stun))
+				{
+					// Instantly remove effect
+					if (StateManager.getInstance().getEntityManager().getStunned(this.getBukkitLivingEntity()) != null)
+					{
+						StateManager.getInstance().getEntityManager().removeStunned(this.getBukkitLivingEntity());
+						this.getBukkitLivingEntity().sendMessage("You are not longer stunned (NegateIfCombat)");
+					}
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		
 		// Check if bard song, may need to keep singing
 		if (forceDoNotLoopBardSpell == false)
 		if (activeSpell.getSpell().isBardSong()) {
