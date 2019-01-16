@@ -5820,6 +5820,11 @@ public class Utils {
 		entity.addPotionEffect(new PotionEffect(effectType, Utils.GetPotionEffectTickLength(effectType), amplifier),
 				true);
 	}
+	
+	public static void RemovePotionEffect(LivingEntity entity, PotionEffectType effectType) {
+		entity.removePotionEffect(effectType);
+	}
+
 
 	public static int GetPotionEffectTickLength(PotionEffectType effectType) {
 		if (effectType == PotionEffectType.NIGHT_VISION) {
@@ -6554,4 +6559,5 @@ public class Utils {
 		return true;
 
 	}
+
 }

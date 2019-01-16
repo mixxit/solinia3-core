@@ -15,6 +15,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffectType;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -314,6 +315,8 @@ public class SoliniaEntitySpells {
 					{
 						StateManager.getInstance().getEntityManager().removeMezzed(this.getBukkitLivingEntity());
 						this.getBukkitLivingEntity().sendMessage("You are not longer mezzed (removed)");
+						Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.SLOW);
+						Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
 					}
 				}
 	
