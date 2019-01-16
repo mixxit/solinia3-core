@@ -4170,7 +4170,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 		
 		if (!solSource.isNPC() && solTarget.isImmuneToSpell(soliniaSpell))
+		{
+			source.sendMessage(ChatColor.RED + "Your target cannot be affected (with this spell)");
 			return false;
+		}
 		
 		// Always allow self only spells if the target and source is the self
 		if (source.getUniqueId().equals(target.getUniqueId()) && 
