@@ -26,16 +26,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.projectiles.ProjectileSource;
-
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -110,36 +106,18 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		}
 
-		try {
-			Timestamp mzExpiry = StateManager.getInstance().getEntityManager()
-					.getMezzed((LivingEntity) event.getEntity());
-			if (mzExpiry != null) {
-				if (event.getEntity() instanceof Player) {
-					((Player) event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
-				}
-				Utils.CancelEvent(event);
-				return;
-			}
-		} catch (CoreStateInitException e) {
-
+		if (Utils.isMezzed((LivingEntity)event.getEntity()))
+		{
+			Utils.CancelEvent(event);
+			return;
 		}
 
-		try {
-			Timestamp stExpiry = StateManager.getInstance().getEntityManager()
-					.getStunned((LivingEntity) event.getEntity());
-			if (stExpiry != null) {
-				if (event.getEntity() instanceof Player) {
-					((Player) event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(ChatColor.GRAY + "* You are stunned!"));
-				}
-				Utils.CancelEvent(event);
-				return;
-			}
-		} catch (CoreStateInitException e) {
-
+		if (Utils.isStunned((LivingEntity)event.getEntity()))
+		{
+			Utils.CancelEvent(event);
+			return;
 		}
-
+		
 		try {
 			// Me
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
@@ -611,38 +589,20 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onShootBow(EntityShootBowEvent event) {
 		if (event.isCancelled())
 			return;
-
-		try {
-			Timestamp mzExpiry = StateManager.getInstance().getEntityManager()
-					.getMezzed((LivingEntity) event.getEntity());
-			if (mzExpiry != null) {
-				if (event.getEntity() instanceof Player) {
-					((Player) event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
-				}
+		
+		if (event.getEntity() instanceof LivingEntity)
+		if (Utils.isMezzed((LivingEntity)event.getEntity()))
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+		
+		if (event.getEntity() instanceof LivingEntity)
+			if (Utils.isStunned((LivingEntity)event.getEntity()))
+			{
 				Utils.CancelEvent(event);
-				;
 				return;
 			}
-		} catch (CoreStateInitException e) {
-
-		}
-
-		try {
-			Timestamp stExpiry = StateManager.getInstance().getEntityManager()
-					.getStunned((LivingEntity) event.getEntity());
-			if (stExpiry != null) {
-				if (event.getEntity() instanceof Player) {
-					((Player) event.getEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(ChatColor.GRAY + "* You are stunned!"));
-				}
-				Utils.CancelEvent(event);
-				;
-				return;
-			}
-		} catch (CoreStateInitException e) {
-
-		}
 
 		if (event.getEntity() instanceof Player) {
 			Player shooter = (Player) event.getEntity();
@@ -663,39 +623,15 @@ public class Solinia3CoreEntityListener implements Listener {
 	@EventHandler
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
-		try {
-			Timestamp mzExpiry = StateManager.getInstance().getEntityManager()
-					.getMezzed((LivingEntity) event.getPlayer());
-			if (mzExpiry != null) {
-				if (event.getPlayer() instanceof Player) {
-					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
-				}
-				Utils.CancelEvent(event);
-				;
-				return;
-			}
-		} catch (CoreStateInitException e) {
-
+		if (Utils.isMezzed(event.getPlayer()))
+		{
+			Utils.CancelEvent(event);
+			return;
 		}
 
-		try {
-			Timestamp stExpiry = StateManager.getInstance().getEntityManager()
-					.getStunned((LivingEntity) event.getPlayer());
-			if (stExpiry != null) {
-				if (event.getPlayer() instanceof Player) {
-					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(ChatColor.GRAY + "* You are stunned!"));
-				}
-				Utils.CancelEvent(event);
-				;
-				return;
-			}
-		} catch (CoreStateInitException e) {
-
-		}
-
-		if (!(event.getRightClicked() instanceof LivingEntity)) {
+		if (Utils.isStunned(event.getPlayer()))
+		{
+			Utils.CancelEvent(event);
 			return;
 		}
 

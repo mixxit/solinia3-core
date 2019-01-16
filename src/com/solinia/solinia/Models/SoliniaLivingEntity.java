@@ -6851,7 +6851,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)) {
 					if (!removeSpells.contains(spell.getSpell().getId()))
 						removeSpells.add(spell.getSpell().getId());
+					
+					// THIS IS FOR REMOVING EFFECTS INSTANTLY INSTEAD OF WAITING FOR NEXT TICK
+					
+					// Listen out for mez type spells here to remove the effect instantly
+					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez))
+					{
+						// Instantly remove effect
+						if (StateManager.getInstance().getEntityManager().getMezzed(this.getBukkitLivingEntity()) != null)
+							StateManager.getInstance().getEntityManager().removeMezzed(this.getBukkitLivingEntity());
+					}
 
+					// Listen out for NegateIfCombat that are Feign Death status
+					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat) && spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.FeignDeath))
+					{
+						// Instantly remove effect
+						if (StateManager.getInstance().getEntityManager().isFeignedDeath(this.getBukkitLivingEntity().getUniqueId()))
+							StateManager.getInstance().getEntityManager().setFeignedDeath(this.getBukkitLivingEntity().getUniqueId(), false);
+					}
+					
+					// Listen out for NegateIfCombat that are Stun status
+					if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat) && spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Stun))
+					{
+						// Instantly remove effect
+						if (StateManager.getInstance().getEntityManager().getStunned(this.getBukkitLivingEntity()) != null)
+							StateManager.getInstance().getEntityManager().removeStunned(this.getBukkitLivingEntity());
+					}
+					
 				}
 			}
 

@@ -1413,31 +1413,17 @@ public class Solinia3CorePlayerListener implements Listener {
 		{
 					
 		}
-
-		try {
-			Timestamp mezExpiry = StateManager.getInstance().getEntityManager()
-					.getMezzed((LivingEntity) event.getPlayer());
-			if (mezExpiry != null) {
-				event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
-				Utils.CancelEvent(event);
-				;
-				return;
-			}
-		} catch (CoreStateInitException e) {
-
-		}
 		
-		try {
-			Timestamp stunExpiry = StateManager.getInstance().getEntityManager()
-					.getStunned((LivingEntity) event.getPlayer());
-			if (stunExpiry != null) {
-				event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You are stunned!"));
-				Utils.CancelEvent(event);
-				;
-				return;
-			}
-		} catch (CoreStateInitException e) {
+		if (Utils.isMezzed((LivingEntity) event.getPlayer()))
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
 
+		if (Utils.isStunned((LivingEntity) event.getPlayer()))
+		{
+			Utils.CancelEvent(event);
+			return;
 		}
 
 		try {

@@ -109,6 +109,7 @@ import com.solinia.solinia.Models.WorldWidePerk;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -129,6 +130,44 @@ public class Utils {
 
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));
+	}
+	
+	public static boolean isStunned(LivingEntity livingEntity)
+	{
+		try {
+			Timestamp stExpiry = StateManager.getInstance().getEntityManager()
+					.getStunned(livingEntity);
+			if (stExpiry != null) {
+				if (livingEntity instanceof Player) {
+					((Player) livingEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+							new TextComponent(ChatColor.GRAY + "* You are stunned!"));
+				}
+				return true;
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+		
+		return false;
+	}
+
+	
+	public static boolean isMezzed(LivingEntity livingEntity)
+	{
+		try {
+			Timestamp mzExpiry = StateManager.getInstance().getEntityManager()
+					.getMezzed(livingEntity);
+			if (mzExpiry != null) {
+				if (livingEntity instanceof Player) {
+					((Player)livingEntity).spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
+				}
+				return true;
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+		
+		return false;
 	}
 	
 	public static void tryFollow(Player source, Player target, int preferredDistance) {

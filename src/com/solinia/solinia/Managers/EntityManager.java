@@ -587,12 +587,12 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public void removeMezzed(LivingEntity livingEntity, Timestamp expiretimestamp) {
+	public void removeMezzed(LivingEntity livingEntity) {
 		this.entityMezzed.remove(livingEntity.getUniqueId());
 	}
 	
 	@Override
-	public void removeStunned(LivingEntity livingEntity, Timestamp expiretimestamp) {
+	public void removeStunned(LivingEntity livingEntity) {
 		this.entityStunned.remove(livingEntity.getUniqueId());
 	}
 

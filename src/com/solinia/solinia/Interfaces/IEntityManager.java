@@ -60,8 +60,6 @@ public interface IEntityManager {
 
 	boolean hasEntityEffectType(LivingEntity livingEntity, SpellEffectType type);
 
-	void removeMezzed(LivingEntity livingEntity, Timestamp expiretimestamp);
-
 	void doNPCSummon();
 
 	void clearEntityFirstEffect(LivingEntity livingEntity);
@@ -134,8 +132,6 @@ public interface IEntityManager {
 
 	void addStunned(LivingEntity livingEntity, Timestamp expiretimestamp);
 
-	void removeStunned(LivingEntity livingEntity, Timestamp expiretimestamp);
-
 	EntityAutoAttack getEntityAutoAttack(LivingEntity livingEntity);
 
 	void setEntityAutoAttack(LivingEntity livingEntity, boolean autoAttacking);
@@ -179,4 +175,8 @@ public interface IEntityManager {
 	Boolean isFollowing(UUID entityUuid);
 
 	List<UUID> getFollowers(UUID uniqueId);
+
+	void removeMezzed(LivingEntity livingEntity);
+
+	void removeStunned(LivingEntity livingEntity);
 }
