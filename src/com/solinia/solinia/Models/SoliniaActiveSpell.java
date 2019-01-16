@@ -1963,7 +1963,6 @@ public class SoliniaActiveSpell {
 				vehicle.eject();
 			}
 
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
 			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
 		} catch (CoreStateInitException e) {
 			return;
@@ -2006,7 +2005,6 @@ public class SoliniaActiveSpell {
 				vehicle.eject();
 			}
 
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
 			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
 		} catch (CoreStateInitException e) {
 			return;

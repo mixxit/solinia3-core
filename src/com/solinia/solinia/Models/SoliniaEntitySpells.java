@@ -315,7 +315,6 @@ public class SoliniaEntitySpells {
 					{
 						StateManager.getInstance().getEntityManager().removeMezzed(this.getBukkitLivingEntity());
 						this.getBukkitLivingEntity().sendMessage("You are not longer mezzed (removed)");
-						Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.SLOW);
 						Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
 					}
 				}
@@ -339,6 +338,7 @@ public class SoliniaEntitySpells {
 					{
 						StateManager.getInstance().getEntityManager().removeStunned(this.getBukkitLivingEntity());
 						this.getBukkitLivingEntity().sendMessage("You are not longer stunned (NegateIfCombat)");
+						Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
 					}
 				}
 			} catch (CoreStateInitException e)
