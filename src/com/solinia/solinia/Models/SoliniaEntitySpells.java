@@ -301,51 +301,6 @@ public class SoliniaEntitySpells {
 				DisguiseAPI.undisguiseToAll(getLivingEntity());
 		}
 		
-		if (!activeSpell.getSpell().isBardSong() || removeNonCombatEffects == true)
-		{
-			// THIS IS FOR REMOVING EFFECTS INSTANTLY INSTEAD OF WAITING FOR NEXT TICK
-			
-			try
-			{
-				// Listen out for mez type spells here to remove the effect instantly
-				if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez))
-				{
-					// Instantly remove effect
-					if (StateManager.getInstance().getEntityManager().getMezzed(this.getBukkitLivingEntity()) != null)
-					{
-						StateManager.getInstance().getEntityManager().removeMezzed(this.getBukkitLivingEntity());
-						this.getBukkitLivingEntity().sendMessage("You are not longer mezzed (removed)");
-						Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
-					}
-				}
-	
-				// Listen out for NegateIfCombat that are Feign Death status
-				if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat) && activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.FeignDeath))
-				{
-					// Instantly remove effect
-					if (StateManager.getInstance().getEntityManager().isFeignedDeath(this.getBukkitLivingEntity().getUniqueId()))
-					{
-						StateManager.getInstance().getEntityManager().setFeignedDeath(this.getBukkitLivingEntity().getUniqueId(), false);
-						this.getBukkitLivingEntity().sendMessage("You are not longer feigned (NegateIfCombat)");
-					}
-				}
-				
-				// Listen out for NegateIfCombat that are Stun status
-				if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat) && activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Stun))
-				{
-					// Instantly remove effect
-					if (StateManager.getInstance().getEntityManager().getStunned(this.getBukkitLivingEntity()) != null)
-					{
-						StateManager.getInstance().getEntityManager().removeStunned(this.getBukkitLivingEntity());
-						this.getBukkitLivingEntity().sendMessage("You are not longer stunned (NegateIfCombat)");
-						Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
-					}
-				}
-			} catch (CoreStateInitException e)
-			{
-				
-			}
-		}
 		
 		// Check if bard song, may need to keep singing
 		if (forceDoNotLoopBardSpell == false)
@@ -359,6 +314,11 @@ public class SoliniaEntitySpells {
 						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()));
 						solEntity.emote(solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
 						
+						if (removeNonCombatEffects == true)
+						{
+							tryRemoveNonCombatEffects(activeSpell);
+						}
+						
 						if (solEntity.getBukkitLivingEntity().isOp())
 							System.out.println("Debug: " + solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]");
 					} else {
@@ -368,9 +328,21 @@ public class SoliniaEntitySpells {
 									(LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid()),
 									(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()));
 							if (!itemUseSuccess)
+							{
 								Bukkit.getEntity(activeSpell.getSourceUuid()).sendMessage(ChatColor.GRAY + "* Your song failed to apply to the entity!");
+								if (removeNonCombatEffects == true)
+								{
+									tryRemoveNonCombatEffects(activeSpell);
+								}
+							}
 							else
+							{
+								if (removeNonCombatEffects == true)
+								{
+									tryRemoveNonCombatEffects(activeSpell);
+								}
 								return;
+							}
 						}
 					}
 				} else {
@@ -379,6 +351,11 @@ public class SoliniaEntitySpells {
 			} catch (CoreStateInitException e)
 			{
 				
+			}
+		} else {
+			if (removeNonCombatEffects == true)
+			{
+				tryRemoveNonCombatEffects(activeSpell);
 			}
 		}
 		
@@ -397,6 +374,47 @@ public class SoliniaEntitySpells {
 			} catch (CoreStateInitException e) {
 
 			}
+		}
+	}
+	
+	public void tryRemoveNonCombatEffects(SoliniaActiveSpell activeSpell) {
+		// THIS IS FOR REMOVING EFFECTS INSTANTLY INSTEAD OF WAITING FOR NEXT TICK
+
+		try {
+			// Listen out for mez type spells here to remove the effect instantly
+			if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez)) {
+				// Instantly remove effect
+				if (StateManager.getInstance().getEntityManager().getMezzed(this.getBukkitLivingEntity()) != null) {
+					StateManager.getInstance().getEntityManager().removeMezzed(this.getBukkitLivingEntity());
+					this.getBukkitLivingEntity().sendMessage("You are not longer mezzed (removed)");
+					Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
+				}
+			}
+
+			// Listen out for NegateIfCombat that are Feign Death status
+			if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat)
+					&& activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.FeignDeath)) {
+				// Instantly remove effect
+				if (StateManager.getInstance().getEntityManager()
+						.isFeignedDeath(this.getBukkitLivingEntity().getUniqueId())) {
+					StateManager.getInstance().getEntityManager()
+							.setFeignedDeath(this.getBukkitLivingEntity().getUniqueId(), false);
+					this.getBukkitLivingEntity().sendMessage("You are not longer feigned (NegateIfCombat)");
+				}
+			}
+
+			// Listen out for NegateIfCombat that are Stun status
+			if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat)
+					&& activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Stun)) {
+				// Instantly remove effect
+				if (StateManager.getInstance().getEntityManager().getStunned(this.getBukkitLivingEntity()) != null) {
+					StateManager.getInstance().getEntityManager().removeStunned(this.getBukkitLivingEntity());
+					this.getBukkitLivingEntity().sendMessage("You are not longer stunned (NegateIfCombat)");
+					Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
+				}
+			}
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 
