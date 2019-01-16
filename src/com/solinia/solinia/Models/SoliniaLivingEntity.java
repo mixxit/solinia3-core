@@ -7024,4 +7024,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public int getMaxTotalSlots() {
 		return Utils.TotalBuffs;
 	}
+
+	@Override
+	public boolean isImmuneToSpell(ISoliniaSpell spell)
+	{
+		for(SpellEffect effect : spell.getBaseSpellEffects())
+		{
+			if (effect.getSpellEffectType().equals(SpellEffectType.Mez) || 
+					effect.getSpellEffectType().equals(SpellEffectType.Charm) || 
+					effect.getSpellEffectType().equals(SpellEffectType.Fear)
+					)
+			{
+				if (getLevel() > effect.getMax())
+					return true;
+			}
+		}
+		
+		return false;
+	}
 }

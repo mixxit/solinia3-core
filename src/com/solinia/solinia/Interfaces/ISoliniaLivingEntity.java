@@ -334,4 +334,6 @@ public interface ISoliniaLivingEntity
 
 	public int getMaxTotalSlots();
 
+	public boolean isImmuneToSpell(ISoliniaSpell spell);
+
 }

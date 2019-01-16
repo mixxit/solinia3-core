@@ -4169,6 +4169,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		}
 		
+		if (!solSource.isNPC() && solTarget.isImmuneToSpell(soliniaSpell))
+			return false;
+		
 		// Always allow self only spells if the target and source is the self
 		if (source.getUniqueId().equals(target.getUniqueId()) && 
 				Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
