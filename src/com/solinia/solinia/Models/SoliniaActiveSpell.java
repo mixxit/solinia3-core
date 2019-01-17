@@ -1913,7 +1913,7 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.LEVITATION, 1);
+		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.LEVITATION, 255);
 	}
 
 	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
