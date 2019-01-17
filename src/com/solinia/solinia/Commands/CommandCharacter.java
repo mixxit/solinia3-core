@@ -108,12 +108,19 @@ public class CommandCharacter implements CommandExecutor {
 							player.sendMessage("You can only change your character every 10 minutes");
 							return true;
 						}
-							
+						
+						boolean resetLocation = true;
+						if (args.length > 1 && (player.isOp() || player.hasPermission("solinia.characterdonochangelocation")))
+						{
+							if (args[1].toUpperCase().equals("false"))
+								resetLocation = false;
+						}
 						
 						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
 						if (newPlayer != null)
 						{
-							player.teleport(player.getWorld().getSpawnLocation());
+							if (resetLocation == true)
+								player.teleport(player.getWorld().getSpawnLocation());
 							newPlayer.setBindPoint(player.getWorld().getSpawnLocation().getWorld().getName() + "," + player.getWorld().getSpawnLocation().getX() + ","
 									+ player.getWorld().getSpawnLocation().getY() + "," + player.getWorld().getSpawnLocation().getZ());
 							
@@ -127,6 +134,13 @@ public class CommandCharacter implements CommandExecutor {
 						{
 							player.sendMessage("You must provide the character UUID");
 							return true;
+						}
+						
+			        	boolean resetLocation2 = true;
+						if (args.length > 2 && (player.isOp() || player.hasPermission("solinia.characterdonochangelocation")))
+						{
+							if (args[2].toUpperCase().equals("false"))
+								resetLocation2 = false;
 						}
 						
 						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
@@ -148,7 +162,8 @@ public class CommandCharacter implements CommandExecutor {
 						if (loadedPlayer != null)
 						{
 							if (loadedPlayer.getLastLocation() != null)
-								player.teleport(loadedPlayer.getLastLocation());
+								if (resetLocation2 == true)
+									player.teleport(loadedPlayer.getLastLocation());
 							
 							player.sendMessage("Your character has been stored and your new character loaded");
 						} else {
