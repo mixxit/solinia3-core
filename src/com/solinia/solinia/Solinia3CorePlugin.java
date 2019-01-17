@@ -458,6 +458,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listlootdrops").setExecutor(new CommandListLootDrops());
 		this.getCommand("listloottables").setExecutor(new CommandListLootTables());
 		this.getCommand("local").setExecutor(new CommandLocal());
+		this.getCommand("removevampirism").setExecutor(new CommandRemoveVampirism());
 		this.getCommand("forcelevel").setExecutor(new CommandForceLevel());
 		this.getCommand("createmerchantlist").setExecutor(new CommandCreateMerchantList());
 		this.getCommand("addmerchantitem").setExecutor(new CommandAddMerchantItem());
