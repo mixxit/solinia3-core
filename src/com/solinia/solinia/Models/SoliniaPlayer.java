@@ -1318,7 +1318,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 			
 			// Not a clicky!
-			if (!item.isThrowing() && !item.isPetControlRod() && !item.getLanguagePrimer().equals("") && (item.getAbilityid() < 1))
+			if (!item.isThrowing() && !item.isPetControlRod() && item.getLanguagePrimer().equals("") && (item.getAbilityid() < 1))
 				return;
 			
 			if (item.isThrowing()) {
