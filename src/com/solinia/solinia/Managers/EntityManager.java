@@ -1449,8 +1449,22 @@ public class EntityManager implements IEntityManager {
 		interruptCasting(livingEntity);
 		if (livingEntity instanceof Player)
 		{
-			livingEntity.sendMessage("You begin casting " + castingSpell.getSpell().getName());
-			entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
+			try
+			{
+				// Move fizzle check to before casting
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)livingEntity);
+				if (solPlayer != null && !solPlayer.checkDoesntFizzle(castingSpell.getSpell())) {
+					solPlayer.emote("* " + solPlayer.getFullName() + "'s spell fizzles", false);
+					solPlayer.reducePlayerMana(castingSpell.getSpell().getActSpellCost(solPlayer.getSoliniaLivingEntity()));
+					return;
+				}
+				
+				livingEntity.sendMessage("You begin casting " + castingSpell.getSpell().getName());
+				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 		}
 	}
 

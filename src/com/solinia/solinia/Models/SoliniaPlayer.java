@@ -1622,12 +1622,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 				}
 			}
-
-			if (!checkDoesntFizzle(spell)) {
-				emote("* " + getFullName() + "'s spell fizzles", false);
-				SoliniaPlayerAdapter.Adapt(player).reducePlayerMana(spell.getActSpellCost(solentity));
-				return;
-			}
 		} catch (CoreStateInitException e) {
 			return;
 		}
