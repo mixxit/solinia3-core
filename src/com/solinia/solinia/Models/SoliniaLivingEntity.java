@@ -6122,8 +6122,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						}
 
 						if (hatedFactions.contains((Integer) targetNpc.getFactionid())) {
-							addToHateList(le.getUniqueId(), 1);
-							return;
+							if (Utils.isEntityInLineOfSight(getBukkitLivingEntity(),le)) {
+								addToHateList(le.getUniqueId(), 1);
+								return;
+							}
 						}
 					} catch (Exception e) {
 
@@ -6135,8 +6137,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// NPC VS PLAYER
 					Player player = (Player) entity;
 					if (faction.getName().equals("KOS")) {
-						addToHateList(player.getUniqueId(), 1);
-						return;
+						if (Utils.isEntityInLineOfSight(getBukkitLivingEntity(),player)) {
+							addToHateList(player.getUniqueId(), 1);
+							return;
+						}
 					}
 					
 					Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Checking for hate against player: " + player.getName() + ":" + player.getUniqueId());
@@ -6149,7 +6153,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player))) {
 						case FACTION_THREATENLY:
 						case FACTION_SCOWLS:
-							if (Utils.isEntityInLineOfSight(player, getBukkitLivingEntity())) {
+							if (Utils.isEntityInLineOfSight(getBukkitLivingEntity(),player)) {
 								addToHateList(player.getUniqueId(), 1);
 								return;
 							} else {
