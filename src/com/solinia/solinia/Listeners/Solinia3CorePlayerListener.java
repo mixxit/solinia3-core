@@ -1212,6 +1212,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			    	
 				}
 				
+				
+				
 				solplayer.updateMaxHp();
 				if (solplayer.getBindPoint() != null && !solplayer.getBindPoint().equals("")) {
 					String[] loc = solplayer.getBindPoint().split(",");
@@ -1222,6 +1224,10 @@ public class Solinia3CorePlayerListener implements Listener {
 					event.setRespawnLocation(location);
 					event.getPlayer().teleport(location);
 				}
+				
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+				if (solPlayer != null)
+					solPlayer.setLastLocation(event.getPlayer().getLocation());
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
