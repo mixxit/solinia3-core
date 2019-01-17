@@ -70,7 +70,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 				try
 				{
 					ISoliniaItem i = SoliniaItemAdapter.Adapt(player.getInventory().getItem(slotId));
-					
+					// Check temporary items
 					if (i.isTemporary())
 					{
 						for(String loreLine : player.getInventory().getItem(slotId).getItemMeta().getLore())
@@ -97,6 +97,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					
 					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Validating player slot: " + slotId);
 					
+					// Check out of date items
 					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Checking isItemStackUptoDate: " + ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i));
 					if (!ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i))
 		    		{
@@ -141,7 +142,8 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						continue;
 		    		}
 					
-					if (i.getMinLevel() > solplayer.getLevel() && !i.isSpellscroll())
+					// Check class armour and offhand items for wrong level
+					if (slotId > 35 && i.getMinLevel() > solplayer.getLevel() && !i.isSpellscroll())
 		    		{
 						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
@@ -162,7 +164,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
-						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
+						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your /claims");
 						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Moved minlevel item to claims: " + i.getDisplayname());
 						continue;
 		    		}
@@ -170,7 +172,8 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					if (i.getAllowedClassNames().size() < 1)
 						continue;
 					
-					if (solplayer.getClassObj() == null && !i.isSpellscroll())
+					// Check class armour and offhand items for wrong class (where the player has no class)
+					if (slotId > 35 && solplayer.getClassObj() == null && !i.isSpellscroll())
 					{
 						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
@@ -191,12 +194,13 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
-						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
+						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your /claims");
 						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Moved wrong class item claims: " + i.getDisplayname());
 						continue;
 					}
 					
-					if (!i.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()) && !i.isSpellscroll())
+					// Check class armour and offhand items for wrong class (where the player has a class)
+					if (slotId > 35 && !i.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()) && !i.isSpellscroll())
 					{
 						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
@@ -217,7 +221,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
-						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your claims");
+						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your /claims");
 						Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Moved wrong class item to claims: " + i.getDisplayname());
 						continue;
 					}
@@ -269,7 +273,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 	    		{
 					solPlayer.setEquipSlotItem(slot, 0);
 					Utils.AddAccountClaim(solPlayer.getBukkitPlayer().getName(),i.getId());
-					solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY + "You cannot wear equip item " + i.getDisplayname() + " so it has been added to your claims");
+					solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY + "You cannot wear equip item " + i.getDisplayname() + " so it has been added to your /claims");
 					Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",solPlayer.getBukkitPlayer().getName(),"Moved minlevel item to claims (equip): " + i.getDisplayname());
 	    		}
 				
