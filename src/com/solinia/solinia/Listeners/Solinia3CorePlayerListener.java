@@ -84,6 +84,10 @@ public class Solinia3CorePlayerListener implements Listener {
 				ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 				StateManager.getInstance().getEntityManager().removePet(event.getPlayer().getUniqueId(), !petsolEntity.isCharmed());
 			}
+			
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+			if (solPlayer != null)
+				solPlayer.setLastLocation(event.getPlayer().getLocation());
 	    } catch (CoreStateInitException e)
 		{
 	    	
@@ -554,6 +558,13 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (pet != null) {
 				ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 				StateManager.getInstance().getEntityManager().removePet(event.getEntity().getUniqueId(), !petsolEntity.isCharmed());
+			}
+			
+			if (event.getEntity() instanceof Player)
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getEntity());
+				if (solPlayer != null)
+					solPlayer.setLastLocation(event.getEntity().getLocation());
 			}
 	    } catch (CoreStateInitException e)
 		{

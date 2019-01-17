@@ -179,6 +179,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.lastY = location.getBlockY();
 		this.lastZ = location.getBlockZ();
 	}
+	
+	@Override
+	public Location getLastLocation()
+	{
+		return new Location(this.getBukkitPlayer().getWorld(), this.lastX, this.lastY, this.lastZ);
+	}
 
 	@Override
 	public void setIgnoredPlayers(List<UUID> ignoredPlayers) {

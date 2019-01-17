@@ -490,4 +490,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void tryCastFromSpellbook(ISoliniaItem solItem);
 
+	Location getLastLocation();
+
 }

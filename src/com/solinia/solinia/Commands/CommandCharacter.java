@@ -113,8 +113,9 @@ public class CommandCharacter implements CommandExecutor {
 						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
 						if (newPlayer != null)
 						{
-							newPlayer.setBindPoint(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + ","
-									+ player.getLocation().getY() + "," + player.getLocation().getZ());
+							player.teleport(player.getWorld().getSpawnLocation());
+							newPlayer.setBindPoint(player.getWorld().getSpawnLocation().getWorld().getName() + "," + player.getWorld().getSpawnLocation().getX() + ","
+									+ player.getWorld().getSpawnLocation().getY() + "," + player.getWorld().getSpawnLocation().getZ());
 							
 							player.sendMessage("Your character has been stored and a new character created");
 						} else {
@@ -146,6 +147,9 @@ public class CommandCharacter implements CommandExecutor {
 						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(plugin, player,characterUUID);
 						if (loadedPlayer != null)
 						{
+							if (loadedPlayer.getLastLocation() != null)
+								player.teleport(loadedPlayer.getLastLocation());
+							
 							player.sendMessage("Your character has been stored and your new character loaded");
 						} else {
 							player.sendMessage("Problem loading requested character");
