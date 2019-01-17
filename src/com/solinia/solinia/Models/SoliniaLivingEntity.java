@@ -3395,7 +3395,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc == null)
 				return;
 
-			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + player.getName() + " '" + message
+			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + player.getDisplayName() + " '" + message
 					+ "'" + ChatColor.RESET;
 
 			if (player.isOp() || (getLanguage() == null || isSpeaksAllLanguages()
@@ -3472,8 +3472,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
 			if (npc == null)
 				return;
+			
+			String name = messageto.getName();
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(messageto);
+			if (solLivingEntity != null)
+				name = solLivingEntity.getName();
+			
 
-			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + messageto.getName() + " '"
+			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + name + " '"
 					+ message + "'" + ChatColor.RESET;
 			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage,
 					allowlanguagelearn, message, getBukkitLivingEntity().getEquipment().getItemInMainHand());
