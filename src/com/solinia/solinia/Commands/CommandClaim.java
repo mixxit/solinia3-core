@@ -77,28 +77,21 @@ public class CommandClaim implements CommandExecutor {
 				sender.sendMessage("Current Claims: " + solClaimPlayer.getAccountClaims().size());
 				
 				if (args.length < 2) {
-					sender.sendMessage("That is not a claim id - /claim claim claimid (see /claim list)");
+					sender.sendMessage("That is not a claim id or the word all - /claim claim claimid (see /claim list) or /claim claim all");
 					return true;
 				}
-
-				int seekClaimId = Integer.parseInt(args[1].toUpperCase());
-				System.out.println("Looking up claims for player name: " + claimPlayer.getName() + " for claim ID: " + seekClaimId);
-				SoliniaAccountClaim claim = StateManager.getInstance().getConfigurationManager().getAccountClaim(claimPlayer.getName().toUpperCase(),seekClaimId);
-				if (claim == null) {
-					sender.sendMessage("That is not a valid claim - /claim claim claimid (see /claim list)");
-					return true;
+				
+				if (args[1].toUpperCase().equals("ALL"))
+				{
+					for(SoliniaAccountClaim claim : StateManager.getInstance().getConfigurationManager().getAccountClaims(claimPlayer.getName().toUpperCase()))
+					{
+						getClaim(claimPlayer,claim.getId());
+					}
+				} else {
+					int seekClaimId = Integer.parseInt(args[1].toUpperCase());
+					System.out.println("Looking up claims for player name: " + claimPlayer.getName() + " for claim ID: " + seekClaimId);
+					getClaim(claimPlayer,seekClaimId);
 				}
-
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(claim.getItemid());
-				if (item == null) {
-					sender.sendMessage("That is not a valid claim item - /claim claim claimid (see /claim list)");
-					return true;
-				}
-
-				claimPlayer.getWorld().dropItemNaturally(claimPlayer.getLocation(), item.asItemStack());
-				sender.sendMessage("Claim item dropped at your feet - ID: " + claim.getId());
-				StateManager.getInstance().getConfigurationManager().removeClaim(claim.getId());
 
 				return true;
 
@@ -111,5 +104,31 @@ public class CommandClaim implements CommandExecutor {
 
 		}
 		return true;
+	}
+
+	private void getClaim(Player claimPlayer, int seekClaimId) {
+		try
+		{
+			SoliniaAccountClaim claim = StateManager.getInstance().getConfigurationManager().getAccountClaim(claimPlayer.getName().toUpperCase(),seekClaimId);
+			if (claim == null) {
+				claimPlayer.sendMessage("That is not a valid claim - /claim claim claimid (see /claim list)");
+				return;
+			}
+	
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+					.getItem(claim.getItemid());
+			if (item == null) {
+				claimPlayer.sendMessage("That is not a valid claim item - /claim claim claimid (see /claim list)");
+				return;
+			}
+	
+			claimPlayer.getWorld().dropItemNaturally(claimPlayer.getLocation(), item.asItemStack());
+			claimPlayer.sendMessage("Claim item dropped at your feet - ID: " + claim.getId());
+			StateManager.getInstance().getConfigurationManager().removeClaim(claim.getId());
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+
 	}
 }
