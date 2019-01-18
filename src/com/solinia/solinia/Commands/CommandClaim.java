@@ -52,6 +52,7 @@ public class CommandClaim implements CommandExecutor {
 					sender.spigot().sendMessage(tc);
 				}
 				
+				sender.sendMessage("Use /claim claim all - to claim all your items");
 				return true;
 			case "give":
 				if (!sender.isOp() && !sender.hasPermission("solinia.claim.give"))
