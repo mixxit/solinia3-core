@@ -994,7 +994,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	@Override
-	public void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents)
+	public void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel)
 	{
 		if (spell == null)
 			return;
@@ -1019,7 +1019,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	
 			// Reroute action depending on target
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
-			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
+			if (useMana && spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
 				getBukkitPlayer().sendMessage(
 						ChatColor.GRAY + "Insufficient Mana  [E]");
 				return;
@@ -1034,7 +1034,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 	
-			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
+			if (useMana && StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
 					spell.getId()) != null) {
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
@@ -1051,7 +1051,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 	
-			startCasting(spell, getBukkitPlayer(), useMana, useReagents);
+			startCasting(spell, getBukkitPlayer(), useMana, useReagents, ignoreProfessionAndLevel);
 		} catch (CoreStateInitException e)
 		{
 			
@@ -1077,7 +1077,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 			
 			
-			tryCastSpell(StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid()), true, true);
+			tryCastSpell(StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid()), true, true, false);
 		} catch (CoreStateInitException e)
 		{
 			
@@ -1177,7 +1177,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	
 			// Reroute action depending on target
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
-			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
+			if (!item.isConsumable() && spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
 				getBukkitPlayer().sendMessage(
 						ChatColor.GRAY + "Insufficient Mana  [E]");
 				return;
@@ -1192,7 +1192,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 	
-			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
+			if (!item.isConsumable() && StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
 					spell.getId()) != null) {
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
@@ -1209,7 +1209,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 	
-			startCasting(spell, getBukkitPlayer(), !item.isConsumable(), !item.isConsumable());
+			startCasting(spell, getBukkitPlayer(), !item.isConsumable(), !item.isConsumable(), false);
 		} catch (CoreStateInitException e)
 		{
 			
@@ -1453,10 +1453,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents) {
+	public void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel) {
 		try {
 
-			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), useMana, useReagents);
+			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), useMana, useReagents, ignoreProfessionAndLevel);
 			StateManager.getInstance().getEntityManager().startCasting((LivingEntity) player, castingSpell);
 		} catch (CoreStateInitException e) {
 
@@ -1484,12 +1484,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		/*if (castingSpell.getItem() == null)
 			return;*/
 
-		doCastSpell(castingSpell.getSpell(), player, castingSpell.useMana, castingSpell.useReagents);
+		doCastSpell(castingSpell.getSpell(), player, castingSpell.useMana, castingSpell.useReagents, castingSpell.ignoreProfessionAndLevel);
 	}
 
 	@Override
-	public void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useComponents) {
-		if (spell.isAASpell() && !canUseAASpell(spell)) {
+	public void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel) {
+		if (!ignoreProfessionAndLevel && spell.isAASpell() && !canUseAASpell(spell)) {
 			player.sendMessage("You require the correct AA to use this spell");
 			return;
 		}
@@ -1538,9 +1538,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 		}
 
-		if (spell.getAllowedClasses().size() > 0) {
+		if (!ignoreProfessionAndLevel && spell.getAllowedClasses().size() > 0) {
 			if (getClassObj() == null) {
-				player.sendMessage(ChatColor.GRAY + " * This item cannot be used by your profession");
+				player.sendMessage(ChatColor.GRAY + " * This effect cannot be used by your profession");
 				return;
 			}
 
@@ -1557,13 +1557,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			if (foundprofession == false) {
-				player.sendMessage(ChatColor.GRAY + " * This item can only be used by " + professions);
+				player.sendMessage(ChatColor.GRAY + " * This effect can only be used by " + professions);
 				return;
 			} else {
 				if (foundlevel > 0) {
 					Double level = (double) getLevel();
 					if (level < foundlevel) {
-						player.sendMessage(ChatColor.GRAY + " * This item requires level " + foundlevel);
+						player.sendMessage(ChatColor.GRAY + " * This effect requires level " + foundlevel);
 						return;
 					}
 				}
@@ -1576,12 +1576,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (solentity == null)
 				return;
 
-			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
+			if (useMana && spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]");
 				return;
 			}
 
-			if (!spell.isBardSong()) {
+			if (!spell.isBardSong() && useReagents) {
 				if (spell.getComponents1() > 0) {
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
@@ -1648,13 +1648,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (player != null && !player.isDead())
 		if (targetmob != null && !targetmob.isDead()) {
-			boolean success = spell.tryCast(player, targetmob, useMana, useComponents);
+			boolean success = spell.tryCast(player, targetmob, useMana, useReagents);
 			if (success == true) {
 				tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 			}
 			return;
 		} else {
-			boolean success = spell.tryCast(player, player, useMana, useComponents);
+			boolean success = spell.tryCast(player, player, useMana, useReagents);
 			if (success == true) {
 				tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 			}

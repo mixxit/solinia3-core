@@ -19,8 +19,9 @@ public class CastingSpell {
 	public int timeLeftMilliseconds = 0;
 	boolean useMana = true;
 	boolean useReagents = true;
+	boolean ignoreProfessionAndLevel = false;
 	
-	public CastingSpell(UUID uuid, int spellId, boolean useMana, boolean useReagents)
+	public CastingSpell(UUID uuid, int spellId, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel)
 	{
 		this.livingEntityUUID = uuid;
 
@@ -46,6 +47,7 @@ public class CastingSpell {
 		this.spellId = spellId;
 		this.useMana = useMana;
 		this.useReagents = useReagents;
+		this.ignoreProfessionAndLevel = ignoreProfessionAndLevel;
 	}
 	
 	private LivingEntity getLivingEntity()

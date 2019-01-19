@@ -488,11 +488,14 @@ public interface ISoliniaPlayer extends Serializable {
 
 	Location getLastLocation();
 
-	void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents);
 
-	void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents);
+	void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
+			boolean ignoreProfessionAndLevel);
 
-	void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents);
+	void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
+			boolean ignoreProfessionAndLevel);
+
+	void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel);
 
 
 
