@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -632,7 +633,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@SerializedName("sneaking")
 	@Expose
 	private Integer sneaking;
-	@SerializedName("not_extendable") //not focusable
+	@SerializedName("not_extendable") // not focusable
 	@Expose
 	private Integer notExtendable;
 	@SerializedName("field198")
@@ -752,7 +753,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@SerializedName("field236")
 	@Expose
 	private Integer field236;
-	
+
 	private String requiresPermissionNode = "";
 
 	public Integer getId() {
@@ -2334,7 +2335,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public Integer getNotExtendable() {
 		return notExtendable;
 	}
-	
+
 	@Override
 	public Integer getNotFocusable() {
 		return notExtendable;
@@ -2664,11 +2665,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public void setAllowedClasses(List<SoliniaSpellClass> allowedClasses) {
 		this.allowedClasses = allowedClasses;
-		try
-		{
+		try {
 			StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			// do nothing
 		}
 	}
@@ -2679,86 +2678,99 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage(ChatColor.RED + "Spell Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " BardSong: " + this.isBardSong());
-		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET + " range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
-		sender.sendMessage("- castonyou: " + ChatColor.GOLD + this.getCastOnYou() + ChatColor.RESET + " castonother: " + ChatColor.GOLD + this.getCastOnOther() + ChatColor.RESET);
+		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET + " mana: " + ChatColor.GOLD
+				+ getMana() + ChatColor.RESET + " range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
+		sender.sendMessage("- castonyou: " + ChatColor.GOLD + this.getCastOnYou() + ChatColor.RESET + " castonother: "
+				+ ChatColor.GOLD + this.getCastOnOther() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "(" + Utils.getSpellTargetType(getTargettype()).name() + ")"+ ChatColor.RESET + " teleport_zone: " + ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
-		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET + " - recasttime: " + ChatColor.GOLD + getRecastTime() + ChatColor.RESET);
-		sender.sendMessage("- resisttype: " + ChatColor.GOLD + Utils.getSpellResistType(getResisttype()).name() + " [" + getResisttype() + "]" + ChatColor.RESET);
-		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name() + ")" + ChatColor.RESET);
-		sender.sendMessage("- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
+		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "("
+				+ Utils.getSpellTargetType(getTargettype()).name() + ")" + ChatColor.RESET + " teleport_zone: "
+				+ ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
+		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET + " - recasttime: "
+				+ ChatColor.GOLD + getRecastTime() + ChatColor.RESET);
+		sender.sendMessage("- resisttype: " + ChatColor.GOLD + Utils.getSpellResistType(getResisttype()).name() + " ["
+				+ getResisttype() + "]" + ChatColor.RESET);
+		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name()
+				+ ")" + ChatColor.RESET);
+		sender.sendMessage(
+				"- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 		SpellEffectIndex sei = Utils.getSpellEffectIndex(getSpellAffectIndex());
-		if (sei != null)
-		{
-			sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (" + sei.name() + ")" + ChatColor.RESET);
+		if (sei != null) {
+			sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (" + sei.name() + ")"
+					+ ChatColor.RESET);
 		} else {
-			sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (NO MAP)" + ChatColor.RESET);
+			sender.sendMessage(
+					"- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (NO MAP)" + ChatColor.RESET);
 		}
 
 		ISoliniaItem item1 = null;
 		ISoliniaItem item2 = null;
 		ISoliniaItem item3 = null;
 		ISoliniaItem item4 = null;
-		
-		try
-		{
-		
-		item1 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents1());
-		item2 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents2());
-		item3 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents3());
-		item4 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents4());
-		
-		} catch (CoreStateInitException e)
-		{
-			
+
+		try {
+
+			item1 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents1());
+			item2 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents2());
+			item3 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents3());
+			item4 = StateManager.getInstance().getConfigurationManager().getItem(this.getComponents4());
+
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 		String component1name = "";
 		String component2name = "";
 		String component3name = "";
 		String component4name = "";
-		
-		if (item1 != null)
-		{
+
+		if (item1 != null) {
 			component1name = item1.getDisplayname();
 		}
-		if (item2 != null)
-		{
+		if (item2 != null) {
 			component2name = item2.getDisplayname();
 		}
-		if (item3 != null)
-		{
+		if (item3 != null) {
 			component3name = item3.getDisplayname();
 		}
-		if (item4 != null)
-		{
+		if (item4 != null) {
 			component4name = item4.getDisplayname();
 		}
-		
-		sender.sendMessage("- numhits: " + ChatColor.GOLD + this.getNumhits() + " Type: " + this.getNumhitstype() + " (" + Utils.getNumHitsType(this.getNumhitstype()) + ") ");
-		sender.sendMessage("- components1: " + ChatColor.GOLD + this.getComponents1() + "(" + component1name + ")" + ChatColor.RESET + " componentcounts1: " + this.getComponentCounts1() + "NoExpend:(" + getNoexpendReagent1() + ")");
-		sender.sendMessage("- components2: " + ChatColor.GOLD + this.getComponents2() + "(" + component2name + ")" +  ChatColor.RESET + " componentcounts2: " + this.getComponentCounts2() + "NoExpend:(" + getNoexpendReagent2() + ")");
-		sender.sendMessage("- components3: " + ChatColor.GOLD + this.getComponents3() + "(" + component3name + ")" +  ChatColor.RESET + " componentcounts3: " + this.getComponentCounts3() + "NoExpend:(" + getNoexpendReagent3() + ")");
-		sender.sendMessage("- components4: " + ChatColor.GOLD + this.getComponents4() + "(" + component4name + ")" +  ChatColor.RESET + " componentcounts4: " + this.getComponentCounts4() + "NoExpend:(" + getNoexpendReagent4() + ")");
+
+		sender.sendMessage("- numhits: " + ChatColor.GOLD + this.getNumhits() + " Type: " + this.getNumhitstype() + " ("
+				+ Utils.getNumHitsType(this.getNumhitstype()) + ") ");
+		sender.sendMessage("- components1: " + ChatColor.GOLD + this.getComponents1() + "(" + component1name + ")"
+				+ ChatColor.RESET + " componentcounts1: " + this.getComponentCounts1() + "NoExpend:("
+				+ getNoexpendReagent1() + ")");
+		sender.sendMessage("- components2: " + ChatColor.GOLD + this.getComponents2() + "(" + component2name + ")"
+				+ ChatColor.RESET + " componentcounts2: " + this.getComponentCounts2() + "NoExpend:("
+				+ getNoexpendReagent2() + ")");
+		sender.sendMessage("- components3: " + ChatColor.GOLD + this.getComponents3() + "(" + component3name + ")"
+				+ ChatColor.RESET + " componentcounts3: " + this.getComponentCounts3() + "NoExpend:("
+				+ getNoexpendReagent3() + ")");
+		sender.sendMessage("- components4: " + ChatColor.GOLD + this.getComponents4() + "(" + component4name + ")"
+				+ ChatColor.RESET + " componentcounts4: " + this.getComponentCounts4() + "NoExpend:("
+				+ getNoexpendReagent4() + ")");
 
 		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		for(SoliniaSpellClass spellclass : this.getAllowedClasses())
-		{
+		for (SoliniaSpellClass spellclass : this.getAllowedClasses()) {
 			sender.sendMessage("- " + spellclass.getClassname() + " " + spellclass.getMinlevel());
 		}
 		sender.sendMessage("----------------------------");
-		for(SpellEffect effect : this.getBaseSpellEffects())
-		{
-			sender.sendMessage("- [" + effect.getSpellEffectNo() + "]"  + effect.getSpellEffectType().name() + ": BASE: " + ChatColor.GOLD + effect.getBase() + " FORMULA: " + ChatColor.GOLD + effect.getFormula() + " Max: " + effect.getMax() + ChatColor.RESET);		
+		for (SpellEffect effect : this.getBaseSpellEffects()) {
+			sender.sendMessage("- [" + effect.getSpellEffectNo() + "]" + effect.getSpellEffectType().name() + ": BASE: "
+					+ ChatColor.GOLD + effect.getBase() + " FORMULA: " + ChatColor.GOLD + effect.getFormula() + " Max: "
+					+ effect.getMax() + ChatColor.RESET);
 		}
 	}
 
 	@Override
-	public void editSetting(String setting, String value, String[] additional) throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
-		
+	public void editSetting(String setting, String value, String[] additional)
+			throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
+
 		StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
-		
+
 		String name = getName();
 
 		switch (setting.toLowerCase()) {
@@ -2771,60 +2783,60 @@ public class SoliniaSpell implements ISoliniaSpell {
 			setName(value);
 			break;
 		case "components1":
-			if (Integer.parseInt(value) > 0)
-			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(value));
+			if (Integer.parseInt(value) > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(Integer.parseInt(value));
 				if (item == null)
 					throw new InvalidSpellSettingException("Invalid item");
 				if (!item.isReagent())
 					throw new InvalidSpellSettingException("Not a reagent item");
 			}
-			
+
 			if (Integer.parseInt(value) < 0)
 				throw new InvalidSpellSettingException("Component ID must be 0 or higher");
-			
+
 			setComponents1(Integer.parseInt(value));
 			break;
 		case "components2":
-			if (Integer.parseInt(value) > 0)
-			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(value));
+			if (Integer.parseInt(value) > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(Integer.parseInt(value));
 				if (item == null)
 					throw new InvalidSpellSettingException("Invalid item");
 				if (!item.isReagent())
 					throw new InvalidSpellSettingException("Not a reagent item");
 			}
-			
+
 			if (Integer.parseInt(value) < 0)
 				throw new InvalidSpellSettingException("Component ID must be 0 or higher");
 
 			setComponents2(Integer.parseInt(value));
 			break;
 		case "components3":
-			if (Integer.parseInt(value) > 0)
-			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(value));
+			if (Integer.parseInt(value) > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(Integer.parseInt(value));
 				if (item == null)
 					throw new InvalidSpellSettingException("Invalid item");
 				if (!item.isReagent())
 					throw new InvalidSpellSettingException("Not a reagent item");
 			}
-			
+
 			if (Integer.parseInt(value) < 0)
 				throw new InvalidSpellSettingException("Component ID must be 0 or higher");
 
 			setComponents3(Integer.parseInt(value));
 			break;
 		case "components4":
-			if (Integer.parseInt(value) > 0)
-			{
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(value));
+			if (Integer.parseInt(value) > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(Integer.parseInt(value));
 				if (item == null)
 					throw new InvalidSpellSettingException("Invalid item");
 				if (!item.isReagent())
 					throw new InvalidSpellSettingException("Not a reagent item");
 			}
-			
+
 			if (Integer.parseInt(value) < 0)
 				throw new InvalidSpellSettingException("Component ID must be 0 or higher");
 
@@ -2856,18 +2868,18 @@ public class SoliniaSpell implements ISoliniaSpell {
 		case "mana":
 			if (value.equals(""))
 				throw new InvalidSpellSettingException("mana is empty");
-			
+
 			int mana = Integer.parseInt(value);
 			setMana(mana);
 			break;
 		case "duration":
 			if (value.equals(""))
 				throw new InvalidSpellSettingException("duration is empty");
-			
+
 			int buffduration = Integer.parseInt(value);
 			setBuffduration(buffduration);
 			break;
-			
+
 		case "spelleffectindex":
 			setSpellAffectIndex(Integer.parseInt(value));
 			break;
@@ -2881,421 +2893,389 @@ public class SoliniaSpell implements ISoliniaSpell {
 			int effectNo = Integer.parseInt(value);
 			if (effectNo < 1 || effectNo > 12)
 				throw new InvalidSpellSettingException("EffectNo is not valid, must be between 1 and 12");
-			
+
 			if (additional.length < 2)
 				throw new InvalidSpellSettingException("Missing effect setting and value to change, ie BASE 1");
-			
+
 			String effectSettingType = additional[0];
 			int effectValue = Integer.parseInt(additional[1]);
-			
-			switch (effectNo)
-			{
-				case 1:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue1(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula1(effectValue);
-					}
-					break;
-				case 2:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue2(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula2(effectValue);
-					}
-					break;
-				case 3:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue3(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula3(effectValue);
-					}
-					break;
-				case 4:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue4(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula4(effectValue);
-					}
-					break;
-				case 5:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue5(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula5(effectValue);
-					}
-					break;
-				case 6:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue6(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula6(effectValue);
-					}
-					break;
-				case 7:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue7(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula7(effectValue);
-					}
-					break;
-				case 8:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue8(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula8(effectValue);
-					}
-					break;
-				case 9:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue9(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula9(effectValue);
-					}
-					break;
-				case 10:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue10(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula10(effectValue);
-					}
-					break;
-				case 11:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue11(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula11(effectValue);
-					}
-					break;
-				case 12:
-					if (effectSettingType.equals("BASE"))
-					{
-						this.setEffectBaseValue12(effectValue);
-					}
-					if (effectSettingType.equals("FORMULA"))
-					{
-						this.setFormula12(effectValue);
-					}
-					break;
-				default:
-					throw new InvalidSpellSettingException("EffectNo is not valid, must be between 1 and 12"); 
+
+			switch (effectNo) {
+			case 1:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue1(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula1(effectValue);
+				}
+				break;
+			case 2:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue2(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula2(effectValue);
+				}
+				break;
+			case 3:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue3(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula3(effectValue);
+				}
+				break;
+			case 4:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue4(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula4(effectValue);
+				}
+				break;
+			case 5:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue5(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula5(effectValue);
+				}
+				break;
+			case 6:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue6(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula6(effectValue);
+				}
+				break;
+			case 7:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue7(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula7(effectValue);
+				}
+				break;
+			case 8:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue8(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula8(effectValue);
+				}
+				break;
+			case 9:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue9(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula9(effectValue);
+				}
+				break;
+			case 10:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue10(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula10(effectValue);
+				}
+				break;
+			case 11:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue11(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula11(effectValue);
+				}
+				break;
+			case 12:
+				if (effectSettingType.equals("BASE")) {
+					this.setEffectBaseValue12(effectValue);
+				}
+				if (effectSettingType.equals("FORMULA")) {
+					this.setFormula12(effectValue);
+				}
+				break;
+			default:
+				throw new InvalidSpellSettingException("EffectNo is not valid, must be between 1 and 12");
 			}
 			break;
 		case "teleport_zone":
 		case "teleportzone":
-			try
-			{
+			try {
 				String[] zonedata = value.split(",");
 				// Dissasemble the value to ensure it is correct
 				String world = zonedata[0];
 				double x = Double.parseDouble(zonedata[1]);
 				double y = Double.parseDouble(zonedata[2]);
 				double z = Double.parseDouble(zonedata[3]);
-				
-				setTeleportZone(world+","+x+","+y+","+z);
+
+				setTeleportZone(world + "," + x + "," + y + "," + z);
 				break;
-			} catch (Exception e)
-			{
+			} catch (Exception e) {
 				throw new InvalidSpellSettingException("Teleport zone value must be in format: world,x,y,z");
 			}
 		case "skill":
 			this.setSkill(Integer.parseInt(value));
 			break;
 		case "addspellclass":
-			try
-			{
+			try {
 				String[] spellclassdata = value.split(",");
 				// Dissasemble the value to ensure it is correct
 				String classname = spellclassdata[0].toUpperCase();
 				int minLevel = Integer.parseInt(spellclassdata[1]);
-				
+
 				boolean foundClass = false;
-				for (ISoliniaClass solClass : StateManager.getInstance().getConfigurationManager().getClasses())
-				{
+				for (ISoliniaClass solClass : StateManager.getInstance().getConfigurationManager().getClasses()) {
 					if (solClass.getName().toUpperCase().equals(classname.toUpperCase()))
 						foundClass = true;
 				}
-				
-				if (foundClass == false)
-				{
+
+				if (foundClass == false) {
 					throw new InvalidSpellSettingException("Spell class value must be in format: CLASSNAME,MINLEVEL");
 				}
-				
+
 				boolean updatedSpellClass = false;
-				for(SoliniaSpellClass allowedClass : this.getAllowedClasses())
-				{
-					if (allowedClass.getClassname().toUpperCase().equals(classname.toUpperCase()))
-					{
+				for (SoliniaSpellClass allowedClass : this.getAllowedClasses()) {
+					if (allowedClass.getClassname().toUpperCase().equals(classname.toUpperCase())) {
 						updatedSpellClass = true;
 						allowedClass.setMinlevel(minLevel);
 					}
 				}
-				
-				if (updatedSpellClass == false)
-				{
+
+				if (updatedSpellClass == false) {
 					SoliniaSpellClass allowedClass = new SoliniaSpellClass();
 					allowedClass.setClassname(classname.toUpperCase());
 					allowedClass.setMinlevel(minLevel);
 					this.getAllowedClasses().add(allowedClass);
 				}
-				
+
 				break;
-			} catch (Exception e)
-			{
+			} catch (Exception e) {
 				throw new InvalidSpellSettingException("Spell class value must be in format: CLASSNAME,MINLEVEL");
 			}
 		default:
 			throw new InvalidSpellSettingException(
 					"Invalid Spell setting. Valid Options are: name, teleportzone, effect, castonyou, castonother, spelleffectindex, duration, mana, componentsX, componentscountX, addspellclass");
 		}
-		
+
 		StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
 	}
 
 	@Override
 	public boolean tryApplyOnBlock(LivingEntity sourceEntity, Block clickedBlock, boolean sendMessages) {
-		return StateManager.getInstance().addActiveBlockEffect(clickedBlock,this,sourceEntity);
+		return StateManager.getInstance().addActiveBlockEffect(clickedBlock, this, sourceEntity);
 	}
 
 	@Override
 	public boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages) {
 		// Entity was targeted for this spell but is that the final location?
 		try {
-			switch(Utils.getSpellTargetType(getTargettype()))
-			{
-				case Self:
-					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity,this,sourceEntity,sendMessages);
-				// Casts on self as holding signaculum
-				case Corpse:
-					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity,this,sourceEntity,sendMessages);
-				case Pet:
-					if (sourceEntity instanceof Player)
-					{
-						Player player = (Player)sourceEntity;
-						try
-						{
-							LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player.getUniqueId());
-							if (pet != null) {
-								return StateManager.getInstance().getEntityManager().addActiveEntitySpell(pet,this,sourceEntity,sendMessages);
-							}
-						} catch (CoreStateInitException e)
-						{
-							e.printStackTrace();
+			switch (Utils.getSpellTargetType(getTargettype())) {
+			case Self:
+				return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity, this,
+						sourceEntity, sendMessages);
+			// Casts on self as holding signaculum
+			case Corpse:
+				return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity, this,
+						sourceEntity, sendMessages);
+			case Pet:
+				if (sourceEntity instanceof Player) {
+					Player player = (Player) sourceEntity;
+					try {
+						LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player.getUniqueId());
+						if (pet != null) {
+							return StateManager.getInstance().getEntityManager().addActiveEntitySpell(pet, this,
+									sourceEntity, sendMessages);
 						}
+					} catch (CoreStateInitException e) {
+						e.printStackTrace();
 					}
-					return false;
-				case TargetOptional:
-					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(targetentity,this,sourceEntity, sendMessages);
-				case Plant:
-				case Summoned:
-				case Animal:
-				case Undead:
-				case Target:
-					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(targetentity,this,sourceEntity,sendMessages);
-				case Tap:
-					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(targetentity,this,sourceEntity,sendMessages);
-				case TargetAETap:
-					// Get entities around entity and attempt to apply, if any are successful, return true
-					boolean tapsuccess = false;
-					// TODO - should the ae range be read from a field of the spell?
-					for (Entity e : targetentity.getNearbyEntities(10, 10, 10))
-					{
-						if (!(e instanceof LivingEntity))
-							continue;
-						
-						boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell((LivingEntity)e,this,sourceEntity, sendMessages);
-						if (loopSuccess == true)
-							tapsuccess = true;
-					}
-					
-					boolean loopSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell((LivingEntity)targetentity,this,sourceEntity, sendMessages);
+				}
+				return false;
+			case TargetOptional:
+				return StateManager.getInstance().getEntityManager().addActiveEntitySpell(targetentity, this,
+						sourceEntity, sendMessages);
+			case Plant:
+			case Summoned:
+			case Animal:
+			case Undead:
+			case Target:
+				return StateManager.getInstance().getEntityManager().addActiveEntitySpell(targetentity, this,
+						sourceEntity, sendMessages);
+			case Tap:
+				return StateManager.getInstance().getEntityManager().addActiveEntitySpell(targetentity, this,
+						sourceEntity, sendMessages);
+			case TargetAETap:
+				// Get entities around entity and attempt to apply, if any are successful,
+				// return true
+				boolean tapsuccess = false;
+				// TODO - should the ae range be read from a field of the spell?
+				for (Entity e : targetentity.getNearbyEntities(10, 10, 10)) {
+					if (!(e instanceof LivingEntity))
+						continue;
+
+					boolean loopSuccess = StateManager.getInstance().getEntityManager()
+							.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages);
 					if (loopSuccess == true)
 						tapsuccess = true;
-					
-					return tapsuccess;
-				case AETarget:
-					// Get entities around entity and attempt to apply, if any are successful, return true
-					boolean success = false;
-					// TODO - should the ae range be read from a field of the spell?
-					for (Entity e : targetentity.getNearbyEntities(10, 10, 10))
-					{
-						if (!(e instanceof LivingEntity))
-							continue;
-						
-						boolean loopSuccess2 = StateManager.getInstance().getEntityManager().addActiveEntitySpell((LivingEntity)e,this,sourceEntity, sendMessages);
-						if (loopSuccess2 == true)
-							success = true;
-					}
-					
-					boolean loopSuccess2 = StateManager.getInstance().getEntityManager().addActiveEntitySpell((LivingEntity)targetentity,this,sourceEntity, sendMessages);
+				}
+
+				boolean loopSuccess = StateManager.getInstance().getEntityManager()
+						.addActiveEntitySpell((LivingEntity) targetentity, this, sourceEntity, sendMessages);
+				if (loopSuccess == true)
+					tapsuccess = true;
+
+				return tapsuccess;
+			case AETarget:
+				// Get entities around entity and attempt to apply, if any are successful,
+				// return true
+				boolean success = false;
+				// TODO - should the ae range be read from a field of the spell?
+				for (Entity e : targetentity.getNearbyEntities(10, 10, 10)) {
+					if (!(e instanceof LivingEntity))
+						continue;
+
+					boolean loopSuccess2 = StateManager.getInstance().getEntityManager()
+							.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages);
 					if (loopSuccess2 == true)
 						success = true;
-					
-					return success;
-				case GroupTeleport:
-					boolean successGroupTeleport = false;
-					
-					if (!(sourceEntity instanceof Player))
-						return false;
-					
-					ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sourceEntity);
-					ISoliniaGroup group = player.getGroup();
-					
-					if (group != null)
-					{
-						for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10))
-						{
-							if (!(e instanceof Player))
-								continue;
-							
-							if (group.getMembers().contains(e.getUniqueId()))
-							{
-								boolean loopSuccess3 = StateManager.getInstance().getEntityManager().addActiveEntitySpell((LivingEntity)e,this,sourceEntity, sendMessages);
-								if (loopSuccess3 == true)
-									successGroupTeleport = true;
-							}
-						}
-					}
-					
-					boolean selfSuccessTeleport = StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity,this,sourceEntity, sendMessages);
-					if (selfSuccessTeleport == true)
-						successGroupTeleport = true;
-					
-					return successGroupTeleport;
-				// this might need to be target only
-				case GroupClientAndPet:
-					boolean successGroupClient = false;
-					
-					if (!(sourceEntity instanceof Player))
-						return false;
-					
-					ISoliniaPlayer playerGroupClient = SoliniaPlayerAdapter.Adapt((Player)sourceEntity);
-					ISoliniaGroup groupClient = playerGroupClient.getGroup();
-					
-					if (groupClient != null)
-					{
-						for(UUID uuidClient : playerGroupClient.getGroup().getMembers())
-						{
-							Entity e = Bukkit.getEntity(uuidClient);
-							if (!(e instanceof Player))
-								continue;
-							
-							if (groupClient.getMembers().contains(e.getUniqueId()))
-							{
-								boolean loopSuccess3 = StateManager.getInstance().getEntityManager().addActiveEntitySpell((LivingEntity)e,this,sourceEntity, sendMessages);
-								if (loopSuccess3 == true)
-									successGroupClient = true;
-							}
-						}
-					}
-					
-					boolean selfSuccessClient = StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity,this,sourceEntity, sendMessages);
-					if (selfSuccessClient == true)
-						successGroupClient = true;
-					
-					return successGroupClient;
-				case Group:
-					boolean successGroup = false;
-					
-					if (!(sourceEntity instanceof Player))
-						return false;
-					
-					ISoliniaPlayer playerGroupTeleport = SoliniaPlayerAdapter.Adapt((Player)sourceEntity);
-					ISoliniaGroup groupTeleport = playerGroupTeleport.getGroup();
-					
-					if (groupTeleport != null)
-					{
-						for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10))
-						{
-							if (!(e instanceof Player))
-								continue;
-							
-							if (groupTeleport.getMembers().contains(e.getUniqueId()))
-							{
-								boolean loopSuccess3 = StateManager.getInstance().getEntityManager().addActiveEntitySpell((LivingEntity)e,this,sourceEntity,sendMessages);
-								if (loopSuccess3 == true)
-									successGroup = true;
-							}
-						}
-					}
-					
-					boolean selfSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity,this,sourceEntity,sendMessages);
-					if (selfSuccess == true)
-						successGroup = true;
-					
-					return successGroup;
-				case UndeadAE:
-				case AECaster:
-					// Get entities around caster and attempt to apply, if any are successful, return true
-					boolean successCaster = false;
-					// TODO - should the ae range be read from a field of the spell?
-					for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10))
-					{
-						if (!(e instanceof LivingEntity))
-							continue;
-						
-						boolean loopSuccess4 = StateManager.getInstance().getEntityManager().addActiveEntitySpell((LivingEntity)e,this,sourceEntity,sendMessages);
-						if (loopSuccess4 == true)
-							successCaster = true;
-					}
-					return successCaster;
-				default:
+				}
+
+				boolean loopSuccess2 = StateManager.getInstance().getEntityManager()
+						.addActiveEntitySpell((LivingEntity) targetentity, this, sourceEntity, sendMessages);
+				if (loopSuccess2 == true)
+					success = true;
+
+				return success;
+			case GroupTeleport:
+				boolean successGroupTeleport = false;
+
+				if (!(sourceEntity instanceof Player))
 					return false;
-			
+
+				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) sourceEntity);
+				ISoliniaGroup group = player.getGroup();
+
+				if (group != null) {
+					for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10)) {
+						if (!(e instanceof Player))
+							continue;
+
+						if (group.getMembers().contains(e.getUniqueId())) {
+							boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
+									.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages);
+							if (loopSuccess3 == true)
+								successGroupTeleport = true;
+						}
+					}
+				}
+
+				boolean selfSuccessTeleport = StateManager.getInstance().getEntityManager()
+						.addActiveEntitySpell(sourceEntity, this, sourceEntity, sendMessages);
+				if (selfSuccessTeleport == true)
+					successGroupTeleport = true;
+
+				return successGroupTeleport;
+			// this might need to be target only
+			case GroupClientAndPet:
+				boolean successGroupClient = false;
+
+				if (!(sourceEntity instanceof Player))
+					return false;
+
+				ISoliniaPlayer playerGroupClient = SoliniaPlayerAdapter.Adapt((Player) sourceEntity);
+				ISoliniaGroup groupClient = playerGroupClient.getGroup();
+
+				if (groupClient != null) {
+					for (UUID uuidClient : playerGroupClient.getGroup().getMembers()) {
+						Entity e = Bukkit.getEntity(uuidClient);
+						if (!(e instanceof Player))
+							continue;
+
+						if (groupClient.getMembers().contains(e.getUniqueId())) {
+							boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
+									.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages);
+							if (loopSuccess3 == true)
+								successGroupClient = true;
+						}
+					}
+				}
+
+				boolean selfSuccessClient = StateManager.getInstance().getEntityManager()
+						.addActiveEntitySpell(sourceEntity, this, sourceEntity, sendMessages);
+				if (selfSuccessClient == true)
+					successGroupClient = true;
+
+				return successGroupClient;
+			case Group:
+				boolean successGroup = false;
+
+				if (!(sourceEntity instanceof Player))
+					return false;
+
+				ISoliniaPlayer playerGroupTeleport = SoliniaPlayerAdapter.Adapt((Player) sourceEntity);
+				ISoliniaGroup groupTeleport = playerGroupTeleport.getGroup();
+
+				if (groupTeleport != null) {
+					for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10)) {
+						if (!(e instanceof Player))
+							continue;
+
+						if (groupTeleport.getMembers().contains(e.getUniqueId())) {
+							boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
+									.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages);
+							if (loopSuccess3 == true)
+								successGroup = true;
+						}
+					}
+				}
+
+				boolean selfSuccess = StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity,
+						this, sourceEntity, sendMessages);
+				if (selfSuccess == true)
+					successGroup = true;
+
+				return successGroup;
+			case UndeadAE:
+			case AECaster:
+				// Get entities around caster and attempt to apply, if any are successful,
+				// return true
+				boolean successCaster = false;
+				// TODO - should the ae range be read from a field of the spell?
+				for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10)) {
+					if (!(e instanceof LivingEntity))
+						continue;
+
+					boolean loopSuccess4 = StateManager.getInstance().getEntityManager()
+							.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages);
+					if (loopSuccess4 == true)
+						successCaster = true;
+				}
+				return successCaster;
+			default:
+				return false;
+
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		
+
 	}
-	
+
 	@Override
-	public boolean isBuffSpell()
-	{
+	public boolean isBuffSpell() {
 		if (getBuffduration() > 0 || getBuffdurationformula() > 0)
 			return true;
 
 		return false;
 	}
-	
+
 	@Override
-	public List<SpellEffectType> getSpellEffectTypes()
-	{
+	public List<SpellEffectType> getSpellEffectTypes() {
 		List<SpellEffectType> spellEffects = new ArrayList<SpellEffectType>();
 		if (this.getEffectid1() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid1()));
@@ -3321,10 +3301,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellEffects.add(Utils.getSpellEffectType(getEffectid11()));
 		if (this.getEffectid12() >= 0)
 			spellEffects.add(Utils.getSpellEffectType(getEffectid12()));
-		
+
 		return spellEffects;
 	}
-	
+
 	public SpellEffect getSpellEffectByNo(int no) {
 		int effectid;
 		int base;
@@ -3333,7 +3313,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		int formula;
 		int max;
 		int base2;
-		
+
 		switch (no) {
 		case 1:
 			effectid = getEffectid1();
@@ -3459,9 +3439,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 		spellEffect.setSpellEffectNo(effectno);
 		return spellEffect;
 	}
-	
+
 	@Override
-	public int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity, int sourceLevel, int ticksleft, int instrument_mod) {
+	public int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
+			int sourceLevel, int ticksleft, int instrument_mod) {
 		int formula, base, max, effect_value;
 
 		formula = spellEffect.getFormula();
@@ -3472,10 +3453,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return 0;
 
 		effect_value = calcSpellEffectValueFormula(spellEffect, sourceEntity, targetEntity, sourceLevel, ticksleft);
-		//System.out.println("Calculated Spell Effect (" + spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
+		// System.out.println("Calculated Spell Effect (" +
+		// spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
 
-		if (Utils.IsBardInstrumentSkill(Utils.getSkillType(getSkill())) &&
-				spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed
+		if (Utils.IsBardInstrumentSkill(Utils.getSkillType(getSkill()))
+				&& spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed
 				&& spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed2
 				&& spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed3
 				&& spellEffect.getSpellEffectType() != SpellEffectType.Lull
@@ -3483,16 +3465,16 @@ public class SoliniaSpell implements ISoliniaSpell {
 				&& spellEffect.getSpellEffectType() != SpellEffectType.Harmony
 				&& spellEffect.getSpellEffectType() != SpellEffectType.CurrentMana
 				&& spellEffect.getSpellEffectType() != SpellEffectType.ManaRegen_v2
-				&& spellEffect.getSpellEffectType() != SpellEffectType.AddFaction) 
-		{
+				&& spellEffect.getSpellEffectType() != SpellEffectType.AddFaction) {
 
-				int oval = effect_value;
-				int mod = applySpellEffectiveness(instrument_mod, true, sourceEntity);
-				effect_value = effect_value * mod / 10;
-			}
-		
+			int oval = effect_value;
+			int mod = applySpellEffectiveness(instrument_mod, true, sourceEntity);
+			effect_value = effect_value * mod / 10;
+		}
+
 		effect_value = modEffectValue(effect_value, spellEffect, sourceEntity);
-		//System.out.println("Calculated Modded Spell Effect (" + spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
+		// System.out.println("Calculated Modded Spell Effect (" +
+		// spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
 
 		return effect_value;
 	}
@@ -3508,17 +3490,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// TODO Auto-generated method stub
 		return effect_value;
 	}
-	
+
 	@Override
-	public boolean isBardSong()
-	{
+	public boolean isBardSong() {
 		if (this.getAllowedClasses().size() == 1)
-		for (SoliniaSpellClass spellclass : this.getAllowedClasses())
-		{
-			if (spellclass.getClassname().toUpperCase().equals("BARD"))
-				return true;
-		}
-		
+			for (SoliniaSpellClass spellclass : this.getAllowedClasses()) {
+				if (spellclass.getClassname().toUpperCase().equals("BARD"))
+					return true;
+			}
+
 		return false;
 	}
 
@@ -3547,7 +3527,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	@Override
-	public int calcSpellEffectValueFormula(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity, int sourceLevel, int ticksleft) {
+	public int calcSpellEffectValueFormula(SpellEffect spellEffect, LivingEntity sourceEntity,
+			LivingEntity targetEntity, int sourceLevel, int ticksleft) {
 		boolean degeneratingEffects = false;
 		int result = 0, updownsign = 1, ubase = spellEffect.getBase();
 		if (ubase < 0)
@@ -3559,7 +3540,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			updownsign = 1;
 		}
 
-		//System.out.println("CSEV: spell " + getId() + ", formula " + spellEffect.getFormula() + ", base " + spellEffect.getBase() + ", max " + spellEffect.getMax() + ", lvl " + sourceLevel + ". Up/Down " + updownsign);
+		// System.out.println("CSEV: spell " + getId() + ", formula " +
+		// spellEffect.getFormula() + ", base " + spellEffect.getBase() + ", max " +
+		// spellEffect.getMax() + ", lvl " + sourceLevel + ". Up/Down " + updownsign);
 
 		switch (spellEffect.getFormula()) {
 		case 60:
@@ -3729,7 +3712,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			break;
 
 		case 137:
-			result = ubase - (int) ((ubase * (targetEntity.getHealth()/targetEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())));
+			result = ubase - (int) ((ubase
+					* (targetEntity.getHealth() / targetEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())));
 			break;
 
 		case 138: {
@@ -3801,7 +3785,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (spellEffect.getBase() < 0 && result > 0)
 			result *= -1;
 
-		//System.out.println("Spell effect calculated from formula as " + result + " from base " + spellEffect.getBase() + " for spell: " + getName() + ":"+ spellEffect.getSpellEffectType().name());
+		// System.out.println("Spell effect calculated from formula as " + result + "
+		// from base " + spellEffect.getBase() + " for spell: " + getName() + ":"+
+		// spellEffect.getSpellEffectType().name());
 		return result;
 	}
 
@@ -3869,12 +3855,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 			temp = duration;
 		return temp;
 	}
-	
+
 	@Override
-	public List<SpellEffect> getBaseSpellEffects()
-	{
+	public List<SpellEffect> getBaseSpellEffects() {
 		List<SpellEffect> spellEffects = new ArrayList<SpellEffect>();
-		
+
 		if (this.getEffectid1() >= 0 && this.getEffectid1() != 254)
 			spellEffects.add(getSpellEffectByNo(1));
 		if (this.getEffectid2() >= 0 && this.getEffectid2() != 254)
@@ -3899,109 +3884,94 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellEffects.add(getSpellEffectByNo(11));
 		if (this.getEffectid12() >= 0 && this.getEffectid12() != 254)
 			spellEffects.add(getSpellEffectByNo(12));
-		
+
 		return spellEffects;
 	}
 
 	@Override
-	public boolean isDamageSpell()
-	{
-		for(SpellEffect spellEffect : getBaseSpellEffects())
-		{
-			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce) || spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP)) &&
-					Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1 
-					// && .base < 0
-					)
+	public boolean isDamageSpell() {
+		for (SpellEffect spellEffect : getBaseSpellEffects()) {
+			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)
+					|| spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP))
+					&& Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1
+			// && .base < 0
+			)
 				return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	public boolean isNuke()
-	{
-		for(SpellEffect spellEffect : getBaseSpellEffects())
-		{
-			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce) || spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP)) &&
-					Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1 
-					&& spellEffect.getBase() < 0
-					)
+	public boolean isNuke() {
+		for (SpellEffect spellEffect : getBaseSpellEffects()) {
+			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)
+					|| spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP))
+					&& Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1
+					&& spellEffect.getBase() < 0)
 				return true;
 		}
-		
+
 		return false;
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType1()
-	{
+
+	@Override
+	public SpellEffectType getEffectType1() {
 		return Utils.getSpellEffectType(this.getEffectid1());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType2()
-	{
+
+	@Override
+	public SpellEffectType getEffectType2() {
 		return Utils.getSpellEffectType(this.getEffectid2());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType3()
-	{
+
+	@Override
+	public SpellEffectType getEffectType3() {
 		return Utils.getSpellEffectType(this.getEffectid3());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType4()
-	{
+
+	@Override
+	public SpellEffectType getEffectType4() {
 		return Utils.getSpellEffectType(this.getEffectid4());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType5()
-	{
+
+	@Override
+	public SpellEffectType getEffectType5() {
 		return Utils.getSpellEffectType(this.getEffectid5());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType6()
-	{
+
+	@Override
+	public SpellEffectType getEffectType6() {
 		return Utils.getSpellEffectType(this.getEffectid6());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType7()
-	{
+
+	@Override
+	public SpellEffectType getEffectType7() {
 		return Utils.getSpellEffectType(this.getEffectid7());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType8()
-	{
+
+	@Override
+	public SpellEffectType getEffectType8() {
 		return Utils.getSpellEffectType(this.getEffectid8());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType9()
-	{
+
+	@Override
+	public SpellEffectType getEffectType9() {
 		return Utils.getSpellEffectType(this.getEffectid9());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType10()
-	{
+
+	@Override
+	public SpellEffectType getEffectType10() {
 		return Utils.getSpellEffectType(this.getEffectid10());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType11()
-	{
+
+	@Override
+	public SpellEffectType getEffectType11() {
 		return Utils.getSpellEffectType(this.getEffectid11());
 	}
-	
-	@Override 
-	public SpellEffectType getEffectType12()
-	{
+
+	@Override
+	public SpellEffectType getEffectType12() {
 		return Utils.getSpellEffectType(this.getEffectid12());
 	}
 
@@ -4015,8 +3985,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 		return false;
 	}
-	
-	@Override 
+
+	@Override
 	public boolean isBeneficial() {
 		// Thanks EQEmu!
 		// You'd think just checking goodEffect flag would be enough?
@@ -4024,14 +3994,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 			// If the target type is Self or Pet and is a CancelMagic spell
 			// it is not Beneficial
 			SpellTargetType tt = Utils.getSpellTargetType(getTargettype());
-			if (tt != SpellTargetType.Self && tt != SpellTargetType.Pet &&
-					isEffectInSpell(SpellEffectType.CancelMagic))
+			if (tt != SpellTargetType.Self && tt != SpellTargetType.Pet && isEffectInSpell(SpellEffectType.CancelMagic))
 				return false;
 
 			// When our targettype is Target, AETarget, Aniaml, Undead, or Pet
 			// We need to check more things!
-			if (tt == SpellTargetType.Target || tt == SpellTargetType.AETarget || tt == SpellTargetType.Animal ||
-					tt == SpellTargetType.Undead || tt == SpellTargetType.Pet) {
+			if (tt == SpellTargetType.Target || tt == SpellTargetType.AETarget || tt == SpellTargetType.Animal
+					|| tt == SpellTargetType.Undead || tt == SpellTargetType.Pet) {
 				int sai = getSpellAffectIndex();
 
 				// If the resisttype is magic and SpellAffectIndex is Calm/memblur/dispell sight
@@ -4039,15 +4008,17 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (Utils.getSpellResistType(getResisttype()) == SpellResistType.RESIST_MAGIC) {
 					// checking these SAI cause issues with the rng defensive proc line
 					// So I guess instead of fixing it for real, just a quick hack :P
-					if (Utils.getSpellEffectType(this.getEffectid1()) != SpellEffectType.DefensiveProc &&
-					    (Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm || Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight || Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Memory_Blur ||
-					    		Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm_Song))
+					if (Utils.getSpellEffectType(this.getEffectid1()) != SpellEffectType.DefensiveProc
+							&& (Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm
+									|| Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight
+									|| Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Memory_Blur
+									|| Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm_Song))
 						return false;
 				} else {
 					// If the resisttype is not magic and spell is Bind Sight or Cast Sight
 					// It's not beneficial
-					if (Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight && getSkill() == 18 &&
-							!isEffectInSpell(SpellEffectType.VoiceGraft))
+					if (Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight && getSkill() == 18
+							&& !isEffectInSpell(SpellEffectType.VoiceGraft))
 						return false;
 				}
 			}
@@ -4059,10 +4030,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isGroupSpell() {
-		if (Utils.getSpellTargetType(getTargettype()) == SpellTargetType.AEBard ||
-				Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Group ||
-						Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupTeleport ||
-						Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupClientAndPet)
+		if (Utils.getSpellTargetType(getTargettype()) == SpellTargetType.AEBard
+				|| Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Group
+				|| Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupTeleport
+				|| Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupClientAndPet)
 			return true;
 
 		return false;
@@ -4070,127 +4041,111 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isEffectInSpell(SpellEffectType effecttype) {
-		for(SpellEffect effect : getBaseSpellEffects())
-		{
+		for (SpellEffect effect : getBaseSpellEffects()) {
 			if (effect.getSpellEffectType() == effecttype)
 				return true;
 		}
 		return false;
 	}
 
-	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, ISoliniaSpell soliniaSpell) throws CoreStateInitException {
-		if (source == null)
-		{
-			System.out.println("Source was null for isValidEffectForEntity: " + soliniaSpell.getName() + " on target: " + target.getCustomName());
+	public static boolean isValidEffectForEntity(LivingEntity target, LivingEntity source, ISoliniaSpell soliniaSpell)
+			throws CoreStateInitException {
+		if (source == null) {
+			System.out.println("Source was null for isValidEffectForEntity: " + soliniaSpell.getName() + " on target: "
+					+ target.getCustomName());
 			return false;
 		}
-		
-		if (target == null)
-		{
-			System.out.println("Target was null for isValidEffectForEntity: " + soliniaSpell.getName() + " from source: " + source.getCustomName());
+
+		if (target == null) {
+			System.out.println("Target was null for isValidEffectForEntity: " + soliniaSpell.getName()
+					+ " from source: " + source.getCustomName());
 			return false;
 		}
-		
+
 		if (source.isDead() || target.isDead())
 			return false;
-		
+
 		ISoliniaLivingEntity solTarget = SoliniaLivingEntityAdapter.Adapt(target);
-		if (solTarget != null)
-		{
-			switch (Utils.getSpellTargetType(soliniaSpell.getTargettype()))
-			{
-				case SummonedAE:
-					if (!solTarget.isUndead())
-					{
-						return false;
-					}
+		if (solTarget != null) {
+			switch (Utils.getSpellTargetType(soliniaSpell.getTargettype())) {
+			case SummonedAE:
+				if (!solTarget.isUndead()) {
+					return false;
+				}
 				break;
-				case UndeadAE:
-					if (!solTarget.isUndead())
-					{
-						return false;
-					}
+			case UndeadAE:
+				if (!solTarget.isUndead()) {
+					return false;
+				}
 				break;
-				case Undead:
-					if (!solTarget.isUndead())
-					{
-						source.sendMessage("This spell is only effective on Undead");
-						return false;
-					}
-					break;
-				case Summoned:
-					if (!solTarget.isCurrentlyNPCPet() && !solTarget.isCharmed())
-					{
-						source.sendMessage("This spell is only effective on Summoned");
-						return false;
-					}
-					break;
-				case Animal:
-					if (!solTarget.isAnimal())
-					{
-						source.sendMessage("This spell is only effective on Animals");
-						return false;
-					}
-					break;
-				case Plant:
-					if (!solTarget.isPlant())
-					{
-						source.sendMessage("This spell is only effective on Plants");
-						return false;
-					}
-					break;
-				default:
-					break;
+			case Undead:
+				if (!solTarget.isUndead()) {
+					source.sendMessage("This spell is only effective on Undead");
+					return false;
+				}
+				break;
+			case Summoned:
+				if (!solTarget.isCurrentlyNPCPet() && !solTarget.isCharmed()) {
+					source.sendMessage("This spell is only effective on Summoned");
+					return false;
+				}
+				break;
+			case Animal:
+				if (!solTarget.isAnimal()) {
+					source.sendMessage("This spell is only effective on Animals");
+					return false;
+				}
+				break;
+			case Plant:
+				if (!solTarget.isPlant()) {
+					source.sendMessage("This spell is only effective on Plants");
+					return false;
+				}
+				break;
+			default:
+				break;
 			}
 		}
-		
+
 		ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter.Adapt(source);
-		if (solTarget.isNPC())
-		{
-			if (source instanceof Player || solSource.isCurrentlyNPCPet())
-			{
+		if (solTarget.isNPC()) {
+			if (source instanceof Player || solSource.isCurrentlyNPCPet()) {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solTarget.getNpcid());
-				if (npc != null)
-				{
+				if (npc != null) {
 					if (npc.isBoss() || npc.isRaidboss())
-						if (!soliniaSpell.isBossApplyable())
-						{
-							source.sendMessage(ChatColor.RED + "This NPC is immune to runspeed and mezmersization changes");
+						if (!soliniaSpell.isBossApplyable()) {
+							source.sendMessage(
+									ChatColor.RED + "This NPC is immune to runspeed and mezmersization changes");
 							return false;
 						}
-					
+
 					if (npc.isRaidheroic())
-						if (!soliniaSpell.isRaidApplyable())
-						{
-							source.sendMessage(ChatColor.RED + "This NPC is immune to runspeed and mezmersization changes");
+						if (!soliniaSpell.isRaidApplyable()) {
+							source.sendMessage(
+									ChatColor.RED + "This NPC is immune to runspeed and mezmersization changes");
 							return false;
 						}
 				}
 			}
 		}
-		
-		if (!solSource.isNPC() && solTarget.isImmuneToSpell(soliniaSpell))
-		{
+
+		if (!solSource.isNPC() && solTarget.isImmuneToSpell(soliniaSpell)) {
 			source.sendMessage(ChatColor.RED + "Your target cannot be affected (with this spell)");
 			return false;
 		}
-		
+
 		// Always allow self only spells if the target and source is the self
-		if (source.getUniqueId().equals(target.getUniqueId()) && 
-				Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
-		{
+		if (source.getUniqueId().equals(target.getUniqueId())
+				&& Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
 			// just be sure to check the item its giving if its an item spell
-			for(SpellEffect effect : soliniaSpell.getBaseSpellEffects())
-			{
-				if (effect.getSpellEffectType().equals(SpellEffectType.SummonHorse))
-				{
-					if (source instanceof Player)
-					{
-						if (source.getUniqueId().equals(target.getUniqueId()))
-						{
-							if (StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(source.getUniqueId()) != null)
-							{
-								source.sendMessage("You can only summon a mount once per server session. Please wait for the next 4 hourly restart");
+			for (SpellEffect effect : soliniaSpell.getBaseSpellEffects()) {
+				if (effect.getSpellEffectType().equals(SpellEffectType.SummonHorse)) {
+					if (source instanceof Player) {
+						if (source.getUniqueId().equals(target.getUniqueId())) {
+							if (StateManager.getInstance().getPlayerManager()
+									.getPlayerLastChangeChar(source.getUniqueId()) != null) {
+								source.sendMessage(
+										"You can only summon a mount once per server session. Please wait for the next 4 hourly restart");
 								return false;
 							}
 						} else {
@@ -4200,385 +4155,351 @@ public class SoliniaSpell implements ISoliniaSpell {
 						return false;
 					}
 				}
-				
-				if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem))
-				{
+
+				if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem)) {
 					int itemId = effect.getBase();
-					try
-					{
+					try {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-						
-						if (item == null)
-						{
+
+						if (item == null) {
 							return false;
 						}
-						
-						if (!item.isTemporary())
-						{
+
+						if (!item.isTemporary()) {
 							return false;
 						}
-						
-						if (!(target instanceof LivingEntity))
-						{
+
+						if (!(target instanceof LivingEntity)) {
 							return false;
 						}
-					} catch (CoreStateInitException e)
-					{
+					} catch (CoreStateInitException e) {
 						return false;
 					}
 				}
 			}
-			
-			//System.out.println("Detected a self only spell (" + soliniaSpell.getName() + "), returning as valid, always");
-				return true;	
+
+			// System.out.println("Detected a self only spell (" + soliniaSpell.getName() +
+			// "), returning as valid, always");
+			return true;
 		}
-		
+
 		if (!source.getUniqueId().equals(target.getUniqueId()))
-		if (!source.hasLineOfSight(target))
-			return false;
-		
+			if (!source.hasLineOfSight(target))
+				return false;
+
 		// Try not to kill potentially friendly player tameables with hostile spells
-		if (solTarget.isCurrentlyNPCPet() && target instanceof Creature && !soliniaSpell.isBeneficial())
-		{
-			if (soliniaSpell.isCharmSpell() && source.getUniqueId().equals(solTarget.getOwnerEntity().getUniqueId()))
-			{
+		if (solTarget.isCurrentlyNPCPet() && target instanceof Creature && !soliniaSpell.isBeneficial()) {
+			if (soliniaSpell.isCharmSpell() && source.getUniqueId().equals(solTarget.getOwnerEntity().getUniqueId())) {
 				// Our owner wants to renew his charm
 				return true;
 			} else {
-					Creature cr = (Creature)target;
-					if (cr.getTarget() == null) 
-						return false;
-					
-					if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
-						return false;
+				Creature cr = (Creature) target;
+				if (cr.getTarget() == null)
+					return false;
+
+				if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
+					return false;
 			}
 		}
-		
-		for(SpellEffect effect : soliniaSpell.getBaseSpellEffects())
-		{
+
+		for (SpellEffect effect : soliniaSpell.getBaseSpellEffects()) {
 			// Return false if the target is in the same group as the player
 			// and the spell is a detrimental
-			if (source instanceof Player && target instanceof Player && soliniaSpell.isDetrimental())
-			{
-				ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt((Player)source);
-				if (solsourceplayer.getGroup() != null)
-				{
-					if (solsourceplayer.getGroup().getMembers().contains(target.getUniqueId()))
-					{
+			if (source instanceof Player && target instanceof Player && soliniaSpell.isDetrimental()) {
+				ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt((Player) source);
+				if (solsourceplayer.getGroup() != null) {
+					if (solsourceplayer.getGroup().getMembers().contains(target.getUniqueId())) {
 						return false;
 					}
 				}
 			}
-			
+
 			// Return false if the target is in the same faction as the npc and not self
-			if (!(source instanceof Player) && !(target instanceof Player)  && soliniaSpell.isDetrimental() && !source.getUniqueId().equals(target.getUniqueId()))
-			{
-				if (source instanceof LivingEntity && target instanceof LivingEntity)
-				{
+			if (!(source instanceof Player) && !(target instanceof Player) && soliniaSpell.isDetrimental()
+					&& !source.getUniqueId().equals(target.getUniqueId())) {
+				if (source instanceof LivingEntity && target instanceof LivingEntity) {
 					ISoliniaLivingEntity solsourceEntity = SoliniaLivingEntityAdapter.Adapt(source);
 					ISoliniaLivingEntity soltargetEntity = SoliniaLivingEntityAdapter.Adapt(target);
-					
-					if (solsourceEntity.isNPC() && soltargetEntity.isNPC())
-					{
-						ISoliniaNPC sourceNpc = StateManager.getInstance().getConfigurationManager().getNPC(solsourceEntity.getNpcid());
-						ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager().getNPC(solsourceEntity.getNpcid());
-						
-						if (sourceNpc.getFactionid() > 0 && targetNpc.getFactionid() > 0)
-						{
+
+					if (solsourceEntity.isNPC() && soltargetEntity.isNPC()) {
+						ISoliniaNPC sourceNpc = StateManager.getInstance().getConfigurationManager()
+								.getNPC(solsourceEntity.getNpcid());
+						ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager()
+								.getNPC(solsourceEntity.getNpcid());
+
+						if (sourceNpc.getFactionid() > 0 && targetNpc.getFactionid() > 0) {
 							if (sourceNpc.getFactionid() == targetNpc.getFactionid())
 								return false;
 						}
-						
+
 					}
-					
+
 				}
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.Revive))
-			{
-				if (!(target instanceof Player))
-				{
-					return false;				
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.Revive)) {
+				if (!(target instanceof Player)) {
+					return false;
 				}
-				
+
 				if (!(source instanceof Player))
 					return false;
-				
-				Player sourcePlayer = (Player)source;
-				
-				if (!sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG))
-				{
-					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC): " + sourcePlayer.getInventory().getItemInOffHand().getType().name());
-					return false;				
+
+				Player sourcePlayer = (Player) source;
+
+				if (!sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG)) {
+					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC): "
+							+ sourcePlayer.getInventory().getItemInOffHand().getType().name());
+					return false;
 				}
-				
+
 				ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
-				if (item.getEnchantmentLevel(Enchantment.DURABILITY) != 1)
-				{
+				if (item.getEnchantmentLevel(Enchantment.DURABILITY) != 1) {
 					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (EC)");
-					return false;	
+					return false;
 				}
-				
-				if (!item.getItemMeta().getDisplayName().equals("Signaculum"))
-				{
+
+				if (!item.getItemMeta().getDisplayName().equals("Signaculum")) {
 					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (NC)");
-					return false;	
+					return false;
 				}
-				
-				if (item.getItemMeta().getLore().size() < 5)
-				{
+
+				if (item.getItemMeta().getLore().size() < 5) {
 					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (LC)");
-					return false;			
+					return false;
 				}
-				
-				
+
 				String sigdataholder = item.getItemMeta().getLore().get(3);
 				String[] sigdata = sigdataholder.split("\\|");
-				
-				if (sigdata.length != 2)
-				{
+
+				if (sigdata.length != 2) {
 					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (SD)");
-					return false;	
+					return false;
 				}
-				
+
 				String str_experience = sigdata[0];
 				String str_stimetsamp = sigdata[1];
-				
+
 				int experience = Integer.parseInt(str_experience);
 				Timestamp timestamp = Timestamp.valueOf(str_stimetsamp);
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp currenttimestamp = Timestamp.valueOf(datetime);
-				
-				long maxminutes = 60*7;
-				if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes*60*1000)
-				{
+
+				long maxminutes = 60 * 7;
+				if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes * 60 * 1000) {
 					sourcePlayer.sendMessage("This Signaculum has lost its binding to the soul");
-					return false;	
+					return false;
 				}
-				
+
 				String playeruuidb64 = item.getItemMeta().getLore().get(4);
 				String uuid = Utils.uuidFromBase64(playeruuidb64);
-				
+
 				Player targetplayer = Bukkit.getPlayer(UUID.fromString(uuid));
-				if (targetplayer == null || !targetplayer.isOnline())
-				{
+				if (targetplayer == null || !targetplayer.isOnline()) {
 					sourcePlayer.sendMessage("You cannot resurrect that player as they are offline");
-					return false;	
+					return false;
 				}
 			}
-			
+
 			// Validate spelleffecttype rules
-			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) || effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce))
-			{
+			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP)
+					|| effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)) {
 				// Ignore this rule if the spell is self
-				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self))
-				{
+				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
 					// If the effect is negative standard nuke and on self, cancel out
 					if (effect.getBase() < 0 && target.equals(source))
 						return false;
 				}
-				
-				// if the source is a player 
-				// and the target is an AI 
+
+				// if the source is a player
+				// and the target is an AI
 				// and it isnt a pet
 				// and it is a heal
 				// cancel
-				if (source instanceof Player)
-				{
-					if (!(target instanceof Player))
-					{
+				if (source instanceof Player) {
+					if (!(target instanceof Player)) {
 						ISoliniaLivingEntity soltargetentity = SoliniaLivingEntityAdapter.Adapt(target);
-						if (!soltargetentity.isCurrentlyNPCPet())
-						{
+						if (!soltargetentity.isCurrentlyNPCPet()) {
 							if (effect.getBase() > 0)
 								return false;
 						}
 					}
 				}
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.Illusion) ||
-					effect.getSpellEffectType().equals(SpellEffectType.IllusionaryTarget) ||
-					effect.getSpellEffectType().equals(SpellEffectType.IllusionCopy) ||
-					effect.getSpellEffectType().equals(SpellEffectType.IllusionOther) ||
-					effect.getSpellEffectType().equals(SpellEffectType.IllusionPersistence))
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.Illusion)
+					|| effect.getSpellEffectType().equals(SpellEffectType.IllusionaryTarget)
+					|| effect.getSpellEffectType().equals(SpellEffectType.IllusionCopy)
+					|| effect.getSpellEffectType().equals(SpellEffectType.IllusionOther)
+					|| effect.getSpellEffectType().equals(SpellEffectType.IllusionPersistence)) {
 				// if target has spell effect of above already then we cant apply another
-				for(SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(target).getActiveSpells())
-				{
+				for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager()
+						.getActiveEntitySpells(target).getActiveSpells()) {
 					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Illusion))
-						return false;				
+						return false;
 					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionaryTarget))
-						return false;				
+						return false;
 					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionCopy))
-						return false;				
+						return false;
 					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionOther))
-						return false;				
+						return false;
 					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionPersistence))
-						return false;				
+						return false;
 				}
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem))
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem)) {
 				System.out.println("Validating SummonItem for source: " + source.getCustomName());
 				int itemId = effect.getBase();
-				try
-				{
+				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-					
+
 					System.out.println("Validating SummonItem for source: " + source.getCustomName());
 
-					if (item == null)
-					{
+					if (item == null) {
 						System.out.println("Validating SummonItem said item was null");
 						return false;
 					}
-					
-					if (!item.isTemporary())
-					{
+
+					if (!item.isTemporary()) {
 						System.out.println("Validating SummonItem said item was not temporary");
 						return false;
 					}
-					
-					if (!(target instanceof LivingEntity))
-					{
+
+					if (!(target instanceof LivingEntity)) {
 						System.out.println("Validating SummonItem said target was not a living entity");
 						return false;
 					}
-				} catch (CoreStateInitException e)
-				{
+				} catch (CoreStateInitException e) {
 					return false;
 				}
 			}
-				
-			if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll) || 
-					effect.getSpellEffectType().equals(SpellEffectType.ResistCold) ||
-					effect.getSpellEffectType().equals(SpellEffectType.ResistFire) ||
-					effect.getSpellEffectType().equals(SpellEffectType.ResistMagic) ||
-					effect.getSpellEffectType().equals(SpellEffectType.ResistPoison) ||
-					effect.getSpellEffectType().equals(SpellEffectType.ResistDisease) ||
-					effect.getSpellEffectType().equals(SpellEffectType.ResistCorruption)
-					)
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll)
+					|| effect.getSpellEffectType().equals(SpellEffectType.ResistCold)
+					|| effect.getSpellEffectType().equals(SpellEffectType.ResistFire)
+					|| effect.getSpellEffectType().equals(SpellEffectType.ResistMagic)
+					|| effect.getSpellEffectType().equals(SpellEffectType.ResistPoison)
+					|| effect.getSpellEffectType().equals(SpellEffectType.ResistDisease)
+					|| effect.getSpellEffectType().equals(SpellEffectType.ResistCorruption)) {
 				// If the effect is negative standard resist debuffer and on self, cancel out
 				if (effect.getBase() < 0 && target.equals(source))
 					return false;
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.Mez))
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.Mez)) {
 				// If the effect is a mez, cancel out
 				if (target.equals(source))
 					return false;
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.Stun))
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.Stun)) {
 				// If the effect is a stun, cancel out
 				if (target.equals(source))
 					return false;
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.Root))
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.Root)) {
 				// If the effect is a root, cancel out
 				if (target.equals(source))
 					return false;
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.Blind))
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.Blind)) {
 				// If the effect is a blindness, cancel out
 				if (target.equals(source))
 					return false;
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.DamageShield) && !(target instanceof Player) && !SoliniaLivingEntityAdapter.Adapt(target).isCurrentlyNPCPet())
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.DamageShield) && !(target instanceof Player)
+					&& !SoliniaLivingEntityAdapter.Adapt(target).isCurrentlyNPCPet()) {
 				// If the effect is a mez, cancel out
 				if (target.equals(source))
 					return false;
 			}
-			
-			if (effect.getSpellEffectType().equals(SpellEffectType.NecPet) || effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2) || effect.getSpellEffectType().equals(SpellEffectType.Translocate) || effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor))
-			{
+
+			if (effect.getSpellEffectType().equals(SpellEffectType.NecPet)
+					|| effect.getSpellEffectType().equals(SpellEffectType.SummonPet)
+					|| effect.getSpellEffectType().equals(SpellEffectType.Teleport)
+					|| effect.getSpellEffectType().equals(SpellEffectType.Teleport2)
+					|| effect.getSpellEffectType().equals(SpellEffectType.Translocate)
+					|| effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor)) {
 				// If the effect is teleport and the target is not a player then fail
 				if (!(target instanceof Player))
 					return false;
-				
+
 				if (!(source instanceof Player))
 					return false;
-				
-				// If the effect is a teleport and the target is not in a group or self then fail
-				if (effect.getSpellEffectType().equals(SpellEffectType.Teleport) || effect.getSpellEffectType().equals(SpellEffectType.Teleport2) || effect.getSpellEffectType().equals(SpellEffectType.Translocate) || effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor))
-				{
+
+				// If the effect is a teleport and the target is not in a group or self then
+				// fail
+				if (effect.getSpellEffectType().equals(SpellEffectType.Teleport)
+						|| effect.getSpellEffectType().equals(SpellEffectType.Teleport2)
+						|| effect.getSpellEffectType().equals(SpellEffectType.Translocate)
+						|| effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor)) {
 					// if target is not the player casting
-					if (!target.getUniqueId().equals(source.getUniqueId()))
-					{
-						ISoliniaPlayer solplayertarget = SoliniaPlayerAdapter.Adapt((Player)target);
+					if (!target.getUniqueId().equals(source.getUniqueId())) {
+						ISoliniaPlayer solplayertarget = SoliniaPlayerAdapter.Adapt((Player) target);
 						if (solplayertarget == null)
 							return false;
-						
+
 						if (solplayertarget.getGroup() == null)
 							return false;
-						
+
 						if (!(solplayertarget.getGroup().getMembers().contains(source.getUniqueId())))
 							return false;
 					}
 				}
-				
-				if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet) || effect.getSpellEffectType().equals(SpellEffectType.NecPet))
-				{
-					try
-					{
-						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(soliniaSpell.getTeleportZone());
-						if (npc == null)
-						{
+
+				if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet)
+						|| effect.getSpellEffectType().equals(SpellEffectType.NecPet)) {
+					try {
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+								.getPetNPCByName(soliniaSpell.getTeleportZone());
+						if (npc == null) {
 							return false;
 						}
-						if (npc.isCorePet() == false)
-						{
+						if (npc.isCorePet() == false) {
 							System.out.print("NPC " + soliniaSpell.getTeleportZone() + " is not defined as a pet");
 							return false;
 						}
-					} catch (CoreStateInitException e)
-					{
+					} catch (CoreStateInitException e) {
 						return false;
 					}
 				}
 			}
 		}
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean isLifetapSpell() {
-		if(Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap || Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap)
-				return true;
-		
-		return false;
-	}
-	
-	@Override
-	public boolean isResistable() {
-		if (isDetrimental() && !isResistDebuffSpell() && !Utils.getSpellResistType(this.getResisttype()).name().equals("RESIST_NONE"))
+		if (Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap
+				|| Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap)
 			return true;
 
 		return false;
 	}
-	
+
 	@Override
-	public boolean isResistDebuffSpell()
-	{
-		if ((isEffectInSpell(SpellEffectType.ResistFire) || isEffectInSpell(SpellEffectType.ResistCold) ||
-				isEffectInSpell(SpellEffectType.ResistPoison) || isEffectInSpell(SpellEffectType.ResistDisease) ||
-				isEffectInSpell(SpellEffectType.ResistMagic) || isEffectInSpell(SpellEffectType.ResistAll) ||
-				isEffectInSpell(SpellEffectType.ResistCorruption)) && !isBeneficial())
-		return true;
-	else
+	public boolean isResistable() {
+		if (isDetrimental() && !isResistDebuffSpell()
+				&& !Utils.getSpellResistType(this.getResisttype()).name().equals("RESIST_NONE"))
+			return true;
+
 		return false;
+	}
+
+	@Override
+	public boolean isResistDebuffSpell() {
+		if ((isEffectInSpell(SpellEffectType.ResistFire) || isEffectInSpell(SpellEffectType.ResistCold)
+				|| isEffectInSpell(SpellEffectType.ResistPoison) || isEffectInSpell(SpellEffectType.ResistDisease)
+				|| isEffectInSpell(SpellEffectType.ResistMagic) || isEffectInSpell(SpellEffectType.ResistAll)
+				|| isEffectInSpell(SpellEffectType.ResistCorruption)) && !isBeneficial())
+			return true;
+		else
+			return false;
 	}
 
 	@Override
@@ -4588,38 +4509,35 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isDamageShield() {
-		for(SpellEffect spellEffect : getBaseSpellEffects())
-		{
+		for (SpellEffect spellEffect : getBaseSpellEffects()) {
 			if (spellEffect.getSpellEffectType().equals(SpellEffectType.DamageShield))
 				return true;
 		}
 
 		return false;
 	}
-	
+
 	@Override
-	public boolean isCureSpell()
-	{
+	public boolean isCureSpell() {
 		boolean CureEffect = false;
 
 		if (isEffectInSpell(SpellEffectType.DiseaseCounter) || isEffectInSpell(SpellEffectType.PoisonCounter)
 				|| isEffectInSpell(SpellEffectType.CurseCounter) || isEffectInSpell(SpellEffectType.CorruptionCounter))
-				CureEffect = true;
+			CureEffect = true;
 
 		if (CureEffect && isBeneficial())
 			return true;
 
 		return false;
 	}
-	
+
 	@Override
-	public boolean isDot()
-	{
+	public boolean isDot() {
 		boolean CureEffect = false;
 
 		if (isEffectInSpell(SpellEffectType.DiseaseCounter) || isEffectInSpell(SpellEffectType.PoisonCounter)
 				|| isEffectInSpell(SpellEffectType.CurseCounter) || isEffectInSpell(SpellEffectType.CorruptionCounter))
-				CureEffect = true;
+			CureEffect = true;
 
 		if (CureEffect && !isBeneficial())
 			return true;
@@ -4629,24 +4547,23 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isWeaponProc() {
-		if (isEffectInSpell(SpellEffectType.WeaponProc) || isEffectInSpell(SpellEffectType.AddMeleeProc))
-		{
+		if (isEffectInSpell(SpellEffectType.WeaponProc) || isEffectInSpell(SpellEffectType.AddMeleeProc)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean isRangedProc() {
-		if (isEffectInSpell(SpellEffectType.RangedProc))
-		{
+		if (isEffectInSpell(SpellEffectType.RangedProc)) {
 			return true;
 		}
 		return false;
 	}
 
 	private boolean isHarmonySpell() {
-		return isEffectInSpell(SpellEffectType.Lull) || isEffectInSpell(SpellEffectType.Harmony) || isEffectInSpell(SpellEffectType.ChangeFrenzyRad);
+		return isEffectInSpell(SpellEffectType.Lull) || isEffectInSpell(SpellEffectType.Harmony)
+				|| isEffectInSpell(SpellEffectType.ChangeFrenzyRad);
 	}
 
 	private boolean isPreCombatBuffSong() {
@@ -4670,7 +4587,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	private boolean isInCombatBuffSong() {
 		if (!isBardSong())
 			return false;
-		
+
 		return isBuffSpell();
 	}
 
@@ -4683,22 +4600,20 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	private boolean isDebuff() {
-		if (isBeneficial() || isEffectHitpointsSpell() || isStunSpell() ||
-				isMezSpell() || isCharmSpell() || isSlowSpell() ||
-				isEffectInSpell(SpellEffectType.Root) || isEffectInSpell(SpellEffectType.CancelMagic) ||
-				isEffectInSpell(SpellEffectType.MovementSpeed) || isFearSpell() || isEffectInSpell(SpellEffectType.InstantHate))
+		if (isBeneficial() || isEffectHitpointsSpell() || isStunSpell() || isMezSpell() || isCharmSpell()
+				|| isSlowSpell() || isEffectInSpell(SpellEffectType.Root)
+				|| isEffectInSpell(SpellEffectType.CancelMagic) || isEffectInSpell(SpellEffectType.MovementSpeed)
+				|| isFearSpell() || isEffectInSpell(SpellEffectType.InstantHate))
 			return false;
 		else
 			return true;
 	}
-	
-	public boolean isEffectHitpointsSpell()
-	{
+
+	public boolean isEffectHitpointsSpell() {
 		return isEffectInSpell(SpellEffectType.CurrentHP);
 	}
-	
-	private boolean isStunSpell()
-	{
+
+	private boolean isStunSpell() {
 		return isEffectInSpell(SpellEffectType.Stun);
 	}
 
@@ -4706,18 +4621,17 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public boolean isCharmSpell() {
 		return isEffectInSpell(SpellEffectType.Charm);
 	}
-	
+
 	private boolean isSlowSpell() {
-		for(SpellEffect effect : getBaseSpellEffects())
-		{
-			if ((effect.getSpellEffectType().equals(SpellEffectType.AttackSpeed) && effect.getBase() < 100) || effect.getSpellEffectType().equals(SpellEffectType.AttackSpeed4))
+		for (SpellEffect effect : getBaseSpellEffects()) {
+			if ((effect.getSpellEffectType().equals(SpellEffectType.AttackSpeed) && effect.getBase() < 100)
+					|| effect.getSpellEffectType().equals(SpellEffectType.AttackSpeed4))
 				return true;
 		}
 
 		return false;
 	}
-	
-	
+
 	private boolean isFearSpell() {
 		return isEffectInSpell(SpellEffectType.Fear);
 	}
@@ -4731,13 +4645,14 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	private boolean isDispell() {
-		return (isEffectInSpell(SpellEffectType.DispelBeneficial) || isEffectInSpell(SpellEffectType.DispelDetrimental));
+		return (isEffectInSpell(SpellEffectType.DispelBeneficial)
+				|| isEffectInSpell(SpellEffectType.DispelDetrimental));
 	}
 
 	private boolean isSnareSpell() {
 		if (!isBeneficial())
 			return isEffectInSpell(SpellEffectType.MovementSpeed);
-		
+
 		return false;
 	}
 
@@ -4746,7 +4661,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	private boolean isEscapeSpell() {
-		return (isEffectInSpell(SpellEffectType.Gate) || isEffectInSpell(SpellEffectType.Translocate) || isEffectInSpell(SpellEffectType.TranslocatetoAnchor) || isEffectInSpell(SpellEffectType.Teleport) || isEffectInSpell(SpellEffectType.Teleport2) || isEffectInSpell(SpellEffectType.TeleporttoAnchor));
+		return (isEffectInSpell(SpellEffectType.Gate) || isEffectInSpell(SpellEffectType.Translocate)
+				|| isEffectInSpell(SpellEffectType.TranslocatetoAnchor) || isEffectInSpell(SpellEffectType.Teleport)
+				|| isEffectInSpell(SpellEffectType.Teleport2) || isEffectInSpell(SpellEffectType.TeleporttoAnchor));
 	}
 
 	private boolean isRootSpell() {
@@ -4754,8 +4671,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	private boolean isHealSpell() {
-		for(SpellEffect effect : getBaseSpellEffects())
-		{
+		for (SpellEffect effect : getBaseSpellEffects()) {
 			if ((effect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && effect.getBase() > 0))
 				return true;
 		}
@@ -4765,170 +4681,154 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isInvisSpell() {
-		if (getSpellEffectTypes().contains(SpellEffectType.Invisibility) ||
-				getSpellEffectTypes().contains(SpellEffectType.Invisibility2) ||
-				getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals) ||
-				getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead) ||
-				getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2) ||
-				getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)
-						)
+		if (getSpellEffectTypes().contains(SpellEffectType.Invisibility)
+				|| getSpellEffectTypes().contains(SpellEffectType.Invisibility2)
+				|| getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals)
+				|| getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
+				|| getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
+				|| getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals))
 			return true;
-		
+
 		return false;
 	}
 
 	@Override
 	public int getMinLevelClass(String name) {
-		for(SoliniaSpellClass spellclass : this.getAllowedClasses())
-		{
+		for (SoliniaSpellClass spellclass : this.getAllowedClasses()) {
 			if (spellclass.getClassname().toUpperCase().equals(name.toUpperCase()))
 				return spellclass.getMinlevel();
 		}
-		
+
 		return 1000;
 	}
-	
+
 	@Override
-	public int getActSpellDuration(ISoliniaLivingEntity solEntity, int duration)
-	{
+	public int getActSpellDuration(ISoliniaLivingEntity solEntity, int duration) {
 		int increase = 100;
 		increase += solEntity.getFocusEffect(FocusEffect.SpellDuration, this);
 		int tic_inc = 0;
 		tic_inc = solEntity.getFocusEffect(FocusEffect.SpellDurByTic, this);
 
 		float focused = ((duration * increase) / 100.0f) + tic_inc;
-		int ifocused = (int)(focused);
+		int ifocused = (int) (focused);
 
 		return ifocused;
 	}
 
 	@Override
-	public int getActSpellCost(ISoliniaLivingEntity solEntity) 
-	{
+	public int getActSpellCost(ISoliniaLivingEntity solEntity) {
 		// TODO Frenzied Devastation
 		// TODO Clairevoyance
 		int cost = getMana();
-		
+
 		float spec = 0.0f;
-		
-		if (solEntity.isPlayer())
-		{
-			try
-			{
-			String skillName = (Utils.getSkillType(getSkill()).name().toUpperCase());
-			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)solEntity.getBukkitLivingEntity());
-			if (player != null)
-				if (Utils.getSpecialisationSkills().contains(skillName.toUpperCase()))
-					if (player.getSpecialisation() != null && player.getSpecialisation().equals(skillName.toUpperCase()))
-						spec = (float)solEntity.getSkill("SPECIALISE" + skillName.toUpperCase());
-			} catch (CoreStateInitException e)
-			{
+
+		if (solEntity.isPlayer()) {
+			try {
+				String skillName = (Utils.getSkillType(getSkill()).name().toUpperCase());
+				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) solEntity.getBukkitLivingEntity());
+				if (player != null)
+					if (Utils.getSpecialisationSkills().contains(skillName.toUpperCase()))
+						if (player.getSpecialisation() != null
+								&& player.getSpecialisation().equals(skillName.toUpperCase()))
+							spec = (float) solEntity.getSkill("SPECIALISE" + skillName.toUpperCase());
+			} catch (CoreStateInitException e) {
 				// skip
 			}
 		}
-		
+
 		float bonus = 1.0f;
 		int rank = 0;
 		int advancedrank = 0;
 		ISoliniaAAAbility aa = null;
-		
-		try
-		{
-			if (solEntity.isPlayer())
-			{
-				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)solEntity.getBukkitLivingEntity());
-				if(player.getAARanks().size() > 0)
-				{
-					for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("SPELLCASTINGMASTERY"))
-					{
+
+		try {
+			if (solEntity.isPlayer()) {
+				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) solEntity.getBukkitLivingEntity());
+				if (player.getAARanks().size() > 0) {
+					for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
+							.getAAbilitiesBySysname("SPELLCASTINGMASTERY")) {
 						if (!player.hasAAAbility(ability.getId()))
 							continue;
-						
+
 						aa = ability;
 					}
-				}				
-				
+				}
+
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 		int SuccessChance = Utils.RandomBetween(0, 100);
-		
+
 		double PercentManaReduction = 0d;
-		
-		if(SuccessChance <= (spec * 0.3f)) 
-		{
+
+		if (SuccessChance <= (spec * 0.3f)) {
 			PercentManaReduction = (1 + 0.05 * spec);
-			switch(rank) {
-				case 1:
-					PercentManaReduction += 2.5d;
-					break;
-				case 2:
-					PercentManaReduction += 5.0d;
-					break;
-				case 3:
-					PercentManaReduction += 10.0d;
-					break;
+			switch (rank) {
+			case 1:
+				PercentManaReduction += 2.5d;
+				break;
+			case 2:
+				PercentManaReduction += 5.0d;
+				break;
+			case 3:
+				PercentManaReduction += 10.0d;
+				break;
 			}
 		}
-		
-		// This seems wrong in EQEmu as its not supposed to be based on 
+
+		// This seems wrong in EQEmu as its not supposed to be based on
 		// the specialisation skill
 		// So i have moved this below the specialisation checks to add
 		// on top
 		// I think at some point this was lowered in its strength and made more general
 		// in eq
-	
-		if (aa != null)
-		{
-			rank = Utils.getRankPositionOfAAAbility(solEntity.getBukkitLivingEntity(),aa);
-			switch(rank)
-			{
-				case 1:
-					PercentManaReduction += 2.0d;
-					break;
-				case 2:
-					PercentManaReduction += 5.0d;
-					break;
-				case 3:
-					PercentManaReduction += 10.0d;
-					break;
-				case 4:
-					PercentManaReduction += 15.0d;
-					break;
+
+		if (aa != null) {
+			rank = Utils.getRankPositionOfAAAbility(solEntity.getBukkitLivingEntity(), aa);
+			switch (rank) {
+			case 1:
+				PercentManaReduction += 2.0d;
+				break;
+			case 2:
+				PercentManaReduction += 5.0d;
+				break;
+			case 3:
+				PercentManaReduction += 10.0d;
+				break;
+			case 4:
+				PercentManaReduction += 15.0d;
+				break;
 			}
-			
+
 			// TODO advanced rank
 		}
 
-		
 		// TODO Spell Reduction effects on items/buffs
 		// TODO Focus Effects
-		
+
 		int focus_redux = solEntity.getFocusEffect(FocusEffect.ManaCost, this);
-		
+
 		if (focus_redux > 0)
 			PercentManaReduction += Utils.RandomBetween(1, focus_redux);
-		
+
 		cost -= cost * PercentManaReduction / 100;
 
 		// TODO Gift of mana AA
 
-		if(cost < 0)
+		if (cost < 0)
 			cost = 0;
-		
+
 		return cost;
 	}
-	
+
 	@Override
-	public List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesData()
-	{
+	public List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesData() {
 		List<SoliniaSpellClass> classes = new ArrayList<SoliniaSpellClass>();
-		
-		if (getClasses1() > 0 && getClasses1() < 254)
-		{
+
+		if (getClasses1() > 0 && getClasses1() < 254) {
 			int classLevel = getClasses1();
 			String className = "WARRIOR";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -4936,9 +4836,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses2() > 0 && getClasses2() < 254)
-		{
+
+		if (getClasses2() > 0 && getClasses2() < 254) {
 			int classLevel = getClasses2();
 			String className = "CLERIC";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -4946,9 +4845,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses3() > 0 && getClasses3() < 254)
-		{
+
+		if (getClasses3() > 0 && getClasses3() < 254) {
 			int classLevel = getClasses3();
 			String className = "PALADIN";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -4956,9 +4854,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses4() > 0 && getClasses4() < 254)
-		{
+
+		if (getClasses4() > 0 && getClasses4() < 254) {
 			int classLevel = getClasses4();
 			String className = "RANGER";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -4966,9 +4863,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses5() > 0 && getClasses5() < 254)
-		{
+
+		if (getClasses5() > 0 && getClasses5() < 254) {
 			int classLevel = getClasses5();
 			String className = "SHADOWKNIGHT";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -4976,9 +4872,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses6() > 0 && getClasses6() < 254)
-		{
+
+		if (getClasses6() > 0 && getClasses6() < 254) {
 			int classLevel = getClasses6();
 			String className = "DRUID";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -4986,9 +4881,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses7() > 0 && getClasses7() < 254)
-		{
+
+		if (getClasses7() > 0 && getClasses7() < 254) {
 			int classLevel = getClasses7();
 			String className = "MONK";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -4996,9 +4890,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses8() > 0 && getClasses8() < 254)
-		{
+
+		if (getClasses8() > 0 && getClasses8() < 254) {
 			int classLevel = getClasses8();
 			String className = "BARD";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5006,9 +4899,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses9() > 0 && getClasses9() < 254)
-		{
+
+		if (getClasses9() > 0 && getClasses9() < 254) {
 			int classLevel = getClasses9();
 			String className = "ROGUE";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5016,9 +4908,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses10() > 0 && getClasses10() < 254)
-		{
+
+		if (getClasses10() > 0 && getClasses10() < 254) {
 			int classLevel = getClasses10();
 			String className = "SHAMAN";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5026,9 +4917,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses11() > 0 && getClasses11() < 254)
-		{
+
+		if (getClasses11() > 0 && getClasses11() < 254) {
 			int classLevel = getClasses11();
 			String className = "NECROMANCER";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5036,9 +4926,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses12() > 0 && getClasses12() < 254)
-		{
+
+		if (getClasses12() > 0 && getClasses12() < 254) {
 			int classLevel = getClasses12();
 			String className = "WIZARD";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5046,9 +4935,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses13() > 0 && getClasses13() < 254)
-		{
+
+		if (getClasses13() > 0 && getClasses13() < 254) {
 			int classLevel = getClasses13();
 			String className = "MAGICIAN";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5056,9 +4944,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses14() > 0 && getClasses14() < 254)
-		{
+
+		if (getClasses14() > 0 && getClasses14() < 254) {
 			int classLevel = getClasses14();
 			String className = "ENCHANTER";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5066,9 +4953,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses15() > 0 && getClasses15() < 254)
-		{
+
+		if (getClasses15() > 0 && getClasses15() < 254) {
 			int classLevel = getClasses15();
 			String className = "BEASTLORD";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5076,9 +4962,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
-		if (getClasses16() > 0 && getClasses16() < 254)
-		{
+
+		if (getClasses16() > 0 && getClasses16() < 254) {
 			int classLevel = getClasses16();
 			String className = "BERSERKER";
 			SoliniaSpellClass spellClass = new SoliniaSpellClass();
@@ -5086,375 +4971,340 @@ public class SoliniaSpell implements ISoliniaSpell {
 			spellClass.setMinlevel(classLevel);
 			classes.add(spellClass);
 		}
-		
+
 		return classes;
 	}
-	
+
 	@Override
-	public List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesAAData()
-	{
+	public List<SoliniaSpellClass> getSoliniaSpellClassesFromClassesAAData() {
 		List<SoliniaSpellClass> classes = new ArrayList<SoliniaSpellClass>();
-		
-		try
-		{
+
+		try {
 			List<Integer> aa = StateManager.getInstance().getConfigurationManager().getAASpellRankCache(getId());
-			if (getClasses1() == 254)
-			{
+			if (getClasses1() == 254) {
 				int classLevel = getClasses1();
 				String className = "WARRIOR";
 
-				for(Integer rankId : aa)
-				{
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses2() == 254)
-			{
+
+			if (getClasses2() == 254) {
 				int classLevel = getClasses2();
 				String className = "CLERIC";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses3() == 254)
-			{
+
+			if (getClasses3() == 254) {
 				int classLevel = getClasses3();
 				String className = "PALADIN";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses4() == 254)
-			{
+
+			if (getClasses4() == 254) {
 				int classLevel = getClasses4();
 				String className = "RANGER";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses5() == 254)
-			{
+
+			if (getClasses5() == 254) {
 				int classLevel = getClasses5();
 				String className = "SHADOWKNIGHT";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses6() == 254)
-			{
+
+			if (getClasses6() == 254) {
 				int classLevel = getClasses6();
 				String className = "DRUID";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses7() == 254)
-			{
+
+			if (getClasses7() == 254) {
 				int classLevel = getClasses7();
 				String className = "MONK";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses8() == 254)
-			{
+
+			if (getClasses8() == 254) {
 				int classLevel = getClasses8();
 				String className = "BARD";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses9() == 254)
-			{
+
+			if (getClasses9() == 254) {
 				int classLevel = getClasses9();
 				String className = "ROGUE";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses10() == 254)
-			{
+
+			if (getClasses10() == 254) {
 				int classLevel = getClasses10();
 				String className = "SHAMAN";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses11() == 254)
-			{
+
+			if (getClasses11() == 254) {
 				int classLevel = getClasses11();
 				String className = "NECROMANCER";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses12() == 254)
-			{
+
+			if (getClasses12() == 254) {
 				int classLevel = getClasses12();
 				String className = "WIZARD";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses13() == 254)
-			{
+
+			if (getClasses13() == 254) {
 				int classLevel = getClasses13();
 				String className = "MAGICIAN";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses14() == 254)
-			{
+
+			if (getClasses14() == 254) {
 				int classLevel = getClasses14();
 				String className = "ENCHANTER";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses15() == 254)
-			{
+
+			if (getClasses15() == 254) {
 				int classLevel = getClasses15();
 				String className = "BEASTLORD";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-			
-			if (getClasses16() == 254)
-			{
+
+			if (getClasses16() == 254) {
 				int classLevel = getClasses16();
 				String className = "BERSERKER";
-				
-				for(Integer rankId : aa)
-				{
+
+				for (Integer rankId : aa) {
 					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
-					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager().getAAAbility(rank.getAbilityid());
-					if (aaAbility.getClasses().contains(className))
-					{
+					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
+							.getAAAbility(rank.getAbilityid());
+					if (aaAbility.getClasses().contains(className)) {
 						if (rank.getLevel_req() < classLevel)
 							classLevel = rank.getLevel_req();
 					}
 				}
-				
+
 				SoliniaSpellClass spellClass = new SoliniaSpellClass();
 				spellClass.setClassname(className);
 				spellClass.setMinlevel(classLevel);
 				classes.add(spellClass);
 			}
-		
-		} catch (CoreStateInitException e)
-		{
-			
+
+		} catch (CoreStateInitException e) {
+
 		}
-		
+
 		return classes;
 	}
 
@@ -5462,37 +5312,34 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public int getAARecastTime(ISoliniaPlayer solPlayer) {
 		if (!isAASpell())
 			return getRecastTime();
-		
+
 		try {
-		List<Integer> rankIds = StateManager.getInstance().getConfigurationManager().getAASpellRankCache(getId());
-			
+			List<Integer> rankIds = StateManager.getInstance().getConfigurationManager().getAASpellRankCache(getId());
+
 			if (rankIds.size() < 1)
 				return getRecastTime();
-			
-			for(Integer rankId : rankIds)
-			{
+
+			for (Integer rankId : rankIds) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
 				if (rank.getRecast_time() > 0)
-				if (solPlayer.hasRank(rank))
-				{
-					return rank.getRecast_time();
-				}
+					if (solPlayer.hasRank(rank)) {
+						return rank.getRecast_time();
+					}
 			}
 		} catch (CoreStateInitException e) {
 		}
-		
+
 		return getRecastTime();
 	}
-	
+
 	@Override
-	public boolean isSacrificeSpell()
-	{
+	public boolean isSacrificeSpell() {
 		return isEffectInSpell(SpellEffectType.Sacrifice);
 	}
 
 	@Override
 	public boolean isCombatSkill() {
-		//Check if Discipline
+		// Check if Discipline
 		if ((getMana() == 0 && (getEndurCost() != null || getEndurUpkeep() != null)))
 			return true;
 
@@ -5503,38 +5350,34 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// TODO do caster level overide
 
 		int res = calcBuffDurationFormula(solEntity.getLevel(), getBuffdurationformula(), getBuffduration());
-		
+
 		// TODO illusion spells
 		// TODO mod
-		
+
 		return res;
 	}
 
 	@Override
 	public boolean isBossApplyable() {
-		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed) ||
-				getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed) ||
-				getSpellEffectTypes().contains(SpellEffectType.Mez) || 
-				isCharmSpell() ||
-				getSpellEffectTypes().contains(SpellEffectType.Root) ||
-				getSpellEffectTypes().contains(SpellEffectType.Stun)
-		)
+		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed)
+				|| getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed)
+				|| getSpellEffectTypes().contains(SpellEffectType.Mez) || isCharmSpell()
+				|| getSpellEffectTypes().contains(SpellEffectType.Root)
+				|| getSpellEffectTypes().contains(SpellEffectType.Stun))
 			return false;
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean isRaidApplyable() {
-		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed) ||
-				getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed) ||
-				getSpellEffectTypes().contains(SpellEffectType.Mez) ||
-				isCharmSpell() ||
-				getSpellEffectTypes().contains(SpellEffectType.Root) ||
-				getSpellEffectTypes().contains(SpellEffectType.Stun)
-		)
+		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed)
+				|| getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed)
+				|| getSpellEffectTypes().contains(SpellEffectType.Mez) || isCharmSpell()
+				|| getSpellEffectTypes().contains(SpellEffectType.Root)
+				|| getSpellEffectTypes().contains(SpellEffectType.Stun))
 			return false;
-		
+
 		return true;
 	}
 
@@ -5546,5 +5389,138 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public void setRequiresPermissionNode(String requiresPermissionNode) {
 		this.requiresPermissionNode = requiresPermissionNode;
+	}
+
+	@Override
+	public boolean tryCast(LivingEntity sourcemob, LivingEntity targetmob, boolean consumeMana,
+			boolean consumeReagents) {
+		try {
+
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(sourcemob);
+			if (solentity == null)
+				return false;
+
+			if (consumeMana)
+				if (this.getActSpellCost(solentity) > solentity.getMana()) {
+					sourcemob.sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
+					return false;
+				}
+
+			if (!isBardSong() && consumeReagents && solentity.isPlayer()) {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) sourcemob);
+				if (getComponents1() > 0) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getComponents1());
+					if (item == null || !item.isReagent()) {
+						sourcemob.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+								+ getId() + "-ID" + getComponents1());
+						return false;
+					}
+					if (!solPlayer.hasSufficientReagents(getComponents1(), getComponentCounts1())) {
+						sourcemob.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+						return false;
+					}
+				}
+
+				if (getComponents2() > 0) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getComponents2());
+					if (item == null || !item.isReagent()) {
+						sourcemob.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+								+ getId() + "-ID" + getComponents2());
+						return false;
+					}
+					if (!solPlayer.hasSufficientReagents(getComponents2(), getComponentCounts2())) {
+						sourcemob.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+						return false;
+					}
+				}
+
+				if (getComponents3() > 0) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getComponents3());
+					if (item == null || !item.isReagent()) {
+						sourcemob.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+								+ getId() + "-ID" + getComponents3());
+						return false;
+					}
+					if (!solPlayer.hasSufficientReagents(getComponents3(), getComponentCounts3())) {
+						sourcemob.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+						return false;
+					}
+				}
+
+				if (getComponents4() > 0) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getComponents4());
+					if (item == null || !item.isReagent()) {
+						sourcemob.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+								+ getId() + "-ID" + getComponents4());
+						return false;
+					}
+					if (!solPlayer.hasSufficientReagents(getComponents4(), getComponentCounts4())) {
+						sourcemob.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+						return false;
+					}
+				}
+			}
+			// only if it consumes mana
+			if (consumeMana)
+				if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(sourcemob, getId()) != null) {
+					LocalDateTime datetime = LocalDateTime.now();
+					Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+					Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+							.getEntitySpellCooldown(sourcemob, getId());
+
+					if (expiretimestamp != null)
+						if (!nowtimestamp.after(expiretimestamp)) {
+							sourcemob.sendMessage("You do not have enough willpower to cast " + getName() + " (Wait: "
+									+ ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+							return false;
+						}
+				}
+
+			boolean itemUseSuccess = tryApplyOnEntity(sourcemob, targetmob, true);
+
+			if (itemUseSuccess) {
+
+				int recastTime = getRecastTime();
+				if (isAASpell() && solentity.isPlayer()) {
+					recastTime = getAARecastTime(SoliniaPlayerAdapter.Adapt((Player) sourcemob));
+					if (recastTime < getRecastTime()) {
+						recastTime = getRecastTime();
+					}
+				}
+
+				if (getRecastTime() > 0) {
+					LocalDateTime datetime = LocalDateTime.now();
+					Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(recastTime, ChronoUnit.MILLIS));
+					StateManager.getInstance().getEntityManager().addEntitySpellCooldown(sourcemob, getId(),
+							expiretimestamp);
+				}
+
+				if (consumeMana && solentity.isPlayer()) {
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) sourcemob);
+					solPlayer.reducePlayerMana(getActSpellCost(solentity));
+
+					if (!isBardSong() && consumeReagents) {
+
+						if (getComponents1() > 0) {
+							solPlayer.reduceReagents(getComponents1(), getComponentCounts1());
+						}
+						if (getComponents2() > 0) {
+							solPlayer.reduceReagents(getComponents2(), getComponentCounts2());
+						}
+						if (getComponents3() > 0) {
+							solPlayer.reduceReagents(getComponents3(), getComponentCounts3());
+						}
+						if (getComponents4() > 0) {
+							solPlayer.reduceReagents(getComponents4(), getComponentCounts4());
+						}
+					}
+				}
+			}
+			return itemUseSuccess;
+
+		} catch (CoreStateInitException e) {
+			// skip
+			return false;
+		}
 	}
 }

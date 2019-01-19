@@ -15,10 +15,12 @@ import com.solinia.solinia.Managers.StateManager;
 public class CastingSpell {
 	int spellId = 0;	
 	UUID livingEntityUUID;
-	int itemId = 0;
+	//int itemId = 0;
 	public int timeLeftMilliseconds = 0;
+	boolean useMana = true;
+	boolean useReagents = true;
 	
-	public CastingSpell(UUID uuid, int spellId, int itemId)
+	public CastingSpell(UUID uuid, int spellId, boolean useMana, boolean useReagents)
 	{
 		this.livingEntityUUID = uuid;
 
@@ -42,7 +44,8 @@ public class CastingSpell {
 		}
 		
 		this.spellId = spellId;
-		this.itemId = itemId;
+		this.useMana = useMana;
+		this.useReagents = useReagents;
 	}
 	
 	private LivingEntity getLivingEntity()
@@ -61,19 +64,6 @@ public class CastingSpell {
 		{
 			if (spellId > 0)
 				return StateManager.getInstance().getConfigurationManager().getSpell(spellId);
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-		
-		return null;
-	}
-
-	public ISoliniaItem getItem() {
-		try
-		{
-			if (itemId > 0)
-				return StateManager.getInstance().getConfigurationManager().getItem(itemId);
 		} catch (CoreStateInitException e)
 		{
 			

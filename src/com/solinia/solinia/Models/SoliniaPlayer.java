@@ -994,43 +994,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	@Override
-	public void tryCastFromSpellbook(ISoliniaItem item) {
+	public void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents)
+	{
+		if (spell == null)
+			return;
+		
 		try
 		{
-			if (item == null) {
-				return;
-			}
-
-			if (item.getAbilityid() < 1) {
-				return;
-			}
-			
 			// Some spells auto target self, if they don't have a target try to do that
 			if (getTarget() == null) {
-				if (item.getAbilityid() > 0) {
-					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-							.getSpell(item.getAbilityid());
-					if (spell != null) {
-						if (!tryFixSpellTarget(spell))
-						{
-							getBukkitPlayer().sendMessage(
-									"* You must select a target (shift+left click with spell or use /target for group or shift-f for self (tryCastFromSpellbook-tryFixSpellTarget)");
-							return;
-						}
-					}
+				if (!tryFixSpellTarget(spell))
+				{
+					getBukkitPlayer().sendMessage(
+							"* You must select a target (shift+left click with spell or use /target for group or shift-f for self");
+					return;
 				}
 			}
 
 			if (getTarget() == null)
 			{
-				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /target for group or shift-f for self (tryCastFromSpellbook)");
-				return;
-			}
-			
-			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-			
-			// Spellbooks dont contain consumables
-			if (item.isConsumable()) {
+				getBukkitPlayer().sendMessage("* You must select a target (shift+left click with consumable or use /target for group or shift-f for self");
 				return;
 			}
 	
@@ -1068,13 +1051,40 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 	
-			startCasting(spell, getBukkitPlayer(), item);
+			startCasting(spell, getBukkitPlayer(), useMana, useReagents);
 		} catch (CoreStateInitException e)
 		{
 			
 		}
 	}
 	
+	@Override
+	public void tryCastFromSpellbook(ISoliniaItem item) {
+		if (item == null) {
+			return;
+		}
+
+		if (item.getAbilityid() < 1) {
+			return;
+		}
+		
+		// Spellbooks dont contain consumables
+		if (item.isConsumable()) {
+			return;
+		}
+		
+		try
+		{
+			
+			
+			tryCastSpell(StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid()), true, true);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	// TODO REFACTOR ALL THIS TO USE TRYCASTSPELL
 	@Override
 	public void tryCastFromItemInSlot(int slotId) {
 		try
@@ -1199,7 +1209,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 	
-			startCasting(spell, getBukkitPlayer(), item);
+			startCasting(spell, getBukkitPlayer(), !item.isConsumable(), !item.isConsumable());
 		} catch (CoreStateInitException e)
 		{
 			
@@ -1443,10 +1453,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void startCasting(ISoliniaSpell spell, Player player, ISoliniaItem item) {
+	public void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents) {
 		try {
 
-			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), item.getId());
+			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), useMana, useReagents);
 			StateManager.getInstance().getEntityManager().startCasting((LivingEntity) player, castingSpell);
 		} catch (CoreStateInitException e) {
 
@@ -1471,14 +1481,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (castingSpell.getSpell() == null)
 			return;
 
-		if (castingSpell.getItem() == null)
-			return;
+		/*if (castingSpell.getItem() == null)
+			return;*/
 
-		doCastSpellItem(castingSpell.getSpell(), player, castingSpell.getItem());
+		doCastSpell(castingSpell.getSpell(), player, castingSpell.useMana, castingSpell.useReagents);
 	}
 
 	@Override
-	public void doCastSpellItem(ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem) {
+	public void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useComponents) {
 		if (spell.isAASpell() && !canUseAASpell(spell)) {
 			player.sendMessage("You require the correct AA to use this spell");
 			return;
@@ -1636,24 +1646,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		}
 
-		// Reroute action depending on target
-		//
-		try {
-			if (player != null && !player.isDead())
-			if (targetmob != null && !targetmob.isDead()) {
-				boolean success = spellSourceItem.useItemOnEntity(player, targetmob, false);
-				if (success == true) {
-					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
-				}
-				return;
-			} else {
-				boolean success = spellSourceItem.useItemOnEntity(player, player, false);
-				if (success == true) {
-					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
-				}
-				return;
+		if (player != null && !player.isDead())
+		if (targetmob != null && !targetmob.isDead()) {
+			boolean success = spell.tryCast(player, targetmob, useMana, useComponents);
+			if (success == true) {
+				tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 			}
-		} catch (CoreStateInitException e) {
+			return;
+		} else {
+			boolean success = spell.tryCast(player, player, useMana, useComponents);
+			if (success == true) {
+				tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
+			}
 			return;
 		}
 	}

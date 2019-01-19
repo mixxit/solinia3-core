@@ -46,6 +46,10 @@ commands:
     description: Casts a spell in a hotbat slot from 1 to 9
     usage: /castslot <hotbarnumber>
     aliases: []
+  castspell:
+    description: Casts a spell by its spell id
+    usage: /castspell <spellid>
+    aliases: []
   castspellbook:
     description: Casts a spell in a spellbook
     usage: /castspellbook itemid

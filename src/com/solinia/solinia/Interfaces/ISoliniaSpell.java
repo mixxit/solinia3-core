@@ -5,6 +5,8 @@ import java.util.List;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaSpellClass;
@@ -1072,4 +1074,6 @@ public interface ISoliniaSpell {
 	void setRequiresPermissionNode(String requiresPermissionNode);
 
 	boolean isCharmSpell();
+
+	boolean tryCast(LivingEntity sourcemob, LivingEntity targetmob, boolean consumeMana, boolean consumeReagents);
 }

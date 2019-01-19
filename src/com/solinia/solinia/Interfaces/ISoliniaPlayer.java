@@ -229,8 +229,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void setSkills(List<SoliniaPlayerSkill> skillCache);
 
-	void doCastSpellItem(ISoliniaSpell spell, Player player, ISoliniaItem spellSourceItem);
-
 	boolean checkDoesntFizzle(ISoliniaSpell spell);
 
 	void dropResurrectionItem(int experienceamount);
@@ -347,8 +345,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isFeignedDeath();
 
 	void setFeigned(boolean feigned);
-
-	void startCasting(ISoliniaSpell spell, Player player, ISoliniaItem item);
 
 	void castingComplete(CastingSpell castingSpell);
 
@@ -491,5 +487,13 @@ public interface ISoliniaPlayer extends Serializable {
 	public void tryCastFromSpellbook(ISoliniaItem solItem);
 
 	Location getLastLocation();
+
+	void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents);
+
+	void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents);
+
+	void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents);
+
+
 
 }
