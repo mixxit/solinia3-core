@@ -3745,4 +3745,168 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.setBase64ArmorContents(new String(Base64.encodeBase64(ItemStackUtils.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getArmorContents()).getBytes())));
 	}
 
+	@Override
+	public void doRegenTick() {
+		this.grantPlayerRegenBonuses();
+	}
+	
+	private void grantPlayerRegenBonuses() {
+		if (getBukkitPlayer().isDead())
+			return;
+		
+		// Apply Crouch Mana Regen Bonus
+		int manaregen = 1;
+		
+		int sleephpregen = 0;
+		int sleepmpregen = 0;
+		// Sleep regen
+		if (getBukkitPlayer().isSleeping())
+		{
+			sleephpregen += 50;
+			sleepmpregen += 50;
+		}
+		
+		manaregen += sleepmpregen;
+		
+		// a players mana regen based on if they are meditating (sneaking)
+		manaregen += getPlayerMeditatingManaBonus();
+		
+		ISoliniaAAAbility aa = null;
+		try
+		{
+			if(getAARanks().size() > 0)
+			{
+				for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("MENTALCLARITY"))
+				{
+					if (!hasAAAbility(ability.getId()))
+						continue;
+					
+					aa = ability;
+				}
+			}
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		int aamanaregenrank = 0;
+		
+		if (aa != null)
+		{
+			if(getAARanks().size() > 0)
+			aamanaregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), aa);
+			manaregen += aamanaregenrank;
+		}
+		
+		ISoliniaAAAbility emaa = null;
+		try
+		{
+			if(getAARanks().size() > 0)
+			{
+				for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("MENTALCLARITY"))
+				{
+					if (!hasAAAbility(ability.getId()))
+						continue;
+					
+					emaa = ability;
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		int emaamanaregenrank = 0;
+		
+		if (emaa != null)
+		{
+			if(getAARanks().size() > 0)
+			emaamanaregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), emaa);
+			manaregen += emaamanaregenrank;
+		}
+
+		manaregen += getItemMpRegenBonuses();
+		
+		// Hp and Mana Regen from Items
+		int hpregen = 0;
+		
+		ISoliniaAAAbility hpaa = null;
+		try
+		{
+			if(getAARanks().size() > 0)
+			{
+				for(ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAbilitiesBySysname("INNATEREGENERATION"))
+				{
+					if (!hasAAAbility(ability.getId()))
+						continue;
+					
+					hpaa = ability;
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		int aahpregenrank = 0;
+		
+		if (hpaa != null)
+		{
+			aahpregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), hpaa);
+			hpregen += aahpregenrank;
+		}
+		
+		hpregen += sleephpregen;
+		
+		hpregen += getItemHpRegenBonuses();
+
+		// Process HP Regeneration
+		if (hpregen > 0) {
+			int amount = (int) Math.round(getBukkitPlayer().getHealth()) + hpregen;
+			if (amount > getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+				amount = (int) Math.round(getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			}
+			
+			if (amount < 0)
+				amount = 0;
+
+			if (!getBukkitPlayer().isDead())
+			getSoliniaLivingEntity().setHealth(amount);
+		}
+		
+		// Process Mana Regeneration
+		//System.out.println(player.getName() + " was found to have " + manaregen + " mana regen");
+		increasePlayerMana(manaregen);
+	}
+
+	private int getPlayerMeditatingManaBonus() {
+		int manaregen = 0;
+		if (isMeditating())
+		{
+			SoliniaPlayerSkill meditationskill = getSkill("MEDITATION");
+			int bonusmana = 3 + (meditationskill.getValue() / 15);
+
+			manaregen += bonusmana;
+
+			// apply meditation skill increase
+			Random r = new Random();
+			int randomInt = r.nextInt(100) + 1;
+			if (randomInt > 90) {
+				int currentvalue = 0;
+				SoliniaPlayerSkill skill = getSkill("MEDITATION");
+				if (skill != null) {
+					currentvalue = skill.getValue();
+				}
+
+				if ((currentvalue + 1) <= getSkillCap("MEDITATION")) {
+					setSkill("MEDITATION", currentvalue + 1);
+				}
+
+			}
+		}
+		
+		return manaregen;
+	}
+
 }

@@ -61,7 +61,7 @@ import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PetFastCheckTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
-import com.solinia.solinia.Timers.PlayerRegenTickTimer;
+import com.solinia.solinia.Timers.PlayerTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 import com.solinia.solinia.Timers.ZoneTickTimer;
@@ -78,7 +78,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private CSVGenerationTimer csvGenerationTimer;
 	private CastingTimer castingTimer;
 	private StateCommitTimer commitTimer;
-	private PlayerRegenTickTimer playerRegenTimer;
+	private PlayerTickTimer playerTickTimer;
 	private ZoneTickTimer zoneTickTimer;
 	private SpellTickTimer spellTickTimer;
 	private NPCSpellCastTimer npcSpellCastTimer;
@@ -338,8 +338,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			commitTimer = new StateCommitTimer();
 			commitTimer.runTaskTimer(this, 300 * 20L, 300 * 20L);
 
-			playerRegenTimer = new PlayerRegenTickTimer();
-			playerRegenTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+			playerTickTimer = new PlayerTickTimer();
+			playerTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 
 			zoneTickTimer = new ZoneTickTimer();
 			zoneTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);

@@ -498,6 +498,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	SoliniaZone getFirstZone();
 
+	public void doRegenTick();
+
 
 
 }

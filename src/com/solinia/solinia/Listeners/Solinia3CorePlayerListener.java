@@ -44,6 +44,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.PlayerTickEvent;
 import com.solinia.solinia.Events.PlayerZoneTickEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Events.SoliniaSyncPlayerChatEvent;
@@ -74,6 +75,25 @@ public class Solinia3CorePlayerListener implements Listener {
 	public Solinia3CorePlayerListener(Solinia3CorePlugin solinia3CorePlugin) {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
+	}
+	
+	@EventHandler
+	public void onPlayerTick(PlayerTickEvent event)
+	{
+		if (event.isCancelled())
+			return;
+		
+		if (event.getPlayer() == null)
+			return;
+		
+		if (event.getPlayer().getBukkitPlayer().isDead())
+			return;
+		
+		event.getPlayer().doRegenTick();
+		
+		// update last location
+		event.getPlayer().setLastLocation(event.getPlayer().getBukkitPlayer().getLocation());
+
 	}
 	
 	@EventHandler
