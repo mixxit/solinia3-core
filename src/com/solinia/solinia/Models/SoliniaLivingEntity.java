@@ -6021,6 +6021,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity().isDead()) {
 			return;
 		}
+		
+		if (entity instanceof Player)
+			if (((Player)entity).getGameMode() != GameMode.SURVIVAL)
+				return;
 
 		if (entity != null && (entity.isDead() || entity.isInvulnerable())) {
 			if (this.getBukkitLivingEntity() instanceof Creature) {

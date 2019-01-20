@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Animals;
@@ -79,16 +80,28 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		if (!(event.getEntity() instanceof Creature))
 			return;
+		
+		if (event.getTarget() instanceof Player)
+			if (((Player)event.getTarget()).getGameMode() != GameMode.SURVIVAL)
+			{
+				Utils.CancelEvent(event);
+				return;
+			}
 
 		try {
+			// Pets dont need line of sight to set their target
+			
 			if (event.getEntity() instanceof LivingEntity)
-				if (StateManager.getInstance().getEntityManager().getHateListEntry(event.getEntity().getUniqueId(),
-						event.getTarget().getUniqueId()) < 1)
+			{
+				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+				if (!solentity.isCurrentlyNPCPet())
+				if (StateManager.getInstance().getEntityManager().getHateListEntry(event.getEntity().getUniqueId(),event.getTarget().getUniqueId()) < 1)
 					if (!Utils.isEntityInLineOfSightCone((LivingEntity) event.getEntity(), event.getTarget(), 90,
 							Utils.MAX_ENTITY_AGGRORANGE)) {
 						Utils.CancelEvent(event);
 						return;
 					}
+			}
 		} catch (CoreStateInitException e) {
 
 		}
