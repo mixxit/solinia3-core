@@ -41,7 +41,7 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 					if (!(entityThatWillAutoAttack instanceof LivingEntity))
 						continue;
 					
-					LivingEntity livingEntityThatWillCast = (LivingEntity)entityThatWillAutoAttack;
+					LivingEntity livingEntityThatWillAutoAttack = (LivingEntity)entityThatWillAutoAttack;
 					
 					if (!(entityThatWillAutoAttack instanceof Creature))
 						continue;
@@ -53,18 +53,16 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 					if (creatureThatWillAttack.getTarget() == null)
 						continue;
 					
-					if (!Utils.isLivingEntityNPC(livingEntityThatWillCast))
+					if (!Utils.isLivingEntityNPC(livingEntityThatWillAutoAttack))
 						continue;
 					
 					try {
-						ISoliniaLivingEntity solLivingEntityThatWillCast = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillCast);
+						ISoliniaLivingEntity solLivingEntityThatWillCast = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillAutoAttack);
 						if (completedEntities.contains(solLivingEntityThatWillCast.getBukkitLivingEntity().getUniqueId().toString()))
 							continue;
 						
 						completedEntities.add(solLivingEntityThatWillCast.getBukkitLivingEntity().getUniqueId().toString());
-						
-						if (Utils.isEntityInLineOfSight(livingEntityThatWillCast, creatureThatWillAttack.getTarget()))
-							processLivingEntityAutoAttack(creatureThatWillAttack);
+						processLivingEntityAutoAttack(creatureThatWillAttack);
 						
 					} catch (CoreStateInitException e) {
 						// TODO Auto-generated catch block
@@ -84,62 +82,62 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 		{
 			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(entityForAutoAttack);
 	
-			if (autoAttack.isAutoAttacking() == true)
+			if (!autoAttack.isAutoAttacking())
+				return;
+				
+			if (entityForAutoAttack.isDead())
 			{
-				if (entityForAutoAttack.isDead())
+				StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
+				return;
+			}
+			
+			if (autoAttack.getTimer() > 0)
+			{
+				autoAttack.setTimer(autoAttack.getTimer() - 1);
+				return;
+			}
+			
+			LivingEntity target = StateManager.getInstance().getEntityManager().getEntityTarget((LivingEntity)entityForAutoAttack);
+			if (target != null)
+			{
+				if (target instanceof Player)
 				{
+					if (((Player)target).getGameMode() != GameMode.SURVIVAL)
+					{
+						if (entityForAutoAttack instanceof Player)
+							entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
+						
+						StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
+					}
+				}
+				
+				if (target.isDead())
+				{
+					if (entityForAutoAttack instanceof Player)
+					entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Your target is dead!");
 					StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
 					return;
 				}
 				
-				if (autoAttack.getTimer() > 0)
-				{
-					autoAttack.setTimer(autoAttack.getTimer() - 1);
-					return;
-				}
+				ISoliniaLivingEntity solLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(target);
+				ISoliniaLivingEntity solLivingEntityAttacker = SoliniaLivingEntityAdapter.Adapt(entityForAutoAttack);
 				
-				LivingEntity target = StateManager.getInstance().getEntityManager().getEntityTarget((LivingEntity)entityForAutoAttack);
-				if (target != null)
+				if (solLivingEntityTarget != null && solLivingEntityAttacker != null)
 				{
-					if (target instanceof Player)
-					{
-						if (((Player)target).getGameMode() != GameMode.SURVIVAL)
-						{
-							if (entityForAutoAttack instanceof Player)
-								entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
-							
-							StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-						}
-					}
-					
-					if (target.isDead())
-					{
-						if (entityForAutoAttack instanceof Player)
-						entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Your target is dead!");
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-						return;
-					}
-					
-					ISoliniaLivingEntity solLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(target);
-					ISoliniaLivingEntity solLivingEntityAttacker = SoliniaLivingEntityAdapter.Adapt(entityForAutoAttack);
-					
-					if (solLivingEntityTarget != null && solLivingEntityAttacker != null)
-					{
-						// reset timer
-						autoAttack.setTimerFromAttackSpeed(solLivingEntityAttacker.getAttackSpeed());
-						solLivingEntityAttacker.autoAttackEnemy(solLivingEntityTarget);
-					} else {
-						if (entityForAutoAttack instanceof Player)
-						entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Could not find target to attack!");
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-						return;
-					}
+					// reset timer
+					autoAttack.setTimerFromAttackSpeed(solLivingEntityAttacker.getAttackSpeed());
+					solLivingEntityAttacker.autoAttackEnemy(solLivingEntityTarget);
 				} else {
 					if (entityForAutoAttack instanceof Player)
-					entityForAutoAttack.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
+					entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Could not find target to attack!");
 					StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
 					return;
 				}
+			} else {
+				if (entityForAutoAttack instanceof Player)
+				entityForAutoAttack.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
+				StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
+				return;
 			}
 		} catch (CoreStateInitException e)
 		{
