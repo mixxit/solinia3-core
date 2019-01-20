@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -5088,6 +5089,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		Entity entity = Bukkit.getEntity(uniqueId);
 		if (entity.isInvulnerable() || entity.isDead())
 			return;
+		
+		if (entity instanceof Player)
+			if (((Player)entity).getGameMode() != GameMode.SURVIVAL)
+				return;
 
 		try {
 			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(),
@@ -5148,6 +5153,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			if (entity.isDead() || entity.isInvulnerable()) {
+				removeUuids.add(uuid);
+				continue;
+			}
+			
+			if (entity instanceof Player)
+			if (((Player)entity).getGameMode() != GameMode.SURVIVAL)
+			{
 				removeUuids.add(uuid);
 				continue;
 			}
