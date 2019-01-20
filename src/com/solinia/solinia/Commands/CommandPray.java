@@ -1,25 +1,12 @@
 package com.solinia.solinia.Commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
-import com.solinia.solinia.Factories.SoliniaItemFactory;
-import com.solinia.solinia.Factories.SoliniaNPCMerchantFactory;
-import com.solinia.solinia.Interfaces.ISoliniaItem;
-import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandPray implements CommandExecutor {
 	@Override

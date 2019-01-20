@@ -9,8 +9,6 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
-import net.md_5.bungee.api.ChatColor;
-
 public class CommandEmote implements CommandExecutor 
 {
 	@Override

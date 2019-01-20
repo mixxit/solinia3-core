@@ -1,6 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,7 +11,6 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Utils.Utils;

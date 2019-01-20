@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaPlayer;
 
 public class CommandTransferCharacter implements CommandExecutor {
 	@Override

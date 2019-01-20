@@ -3,7 +3,6 @@ package com.solinia.solinia.Timers;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,7 +13,6 @@ import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
-import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Utils.Utils;
 
 public class PlayerRegenTickTimer extends BukkitRunnable {
@@ -45,24 +43,6 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		if (solplayer == null)
 			return;
 		
-		int zonehpregen = 0;
-		int zonempregen = 0;
-		
-		try
-		{
-			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
-				if (player.getLocation().distance(new Location(player.getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone.getSize())
-				{
-					zonehpregen += zone.getHpRegen();
-					zonempregen += zone.getManaRegen();
-				}
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-		
-		
 		int sleephpregen = 0;
 		int sleepmpregen = 0;
 		// Sleep regen
@@ -72,14 +52,6 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			sleepmpregen += 50;
 		}
 		
-		SoliniaZone zone = solplayer.isInZone();
-		if (zone != null)
-		{
-			zonehpregen = zone.getHpRegen();
-			zonempregen = zone.getManaRegen();
-		}
-		
-		manaregen += zonempregen;
 		manaregen += sleepmpregen;
 		
 		// a players mana regen based on if they are meditating (sneaking)
@@ -171,7 +143,6 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 			hpregen += aahpregenrank;
 		}
 		
-		hpregen += zonehpregen;
 		hpregen += sleephpregen;
 		
 		hpregen += solplayer.getItemHpRegenBonuses();

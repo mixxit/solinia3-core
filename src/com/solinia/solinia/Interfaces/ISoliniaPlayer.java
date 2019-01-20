@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -306,8 +305,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void clearAAs();
 
-	SoliniaZone isInZone();
-
+	boolean isInZone(SoliniaZone zone);
+	
 	boolean getSkillCheck(String skillname, int trivial);
 
 	SoliniaWorld getSoliniaWorld();
@@ -496,6 +495,8 @@ public interface ISoliniaPlayer extends Serializable {
 			boolean ignoreProfessionAndLevel);
 
 	void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel);
+
+	SoliniaZone getFirstZone();
 
 
 

@@ -15,7 +15,6 @@ import de.slikey.effectlib.effect.LoveEffect;
 import de.slikey.effectlib.effect.MusicEffect;
 import de.slikey.effectlib.effect.SmokeEffect;
 import de.slikey.effectlib.effect.WarpEffect;
-import de.slikey.effectlib.util.ParticleEffect;
 
 public class SpecialEffectUtils {
 

@@ -2,7 +2,6 @@ package com.solinia.solinia;
 
 import java.util.Locale;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -65,6 +64,7 @@ import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
+import com.solinia.solinia.Timers.ZoneTickTimer;
 
 import de.slikey.effectlib.EffectManager;
 import net.milkbowl.vault.economy.Economy;
@@ -79,6 +79,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private CastingTimer castingTimer;
 	private StateCommitTimer commitTimer;
 	private PlayerRegenTickTimer playerRegenTimer;
+	private ZoneTickTimer zoneTickTimer;
 	private SpellTickTimer spellTickTimer;
 	private NPCSpellCastTimer npcSpellCastTimer;
 	private NPCSummonAndTeleportCastTimer npcSummonCastTimer;
@@ -340,6 +341,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			playerRegenTimer = new PlayerRegenTickTimer();
 			playerRegenTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 
+			zoneTickTimer = new ZoneTickTimer();
+			zoneTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+			
 			spellTickTimer = new SpellTickTimer(this);
 			spellTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 

@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -43,6 +44,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.PlayerZoneTickEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
 import com.solinia.solinia.Events.SoliniaSyncPlayerChatEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -73,7 +75,39 @@ public class Solinia3CorePlayerListener implements Listener {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
 	}
+	
+	@EventHandler
+	public void onPlayerZoneTick(PlayerZoneTickEvent event)
+	{
+		if (event.isCancelled())
+			return;
+		
+		if (event.getPlayer() == null || event.getZone() == null)
+			return;
+		
+		if (event.getPlayer().getBukkitPlayer().isDead())
+			return;
+		
+		int hpregen = event.getZone().getHpRegen();
+		int mpregen = event.getZone().getManaRegen();
+		
+		if (hpregen > 0) {
+			int amount = (int) Math.round(event.getPlayer().getBukkitPlayer().getHealth()) + hpregen;
+			if (amount > event.getPlayer().getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+				amount = (int) Math.round(event.getPlayer().getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			}
+			
+			if (amount < 0)
+				amount = 0;
 
+			if (!event.getPlayer().getBukkitPlayer().isDead())
+			event.getPlayer().getSoliniaLivingEntity().setHealth(amount);
+		}
+		
+		if (mpregen > 0)
+			event.getPlayer().increasePlayerMana(mpregen);
+	}
+	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 
@@ -160,7 +194,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 
-			SoliniaZone zone = solplayer.isInZone();
+			SoliniaZone zone = solplayer.getFirstZone();
 			solplayer.tryIncreaseSkill("LOGGING", 1);
 
 			if (zone != null) {
@@ -206,7 +240,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 
-			SoliniaZone zone = solplayer.isInZone();
+			SoliniaZone zone = solplayer.getFirstZone();
 			solplayer.tryIncreaseSkill("FORAGE", 1);
 
 			if (zone != null) {
@@ -252,7 +286,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 
-			SoliniaZone zone = solplayer.isInZone();
+			SoliniaZone zone = solplayer.getFirstZone();
 			solplayer.tryIncreaseSkill("MINING", 1);
 
 			if (zone != null) {
@@ -299,7 +333,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 
-			SoliniaZone zone = solplayer.isInZone();
+			SoliniaZone zone = solplayer.getFirstZone();
 			solplayer.tryIncreaseSkill("FISHING", 1);
 
 			if (zone != null) {

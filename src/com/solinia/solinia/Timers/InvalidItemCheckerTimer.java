@@ -10,8 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.solinia.solinia.Utils.ItemStackUtils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class InvalidItemCheckerTimer  extends BukkitRunnable {

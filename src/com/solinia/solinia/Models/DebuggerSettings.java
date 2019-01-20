@@ -1,6 +1,5 @@
 package com.solinia.solinia.Models;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DebuggerSettings {
