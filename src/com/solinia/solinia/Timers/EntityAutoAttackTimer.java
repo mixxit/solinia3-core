@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -100,6 +101,17 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 				LivingEntity target = StateManager.getInstance().getEntityManager().getEntityTarget((LivingEntity)entityForAutoAttack);
 				if (target != null)
 				{
+					if (target instanceof Player)
+					{
+						if (((Player)target).getGameMode() != GameMode.SURVIVAL)
+						{
+							if (entityForAutoAttack instanceof Player)
+								entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
+							
+							StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
+						}
+					}
+					
 					if (target.isDead())
 					{
 						if (entityForAutoAttack instanceof Player)
