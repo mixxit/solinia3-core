@@ -5,12 +5,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.PlayerEquipmentTickEvent;
 import com.solinia.solinia.Events.PlayerTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 
-public class PlayerTickTimer extends BukkitRunnable {
-
+public class PlayerEquipmentTickTimer extends BukkitRunnable {
 	@Override
 	public void run() {
 
@@ -21,8 +23,12 @@ public class PlayerTickTimer extends BukkitRunnable {
 				if (solPlayer == null)
 					continue;
 				
-				PlayerTickEvent soliniaevent = new PlayerTickEvent(solPlayer);
-				Bukkit.getPluginManager().callEvent(soliniaevent);
+				for (ISoliniaItem item : solPlayer.getEquippedSoliniaItems()) {
+					PlayerEquipmentTickEvent soliniaevent = new PlayerEquipmentTickEvent(solPlayer, item);
+					Bukkit.getPluginManager().callEvent(soliniaevent);
+				}
+				
+				
 			} catch (CoreStateInitException e)
 			{
 				

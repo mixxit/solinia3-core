@@ -58,6 +58,7 @@ import com.solinia.solinia.Timers.NPCSummonAndTeleportCastTimer;
 import com.solinia.solinia.Timers.PerkLoadTimer;
 import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PetFastCheckTimer;
+import com.solinia.solinia.Timers.PlayerEquipmentTickTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerTickTimer;
@@ -77,6 +78,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private CastingTimer castingTimer;
 	private StateCommitTimer commitTimer;
 	private PlayerTickTimer playerTickTimer;
+	private PlayerEquipmentTickTimer playerEquipmentTickTimer;
 	private ZoneTickTimer zoneTickTimer;
 	private SpellTickTimer spellTickTimer;
 	private NPCSpellCastTimer npcSpellCastTimer;
@@ -338,6 +340,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			playerTickTimer = new PlayerTickTimer();
 			playerTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+			
+			playerEquipmentTickTimer = new PlayerEquipmentTickTimer();
+			playerEquipmentTickTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
 
 			zoneTickTimer = new ZoneTickTimer();
 			zoneTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);

@@ -500,6 +500,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void doRegenTick();
 
+	public void doEquipmentRegenTick(ISoliniaItem item);
+
 
 
 }

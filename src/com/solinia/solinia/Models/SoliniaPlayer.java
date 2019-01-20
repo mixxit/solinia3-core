@@ -3747,10 +3747,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void doRegenTick() {
-		this.grantPlayerRegenBonuses();
-	}
-	
-	private void grantPlayerRegenBonuses() {
 		if (getBukkitPlayer().isDead())
 			return;
 		
@@ -3826,8 +3822,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			manaregen += emaamanaregenrank;
 		}
 
-		manaregen += getItemMpRegenBonuses();
-		
 		// Hp and Mana Regen from Items
 		int hpregen = 0;
 		
@@ -3858,8 +3852,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		hpregen += sleephpregen;
-		
-		hpregen += getItemHpRegenBonuses();
 
 		// Process HP Regeneration
 		if (hpregen > 0) {
@@ -3879,7 +3871,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		//System.out.println(player.getName() + " was found to have " + manaregen + " mana regen");
 		increasePlayerMana(manaregen);
 	}
-
+	
 	private int getPlayerMeditatingManaBonus() {
 		int manaregen = 0;
 		if (isMeditating())
@@ -3907,6 +3899,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		return manaregen;
+	}
+
+	@Override
+	public void doEquipmentRegenTick(ISoliniaItem item) {
+		if (getBukkitPlayer().isDead())
+			return;
+		
+		// Process HP Regeneration
+		if (item.getHpregen() > 0) {
+			int amount = (int) Math.round(getBukkitPlayer().getHealth()) + item.getHpregen();
+			if (amount > getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+				amount = (int) Math.round(getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			}
+			
+			if (amount < 0)
+				amount = 0;
+
+			if (!getBukkitPlayer().isDead())
+				getSoliniaLivingEntity().setHealth(amount);
+		}
+		
+		if (item.getMpregen() > 0)
+			increasePlayerMana(item.getMpregen());
 	}
 
 }
