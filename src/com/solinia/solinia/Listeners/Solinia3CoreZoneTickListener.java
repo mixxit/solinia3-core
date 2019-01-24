@@ -18,10 +18,10 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
 
-public class SoliniaZoneTickListener implements Listener {
+public class Solinia3CoreZoneTickListener implements Listener {
 	Solinia3CorePlugin plugin;
 
-	public SoliniaZoneTickListener(Solinia3CorePlugin plugin) {
+	public Solinia3CoreZoneTickListener(Solinia3CorePlugin plugin) {
 		this.plugin = plugin;
 	}
 	
