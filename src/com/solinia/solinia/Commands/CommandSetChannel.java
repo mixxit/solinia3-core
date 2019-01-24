@@ -17,13 +17,18 @@ public class CommandSetChannel implements CommandExecutor {
             Player player = (Player) sender;
             if (args.length == 0)
             {
-            	player.sendMessage("Insufficient arguments [OOC,LOCAL]");
+            	player.sendMessage("Insufficient arguments [OOC,LOCAL,WHISPER,SHOUT]");
             	return false;
             }
             
-            if (!args[0].toUpperCase().equals("OOC") && !args[0].toUpperCase().equals("LOCAL"))
+            if (
+            		!args[0].toUpperCase().equals("OOC") && 
+            		!args[0].toUpperCase().equals("LOCAL") &&
+            		!args[0].toUpperCase().equals("WHISPER") &&
+            		!args[0].toUpperCase().equals("SHOUT")
+            		)
             {
-            	player.sendMessage("Insufficient arguments [OOC,LOCAL]");
+            	player.sendMessage("Insufficient arguments [OOC,LOCAL,WHISPER,SHOUT]");
             	return false;
             }
             

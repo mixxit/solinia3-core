@@ -39,12 +39,23 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		}
 		
 		// TODO - Support checking channel modes of player
-		if (currentChannel.equals("LOCAL"))
+		switch(currentChannel)
 		{
-			StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
-		} else {
-			StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
-			return;
+			case "OOC":
+				StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
+				break;
+			case "LOCAL":
+				StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
+				break;
+			case "WHISPER":
+				StateManager.getInstance().getChannelManager().sendToWhisperChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
+				break;
+			case "SHOUT":
+				StateManager.getInstance().getChannelManager().sendToShoutChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
+				break;
+			default:
+				StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
+				break;
 		}
 		
 		// NPC responses (if applicable)

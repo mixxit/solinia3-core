@@ -855,6 +855,34 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, string, string, getBukkitPlayer().getInventory().getItemInMainHand());
 	}
+	
+	@Override
+	public void whisper(String string) {
+		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
+			if (getRace() == null) {
+				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
+				return;
+			} else {
+				setLanguage(getRace().getName().toUpperCase());
+			}
+		}
+		StateManager.getInstance().getChannelManager().sendToWhisperChannelDecorated(this, string, string, getBukkitPlayer().getInventory().getItemInMainHand());
+	}
+
+	
+	@Override
+	public void shout(String string) {
+		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
+			if (getRace() == null) {
+				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
+				return;
+			} else {
+				setLanguage(getRace().getName().toUpperCase());
+			}
+		}
+		StateManager.getInstance().getChannelManager().sendToShoutChannelDecorated(this, string, string, getBukkitPlayer().getInventory().getItemInMainHand());
+	}
+
 
 	@Override
 	public SoliniaPlayerSkill getSkill(String skillname) {

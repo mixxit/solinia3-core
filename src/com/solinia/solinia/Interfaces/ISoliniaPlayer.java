@@ -502,6 +502,10 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void doEquipmentRegenTick(ISoliniaItem item);
 
+	void whisper(String string);
+
+	void shout(String string);
+
 
 
 }

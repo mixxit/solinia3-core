@@ -415,6 +415,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 
 		this.getCommand("castslot").setExecutor(new CommandCastSlot());
+		this.getCommand("shout").setExecutor(new CommandShout());
+		this.getCommand("whisper").setExecutor(new CommandWhisper());
 		this.getCommand("transfercharacter").setExecutor(new CommandTransferCharacter());
 		this.getCommand("playeremote").setExecutor(new CommandPlayerEmote());
 		this.getCommand("consider").setExecutor(new CommandConsider());

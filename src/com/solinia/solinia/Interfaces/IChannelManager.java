@@ -54,4 +54,8 @@ public interface IChannelManager {
 	void clearDiscordQueue();
 
 	void setDiscordBotspamChannelId(String discordBotspamChannelId);
+
+	void sendToWhisperChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack);
+
+	void sendToShoutChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack);
 }

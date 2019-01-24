@@ -301,6 +301,14 @@ commands:
     aliases:
     - say
     - l
+  shout:
+    description: Speaks in shout chat
+    usage: /shout message
+    aliases: []
+  whisper:
+    description: Speaks in whisper chat
+    usage: /whisper message
+    aliases: []
   forcelevel:
     description: Forces a players level
     usage: /forcelevel mcplayer level
