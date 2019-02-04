@@ -35,7 +35,6 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
-import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordBotspamChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordContentTeamChannelCommandSender;
@@ -577,10 +576,6 @@ public class CoreState {
 		return entityManager;
 	}
 
-	public double getWorldPerkXPModifier() {
-		return Utils.getWorldPerkXPModifier();
-	}
-
 	public void giveMoney(Player player, int amount) {
 		if (getEconomy() == null)
 			return;
@@ -600,10 +595,6 @@ public class CoreState {
 	public IChannelManager getChannelManager() {
 		// TODO Auto-generated method stub
 		return this.channelManager;
-	}
-
-	public int getWorldPerkDropCountModifier() {
-		return Utils.GetWorldPerkDropCountModifier();
 	}
 
 	public boolean addActiveBlockEffect(Block clickedBlock, SoliniaSpell soliniaSpell, LivingEntity sourceEntity) {
@@ -869,27 +860,6 @@ public class CoreState {
 		leader.sendMessage("Invited " + member.getDisplayName() + " to join your group");
 		member.sendMessage(
 				"You have been invited to join " + leader.getName() + "'s group - /group accept | /group decline");
-	}
-
-	public void reloadPerks() {
-		try {
-			StateManager.getInstance().getConfigurationManager().reloadPerks();
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public List<WorldWidePerk> getWorldWidePerks()
-	{
-		List<WorldWidePerk> perks = new ArrayList<WorldWidePerk>();
-		try {
-			return StateManager.getInstance().getConfigurationManager().getWorldWidePerks();
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return perks;
 	}
 
 	public String getInstanceGuid() {

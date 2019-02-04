@@ -72,7 +72,6 @@ import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SoliniaWorld;
-import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
@@ -92,7 +91,6 @@ import com.solinia.solinia.Repositories.JsonPatchRepository;
 import com.solinia.solinia.Repositories.JsonQuestRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
-import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 
 public class ConfigurationManager implements IConfigurationManager {
 
@@ -106,7 +104,6 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaLootTable> loottableRepository;
 	private IRepository<ISoliniaLootDrop> lootdropRepository;
 	private IRepository<ISoliniaSpawnGroup> spawngroupRepository;
-	private IRepository<WorldWidePerk> perkRepository;
 	private IRepository<ISoliniaAAAbility> aaabilitiesRepository;
 	private ConcurrentHashMap<Integer, ISoliniaAARank> aarankcache = new ConcurrentHashMap<Integer, ISoliniaAARank>();
 	private ConcurrentHashMap<Integer, List<Integer>> spellaarankcache = new ConcurrentHashMap<Integer, List<Integer>>();
@@ -134,7 +131,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonFactionRepository factionContext, JsonNPCRepository npcContext,
 			JsonNPCMerchantRepository npcmerchantContext, JsonLootTableRepository loottableContext,
 			JsonLootDropRepository lootdropContext, JsonSpawnGroupRepository spawngroupContext, 
-			JsonWorldWidePerkRepository perkContext, JsonAAAbilityRepository aaabilitiesContext, 
+			JsonAAAbilityRepository aaabilitiesContext, 
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
 			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext) {
@@ -148,7 +145,6 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.loottableRepository = loottableContext;
 		this.lootdropRepository = lootdropContext;
 		this.spawngroupRepository = spawngroupContext;
-		this.perkRepository = perkContext;
 		this.aaabilitiesRepository = aaabilitiesContext;
 		resetAARankRepository();
 		this.patchesRepository = patchesContext;
@@ -971,16 +967,6 @@ public class ConfigurationManager implements IConfigurationManager {
 		getSpawnGroup(spawngroupid).setLocation(location);
 		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroupid));
 		Bukkit.getPluginManager().callEvent(soliniaevent);
-	}
-
-	@Override
-	public void reloadPerks() {
-		perkRepository.reload();
-	}
-
-	@Override
-	public List<WorldWidePerk> getWorldWidePerks() {
-		return perkRepository.query(q -> q.getId() > 0);
 	}
 
 	@Override

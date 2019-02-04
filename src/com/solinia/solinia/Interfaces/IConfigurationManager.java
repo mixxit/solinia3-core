@@ -40,7 +40,6 @@ import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Models.SoliniaWorld;
-import com.solinia.solinia.Models.WorldWidePerk;
 
 public interface IConfigurationManager {
 	
@@ -342,10 +341,6 @@ public interface IConfigurationManager {
 	ISoliniaSpawnGroup getSpawnGroup(String upperCase);
 
 	void updateSpawnGroupLoc(int spawngroupid, Location location);
-
-	void reloadPerks();
-
-	List<WorldWidePerk> getWorldWidePerks();
 
 	ISoliniaFaction getFaction(int Id);
 

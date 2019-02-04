@@ -431,7 +431,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			
 			
-			double modifier = StateManager.getInstance().getWorldPerkXPModifier();
+			double modifier = 100;
 			if (getExperienceBonusExpires() != null) {
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
@@ -697,7 +697,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (applyModifiers)
 		{
-			double modifier = StateManager.getInstance().getWorldPerkXPModifier();
+			double modifier = 100;
 			if (getExperienceBonusExpires() != null) {
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);

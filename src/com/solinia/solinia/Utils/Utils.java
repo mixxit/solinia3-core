@@ -94,8 +94,6 @@ import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
-import com.solinia.solinia.Models.WorldWidePerk;
-
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -338,24 +336,6 @@ public class Utils {
 		}
 	}
 
-	public static List<WorldWidePerk> getActiveWorldWidePerks() {
-		List<WorldWidePerk> perks = new ArrayList<WorldWidePerk>();
-
-		LocalDateTime datetime = LocalDateTime.now();
-		Timestamp currenttimestamp = Timestamp.valueOf(datetime);
-
-		for (WorldWidePerk entity : StateManager.getInstance().getWorldWidePerks()) {
-			// System.out.println("Comparing Perk [" + entity.getId() + "/" +
-			// entity.getContributor() + "] time: " +
-			// entity.getEndtimeAsTimestamp().toLocaleString() + " against now " +
-			// now.toLocaleString());
-			if (entity.getEndtimeAsTimestamp().after(currenttimestamp)) {
-				perks.add(entity);
-			}
-		}
-		return perks;
-	}
-
 	public static void RepairAllowedClasses(ISoliniaSpell spell) {
 
 		List<SoliniaSpellClass> allowedClasses = new ArrayList<SoliniaSpellClass>();
@@ -479,48 +459,6 @@ public class Utils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	public static int GetWorldPerkDropCountModifier() {
-		int dropcount = 1;
-
-		for (WorldWidePerk perk : getActiveWorldWidePerks()) {
-			if (perk.getPerkname().equals("DROP100")) {
-				dropcount += 1;
-			}
-			if (perk.getPerkname().equals("DROP1000")) {
-				dropcount += 10;
-			}
-		}
-
-		return dropcount;
-	}
-
-	public static double getWorldPerkXPModifier() {
-		double xppercent = 100;
-		for (WorldWidePerk perk : getActiveWorldWidePerks()) {
-			if (perk.getPerkname().equals("XPBONUS50")) {
-				xppercent += 50;
-			}
-
-			if (perk.getPerkname().equals("XPBONUS100")) {
-				xppercent += 100;
-			}
-
-			if (perk.getPerkname().equals("XPBONUS150")) {
-				xppercent += 150;
-			}
-
-			if (perk.getPerkname().equals("XPBONUS200")) {
-				xppercent += 200;
-			}
-
-			if (perk.getPerkname().equals("XPBONUS1000")) {
-				xppercent += 1000;
-			}
-		}
-
-		return xppercent;
 	}
 
 	public static long compareTwoTimeStamps(java.sql.Timestamp currentTime, java.sql.Timestamp oldTime) {
@@ -5900,8 +5838,8 @@ public class Utils {
 			if (absoluteitems.size() == 0 && rollitems.size() == 0)
 				return;
 
-			int dropcount = StateManager.getInstance().getWorldPerkDropCountModifier();
-
+			int dropcount = 1;
+			
 			Random r = new Random();
 			int randomInt = r.nextInt(100) + 1;
 

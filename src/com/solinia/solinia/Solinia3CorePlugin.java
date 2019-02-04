@@ -46,7 +46,6 @@ import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
-import com.solinia.solinia.Repositories.JsonWorldWidePerkRepository;
 import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
@@ -56,7 +55,6 @@ import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
 import com.solinia.solinia.Timers.NPCSummonAndTeleportCastTimer;
-import com.solinia.solinia.Timers.PerkLoadTimer;
 import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PetFastCheckTimer;
 import com.solinia.solinia.Timers.PlayerEquipmentTickTimer;
@@ -98,7 +96,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
 	
 	private Economy economy;
-	private PerkLoadTimer perkLoadTimer;
 	private IDiscordClient discordClient;
 	
 	String discordbottoken = "";
@@ -263,18 +260,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			spawngrouprepo.setJsonFile(getDataFolder() + "/" + "spawngroups.json");
 			spawngrouprepo.reload();
 
-			// May be being written
-			JsonWorldWidePerkRepository perkrepo = null;
-			try
-			{
-				perkrepo = new JsonWorldWidePerkRepository();
-				perkrepo.setJsonFile(getDataFolder() + "/" + "worldwideperks.json");
-				perkrepo.reload();
-			} catch (Exception e)
-			{
-				perkrepo = new JsonWorldWidePerkRepository();
-			}
-
 			JsonAAAbilityRepository aaabilityrepo = new JsonAAAbilityRepository();
 			aaabilityrepo.setJsonFile(getDataFolder() + "/" + "aaabilities.json");
 			aaabilityrepo.reload();
@@ -320,7 +305,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
-					perkrepo, aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
+					aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
 					accountclaimsrepo, zonesrepo, craftrepo, worldrepo);
 
 			ChannelManager channelManager = new ChannelManager();
@@ -353,9 +338,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			playerInteractionTimer = new PlayerInteractionTimer();
 			playerInteractionTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
-
-			perkLoadTimer = new PerkLoadTimer();
-			perkLoadTimer.runTaskTimer(this, 6 * 20L, 120 * 20L);
 
 			// Only validate these things every 2 minutes
 			playerInventoryValidatorTimer = new PlayerInventoryValidatorTimer();

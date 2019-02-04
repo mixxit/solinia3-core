@@ -24,7 +24,6 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.DiscordChannel;
 import com.solinia.solinia.Models.QueuedDiscordMessage;
 import com.solinia.solinia.Models.SoliniaZone;
-import com.solinia.solinia.Models.WorldWidePerk;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -646,9 +645,6 @@ public class ChannelManager implements IChannelManager {
 				if (commands.length > 2)
 					sendMobLvlToDiscordChannel(discordChannel,Integer.parseInt(commands[1]),Integer.parseInt(commands[2]));
 				break;
-			case "?donation":
-					sendDonationToDiscordChannel(discordChannel);
-				break;
 			case "?votes":
 				sendVotesToDiscordChannel(discordChannel);
 			break;
@@ -884,53 +880,6 @@ public class ChannelManager implements IChannelManager {
 			}
 			
 		} catch (CoreStateInitException e)
-		{
-			// ignore it
-		}
-	}
-	
-	private void sendDonationToDiscordChannel(DiscordChannel discordChannel) {
-		String list = "";
-		String targetChannelId = getChannelId(discordChannel);
-
-		try
-		{
-			int total = 0;
-			
-			for(WorldWidePerk perk : StateManager.getInstance().getWorldWidePerks())
-			{
-				if (perk.getPerkname().equals("DROP100")) {
-					total += 4;
-				}
-				
-				if (perk.getPerkname().equals("DROP1000")) {
-					total += 40;
-				}
-
-				if (perk.getPerkname().equals("XPBONUS50")) {
-					total += 1;
-				}
-
-				if (perk.getPerkname().equals("XPBONUS100")) {
-					total += 2;
-				}
-
-				if (perk.getPerkname().equals("XPBONUS150")) {
-					total += 3;
-				}
-
-				if (perk.getPerkname().equals("XPBONUS200")) {
-					total += 4;
-				}
-
-				if (perk.getPerkname().equals("XPBONUS1000")) {
-					total += 40;
-				}
-
-			}
-			
-			sendToDiscordMC(null,targetChannelId,"Total Donations to-date (CAD): $" + total);
-		} catch (Exception e)
 		{
 			// ignore it
 		}
