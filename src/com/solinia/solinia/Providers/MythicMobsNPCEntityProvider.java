@@ -580,22 +580,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			}
 		}
 
-		if (npc.isBoss() == true || npc.isRaidboss()) {
-			// we dont need to spam the screen
-			/*
-			 * mob = mob + "  BossBar:\r\n"; mob = mob + "    Enabled: true\r\n"; mob = mob
-			 * + "    Title: " + npc.getName() + "\r\n"; mob = mob + "    Range: 200\r\n";
-			 * mob = mob + "    CreateFog: true\r\n"; mob = mob + "    DarkenSky: true\r\n";
-			 * mob = mob + "    PlayMusic: true\r\n";
-			 */
-			if (npc.isUsedisguise() == true && npc.getDisguisetype() != null)
-				if (npc.getDisguisetype().toLowerCase().contains("player-")) {
-					String[] disguisedata = npc.getDisguisetype().split("-");
-					mob = mob + "    Player: " + npc.getName() + "\r\n";
-					mob = mob + "    Skin: '" + disguisedata[1] + "'\r\n";
-				}
-		}
-
 		mob = mob + "  Skills:\r\n";
 		if (npc.isInvisible() == true) {
 			mob = mob + "  - potion{t=INVISIBILITY;d=2147483647;l=1} @self ~onSpawn\r\n";
