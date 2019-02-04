@@ -51,6 +51,7 @@ public class CommandCommit implements CommandExecutor {
 				)) {
 			if (args[0].equals("provider")) {
 				Utils.RecommitNpcs();
+				Utils.RecommitSpawnGroups();
 				
 			}
 			
