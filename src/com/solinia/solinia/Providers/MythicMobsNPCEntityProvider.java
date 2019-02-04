@@ -537,33 +537,33 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			if (npc.getHeaditem() != null || npc.getChestitem() != null || npc.getLegsitem() != null
 					|| npc.getFeetitem() != null || npc.getHanditem() != null || npc.getOffhanditem() != null) {
 				mob = mob + "  Equipment:\r\n";
-				if (npc.getOffhanditem() != null)
+				if (npc.getOffhanditem() != null && !npc.getOffhanditem().equals(""))
 					mob = mob + "  - " + npc.getOffhanditem() + ":5\r\n";
 
 				if (npc.isCustomhead() == true) {
-					if (npc.getCustomheaddata() != null) {
+					if (npc.getCustomheaddata() != null && !npc.getCustomheaddata().equals("")) {
 						mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r\n";
 					} else {
-						if (npc.getHeaditem() != null)
+						if (npc.getHeaditem() != null && !npc.getHeaditem().equals(""))
 							mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
 					}
 				} else {
-					if (npc.getHeaditem() != null)
+					if (npc.getHeaditem() != null && !npc.getHeaditem().equals(""))
 						mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
 				}
 
-				if (npc.getChestitem() != null)
+				if (npc.getChestitem() != null && !npc.getChestitem().equals(""))
 					mob = mob + "  - " + npc.getChestitem() + ":3\r\n";
-				if (npc.getLegsitem() != null)
+				if (npc.getLegsitem() != null && !npc.getLegsitem().equals(""))
 					mob = mob + "  - " + npc.getLegsitem() + ":2\r\n";
-				if (npc.getFeetitem() != null)
+				if (npc.getFeetitem() != null && !npc.getFeetitem().equals(""))
 					mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
-				if (npc.getHanditem() != null)
+				if (npc.getHanditem() != null && !npc.getHanditem().equals(""))
 					mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
 			}
 		}
 
-		if (npc.isUsedisguise() == true && npc.getDisguisetype() != null) {
+		if (npc.isUsedisguise() == true && npc.getDisguisetype() != null && !npc.getDisguisetype().equals("")) {
 			mob = mob + "  Disguise:\r\n";
 			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
 				mob = mob + "    Type: player\r\n";
