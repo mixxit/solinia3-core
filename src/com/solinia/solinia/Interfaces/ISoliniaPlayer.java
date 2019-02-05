@@ -377,10 +377,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	boolean isStunned();
 
-	boolean isShowDiscord();
-
-	void setShowDiscord(boolean showDiscord);
-
 	Timestamp getLastLogin();
 
 	int getForearmsItem();

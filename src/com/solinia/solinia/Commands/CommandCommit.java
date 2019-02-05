@@ -8,10 +8,6 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordBotspamChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordContentTeamChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandCommit implements CommandExecutor {
@@ -44,10 +40,6 @@ public class CommandCommit implements CommandExecutor {
 		if (args.length > 0 && 
 				(
 						sender.isOp() || sender instanceof ConsoleCommandSender 
-				|| sender instanceof DiscordDefaultChannelCommandSender 
-				|| sender instanceof DiscordContentTeamChannelCommandSender 
-				|| sender instanceof DiscordBotspamChannelCommandSender
-				|| sender instanceof DiscordAdminChannelCommandSender
 				)) {
 			if (args[0].equals("provider")) {
 				Utils.RecommitNpcs();

@@ -124,7 +124,6 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	latestitem.setDiscoverer(e.getPlayer().getCustomName());
 					StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 	            	Utils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
-	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
 		    }
 	        if (Utils.IsSoliniaItem(pickedUpItemStack) && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
@@ -137,7 +136,6 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	latestitem.setDiscoverer(e.getPlayer().getCustomName());
 					StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 	            	Utils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
-	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
 	        	
 	            if (pickedUpItemStack != null)
