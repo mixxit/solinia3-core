@@ -1951,6 +1951,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				|| getBukkitLivingEntity().isDead())
 			return;
 
+		Utils.DebugLog("SoliniaLivingEntity", "damage", sourceEntity.getName(), "start of damage damageAlertHook");
 		damageAlertHook(damage, sourceEntity);
 
 		if (damage > getBukkitLivingEntity().getHealth() && hasDeathSave() > 0) {
@@ -1967,11 +1968,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		}
 		
+		Utils.DebugLog("SoliniaLivingEntity", "damage", sourceEntity.getName(), "adding damage process");
+
 		getBukkitLivingEntity().damage(damage, sourceEntity);
 		
 		// Try melee procs
 		if (isMelee && sourceEntity instanceof LivingEntity && !this.getBukkitLivingEntity().isDead() && !sourceEntity.isDead())
 		{
+			Utils.DebugLog("SoliniaLivingEntity", "damage", sourceEntity.getName(), "im melee eattack, gonna go look up items");
+			
 			try {
 				// try weapon item procs
 
@@ -1987,6 +1992,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 				
 				if (attackItem != null) {
+					Utils.DebugLog("SoliniaLivingEntity", "damage", sourceEntity.getName(), "damage process about to start doProcItem check for attackItem Id " + attackItem.getId());
 					TryProcItem(attackItem, attackerSolEntity, this, isOffhand);
 				}
 				
