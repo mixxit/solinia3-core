@@ -1460,6 +1460,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
+		Utils.DebugLog("SoliniaLivingEntity", "Attack", this.getBukkitLivingEntity().getName(), "Checking valid weapon for Attack");
 		if (usingValidWeapon() == false) {
 			return 0;
 		} else {
@@ -1480,15 +1481,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (baseDamage < 1)
 			baseDamage = 1;
 
+		Utils.DebugLog("SoliniaLivingEntity", "Attack", this.getBukkitLivingEntity().getName(), "Checking if either is dead");
 		if (defender.getBukkitLivingEntity().isDead() || this.getBukkitLivingEntity().isDead()
 				|| this.getBukkitLivingEntity().getHealth() < 0) {
 			return 0;
 		}
 
+		Utils.DebugLog("SoliniaLivingEntity", "Attack", this.getBukkitLivingEntity().getName(), "Checking if isInvulnerable");
 		if (isInulvnerable()) {
 			return 0;
 		}
 
+		Utils.DebugLog("SoliniaLivingEntity", "Attack", this.getBukkitLivingEntity().getName(), "Checking if isFaeigned");
 		if (isFeigned()) {
 			return 0;
 		}
@@ -1509,6 +1513,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		int finaldamage = 0;
 
+		Utils.DebugLog("SoliniaLivingEntity", "Attack", this.getBukkitLivingEntity().getName(), "Checking if damage done was over 0");
 		if (my_hit.damage_done > 0) {
 			triggerDefensiveProcs(defender, my_hit.damage_done, arrowHit);
 
@@ -1526,6 +1531,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				name = defender.getBukkitLivingEntity().getCustomName();
 
 			if (attackerEntity instanceof Player)
+			{
+				Utils.DebugLog("SoliniaLivingEntity", "Attack", attackerEntity.getName(), "Damage to target was " + df.format(finaldamage));
 				((Player) attackerEntity).spigot()
 						.sendMessage(ChatMessageType.ACTION_BAR,
 								new TextComponent("You hit " + name + " for " + df.format(finaldamage) + " "
@@ -1533,6 +1540,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 										+ df.format(defender.getBukkitLivingEntity()
 												.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
 										+ " " + my_hit.skill + " damage"));
+			}
 
 			if (this.isCurrentlyNPCPet()) {
 				if (getOwnerEntity() != null && getOwnerEntity() instanceof Player) {
@@ -1552,7 +1560,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
 					final UUID attackerUUID = this.getBukkitLivingEntity().getUniqueId();
 					final int final_damagedone = my_hit.damage_done;
-
+					Utils.DebugLog("SoliniaLivingEntity", "Attack", attackerEntity.getName(), "Schedulding double attack");
 					Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
 							new Runnable() {
 								public void run() {
@@ -1594,6 +1602,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			if (finaldamage > getBukkitLivingEntity().getHealth() && hasDeathSave() > 0) {
+				Utils.DebugLog("SoliniaLivingEntity", "Attack", attackerEntity.getName(), "Target was boon saved");
 				removeDeathSaves();
 				attackerEntity.sendMessage("* Your target was protected by a death save boon!");
 				getBukkitLivingEntity().sendMessage("* Your death save boon has saved you from death!");
@@ -1613,6 +1622,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					
 					if (attackItem != null) {
+						Utils.DebugLog("SoliniaLivingEntity", "Attack", attackerEntity.getName(), "Attack process about to start doProcItem check");
 						TryProcItem(attackItem, this, defender, false);
 					}
 					
