@@ -467,13 +467,20 @@ public class Solinia3CoreEntityListener implements Listener {
 				return;
 			}
 
-			event.setDamage(DamageModifier.BASE, damage);
+			// we dont use normal damage we do it all through 'damage'
+			//event.setDamage(DamageModifier.BASE, damage);
+			Utils.CancelEvent(event);
+			solLivingEntity.damage(damage, damagecause.getDamager(), true, !event.getCause().equals(EntityDamageEvent.DamageCause.THORNS), false);
+			return;
+
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+		// we dont use normal damage
+		Utils.CancelEvent(event);
 		return;
 	}
 
