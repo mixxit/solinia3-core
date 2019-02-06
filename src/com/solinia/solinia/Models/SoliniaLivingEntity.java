@@ -1609,8 +1609,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return 0;
 			}
 			
-			// This is the only place to hook ranged proc attacks
-			if (arrowHit)
+			// This is the only place to hook proc attacks
+			if (true)
 			{
 				try {
 					// try weapon item procs
