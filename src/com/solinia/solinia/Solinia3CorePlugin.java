@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Listeners.DiscordListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
 import com.solinia.solinia.Listeners.Solinia3CoreItemPickupListener;
@@ -47,6 +48,7 @@ import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
 import com.solinia.solinia.Timers.CastingTimer;
+import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.EntityAutoAttackTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
@@ -65,6 +67,10 @@ import com.solinia.solinia.Timers.ZoneTickTimer;
 
 import de.slikey.effectlib.EffectManager;
 import net.milkbowl.vault.economy.Economy;
+import sx.blah.discord.api.ClientBuilder;
+import sx.blah.discord.api.IDiscordClient;
+import sx.blah.discord.api.events.EventDispatcher;
+import sx.blah.discord.util.DiscordException;
 
 public class Solinia3CorePlugin extends JavaPlugin {
 
@@ -82,6 +88,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private NPCCheckForEnemiesTimer npcCheckForEnemiesTimer;
 	private PetCheckTickTimer petCheckTickTimer;
 	private PetFastCheckTimer petFastCheckTickTimer;
+	private DiscordMessageTimer discordMessageTimer;
 	private InvalidItemCheckerTimer invalidItemCheckerTimer;
 	private EntityAutoAttackTimer entityAutoAttackTimer;
 	FileConfiguration config = getConfig();
@@ -89,16 +96,46 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
 	
 	private Economy economy;
+	private IDiscordClient discordClient;
+	
+	String discordbottoken = "";
+	String discordmainchannelid;
+	String discordcontentteamchannelid;
+	String discordbotspamchannelid;
+	String discordadminchannelid;
+	String discordincharacterchannelid;
 
 	@Override
 	public void onEnable() {
 		System.out.println("[Solinia3Core] Plugin Enabled");
 		createConfigDir();
 		
-		//config.addDefault("discordincharacterchannelid", "");
+		config.addDefault("discordbottoken", "");
+		config.addDefault("discordmainchannelid", "");
+		config.addDefault("discordadminchannelid", "");
+		config.addDefault("discordcontentteamchannelid", "");
+		config.addDefault("discordbotspamchannelid", "");
+		config.addDefault("discordincharacterchannelid", "");
 		config.options().copyDefaults(true);
 		saveConfig();
-				
+		
+		if (
+				!config.getString("discordbottoken").equals("") && 
+				!config.getString("discordmainchannelid").equals("") && 
+				!config.getString("discordadminchannelid").equals("") &&  
+				!config.getString("discordcontentteamchannelid").equals("") &&  
+				!config.getString("discordbotspamchannelid").equals("") &&  
+				!config.getString("discordincharacterchannelid").equals(""))
+		{
+			discordbottoken = config.getString("discordbottoken");
+			discordmainchannelid = config.getString("discordmainchannelid");
+			discordadminchannelid = config.getString("discordadminchannelid");
+			discordcontentteamchannelid = config.getString("discordcontentteamchannelid");
+			discordbotspamchannelid = config.getString("discordbotspamchannelid");
+			discordincharacterchannelid = config.getString("discordincharacterchannelid");
+			setupDiscordClient();
+		}
+		
 		System.out.println("All local dates stored in format: " + Locale.getDefault().toLanguageTag());
 		
 		// For debugging
@@ -112,6 +149,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		setupEconomy();
 
 		StateManager.getInstance().setEconomy(this.economy);
+		StateManager.getInstance().setDiscordClient(this.discordClient);
 		
 		RegisterEntities();
 	}
@@ -125,6 +163,29 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private void UnregisterEntities() {
 		
 	}
+
+	private void setupDiscordClient() {
+		this.discordClient = createClient(this.discordbottoken, true);
+		EventDispatcher dispatcher = this.discordClient.getDispatcher(); 
+        dispatcher.registerListener(new DiscordListener(this));
+
+	}
+
+	public static IDiscordClient createClient(String token, boolean login) 
+	{ 
+        ClientBuilder clientBuilder = new ClientBuilder();
+        clientBuilder.withToken(token);
+        try {
+            if (login) {
+                return clientBuilder.login();
+            } else {
+                return clientBuilder.build();
+            }
+        } catch (DiscordException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 	@Override
 	public void onDisable() {
@@ -249,6 +310,15 @@ public class Solinia3CorePlugin extends JavaPlugin {
 
 			ChannelManager channelManager = new ChannelManager();
 			
+			if (this.discordClient != null)
+			{
+				channelManager.setDiscordMainChannelId(discordmainchannelid);
+				channelManager.setDiscordAdminChannelId(discordadminchannelid);
+				channelManager.setDiscordContentTeamChannelId(discordcontentteamchannelid);
+				channelManager.setDiscordBotspamChannelId(discordbotspamchannelid);
+				channelManager.setDiscordInCharacterChannelId(discordincharacterchannelid);
+			}
+
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager, effectManager);
 
 			commitTimer = new StateCommitTimer();
@@ -304,6 +374,12 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			entityAutoAttackTimer = new EntityAutoAttackTimer();
 			entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
 			
+			if (this.discordClient != null)
+			{
+				discordMessageTimer = new DiscordMessageTimer();
+				discordMessageTimer.runTaskTimer(this, 40L, 40L);
+			}
+			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -336,6 +412,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("mana").setExecutor(new CommandMana());
 		this.getCommand("addrace").setExecutor(new CommandAddRace());
 		this.getCommand("setrace").setExecutor(new CommandSetRace());
+		this.getCommand("flushdiscord").setExecutor(new CommandFlushDiscord());
 		this.getCommand("addclass").setExecutor(new CommandAddClass());
 		this.getCommand("setclass").setExecutor(new CommandSetClass());
 		this.getCommand("addraceclass").setExecutor(new CommandAddRaceClass());
@@ -454,6 +531,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("bindwound").setExecutor(new CommandBindWound());
 		this.getCommand("editmerchantlist").setExecutor(new CommandEditMerchantList());
 		this.getCommand("claimxp").setExecutor(new CommandClaimXp());
+		this.getCommand("showdiscord").setExecutor(new CommandShowDiscord());
 		this.getCommand("publishbook").setExecutor(new CommandPublishBook());
 		this.getCommand("editalignment").setExecutor(new CommandEditAlignment());
 		this.getCommand("oath").setExecutor(new CommandOath());

@@ -1,6 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -49,14 +48,8 @@ public class CommandPray implements CommandExecutor {
         	
         	String message = "[" + solPlayer.getClassObj().getName() + "/" + player.getName() + "] " + player.getDisplayName() + " is praying to the Gods! " + prayerText;
         		
-        	for (Player targetplayer : Bukkit.getOnlinePlayers())
-        	{
-        		if (!targetplayer.isOp() && !targetplayer.hasPermission("solinia.playeremote"))
-        			continue;
+        	StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getDiscordContentTeamChannelId(), message);
         		
-        		targetplayer.sendMessage(message);
-        	}
-        	
         	sender.sendMessage("* The Gods have heard your prayer");
         } catch (Exception e)
         {
