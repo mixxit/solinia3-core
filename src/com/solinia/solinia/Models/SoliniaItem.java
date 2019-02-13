@@ -552,15 +552,11 @@ public class SoliniaItem implements ISoliniaItem {
 					}
 					
 					ISoliniaPlayer tmpPlayer = SoliniaPlayerAdapter.Adapt(player);
-					if (tmpPlayer != null)
+					if (tmpPlayer != null && tmpPlayer.isInGroup(targetentity))
 					{
-						if (tmpPlayer.getGroup() != null)
-						if (tmpPlayer.getGroup().getMembers().contains(targetentity.getUniqueId()))
-						{
-							solLivingEntity.setAttackTarget(null);
-							player.sendMessage("You cannot send your pet to attack your group!");
-							return false;
-						}
+						solLivingEntity.setAttackTarget(null);
+						player.sendMessage("You cannot send your pet to attack your group!");
+						return false;
 					}
 					
 					if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
