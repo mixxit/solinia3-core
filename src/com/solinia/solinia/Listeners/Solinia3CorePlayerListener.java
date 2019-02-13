@@ -364,6 +364,9 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onFish(PlayerFishEvent event) {
 		if (event.isCancelled())
 			return;
+		
+		if (!event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH))
+			return;
 
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
