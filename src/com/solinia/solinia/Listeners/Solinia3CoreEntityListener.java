@@ -746,6 +746,10 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		try {
 			ISoliniaLivingEntity livingEntity = SoliniaLivingEntityAdapter.Adapt(event.getEntity());
+			
+			if ((livingEntity instanceof Player) || livingEntity.isCurrentlyNPCPet() || !livingEntity.isNPC())
+				return;
+			
 			ISoliniaPlayer player = null;
 			if (damager instanceof Player) {
 				player = SoliniaPlayerAdapter.Adapt((Player) damager);
