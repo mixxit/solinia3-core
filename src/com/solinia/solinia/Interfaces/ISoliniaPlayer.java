@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -505,6 +506,8 @@ public interface ISoliniaPlayer extends Serializable {
 	void whisper(String string);
 
 	void shout(String string);
+
+	public boolean isInGroup(LivingEntity targetentity);
 
 
 

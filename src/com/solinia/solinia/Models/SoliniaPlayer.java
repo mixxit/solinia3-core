@@ -3952,4 +3952,37 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			increasePlayerMana(item.getMpregen());
 	}
 
+	@Override
+	public boolean isInGroup(LivingEntity targetentity) {
+		try
+		{
+		if (getGroup() != null)
+		{
+			// If group members contain entity
+			if (targetentity instanceof Player)
+			{
+				if (getGroup().getMembers().contains(targetentity.getUniqueId()))
+					return true;
+				else
+					return false;
+			}
+			
+			// Must be npc, check if pet
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(targetentity);
+			if (solLivingEntity != null && solLivingEntity.isCurrentlyNPCPet() && solLivingEntity.getOwnerEntity() != null)
+			{
+				if (getGroup().getMembers().contains(solLivingEntity.getOwnerEntity().getUniqueId()))
+				{
+					return true;
+				}
+			}
+		}
+		
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return false;
+	}
+
 }
