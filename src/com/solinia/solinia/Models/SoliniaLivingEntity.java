@@ -4526,15 +4526,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return 1;
 
 				int stat = npc.getLevel() * 5;
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "base: " + stat);
+
 				int totalItemStat = getTotalItemStat("STAMINA");
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalItemStat: " + totalItemStat);
 				int totalEffectStat = Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalEffectStat: " + totalEffectStat);
 				int maxStat = getMaxStat("STAMINA");
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "Getting stamina for NPC - base level*5: " + stat + " totalItemStat: " + totalItemStat + " totalEffectStat: " + totalEffectStat + " maxStat: " + maxStat);
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "maxStamina allowed: " + maxStat);
 				stat += totalItemStat;
 				stat += totalEffectStat;
 
 				if (stat > maxStat)
 					stat = maxStat;
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "final stat: " + stat);
 
 				return stat;
 			}
@@ -4549,13 +4554,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solplayer.getRace() != null)
 					stat += solplayer.getRace().getStamina();
 
-				stat += getTotalItemStat("STAMINA");
-				stat += Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
-				stat += Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "STAMINA");
 
-				if (stat > getMaxStat("STAMINA"))
-					stat = getMaxStat("STAMINA");
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "base: " + stat);
 
+				int totalItemStat = getTotalItemStat("STAMINA");
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalItemStat: " + totalItemStat);
+				stat += totalItemStat;
+
+				int totalEffectStat = Utils.getTotalEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalEffectStat: " + totalEffectStat);
+				stat += totalEffectStat;
+				
+				int totalAAEffectStat = Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), "STAMINA");
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalAAEffectStat: " + totalAAEffectStat);
+				stat += totalAAEffectStat;
+				
+				int maxStat = getMaxStat("STAMINA");
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "maxStamina allowed: " + maxStat);
+
+				if (stat > maxStat)
+					stat = maxStat;
+				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "final stat: " + stat);
 				return stat;
 			}
 		} catch (CoreStateInitException e) {
