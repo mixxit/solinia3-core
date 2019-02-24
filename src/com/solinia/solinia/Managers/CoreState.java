@@ -1,6 +1,8 @@
 package com.solinia.solinia.Managers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +72,7 @@ public class CoreState {
 	private EffectManager effectManager;
 	
 	private List<Integer> currentHotZones = new ArrayList<Integer>();
+	private double xpdaybonus = 0;
 		
 	public List<SoliniaZone> getCurrentHotzones() {
 		List<SoliniaZone> zones = new ArrayList<SoliniaZone>();
@@ -149,6 +152,14 @@ public class CoreState {
 		this.discordInCharacterChannelCommandSender = new DiscordInCharacterChannelCommandSender();
 		this.discordContentTeamChannelCommandSender = new DiscordContentTeamChannelCommandSender();
 		this.discordBotspamChannelCommandSender = new DiscordBotspamChannelCommandSender();
+		
+		// If its tuesday or sunday you will get 100% bonus with XP
+		Date now = new Date();
+		SimpleDateFormat simpleDateformat = new SimpleDateFormat("E");
+		if (simpleDateformat.format(now).equals("Tue") || simpleDateformat.format(now).equals("Sun"))
+		{
+			xpdaybonus = 100;
+		}
 	}
 	
 	public Scoreboard getScoreboard(Player player)
@@ -899,5 +910,12 @@ public class CoreState {
 	public DiscordBotspamChannelCommandSender getDiscordBotspamChannelCommandSender() {
 		// TODO Auto-generated method stub
 		return this.discordBotspamChannelCommandSender;
+	}
+
+	public double getXPDayModifier() {
+		double xppercent = 100;
+		xppercent += this.xpdaybonus ;
+		return xppercent;
+		
 	}
 }

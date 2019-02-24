@@ -391,10 +391,6 @@ commands:
     usage: /convertmerchanttolootdrop merchantid
     aliases:
     - convertmerchant
-  perks:
-    description: Perk help
-    usage: /perks
-    aliases: []
   effects:
     description: Lists details regarding effects related to your character
     usage: /effects

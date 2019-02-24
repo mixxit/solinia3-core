@@ -464,7 +464,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("group").setExecutor(new CommandGroup());
 		this.getCommand("groupchat").setExecutor(new CommandGroupChat());
 		this.getCommand("convertmerchanttolootdrop").setExecutor(new CommandConvertMerchantToLootDrop());
-		this.getCommand("perks").setExecutor(new CommandPerks());
 		this.getCommand("effects").setExecutor(new CommandEffects(this));
 		this.getCommand("editclass").setExecutor(new CommandEditClass());
 		this.getCommand("createarmorset").setExecutor(new CommandCreateArmourSet());

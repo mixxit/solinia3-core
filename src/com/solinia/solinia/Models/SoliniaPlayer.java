@@ -429,9 +429,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			classxpmodifier = Utils.getClassXPModifier(getClassObj());
 			experience = experience * (classxpmodifier / 100);
 
-			
-			
-			double modifier = 100;
+			double modifier = StateManager.getInstance().getXPDayModifier();
 			if (getExperienceBonusExpires() != null) {
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
@@ -602,7 +600,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			getBukkitPlayer().sendMessage(ChatColor.GRAY + "Exp Gained: " + changeamount);
 			if (modified == true)
 				getBukkitPlayer().sendMessage(ChatColor.YELLOW
-						+ "* You were given bonus XP from a player donation perk/hotzone or potion! (See /perks && /hotzones)");
+						+ "* You were given bonus XP from a xp bonus /hotzone or potion! (See /stats && /hotzones)");
 		}
 
 		if (changeamount < 0) {
@@ -697,7 +695,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (applyModifiers)
 		{
-			double modifier = 100;
+			double modifier = StateManager.getInstance().getXPDayModifier();
 			if (getExperienceBonusExpires() != null) {
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
@@ -765,7 +763,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		getBukkitPlayer().sendMessage(ChatColor.GRAY + "AAExp Gained: " + amountincreased);
 		if (modified == true)
 			getBukkitPlayer().sendMessage(ChatColor.YELLOW
-					+ "* You were given bonus XP from a player donation perk/hotzone or potion! (See /perks && /hotzones)");
+					+ "* You were given bonus XP from a player xp bonus/hotzone or potion! (See /stats && /hotzones)");
 
 		if (givenaapoint) {
 			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gained an Alternate Experience Point!");

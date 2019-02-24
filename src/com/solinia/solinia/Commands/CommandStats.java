@@ -11,6 +11,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -94,6 +95,12 @@ public class CommandStats implements CommandExecutor {
 				{
 					player.sendMessage(ChatColor.YELLOW + "* You have not set your Oath. Please see /oath" + ChatColor.RESET);
 				}
+				
+				if (StateManager.getInstance().getXPDayModifier() > 100)
+				{
+					player.sendMessage("* You are currently receiving extra XP from XP Day modifiers (" + StateManager.getInstance().getXPDayModifier() + ")%");
+				}
+				
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
