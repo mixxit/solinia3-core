@@ -254,7 +254,11 @@ public class SoliniaEntitySpells {
 
 		boolean updateMaxHp = false;
 		boolean updateDisguise = false;
-		boolean removeCharm = true;
+		// CarlZalph 
+		// So I looked at the github for why pets disappear when buffs applied to them wear off.  This boolean is always true, which results in the deletion of the pet for when buffs wear
+		// It should be initialized to 'false' here
+		// Possibly related to issue #290 ?
+		boolean removeCharm = false;
 
 		// Handle any effect removals needed
 		for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
