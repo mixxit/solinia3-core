@@ -2986,6 +2986,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						items.add(item);
 				}
 			}
+			
+			if (this.getWaistItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getWaistItem());
+				if (item != null) {
+					if (!item.isSpellscroll())
+						items.add(item);
+				}
+			}
 
 		} catch (CoreStateInitException e) {
 
