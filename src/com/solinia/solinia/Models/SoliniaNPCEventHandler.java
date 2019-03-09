@@ -51,6 +51,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private String requiresPermissionNode = "";
 	private int awardsFactionValue = 0;
 	private int awardsFactionId = 0;
+	private String requiresAlignment = "NONE";
 
 	@Override
 	public InteractionType getInteractiontype() {
@@ -138,6 +139,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- awardsquestflag: " + ChatColor.GOLD + getAwardsQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- requiresraceid: " + ChatColor.GOLD + getRequiresRaceId() + ChatColor.RESET);
 		sender.sendMessage("- requiresclassid: " + ChatColor.GOLD + getRequiresClassId() + ChatColor.RESET);
+		sender.sendMessage("- requiresalignment: " + ChatColor.GOLD + getRequiresAlignment() + ChatColor.RESET);
 		sender.sendMessage("- awardsitem: " + ChatColor.GOLD + getAwardsItem() + ChatColor.RESET);
 		sender.sendMessage("- awardsrandomisedgear: " + ChatColor.GOLD + isAwardsRandomisedGear() + ChatColor.RESET);
 		sender.sendMessage("- randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
@@ -228,6 +230,11 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				throw new InvalidNPCEventSettingException("State not initialised");
 			}
 			setRequiresClassId(classid);
+			break;
+		case "requiresalignment":
+			if (!value.equals("GOOD") && !value.equals("NEUTRAL") && !value.equals("EVIL") && !value.equals("NONE"))
+				throw new InvalidNPCEventSettingException("Invalid alignment - must be GOOD NEUTRAL EVIL or NONE");			
+			setRequiresAlignment(value);
 			break;
 		case "requiresraceid":
 			int raceid = Integer.parseInt(value);
@@ -402,6 +409,17 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					return false;
 			}
 			
+			if (getRequiresAlignment() != null && !getRequiresAlignment().equals("") && !getRequiresAlignment().equals("NONE"))
+			{
+				if (player.getRace() != null)
+				{
+					if (!player.getRace().getAlignment().toLowerCase().equals(getRequiresAlignment().toLowerCase()))
+						return false;
+				} else {
+					return false;
+				}
+			}
+			
 			if (getRequiresQuestFlag() != null && !getRequiresQuestFlag().equals(""))
 			{
 				boolean foundQuestFlag = false;
@@ -423,6 +441,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				{
 					if (player.getRace().getId() != getRequiresRaceId())
 						return false;
+				} else {
+					return false;
 				}
 			}
 			
@@ -432,6 +452,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				{
 					if (player.getClassObj().getId() != getRequiresClassId())
 						return false;
+				} else {
+					return false;
 				}
 			}
 			
@@ -760,6 +782,14 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 
 	public void setAwardsFactionId(int awardsFactionId) {
 		this.awardsFactionId = awardsFactionId;
+	}
+
+	public String getRequiresAlignment() {
+		return requiresAlignment;
+	}
+
+	public void setRequiresAlignment(String requiresAlignment) {
+		this.requiresAlignment = requiresAlignment;
 	}
 
 }

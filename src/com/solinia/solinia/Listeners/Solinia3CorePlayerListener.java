@@ -123,6 +123,31 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (event.getPlayer().getBukkitPlayer().isDead())
 			return;
 		
+		// Alliance/race taggable hottub zones 
+		if (event.getPlayer().getRace() != null)
+		{
+			if (event.getZone().getRequiresAlignment() != null && !event.getZone().getRequiresAlignment().equals("") && !event.getZone().getRequiresAlignment().equals("NONE"))
+			{
+				if (!event.getPlayer().getRace().getAlignment().toLowerCase().equals(event.getZone().getRequiresAlignment().toLowerCase()))
+				{
+					return;
+				}
+			}
+		}
+		
+		// Alliance/race taggable hottub zones 
+		if (event.getPlayer().getRace() != null)
+		{
+			if (event.getZone().getRequiresRaceId() > 0)
+			{
+				if (event.getPlayer().getRace().getId() != event.getZone().getRequiresRaceId())
+				{
+					return;
+				}
+			}
+		}
+
+		
 		int hpregen = event.getZone().getHpRegen();
 		int mpregen = event.getZone().getManaRegen();
 		

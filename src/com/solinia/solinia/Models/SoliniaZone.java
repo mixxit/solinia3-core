@@ -3,8 +3,10 @@ package com.solinia.solinia.Models;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
@@ -30,6 +32,8 @@ public class SoliniaZone {
 	private int size = 500;
 	private int manaRegen = 0;
 	private int hpRegen = 0;
+	private String requiresAlignment = "NONE";
+	private int requiresRaceId = 0;
 
 	public int getId() {
 		return id;
@@ -88,6 +92,8 @@ public class SoliniaZone {
 		sender.sendMessage("- foragingminskill: " + ChatColor.GOLD + getForagingMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- manaregen: " + ChatColor.GOLD + getManaRegen() + ChatColor.RESET);
 		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpRegen() + ChatColor.RESET);
+		sender.sendMessage("- requiresalignment: " + ChatColor.GOLD + getRequiresAlignment() + ChatColor.RESET);
+		sender.sendMessage("- requiresraceid: " + ChatColor.GOLD + getRequiresRaceId() + ChatColor.RESET);
 		
 		if (getForagingLootTableId() != 0) {
 			sender.sendMessage("- foragingloottableid: " + ChatColor.GOLD + getForagingLootTableId() + " ("
@@ -134,6 +140,24 @@ public class SoliniaZone {
 			if (value.equals(""))
 				throw new InvalidZoneSettingException("Name is empty");
 			setName(value);
+			break;
+		case "requiresraceid":
+			int raceid = Integer.parseInt(value);
+			if (raceid < 1)
+			{
+				setRequiresRaceId(0);
+				break;
+			}
+			try
+			{
+				ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(raceid);
+				if (race == null)
+					throw new InvalidZoneSettingException("Invalid race id");
+			} catch (CoreStateInitException e)
+			{
+				throw new InvalidZoneSettingException("State not initialised");
+			}
+			setRequiresRaceId(raceid);
 			break;
 		case "x":
 			setX(Integer.parseInt(value));
@@ -229,9 +253,14 @@ public class SoliniaZone {
 				throw new InvalidZoneSettingException("Loottable ID does not exist");
 			setMiningLootTableId(Integer.parseInt(value));
 			break;
+		case "requiresalignment":
+			if (!value.equals("GOOD") && !value.equals("NEUTRAL") && !value.equals("EVIL") && !value.equals("NONE"))
+				throw new InvalidZoneSettingException("Invalid alignment - must be GOOD NEUTRAL EVIL or NONE");			
+			setRequiresAlignment(value);
+			break;
 		default:
 			throw new InvalidZoneSettingException(
-					"Invalid zone setting. Valid Options are: name,x,y,z,hotzone,succorx,succory,succorz,forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill");
+					"Invalid zone setting. Valid Options are: name,x,y,z,requiresalignment,hotzone,succorx,succory,succorz,forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill");
 		}
 	}
 	public int getSuccorx() {
@@ -317,5 +346,17 @@ public class SoliniaZone {
 	}
 	public void setHpRegen(int hpRegen) {
 		this.hpRegen = hpRegen;
+	}
+	public String getRequiresAlignment() {
+		return requiresAlignment;
+	}
+	public void setRequiresAlignment(String requiresAlignment) {
+		this.requiresAlignment = requiresAlignment;
+	}
+	public int getRequiresRaceId() {
+		return requiresRaceId;
+	}
+	public void setRequiresRaceId(int requiresRaceId) {
+		this.requiresRaceId = requiresRaceId;
 	}
 }
