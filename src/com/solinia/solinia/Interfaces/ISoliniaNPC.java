@@ -256,9 +256,13 @@ public interface ISoliniaNPC {
 
 	void setTeleportAttackLocation(String teleportAttackLocation);
 
-	boolean isNocturnal();
-
-	void setNocturnal(boolean nocturnal);
-
 	boolean isCorePet();
+
+	long getTimefrom();
+
+	void setTimefrom(long timefrom);
+
+	long getTimeto();
+
+	void setTimeto(long timeto);
 }

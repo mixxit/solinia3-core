@@ -6209,19 +6209,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean doCheckForDespawn() {
-		if (despawnIfNight())
+		if (despawnIfWrongTime())
 			return true;
 
 		return false;
 	}
-
-	private boolean despawnIfNight() {
+	
+	private boolean despawnIfWrongTime() {
 		if (Utils.isLivingEntityNPC(this.getBukkitLivingEntity())) {
 			try {
 				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitLivingEntity());
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solEntity.getNpcid());
-				if (npc.isNocturnal() && Utils.IsNight(this.getBukkitLivingEntity().getWorld())) {
-					Utils.RemoveEntity(this.getBukkitLivingEntity(), "DESPAWNIFNIGHT");
+				if (!Utils.IsTimeRangeActive(this.getBukkitLivingEntity().getWorld(), npc.getTimefrom(), npc.getTimeto())) {
+					Utils.RemoveEntity(this.getBukkitLivingEntity(), "DESPAWNIFDAY");
 					return true;
 				}
 			} catch (CoreStateInitException e) {

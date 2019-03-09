@@ -84,7 +84,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private int chanceToRespawnOnDeath = 0;
 	private boolean teleportAttack = false;
 	private String teleportAttackLocation = "";
-	private boolean nocturnal = false;
+	private long timefrom = 0L;
+	private long timeto = 23850L;
 
 	@Override
 	public int getId() {
@@ -344,7 +345,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 				+ "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
-		sender.sendMessage("- nocturnal: " + ChatColor.GOLD + isNocturnal() + ChatColor.RESET + " - randomspawn: "
+		sender.sendMessage("- timefrom: " + ChatColor.GOLD + getTimefrom() + ChatColor.RESET +  "- timeto: " + ChatColor.GOLD + getTimeto() + ChatColor.RESET + " - randomspawn: "
 				+ ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD
 				+ getChanceToRespawnOnDeath() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -490,8 +491,17 @@ public class SoliniaNPC implements ISoliniaNPC {
 		case "usedisguise":
 			setUsedisguise(Boolean.parseBoolean(value));
 			break;
-		case "nocturnal":
-			setNocturnal(Boolean.parseBoolean(value));
+		case "timefrom":
+			long time = Long.parseLong(value);
+			if (time < 0L || time > 23850L)
+				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and 23850");
+			setTimefrom(time);
+			break;
+		case "timeto":
+			long time2 = Long.parseLong(value);
+			if (time2 < 0L || time2 > 23850L)
+				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and 23850");
+			setTimeto(time2);
 			break;
 		case "disguisetype":
 			setDisguisetype(value);
@@ -1506,12 +1516,22 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public boolean isNocturnal() {
-		return nocturnal;
+	public long getTimefrom() {
+		return timefrom;
 	}
 
 	@Override
-	public void setNocturnal(boolean nocturnal) {
-		this.nocturnal = nocturnal;
+	public void setTimefrom(long timefrom) {
+		this.timefrom = timefrom;
+	}
+
+	@Override
+	public long getTimeto() {
+		return timeto;
+	}
+
+	@Override
+	public void setTimeto(long timeto) {
+		this.timeto = timeto;
 	}
 }
