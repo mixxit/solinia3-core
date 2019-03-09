@@ -489,6 +489,11 @@ commands:
     description: Edits a zone
     usage: /editzone zoneid setting value
     aliases: []
+  zonetp:
+    description: TPs to a zone
+    usage: /zonetp zoneid
+    aliases:
+    - tpzone
   editaa:
     description: Edits an AA Ability
     usage: /editaa aaid setting value
