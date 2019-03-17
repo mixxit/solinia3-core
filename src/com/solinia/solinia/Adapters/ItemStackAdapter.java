@@ -128,7 +128,12 @@ public class ItemStackAdapter {
 		
 		if (soliniaItem.getDamage() > 0) {
 			loretxt.add("Damage: " + ChatColor.GREEN + soliniaItem.getDamage() + ChatColor.RESET);
+			if (soliniaItem.getWeaponDelay() > 0) {
+				loretxt.add("WeaponDelay: " + ChatColor.GREEN + soliniaItem.getWeaponDelay() + ChatColor.RESET);
+			}
 		}
+
+		loretxt.add("ItemType: " + ChatColor.GREEN + soliniaItem.getItemType().name().toUpperCase() + ChatColor.RESET);
 		
 		if (soliniaItem.isThrowing() == true && !soliniaItem.isSpellscroll())
 	    {

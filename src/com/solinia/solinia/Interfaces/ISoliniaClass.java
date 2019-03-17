@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Models.ItemType;
 
 public interface ISoliniaClass {
 
@@ -153,5 +154,13 @@ public interface ISoliniaClass {
 	List<Integer> getOaths();
 
 	void setOaths(List<Integer> oaths);
+
+	ItemType getDefaultHandItemType();
+
+	void setDefaultHandItemType(ItemType defaultHandItemType);
+
+	ItemType getDefaultOffHandItemType();
+
+	void setDefaultOffHandItemType(ItemType defaultOffHandItemType);
 
 }

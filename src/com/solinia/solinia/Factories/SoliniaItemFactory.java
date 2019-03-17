@@ -151,8 +151,10 @@ public class SoliniaItemFactory {
 			feetItem.setDiscoverer(discoverer);
 			ISoliniaItem handItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaulthandMaterial().toUpperCase())));
 			handItem.setDiscoverer(discoverer);
+			handItem.setItemType(classtype.getDefaultHandItemType());
 			ISoliniaItem offhandItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultoffHandMaterial().toUpperCase())));
 			offhandItem.setDiscoverer(discoverer);
+			offhandItem.setItemType(classtype.getDefaultOffHandItemType());
 			
 			// Jewelry!
 			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));

@@ -334,4 +334,10 @@ public interface ISoliniaLivingEntity
 
 	public boolean isImmuneToSpell(ISoliniaSpell spell);
 
+	public int getMainWeaponDelay();
+
+	ISoliniaItem getSoliniaItemInMainHand();
+
+	ISoliniaItem getSoliniaItemInOffHand();
+
 }

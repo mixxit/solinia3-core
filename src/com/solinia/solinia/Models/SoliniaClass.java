@@ -26,7 +26,9 @@ public class SoliniaClass implements ISoliniaClass {
 	private String defaultLegsMaterial = "LEATHER_LEGGINGS";
 	private String defaultFeetMaterial = "LEATHER_BOOTS";
 	private String defaulthandMaterial = "WOODEN_SWORD";
+	private ItemType defaultHandItemType = ItemType.OneHandSlashing;
 	private String defaultoffHandMaterial = "SHIELD";
+	private ItemType defaultOffHandItemType = ItemType.None;
 	private int strengthitembonus = 0;
 	private int staminaitembonus = 0;
 	private int agilityitembonus = 0;
@@ -168,6 +170,8 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- defaultfeetmaterial: " + ChatColor.GOLD + getDefaultFeetMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaulthandmaterial: " + ChatColor.GOLD + getDefaulthandMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultoffhandmaterial: " + ChatColor.GOLD + getDefaultoffHandMaterial() + ChatColor.RESET);
+		sender.sendMessage("- defaulthanditemtype: " + ChatColor.GOLD + getDefaultHandItemType().name() + ChatColor.RESET);
+		sender.sendMessage("- defaultoffhanditemtype: " + ChatColor.GOLD + getDefaultOffHandItemType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- strengthitembonus: " + ChatColor.GOLD + getStrengthitembonus() + ChatColor.RESET);
 		sender.sendMessage("- staminaitembonus: " + ChatColor.GOLD + getStaminaitembonus() + ChatColor.RESET);
@@ -252,6 +256,12 @@ public class SoliniaClass implements ISoliniaClass {
 			if (!ConfigurationManager.HandMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultoffHandMaterial(value.toUpperCase());
+			break;
+		case "defaulthanditemtype":
+			setDefaultHandItemType(ItemType.valueOf(value));
+			break;
+		case "defaultoffhanditemtype":
+			setDefaultOffHandItemType(ItemType.valueOf(value));
 			break;
 		case "strengthitembonus":
 			this.setStrengthitembonus(Integer.parseInt(value));
@@ -823,5 +833,25 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setOaths(List<Integer> oaths) {
 		this.oaths = oaths;
+	}
+
+	@Override
+	public ItemType getDefaultHandItemType() {
+		return defaultHandItemType;
+	}
+
+	@Override
+	public void setDefaultHandItemType(ItemType defaultHandItemType) {
+		this.defaultHandItemType = defaultHandItemType;
+	}
+
+	@Override
+	public ItemType getDefaultOffHandItemType() {
+		return defaultOffHandItemType;
+	}
+
+	@Override
+	public void setDefaultOffHandItemType(ItemType defaultOffHandItemType) {
+		this.defaultOffHandItemType = defaultOffHandItemType;
 	}
 }

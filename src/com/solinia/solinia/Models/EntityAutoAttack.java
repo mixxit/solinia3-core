@@ -8,11 +8,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+
 public class EntityAutoAttack {
 	UUID entityUuid;
 	private boolean playerAutoAttacking = false;
-	private int timer = 20;
-	private int baseAttackRate = 20;
+	private int timer = 60;
+	private int oneSecond = 20;
 
 	public EntityAutoAttack(LivingEntity entity) {
 		this.entityUuid = entity.getUniqueId();
@@ -35,6 +39,7 @@ public class EntityAutoAttack {
 		
 		return (LivingEntity)entity;
 	}
+	
 	
 	public boolean isPlayer()
 	{
@@ -84,13 +89,16 @@ public class EntityAutoAttack {
 		this.timer = timer;
 	}
 
-	public void setTimerFromAttackSpeed(int attackSpeed) {
-		int rate = (int)Math.ceil(baseAttackRate + ((100d - attackSpeed) * (baseAttackRate / 100d)));
+	public void setTimerFromSoliniaLivingEntity(ISoliniaLivingEntity solLivingEntity) {
+		int delayInSeconds = solLivingEntity.getMainWeaponDelay() * this.oneSecond;
+		
+		int rate = (int)Math.ceil(delayInSeconds + ((100d - solLivingEntity.getAttackSpeed()) * (delayInSeconds / 100d)));
+		
     	// Our lowest attack cap
     	if (rate < 2)
     		rate = 2;
 		
     	setTimer(rate);
 	}
-
+	
 }

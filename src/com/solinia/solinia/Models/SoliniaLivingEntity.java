@@ -1685,6 +1685,53 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 0;
 		}
 	}
+	
+	@Override
+	public int getMainWeaponDelay()
+	{
+		int delay = 30;
+		ISoliniaItem item = getSoliniaItemInMainHand();
+		if (item != null)
+			delay = item.getWeaponDelay();
+			
+		return delay;
+		
+	}
+	
+	@Override
+	public ISoliniaItem getSoliniaItemInMainHand()
+	{
+		ItemStack main = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+		if (main == null)
+			return null;
+		
+		if (!Utils.IsSoliniaItem(main))
+			return null;
+		
+		try {
+			return SoliniaItemAdapter.Adapt(main);
+		} catch (SoliniaItemException | CoreStateInitException e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public ISoliniaItem getSoliniaItemInOffHand()
+	{
+		ItemStack main = getBukkitLivingEntity().getEquipment().getItemInOffHand();
+		if (main == null)
+			return null;
+		
+		if (!Utils.IsSoliniaItem(main))
+			return null;
+		
+		try {
+			return SoliniaItemAdapter.Adapt(main);
+		} catch (SoliniaItemException | CoreStateInitException e) {
+			return null;
+		}
+	}
+	
 
 	private void TryDualWield(LivingEntity attackerEntity, ISoliniaLivingEntity defender) {
 		if (getDualWieldCheck() && !attackerEntity.isDead() && !defender.getBukkitLivingEntity().isDead()) {

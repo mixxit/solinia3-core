@@ -125,7 +125,7 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 				if (solLivingEntityTarget != null && solLivingEntityAttacker != null)
 				{
 					// reset timer
-					autoAttack.setTimerFromAttackSpeed(solLivingEntityAttacker.getAttackSpeed());
+					autoAttack.setTimerFromSoliniaLivingEntity(solLivingEntityAttacker);
 					solLivingEntityAttacker.autoAttackEnemy(solLivingEntityTarget);
 				} else {
 					if (entityForAutoAttack instanceof Player)
