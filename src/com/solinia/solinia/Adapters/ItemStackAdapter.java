@@ -467,11 +467,14 @@ public class ItemStackAdapter {
 
 	private static List<String> generateItemSpellLoreText(ISoliniaItem soliniaItem) {
 		List<String> loreTxt = new ArrayList<String>();
-		ISoliniaSpell spell;
 		try {
-			spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getAbilityid());
-			
-			loreTxt.add(ChatColor.WHITE + "Right Click Effect: " + ChatColor.YELLOW+ spell.getName() + " " + ChatColor.RESET);
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getAbilityid());
+			if (spell != null)
+			{
+				loreTxt.add(ChatColor.WHITE + "Right Click Effect: " + ChatColor.YELLOW + spell.getName() + " " + ChatColor.RESET);
+			} else {
+				System.out.println("!! WARNING !! Item: " + soliniaItem.getId() + " has an invalid spell Id [" + soliniaItem.getAbilityid() + "]");
+			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

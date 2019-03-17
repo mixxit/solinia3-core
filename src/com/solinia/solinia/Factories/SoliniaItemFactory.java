@@ -57,7 +57,6 @@ public class SoliniaItemFactory {
 			item.setItemType(ItemType.Clothing);
 		}
 		
-		item.setItemTypePatched(true);
 		if (itemStack.getData() != null)
 		{
 			try
@@ -99,7 +98,6 @@ public class SoliniaItemFactory {
 		item.setAC(originalItem.getAC());
 		item.setLastUpdatedTimeNow();
 		item.setItemType(originalItem.getItemType());
-		item.setItemTypePatched(true);
 		item.setWeaponDelay(originalItem.getWeaponDelay());
 		item.setAugmentation(originalItem.isAugmentation());
 		item.setAugmentationFitsSlotType(originalItem.getAugmentationFitsSlotType());

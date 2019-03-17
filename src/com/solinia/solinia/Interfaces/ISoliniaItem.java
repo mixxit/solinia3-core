@@ -353,10 +353,4 @@ public interface ISoliniaItem {
 	int getWeaponDelay();
 
 	void setWeaponDelay(int weaponDelay);
-
-	boolean getLegacyThrowing();
-
-	boolean isItemTypePatched();
-
-	void setItemTypePatched(boolean itemTypePatched);
 }

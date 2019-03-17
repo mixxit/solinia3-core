@@ -91,7 +91,6 @@ public class SoliniaItem implements ISoliniaItem {
 	private SkillType skillModType = SkillType.None;
 	private int skillModValue = 0;
 	private boolean reagent = false;
-	private boolean throwing = false;
 	private String languagePrimer = "";
 	private int focusEffectId = 0;
 	private int weaponDelay = 30;
@@ -116,7 +115,6 @@ public class SoliniaItem implements ISoliniaItem {
 	private List<String> bookPages = new ArrayList<String>();
 	private boolean neverDrop = false;
 	
-	private boolean itemTypePatched = false;
 	private Timestamp lastUpdatedTime;
 	private ItemType itemType = ItemType.None;
 	
@@ -749,12 +747,6 @@ public class SoliniaItem implements ISoliniaItem {
 		return out.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "\\r").replace("\n", "\\n");
 	}
 	
-	@Override
-	public boolean getLegacyThrowing()
-	{
-		return this.throwing;
-	}
-
 	@Override
 	public void sendItemSettingsToSender(CommandSender sender) throws CoreStateInitException {
 		sender.sendMessage(ChatColor.RED + "Item Settings for " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
@@ -1491,6 +1483,7 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setLastUpdatedTime(Timestamp lastUpdatedTime) {
 		this.lastUpdatedTime = lastUpdatedTime;
+		hookGlobalItemsChanged();
 	}
 	
 	@Override
@@ -1501,6 +1494,17 @@ public class SoliniaItem implements ISoliniaItem {
 		this.setLastUpdatedTime(nowtimestamp);
 	}
 
+	public void hookGlobalItemsChanged()
+	{
+		try
+		{
+			StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
 	@Override
 	public boolean isPlaceable() {
 		return placeable;
@@ -1530,15 +1534,5 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setWeaponDelay(int weaponDelay) {
 		this.weaponDelay = weaponDelay;
-	}
-
-	@Override
-	public boolean isItemTypePatched() {
-		return itemTypePatched;
-	}
-
-	@Override
-	public void setItemTypePatched(boolean itemTypePatched) {
-		this.itemTypePatched = itemTypePatched;
 	}
 }
