@@ -1854,7 +1854,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private DamageHitInfo GetHitInfo(ItemStack weapon, int baseDamage, boolean arrowHit,
 			ISoliniaLivingEntity defender) {
 		DamageHitInfo my_hit = new DamageHitInfo();
-		my_hit.skill = Utils.getSkillForMaterial(weapon.getType().toString()).getSkillname();
+		my_hit.skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillname();
 		if (arrowHit) {
 			my_hit.skill = "ARCHERY";
 		}
@@ -3261,12 +3261,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		return false;
-	}
-
-	@Override
-	public String getSkillNameFromMaterialInHand(Material materialinhand) {
-		SkillReward reward = Utils.getSkillForMaterial(materialinhand.toString());
-		return reward.getSkillname();
 	}
 
 	@Override

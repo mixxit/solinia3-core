@@ -21,11 +21,14 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.ItemType;
+import com.solinia.solinia.Models.SkillReward;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_13_R2.AttributeModifier;
@@ -68,6 +71,62 @@ public class ItemStackUtils {
         
         return damage;
     }
+
+	public static SkillReward getMeleeSkillForItemStack(ItemStack itemStack) {
+		SkillReward reward = null;
+		ItemType type = ItemType.None;
+		try
+		{
+			ISoliniaItem item = SoliniaItemAdapter.Adapt(itemStack);
+			if (item != null)
+			{
+				type = item.getItemType();				
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		} catch (SoliniaItemException e) {
+			
+		}
+
+		int xp = 0;
+		String skill = "";
+
+		switch (type) {
+			case OneHandSlashing:
+				xp = 1;
+				skill = "SLASHING";
+			case TwoHandSlashing:
+				xp = 1;
+				skill = "SLASHING";
+			case OneHandBlunt:
+				xp = 1;
+				skill = "CRUSHING";
+			case TwoHandBlunt:
+				xp = 1;
+				skill = "CRUSHING";
+			case OneHandPiercing:
+				xp = 1;
+				skill = "PIERCING";
+			case TwoHandPiercing:
+				xp = 1;
+				skill = "PIERCING";
+			case BowArchery:
+				xp = 1;
+				skill = "ARCHERY";
+			default:
+				xp = 1;
+				skill = "SLASHING";
+			break;
+		
+		}
+
+		if (xp > 0 && !skill.equals("")) {
+			reward = new SkillReward(skill, xp);
+		}
+
+		return reward;
+	}
 	
 	public static Integer getSoliniaItemId(ItemStack itemStack)
 	{
@@ -234,24 +293,6 @@ public class ItemStackUtils {
 			return null;
 		}
 		return null;
-	}
-
-	public static boolean isMeleeWeapon(ItemStack itemStack) {
-		if (itemStack.getType().equals(Material.WOODEN_SWORD) || itemStack.getType().equals(Material.STONE_SWORD)
-				|| itemStack.getType().equals(Material.IRON_SWORD) || itemStack.getType().equals(Material.GOLDEN_SWORD)
-				|| itemStack.getType().equals(Material.DIAMOND_SWORD) || itemStack.getType().equals(Material.WOODEN_AXE)
-				|| itemStack.getType().equals(Material.STONE_AXE) || itemStack.getType().equals(Material.IRON_AXE)
-				|| itemStack.getType().equals(Material.GOLDEN_AXE) || itemStack.getType().equals(Material.DIAMOND_AXE)
-				|| itemStack.getType().equals(Material.WOODEN_HOE) || itemStack.getType().equals(Material.STONE_HOE)
-				|| itemStack.getType().equals(Material.IRON_HOE) || itemStack.getType().equals(Material.GOLDEN_HOE) || itemStack.getType().equals(Material.DIAMOND_HOE)
-				|| itemStack.getType().equals(Material.WOODEN_PICKAXE) || itemStack.getType().equals(Material.STONE_PICKAXE)
-				|| itemStack.getType().equals(Material.IRON_PICKAXE) || itemStack.getType().equals(Material.GOLDEN_PICKAXE) || itemStack.getType().equals(Material.DIAMOND_PICKAXE)
-				|| itemStack.getType().equals(Material.WOODEN_SHOVEL) || itemStack.getType().equals(Material.STONE_SHOVEL)
-				|| itemStack.getType().equals(Material.IRON_SHOVEL) || itemStack.getType().equals(Material.GOLDEN_SHOVEL)
-				|| itemStack.getType().equals(Material.DIAMOND_SHOVEL))
-			return true;
-
-		return false;
 	}
 
 	public static boolean isPotion(ItemStack itemStack) {

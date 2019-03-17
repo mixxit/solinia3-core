@@ -104,8 +104,6 @@ public interface ISoliniaLivingEntity
 
 	int getSkill(String skillname);
 
-	String getSkillNameFromMaterialInHand(Material materialinhand);
-
 	int getTotalDefense();
 
 	int getDefenseByDefenseSkill();

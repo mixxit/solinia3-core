@@ -115,7 +115,7 @@ public class Utils {
 	public static final int NPCBuffs = 60;
 	public static final int PetBuffs = 30;
 	public static final Boolean GlowApiEnabled = true;
-	public static final String HeartSymbol = "â�¤";
+	public static final String HeartSymbol = "Ã¢ï¿½Â¤";
 
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));
@@ -704,141 +704,73 @@ public class Utils {
 		return r.nextInt((maxnumber - minnumber) + 1) + minnumber;
 	}
 
-	public static SkillReward getSkillForMaterial(String materialstring) {
-		SkillReward reward = null;
-
-		int xp = 0;
-		String skill = "";
-
-		switch (materialstring) {
-		case "WOODEN_SWORD":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "STONE_SWORD":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "IRON_SWORD":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "GOLDEN_SWORD":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "DIAMOND_SWORD":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "WOODEN_AXE":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "STONE_AXE":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "IRON_AXE":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "GOLDEN_AXE":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "DIAMOND_AXE":
-			xp = 1;
-			skill = "SLASHING";
-			break;
-		case "AIR":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "STICK":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "WOODEN_SHOVEL":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "STONE_SHOVEL":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "IRON_SHOVEL":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "GOLDEN_SHOVEL":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "DIAMOND_SHOVEL":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "WOODEN_HOE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "STONE_HOE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "IRON_HOE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "GOLDEN_HOE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "DIAMOND_HOE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "WOODEN_PICKAXE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "STONE_PICKAXE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "IRON_PICKAXE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "GOLDEN_PICKAXE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "DIAMOND_PICKAXE":
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		case "BOW":
-			xp = 1;
-			skill = "ARCHERY";
-			break;
-		default:
-			// Fall back on crushing
-			xp = 1;
-			skill = "CRUSHING";
-			break;
-		}
-
-		if (xp > 0 && !skill.equals("")) {
-			reward = new SkillReward(skill, xp);
-		}
-
-		return reward;
-	}
-
 	public static int getMaxLevel() {
 		return 70;
+	}
+	
+	public static String getDefaultSkillForMaterial(Material material) {
+		String materialstring = material.name().toUpperCase();
+		
+		switch (materialstring) {
+		case "WOODEN_SWORD":
+			return "SLASHING";
+		case "STONE_SWORD":
+			return "SLASHING";
+		case "IRON_SWORD":
+			return "SLASHING";
+		case "GOLDEN_SWORD":
+			return "SLASHING";
+		case "DIAMOND_SWORD":
+			return "SLASHING";
+		case "WOODEN_AXE":
+			return "SLASHING";
+		case "STONE_AXE":
+			return "SLASHING";
+		case "IRON_AXE":
+			return "SLASHING";
+		case "GOLDEN_AXE":
+			return "SLASHING";
+		case "DIAMOND_AXE":
+			return "SLASHING";
+		case "AIR":
+			return "CRUSHING";
+		case "STICK":
+			return "CRUSHING";
+		case "WOODEN_SHOVEL":
+			return "CRUSHING";
+		case "STONE_SHOVEL":
+			return "CRUSHING";
+		case "IRON_SHOVEL":
+			return "CRUSHING";
+		case "GOLDEN_SHOVEL":
+			return "CRUSHING";
+		case "DIAMOND_SHOVEL":
+			return "CRUSHING";
+		case "WOODEN_HOE":
+			return "CRUSHING";
+		case "STONE_HOE":
+			return "CRUSHING";
+		case "IRON_HOE":
+			return "CRUSHING";
+		case "GOLDEN_HOE":
+			return "CRUSHING";
+		case "DIAMOND_HOE":
+			return "CRUSHING";
+		case "WOODEN_PICKAXE":
+			return "CRUSHING";
+		case "STONE_PICKAXE":
+			return "CRUSHING";
+		case "IRON_PICKAXE":
+			return "CRUSHING";
+		case "GOLDEN_PICKAXE":
+			return "CRUSHING";
+		case "DIAMOND_PICKAXE":
+			return "CRUSHING";
+		case "BOW":
+			return "ARCHERY";
+		default:
+			return "CRUSHING";
+		}
 	}
 
 	public static Double getExperienceRewardAverageForLevel(int level) {
@@ -6016,87 +5948,87 @@ public class Utils {
 	public static List<String> GetRunic()
 	{
 		List<String> runic = new ArrayList<String>();
-		runic.add("áš ");
-		runic.add("áš¡");
-		runic.add("áš¢");
-		runic.add("áš£");
-		runic.add("áš¤");
-		runic.add("áš¥");
-		runic.add("áš¦");
-		runic.add("áš§");
-		runic.add("áš¨");
-		runic.add("áš©");
-		runic.add("ášª");
-		runic.add("áš«");
-		runic.add("áš¬");
-		runic.add("áš­");
-		runic.add("áš®");
-		runic.add("áš¯");
-		runic.add("áš°");
-		runic.add("áš±");
-		runic.add("áš²");
-		runic.add("áš³");
-		runic.add("áš´");
-		runic.add("ášµ");
-		runic.add("áš¶");
-		runic.add("áš·");
-		runic.add("áš¸");
-		runic.add("áš¹");
-		runic.add("ášº");
-		runic.add("áš»");
-		runic.add("áš¼");
-		runic.add("áš½");
-		runic.add("áš¾");
-		runic.add("áš¿");
-		runic.add("á›€");
-		runic.add("á›�");
-		runic.add("á›‚");
-		runic.add("á›ƒ");
-		runic.add("á›„");
-		runic.add("á›…");
-		runic.add("á›†");
-		runic.add("á›‡");
-		runic.add("á›ˆ");
-		runic.add("á›‰");
-		runic.add("á›Š");
-		runic.add("á›‹");
-		runic.add("á›Œ");
-		runic.add("á›�");
-		runic.add("á›Ž");
-		runic.add("á›�");
-		runic.add("á›�");
-		runic.add("á›‘");
-		runic.add("á›’");
-		runic.add("á›“");
-		runic.add("á›”");
-		runic.add("á›•");
-		runic.add("á›–");
-		runic.add("á›—");
-		runic.add("á›˜");
-		runic.add("á›™");
-		runic.add("á›š");
-		runic.add("á››");
-		runic.add("á›œ");
-		runic.add("á›�");
-		runic.add("á›ž");
-		runic.add("á›Ÿ");
-		runic.add("á› ");
-		runic.add("á›¡");
-		runic.add("á›¢");
-		runic.add("á›£");
-		runic.add("á›¤");
-		runic.add("á›¥");
-		runic.add("á›¦");
-		runic.add("á›§");
-		runic.add("á›¨");
-		runic.add("á›©");
-		runic.add("á›ª");
-		runic.add("á›«");
-		runic.add("á›¬");
-		runic.add("á›­");
-		runic.add("á›®");
-		runic.add("á›¯");
-		runic.add("á›°");
+		runic.add("Ã¡Å¡Â ");
+		runic.add("Ã¡Å¡Â¡");
+		runic.add("Ã¡Å¡Â¢");
+		runic.add("Ã¡Å¡Â£");
+		runic.add("Ã¡Å¡Â¤");
+		runic.add("Ã¡Å¡Â¥");
+		runic.add("Ã¡Å¡Â¦");
+		runic.add("Ã¡Å¡Â§");
+		runic.add("Ã¡Å¡Â¨");
+		runic.add("Ã¡Å¡Â©");
+		runic.add("Ã¡Å¡Âª");
+		runic.add("Ã¡Å¡Â«");
+		runic.add("Ã¡Å¡Â¬");
+		runic.add("Ã¡Å¡Â­");
+		runic.add("Ã¡Å¡Â®");
+		runic.add("Ã¡Å¡Â¯");
+		runic.add("Ã¡Å¡Â°");
+		runic.add("Ã¡Å¡Â±");
+		runic.add("Ã¡Å¡Â²");
+		runic.add("Ã¡Å¡Â³");
+		runic.add("Ã¡Å¡Â´");
+		runic.add("Ã¡Å¡Âµ");
+		runic.add("Ã¡Å¡Â¶");
+		runic.add("Ã¡Å¡Â·");
+		runic.add("Ã¡Å¡Â¸");
+		runic.add("Ã¡Å¡Â¹");
+		runic.add("Ã¡Å¡Âº");
+		runic.add("Ã¡Å¡Â»");
+		runic.add("Ã¡Å¡Â¼");
+		runic.add("Ã¡Å¡Â½");
+		runic.add("Ã¡Å¡Â¾");
+		runic.add("Ã¡Å¡Â¿");
+		runic.add("Ã¡â€ºâ‚¬");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºâ€š");
+		runic.add("Ã¡â€ºÆ’");
+		runic.add("Ã¡â€ºâ€ž");
+		runic.add("Ã¡â€ºâ€¦");
+		runic.add("Ã¡â€ºâ€ ");
+		runic.add("Ã¡â€ºâ€¡");
+		runic.add("Ã¡â€ºË†");
+		runic.add("Ã¡â€ºâ€°");
+		runic.add("Ã¡â€ºÅ ");
+		runic.add("Ã¡â€ºâ€¹");
+		runic.add("Ã¡â€ºÅ’");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºÅ½");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºâ€˜");
+		runic.add("Ã¡â€ºâ€™");
+		runic.add("Ã¡â€ºâ€œ");
+		runic.add("Ã¡â€ºâ€�");
+		runic.add("Ã¡â€ºâ€¢");
+		runic.add("Ã¡â€ºâ€“");
+		runic.add("Ã¡â€ºâ€”");
+		runic.add("Ã¡â€ºËœ");
+		runic.add("Ã¡â€ºâ„¢");
+		runic.add("Ã¡â€ºÅ¡");
+		runic.add("Ã¡â€ºâ€º");
+		runic.add("Ã¡â€ºÅ“");
+		runic.add("Ã¡â€ºï¿½");
+		runic.add("Ã¡â€ºÅ¾");
+		runic.add("Ã¡â€ºÅ¸");
+		runic.add("Ã¡â€ºÂ ");
+		runic.add("Ã¡â€ºÂ¡");
+		runic.add("Ã¡â€ºÂ¢");
+		runic.add("Ã¡â€ºÂ£");
+		runic.add("Ã¡â€ºÂ¤");
+		runic.add("Ã¡â€ºÂ¥");
+		runic.add("Ã¡â€ºÂ¦");
+		runic.add("Ã¡â€ºÂ§");
+		runic.add("Ã¡â€ºÂ¨");
+		runic.add("Ã¡â€ºÂ©");
+		runic.add("Ã¡â€ºÂª");
+		runic.add("Ã¡â€ºÂ«");
+		runic.add("Ã¡â€ºÂ¬");
+		runic.add("Ã¡â€ºÂ­");
+		runic.add("Ã¡â€ºÂ®");
+		runic.add("Ã¡â€ºÂ¯");
+		runic.add("Ã¡â€ºÂ°");
 		return runic;
 	}
 

@@ -32,7 +32,7 @@ public class SoliniaItemFactory {
 		// ItemType auto configuration
 		if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
 		{
-			switch (Utils.getSkillForMaterial(item.asItemStack().getType().toString()).getSkillname())
+			switch (Utils.getDefaultSkillForMaterial(item.asItemStack().getType()))
 			{
 				case "SLASHING":
 					item.setItemType(ItemType.OneHandSlashing);
