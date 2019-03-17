@@ -13,6 +13,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.EquipmentSlot;
+import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -25,6 +26,38 @@ public class SoliniaItemFactory {
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(itemStack.getType().name());
 		item.setLastUpdatedTimeNow();
+		
+		item.setItemType(ItemType.None);
+		
+		// ItemType auto configuration
+		if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
+		{
+			switch (Utils.getSkillForMaterial(item.asItemStack().getType().toString()).getSkillname())
+			{
+				case "SLASHING":
+					item.setItemType(ItemType.OneHandSlashing);
+					break;
+				case "PIERCING":
+					item.setItemType(ItemType.OneHandPiercing);
+					break;
+				case "CRUSHING":
+					item.setItemType(ItemType.OneHandBlunt);
+					break;
+				case "ARCHERY":
+					item.setItemType(ItemType.BowArchery);
+					break;
+				default:
+					item.setItemType(ItemType.OneHandBlunt);
+					break;
+			}
+		}
+		
+		if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()))
+		{
+			item.setItemType(ItemType.Clothing);
+		}
+		
+		item.setItemTypePatched(true);
 		if (itemStack.getData() != null)
 		{
 			try
@@ -65,9 +98,11 @@ public class SoliniaItemFactory {
 		item.setDamage(originalItem.getDamage());
 		item.setAC(originalItem.getAC());
 		item.setLastUpdatedTimeNow();
+		item.setItemType(originalItem.getItemType());
+		item.setItemTypePatched(true);
+		item.setWeaponDelay(originalItem.getWeaponDelay());
 		item.setAugmentation(originalItem.isAugmentation());
 		item.setAugmentationFitsSlotType(originalItem.getAugmentationFitsSlotType());
-		
 		item.setAllowedClassNames(originalItem.getAllowedClassNames());
 		
 		if (itemStack.getData() != null)

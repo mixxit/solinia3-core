@@ -94,6 +94,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean throwing = false;
 	private String languagePrimer = "";
 	private int focusEffectId = 0;
+	private int weaponDelay = 30;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -115,7 +116,9 @@ public class SoliniaItem implements ISoliniaItem {
 	private List<String> bookPages = new ArrayList<String>();
 	private boolean neverDrop = false;
 	
+	private boolean itemTypePatched = false;
 	private Timestamp lastUpdatedTime;
+	private ItemType itemType = ItemType.None;
 	
 	@Override
 	public ItemStack asItemStack() {
@@ -745,6 +748,12 @@ public class SoliniaItem implements ISoliniaItem {
 		String out = asJsonString();
 		return out.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "\\r").replace("\n", "\\n");
 	}
+	
+	@Override
+	public boolean getLegacyThrowing()
+	{
+		return this.throwing;
+	}
 
 	@Override
 	public void sendItemSettingsToSender(CommandSender sender) throws CoreStateInitException {
@@ -755,7 +764,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET + " placeable: " + ChatColor.GOLD + isPlaceable() + ChatColor.RESET);
 		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
-		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET + " - throwing: " + ChatColor.GOLD + isThrowing() + ChatColor.RESET);
+		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
 		sender.sendMessage("- petcontrolrod: " + ChatColor.GOLD + isPetControlRod() + ChatColor.RESET + " crafting: " + ChatColor.GOLD + isCrafting() + ChatColor.RESET + " quest: " + ChatColor.GOLD + isQuest() + ChatColor.RESET);
 		sender.sendMessage("- bandage: " + ChatColor.GOLD + isBandage() + ChatColor.RESET + " languageprimer: " + ChatColor.GOLD + getLanguagePrimer() + ChatColor.RESET);
@@ -767,7 +776,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpregen() + ChatColor.RESET + " mpregen: " + ChatColor.GOLD + getMpregen() + ChatColor.RESET);
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
-		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
+		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " weapondelay: " + ChatColor.GOLD + getWeaponDelay() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET + " - weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
 		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + "%" + ChatColor.RESET);
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET +
@@ -785,6 +794,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- skillmodtype4: " + ChatColor.GOLD + getSkillModType4().toString() + ChatColor.RESET + " skillmodvalue4: " + ChatColor.GOLD + getSkillModValue4() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- equipmentslot: " + ChatColor.GOLD + getEquipmentSlot().name() + ChatColor.RESET);
+		sender.sendMessage("- itemtype: " + ChatColor.GOLD + getItemType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
 		sender.sendMessage("- bookauthor: " + ChatColor.GOLD + getBookAuthor() + ChatColor.RESET);
@@ -992,14 +1002,17 @@ public class SoliniaItem implements ISoliniaItem {
 		case "skillmodvalue4":
 			setSkillModValue4(Integer.parseInt(value));
 			break;
+		case "weapondelay":
+			setWeaponDelay(Integer.parseInt(value));
+			break;
 		case "equipmentslot":
 			setEquipmentSlot(EquipmentSlot.valueOf(Utils.CapitaliseFirstLetter(value)));
 			break;
+		case "itemtype":
+			setItemType(ItemType.valueOf(Utils.CapitaliseFirstLetter(value)));
+			break;
 		case "reagent":
 			setReagent(Boolean.parseBoolean(value));
-			break;
-		case "throwing":
-			setThrowing(Boolean.parseBoolean(value));
 			break;
 		case "identifymessage":
 			setIdentifyMessage(value);
@@ -1023,7 +1036,7 @@ public class SoliniaItem implements ISoliniaItem {
 			setLanguagePrimer("");
 			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,throwing,identifymessage,languageprimer,clearlanguageprimer");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,identifymessage,languageprimer,clearlanguageprimer");
 		}
 		
 		this.setLastUpdatedTimeNow();
@@ -1344,12 +1357,7 @@ public class SoliniaItem implements ISoliniaItem {
 	
 	@Override
 	public boolean isThrowing() {
-		return throwing;
-	}
-
-	@Override
-	public void setThrowing(boolean throwing) {
-		this.throwing = throwing;
+		return this.getItemType().equals(ItemType.ThrowingWeapon);
 	}
 
 	@Override
@@ -1501,5 +1509,36 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setPlaceable(boolean placeable) {
 		this.placeable = placeable;
+	}
+
+	@Override
+	public ItemType getItemType() {
+		return itemType;
+	}
+
+	@Override
+	public void setItemType(ItemType itemType) {
+		this.itemType = itemType;
+	}
+
+	
+	@Override
+	public int getWeaponDelay() {
+		return weaponDelay;
+	}
+
+	@Override
+	public void setWeaponDelay(int weaponDelay) {
+		this.weaponDelay = weaponDelay;
+	}
+
+	@Override
+	public boolean isItemTypePatched() {
+		return itemTypePatched;
+	}
+
+	@Override
+	public void setItemTypePatched(boolean itemTypePatched) {
+		this.itemTypePatched = itemTypePatched;
 	}
 }

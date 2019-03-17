@@ -14,6 +14,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.EquipmentSlot;
+import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SkillType;
 
 public interface ISoliniaItem {
@@ -297,8 +298,6 @@ public interface ISoliniaItem {
 
 	boolean isThrowing();
 
-	void setThrowing(boolean throwing);
-
 	String getIdentifyMessage();
 
 	void setIdentifyMessage(String identifyMessage);
@@ -346,4 +345,18 @@ public interface ISoliniaItem {
 	boolean isPlaceable();
 
 	void setPlaceable(boolean placeable);
+
+	ItemType getItemType();
+
+	void setItemType(ItemType itemType);
+
+	int getWeaponDelay();
+
+	void setWeaponDelay(int weaponDelay);
+
+	boolean getLegacyThrowing();
+
+	boolean isItemTypePatched();
+
+	void setItemTypePatched(boolean itemTypePatched);
 }

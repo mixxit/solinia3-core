@@ -34,6 +34,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
@@ -237,6 +238,93 @@ public class CoreState {
 		patchItems1_13();
 		patchClasses1_13();
 		fixPets();
+		patchItemTypes();
+	}
+	
+	private void patchItemTypes()
+	{
+		try {
+			boolean updated = false;
+			
+			System.out.println("Upgrading to itemtypes");
+			
+			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
+			{
+				if (item.isItemTypePatched())
+					continue;
+				
+				if (item.getLegacyThrowing() == true)
+				{
+					item.setItemType(ItemType.ThrowingWeapon);
+					item.setItemTypePatched(true);
+					item.setLastUpdatedTimeNow();
+					updated = true;
+					continue;
+				}
+				
+				// Weapon Stuff
+				if (ConfigurationManager.WeaponMaterials.contains(item.getBasename().toUpperCase()))
+				{
+					switch (Utils.getSkillForMaterial(item.asItemStack().getType().toString()).getSkillname())
+					{
+						case "SLASHING":
+							item.setItemType(ItemType.OneHandSlashing);
+							item.setItemTypePatched(true);
+							item.setLastUpdatedTimeNow();
+							updated = true;
+							continue;
+						case "PIERCING":
+							item.setItemType(ItemType.OneHandPiercing);
+							item.setItemTypePatched(true);
+							item.setLastUpdatedTimeNow();
+							updated = true;
+							continue;
+						case "CRUSHING":
+							item.setItemType(ItemType.OneHandBlunt);
+							item.setItemTypePatched(true);
+							item.setLastUpdatedTimeNow();
+							updated = true;
+							continue;
+						case "ARCHERY":
+							item.setItemType(ItemType.BowArchery);
+							item.setItemTypePatched(true);
+							item.setLastUpdatedTimeNow();
+							updated = true;
+							continue;
+						default:
+							item.setItemType(ItemType.OneHandBlunt);
+							item.setItemTypePatched(true);
+							item.setLastUpdatedTimeNow();
+							updated = true;
+							continue;
+					}
+				}
+				
+				if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()))
+				{
+					item.setItemType(ItemType.Clothing);
+					item.setItemTypePatched(true);
+					item.setLastUpdatedTimeNow();
+					updated = true;
+					continue;
+				}
+				
+				item.setItemTypePatched(true);
+				updated = true;
+			}
+			
+			if (updated)
+			{	
+				System.out.println("Detected some internal item changes, recommitting npcs (this may take some time)...");
+				Utils.RecommitNpcs();
+			} else {
+				System.out.println("All items patched to ItemType");
+			}
+
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void fixPets()

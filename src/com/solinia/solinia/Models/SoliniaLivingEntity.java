@@ -35,6 +35,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -2971,6 +2972,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// TODO include weapon delays
 		int delay = 30;
+		try {
+			ISoliniaItem item = SoliniaItemAdapter.Adapt(itemStack);
+			delay = item.getWeaponDelay();
+		} catch (SoliniaItemException | CoreStateInitException e) {
+			// continue on
+		}
 
 		// 1hand weapons
 		// we assume sinister strikes is checked before calling here
