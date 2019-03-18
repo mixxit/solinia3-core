@@ -1468,10 +1468,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				try {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager()
 							.getItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
-
-					// TODO move this
-					if (soliniaitem.getBaneUndead() > 0 && defender.isUndead())
-						baseDamage += soliniaitem.getBaneUndead();
+					
+					if (soliniaitem != null)
+					{
+						// TODO move this
+						if (soliniaitem.getBaneUndead() > 0 && defender.isUndead())
+							baseDamage += soliniaitem.getBaneUndead();
+						}
 				} catch (CoreStateInitException e) {
 					return 0;
 				}
@@ -1703,13 +1706,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public float getAutoAttackTimerFrequencySeconds() {
-		long weaponDelayInSeconds = getMainWeaponDelay()/10;
-		long hasteDelaySaving = ((weaponDelayInSeconds/100)*getAttackSpeed())-weaponDelayInSeconds;
+		float weaponDelayInSeconds = ((float)getMainWeaponDelay())/10F;
+		float onePercentWeaponDelay = weaponDelayInSeconds/100F;
+		float hastedWeaponDelay = onePercentWeaponDelay * (float)getAttackSpeed();
+		float hastedWeaponDelayMinusDelay = hastedWeaponDelay - weaponDelayInSeconds;
 		
-		float frequency = weaponDelayInSeconds-hasteDelaySaving;
-		if (frequency < 0.1)
+		float frequency = weaponDelayInSeconds-hastedWeaponDelayMinusDelay;
+		if (frequency < 0.1F)
 			frequency = 0.10F;
 		
+		Utils.DebugLog("SoliniaLivingEntity","getAutoAttackTimerFrequencySeconds",getBukkitLivingEntity().getName(),"WeaponDelayInSeconds: " + weaponDelayInSeconds + " onePercentWeaponDelay: " + onePercentWeaponDelay + " hastedWeaponDelay: " + hastedWeaponDelay + " hastedWeaponDelayMinusDelay: " + hastedWeaponDelayMinusDelay + " frequency: " + frequency);
+
 		return frequency;
 	}
 
@@ -6737,7 +6744,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			// MEZZED
 			if (attacker.isMezzed()) {
-				if (attacker instanceof Player)
+				if (attacker.getBukkitLivingEntity() instanceof Player)
 					((Player) attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 				return 0;
@@ -6745,7 +6752,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			// STUNNED
 			if (attacker.isStunned()) {
-				if (attacker instanceof Player)
+				if (attacker.getBukkitLivingEntity() instanceof Player)
 					attacker.getBukkitLivingEntity().sendMessage("* You are stunned!");
 				return 0;
 			}
@@ -6755,10 +6762,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return 0;
 			}
 			
-			if (!ismagic && !getLastMeleeAttackCheck())
+			if (!ismagic && !attacker.getLastMeleeAttackCheck())
 			{
-				if (attacker instanceof Player)
+				/* Spammy
+				if (attacker.getBukkitLivingEntity() instanceof Player)
 					attacker.sendMessage(ChatColor.GRAY + "* This weapon is too slow to attack this frequently [" + getAutoAttackTimerFrequencySeconds() + " seconds]");
+					*/
 				return 0;
 			}
 
