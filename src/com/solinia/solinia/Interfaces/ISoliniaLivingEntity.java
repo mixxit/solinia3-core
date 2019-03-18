@@ -340,4 +340,12 @@ public interface ISoliniaLivingEntity
 
 	ISoliniaItem getSoliniaItemInOffHand();
 
+	void setLastMeleeAttack();
+
+	boolean getLastMeleeAttackCheck();
+
+	Timestamp getLastMeleeAttack();
+
+	float getAutoAttackTimerFrequencySeconds();
+
 }

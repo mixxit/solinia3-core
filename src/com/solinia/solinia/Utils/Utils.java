@@ -249,6 +249,7 @@ public class Utils {
 	private static final List<Material> DONT_STAND_ON;
 	private static final List<Material> HALF_HEIGHT;
 	private static final List<Material> HEIGHT_AND_HALF;
+	public static final int TICKS_PER_SECOND = 20;
 	
 	static
 	  {

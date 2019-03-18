@@ -74,6 +74,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Integer>> hateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Integer>>();
 	private ConcurrentHashMap<UUID, Timestamp> lastRiposte = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastBindwound = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> lastMeleeAttack = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontHealMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontRootMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontBuffMe = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1609,6 +1610,16 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setLastRiposte(UUID uuid, Timestamp lasttimestamp) {
 		this.lastRiposte.put(uuid, lasttimestamp);
+	}
+	
+	@Override
+	public ConcurrentHashMap<UUID, Timestamp> getLastMeleeAttack() {
+		return lastMeleeAttack;
+	}
+
+	@Override
+	public void setLastMeleeAttack(UUID uuid, Timestamp lasttimestamp) {
+		this.lastMeleeAttack.put(uuid, lasttimestamp);
 	}
 
 	@Override

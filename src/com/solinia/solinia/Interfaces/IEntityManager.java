@@ -181,4 +181,8 @@ public interface IEntityManager {
 			boolean removeNonCombatEffects);
 
 	void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects);
+
+	ConcurrentHashMap<UUID, Timestamp> getLastMeleeAttack();
+
+	void setLastMeleeAttack(UUID uuid, Timestamp lasttimestamp);
 }

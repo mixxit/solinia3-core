@@ -182,8 +182,10 @@ public class CommandPet implements CommandExecutor {
 				}
 
 				player.sendMessage("STR: " + petLivingEntity.getStrength() + " STA: " + petLivingEntity.getStamina() + " AGI: " + petLivingEntity.getAgility() + " DEX: " + petLivingEntity.getDexterity() + " INT: " + petLivingEntity.getIntelligence() + " WIS: " + petLivingEntity.getWisdom() + " CHA: " + petLivingEntity.getCharisma());
-	            player.sendMessage("Pet Armour Class Mitigation : " + petLivingEntity.getMitigationAC());
+	            player.sendMessage("Pet Armour Class Mitigation (AC): " + petLivingEntity.getMitigationAC());
 	            player.sendMessage("Pet Attack Value: " + petLivingEntity.getAttk());
+	            player.sendMessage("Pet Attack Speed: " + ChatColor.GOLD+ petLivingEntity.getAttackSpeed() + "%" + ChatColor.RESET);
+	            player.sendMessage("Pet MainWeapon Attack Rate (Seconds): " + ChatColor.GOLD+ petLivingEntity.getAutoAttackTimerFrequencySeconds() + ChatColor.RESET);
 	            player.sendMessage("Pet Total Rune of: " + petLivingEntity.getRune());
 				
 	            player.sendMessage("Skills:");

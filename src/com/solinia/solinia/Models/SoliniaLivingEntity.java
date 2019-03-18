@@ -1509,6 +1509,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		int finaldamage = 0;
+		
+		// Sets last melee attack so we can check if a user has melee attacked previously
+		setLastMeleeAttack();
 
 		if (my_hit.damage_done > 0) {
 			triggerDefensiveProcs(defender, my_hit.damage_done, arrowHit);
@@ -1695,8 +1698,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			delay = item.getWeaponDelay();
 			
 		return delay;
-		
 	}
+	
+
+	@Override
+	public float getAutoAttackTimerFrequencySeconds() {
+		long weaponDelayInSeconds = getMainWeaponDelay()/10;
+		long hasteDelaySaving = ((weaponDelayInSeconds/100)*getAttackSpeed())-weaponDelayInSeconds;
+		
+		float frequency = weaponDelayInSeconds-hasteDelaySaving;
+		if (frequency < 0.1)
+			frequency = 0.10F;
+		
+		return frequency;
+	}
+
 	
 	@Override
 	public ISoliniaItem getSoliniaItemInMainHand()
@@ -4368,6 +4384,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		return null;
 	}
+	
+	@Override
+	public Timestamp getLastMeleeAttack() {
+		try {
+			return StateManager.getInstance().getEntityManager().getLastMeleeAttack()
+					.get(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e) {
+		}
+		return null;
+	}
 
 	@Override
 	public void setLastDoubleAttack() {
@@ -4397,6 +4423,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 			StateManager.getInstance().getEntityManager().setLastRiposte(this.getBukkitLivingEntity().getUniqueId(),
+					nowtimestamp);
+		} catch (CoreStateInitException e) {
+
+		}
+	}
+	
+	@Override
+	public void setLastMeleeAttack() {
+		try {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			StateManager.getInstance().getEntityManager().setLastMeleeAttack(this.getBukkitLivingEntity().getUniqueId(),
 					nowtimestamp);
 		} catch (CoreStateInitException e) {
 
@@ -4945,6 +4983,28 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		return false;
+	}
+	
+	@Override
+	public boolean getLastMeleeAttackCheck()
+	{
+		if (getNpcid() < 1 && !isPlayer())
+			return false;
+
+		// If dual wield less than 3 second ago return false
+		// Ugly hack to work around looping dual wields (cant get source of offhand on
+		// damage event)
+		Timestamp expiretimestamp = getLastMeleeAttack();
+		if (expiretimestamp != null) {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus((long) (getAutoAttackTimerFrequencySeconds()*1000), ChronoUnit.MILLIS));
+
+			if (nowtimestamp.before(mintimestamp))
+				return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -6677,23 +6737,28 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			// MEZZED
 			if (attacker.isMezzed()) {
-				if (attacker instanceof Player) {
+				if (attacker instanceof Player)
 					((Player) attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
-				}
 				return 0;
 			}
 
 			// STUNNED
 			if (attacker.isStunned()) {
-				if (attacker instanceof Player) {
+				if (attacker instanceof Player)
 					attacker.getBukkitLivingEntity().sendMessage("* You are stunned!");
-				}
 				return 0;
 			}
 
 			// CAN ATTACK / MEZ, STUN - PETS CHECKING IF CAN ATTACK ETC
 			if (!attacker.canAttackTarget(defender)) {
+				return 0;
+			}
+			
+			if (!ismagic && !getLastMeleeAttackCheck())
+			{
+				if (attacker instanceof Player)
+					attacker.sendMessage(ChatColor.GRAY + "* This weapon is too slow to attack this frequently [" + getAutoAttackTimerFrequencySeconds() + " seconds]");
 				return 0;
 			}
 
