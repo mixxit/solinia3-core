@@ -44,30 +44,6 @@ public class CommandZoneTp implements CommandExecutor {
 
 		int zoneid = Integer.parseInt(args[0]);
 		
-		if (args.length == 1)
-		{
-			try
-			{
-				SoliniaZone zone = StateManager.getInstance().getConfigurationManager().getZone(zoneid);
-				if (zone != null)
-				{
-					zone.sendZoneSettingsToSender(player);
-				} else {
-					player.sendMessage("Zone ID doesnt exist");
-				}
-				return true;
-			} catch (CoreStateInitException e)
-			{
-				player.sendMessage(e.getMessage());
-			}
-		}
-
-		if (zoneid < 1)
-		{
-			player.sendMessage("Invalid zoneid");
-			return false;
-		}
-		
 		try
 		{
 
