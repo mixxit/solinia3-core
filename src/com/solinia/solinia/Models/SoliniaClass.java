@@ -173,8 +173,10 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- defaultfeetmaterial: " + ChatColor.GOLD + getDefaultFeetMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaulthandmaterial: " + ChatColor.GOLD + getDefaulthandMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultoffhandmaterial: " + ChatColor.GOLD + getDefaultoffHandMaterial() + ChatColor.RESET);
+		sender.sendMessage("- defaultalternatehandmaterial: " + ChatColor.GOLD + getDefaultAlternateHandMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaulthanditemtype: " + ChatColor.GOLD + getDefaultHandItemType().name() + ChatColor.RESET);
 		sender.sendMessage("- defaultoffhanditemtype: " + ChatColor.GOLD + getDefaultOffHandItemType().name() + ChatColor.RESET);
+		sender.sendMessage("- defaultalternatehanditemtype: " + ChatColor.GOLD + getDefaultAlternateHandItemType().name() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- strengthitembonus: " + ChatColor.GOLD + getStrengthitembonus() + ChatColor.RESET);
 		sender.sendMessage("- staminaitembonus: " + ChatColor.GOLD + getStaminaitembonus() + ChatColor.RESET);
@@ -261,11 +263,19 @@ public class SoliniaClass implements ISoliniaClass {
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultoffHandMaterial(value.toUpperCase());
 			break;
+		case "defaultalternatehandmaterial":
+			if (!ConfigurationManager.HandMaterials.contains(value.toUpperCase()))
+				throw new InvalidClassSettingException("Invalid material type");
+			setDefaultAlternateHandMaterial(value.toUpperCase());
+			break;
 		case "defaulthanditemtype":
 			setDefaultHandItemType(ItemType.valueOf(value));
 			break;
 		case "defaultoffhanditemtype":
 			setDefaultOffHandItemType(ItemType.valueOf(value));
+			break;
+		case "defaultalternatehanditemtype":
+			setDefaultAlternateHandItemType(ItemType.valueOf(value));
 			break;
 		case "strengthitembonus":
 			this.setStrengthitembonus(Integer.parseInt(value));
