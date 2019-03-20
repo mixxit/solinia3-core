@@ -2737,7 +2737,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private DamageHitInfo applyDamageTable(DamageHitInfo hit) {
-
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "Starting applyDamageTable (hit.offense: " + hit.offense + " + hit.damage_done: " + hit.damage_done + ")");
+		
 		if (hit.offense < 115)
 			return hit;
 
@@ -2748,21 +2749,37 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// 1 = chance
 		// 2 = minusfactor
 		int[] damage_table = getDamageTable();
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "Damage table [" + damage_table[0] + "," + damage_table[1] + "," + damage_table[2] + "]");
+
 
 		if (Utils.RandomBetween(0, 100) < (damage_table[1]))
 			return hit;
 
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "Damage table rolled less than " + damage_table[1]);
+
+		
 		int basebonus = hit.offense - damage_table[2];
+
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "basebonus: " + basebonus);
+
 		basebonus = Math.max(10, basebonus / 2);
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "basebonus2: " + basebonus);
+
 		int extrapercent = Utils.RandomBetween(0, basebonus);
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "extrapercent: " + extrapercent);
+
 		int percent = Math.min(100 + extrapercent, damage_table[0]);
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "percent: " + percent);
+
 		hit.damage_done = (hit.damage_done * percent) / 100;
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "damage_done: " + hit.damage_done);
 
 		if (getClassObj() != null) {
 			if (getClassObj().isWarriorClass() && getLevel() > 54)
 				hit.damage_done++;
 		}
 
+		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getUniqueId().toString(), "damage_done2: " + hit.damage_done);
 		return hit;
 	}
 
