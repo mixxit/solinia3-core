@@ -163,4 +163,8 @@ public interface ISoliniaClass {
 
 	void setDefaultOffHandItemType(ItemType defaultOffHandItemType);
 
+	int getWeaponDelayItemBonus();
+
+	void setWeaponDelayItemBonus(int weaponDelayItemBonus);
+
 }

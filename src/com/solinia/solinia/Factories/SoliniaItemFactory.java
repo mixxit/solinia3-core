@@ -316,6 +316,7 @@ public class SoliniaItemFactory {
 				int classWisBonus = classtype.getItemGenerationBonus("wisdom");
 				int classChaBonus = classtype.getItemGenerationBonus("charisma");
 				int classAcBonus = classtype.getItemGenerationBonus("ac");
+				int classDelayBonus = classtype.getItemGenerationBonus("weapondelay");
 				
 
 				// Unless there is a bonus defined, the class doesnt seem to use that statistic
@@ -335,7 +336,9 @@ public class SoliniaItemFactory {
 				if (classChaBonus > 0)
 					item.setCharisma(Utils.RandomBetween(tierMin, tierMax) + rarityBonus+classChaBonus);
 				
-				setItemDamageAndAc(item, armourtier, tierMin, tierMax, classAcBonus, rarityBonus, classStrBonus);
+				
+				
+				setItemDamageAndAcAndDelay(item, armourtier, tierMin, tierMax, classAcBonus, rarityBonus, classStrBonus, classDelayBonus);
 				
 				// mana
 				item.setMana(Utils.RandomBetween(0,armourtier * 20)+rarityBonus);
@@ -403,7 +406,7 @@ public class SoliniaItemFactory {
 		return tierMax;
 	}
 
-	public static void setItemDamageAndAc(ISoliniaItem item, int tier, int tierMin, int tierMax, int acBonus, int rarityBonus, int damageBonus) {
+	public static void setItemDamageAndAcAndDelay(ISoliniaItem item, int tier, int tierMin, int tierMax, int acBonus, int rarityBonus, int damageBonus, int delayBonus) {
 		// Damage
 		if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
 		{
@@ -421,6 +424,9 @@ public class SoliniaItemFactory {
 				
 				int damage = Utils.RandomBetween(dmgMin, dmgMax) + rarityBonus + damageBonus;
 				item.setDamage(damage);
+				
+				item.setWeaponDelay((item.getWeaponDelay() - delayBonus));
+				
 			} else {
 				item.setAC(SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus));
 			}

@@ -60,6 +60,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private String level55Title = "";
 	private String level60Title = "";
 	private List<Integer> oaths = new ArrayList<Integer>();
+	private int weaponDelayItemBonus = 0;
 	
 	@Override
 	public String getName() {
@@ -181,6 +182,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- wisdomitembonus: " + ChatColor.GOLD + getWisdomitembonus() + ChatColor.RESET);
 		sender.sendMessage("- charismaitembonus: " + ChatColor.GOLD + getCharismaitembonus() + ChatColor.RESET);
 		sender.sendMessage("- acitembonus: " + ChatColor.GOLD + getACItemBonus() + ChatColor.RESET);
+		sender.sendMessage("- weapondelayitembonus: " + ChatColor.GOLD + getWeaponDelayItemBonus() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- classitemprefix: " + ChatColor.GOLD + getClassItemPrefix() + ChatColor.RESET);
 		sender.sendMessage("- helmtypename: " + ChatColor.GOLD + getHelmtypename() + ChatColor.RESET);
@@ -292,6 +294,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "acitembonus":
 			this.setACItemBonus(Integer.parseInt(value));
+			break;
+		case "weapondelayitembonus":
+			this.setWeaponDelayItemBonus(Integer.parseInt(value));
 			break;
 		case "helmtypename":
 			this.setHelmtypename(value);
@@ -506,6 +511,8 @@ public class SoliniaClass implements ISoliniaClass {
 				return this.getCharismaitembonus();
 			case "ac":
 				return this.getACItemBonus();
+			case "weapondelay":
+				return this.getWeaponDelayItemBonus();
 			default:
 				return 0;
 		}
@@ -853,5 +860,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setDefaultOffHandItemType(ItemType defaultOffHandItemType) {
 		this.defaultOffHandItemType = defaultOffHandItemType;
+	}
+
+	@Override
+	public int getWeaponDelayItemBonus() {
+		return weaponDelayItemBonus;
+	}
+
+	@Override
+	public void setWeaponDelayItemBonus(int weaponDelayItemBonus) {
+		this.weaponDelayItemBonus = weaponDelayItemBonus;
 	}
 }
