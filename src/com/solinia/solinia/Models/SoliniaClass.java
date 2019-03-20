@@ -29,6 +29,8 @@ public class SoliniaClass implements ISoliniaClass {
 	private ItemType defaultHandItemType = ItemType.OneHandSlashing;
 	private String defaultoffHandMaterial = "SHIELD";
 	private ItemType defaultOffHandItemType = ItemType.None;
+	private String defaultAlternateHandMaterial = "NONE";
+	private ItemType defaultAlternateHandItemType = ItemType.None;
 	private int strengthitembonus = 0;
 	private int staminaitembonus = 0;
 	private int agilityitembonus = 0;
@@ -870,5 +872,25 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setWeaponDelayItemBonus(int weaponDelayItemBonus) {
 		this.weaponDelayItemBonus = weaponDelayItemBonus;
+	}
+
+	@Override
+	public String getDefaultAlternateHandMaterial() {
+		return defaultAlternateHandMaterial;
+	}
+
+	@Override
+	public void setDefaultAlternateHandMaterial(String defaultAlternateHandMaterial) {
+		this.defaultAlternateHandMaterial = defaultAlternateHandMaterial;
+	}
+
+	@Override
+	public ItemType getDefaultAlternateHandItemType() {
+		return defaultAlternateHandItemType;
+	}
+
+	@Override
+	public void setDefaultAlternateHandItemType(ItemType defaultAlternateHandItemType) {
+		this.defaultAlternateHandItemType = defaultAlternateHandItemType;
 	}
 }

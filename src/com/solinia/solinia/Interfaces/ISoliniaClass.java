@@ -167,4 +167,12 @@ public interface ISoliniaClass {
 
 	void setWeaponDelayItemBonus(int weaponDelayItemBonus);
 
+	String getDefaultAlternateHandMaterial();
+
+	void setDefaultAlternateHandMaterial(String defaultAlternateHandMaterial);
+
+	ItemType getDefaultAlternateHandItemType();
+
+	void setDefaultAlternateHandItemType(ItemType defaultAlternateHandItemType);
+
 }

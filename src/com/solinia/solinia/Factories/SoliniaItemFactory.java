@@ -156,6 +156,15 @@ public class SoliniaItemFactory {
 			offhandItem.setDiscoverer(discoverer);
 			offhandItem.setItemType(classtype.getDefaultOffHandItemType());
 			
+			ISoliniaItem alternateHandItem = null;
+			if (!classtype.getDefaultAlternateHandMaterial().toUpperCase().equals("NONE"))
+			{
+				alternateHandItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultAlternateHandMaterial().toUpperCase())));
+				alternateHandItem.setDiscoverer(discoverer);
+				alternateHandItem.setItemType(classtype.getDefaultAlternateHandItemType());
+			}
+
+			
 			// Jewelry!
 			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
 			neckItem.setEquipmentSlot(EquipmentSlot.Neck);
@@ -201,6 +210,8 @@ public class SoliniaItemFactory {
 			items.add(feetItem.getId());
 			items.add(handItem.getId());
 			items.add(offhandItem.getId());
+			if (alternateHandItem != null)
+			items.add(alternateHandItem.getId());
 			items.add(neckItem.getId());
 			items.add(shouldersItem.getId());
 			items.add(fingersItem.getId());
@@ -338,7 +349,7 @@ public class SoliniaItemFactory {
 				
 				
 				
-				setItemDamageAndAcAndDelay(item, armourtier, tierMin, tierMax, classAcBonus, rarityBonus, classStrBonus, classDelayBonus);
+				setItemDamageAndAcAndDelay(item, armourtier, tierMin, tierMax, classAcBonus, rarityBonus, classStrBonus, classDelayBonus, item.getItemType());
 				
 				// mana
 				item.setMana(Utils.RandomBetween(0,armourtier * 20)+rarityBonus);
@@ -406,7 +417,7 @@ public class SoliniaItemFactory {
 		return tierMax;
 	}
 
-	public static void setItemDamageAndAcAndDelay(ISoliniaItem item, int tier, int tierMin, int tierMax, int acBonus, int rarityBonus, int damageBonus, int delayBonus) {
+	public static void setItemDamageAndAcAndDelay(ISoliniaItem item, int tier, int tierMin, int tierMax, int acBonus, int rarityBonus, int damageBonus, int delayBonus, ItemType itemType) {
 		// Damage
 		if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
 		{
@@ -423,9 +434,16 @@ public class SoliniaItemFactory {
 					dmgMax = 7;
 				
 				int damage = Utils.RandomBetween(dmgMin, dmgMax) + rarityBonus + damageBonus;
+				if (itemType.equals(ItemType.TwoHandBlunt) || itemType.equals(ItemType.TwoHandPiercing) || itemType.equals(ItemType.TwoHandSlashing) )
+					damage = damage*2;
+				
 				item.setDamage(damage);
 				
-				item.setWeaponDelay((item.getWeaponDelay() - delayBonus));
+				int delay = (item.getWeaponDelay() - delayBonus);
+				if (itemType.equals(ItemType.TwoHandBlunt) || itemType.equals(ItemType.TwoHandPiercing) || itemType.equals(ItemType.TwoHandSlashing) )
+					delay = delay+((delay/5)*3);
+				
+				item.setWeaponDelay(delay);
 				
 			} else {
 				item.setAC(SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus));
