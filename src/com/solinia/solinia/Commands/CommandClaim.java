@@ -14,6 +14,7 @@ import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -112,19 +113,25 @@ public class CommandClaim implements CommandExecutor {
 		{
 			SoliniaAccountClaim claim = StateManager.getInstance().getConfigurationManager().getAccountClaim(claimPlayer.getName().toUpperCase(),seekClaimId);
 			if (claim == null) {
-				claimPlayer.sendMessage("That is not a valid claim - /claim claim claimid (see /claim list)");
+				TextComponent tc = new TextComponent();
+				tc.setText("That is not a valid claim - /claim claim claimid (see /claim list)");
+				claimPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,tc);
 				return;
 			}
 	
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 					.getItem(claim.getItemid());
 			if (item == null) {
-				claimPlayer.sendMessage("That is not a valid claim item - /claim claim claimid (see /claim list)");
+				TextComponent tc = new TextComponent();
+				tc.setText("That is not a valid claim item - /claim claim claimid (see /claim list)");
+				claimPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,tc);
 				return;
 			}
-	
+			
 			claimPlayer.getWorld().dropItemNaturally(claimPlayer.getLocation(), item.asItemStack());
-			claimPlayer.sendMessage("Claim item dropped at your feet - ID: " + claim.getId());
+			TextComponent tc = new TextComponent();
+			tc.setText("Claim item dropped at your feet - ID: " + claim.getId());
+			claimPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,tc);
 			StateManager.getInstance().getConfigurationManager().removeClaim(claim.getId());
 		} catch (CoreStateInitException e)
 		{
