@@ -4336,6 +4336,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean getDualWieldCheck() {
 		if (getNpcid() < 1 && !isPlayer())
 			return false;
+		
+		if (holdingTwoHander())
+			return false;
 
 		// If dual wield less than 3 second ago return false
 		// Ugly hack to work around looping dual wields (cant get source of offhand on
@@ -4374,6 +4377,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return false;
 		}
 
+		return false;
+	}
+
+	private boolean holdingTwoHander() {
+		if (this.getSoliniaItemInMainHand() != null)
+		{
+			if (
+					this.getSoliniaItemInMainHand().getItemType().equals(ItemType.TwoHandBlunt) ||
+					this.getSoliniaItemInMainHand().getItemType().equals(ItemType.TwoHandPiercing) ||
+					this.getSoliniaItemInMainHand().getItemType().equals(ItemType.TwoHandSlashing)
+				) { 
+				return true;
+			}
+		}
+
+		if (this.getSoliniaItemInOffHand() != null)
+		{
+			if (
+					this.getSoliniaItemInOffHand().getItemType().equals(ItemType.TwoHandBlunt) ||
+					this.getSoliniaItemInOffHand().getItemType().equals(ItemType.TwoHandPiercing) ||
+					this.getSoliniaItemInOffHand().getItemType().equals(ItemType.TwoHandSlashing)
+				) { 
+				return true;
+			}
+		}
+
+		
 		return false;
 	}
 
