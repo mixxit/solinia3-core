@@ -96,24 +96,31 @@ public class ItemStackUtils {
 			case OneHandSlashing:
 				xp = 1;
 				skill = "SLASHING";
+				break;
 			case TwoHandSlashing:
 				xp = 1;
 				skill = "SLASHING";
+				break;
 			case OneHandBlunt:
 				xp = 1;
 				skill = "CRUSHING";
+				break;
 			case TwoHandBlunt:
 				xp = 1;
 				skill = "CRUSHING";
+				break;
 			case OneHandPiercing:
 				xp = 1;
 				skill = "PIERCING";
+				break;
 			case TwoHandPiercing:
 				xp = 1;
 				skill = "PIERCING";
+				break;
 			case BowArchery:
 				xp = 1;
 				skill = "ARCHERY";
+				break;
 			default:
 				xp = 1;
 				skill = "CRUSHING";
