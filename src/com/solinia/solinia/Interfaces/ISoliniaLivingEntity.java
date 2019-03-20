@@ -132,8 +132,6 @@ public interface ISoliniaLivingEntity
 
 	public int getMitigationAC();
 
-	int Attack(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage);
-
 	public int getSkillDmgTaken(String skill);
 
 	public int getFcDamageAmtIncoming(SoliniaLivingEntity soliniaLivingEntity, int i, boolean b, String skill);
@@ -347,5 +345,7 @@ public interface ISoliniaLivingEntity
 	Timestamp getLastMeleeAttack();
 
 	float getAutoAttackTimerFrequencySeconds();
+
+	int AttackWithMainHand(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage);
 
 }

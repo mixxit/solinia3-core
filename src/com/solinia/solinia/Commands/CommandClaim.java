@@ -76,7 +76,6 @@ public class CommandClaim implements CommandExecutor {
 
 				Player claimPlayer = (Player) sender;
 				ISoliniaPlayer solClaimPlayer = SoliniaPlayerAdapter.Adapt(claimPlayer);
-				sender.sendMessage("Current Claims: " + solClaimPlayer.getAccountClaims().size());
 				
 				if (args.length < 2) {
 					sender.sendMessage("That is not a claim id or the word all - /claim claim claimid (see /claim list) or /claim claim all");

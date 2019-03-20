@@ -116,7 +116,7 @@ public class ItemStackUtils {
 				skill = "ARCHERY";
 			default:
 				xp = 1;
-				skill = "SLASHING";
+				skill = "CRUSHING";
 			break;
 		
 		}

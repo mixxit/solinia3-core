@@ -1427,7 +1427,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int Attack(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage) {
+	public int AttackWithMainHand(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage) {
 		try {
 			if (defender.isPlayer() && isPlayer()) {
 				ISoliniaPlayer defenderPlayer = SoliniaPlayerAdapter.Adapt((Player) defender.getBukkitLivingEntity());
@@ -1497,7 +1497,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 0;
 		}
 
-		ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInHand();
+		ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
 
 		DamageHitInfo my_hit = this.GetHitInfo(weapon, baseDamage, arrowHit, defender);
 
@@ -6873,7 +6873,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			// MELEE / BOW STARTS HERE
 			defender.damageAlertHook(damage, attacker.getBukkitLivingEntity());
-			return attacker.Attack(defender, (originalDamager instanceof Arrow), damage);
+			return attacker.AttackWithMainHand(defender, (originalDamager instanceof Arrow), damage);
 		} catch (CoreStateInitException e) {
 			return 0;
 		}
