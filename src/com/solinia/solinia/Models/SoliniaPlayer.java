@@ -3990,5 +3990,4 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		return false;
 	}
-
 }

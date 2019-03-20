@@ -713,7 +713,8 @@ public class ChannelManager implements IChannelManager {
         			
         		}
         			
-        		sendToDiscordMC(null,targetChannelId,"[" + accountName + "] " + character.getFullName() + " the Level " + character.getLevel() + " " + characterRace + " " + characterClass);
+        		sendToDiscordMC(null,targetChannelId,
+        				"[" + accountName + "] " + character.getFullName() + " the Level " + character.getLevel() + " " + characterRace + " " + characterClass + " [" + character.getUUID() + "]");
         	}
         } catch (Exception e)
         {
@@ -1027,7 +1028,21 @@ public class ChannelManager implements IChannelManager {
 			int rank = 1;
 			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getTopLevelPlayers(classname))
 			{
-				sendToDiscordMC(null,targetChannelId,rank + ": " + player.getFullName() + " " + player.getLevel() + " level " + player.getClassObj().getName() + " aas: " + player.getAARanks().size());
+				String racename = "Unknown Race";
+				String classname2 = "Unknown Class";	
+				
+				if (player.getClassObj() != null)
+				{
+					classname2 = player.getClassObj().getName();
+				}
+				
+				if (player.getRace() != null)
+				{
+					racename = player.getRace().getName();
+				}
+				
+				sendToDiscordMC(null,targetChannelId,rank + ": " + player.getFullName() + " " + player.getLevel() + " level " + racename + " " + classname2 + " aas: " + player.getAARanks().size());
+				
 				rank++;
 			}
 			

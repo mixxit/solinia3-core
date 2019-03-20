@@ -508,5 +508,4 @@ public interface ISoliniaPlayer extends Serializable {
 	void shout(String string);
 
 	public boolean isInGroup(LivingEntity targetentity);
-
 }
