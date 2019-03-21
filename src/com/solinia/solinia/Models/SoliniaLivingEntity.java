@@ -2193,11 +2193,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private DamageHitInfo doAttack(ISoliniaLivingEntity defender, DamageHitInfo hit) {
 		if (defender == null)
 			return hit;
+		
+		Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "Starting doAttack hit.base_damage: " + hit.base_damage + " hit.damage_done:" + hit.damage_done + " hit.offense:" + hit.offense);
 
 		// for riposte
 		int originalDamage = hit.damage_done;
+		Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "originalDamage: " + hit.damage_done);
 
 		hit = defender.avoidDamage(this, hit);
+		Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "After avoidDamage hit.damage_done: " + hit.damage_done);
 		if (hit.avoided == true) {
 			// TODO Strike through
 
@@ -2253,9 +2257,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (hit.damage_done >= 0) {
 			if (defender.checkHitChance(this, hit)) {
 				hit = defender.meleeMitigation(this, hit);
+				Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "After meleeMitigation hit.damage_done: " + hit.damage_done);
 				if (hit.damage_done > 0) {
 					hit = applyDamageTable(hit);
+					Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "After applyDamageTable hit.damage_done: " + hit.damage_done);
 					hit = commonOutgoingHitSuccess(defender, hit);
+					Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "After commonOutgoingSuccess hit.damage_done: " + hit.damage_done);
 				}
 			} else {
 				if (getBukkitLivingEntity() instanceof Player) {
