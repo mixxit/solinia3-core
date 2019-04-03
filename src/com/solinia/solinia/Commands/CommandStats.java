@@ -97,10 +97,7 @@ public class CommandStats implements CommandExecutor {
 					player.sendMessage(ChatColor.YELLOW + "* You have not set your Oath. Please see /oath" + ChatColor.RESET);
 				}
 				
-				if (StateManager.getInstance().getXPDayModifier() > 100)
-				{
-					player.sendMessage("* You are currently receiving extra XP from XP Day modifiers (" + StateManager.getInstance().getXPDayModifier() + ")%");
-				}
+				player.sendMessage("* Your currently XP Day modifier sits at (" + StateManager.getInstance().getXPDayModifier() + ")%");
 				
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

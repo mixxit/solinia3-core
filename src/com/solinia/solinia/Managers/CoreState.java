@@ -157,7 +157,7 @@ public class CoreState {
 		// If its tuesday or sunday you will get 100% bonus with XP
 		Date now = new Date();
 		SimpleDateFormat simpleDateformat = new SimpleDateFormat("E");
-		if (simpleDateformat.format(now).equals("Tue") || simpleDateformat.format(now).equals("Sun"))
+		if (simpleDateformat.format(now).equals("Tue") || simpleDateformat.format(now).equals("Wed") || simpleDateformat.format(now).equals("Sun"))
 		{
 			xpdaybonus = 100;
 		}
