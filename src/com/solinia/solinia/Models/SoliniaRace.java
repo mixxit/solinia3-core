@@ -2,6 +2,8 @@ package com.solinia.solinia.Models;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -28,6 +30,11 @@ public class SoliniaRace implements ISoliniaRace {
 	private String shortName = "";
 	private UUID king;
 	private boolean vampire = false;
+	
+	private int startX = 169;
+	private int startY = 78;
+	private int startZ = -3672;
+	private String startWorld = "world";
 	
 	@Override
 	public String getName() {
@@ -145,6 +152,10 @@ public class SoliniaRace implements ISoliniaRace {
 		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
 		sender.sendMessage("- vampire: " + ChatColor.GOLD + isVampire() + ChatColor.RESET);
 		sender.sendMessage("- admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
+		sender.sendMessage("- startx: " + ChatColor.GOLD + getStartX() + ChatColor.RESET);
+		sender.sendMessage("- starty: " + ChatColor.GOLD + getStartY() + ChatColor.RESET);
+		sender.sendMessage("- startz: " + ChatColor.GOLD + getStartZ() + ChatColor.RESET);
+		sender.sendMessage("- startworld: " + ChatColor.GOLD + getStartWorld() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 	}
 
@@ -161,6 +172,18 @@ public class SoliniaRace implements ISoliniaRace {
 			break;
 		case "vampire":
 			setVampire(Boolean.parseBoolean(value));
+			break;
+		case "startx":
+			setStartX(Integer.parseInt(value));
+			break;
+		case "starty":
+			setStartY(Integer.parseInt(value));
+			break;
+		case "startz":
+			setStartZ(Integer.parseInt(value));
+			break;
+		case "startworld":
+			setStartWorld(value);
 			break;
 		case "admin":
 			setAdmin(Boolean.parseBoolean(value));
@@ -213,6 +236,51 @@ public class SoliniaRace implements ISoliniaRace {
 	@Override
 	public void setVampire(boolean vampire) {
 		this.vampire = vampire;
+	}
+
+	@Override
+	public int getStartX() {
+		return startX;
+	}
+
+	@Override
+	public void setStartX(int startX) {
+		this.startX = startX;
+	}
+
+	@Override
+	public int getStartY() {
+		return startY;
+	}
+
+	@Override
+	public void setStartY(int startY) {
+		this.startY = startY;
+	}
+
+	@Override
+	public int getStartZ() {
+		return startZ;
+	}
+
+	@Override
+	public void setStartZ(int startZ) {
+		this.startZ = startZ;
+	}
+
+	@Override
+	public String getStartWorld() {
+		return startWorld;
+	}
+
+	@Override
+	public void setStartWorld(String startWorld) {
+		this.startWorld = startWorld;
+	}
+
+	@Override
+	public Location getStartLocation() {
+		return new Location(Bukkit.getWorld(getStartWorld()), getStartX(), getStartY(), getStartZ());
 	}
 
 }

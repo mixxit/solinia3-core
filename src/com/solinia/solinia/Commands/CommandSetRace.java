@@ -132,9 +132,16 @@ public class CommandSetRace implements CommandExecutor {
         try {
 			if (StateManager.getInstance().getConfigurationManager().getRace(race) != null)
 			{
-				soliniaplayer.setRaceId(StateManager.getInstance().getConfigurationManager().getRace(race).getId());
+				ISoliniaRace solRace = StateManager.getInstance().getConfigurationManager().getRace(race);
+				
+				soliniaplayer.setRaceId(solRace.getId());
 				soliniaplayer.setChosenRace(true);
 				player.sendMessage("* Race set to " + race);
+				
+				player.teleport(solRace.getStartLocation());
+				soliniaplayer.setBindPoint(solRace.getStartWorld() + "," + solRace.getStartX() + ","
+					+ solRace.getStartY() + "," + solRace.getStartZ());
+				
 				return true;
 			} else {
 				Utils.sendRaceInfo(sender);
