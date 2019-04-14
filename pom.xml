@@ -103,8 +103,8 @@
       </releases>
     </repository>
     <repository>
-        <id>lumine-repo</id>
-    	<url>zz_http://mvn.lumine.io/repository/maven-snapshots/</url>
+        <id>zz_lumine-repo</id>
+    	<url>http://mvn.lumine.io/repository/maven-snapshots/</url>
     </repository>
   </repositories>
   <distributionManagement>
