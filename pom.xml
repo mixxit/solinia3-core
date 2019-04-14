@@ -88,9 +88,9 @@
       <url>http://maven.elmakers.com/repository/ </url>
     </repository>
     <repository>
-      <id>parallelblock-public</id>
-      <name>ParallelBlock Public Repository</name>
-      <url>https://repo.parallelblock.com/repository/maven-public/</url>
+      <id>ibj-public</id>
+      <name>Ichbinjoe Public Repository</name>
+      <url>https://nexus.ibj.io/repository/maven-public</url>
     </repository>
     <repository>
       <id>mvnrepository</id>
