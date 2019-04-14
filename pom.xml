@@ -88,7 +88,7 @@
       <url>http://maven.elmakers.com/repository/ </url>
     </repository>
     <repository>
-      <id>ibj-public</id>
+      <id>6_ibj-public</id>
       <name>Ichbinjoe Public Repository</name>
       <url>https://nexus.ibj.io/repository/maven-public</url>
     </repository>
