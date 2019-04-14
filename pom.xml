@@ -64,6 +64,10 @@
       </releases>
     </repository>
     <repository>
+	    <id>vault-repo</id>
+	    <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+    </repository>
+    <repository>
         <id>lumine-repo</id>
     	<url>http://mvn.lumine.io/repository/maven-snapshots/</url>
     </repository>
@@ -147,9 +151,10 @@
 	    <version>1.8.3</version>
 	</dependency>
     <dependency>
-      <groupId>net.milkbowl.vault</groupId>
-      <artifactId>Vault</artifactId>
-      <version>1.7.1</version>
+        <groupId>net.milkbowl.vault</groupId>
+        <artifactId>VaultAPI</artifactId>
+        <version>1.7.1</version>
+        <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.vexsoftware</groupId>
