@@ -126,6 +126,11 @@ commands:
     usage: /setrace racename
     aliases:
     - race
+  setgod:
+    description: Sets a players god
+    usage: /setgod godname
+    aliases:
+    - god
   creategod:
     description: Adds a new God
     usage: /addgod name
@@ -232,6 +237,10 @@ commands:
   raceinfo:
     description: Lists race info
     usage: /raceinfo
+    aliases: []
+  godinfo:
+    description: Lists god info
+    usage: /godinfo
     aliases: []
   rebuildspellitems:
     description: Rebuilds spell items

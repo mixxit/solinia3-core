@@ -508,4 +508,12 @@ public interface ISoliniaPlayer extends Serializable {
 	void shout(String string);
 
 	public boolean isInGroup(LivingEntity targetentity);
+
+	int getGodId();
+
+	void setGodId(int godId);
+
+	void setHasChosenGod(boolean hasChosenGod);
+
+	boolean hasChosenGod();
 }

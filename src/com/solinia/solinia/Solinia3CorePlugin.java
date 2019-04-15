@@ -408,6 +408,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("listgods").setExecutor(new CommandListGods());
 		this.getCommand("editgod").setExecutor(new CommandEditGod());
 
+		this.getCommand("godinfo").setExecutor(new CommandGodInfo());
+		this.getCommand("setgod").setExecutor(new CommandSetGod());
+		
 		this.getCommand("castslot").setExecutor(new CommandCastSlot());
 		this.getCommand("shout").setExecutor(new CommandShout());
 		this.getCommand("whisper").setExecutor(new CommandWhisper());

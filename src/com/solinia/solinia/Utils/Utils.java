@@ -66,6 +66,7 @@ import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
@@ -5312,6 +5313,22 @@ public class Utils {
 		return validSpecialisationSkills;
 	}
 
+	public static void sendGodInfo(CommandSender sender) throws CoreStateInitException {
+		for (ISoliniaGod entry : StateManager.getInstance().getConfigurationManager().getGods()) {
+			TextComponent tc = new TextComponent();
+			tc.setText(ChatColor.RED + "~ GOD: " + ChatColor.GOLD + entry.getName().toUpperCase() + ChatColor.GRAY
+					+ " [" + entry.getId() + "] - " + ChatColor.RESET);
+			TextComponent tc2 = new TextComponent();
+			tc2.setText("Hover for more details");
+			String details = ChatColor.GOLD + entry.getName() + ChatColor.RESET + "\nRecommended Alignment: "
+					+ ChatColor.GOLD + entry.getAlignment() + ChatColor.RESET + "\n" + entry.getDescription();
+			tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+			tc.addExtra(tc2);
+			sender.spigot().sendMessage(tc);
+		}
+	}
+
+	
 	public static void sendRaceInfo(CommandSender sender) throws CoreStateInitException {
 		List<ISoliniaClass> classes = StateManager.getInstance().getConfigurationManager().getClasses();
 		for (ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces()) {

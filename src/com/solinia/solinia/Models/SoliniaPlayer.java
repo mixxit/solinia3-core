@@ -68,6 +68,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private Double aaexperience = 0d;
 	private int aapoints = 0;
 	private int raceid = 0;
+	private int godId = 0;
+	private boolean hasChosenGod = false;
 	private boolean haschosenrace = false;
 	private boolean haschosenclass = false;
 	private int classid = 0;
@@ -3989,5 +3991,25 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 		}
 		return false;
+	}
+
+	@Override
+	public int getGodId() {
+		return godId;
+	}
+
+	@Override
+	public void setGodId(int godId) {
+		this.godId = godId;
+	}
+
+	@Override
+	public boolean hasChosenGod() {
+		return hasChosenGod;
+	}
+
+	@Override
+	public void setHasChosenGod(boolean hasChosenGod) {
+		this.hasChosenGod = hasChosenGod;
 	}
 }

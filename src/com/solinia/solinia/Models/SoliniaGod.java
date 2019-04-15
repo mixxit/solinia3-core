@@ -11,6 +11,7 @@ import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidGodSettingException;
+import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
@@ -22,6 +23,7 @@ public class SoliniaGod implements ISoliniaGod {
 	private int id;
 	private String name;
 	private String description;
+	private String alignment = "NEUTRAL";
 	
 	@Override
 	public int getId() {
@@ -50,6 +52,7 @@ public class SoliniaGod implements ISoliniaGod {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
 	}
 
 	@Override
@@ -68,10 +71,25 @@ public class SoliniaGod implements ISoliniaGod {
 		case "description":
 			setDescription(value);
 			break;
+		case "alignment":
+			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
+				throw new InvalidGodSettingException("Invalid Alignment (GOOD,NEUTRAL,EVIL)");
+			setAlignment(value.toUpperCase());
+			break;
 		default:
 			throw new InvalidGodSettingException(
 					"Invalid setting. Valid Options are: name,description");
 		}
+	}	
+	
+	@Override
+	public String getAlignment() {
+		return alignment;
+	}
+
+	@Override
+	public void setAlignment(String alignment) {
+		this.alignment = alignment;
 	}
 
 	@Override

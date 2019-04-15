@@ -28,5 +28,9 @@ public interface ISoliniaGod {
 	String getDescription();
 
 	void setDescription(String description);
+
+	String getAlignment();
+
+	void setAlignment(String alignment);
 	
 }
