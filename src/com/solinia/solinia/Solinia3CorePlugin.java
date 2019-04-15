@@ -302,8 +302,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			worldrepo.reload();
 
 			JsonGodRepository godrepo = new JsonGodRepository();
-			worldrepo.setJsonFile(getDataFolder() + "/" + "gods.json");
-			worldrepo.reload();
+			godrepo.setJsonFile(getDataFolder() + "/" + "gods.json");
+			godrepo.reload();
 
 			
 			PlayerManager playerManager = new PlayerManager(repo);
