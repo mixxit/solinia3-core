@@ -126,6 +126,11 @@ commands:
     usage: /setrace racename
     aliases:
     - race
+  creategod:
+    description: Adds a new God
+    usage: /addgod name
+    aliases:
+    - addgod
   addclass:
     description: Creates a new class
     usage: /addclass classname adminonly
@@ -203,6 +208,10 @@ commands:
   listzones:
     description: Lists active zones
     usage: /listzones
+    aliases: []
+  listgods:
+    description: Lists gods
+    usage: /listgods
     aliases: []
   hotzones:
     description: Lists hot zones
@@ -456,6 +465,10 @@ commands:
   editrace:
     description: Edits a race
     usage: /editrace raceid setting value
+    aliases: []
+  editgod:
+    description: Edits a god
+    usage: /editgod godid setting value
     aliases: []
   editalignment:
     description: Edits an alignment

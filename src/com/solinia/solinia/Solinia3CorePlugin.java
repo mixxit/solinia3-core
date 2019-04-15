@@ -32,6 +32,7 @@ import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
+import com.solinia.solinia.Repositories.JsonGodRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
@@ -299,6 +300,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonWorldRepository worldrepo = new JsonWorldRepository();
 			worldrepo.setJsonFile(getDataFolder() + "/" + "worlds.json");
 			worldrepo.reload();
+
+			JsonGodRepository godrepo = new JsonGodRepository();
+			worldrepo.setJsonFile(getDataFolder() + "/" + "gods.json");
+			worldrepo.reload();
+
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(this, new MythicMobsNPCEntityProvider());
@@ -306,7 +312,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
 					aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
-					accountclaimsrepo, zonesrepo, craftrepo, worldrepo);
+					accountclaimsrepo, zonesrepo, craftrepo, worldrepo,godrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -397,6 +403,10 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVoteListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
+
+		this.getCommand("creategod").setExecutor(new CommandCreateGod());
+		this.getCommand("listgods").setExecutor(new CommandListGods());
+		this.getCommand("editgod").setExecutor(new CommandEditGod());
 
 		this.getCommand("castslot").setExecutor(new CommandCastSlot());
 		this.getCommand("shout").setExecutor(new CommandShout());
