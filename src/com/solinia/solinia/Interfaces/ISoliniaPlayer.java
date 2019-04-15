@@ -516,4 +516,6 @@ public interface ISoliniaPlayer extends Serializable {
 	void setHasChosenGod(boolean hasChosenGod);
 
 	boolean hasChosenGod();
+
+	ISoliniaGod getGod();
 }

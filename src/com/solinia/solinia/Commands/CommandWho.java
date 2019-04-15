@@ -73,6 +73,9 @@ public class CommandWho implements CommandExecutor {
 					String flaw = "Flaw: I have no flaw\n";
 					String oath = "Oath: I have no oath\n";
 					
+					if (solplayer.getGodId() > 0)
+						worship = "I worship: " + solplayer.getGod().getName() + "\n";
+					
 					if (solplayer.getPersonality().getIdealId() > 0)
 					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + "\n";
 					if (solplayer.getPersonality().getFirstTraitId() > 0)

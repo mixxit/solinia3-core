@@ -36,6 +36,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -343,6 +344,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public ISoliniaRace getRace() {
 		try {
 			return StateManager.getInstance().getConfigurationManager().getRace(getRaceId());
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public ISoliniaGod getGod() {
+		try {
+			return StateManager.getInstance().getConfigurationManager().getGod(getGodId());
 		} catch (CoreStateInitException e) {
 			return null;
 		}
