@@ -51,7 +51,7 @@ public class SoliniaGod implements ISoliniaGod {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
-		sender.sendMessage("- description: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
 		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
 	}
 
