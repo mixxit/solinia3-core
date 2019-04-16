@@ -7,11 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidGodSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -220,6 +223,10 @@ public class SoliniaRace implements ISoliniaRace {
 				ISoliniaSpell ability = StateManager.getInstance().getConfigurationManager().getSpell(abilityid);
 				if (ability == null)
 					throw new InvalidRaceSettingException("Invalid id");
+				
+				if (!ability.isBuffSpell() || !Utils.getSpellTargetType(ability.getTargettype()).name().equals(SpellTargetType.Self))
+					throw new InvalidRaceSettingException("Only Self only buff type spells can be set as a passive spell");
+
 			} catch (CoreStateInitException e)
 			{
 				throw new InvalidRaceSettingException("State not initialised");

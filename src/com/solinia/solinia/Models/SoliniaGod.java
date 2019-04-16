@@ -17,6 +17,8 @@ import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -98,6 +100,10 @@ public class SoliniaGod implements ISoliniaGod {
 				ISoliniaSpell ability = StateManager.getInstance().getConfigurationManager().getSpell(abilityid);
 				if (ability == null)
 					throw new InvalidGodSettingException("Invalid id");
+				
+				if (!ability.isBuffSpell() || !Utils.getSpellTargetType(ability.getTargettype()).name().equals(SpellTargetType.Self))
+					throw new InvalidGodSettingException("Only Self only buff type spells can be set as a passive spell");
+					
 			} catch (CoreStateInitException e)
 			{
 				throw new InvalidGodSettingException("State not initialised");
