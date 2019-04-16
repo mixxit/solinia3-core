@@ -7,6 +7,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.solinia.solinia.Commands.*;
+import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
@@ -62,6 +63,7 @@ import com.solinia.solinia.Timers.PlayerEquipmentTickTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerTickTimer;
+import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 import com.solinia.solinia.Timers.ZoneTickTimer;
@@ -92,6 +94,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private DiscordMessageTimer discordMessageTimer;
 	private InvalidItemCheckerTimer invalidItemCheckerTimer;
 	private EntityAutoAttackTimer entityAutoAttackTimer;
+	private SoliniaLivingEntityPassiveEffectTimer entityPassiveEffectTimer;
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
@@ -379,6 +382,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			
 			entityAutoAttackTimer = new EntityAutoAttackTimer();
 			entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
+
+			entityPassiveEffectTimer = new SoliniaLivingEntityPassiveEffectTimer();
+			entityPassiveEffectTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 			
 			if (this.discordClient != null)
 			{

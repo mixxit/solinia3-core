@@ -350,4 +350,8 @@ public interface ISoliniaLivingEntity
 
 	ISoliniaRace getRace();
 
+	ISoliniaGod getGod();
+
+	public void tryApplySpellOnSelf(int spellId);
+
 }

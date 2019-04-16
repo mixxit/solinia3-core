@@ -44,6 +44,7 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -5209,6 +5210,23 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
+	public ISoliniaGod getGod() {
+		try {
+			if (isPlayer()) {
+				return SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).getGod();
+			}
+
+			// only players have gods
+			if (this.getNpcid() > 0) {
+				return null;
+			}
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+		return null;
+	}
+	
+	@Override
 	public int getRaceId() {
 		try {
 			if (isPlayer()) {
@@ -7295,5 +7313,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public void tryApplySpellOnSelf(int spellId) {
+		try
+		{
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+			if (spell == null)
+				return;
+			
+			spell.tryApplyOnEntity(getBukkitLivingEntity(), getBukkitLivingEntity(), false);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 }

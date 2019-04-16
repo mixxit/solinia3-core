@@ -56,18 +56,11 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 					if (!Utils.isLivingEntityNPC(livingEntityThatWillAutoAttack))
 						continue;
 					
-					try {
-						ISoliniaLivingEntity solLivingEntityThatWillCast = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillAutoAttack);
-						if (completedEntities.contains(solLivingEntityThatWillCast.getBukkitLivingEntity().getUniqueId().toString()))
-							continue;
-						
-						completedEntities.add(solLivingEntityThatWillCast.getBukkitLivingEntity().getUniqueId().toString());
-						processLivingEntityAutoAttack(creatureThatWillAttack);
-						
-					} catch (CoreStateInitException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					if (completedEntities.contains(livingEntityThatWillAutoAttack.getUniqueId().toString()))
+						continue;
+					
+					completedEntities.add(livingEntityThatWillAutoAttack.getUniqueId().toString());
+					processLivingEntityAutoAttack(creatureThatWillAttack);
 				}
 			
 			} catch (Exception e)

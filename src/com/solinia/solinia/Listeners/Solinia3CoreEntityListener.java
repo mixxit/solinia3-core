@@ -36,6 +36,8 @@ import org.bukkit.projectiles.ProjectileSource;
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.PlayerTickEvent;
+import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
@@ -229,6 +231,27 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 		}
 		
+	}
+	
+	@EventHandler
+	public void onPassiveEffectTickEvent(SoliniaLivingEntityPassiveEffectTickEvent event)
+	{
+		if (event.isCancelled())
+			return;
+		
+		if (event.getSoliniaLivingEntity() == null)
+			return;
+		
+		if (event.getSoliniaLivingEntity().getBukkitLivingEntity().isDead())
+			return;
+		
+		if (event.getSoliniaLivingEntity().getRace() != null)
+			if (event.getSoliniaLivingEntity().getRace().getPassiveAbilityId() > 0)
+				event.getSoliniaLivingEntity().tryApplySpellOnSelf(event.getSoliniaLivingEntity().getRace().getPassiveAbilityId());
+
+		if (event.getSoliniaLivingEntity().getGod() != null)
+			if (event.getSoliniaLivingEntity().getGod().getPassiveAbilityId() > 0)
+				event.getSoliniaLivingEntity().tryApplySpellOnSelf(event.getSoliniaLivingEntity().getGod().getPassiveAbilityId());
 	}
 
 	@EventHandler
