@@ -1444,15 +1444,6 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public void commitCsvs() {
-		System.out.println("Writing Items CSV");
-		this.itemRepository.writeCsv("items.csv");
-		System.out.println("Writing Items CSV Finished");
-		System.out.println("Writing Spells CSV");
-		this.spellRepository.writeCsv("spells.csv");
-		System.out.println("Writing Spells Finished");
-		System.out.println("Writing Craft CSV");
-		this.craftRepository.writeCsv("crafts.csv");
-		System.out.println("Writing Craft Finished");
 	}
 
 	@Override

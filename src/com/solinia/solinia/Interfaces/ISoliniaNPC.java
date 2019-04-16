@@ -265,4 +265,6 @@ public interface ISoliniaNPC {
 	long getTimeto();
 
 	void setTimeto(long timeto);
+
+	ISoliniaRace getRace();
 }

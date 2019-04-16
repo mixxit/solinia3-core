@@ -613,23 +613,40 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-				if (soliniaitem.getAllowedClassNames().size() == 0)
-					return;
-
-				if (solplayer.getClassObj() == null) {
-					Utils.CancelEvent(event);
-					;
-					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-					return;
+				if (soliniaitem.getAllowedClassNames().size() > 0)
+				{
+					if (solplayer.getClassObj() == null) {
+						Utils.CancelEvent(event);
+						;
+						event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+						return;
+					}
+	
+					if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
+						Utils.CancelEvent(event);
+						;
+						event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+						return;
+					}
 				}
-
-				if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
-					Utils.CancelEvent(event);
-					;
-					event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-					return;
+				
+				if (soliniaitem.getAllowedRaceNames().size() > 0)
+				{
+					if (solplayer.getRace() == null) {
+						Utils.CancelEvent(event);
+						;
+						event.getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
+						return;
+					}
+	
+					if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName().toUpperCase())) {
+						Utils.CancelEvent(event);
+						;
+						event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
+						return;
+					}
 				}
-
+				
 				if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
 					Utils.CancelEvent(event);
 					;
@@ -847,22 +864,34 @@ public class Solinia3CorePlayerListener implements Listener {
 						return;
 					}
 					
-					if (soliniaitem.getAllowedClassNames().size() == 0)
+					if (soliniaitem.getAllowedClassNames().size() > 0)
 					{
-						solplayer.scheduleUpdateMaxHp();
-						return;
+						if (solplayer.getClassObj() == null) {
+							Utils.CancelEvent(event);
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+							return;
+						}
+	
+						if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
+							Utils.CancelEvent(event);
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+							return;
+						}
 					}
-
-					if (solplayer.getClassObj() == null) {
-						Utils.CancelEvent(event);
-						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-						return;
-					}
-
-					if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
-						Utils.CancelEvent(event);
-						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-						return;
+					
+					if (soliniaitem.getAllowedRaceNames().size() > 0)
+					{
+						if (solplayer.getRace() == null) {
+							Utils.CancelEvent(event);
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
+							return;
+						}
+	
+						if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName().toUpperCase())) {
+							Utils.CancelEvent(event);
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
+							return;
+						}
 					}
 
 					solplayer.scheduleUpdateMaxHp();
@@ -886,25 +915,40 @@ public class Solinia3CorePlayerListener implements Listener {
 						return;
 					}
 
-					if (soliniaitem.getAllowedClassNames().size() == 0)
+					if (soliniaitem.getAllowedClassNames().size() > 0)
 					{
-						solplayer.scheduleUpdateMaxHp();
-						return;
+						if (solplayer.getClassObj() == null) {
+							Utils.CancelEvent(event);
+							;
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+							return;
+						}
+	
+						if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
+							Utils.CancelEvent(event);
+							;
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+							return;
+						}
+					}
+					
+					if (soliniaitem.getAllowedRaceNames().size() > 0)
+					{
+						if (solplayer.getRace() == null) {
+							Utils.CancelEvent(event);
+							;
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
+							return;
+						}
+	
+						if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName().toUpperCase())) {
+							Utils.CancelEvent(event);
+							;
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
+							return;
+						}
 					}
 
-					if (solplayer.getClassObj() == null) {
-						Utils.CancelEvent(event);
-						;
-						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-						return;
-					}
-
-					if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
-						Utils.CancelEvent(event);
-						;
-						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-						return;
-					}
 
 					solplayer.scheduleUpdateMaxHp();
 				}
@@ -926,24 +970,38 @@ public class Solinia3CorePlayerListener implements Listener {
 						return;
 					}
 					
-					if (soliniaitem.getAllowedClassNames().size() == 0)
+					if (soliniaitem.getAllowedClassNames().size() > 0)
 					{
-						solplayer.scheduleUpdateMaxHp();
-						return;
+						if (solplayer.getClassObj() == null) {
+							Utils.CancelEvent(event);
+							;
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+							return;
+						}
+	
+						if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
+							Utils.CancelEvent(event);
+							;
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+							return;
+						}
 					}
-
-					if (solplayer.getClassObj() == null) {
-						Utils.CancelEvent(event);
-						;
-						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-						return;
-					}
-
-					if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
-						Utils.CancelEvent(event);
-						;
-						event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
-						return;
+					
+					if (soliniaitem.getAllowedRaceNames().size() > 0)
+					{
+						if (solplayer.getRace() == null) {
+							Utils.CancelEvent(event);
+							;
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
+							return;
+						}
+	
+						if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName().toUpperCase())) {
+							Utils.CancelEvent(event);
+							;
+							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
+							return;
+						}
 					}
 
 					solplayer.scheduleUpdateMaxHp();

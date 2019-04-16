@@ -353,4 +353,8 @@ public interface ISoliniaItem {
 	int getWeaponDelay();
 
 	void setWeaponDelay(int weaponDelay);
+
+	List<String> getAllowedRaceNames();
+
+	void setAllowedRaceNames(List<String> allowedRaceNames);
 }

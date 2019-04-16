@@ -502,6 +502,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return false;
 				}
 			}
+			
+			if (item.getAllowedRaceNames().size() > 0) {
+				if (getRace() == null) {
+					return false;
+				}
+
+				if (!item.getAllowedRaceNames().contains(getRace().getName())) {
+					return false;
+				}
+			}
 
 			if (item.getMinLevel() > 0) {
 				if (item.getMinLevel() > getLevel()) {
@@ -1375,6 +1385,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 						if (!soliniaitem.getAllowedClassNames().contains(getClassObj().getName())) {
 							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your class cannot use this item");
+							return false;
+						}
+					}
+					
+					if (soliniaitem.getAllowedRaceNames().size() > 0) {
+						if (getRace() == null) {
+							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your race cannot use this item");
+							return false;
+						}
+
+						if (!soliniaitem.getAllowedRaceNames().contains(getRace().getName())) {
+							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your race cannot use this item");
 							return false;
 						}
 					}
@@ -5170,6 +5192,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return null;
 	}
 
+	@Override
+	public ISoliniaRace getRace() {
+		try {
+			if (isPlayer()) {
+				return SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).getRace();
+			}
+
+			if (this.getNpcid() > 0) {
+				return StateManager.getInstance().getConfigurationManager().getNPC(getNpcid()).getRace();
+			}
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+		return null;
+	}
+	
 	@Override
 	public int getRaceId() {
 		try {

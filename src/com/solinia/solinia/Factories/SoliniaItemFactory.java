@@ -102,6 +102,7 @@ public class SoliniaItemFactory {
 		item.setAugmentation(originalItem.isAugmentation());
 		item.setAugmentationFitsSlotType(originalItem.getAugmentationFitsSlotType());
 		item.setAllowedClassNames(originalItem.getAllowedClassNames());
+		item.setAllowedRaceNames(originalItem.getAllowedRaceNames());
 		
 		if (itemStack.getData() != null)
 		{
@@ -225,8 +226,10 @@ public class SoliniaItemFactory {
 			{
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(i);
 				List<String> classNames = new ArrayList<String>();
+				List<String> raceNames = new ArrayList<String>();
 				classNames.add(classtype.getName().toUpperCase());
 				item.setAllowedClassNames(classNames);
+				item.setAllowedRaceNames(raceNames);
 				
 				item.setWorth(armourtier*25);
 				// Randomise the stats of the class armour so we get more unique content in each dungeon

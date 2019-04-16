@@ -77,7 +77,7 @@ public class CommandEditItem implements CommandExecutor {
 
 			value = value.trim();
 		} else {
-			if (!setting.toLowerCase().contains("allowedclassnames"))
+			if (!setting.toLowerCase().contains("allowedclassnames") && !setting.toLowerCase().contains("allowedracenames"))
 				value = value.replaceAll("[^A-Za-z0-9_]", "");
 		}
 		

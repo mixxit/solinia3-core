@@ -131,83 +131,9 @@ public class JsonCraftRepository implements IRepository<SoliniaCraft> {
 	}
 
 	@Override
-	public void writeCsv(String filePath)
-	{
-		try (
-	            BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
-	            CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
-	            		"id",
-	        			"recipeName",
-	        			"item1",
-	        			"item2",
-	        			"skill",
-	        			"minSkill",
-	        			"nearForge",
-	        			"classId",
-	        			"outputItem",
-	        			"item1name",
-	        			"item2name",
-	        			"classname"
-	            	));
-	        ) 
-		{
-			
-			for(Entry<Integer, SoliniaCraft> keyValuePair : Crafts.entrySet())
-			{
-				SoliniaCraft craft =  keyValuePair.getValue();
-				
-				try
-				{
-					ISoliniaItem item1 = StateManager.getInstance().getConfigurationManager().getItem(craft.getItem1());
-					ISoliniaItem item2 = StateManager.getInstance().getConfigurationManager().getItem(craft.getItem2());
-					
-					String outname = "";
-					
-					if (craft.getOutputItem() > 0)
-					{
-						ISoliniaItem outitem = StateManager.getInstance().getConfigurationManager().getItem(craft.getOutputItem());
-						outname = outitem.getDisplayname();
-					}
-					
-					if (craft.getOutputLootTableId() > 0)
-					{
-						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craft.getOutputLootTableId());
-						outname = loottable.getName();
-					}
-					String classname = "";
-					if (craft.getClassId() > 0)
-					{
-						ISoliniaClass classObj = StateManager.getInstance().getConfigurationManager().getClassObj(craft.getClassId());
-						classname = classObj.getName();
-					}
-					
-		            csvPrinter.printRecord(
-		            		craft.getId(),
-		        			craft.getRecipeName(),
-		        			craft.getItem1(),
-		        			craft.getItem2(),
-		        			craft.getSkill(),
-		        			craft.getMinSkill(),
-		        			craft.isNearForge(),
-		        			craft.getClassId(),
-		        			craft.getOutputItem(),
-		        			item1.getDisplayname(),
-		        			item2.getDisplayname(),
-		        			outname,
-		        			classname
-		            		);
-		            
-				} catch (CoreStateInitException e)
-				{
-					
-				}
-			}
-			
-			csvPrinter.flush();            
-	    } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void writeCsv(String filePath) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

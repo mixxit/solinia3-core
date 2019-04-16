@@ -331,6 +331,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									continue;
 								}
 
+								// TODO We should check race here also
 								if (npc.getClassObj() != null) {
 									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("CHESTPLATE"))
@@ -356,6 +357,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									continue;
 								}
 
+								// We should check race here too
 								if (npc.getClassObj() != null) {
 									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))
@@ -380,6 +382,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									continue;
 								}
 
+								// We should check race here too
 								if (npc.getClassObj() != null) {
 									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))

@@ -348,4 +348,6 @@ public interface ISoliniaLivingEntity
 
 	int AttackWithMainHand(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage);
 
+	ISoliniaRace getRace();
+
 }
