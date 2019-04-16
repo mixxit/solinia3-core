@@ -86,4 +86,8 @@ public interface ISoliniaRace {
 	void setStartWorld(String startWorld);
 
 	public Location getStartLocation();
+
+	int getPassiveAbilityId();
+
+	void setPassiveAbilityId(int passiveAbilityId);
 }

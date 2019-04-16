@@ -15,6 +15,7 @@ import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
@@ -24,6 +25,7 @@ public class SoliniaGod implements ISoliniaGod {
 	private String name;
 	private String description;
 	private String alignment = "NEUTRAL";
+	private int passiveAbilityId = 0;
 	
 	@Override
 	public int getId() {
@@ -53,6 +55,14 @@ public class SoliniaGod implements ISoliniaGod {
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
 		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
+		if (getPassiveAbilityId() != 0) {
+			sender.sendMessage("- passiveabilityid: " + ChatColor.GOLD + getPassiveAbilityId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getSpell(getPassiveAbilityId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- passiveabilityid: " + ChatColor.GOLD + getPassiveAbilityId() + " (No Ability)" + ChatColor.RESET);
+		}
 	}
 
 	@Override
@@ -75,6 +85,24 @@ public class SoliniaGod implements ISoliniaGod {
 			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
 				throw new InvalidGodSettingException("Invalid Alignment (GOOD,NEUTRAL,EVIL)");
 			setAlignment(value.toUpperCase());
+			break;
+		case "passiveabilityid":
+			int abilityid = Integer.parseInt(value);
+			if (abilityid < 1)
+			{
+				setPassiveAbilityId(0);
+				break;
+			}
+			try
+			{
+				ISoliniaSpell ability = StateManager.getInstance().getConfigurationManager().getSpell(abilityid);
+				if (ability == null)
+					throw new InvalidGodSettingException("Invalid id");
+			} catch (CoreStateInitException e)
+			{
+				throw new InvalidGodSettingException("State not initialised");
+			}
+			setPassiveAbilityId(abilityid);
 			break;
 		default:
 			throw new InvalidGodSettingException(
@@ -101,5 +129,14 @@ public class SoliniaGod implements ISoliniaGod {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	@Override
+	public int getPassiveAbilityId() {
+		return passiveAbilityId;
+	}
+
+	@Override
+	public void setPassiveAbilityId(int passiveAbilityId) {
+		this.passiveAbilityId = passiveAbilityId;
+	}
 }

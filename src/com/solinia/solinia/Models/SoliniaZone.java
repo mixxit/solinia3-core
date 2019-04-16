@@ -4,9 +4,11 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
+import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
@@ -34,6 +36,7 @@ public class SoliniaZone {
 	private int hpRegen = 0;
 	private String requiresAlignment = "NONE";
 	private int requiresRaceId = 0;
+	private int passiveAbilityId = 0;
 
 	public int getId() {
 		return id;
@@ -129,6 +132,15 @@ public class SoliniaZone {
 		} else {
 			sender.sendMessage(
 					"- miningloottableid: " + ChatColor.GOLD + getMiningLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
+		
+		if (getPassiveAbilityId() != 0) {
+			sender.sendMessage("- passiveabilityid: " + ChatColor.GOLD + getPassiveAbilityId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getSpell(getPassiveAbilityId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- passiveabilityid: " + ChatColor.GOLD + getPassiveAbilityId() + " (No Ability)" + ChatColor.RESET);
 		}
 	}
 
@@ -258,6 +270,24 @@ public class SoliniaZone {
 				throw new InvalidZoneSettingException("Invalid alignment - must be GOOD NEUTRAL EVIL or NONE");			
 			setRequiresAlignment(value);
 			break;
+		case "passiveabilityid":
+			int abilityid = Integer.parseInt(value);
+			if (abilityid < 1)
+			{
+				setPassiveAbilityId(0);
+				break;
+			}
+			try
+			{
+				ISoliniaSpell ability = StateManager.getInstance().getConfigurationManager().getSpell(abilityid);
+				if (ability == null)
+					throw new InvalidZoneSettingException("Invalid id");
+			} catch (CoreStateInitException e)
+			{
+				throw new InvalidZoneSettingException("State not initialised");
+			}
+			setPassiveAbilityId(abilityid);
+			break;
 		default:
 			throw new InvalidZoneSettingException(
 					"Invalid zone setting. Valid Options are: name,x,y,z,requiresalignment,hotzone,succorx,succory,succorz,forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill");
@@ -358,5 +388,11 @@ public class SoliniaZone {
 	}
 	public void setRequiresRaceId(int requiresRaceId) {
 		this.requiresRaceId = requiresRaceId;
+	}
+	public int getPassiveAbilityId() {
+		return passiveAbilityId;
+	}
+	public void setPassiveAbilityId(int passiveAbilityId) {
+		this.passiveAbilityId = passiveAbilityId;
 	}
 }

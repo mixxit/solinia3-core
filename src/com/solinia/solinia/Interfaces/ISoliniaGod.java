@@ -32,5 +32,9 @@ public interface ISoliniaGod {
 	String getAlignment();
 
 	void setAlignment(String alignment);
+
+	int getPassiveAbilityId();
+
+	void setPassiveAbilityId(int passiveAbilityId);
 	
 }

@@ -8,7 +8,11 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
+import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.StateManager;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaRace implements ISoliniaRace {
@@ -35,6 +39,8 @@ public class SoliniaRace implements ISoliniaRace {
 	private int startY = 78;
 	private int startZ = -3672;
 	private String startWorld = "world";
+	
+	private int passiveAbilityId = 0;
 	
 	@Override
 	public String getName() {
@@ -156,6 +162,15 @@ public class SoliniaRace implements ISoliniaRace {
 		sender.sendMessage("- starty: " + ChatColor.GOLD + getStartY() + ChatColor.RESET);
 		sender.sendMessage("- startz: " + ChatColor.GOLD + getStartZ() + ChatColor.RESET);
 		sender.sendMessage("- startworld: " + ChatColor.GOLD + getStartWorld() + ChatColor.RESET);
+		if (getPassiveAbilityId() != 0) {
+			sender.sendMessage("- passiveabilityid: " + ChatColor.GOLD + getPassiveAbilityId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getSpell(getPassiveAbilityId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- passiveabilityid: " + ChatColor.GOLD + getPassiveAbilityId() + " (No Ability)" + ChatColor.RESET);
+		}
+
 		sender.sendMessage("----------------------------");
 	}
 
@@ -192,6 +207,24 @@ public class SoliniaRace implements ISoliniaRace {
 			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
 				throw new InvalidRaceSettingException("Invalid Race Alignment (GOOD,NEUTRAL,EVIL)");
 			setAlignment(value.toUpperCase());
+			break;
+		case "passiveabilityid":
+			int abilityid = Integer.parseInt(value);
+			if (abilityid < 1)
+			{
+				setPassiveAbilityId(0);
+				break;
+			}
+			try
+			{
+				ISoliniaSpell ability = StateManager.getInstance().getConfigurationManager().getSpell(abilityid);
+				if (ability == null)
+					throw new InvalidRaceSettingException("Invalid id");
+			} catch (CoreStateInitException e)
+			{
+				throw new InvalidRaceSettingException("State not initialised");
+			}
+			setPassiveAbilityId(abilityid);
 			break;
 		default:
 			throw new InvalidRaceSettingException("Invalid Race setting. Valid Options are: description");
@@ -281,6 +314,16 @@ public class SoliniaRace implements ISoliniaRace {
 	@Override
 	public Location getStartLocation() {
 		return new Location(Bukkit.getWorld(getStartWorld()), getStartX(), getStartY(), getStartZ());
+	}
+
+	@Override
+	public int getPassiveAbilityId() {
+		return passiveAbilityId;
+	}
+
+	@Override
+	public void setPassiveAbilityId(int passiveAbilityId) {
+		this.passiveAbilityId = passiveAbilityId;
 	}
 
 }
