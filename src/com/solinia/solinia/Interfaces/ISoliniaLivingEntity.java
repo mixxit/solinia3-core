@@ -348,4 +348,10 @@ public interface ISoliniaLivingEntity
 
 	int AttackWithMainHand(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage);
 
+	ISoliniaRace getRace();
+
+	ISoliniaGod getGod();
+
+	public void tryApplySpellOnSelf(int spellId);
+
 }

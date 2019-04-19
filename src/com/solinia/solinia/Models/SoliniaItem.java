@@ -50,6 +50,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int wisdom = 0;
 	private int charisma = 0;
 	private List<String> allowedClassNames = new ArrayList<String>();
+	private List<String> allowedRaceNames = new ArrayList<String>();
 	private String texturebase64;
 	private boolean questitem = false;
 	private int damage = 0;
@@ -253,6 +254,16 @@ public class SoliniaItem implements ISoliniaItem {
 		this.allowedClassNames = allowedClassesNames;
 	}
 
+	@Override
+	public List<String> getAllowedRaceNames() {
+		return allowedRaceNames;
+	}
+
+	@Override
+	public void setAllowedRaceNames(List<String> allowedRaceNames) {
+		this.allowedRaceNames = allowedRaceNames;
+	}
+	
 	@Override
 	public String getTexturebase64() {
 		return texturebase64;
@@ -797,6 +808,13 @@ public class SoliniaItem implements ISoliniaItem {
 		}
 		sender.sendMessage("- allowedclassnames: " + allowedClassNames.trim());
 
+		String allowedRaceNames = "";
+		for(String racename : this.getAllowedRaceNames())
+		{
+			allowedRaceNames += racename + ",";
+		}
+		sender.sendMessage("- allowedracenames: " + allowedRaceNames.trim());
+
 	}
 
 	private String getLastUpdatedTimeAsString() {
@@ -854,6 +872,26 @@ public class SoliniaItem implements ISoliniaItem {
 			}
 			
 			setAllowedClassNames(Arrays.asList(allowedclasses));
+			break;
+		case "allowedracenames":
+			String[] allowedraces = value.split(",");
+			
+			for (String racename : allowedraces)
+			{
+				boolean foundRace = false;
+				for (ISoliniaRace solRace : StateManager.getInstance().getConfigurationManager().getRaces())
+				{
+					if (solRace.getName().toUpperCase().equals(racename.toUpperCase()))
+						foundRace = true;
+				}
+				
+				if (foundRace == false)
+				{
+					throw new InvalidItemSettingException("Invalid race in allowedclasses array [" + racename + "]");
+				}
+			}
+			
+			setAllowedRaceNames(Arrays.asList(allowedraces));
 			break;
 		case "color":
 			setColor(Short.parseShort(value));
@@ -949,6 +987,9 @@ public class SoliniaItem implements ISoliniaItem {
 		case "clearallowedclasses":
 			setAllowedClassNames(new ArrayList<String>());
 			break;
+		case "clearallowedraces":
+			setAllowedRaceNames(new ArrayList<String>());
+			break;
 		case "cleardiscoverer":
 			setDiscoverer("");
 			break;
@@ -1028,7 +1069,7 @@ public class SoliniaItem implements ISoliniaItem {
 			setLanguagePrimer("");
 			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,identifymessage,languageprimer,clearlanguageprimer");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,clearallowedraces,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,allowedracenames,identifymessage,languageprimer,clearlanguageprimer");
 		}
 		
 		this.setLastUpdatedTimeNow();

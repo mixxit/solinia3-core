@@ -17,6 +17,7 @@ import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Exceptions.InvalidGodSettingException;
 import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
@@ -35,6 +36,7 @@ import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
+import com.solinia.solinia.Models.SoliniaGod;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -541,4 +543,19 @@ public interface IConfigurationManager {
 
 	void editQuest(CommandSender sender, int id, String setting, String value, String[] additional)
 			throws InvalidQuestSettingException, NumberFormatException, CoreStateInitException;
+
+	void editGod(int id, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidGodSettingException;
+
+	int getNextGodId();
+
+	List<ISoliniaGod> getGods();
+
+	ISoliniaGod addGod(SoliniaGod god);
+
+	boolean isGodNameFree(String godNameUpperCase);
+
+	ISoliniaGod getGod(int Id);
+
+	ISoliniaGod getGod(String name);
 }

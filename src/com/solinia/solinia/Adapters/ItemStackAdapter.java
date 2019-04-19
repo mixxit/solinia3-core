@@ -224,15 +224,28 @@ public class ItemStackAdapter {
 
 		String classtxt = "";
 		if (soliniaItem.getAllowedClassNames().size() > 0) {
-			classtxt = "Usable By: ";
+			classtxt = "Classes: ";
 			for (String classname : soliniaItem.getAllowedClassNames()) {
 				classtxt += ChatColor.YELLOW + classname + ChatColor.RESET + " ";
 			}
 		}
-
+		
 		if (!classtxt.equals("")) {
 			loretxt.add(classtxt);
 		}
+		
+		String racetxt = "";
+		if (soliniaItem.getAllowedRaceNames().size() > 0) {
+			racetxt = "Races: ";
+			for (String racename : soliniaItem.getAllowedRaceNames()) {
+				racetxt += ChatColor.YELLOW + racename + ChatColor.RESET + " ";
+			}
+		}
+		
+		if (!racetxt.equals("")) {
+			loretxt.add(racetxt);
+		}
+
 		
 		if (soliniaItem.getMinLevel() > 0) {
 			loretxt.add("Minimum Level: " + ChatColor.YELLOW + soliniaItem.getMinLevel() + ChatColor.RESET);

@@ -7,6 +7,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.solinia.solinia.Commands.*;
+import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
@@ -32,6 +33,7 @@ import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
+import com.solinia.solinia.Repositories.JsonGodRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
@@ -61,6 +63,7 @@ import com.solinia.solinia.Timers.PlayerEquipmentTickTimer;
 import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerTickTimer;
+import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 import com.solinia.solinia.Timers.ZoneTickTimer;
@@ -91,6 +94,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 	private DiscordMessageTimer discordMessageTimer;
 	private InvalidItemCheckerTimer invalidItemCheckerTimer;
 	private EntityAutoAttackTimer entityAutoAttackTimer;
+	private SoliniaLivingEntityPassiveEffectTimer entityPassiveEffectTimer;
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
@@ -299,6 +303,11 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			JsonWorldRepository worldrepo = new JsonWorldRepository();
 			worldrepo.setJsonFile(getDataFolder() + "/" + "worlds.json");
 			worldrepo.reload();
+
+			JsonGodRepository godrepo = new JsonGodRepository();
+			godrepo.setJsonFile(getDataFolder() + "/" + "gods.json");
+			godrepo.reload();
+
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(this, new MythicMobsNPCEntityProvider());
@@ -306,7 +315,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
 					aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
-					accountclaimsrepo, zonesrepo, craftrepo, worldrepo);
+					accountclaimsrepo, zonesrepo, craftrepo, worldrepo,godrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -373,6 +382,9 @@ public class Solinia3CorePlugin extends JavaPlugin {
 			
 			entityAutoAttackTimer = new EntityAutoAttackTimer();
 			entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
+
+			entityPassiveEffectTimer = new SoliniaLivingEntityPassiveEffectTimer();
+			entityPassiveEffectTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 			
 			if (this.discordClient != null)
 			{
@@ -398,6 +410,13 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
 
+		this.getCommand("creategod").setExecutor(new CommandCreateGod());
+		this.getCommand("listgods").setExecutor(new CommandListGods());
+		this.getCommand("editgod").setExecutor(new CommandEditGod());
+
+		this.getCommand("godinfo").setExecutor(new CommandGodInfo());
+		this.getCommand("setgod").setExecutor(new CommandSetGod());
+		
 		this.getCommand("castslot").setExecutor(new CommandCastSlot());
 		this.getCommand("shout").setExecutor(new CommandShout());
 		this.getCommand("whisper").setExecutor(new CommandWhisper());

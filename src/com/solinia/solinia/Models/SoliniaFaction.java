@@ -125,7 +125,7 @@ public class SoliniaFaction implements ISoliniaFaction {
 			break;
 		default:
 			throw new InvalidFactionSettingException(
-					"Invalid SpawnGroup setting. Valid Options are: name, base, factionentry");
+					"Invalid setting. Valid Options are: name, base, factionentry");
 		}
 	}
 	

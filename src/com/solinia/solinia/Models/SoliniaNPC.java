@@ -28,6 +28,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
@@ -779,6 +780,18 @@ public class SoliniaNPC implements ISoliniaNPC {
 		}
 	}
 
+	@Override
+	public ISoliniaRace getRace() {
+		if (getRaceid() < 1)
+			return null;
+
+		try {
+			return StateManager.getInstance().getConfigurationManager().getRace(getRaceid());
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
+	
 	@Override
 	public boolean isCorePet() {
 		return isPet;

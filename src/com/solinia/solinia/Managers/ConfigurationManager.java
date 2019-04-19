@@ -22,6 +22,7 @@ import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
+import com.solinia.solinia.Exceptions.InvalidGodSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootTableSettingException;
@@ -43,6 +44,7 @@ import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaAlignment;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
@@ -66,6 +68,7 @@ import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
+import com.solinia.solinia.Models.SoliniaGod;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -78,6 +81,7 @@ import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
+import com.solinia.solinia.Repositories.JsonGodRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Utils.ItemStackUtils;
 
@@ -115,6 +119,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<SoliniaAccountClaim> accountClaimsRepository;
 	private IRepository<SoliniaZone> zonesRepository;
 	private IRepository<SoliniaCraft> craftRepository;
+	private IRepository<ISoliniaGod> godsRepository;
 	private IRepository<SoliniaWorld> worldRepository;
 	private List<Bond> bonds = new ArrayList<Bond>();
 	private List<Flaw> flaws = new ArrayList<Flaw>();
@@ -134,7 +139,9 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonAAAbilityRepository aaabilitiesContext, 
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
-			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext) {
+			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext,
+			JsonGodRepository godsContext
+			) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
 		this.itemRepository = itemContext;
@@ -156,6 +163,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.zonesRepository = zonesContext;
 		this.craftRepository = craftContext;
 		this.worldRepository = worldContext;
+		this.godsRepository = godsContext;
 		
 		this.setBonds(generateBonds());
 		this.setOaths(generateOaths());
@@ -200,6 +208,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.zonesRepository.commit();
 		this.craftRepository.commit();
 		this.worldRepository.commit();
+		this.godsRepository.commit();
 	}
 	
 	@Override 
@@ -598,6 +607,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
+	public ISoliniaGod addGod(SoliniaGod god) {
+		this.godsRepository.add(god);
+		return getGod(god.getId());
+
+	}
+	
+	@Override
 	public void addClass(ISoliniaClass classobj) {
 		this.classRepository.add(classobj);
 
@@ -775,7 +791,13 @@ public class ConfigurationManager implements IConfigurationManager {
 			throws NumberFormatException, CoreStateInitException, InvalidZoneSettingException {
 		getZone(zoneid).editSetting(setting, value);
 	}
-	
+
+	@Override
+	public void editGod(int id, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidGodSettingException {
+		getGod(id).editSetting(setting, value);
+	}
+
 	@Override
 	public void editCraft(int craftid, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidCraftSettingException {
@@ -856,7 +878,7 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return null;
 	}
-	
+
 	@Override
 	public SoliniaCraft getCraft(String name) {
 		// TODO Auto-generated method stub
@@ -892,6 +914,16 @@ public class ConfigurationManager implements IConfigurationManager {
 			return null;
 		}
 		
+		return null;
+	}
+	
+	@Override
+	public ISoliniaGod getGod(String name) {
+
+		List<ISoliniaGod> entries = godsRepository.query(q -> q.getName().toUpperCase().equals(name.toUpperCase()));
+		if (entries.size() > 0)
+			return entries.get(0);
+
 		return null;
 	}
 
@@ -1073,6 +1105,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public ISoliniaGod getGod(int Id) {
+		return godsRepository.getByKey(Id);
+	}
+	
+	@Override
 	public ISoliniaAARank getAARank(int seekRankId) {
 		ISoliniaAARank aarank = null;
 		try {
@@ -1228,6 +1265,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	public List<SoliniaZone> getZones() {
 		return zonesRepository.query(q -> q.getId() > 0);
 	}
+
+	@Override
+	public List<ISoliniaGod> getGods() {
+		return godsRepository.query(q -> q.getId() > 0);
+	}
 	
 	@Override
 	public List<SoliniaCraft> getCrafts() {
@@ -1261,6 +1303,18 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return max + 1;
 	}
+
+	@Override
+	public int getNextGodId() {
+		int max = 0;
+		for (ISoliniaGod entry : getGods()) {
+			if (entry.getId() > max)
+				max = entry.getId();
+		}
+
+		return max + 1;
+	}
+
 	
 	@Override
 	public int getNextCraftId() {
@@ -1360,6 +1414,15 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
+	public boolean isGodNameFree(String godNameUpperCase) {
+		List<ISoliniaGod> list = godsRepository.query(q -> q.getName().toUpperCase().equals(godNameUpperCase.toUpperCase()));
+		if (list.size() > 0)
+			return false;
+		
+		return true;
+	}
+	
+	@Override
 	public boolean isSpellsChanged() {
 		return spellsChanged;
 	}
@@ -1381,15 +1444,6 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public void commitCsvs() {
-		System.out.println("Writing Items CSV");
-		this.itemRepository.writeCsv("items.csv");
-		System.out.println("Writing Items CSV Finished");
-		System.out.println("Writing Spells CSV");
-		this.spellRepository.writeCsv("spells.csv");
-		System.out.println("Writing Spells Finished");
-		System.out.println("Writing Craft CSV");
-		this.craftRepository.writeCsv("crafts.csv");
-		System.out.println("Writing Craft Finished");
 	}
 
 	@Override

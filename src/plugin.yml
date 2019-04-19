@@ -126,6 +126,16 @@ commands:
     usage: /setrace racename
     aliases:
     - race
+  setgod:
+    description: Sets a players god
+    usage: /setgod godname
+    aliases:
+    - god
+  creategod:
+    description: Adds a new God
+    usage: /addgod name
+    aliases:
+    - addgod
   addclass:
     description: Creates a new class
     usage: /addclass classname adminonly
@@ -204,6 +214,10 @@ commands:
     description: Lists active zones
     usage: /listzones
     aliases: []
+  listgods:
+    description: Lists gods
+    usage: /listgods
+    aliases: []
   hotzones:
     description: Lists hot zones
     usage: /listhotzones
@@ -223,6 +237,10 @@ commands:
   raceinfo:
     description: Lists race info
     usage: /raceinfo
+    aliases: []
+  godinfo:
+    description: Lists god info
+    usage: /godinfo
     aliases: []
   rebuildspellitems:
     description: Rebuilds spell items
@@ -456,6 +474,10 @@ commands:
   editrace:
     description: Edits a race
     usage: /editrace raceid setting value
+    aliases: []
+  editgod:
+    description: Edits a god
+    usage: /editgod godid setting value
     aliases: []
   editalignment:
     description: Edits an alignment

@@ -36,6 +36,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -68,6 +69,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private Double aaexperience = 0d;
 	private int aapoints = 0;
 	private int raceid = 0;
+	private int godId = 0;
+	private boolean hasChosenGod = false;
 	private boolean haschosenrace = false;
 	private boolean haschosenclass = false;
 	private int classid = 0;
@@ -341,6 +344,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public ISoliniaRace getRace() {
 		try {
 			return StateManager.getInstance().getConfigurationManager().getRace(getRaceId());
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public ISoliniaGod getGod() {
+		try {
+			return StateManager.getInstance().getConfigurationManager().getGod(getGodId());
 		} catch (CoreStateInitException e) {
 			return null;
 		}
@@ -3989,5 +4001,25 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 		}
 		return false;
+	}
+
+	@Override
+	public int getGodId() {
+		return godId;
+	}
+
+	@Override
+	public void setGodId(int godId) {
+		this.godId = godId;
+	}
+
+	@Override
+	public boolean hasChosenGod() {
+		return hasChosenGod;
+	}
+
+	@Override
+	public void setHasChosenGod(boolean hasChosenGod) {
+		this.hasChosenGod = hasChosenGod;
 	}
 }

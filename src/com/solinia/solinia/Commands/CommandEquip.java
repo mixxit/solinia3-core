@@ -92,6 +92,13 @@ public class CommandEquip implements CommandExecutor {
 							return true;
 						}
 
+					if (item.getAllowedRaceNames() != null && item.getAllowedRaceNames().size() > 0)
+						if (!item.getAllowedRaceNames().contains(solPlayer.getRace().getName().toUpperCase())) {
+							player.sendMessage(ChatColor.GRAY + "Your race cannot wear this equipment");
+							return true;
+						}
+
+					
 					if (item.getMinLevel() > solPlayer.getLevel()) {
 						player.sendMessage(ChatColor.GRAY + "Your are not sufficient level to wear this equipment");
 						return true;

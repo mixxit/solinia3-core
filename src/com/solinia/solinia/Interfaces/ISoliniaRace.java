@@ -1,5 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -67,4 +68,26 @@ public interface ISoliniaRace {
 	boolean isVampire();
 
 	void setVampire(boolean vampire);
+
+	int getStartX();
+
+	void setStartX(int startX);
+
+	int getStartY();
+
+	void setStartY(int startY);
+
+	int getStartZ();
+
+	void setStartZ(int startZ);
+
+	String getStartWorld();
+
+	void setStartWorld(String startWorld);
+
+	public Location getStartLocation();
+
+	int getPassiveAbilityId();
+
+	void setPassiveAbilityId(int passiveAbilityId);
 }

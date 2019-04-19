@@ -119,6 +119,7 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 						item.setDisplayname("Spell: " + spell.getName());
 						item.setSpellscroll(true);
 						item.setAllowedClassNames(new ArrayList<String>());
+						item.setAllowedRaceNames(new ArrayList<String>());
 						item.setLore("This appears to be some sort of   magical spell that could be       learned");
 						item.setWorth(worth);
 						item.setLastUpdatedTimeNow();
@@ -132,6 +133,7 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 					item.setDisplayname("Spell: " + spell.getName());
 					item.setSpellscroll(true);
 					item.setAllowedClassNames(new ArrayList<String>());
+					item.setAllowedRaceNames(new ArrayList<String>());
 					item.setLore("This appears to be some sort of   magical spell that could be       learned");
 					item.setWorth(worth);
 					item.setLastUpdatedTimeNow();

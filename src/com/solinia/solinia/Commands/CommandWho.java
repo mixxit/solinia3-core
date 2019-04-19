@@ -49,6 +49,7 @@ public class CommandWho implements CommandExecutor {
 		        	
 		        	String racename = "UNKNOWN";
 		        	String classname = "UNKNOWN";
+		        	String godname = "UNKNOWN";
 		        	
 		        	if (solplayer.getRace() != null)
 		        		racename = solplayer.getRace().getName();
@@ -63,12 +64,17 @@ public class CommandWho implements CommandExecutor {
 		        	
 		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET));
 					
+		        	String worship = "I worship: " + godname + "\n";
+		        	
 					String ideal = "Ideal: I have no ideal\n";
 					String trait1 = "Trait: I have no primary trait\n";
 					String trait2 = "Trait: I have no secondary trait\n";
 					String bond = "Bond: I have no bond\n";
 					String flaw = "Flaw: I have no flaw\n";
 					String oath = "Oath: I have no oath\n";
+					
+					if (solplayer.getGodId() > 0)
+						worship = "I worship: " + solplayer.getGod().getName() + "\n";
 					
 					if (solplayer.getPersonality().getIdealId() > 0)
 					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + "\n";
@@ -95,6 +101,7 @@ public class CommandWho implements CommandExecutor {
 					}
 					
 					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + "\n" + 
+					worship + 
 					ideal +
 					trait1 +
 					trait2 + 

@@ -1,102 +1,93 @@
 package com.solinia.solinia.Repositories;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Interfaces.IRepository;
-import com.solinia.solinia.Interfaces.ISoliniaSpell;
-import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Interfaces.ISoliniaGod;
+import com.solinia.solinia.Models.SoliniaGod;
 
-public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
-
+public class JsonGodRepository implements IRepository<ISoliniaGod> {
 	private String filePath;
-	private ConcurrentHashMap<Integer, ISoliniaSpell> spells = new ConcurrentHashMap<Integer, ISoliniaSpell>();
+	private ConcurrentHashMap<Integer, ISoliniaGod> Gods = new ConcurrentHashMap<Integer, ISoliniaGod>();
 
 	@Override
-	public void add(ISoliniaSpell item) {
-		this.spells.put(item.getId(), item);
+	public void add(ISoliniaGod item) {
+		this.Gods.put(item.getId(), item);
 	}
 
 	@Override
-	public void add(Iterable<ISoliniaSpell> items) {
-		for(ISoliniaSpell i : items)
+	public void add(Iterable<ISoliniaGod> items) {
+		for(ISoliniaGod i : items)
 		{
-			this.spells.put(i.getId(), i);
+			this.Gods.put(i.getId(), i);
 		}
 	}
 
 	@Override
-	public void update(ISoliniaSpell item) {
-		this.spells.put(item.getId(), item);
+	public void update(ISoliniaGod item) {
+		this.Gods.put(item.getId(), item);
 	}
 
 	@Override
-	public void remove(ISoliniaSpell item) {
-		this.spells.remove(item.getId());
+	public void remove(ISoliniaGod item) {
+		this.Gods.remove(item.getId());
 	}
 
 	@Override
-	public void remove(Predicate<ISoliniaSpell> filter) {
-		for(ISoliniaSpell i : spells.values().stream().filter(filter).collect(Collectors.toList()))
+	public void remove(Predicate<ISoliniaGod> filter) {
+		for(ISoliniaGod i : Gods.values().stream().filter(filter).collect(Collectors.toList()))
 		{
-			spells.remove(i.getId());
+			Gods.remove(i.getId());
 		}
 	}
 
 	@Override
-	public List<ISoliniaSpell> query(Predicate<ISoliniaSpell> filter) {
-		return spells.values().stream().filter(filter).collect(Collectors.toList());
+	public List<ISoliniaGod> query(Predicate<ISoliniaGod> filter) {
+		return Gods.values().stream().filter(filter).collect(Collectors.toList());
 	}
 
 	@Override
 	public void reload() {
-		List<ISoliniaSpell> file = new ArrayList<ISoliniaSpell>();
+		List<ISoliniaGod> file = new ArrayList<ISoliniaGod>();
 		
 		try {
 			Gson gson = new Gson();
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
-			file = gson.fromJson(br, new TypeToken<List<SoliniaSpell>>(){}.getType());
+			file = gson.fromJson(br, new TypeToken<List<SoliniaGod>>(){}.getType());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		
-		spells.clear();
-		for(ISoliniaSpell i : file)
+		Gods.clear();
+		for(ISoliniaGod i : file)
 		{
-			spells.put(i.getId(), i);
+			Gods.put(i.getId(), i);
 		}
 		
-		System.out.println("Reloaded " + spells.size() + " spells");
+		System.out.println("Reloaded " + Gods.size() + " Gods");
 	}	
 	
 	@Override
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
-		String jsonOutput = gson.toJson(spells.values(), new TypeToken<List<SoliniaSpell>>(){}.getType());
+		String jsonOutput = gson.toJson(Gods.values(), new TypeToken<List<SoliniaGod>>(){}.getType());
 		try {
 			
 			File file = new File(filePath);
@@ -109,7 +100,7 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 	        outWriter.close();
 	        fileOut.close();
 	        
-	        System.out.println("Commited " + spells.size() + " spells");
+	        System.out.println("Commited " + Gods.size() + " Gods");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,8 +115,8 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 	}
 	
 	@Override
-	public ISoliniaSpell getByKey(Object key) {
-		return this.spells.get(key);
+	public ISoliniaGod getByKey(Object key) {
+		return this.Gods.get(key);
 	}
 
 	@Override
@@ -133,5 +124,4 @@ public class JsonSpellRepository implements IRepository<ISoliniaSpell> {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

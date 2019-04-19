@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordBotspamChannelCommandSender;
@@ -22,28 +22,25 @@ import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class CommandSetRace implements CommandExecutor {
+public class CommandSetGod implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 		
-		sender.sendMessage("See /raceinfo for more information");
+		sender.sendMessage("See /godinfo for more information");
 		
-		String racelist = "";
-        List<ISoliniaRace> races = new ArrayList<ISoliniaRace>();
+		String godlist = "";
+        List<ISoliniaGod> gods = new ArrayList<ISoliniaGod>();
     	try {
-			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
+			for(ISoliniaGod god : StateManager.getInstance().getConfigurationManager().getGods())
 			{
-				if (!race.isAdmin())
-				{
-					racelist = racelist + " " + ChatColor.LIGHT_PURPLE + race.getName().toUpperCase() + ChatColor.RESET;
-					races.add(race);
-				}
+				godlist = godlist + " " + ChatColor.LIGHT_PURPLE + god.getName().toUpperCase() + ChatColor.RESET;
+				gods.add(god);
 			}
 		} catch (CoreStateInitException e1) 
     	{
-			sender.sendMessage("Race command failed. " + e1.getMessage());
+			sender.sendMessage("God command failed. " + e1.getMessage());
 			return false;
 		}
 		
@@ -57,7 +54,7 @@ public class CommandSetRace implements CommandExecutor {
 
 		{
 			try {
-				Utils.sendRaceInfo(sender);
+				Utils.sendGodInfo(sender);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -70,48 +67,48 @@ public class CommandSetRace implements CommandExecutor {
 		try {
 			soliniaplayer = SoliniaPlayerAdapter.Adapt(player);
 		} catch (CoreStateInitException e2) {
-			player.sendMessage("Race command failed. " + e2.getMessage());
+			player.sendMessage("God command failed. " + e2.getMessage());
 			return false;
 		}
     	
-    	if (soliniaplayer.hasChosenRace() == true)
+    	if (soliniaplayer.hasChosenGod() == true)
         {
-        	player.sendMessage("You cannot choose a race as you have already selected one");
+        	player.sendMessage("You cannot choose a god as you have already selected one");
         	return true;            	
         }
         
         if (args.length == 0)
         {
         	try {
-				Utils.sendRaceInfo(sender);
+				Utils.sendGodInfo(sender);
 			} catch (CoreStateInitException e1) {
 				
 			}
-        	player.sendMessage("Insufficient arguments. Please provide correct race name");
+        	player.sendMessage("Insufficient arguments. Please provide correct god name");
         	if (soliniaplayer != null)
         	{
-        		ISoliniaRace solrace;
+        		ISoliniaGod solgod;
 				try {
-					solrace = StateManager.getInstance().getConfigurationManager().getRace(soliniaplayer.getRaceId());
+					solgod = StateManager.getInstance().getConfigurationManager().getGod(soliniaplayer.getGodId());
 				} catch (CoreStateInitException e) {
-					player.sendMessage("Race command failed. " + e.getMessage());
+					player.sendMessage("God command failed. " + e.getMessage());
 					return false;
 				}
         		
-				if (solrace == null)
-					player.sendMessage("Your current race is: UNKNOWN");
+				if (solgod == null)
+					player.sendMessage("Your current god is: UNKNOWN");
 				else
-					player.sendMessage("Your current race is: " + solrace.getName());
+					player.sendMessage("Your current god is: " + solgod.getName());
         	}
         	return false;
         }
         
-        String race = args[0].toUpperCase();
+        String god = args[0].toUpperCase();
         
         boolean found = false;
-        for(ISoliniaRace allowedrace : races)
+        for(ISoliniaGod allowedgod : gods)
     	{
-    		if (allowedrace.getName().equals(race))
+    		if (allowedgod.getName().equals(god))
     		{
     			found = true;
     		}
@@ -120,36 +117,32 @@ public class CommandSetRace implements CommandExecutor {
         if (found == false)
         {
         	try {
-				Utils.sendRaceInfo(sender);
+				Utils.sendGodInfo(sender);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        	player.sendMessage("Insufficient arguments. Please provide correct race name");
+        	player.sendMessage("Insufficient arguments. Please provide correct god name");
         	return false;
         }
         
         try {
-			if (StateManager.getInstance().getConfigurationManager().getRace(race) != null)
+			if (StateManager.getInstance().getConfigurationManager().getGod(god) != null)
 			{
-				ISoliniaRace solRace = StateManager.getInstance().getConfigurationManager().getRace(race);
+				ISoliniaGod solGod = StateManager.getInstance().getConfigurationManager().getGod(god);
 				
-				soliniaplayer.setRaceId(solRace.getId());
-				soliniaplayer.setChosenRace(true);
-				player.sendMessage("* Race set to " + race);
-				
-				player.teleport(solRace.getStartLocation());
-				soliniaplayer.setBindPoint(solRace.getStartWorld() + "," + solRace.getStartX() + ","
-					+ solRace.getStartY() + "," + solRace.getStartZ());
+				soliniaplayer.setGodId(solGod.getId());
+				soliniaplayer.setHasChosenGod(true);
+				player.sendMessage("* God set to " + god);
 				
 				return true;
 			} else {
-				Utils.sendRaceInfo(sender);
-				player.sendMessage("Insufficient arguments. Please provide correct race name");
+				Utils.sendGodInfo(sender);
+				player.sendMessage("Insufficient arguments. Please provide correct god name");
 				return false;
 			}
 		} catch (CoreStateInitException e) {
-			player.sendMessage("Race command failed. " + e.getMessage());
+			player.sendMessage("God command failed. " + e.getMessage());
 			return false;
 		}
 	}

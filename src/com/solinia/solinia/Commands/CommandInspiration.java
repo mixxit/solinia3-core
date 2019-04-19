@@ -40,8 +40,9 @@ public class CommandInspiration implements CommandExecutor {
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Legs) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manalegs");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Feet) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manafeet");
 				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x 100% Experience Potion " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy xpbottle");
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x pre-tier gear set" + ChatColor.RESET + " - Cost: 6 inspiration : /inspiration buy pregear");
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x next tier gear set" + ChatColor.RESET + " - Cost: 35 inspiration : /inspiration buy gear");
+				// Inspiration gear disabled temporarily for 2019 update
+				//sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x pre-tier gear set" + ChatColor.RESET + " - Cost: 6 inspiration : /inspiration buy pregear");
+				//sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x next tier gear set" + ChatColor.RESET + " - Cost: 35 inspiration : /inspiration buy gear");
 				sender.sendMessage("-----------------");
 				sender.sendMessage("Sub Commands: " + ChatColor.LIGHT_PURPLE + "sites, buy, send");
 				
@@ -63,210 +64,13 @@ public class CommandInspiration implements CommandExecutor {
 						switch(args[1].toLowerCase())
 						{
 							case "gear":
-							if (sender instanceof Player)
-							{
-								ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sender);
-								cost = 35;
-								if (player.getInspiration() >= cost)
-								{
-									
-									String suffix = "of Inspiration";
-									
-									int playertier = 1;
-									if (player.getLevel() >= 1 && player.getLevel() < 11)
-										playertier = 1;
-									if (player.getLevel() >= 11 && player.getLevel() < 21)
-										playertier = 2;
-									if (player.getLevel() >= 21 && player.getLevel() < 31)
-										playertier = 3;
-									if (player.getLevel() >= 31 && player.getLevel() < 41)
-										playertier = 4;
-									if (player.getLevel() >= 41 && player.getLevel() < 51)
-										playertier = 5;
-									if (player.getLevel() >= 51 && player.getLevel() < 61)
-										playertier = 6;
-									if (player.getLevel() >= 61 && player.getLevel() < 71)
-										playertier = 7;
-									if (player.getLevel() >= 71 && player.getLevel() < 81)
-										playertier = 8;
-									if (player.getLevel() >= 81 && player.getLevel() < 91)
-										playertier = 9;
-									if (player.getLevel() >= 91 && player.getLevel() < 101)
-										playertier = 10;
-									if (player.getLevel() >= 101 && player.getLevel() < 111)
-										playertier = 11;
-
-									
-									try {
-										
-										// always give the next tier up
-										// this ability is for special seasonal rewards only
-										playertier += 1;
-										List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, player.getBukkitPlayer().getName());
-										
-										for(int itemid : items)
-										{
-											ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
-											final String playerName = player.getBukkitPlayer().getName();
-											final int minLevel = player.getLevel();
-											final int finalitemid = itemid;
-											if (item != null)
-											{
-												
-												Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-														Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
-															public void run() {
-																try
-																{
-																	ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(finalitemid);
-																	item.setMinLevel(minLevel);
-																	item.setLastUpdatedTimeNow();
-																	SoliniaAccountClaim claim = new SoliniaAccountClaim();
-																	claim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-																	claim.setMcname(playerName);
-																	claim.setItemid(finalitemid);
-																	claim.setClaimed(false);
-																	Player claimPlayer = Bukkit.getPlayer(playerName);
-																	if (claimPlayer != null)
-																	{
-																		claimPlayer.sendMessage(ChatColor.GOLD + "You have been awarded with a claim item! See /claim");
-																	}
-																	StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
-																	System.out.println("Awarded Claim: " + item.getDisplayname() + " to " + playerName);
-																} catch (CoreStateInitException e)
-																{
-																	// skip
-																}
-															}
-														});
-											}
-										}
-										
-										player.setInspiration(player.getInspiration() - cost);
-										sender.sendMessage("You have purchased a full set of gear!");
-
-									} catch (CoreStateInitException e)
-									{
-										sender.sendMessage("There was a problem generating your gear (Core), please report this to a developer");
-									} catch (SoliniaItemException e)
-									{
-										sender.sendMessage("There was a problem generating your gear (Item), please report this to a developer");
-									}
-									
-									return true;
-								} else {
-									sender.sendMessage("You require more inspiration points to purchase this");
-									return true;
-								}
-							} else {
-								sender.sendMessage("This is a player only subcommand");
-								return true;
-
-							}
+								//sendGear(sender, cost);
+								//return true;
+								return false;
 							case "pregear":
-								if (sender instanceof Player)
-								{
-									ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sender);
-									cost = 6;
-									if (player.getInspiration() >= cost)
-									{
-										
-										String suffix = "of Inspiration";
-										
-										int playertier = 1;
-										if (player.getLevel() >= 1 && player.getLevel() < 11)
-											playertier = 1;
-										if (player.getLevel() >= 11 && player.getLevel() < 21)
-											playertier = 2;
-										if (player.getLevel() >= 21 && player.getLevel() < 31)
-											playertier = 3;
-										if (player.getLevel() >= 31 && player.getLevel() < 41)
-											playertier = 4;
-										if (player.getLevel() >= 41 && player.getLevel() < 51)
-											playertier = 5;
-										if (player.getLevel() >= 51 && player.getLevel() < 61)
-											playertier = 6;
-										if (player.getLevel() >= 61 && player.getLevel() < 71)
-											playertier = 7;
-										if (player.getLevel() >= 71 && player.getLevel() < 81)
-											playertier = 8;
-										if (player.getLevel() >= 81 && player.getLevel() < 91)
-											playertier = 9;
-										if (player.getLevel() >= 91 && player.getLevel() < 101)
-											playertier = 10;
-										if (player.getLevel() >= 101 && player.getLevel() < 111)
-											playertier = 11;
-
-										
-										try {
-											
-											// always give the next tier up
-											// this ability is for special seasonal rewards only
-											playertier -= 1;
-											if (playertier < 1)
-												playertier = 1;
-											
-											List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, player.getBukkitPlayer().getName());
-											
-											for(int itemid : items)
-											{
-												ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
-												final String playerName = player.getBukkitPlayer().getName();
-												final int minLevel = player.getLevel();
-												final int finalitemid = itemid;
-												if (item != null)
-												{
-													
-													Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-															Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
-																public void run() {
-																	try
-																	{
-																		ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(finalitemid);
-																		item.setMinLevel(minLevel);
-																		item.setLastUpdatedTimeNow();
-																		SoliniaAccountClaim claim = new SoliniaAccountClaim();
-																		claim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-																		claim.setMcname(playerName);
-																		claim.setItemid(finalitemid);
-																		claim.setClaimed(false);
-																		Player claimPlayer = Bukkit.getPlayer(playerName);
-																		if (claimPlayer != null)
-																		{
-																			claimPlayer.sendMessage(ChatColor.GOLD + "You have been awarded with a claim item! See /claim");
-																		}
-																		StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
-																		System.out.println("Awarded Claim: " + item.getDisplayname() + " to " + playerName);
-																	} catch (CoreStateInitException e)
-																	{
-																		// skip
-																	}
-																}
-															});
-												}
-											}
-											
-											player.setInspiration(player.getInspiration() - cost);
-											sender.sendMessage("You have purchased a full set of gear!");
-
-										} catch (CoreStateInitException e)
-										{
-											sender.sendMessage("There was a problem generating your gear (Core), please report this to a developer");
-										} catch (SoliniaItemException e)
-										{
-											sender.sendMessage("There was a problem generating your gear (Item), please report this to a developer");
-										}
-										
-										return true;
-									} else {
-										sender.sendMessage("You require more inspiration points to purchase this");
-										return true;
-									}
-								} else {
-									sender.sendMessage("This is a player only subcommand");
-									return true;
-								}
-						
+								//sendPreGear(sender, cost);
+								//return true;
+								return false;
 							case "aa":
 								if (sender instanceof Player)
 								{
@@ -495,6 +299,226 @@ public class CommandInspiration implements CommandExecutor {
 			e.printStackTrace();
 			sender.sendMessage(e.getMessage());
 			return true;
+		}
+	}
+
+	private boolean sendGear(CommandSender sender, int cost) {
+		try
+		{
+		if (sender instanceof Player)
+		{
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sender);
+			cost = 35;
+			if (player.getInspiration() >= cost)
+			{
+				
+				String suffix = "of Inspiration";
+				
+				int playertier = 1;
+				if (player.getLevel() >= 1 && player.getLevel() < 11)
+					playertier = 1;
+				if (player.getLevel() >= 11 && player.getLevel() < 21)
+					playertier = 2;
+				if (player.getLevel() >= 21 && player.getLevel() < 31)
+					playertier = 3;
+				if (player.getLevel() >= 31 && player.getLevel() < 41)
+					playertier = 4;
+				if (player.getLevel() >= 41 && player.getLevel() < 51)
+					playertier = 5;
+				if (player.getLevel() >= 51 && player.getLevel() < 61)
+					playertier = 6;
+				if (player.getLevel() >= 61 && player.getLevel() < 71)
+					playertier = 7;
+				if (player.getLevel() >= 71 && player.getLevel() < 81)
+					playertier = 8;
+				if (player.getLevel() >= 81 && player.getLevel() < 91)
+					playertier = 9;
+				if (player.getLevel() >= 91 && player.getLevel() < 101)
+					playertier = 10;
+				if (player.getLevel() >= 101 && player.getLevel() < 111)
+					playertier = 11;
+
+				
+				try {
+					
+					// always give the next tier up
+					// this ability is for special seasonal rewards only
+					playertier += 1;
+					List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, player.getBukkitPlayer().getName());
+					
+					for(int itemid : items)
+					{
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
+						final String playerName = player.getBukkitPlayer().getName();
+						final int minLevel = player.getLevel();
+						final int finalitemid = itemid;
+						if (item != null)
+						{
+							
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											try
+											{
+												ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(finalitemid);
+												item.setMinLevel(minLevel);
+												item.setLastUpdatedTimeNow();
+												SoliniaAccountClaim claim = new SoliniaAccountClaim();
+												claim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+												claim.setMcname(playerName);
+												claim.setItemid(finalitemid);
+												claim.setClaimed(false);
+												Player claimPlayer = Bukkit.getPlayer(playerName);
+												if (claimPlayer != null)
+												{
+													claimPlayer.sendMessage(ChatColor.GOLD + "You have been awarded with a claim item! See /claim");
+												}
+												StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
+												System.out.println("Awarded Claim: " + item.getDisplayname() + " to " + playerName);
+											} catch (CoreStateInitException e)
+											{
+												// skip
+											}
+										}
+									});
+						}
+					}
+					
+					player.setInspiration(player.getInspiration() - cost);
+					sender.sendMessage("You have purchased a full set of gear!");
+
+				} catch (CoreStateInitException e)
+				{
+					sender.sendMessage("There was a problem generating your gear (Core), please report this to a developer");
+				} catch (SoliniaItemException e)
+				{
+					sender.sendMessage("There was a problem generating your gear (Item), please report this to a developer");
+				}
+				
+				return true;
+			} else {
+				sender.sendMessage("You require more inspiration points to purchase this");
+				return true;
+			}
+		} else {
+			sender.sendMessage("This is a player only subcommand");
+			return true;
+
+		}
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+	}
+
+	private boolean sendPreGear(CommandSender sender, int cost) {
+		try
+		{
+		if (sender instanceof Player)
+		{
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player)sender);
+			cost = 6;
+			if (player.getInspiration() >= cost)
+			{
+				
+				String suffix = "of Inspiration";
+				
+				int playertier = 1;
+				if (player.getLevel() >= 1 && player.getLevel() < 11)
+					playertier = 1;
+				if (player.getLevel() >= 11 && player.getLevel() < 21)
+					playertier = 2;
+				if (player.getLevel() >= 21 && player.getLevel() < 31)
+					playertier = 3;
+				if (player.getLevel() >= 31 && player.getLevel() < 41)
+					playertier = 4;
+				if (player.getLevel() >= 41 && player.getLevel() < 51)
+					playertier = 5;
+				if (player.getLevel() >= 51 && player.getLevel() < 61)
+					playertier = 6;
+				if (player.getLevel() >= 61 && player.getLevel() < 71)
+					playertier = 7;
+				if (player.getLevel() >= 71 && player.getLevel() < 81)
+					playertier = 8;
+				if (player.getLevel() >= 81 && player.getLevel() < 91)
+					playertier = 9;
+				if (player.getLevel() >= 91 && player.getLevel() < 101)
+					playertier = 10;
+				if (player.getLevel() >= 101 && player.getLevel() < 111)
+					playertier = 11;
+
+				
+				try {
+					
+					// always give the next tier up
+					// this ability is for special seasonal rewards only
+					playertier -= 1;
+					if (playertier < 1)
+						playertier = 1;
+					
+					List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, player.getBukkitPlayer().getName());
+					
+					for(int itemid : items)
+					{
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
+						final String playerName = player.getBukkitPlayer().getName();
+						final int minLevel = player.getLevel();
+						final int finalitemid = itemid;
+						if (item != null)
+						{
+							
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											try
+											{
+												ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(finalitemid);
+												item.setMinLevel(minLevel);
+												item.setLastUpdatedTimeNow();
+												SoliniaAccountClaim claim = new SoliniaAccountClaim();
+												claim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+												claim.setMcname(playerName);
+												claim.setItemid(finalitemid);
+												claim.setClaimed(false);
+												Player claimPlayer = Bukkit.getPlayer(playerName);
+												if (claimPlayer != null)
+												{
+													claimPlayer.sendMessage(ChatColor.GOLD + "You have been awarded with a claim item! See /claim");
+												}
+												StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
+												System.out.println("Awarded Claim: " + item.getDisplayname() + " to " + playerName);
+											} catch (CoreStateInitException e)
+											{
+												// skip
+											}
+										}
+									});
+						}
+					}
+					
+					player.setInspiration(player.getInspiration() - cost);
+					sender.sendMessage("You have purchased a full set of gear!");
+
+				} catch (CoreStateInitException e)
+				{
+					sender.sendMessage("There was a problem generating your gear (Core), please report this to a developer");
+				} catch (SoliniaItemException e)
+				{
+					sender.sendMessage("There was a problem generating your gear (Item), please report this to a developer");
+				}
+				
+				return true;
+			} else {
+				sender.sendMessage("You require more inspiration points to purchase this");
+				return true;
+			}
+		} else {
+			sender.sendMessage("This is a player only subcommand");
+			return true;
+		}
+		} catch (CoreStateInitException e)
+		{
+			return false;
 		}
 	}
 }

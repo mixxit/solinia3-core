@@ -44,6 +44,7 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
+import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -499,6 +500,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 
 				if (!item.getAllowedClassNames().contains(getClassObj().getName())) {
+					return false;
+				}
+			}
+			
+			if (item.getAllowedRaceNames().size() > 0) {
+				if (getRace() == null) {
+					return false;
+				}
+
+				if (!item.getAllowedRaceNames().contains(getRace().getName())) {
 					return false;
 				}
 			}
@@ -1375,6 +1386,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 						if (!soliniaitem.getAllowedClassNames().contains(getClassObj().getName())) {
 							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your class cannot use this item");
+							return false;
+						}
+					}
+					
+					if (soliniaitem.getAllowedRaceNames().size() > 0) {
+						if (getRace() == null) {
+							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your race cannot use this item");
+							return false;
+						}
+
+						if (!soliniaitem.getAllowedRaceNames().contains(getRace().getName())) {
+							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your race cannot use this item");
 							return false;
 						}
 					}
@@ -5171,6 +5194,39 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
+	public ISoliniaRace getRace() {
+		try {
+			if (isPlayer()) {
+				return SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).getRace();
+			}
+
+			if (this.getNpcid() > 0) {
+				return StateManager.getInstance().getConfigurationManager().getNPC(getNpcid()).getRace();
+			}
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+		return null;
+	}
+	
+	@Override
+	public ISoliniaGod getGod() {
+		try {
+			if (isPlayer()) {
+				return SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).getGod();
+			}
+
+			// only players have gods
+			if (this.getNpcid() > 0) {
+				return null;
+			}
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+		return null;
+	}
+	
+	@Override
 	public int getRaceId() {
 		try {
 			if (isPlayer()) {
@@ -7257,5 +7313,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public void tryApplySpellOnSelf(int spellId) {
+		try
+		{
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+			if (spell == null)
+				return;
+			
+			spell.tryApplyOnEntity(getBukkitLivingEntity(), getBukkitLivingEntity(), false);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 }
