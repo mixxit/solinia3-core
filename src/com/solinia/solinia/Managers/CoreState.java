@@ -161,6 +161,26 @@ public class CoreState {
 		{
 			xpdaybonus = 100;
 		}
+		simpleDateformat = new SimpleDateFormat("dd.MM");
+
+		// Easter Holidays
+		if (simpleDateformat.format(now).equals("19.04") || simpleDateformat.format(now).equals("20.04") || simpleDateformat.format(now).equals("21.04") || simpleDateformat.format(now).equals("22.04"))
+		{
+			xpdaybonus += 400;
+		}
+
+		// Xmas and New Year
+		if (simpleDateformat.format(now).equals("24.12") || simpleDateformat.format(now).equals("25.12") || simpleDateformat.format(now).equals("26.12") || simpleDateformat.format(now).equals("27.12") || simpleDateformat.format(now).equals("28.12") || simpleDateformat.format(now).equals("29.12") || simpleDateformat.format(now).equals("30.12") || simpleDateformat.format(now).equals("31.12") || simpleDateformat.format(now).equals("01.01") || simpleDateformat.format(now).equals("02.01"))
+		{
+			xpdaybonus = 400;
+		}
+
+		// Halloween
+		if (simpleDateformat.format(now).equals("30.10") || simpleDateformat.format(now).equals("31.10") || simpleDateformat.format(now).equals("01.11"))
+		{
+			xpdaybonus = 400;
+		}
+
 	}
 	
 	public Scoreboard getScoreboard(Player player)
