@@ -4,9 +4,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
-import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class SoliniaLivingEntityPassiveEffectTickEvent extends Event implements Cancellable {
 	private boolean cancelled;

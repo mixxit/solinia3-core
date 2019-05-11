@@ -5,7 +5,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Models.SoliniaZone;
 
 public class PlayerTickEvent extends Event implements Cancellable {
 	private boolean cancelled;

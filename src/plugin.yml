@@ -7,6 +7,10 @@ commands:
     description: Displays additional information about Solinia3Core
     usage: /solinia
     aliases: []
+  autoattack:
+    description: Toggles your auto attack state
+    usage: /autoattack
+    aliases: []
   commit:
     description: Commits Solinia3Core State Data
     usage: /commit

@@ -7,7 +7,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.solinia.solinia.Commands.*;
-import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
@@ -410,6 +409,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
 
+		this.getCommand("autoattack").setExecutor(new CommandAutoAttack());
 		this.getCommand("creategod").setExecutor(new CommandCreateGod());
 		this.getCommand("listgods").setExecutor(new CommandListGods());
 		this.getCommand("editgod").setExecutor(new CommandEditGod());

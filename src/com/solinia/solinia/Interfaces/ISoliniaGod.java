@@ -1,14 +1,9 @@
 package com.solinia.solinia.Interfaces;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidGodSettingException;
-import com.solinia.solinia.Models.FactionStandingEntry;
 
 public interface ISoliniaGod {
 

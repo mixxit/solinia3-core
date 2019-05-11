@@ -1,8 +1,6 @@
 package com.solinia.solinia.Listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,13 +8,9 @@ import org.bukkit.event.Listener;
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerZoneTickEvent;
-import com.solinia.solinia.Events.SoliniaSyncPlayerChatEvent;
 import com.solinia.solinia.Events.ZoneTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.InteractionType;
 
 public class Solinia3CoreZoneTickListener implements Listener {
 	Solinia3CorePlugin plugin;
