@@ -18,6 +18,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -6575,15 +6576,33 @@ public class Utils {
 		return matchedValue;
 	}
 	
+	public static void sendStringToSenderInBlocksOfSize(CommandSender sender, String message, int blocksize)
+	{
+		sender.sendMessage(splitStringIntoBlocksOfSize(message,blocksize));
+	}
+	
+	public static String[] splitStringIntoBlocksOfSize(String string, int size)
+	{
+		return string.split("(?<=\\G.{"+size+"})");
+	}
 
 	public static void sendValidFields(CommandSender sender, Class classType) {
+		List<String> fields = new ArrayList<String>();
+		
 		try {
 			for(Field field : classType.getFields())
-				sender.sendMessage(field.getName());
+			{
+				field.setAccessible(true);
+				fields.add(field.getName());
+			}
 			
 		} catch (SecurityException | IllegalArgumentException e) {
 			// its fine just ignore it
 		}
+		
+		String str = String.join(" ", fields);
+		sendStringToSenderInBlocksOfSize(sender,str,256);
+		
 	}
 
 }
