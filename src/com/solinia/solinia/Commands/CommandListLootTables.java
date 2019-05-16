@@ -30,7 +30,7 @@ public class CommandListLootTables implements CommandExecutor {
 			filter = args[0].toUpperCase();
 		}
 		
-		if (args[0].equals(".criteria"))
+		if (args.length > 0 && args[0].equals(".criteria"))
 		{
 			try {
 				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getLootTables(), sender, args,SoliniaLootTable.class);

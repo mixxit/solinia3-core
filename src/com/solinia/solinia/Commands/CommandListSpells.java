@@ -33,7 +33,7 @@ public class CommandListSpells implements CommandExecutor {
 			return true;
 		}
 		
-		if (args[0].equals(".criteria"))
+		if (args.length > 0 && args[0].equals(".criteria"))
 		{
 			try {
 				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getSpells(), sender, args,SoliniaSpell.class);

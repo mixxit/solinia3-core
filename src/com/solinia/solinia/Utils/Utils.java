@@ -6543,7 +6543,7 @@ public class Utils {
 		if ((field2 != null && !field2.equals("")) && (matchedValue.equals("")))
 		{
 			try {
-				Field f = classType.getDeclaredField(field1);
+				Field f = classType.getDeclaredField(field2);
 				f.setAccessible(true);
 				matchedValue = f.get(object).toString(); 
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) 
