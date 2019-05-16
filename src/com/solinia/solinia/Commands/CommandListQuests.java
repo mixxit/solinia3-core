@@ -10,7 +10,9 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Models.SoliniaQuest;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandListQuests implements CommandExecutor {
 	@Override
@@ -32,52 +34,23 @@ public class CommandListQuests implements CommandExecutor {
 			searchTerm = args[0];
 		}
 		
+		if (args[0].equals(".criteria"))
+		{
+			try {
+				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getQuests(), sender, args,SoliniaQuest.class);
+			return true;
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				sender.sendMessage(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		
 		int found = 0;
 		try {
 			if (searchTerm != null)
 			{
-				if (searchTerm.equals(".criteria"))
-				{
-					if (args.length < 3)
-					{
-						sender.sendMessage("Criteria must include a search term and value - ie .criteria name test");
-					} else {
-						String field = args[1];
-						String value = args[2];
-						
-						try {
-							Field f = SoliniaQuest.class.getDeclaredField(field);
-							f.setAccessible(true);
-							
-							for(ISoliniaQuest entry : StateManager.getInstance().getConfigurationManager().getQuests())
-							{
-								String matchedValue = f.get(entry).toString(); 
-								
-								if (matchedValue.toLowerCase().equals(value.toLowerCase()))
-								{
-									found++;
-									String message = entry.getId() + " - " + entry.getName();
-									sender.sendMessage(message);
-								}
-							}
-							
-						} catch (NoSuchFieldException e) {
-							sender.sendMessage("Could not be located by search criteria (field not found)");
-						} catch (SecurityException e) {
-							sender.sendMessage("Could not be located by search criteria (field is private)");
-						} catch (IllegalArgumentException e) {
-							sender.sendMessage("Could not be located by search criteria (argument issue)");
-						} catch (IllegalAccessException e) {
-							sender.sendMessage("Could not be located by search criteria (access issue)");
-						}
-						
-						if (found == 0)
-						{
-							sender.sendMessage("Could not be located by search criteria (no matches)");
-						}
-						
-					}
-				} else {
+				
 					
 					for(ISoliniaQuest entry : StateManager.getInstance().getConfigurationManager().getQuests())
 					{
@@ -93,7 +66,7 @@ public class CommandListQuests implements CommandExecutor {
 					{
 						sender.sendMessage("Could not be located by search string");
 					}
-				}
+				
 			} else {
 				for(ISoliniaQuest entry : StateManager.getInstance().getConfigurationManager().getQuests())
 				{

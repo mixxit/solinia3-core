@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.NPCSpellList;
+import com.solinia.solinia.Models.SoliniaItem;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandListNpcSpells implements CommandExecutor 
 {
@@ -34,6 +36,18 @@ public class CommandListNpcSpells implements CommandExecutor
 				}
 				
 				return true;
+			}
+			
+			if (args[0].equals(".criteria"))
+			{
+				try {
+					Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getNPCSpellLists(), sender, args,NPCSpellList.class);
+				return true;
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					sender.sendMessage(e.getMessage());
+					e.printStackTrace();
+				}
 			}
 			
 			// Filter for name

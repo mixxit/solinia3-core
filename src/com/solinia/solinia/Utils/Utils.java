@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
@@ -91,6 +92,7 @@ import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectIndex;
@@ -6487,6 +6489,101 @@ public class Utils {
 
 		return true;
 
+	}
+
+	public static <T> void sendFilterByCriteria(List<T> dataSet, CommandSender sender, String[] args, Class classType)
+	{
+		int found = 0;
+		if (args.length < 3)
+		{
+			sendValidFields(sender,classType);			
+			sender.sendMessage("Criteria must include a search term and value - ie .criteria fieldname fieldvalue - See above for valid fields");
+		} else {
+			String field = args[1];
+			String value = args[2];
+			
+			try {
+				Field f = classType.getDeclaredField(field);
+				f.setAccessible(true);
+				
+				for(T object : dataSet)
+				{
+					String matchedValue = f.get(object).toString(); 
+					
+					if (!matchedValue.toLowerCase().equals(value.toLowerCase()))
+						continue;
+					
+					found++;
+					String itemmessage = getFieldValue(object,"id","",classType) + " - " + getFieldValue(object,"displayname","name",classType);
+					sender.sendMessage(itemmessage);
+				}
+				
+			} catch (NoSuchFieldException e) {
+				sendValidFields(sender,classType);
+				sender.sendMessage("Object could not be located by search criteria (field not found) See above for list of valid fields");
+			} catch (SecurityException e) {
+				sender.sendMessage("Object could not be located by search criteria (field is private)");
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage("Object could not be located by search criteria (argument issue)");
+			} catch (IllegalAccessException e) {
+				sender.sendMessage("Object could not be located by search criteria (access issue)");
+			}
+			
+			if (found == 0)
+			{
+				sender.sendMessage("Object could not be located by search criteria (no matches)");
+			}
+			
+		}
+	}
+
+	private static <T> String getFieldValue(T object, String field1, String field2, Class classType) {
+		String matchedValue = getFieldValue(object,field1,classType);
+		
+		if ((field2 != null && !field2.equals("")) && (matchedValue.equals("")))
+		{
+			try {
+				Field f = classType.getDeclaredField(field1);
+				f.setAccessible(true);
+				matchedValue = f.get(object).toString(); 
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) 
+			{
+				
+			}
+		}
+		
+		if (matchedValue == null)
+			matchedValue = "";
+		
+		return matchedValue;
+	}
+	
+	private static <T> String getFieldValue(T object, String field1, Class classType) {
+		String matchedValue = "";
+		try {
+			Field f = classType.getDeclaredField(field1);
+			f.setAccessible(true);
+			matchedValue = f.get(object).toString(); 
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) 
+		{
+			
+		}
+		
+		if (matchedValue == null)
+			matchedValue = "";
+		
+		return matchedValue;
+	}
+	
+
+	public static void sendValidFields(CommandSender sender, Class classType) {
+		try {
+			for(Field field : classType.getFields())
+				sender.sendMessage(field.getName());
+			
+		} catch (SecurityException | IllegalArgumentException e) {
+			// its fine just ignore it
+		}
 	}
 
 }

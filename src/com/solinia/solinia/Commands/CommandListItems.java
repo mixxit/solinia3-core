@@ -1,6 +1,7 @@
 package com.solinia.solinia.Commands;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
@@ -12,6 +13,8 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaItem;
+import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandListItems implements CommandExecutor {
 	@Override
@@ -31,54 +34,22 @@ public class CommandListItems implements CommandExecutor {
 			return true;
 		}
 		
+		if (args[0].equals(".criteria"))
+		{
+			try {
+				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getItems(), sender, args,SoliniaItem.class);
+			return true;
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				sender.sendMessage(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		
 		// Filter for name
 		
 		int found = 0;
 		try {
-			
-			if (args[0].equals(".criteria"))
-			{
-				if (args.length < 3)
-				{
-					sender.sendMessage("Criteria must include a search term and value - ie .criteria name aegolism");
-				} else {
-					String field = args[1];
-					String value = args[2];
-					
-					try {
-						Field f = SoliniaItem.class.getDeclaredField(field);
-						f.setAccessible(true);
-						
-						for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
-						{
-							String matchedValue = f.get(item).toString(); 
-							
-							if (matchedValue.toLowerCase().equals(value.toLowerCase()))
-							{
-								found++;
-								String itemmessage = item.getId() + " - " + item.getDisplayname();
-								sender.sendMessage(itemmessage);
-
-							}
-						}
-						
-					} catch (NoSuchFieldException e) {
-						sender.sendMessage("Item could not be located by search criteria (field not found)");
-					} catch (SecurityException e) {
-						sender.sendMessage("Item could not be located by search criteria (field is private)");
-					} catch (IllegalArgumentException e) {
-						sender.sendMessage("Item could not be located by search criteria (argument issue)");
-					} catch (IllegalAccessException e) {
-						sender.sendMessage("Item could not be located by search criteria (access issue)");
-					}
-					
-					if (found == 0)
-					{
-						sender.sendMessage("Spell could not be located by search criteria (no matches)");
-					}
-					
-				}
-			} else {
 				for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 				{
 					found++;
@@ -88,7 +59,6 @@ public class CommandListItems implements CommandExecutor {
 						sender.sendMessage(itemmessage);
 					}
 				}
-			}
 			
 			if (found == 0)
 			{

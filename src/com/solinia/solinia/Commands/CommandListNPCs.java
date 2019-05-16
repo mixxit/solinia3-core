@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaItem;
+import com.solinia.solinia.Models.SoliniaNPC;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandListNPCs implements CommandExecutor {
 
@@ -34,6 +37,18 @@ public class CommandListNPCs implements CommandExecutor {
 			}
 			
 			return true;
+		}
+		
+		if (args[0].equals(".criteria"))
+		{
+			try {
+				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getNPCs(), sender, args,SoliniaNPC.class);
+			return true;
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				sender.sendMessage(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 		
 		// Filter for name

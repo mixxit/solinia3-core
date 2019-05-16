@@ -8,6 +8,9 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaItem;
+import com.solinia.solinia.Models.SoliniaLootDrop;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandListLootDrops implements CommandExecutor {
 	@Override
@@ -25,6 +28,18 @@ public class CommandListLootDrops implements CommandExecutor {
 		if (args.length > 0)
 		{
 			filter = args[0].toUpperCase();
+		}
+		
+		if (args[0].equals(".criteria"))
+		{
+			try {
+				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getLootDrops(), sender, args,SoliniaLootDrop.class);
+			return true;
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				sender.sendMessage(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 		
 		try
