@@ -518,4 +518,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean hasChosenGod();
 
 	ISoliniaGod getGod();
+
+	public boolean canUseSpell(ISoliniaSpell spell);
 }

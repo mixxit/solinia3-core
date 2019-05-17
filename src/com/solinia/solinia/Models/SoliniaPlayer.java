@@ -107,6 +107,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int handsItem = 0;
 	private int waistItem = 0;
 	private Personality personality = new Personality();
+	private int memorisedSpellSlot1 = 0;
+	private int memorisedSpellSlot2 = 0;
+	private int memorisedSpellSlot3 = 0;
+	private int memorisedSpellSlot4 = 0;
+	private int memorisedSpellSlot5 = 0;
+	private int memorisedSpellSlot6 = 0;
+	private int memorisedSpellSlot7 = 0;
+	private int memorisedSpellSlot8 = 0;
 	
 	private int lastX = 0;
 	private int lastY = 0;
@@ -4021,5 +4029,89 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setHasChosenGod(boolean hasChosenGod) {
 		this.hasChosenGod = hasChosenGod;
+	}
+
+	public int getMemorisedSpellSlot1() {
+		return memorisedSpellSlot1;
+	}
+
+	public void setMemorisedSpellSlot1(int memorisedSpellSlot1) {
+		this.memorisedSpellSlot1 = memorisedSpellSlot1;
+	}
+
+	public int getMemorisedSpellSlot2() {
+		return memorisedSpellSlot2;
+	}
+
+	public void setMemorisedSpellSlot2(int memorisedSpellSlot2) {
+		this.memorisedSpellSlot2 = memorisedSpellSlot2;
+	}
+
+	public int getMemorisedSpellSlot3() {
+		return memorisedSpellSlot3;
+	}
+
+	public void setMemorisedSpellSlot3(int memorisedSpellSlot3) {
+		this.memorisedSpellSlot3 = memorisedSpellSlot3;
+	}
+
+	public int getMemorisedSpellSlot4() {
+		return memorisedSpellSlot4;
+	}
+
+	public void setMemorisedSpellSlot4(int memorisedSpellSlot4) {
+		this.memorisedSpellSlot4 = memorisedSpellSlot4;
+	}
+
+	public int getMemorisedSpellSlot5() {
+		return memorisedSpellSlot5;
+	}
+
+	public void setMemorisedSpellSlot5(int memorisedSpellSlot5) {
+		this.memorisedSpellSlot5 = memorisedSpellSlot5;
+	}
+
+	public int getMemorisedSpellSlot6() {
+		return memorisedSpellSlot6;
+	}
+
+	public void setMemorisedSpellSlot6(int memorisedSpellSlot6) {
+		this.memorisedSpellSlot6 = memorisedSpellSlot6;
+	}
+
+	public int getMemorisedSpellSlot7() {
+		return memorisedSpellSlot7;
+	}
+
+	public void setMemorisedSpellSlot7(int memorisedSpellSlot7) {
+		this.memorisedSpellSlot7 = memorisedSpellSlot7;
+	}
+
+	public int getMemorisedSpellSlot8() {
+		return memorisedSpellSlot8;
+	}
+
+	public void setMemorisedSpellSlot8(int memorisedSpellSlot8) {
+		this.memorisedSpellSlot8 = memorisedSpellSlot8;
+	}
+
+	@Override
+	public boolean canUseSpell(ISoliniaSpell spell) {
+		
+		if (this.getClassObj() == null)
+			return false;
+		
+		for(SoliniaSpellClass spellClass : spell.getAllowedClasses())
+		{
+			if (
+					spellClass.getClassname().toUpperCase().equals(this.getClassObj().getName().toUpperCase()) &&
+					getLevel() >= spellClass.getMinlevel()
+				)
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
