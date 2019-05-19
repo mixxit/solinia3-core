@@ -40,6 +40,11 @@ commands:
     description: Transfers a character to another player
     usage: /transfercharacter <characteruuid> <playername>
     aliases: []
+  memorisespell:
+    description: Memorises a spell into spell slot
+    usage: /memorisespell spellslotnumber spellid
+    aliases:
+    - memorise
   forename:
     description: Sets player forename
     usage: /forename <forename>

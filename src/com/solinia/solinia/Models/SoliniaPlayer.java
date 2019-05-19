@@ -4031,66 +4031,82 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.hasChosenGod = hasChosenGod;
 	}
 
+	@Override
 	public int getMemorisedSpellSlot1() {
 		return memorisedSpellSlot1;
 	}
 
+	@Override
 	public void setMemorisedSpellSlot1(int memorisedSpellSlot1) {
 		this.memorisedSpellSlot1 = memorisedSpellSlot1;
 	}
 
+	@Override
 	public int getMemorisedSpellSlot2() {
 		return memorisedSpellSlot2;
 	}
 
+	@Override
 	public void setMemorisedSpellSlot2(int memorisedSpellSlot2) {
 		this.memorisedSpellSlot2 = memorisedSpellSlot2;
 	}
 
+	@Override
 	public int getMemorisedSpellSlot3() {
 		return memorisedSpellSlot3;
 	}
 
+	@Override
 	public void setMemorisedSpellSlot3(int memorisedSpellSlot3) {
 		this.memorisedSpellSlot3 = memorisedSpellSlot3;
 	}
 
+	@Override
 	public int getMemorisedSpellSlot4() {
 		return memorisedSpellSlot4;
 	}
 
+	@Override
 	public void setMemorisedSpellSlot4(int memorisedSpellSlot4) {
 		this.memorisedSpellSlot4 = memorisedSpellSlot4;
 	}
 
+	@Override
 	public int getMemorisedSpellSlot5() {
 		return memorisedSpellSlot5;
 	}
 
+	@Override
 	public void setMemorisedSpellSlot5(int memorisedSpellSlot5) {
 		this.memorisedSpellSlot5 = memorisedSpellSlot5;
 	}
 
+	@Override
 	public int getMemorisedSpellSlot6() {
 		return memorisedSpellSlot6;
 	}
 
+	@Override
 	public void setMemorisedSpellSlot6(int memorisedSpellSlot6) {
 		this.memorisedSpellSlot6 = memorisedSpellSlot6;
 	}
 
+	@Override
 	public int getMemorisedSpellSlot7() {
 		return memorisedSpellSlot7;
 	}
 
+	@Override
 	public void setMemorisedSpellSlot7(int memorisedSpellSlot7) {
 		this.memorisedSpellSlot7 = memorisedSpellSlot7;
 	}
 
+	@Override
 	public int getMemorisedSpellSlot8() {
 		return memorisedSpellSlot8;
 	}
 
+	@Override
 	public void setMemorisedSpellSlot8(int memorisedSpellSlot8) {
 		this.memorisedSpellSlot8 = memorisedSpellSlot8;
 	}
@@ -4110,6 +4126,117 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			{
 				return true;
 			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public List<Integer> getSpellBookSpellIds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean memoriseSpell(int spellSlot, int spellId) {
+		
+		try
+		{
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+			if (spell == null)
+				return false;
+			
+			if (!this.canUseSpell(spell))
+				return false;
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+		
+		if (getMaxSpellSlots() < spellSlot)
+			return false;
+		
+		if (!getSpellBookSpellIds().contains(spellId))
+			return false;
+		
+		return this.setMemorisedSpellSlot(spellSlot, spellId);
+	}
+
+	@Override
+	public int getMaxSpellSlots() {
+		// TODO Auto-generated method stub
+		return 8;
+	}
+	
+	@Override
+	public int getMemorisedSpellSlot(int spellSlot) throws IllegalArgumentException
+	{
+		switch(spellSlot)
+		{
+			case 1:
+				return this.getMemorisedSpellSlot1();
+			case 2:
+				return this.getMemorisedSpellSlot1();
+			case 3:
+				return this.getMemorisedSpellSlot1();
+			case 4:
+				return this.getMemorisedSpellSlot1();
+			case 5:
+				return this.getMemorisedSpellSlot1();
+			case 6:
+				return this.getMemorisedSpellSlot1();
+			case 7:
+				return this.getMemorisedSpellSlot1();
+			case 8:
+				return this.getMemorisedSpellSlot1();
+			default:
+				throw new IllegalArgumentException("Cannot find spell slot of that number");
+		}
+	}
+	
+	public boolean setMemorisedSpellSlot(int spellSlot, int spellId) throws IllegalArgumentException
+	{
+		switch(spellSlot)
+		{
+			case 1:
+				this.setMemorisedSpellSlot1(spellId);
+				return true;
+			case 2:
+				this.setMemorisedSpellSlot2(spellId);
+				return true;
+			case 3:
+				this.setMemorisedSpellSlot3(spellId);
+				return true;
+			case 4:
+				this.setMemorisedSpellSlot4(spellId);
+				return true;
+			case 5:
+				this.setMemorisedSpellSlot5(spellId);
+				return true;
+			case 6:
+				this.setMemorisedSpellSlot6(spellId);
+				return true;
+			case 7:
+				this.setMemorisedSpellSlot7(spellId);
+				return true;
+			case 8:
+				this.setMemorisedSpellSlot8(spellId);
+				return true;
+			default:
+				throw new IllegalArgumentException("Cannot find spell slot of that number");
+		}
+	}
+
+	@Override
+	public boolean isSpellMemoriseSlotFree(int spellSlot) {
+		try
+		{
+			int value = this.getMemorisedSpellSlot(spellSlot);
+			if (value > 0)
+				return true;
+		} catch (IllegalArgumentException e)
+		{
+			return false;
 		}
 		
 		return false;

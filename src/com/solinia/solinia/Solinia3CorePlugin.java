@@ -409,6 +409,8 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
 
+		this.getCommand("memorisespell").setExecutor(new CommandMemoriseSpell());
+
 		this.getCommand("autoattack").setExecutor(new CommandAutoAttack());
 		this.getCommand("creategod").setExecutor(new CommandCreateGod());
 		this.getCommand("listgods").setExecutor(new CommandListGods());

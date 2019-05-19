@@ -337,6 +337,7 @@ public interface ISoliniaPlayer extends Serializable {
 	public void scheduleUpdateMaxHp();
 
 	List<Integer> getSpellBookItems();
+	List<Integer> getSpellBookSpellIds();
 
 	void setSpellBookItems(List<Integer> spellBookItems);
 
@@ -520,4 +521,45 @@ public interface ISoliniaPlayer extends Serializable {
 	ISoliniaGod getGod();
 
 	public boolean canUseSpell(ISoliniaSpell spell);
+
+	int getMemorisedSpellSlot1();
+
+	int getMemorisedSpellSlot2();
+
+	void setMemorisedSpellSlot1(int memorisedSpellSlot1);
+
+	void setMemorisedSpellSlot2(int memorisedSpellSlot2);
+
+	int getMemorisedSpellSlot3();
+
+	void setMemorisedSpellSlot3(int memorisedSpellSlot3);
+
+	void setMemorisedSpellSlot4(int memorisedSpellSlot4);
+
+	int getMemorisedSpellSlot4();
+
+	int getMemorisedSpellSlot5();
+
+	void setMemorisedSpellSlot5(int memorisedSpellSlot5);
+
+	int getMemorisedSpellSlot6();
+
+	int getMemorisedSpellSlot7();
+
+	void setMemorisedSpellSlot6(int memorisedSpellSlot6);
+
+	void setMemorisedSpellSlot7(int memorisedSpellSlot7);
+
+	int getMemorisedSpellSlot8();
+
+	void setMemorisedSpellSlot8(int memorisedSpellSlot8);
+
+	public boolean memoriseSpell(int spellSlot, int spellId);
+
+	public int getMaxSpellSlots();
+
+	public boolean isSpellMemoriseSlotFree(int spellSlot);
+
+	int getMemorisedSpellSlot(int spellSlot) throws IllegalArgumentException;
+
 }
