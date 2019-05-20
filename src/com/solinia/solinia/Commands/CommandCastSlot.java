@@ -21,6 +21,8 @@ public class CommandCastSlot implements CommandExecutor {
 		if (!(sender instanceof Player))
 			return false;
 
+		return false;
+		/*
 		Player player = (Player) sender;
 		
 		if (args.length == 0)
@@ -63,6 +65,7 @@ public class CommandCastSlot implements CommandExecutor {
 			return true;
 		}
 		return true;
+		*/
 	}
 
 	private int hotBarToSlotId(int hotBar) {

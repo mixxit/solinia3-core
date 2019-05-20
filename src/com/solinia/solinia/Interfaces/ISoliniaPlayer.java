@@ -483,8 +483,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	Entity getTarget();
 
-	void tryCastFromItemInSlot(int slotId);
-
 	public void tryCastFromSpellbook(ISoliniaItem solItem);
 
 	Location getLastLocation();
@@ -561,5 +559,7 @@ public interface ISoliniaPlayer extends Serializable {
 	public boolean isSpellMemoriseSlotFree(int spellSlot);
 
 	int getMemorisedSpellSlot(int spellSlot) throws IllegalArgumentException;
+
+	void tryCastFromMemorySlot(int slotId);
 
 }

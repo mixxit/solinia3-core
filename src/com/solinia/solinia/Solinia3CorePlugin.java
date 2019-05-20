@@ -419,7 +419,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("godinfo").setExecutor(new CommandGodInfo());
 		this.getCommand("setgod").setExecutor(new CommandSetGod());
 		
-		this.getCommand("castslot").setExecutor(new CommandCastSlot());
+		this.getCommand("cast").setExecutor(new CommandCast());
 		this.getCommand("shout").setExecutor(new CommandShout());
 		this.getCommand("whisper").setExecutor(new CommandWhisper());
 		this.getCommand("zonetp").setExecutor(new CommandZoneTp());
@@ -455,7 +455,6 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		this.getCommand("spawnitem").setExecutor(new CommandSpawnItem());
 		this.getCommand("debugger").setExecutor(new CommandDebugger());
 		this.getCommand("raceinfo").setExecutor(new CommandRaceInfo());
-		this.getCommand("castspellbook").setExecutor(new CommandCastSpellbook());
 		this.getCommand("castspell").setExecutor(new CommandCastSpell());
 		this.getCommand("rebuildspellitems").setExecutor(new CommandRebuildSpellItems());
 		this.getCommand("createfaction").setExecutor(new CommandCreateFaction());

@@ -51,17 +51,13 @@ commands:
     aliases:
     - name
     - nick
-  castslot:
-    description: Casts a spell in a hotbat slot from 1 to 9
-    usage: /castslot <hotbarnumber>
+  cast:
+    description: Casts a spell from memory slot 1 to 0
+    usage: /cast <memoryslot>
     aliases: []
   castspell:
     description: Casts a spell by its spell id
     usage: /castspell <spellid>
-    aliases: []
-  castspellbook:
-    description: Casts a spell in a spellbook
-    usage: /castspellbook itemid
     aliases: []
   givehead:
     description: Gives a head from minecraft-heads.com

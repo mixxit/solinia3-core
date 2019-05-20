@@ -1129,52 +1129,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 	}
 	
-	// TODO REFACTOR ALL THIS TO USE TRYCASTSPELL
 	@Override
-	public void tryCastFromItemInSlot(int slotId) {
+	public void tryCastFromMemorySlot(int slotId) {
 		try
 		{
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "Trying to cast from item in slot: " + slotId);
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(), "Trying to cast from item in memory slot: " + slotId);
 			
-			ItemStack itemstack = this.getBukkitPlayer().getInventory().getItem(slotId);
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "Item in slot: " + slotId + " null status: " + (itemstack == null));
-			if (itemstack == null || itemstack.getType().equals(Material.AIR))
-				return;
-			
-			if ((!Utils.IsSoliniaItem(itemstack)))
-				return;
-			
-			if (ItemStackUtils.isPotion(itemstack))
-			{
-				return;
-			}
-
-			// We have our custom item id, lets check it exists
-			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " null status: " + (item == null));
-
-			if (item == null) {
-				return;
-			}
-
-			if (item.getAbilityid() < 1) {
+			int spellId = this.getMemorisedSpellSlot(slotId);
+			if (spellId < 1) {
 				return;
 			}
 			
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " target status: " + (getTarget() == null));
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(), "SoliniaSpell in slot: " + spellId + " target status: " + (getTarget() == null));
 
 			// Some spells auto target self, if they don't have a target try to do that
 			if (getTarget() == null) {
-				if (item.getAbilityid() > 0) {
-					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-							.getSpell(item.getAbilityid());
-					if (spell != null) {
-						if (!tryFixSpellTarget(spell))
-						{
-							getBukkitPlayer().sendMessage(
-									"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self (tryCastFromItemInSlot-tryFixSpellTarget)");
-							return;
-						}
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+						.getSpell(spellId);
+				if (spell != null) {
+					if (!tryFixSpellTarget(spell))
+					{
+						getBukkitPlayer().sendMessage(
+								"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self (tryCastFromItemInSlot-tryFixSpellTarget)");
+						return;
 					}
 				}
 			}
@@ -1185,44 +1162,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 			
-			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " consumable status: " + item.isConsumable());
-
-			// Only applies to consumable items
-			if (item.isConsumable()) {
-	
-				int newAmount = itemstack.getAmount() -1;
-				Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " using consumable item");
-				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
-				if (newAmount < 1)
-				{
-					getBukkitPlayer().getInventory().setItem(slotId, null);
-					getBukkitPlayer().updateInventory();
-					return;
-				} else {
-					itemstack.setAmount(newAmount);
-					getBukkitPlayer().getInventory().setItem(slotId, null);
-					getBukkitPlayer().updateInventory();
-					return;
-				}
-			}
-	
-			// Only applies to non-consumable items
-			if (!item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-				Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInSlot", this.getBukkitPlayer().getName(), "SoliniaItem in slot: " + slotId + " using non consumable item");
-				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
-				return;
-			}
-	
-			// Only applies to spell effects
-			if (!itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-				return;
-			}
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
 	
 			// Reroute action depending on target
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
-			if (!item.isConsumable() && spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
+			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
 				getBukkitPlayer().sendMessage(
 						ChatColor.GRAY + "Insufficient Mana  [E]");
 				return;
@@ -1237,7 +1181,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 	
-			if (!item.isConsumable() && StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
+			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
 					spell.getId()) != null) {
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
@@ -1254,7 +1198,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 	
-			startCasting(spell, getBukkitPlayer(), !item.isConsumable(), !item.isConsumable(), false);
+			startCasting(spell, getBukkitPlayer(), true, true, false);
 		} catch (CoreStateInitException e)
 		{
 			
@@ -1344,6 +1288,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			return;
+		
+		if (itemstack == null || itemstack.getType().equals(Material.AIR))
+			return;
 			
 		if (!Utils.IsSoliniaItem(itemstack))
 			return;			
@@ -1429,7 +1376,96 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			tryCastFromItemInSlot(getBukkitPlayer().getInventory().getHeldItemSlot());
+			if (item.getAbilityid() < 1) {
+				return;
+			}
+
+			// Some spells auto target self, if they don't have a target try to do that
+			if (getTarget() == null) {
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+						.getSpell(item.getAbilityid());
+				if (spell != null) {
+					if (!tryFixSpellTarget(spell)) {
+						getBukkitPlayer().sendMessage(
+								"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self (interact-tryFixSpellTarget)");
+						return;
+					}
+				}
+			}
+
+			if (getTarget() == null) {
+				getBukkitPlayer().sendMessage(
+						"* You must select a target (shift+left click with consumable or use /target for group or shift-f for self (interact)");
+				return;
+			}
+
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+
+			Utils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer().getName(),"consumable status: " + item.isConsumable());
+
+			// Only applies to consumable items
+			if (item.isConsumable()) {
+
+				int newAmount = itemstack.getAmount() - 1;
+				Utils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer().getName(),"using consumable item");
+				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
+				if (newAmount < 1) {
+					getBukkitPlayer().getInventory().setItem(getBukkitPlayer().getInventory().getHeldItemSlot(), null);
+					getBukkitPlayer().updateInventory();
+					return;
+				} else {
+					itemstack.setAmount(newAmount);
+					getBukkitPlayer().getInventory().setItem(getBukkitPlayer().getInventory().getHeldItemSlot(), null);
+					getBukkitPlayer().updateInventory();
+					return;
+				}
+			}
+
+			// Only applies to non-consumable items
+			if (!item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				Utils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer().getName(),"using non consumable item");
+				item.useItemOnEntity(getBukkitPlayer(), getTarget(), true);
+				return;
+			}
+
+			// Only applies to spell effects
+			if (!itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				return;
+			}
+
+			// Reroute action depending on target
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
+			if (!item.isConsumable()
+					&& spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
+				return;
+			}
+
+			if (!spell.getRequiresPermissionNode().equals("")) {
+				if (!getBukkitPlayer().hasPermission(spell.getRequiresPermissionNode())) {
+					getBukkitPlayer().sendMessage("This requires a permission node you do not have");
+					return;
+				}
+			}
+
+			if (!item.isConsumable() && StateManager.getInstance().getEntityManager()
+					.getEntitySpellCooldown(getBukkitPlayer(), spell.getId()) != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+						.getEntitySpellCooldown(getBukkitPlayer(), spell.getId());
+
+				if (expiretimestamp != null)
+					if (!nowtimestamp.after(expiretimestamp)) {
+						getBukkitPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName()
+								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+						return;
+					}
+			}
+
+			startCasting(spell, getBukkitPlayer(), !item.isConsumable(), !item.isConsumable(), false);
+			
+			
 		} catch (CoreStateInitException e) 
 		{
 			e.printStackTrace();
@@ -4176,19 +4212,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			case 1:
 				return this.getMemorisedSpellSlot1();
 			case 2:
-				return this.getMemorisedSpellSlot1();
+				return this.getMemorisedSpellSlot2();
 			case 3:
-				return this.getMemorisedSpellSlot1();
+				return this.getMemorisedSpellSlot3();
 			case 4:
-				return this.getMemorisedSpellSlot1();
+				return this.getMemorisedSpellSlot4();
 			case 5:
-				return this.getMemorisedSpellSlot1();
+				return this.getMemorisedSpellSlot5();
 			case 6:
-				return this.getMemorisedSpellSlot1();
+				return this.getMemorisedSpellSlot6();
 			case 7:
-				return this.getMemorisedSpellSlot1();
+				return this.getMemorisedSpellSlot7();
 			case 8:
-				return this.getMemorisedSpellSlot1();
+				return this.getMemorisedSpellSlot8();
 			default:
 				throw new IllegalArgumentException("Cannot find spell slot of that number");
 		}
