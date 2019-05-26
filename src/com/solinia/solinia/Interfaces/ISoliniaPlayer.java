@@ -27,6 +27,7 @@ import com.solinia.solinia.Models.SoliniaReagent;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Models.SpellbookPage;
 
 public interface ISoliniaPlayer extends Serializable {
 	public UUID getUUID();
@@ -561,5 +562,7 @@ public interface ISoliniaPlayer extends Serializable {
 	int getMemorisedSpellSlot(int spellSlot) throws IllegalArgumentException;
 
 	void tryCastFromMemorySlot(int slotId);
+
+	public SpellbookPage getSpellbookPage(int pageNo);
 
 }

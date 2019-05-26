@@ -9,7 +9,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAAAbility;
-import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandListAAs implements CommandExecutor {

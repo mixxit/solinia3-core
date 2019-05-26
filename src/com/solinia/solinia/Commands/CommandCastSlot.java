@@ -1,18 +1,9 @@
 package com.solinia.solinia.Commands;
 
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import com.solinia.solinia.Adapters.SoliniaItemAdapter;
-import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
-import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.SoliniaItemException;
-import com.solinia.solinia.Interfaces.ISoliniaItem;
-import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 
 public class CommandCastSlot implements CommandExecutor {

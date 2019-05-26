@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Models.SoliniaLootTable;
 import com.solinia.solinia.Utils.Utils;
 

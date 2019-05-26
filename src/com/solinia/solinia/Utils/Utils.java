@@ -1,6 +1,7 @@
 package com.solinia.solinia.Utils;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,7 +19,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -53,8 +53,11 @@ import org.inventivetalent.glow.GlowAPI;
 import org.inventivetalent.glow.GlowAPI.Color;
 
 import com.comphenix.example.Vector3D;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.rit.sucy.player.TargetHelper;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -92,13 +95,15 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
+import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
-import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Models.SpellbookPage;
+
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -6603,6 +6608,28 @@ public class Utils {
 		String str = String.join(" ", fields);
 		sendStringToSenderInBlocksOfSize(sender,str,256);
 		
+	}
+	
+	public static boolean isInteger(String s) {
+	    return isInteger(s,10);
+	}
+
+	public static boolean isInteger(String s, int radix) {
+	    if(s.isEmpty()) return false;
+	    for(int i = 0; i < s.length(); i++) {
+	        if(i == 0 && s.charAt(i) == '-') {
+	            if(s.length() == 1) return false;
+	            else continue;
+	        }
+	        if(Character.digit(s.charAt(i),radix) < 0) return false;
+	    }
+	    return true;
+	}
+
+	public static <T> String getObjectAsJson(T model) {
+		Gson gson = new GsonBuilder().create();
+        return gson.toJson(model);
+        
 	}
 
 }

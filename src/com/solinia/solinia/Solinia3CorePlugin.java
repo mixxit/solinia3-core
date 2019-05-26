@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -24,6 +25,7 @@ import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
@@ -74,7 +76,7 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.util.DiscordException;
 
-public class Solinia3CorePlugin extends JavaPlugin {
+public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListener  {
 
 	private CastingTimer castingTimer;
 	private StateCommitTimer commitTimer;
@@ -155,6 +157,30 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		StateManager.getInstance().setDiscordClient(this.discordClient);
 		
 		RegisterEntities();
+		
+		if (!getServer().getPluginManager().isPluginEnabled(this)) return;
+		
+		System.out.println("Registered outgoing plugin channel: " + Solinia3UIChannelNames.Outgoing);		
+		getServer().getMessenger().registerOutgoingPluginChannel(this, Solinia3UIChannelNames.Outgoing); // we register the outgoing channel
+	    
+	}
+
+	@Override
+	public void onPluginMessageReceived(String channel, org.bukkit.entity.Player player, byte[] bytes) {
+		if (!channel.equalsIgnoreCase("solinia3core:channel")) {
+			return;
+		}
+		System.out.println("plugin message from channel: " + channel);
+		/*
+		ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
+		String subChannel = in.readUTF();
+		if (subChannel.equalsIgnoreCase("openspellbook")) {
+			String data1 = in.readUTF();
+			int data2 = in.readInt();
+
+			// do things with the data
+		}
+		*/
 	}
 	
 	private void RegisterEntities() {
@@ -410,6 +436,7 @@ public class Solinia3CorePlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
 
 		this.getCommand("memorisespell").setExecutor(new CommandMemoriseSpell());
+		this.getCommand("openspellbook").setExecutor(new CommandOpenSpellbook());
 
 		this.getCommand("autoattack").setExecutor(new CommandAutoAttack());
 		this.getCommand("creategod").setExecutor(new CommandCreateGod());

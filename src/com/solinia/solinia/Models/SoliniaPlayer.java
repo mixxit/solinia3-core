@@ -4277,4 +4277,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		return false;
 	}
+
+	@Override
+	public SpellbookPage getSpellbookPage(int pageNo) {
+		return new SpellbookPage();
+	}
 }

@@ -1,7 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import java.lang.reflect.Field;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +9,6 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Utils.Utils;
 

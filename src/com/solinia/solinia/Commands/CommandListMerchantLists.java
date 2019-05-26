@@ -9,7 +9,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Models.SoliniaNPCMerchant;
 import com.solinia.solinia.Utils.Utils;
 

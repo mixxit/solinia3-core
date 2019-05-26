@@ -1,8 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +10,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaItem;
-import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandListItems implements CommandExecutor {
