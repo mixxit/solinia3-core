@@ -4280,6 +4280,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public SpellbookPage getSpellbookPage(int pageNo) {
-		return new SpellbookPage();
+		List<Integer> spellBookPage = new ArrayList<Integer>();
+		
+		System.out.println("Found spellbook size of : " + this.getSpellBookItems().size());
+		
+		List<List<Integer>> spellBookItemPages = Utils.getPages(this.getSpellBookItems(), 10);
+		if (spellBookItemPages.size() >= (pageNo+1))
+			spellBookPage = spellBookItemPages.get(pageNo);
+			
+		return new SpellbookPage(pageNo,spellBookPage);
 	}
 }
