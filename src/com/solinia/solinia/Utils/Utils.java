@@ -116,6 +116,8 @@ import net.minecraft.server.v1_13_R2.GenericAttributes;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 
 public class Utils {
+	public static final int HP_REGEN_CAP = 48;
+	public static final int MP_REGEN_CAP = 48;
 	public static final int MAX_ENTITY_AGGRORANGE = 100;
 	public static final int DMG_INVULNERABLE = -5;
 	public static final int LongBuffs = 25;

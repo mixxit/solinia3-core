@@ -281,10 +281,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	boolean isInHotzone();
 
-	public int getItemHpRegenBonuses();
-
-	public int getItemMpRegenBonuses();
-
 	List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand);
 
 	List<ISoliniaItem> getEquippedSoliniaItems();
@@ -501,7 +497,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void doRegenTick();
 
-	public void doEquipmentRegenTick(ISoliniaItem item);
+	public void doEquipmentRegenTick(List<ISoliniaItem> items);
 
 	void whisper(String string);
 

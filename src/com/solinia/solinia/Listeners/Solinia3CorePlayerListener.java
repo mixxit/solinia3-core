@@ -108,7 +108,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (event.getPlayer().getBukkitPlayer().isDead())
 			return;
 		
-		event.getPlayer().doEquipmentRegenTick(event.getItem());
+		event.getPlayer().doEquipmentRegenTick(event.getItems());
 	}
 	
 	@EventHandler

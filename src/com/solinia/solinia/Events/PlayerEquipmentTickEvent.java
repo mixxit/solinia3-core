@@ -1,5 +1,8 @@
 package com.solinia.solinia.Events;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -11,13 +14,13 @@ public class PlayerEquipmentTickEvent extends Event implements Cancellable {
 	private boolean cancelled;
 	private static final HandlerList handlers = new HandlerList();
 	private ISoliniaPlayer player;
-	private ISoliniaItem item;
+	private List<ISoliniaItem> items;
 	
-	public PlayerEquipmentTickEvent(ISoliniaPlayer player, ISoliniaItem item) 
+	public PlayerEquipmentTickEvent(ISoliniaPlayer player, List<ISoliniaItem> items) 
     {
 		this.player = player;
 		this.cancelled = false;
-		this.item = item;
+		this.items = items;
     }
 	
 	public boolean isCancelled() {
@@ -41,8 +44,8 @@ public class PlayerEquipmentTickEvent extends Event implements Cancellable {
     	return this.player;
     }
     
-    public ISoliniaItem getItem()
+    public List<ISoliniaItem> getItems()
     {
-    	return this.item;
+    	return this.items;
     }
 }

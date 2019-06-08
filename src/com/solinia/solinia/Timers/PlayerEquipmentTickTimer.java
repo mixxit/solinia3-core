@@ -20,12 +20,9 @@ public class PlayerEquipmentTickTimer extends BukkitRunnable {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 				if (solPlayer == null)
 					continue;
-				
-				for (ISoliniaItem item : solPlayer.getEquippedSoliniaItems()) {
-					PlayerEquipmentTickEvent soliniaevent = new PlayerEquipmentTickEvent(solPlayer, item);
-					Bukkit.getPluginManager().callEvent(soliniaevent);
-				}
-				
+
+				PlayerEquipmentTickEvent soliniaevent = new PlayerEquipmentTickEvent(solPlayer, solPlayer.getEquippedSoliniaItems());					
+				Bukkit.getPluginManager().callEvent(soliniaevent);
 				
 			} catch (CoreStateInitException e)
 			{

@@ -2896,24 +2896,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public int getItemHpRegenBonuses() {
-		int bonus = 0;
-		for (ISoliniaItem item : getEquippedSoliniaItems()) {
-			bonus += item.getHpregen();
-		}
-		return bonus;
-	}
-
-	@Override
-	public int getItemMpRegenBonuses() {
-		int bonus = 0;
-		for (ISoliniaItem item : getEquippedSoliniaItems()) {
-			bonus += item.getMpregen();
-		}
-		return bonus;
-	}
-
-	@Override
 	public List<ISoliniaItem> getEquippedSoliniaItems() {
 		return getEquippedSoliniaItems(false);
 	}
@@ -3992,26 +3974,51 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void doEquipmentRegenTick(ISoliniaItem item) {
+	public void doEquipmentRegenTick(List<ISoliniaItem> items) {
 		if (getBukkitPlayer().isDead())
 			return;
 		
-		// Process HP Regeneration
-		if (item.getHpregen() > 0) {
-			int amount = (int) Math.round(getBukkitPlayer().getHealth()) + item.getHpregen();
-			if (amount > getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-				amount = (int) Math.round(getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+		int hpAmount = 0;
+		int mpAmount = 0;
+		
+		for(ISoliniaItem item : items)
+		{
+			// Process HP Regeneration
+			if (item.getHpregen() > 0) {
+				hpAmount += item.getHpregen();
 			}
 			
-			if (amount < 0)
-				amount = 0;
-
-			if (!getBukkitPlayer().isDead())
-				getSoliniaLivingEntity().setHealth(amount);
+			if (item.getMpregen() > 0)
+			{
+				mpAmount += item.getMpregen();
+			}
 		}
 		
-		if (item.getMpregen() > 0)
-			increasePlayerMana(item.getMpregen());
+		if (hpAmount > 0)
+		{
+			if (hpAmount > Utils.HP_REGEN_CAP)
+				hpAmount = Utils.HP_REGEN_CAP;
+			
+			hpAmount = (int) Math.round(getBukkitPlayer().getHealth()) + hpAmount;
+			
+			if (hpAmount > getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+				hpAmount = (int) Math.round(getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			}
+			
+			if (hpAmount < 0)
+				hpAmount = 0;
+
+			if (!getBukkitPlayer().isDead())
+				getSoliniaLivingEntity().setHealth(hpAmount);			
+		}
+		
+		if (mpAmount > 0)
+		{
+			if (mpAmount > Utils.MP_REGEN_CAP)
+				mpAmount = Utils.MP_REGEN_CAP;
+
+			increasePlayerMana(mpAmount);
+		}
 	}
 
 	@Override
