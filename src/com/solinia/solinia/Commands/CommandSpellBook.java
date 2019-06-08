@@ -229,7 +229,7 @@ public class CommandSpellBook implements CommandExecutor {
 					continue;
 	
 				TextComponent tc = new TextComponent();
-				if (!item.getDisplayname().toUpperCase().contains(searchTerm))
+				if (!item.getDisplayname().toUpperCase().contains(searchTerm.toUpperCase()))
 					continue;
 				
 				tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
