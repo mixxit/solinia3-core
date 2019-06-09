@@ -4291,7 +4291,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		System.out.println("Found spellbook size of : " + this.getSpellBookItems().size());
 		
-		List<List<Integer>> spellBookItemPages = Utils.getPages(this.getSpellBookItems(), 10);
+		List<List<Integer>> spellBookItemPages = Utils.getPages(this.getSpellBookItems(), 16);
 		if (spellBookItemPages.size() >= (pageNo+1))
 			spellBookPage = spellBookItemPages.get(pageNo);
 			

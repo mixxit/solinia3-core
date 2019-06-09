@@ -19,6 +19,12 @@ public class SpellbookPage {
 	public String SpellSlot8Name;
 	public String SpellSlot9Name;
 	public String SpellSlot10Name;
+	public String SpellSlot11Name;
+	public String SpellSlot12Name;
+	public String SpellSlot13Name;
+	public String SpellSlot14Name;
+	public String SpellSlot15Name;
+	public String SpellSlot16Name;
 	public int SpellSlot1Icon;
 	public int SpellSlot2Icon;
 	public int SpellSlot3Icon;
@@ -29,6 +35,12 @@ public class SpellbookPage {
 	public int SpellSlot8Icon;
 	public int SpellSlot9Icon;
 	public int SpellSlot10Icon;
+	public int SpellSlot11Icon;
+	public int SpellSlot12Icon;
+	public int SpellSlot13Icon;
+	public int SpellSlot14Icon;
+	public int SpellSlot15Icon;
+	public int SpellSlot16Icon;
 	public int SpellSlot1MemIcon;
 	public int SpellSlot2MemIcon;
 	public int SpellSlot3MemIcon;
@@ -39,6 +51,12 @@ public class SpellbookPage {
 	public int SpellSlot8MemIcon;
 	public int SpellSlot9MemIcon;
 	public int SpellSlot10MemIcon;
+	public int SpellSlot11MemIcon;
+	public int SpellSlot12MemIcon;
+	public int SpellSlot13MemIcon;
+	public int SpellSlot14MemIcon;
+	public int SpellSlot15MemIcon;
+	public int SpellSlot16MemIcon;
 
 
 	public SpellbookPage(int pageNo, List<Integer> itemIdsOnPage) {
@@ -66,6 +84,18 @@ public class SpellbookPage {
 		setSlot(9,itemIdsOnPage.get(8));
 		if (itemIdsOnPage.size() >= 10)
 		setSlot(10,itemIdsOnPage.get(9));
+		if (itemIdsOnPage.size() >= 11)
+		setSlot(11,itemIdsOnPage.get(10));
+		if (itemIdsOnPage.size() >= 12)
+		setSlot(12,itemIdsOnPage.get(11));
+		if (itemIdsOnPage.size() >= 13)
+		setSlot(13,itemIdsOnPage.get(12));
+		if (itemIdsOnPage.size() >= 14)
+		setSlot(14,itemIdsOnPage.get(13));
+		if (itemIdsOnPage.size() >= 15)
+		setSlot(15,itemIdsOnPage.get(14));
+		if (itemIdsOnPage.size() >= 16)
+		setSlot(16,itemIdsOnPage.get(15));
 	}
 
 	private void setSlot(int slot, int itemId) {
@@ -136,6 +166,36 @@ public class SpellbookPage {
 					SpellSlot10Name = spell.getName();
 					SpellSlot10Icon = spell.getIcon();
 					SpellSlot10MemIcon = spell.getMemicon();
+					break;
+				case 11:
+					SpellSlot11Name = spell.getName();
+					SpellSlot11Icon = spell.getIcon();
+					SpellSlot11MemIcon = spell.getMemicon();
+					break;
+				case 12:
+					SpellSlot12Name = spell.getName();
+					SpellSlot12Icon = spell.getIcon();
+					SpellSlot12MemIcon = spell.getMemicon();
+					break;
+				case 13:
+					SpellSlot13Name = spell.getName();
+					SpellSlot13Icon = spell.getIcon();
+					SpellSlot13MemIcon = spell.getMemicon();
+					break;
+				case 14:
+					SpellSlot14Name = spell.getName();
+					SpellSlot14Icon = spell.getIcon();
+					SpellSlot14MemIcon = spell.getMemicon();
+					break;
+				case 15:
+					SpellSlot15Name = spell.getName();
+					SpellSlot15Icon = spell.getIcon();
+					SpellSlot15MemIcon = spell.getMemicon();
+					break;
+				case 16:
+					SpellSlot16Name = spell.getName();
+					SpellSlot16Icon = spell.getIcon();
+					SpellSlot16MemIcon = spell.getMemicon();
 					break;
 				default:
 					return;

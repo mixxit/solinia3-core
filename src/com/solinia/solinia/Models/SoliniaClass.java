@@ -63,6 +63,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private String level60Title = "";
 	private List<Integer> oaths = new ArrayList<Integer>();
 	private int weaponDelayItemBonus = 0;
+	private boolean canPray = false;
 	
 	@Override
 	public String getName() {
@@ -161,11 +162,9 @@ public class SoliniaClass implements ISoliniaClass {
 	public void sendClassSettingsToSender(CommandSender sender) throws CoreStateInitException {
 		sender.sendMessage(ChatColor.RED + "Class Settings for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
-		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
-		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET);
+		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET + " admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
-		sender.sendMessage("- admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- defaultheadmaterial: " + ChatColor.GOLD + getDefaultHeadMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultchestmaterial: " + ChatColor.GOLD + getDefaultChestMaterial() + ChatColor.RESET);
@@ -205,6 +204,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- safefalllevel: " + ChatColor.GOLD + getSafefalllevel() + ChatColor.RESET);
 		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
 		sender.sendMessage("- dualwieldlevel: " + ChatColor.GOLD + getDualwieldlevel() + ChatColor.RESET);
+		sender.sendMessage("- canpray: " + ChatColor.GOLD + canPray() + ChatColor.RESET);
 		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
 		sender.sendMessage("- oaths: " + ChatColor.GOLD + getOaths().toString() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -267,6 +267,9 @@ public class SoliniaClass implements ISoliniaClass {
 			if (!ConfigurationManager.HandMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultAlternateHandMaterial(value.toUpperCase());
+			break;
+		case "canpray":
+			setCanPray(Boolean.valueOf(value));
 			break;
 		case "defaulthanditemtype":
 			setDefaultHandItemType(ItemType.valueOf(value));
@@ -902,5 +905,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setDefaultAlternateHandItemType(ItemType defaultAlternateHandItemType) {
 		this.defaultAlternateHandItemType = defaultAlternateHandItemType;
+	}
+
+	@Override
+	public boolean canPray() {
+		return canPray;
+	}
+
+	@Override
+	public void setCanPray(boolean canPray) {
+		this.canPray = canPray;
 	}
 }

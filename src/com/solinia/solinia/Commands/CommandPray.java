@@ -30,13 +30,9 @@ public class CommandPray implements CommandExecutor {
         try
         {
         	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-        	if (
-        			!solPlayer.getClassObj().getName().toUpperCase().equals("CLERIC") &&
-        			!solPlayer.getClassObj().getName().toUpperCase().equals("PALADIN") &&
-        			!solPlayer.getClassObj().getName().toUpperCase().equals("SHADOWKNIGHT")        			
-        			)
+        	if (!solPlayer.getClassObj().canPray())
         	{
-        		player.sendMessage("* The Gods are silent (only a cleric, paladin or shadowknight may act as a conduit for the Gods)");
+        		player.sendMessage("* The Gods are silent (only a religious or priestly class may act as a conduit for the Gods)");
         		return false;
         	}
         	

@@ -175,4 +175,8 @@ public interface ISoliniaClass {
 
 	void setDefaultAlternateHandItemType(ItemType defaultAlternateHandItemType);
 
+	boolean canPray();
+
+	void setCanPray(boolean canPray);
+
 }
