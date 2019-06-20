@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -66,8 +66,8 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.economy.EconomyResponse;
-import net.minecraft.server.v1_13_R2.EntityHuman;
-import net.minecraft.server.v1_13_R2.GenericAttributes;
+import net.minecraft.server.v1_14_R1.EntityHuman;
+import net.minecraft.server.v1_14_R1.GenericAttributes;
 
 public class Solinia3CorePlayerListener implements Listener {
 
@@ -197,7 +197,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	    {
 	      Player player = event.getPlayer();
 	      EntityHuman entityHuman = ((CraftPlayer)player).getHandle();
-	      entityHuman.getAttributeInstance(GenericAttributes.c).setValue(0.0D);
+	      entityHuman.getAttributeInstance(GenericAttributes.KNOCKBACK_RESISTANCE).setValue(0.0D);
 	    }
 	    catch (Exception ex)
 	    {
@@ -1403,7 +1403,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	    {
 	      Player player = event.getPlayer();
 	      EntityHuman entityHuman = ((CraftPlayer)player).getHandle();
-	      entityHuman.getAttributeInstance(GenericAttributes.c).setValue(1.0D);
+	      entityHuman.getAttributeInstance(GenericAttributes.KNOCKBACK_RESISTANCE).setValue(1.0D);
 	    }
 	    catch (Exception ex)
 	    {

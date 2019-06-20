@@ -21,15 +21,14 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sittable;
-import org.bukkit.entity.Arrow.PickupStatus;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
@@ -62,9 +61,9 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_13_R2.EntityDamageSource;
-import net.minecraft.server.v1_13_R2.EnumItemSlot;
-import net.minecraft.server.v1_13_R2.PacketPlayOutAnimation;
+import net.minecraft.server.v1_14_R1.EntityDamageSource;
+import net.minecraft.server.v1_14_R1.EnumItemSlot;
+import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -368,7 +367,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int itemid = solPlayer.getArrowReagents().get(0);
 					solPlayer.reduceReagents(itemid, 1);
 
-					net.minecraft.server.v1_13_R2.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+					net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 					getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 							Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
@@ -382,7 +381,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
 
 					Arrow projectile = getBukkitLivingEntity().launchProjectile(Arrow.class);
-					projectile.setPickupStatus(PickupStatus.DISALLOWED);
+					projectile.setPickupStatus(org.bukkit.entity.AbstractArrow.PickupStatus.DISALLOWED);
 					projectile.setVelocity(defender.getBukkitLivingEntity().getEyeLocation().toVector()
 							.subtract(projectile.getLocation().toVector()).normalize().multiply(4));
 					// .attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
@@ -391,7 +390,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 
 			} else {
-				net.minecraft.server.v1_13_R2.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 						Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
@@ -424,7 +423,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// BOW
 			if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW")) {
 
-				net.minecraft.server.v1_13_R2.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 						Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
@@ -444,14 +443,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				Arrow projectile = getBukkitLivingEntity().launchProjectile(Arrow.class);
 				projectile.setVelocity(defender.getBukkitLivingEntity().getEyeLocation().toVector()
 						.subtract(projectile.getLocation().toVector()).normalize().multiply(4));
-				projectile.setPickupStatus(PickupStatus.DISALLOWED);
+				projectile.setPickupStatus(org.bukkit.entity.AbstractArrow.PickupStatus.DISALLOWED);
 
 				// ((CraftEntity)
 				// defender.getBukkitLivingEntity()).getHandle().damageEntity(source,
 				// (float)damage);
 
 			} else {
-				net.minecraft.server.v1_13_R2.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+				net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 						Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);

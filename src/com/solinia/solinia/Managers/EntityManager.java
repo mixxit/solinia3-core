@@ -63,7 +63,7 @@ import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_13_R2.GenericAttributes;
+import net.minecraft.server.v1_14_R1.GenericAttributes;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
@@ -742,7 +742,7 @@ public class EntityManager implements IEntityManager {
 			if (!spawnedMob.isDead())
 				spawnedMob.setHealth(maxHp);
 			
-			net.minecraft.server.v1_13_R2.EntityInsentient entityhandle = (net.minecraft.server.v1_13_R2.EntityInsentient) ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) spawnedMob).getHandle();
+			net.minecraft.server.v1_14_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_14_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) spawnedMob).getHandle();
 			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solPet.getMaxDamage());
 			entityhandle.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double)0.4D);
 			owner.sendMessage("New Pet spawned with HP: " + spawnedMob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " and " + solPet.getMaxDamage() + " dmg");

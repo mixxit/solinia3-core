@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.solinia</groupId>
   <artifactId>solinia3-core</artifactId>
-  <version>1.13.2-R0.1-SNAPSHOT</version>
+  <version>1.14-R0.1-SNAPSHOT</version>
   <name>solinia3-core</name>
   <description>The EverQuest like RPG plugin for spigot</description>
 
@@ -123,7 +123,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.13.2-R0.1-SNAPSHOT</version>
+      <version>1.14-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>LibsDisguises</groupId>
@@ -133,7 +133,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.13.2-R0.1-SNAPSHOT</version>
+      <version>1.14-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>de.slikey</groupId>

@@ -33,7 +33,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -112,8 +112,8 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_13_R2.GenericAttributes;
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.GenericAttributes;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
 
 public class Utils {
 	public static final int HP_REGEN_CAP = 48;
@@ -284,7 +284,13 @@ public class Utils {
 	    SAFE_TO_SHARE.add(Material.SUGAR_CANE);
 	    SAFE_TO_SHARE.add(Material.DEAD_BUSH);
 	    SAFE_TO_SHARE.add(Material.LEGACY_LONG_GRASS);
-	    SAFE_TO_SHARE.add(Material.SIGN);
+	    SAFE_TO_SHARE.add(Material.ACACIA_SIGN);
+	    SAFE_TO_SHARE.add(Material.BIRCH_SIGN);
+	    SAFE_TO_SHARE.add(Material.JUNGLE_SIGN);
+	    SAFE_TO_SHARE.add(Material.LEGACY_SIGN);
+	    SAFE_TO_SHARE.add(Material.OAK_SIGN);
+	    SAFE_TO_SHARE.add(Material.SPRUCE_SIGN);
+	    SAFE_TO_SHARE.add(Material.DARK_OAK_SIGN);
 	    SAFE_TO_SHARE.add(Material.LEGACY_SIGN_POST);
 	    SAFE_TO_SHARE.add(Material.STONE_BUTTON);
 	    SAFE_TO_SHARE.add(Material.LEVER);
@@ -1302,7 +1308,7 @@ public class Utils {
 		if (itemstack == null)
 			return;
 
-		if (!(CraftItemStack.asNMSCopy(itemstack).getItem() instanceof net.minecraft.server.v1_13_R2.ItemArmor)) {
+		if (!(CraftItemStack.asNMSCopy(itemstack).getItem() instanceof net.minecraft.server.v1_14_R1.ItemArmor)) {
 			return;
 		}
 
@@ -5773,7 +5779,7 @@ public class Utils {
 		}
 
 		// Classic method
-		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 
 		String soliniaid = compound.getString("soliniaid");
@@ -6155,7 +6161,7 @@ public class Utils {
 		if (distance > 100D)
 			return 100D - distance;
 
-		net.minecraft.server.v1_13_R2.EntityLiving entity = ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity) aggroCheckEntity)
+		net.minecraft.server.v1_14_R1.EntityLiving entity = ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) aggroCheckEntity)
 				.getHandle();
 		if (entity == null)
 			return 0D;
