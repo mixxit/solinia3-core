@@ -6419,8 +6419,6 @@ public class Utils {
 	}
 
 	public static void setGlowing(Entity target, boolean glow, Player source) {
-		if (Utils.GlowApiEnabled == false)
-			return;
 
 		if (source == null || target == null || source.isDead() || target.isDead())
 			return;
