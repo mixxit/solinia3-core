@@ -129,7 +129,6 @@ public class Utils {
 	public static final int TotalBuffs = LongBuffs + ShortBuffs + DiscBuffs;
 	public static final int NPCBuffs = 60;
 	public static final int PetBuffs = 30;
-	public static final Boolean GlowApiEnabled = false;
 	public static final String HeartSymbol = "❤";
 
 	public static float clamp(float val, float min, float max) {
