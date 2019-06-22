@@ -1310,7 +1310,8 @@ public class EntityManager implements IEntityManager {
 					if (solPlayer != null && solEntity != null && solPlayerEntity != null && solPlayer.isGlowTargetting())
 					{
 						toggleGlow = solPlayer.isGlowTargetting();
-						Utils.setGlowing((Entity)target, Utils.getGlowColor(solEntity.getLevelCon(solPlayerEntity)), (Player)source);
+						//Utils.setGlowing((Entity)target, Utils.getGlowColor(solEntity.getLevelCon(solPlayerEntity)), (Player)source);
+						Utils.setGlowing((Entity)target, true, (Player)source);
 					}
 				} catch (CoreStateInitException e)
 				{

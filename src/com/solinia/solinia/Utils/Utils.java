@@ -33,6 +33,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
@@ -51,8 +52,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import org.inventivetalent.glow.GlowAPI;
-import org.inventivetalent.glow.GlowAPI.Color;
 
 import com.comphenix.example.Vector3D;
 import com.google.gson.Gson;
@@ -113,7 +112,11 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.GenericAttributes;
+import net.minecraft.server.v1_14_R1.MobEffect;
+import net.minecraft.server.v1_14_R1.MobEffectList;
+import net.minecraft.server.v1_14_R1.MobEffects;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEffect;
 
 public class Utils {
 	public static final int HP_REGEN_CAP = 48;
@@ -6416,71 +6419,22 @@ public class Utils {
 		return true;
 	}
 
-	public static void setGlowing(Entity target, boolean b, Player source) {
+	public static void setGlowing(Entity target, boolean glow, Player source) {
 		if (Utils.GlowApiEnabled == false)
 			return;
 
 		if (source == null || target == null || source.isDead() || target.isDead())
 			return;
 
+		int duration = 3600;
+		if (glow == false)
+			duration = 0;
+		
 		try {
-			GlowAPI.setGlowing(target, b, source);
+			PacketPlayOutEntityEffect eff = new PacketPlayOutEntityEffect(target.getEntityId(), new MobEffect(MobEffects.GLOWING, duration, 1, true, true));
+			((CraftPlayer) source.getPlayer()).getHandle().playerConnection.sendPacket(eff);
 		} catch (Exception e) {
-			System.out.println("Issue with glowAPI");
-		}
-	}
-
-	public static void setGlowing(Entity target, GlowAPI.Color color, Player source) {
-		if (Utils.GlowApiEnabled == false)
-			return;
-
-		if (source == null || target == null || source.isDead() || target.isDead())
-			return;
-
-		try {
-			GlowAPI.setGlowing(target, color, source);
-		} catch (Exception e) {
-			System.out.println("Issue with glowAPI");
-		}
-	}
-
-	public static Color getGlowColor(org.bukkit.ChatColor color) {
-
-		switch (color) {
-		case AQUA:
-			return Color.AQUA;
-		case BLACK:
-			return Color.BLACK;
-		case BLUE:
-			return Color.BLUE;
-		case DARK_AQUA:
-			return Color.DARK_AQUA;
-		case DARK_BLUE:
-			return Color.DARK_BLUE;
-		case DARK_GRAY:
-			return Color.DARK_GRAY;
-		case DARK_GREEN:
-			return Color.DARK_GREEN;
-		case DARK_PURPLE:
-			return Color.DARK_PURPLE;
-		case DARK_RED:
-			return Color.DARK_RED;
-		case GOLD:
-			return Color.GOLD;
-		case GRAY:
-			return Color.GRAY;
-		case GREEN:
-			return Color.GREEN;
-		case LIGHT_PURPLE:
-			return Color.PURPLE;
-		case RED:
-			return Color.RED;
-		case WHITE:
-			return Color.WHITE;
-		case YELLOW:
-			return Color.YELLOW;
-		default:
-			return Color.WHITE;
+			System.out.println("Issue with glow packet");
 		}
 	}
 
