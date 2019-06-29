@@ -54,7 +54,7 @@ public class CommandEquip implements CommandExecutor {
 					) {
 				try {
 					ItemStack primaryItem = player.getInventory().getItemInMainHand();
-					if (primaryItem.getType().equals(Material.AIR)) {
+					if (primaryItem.getType() == null || primaryItem.getType().equals(Material.AIR)) {
 						player.sendMessage(ChatColor.GRAY
 								+ "Empty item in primary hand. You must hold the item you want to equip in your main hand");
 						return false;

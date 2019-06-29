@@ -35,7 +35,7 @@ public class CommandPublishBook implements CommandExecutor {
 		ItemStack itemstack = null;
         
 		itemstack = player.getInventory().getItemInMainHand();
-        if (itemstack.getType().equals(Material.AIR))
+        if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
         {
         	player.sendMessage(ChatColor.GRAY+"Empty item in hand. You must hold the item you want to publish a book from");
         	return false;

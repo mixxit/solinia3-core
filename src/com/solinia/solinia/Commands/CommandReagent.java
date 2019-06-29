@@ -46,7 +46,7 @@ public class CommandReagent implements CommandExecutor {
 					case "add":
 						ItemStack itemstack = null;
 						itemstack = player.getInventory().getItemInMainHand();
-						if (itemstack.getType().equals(Material.AIR))
+						if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
 			            {
 			            	player.sendMessage("The item in your main hand is not a reagent");
 			    			return true;

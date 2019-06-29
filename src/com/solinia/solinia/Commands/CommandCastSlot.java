@@ -13,50 +13,7 @@ public class CommandCastSlot implements CommandExecutor {
 			return false;
 
 		return false;
-		/*
-		Player player = (Player) sender;
 		
-		if (args.length == 0)
-			return false;
-		
-		int hotBar = Integer.parseInt(args[0]);
-		if (hotBar < 1 || hotBar > 9)
-			return false;
-		
-		// Check item in slot is a spell
-		try
-		{
-			int slotId = hotBarToSlotId(hotBar);
-			ItemStack item = player.getInventory().getItem(slotId);
-			if (item == null || item.getType().equals(Material.AIR))
-			{
-				player.sendMessage("Item in slot: " + hotBar + " is not a spell");
-				return true;
-			}
-			
-			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			if (solPlayer == null)
-				return false;
-			
-			try {
-				ISoliniaItem solItem = SoliniaItemAdapter.Adapt(item);
-				if (solItem == null || !solItem.isSpellscroll())
-				{
-					player.sendMessage("Item in slot: " + hotBar + " is not a spell");
-					return true;
-				}
-				
-				solPlayer.tryCastFromItemInSlot(slotId);
-			} catch (SoliniaItemException e) {
-				player.sendMessage("Item in slot: " + hotBar + " is not a spell");
-				return true;
-			}
-		} catch (CoreStateInitException e)
-		{
-			return true;
-		}
-		return true;
-		*/
 	}
 
 	private int hotBarToSlotId(int hotBar) {

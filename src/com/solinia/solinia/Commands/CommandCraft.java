@@ -37,14 +37,14 @@ public class CommandCraft implements CommandExecutor {
 		
 		Player player = (Player)sender;
 		ItemStack primaryItem = player.getInventory().getItemInMainHand();
-        if (primaryItem.getType().equals(Material.AIR))
+        if (primaryItem.getType() == null || primaryItem.getType().equals(Material.AIR))
         {
         	player.sendMessage(ChatColor.GRAY+"Empty item in primary hand. You must hold the item you want to use in your crafting recipe");
         	return false;
         }
         
 		ItemStack secondaryItem = player.getInventory().getItemInOffHand();
-        if (secondaryItem.getType().equals(Material.AIR))
+        if (secondaryItem.getType() == null || secondaryItem.getType().equals(Material.AIR))
         {
         	player.sendMessage(ChatColor.GRAY+"Empty item in offhand. You must hold the item you want to use in your crafting recipe");
         	return false;
@@ -75,13 +75,13 @@ public class CommandCraft implements CommandExecutor {
         	try
             {
         		primaryItem = player.getInventory().getItemInMainHand();
-        		if (primaryItem == null || primaryItem.getType().equals(Material.AIR))
+        		if (primaryItem == null || primaryItem.getType() == null || primaryItem.getType().equals(Material.AIR))
         		{
         			player.sendMessage(ChatColor.GRAY+"Empty item in offhand. You must hold the item you want to use in your crafting recipe");
                 	return false;
         		}
         		secondaryItem = player.getInventory().getItemInOffHand();
-        		if (secondaryItem == null || secondaryItem.getType().equals(Material.AIR))
+        		if (secondaryItem == null || secondaryItem.getType() == null || secondaryItem.getType().equals(Material.AIR))
         		{
         			player.sendMessage(ChatColor.GRAY+"Empty item in offhand. You must hold the item you want to use in your crafting recipe");
                 	return false;

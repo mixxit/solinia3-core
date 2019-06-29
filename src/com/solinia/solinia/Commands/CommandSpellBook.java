@@ -79,7 +79,7 @@ public class CommandSpellBook implements CommandExecutor {
 
 	private void performSpellBookAdd(ISoliniaPlayer solPlayer) {
 		ItemStack primaryItem = solPlayer.getBukkitPlayer().getInventory().getItemInMainHand();
-		if (primaryItem.getType().equals(Material.AIR)) {
+		if (primaryItem.getType() == null || primaryItem.getType().equals(Material.AIR)) {
 			solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY
 					+ "Empty item in primary hand. You must hold the spell you want to place in your spellbook in your main hand");
 			return;

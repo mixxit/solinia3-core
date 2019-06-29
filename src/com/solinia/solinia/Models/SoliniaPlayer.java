@@ -1289,7 +1289,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			return;
 		
-		if (itemstack == null || itemstack.getType().equals(Material.AIR))
+		if (itemstack == null || itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
 			return;
 			
 		if (!Utils.IsSoliniaItem(itemstack))

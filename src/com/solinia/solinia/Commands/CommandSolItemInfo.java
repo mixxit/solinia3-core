@@ -10,6 +10,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandSolItemInfo implements CommandExecutor {
 	@Override
@@ -48,6 +49,7 @@ public class CommandSolItemInfo implements CommandExecutor {
 		if (ItemStackUtils.getAugmentationItemId(itemStack) != null)
 			player.sendMessage("SoliniaAugmentationItemId (Tag):" + ItemStackUtils.getAugmentationItemId(itemStack));
 
+		player.sendMessage("Is Display Item (Tag):" + Utils.IsDisplayItem(itemStack));
 		
 		if (args.length > 0 && args[0].equals("write"))
 		{

@@ -18,8 +18,6 @@ import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SkillType;
 
 public interface ISoliniaItem {
-	ItemStack asItemStack();
-
 	int getId();
 
 	void setId(int id);
@@ -357,4 +355,6 @@ public interface ISoliniaItem {
 	List<String> getAllowedRaceNames();
 
 	void setAllowedRaceNames(List<String> allowedRaceNames);
+
+	ItemStack asItemStack();
 }

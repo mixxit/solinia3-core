@@ -45,7 +45,7 @@ import net.minecraft.server.v1_14_R1.NBTTagList;
 import net.minecraft.server.v1_14_R1.NBTTagString;
 
 public class ItemStackAdapter {
-	public static ItemStack Adapt(ISoliniaItem soliniaItem, long costmultiplier) {
+	public static ItemStack Adapt(ISoliniaItem soliniaItem, long costmultiplier, boolean merchanttag) {
 		
 		ItemStack stack = new ItemStack(Material.valueOf(soliniaItem.getBasename().toUpperCase()), 1, soliniaItem.getColor());
 		
@@ -53,8 +53,10 @@ public class ItemStackAdapter {
 		
 		// New Item ID storage system
 		NamespacedKey soliniaIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaid");
+		NamespacedKey merchantKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "merchant");
 		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "sollastupdated");
 		ItemMeta itemMeta = stack.getItemMeta();
+		itemMeta.getCustomTagContainer().setCustomTag(merchantKey, ItemTagType.STRING, Boolean.toString(merchanttag));
 		itemMeta.getCustomTagContainer().setCustomTag(soliniaIdKey, ItemTagType.INTEGER, soliniaItem.getId());
 		if (lastItemTimestamp != null)
 			itemMeta.getCustomTagContainer().setCustomTag(soliniaLastUpdatedKey, ItemTagType.LONG, lastItemTimestamp.getTime());

@@ -841,7 +841,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			
 			if (event.getSlotType().equals(SlotType.ARMOR) || event.getSlot() == 40) {
 				ItemStack item = event.getWhoClicked().getInventory().getItem(event.getSlot());
-				if (item != null && !item.getType().equals(Material.AIR)) {
+				if (item != null && item.getType() != null && !item.getType().equals(Material.AIR)) {
 					if (Utils.IsSoliniaItem(item)) {
 						ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(item);
 						if (soliniaitem.getHp() > 0 || soliniaitem.getStamina() > 0) {
@@ -1027,7 +1027,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		// This is to stop drops after closing shop
 		if (Utils.IsSoliniaItem(event.getItemDrop().getItemStack()))
-			if (event.getItemDrop().getItemStack().getType() != null && event.getItemDrop().getItemStack().getItemMeta().getDisplayName().startsWith("Display Item: ")) {
+			if (event.getItemDrop().getItemStack().getType() != null && Utils.IsDisplayItem(event.getItemDrop().getItemStack())) {
 				event.getItemDrop().getItemStack().setAmount(0);
 			}
 	}
@@ -1063,7 +1063,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			return;
 		}
 
-		if (event.getCursor() == null || event.getCursor().getType().equals(Material.AIR)) {
+		if (event.getCursor() == null || event.getCursor().getType() == null || event.getCursor().getType().equals(Material.AIR)) {
 			if (event.getRawSlot() > 26) {
 
 				try {
@@ -1152,11 +1152,11 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		}
 
-		if (event.getCursor() != null && !event.getCursor().getType().equals(Material.AIR)) {
+		if (event.getCursor() != null && event.getCursor().getType() != null && !event.getCursor().getType().equals(Material.AIR)) {
 			// Clicking item in cursor onto a slot
 			if (event.getRawSlot() > 26) {
 				// Dropping own item or buying
-				if (event.getCursor().getType() != null && event.getCursor().getItemMeta() != null &&  event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: ")) {
+				if (event.getCursor().getType() != null && event.getCursor().getItemMeta() != null && Utils.IsDisplayItem(event.getCursor())) {
 					// Buying
 					// event.getView().getPlayer().sendMessage("Buying item");
 
@@ -1272,7 +1272,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			} else {
 				// Selling items or dropping item back
-				if (event.getCursor().getType() != null && event.getCursor().getItemMeta() != null && event.getCursor().getItemMeta().getDisplayName().startsWith("Display Item: ")) {
+				if (event.getCursor().getType() != null && event.getCursor().getItemMeta() != null && Utils.IsDisplayItem(event.getCursor())) {
 					// Returning store item
 					// Cursor events are deprecated, must be done next tick before a cancel
 					final UUID uuid = event.getView().getPlayer().getUniqueId();
@@ -1308,7 +1308,7 @@ public class Solinia3CorePlayerListener implements Listener {
 												return;
 											}
 											
-											if (Bukkit.getPlayer(finaluuid).getItemOnCursor().getType().equals(Material.AIR))
+											if (Bukkit.getPlayer(finaluuid).getItemOnCursor().getType() == null || Bukkit.getPlayer(finaluuid).getItemOnCursor().getType().equals(Material.AIR))
 											{
 												return;
 											}

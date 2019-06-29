@@ -1385,7 +1385,7 @@ public class SoliniaActiveSpell {
 			return;
 		}
 
-		if (sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.AIR)) {
+		if (sourcePlayer.getInventory().getItemInOffHand().getType() == null || sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.AIR)) {
 			sourcePlayer.sendMessage("You are not holding an item to identify in your offhand");
 			return;
 		}

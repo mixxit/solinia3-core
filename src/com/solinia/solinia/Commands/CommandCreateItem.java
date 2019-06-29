@@ -33,7 +33,7 @@ public class CommandCreateItem implements CommandExecutor {
 		{
 			Player player = (Player)sender;
 			itemstack = player.getInventory().getItemInMainHand();
-	        if (itemstack.getType().equals(Material.AIR))
+	        if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
 	        {
 	        	player.sendMessage(ChatColor.GRAY+"Empty item in hand. You must hold the item you want to make a new item from");
 	        	return false;

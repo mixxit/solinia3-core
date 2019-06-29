@@ -250,7 +250,7 @@ public class CommandPet implements CommandExecutor {
 			return;
 		}
 		
-		if (itemStack.getType().equals(Material.AIR))
+		if (itemStack.getType() == null || itemStack.getType().equals(Material.AIR))
 		{
 			player.sendMessage("Cannot give a pet nothing (empty main hand)");
 			return;
@@ -285,7 +285,7 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 	
-					if (pet.getEquipment().getItemInMainHand().getType().equals(Material.AIR))
+					if (pet.getEquipment().getItemInMainHand().getType() == null || pet.getEquipment().getItemInMainHand().getType().equals(Material.AIR))
 					{
 						pet.getEquipment().setItemInMainHand(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
@@ -306,7 +306,7 @@ public class CommandPet implements CommandExecutor {
 					return;
 				}
 
-				if (pet.getEquipment().getItemInOffHand().getType().equals(Material.AIR))
+				if (pet.getEquipment().getItemInOffHand().getType() == null || pet.getEquipment().getItemInOffHand().getType().equals(Material.AIR))
 				{
 					pet.getEquipment().setItemInOffHand(item.asItemStack());
 					player.getInventory().setItemInMainHand(null);
@@ -334,7 +334,7 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 
-					if (pet.getEquipment().getHelmet().getType().equals(Material.AIR))
+					if (pet.getEquipment().getHelmet().getType() == null || pet.getEquipment().getHelmet().getType().equals(Material.AIR))
 					{
 						pet.getEquipment().setHelmet(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
@@ -359,7 +359,7 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 
-					if (pet.getEquipment().getChestplate().getType().equals(Material.AIR))
+					if (pet.getEquipment().getChestplate().getType() == null || pet.getEquipment().getChestplate().getType().equals(Material.AIR))
 					{
 						pet.getEquipment().setChestplate(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
@@ -384,7 +384,7 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 
-					if (pet.getEquipment().getLeggings().getType().equals(Material.AIR))
+					if (pet.getEquipment().getLeggings().getType() == null || pet.getEquipment().getLeggings().getType().equals(Material.AIR))
 					{
 						pet.getEquipment().setLeggings(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
@@ -409,7 +409,7 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 
-					if (pet.getEquipment().getBoots().getType().equals(Material.AIR))
+					if (pet.getEquipment().getBoots().getType() == null || pet.getEquipment().getBoots().getType().equals(Material.AIR))
 					{
 						pet.getEquipment().setBoots(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);

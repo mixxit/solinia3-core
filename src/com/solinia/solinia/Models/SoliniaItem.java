@@ -121,7 +121,7 @@ public class SoliniaItem implements ISoliniaItem {
 	
 	@Override
 	public ItemStack asItemStack() {
-		return ItemStackAdapter.Adapt(this, 1);
+		return ItemStackAdapter.Adapt(this, 1, false);
 	}
 
 	@Override
@@ -1359,7 +1359,7 @@ public class SoliniaItem implements ISoliniaItem {
 
 	@Override
 	public ItemStack asItemStackForMerchant(long costmultiplier) {
-		return ItemStackAdapter.Adapt(this, costmultiplier);
+		return ItemStackAdapter.Adapt(this, costmultiplier, true);
 	}
 
 	@Override

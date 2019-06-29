@@ -2313,7 +2313,7 @@ public class NMSUtils {
     }
 
     public static boolean isEmpty(ItemStack itemStack) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) return true;
+        if (itemStack == null || itemStack.getType() == null || itemStack.getType() == Material.AIR) return true;
         if (class_ItemStack_isEmptyMethod == null) return false;
         try {
             Object handle = getHandle(itemStack);

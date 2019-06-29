@@ -529,7 +529,7 @@ public class Utils {
 			if (itemstack == null)
 				continue;
 
-			if (itemstack.getType().equals(Material.AIR))
+			if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
 				continue;
 
 			if (!Utils.IsSoliniaItem(itemstack))
@@ -561,7 +561,7 @@ public class Utils {
 			if (itemstack == null)
 				continue;
 
-			if (itemstack.getType().equals(Material.AIR))
+			if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
 				continue;
 
 			if (!Utils.IsSoliniaItem(itemstack))
@@ -6608,6 +6608,23 @@ public class Utils {
 		Gson gson = new GsonBuilder().create();
         return gson.toJson(model);
         
+	}
+
+	public static boolean IsDisplayItem(ItemStack itemStack) {
+		// Also check nbttag
+		if (itemStack == null)
+			return false;
+		
+		boolean isDisplayItem = itemStack.getItemMeta().getDisplayName().startsWith("Display Item: ");
+		if (isDisplayItem)
+			return isDisplayItem;
+
+		// Classic method
+		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+
+		String isMerchant = compound.getString("merchant");
+		return Boolean.parseBoolean(isMerchant);
 	}
 
 }
