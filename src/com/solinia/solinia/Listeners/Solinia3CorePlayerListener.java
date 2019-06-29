@@ -1161,7 +1161,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					// event.getView().getPlayer().sendMessage("Buying item");
 
 					try {
-						if (!event.getCurrentItem().getType().equals(Material.AIR)) {
+						if (event.getCurrentItem() != null && event.getCurrentItem().getType() != null && !event.getCurrentItem().getType().equals(Material.AIR)) {
 							event.getView().getPlayer()
 									.sendMessage("You must place the item you wish to buy on an empty slot");
 							// Cursor events are deprecated, must be done next tick before a cancel
