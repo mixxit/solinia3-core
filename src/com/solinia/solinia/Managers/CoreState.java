@@ -174,6 +174,12 @@ public class CoreState {
 			xpdaybonus = 400;
 		}
 
+		// 4th of July
+		if (simpleDateformat.format(now).equals("04.07") || simpleDateformat.format(now).equals("05.07") || simpleDateformat.format(now).equals("06.07") || simpleDateformat.format(now).equals("07.07"))
+		{
+			xpdaybonus = 400;
+		}
+		
 		// Halloween
 		if (simpleDateformat.format(now).equals("30.10") || simpleDateformat.format(now).equals("31.10") || simpleDateformat.format(now).equals("01.11"))
 		{
