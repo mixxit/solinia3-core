@@ -98,6 +98,10 @@
       </releases>
     </repository>
     <repository>
+    	<id>bintray-repo</id>
+    	<url>https://dl.bintray.com/nuvotifier/maven/</url>
+	</repository>
+    <repository>
         <id>zz_lumine-repo</id>
     	<url>http://mvn.lumine.io/repository/maven-snapshots/</url>
     </repository>
@@ -118,7 +122,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.14.2-R0.1-SNAPSHOT</version>
+      <version>1.14.4-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>LibsDisguises</groupId>
@@ -128,7 +132,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.14.2-R0.1-SNAPSHOT</version>
+      <version>1.14.4-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>de.slikey</groupId>
@@ -148,12 +152,13 @@
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
-      <version>1.7.1</version>
+      <version>1.7.2</version>
     </dependency>
     <dependency>
       <groupId>com.vexsoftware</groupId>
       <artifactId>nuvotifier-universal</artifactId>
-      <version>2.5.1-SNAPSHOT</version>
+      <version>2.3.4</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
