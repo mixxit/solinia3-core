@@ -16,6 +16,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EquipmentSlot;
+import com.solinia.solinia.Models.MemorisedSpells;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Models.PlayerFactionEntry;
@@ -560,5 +561,7 @@ public interface ISoliniaPlayer extends Serializable {
 	void tryCastFromMemorySlot(int slotId);
 
 	public SpellbookPage getSpellbookPage(int pageNo);
+
+	MemorisedSpells getMemorisedSpellSlots();
 
 }

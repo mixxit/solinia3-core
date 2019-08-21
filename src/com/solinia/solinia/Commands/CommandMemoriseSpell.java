@@ -10,6 +10,10 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.Solinia3UIChannelNames;
+import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
+import com.solinia.solinia.Utils.ForgeUtils;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandMemoriseSpell implements CommandExecutor {
 	@Override
@@ -51,9 +55,15 @@ public class CommandMemoriseSpell implements CommandExecutor {
 				return false;
 			}
 			
-			if (solPlayer.getMaxSpellSlots() < spellSlot)
+			if (spellSlot < 1)
 			{
-				sender.sendMessage("You do not have that many spell slots");
+				sender.sendMessage("That spell slot does not exist");
+				return false;
+			}
+			
+			if (spellSlot > solPlayer.getMaxSpellSlots())
+			{
+				sender.sendMessage("That spell slot does not exist");
 				return false;
 			}
 			
@@ -64,7 +74,20 @@ public class CommandMemoriseSpell implements CommandExecutor {
 			}
 			
 			if (!solPlayer.memoriseSpell(spellSlot, spellId))
+			{
 				return false;
+			} else {
+				try
+				{
+			    	String json = Utils.getObjectAsJson(solPlayer.getMemorisedSpellSlots());
+					ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.UPDATE_MEMORISEDSPELLS,json);
+					System.out.println("Sent Memorised Spell Data data: " + json);
+				} catch (Exception e)
+				{
+					System.out.println("Could not generated memorised spell data: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
 		} catch (CoreStateInitException e)
 		{
 			return false;

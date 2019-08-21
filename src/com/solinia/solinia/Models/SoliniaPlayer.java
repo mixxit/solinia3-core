@@ -4075,6 +4075,21 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
+	public MemorisedSpells getMemorisedSpellSlots() {
+		List<Integer> spells = new ArrayList<Integer>();
+		spells.add(memorisedSpellSlot1);
+		spells.add(memorisedSpellSlot2);
+		spells.add(memorisedSpellSlot3);
+		spells.add(memorisedSpellSlot4);
+		spells.add(memorisedSpellSlot5);
+		spells.add(memorisedSpellSlot6);
+		spells.add(memorisedSpellSlot7);
+		spells.add(memorisedSpellSlot8);
+		
+		return new MemorisedSpells(spells);
+	}
+	
+	@Override
 	public int getMemorisedSpellSlot1() {
 		return memorisedSpellSlot1;
 	}
@@ -4176,8 +4191,30 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public List<Integer> getSpellBookSpellIds() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> spellBookIds = new ArrayList<Integer>();
+		
+		try
+		{
+			for(int itemId : getSpellBookItems())
+			{
+				ISoliniaItem spellbookItem = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+				if (spellbookItem == null)
+					continue;
+				
+				if (!spellbookItem.isSpellscroll())
+					continue;
+
+				if (spellBookIds.contains(spellbookItem.getAbilityid()))
+					continue;
+				
+				spellBookIds.add(spellbookItem.getAbilityid());
+			}
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return spellBookIds;
 	}
 
 	@Override

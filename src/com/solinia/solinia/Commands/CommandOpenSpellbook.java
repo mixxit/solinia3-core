@@ -34,7 +34,7 @@ public class CommandOpenSpellbook implements CommandExecutor {
 	    	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
 	    	String json = Utils.getObjectAsJson(solPlayer.getSpellbookPage(pageNo));
 			ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.OPEN_SPELLBOOK,json);
-			System.out.println("Sent Spellbook data: " + json);
+			//System.out.println("Sent Spellbook data: " + json);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
