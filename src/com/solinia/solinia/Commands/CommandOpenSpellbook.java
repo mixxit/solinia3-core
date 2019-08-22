@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.GenericPacketMessage;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Utils.ForgeUtils;
@@ -32,8 +33,10 @@ public class CommandOpenSpellbook implements CommandExecutor {
 		
 	    try {
 	    	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-	    	String json = Utils.getObjectAsJson(solPlayer.getSpellbookPage(pageNo));
-			ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.OPEN_SPELLBOOK,json);
+	    	GenericPacketMessage message = new GenericPacketMessage();
+	    	message.setSpellbookPage(solPlayer.getSpellbookPage(pageNo));
+	    	String json = Utils.getObjectAsJson(message);
+			ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.GENERIC_MESSAGE,json);
 			//System.out.println("Sent Spellbook data: " + json);
 		} catch (Exception e) {
 			e.printStackTrace();
