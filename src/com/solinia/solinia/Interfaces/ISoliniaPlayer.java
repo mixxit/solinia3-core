@@ -564,4 +564,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	MemorisedSpells getMemorisedSpellSlots();
 
+	public void sendMemorisedSpellSlots();
+
 }

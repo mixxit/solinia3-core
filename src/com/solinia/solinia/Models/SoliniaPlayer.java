@@ -46,6 +46,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
@@ -4333,5 +4334,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			spellBookPage = spellBookItemPages.get(pageNo);
 			
 		return new SpellbookPage(pageNo,spellBookPage);
+	}
+
+	@Override
+	public void sendMemorisedSpellSlots() {
+		try
+		{
+			GenericPacketMessage message = new GenericPacketMessage();
+			message.setMemorisedSpellSlots(getMemorisedSpellSlots());
+	    	String json = Utils.getObjectAsJson(message);
+			ForgeUtils.sendForgeMessage(((Player)getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.GENERIC_MESSAGE,json);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

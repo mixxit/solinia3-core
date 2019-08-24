@@ -1475,6 +1475,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			{
 		    	
 			}
+			
+            solplayer.sendMemorisedSpellSlots();
 
 		} catch (CoreStateInitException e) {
 			event.getPlayer().kickPlayer("Server initialising");

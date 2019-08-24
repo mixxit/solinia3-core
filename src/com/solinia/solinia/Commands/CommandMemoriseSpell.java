@@ -78,18 +78,7 @@ public class CommandMemoriseSpell implements CommandExecutor {
 			{
 				return false;
 			} else {
-				try
-				{
-					GenericPacketMessage message = new GenericPacketMessage();
-					message.setMemorisedSpellSlots(solPlayer.getMemorisedSpellSlots());
-			    	String json = Utils.getObjectAsJson(message);
-					ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.GENERIC_MESSAGE,json);
-					System.out.println("Sent Memorised Spell Data data: " + json);
-				} catch (Exception e)
-				{
-					System.out.println("Could not generated memorised spell data: " + e.getMessage());
-					e.printStackTrace();
-				}
+				solPlayer.sendMemorisedSpellSlots();
 			}
 		} catch (CoreStateInitException e)
 		{

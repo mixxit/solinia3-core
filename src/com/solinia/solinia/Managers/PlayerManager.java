@@ -293,6 +293,8 @@ public class PlayerManager implements IPlayerManager {
 			player.getInventory().clear();
             player.getInventory().setArmorContents(null);
             player.updateInventory();
+            
+            solPlayer.sendMemorisedSpellSlots();
 
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
@@ -341,6 +343,8 @@ public class PlayerManager implements IPlayerManager {
 			player.getInventory().setArmorContents(altSolPlayer.getStoredArmorContents());
             player.updateInventory();
 			
+            solPlayer.sendMemorisedSpellSlots();
+            
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
 				solPlayer.getSoliniaLivingEntity().setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
