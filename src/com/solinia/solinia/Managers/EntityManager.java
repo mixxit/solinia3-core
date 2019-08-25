@@ -1245,24 +1245,6 @@ public class EntityManager implements IEntityManager {
 		
 		if (target == null)
 		{
-			if (entityTargets.get(source.getUniqueId()) != null)
-			{
-				Entity currentTarget = Bukkit.getEntity(entityTargets.get(source.getUniqueId()));
-				if (source instanceof Player && currentTarget != null)
-				{
-					try {
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
-						
-						if (solPlayer != null && solPlayer.isGlowTargetting())
-							Utils.setGlowing((Entity)currentTarget, false, (Player)source);
-					} catch (CoreStateInitException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}
-			}
-			
 			// no need, is on the boss bar
 			//source.sendMessage(ChatColor.GRAY + "Cleared your target");
 			entityTargets.remove(source.getUniqueId());
@@ -1279,46 +1261,6 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 		} else {
-			
-			// if already has a target turn it off
-			if (entityTargets.get(source.getUniqueId()) != null)
-			{
-				Entity currentTarget = Bukkit.getEntity(entityTargets.get(source.getUniqueId()));
-				if (source instanceof Player && currentTarget != null)
-				{
-					try {
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
-						
-						if (solPlayer != null && solPlayer.isGlowTargetting())
-							Utils.setGlowing((Entity)currentTarget, false, (Player)source);
-					} catch (CoreStateInitException e)
-					{
-						
-					}
-				}
-			}
-			
-			boolean toggleGlow = false;
-			
-			if (source instanceof Player && target != null)
-			{
-				try {
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)source);
-					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(target);
-					ISoliniaLivingEntity solPlayerEntity = SoliniaLivingEntityAdapter.Adapt((Player)source);
-					
-					if (solPlayer != null && solEntity != null && solPlayerEntity != null && solPlayer.isGlowTargetting())
-					{
-						toggleGlow = solPlayer.isGlowTargetting();
-						//Utils.setGlowing((Entity)target, Utils.getGlowColor(solEntity.getLevelCon(solPlayerEntity)), (Player)source);
-						Utils.setGlowing((Entity)target, true, (Player)source);
-					}
-				} catch (CoreStateInitException e)
-				{
-					
-				}
-			}
-			
 			// no need, is on the bossbar
 			//source.sendMessage(ChatColor.GRAY + "Set target to " + target.getName() + " [/toggleglow: " + toggleGlow + "]");
 			entityTargets.put(source.getUniqueId(), target.getUniqueId());

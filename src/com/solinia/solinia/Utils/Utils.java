@@ -6362,23 +6362,6 @@ public class Utils {
 		return true;
 	}
 
-	public static void setGlowing(Entity target, boolean glow, Player source) {
-
-		if (source == null || target == null || source.isDead() || target.isDead())
-			return;
-
-		int duration = 3600;
-		if (glow == false)
-			duration = 0;
-		
-		try {
-			PacketPlayOutEntityEffect eff = new PacketPlayOutEntityEffect(target.getEntityId(), new MobEffect(MobEffects.GLOWING, duration, 1, true, true));
-			((CraftPlayer) source.getPlayer()).getHandle().playerConnection.sendPacket(eff);
-		} catch (Exception e) {
-			System.out.println("Issue with glow packet");
-		}
-	}
-
 	public static boolean AddAccountClaim(String mcaccountname, int itemId) {
 		try {
 			SoliniaAccountClaim newclaim = new SoliniaAccountClaim();

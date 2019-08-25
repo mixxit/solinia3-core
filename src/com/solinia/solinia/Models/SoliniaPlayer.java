@@ -134,7 +134,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
 	private ConcurrentHashMap<String, Integer> monthlyVote = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, SoliniaReagent> reagentsPouch = new ConcurrentHashMap<Integer, SoliniaReagent>();
-	private boolean glowTargetting = true;
 	private Double pendingXp = 0d;
 	private boolean showDiscord = true;
 	private int oathId = 0;
@@ -3309,16 +3308,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 
 		}
-	}
-
-	@Override
-	public boolean isGlowTargetting() {
-		return glowTargetting;
-	}
-
-	@Override
-	public void setGlowTargetting(boolean glowTargetting) {
-		this.glowTargetting = glowTargetting;
 	}
 
 	@Override
