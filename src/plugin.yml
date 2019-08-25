@@ -87,6 +87,11 @@ commands:
     usage: /stopsinging
     aliases:
     - stopsong
+  stopcasting:
+    description: Stops casting a spell
+    usage: /stopcasting
+    aliases:
+    - stopcast
   claimxp:
     description: Claims pending XP
     usage: /claimxp
