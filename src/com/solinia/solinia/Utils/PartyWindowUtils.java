@@ -1,5 +1,7 @@
 package com.solinia.solinia.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -19,6 +21,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.GenericPacketMessage;
 import com.solinia.solinia.Models.PartyWindow;
+import com.solinia.solinia.Models.PartyWindowPlayer;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 
@@ -72,6 +75,9 @@ public class PartyWindowUtils {
 			GenericPacketMessage message = GenerateGenericPacketMessageForPlayer(player);
 			if (message == null)
 				return;
+			
+			if (message.PartyWindow.PartyMembers == null)
+				message.PartyWindow.PartyMembers = new ArrayList<PartyWindowPlayer>();
 			
 			if (group != null)
 			{
