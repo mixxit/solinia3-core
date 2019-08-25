@@ -189,98 +189,98 @@ public class SpellbookPage {
 			{
 				case 1:
 					SpellSlot1Id = spell.getId();
-					SpellSlot1Name = spell.getId() + "|" + spell.getName();
+					SpellSlot1Name = spell.getName();
 					SpellSlot1Icon = spell.getIcon();
 					SpellSlot1MemIcon = spell.getMemicon();
 					SpellSlot1NewIcon = spell.getNewIcon();
 				break;
 				case 2:
 					SpellSlot2Id = spell.getId();
-					SpellSlot2Name = spell.getId() + "|" + spell.getName();
+					SpellSlot2Name = spell.getName();
 					SpellSlot2Icon = spell.getIcon();
 					SpellSlot2MemIcon = spell.getMemicon();
 					SpellSlot2NewIcon = spell.getNewIcon();
 				break;
 				case 3:
 					SpellSlot3Id = spell.getId();
-					SpellSlot3Name = spell.getId() + "|" + spell.getName();
+					SpellSlot3Name = spell.getName();
 					SpellSlot3Icon = spell.getIcon();
 					SpellSlot3MemIcon = spell.getMemicon();
 					SpellSlot3NewIcon = spell.getNewIcon();
 				break;
 				case 4:
 					SpellSlot4Id = spell.getId();
-					SpellSlot4Name = spell.getId() + "|" + spell.getName();
+					SpellSlot4Name = spell.getName();
 					SpellSlot4Icon = spell.getIcon();
 					SpellSlot4MemIcon = spell.getMemicon();
 					SpellSlot4NewIcon = spell.getNewIcon();
 				break;
 				case 5:
 					SpellSlot5Id = spell.getId();
-					SpellSlot5Name = spell.getId() + "|" + spell.getName();
+					SpellSlot5Name = spell.getName();
 					SpellSlot5Icon = spell.getIcon();
 					SpellSlot5MemIcon = spell.getMemicon();
 					SpellSlot5NewIcon = spell.getNewIcon();
 				break;
 				case 6:
 					SpellSlot6Id = spell.getId();
-					SpellSlot6Name = spell.getId() + "|" + spell.getName();
+					SpellSlot6Name = spell.getName();
 					SpellSlot6Icon = spell.getIcon();
 					SpellSlot6MemIcon = spell.getMemicon();
 					SpellSlot6NewIcon = spell.getNewIcon();
 				break;
 				case 7:
 					SpellSlot7Id = spell.getId();
-					SpellSlot7Name = spell.getId() + "|" + spell.getName();
+					SpellSlot7Name = spell.getName();
 					SpellSlot7Icon = spell.getIcon();
 					SpellSlot7MemIcon = spell.getMemicon();
 					SpellSlot7NewIcon = spell.getNewIcon();
 				break;
 				case 8:
 					SpellSlot8Id = spell.getId();
-					SpellSlot8Name = spell.getId() + "|" + spell.getName();
+					SpellSlot8Name = spell.getName();
 					SpellSlot8Icon = spell.getIcon();
 					SpellSlot8MemIcon = spell.getMemicon();
 					SpellSlot8NewIcon = spell.getNewIcon();
 				break;
 				case 9:
 					SpellSlot9Id = spell.getId();
-					SpellSlot9Name = spell.getId() + "|" + spell.getName();
+					SpellSlot9Name = spell.getName();
 					SpellSlot9Icon = spell.getIcon();
 					SpellSlot9MemIcon = spell.getMemicon();
 					SpellSlot9NewIcon = spell.getNewIcon();
 					break;
 				case 10:
 					SpellSlot10Id = spell.getId();
-					SpellSlot10Name = spell.getId() + "|" + spell.getName();
+					SpellSlot10Name = spell.getName();
 					SpellSlot10Icon = spell.getIcon();
 					SpellSlot10MemIcon = spell.getMemicon();
 					SpellSlot10NewIcon = spell.getNewIcon();
 					break;
 				case 11:
 					SpellSlot11Id = spell.getId();
-					SpellSlot11Name = spell.getId() + "|" + spell.getName();
+					SpellSlot11Name = spell.getName();
 					SpellSlot11Icon = spell.getIcon();
 					SpellSlot11MemIcon = spell.getMemicon();
 					SpellSlot11NewIcon = spell.getNewIcon();
 					break;
 				case 12:
 					SpellSlot12Id = spell.getId();
-					SpellSlot12Name = spell.getId() + "|" + spell.getName();
+					SpellSlot12Name = spell.getName();
 					SpellSlot12Icon = spell.getIcon();
 					SpellSlot12MemIcon = spell.getMemicon();
 					SpellSlot12NewIcon = spell.getNewIcon();
 					break;
 				case 13:
 					SpellSlot13Id = spell.getId();
-					SpellSlot13Name = spell.getId() + "|" + spell.getName();
+					SpellSlot13Name = spell.getName();
 					SpellSlot13Icon = spell.getIcon();
 					SpellSlot13MemIcon = spell.getMemicon();
 					SpellSlot13NewIcon = spell.getNewIcon();
 					break;
 				case 14:
 					SpellSlot14Id = spell.getId();
-					SpellSlot14Name = spell.getId() + "|" + spell.getName();
+					SpellSlot14Name = spell.getName();
 					SpellSlot14Icon = spell.getIcon();
 					SpellSlot14MemIcon = spell.getMemicon();
 					SpellSlot14NewIcon = spell.getNewIcon();
@@ -294,7 +294,7 @@ public class SpellbookPage {
 					break;
 				case 16:
 					SpellSlot16Id = spell.getId();
-					SpellSlot16Name = spell.getId() + "|" + spell.getName();
+					SpellSlot16Name = spell.getName();
 					SpellSlot16Icon = spell.getIcon();
 					SpellSlot16MemIcon = spell.getMemicon();
 					SpellSlot16NewIcon = spell.getNewIcon();
