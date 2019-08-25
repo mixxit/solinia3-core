@@ -65,26 +65,23 @@ public class PartyWindowUtils {
 			e.printStackTrace();
 		}
 	}
-
-	public static void UpdateGroupWindow(UUID uuid, ISoliniaGroup group) {
+	
+	public static void SendGroupToMember(Player player, ISoliniaGroup group)
+	{
+		GenericPacketMessage message = GenerateGenericPacketMessageForPlayer(player);
+		if (message == null)
+			return;
+		
+		if (message.PartyWindow.PartyMembers == null)
+			message.PartyWindow.PartyMembers = new ArrayList<PartyWindowPlayer>();
+		
 		try {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player == null)
-				return;
-			
-			GenericPacketMessage message = GenerateGenericPacketMessageForPlayer(player);
-			if (message == null)
-				return;
-			
-			if (message.PartyWindow.PartyMembers == null)
-				message.PartyWindow.PartyMembers = new ArrayList<PartyWindowPlayer>();
-			
 			if (group != null)
 			{
 				for (UUID groupmemberuuid : group.getMembers()) {
-					if (groupmemberuuid.toString().equals(uuid.toString()))
+					if (groupmemberuuid.toString().equals(player.getUniqueId().toString()))
 						continue;
-
+	
 					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(groupmemberuuid));
 					if (solplayer == null)
 						continue;
@@ -94,16 +91,30 @@ public class PartyWindowUtils {
 			}
 			
 			String json = JsonUtils.getObjectAsJson(message);
-			
-
 			ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.GENERIC_MESSAGE,json);
+			
+		} catch (CoreStateInitException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	public static void UpdateGroupWindow(UUID uuid, ISoliniaGroup group) {
+		Player player = Bukkit.getPlayer(uuid);
+		if (player == null)
+			return;
+		
+		try {
+			SendGroupToMember(player, group);
+			// Now send to groupies, remember to change the party members nad Me
 			if (group != null)
 			for (UUID groupmemberuuid : group.getMembers()) {
 				Player sendToPlayer = Bukkit.getPlayer(groupmemberuuid);
-				ForgeUtils.sendForgeMessage(sendToPlayer,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.GENERIC_MESSAGE,json);
+				SendGroupToMember(sendToPlayer, group);
 			}
-		} catch (CoreStateInitException e) {
-			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
