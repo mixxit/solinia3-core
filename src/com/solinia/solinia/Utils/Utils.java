@@ -1,7 +1,6 @@
 package com.solinia.solinia.Utils;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,11 +53,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.comphenix.example.Vector3D;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.rit.sucy.player.TargetHelper;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
@@ -96,15 +92,12 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
-import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
-import com.solinia.solinia.Models.SpellbookPage;
-
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -113,7 +106,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.GenericAttributes;
 import net.minecraft.server.v1_14_R1.MobEffect;
-import net.minecraft.server.v1_14_R1.MobEffectList;
 import net.minecraft.server.v1_14_R1.MobEffects;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEffect;
@@ -532,7 +524,7 @@ public class Utils {
 			if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
 				continue;
 
-			if (!Utils.IsSoliniaItem(itemstack))
+			if (!ItemStackUtils.IsSoliniaItem(itemstack))
 				continue;
 
 			int tmpitemid = 0;
@@ -564,7 +556,7 @@ public class Utils {
 			if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
 				continue;
 
-			if (!Utils.IsSoliniaItem(itemstack))
+			if (!ItemStackUtils.IsSoliniaItem(itemstack))
 				continue;
 
 			// covers cases of special tmp ids
@@ -1314,7 +1306,7 @@ public class Utils {
 			return;
 		}
 
-		if (Utils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+		if (ItemStackUtils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 			try {
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
@@ -5767,46 +5759,6 @@ public class Utils {
 		return 8 * 20;
 	}
 
-	public static boolean IsSoliniaItem(ItemStack itemStack) {
-		if (itemStack == null)
-			return false;
-
-		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
-			if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
-				return true;
-
-		// New method
-		if (ItemStackUtils.getSoliniaItemId(itemStack) != null) {
-			return true;
-		}
-
-		// Classic method
-		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-
-		String soliniaid = compound.getString("soliniaid");
-
-		return soliniaid.matches("-?\\d+");
-	}
-
-	public static Timestamp GetSolLastUpdated(ItemStack itemStack) {
-		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
-			if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
-				return null;
-
-		Long solupdatedtime = ItemStackUtils.getSoliniaLastUpdated(itemStack);
-		if (solupdatedtime == null)
-			return null;
-
-		try {
-			Timestamp timestamp = new java.sql.Timestamp(solupdatedtime);
-			return timestamp;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public static int getMaxUnspentAAPoints() {
 		// TODO Auto-generated method stub
 		return 1000;
@@ -6194,14 +6146,6 @@ public class Utils {
 		return !IsDay(world);
 	}
 	
-	public static boolean isSkullItem(ItemStack itemStack) {
-		if (itemStack.getType().name().equals("SKULL_ITEM") || itemStack.getType().name().equals("PLAYER_HEAD")
-				|| itemStack.getType().name().equals("LEGACY_SKULL_ITEM"))
-			return true;
-
-		return false;
-	}
-
 	public static void RecommitNpcs() {
 		try {
 			System.out.println("Recommiting all NPCs via provider");
@@ -6602,12 +6546,6 @@ public class Utils {
 	        if(Character.digit(s.charAt(i),radix) < 0) return false;
 	    }
 	    return true;
-	}
-
-	public static <T> String getObjectAsJson(T model) {
-		Gson gson = new GsonBuilder().create();
-        return gson.toJson(model);
-        
 	}
 
 	public static boolean IsDisplayItem(ItemStack itemStack) {

@@ -68,7 +68,7 @@ public class SoliniaItemFactory {
 			}
 		}
 		
-		if (Utils.isSkullItem(itemStack))
+		if (ItemStackUtils.isSkullItem(itemStack))
 			item.setTexturebase64(ItemStackUtils.getSkullTexture(itemStack));
 		
 		if (itemStack.getType().name().equals("WRITTEN_BOOK"))
@@ -115,7 +115,7 @@ public class SoliniaItemFactory {
 			}
 		}
 		
-		if (Utils.isSkullItem(itemStack))
+		if (ItemStackUtils.isSkullItem(itemStack))
 			item.setTexturebase64(ItemStackUtils.getSkullTexture(itemStack));
 		
 		if (itemStack.getType().name().equals("WRITTEN_BOOK"))

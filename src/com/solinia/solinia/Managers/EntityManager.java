@@ -50,7 +50,7 @@ import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
-import com.solinia.solinia.Utils.ScoreboardUtils;
+import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -1272,7 +1272,7 @@ public class EntityManager implements IEntityManager {
 				try
 				{
 					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
-					ScoreboardUtils.UpdateScoreboard((Player)source,solPlayer.getMana());
+					PartyWindowUtils.UpdateWindow((Player)source,solPlayer.getMana());
 				} catch (CoreStateInitException e)
 				{
 					
@@ -1326,7 +1326,7 @@ public class EntityManager implements IEntityManager {
 			{
 				try
 				{
-					ScoreboardUtils.UpdateScoreboard((Player)source,SoliniaLivingEntityAdapter.Adapt(source).getMana());
+					PartyWindowUtils.UpdateWindow((Player)source,SoliniaLivingEntityAdapter.Adapt(source).getMana());
 				} catch (CoreStateInitException e)
 				{
 					
@@ -1541,7 +1541,7 @@ public class EntityManager implements IEntityManager {
 				{
 					try {
 						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
-						ScoreboardUtils.UpdateScoreboard((Player)entity, solPlayer.getMana());
+						PartyWindowUtils.UpdateWindow((Player)entity, solPlayer.getMana());
 					} catch (CoreStateInitException e) {
 						
 					}

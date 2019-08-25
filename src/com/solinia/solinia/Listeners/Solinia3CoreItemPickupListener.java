@@ -96,7 +96,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
         
         try
         {
-	        if (Utils.IsSoliniaItem(pickedUpItemStack) && pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK))
+	        if (ItemStackUtils.IsSoliniaItem(pickedUpItemStack) && pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK))
 		    {
 	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
 	            if (pickedUpItemStack != null)
@@ -127,7 +127,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	StateManager.getInstance().getChannelManager().sendToDiscordMC(null,StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
 		    }
-	        if (Utils.IsSoliniaItem(pickedUpItemStack) && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
+	        if (ItemStackUtils.IsSoliniaItem(pickedUpItemStack) && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
 		    {
 	        	Map<Enchantment, Integer> oldenchantments = pickedUpItemStack.getEnchantments();
 	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItem(pickedUpItemStack);
@@ -179,7 +179,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 		    }
 	        
 	        // group messages
-	        if (Utils.IsSoliniaItem(pickedUpItemStack))
+	        if (ItemStackUtils.IsSoliniaItem(pickedUpItemStack))
 		    {
 	        	ISoliniaItem item;
 				try {

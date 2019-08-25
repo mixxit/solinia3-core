@@ -1421,7 +1421,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 					Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Checking if itemStack is SoliniaItem: " + itemstack.getItemMeta().getDisplayName());
 				}
 
-				if (Utils.IsSoliniaItem(itemstack)) {
+				if (ItemStackUtils.IsSoliniaItem(itemstack)) {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					if (item == null)
 						continue;

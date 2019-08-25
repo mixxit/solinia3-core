@@ -10,11 +10,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.GenericPacketMessage;
-import com.solinia.solinia.Models.Solinia3UIChannelNames;
-import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
-import com.solinia.solinia.Utils.ForgeUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandMemoriseSpell implements CommandExecutor {
 	@Override

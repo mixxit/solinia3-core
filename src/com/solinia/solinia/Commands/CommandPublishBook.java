@@ -16,7 +16,7 @@ import com.solinia.solinia.Factories.SoliniaNPCMerchantFactory;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.Utils;
+import com.solinia.solinia.Utils.ItemStackUtils;
 
 public class CommandPublishBook implements CommandExecutor {
 	@Override
@@ -41,7 +41,7 @@ public class CommandPublishBook implements CommandExecutor {
         	return false;
         }
         
-        if (Utils.IsSoliniaItem(itemstack))
+        if (ItemStackUtils.IsSoliniaItem(itemstack))
         {
         	player.sendMessage("You can only create a new item from core minecraft items, not solinia items");
         	return true;

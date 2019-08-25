@@ -1,6 +1,5 @@
 package com.solinia.solinia.Events;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.event.Cancellable;

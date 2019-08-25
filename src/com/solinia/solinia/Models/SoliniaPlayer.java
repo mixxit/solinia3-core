@@ -48,7 +48,8 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
-import com.solinia.solinia.Utils.ScoreboardUtils;
+import com.solinia.solinia.Utils.JsonUtils;
+import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -258,7 +259,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (this.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(this.getBukkitPlayer());
 			} else {
-				ScoreboardUtils.RemoveScoreboard(this.getBukkitPlayer().getUniqueId());
+				PartyWindowUtils.UpdateGroupWindow(getBukkitPlayer().getUniqueId(), this.getGroup());
 			}
 		}
 	}
@@ -297,7 +298,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMana(int mana) {
 		this.mana = mana;
-		ScoreboardUtils.UpdateScoreboard(this.getBukkitPlayer(), mana);
+		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer(), mana);
 	}
 
 	@Override
@@ -409,7 +410,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				getBukkitPlayer().setHealthScaled(true);
 				getBukkitPlayer().setHealthScale(40D);
 				
-				ScoreboardUtils.UpdateGroupScoreboardForEveryone(getBukkitPlayer().getUniqueId(), getGroup());
+				PartyWindowUtils.UpdateGroupWindowForEveryone(getBukkitPlayer().getUniqueId(), getGroup());
 			} catch (CoreStateInitException e) {
 
 			}
@@ -1212,7 +1213,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try
 		{
 			ItemStack itemstack = this.getBukkitPlayer().getEquipment().getItemInMainHand();
-			if ((!Utils.IsSoliniaItem(itemstack)))
+			if ((!ItemStackUtils.IsSoliniaItem(itemstack)))
 				return;
 
 			// We have our custom item id, lets check it exists
@@ -1293,7 +1294,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (itemstack == null || itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
 			return;
 			
-		if (!Utils.IsSoliniaItem(itemstack))
+		if (!ItemStackUtils.IsSoliniaItem(itemstack))
 			return;			
 			
 		try {
@@ -2949,7 +2950,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (itemstack == null)
 					continue;
 
-				if (Utils.IsSoliniaItem(itemstack)) {
+				if (ItemStackUtils.IsSoliniaItem(itemstack)) {
 
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					if (item == null)
@@ -4343,13 +4344,41 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void sendMemorisedSpellSlots() {
 		try
 		{
-			GenericPacketMessage message = new GenericPacketMessage();
+			GenericPacketMessage message = new GenericPacketMessage(this);
 			message.setMemorisedSpellSlots(getMemorisedSpellSlots());
-	    	String json = Utils.getObjectAsJson(message);
+	    	String json = JsonUtils.getObjectAsJson(message);
 			ForgeUtils.sendForgeMessage(((Player)getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.GENERIC_MESSAGE,json);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public double getCastingProgress() {
+		try
+		{
+			CastingSpell casting = StateManager.getInstance().getEntityManager().getCasting(this.getBukkitPlayer());
+	
+			double progress = 0d;
+			if (casting != null && casting.timeLeftMilliseconds > 0 && casting.getSpell() != null) {
+				double progressmilliseconds = ((double) casting.getSpell().getCastTime()
+						- casting.timeLeftMilliseconds);
+				progress = (double) ((double) progressmilliseconds / (double) casting.getSpell().getCastTime());
+	
+				if (progress < 0d)
+					progress = 0d;
+	
+				if (progress > 1d)
+					progress = 1d;
+			}
+			
+			return progress;
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return 0D;
 	}
 }

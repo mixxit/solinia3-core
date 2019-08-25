@@ -19,8 +19,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
-import com.solinia.solinia.Utils.Utils;
-
+import com.solinia.solinia.Utils.ItemStackUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -85,7 +84,7 @@ public class CommandSpellBook implements CommandExecutor {
 			return;
 		}
 		
-		if (!Utils.IsSoliniaItem(primaryItem))
+		if (!ItemStackUtils.IsSoliniaItem(primaryItem))
 		{
 			solPlayer.getBukkitPlayer().sendMessage("This item is not a spell");
 			return;

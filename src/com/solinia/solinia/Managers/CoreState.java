@@ -14,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +41,7 @@ import com.solinia.solinia.Providers.DiscordBotspamChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordContentTeamChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 import com.solinia.solinia.Providers.DiscordInCharacterChannelCommandSender;
-import com.solinia.solinia.Utils.ScoreboardUtils;
+import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import de.slikey.effectlib.EffectManager;
@@ -58,10 +57,10 @@ public class CoreState {
 	private IConfigurationManager configurationManager;
 	private Economy economy;
 	private IChannelManager channelManager;
-	private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
+	//private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
-	private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
+	//private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
 	private String instanceGuid;
 	private IDiscordClient discordClient;
 	private DiscordAdminChannelCommandSender discordAdminChannelCommandSender;
@@ -187,7 +186,7 @@ public class CoreState {
 		}
 
 	}
-	
+	/*
 	public Scoreboard getScoreboard(Player player)
 	{
 		if (scoreboards.get(player.getUniqueId()) == null)
@@ -198,8 +197,8 @@ public class CoreState {
 		
 		return scoreboards.get(player.getUniqueId());
 	}
-	
-	
+	*/
+	/*
 	public BossBar getBossBar(UUID uuid) {
 		return this.bossbars.get(uuid);
 	}
@@ -208,6 +207,7 @@ public class CoreState {
 		// TODO Auto-generated method stub
 		this.bossbars.put(uuid, bossbar);
 	}
+	*/
 	
 	public void setEconomy(Economy economy) {
 		// TODO Auto-generated method stub
@@ -696,10 +696,10 @@ public class CoreState {
 		sendGroupMessage(player, "has left the group!");
 		group.getMembers().remove(player.getUniqueId());
 
-		ScoreboardUtils.RemoveScoreboard(player.getUniqueId());
+		PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), null);
 		for(UUID uuid : group.getMembers())
 		{
-			ScoreboardUtils.UpdateGroupScoreboard(uuid,group);
+			PartyWindowUtils.UpdateGroupWindow(uuid,group);
 		}
 
 		if (group.getOwner().equals(player.getUniqueId())) {
@@ -786,7 +786,7 @@ public class CoreState {
 		group.getMembers().add(player.getUniqueId());
 		System.out.println("group: " + group.getId() + " gained a member: " + player.getDisplayName());
 		
-		ScoreboardUtils.UpdateGroupScoreboardForEveryone(player.getUniqueId(),group);
+		PartyWindowUtils.UpdateGroupWindowForEveryone(player.getUniqueId(),group);
 		
 		sendGroupMessage(player, "has joined the group!");
 		groups.put(group.getId(), group);

@@ -27,6 +27,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -256,7 +257,7 @@ public class CommandPet implements CommandExecutor {
 			return;
 		}
 		
-		if (!Utils.IsSoliniaItem(itemStack))
+		if (!ItemStackUtils.IsSoliniaItem(itemStack))
 		{
 			player.sendMessage("Can only give pets Solinia Items (invalid item type)");
 			return;

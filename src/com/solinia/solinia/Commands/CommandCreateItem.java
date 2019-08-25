@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
-import com.solinia.solinia.Utils.Utils;
+import com.solinia.solinia.Utils.ItemStackUtils;
 
 public class CommandCreateItem implements CommandExecutor {
 	@Override
@@ -39,7 +39,7 @@ public class CommandCreateItem implements CommandExecutor {
 	        	return false;
 	        }
 	        
-	        if (Utils.IsSoliniaItem(itemstack))
+	        if (ItemStackUtils.IsSoliniaItem(itemstack))
 	        {
 	        	player.sendMessage("You can only create a new item from core minecraft items, not solinia items");
 	        	return true;

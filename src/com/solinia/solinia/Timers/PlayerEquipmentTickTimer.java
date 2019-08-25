@@ -7,7 +7,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerEquipmentTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class PlayerEquipmentTickTimer extends BukkitRunnable {

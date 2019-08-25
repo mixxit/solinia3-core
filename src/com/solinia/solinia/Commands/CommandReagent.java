@@ -17,8 +17,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaReagent;
-import com.solinia.solinia.Utils.Utils;
-
+import com.solinia.solinia.Utils.ItemStackUtils;
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandReagent implements CommandExecutor {
@@ -51,7 +50,7 @@ public class CommandReagent implements CommandExecutor {
 			            	player.sendMessage("The item in your main hand is not a reagent");
 			    			return true;
 			            }
-						if (!Utils.IsSoliniaItem(itemstack))
+						if (!ItemStackUtils.IsSoliniaItem(itemstack))
 			            {
 			            	player.sendMessage("The item in your main hand is not a reagent");
 			    			return true;

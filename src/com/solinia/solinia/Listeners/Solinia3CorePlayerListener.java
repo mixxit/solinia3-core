@@ -614,7 +614,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (itemstack == null)
 				return;
 
-			if (Utils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+			if (ItemStackUtils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
@@ -761,7 +761,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				}
 
-				if (!Utils.IsSoliniaItem(targetItemStack)
+				if (!ItemStackUtils.IsSoliniaItem(targetItemStack)
 						|| targetItemStack.getType().equals(Material.ENCHANTED_BOOK)) {
 					event.getView().getPlayer().sendMessage("This augmentation cannot be applied to this item type");
 					StateManager.getInstance().getPlayerManager()
@@ -842,7 +842,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (event.getSlotType().equals(SlotType.ARMOR) || event.getSlot() == 40) {
 				ItemStack item = event.getWhoClicked().getInventory().getItem(event.getSlot());
 				if (item != null && item.getType() != null && !item.getType().equals(Material.AIR)) {
-					if (Utils.IsSoliniaItem(item)) {
+					if (ItemStackUtils.IsSoliniaItem(item)) {
 						ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(item);
 						if (soliniaitem.getHp() > 0 || soliniaitem.getStamina() > 0) {
 							solplayer.scheduleUpdateMaxHp();
@@ -859,7 +859,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				ItemStack itemstack = event.getCurrentItem();
 				if (itemstack == null)
 					return;
-				if (Utils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				if (ItemStackUtils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					
 					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
@@ -909,7 +909,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (itemstack == null)
 					return;
 
-				if (Utils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				if (ItemStackUtils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
 					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
@@ -964,7 +964,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				ItemStack itemstack = event.getCursor();
 				if (itemstack == null)
 					return;
-				if (Utils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
+				if (ItemStackUtils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					
 					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
@@ -1026,7 +1026,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onDropItemEvent(PlayerDropItemEvent event) {
 
 		// This is to stop drops after closing shop
-		if (Utils.IsSoliniaItem(event.getItemDrop().getItemStack()))
+		if (ItemStackUtils.IsSoliniaItem(event.getItemDrop().getItemStack()))
 			if (event.getItemDrop().getItemStack().getType() != null && Utils.IsDisplayItem(event.getItemDrop().getItemStack())) {
 				event.getItemDrop().getItemStack().setAmount(0);
 			}

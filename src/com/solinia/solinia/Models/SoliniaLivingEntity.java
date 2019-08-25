@@ -52,7 +52,7 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
-import com.solinia.solinia.Utils.ScoreboardUtils;
+import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -1366,7 +1366,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.isCurrentlyNPCPet() || this.isNPC())
 			return true;
 
-		if (Utils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+		if (ItemStackUtils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 			try {
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager()
 						.getItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
@@ -1485,7 +1485,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (usingValidWeapon() == false) {
 			return 0;
 		} else {
-			if (Utils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+			if (ItemStackUtils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 				try {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager()
 							.getItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
@@ -1636,7 +1636,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 					ISoliniaItem attackItem = null;
 					
-					if (Utils.IsSoliniaItem(this.getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+					if (ItemStackUtils.IsSoliniaItem(this.getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 						attackItem = SoliniaItemAdapter.Adapt(this.getBukkitLivingEntity().getEquipment().getItemInMainHand());
 					}
 					
@@ -1749,7 +1749,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (main == null)
 			return null;
 		
-		if (!Utils.IsSoliniaItem(main))
+		if (!ItemStackUtils.IsSoliniaItem(main))
 			return null;
 		
 		try {
@@ -1766,7 +1766,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (main == null)
 			return null;
 		
-		if (!Utils.IsSoliniaItem(main))
+		if (!ItemStackUtils.IsSoliniaItem(main))
 			return null;
 		
 		try {
@@ -1789,7 +1789,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			final int final_damagedone = my_hit2.damage_done;
 
 			int offHandItemId = 0;
-			if (Utils.IsSoliniaItem(weapon2)) {
+			if (ItemStackUtils.IsSoliniaItem(weapon2)) {
 
 				try {
 					ISoliniaItem item = SoliniaItemAdapter.Adapt(weapon2);
@@ -2010,7 +2010,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
 
-				ScoreboardUtils.UpdateGroupScoreboardForEveryone(getBukkitLivingEntity().getUniqueId(),
+				PartyWindowUtils.UpdateGroupWindowForEveryone(getBukkitLivingEntity().getUniqueId(),
 						solPlayer.getGroup());
 
 				// Update group
@@ -2060,11 +2060,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaItem attackItem = null;
 				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sourceEntity);
 				
-				if (!isOffhand && Utils.IsSoliniaItem(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+				if (!isOffhand && ItemStackUtils.IsSoliniaItem(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 					attackItem = SoliniaItemAdapter.Adapt(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInMainHand());
 				}
 	
-				if (isOffhand && Utils.IsSoliniaItem(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand())) {
+				if (isOffhand && ItemStackUtils.IsSoliniaItem(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand())) {
 					attackItem = SoliniaItemAdapter.Adapt(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand());
 				}
 				
@@ -6886,7 +6886,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (mainitem != null && mainitem.getType() == Material.BOW) {
 					int dmgmodifier = 0;
 
-					if (Utils.IsSoliniaItem(mainitem)) {
+					if (ItemStackUtils.IsSoliniaItem(mainitem)) {
 						try {
 							ISoliniaItem item = SoliniaItemAdapter.Adapt(mainitem);
 							if (item.getDamage() > 0 && item.getBasename().equals("BOW")) {
@@ -7142,7 +7142,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) this.getOwnerEntity());
-				ScoreboardUtils.UpdateGroupScoreboardForEveryone(solPlayer.getUUID(), solPlayer.getGroup());
+				PartyWindowUtils.UpdateGroupWindowForEveryone(solPlayer.getUUID(), solPlayer.getGroup());
 			} catch (CoreStateInitException e) {
 
 			}
@@ -7151,7 +7151,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getBukkitLivingEntity() instanceof Player) {
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				ScoreboardUtils.UpdateGroupScoreboardForEveryone(getBukkitLivingEntity().getUniqueId(),
+				PartyWindowUtils.UpdateGroupWindowForEveryone(getBukkitLivingEntity().getUniqueId(),
 						solPlayer.getGroup());
 			} catch (CoreStateInitException e) {
 

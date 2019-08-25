@@ -23,6 +23,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandCraft implements CommandExecutor {
@@ -50,13 +51,13 @@ public class CommandCraft implements CommandExecutor {
         	return false;
         }
         
-        if (!Utils.IsSoliniaItem(primaryItem))
+        if (!ItemStackUtils.IsSoliniaItem(primaryItem))
         {
         	player.sendMessage("You can only create a new item from solinia items, not minecraft items");
         	return true;
         }
         
-        if (!Utils.IsSoliniaItem(secondaryItem))
+        if (!ItemStackUtils.IsSoliniaItem(secondaryItem))
         {
         	player.sendMessage("You can only create a new item from solinia items, not minecraft items");
         	return true;

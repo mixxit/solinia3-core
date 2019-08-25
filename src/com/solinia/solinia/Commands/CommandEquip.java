@@ -17,8 +17,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
-import com.solinia.solinia.Utils.Utils;
-
+import com.solinia.solinia.Utils.ItemStackUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -60,7 +59,7 @@ public class CommandEquip implements CommandExecutor {
 						return false;
 					}
 
-					if (!Utils.IsSoliniaItem(primaryItem)) {
+					if (!ItemStackUtils.IsSoliniaItem(primaryItem)) {
 						player.sendMessage("You can only equip solinia items this way");
 						return true;
 					}

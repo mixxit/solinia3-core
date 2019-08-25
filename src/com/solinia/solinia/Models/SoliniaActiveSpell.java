@@ -38,6 +38,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -1392,7 +1393,7 @@ public class SoliniaActiveSpell {
 
 		ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
 
-		if (!Utils.IsSoliniaItem(item)) {
+		if (!ItemStackUtils.IsSoliniaItem(item)) {
 			sourcePlayer.sendMessage("You do not recognise anything particularly interesting about this item");
 			return;
 		}

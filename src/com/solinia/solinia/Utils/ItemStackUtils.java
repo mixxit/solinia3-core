@@ -192,9 +192,31 @@ public class ItemStackUtils {
         return compound.toString();
     }
 	
+	public static boolean IsSoliniaItem(ItemStack itemStack) {
+		if (itemStack == null)
+			return false;
+
+		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
+			if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
+				return true;
+
+		// New method
+		if (ItemStackUtils.getSoliniaItemId(itemStack) != null) {
+			return true;
+		}
+
+		// Classic method
+		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+
+		String soliniaid = compound.getString("soliniaid");
+
+		return soliniaid.matches("-?\\d+");
+	}
+	
 	public static Integer getAugmentationItemId(ItemStack itemStack)
 	{
-		if (!Utils.IsSoliniaItem(itemStack))
+		if (!ItemStackUtils.IsSoliniaItem(itemStack))
 			return null;
 		
 		NamespacedKey soliniaAugIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaaug1id");
@@ -222,7 +244,7 @@ public class ItemStackUtils {
 	
 	public static Integer getOldNBTAugmentationItemId(ItemStack itemStack)
 	{
-		if (!Utils.IsSoliniaItem(itemStack))
+		if (!ItemStackUtils.IsSoliniaItem(itemStack))
 			return null;
 		
 		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
@@ -236,10 +258,18 @@ public class ItemStackUtils {
 		return Integer.parseInt(soliniaaug1id);
 	}
 	
+	public static boolean isSkullItem(ItemStack itemStack) {
+		if (itemStack.getType().name().equals("SKULL_ITEM") || itemStack.getType().name().equals("PLAYER_HEAD")
+				|| itemStack.getType().name().equals("LEGACY_SKULL_ITEM"))
+			return true;
+
+		return false;
+	}
+	
 	public static String getSkullTexture(ItemStack itemStack)
 	{
 		String textureValue = "";
-		if (Utils.isSkullItem(itemStack))
+		if (ItemStackUtils.isSkullItem(itemStack))
 	    {
 			net.minecraft.server.v1_14_R1.ItemStack rawItemStack = CraftItemStack.asNMSCopy(itemStack);
 	        if (rawItemStack.hasTag()) {
@@ -260,7 +290,7 @@ public class ItemStackUtils {
 	
 	public static Integer getMerchantItemWorth(ItemStack itemStack)
 	{
-		if (!Utils.IsSoliniaItem(itemStack))
+		if (!ItemStackUtils.IsSoliniaItem(itemStack))
 			return null;
 		
 		for(String loreLine : itemStack.getItemMeta().getLore())
@@ -526,11 +556,29 @@ public class ItemStackUtils {
         return config.getItemStack("serialized-item-stack", null);
 	}
 	
+	public static Timestamp GetSolLastUpdated(ItemStack itemStack) {
+		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
+			if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
+				return null;
+
+		Long solupdatedtime = ItemStackUtils.getSoliniaLastUpdated(itemStack);
+		if (solupdatedtime == null)
+			return null;
+
+		try {
+			Timestamp timestamp = new java.sql.Timestamp(solupdatedtime);
+			return timestamp;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static boolean isItemStackUptoDate(ItemStack item, ISoliniaItem solitem) {
-		if (!Utils.IsSoliniaItem(item))
+		if (!ItemStackUtils.IsSoliniaItem(item))
 			return true;
 		
-		Timestamp itemStackTimestamp = Utils.GetSolLastUpdated(item);
+		Timestamp itemStackTimestamp = ItemStackUtils.GetSolLastUpdated(item);
 		if (itemStackTimestamp == null)
 		{
 			Utils.DebugLog("ItemStackUtils","isItemStackUptoDate",String.valueOf(solitem.getId()),"ItemStack was null so returning false");
