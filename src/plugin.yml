@@ -58,11 +58,8 @@ commands:
   cast:
     description: Casts a spell from memory slot 1 to 0
     usage: /cast <memoryslot>
-    aliases: []
-  castspell:
-    description: Casts a spell by its spell id
-    usage: /castspell <spellid>
-    aliases: []
+    aliases:
+    - castslot
   givehead:
     description: Gives a head from minecraft-heads.com
     usage: /givehead player headurl
