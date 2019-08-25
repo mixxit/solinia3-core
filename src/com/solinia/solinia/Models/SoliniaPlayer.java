@@ -4221,24 +4221,27 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean memoriseSpell(int spellSlot, int spellId) {
 		
-		try
+		if (spellId > 0)
 		{
-			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
-			if (spell == null)
+			try
+			{
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+				if (spell == null)
+					return false;
+				
+				if (!this.canUseSpell(spell))
+					return false;
+			} catch (CoreStateInitException e)
+			{
+				return false;
+			}
+			
+			if (getMaxSpellSlots() < spellSlot)
 				return false;
 			
-			if (!this.canUseSpell(spell))
+			if (!getSpellBookSpellIds().contains(spellId))
 				return false;
-		} catch (CoreStateInitException e)
-		{
-			return false;
 		}
-		
-		if (getMaxSpellSlots() < spellSlot)
-			return false;
-		
-		if (!getSpellBookSpellIds().contains(spellId))
-			return false;
 		
 		return this.setMemorisedSpellSlot(spellSlot, spellId);
 	}

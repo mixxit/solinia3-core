@@ -343,7 +343,7 @@ public class PlayerManager implements IPlayerManager {
 			player.getInventory().setArmorContents(altSolPlayer.getStoredArmorContents());
             player.updateInventory();
 			
-            solPlayer.sendMemorisedSpellSlots();
+            altSolPlayer.sendMemorisedSpellSlots();
             
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())

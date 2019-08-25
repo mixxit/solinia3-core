@@ -36,42 +36,51 @@ public class CommandMemoriseSpell implements CommandExecutor {
 			int spellSlot = Integer.parseInt(args[0]);
 			int spellId = Integer.parseInt(args[1]);
 			
-			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
-			if (spell == null)
-			{
-				sender.sendMessage("That spell does not exist");
-				return false;
-			}
-			
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
 			if (solPlayer == null)
 			{
 				sender.sendMessage("Could not find player");
 				return false;
 			}
-
-			if (!solPlayer.canUseSpell(spell))
-			{
-				sender.sendMessage("You are not the correct class/level to memorise this spell");
-				return false;
-			}
 			
-			if (spellSlot < 1)
+			if (spellId > 0)
 			{
-				sender.sendMessage("That spell slot does not exist");
-				return false;
-			}
-			
-			if (spellSlot > solPlayer.getMaxSpellSlots())
-			{
-				sender.sendMessage("That spell slot does not exist");
-				return false;
-			}
-			
-			if (!solPlayer.getSpellBookSpellIds().contains(spellId))
-			{
-				sender.sendMessage("This spell is not in your spell book");
-				return false;
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+				if (spell == null)
+				{
+					sender.sendMessage("That spell does not exist");
+					return false;
+				}
+	
+				if (!solPlayer.canUseSpell(spell))
+				{
+					sender.sendMessage("You are not the correct class/level to memorise this spell");
+					return false;
+				}
+				
+				if (spellSlot < 1)
+				{
+					sender.sendMessage("That spell slot does not exist");
+					return false;
+				}
+				
+				if (spellSlot > solPlayer.getMaxSpellSlots())
+				{
+					sender.sendMessage("That spell slot does not exist");
+					return false;
+				}
+				
+				if (!solPlayer.getSpellBookSpellIds().contains(spellId))
+				{
+					sender.sendMessage("This spell is not in your spell book");
+					return false;
+				}
+				
+				if (solPlayer.getMemorisedSpellSlots().getAllSpellIds().contains(spellId))
+				{
+					sender.sendMessage("This spell is already memorised");
+					return false;
+				}
 			}
 			
 			if (!solPlayer.memoriseSpell(spellSlot, spellId))
