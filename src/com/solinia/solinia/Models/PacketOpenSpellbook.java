@@ -24,7 +24,7 @@ public class PacketOpenSpellbook implements ISoliniaPacket {
 		if (!data.contains("^"))
 			throw new InvalidPacketException("Packet data is wrong format");
 
-		String[] dataArray = data.split("\\^",-1);
+		String[] dataArray = data.split("\\^");
 		if (dataArray.length < 1)
 			throw new InvalidPacketException("Packet data missing elements");
 		
