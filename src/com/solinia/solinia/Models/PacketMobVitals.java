@@ -10,7 +10,8 @@ public class PacketMobVitals implements ISoliniaPacket {
 	private float healthPercent = 0F;
 	private float manaPercent = 0F;
 	private UUID uniqueId = null;
-
+	private String name = "";
+	
 	public PacketMobVitals()
 	{
 		
@@ -32,11 +33,13 @@ public class PacketMobVitals implements ISoliniaPacket {
 		float healthPercent = Float.parseFloat(dataArray[1]);
 		float manaPercent = Float.parseFloat(dataArray[2]);
 		UUID uniqueId = UUID.fromString(dataArray[3]);
+		String name = dataArray[4];
 		
 		this.partyMember = partyMember;
 		this.healthPercent = healthPercent;
 		this.manaPercent = manaPercent;
 		this.uniqueId = uniqueId;
+		this.name = name;
 	}
 	
 	public int getPartyMember()
@@ -59,6 +62,10 @@ public class PacketMobVitals implements ISoliniaPacket {
 		return this.uniqueId;
 	}
 
+	public String getName()
+	{
+		return this.getName();
+	}
 	
 	public String toPacketData()
 	{
@@ -66,14 +73,16 @@ public class PacketMobVitals implements ISoliniaPacket {
 		packetData += getPartyMember() 
 				+ "^" + getHealthPercent() 
 				+ "^" + getManaPercent()
-				+ "^" + getUniqueId().toString();
+				+ "^" + getUniqueId().toString()
+				+ "^" + getName();
 		return packetData;
 	}
 
-	public void fromData(int partyMember, float healthPercent, float manaPercent, UUID uniqueId) {
+	public void fromData(int partyMember, float healthPercent, float manaPercent, UUID uniqueId, String name) {
 		this.partyMember = partyMember;
 		this.healthPercent = healthPercent;
 		this.manaPercent = manaPercent;
 		this.uniqueId = uniqueId;
+		this.name = name.replaceAll("\\^", "").replaceAll("\\|", "");
 	}
 }
