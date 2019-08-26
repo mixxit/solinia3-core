@@ -1251,28 +1251,13 @@ public class EntityManager implements IEntityManager {
 			
 	        if (source instanceof Player)
 			{
-				try
-				{
-					ISoliniaLivingEntity solPlayer = SoliniaLivingEntityAdapter.Adapt(source);
-					PartyWindowUtils.UpdateWindow((Player)source,solPlayer.getMana());
-				} catch (CoreStateInitException e)
-				{
-					
-				}
+				PartyWindowUtils.UpdateWindow((Player)source);
 			}
 		} else {
-			// no need, is on the bossbar
-			//source.sendMessage(ChatColor.GRAY + "Set target to " + target.getName() + " [/toggleglow: " + toggleGlow + "]");
 			entityTargets.put(source.getUniqueId(), target.getUniqueId());
 			if (source instanceof Player)
 			{
-				try
-				{
-					PartyWindowUtils.UpdateWindow((Player)source,SoliniaLivingEntityAdapter.Adapt(source).getMana());
-				} catch (CoreStateInitException e)
-				{
-					
-				}
+				PartyWindowUtils.UpdateWindow((Player)source);
 			}
 		}
 	}
@@ -1481,12 +1466,7 @@ public class EntityManager implements IEntityManager {
 			{
 				if (entity instanceof Player && (!((Player)entity).isDead()))
 				{
-					try {
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
-						PartyWindowUtils.UpdateWindow((Player)entity, solPlayer.getMana());
-					} catch (CoreStateInitException e) {
-						
-					}
+					PartyWindowUtils.UpdateWindow((Player)entity);
 				}
 			}
 		}

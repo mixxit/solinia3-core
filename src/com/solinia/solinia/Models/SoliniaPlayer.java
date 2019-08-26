@@ -297,7 +297,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMana(int mana) {
 		this.mana = mana;
-		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer(), mana);
+		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer());
 	}
 
 	@Override

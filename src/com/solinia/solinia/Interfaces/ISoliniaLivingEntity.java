@@ -18,6 +18,7 @@ import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.FocusEffect;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.NumHit;
+import com.solinia.solinia.Models.PacketMobVitals;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
@@ -352,5 +353,7 @@ public interface ISoliniaLivingEntity
 	ISoliniaGod getGod();
 
 	public void tryApplySpellOnSelf(int spellId);
+
+	public PacketMobVitals toPacketMobVitals(int partyMember);
 
 }

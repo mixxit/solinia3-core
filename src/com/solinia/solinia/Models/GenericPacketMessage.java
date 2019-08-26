@@ -15,7 +15,6 @@ import net.md_5.bungee.api.ChatColor;
 public class GenericPacketMessage {
 	public MemorisedSpells MemorisedSpellSlots = null;
 	public SpellbookPage SpellbookPage = null;
-	public PartyWindow PartyWindow = null;
 	public double CastingProgress = 0.0D;
 	public UUID TargetUUID = null;
 	public String TargetName = null;
@@ -55,10 +54,6 @@ public class GenericPacketMessage {
 	
 	public void setSpellbookPage(SpellbookPage spellbookPage) {
 		this.SpellbookPage = spellbookPage;
-	}
-	
-	public void setPartyWindow(PartyWindow partyWindow) {
-		this.PartyWindow = partyWindow;
 	}
 	
 	public void setCastingProgress(double castingProgress) {

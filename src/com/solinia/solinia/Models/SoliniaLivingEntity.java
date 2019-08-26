@@ -7144,13 +7144,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			getBukkitLivingEntity().setHealth(health);
 
 		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
-
-			try {
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) this.getOwnerEntity());
-				PartyWindowUtils.UpdateGroupWindowForEveryone(solPlayer.getUUID(), solPlayer.getGroup());
-			} catch (CoreStateInitException e) {
-
-			}
+			PartyWindowUtils.UpdateWindow(((Player)this.getOwnerEntity()));
 		}
 
 		if (getBukkitLivingEntity() instanceof Player) {
@@ -7331,5 +7325,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			
 		}
+	}
+
+	@Override
+	public PacketMobVitals toPacketMobVitals(int partyMember) {
+		PacketMobVitals vitals = new PacketMobVitals(partyMember, ((float)getHPRatio())/100F, ((float)getManaRatio())/100F, this.getBukkitLivingEntity().getUniqueId());
+		return vitals;
 	}
 }
