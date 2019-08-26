@@ -7329,7 +7329,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public PacketMobVitals toPacketMobVitals(int partyMember) {
-		PacketMobVitals vitals = new PacketMobVitals(partyMember, ((float)getHPRatio())/100F, ((float)getManaRatio())/100F, this.getBukkitLivingEntity().getUniqueId());
+		PacketMobVitals vitals = new PacketMobVitals();
+		vitals.fromData(partyMember, ((float)getHPRatio())/100F, ((float)getManaRatio())/100F, this.getBukkitLivingEntity().getUniqueId());
 		return vitals;
 	}
 }

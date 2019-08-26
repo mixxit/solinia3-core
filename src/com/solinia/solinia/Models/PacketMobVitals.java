@@ -3,22 +3,20 @@ package com.solinia.solinia.Models;
 import java.util.UUID;
 
 import com.solinia.solinia.Exceptions.InvalidPacketException;
+import com.solinia.solinia.Interfaces.SoliniaPacket;
 
-public class PacketMobVitals {
+public class PacketMobVitals implements SoliniaPacket {
 	private int partyMember = 0;
 	private float healthPercent = 0F;
 	private float manaPercent = 0F;
 	private UUID uniqueId = null;
 
-	public PacketMobVitals(int partyMember, float healthPercent, float manaPercent, UUID uniqueId)
+	public PacketMobVitals()
 	{
-		this.partyMember = partyMember;
-		this.healthPercent = healthPercent;
-		this.manaPercent = manaPercent;
-		this.uniqueId = uniqueId;
+		
 	}
 	
-	public static PacketMobVitals fromPacketData(String data) throws InvalidPacketException
+	public void fromPacketData(String data) throws InvalidPacketException
 	{
 		if (data == null)
 			throw new InvalidPacketException("Packet data is empty");
@@ -35,8 +33,10 @@ public class PacketMobVitals {
 		float manaPercent = Float.parseFloat(dataArray[2]);
 		UUID uniqueId = UUID.fromString(dataArray[3]);
 		
-		PacketMobVitals vitals = new PacketMobVitals(partyMember, healthPercent, manaPercent, uniqueId);
-		return vitals;
+		this.partyMember = partyMember;
+		this.healthPercent = healthPercent;
+		this.manaPercent = manaPercent;
+		this.uniqueId = uniqueId;
 	}
 	
 	public int getPartyMember()
@@ -68,5 +68,12 @@ public class PacketMobVitals {
 				+ "^" + getManaPercent()
 				+ "^" + getUniqueId().toString();
 		return packetData;
+	}
+
+	public void fromData(int partyMember, float healthPercent, float manaPercent, UUID uniqueId) {
+		this.partyMember = partyMember;
+		this.healthPercent = healthPercent;
+		this.manaPercent = manaPercent;
+		this.uniqueId = uniqueId;
 	}
 }

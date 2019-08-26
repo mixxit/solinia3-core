@@ -14,7 +14,8 @@ public class PacketMobVitalsTest {
 		String testForPacketData = "1^1.0^1.0^"+UUID.randomUUID().toString();
 		String foundPacketData = "";
 		try {
-			PacketMobVitals vitals = PacketMobVitals.fromPacketData(testForPacketData);
+			PacketMobVitals vitals = new PacketMobVitals();
+			vitals.fromPacketData(testForPacketData);
 			foundPacketData = vitals.toPacketData();
 		} catch (InvalidPacketException e) {
 			e.printStackTrace();
@@ -26,7 +27,7 @@ public class PacketMobVitalsTest {
 	public void IfMissingSeperatorsThrowInvalidPacket() {
 		boolean threwException = false;
 		try {
-			PacketMobVitals.fromPacketData("moo");
+			new PacketMobVitals().fromPacketData("moo");
 		} catch (InvalidPacketException e) {
 			if (e.getMessage().equals("Packet data is wrong format"))
 			threwException = true;
@@ -38,7 +39,7 @@ public class PacketMobVitalsTest {
 	public void IfMissingNullThrowInvalidPacket() {
 		boolean threwException = false;
 		try {
-			PacketMobVitals.fromPacketData(null);
+			new PacketMobVitals().fromPacketData(null);
 		} catch (InvalidPacketException e) {
 			if (e.getMessage().equals("Packet data is empty"))
 			threwException = true;
@@ -50,7 +51,7 @@ public class PacketMobVitalsTest {
 	public void IfMissingElementsThrowInvalidPacket() {
 		boolean threwException = false;
 		try {
-			PacketMobVitals.fromPacketData("1^");
+			new PacketMobVitals().fromPacketData("1^");
 		} catch (InvalidPacketException e) {
 			if (e.getMessage().equals("Packet data missing elements"))
 			threwException = true;
