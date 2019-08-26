@@ -3,9 +3,9 @@ package com.solinia.solinia.Models;
 import java.util.UUID;
 
 import com.solinia.solinia.Exceptions.InvalidPacketException;
-import com.solinia.solinia.Interfaces.SoliniaPacket;
+import com.solinia.solinia.Interfaces.ISoliniaPacket;
 
-public class PacketMobVitals implements SoliniaPacket {
+public class PacketMobVitals implements ISoliniaPacket {
 	private int partyMember = 0;
 	private float healthPercent = 0F;
 	private float manaPercent = 0F;
@@ -75,5 +75,11 @@ public class PacketMobVitals implements SoliniaPacket {
 		this.healthPercent = healthPercent;
 		this.manaPercent = manaPercent;
 		this.uniqueId = uniqueId;
+	}
+
+	@Override
+	public void handle() {
+		// TODO Auto-generated method stub
+		
 	}
 }
