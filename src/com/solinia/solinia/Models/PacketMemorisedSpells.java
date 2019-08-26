@@ -39,9 +39,6 @@ public class PacketMemorisedSpells implements ISoliniaPacket {
 		String packetData = "";
 		for(int i = 1; i <= 16; i++)
 		{
-			if (this.memorisedSpells.getSlotId(i) < 1)
-				continue;
-			
 			packetData += i + "|"
 					+ this.memorisedSpells.getSlotId(i) + "|" 
 					+ this.memorisedSpells.getSlotIcon(i)+ "|" 
