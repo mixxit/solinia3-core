@@ -107,7 +107,7 @@ public class PartyWindowUtils {
 	public static void SendEmptyVital(Player player, int partyMember)
 	{
 		PacketMobVitals vitals = new PacketMobVitals();
-		vitals.fromData(partyMember, 0F, 0F, null, null);
+		vitals.fromData(partyMember, 0F, 0F, null, "");
 		try {
 			ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,vitals.toPacketData());
 		} catch (Exception e) {
