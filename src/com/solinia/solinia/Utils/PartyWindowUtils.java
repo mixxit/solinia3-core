@@ -111,7 +111,7 @@ public class PartyWindowUtils {
 		try {
 			ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,vitals.toPacketData());
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
 

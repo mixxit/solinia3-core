@@ -32,7 +32,14 @@ public class PacketMobVitals implements ISoliniaPacket {
 		int partyMember = Integer.parseInt(dataArray[0]);
 		float healthPercent = Float.parseFloat(dataArray[1]);
 		float manaPercent = Float.parseFloat(dataArray[2]);
-		UUID uniqueId = UUID.fromString(dataArray[3]);
+		UUID uniqueId = null;
+		try
+		{
+			uniqueId = UUID.fromString(dataArray[3]);
+		} catch (Exception e)
+		{
+			// not valid UUID (ie null
+		}
 		String name = dataArray[4];
 		
 		this.partyMember = partyMember;
@@ -70,10 +77,13 @@ public class PacketMobVitals implements ISoliniaPacket {
 	public String toPacketData()
 	{
 		String packetData = "";
+		String uniqueString = "";
+		if (this.getUniqueId() != null)
+			uniqueString = this.getUniqueId().toString();
 		packetData += getPartyMember() 
 				+ "^" + getHealthPercent() 
 				+ "^" + getManaPercent()
-				+ "^" + getUniqueId().toString()
+				+ "^" + uniqueString
 				+ "^" + getName();
 		return packetData;
 	}
