@@ -18,6 +18,8 @@ import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.MemorisedSpells;
 import com.solinia.solinia.Models.Oath;
+import com.solinia.solinia.Models.PacketCastingPercent;
+import com.solinia.solinia.Models.PacketMobVitals;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.PlayerQuest;
@@ -563,5 +565,7 @@ public interface ISoliniaPlayer extends Serializable {
 	public void sendMemorisedSpellSlots();
 
 	public double getCastingProgress();
+
+	public PacketCastingPercent toPacketCastingPercent();
 
 }

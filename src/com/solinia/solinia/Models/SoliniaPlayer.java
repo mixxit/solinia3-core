@@ -161,6 +161,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	@Override
+	public PacketCastingPercent toPacketCastingPercent() {
+		PacketCastingPercent vitals = new PacketCastingPercent();
+		vitals.fromData((float)this.getCastingProgress());
+		return vitals;
+	}
+	
+	@Override
 	public LivingEntity getTarget()
 	{
 		try {

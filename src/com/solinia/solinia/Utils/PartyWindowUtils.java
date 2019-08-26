@@ -11,9 +11,11 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
@@ -27,7 +29,12 @@ public class PartyWindowUtils {
 			// myself (vital: 0)
 			ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
 			ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals(0).toPacketData());
-			
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			if (solPlayer != null)
+			{
+				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CASTINGPERCENT,solPlayer.toPacketCastingPercent().toPacketData());
+			}
+
 			// Has a target set (vital: -1)
 			LivingEntity entityTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
 			
