@@ -16,10 +16,13 @@ public class PacketMemorisedSpells implements ISoliniaPacket {
 		if (data == null)
 			throw new InvalidPacketException("Packet data is empty");
 
-		String[] dataArray = data.split("\\^",-1);
-		
 		// now pages
 		this.memorisedSpells = new MemorisedSpells();
+
+		if (data.equals(""))
+			return;
+		
+		String[] dataArray = data.split("\\^",-1);
 		
 		for(int i = 0; i < dataArray.length; i++)
 		{
