@@ -17,6 +17,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.PacketMobVitals;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 
@@ -42,6 +43,8 @@ public class PartyWindowUtils {
 				ISoliniaLivingEntity soliniaLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(entityTarget);
 				if (soliniaLivingEntityTarget != null)
 				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityTarget.toPacketMobVitals(-1).toPacketData());
+			} else {
+				SendEmptyVital(player,(-1));
 			}
 			
 			// Pet (vital: -2)
@@ -58,22 +61,36 @@ public class PartyWindowUtils {
 		try {
 			if (group != null)
 			{
-				for (int i = 0; i < group.getMembersWithoutPlayer(player).size(); i++) {
+				for (int i = 0; i < 5; i++) {
 					UUID uuid = group.getMembersWithoutPlayer(player).get(i);
+					
+					// 
 					if (uuid == null)
+					{
+						SendEmptyVital(player,(i+1));
 						continue;
+					}
 					
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity == null)
+					{
+						SendEmptyVital(player,(i+1));
 						continue; 
+					}
 					
 					LivingEntity le = (LivingEntity)entity;
 					if (le == null || !(le instanceof Player))
+					{
+						SendEmptyVital(player,(i+1));
 						continue;
+					}
 					
 					ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(le);
 					if (soliniaLivingEntity == null)
+					{
+						SendEmptyVital(player,(i+1));
 						continue;
+					}
 					
 					ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals((i+1)).toPacketData());
 				}
@@ -85,6 +102,17 @@ public class PartyWindowUtils {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void SendEmptyVital(Player player, int partyMember)
+	{
+		PacketMobVitals vitals = new PacketMobVitals();
+		vitals.fromData(partyMember, 0F, 0F, null, null);
+		try {
+			ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,vitals.toPacketData());
+		} catch (Exception e) {
+			
+		}
 	}
 
 	public static void UpdateGroupWindow(UUID uuid, ISoliniaGroup group) {
