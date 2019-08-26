@@ -37,15 +37,25 @@ public class PacketMemorisedSpells implements ISoliniaPacket {
 	public String toPacketData()
 	{
 		String packetData = "";
+		boolean first = true;
 		for(int i = 1; i <= 16; i++)
 		{
+			if (this.memorisedSpells.getSlotId(i) < 1)
+				continue;
+			
+			if (first)
+				first = false;
+			else
+				packetData += "^";
+			
 			packetData += i + "|"
 					+ this.memorisedSpells.getSlotId(i) + "|" 
 					+ this.memorisedSpells.getSlotIcon(i)+ "|" 
 					+ this.memorisedSpells.getSlotNewIcon(i)+ "|" 
 					+ this.memorisedSpells.getSlotMemIcon(i)+ "|" 
-					+ this.memorisedSpells.getSlotName(i)+ "^" ;
+					+ this.memorisedSpells.getSlotName(i);
 		}
+		
 		return packetData;
 	}
 	
