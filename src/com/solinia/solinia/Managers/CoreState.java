@@ -695,8 +695,9 @@ public class CoreState {
 		System.out.println("group: " + group.getId() + " lost a member: " + player.getDisplayName());
 		sendGroupMessage(player, "has left the group!");
 		group.getMembers().remove(player.getUniqueId());
-
+		
 		PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), null);
+		
 		for(UUID uuid : group.getMembers())
 		{
 			PartyWindowUtils.UpdateGroupWindow(uuid,group);

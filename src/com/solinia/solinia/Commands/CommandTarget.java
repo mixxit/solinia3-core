@@ -102,8 +102,7 @@ public class CommandTarget implements CommandExecutor {
 					target.equals("2") ||
 					target.equals("3") ||
 					target.equals("4") ||
-					target.equals("5") ||
-					target.equals("6")
+					target.equals("5")
 					)
 			{
 				player.sendMessage("Selecting group member no: " + target);
@@ -122,13 +121,13 @@ public class CommandTarget implements CommandExecutor {
 				
 				int groupNumber = Integer.parseInt(target);
 				
-				if (group.getMembers().size() < groupNumber)
+				if (group.getMembersWithoutPlayer(player).size() < groupNumber)
 				{
 					player.sendMessage(ChatColor.RED + "Cannot find member number: " + groupNumber);
 					return true;
 				}
 				
-				UUID uuid = group.getMembers().get(groupNumber-1);
+				UUID uuid = group.getMembersWithoutPlayer(player).get(groupNumber-1);
 				if (uuid == null)
 				{
 					player.sendMessage(ChatColor.RED + "Cannot find member number: " + groupNumber);

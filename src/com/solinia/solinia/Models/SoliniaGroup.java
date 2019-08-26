@@ -60,6 +60,25 @@ public class SoliniaGroup implements ISoliniaGroup {
 	public List<UUID> getMembers() {
 		return this.members;
 	}
+	
+	@Override
+	public List<UUID> getMembersWithoutPlayer(Player player)
+	{
+		List<UUID> members = new ArrayList<UUID>();
+
+		if (player == null || player.isDead())
+			return members;
+		
+		for(UUID member : this.members)
+		{
+			if (member.toString().equals(player.getUniqueId().toString()))
+				continue;
+			
+			members.add(member);
+		}
+		
+		return members;
+	}
 
 	@Override
 	public void sendGroupMessage(Player player, String message) {

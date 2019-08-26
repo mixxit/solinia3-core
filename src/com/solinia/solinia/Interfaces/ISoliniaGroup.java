@@ -25,4 +25,6 @@ public interface ISoliniaGroup {
 
 	UUID getId();
 
+	List<UUID> getMembersWithoutPlayer(Player player);
+
 }
