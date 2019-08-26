@@ -26,7 +26,7 @@ public class PacketMobVitals {
 		if (!data.contains("^"))
 			throw new InvalidPacketException("Packet data is wrong format");
 
-		String[] dataArray = data.split("^");
+		String[] dataArray = data.split("\\^");
 		if (dataArray.length < 4)
 			throw new InvalidPacketException("Packet data missing elements");
 		
