@@ -16,7 +16,6 @@ public class PartyWindow {
 
 	public PartyWindow(ISoliniaPlayer solPlayer) {
 		this.Me = new com.solinia.solinia.Models.PartyWindowPlayer(solPlayer.getFullName(),solPlayer.getSoliniaLivingEntity().getHPRatio()/100D,solPlayer.getSoliniaLivingEntity().getManaRatio()/100D);
-		System.out.println("Debug: mana ratio found to be: " + solPlayer.getSoliniaLivingEntity().getManaRatio());
 	}
 	
 	public void AddPartyMember(ISoliniaPlayer solPlayer)
