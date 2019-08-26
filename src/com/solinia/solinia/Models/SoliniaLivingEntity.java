@@ -3569,7 +3569,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public double getManaRatio() {
-		return getMaxMP() == 0 ? 100 : ((getMana() / getMaxMP()) * 100);
+		if (getMaxMP() == 0)
+		{
+			return 0D;
+		}
+		
+		return ((double)getMana() / (double)getMaxMP()) * 100D;
 	}
 
 	@Override
