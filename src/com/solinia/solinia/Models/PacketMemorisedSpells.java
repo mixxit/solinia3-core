@@ -16,12 +16,7 @@ public class PacketMemorisedSpells implements ISoliniaPacket {
 		if (data == null)
 			throw new InvalidPacketException("Packet data is empty");
 
-		if (!data.contains("^"))
-			throw new InvalidPacketException("Packet data is wrong format");
-
 		String[] dataArray = data.split("\\^");
-		if (dataArray.length < 1)
-			throw new InvalidPacketException("Packet data missing elements");
 		
 		// now pages
 		this.memorisedSpells = new MemorisedSpells();
