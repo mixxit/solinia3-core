@@ -90,6 +90,11 @@ public class SpellbookPage {
 	public int SpellSlot14NewIcon;
 	public int SpellSlot15NewIcon;
 	public int SpellSlot16NewIcon;
+	
+	public SpellbookPage()
+	{
+		
+	}
 
 	public SpellbookPage(int pageNo, List<Integer> itemIdsOnPage) {
 		this.PageNo = pageNo;
@@ -167,7 +172,7 @@ public class SpellbookPage {
 			returnIds.add(SpellSlot16Id);		
 		return returnIds;
 	}
-
+	
 	private void setSlot(int slot, int itemId) {
 		if (itemId < 1)
 			return;
@@ -185,126 +190,411 @@ public class SpellbookPage {
 			if (spell == null)
 				return;
 			
-			switch(slot)
-			{
-				case 1:
-					SpellSlot1Id = spell.getId();
-					SpellSlot1Name = spell.getName();
-					SpellSlot1Icon = spell.getIcon();
-					SpellSlot1MemIcon = spell.getMemicon();
-					SpellSlot1NewIcon = spell.getNewIcon();
-				break;
-				case 2:
-					SpellSlot2Id = spell.getId();
-					SpellSlot2Name = spell.getName();
-					SpellSlot2Icon = spell.getIcon();
-					SpellSlot2MemIcon = spell.getMemicon();
-					SpellSlot2NewIcon = spell.getNewIcon();
-				break;
-				case 3:
-					SpellSlot3Id = spell.getId();
-					SpellSlot3Name = spell.getName();
-					SpellSlot3Icon = spell.getIcon();
-					SpellSlot3MemIcon = spell.getMemicon();
-					SpellSlot3NewIcon = spell.getNewIcon();
-				break;
-				case 4:
-					SpellSlot4Id = spell.getId();
-					SpellSlot4Name = spell.getName();
-					SpellSlot4Icon = spell.getIcon();
-					SpellSlot4MemIcon = spell.getMemicon();
-					SpellSlot4NewIcon = spell.getNewIcon();
-				break;
-				case 5:
-					SpellSlot5Id = spell.getId();
-					SpellSlot5Name = spell.getName();
-					SpellSlot5Icon = spell.getIcon();
-					SpellSlot5MemIcon = spell.getMemicon();
-					SpellSlot5NewIcon = spell.getNewIcon();
-				break;
-				case 6:
-					SpellSlot6Id = spell.getId();
-					SpellSlot6Name = spell.getName();
-					SpellSlot6Icon = spell.getIcon();
-					SpellSlot6MemIcon = spell.getMemicon();
-					SpellSlot6NewIcon = spell.getNewIcon();
-				break;
-				case 7:
-					SpellSlot7Id = spell.getId();
-					SpellSlot7Name = spell.getName();
-					SpellSlot7Icon = spell.getIcon();
-					SpellSlot7MemIcon = spell.getMemicon();
-					SpellSlot7NewIcon = spell.getNewIcon();
-				break;
-				case 8:
-					SpellSlot8Id = spell.getId();
-					SpellSlot8Name = spell.getName();
-					SpellSlot8Icon = spell.getIcon();
-					SpellSlot8MemIcon = spell.getMemicon();
-					SpellSlot8NewIcon = spell.getNewIcon();
-				break;
-				case 9:
-					SpellSlot9Id = spell.getId();
-					SpellSlot9Name = spell.getName();
-					SpellSlot9Icon = spell.getIcon();
-					SpellSlot9MemIcon = spell.getMemicon();
-					SpellSlot9NewIcon = spell.getNewIcon();
-					break;
-				case 10:
-					SpellSlot10Id = spell.getId();
-					SpellSlot10Name = spell.getName();
-					SpellSlot10Icon = spell.getIcon();
-					SpellSlot10MemIcon = spell.getMemicon();
-					SpellSlot10NewIcon = spell.getNewIcon();
-					break;
-				case 11:
-					SpellSlot11Id = spell.getId();
-					SpellSlot11Name = spell.getName();
-					SpellSlot11Icon = spell.getIcon();
-					SpellSlot11MemIcon = spell.getMemicon();
-					SpellSlot11NewIcon = spell.getNewIcon();
-					break;
-				case 12:
-					SpellSlot12Id = spell.getId();
-					SpellSlot12Name = spell.getName();
-					SpellSlot12Icon = spell.getIcon();
-					SpellSlot12MemIcon = spell.getMemicon();
-					SpellSlot12NewIcon = spell.getNewIcon();
-					break;
-				case 13:
-					SpellSlot13Id = spell.getId();
-					SpellSlot13Name = spell.getName();
-					SpellSlot13Icon = spell.getIcon();
-					SpellSlot13MemIcon = spell.getMemicon();
-					SpellSlot13NewIcon = spell.getNewIcon();
-					break;
-				case 14:
-					SpellSlot14Id = spell.getId();
-					SpellSlot14Name = spell.getName();
-					SpellSlot14Icon = spell.getIcon();
-					SpellSlot14MemIcon = spell.getMemicon();
-					SpellSlot14NewIcon = spell.getNewIcon();
-					break;
-				case 15:
-					SpellSlot15Id = spell.getId();
-					SpellSlot15Name = spell.getName();
-					SpellSlot15Icon = spell.getIcon();
-					SpellSlot15MemIcon = spell.getMemicon();
-					SpellSlot15NewIcon = spell.getNewIcon();
-					break;
-				case 16:
-					SpellSlot16Id = spell.getId();
-					SpellSlot16Name = spell.getName();
-					SpellSlot16Icon = spell.getIcon();
-					SpellSlot16MemIcon = spell.getMemicon();
-					SpellSlot16NewIcon = spell.getNewIcon();
-					break;
-				default:
-					return;
-			}
+			// escape symbols we use for data transfer
+			setSpellSlot(slot, spell.getId(), spell.getIcon(), spell.getNewIcon(), spell.getMemicon(), spell.getName().replaceAll("\\|", "").replaceAll("\\^", ""));
 		} catch (CoreStateInitException e)
 		{
 			
+		}
+	}
+	
+	public int getSlotId(int slot) {
+		switch(slot)
+		{
+			case 1:
+				return SpellSlot1Id;
+			
+			case 2:
+				return SpellSlot2Id;
+			
+			case 3:
+				return SpellSlot3Id;
+			
+			case 4:
+				return SpellSlot4Id;
+			
+			case 5:
+				return SpellSlot5Id;
+			
+			case 6:
+				return SpellSlot6Id;
+			
+			case 7:
+				return SpellSlot7Id;
+			
+			case 8:
+				return SpellSlot8Id;
+			
+			case 9:
+				return SpellSlot9Id;
+				
+			case 10:
+				return SpellSlot10Id;
+				
+			case 11:
+				return SpellSlot11Id;
+				
+			case 12:
+				return SpellSlot12Id;
+				
+			case 13:
+				return SpellSlot13Id;
+				
+			case 14:
+				return SpellSlot14Id;
+				
+			case 15:
+				return SpellSlot15Id;
+				
+			case 16:
+				return SpellSlot16Id;
+				
+			default:
+				return 0;
+		}
+	}
+	
+	public String getSlotName(int slot) {
+		switch(slot)
+		{
+			case 1:
+				return SpellSlot1Name;
+			
+			case 2:
+				return SpellSlot2Name;
+			
+			case 3:
+				return SpellSlot3Name;
+			
+			case 4:
+				return SpellSlot4Name;
+			
+			case 5:
+				return SpellSlot5Name;
+			
+			case 6:
+				return SpellSlot6Name;
+			
+			case 7:
+				return SpellSlot7Name;
+			
+			case 8:
+				return SpellSlot8Name;
+			
+			case 9:
+				return SpellSlot9Name;
+				
+			case 10:
+				return SpellSlot10Name;
+				
+			case 11:
+				return SpellSlot11Name;
+				
+			case 12:
+				return SpellSlot12Name;
+				
+			case 13:
+				return SpellSlot13Name;
+				
+			case 14:
+				return SpellSlot14Name;
+				
+			case 15:
+				return SpellSlot15Name;
+				
+			case 16:
+				return SpellSlot16Name;
+				
+			default:
+				return null;
+		}
+	}
+	
+	public int getSlotIcon(int slot) {
+		switch(slot)
+		{
+			case 1:
+				return SpellSlot1Icon;
+			
+			case 2:
+				return SpellSlot2Icon;
+			
+			case 3:
+				return SpellSlot3Icon;
+			
+			case 4:
+				return SpellSlot4Icon;
+			
+			case 5:
+				return SpellSlot5Icon;
+			
+			case 6:
+				return SpellSlot6Icon;
+			
+			case 7:
+				return SpellSlot7Icon;
+			
+			case 8:
+				return SpellSlot8Icon;
+			
+			case 9:
+				return SpellSlot9Icon;
+				
+			case 10:
+				return SpellSlot10Icon;
+				
+			case 11:
+				return SpellSlot11Icon;
+				
+			case 12:
+				return SpellSlot12Icon;
+				
+			case 13:
+				return SpellSlot13Icon;
+				
+			case 14:
+				return SpellSlot14Icon;
+				
+			case 15:
+				return SpellSlot15Icon;
+				
+			case 16:
+				return SpellSlot16Icon;
+				
+			default:
+				return 0;
+		}
+	}
+
+	public int getSlotMemIcon(int slot) {
+		switch(slot)
+		{
+			case 1:
+				return SpellSlot1MemIcon;
+			
+			case 2:
+				return SpellSlot2MemIcon;
+			
+			case 3:
+				return SpellSlot3MemIcon;
+			
+			case 4:
+				return SpellSlot4MemIcon;
+			
+			case 5:
+				return SpellSlot5MemIcon;
+			
+			case 6:
+				return SpellSlot6MemIcon;
+			
+			case 7:
+				return SpellSlot7MemIcon;
+			
+			case 8:
+				return SpellSlot8MemIcon;
+			
+			case 9:
+				return SpellSlot9MemIcon;
+				
+			case 10:
+				return SpellSlot10MemIcon;
+				
+			case 11:
+				return SpellSlot11MemIcon;
+				
+			case 12:
+				return SpellSlot12MemIcon;
+				
+			case 13:
+				return SpellSlot13MemIcon;
+				
+			case 14:
+				return SpellSlot14MemIcon;
+				
+			case 15:
+				return SpellSlot15MemIcon;
+				
+			case 16:
+				return SpellSlot16MemIcon;
+				
+			default:
+				return 0;
+		}
+	}
+
+	public int getSlotNewIcon(int slot) {
+		switch(slot)
+		{
+			case 1:
+				return SpellSlot1NewIcon;
+			
+			case 2:
+				return SpellSlot2NewIcon;
+			
+			case 3:
+				return SpellSlot3NewIcon;
+			
+			case 4:
+				return SpellSlot4NewIcon;
+			
+			case 5:
+				return SpellSlot5NewIcon;
+			
+			case 6:
+				return SpellSlot6NewIcon;
+			
+			case 7:
+				return SpellSlot7NewIcon;
+			
+			case 8:
+				return SpellSlot8NewIcon;
+			
+			case 9:
+				return SpellSlot9NewIcon;
+				
+			case 10:
+				return SpellSlot10NewIcon;
+				
+			case 11:
+				return SpellSlot11NewIcon;
+				
+			case 12:
+				return SpellSlot12NewIcon;
+				
+			case 13:
+				return SpellSlot13NewIcon;
+				
+			case 14:
+				return SpellSlot14NewIcon;
+				
+			case 15:
+				return SpellSlot15NewIcon;
+				
+			case 16:
+				return SpellSlot16NewIcon;
+				
+			default:
+				return 0;
+		}
+	}
+
+	public void setSpellSlot(int spellSlot, int id, int icon, int newIcon, int memIcon, String name) {
+		switch(spellSlot)
+		{
+			case 1:
+				SpellSlot1Id = id;
+				SpellSlot1Name = name;
+				SpellSlot1Icon = icon;
+				SpellSlot1MemIcon = memIcon;
+				SpellSlot1NewIcon = newIcon;
+			break;
+			case 2:
+				SpellSlot2Id = id;
+				SpellSlot2Name = name;
+				SpellSlot2Icon = icon;
+				SpellSlot2MemIcon = memIcon;
+				SpellSlot2NewIcon = newIcon;
+			break;
+			case 3:
+				SpellSlot3Id = id;
+				SpellSlot3Name = name;
+				SpellSlot3Icon = icon;
+				SpellSlot3MemIcon = memIcon;
+				SpellSlot3NewIcon = newIcon;
+			break;
+			case 4:
+				SpellSlot4Id = id;
+				SpellSlot4Name = name;
+				SpellSlot4Icon = icon;
+				SpellSlot4MemIcon = memIcon;
+				SpellSlot4NewIcon = newIcon;
+			break;
+			case 5:
+				SpellSlot5Id = id;
+				SpellSlot5Name = name;
+				SpellSlot5Icon = icon;
+				SpellSlot5MemIcon = memIcon;
+				SpellSlot5NewIcon = newIcon;
+			break;
+			case 6:
+				SpellSlot6Id = id;
+				SpellSlot6Name = name;
+				SpellSlot6Icon = icon;
+				SpellSlot6MemIcon = memIcon;
+				SpellSlot6NewIcon = newIcon;
+			break;
+			case 7:
+				SpellSlot7Id = id;
+				SpellSlot7Name = name;
+				SpellSlot7Icon = icon;
+				SpellSlot7MemIcon = memIcon;
+				SpellSlot7NewIcon = newIcon;
+			break;
+			case 8:
+				SpellSlot8Id = id;
+				SpellSlot8Name = name;
+				SpellSlot8Icon = icon;
+				SpellSlot8MemIcon = memIcon;
+				SpellSlot8NewIcon = newIcon;
+			break;
+			case 9:
+				SpellSlot9Id = id;
+				SpellSlot9Name = name;
+				SpellSlot9Icon = icon;
+				SpellSlot9MemIcon = memIcon;
+				SpellSlot9NewIcon = newIcon;
+				break;
+			case 10:
+				SpellSlot10Id = id;
+				SpellSlot10Name = name;
+				SpellSlot10Icon = icon;
+				SpellSlot10MemIcon = memIcon;
+				SpellSlot10NewIcon = newIcon;
+				break;
+			case 11:
+				SpellSlot11Id = id;
+				SpellSlot11Name = name;
+				SpellSlot11Icon = icon;
+				SpellSlot11MemIcon = memIcon;
+				SpellSlot11NewIcon = newIcon;
+				break;
+			case 12:
+				SpellSlot12Id = id;
+				SpellSlot12Name = name;
+				SpellSlot12Icon = icon;
+				SpellSlot12MemIcon = memIcon;
+				SpellSlot12NewIcon = newIcon;
+				break;
+			case 13:
+				SpellSlot13Id = id;
+				SpellSlot13Name = name;
+				SpellSlot13Icon = icon;
+				SpellSlot13MemIcon = memIcon;
+				SpellSlot13NewIcon = newIcon;
+				break;
+			case 14:
+				SpellSlot14Id = id;
+				SpellSlot14Name = name;
+				SpellSlot14Icon = icon;
+				SpellSlot14MemIcon = memIcon;
+				SpellSlot14NewIcon = newIcon;
+				break;
+			case 15:
+				SpellSlot15Id = id;
+				SpellSlot15Name = name;
+				SpellSlot15Icon = icon;
+				SpellSlot15MemIcon = memIcon;
+				SpellSlot15NewIcon = newIcon;
+				break;
+			case 16:
+				SpellSlot16Id = id;
+				SpellSlot16Name = name;
+				SpellSlot16Icon = icon;
+				SpellSlot16MemIcon = memIcon;
+				SpellSlot16NewIcon = newIcon;
+				break;
+			default:
+				return;
 		}
 	}
 }

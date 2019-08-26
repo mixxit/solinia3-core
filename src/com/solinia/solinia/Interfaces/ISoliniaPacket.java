@@ -1,9 +1,10 @@
 package com.solinia.solinia.Interfaces;
 
+import java.util.function.Supplier;
+
 import com.solinia.solinia.Exceptions.InvalidPacketException;
 
 public interface ISoliniaPacket {
-	public String toPacketData();
+	String toPacketData();
 	void fromPacketData(String data) throws InvalidPacketException;
-	public void handle();
 }

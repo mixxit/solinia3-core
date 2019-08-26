@@ -76,10 +76,4 @@ public class PacketMobVitals implements ISoliniaPacket {
 		this.manaPercent = manaPercent;
 		this.uniqueId = uniqueId;
 	}
-
-	@Override
-	public void handle() {
-		// TODO Auto-generated method stub
-		
-	}
 }

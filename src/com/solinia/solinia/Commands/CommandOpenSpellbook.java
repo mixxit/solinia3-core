@@ -7,11 +7,10 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Models.GenericPacketMessage;
+import com.solinia.solinia.Models.PacketOpenSpellbook;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Utils.ForgeUtils;
-import com.solinia.solinia.Utils.JsonUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandOpenSpellbook implements CommandExecutor {
@@ -33,11 +32,9 @@ public class CommandOpenSpellbook implements CommandExecutor {
 		
 	    try {
 	    	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-	    	GenericPacketMessage message = new GenericPacketMessage(solPlayer);
-	    	message.setSpellbookPage(solPlayer.getSpellbookPage(pageNo));
-	    	String json = JsonUtils.getObjectAsJson(message);
-			ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.GENERIC_MESSAGE,json);
-			//System.out.println("Sent Spellbook data: " + json);
+	    	PacketOpenSpellbook spellbookPacket = new PacketOpenSpellbook();
+	    	spellbookPacket.fromData(solPlayer.getSpellbookPage(pageNo));
+			ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.SPELLBOOKPAGE,spellbookPacket.toPacketData());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -4333,10 +4333,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void sendMemorisedSpellSlots() {
 		try
 		{
-			GenericPacketMessage message = new GenericPacketMessage(this);
-			message.setMemorisedSpellSlots(getMemorisedSpellSlots());
-	    	String json = JsonUtils.getObjectAsJson(message);
-			ForgeUtils.sendForgeMessage(((Player)getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.GENERIC_MESSAGE,json);
+			PacketMemorisedSpells spells = new PacketMemorisedSpells();
+			spells.fromData(getMemorisedSpellSlots());
+			ForgeUtils.sendForgeMessage(((Player)getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.MEMORISEDSPELLS,spells.toPacketData());
 		} catch (Exception e)
 		{
 			e.printStackTrace();

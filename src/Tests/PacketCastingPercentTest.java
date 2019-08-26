@@ -7,15 +7,14 @@ import java.util.UUID;
 
 import com.solinia.solinia.Exceptions.InvalidPacketException;
 import com.solinia.solinia.Models.PacketCastingPercent;
-import com.solinia.solinia.Models.PacketMobVitals;
 
-public class PacketMobVitalsTest {
+public class PacketCastingPercentTest {
 	@Test
 	public void WhenGivenPacketDataReturnExpectedFormat() {
-		String testForPacketData = "1^1.0^1.0^"+UUID.randomUUID().toString();
+		String testForPacketData = "1.0^";
 		String foundPacketData = "";
 		try {
-			PacketMobVitals vitals = new PacketMobVitals();
+			PacketCastingPercent vitals = new PacketCastingPercent();
 			vitals.fromPacketData(testForPacketData);
 			foundPacketData = vitals.toPacketData();
 		} catch (InvalidPacketException e) {
@@ -29,7 +28,7 @@ public class PacketMobVitalsTest {
 		String expectedException = "Packet data is wrong format";
 		String actualException = "";
 		try {
-			new PacketMobVitals().fromPacketData("moo");
+			new PacketCastingPercent().fromPacketData("moo");
 		} catch (InvalidPacketException e) {
 			actualException = e.getMessage();
 		}
@@ -41,19 +40,7 @@ public class PacketMobVitalsTest {
 		String expectedException = "Packet data is empty";
 		String actualException = "";
 		try {
-			new PacketMobVitals().fromPacketData(null);
-		} catch (InvalidPacketException e) {
-			actualException = e.getMessage();
-		}
-        assertEquals(expectedException, actualException);
-    }
-	
-	@Test
-	public void IfMissingElementsThrowInvalidPacket() {
-		String expectedException = "Packet data missing elements";
-		String actualException = "";
-		try {
-			new PacketMobVitals().fromPacketData("1^");
+			new PacketCastingPercent().fromPacketData(null);
 		} catch (InvalidPacketException e) {
 			actualException = e.getMessage();
 		}
