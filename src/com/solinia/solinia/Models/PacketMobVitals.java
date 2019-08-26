@@ -64,7 +64,7 @@ public class PacketMobVitals implements ISoliniaPacket {
 
 	public String getName()
 	{
-		return this.getName();
+		return this.name;
 	}
 	
 	public String toPacketData()
