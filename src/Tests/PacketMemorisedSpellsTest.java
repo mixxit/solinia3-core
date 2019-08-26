@@ -10,7 +10,7 @@ import com.solinia.solinia.Models.PacketMemorisedSpells;
 public class PacketMemorisedSpellsTest {
 	@Test
 	public void WhenGivenPacketDataReturnExpectedFormat() {
-		String testForPacketData = "1|1|1|1|1|Name^";
+		String testForPacketData = "1|1|1|1|1|Name";
 		String foundPacketData = "";
 		try {
 			PacketMemorisedSpells vitals = new PacketMemorisedSpells();
@@ -27,10 +27,17 @@ public class PacketMemorisedSpellsTest {
 		int testSlots = 8;
 		
 		String testPacketData = "";
+		boolean first = true;
+		
 		for (int i = 1; i <= testSlots; i++)
 		{
+			if (first)
+				first = false;
+			else
+				testPacketData += "^";
+			
 			testPacketData += 
-					i+"|"+i+"000|"+i+"111|"+i+"222|"+i+"333|Name"+i+"^";
+					i+"|"+i+"000|"+i+"111|"+i+"222|"+i+"333|Name"+i;
 		}
 		
 		for (int i = 1; i <= testSlots; i++)
@@ -50,30 +57,5 @@ public class PacketMemorisedSpellsTest {
 			}
 	        
 		}
-    }
-
-	
-	@Test
-	public void IfMissingSeperatorsThrowInvalidPacket() {
-		String expectedException = "Packet data is wrong format";
-		String actualException = "";
-		try {
-			new PacketMemorisedSpells().fromPacketData("moo");
-		} catch (InvalidPacketException e) {
-			actualException = e.getMessage();
-		}
-        assertEquals(expectedException, actualException);
-    }
-	
-	@Test
-	public void IfMissingNullThrowInvalidPacket() {
-		String expectedException = "Packet data is empty";
-		String actualException = "";
-		try {
-			new PacketMemorisedSpells().fromPacketData(null);
-		} catch (InvalidPacketException e) {
-			actualException = e.getMessage();
-		}
-        assertEquals(expectedException, actualException);
     }
 }
