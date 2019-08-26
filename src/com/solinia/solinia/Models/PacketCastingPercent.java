@@ -19,7 +19,7 @@ public class PacketCastingPercent implements ISoliniaPacket {
 		if (!data.contains("^"))
 			throw new InvalidPacketException("Packet data is wrong format");
 
-		String[] dataArray = data.split("\\^");
+		String[] dataArray = data.split("\\^",-1);
 		
 		float castingPercent = Float.parseFloat(dataArray[0]);
 		

@@ -16,14 +16,14 @@ public class PacketMemorisedSpells implements ISoliniaPacket {
 		if (data == null)
 			throw new InvalidPacketException("Packet data is empty");
 
-		String[] dataArray = data.split("\\^");
+		String[] dataArray = data.split("\\^",-1);
 		
 		// now pages
 		this.memorisedSpells = new MemorisedSpells();
 		
 		for(int i = 0; i < dataArray.length; i++)
 		{
-			String[] spellArray = dataArray[i].split("\\|");
+			String[] spellArray = dataArray[i].split("\\|",-1);
 			int slotNo = Integer.parseInt(spellArray[0]);
 			int Id = Integer.parseInt(spellArray[1]);
 			int Icon = Integer.parseInt(spellArray[2]);
