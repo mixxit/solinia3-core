@@ -62,7 +62,10 @@ public class PartyWindowUtils {
 			if (group != null)
 			{
 				for (int i = 0; i < 5; i++) {
-					UUID uuid = group.getMembersWithoutPlayer(player).get(i);
+					UUID uuid = null;
+					
+					if (group.getMembersWithoutPlayer(player).size() >= (i+1))
+						uuid = group.getMembersWithoutPlayer(player).get(i);
 					
 					// 
 					if (uuid == null)
