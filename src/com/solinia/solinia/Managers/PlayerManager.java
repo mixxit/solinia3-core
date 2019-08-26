@@ -22,6 +22,7 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.Personality;
+import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class PlayerManager implements IPlayerManager {
@@ -288,6 +289,12 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer.removeAllEntityEffects(plugin);
 			solPlayer.killAllPets();
 			
+			if (solPlayer.getGroup() != null) {
+				StateManager.getInstance().removePlayerFromGroup(player);
+			} else {
+				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup());
+			}
+			
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
 			solPlayer = SoliniaPlayerFactory.CreatePlayer(player,false);
 			player.getInventory().clear();
@@ -322,6 +329,12 @@ public class PlayerManager implements IPlayerManager {
 			
 			solPlayer.removeAllEntityEffects(plugin);
 			solPlayer.killAllPets();
+			
+			if (solPlayer.getGroup() != null) {
+				StateManager.getInstance().removePlayerFromGroup(player);
+			} else {
+				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup());
+			}
 			
 			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
 			if (altSolPlayer == null)
