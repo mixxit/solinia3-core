@@ -5377,6 +5377,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		//System.out.println("Testing checkHateTargets");
 		
+		if (this.isCurrentlyNPCPet())
+		{
+			System.out.println("PET Testing checkHateTargets");
+		}
+		
 		if (!(this.getBukkitLivingEntity() instanceof Creature))
 			return false;
 
@@ -5386,7 +5391,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				resetPosition(true);
 				return false;
 			}
-
+		
 		List<UUID> removeUuids = new ArrayList<UUID>();
 
 		int maxHate = 0;
@@ -7344,5 +7349,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		PacketMobVitals vitals = new PacketMobVitals();
 		vitals.fromData(partyMember, ((float)getHPRatio())/100F, ((float)getManaRatio())/100F, this.getBukkitLivingEntity().getUniqueId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""));
 		return vitals;
+	}
+
+	@Override
+	public void sendHateList(LivingEntity recipient) {
+		recipient.sendMessage("HateList:");
+		if (recipient instanceof Player && (((Player) recipient).isOp() || this.isCurrentlyNPCPet())) {
+			for(UUID uuid : getHateList().keySet())
+			{
+				int hate = getHateList().get(uuid);
+				String name = "";
+				org.bukkit.entity.Entity entity = Bukkit.getEntity(uuid);
+				if (entity != null)
+					name = entity.getName();
+				System.out.println("UUID: " + uuid + "(" + name + ") Value: " + hate);
+				recipient.sendMessage("UUID: " + uuid + "(" + name + ") Value: " + hate);
+			}
+		}
 	}
 }

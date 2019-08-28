@@ -1,7 +1,9 @@
 package com.solinia.solinia.Commands;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -165,6 +167,18 @@ public class CommandPet implements CommandExecutor {
 						}
 						
 						PetEquip(player,pet);
+					}
+					
+					if (petcommand.equals("hatelist"))
+					{
+						player.sendMessage("Hate List: ");
+						if (solLivingEntity != null)
+						{
+							solLivingEntity.sendHateList(player);							
+							return true;
+						}
+						
+						return true;
 					}
 				}
 				

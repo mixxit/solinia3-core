@@ -356,4 +356,6 @@ public interface ISoliniaLivingEntity
 
 	public PacketMobVitals toPacketMobVitals(int partyMember);
 
+	public void sendHateList(LivingEntity recipient);
+
 }
