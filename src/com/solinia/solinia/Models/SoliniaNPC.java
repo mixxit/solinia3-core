@@ -86,7 +86,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean teleportAttack = false;
 	private String teleportAttackLocation = "";
 	private long timefrom = 0L;
-	private long timeto = 23850L;
+	private long timeto = Utils.MAXDAYTICK;
 
 	@Override
 	public int getId() {
@@ -494,14 +494,14 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "timefrom":
 			long time = Long.parseLong(value);
-			if (time < 0L || time > 23850L)
-				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and 23850");
+			if (time < 0L || time > Utils.MAXDAYTICK)
+				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and " + Utils.MAXDAYTICK);
 			setTimefrom(time);
 			break;
 		case "timeto":
 			long time2 = Long.parseLong(value);
-			if (time2 < 0L || time2 > 23850L)
-				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and 23850");
+			if (time2 < 0L || time2 > Utils.MAXDAYTICK)
+				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and " + Utils.MAXDAYTICK);
 			setTimeto(time2);
 			break;
 		case "disguisetype":

@@ -254,6 +254,7 @@ public class Utils {
 	private static final List<Material> HALF_HEIGHT;
 	private static final List<Material> HEIGHT_AND_HALF;
 	public static final int TICKS_PER_SECOND = 20;
+	public static final long MAXDAYTICK = 24000L;
 	
 	static
 	  {
@@ -6131,7 +6132,7 @@ public class Utils {
 
 	public static boolean IsDay(World world) {
 		long time = world.getTime();
-		return time < 12300 || time > 23850;
+		return time < 12300 || time > Utils.MAXDAYTICK;
 	}
 	
 	public static boolean IsTimeRangeActive(World world, long timefrom, long timeto) {

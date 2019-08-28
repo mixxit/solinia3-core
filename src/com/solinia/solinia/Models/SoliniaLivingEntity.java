@@ -6447,7 +6447,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	private boolean despawnIfWrongTime() {
+		if (this.isCurrentlyNPCPet())
+			return false;
+
 		if (Utils.isLivingEntityNPC(this.getBukkitLivingEntity())) {
+			
 			try {
 				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitLivingEntity());
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solEntity.getNpcid());

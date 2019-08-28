@@ -263,6 +263,36 @@ public class CoreState {
 		patchItems1_13();
 		patchClasses1_13();
 		fixPets();
+		fixTimeto();
+	}
+	
+	private void fixTimeto()
+	{
+		try {
+			boolean updated = false;
+			
+			System.out.println("Attempting to fix incorrectly set npcs timeto spawns");
+			
+			List<String> unknownMaterialNames = new ArrayList<String>();
+			
+			for(ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
+			{
+				if (npc.getTimeto() == 23850L)
+				{
+					npc.setTimeto(Utils.MAXDAYTICK);
+					updated = true;
+				}
+			}
+			
+			if (updated == true)
+			{
+				System.out.println("Detected some internal npc changes, recommitting npcs (this may take some time)...");
+				Utils.RecommitNpcs();
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void fixPets()
