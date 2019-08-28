@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAAAbility;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListAAs implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -37,7 +39,7 @@ public class CommandListAAs implements CommandExecutor {
 			// Return all
 			for(ISoliniaAAAbility aa : StateManager.getInstance().getConfigurationManager().getAAAbilities())
 			{
-				sender.sendMessage("AAAbilityID: " + aa.getId() + " - " + aa.getName() + " Sysname: " + aa.getSysname());
+				sender.sendMessage("AAAbilityID: " + ChatColor.GOLD + aa.getId() + ChatColor.RESET + " - " + aa.getName() + " Sysname: " + aa.getSysname());
 			}
 			
 			return true;
@@ -60,7 +62,7 @@ public class CommandListAAs implements CommandExecutor {
 		{
 			if (aa.getName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("AAAbilityID: " + aa.getId() + " - " + aa.getName() + " Sysname: " + aa.getSysname());
+				sender.sendMessage("AAAbilityID: " + ChatColor.GOLD + aa.getId() + ChatColor.RESET + " - " + aa.getName() + " Sysname: " + aa.getSysname());
 			}
 		}
 		} catch (CoreStateInitException e)

@@ -10,6 +10,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListCrafts implements CommandExecutor {
 
 	@Override
@@ -31,7 +33,7 @@ public class CommandListCrafts implements CommandExecutor {
 			// Return all
 			for(SoliniaCraft entity : StateManager.getInstance().getConfigurationManager().getCrafts())
 			{
-				sender.sendMessage("CraftID: " + entity.getId() + " - " + entity.getRecipeName() + " outputId: " + entity.getOutputItem());
+				sender.sendMessage("CraftID: " + ChatColor.GOLD + entity.getId() + ChatColor.RESET + " - " + entity.getRecipeName() + " outputId: " + entity.getOutputItem());
 			}
 			
 			return true;
@@ -54,7 +56,7 @@ public class CommandListCrafts implements CommandExecutor {
 		{
 			if (entity.getRecipeName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("CraftID: " + entity.getId() + " - " + entity.getRecipeName() + " outputId: " + entity.getOutputItem());
+				sender.sendMessage("CraftID: " + ChatColor.GOLD + entity.getId() + ChatColor.RESET + " - " + entity.getRecipeName() + " outputId: " + entity.getOutputItem());
 			}
 		}
 		} catch (CoreStateInitException e)

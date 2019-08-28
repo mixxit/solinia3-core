@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaSpawnGroup;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListSpawnGroups implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -30,7 +32,7 @@ public class CommandListSpawnGroups implements CommandExecutor {
 				// Return all
 				for(ISoliniaSpawnGroup spawngroup : StateManager.getInstance().getConfigurationManager().getSpawnGroups())
 				{
-					sender.sendMessage("SpawnGroupID: " + spawngroup.getId() + " - " + spawngroup.getName() + " world: " + spawngroup.getWorld() + " XYZ: " + spawngroup.getX() + "," + spawngroup.getY() + "," + spawngroup.getZ());
+					sender.sendMessage("SpawnGroupID: " + ChatColor.GOLD + spawngroup.getId() + ChatColor.RESET + " - " + spawngroup.getName() + " world: " + spawngroup.getWorld() + " XYZ: " + spawngroup.getX() + "," + spawngroup.getY() + "," + spawngroup.getZ());
 				}
 				
 				return true;
@@ -53,7 +55,7 @@ public class CommandListSpawnGroups implements CommandExecutor {
 			{
 				if (spawngroup.getName().toUpperCase().contains(args[0].toUpperCase()))
 				{
-					sender.sendMessage("SpawnGroupID: " + spawngroup.getId() + " - " + spawngroup.getName() + " world: " + spawngroup.getWorld() + " XYZ: " + spawngroup.getX() + "," + spawngroup.getY() + "," + spawngroup.getZ());
+					sender.sendMessage("SpawnGroupID: " + ChatColor.GOLD + spawngroup.getId() + ChatColor.RESET + " - " + spawngroup.getName() + " world: " + spawngroup.getWorld() + " XYZ: " + spawngroup.getX() + "," + spawngroup.getY() + "," + spawngroup.getZ());
 				}
 			}
 		} catch (CoreStateInitException e)

@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListFactions implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -31,7 +33,7 @@ public class CommandListFactions implements CommandExecutor {
 			// Return all
 			for(ISoliniaFaction faction : StateManager.getInstance().getConfigurationManager().getFactions())
 			{
-				sender.sendMessage("FactionID: " + faction.getId() + " - " + faction.getName() + " base: " + faction.getBase());
+				sender.sendMessage("FactionID: " + ChatColor.GOLD + faction.getId() + ChatColor.RESET + " - " + faction.getName() + " base: " + faction.getBase());
 			}
 			
 			return true;
@@ -54,7 +56,7 @@ public class CommandListFactions implements CommandExecutor {
 		{
 			if (faction.getName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("FactionID: " + faction.getId() + " - " + faction.getName() + " base: " + faction.getBase());
+				sender.sendMessage("FactionID: " + ChatColor.GOLD + faction.getId() + ChatColor.RESET + " - " + faction.getName() + " base: " + faction.getBase());
 			}
 		}
 		} catch (CoreStateInitException e)

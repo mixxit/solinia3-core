@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaGod;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListGods implements CommandExecutor {
 
 	@Override
@@ -32,7 +34,7 @@ public class CommandListGods implements CommandExecutor {
 			// Return all
 			for(ISoliniaGod god : StateManager.getInstance().getConfigurationManager().getGods())
 			{
-				sender.sendMessage("GodID: " + god.getId() + " - " + god.getName());
+				sender.sendMessage("GodID: " + ChatColor.GOLD + god.getId() + ChatColor.RESET + " - " + god.getName());
 			}
 			
 			return true;
@@ -55,7 +57,7 @@ public class CommandListGods implements CommandExecutor {
 		{
 			if (god.getName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("GodID: " + god.getId() + " - " + god.getName());
+				sender.sendMessage("GodID: " + ChatColor.GOLD + god.getId() + ChatColor.RESET + " - " + god.getName());
 			}
 		}
 		} catch (CoreStateInitException e)

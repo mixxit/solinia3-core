@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaClass;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListClasses implements CommandExecutor {
 
 	@Override
@@ -32,7 +34,7 @@ public class CommandListClasses implements CommandExecutor {
 			// Return all
 			for(ISoliniaClass classObj : StateManager.getInstance().getConfigurationManager().getClasses())
 			{
-				sender.sendMessage("ClassID: " + classObj.getId() + " - " + classObj.getName() + " adminonly: " + classObj.isAdmin());
+				sender.sendMessage("ClassID: " + ChatColor.GOLD + classObj.getId() + ChatColor.RESET + " - " + classObj.getName() + " adminonly: " + classObj.isAdmin());
 			}
 			
 			return true;
@@ -55,7 +57,7 @@ public class CommandListClasses implements CommandExecutor {
 		{
 			if (classObj.getName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("ClassID: " + classObj.getId() + " - " + classObj.getName() + " adminonly: " + classObj.isAdmin());
+				sender.sendMessage("ClassID: " + ChatColor.GOLD + classObj.getId() + ChatColor.RESET + " - " + classObj.getName() + " adminonly: " + classObj.isAdmin());
 			}
 		}
 		} catch (CoreStateInitException e)

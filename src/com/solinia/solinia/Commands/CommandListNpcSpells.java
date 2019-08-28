@@ -10,6 +10,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListNpcSpells implements CommandExecutor 
 {
 	
@@ -31,7 +33,7 @@ public class CommandListNpcSpells implements CommandExecutor
 				// Return all
 				for(NPCSpellList npc : StateManager.getInstance().getConfigurationManager().getNPCSpellLists())
 				{
-					sender.sendMessage("ID: " + npc.getId() + " - " + npc.getName());
+					sender.sendMessage("ID: " + ChatColor.GOLD + npc.getId() + ChatColor.RESET + " - " + npc.getName());
 				}
 				
 				return true;
@@ -54,7 +56,7 @@ public class CommandListNpcSpells implements CommandExecutor
 			{
 				if (npc.getName().toUpperCase().contains(args[0].toUpperCase()))
 				{
-					sender.sendMessage("ID: " + npc.getId() + " - " + npc.getName());
+					sender.sendMessage("ID: " + ChatColor.GOLD + npc.getId() + ChatColor.RESET + " - " + npc.getName());
 				}
 			}
 		} catch (CoreStateInitException e)

@@ -9,6 +9,8 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaZone;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListZones implements CommandExecutor {
 
 	@Override
@@ -30,7 +32,7 @@ public class CommandListZones implements CommandExecutor {
 			// Return all
 			for(SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
 			{
-				sender.sendMessage("ZoneID: " + zone.getId() + " - " + zone.getName() + " hotzone: " + zone.isHotzone());
+				sender.sendMessage("ZoneID: " + ChatColor.GOLD + zone.getId() + ChatColor.RESET + " - " + zone.getName() + " hotzone: " + zone.isHotzone());
 			}
 			
 			return true;
@@ -41,7 +43,7 @@ public class CommandListZones implements CommandExecutor {
 		{
 			if (zone.getName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("ZoneID: " + zone.getId() + " - " + zone.getName() + " hotzone: " + zone.isHotzone());
+				sender.sendMessage("ZoneID: " + ChatColor.GOLD + zone.getId() + ChatColor.RESET + " - " + zone.getName() + " hotzone: " + zone.isHotzone());
 			}
 		}
 		} catch (CoreStateInitException e)

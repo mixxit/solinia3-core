@@ -12,6 +12,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaNPCMerchant;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListMerchantLists implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -52,11 +54,11 @@ public class CommandListMerchantLists implements CommandExecutor {
 				{
 					if (entitylist.getName().toUpperCase().contains(filter))
 					{
-						sender.sendMessage("ID: " + entitylist.getId() + " - " + entitylist.getName());
-						for(ISoliniaNPCMerchantEntry entry : entitylist.getEntries())
+						sender.sendMessage("ID: " + ChatColor.GOLD + entitylist.getId() + ChatColor.RESET + " - " + entitylist.getName());
+						/*for(ISoliniaNPCMerchantEntry entry : entitylist.getEntries())
 						{
 							sender.sendMessage("- ID: " + entry.getId() + " - ItemID: " + entry.getItemid() + StateManager.getInstance().getConfigurationManager().getItem(entry.getItemid()).getDisplayname());
-						}
+						}*/
 					}
 				} else {
 					sender.sendMessage("ID: " + entitylist.getId() + " - " + entitylist.getName());

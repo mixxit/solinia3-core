@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaQuest;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListQuests implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -54,7 +56,7 @@ public class CommandListQuests implements CommandExecutor {
 						if (entry.getName().toUpperCase().contains(searchTerm))
 						{
 							found++;
-							String message = entry.getId() + " - " + entry.getName();
+							String message = "" + ChatColor.GOLD + entry.getId() + ChatColor.RESET + " - " + entry.getName();
 							sender.sendMessage(message);
 						}
 					}
@@ -68,7 +70,7 @@ public class CommandListQuests implements CommandExecutor {
 				for(ISoliniaQuest entry : StateManager.getInstance().getConfigurationManager().getQuests())
 				{
 					found++;
-					String message = entry.getId() + " - " + entry.getName();
+					String message = "" + ChatColor.GOLD + entry.getId() + ChatColor.RESET + " - " + entry.getName();
 					sender.sendMessage(message);
 				}
 				

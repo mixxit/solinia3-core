@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaLootDrop;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListLootDrops implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -50,10 +52,10 @@ public class CommandListLootDrops implements CommandExecutor {
 				{
 					if (entitylist.getName().toUpperCase().contains(filter))
 					{
-						sender.sendMessage("ID: " + entitylist.getId() + " - " + entitylist.getName());
+						sender.sendMessage("ID: " + ChatColor.GOLD + entitylist.getId() + ChatColor.RESET + " - " + entitylist.getName());
 					}
 				} else {
-					sender.sendMessage("ID: : " + entitylist.getId() + " - " + entitylist.getName());
+					sender.sendMessage("ID: : " + ChatColor.GOLD + entitylist.getId() + ChatColor.RESET + " - " + entitylist.getName());
 				}
 			}
 		} catch (CoreStateInitException e)

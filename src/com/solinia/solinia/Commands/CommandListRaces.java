@@ -11,6 +11,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaRace;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListRaces implements CommandExecutor {
 
 	@Override
@@ -32,7 +34,7 @@ public class CommandListRaces implements CommandExecutor {
 			// Return all
 			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
 			{
-				sender.sendMessage("RaceID: " + race.getId() + " - " + race.getName() + " adminonly: " + race.isAdmin());
+				sender.sendMessage("RaceID: " + ChatColor.GOLD + race.getId() + ChatColor.RESET + " - " + race.getName() + " adminonly: " + race.isAdmin());
 			}
 			
 			return true;
@@ -55,7 +57,7 @@ public class CommandListRaces implements CommandExecutor {
 		{
 			if (race.getName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("RaceID: " + race.getId() + " - " + race.getName() + " adminonly: " + race.isAdmin());
+				sender.sendMessage("RaceID: " + ChatColor.GOLD + race.getId() + ChatColor.RESET + " - " + race.getName() + " adminonly: " + race.isAdmin());
 			}
 		}
 		} catch (CoreStateInitException e)

@@ -12,6 +12,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Utils.Utils;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListSpells implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -52,7 +54,7 @@ public class CommandListSpells implements CommandExecutor {
 				if (spell.getName().toUpperCase().contains(StringUtils.join(args, " ").toUpperCase()))
 				{
 					found++;
-					String spellmessage = spell.getId() + " - " + spell.getName();
+					String spellmessage = "" + ChatColor.GOLD + spell.getId() + ChatColor.RESET + " - " + spell.getName();
 					sender.sendMessage(spellmessage);
 				}
 			}

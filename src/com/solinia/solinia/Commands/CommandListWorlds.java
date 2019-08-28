@@ -9,6 +9,8 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaWorld;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandListWorlds implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -29,7 +31,7 @@ public class CommandListWorlds implements CommandExecutor {
 			// Return all
 			for(SoliniaWorld entity : StateManager.getInstance().getConfigurationManager().getWorlds())
 			{
-				sender.sendMessage("ID: " + entity.getId() + " - " + entity.getName());
+				sender.sendMessage("ID: " + ChatColor.GOLD + entity.getId() + ChatColor.RESET + " - " + entity.getName());
 			}
 			
 			return true;
@@ -40,7 +42,7 @@ public class CommandListWorlds implements CommandExecutor {
 		{
 			if (entity.getName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("ID: " + entity.getId() + " - " + entity.getName());
+				sender.sendMessage("ID: " + ChatColor.GOLD + entity.getId() + ChatColor.RESET + " - " + entity.getName());
 			}
 		}
 		} catch (CoreStateInitException e)
