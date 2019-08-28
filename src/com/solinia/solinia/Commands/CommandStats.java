@@ -89,12 +89,12 @@ public class CommandStats implements CommandExecutor {
 						solPlayer.getPersonality().getIdealId() == 0
 						)
 				{
-					player.sendMessage(ChatColor.YELLOW + "* You have not set your personality. Please see /personality" + ChatColor.RESET);
+					player.sendMessage(ChatColor.GRAY + "* You have not set your personality. Please see /personality" + ChatColor.RESET);
 				}
 				
 				if (solPlayer.getClassObj() != null && solPlayer.getClassObj().getOaths().size() > 0 && solPlayer.getOathId() == 0)
 				{
-					player.sendMessage(ChatColor.YELLOW + "* You have not set your Oath. Please see /oath" + ChatColor.RESET);
+					player.sendMessage(ChatColor.GRAY + "* You have not set your Oath. Please see /oath" + ChatColor.RESET);
 				}
 				
 				player.sendMessage("* Your currently XP Day modifier sits at (" + StateManager.getInstance().getXPDayModifier() + ")%");

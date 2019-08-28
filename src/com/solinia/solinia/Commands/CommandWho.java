@@ -31,6 +31,9 @@ public class CommandWho implements CommandExecutor {
 		if (sender instanceof Player) {
 	        Player player = (Player) sender;
 	        
+	        sender.sendMessage("Current Online Players:");
+	        sender.sendMessage("---------------------------------");
+	        
 	        for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
 		    {
 	        	String hidden = "";
@@ -70,11 +73,11 @@ public class CommandWho implements CommandExecutor {
 		        	
 		        	if (!(sender instanceof Player))
 		        	{
-		        		sender.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+		        		sender.sendMessage("["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
 		        		continue;
 		        	}
 		        	
-		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText(hidden+"["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET));
+		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText(hidden+"["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET));
 					
 		        	String worship = "I worship: " + godname + "\n";
 		        	
@@ -139,12 +142,12 @@ public class CommandWho implements CommandExecutor {
 						solPlayer.getPersonality().getIdealId() == 0
 						)
 				{
-					player.sendMessage("* You have not set your personality. Please see /personality");
+					player.sendMessage(ChatColor.GRAY + "* You have not set your personality. Please see /personality" + ChatColor.RESET);
 				}
 				
 				if (solPlayer.getClassObj() != null && solPlayer.getClassObj().getOaths().size() > 0 && solPlayer.getOathId() == 0)
 				{
-					player.sendMessage("* You have not set your Oath. Please see /oath");
+					player.sendMessage(ChatColor.GRAY + "* You have not set your Oath. Please see /oath" + ChatColor.RESET);
 				}
 	        } catch (CoreStateInitException e)
 	        {
