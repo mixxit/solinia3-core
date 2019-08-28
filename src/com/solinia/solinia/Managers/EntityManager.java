@@ -104,15 +104,10 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public Inventory getNPCMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno)
+	public Inventory getNPCMerchantInventory(UUID playerUUID, ISoliniaNPCMerchant soliniaNpcMerchant, int pageno)
 	{
-		if (npc.getMerchantid() < 1)
-			return null;
-		
 		try
 		{
-			ISoliniaNPCMerchant soliniaNpcMerchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(npc.getMerchantid());
-			
 			if (!soliniaNpcMerchant.getRequiresPermissionNode().equals(""))
 			{
 				Player player = Bukkit.getPlayer(playerUUID);
@@ -127,7 +122,7 @@ public class EntityManager implements IEntityManager {
 			}
 			
 			List<ISoliniaNPCMerchantEntry> fullmerchantentries = StateManager.getInstance().getEntityManager()
-					.getNPCMerchantCombinedEntries(npc);
+					.getNPCMerchantCombinedEntries(soliniaNpcMerchant);
 			
 			List<UniversalMerchantEntry> entries = new ArrayList<UniversalMerchantEntry>();
 			
@@ -887,18 +882,13 @@ public class EntityManager implements IEntityManager {
 	}
 	*/
 	@Override
-	public List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc) {
+	public List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPCMerchant merchant) {
 		List<ISoliniaNPCMerchantEntry> combinedEntries = new ArrayList<ISoliniaNPCMerchantEntry>();
-		if (npc.getMerchantid() < 1)
+		if (merchant == null)
 			return combinedEntries;
 			
 		try
 		{
-			ISoliniaNPCMerchant merchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(npc.getMerchantid());
-			
-			if (merchant == null)
-				return combinedEntries;
-	
 			List<Integer> existingItemIds = new ArrayList<Integer>();
 			
 			// Prevents items from being listed that dont exist as an item or are already in the list

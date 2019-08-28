@@ -27,6 +27,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
@@ -320,9 +321,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 	@Override
 	public void sendMerchantItemListToPlayer(Player player, int pageno) {
+		if (this.getMerchantid() < 1)
+			return;
+		
 		try {
+			ISoliniaNPCMerchant soliniaNpcMerchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(getMerchantid());
+			
+			
 			Inventory merchantInventory = StateManager.getInstance().getEntityManager()
-					.getNPCMerchantInventory(player.getUniqueId(), this, pageno);
+					.getNPCMerchantInventory(player.getUniqueId(), soliniaNpcMerchant, pageno);
 			if (merchantInventory != null)
 				player.openInventory(merchantInventory);
 		} catch (CoreStateInitException e) {

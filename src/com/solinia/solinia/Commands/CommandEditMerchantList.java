@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCMerchantListSettingException;
@@ -57,6 +58,29 @@ public class CommandEditMerchantList implements CommandExecutor
 			{
 				sender.sendMessage(e.getMessage());
 			}
+		}
+		
+		if (args.length == 2 && sender instanceof Player)
+		{
+			if (args[1].toLowerCase().equals("open"))
+			{
+				// opens dynamic merchant list
+				try {
+					
+					ISoliniaNPCMerchant soliniaNpcMerchant = StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchantid);
+					if (soliniaNpcMerchant == null)
+						return true;
+					
+					Inventory merchantInventory = StateManager.getInstance().getEntityManager()
+							.getNPCMerchantInventory(((Player)sender).getUniqueId(), soliniaNpcMerchant, 1);
+					if (merchantInventory != null)
+						((Player)sender).openInventory(merchantInventory);
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+					
 		}
 
 		

@@ -52,7 +52,7 @@ public interface IEntityManager {
 
 	void doNPCSpellCast();
 
-	List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPC npc);
+	List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPCMerchant merchant);
 
 	boolean hasEntityEffectType(LivingEntity livingEntity, SpellEffectType type);
 
@@ -88,7 +88,7 @@ public interface IEntityManager {
 
 	Inventory getMerchantInventory(UUID playerUUID, int pageno, UniversalMerchant universalMerchant);
 
-	Inventory getNPCMerchantInventory(UUID playerUUID, ISoliniaNPC npc, int pageno);
+	Inventory getNPCMerchantInventory(UUID playerUUID, ISoliniaNPCMerchant soliniaNpcMerchant, int pageno);
 
 	ConcurrentHashMap<UUID, Boolean> getPlayerInTerritory();
 
