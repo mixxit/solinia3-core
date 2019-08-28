@@ -21,6 +21,7 @@ local.properties
 .buildpath
 .target
 .texlipse
+server/
 
 # Java files
 *.class

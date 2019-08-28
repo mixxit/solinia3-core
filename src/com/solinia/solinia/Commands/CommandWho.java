@@ -33,11 +33,23 @@ public class CommandWho implements CommandExecutor {
 	        
 	        for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
 		    {
+	        	String hidden = "";
+	        	
 	        	if (currentplayer.hasPermission("essentials.silentjoin"))
+	        		hidden = "[HIDDEN]";
+	        	
+	        	if (currentplayer.hasPermission("essentials.silentjoin") && !sender.isOp())
+	        	{
 	        		continue;
+	        	}
 	        	
 	        	if (!player.canSee(currentplayer))
+	        		hidden = "[HIDDEN]";
+	        	
+	        	if (!player.canSee(currentplayer) && !sender.isOp())
+	        	{
 	        		continue;
+	        	}
 	        	
 	        	if (!filter.equals(""))
 	        		if (!currentplayer.getDisplayName().contains(filter))
@@ -62,7 +74,7 @@ public class CommandWho implements CommandExecutor {
 		        		continue;
 		        	}
 		        	
-		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET));
+		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText(hidden+"["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET));
 					
 		        	String worship = "I worship: " + godname + "\n";
 		        	
