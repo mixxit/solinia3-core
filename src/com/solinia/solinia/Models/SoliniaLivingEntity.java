@@ -5375,13 +5375,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity().isDead())
 			return false;
 
-		//System.out.println("Testing checkHateTargets");
-		
-		if (this.isCurrentlyNPCPet())
-		{
-			System.out.println("PET Testing checkHateTargets");
-		}
-		
 		if (!(this.getBukkitLivingEntity() instanceof Creature))
 			return false;
 
