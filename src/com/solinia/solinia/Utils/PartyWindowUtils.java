@@ -48,6 +48,15 @@ public class PartyWindowUtils {
 			}
 			
 			// Pet (vital: -2)
+			LivingEntity entityPet = StateManager.getInstance().getEntityManager().getPet(player.getUniqueId());
+			
+			if (entityPet != null) {
+				ISoliniaLivingEntity soliniaLivingEntityPet = SoliniaLivingEntityAdapter.Adapt(entityPet);
+				if (soliniaLivingEntityPet != null)
+				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityPet.toPacketMobVitals(-2).toPacketData());
+			} else {
+				SendEmptyVital(player,(-2));
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
