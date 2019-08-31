@@ -988,6 +988,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 					if (words[0].toLowerCase().equals("hail")) {
 						if ((triggerentity instanceof Player)) {
 							if (handler.getResponseType().equals("SAY"))
+								if (getMerchantid() > 0) {
+									solentity.sayto((Player) triggerentity,"i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA + "] available if you are interested in buying or selling something",true);
+								}
 								solentity.sayto((Player) triggerentity, replaceChatWordsWithHints(response), true);
 							if (handler.getResponseType().equals("EMOTE"))
 								solentity.emote(replaceChatWordsWithHints(response), false);

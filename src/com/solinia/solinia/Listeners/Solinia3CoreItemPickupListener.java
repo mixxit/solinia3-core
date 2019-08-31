@@ -20,6 +20,7 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -105,8 +106,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	{
 	            		if (latestitem.isSpellscroll())
 	            		{
-		    	        	e.getPlayer().sendMessage(ChatColor.GRAY + "INFO: You have picked up an ability! To use it, hold it in your hand and right click!");
-		    	        	e.getPlayer().sendMessage(ChatColor.GRAY + "INFO: To target an enemy use left click when holding a spell or shift F to select yourself!");
+	            			Utils.SendHint(e.getPlayer(), HINT.PICKEDUP_SPELL, "PickedUpSpell");
 	            		}
 	            		
 	            		ItemStack latestitemstack = latestitem.asItemStack();

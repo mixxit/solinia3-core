@@ -62,7 +62,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		if (event.getPlayer().getEntityTarget() != null)
 		{
 			Entity entity = event.getPlayer().getEntityTarget();
-			if (entity != null && entity instanceof LivingEntity)
+			if (entity != null && entity instanceof LivingEntity && event.getPlayer().getBukkitPlayer().getLocation().distance(entity.getLocation()) < 4)
 			{
 				LivingEntity livingEntity = (LivingEntity)entity;
 				ISoliniaLivingEntity solentity;

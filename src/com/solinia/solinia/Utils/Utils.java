@@ -6549,13 +6549,19 @@ public class Utils {
 	}
 
 	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode) {
+		String message = "";
 		switch (hint)
 		{
 		case NEED_TARGET:
-			entity.sendMessage("You must select a target (See SoliniaMOD Keybinds)");
+			message = "You must select a target (See SoliniaMOD Keybinds)";
+			break;
+		case PICKEDUP_SPELL:
+			message = "You have picked up a spell. You can add this to your spellbook with /spellbook add. Up to 8 spells can be memorised and cast from the memorisation bar at the top of the screen  (See SoliniaMOD Keybinds)";
 			break;
 		default:
 			break;
 		}
+		
+		entity.sendMessage(ChatColor.GRAY + message + ChatColor.RESET);
 	}
 }

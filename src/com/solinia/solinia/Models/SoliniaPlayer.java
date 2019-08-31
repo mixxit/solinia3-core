@@ -864,6 +864,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, string, string,
 				getBukkitPlayer().getInventory().getItemInMainHand());
+		
+		// NPC responses (if applicable)
+		if (getEntityTarget() != null)
+		{
+			Entity entity = getEntityTarget();
+			if (entity != null && entity instanceof LivingEntity && getBukkitPlayer().getLocation().distance(entity.getLocation()) < 4)
+			{
+				LivingEntity livingEntity = (LivingEntity)entity;
+				ISoliniaLivingEntity solentity;
+				try {
+					solentity = StateManager.getInstance().getEntityManager().getLivingEntity(livingEntity);
+					solentity.processInteractionEvent(getBukkitPlayer(), InteractionType.CHAT, string);
+				} catch (CoreStateInitException e) {
+					// skip
+				}
+			}
+		}
 	}
 
 	@Override
