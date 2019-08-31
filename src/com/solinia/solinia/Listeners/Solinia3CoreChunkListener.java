@@ -21,6 +21,7 @@ public class Solinia3CoreChunkListener implements Listener {
 	@EventHandler
 	public void onChunkUnloadEvent(ChunkUnloadEvent event) {
 		try {
+			StateManager.getInstance().getEntityManager().removeAllAbandonedPetsInChunk(event.getChunk());
 			StateManager.getInstance().getEntityManager().removeAllPetsInChunk(event.getChunk());
 		} catch (CoreStateInitException e) {
 
@@ -29,7 +30,7 @@ public class Solinia3CoreChunkListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onChunkUnloadEvent(ChunkLoadEvent event) {
+	public void onChunkLoadEvent(ChunkLoadEvent event) {
 		try {
 			StateManager.getInstance().getEntityManager().removeAllAbandonedPetsInChunk(event.getChunk());
 		} catch (CoreStateInitException e) {

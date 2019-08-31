@@ -1996,7 +1996,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void damageAlertHook(double damage, Entity sourceEntity) {
-		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getActiveMob().getOwner() != null) {
+		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getActiveMob().getOwner() != null && this.getActiveMob().getOwner().isPresent()) {
 			Entity owner = this.getOwnerEntity();
 			if (owner != null) {
 				if (owner != null && owner instanceof Player) {

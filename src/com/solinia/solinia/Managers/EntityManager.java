@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -966,7 +967,31 @@ public class EntityManager implements IEntityManager {
 				if (MythicMobsUtils.getActiveMob((LivingEntity)entity).getOwner() == null)
 					continue;
 				
-				System.out.println("Found a pet without an owner... removing");
+				if (!MythicMobsUtils.getActiveMob((LivingEntity)entity).getOwner().isPresent())
+					continue;
+				
+				petsToRemove.add(entity.getUniqueId());
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		
+		// Do a pass for entities that have pet in their name
+		for (Entity entity : chunk.getEntities())
+		{
+			if (!(entity instanceof LivingEntity))
+				continue;
+
+			if (!entity.getName().contains("s Pet"))
+				continue;
+
+			try
+			{
+				// tis a valid pet
+				if (StateManager.getInstance().getEntityManager().getAllWorldPetUUIDs().contains(entity.getUniqueId()))
+					continue;
+				
 				petsToRemove.add(entity.getUniqueId());
 			} catch (CoreStateInitException e)
 			{
@@ -976,7 +1001,11 @@ public class EntityManager implements IEntityManager {
 		
 		for(UUID uuid : petsToRemove)
 		{
-			Bukkit.getEntity(uuid).remove();
+			if (Bukkit.getEntity(uuid) != null)
+			{
+				System.out.println("Found a pet without an owner... removing " + Bukkit.getEntity(uuid).getName());
+				Bukkit.getEntity(uuid).remove();
+			}
 		}
 	}
 
