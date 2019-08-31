@@ -797,7 +797,10 @@ public class EntityManager implements IEntityManager {
 			}
 			
 			if (kill == true)
+			{
+				System.out.println("Killing pet " + entity.getName());
 				Utils.RemoveEntity(entity,"KILLPET");
+			}
 		}
 			
 		this.petownerdata.remove(petOwnerUUID);
