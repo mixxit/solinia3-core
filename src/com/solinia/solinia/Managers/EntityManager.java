@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -101,6 +102,133 @@ public class EntityManager implements IEntityManager {
 	public EntityManager(Plugin plugin, INPCEntityProvider npcEntityProvider) {
 		this.npcEntityProvider = npcEntityProvider;
 		this.plugin = plugin;
+	}
+	
+	@Override
+	public void forceSetEntityTarget(LivingEntity me, LivingEntity target)
+	{
+		try
+		{
+			// When changing target always clear auto attack
+			if (me instanceof Player)
+			{
+				if (target == null)
+				{
+					StateManager.getInstance().getEntityManager().setEntityAutoAttack((Player)me, false);
+				} else {
+					// get current target
+					if (StateManager.getInstance().getEntityManager().getEntityTargets().get(me.getUniqueId()) != null)
+					{
+						if (me != null && target != null && !StateManager.getInstance().getEntityManager().getEntityTargets().get(me.getUniqueId()).toString().equals(target.getUniqueId().toString()))
+						{
+							StateManager.getInstance().getEntityManager().setEntityAutoAttack((Player)me, false);
+						}
+					}
+				}
+			}
+			
+			if (me instanceof Creature)
+			{
+				try {
+					SoliniaLivingEntityAdapter.Adapt(me).setAttackTarget(target);
+				} catch (CoreStateInitException e) {
+				}
+			}
+			
+			if (target == null)
+			{
+				// no need, is on the boss bar
+				//source.sendMessage(ChatColor.GRAY + "Cleared your target");
+				StateManager.getInstance().getEntityManager().getEntityTargets().remove(me.getUniqueId());
+				
+		        if (me instanceof Player)
+				{
+					PartyWindowUtils.UpdateWindow((Player)me);
+				}
+			} else {
+				StateManager.getInstance().getEntityManager().getEntityTargets().put(me.getUniqueId(), target.getUniqueId());
+				if (me instanceof Player)
+				{
+					PartyWindowUtils.UpdateWindow((Player)me);
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			return;
+		}
+	}
+	
+	@Override
+	public LivingEntity forceGetEntityTarget(LivingEntity me)
+	{
+		try
+		{
+			if (me == null)
+				return null;
+			
+			// If i'm a creature, return creature target
+			if (me instanceof Creature)
+			{
+				return ((Creature)me).getTarget();
+			}
+			
+			UUID target = StateManager.getInstance().getEntityManager().getEntityTargets().get(me.getUniqueId());
+			if (target == null)
+			{
+				return null;
+			}
+			
+			Entity entity = Bukkit.getEntity(target);
+			if (entity == null)
+			{
+				forceSetEntityTarget(me,null);
+				return null;
+			}
+			
+			if (!(entity instanceof LivingEntity))
+			{
+				forceSetEntityTarget(me,null);
+				return null;
+			}
+	
+			if (((LivingEntity)entity).isDead())
+			{
+				forceSetEntityTarget(me,null);
+				return null;
+			}
+			
+			return ((LivingEntity)entity);		
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public void forceClearTargetsAgainstMe(LivingEntity me) {
+		for (Player player : me.getWorld().getPlayers())
+		{
+			if (forceGetEntityTarget(me) == null)
+				continue;
+			
+			if (forceGetEntityTarget(me).getUniqueId().toString().equals(me.getUniqueId().toString()))
+				forceSetEntityTarget(me,null);
+		}
+		
+		for(Entity entity : me.getNearbyEntities(50, 50, 50))
+		{
+			if (entity instanceof Creature)
+			{
+				if (((Creature) entity).getTarget() != null)
+				if (((Creature) entity).getTarget().getUniqueId().toString().equals(me.getUniqueId().toString()))
+				{
+					forceSetEntityTarget(me,null);
+				}
+			}
+		}
+
 	}
 	
 	@Override
@@ -789,7 +917,24 @@ public class EntityManager implements IEntityManager {
 			UUID key = entry.getKey();
 			LivingEntity livingEntityPet = (LivingEntity)Bukkit.getEntity(entry.getValue());
 			if (livingEntityPet != null)
+			{
+				System.out.println("Cleaning Up pet: " + livingEntityPet.getName());
 				livingEntityPet.remove();
+			}
+			this.petownerdata.remove(key);
+		}
+	}
+	
+	@Override
+	public void removeAllPetsInChunk(Chunk chunk) {
+		for (Map.Entry<UUID, UUID> entry : petownerdata.entrySet()) {
+			UUID key = entry.getKey();
+			LivingEntity livingEntityPet = (LivingEntity)Bukkit.getEntity(entry.getValue());
+			if (livingEntityPet != null && livingEntityPet.getLocation().getChunk().equals(chunk))
+			{
+				System.out.println("Cleaning Up pet on chunk unload: " + livingEntityPet.getName());
+				livingEntityPet.remove();
+			}
 			this.petownerdata.remove(key);
 		}
 	}
@@ -1162,119 +1307,6 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setEntityTargets(ConcurrentHashMap<UUID, UUID> entityTarget) {
 		this.entityTargets = entityTarget;
-	}
-	
-	@Override
-	public LivingEntity getEntityTarget(LivingEntity entitySource)
-	{
-		if (entitySource == null)
-			return null;
-		
-		// If i'm a creature, return creature target
-		if (entitySource instanceof Creature)
-		{
-			return ((Creature)entitySource).getTarget();
-		}
-		
-		UUID target = entityTargets.get(entitySource.getUniqueId());
-		if (target == null)
-		{
-			return null;
-		}
-		
-		Entity entity = Bukkit.getEntity(target);
-		if (entity == null)
-		{
-			setEntityTarget(entitySource,null);
-			return null;
-		}
-		
-		if (!(entity instanceof LivingEntity))
-		{
-			setEntityTarget(entitySource,null);
-			return null;
-		}
-
-		if (((LivingEntity)entity).isDead())
-		{
-			setEntityTarget(entitySource,null);
-			return null;
-		}
-		
-		return ((LivingEntity)entity);		
-	}
-	
-	@Override
-	public void setEntityTarget(LivingEntity source, LivingEntity target)
-	{
-		// When changing target always clear auto attack
-		if (source instanceof Player)
-		{
-			if (target == null)
-			{
-				this.setEntityAutoAttack((Player)source, false);
-			} else {
-				// get current target
-				if (entityTargets.get(source.getUniqueId()) != null)
-				{
-					if (source != null && target != null && !entityTargets.get(source.getUniqueId()).toString().equals(target.getUniqueId().toString()))
-					{
-						this.setEntityAutoAttack((Player)source, false);
-					}
-				}
-			}
-		}
-		
-		if (source instanceof Creature)
-		{
-			try {
-				SoliniaLivingEntityAdapter.Adapt(source).setAttackTarget(target);
-			} catch (CoreStateInitException e) {
-			}
-		}
-		
-		if (target == null)
-		{
-			// no need, is on the boss bar
-			//source.sendMessage(ChatColor.GRAY + "Cleared your target");
-			entityTargets.remove(source.getUniqueId());
-			
-	        if (source instanceof Player)
-			{
-				PartyWindowUtils.UpdateWindow((Player)source);
-			}
-		} else {
-			entityTargets.put(source.getUniqueId(), target.getUniqueId());
-			if (source instanceof Player)
-			{
-				PartyWindowUtils.UpdateWindow((Player)source);
-			}
-		}
-	}
-
-	@Override
-	public void clearTargetsAgainstMe(LivingEntity livingEntity) {
-		for (Player player : livingEntity.getWorld().getPlayers())
-		{
-			if (getEntityTarget(player) == null)
-				continue;
-			
-			if (getEntityTarget(player).getUniqueId().toString().equals(livingEntity.getUniqueId().toString()))
-				setEntityTarget(player,null);
-		}
-		
-		for(Entity entity : livingEntity.getNearbyEntities(50, 50, 50))
-		{
-			if (entity instanceof Creature)
-			{
-				if (((Creature) entity).getTarget() != null)
-				if (((Creature) entity).getTarget().getUniqueId().toString().equals(livingEntity.getUniqueId().toString()))
-				{
-					setEntityTarget((LivingEntity)entity,null);
-				}
-			}
-		}
-
 	}
 	
 	@Override

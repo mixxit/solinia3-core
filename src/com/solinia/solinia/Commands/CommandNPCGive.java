@@ -38,12 +38,12 @@ public class CommandNPCGive implements CommandExecutor {
 				return true;
 			}
 
-			if (solplayer.getInteraction() == null) {
+			if (solplayer.getEntityTarget() == null) {
 				player.sendMessage(ChatColor.GRAY + "* You are not currently interacting with an NPC");
 				return true;
 			}
 
-			Entity entity = Bukkit.getEntity(solplayer.getInteraction());
+			Entity entity = solplayer.getEntityTarget();
 
 			if (entity == null) {
 				player.sendMessage(ChatColor.GRAY

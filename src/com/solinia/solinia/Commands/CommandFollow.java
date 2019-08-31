@@ -30,8 +30,15 @@ public class CommandFollow implements CommandExecutor {
 				player.sendMessage("You are no long following someone");
 				return true;
 			} else {
-				LivingEntity targetmob = StateManager.getInstance().getEntityManager()
-						.getEntityTarget(player);
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solPlayer == null)
+				{
+					player.sendMessage("You cannot follow this player at this time");
+					return true;
+				}
+
+				
+				LivingEntity targetmob = solPlayer.getEntityTarget();
 				
 				if (targetmob == null)
 				{
@@ -48,13 +55,6 @@ public class CommandFollow implements CommandExecutor {
 				if (!(targetmob instanceof Player))
 				{
 					player.sendMessage("You can only follow players");
-					return true;
-				}
-				
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				if (solPlayer == null)
-				{
-					player.sendMessage("You cannot follow this player at this time");
 					return true;
 				}
 

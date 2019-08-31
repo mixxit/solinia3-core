@@ -39,17 +39,21 @@ public class CommandTarget implements CommandExecutor {
 		
 		try
 		{
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			if (solPlayer == null)
+				return true;
+
 			if (target.equals("clear"))
 			{
 				player.sendMessage("Clearing target");
-				StateManager.getInstance().getEntityManager().setEntityTarget(player,null);
+				solPlayer.setEntityTarget(null);
 				return true;
 			}
 			
 			if (target.equals("self"))
 			{
 				player.sendMessage("Selecting yourself");
-				StateManager.getInstance().getEntityManager().setEntityTarget(player,player);
+				solPlayer.setEntityTarget(player);
 				return true;
 			}
 			
@@ -57,7 +61,7 @@ public class CommandTarget implements CommandExecutor {
 			{
 				player.sendMessage("Selecting nearest npc");
 
-				LivingEntity currentTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
+				LivingEntity currentTarget = solPlayer.getEntityTarget();
 				
 				List<Entity> nearbyEntities = player.getNearbyEntities(25.0D, 25.0D, 25.0D);
 				Collections.sort(nearbyEntities, (e1, e2) -> ((Double)e1.getLocation().distance(player.getLocation())).compareTo(((Double)e2.getLocation().distance(player.getLocation()))));
@@ -76,7 +80,7 @@ public class CommandTarget implements CommandExecutor {
 					if (currentTarget != null && currentTarget.getUniqueId().equals(entity.getUniqueId()))
 						continue;
 					
-					StateManager.getInstance().getEntityManager().setEntityTarget(player,(LivingEntity)entity);
+					solPlayer.setEntityTarget((LivingEntity)entity);
 					return true;
 					
 				}
@@ -94,7 +98,7 @@ public class CommandTarget implements CommandExecutor {
 					return true;
 				}
 				
-				StateManager.getInstance().getEntityManager().setEntityTarget(player,pet);
+				solPlayer.setEntityTarget(pet);
 				return true;
 			}
 			
@@ -106,10 +110,6 @@ public class CommandTarget implements CommandExecutor {
 					)
 			{
 				player.sendMessage("Selecting group member no: " + target);
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				
-				if (solPlayer == null)
-					return true;
 				
 				if (solPlayer.getGroup() == null)
 				{
@@ -142,12 +142,12 @@ public class CommandTarget implements CommandExecutor {
 					return true;
 				}
 					
-				StateManager.getInstance().getEntityManager().setEntityTarget(player,le);
+				solPlayer.setEntityTarget(le);
 				return true;
 			}
 			
 			// IF WE GET THIS FAR TRY TO FIND BY ENTITY NAME
-			LivingEntity currentTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
+			LivingEntity currentTarget = solPlayer.getEntityTarget();
 			
 			List<Entity> nearbyEntities = player.getNearbyEntities(25.0D, 25.0D, 25.0D);
 			Collections.sort(nearbyEntities, (e1, e2) -> ((Double)e1.getLocation().distance(player.getLocation())).compareTo(((Double)e2.getLocation().distance(player.getLocation()))));
@@ -163,7 +163,7 @@ public class CommandTarget implements CommandExecutor {
 				if (currentTarget != null && currentTarget.getUniqueId().equals(entity.getUniqueId()))
 					continue;
 				
-				StateManager.getInstance().getEntityManager().setEntityTarget(player,(LivingEntity)entity);
+				solPlayer.setEntityTarget((LivingEntity)entity);
 				return true;
 				
 			}

@@ -125,8 +125,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void increasePlayerMana(int mana);
 
-	UUID getInteraction();
-
 	public void ooc(String message);
 
 	String getCurrentChannel();
@@ -164,8 +162,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean hasAAAbility(int abilityid);
 
 	void interact(PlayerInteractEvent event);
-
-	void setInteraction(UUID interaction, ISoliniaNPC npc);
 
 	public boolean canDodge();
 
@@ -477,8 +473,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void tryThrowItemInMainHand();
 
-	Entity getTarget();
-
 	public void tryCastFromSpellbook(ISoliniaItem solItem);
 
 	Location getLastLocation();
@@ -567,5 +561,11 @@ public interface ISoliniaPlayer extends Serializable {
 	public double getCastingProgress();
 
 	public PacketCastingPercent toPacketCastingPercent();
+
+	public LivingEntity getEntityTarget();
+
+	void setEntityTarget(LivingEntity target);
+
+	void clearTargetsAgainstMe();
 
 }

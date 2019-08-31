@@ -31,13 +31,12 @@ public class CommandBindWound implements CommandExecutor {
 				return true;
 			}
 			
-			LivingEntity targetmob = StateManager.getInstance().getEntityManager()
-					.getEntityTarget(player);
+			LivingEntity targetmob = solPlayer.getEntityTarget();
 			
 			if (targetmob == null)
 			{
 				player.sendMessage("Selecting yourself");
-				StateManager.getInstance().getEntityManager().setEntityTarget(player,player);
+				solPlayer.setEntityTarget(player);
 				targetmob = player;
 			}
 			

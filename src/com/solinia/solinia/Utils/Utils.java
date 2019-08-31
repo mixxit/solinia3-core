@@ -87,6 +87,7 @@ import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
+import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -6547,4 +6548,14 @@ public class Utils {
 		return Boolean.parseBoolean(isMerchant);
 	}
 
+	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode) {
+		switch (hint)
+		{
+		case NEED_TARGET:
+			entity.sendMessage("You must select a target (See SoliniaMOD Keybinds)");
+			break;
+		default:
+			break;
+		}
+	}
 }

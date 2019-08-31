@@ -26,16 +26,17 @@ public class CommandConsider implements CommandExecutor {
 		
 		try
 		{
-			if (StateManager.getInstance().getEntityManager().getEntityTarget((Player)sender) == null) {
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+			if (solPlayer.getEntityTarget() == null) {
 				sender.sendMessage("You have no target right now");
 				return true;
 			}
 			
-			Entity target = StateManager.getInstance().getEntityManager().getEntityTarget((Player)sender);
+			Entity target = solPlayer.getEntityTarget();
 			LivingEntity le = (LivingEntity) target;
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(le);
 
-			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+			
 			ISoliniaLivingEntity solPlayerEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sender);
 			ChatColor difficultyColor = solEntity.getLevelCon(solPlayerEntity);
 			

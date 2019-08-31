@@ -340,11 +340,18 @@ public class Solinia3CoreEntityListener implements Listener {
 		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
 		if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
 			try {
+				
 				Player damager = (Player) damagecause.getDamager();
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(damager);
+				if (solPlayer == null)
+				{
+					Utils.CancelEvent(event);
+					return;
+				}
+				
 				if (damager.isSneaking()) 
 				{
-					StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) damager,
-							(LivingEntity) event.getEntity());
+					solPlayer.setEntityTarget((LivingEntity) event.getEntity());
 					Utils.CancelEvent(event);
 					return;
 				}
@@ -357,13 +364,13 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
 			try {
 				Player damager = (Player) damagecause.getDamager();
+				ISoliniaLivingEntity solLivingEntityDamager = SoliniaLivingEntityAdapter.Adapt((LivingEntity)damagecause);
 				ItemStack itemstack = damager.getEquipment().getItemInMainHand();
-				if (itemstack != null) {
+				if (itemstack != null && solLivingEntityDamager != null) {
 					ISoliniaItem solItem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					if (damager.isSneaking() && solItem != null
 							&& (solItem.isSpellscroll() || solItem.isPetControlRod())) {
-						StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) damager,
-								(LivingEntity) event.getEntity());
+						solLivingEntityDamager.setEntityTarget((LivingEntity) event.getEntity());
 						Utils.CancelEvent(event);
 						return;
 					}
@@ -654,68 +661,6 @@ public class Solinia3CoreEntityListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-
-		if (Utils.isMezzed(event.getPlayer()))
-		{
-			Utils.CancelEvent(event);
-			return;
-		}
-
-		if (Utils.isStunned(event.getPlayer()))
-		{
-			Utils.CancelEvent(event);
-			return;
-		}
-
-		if (!(event.getRightClicked() instanceof LivingEntity)) {
-			return;
-		}
-
-		if (event.getRightClicked() instanceof Player) {
-			return;
-		}
-
-		if (event.getHand() != EquipmentSlot.HAND || event.getRightClicked() == null) {
-			return;
-		}
-
-		try {
-			// if its in combat dont respond
-			if (event.getRightClicked() instanceof Creature) {
-				Creature le = (Creature) event.getRightClicked();
-				if (le.getTarget() == null) {
-					ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter
-							.Adapt((LivingEntity) event.getRightClicked());
-
-					if (solentity.getNpcid() > 0) {
-						SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(
-								solentity.getBukkitLivingEntity().getUniqueId(),
-								StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()));
-						solentity.processInteractionEvent(event.getPlayer(), InteractionType.CHAT, "hail");
-					}
-				} else {
-					// too spammy, move ot action bar
-					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY
-							+ "* This npc will not respond to interactions while it is in combat (has a target)"));
-				}
-			} else {
-				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter
-						.Adapt((LivingEntity) event.getRightClicked());
-				if (solentity.getNpcid() > 0) {
-					SoliniaPlayerAdapter.Adapt(event.getPlayer()).setInteraction(
-							solentity.getBukkitLivingEntity().getUniqueId(),
-							StateManager.getInstance().getConfigurationManager().getNPC(solentity.getNpcid()));
-					solentity.processInteractionEvent(event.getPlayer(), InteractionType.CHAT, "hail");
-				}
-			}
-		} catch (CoreStateInitException e) {
-			e.printStackTrace();
-			return;
-		}
-	}
-
-	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		if ((event.getEntity() instanceof ArmorStand)) {
 			return;
@@ -725,7 +670,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 
 		try {
-			StateManager.getInstance().getEntityManager().clearTargetsAgainstMe((LivingEntity) event.getEntity());
+			StateManager.getInstance().getEntityManager().forceClearTargetsAgainstMe((LivingEntity) event.getEntity());
 		} catch (CoreStateInitException e) {
 
 		}

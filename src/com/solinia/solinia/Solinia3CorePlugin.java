@@ -11,6 +11,7 @@ import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
+import com.solinia.solinia.Listeners.Solinia3CoreChunkListener;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
 import com.solinia.solinia.Listeners.Solinia3CoreItemPickupListener;
 import com.solinia.solinia.Listeners.Solinia3CoreNPCUpdatedListener;
@@ -61,7 +62,6 @@ import com.solinia.solinia.Timers.NPCSummonAndTeleportCastTimer;
 import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PetFastCheckTimer;
 import com.solinia.solinia.Timers.PlayerEquipmentTickTimer;
-import com.solinia.solinia.Timers.PlayerInteractionTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerTickTimer;
 import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
@@ -86,7 +86,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private SpellTickTimer spellTickTimer;
 	private NPCSpellCastTimer npcSpellCastTimer;
 	private NPCSummonAndTeleportCastTimer npcSummonCastTimer;
-	private PlayerInteractionTimer playerInteractionTimer;
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
 	private NPCRandomChatTimer npcRandomChatTimer;
 	private NPCCheckForEnemiesTimer npcCheckForEnemiesTimer;
@@ -370,9 +369,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			spellTickTimer = new SpellTickTimer(this);
 			spellTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 
-			playerInteractionTimer = new PlayerInteractionTimer();
-			playerInteractionTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
-
 			// Only validate these things every 2 minutes
 			playerInventoryValidatorTimer = new PlayerInventoryValidatorTimer();
 			playerInventoryValidatorTimer.runTaskTimer(this, 120 * 20L, 120 * 20L);
@@ -433,7 +429,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVehicleListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreVoteListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
-		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
+		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
+		getServer().getPluginManager().registerEvents(new Solinia3CoreChunkListener(this), this);
 
 		this.getCommand("memorisespell").setExecutor(new CommandMemoriseSpell());
 		this.getCommand("openspellbook").setExecutor(new CommandOpenSpellbook());

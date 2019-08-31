@@ -593,19 +593,6 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-		if (event.getPlayer().isSneaking())
-		{
-			try {
-				StateManager.getInstance().getEntityManager().setEntityTarget(event.getPlayer(),
-						event.getPlayer());
-				Utils.CancelEvent(event);
-				return;
-			} catch (CoreStateInitException e)
-			{
-				
-			}
-		}
-		
 		if (event.isCancelled())
 			return;
 
@@ -1544,10 +1531,12 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (player.isSneaking())
 			{
 					LivingEntity targetmob = Utils.getTargettedLivingEntity(player, 50);
-					
-					StateManager.getInstance().getEntityManager().setEntityTarget(player,
-							targetmob);
-					return true;
+					ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
+					if (solLivingEntityPlayer != null)
+					{
+						solLivingEntityPlayer.setEntityTarget(targetmob);
+						return true;
+					}
 				
 			}
 		} catch (CoreStateInitException e)

@@ -358,4 +358,10 @@ public interface ISoliniaLivingEntity
 
 	public void sendHateList(LivingEntity recipient);
 
+	void clearTargetsAgainstMe();
+
+	void setEntityTarget(LivingEntity target);
+
+	LivingEntity getEntityTarget();
+
 }

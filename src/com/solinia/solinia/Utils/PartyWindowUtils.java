@@ -37,7 +37,7 @@ public class PartyWindowUtils {
 			}
 
 			// Has a target set (vital: -1)
-			LivingEntity entityTarget = StateManager.getInstance().getEntityManager().getEntityTarget(player);
+			LivingEntity entityTarget = solPlayer.getEntityTarget();
 			
 			if (entityTarget != null) {
 				ISoliniaLivingEntity soliniaLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(entityTarget);

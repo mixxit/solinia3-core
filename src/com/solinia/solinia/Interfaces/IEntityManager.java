@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Chunk;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -102,12 +103,6 @@ public interface IEntityManager {
 
 	void setEntityTargets(ConcurrentHashMap<UUID, UUID> entityTarget);
 
-	LivingEntity getEntityTarget(LivingEntity source);
-
-	void setEntityTarget(LivingEntity source, LivingEntity target);
-
-	void clearTargetsAgainstMe(LivingEntity entity);
-
 	boolean isFeignedDeath(UUID entityUuid);
 
 	void setFeignedDeath(UUID entityUuid, boolean feigned);
@@ -185,4 +180,12 @@ public interface IEntityManager {
 	ConcurrentHashMap<UUID, Timestamp> getLastMeleeAttack();
 
 	void setLastMeleeAttack(UUID uuid, Timestamp lasttimestamp);
+
+	void forceClearTargetsAgainstMe(LivingEntity me);
+
+	void forceSetEntityTarget(LivingEntity me, LivingEntity target);
+
+	LivingEntity forceGetEntityTarget(LivingEntity me);
+
+	void removeAllPetsInChunk(Chunk chunk);
 }

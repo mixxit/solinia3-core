@@ -90,7 +90,12 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 				return;
 			}
 			
-			LivingEntity target = StateManager.getInstance().getEntityManager().getEntityTarget((LivingEntity)entityForAutoAttack);
+			ISoliniaLivingEntity solLivingEntityForAttack = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entityForAutoAttack);
+			
+			if (solLivingEntityForAttack == null)
+				return;
+			
+			LivingEntity target = solLivingEntityForAttack.getEntityTarget();
 			if (target != null)
 			{
 				if (target instanceof Player)

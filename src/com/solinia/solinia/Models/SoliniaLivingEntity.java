@@ -50,6 +50,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
@@ -542,7 +543,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					feigned);
 			if (feigned == true) {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You feign your death");
-				StateManager.getInstance().getEntityManager().clearTargetsAgainstMe(getBukkitLivingEntity());
+				clearTargetsAgainstMe();
 
 			} else {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are no longer feigning death!");
@@ -7359,5 +7360,41 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				recipient.sendMessage("UUID: " + uuid + "(" + name + ") Value: " + hate);
 			}
 		}
+	}
+	
+	@Override
+	public void setEntityTarget(LivingEntity target)
+	{
+		try
+		{
+			StateManager.getInstance().getEntityManager().forceSetEntityTarget(this.getBukkitLivingEntity(), target);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	@Override
+	public void clearTargetsAgainstMe() {
+		try
+		{
+			StateManager.getInstance().getEntityManager().forceClearTargetsAgainstMe(this.getBukkitLivingEntity());
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+
+	}
+
+	@Override
+	public LivingEntity getEntityTarget() {
+		try
+		{
+			return StateManager.getInstance().getEntityManager().forceGetEntityTarget(this.getBukkitLivingEntity());
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return null;
 	}
 }

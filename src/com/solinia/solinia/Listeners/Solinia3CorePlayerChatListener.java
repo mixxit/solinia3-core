@@ -27,7 +27,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		String currentChannel = event.getPlayer().getCurrentChannel();
 		
 		// always redirect npc interactions to local
-		if (event.getPlayer().getInteraction() != null)
+		if (event.getPlayer().getEntityTarget() != null)
 		{
 			currentChannel = "LOCAL";
 		}
@@ -59,9 +59,9 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		}
 		
 		// NPC responses (if applicable)
-		if (event.getPlayer().getInteraction() != null)
+		if (event.getPlayer().getEntityTarget() != null)
 		{
-			Entity entity = Bukkit.getEntity(event.getPlayer().getInteraction());
+			Entity entity = event.getPlayer().getEntityTarget();
 			if (entity != null && entity instanceof LivingEntity)
 			{
 				LivingEntity livingEntity = (LivingEntity)entity;

@@ -147,9 +147,12 @@ public class SoliniaEntitySpells {
 					Creature creature = (Creature) this.getLivingEntity();
 					if (creature.getTarget() == null) {
 						try {
-							StateManager.getInstance().getEntityManager().setEntityTarget((LivingEntity) creature,
-									(LivingEntity) sourceEntity);
-							SoliniaLivingEntityAdapter.Adapt(creature).addToHateList(sourceEntity.getUniqueId(), 1);
+							ISoliniaLivingEntity solCreature = SoliniaLivingEntityAdapter.Adapt(((LivingEntity)creature));
+							if (solCreature != null)
+							{
+								solCreature.setEntityTarget((LivingEntity) sourceEntity);
+								solCreature.addToHateList(sourceEntity.getUniqueId(), 1);
+							}
 						} catch (CoreStateInitException e) {
 
 						}
