@@ -2,6 +2,7 @@ package com.solinia.solinia.Listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -21,6 +22,16 @@ public class Solinia3CoreChunkListener implements Listener {
 	public void onChunkUnloadEvent(ChunkUnloadEvent event) {
 		try {
 			StateManager.getInstance().getEntityManager().removeAllPetsInChunk(event.getChunk());
+		} catch (CoreStateInitException e) {
+
+		}
+		
+	}
+	
+	@EventHandler
+	public void onChunkUnloadEvent(ChunkLoadEvent event) {
+		try {
+			StateManager.getInstance().getEntityManager().removeAllAbandonedPetsInChunk(event.getChunk());
 		} catch (CoreStateInitException e) {
 
 		}

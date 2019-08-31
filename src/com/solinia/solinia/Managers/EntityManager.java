@@ -51,6 +51,7 @@ import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
+import com.solinia.solinia.Utils.MythicMobsUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -825,6 +826,24 @@ public class EntityManager implements IEntityManager {
 
 		return pets;
 	}
+	
+	@Override
+	public List<UUID> getAllWorldPetUUIDs() {
+		List<UUID> pets = new ArrayList<UUID>();
+
+		for (Map.Entry<UUID, UUID> entry : petownerdata.entrySet()) {
+			// UUID key = entry.getKey();
+			if (entry.getValue() == null)
+				continue;
+			
+			LivingEntity entity = (LivingEntity) Bukkit.getEntity(entry.getValue());
+			if (entity != null)
+				pets.add(entity.getUniqueId());
+		}
+
+		return pets;
+	}
+	
 	@Override
 	public LivingEntity SpawnPet(Player owner, ISoliniaSpell spell)
 	{
@@ -927,6 +946,40 @@ public class EntityManager implements IEntityManager {
 			this.petownerdata.remove(key);
 		}
 	}
+
+	@Override
+	public void removeAllAbandonedPetsInChunk(Chunk chunk) {
+		List<UUID> petsToRemove = new ArrayList<UUID>();
+		for (Entity entity : chunk.getEntities())
+		{
+			if (!(entity instanceof LivingEntity))
+				continue;
+			try
+			{
+				// tis a valid pet
+				if (StateManager.getInstance().getEntityManager().getAllWorldPetUUIDs().contains(entity.getUniqueId()))
+					continue;
+				
+				if (MythicMobsUtils.getActiveMob((LivingEntity)entity) == null)
+					continue;
+				
+				if (MythicMobsUtils.getActiveMob((LivingEntity)entity).getOwner() == null)
+					continue;
+				
+				System.out.println("Found a pet without an owner... removing");
+				petsToRemove.add(entity.getUniqueId());
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		
+		for(UUID uuid : petsToRemove)
+		{
+			Bukkit.getEntity(uuid).remove();
+		}
+	}
+
 	
 	@Override
 	public void removeAllPetsInChunk(Chunk chunk) {

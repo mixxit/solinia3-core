@@ -53,6 +53,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.MythicMobsUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
@@ -7244,10 +7245,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public ActiveMob getActiveMob() {
-		if (MythicMobs.inst().getAPIHelper() != null && this.getBukkitLivingEntity() != null)
-			return MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
-
-		return null;
+		return MythicMobsUtils.getActiveMob(this.getBukkitLivingEntity());
 	}
 
 	@Override

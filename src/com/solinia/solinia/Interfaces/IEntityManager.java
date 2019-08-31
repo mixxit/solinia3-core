@@ -188,4 +188,8 @@ public interface IEntityManager {
 	LivingEntity forceGetEntityTarget(LivingEntity me);
 
 	void removeAllPetsInChunk(Chunk chunk);
+
+	void removeAllAbandonedPetsInChunk(Chunk chunk);
+
+	List<UUID> getAllWorldPetUUIDs();
 }
