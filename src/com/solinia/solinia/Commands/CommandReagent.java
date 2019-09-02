@@ -42,38 +42,11 @@ public class CommandReagent implements CommandExecutor {
 				String command = args[0];
 				switch (command)
 				{
+					case "addcursor":
+						performReagentAdd(solPlayer, true);
+					return true;
 					case "add":
-						ItemStack itemstack = null;
-						itemstack = player.getInventory().getItemInMainHand();
-						if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
-			            {
-			            	player.sendMessage("The item in your main hand is not a reagent");
-			    			return true;
-			            }
-						if (!ItemStackUtils.IsSoliniaItem(itemstack))
-			            {
-			            	player.sendMessage("The item in your main hand is not a reagent");
-			    			return true;
-			            }
-			        	
-			            ISoliniaItem item = SoliniaItemAdapter.Adapt(itemstack);
-			            
-				        if (!item.isReagent())
-				        {
-				        	player.sendMessage("The item in your main hand is not a reagent");
-				        	return true;
-				        }
-				        
-				        if (solPlayer.getReagents().get(item.getId()) == null)
-				        {
-				        	solPlayer.getReagents().put(item.getId(), new SoliniaReagent(item.getId(), 0, StateManager.getInstance().getInstanceGuid()));
-				        }
-				        solPlayer.getReagents().get(item.getId()).addQty(itemstack.getAmount());
-				        
-				        player.sendMessage("Item added to your reagent pouch");
-		    	        player.getInventory().setItemInMainHand(null);
-		    	        player.updateInventory();
-				        
+						performReagentAdd(solPlayer, false);
 				        break;
 					default:
 						break;
@@ -86,12 +59,65 @@ public class CommandReagent implements CommandExecutor {
 		} catch (CoreStateInitException e)
 		{
 			
-		} catch (SoliniaItemException e) {
-			Player player = (Player)sender;
-			player.sendMessage("Unknown item");
 		}
 		
 		return true;
+	}
+
+	private void performReagentAdd(ISoliniaPlayer solplayer, boolean addByCursor) {
+		try
+		{
+			ItemStack itemstack = null;
+			itemstack = solplayer.getBukkitPlayer().getInventory().getItemInMainHand();
+			if (addByCursor)
+			{
+				itemstack = solplayer.getBukkitPlayer().getItemOnCursor();
+			}
+			
+			if (itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
+	        {
+				if (!addByCursor)
+				{
+					solplayer.getBukkitPlayer().sendMessage(ChatColor.GRAY
+						+ "The item you wish to add your reagents must be in your primary hand");
+				} else {
+					solplayer.getBukkitPlayer().sendMessage(ChatColor.GRAY
+							+ "The item you wish to add your reagents must be in your cursor");
+				}
+				return;
+	        }
+			if (!ItemStackUtils.IsSoliniaItem(itemstack))
+	        {
+				solplayer.getBukkitPlayer().sendMessage("The item is not a reagent");
+				return;
+	        }
+	    	
+	        ISoliniaItem item = SoliniaItemAdapter.Adapt(itemstack);
+	        
+	        if (!item.isReagent())
+	        {
+	        	solplayer.getBukkitPlayer().sendMessage("The item is not a reagent");
+	        	return;
+	        }
+	        
+	        if (solplayer.getReagents().get(item.getId()) == null)
+	        {
+	        	solplayer.getReagents().put(item.getId(), new SoliniaReagent(item.getId(), 0, StateManager.getInstance().getInstanceGuid()));
+	        }
+	        
+	        solplayer.getReagents().get(item.getId()).addQty(itemstack.getAmount());
+	        
+	        solplayer.getBukkitPlayer().sendMessage("Item added to your reagent pouch");
+	        if (!addByCursor)
+	        	solplayer.getBukkitPlayer().getInventory().setItemInMainHand(null);
+	    		else
+	    			solplayer.getBukkitPlayer().setItemOnCursor(null);
+	        solplayer.getBukkitPlayer().updateInventory();
+		} catch (CoreStateInitException | SoliniaItemException e)
+		{
+			
+		}
+        
 	}
 
 	private void sendReagentPouch(ISoliniaPlayer solPlayer) {
