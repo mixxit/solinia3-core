@@ -466,6 +466,10 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreChunkListener(this), this);
 
+		setupCommands();
+	}
+
+	private void setupCommands() {
 		this.getCommand("memorisespell").setExecutor(new CommandMemoriseSpell());
 		this.getCommand("openspellbook").setExecutor(new CommandOpenSpellbook());
 
@@ -616,6 +620,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("resetpersonality").setExecutor(new CommandResetPersonality());
 		this.getCommand("pray").setExecutor(new CommandPray());
 		this.getCommand("givehead").setExecutor(new CommandGiveHead(this));
+		this.getCommand("iamversion").setExecutor(new CommandIamVersion(this));
 	}
 
 	private void createConfigDir() {

@@ -55,6 +55,11 @@ commands:
     aliases:
     - name
     - nick
+  iamversion:
+    description: Sets version
+    usage: /iamversion <versionid>
+    aliases:
+    - castslot
   cast:
     description: Casts a spell from memory slot 1 to 0
     usage: /cast <memoryslot>

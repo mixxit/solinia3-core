@@ -42,4 +42,5 @@ public interface IPlayerManager {
 	public void toggleDebugger(UUID uniqueId, String classToDebug, String methodToDebug, String focusId);
 	ConcurrentHashMap<UUID, DebuggerSettings> getDebugger();
 	public void checkPlayerModVersions();
+	public void setPlayerVersion(UUID uniqueId, String string);
 }

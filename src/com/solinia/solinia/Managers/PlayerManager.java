@@ -27,6 +27,7 @@ import com.solinia.solinia.Utils.Utils;
 
 public class PlayerManager implements IPlayerManager {
 	private IRepository<ISoliniaPlayer> repository;
+	private ConcurrentHashMap<UUID, String> playerVersion = new ConcurrentHashMap<UUID, String>();
 	private ConcurrentHashMap<UUID, Integer> playerApplyAugmentation = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Integer> playerActiveBardSong = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> playerLastChangeChar = new ConcurrentHashMap<UUID, Timestamp>();
@@ -437,8 +438,19 @@ public class PlayerManager implements IPlayerManager {
 	
 	public String playerModVersion(Player player)
 	{
+		if (player == null)
+			return "";
+		
 		String version = "";
+		if (this.playerVersion.get(player.getUniqueId()) != null)
+			version = this.playerVersion.get(player.getUniqueId());
+		
 		return version;
+	}
+	
+	public void setPlayerVersion(UUID uuid, String version)
+	{
+		this.playerVersion.put(uuid, version);
 	}
 
 	@Override
