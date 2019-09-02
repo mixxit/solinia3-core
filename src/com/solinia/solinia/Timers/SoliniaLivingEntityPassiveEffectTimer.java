@@ -18,6 +18,16 @@ import com.solinia.solinia.Utils.Utils;
 public class SoliniaLivingEntityPassiveEffectTimer extends BukkitRunnable {
 	@Override
 	public void run() {
+		try
+		{
+			runPassiveEffectTimer();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public void runPassiveEffectTimer()
+	{
 		List<String> completedEntities = new ArrayList<String>();
 		
 		// Check each player and check entities near player

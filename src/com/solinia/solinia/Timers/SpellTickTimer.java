@@ -15,6 +15,12 @@ public class SpellTickTimer extends BukkitRunnable {
 	@Override
 	public void run() {
 
+		try
+		{
 		StateManager.getInstance().spellTick(plugin);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

@@ -11,8 +11,9 @@ public class CastingTimer extends BukkitRunnable {
 
 		try {
 			StateManager.getInstance().getEntityManager().processCastingTimer();
-		} catch (CoreStateInitException e) {
-			
+		} catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 }

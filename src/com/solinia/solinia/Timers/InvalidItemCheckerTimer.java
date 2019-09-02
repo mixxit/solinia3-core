@@ -15,7 +15,16 @@ import net.md_5.bungee.api.ChatColor;
 public class InvalidItemCheckerTimer  extends BukkitRunnable {
 	@Override
 	public void run() {
-		
+		try
+		{
+			runItemChecker();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void runItemChecker() {
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
 			List<ItemStack> itemStackBonuses = new ArrayList<ItemStack>() {/**

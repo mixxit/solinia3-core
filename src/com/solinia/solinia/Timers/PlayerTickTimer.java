@@ -23,9 +23,9 @@ public class PlayerTickTimer extends BukkitRunnable {
 				
 				PlayerTickEvent soliniaevent = new PlayerTickEvent(solPlayer);
 				Bukkit.getPluginManager().callEvent(soliniaevent);
-			} catch (CoreStateInitException e)
+			} catch (Exception e)
 			{
-				
+				e.printStackTrace();
 			}
 		}
 	}

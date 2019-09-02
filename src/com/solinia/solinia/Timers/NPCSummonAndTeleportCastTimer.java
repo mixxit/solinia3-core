@@ -19,7 +19,7 @@ public class NPCSummonAndTeleportCastTimer extends BukkitRunnable {
 			StateManager.getInstance().getEntityManager().doNPCSummon();
 			StateManager.getInstance().getEntityManager().doNPCTeleportAttack();
 			
-		} catch (CoreStateInitException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

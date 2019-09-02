@@ -11,7 +11,7 @@ public class NPCRandomChatTimer extends BukkitRunnable {
 
 		try {
 			StateManager.getInstance().getEntityManager().doNPCRandomChat();
-		} catch (CoreStateInitException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -18,9 +18,9 @@ public class ZoneTickTimer extends BukkitRunnable {
 				ZoneTickEvent soliniaevent = new ZoneTickEvent(zone);
 				Bukkit.getPluginManager().callEvent(soliniaevent);
 			}
-		} catch (CoreStateInitException e)
+		} catch (Exception e)
 		{
-			
+			e.printStackTrace();
 		}
 
 	}

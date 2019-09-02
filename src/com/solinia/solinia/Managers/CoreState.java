@@ -72,6 +72,12 @@ public class CoreState {
 	
 	private List<Integer> currentHotZones = new ArrayList<Integer>();
 	private double xpdaybonus = 0;
+	private String requiredModVersion;
+	
+	public String getRequiredModVersion()
+	{
+		return this.requiredModVersion;
+	}
 		
 	public List<SoliniaZone> getCurrentHotzones() {
 		List<SoliniaZone> zones = new ArrayList<SoliniaZone>();
@@ -974,5 +980,9 @@ public class CoreState {
 		xppercent += this.xpdaybonus ;
 		return xppercent;
 		
+	}
+
+	public void setRequiredModVersion(String expectedClientModVersion) {
+		this.requiredModVersion = expectedClientModVersion;
 	}
 }

@@ -1,9 +1,23 @@
 package com.solinia.solinia.Utils;
 
+import java.awt.List;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_14_R1.MinecraftKey;
@@ -35,5 +49,40 @@ public class ForgeUtils {
 			stream.close();
 		}
 	}
+	
+	public static String fetchExpectedForgeClientModVersion() throws JSONException, IOException
+	{
+		String urljson = readFromUrl("https://raw.githubusercontent.com/mixxit/solinia3-ui/gh-pages/versions.json");
+		return getVersionFromJsonString(urljson);
+	}
+	
+	public static String getVersionFromJsonString(String jsonText)
+	{
+		JSONObject json = new JSONObject(jsonText);
+		JSONObject promos = (JSONObject)json.get("promos");
+		ArrayList<String> list = new ArrayList<String>(promos.keySet());
+	    return promos.getString(list.get(0));
+	}
+	
+	private static String readAll(Reader rd) throws IOException {
+	    StringBuilder sb = new StringBuilder();
+	    int cp;
+	    while ((cp = rd.read()) != -1) {
+	      sb.append((char) cp);
+	    }
+	    return sb.toString();
+	  }
+
+	  public static String readFromUrl(String url) throws IOException, JSONException {
+	    InputStream is = new URL(url).openStream();
+	    try {
+	      BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+	      String string = readAll(rd);
+	      
+	      return string;
+	    } finally {
+	      is.close();
+	    }
+	  }
 
 }

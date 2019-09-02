@@ -29,7 +29,7 @@ public class PetCheckTickTimer extends BukkitRunnable {
 						}
 					}
 				}
-			} catch (CoreStateInitException e)
+			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}

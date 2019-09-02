@@ -10,7 +10,7 @@ public class StateCommitTimer extends BukkitRunnable {
 	public void run() {
 		try {
 			StateManager.getInstance().Commit();
-		} catch (CoreStateInitException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

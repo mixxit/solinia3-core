@@ -26,9 +26,14 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 
 	@Override
 	public void run() {
-
-		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-			validatePlayerItems(player);
+		try
+		{
+			for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+				validatePlayerItems(player);
+			}
+		} catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 

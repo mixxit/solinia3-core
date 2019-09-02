@@ -11,7 +11,7 @@ public class NPCCheckForEnemiesTimer extends BukkitRunnable {
 
 		try {
 			StateManager.getInstance().getEntityManager().doNPCCheckForEnemies();
-		} catch (CoreStateInitException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

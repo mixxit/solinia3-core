@@ -11,8 +11,8 @@ public class AttendenceXpBonusTimer extends BukkitRunnable {
 
 		try {
 			StateManager.getInstance().getPlayerManager().grantPlayerAttendenceBonus();
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}

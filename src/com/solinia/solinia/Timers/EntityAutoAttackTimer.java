@@ -23,7 +23,17 @@ import net.md_5.bungee.api.ChatColor;
 public class EntityAutoAttackTimer extends BukkitRunnable {
 	@Override
 	public void run() {
-		List<String> completedEntities = new ArrayList<String>();
+		try
+		{
+			runEntitiesAutoAttack();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void runEntitiesAutoAttack() {
+List<String> completedEntities = new ArrayList<String>();
 		
 		// Check each player and check entities near player
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
@@ -67,7 +77,7 @@ public class EntityAutoAttackTimer extends BukkitRunnable {
 			{
 				e.printStackTrace();
 			}
-		}
+		}		
 	}
 
 	private void processLivingEntityAutoAttack(LivingEntity entityForAutoAttack) {

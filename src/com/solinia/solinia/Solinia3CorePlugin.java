@@ -1,11 +1,14 @@
 package com.solinia.solinia;
 
+import java.io.IOException;
 import java.util.Locale;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.json.JSONException;
 
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -68,6 +71,7 @@ import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 import com.solinia.solinia.Timers.ZoneTickTimer;
+import com.solinia.solinia.Utils.ForgeUtils;
 
 import de.slikey.effectlib.EffectManager;
 import net.milkbowl.vault.economy.Economy;
@@ -112,6 +116,26 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	@Override
 	public void onEnable() {
 		System.out.println("[Solinia3Core] Plugin Enabled");
+		String expectedClientModVersion = null;
+		try {
+			expectedClientModVersion = ForgeUtils.fetchExpectedForgeClientModVersion();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (expectedClientModVersion == null || expectedClientModVersion.equals(""))
+		{
+			System.out.println("Solinia3-Core Error loading plugin!!! Could not find expected mod version! Disabling plugin...");
+			Bukkit.getPluginManager().disablePlugin(this); 
+			return;
+		}
+		
+		System.out.println("Requiring ClientModVersion: " + expectedClientModVersion);
+		
 		createConfigDir();
 		
 		config.addDefault("discordbottoken", "");
@@ -154,6 +178,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setDiscordClient(this.discordClient);
+		StateManager.getInstance().setRequiredModVersion(expectedClientModVersion);
 		
 		RegisterEntities();
 		
