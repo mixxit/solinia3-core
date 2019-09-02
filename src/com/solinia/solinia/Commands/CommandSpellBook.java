@@ -18,7 +18,11 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.PacketOpenSpellbook;
+import com.solinia.solinia.Models.Solinia3UIChannelNames;
+import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -35,7 +39,15 @@ public class CommandSpellBook implements CommandExecutor {
 		
 		try {
 			if (args.length < 1) {
-				sender.sendMessage(ChatColor.GRAY + "Insufficient arguments (list,search,remove,add)");
+				try {
+			    	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+			    	PacketOpenSpellbook spellbookPacket = new PacketOpenSpellbook();
+			    	spellbookPacket.fromData(solPlayer.getSpellbookPage(0));
+					ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.SPELLBOOKPAGE,spellbookPacket.toPacketData());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 				return true;
 			}
 
@@ -62,9 +74,11 @@ public class CommandSpellBook implements CommandExecutor {
 				performSpellBookRemove(solplayer, Integer.parseInt(args[1]));
 				return true;
 			case "add":
-				performSpellBookAdd(solplayer);
+				performSpellBookAdd(solplayer, false);
 				return true;
-
+			case "addcursor":
+				performSpellBookAdd(solplayer, true);
+				return true;
 			default:
 				sender.sendMessage(ChatColor.GRAY + "Invalid arguments (list,search,remove,add)");
 				return true;
@@ -76,11 +90,23 @@ public class CommandSpellBook implements CommandExecutor {
 		return true;
 	}
 
-	private void performSpellBookAdd(ISoliniaPlayer solPlayer) {
+	private void performSpellBookAdd(ISoliniaPlayer solPlayer, boolean addByCursor) {
 		ItemStack primaryItem = solPlayer.getBukkitPlayer().getInventory().getItemInMainHand();
+		if (addByCursor)
+		{
+			primaryItem = solPlayer.getBukkitPlayer().getItemOnCursor();
+		}
+		
 		if (primaryItem.getType() == null || primaryItem.getType().equals(Material.AIR)) {
+			
+			if (!addByCursor)
+			{
 			solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY
-					+ "Empty item in primary hand. You must hold the spell you want to place in your spellbook in your main hand");
+					+ "The item you wish to add your spellbook must be in your primary hand");
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY
+						+ "The item you wish to add your spellbook must be in your cursor");
+			}
 			return;
 		}
 		
@@ -144,7 +170,10 @@ public class CommandSpellBook implements CommandExecutor {
 		}
 		
 		solPlayer.getSpellBookItems().add(item.getId());
+		if (!addByCursor)
 		solPlayer.getBukkitPlayer().getInventory().setItemInMainHand(null);
+		else
+		solPlayer.getBukkitPlayer().setItemOnCursor(null);
 		solPlayer.getBukkitPlayer().updateInventory();
 		solPlayer.getBukkitPlayer().sendMessage("Spell added to your spell book!");
 	}
