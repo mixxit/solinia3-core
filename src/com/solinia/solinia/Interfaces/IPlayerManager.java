@@ -41,4 +41,5 @@ public interface IPlayerManager {
 	public List<ISoliniaPlayer> getTopVotingPlayers();
 	public void toggleDebugger(UUID uniqueId, String classToDebug, String methodToDebug, String focusId);
 	ConcurrentHashMap<UUID, DebuggerSettings> getDebugger();
+	public void checkPlayerModVersions();
 }

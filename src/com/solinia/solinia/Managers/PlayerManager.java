@@ -434,4 +434,24 @@ public class PlayerManager implements IPlayerManager {
 		
 		this.playerDebugger.get(uniqueId).toggleDebug(classToDebug,methodToDebug,focusId);
 	}
+	
+	public String playerModVersion(Player player)
+	{
+		String version = "";
+		return version;
+	}
+
+	@Override
+	public void checkPlayerModVersions() {
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			try
+			{
+			if (!playerModVersion(player).equals(StateManager.getInstance().getRequiredModVersion()))
+				player.kickPlayer("Missing Mod Version " + StateManager.getInstance().getRequiredModVersion() + " - See http://www.fallofanempire.com/mod.html");
+			} catch (Exception e) {
+				
+			}
+		}
+	}
 }

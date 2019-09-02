@@ -55,6 +55,7 @@ import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
 import com.solinia.solinia.Timers.CastingTimer;
+import com.solinia.solinia.Timers.ClientVersionTimer;
 import com.solinia.solinia.Timers.DiscordMessageTimer;
 import com.solinia.solinia.Timers.EntityAutoAttackTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
@@ -102,6 +103,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
+	private ClientVersionTimer clientVersionTimer;
 	
 	private Economy economy;
 	private IDiscordClient discordClient;
@@ -378,70 +380,77 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			}
 
 			StateManager.getInstance().Initialise(playerManager, entityManager, configurationManager, channelManager, effectManager);
-
-			commitTimer = new StateCommitTimer();
-			commitTimer.runTaskTimer(this, 300 * 20L, 300 * 20L);
-
-			playerTickTimer = new PlayerTickTimer();
-			playerTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
-			
-			playerEquipmentTickTimer = new PlayerEquipmentTickTimer();
-			playerEquipmentTickTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
-
-			zoneTickTimer = new ZoneTickTimer();
-			zoneTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
-			
-			spellTickTimer = new SpellTickTimer(this);
-			spellTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
-
-			// Only validate these things every 2 minutes
-			playerInventoryValidatorTimer = new PlayerInventoryValidatorTimer();
-			playerInventoryValidatorTimer.runTaskTimer(this, 120 * 20L, 120 * 20L);
-
-			npcRandomChatTimer = new NPCRandomChatTimer();
-			npcRandomChatTimer.runTaskTimer(this, 6 * 20L, 60 * 20L);
-
-			npcCheckForEnemiesTimer = new NPCCheckForEnemiesTimer();
-			npcCheckForEnemiesTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
-			
-			npcSpellCastTimer = new NPCSpellCastTimer(this);
-			npcSpellCastTimer.runTaskTimer(this, 3 * 20L, 3 * 20L);
-
-			npcSummonCastTimer = new NPCSummonAndTeleportCastTimer(this);
-			npcSummonCastTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
-			
-			petCheckTickTimer = new PetCheckTickTimer();
-			petCheckTickTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
-
-			petFastCheckTickTimer = new PetFastCheckTimer();
-			petFastCheckTickTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
-			
-			attendenceXpBonusTimer = new AttendenceXpBonusTimer();
-			attendenceXpBonusTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
-
-			invalidItemCheckerTimer = new InvalidItemCheckerTimer();
-			invalidItemCheckerTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
-			
-			castingTimer = new CastingTimer();
-			// every 200 milliseconds
-			castingTimer.runTaskTimer(this, 0L, 2 * 2L);
-			
-			entityAutoAttackTimer = new EntityAutoAttackTimer();
-			entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
-
-			entityPassiveEffectTimer = new SoliniaLivingEntityPassiveEffectTimer();
-			entityPassiveEffectTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
-			
-			if (this.discordClient != null)
-			{
-				discordMessageTimer = new DiscordMessageTimer();
-				discordMessageTimer.runTaskTimer(this, 40L, 40L);
-			}
+			loadTimers();
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private void loadTimers() {
+		commitTimer = new StateCommitTimer();
+		commitTimer.runTaskTimer(this, 300 * 20L, 300 * 20L);
+
+		playerTickTimer = new PlayerTickTimer();
+		playerTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+		
+		playerEquipmentTickTimer = new PlayerEquipmentTickTimer();
+		playerEquipmentTickTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
+
+		zoneTickTimer = new ZoneTickTimer();
+		zoneTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+		
+		spellTickTimer = new SpellTickTimer(this);
+		spellTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+
+		// Only validate these things every 2 minutes
+		playerInventoryValidatorTimer = new PlayerInventoryValidatorTimer();
+		playerInventoryValidatorTimer.runTaskTimer(this, 120 * 20L, 120 * 20L);
+
+		npcRandomChatTimer = new NPCRandomChatTimer();
+		npcRandomChatTimer.runTaskTimer(this, 6 * 20L, 60 * 20L);
+
+		npcCheckForEnemiesTimer = new NPCCheckForEnemiesTimer();
+		npcCheckForEnemiesTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
+		
+		npcSpellCastTimer = new NPCSpellCastTimer(this);
+		npcSpellCastTimer.runTaskTimer(this, 3 * 20L, 3 * 20L);
+
+		npcSummonCastTimer = new NPCSummonAndTeleportCastTimer(this);
+		npcSummonCastTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+		
+		petCheckTickTimer = new PetCheckTickTimer();
+		petCheckTickTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
+
+		petFastCheckTickTimer = new PetFastCheckTimer();
+		petFastCheckTickTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
+		
+		attendenceXpBonusTimer = new AttendenceXpBonusTimer();
+		attendenceXpBonusTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
+
+		invalidItemCheckerTimer = new InvalidItemCheckerTimer();
+		invalidItemCheckerTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
+		
+		castingTimer = new CastingTimer();
+		// every 200 milliseconds
+		castingTimer.runTaskTimer(this, 0L, 2 * 2L);
+		
+		entityAutoAttackTimer = new EntityAutoAttackTimer();
+		entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
+
+		entityPassiveEffectTimer = new SoliniaLivingEntityPassiveEffectTimer();
+		entityPassiveEffectTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+		
+		if (this.discordClient != null)
+		{
+			discordMessageTimer = new DiscordMessageTimer();
+			discordMessageTimer.runTaskTimer(this, 40L, 40L);
+		}
+		
+		clientVersionTimer = new ClientVersionTimer();
+		// every two minutes
+		clientVersionTimer.runTaskTimer(this, 120 * 20L, 120 * 20L);
 	}
 
 	private void registerEvents() {
