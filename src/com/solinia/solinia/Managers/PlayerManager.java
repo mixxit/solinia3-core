@@ -460,7 +460,7 @@ public class PlayerManager implements IPlayerManager {
 			try
 			{
 			if (!playerModVersion(player).equals(StateManager.getInstance().getRequiredModVersion()))
-				player.kickPlayer("Missing Mod Version " + StateManager.getInstance().getRequiredModVersion() + " - See http://www.fallofanempire.com/mod.html");
+				player.kickPlayer("Missing Mod Version " + StateManager.getInstance().getRequiredModVersion() + " - See http://www.fallofanempire.com/mod.html [You have : " + playerModVersion(player) + "]");
 			} catch (Exception e) {
 				
 			}
