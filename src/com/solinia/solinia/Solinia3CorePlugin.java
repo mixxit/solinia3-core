@@ -621,6 +621,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("pray").setExecutor(new CommandPray());
 		this.getCommand("givehead").setExecutor(new CommandGiveHead(this));
 		this.getCommand("iamversion").setExecutor(new CommandIamVersion(this));
+		this.getCommand("sit").setExecutor(new CommandSit());
 	}
 
 	private void createConfigDir() {
