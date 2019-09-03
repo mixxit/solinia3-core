@@ -944,7 +944,7 @@ public class EntityManager implements IEntityManager {
 				System.out.println("Cleaning Up pet: " + livingEntityPet.getName());
 				livingEntityPet.remove();
 			}
-			this.petownerdata.remove(key);
+			this.removePet(key, true);
 		}
 	}
 
@@ -970,6 +970,10 @@ public class EntityManager implements IEntityManager {
 				if (!MythicMobsUtils.getActiveMob((LivingEntity)entity).getOwner().isPresent())
 					continue;
 				
+				// Owner entity still online
+				if (Bukkit.getEntity(MythicMobsUtils.getActiveMob((LivingEntity)entity).getOwner().get()) != null)
+					continue;
+				
 				petsToRemove.add(entity.getUniqueId());
 			} catch (CoreStateInitException e)
 			{
@@ -980,6 +984,9 @@ public class EntityManager implements IEntityManager {
 		// Do a pass for entities that have pet in their name
 		for (Entity entity : chunk.getEntities())
 		{
+			if (petsToRemove.contains(entity.getUniqueId()))
+				continue;
+			
 			if (!(entity instanceof LivingEntity))
 				continue;
 
@@ -1017,10 +1024,9 @@ public class EntityManager implements IEntityManager {
 			LivingEntity livingEntityPet = (LivingEntity)Bukkit.getEntity(entry.getValue());
 			if (livingEntityPet != null && livingEntityPet.getLocation().getChunk().equals(chunk))
 			{
-				System.out.println("Cleaning Up pet on chunk unload: " + livingEntityPet.getName());
-				livingEntityPet.remove();
+				System.out.println("Cleaning Up pet on chunk unload: " + livingEntityPet.getName() + " in chunk: " + livingEntityPet.getLocation().getChunk().getX() + " "+ livingEntityPet.getLocation().getChunk().getZ() + " vs " + chunk.getX() + " " + chunk.getZ());
+				this.removePet(key, true);
 			}
-			this.petownerdata.remove(key);
 		}
 	}
 

@@ -433,8 +433,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		invalidItemCheckerTimer.runTaskTimer(this, 60 * 20L, 60 * 20L);
 		
 		castingTimer = new CastingTimer();
-		// every 200 milliseconds
-		castingTimer.runTaskTimer(this, 0L, 2 * 2L);
+		// every 100 milliseconds
+		castingTimer.runTaskTimer(this, 0L, 1 * 2L);
 		
 		entityAutoAttackTimer = new EntityAutoAttackTimer();
 		entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
