@@ -364,7 +364,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
 			try {
 				Player damager = (Player) damagecause.getDamager();
-				ISoliniaLivingEntity solLivingEntityDamager = SoliniaLivingEntityAdapter.Adapt((LivingEntity)damagecause);
+				ISoliniaLivingEntity solLivingEntityDamager = SoliniaLivingEntityAdapter.Adapt((LivingEntity)damagecause.getDamager());
 				ItemStack itemstack = damager.getEquipment().getItemInMainHand();
 				if (itemstack != null && solLivingEntityDamager != null) {
 					ISoliniaItem solItem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
