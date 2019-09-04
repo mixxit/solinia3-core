@@ -4244,4 +4244,73 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 		}
 	}
+
+	@Override
+	public EquipSlots getEquipSlots() {
+		EquipSlots equipSlots = new EquipSlots();
+		
+		try
+		{
+			if (getArmsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(getArmsItem());
+				if (item != null)
+					equipSlots.ArmsItemBase64 = Base64.encodeBase64String(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+			}
+			
+			if (getEarsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(getEarsItem());
+				if (item != null)
+					equipSlots.EarsItemBase64 = Base64.encodeBase64String(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+			}
+			
+			if (getFingersItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(getFingersItem());
+				if (item != null)
+					equipSlots.FingersItemBase64 = Base64.encodeBase64String(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+			}
+
+			if (getForearmsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(getForearmsItem());
+				if (item != null)
+					equipSlots.ForearmsItemBase64 = Base64.encodeBase64String(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+			}
+			
+			if (getHandsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(getHandsItem());
+				if (item != null)
+					equipSlots.HandsItemBase64 = Base64.encodeBase64String(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+			}
+			
+			if (getNeckItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(getNeckItem());
+				if (item != null)
+					equipSlots.NeckItemBase64 = Base64.encodeBase64String(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+			}
+			
+			if (getShouldersItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(getShouldersItem());
+				if (item != null)
+					equipSlots.ShouldersItemBase64 = Base64.encodeBase64String(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+			}
+			
+			if (getWaistItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(getWaistItem());
+				if (item != null)
+					equipSlots.WaistItemBase64 = Base64.encodeBase64String(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return equipSlots;
+	}
 }

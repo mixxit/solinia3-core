@@ -15,8 +15,14 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.EquipSlots;
 import com.solinia.solinia.Models.EquipmentSlot;
+import com.solinia.solinia.Models.PacketEquipSlots;
+import com.solinia.solinia.Models.PacketOpenSpellbook;
+import com.solinia.solinia.Models.Solinia3UIChannelNames;
+import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -655,6 +661,10 @@ public class CommandEquip implements CommandExecutor {
 
 	private void showCurrentEquippedItems(ISoliniaPlayer solPlayer) {
 		try {
+	    	PacketEquipSlots packet = new PacketEquipSlots();
+	    	packet.fromData(solPlayer.getEquipSlots());
+			ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.EQUIPSLOTS,packet.toPacketData());
+			
 			if (solPlayer.getNeckItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(solPlayer.getNeckItem());
@@ -759,6 +769,9 @@ public class CommandEquip implements CommandExecutor {
 			}
 		} catch (CoreStateInitException e) {
 
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
