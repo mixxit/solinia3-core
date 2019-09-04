@@ -45,7 +45,7 @@ public class CommandEquip implements CommandExecutor {
 				sender.sendMessage("Insufficient arugments  - /equip equip , /equip unequip, /equip unequip neck");
 				return true;
 			}
-
+			
 			if (
 					args[0].toUpperCase().equals("EQUIP") || 
 					args[0].toUpperCase().equals("EARS") || 
@@ -62,9 +62,9 @@ public class CommandEquip implements CommandExecutor {
 					if (primaryItem.getType() == null || primaryItem.getType().equals(Material.AIR)) {
 						player.sendMessage(ChatColor.GRAY
 								+ "Empty item in primary hand. You must hold the item you want to equip in your main hand");
-						return false;
+						return true;
 					}
-
+					
 					if (!ItemStackUtils.IsSoliniaItem(primaryItem)) {
 						player.sendMessage("You can only equip solinia items this way");
 						return true;
@@ -108,6 +108,7 @@ public class CommandEquip implements CommandExecutor {
 						player.sendMessage(ChatColor.GRAY + "Your are not sufficient level to wear this equipment");
 						return true;
 					}
+
 
 					if (item.getEquipmentSlot().equals(EquipmentSlot.Fingers))
 						if (solPlayer.getFingersItem() > 0) {
@@ -220,8 +221,10 @@ public class CommandEquip implements CommandExecutor {
 							solPlayer.updateMaxHp();
 							return true;
 						}
-
-					return false;
+					
+					
+					player.sendMessage("You cannot equip this item for equipmentSlot: " + item.getEquipmentSlot());
+					return true;
 
 				} catch (SoliniaItemException e) {
 					player.sendMessage("You cannot equip this item");
