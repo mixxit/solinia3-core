@@ -664,9 +664,7 @@ public class CommandEquip implements CommandExecutor {
 
 	private void showCurrentEquippedItems(ISoliniaPlayer solPlayer) {
 		try {
-	    	PacketEquipSlots packet = new PacketEquipSlots();
-	    	packet.fromData(solPlayer.getEquipSlots());
-			ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.EQUIPSLOTS,packet.toPacketData());
+			solPlayer.sendSlotsAsPacket();
 			
 			if (solPlayer.getNeckItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()

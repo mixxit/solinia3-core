@@ -1463,6 +1463,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		    	
 			}
 			
+			solplayer.sendSlotsAsPacket();
             solplayer.sendMemorisedSpellSlots();
 
 		} catch (CoreStateInitException e) {

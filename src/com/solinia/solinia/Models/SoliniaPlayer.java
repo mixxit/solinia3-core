@@ -2741,6 +2741,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setFingersItem(int fingersItem) {
 		this.fingersItem = fingersItem;
+		sendSlotsAsPacket();
 	}
 
 	@Override
@@ -2751,6 +2752,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setShouldersItem(int shouldersItem) {
 		this.shouldersItem = shouldersItem;
+		sendSlotsAsPacket();
 	}
 
 	@Override
@@ -2761,6 +2763,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setEarsItem(int earsItem) {
 		this.earsItem = earsItem;
+		sendSlotsAsPacket();
 	}
 
 	@Override
@@ -2771,6 +2774,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setNeckItem(int neckItem) {
 		this.neckItem = neckItem;
+		sendSlotsAsPacket();
 	}
 
 	@Override
@@ -2784,6 +2788,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return StateManager.getInstance().getEntityManager().isFeignedDeath(getBukkitPlayer().getUniqueId());
 		} catch (CoreStateInitException e) {
 			return false;
+		}
+	}
+	
+	@Override
+	public void sendSlotsAsPacket()
+	{
+		try
+		{
+	    	PacketEquipSlots packet = new PacketEquipSlots();
+	    	packet.fromData(getEquipSlots());
+			ForgeUtils.sendForgeMessage(((Player)getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.EQUIPSLOTS,packet.toPacketData());
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -3411,6 +3432,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setForearmsItem(int forearmsItem) {
 		this.forearmsItem = forearmsItem;
+		sendSlotsAsPacket();
 	}
 
 	@Override
@@ -3421,6 +3443,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setArmsItem(int armsItem) {
 		this.armsItem = armsItem;
+		sendSlotsAsPacket();
 	}
 
 	@Override
@@ -3431,6 +3454,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setHandsItem(int handsItem) {
 		this.handsItem = handsItem;
+		sendSlotsAsPacket();
 	}
 
 	@Override
@@ -3441,6 +3465,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setWaistItem(int waistItem) {
 		this.waistItem = waistItem;
+		sendSlotsAsPacket();
 	}
 
 	@Override

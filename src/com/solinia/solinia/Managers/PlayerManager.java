@@ -302,6 +302,7 @@ public class PlayerManager implements IPlayerManager {
             player.getInventory().setArmorContents(null);
             player.updateInventory();
             
+            solPlayer.sendSlotsAsPacket();
             solPlayer.sendMemorisedSpellSlots();
 
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
@@ -357,6 +358,7 @@ public class PlayerManager implements IPlayerManager {
 			player.getInventory().setArmorContents(altSolPlayer.getStoredArmorContents());
             player.updateInventory();
 			
+            altSolPlayer.sendSlotsAsPacket();
             altSolPlayer.sendMemorisedSpellSlots();
             
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);

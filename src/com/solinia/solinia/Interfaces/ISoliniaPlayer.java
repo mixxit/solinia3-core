@@ -571,4 +571,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public EquipSlots getEquipSlots();
 
+	void sendSlotsAsPacket();
+
 }
