@@ -34,6 +34,9 @@ public class CommandEditNpcEvent implements CommandExecutor {
 			return false;
 		}
 
+		sender.sendMessage("NPC Events:");
+		sender.sendMessage("-------------------------");
+
 		int npcid = Integer.parseInt(args[0]);
 		
 		if (args.length == 1)

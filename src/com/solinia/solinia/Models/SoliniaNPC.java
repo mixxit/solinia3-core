@@ -36,6 +36,8 @@ import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class SoliniaNPC implements ISoliniaNPC {
 	private int id;
@@ -856,10 +858,41 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 			switch (words[0].toUpperCase()) {
 			case "HAIL":
-				if (triggerentity instanceof Player)
-				{
-					if (getMerchantid() > 0) {
-						solentity.sayto((Player) triggerentity,"i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA + "] available if you are interested in buying or selling something",true);
+				if (triggerentity instanceof Player) {
+					try {
+						if (getMerchantid() > 0) {
+							solentity.sayto((Player) triggerentity,
+									"i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA
+											+ "] available if you are interested in buying or selling something",
+									true);
+						}
+
+						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) triggerentity);
+						for (ISoliniaNPCEventHandler eventHandler : getEventHandlers()) {
+							if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
+								continue;
+
+							// See if player has any items that are wanted
+							int itemId = Integer.parseInt(eventHandler.getTriggerdata());
+							if (itemId == 0)
+								continue;
+
+							if (Utils.getPlayerTotalCountOfItemId(solPlayer.getBukkitPlayer(), itemId) < 1)
+								continue;
+
+							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+
+							TextComponent tc = new TextComponent(
+									TextComponent.fromLegacyText(ChatColor.YELLOW + "[QUEST] "));
+							TextComponent tc2 = new TextComponent(TextComponent.fromLegacyText(ChatColor.YELLOW
+									+ "- Click here to give " + item.getDisplayname() + ChatColor.RESET));
+							tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/npcgive " + itemId));
+							tc.addExtra(tc2);
+							solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+
+						}
+					} catch (CoreStateInitException e) {
+
 					}
 				}
 				break;

@@ -39,7 +39,7 @@ public class CommandNPCGive implements CommandExecutor {
 			}
 
 			if (solplayer.getEntityTarget() == null) {
-				player.sendMessage(ChatColor.GRAY + "* You are not currently interacting with an NPC");
+				player.sendMessage(ChatColor.GRAY + "* You are not currently targetting an NPC");
 				return true;
 			}
 
@@ -59,7 +59,7 @@ public class CommandNPCGive implements CommandExecutor {
 
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
 			if (solentity.getNpcid() < 1) {
-				player.sendMessage(ChatColor.GRAY + "* You are not currently interacting with an NPC");
+				player.sendMessage(ChatColor.GRAY + "* You are not currently targetting an NPC");
 				return true;
 			}
 
