@@ -58,10 +58,10 @@ public class CommandEquip implements CommandExecutor {
 					args[0].toUpperCase().equals("WAIST")
 					) {
 				try {
-					ItemStack primaryItem = player.getInventory().getItemInMainHand();
+					ItemStack primaryItem = player.getItemOnCursor();
 					if (primaryItem.getType() == null || primaryItem.getType().equals(Material.AIR)) {
 						player.sendMessage(ChatColor.GRAY
-								+ "Empty item in primary hand. You must hold the item you want to equip in your main hand");
+								+ "Empty item in cursor. You must hold the item you want to equip in your cursor");
 						return true;
 					}
 					
@@ -117,7 +117,7 @@ public class CommandEquip implements CommandExecutor {
 						} else {
 							solPlayer.setFingersItem(item.getId());
 							solPlayer.setFingersItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.getInventory().setItemInMainHand(null);
+							player.setItemOnCursor(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
 							solPlayer.updateMaxHp();
@@ -131,7 +131,7 @@ public class CommandEquip implements CommandExecutor {
 						} else {
 							solPlayer.setWaistItem(item.getId());
 							solPlayer.setWaistItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.getInventory().setItemInMainHand(null);
+							player.setItemOnCursor(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
 							solPlayer.updateMaxHp();
@@ -159,7 +159,7 @@ public class CommandEquip implements CommandExecutor {
 						} else {
 							solPlayer.setEarsItem(item.getId());
 							solPlayer.setEarsItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.getInventory().setItemInMainHand(null);
+							player.setItemOnCursor(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
 							solPlayer.updateMaxHp();
@@ -173,7 +173,7 @@ public class CommandEquip implements CommandExecutor {
 						} else {
 							solPlayer.setNeckItem(item.getId());
 							solPlayer.setNeckItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.getInventory().setItemInMainHand(null);
+							player.setItemOnCursor(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
 							solPlayer.updateMaxHp();
@@ -187,7 +187,7 @@ public class CommandEquip implements CommandExecutor {
 						} else {
 							solPlayer.setForearmsItem(item.getId());
 							solPlayer.setForearmsItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.getInventory().setItemInMainHand(null);
+							player.setItemOnCursor(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
 							solPlayer.updateMaxHp();
@@ -201,7 +201,7 @@ public class CommandEquip implements CommandExecutor {
 						} else {
 							solPlayer.setArmsItem(item.getId());
 							solPlayer.setArmsItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.getInventory().setItemInMainHand(null);
+							player.setItemOnCursor(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
 							solPlayer.updateMaxHp();
@@ -215,7 +215,7 @@ public class CommandEquip implements CommandExecutor {
 						} else {
 							solPlayer.setHandsItem(item.getId());
 							solPlayer.setHandsItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.getInventory().setItemInMainHand(null);
+							player.setItemOnCursor(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
 							solPlayer.updateMaxHp();
