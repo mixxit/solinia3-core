@@ -3961,6 +3961,30 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return new MemorisedSpells(spells);
 	}
+	
+	@Override
+	public Effects getEffects() {
+		Effects effects = new Effects();
+		
+		try
+		{
+			SoliniaEntitySpells spells = StateManager.getInstance().getEntityManager().getActiveEntitySpells(this.getBukkitPlayer());
+	        
+	        if (spells == null)
+	        	return effects;
+			
+			for(SoliniaActiveSpell activeSpell : spells.getActiveSpells())
+	        {
+	        	ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(activeSpell.getSpellId());
+	        	effects.effectSlots.put(activeSpell.getSpellId(), new EffectSlot(activeSpell.getSpellId(), spell.getIcon(), spell.getMemicon(), spell.getNewIcon(), spell.getName()));
+	        }
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return effects;
+	}
 
 	@Override
 	public int getMemorisedSpellSlot1() {
@@ -4193,6 +4217,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			spellBookPage = spellBookItemPages.get(pageNo);
 
 		return new SpellbookPage(pageNo, spellBookPage);
+	}
+	
+	@Override
+	public void sendEffects()
+	{
+		try {
+			PacketEffects packet = new PacketEffects();
+			packet.fromData(getEffects());
+			ForgeUtils.sendForgeMessage(((Player) getBukkitPlayer()), Solinia3UIChannelNames.Outgoing,
+					Solinia3UIPacketDiscriminators.EFFECTS, packet.toPacketData());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

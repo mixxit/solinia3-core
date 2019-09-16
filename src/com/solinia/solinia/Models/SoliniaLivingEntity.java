@@ -7300,7 +7300,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getMaxTotalSlots() {
-		return Utils.TotalBuffs;
+		return Effects.TotalBuffsLimit;
 	}
 
 	@Override

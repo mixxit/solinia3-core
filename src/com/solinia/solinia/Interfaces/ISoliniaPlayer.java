@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Models.CastingSpell;
+import com.solinia.solinia.Models.Effects;
 import com.solinia.solinia.Models.EquipSlots;
 import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.MemorisedSpells;
@@ -572,5 +573,9 @@ public interface ISoliniaPlayer extends Serializable {
 	public EquipSlots getEquipSlots();
 
 	void sendSlotsAsPacket();
+
+	Effects getEffects();
+
+	void sendEffects();
 
 }

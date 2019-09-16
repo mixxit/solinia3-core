@@ -447,7 +447,11 @@ public class EntityManager implements IEntityManager {
 				duration = 18;
 			}
 			
-			return entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages);
+			boolean addSpellResult = entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages);
+			
+			if (targetEntity instanceof Player)
+				SoliniaPlayerAdapter.Adapt((Player)targetEntity).sendEffects();
+			return addSpellResult;
 		} catch (CoreStateInitException e) {
 		}
 		
@@ -486,6 +490,17 @@ public class EntityManager implements IEntityManager {
 		for(SoliniaEntitySpells entityEffects : entitySpells.values())
 		{
 			entityEffects.run(plugin, true);
+			
+			try
+			{
+				if (entityEffects.getLivingEntity() != null && entityEffects.getLivingEntity() instanceof Player)
+					SoliniaPlayerAdapter.Adapt((Player)entityEffects.getLivingEntity()).sendEffects();
+			} catch (CoreStateInitException e)
+			{
+				e.printStackTrace();
+			}
+
+
 		}
 	}
 	
@@ -496,6 +511,16 @@ public class EntityManager implements IEntityManager {
 			entitySpells.get(uuid).removeAllSpells(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects);
 		
 		entitySpells.remove(uuid);
+		
+		try
+		{
+			if (Bukkit.getEntity(uuid) != null && Bukkit.getEntity(uuid) instanceof Player)
+				SoliniaPlayerAdapter.Adapt((Player)Bukkit.getEntity(uuid)).sendEffects();
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 	
 	@Override 
@@ -503,6 +528,16 @@ public class EntityManager implements IEntityManager {
 	{
 		if (entitySpells.get(uuid) != null)
 			entitySpells.get(uuid).removeAllSpellsOfId(plugin, spellId, forceDoNotLoopBardSpell, removeNonCombatEffects);
+		
+		try
+		{
+			if (Bukkit.getEntity(uuid) != null && Bukkit.getEntity(uuid) instanceof Player)
+				SoliniaPlayerAdapter.Adapt((Player)Bukkit.getEntity(uuid)).sendEffects();
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 	
 	@Override
@@ -1066,6 +1101,16 @@ public class EntityManager implements IEntityManager {
 	public void clearEntityEffects(UUID uniqueId) {
 		if (entitySpells.get(uniqueId) != null)
 			removeSpellEffects(uniqueId, false, false);
+		
+		try
+		{
+			if (Bukkit.getEntity(uniqueId) != null && Bukkit.getEntity(uniqueId) instanceof Player)
+				SoliniaPlayerAdapter.Adapt((Player)Bukkit.getEntity(uniqueId)).sendEffects();
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -1074,6 +1119,16 @@ public class EntityManager implements IEntityManager {
 			return;
 		
 		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpellOfEffectType(plugin, type, forceDoNotLoopBardSpell, removeNonCombatEffects);
+		
+		try
+		{
+			if (livingEntity != null && livingEntity instanceof Player)
+				SoliniaPlayerAdapter.Adapt((Player)livingEntity).sendEffects();
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 	
 	@Override
@@ -1082,6 +1137,16 @@ public class EntityManager implements IEntityManager {
 			return;
 		
 		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpell(plugin, false);
+		
+		try
+		{
+			if (livingEntity != null && livingEntity instanceof Player)
+				SoliniaPlayerAdapter.Adapt((Player)livingEntity).sendEffects();
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 	/*
 	@Override
