@@ -97,7 +97,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private String languagePrimer = "";
 	private int focusEffectId = 0;
 	private int weaponDelay = 30;
-	private int leatherRgb = 0;
+	private int leatherRgbDecimal = -1;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -770,12 +770,13 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET + " placeable: " + ChatColor.GOLD + isPlaceable() + ChatColor.RESET);
 		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
-		Color colorTmp = Color.fromRGB(getLeatherRgb());
-		sender.sendMessage("- leatherrgb: " + ChatColor.GOLD + getLeatherRgb() + ChatColor.RESET + ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "(Closest)" + ChatColor.RESET + " See: https://bit.ly/2i02I8k");
-		
-		;
-
-		
+		String leathercolor = "NONE";
+		if (getLeatherRgbDecimal() > 0)
+		{
+			Color colorTmp = Color.fromRGB(getLeatherRgbDecimal());
+			leathercolor = ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "(Closest)" + ChatColor.RESET;
+		}
+		sender.sendMessage("- leatherrgbdecimal: " + ChatColor.GOLD + getLeatherRgbDecimal() + ChatColor.RESET + leathercolor + " See: https://bit.ly/2i02I8k");
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
 		sender.sendMessage("- petcontrolrod: " + ChatColor.GOLD + isPetControlRod() + ChatColor.RESET + " crafting: " + ChatColor.GOLD + isCrafting() + ChatColor.RESET + " quest: " + ChatColor.GOLD + isQuest() + ChatColor.RESET);
@@ -911,8 +912,8 @@ public class SoliniaItem implements ISoliniaItem {
 		case "damage":
 			setDamage(Integer.parseInt(value));
 			break;
-		case "leatherrgb":
-			setLeatherRgb(Integer.parseInt(value));
+		case "leatherrgbdecimal":
+			setLeatherRgbDecimal(Integer.parseInt(value));
 			break;
 		case "spellscroll":
 			this.setSpellscroll(Boolean.parseBoolean(value));
@@ -1590,12 +1591,12 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public int getLeatherRgb() {
-		return leatherRgb;
+	public int getLeatherRgbDecimal() {
+		return leatherRgbDecimal;
 	}
 
 	@Override
-	public void setLeatherRgb(int leatherRgb) {
-		this.leatherRgb = leatherRgb;
+	public void setLeatherRgbDecimal(int leatherRgbDecimal) {
+		this.leatherRgbDecimal = leatherRgbDecimal;
 	}
 }

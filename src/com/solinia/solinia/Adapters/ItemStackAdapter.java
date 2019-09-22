@@ -236,8 +236,11 @@ public class ItemStackAdapter {
 		{
 			try
 			{
-				Color colorTmp = Color.fromRGB(soliniaItem.getLeatherRgb());
-				loretxt.add("Leather Color (Closest): " + ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "Dye Color" + ChatColor.RESET);
+				if (soliniaItem.getLeatherRgbDecimal() > 0)
+				{
+					Color colorTmp = Color.fromRGB(soliniaItem.getLeatherRgbDecimal());
+					loretxt.add("Leather Color (Closest): " + ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "Dye Color" + ChatColor.RESET);
+				}
 		        
 			} catch (Exception e)
 			{
@@ -462,7 +465,10 @@ public class ItemStackAdapter {
 			try
 			{
 				LeatherArmorMeta lch = (LeatherArmorMeta)stack.getItemMeta();
-		        lch.setColor(Color.fromRGB(soliniaItem.getLeatherRgb()));
+				if (soliniaItem.getLeatherRgbDecimal() < 1)
+			        lch.setColor(null);
+				else
+					lch.setColor(Color.fromRGB(soliniaItem.getLeatherRgbDecimal()));
 		        stack.setItemMeta(lch);
 		        
 			} catch (Exception e)

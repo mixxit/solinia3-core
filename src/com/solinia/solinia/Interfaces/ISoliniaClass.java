@@ -179,8 +179,8 @@ public interface ISoliniaClass {
 
 	void setCanPray(boolean canPray);
 
-	int getLeatherRgb();
+	int getLeatherRgbDecimal();
 
-	void setLeatherRgb(int leatherRgb);
+	void setLeatherRgbDecimal(int leatherRgbDecimal);
 
 }

@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ColorUtil;
@@ -21,7 +22,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int id;
 	private boolean isadmin = true;
 	private String name = "";
-	private int leatherRgb = 0;
+	private int leatherRgbDecimal = -1;
 	private String description = "";
 	private List<Integer> validRaces = new ArrayList<Integer>();
 	private String defaultHeadMaterial = "LEATHER_HELMET";
@@ -201,8 +202,13 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- spadetypename: " + ChatColor.GOLD + getSpadetypename() + ChatColor.RESET);
 		sender.sendMessage("- shieldtypename: " + ChatColor.GOLD + getShieldtypename() + ChatColor.RESET);
 		sender.sendMessage("- bowtypename: " + ChatColor.GOLD + getBowtypename() + ChatColor.RESET);
-		Color colorTmp = Color.fromRGB(getLeatherRgb());
-		sender.sendMessage("- leatherrgb: " + ChatColor.GOLD + getLeatherRgb() + ChatColor.RESET + ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "(Closest) " + ChatColor.RESET + " See: https://bit.ly/2i02I8k");
+		String leathercolor = "NONE";
+		if (getLeatherRgbDecimal() > 0)
+		{
+			Color colorTmp = Color.fromRGB(getLeatherRgbDecimal());
+			leathercolor = ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "(Closest)" + ChatColor.RESET;
+		}
+		sender.sendMessage("- leatherrgbdecimal: " + ChatColor.GOLD + getLeatherRgbDecimal() + ChatColor.RESET + leathercolor + " See: https://bit.ly/2i02I8k");
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- dodgelevel: " + ChatColor.GOLD + getDodgelevel() + ChatColor.RESET);
 		sender.sendMessage("- ripostelevel: " + ChatColor.GOLD + getRipostelevel() + ChatColor.RESET);
@@ -269,8 +275,9 @@ public class SoliniaClass implements ISoliniaClass {
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultoffHandMaterial(value.toUpperCase());
 			break;
-		case "leatherrgb":
-			setLeatherRgb(Integer.parseInt(value));
+		case "leatherrgbdecimal":
+			setLeatherRgbDecimal(Integer.parseInt(value));
+			updateAllLeatherGear();
 			break;
 		case "defaultalternatehandmaterial":
 			if (!ConfigurationManager.HandMaterials.contains(value.toUpperCase()))
@@ -400,6 +407,38 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		default:
 			throw new InvalidClassSettingException("Invalid Class setting. Valid Options are: name, defaultheadmaterial, defaultchestmaterial,defaultlegsmaterial,defaultfeetmaterial,classitemprefix,specialiselevel,level51title,level55title,level60title");
+		}
+	}
+
+	private void updateAllLeatherGear() {
+		try
+		{
+			int count = 0;
+			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
+			{
+				if (
+						!item.getBasename().toUpperCase().equals("LEATHER_HELMET") &&
+						!item.getBasename().toUpperCase().equals("LEATHER_CHESTPLATE") &&
+						!item.getBasename().toUpperCase().equals("LEATHER_LEGGINGS") &&
+						!item.getBasename().toUpperCase().equals("LEATHER_BOOTS")
+						)
+					continue;
+				
+				if (item.getAllowedClassNames().size() != 1)
+					continue;
+				
+				if (!item.getAllowedClassNames().contains(this.getName().toUpperCase()))
+					continue;
+				
+				item.setLeatherRgbDecimal(this.getLeatherRgbDecimal());
+				count++;
+			}
+			
+			
+			System.out.println("Updated " + count + " class items with new leather color");
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 
@@ -927,12 +966,12 @@ public class SoliniaClass implements ISoliniaClass {
 	}
 
 	@Override
-	public int getLeatherRgb() {
-		return leatherRgb;
+	public int getLeatherRgbDecimal() {
+		return leatherRgbDecimal;
 	}
 
 	@Override
-	public void setLeatherRgb(int leatherRgb) {
-		this.leatherRgb = leatherRgb;
+	public void setLeatherRgbDecimal(int leatherRgbDecimal) {
+		this.leatherRgbDecimal = leatherRgbDecimal;
 	}
 }

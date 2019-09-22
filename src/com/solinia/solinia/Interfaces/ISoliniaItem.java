@@ -358,7 +358,7 @@ public interface ISoliniaItem {
 
 	ItemStack asItemStack();
 
-	int getLeatherRgb();
+	int getLeatherRgbDecimal();
 
-	void setLeatherRgb(int leatherRgb);
+	void setLeatherRgbDecimal(int leatherRgbDecimal);
 }
