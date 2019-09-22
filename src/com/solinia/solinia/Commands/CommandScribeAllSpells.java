@@ -40,7 +40,6 @@ public class CommandScribeAllSpells implements CommandExecutor {
 				if (solPlayer == null || solPlayer.getClassObj() == null)
 					return true;
 				
-				
 				return true;
 			} catch (CoreStateInitException e)
 			{

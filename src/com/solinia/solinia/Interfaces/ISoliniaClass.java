@@ -179,4 +179,8 @@ public interface ISoliniaClass {
 
 	void setCanPray(boolean canPray);
 
+	int getLeatherRgb();
+
+	void setLeatherRgb(int leatherRgb);
+
 }

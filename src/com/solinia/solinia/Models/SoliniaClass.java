@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -11,6 +12,7 @@ import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ColorUtil;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -19,6 +21,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int id;
 	private boolean isadmin = true;
 	private String name = "";
+	private int leatherRgb = 0;
 	private String description = "";
 	private List<Integer> validRaces = new ArrayList<Integer>();
 	private String defaultHeadMaterial = "LEATHER_HELMET";
@@ -64,6 +67,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private List<Integer> oaths = new ArrayList<Integer>();
 	private int weaponDelayItemBonus = 0;
 	private boolean canPray = false;
+	
 	
 	@Override
 	public String getName() {
@@ -197,6 +201,8 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- spadetypename: " + ChatColor.GOLD + getSpadetypename() + ChatColor.RESET);
 		sender.sendMessage("- shieldtypename: " + ChatColor.GOLD + getShieldtypename() + ChatColor.RESET);
 		sender.sendMessage("- bowtypename: " + ChatColor.GOLD + getBowtypename() + ChatColor.RESET);
+		Color colorTmp = Color.fromRGB(getLeatherRgb());
+		sender.sendMessage("- leatherrgb: " + ChatColor.GOLD + getLeatherRgb() + ChatColor.RESET + ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "(Closest) " + ChatColor.RESET + " See: https://bit.ly/2i02I8k");
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- dodgelevel: " + ChatColor.GOLD + getDodgelevel() + ChatColor.RESET);
 		sender.sendMessage("- ripostelevel: " + ChatColor.GOLD + getRipostelevel() + ChatColor.RESET);
@@ -262,6 +268,9 @@ public class SoliniaClass implements ISoliniaClass {
 			if (!ConfigurationManager.HandMaterials.contains(value.toUpperCase()))
 				throw new InvalidClassSettingException("Invalid material type");
 			setDefaultoffHandMaterial(value.toUpperCase());
+			break;
+		case "leatherrgb":
+			setLeatherRgb(Integer.parseInt(value));
 			break;
 		case "defaultalternatehandmaterial":
 			if (!ConfigurationManager.HandMaterials.contains(value.toUpperCase()))
@@ -915,5 +924,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setCanPray(boolean canPray) {
 		this.canPray = canPray;
+	}
+
+	@Override
+	public int getLeatherRgb() {
+		return leatherRgb;
+	}
+
+	@Override
+	public void setLeatherRgb(int leatherRgb) {
+		this.leatherRgb = leatherRgb;
 	}
 }

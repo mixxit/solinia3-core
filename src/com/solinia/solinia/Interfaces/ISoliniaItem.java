@@ -357,4 +357,8 @@ public interface ISoliniaItem {
 	void setAllowedRaceNames(List<String> allowedRaceNames);
 
 	ItemStack asItemStack();
+
+	int getLeatherRgb();
+
+	void setLeatherRgb(int leatherRgb);
 }

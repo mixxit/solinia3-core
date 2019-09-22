@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -19,6 +20,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.tags.ItemTagType;
@@ -36,6 +38,7 @@ import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Utils.ColorUtil;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -222,6 +225,24 @@ public class ItemStackAdapter {
 
 		if (soliniaItem.getAC() > 0) {
 			loretxt.add("Armour Class: " + ChatColor.GREEN + soliniaItem.getAC() + ChatColor.RESET);
+		}
+		
+		if (
+				soliniaItem.getBasename().toUpperCase().equals("LEATHER_HELMET") ||
+				soliniaItem.getBasename().toUpperCase().equals("LEATHER_CHESTPLATE") ||
+				soliniaItem.getBasename().toUpperCase().equals("LEATHER_LEGGINGS") ||
+				soliniaItem.getBasename().toUpperCase().equals("LEATHER_BOOTS")
+				)
+		{
+			try
+			{
+				Color colorTmp = Color.fromRGB(soliniaItem.getLeatherRgb());
+				loretxt.add("Leather Color (Closest): " + ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "Dye Color" + ChatColor.RESET);
+		        
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		String classtxt = "";
@@ -430,6 +451,25 @@ public class ItemStackAdapter {
 		i.setLore(loretxt);
 		
 		stack.setItemMeta(i);
+		
+		if (
+				soliniaItem.getBasename().toUpperCase().equals("LEATHER_HELMET") ||
+				soliniaItem.getBasename().toUpperCase().equals("LEATHER_CHESTPLATE") ||
+				soliniaItem.getBasename().toUpperCase().equals("LEATHER_LEGGINGS") ||
+				soliniaItem.getBasename().toUpperCase().equals("LEATHER_BOOTS")
+				)
+		{
+			try
+			{
+				LeatherArmorMeta lch = (LeatherArmorMeta)stack.getItemMeta();
+		        lch.setColor(Color.fromRGB(soliniaItem.getLeatherRgb()));
+		        stack.setItemMeta(lch);
+		        
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}		
 		// depcreated in favour of nbt string soliniaid
 		//stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1000 + soliniaItem.getId());
 
