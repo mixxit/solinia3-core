@@ -431,10 +431,11 @@ public class SoliniaClass implements ISoliniaClass {
 					continue;
 				
 				item.setLeatherRgbDecimal(this.getLeatherRgbDecimal());
+				item.setLastUpdatedTimeNow();
 				count++;
 			}
 			
-			
+			StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 			System.out.println("Updated " + count + " class items with new leather color");
 		} catch (CoreStateInitException e)
 		{
