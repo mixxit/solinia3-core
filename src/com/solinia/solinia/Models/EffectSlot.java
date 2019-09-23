@@ -1,7 +1,5 @@
 package com.solinia.solinia.Models;
 
-import java.util.HashMap;
-
 public class EffectSlot {
 	public int SpellId = 0;
 	public String Name = "";

@@ -5,8 +5,6 @@ import java.util.Map;
 import com.solinia.solinia.Exceptions.InvalidPacketException;
 import com.solinia.solinia.Interfaces.ISoliniaPacket;
 
-import io.netty.buffer.ByteBufInputStream;
-
 public class PacketEffects implements ISoliniaPacket {
 
 	Effects effects = new Effects();

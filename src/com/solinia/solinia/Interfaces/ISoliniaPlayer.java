@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -21,7 +20,6 @@ import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.MemorisedSpells;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.PacketCastingPercent;
-import com.solinia.solinia.Models.PacketMobVitals;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.PlayerQuest;

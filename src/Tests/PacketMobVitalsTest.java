@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.UUID;
 
 import com.solinia.solinia.Exceptions.InvalidPacketException;
-import com.solinia.solinia.Models.PacketCastingPercent;
 import com.solinia.solinia.Models.PacketMobVitals;
 
 public class PacketMobVitalsTest {

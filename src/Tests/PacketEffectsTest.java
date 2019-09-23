@@ -8,7 +8,6 @@ import java.util.Map;
 import com.solinia.solinia.Exceptions.InvalidPacketException;
 import com.solinia.solinia.Models.EffectSlot;
 import com.solinia.solinia.Models.Effects;
-import com.solinia.solinia.Models.MemorisedSpells;
 import com.solinia.solinia.Models.PacketEffects;
 
 public class PacketEffectsTest {

@@ -3,8 +3,6 @@ package Tests;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 import org.json.JSONException;
 
 import com.solinia.solinia.Utils.ForgeUtils;

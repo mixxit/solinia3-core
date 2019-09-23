@@ -1,6 +1,5 @@
 package com.solinia.solinia.Utils;
 
-import java.awt.List;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -11,11 +10,8 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

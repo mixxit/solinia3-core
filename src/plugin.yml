@@ -3,6 +3,10 @@ main: com.solinia.solinia.Solinia3CorePlugin
 version: 1.0
 api-version: 1.13
 commands:
+  opencharcreation:
+    description: Displays char creation
+    usage: /opencharcreation
+    aliases: []
   solinia:
     description: Displays additional information about Solinia3Core
     usage: /solinia

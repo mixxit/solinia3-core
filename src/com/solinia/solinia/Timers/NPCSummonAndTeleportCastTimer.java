@@ -3,7 +3,6 @@ package com.solinia.solinia.Timers;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 
 public class NPCSummonAndTeleportCastTimer extends BukkitRunnable {

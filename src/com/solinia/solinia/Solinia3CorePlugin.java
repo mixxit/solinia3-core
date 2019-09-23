@@ -23,7 +23,6 @@ import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
 import com.solinia.solinia.Listeners.Solinia3CoreSpawnGroupUpdatedListener;
 import com.solinia.solinia.Listeners.Solinia3CoreVehicleListener;
 import com.solinia.solinia.Listeners.Solinia3CoreVoteListener;
-import com.solinia.solinia.Listeners.Solinia3CoreZoneTickListener;
 import com.solinia.solinia.Managers.ChannelManager;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
@@ -470,6 +469,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	}
 
 	private void setupCommands() {
+		this.getCommand("opencharcreation").setExecutor(new CommandOpenCharacterCreation());
 		this.getCommand("memorisespell").setExecutor(new CommandMemoriseSpell());
 		this.getCommand("openspellbook").setExecutor(new CommandOpenSpellbook());
 

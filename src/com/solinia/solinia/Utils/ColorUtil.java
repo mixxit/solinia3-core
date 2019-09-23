@@ -1,6 +1,5 @@
 package com.solinia.solinia.Utils;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;

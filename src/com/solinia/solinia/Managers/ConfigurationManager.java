@@ -60,10 +60,12 @@ import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.AlignmentType;
 import com.solinia.solinia.Models.Bond;
+import com.solinia.solinia.Models.CharacterCreation;
 import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.Oath;
+import com.solinia.solinia.Models.RaceChoice;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaCraft;
@@ -1963,5 +1965,27 @@ public class ConfigurationManager implements IConfigurationManager {
 	public Trait getTrait(int traitId) {
 		// TODO Auto-generated method stub
 		return getTraits().stream().filter(e -> e.id == traitId).findFirst().orElse(null);
+	}
+
+	@Override
+	public CharacterCreation getCharacterCreationChoices() {
+		CharacterCreation characterCreation = new CharacterCreation();
+		List<ISoliniaClass> classes = getClasses();
+		
+		for(ISoliniaRace race : this.getRaces())
+		{
+			if (race.isAdmin())
+				continue;
+			
+			for (ISoliniaClass solclass : classes) {
+				if (!solclass.getValidRaces().contains(race.getId()))
+					continue;
+				
+				RaceChoice raceChoice = new RaceChoice(race.getId(),solclass.getId(),race.getName(),solclass.getName(),race.getShortName(),solclass.getShortName(),race.getDescription(),solclass.getDescription(),race.getStrength(),race.getStamina(),race.getAgility(),race.getDexterity(),race.getIntelligence(),race.getWisdom(),race.getCharisma());
+				characterCreation.raceChoices.put(raceChoice.RaceName +"_"+raceChoice.ClassName, raceChoice);
+			}
+		}
+		
+		return characterCreation;
 	}
 }
