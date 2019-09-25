@@ -46,8 +46,9 @@ public class PacketOpenCharacterCreation implements ISoliniaPacket {
 			int INT = Integer.parseInt(effectArray[12]);
 			int WIS = Integer.parseInt(effectArray[13]);
 			int CHA = Integer.parseInt(effectArray[14]);
+			String Alignment = effectArray[15];
 
-			this.characterCreation.raceChoices.put(RaceName +"_"+ClassName, new RaceChoice(RaceId,ClassId,RaceName,ClassName,RaceShort,ClassShort,RaceDescription,ClassDescription,STR,STA,AGI,DEX,INT,WIS,CHA));
+			this.characterCreation.raceChoices.put(RaceName +"_"+ClassName, new RaceChoice(RaceId,ClassId,RaceName,ClassName,RaceShort,ClassShort,RaceDescription,ClassDescription,STR,STA,AGI,DEX,INT,WIS,CHA, Alignment));
 		}
 	}
 	
@@ -77,7 +78,8 @@ public class PacketOpenCharacterCreation implements ISoliniaPacket {
 					+ entry.getValue().DEX + "|"
 					+ entry.getValue().INT + "|"
 					+ entry.getValue().WIS + "|"
-					+ entry.getValue().CHA
+					+ entry.getValue().CHA + "|"
+					+ entry.getValue().Alignment
 					;
 		}
 		

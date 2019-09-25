@@ -1981,7 +1981,7 @@ public class ConfigurationManager implements IConfigurationManager {
 				if (!solclass.getValidRaces().contains(race.getId()))
 					continue;
 				
-				RaceChoice raceChoice = new RaceChoice(race.getId(),solclass.getId(),race.getName(),solclass.getName(),race.getShortName(),solclass.getShortName(),race.getDescription(),solclass.getDescription(),race.getStrength(),race.getStamina(),race.getAgility(),race.getDexterity(),race.getIntelligence(),race.getWisdom(),race.getCharisma());
+				RaceChoice raceChoice = new RaceChoice(race.getId(),solclass.getId(),race.getName(),solclass.getName(),race.getShortName(),solclass.getShortName(),race.getDescription(),solclass.getDescription(),race.getStrength(),race.getStamina(),race.getAgility(),race.getDexterity(),race.getIntelligence(),race.getWisdom(),race.getCharisma(), race.getAlignment());
 				characterCreation.raceChoices.put(raceChoice.RaceName +"_"+raceChoice.ClassName, raceChoice);
 			}
 		}

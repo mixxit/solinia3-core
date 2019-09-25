@@ -17,10 +17,11 @@ public class RaceChoice {
 	public int INT = 0;
 	public int WIS = 0;
 	public int CHA = 0;
+	public String Alignment = "";
 
 	public RaceChoice(int raceId, int classId, String raceName, String className, String raceShort, String classShort,
 			String raceDescription, String classDescription, int str, int sta, int agi, int dex, int iint, int wis,
-			int cha) {
+			int cha, String alignment) {
 		this.RaceId = raceId;
 		this.ClassId = classId;
 		this.RaceName = raceName;
@@ -36,6 +37,7 @@ public class RaceChoice {
 		this.INT = iint;
 		this.WIS = wis;
 		this.CHA = cha;
+		this.Alignment = alignment;
 	}
 
 }
