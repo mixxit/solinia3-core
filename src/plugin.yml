@@ -355,6 +355,11 @@ commands:
     description: Forces a players level
     usage: /forcelevel mcplayer level
     aliases: []
+  scribeallspells:
+    description: Scribes all spells up to level (if higher or equal)
+    usage: /scribeallspells level
+    aliases:
+    - scribespells
   swearfealty:
     description: Swears fealty to a player
     usage: /swearfealty mcplayername
