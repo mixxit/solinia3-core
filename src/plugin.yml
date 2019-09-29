@@ -411,12 +411,6 @@ commands:
     description: Updates a spawngroups location
     usage: /updatespawngrouploc spawngroupid
     aliases: []
-  setchannel:
-    description: Sets current channel
-    usage: /setchannel channelname
-    aliases:
-    - ch
-    - channel
   ooc:
     description: Sends a message to the ooc channel
     usage: /ooc message

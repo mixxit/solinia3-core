@@ -75,7 +75,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String base64ArmorContents = "";
 
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
-	private String currentChannel = "OOC";
 	private List<Integer> ranks = new ArrayList<Integer>();
 	private List<Integer> aas = new ArrayList<Integer>();
 	private List<PlayerFactionEntry> factionEntries = new ArrayList<PlayerFactionEntry>();
@@ -1861,16 +1860,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return false;
-	}
-
-	@Override
-	public String getCurrentChannel() {
-		return currentChannel;
-	}
-
-	@Override
-	public void setCurrentChannel(String currentChannel) {
-		this.currentChannel = currentChannel;
 	}
 
 	@Override

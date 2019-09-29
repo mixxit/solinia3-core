@@ -23,13 +23,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
-		String currentChannel = event.getPlayer().getCurrentChannel();
-		
-		// always redirect npc interactions to local
-		if (event.getPlayer().getEntityTarget() != null)
-		{
-			currentChannel = "LOCAL";
-		}
+		String currentChannel = currentChannel = "LOCAL";
 		
 		if (event.getPlayer().getRace() == null)
 		{
@@ -37,25 +31,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 			return;
 		}
 		
-		// TODO - Support checking channel modes of player
-		switch(currentChannel)
-		{
-			case "OOC":
-				StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
-				break;
-			case "LOCAL":
-				StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
-				break;
-			case "WHISPER":
-				StateManager.getInstance().getChannelManager().sendToWhisperChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
-				break;
-			case "SHOUT":
-				StateManager.getInstance().getChannelManager().sendToShoutChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
-				break;
-			default:
-				StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(event.getPlayer(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
-				break;
-		}
+		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
 		
 		// NPC responses (if applicable)
 		if (event.getPlayer().getEntityTarget() != null)

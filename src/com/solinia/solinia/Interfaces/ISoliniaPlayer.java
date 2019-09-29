@@ -127,10 +127,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void ooc(String message);
 
-	String getCurrentChannel();
-
-	void setCurrentChannel(String currentChannel);
-
 	public boolean understandsLanguage(String language);
 
 	public void tryImproveLanguage(String language);

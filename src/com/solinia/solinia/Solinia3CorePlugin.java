@@ -544,7 +544,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("listspawngroups").setExecutor(new CommandListSpawnGroups());
 		this.getCommand("updatespawngrouploc").setExecutor(new CommandUpdateSpawnGroupLoc());
 		this.getCommand("ooc").setExecutor(new CommandOoc());
-		this.getCommand("setchannel").setExecutor(new CommandSetChannel());
 		this.getCommand("group").setExecutor(new CommandGroup());
 		this.getCommand("groupchat").setExecutor(new CommandGroupChat());
 		this.getCommand("convertmerchanttolootdrop").setExecutor(new CommandConvertMerchantToLootDrop());
