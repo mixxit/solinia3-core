@@ -561,6 +561,10 @@ commands:
     description: Character admin command
     usage: /character
     aliases: []
+  createcharacterfull:
+    description: Create full character
+    usage: /createcharacterfull racename classname gender ideal firsttrait secondtrait flaw bond firstname lastname
+    aliases: []
   hideooc:
     description: Toggles hiding of the OOC channel
     usage: /hideooc

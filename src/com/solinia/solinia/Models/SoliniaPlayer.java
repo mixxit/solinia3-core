@@ -4357,4 +4357,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		return equipSlots;
 	}
+
+	@Override
+	public void setForenameAndLastName(String forename, String lastname) {
+		this.forename = forename;
+		this.lastname = lastname;
+	}
 }

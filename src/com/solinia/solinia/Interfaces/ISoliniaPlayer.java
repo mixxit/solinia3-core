@@ -41,6 +41,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public ISoliniaLivingEntity getSoliniaLivingEntity();
 	
+	void setForenameAndLastName(String forename, String lastname);
+	
 	void setForename(String forename);
 
 	public String getLastname();
