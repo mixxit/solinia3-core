@@ -65,9 +65,14 @@ Solinia3CorePlugin plugin;
 
 		try {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			createCharacter(solPlayer,raceid, classid, gender, idealid, firsttraitid, secondtraitid, flawid, bondid, forename, lastname);
+			if (createCharacter(solPlayer,raceid, classid, gender, idealid, firsttraitid, secondtraitid, flawid, bondid, forename, lastname))
+			{
+				player.sendMessage("Character created");
+			} else {
+				player.sendMessage("Failed to create character");
+			}
 		} catch (CoreStateInitException e) {
-
+			e.printStackTrace();
 		}
 		return true;
 	}
@@ -81,10 +86,6 @@ Solinia3CorePlugin plugin;
 		
 		ISoliniaClass solClass = StateManager.getInstance().getConfigurationManager().getClassObj(classId);
 		if (solClass == null)
-			return false;
-		
-		ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
-		if (newPlayer == null)
 			return false;
 		
 		if (!StateManager.getInstance().getConfigurationManager().isValidRaceClass(solRace.getId(), solClass.getId()))
@@ -117,6 +118,10 @@ Solinia3CorePlugin plugin;
 			return false;
 		
 		if (!StateManager.getInstance().getPlayerManager().IsNewNameValid(foreName, lastName))
+			return false;
+		
+		ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
+		if (newPlayer == null)
 			return false;
 		
 		newPlayer.setRaceId(solRace.getId());
