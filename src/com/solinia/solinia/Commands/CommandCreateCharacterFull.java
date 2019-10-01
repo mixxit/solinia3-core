@@ -130,13 +130,13 @@ Solinia3CorePlugin plugin;
 		
 		newPlayer.setGender(gender);
 		
-		solPlayer.getPersonality().setIdealId(ideal1.id);
-		solPlayer.getPersonality().setFirstTraitId(trait1.id);
-		solPlayer.getPersonality().setSecondTraitId(trait2.id);
-		solPlayer.getPersonality().setFlawId(flaw1.id);
-		solPlayer.getPersonality().setBondId(bond1.id);
+		newPlayer.getPersonality().setIdealId(ideal1.id);
+		newPlayer.getPersonality().setFirstTraitId(trait1.id);
+		newPlayer.getPersonality().setSecondTraitId(trait2.id);
+		newPlayer.getPersonality().setFlawId(flaw1.id);
+		newPlayer.getPersonality().setBondId(bond1.id);
 		
-		solPlayer.setForenameAndLastName(foreName, lastName);
+		newPlayer.setForenameAndLastName(foreName, lastName);
 		
 		newPlayer.updateMaxHp();
 		SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
