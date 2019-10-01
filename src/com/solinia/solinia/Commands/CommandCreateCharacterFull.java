@@ -65,64 +65,63 @@ Solinia3CorePlugin plugin;
 
 		try {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			if (createCharacter(solPlayer,raceid, classid, gender, idealid, firsttraitid, secondtraitid, flawid, bondid, forename, lastname))
-			{
-				player.sendMessage("Character created");
-			} else {
-				player.sendMessage("Failed to create character");
-			}
+			createCharacter(solPlayer,raceid, classid, gender, idealid, firsttraitid, secondtraitid, flawid, bondid, forename, lastname);
+			player.sendMessage("Character created");
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			player.sendMessage(e.getMessage());
+			player.sendMessage("Failed to create character");
 		}
 		return true;
 	}
 
-	private boolean createCharacter(ISoliniaPlayer solPlayer, int raceId, int classId, String gender, int ideal, int firstTrait, int secondTrait, int flaw, int bond, String foreName, String lastName) throws CoreStateInitException {
+	private void createCharacter(ISoliniaPlayer solPlayer, int raceId, int classId, String gender, int ideal, int firstTrait, int secondTrait, int flaw, int bond, String foreName, String lastName) throws Exception {
 		Player player = solPlayer.getBukkitPlayer();
 		
 		ISoliniaRace solRace = StateManager.getInstance().getConfigurationManager().getRace(raceId);
 		if (solRace == null)
-			return false;
+			throw new Exception("Invalid race");
 		
 		ISoliniaClass solClass = StateManager.getInstance().getConfigurationManager().getClassObj(classId);
 		if (solClass == null)
-			return false;
+			throw new Exception("Invalid class");
 		
 		if (!StateManager.getInstance().getConfigurationManager().isValidRaceClass(solRace.getId(), solClass.getId()))
-        	return false;
+			throw new Exception("Invalid race/class combination");
 		
 		if (!gender.equals("MALE") && !gender.equals("FEMALE"))
-        	return false;
+			throw new Exception("Invalid gender");
 		
 		Ideal ideal1 = StateManager.getInstance().getConfigurationManager().getIdeal(ideal);
 		if (ideal1 == null)
-			return false;
+			throw new Exception("Invalid ideal");
 		
 		if (firstTrait == secondTrait)
-			return false;
+			throw new Exception("Two traits sharing the same value is not allowed");
 		
 		Trait trait1 = StateManager.getInstance().getConfigurationManager().getTrait(firstTrait);
 		if (trait1 == null)
-			return false;
+			throw new Exception("Invalid trait (1st)");
 
 		Trait trait2 = StateManager.getInstance().getConfigurationManager().getTrait(secondTrait);
 		if (trait2 == null)
-			return false;
+			throw new Exception("Invalid trait (2nd)");
 		
 		Flaw flaw1 = StateManager.getInstance().getConfigurationManager().getFlaw(flaw);
 		if (flaw1 == null)
-			return false;
+			throw new Exception("Invalid flaw");
 		
 		Bond bond1 = StateManager.getInstance().getConfigurationManager().getBond(bond);
 		if (bond1 == null)
-			return false;
+			throw new Exception("Invalid bond");
 		
 		if (!StateManager.getInstance().getPlayerManager().IsNewNameValid(foreName, lastName))
-			return false;
+			throw new Exception("Invalid firstname+lastname");
 		
 		ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
 		if (newPlayer == null)
-			return false;
+			throw new Exception("Failed to create character object");
 		
 		newPlayer.setRaceId(solRace.getId());
 		newPlayer.setChosenRace(true);
@@ -146,6 +145,5 @@ Solinia3CorePlugin plugin;
 		newPlayer.setBindPoint(solRace.getStartWorld() + "," + solRace.getStartX() + "," + solRace.getStartY() + "," + solRace.getStartZ());
 		
 		player.sendMessage("Your character has been stored and a new character created");
-		return true;
 	}
 }
