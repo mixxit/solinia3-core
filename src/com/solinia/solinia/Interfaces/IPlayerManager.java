@@ -43,4 +43,5 @@ public interface IPlayerManager {
 	ConcurrentHashMap<UUID, DebuggerSettings> getDebugger();
 	public void checkPlayerModVersions();
 	public void setPlayerVersion(UUID uniqueId, String string);
+	void checkPlayerModVersion(Player player);
 }

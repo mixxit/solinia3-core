@@ -30,6 +30,7 @@ public class CommandIamVersion implements CommandExecutor {
 
 		try {
 			StateManager.getInstance().getPlayerManager().setPlayerVersion(((Player) sender).getUniqueId(), args[0]);
+			StateManager.getInstance().getPlayerManager().checkPlayerModVersion((Player) sender);
 			return true;
 		} catch (CoreStateInitException e) {
 
