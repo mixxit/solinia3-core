@@ -13,6 +13,7 @@ import org.json.JSONException;
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DiscordListener;
+import com.solinia.solinia.Listeners.PlayerValidatorModListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
 import com.solinia.solinia.Listeners.Solinia3CoreChunkListener;
 import com.solinia.solinia.Listeners.Solinia3CoreEntityListener;
@@ -448,8 +449,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		}
 		
 		clientVersionTimer = new ClientVersionTimer();
-		// every two minutes
-		clientVersionTimer.runTaskTimer(this, 120 * 20L, 120 * 20L);
+		// every 30 seconds
+		clientVersionTimer.runTaskTimer(this, 30 * 20L, 30 * 20L);
 	}
 
 	private void registerEvents() {
@@ -464,6 +465,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreChunkListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerValidatorModListener(this), this);
 
 		setupCommands();
 	}

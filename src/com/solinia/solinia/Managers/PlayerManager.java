@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.PlayerValidatedModEvent;
+import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
@@ -473,10 +475,18 @@ public class PlayerManager implements IPlayerManager {
 						System.out.println(player.getName() + " excluded from kick - Missing Mod Version '" + StateManager.getInstance().getRequiredModVersion() + "' - See https://www.fallofanempire.com/docs/guides/mod/ [You have : '" + playerModVersion(player) + "']");
 						player.sendMessage(ChatColor.GRAY + "Missing Mod Version '" + StateManager.getInstance().getRequiredModVersion() + "' - Due to your status you have been excluded from being kicked");
 					}
+				} else {
+					onPlayerValidMod(player);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	// Triggers when a player has found to have had a valid mod version
+	private void onPlayerValidMod(Player player) {
+		PlayerValidatedModEvent soliniaevent = new PlayerValidatedModEvent(player);
+		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 }
