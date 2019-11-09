@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -229,7 +230,7 @@ public class SoliniaClass implements ISoliniaClass {
 		{
 			RaceClass raceClass = getValidRaceClasses().get(raceId);
 			ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(raceClass.RaceId);
-			sender.sendMessage(raceId + " " + race.getName() + " startworld: " + raceClass.getStartWorld() + " X:" + raceClass.getStartX() + " Y:" + raceClass.getStartY() + " Z:" + raceClass.getStartZ());
+			sender.sendMessage(raceId + " " + race.getName() + " startlocation: " + raceId + "," + raceClass.getStartWorld() + "," + raceClass.getStartX() + "," + raceClass.getStartY() + "," + raceClass.getStartZ());
 		}
 		sender.sendMessage("----------------------------");
 	}
@@ -397,6 +398,44 @@ public class SoliniaClass implements ISoliniaClass {
 		case "level60title":
 			this.setLevel60Title(value);
 			break;
+		case "startlocationall":
+			try {
+				String[] zonedata = value.split(",");
+				// Dissasemble the value to ensure it is correct
+				String world = zonedata[0];
+				for(Integer raceId : this.getValidRaceClasses().keySet())
+				{
+					int x = Integer.parseInt(zonedata[0]);
+					int y = Integer.parseInt(zonedata[1]);
+					int z = Integer.parseInt(zonedata[2]);
+	
+					this.getRaceClass(raceId).setStartWorld(world);
+					this.getRaceClass(raceId).setStartX(x);
+					this.getRaceClass(raceId).setStartY(y);
+					this.getRaceClass(raceId).setStartZ(z);
+				}
+				break;
+			} catch (Exception e) {
+				throw new InvalidClassSettingException("Invalid Class setting. startlocation value must be in format: world,x,y,z");
+			}
+		case "startlocation":
+			try {
+				String[] zonedata = value.split(",");
+				// Dissasemble the value to ensure it is correct
+				Integer raceId = Integer.parseInt(zonedata[0]);
+				String world = zonedata[1];
+				int x = Integer.parseInt(zonedata[2]);
+				int y = Integer.parseInt(zonedata[3]);
+				int z = Integer.parseInt(zonedata[4]);
+
+				this.getRaceClass(raceId).setStartWorld(world);
+				this.getRaceClass(raceId).setStartX(x);
+				this.getRaceClass(raceId).setStartY(y);
+				this.getRaceClass(raceId).setStartZ(z);
+				break;
+			} catch (Exception e) {
+				throw new InvalidClassSettingException("Invalid Class setting. startlocation value must be in format: raceid,world,x,y,z");
+			}
 		case "oaths":
 			List<Integer> oathIdsList = new ArrayList<Integer>();
 			int[] oathIds = Arrays.stream(value.split(",")).mapToInt(Integer::parseInt).toArray();
