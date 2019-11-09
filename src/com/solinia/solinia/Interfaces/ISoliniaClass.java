@@ -29,10 +29,6 @@ public interface ISoliniaClass {
 
 	void setDescription(String description);
 
-	void setValidRaces(List<Integer> validRaces);
-
-	List<Integer> getValidRaces();
-
 	String getDefaultLegsMaterial();
 
 	void setDefaultLegsMaterial(String defaultLegsMaterial);

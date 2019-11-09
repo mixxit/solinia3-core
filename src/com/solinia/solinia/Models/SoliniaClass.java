@@ -28,7 +28,6 @@ public class SoliniaClass implements ISoliniaClass {
 	private String name = "";
 	private int leatherRgbDecimal = -1;
 	private String description = "";
-	private List<Integer> validRaces = new ArrayList<Integer>();
 	private ConcurrentHashMap<Integer, RaceClass> validRaceClasses = new ConcurrentHashMap<Integer, RaceClass>();
 	private String defaultHeadMaterial = "LEATHER_HELMET";
 	private String defaultChestMaterial = "LEATHER_CHESTPLATE";
@@ -116,16 +115,6 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	@Override
-	public List<Integer> getValidRaces() {
-		return validRaces;
-	}
-
-	@Override
-	public void setValidRaces(List<Integer> validRaces) {
-		this.validRaces = validRaces;
 	}
 
 	@Override

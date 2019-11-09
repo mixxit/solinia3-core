@@ -5358,7 +5358,7 @@ public class Utils {
 
 			String classBuilder = "";
 			for (ISoliniaClass solclass : classes) {
-				if (solclass.getValidRaces().contains(race.getId()))
+				if (solclass.getValidRaceClasses().containsKey(race.getId()))
 					classBuilder += solclass.getName() + " ";
 			}
 

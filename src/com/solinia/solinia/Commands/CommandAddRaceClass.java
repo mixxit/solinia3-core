@@ -52,8 +52,8 @@ public class CommandAddRaceClass implements CommandExecutor {
 				return false;
 			}
 			
-			if (classobj.getValidRaces() != null)
-			if (classobj.getValidRaces().contains(race.getId()))
+			if (classobj.getValidRaceClasses() != null)
+			if (classobj.getValidRaceClasses().containsKey(race.getId()))
 			{
 				sender.sendMessage("Race already contains class");
 				return false;

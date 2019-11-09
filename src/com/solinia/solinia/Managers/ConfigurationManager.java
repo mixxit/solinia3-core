@@ -66,6 +66,7 @@ import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.RaceChoice;
+import com.solinia.solinia.Models.RaceClass;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaCraft;
@@ -704,10 +705,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		if (classes == null)
 			return false;
 
-		if (classes.getValidRaces() == null)
-			return false;
-
-		if (classes.getValidRaces().contains(raceId))
+		if (classes.getValidRaceClasses().containsKey(raceId))
 			return true;
 
 		return false;
@@ -721,15 +719,13 @@ public class ConfigurationManager implements IConfigurationManager {
 		if (getRace(raceId) == null)
 			return;
 
-		List<Integer> validRaces = getClassObj(classId).getValidRaces();
-		if (validRaces == null)
-			validRaces = new ArrayList<Integer>();
-
-		if (validRaces.contains(raceId))
+		if (getClassObj(classId).getValidRaceClasses().containsKey(raceId))
 			return;
 
-		validRaces.add(raceId);
-		getClassObj(classId).setValidRaces(validRaces);
+		RaceClass newRaceClass = new RaceClass();
+		newRaceClass.RaceId = raceId;
+		
+		getClassObj(classId).getValidRaceClasses().put(raceId, newRaceClass);
 	}
 
 	@Override
@@ -1977,7 +1973,7 @@ public class ConfigurationManager implements IConfigurationManager {
 				continue;
 			
 			for (ISoliniaClass solclass : classes) {
-				if (!solclass.getValidRaces().contains(race.getId()))
+				if (!solclass.getValidRaceClasses().containsKey(race.getId()))
 					continue;
 				
 				RaceChoice raceChoice = new RaceChoice(race.getId(),solclass.getId(),race.getName(),solclass.getName(),race.getShortName(),solclass.getShortName(),race.getDescription(),solclass.getDescription(),race.getStrength(),race.getStamina(),race.getAgility(),race.getDexterity(),race.getIntelligence(),race.getWisdom(),race.getCharisma(), race.getAlignment());
