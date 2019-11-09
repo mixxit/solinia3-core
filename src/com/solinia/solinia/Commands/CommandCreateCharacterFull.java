@@ -141,8 +141,8 @@ Solinia3CorePlugin plugin;
 		newPlayer.updateMaxHp();
 		SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
 
-		player.teleport(solRace.getStartLocation());
-		newPlayer.setBindPoint(solRace.getStartWorld() + "," + solRace.getStartX() + "," + solRace.getStartY() + "," + solRace.getStartZ());
+		player.teleport(solClass.getRaceClass(solRace.getId()).getStartLocation());
+		newPlayer.setBindPoint(solClass.getRaceClass(solRace.getId()).getStartWorld() + "," + solClass.getRaceClass(solRace.getId()).getStartX() + "," + solClass.getRaceClass(solRace.getId()).getStartY() + "," + solClass.getRaceClass(solRace.getId()).getStartZ());
 		
 		player.sendMessage("Your character has been stored and a new character created");
 	}

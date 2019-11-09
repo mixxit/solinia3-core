@@ -69,24 +69,6 @@ public interface ISoliniaRace {
 
 	void setVampire(boolean vampire);
 
-	int getStartX();
-
-	void setStartX(int startX);
-
-	int getStartY();
-
-	void setStartY(int startY);
-
-	int getStartZ();
-
-	void setStartZ(int startZ);
-
-	String getStartWorld();
-
-	void setStartWorld(String startWorld);
-
-	public Location getStartLocation();
-
 	int getPassiveAbilityId();
 
 	void setPassiveAbilityId(int passiveAbilityId);

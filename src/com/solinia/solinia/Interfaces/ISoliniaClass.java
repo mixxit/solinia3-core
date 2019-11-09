@@ -1,12 +1,15 @@
 package com.solinia.solinia.Interfaces;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Models.ItemType;
+import com.solinia.solinia.Models.RaceClass;
 
 public interface ISoliniaClass {
 
@@ -182,5 +185,11 @@ public interface ISoliniaClass {
 	int getLeatherRgbDecimal();
 
 	void setLeatherRgbDecimal(int leatherRgbDecimal);
+
+	ConcurrentHashMap<Integer, RaceClass> getValidRaceClasses();
+
+	void setValidRaceClasses(ConcurrentHashMap<Integer, RaceClass> validRaceClasses);
+
+	RaceClass getRaceClass(int raceId);
 
 }

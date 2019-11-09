@@ -3387,7 +3387,7 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-
+		
 	}
 
 	public static void disableLootOverLevel110() {

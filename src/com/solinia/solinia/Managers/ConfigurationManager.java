@@ -730,7 +730,6 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		validRaces.add(raceId);
 		getClassObj(classId).setValidRaces(validRaces);
-
 	}
 
 	@Override

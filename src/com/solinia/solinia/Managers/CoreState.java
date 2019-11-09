@@ -31,6 +31,9 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Models.RaceClass;
+import com.solinia.solinia.Models.SoliniaClass;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
@@ -263,6 +266,7 @@ public class CoreState {
 	}
 	
 	private void patchVersion() {
+		patchRaceClasses();
 		fixState();
 		patchItems1_13();
 		patchClasses1_13();
@@ -270,6 +274,37 @@ public class CoreState {
 		fixTimeto();
 	}
 	
+	private void patchRaceClasses() {
+		try {
+			boolean updated = false;
+			
+			System.out.println("Migrating solinia race classes");
+			
+			for(ISoliniaClass classes : StateManager.getInstance().getConfigurationManager().getClasses())
+			{
+				if (classes.getValidRaceClasses().size() > 0)
+					continue;
+				
+				for(Integer validRace : classes.getValidRaces())
+				{
+					RaceClass newClass = new RaceClass();
+					newClass.RaceId = validRace;
+					newClass.setStartWorld("world");
+					newClass.setStartX(169);
+					newClass.setStartY(78);
+					newClass.setStartZ(-3672);
+					classes.getValidRaceClasses().put(validRace, newClass);
+					updated = true;
+					
+					System.out.println("updated class " + classes.getId() + " race " + validRace + " to new storage system");
+				}
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	private void fixTimeto()
 	{
 		try {

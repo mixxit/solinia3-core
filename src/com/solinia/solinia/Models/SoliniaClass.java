@@ -3,14 +3,18 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ColorUtil;
@@ -25,6 +29,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int leatherRgbDecimal = -1;
 	private String description = "";
 	private List<Integer> validRaces = new ArrayList<Integer>();
+	private ConcurrentHashMap<Integer, RaceClass> validRaceClasses = new ConcurrentHashMap<Integer, RaceClass>();
 	private String defaultHeadMaterial = "LEATHER_HELMET";
 	private String defaultChestMaterial = "LEATHER_CHESTPLATE";
 	private String defaultLegsMaterial = "LEATHER_LEGGINGS";
@@ -228,6 +233,14 @@ public class SoliniaClass implements ISoliniaClass {
 			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcspelllist() + "(" + StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()).getName() + ")" + ChatColor.RESET);
 		} else {
 			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcspelllist() + ChatColor.RESET);
+		}
+		sender.sendMessage("----------------------------");
+		sender.sendMessage("Allowed Races:");
+		for(Integer raceId : getValidRaceClasses().keySet())
+		{
+			RaceClass raceClass = getValidRaceClasses().get(raceId);
+			ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(raceClass.RaceId);
+			sender.sendMessage(raceId + " " + race.getName() + " startworld: " + raceClass.getStartWorld() + " X:" + raceClass.getStartX() + " Y:" + raceClass.getStartY() + " Z:" + raceClass.getStartZ());
 		}
 		sender.sendMessage("----------------------------");
 	}
@@ -974,5 +987,20 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setLeatherRgbDecimal(int leatherRgbDecimal) {
 		this.leatherRgbDecimal = leatherRgbDecimal;
+	}
+
+	@Override
+	public ConcurrentHashMap<Integer, RaceClass> getValidRaceClasses() {
+		return validRaceClasses;
+	}
+
+	@Override
+	public void setValidRaceClasses(ConcurrentHashMap<Integer, RaceClass> validRaceClasses) {
+		this.validRaceClasses = validRaceClasses;
+	}
+
+	@Override
+	public RaceClass getRaceClass(int raceId) {
+		return getValidRaceClasses().get(raceId);
 	}
 }

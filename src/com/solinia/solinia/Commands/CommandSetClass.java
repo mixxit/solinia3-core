@@ -126,8 +126,12 @@ public class CommandSetClass implements CommandExecutor {
 		        soliniaplayer.setClassId(solprofession.getId());
 		        soliniaplayer.setChosenClass(true);
 	        	sender.sendMessage("* Profession set to " + profession);
-	        	
+				player.teleport(solprofession.getRaceClass(soliniaplayer.getRaceId()).getStartLocation());
+				soliniaplayer.setBindPoint(solprofession.getRaceClass(soliniaplayer.getRaceId()).getStartWorld() + "," + solprofession.getRaceClass(soliniaplayer.getRaceId()).getStartX() + ","
+					+ solprofession.getRaceClass(soliniaplayer.getRaceId()).getStartY() + "," + solprofession.getRaceClass(soliniaplayer.getRaceId()).getStartZ());
+
 	            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+
 	            solplayer.updateMaxHp();
 	        	return true;
 		        
