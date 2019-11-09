@@ -403,12 +403,12 @@ public class SoliniaClass implements ISoliniaClass {
 				String[] zonedata = value.split(",");
 				// Dissasemble the value to ensure it is correct
 				String world = zonedata[0];
+				int x = Integer.parseInt(zonedata[1]);
+				int y = Integer.parseInt(zonedata[2]);
+				int z = Integer.parseInt(zonedata[3]);
+
 				for(Integer raceId : this.getValidRaceClasses().keySet())
 				{
-					int x = Integer.parseInt(zonedata[0]);
-					int y = Integer.parseInt(zonedata[1]);
-					int z = Integer.parseInt(zonedata[2]);
-	
 					this.getRaceClass(raceId).setStartWorld(world);
 					this.getRaceClass(raceId).setStartX(x);
 					this.getRaceClass(raceId).setStartY(y);
@@ -416,7 +416,7 @@ public class SoliniaClass implements ISoliniaClass {
 				}
 				break;
 			} catch (Exception e) {
-				throw new InvalidClassSettingException("Invalid Class setting. startlocation value must be in format: world,x,y,z");
+				throw new InvalidClassSettingException("Invalid Class setting. startlocation value must be in format: world,x,y,z [" + e.getMessage() + "]");
 			}
 		case "startlocation":
 			try {
@@ -434,7 +434,7 @@ public class SoliniaClass implements ISoliniaClass {
 				this.getRaceClass(raceId).setStartZ(z);
 				break;
 			} catch (Exception e) {
-				throw new InvalidClassSettingException("Invalid Class setting. startlocation value must be in format: raceid,world,x,y,z");
+				throw new InvalidClassSettingException("Invalid Class setting. startlocation value must be in format: raceid, world,x,y,z [" + e.getMessage() + "]");
 			}
 		case "oaths":
 			List<Integer> oathIdsList = new ArrayList<Integer>();
