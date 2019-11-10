@@ -43,6 +43,10 @@ commands:
     description: Gets item info in main hand
     usage: /soliteminfo
     aliases: []
+  solnpcinfo:
+    description: Gets npc info of target
+    usage: /solnpcinfo
+    aliases: []
   consider:
     description: Considers the faction standing of your target
     usage: /consider
