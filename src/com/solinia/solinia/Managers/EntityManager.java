@@ -599,11 +599,13 @@ public class EntityManager implements IEntityManager {
 					LivingEntity le = (LivingEntity)entity;
 					if (!Utils.isLivingEntityNPC(le))
 					{
+						// all skeletons should be npcs
+						// probably left around from the reboot and lost their tag?
+						// get rid of them..
 						if (le instanceof Skeleton)
-						{
-							// This should be removed as its not valid
-							foundInvalidLivingEntity.add(le.getUniqueId());
-						}
+							if (!foundInvalidLivingEntity.contains(le.getUniqueId()))
+								foundInvalidLivingEntity.add(le.getUniqueId());
+						
 						continue;
 					}
 					
@@ -637,9 +639,15 @@ public class EntityManager implements IEntityManager {
 		// This cleans up mobs that have 'lost' their NPC identity
 		for(UUID invalidEntity : foundInvalidLivingEntity)
 		{
-			Entity ent = Bukkit.getEntity(invalidEntity);
-			if (ent != null)
-				ent.remove();
+			try
+			{
+				Entity ent = Bukkit.getEntity(invalidEntity);
+				if (ent != null)
+					ent.remove();
+			} catch (Exception e)
+			{
+				
+			}
 		}
 		
 		// Clear and reset all entities that are not near players
