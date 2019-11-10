@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -32,6 +33,35 @@ public class PlayerValidatorModListener implements Listener {
 	public PlayerValidatorModListener(Solinia3CorePlugin solinia3CorePlugin) {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
+	}
+	
+	@EventHandler
+	public void onPlayerNoMoveUntilModVersionEvent(PlayerMoveEvent event) {
+		if (event.isCancelled())
+			return;
+		
+		try
+		{
+			if (StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()) == null 
+					||
+					StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()).equals(""))
+			{
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(ChatColor.YELLOW + "* Please wait until your mod has been validated before moving. For help please ask in /ooc <msg> " + ChatColor.RESET);
+				return;
+			}
+			
+			ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+			if (soliniaPlayer.getClassObj() == null)
+			{
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(ChatColor.YELLOW + "* You must set your race and class before moving. For help please ask in /ooc <msg>" + ChatColor.RESET);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	@EventHandler
