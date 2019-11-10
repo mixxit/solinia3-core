@@ -22,13 +22,17 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -592,7 +596,45 @@ public class Solinia3CoreEntityListener implements Listener {
 			le.sendMessage(ChatColor.GRAY + "* You have been hit for " + finalDamage + " points of FALL damage!");
 		}
 	}
+	
+	@EventHandler
+	public void onPlayerInteractEntity(EntityInteractEvent event) {
+		if (event.isCancelled())
+			return;
+		
+	}
+	
+	@EventHandler
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
+		if (Utils.isMezzed(event.getPlayer()))
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+
+		if (Utils.isStunned(event.getPlayer()))
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+
+		if (!(event.getRightClicked() instanceof LivingEntity)) {
+			return;
+		}
+
+		if (event.getRightClicked() instanceof Player) {
+			return;
+		}
+
+		if (event.getHand() != EquipmentSlot.HAND || event.getRightClicked() == null) {
+			return;
+		}
+		
+		if (!(event.getRightClicked() instanceof Creature))
+			return;
+	}
+	
 	@EventHandler
 	public void onShootBow(EntityShootBowEvent event) {
 		if (event.isCancelled())

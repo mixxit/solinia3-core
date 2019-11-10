@@ -3,6 +3,10 @@ main: com.solinia.solinia.Solinia3CorePlugin
 version: 1.0
 api-version: 1.13
 commands:
+  rightclickentity:
+    description: Triggers a right click event
+    usage: /rightclickentity
+    aliases: []
   opencharcreation:
     description: Displays char creation
     usage: /opencharcreation

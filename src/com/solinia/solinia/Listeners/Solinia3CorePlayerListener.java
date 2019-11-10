@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -1477,6 +1478,13 @@ public class Solinia3CorePlayerListener implements Listener {
 			return;
 		
 	}
+	
+	@EventHandler
+	public void onPlayerInteractEntity(EntityInteractEvent event) {
+		if (event.isCancelled())
+			return;
+		
+	}
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) 
@@ -1491,27 +1499,6 @@ public class Solinia3CorePlayerListener implements Listener {
 				e.printStackTrace();
 			}
 		}
-		
-		
-		if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
-			if (tryRightClickTarget(event.getPlayer()))
-			{
-				// cancel feigened if targetting
-				try
-				{
-					boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getPlayer().getUniqueId());
-					if (feigned == true)
-					{
-						StateManager.getInstance().getEntityManager().setFeignedDeath(event.getPlayer().getUniqueId(), false);
-					}
-				} catch (CoreStateInitException e)
-				{
-							
-				}
-				
-				Utils.CancelEvent(event);
-				return;
-			}
 		
 		// we only care about main hand interactions
 		if (event.getHand() != null)
@@ -1549,26 +1536,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	private boolean tryRightClickTarget(Player player) {
-		try
-		{
-			LivingEntity targetmob = Utils.getTargettedLivingEntity(player, 50);
-			ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
-			if (solLivingEntityPlayer != null)
-			{
-				if (targetmob != null)
-				{
-					solLivingEntityPlayer.setEntityTarget(targetmob);
-					return true;
-				}
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-		return false;
 	}
 
 	@EventHandler
