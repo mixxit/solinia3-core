@@ -1492,9 +1492,23 @@ public class Solinia3CorePlayerListener implements Listener {
 			}
 		}
 		
+		
 		if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
 			if (tryRightClickTarget(event.getPlayer()))
 			{
+				// cancel feigened if targetting
+				try
+				{
+					boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getPlayer().getUniqueId());
+					if (feigned == true)
+					{
+						StateManager.getInstance().getEntityManager().setFeignedDeath(event.getPlayer().getUniqueId(), false);
+					}
+				} catch (CoreStateInitException e)
+				{
+							
+				}
+				
 				Utils.CancelEvent(event);
 				return;
 			}
@@ -1515,19 +1529,6 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (event.getAction() != Action.RIGHT_CLICK_AIR) {
 			if (event.isCancelled())
 				return;
-		}
-		
-		// cancel feigened if targetting
-		try
-		{
-			boolean feigned = StateManager.getInstance().getEntityManager().isFeignedDeath(event.getPlayer().getUniqueId());
-			if (feigned == true)
-			{
-				StateManager.getInstance().getEntityManager().setFeignedDeath(event.getPlayer().getUniqueId(), false);
-			}
-		} catch (CoreStateInitException e)
-		{
-					
 		}
 		
 		if (Utils.isMezzed((LivingEntity) event.getPlayer()))
@@ -1557,8 +1558,11 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
 			if (solLivingEntityPlayer != null)
 			{
-				solLivingEntityPlayer.setEntityTarget(targetmob);
-				return true;
+				if (targetmob != null)
+				{
+					solLivingEntityPlayer.setEntityTarget(targetmob);
+					return true;
+				}
 			}
 		} catch (CoreStateInitException e)
 		{
