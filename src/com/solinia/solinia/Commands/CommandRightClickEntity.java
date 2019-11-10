@@ -48,11 +48,8 @@ public class CommandRightClickEntity implements CommandExecutor {
 			ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
 			if (solLivingEntityPlayer != null)
 			{
-				if (targetmob != null)
-				{
-					solLivingEntityPlayer.setEntityTarget(targetmob);
-					return true;
-				}
+				solLivingEntityPlayer.setEntityTarget(targetmob);
+				return true;
 			}
 		} catch (CoreStateInitException e)
 		{
