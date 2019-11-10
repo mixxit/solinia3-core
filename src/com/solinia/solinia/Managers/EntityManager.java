@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
@@ -576,6 +577,7 @@ public class EntityManager implements IEntityManager {
 	public void doNPCCheckForEnemies() {
 		List<UUID> completedLivingEntities = new ArrayList<UUID>();
 		List<UUID> entitiesNearPlayers = new ArrayList<UUID>();
+		List<UUID> foundInvalidLivingEntity = new ArrayList<UUID>();
 		
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
@@ -596,7 +598,14 @@ public class EntityManager implements IEntityManager {
 					
 					LivingEntity le = (LivingEntity)entity;
 					if (!Utils.isLivingEntityNPC(le))
+					{
+						if (le instanceof Skeleton)
+						{
+							// This should be removed as its not valid
+							foundInvalidLivingEntity.add(le.getUniqueId());
+						}
 						continue;
+					}
 					
 					if(!Utils.ValidatePet(le))
 					{
@@ -623,6 +632,14 @@ public class EntityManager implements IEntityManager {
 					e.printStackTrace();
 				}
 			}
+		}
+		
+		// This cleans up mobs that have 'lost' their NPC identity
+		for(UUID invalidEntity : foundInvalidLivingEntity)
+		{
+			Entity ent = Bukkit.getEntity(invalidEntity);
+			if (ent != null)
+				ent.remove();
 		}
 		
 		// Clear and reset all entities that are not near players
