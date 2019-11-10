@@ -38,6 +38,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 				"mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 	}
+	
+	@Override
+	public void removeAllNpcs() {
+		Utils.dispatchCommandLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "mm mobs killall");
+	}
 
 	@Override
 	public void reloadProvider() {

@@ -12,4 +12,6 @@ public interface INPCEntityProvider {
 
 	void spawnNPC(ISoliniaNPC npc, int amount, String world, int x, int y, int z);
 
+	void removeAllNpcs();
+
 }

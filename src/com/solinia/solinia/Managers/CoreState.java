@@ -263,6 +263,13 @@ public class CoreState {
 		StateManager.getInstance().setRandomHotzones();
 		
 		StateManager.getInstance().patchVersion();
+		
+		// Cleanup NPCs
+		try {
+			StateManager.getInstance().getEntityManager().getNPCEntityProvider().removeAllNpcs();
+		} catch (CoreStateInitException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void patchVersion() {

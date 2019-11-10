@@ -247,6 +247,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		try {
 			StateManager.getInstance().getEntityManager().removeAllPets();
 			StateManager.getInstance().Commit();
+			StateManager.getInstance().getEntityManager().getNPCEntityProvider().removeAllNpcs();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -255,6 +256,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		effectManager.dispose();
 		
 		UnregisterEntities();
+		
+		
 		
 		System.out.println("[Solinia3Core] Plugin Disabled");
 	}
