@@ -1113,6 +1113,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 	@Override
 	public String replaceChatWordsWithHints(String message) {
+		message = ChatColor.AQUA + message + ChatColor.RESET;
 		List<String> messages = Arrays.asList(message.toUpperCase().split(" "));
 
 		if (getEventHandlers().size() > 0) {
