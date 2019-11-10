@@ -26,6 +26,8 @@ import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class PlayerValidatorModListener implements Listener {
 	Solinia3CorePlugin plugin;
@@ -42,22 +44,47 @@ public class PlayerValidatorModListener implements Listener {
 		
 		try
 		{
-			if (StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()) == null 
-					||
+			if (StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()) == null ||
 					StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()).equals(""))
 			{
-				event.setCancelled(true);
-				event.getPlayer().sendMessage(ChatColor.YELLOW + "* Please wait until your mod has been validated before moving. For help please ask in /ooc <msg> " + ChatColor.RESET);
+				if (event.getTo().getY() < event.getFrom().getY()) {
+					event.getTo().setX(event.getFrom().getX());
+					event.getTo().setZ(event.getFrom().getZ());
+					event.getTo().setYaw(event.getFrom().getYaw());
+					event.getTo().setPitch(event.getFrom().getPitch());
+
+				} else {
+					event.getTo().setX(event.getFrom().getX());
+					event.getTo().setY(event.getFrom().getY());
+					event.getTo().setZ(event.getFrom().getZ());
+					event.getTo().setYaw(event.getFrom().getYaw());
+					event.getTo().setPitch(event.getFrom().getPitch());
+				}
+				event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* Please wait while the server waits for your client to declare its mod version before moving. For help please ask in /ooc <msg>"));
 				return;
 			}
 			
 			ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (soliniaPlayer.getClassObj() == null)
 			{
-				event.setCancelled(true);
-				event.getPlayer().sendMessage(ChatColor.YELLOW + "* You must set your race and class before moving. For help please ask in /ooc <msg>" + ChatColor.RESET);
+				if (event.getTo().getY() < event.getFrom().getY()) {
+					event.getTo().setX(event.getFrom().getX());
+					event.getTo().setZ(event.getFrom().getZ());
+					event.getTo().setYaw(event.getFrom().getYaw());
+					event.getTo().setPitch(event.getFrom().getPitch());
+
+				} else {
+					event.getTo().setX(event.getFrom().getX());
+					event.getTo().setY(event.getFrom().getY());
+					event.getTo().setZ(event.getFrom().getZ());
+					event.getTo().setYaw(event.getFrom().getYaw());
+					event.getTo().setPitch(event.getFrom().getPitch());
+				}
+
+				event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* You must set your race and class before moving. For help please ask in /ooc <msg>"));
 				return;
 			}
+			
 		} catch (CoreStateInitException e)
 		{
 			
