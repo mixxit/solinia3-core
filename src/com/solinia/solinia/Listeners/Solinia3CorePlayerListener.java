@@ -1492,6 +1492,13 @@ public class Solinia3CorePlayerListener implements Listener {
 			}
 		}
 		
+		if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
+			if (tryRightClickTarget(event.getPlayer()))
+			{
+				Utils.CancelEvent(event);
+				return;
+			}
+		
 		// we only care about main hand interactions
 		if (event.getHand() != null)
 		if (!event.getHand().equals(EquipmentSlot.HAND))
@@ -1501,12 +1508,6 @@ public class Solinia3CorePlayerListener implements Listener {
 	}
 
 	private void HandleHandInteraction(PlayerInteractEvent event) {
-		if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
-		if (tryRightClickTarget(event.getPlayer()))
-		{
-			Utils.CancelEvent(event);
-			return;
-		}
 		
 		// Right click air is a cancelled event so we have to ignore it when checking
 		// iscancelled
