@@ -1500,63 +1500,9 @@ public class Solinia3CorePlayerListener implements Listener {
 		HandleHandInteraction(event);
 	}
 
-	private boolean tryRightClickAutoAttack(Player player, ItemStack itemStackInHand)
-	{
-		try
-		{
-			// check if player is toggling auto attack
-			// left click while sneaking
-			if (player.isSneaking() && 
-					(itemStackInHand.getType().name().equals("BOW") || ConfigurationManager.WeaponMaterials.contains(itemStackInHand.getType().name()))) 
-			{
-				ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(player);
-				if (soliniaPlayer != null)
-				{
-					soliniaPlayer.toggleAutoAttack();
-					return true;
-				}
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-		
-		return false;
-	}
-	
-	private boolean tryLeftClickTarget(Player player)
-	{
-		try
-		{
-			// also allow targetting via pet control rod
-			if (player.isSneaking())
-			{
-					LivingEntity targetmob = Utils.getTargettedLivingEntity(player, 50);
-					ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
-					if (solLivingEntityPlayer != null)
-					{
-						solLivingEntityPlayer.setEntityTarget(targetmob);
-						return true;
-					}
-				
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-		return false;
-	}
-	
 	private void HandleHandInteraction(PlayerInteractEvent event) {
-		if (event.getItem() != null && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
-			if (tryRightClickAutoAttack(event.getPlayer(), event.getItem()))
-			{
-				Utils.CancelEvent(event);
-				return;
-			}
-			
-		if ((event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)))
-		if (tryLeftClickTarget(event.getPlayer()))
+		if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
+		if (tryRightClickTarget(event.getPlayer()))
 		{
 			Utils.CancelEvent(event);
 			return;
@@ -1601,6 +1547,23 @@ public class Solinia3CorePlayerListener implements Listener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private boolean tryRightClickTarget(Player player) {
+		try
+		{
+			LivingEntity targetmob = Utils.getTargettedLivingEntity(player, 50);
+			ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
+			if (solLivingEntityPlayer != null)
+			{
+				solLivingEntityPlayer.setEntityTarget(targetmob);
+				return true;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return false;
 	}
 
 	@EventHandler

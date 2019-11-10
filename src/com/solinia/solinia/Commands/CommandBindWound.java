@@ -44,7 +44,7 @@ public class CommandBindWound implements CommandExecutor {
 				if (((Creature)targetmob).getTarget() != null)
 				if (((Creature)targetmob).getTarget().getUniqueId().equals(player.getUniqueId()))
 				{
-					player.sendMessage("You cannot bind wound a mob that is currently trying to attack you! Perhaps you meant to target yourself first? [Shift-F]");
+					player.sendMessage("You cannot bind wound a mob that is currently trying to attack you! Perhaps you meant to target yourself first? [See keybinds]");
 					return true;
 				}
 			}

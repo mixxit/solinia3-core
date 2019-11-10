@@ -1050,13 +1050,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (getEntityTarget() == null) {
 				if (!tryFixSpellTarget(spell)) {
 					getBukkitPlayer().sendMessage(
-							"* You must select a target (shift+left click with spell or use /target for group or shift-f for self");
+							"* You must select a target [See keybinds]"
+							);
 					return;
 				}
 			}
 			if (getEntityTarget() == null) {
 				getBukkitPlayer().sendMessage(
-						"* You must select a target (shift+left click with consumable or use /target for group or shift-f for self");
+						"* You must select a target [See keybinds]");
 				return;
 			}
 
@@ -1138,7 +1139,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (spell != null) {
 					if (!tryFixSpellTarget(spell)) {
 						getBukkitPlayer().sendMessage(
-								"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self (tryCastFromMemorySlot-tryFixSpellTarget)");
+								"* You must select a target [See keybinds]");
 						return;
 					}
 				}
@@ -1146,7 +1147,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 			if (getEntityTarget() == null) {
 				getBukkitPlayer().sendMessage(
-						"* You must select a target (shift+left click with consumable or use /target for group or shift-f for self (tryCastFromMemorySlot)");
+						"* You must select a target [See keybinds]");
 				return;
 			}
 
@@ -1313,7 +1314,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					if (spell != null) {
 						if (!tryFixSpellTarget(spell)) {
 							getBukkitPlayer().sendMessage(
-									"* You must select a target (shift+left click with spell or use /target for group or shift-f for self (interact-tryFixSpellTarget)");
+									"* You must select a target [See keybinds]");
 							return;
 						}
 					}
@@ -1322,7 +1323,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			if (getEntityTarget() == null) {
 				getBukkitPlayer().sendMessage(
-						"* You must select a target (shift+left click with spell or use /target for group or shift-f for self (interact)");
+						"* You must select a target [See keybinds]");
 				return;
 			}
 
@@ -1361,7 +1362,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (spell != null) {
 					if (!tryFixSpellTarget(spell)) {
 						getBukkitPlayer().sendMessage(
-								"* You must select a target (shift+left click with spell or use /ts for group or shift-f for self (interact-tryFixSpellTarget)");
+								"* You must select a target [See keybinds]");
 						return;
 					}
 				}
@@ -1369,7 +1370,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			if (getEntityTarget() == null) {
 				getBukkitPlayer().sendMessage(
-						"* You must select a target (shift+left click with consumable or use /target for group or shift-f for self (interact)");
+						"* You must select a target [See keybinds]");
 				return;
 			}
 
