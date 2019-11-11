@@ -69,7 +69,7 @@ import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 import com.solinia.solinia.Timers.ZoneTickTimer;
 import com.solinia.solinia.Utils.ForgeUtils;
-import com.vexsoftware.votifier.json.JSONException;
+import org.json.JSONException;
 
 import de.slikey.effectlib.EffectManager;
 import net.milkbowl.vault.economy.Economy;

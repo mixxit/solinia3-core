@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import com.solinia.solinia.Utils.ForgeUtils;
-import com.vexsoftware.votifier.json.JSONException;
+import org.json.JSONException;
 
 public class ForgeUtilsTest {
 	@Test

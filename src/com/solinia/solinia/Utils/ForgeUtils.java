@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import com.vexsoftware.votifier.json.JSONException;
-import com.vexsoftware.votifier.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_14_R1.MinecraftKey;
