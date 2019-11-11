@@ -3,9 +3,8 @@ package Tests;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import org.json.JSONException;
-
 import com.solinia.solinia.Utils.ForgeUtils;
+import com.vexsoftware.votifier.json.JSONException;
 
 public class ForgeUtilsTest {
 	@Test

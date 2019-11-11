@@ -16,10 +16,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordBotspamChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordContentTeamChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 
 public class CommandSetClass implements CommandExecutor {
 
@@ -35,11 +31,7 @@ public class CommandSetClass implements CommandExecutor {
 	        List<ISoliniaClass> rawpros = StateManager.getInstance().getConfigurationManager().getClasses();
 	        
 			if ((
-					sender instanceof ConsoleCommandSender || 
-					sender instanceof DiscordDefaultChannelCommandSender || 
-					sender instanceof DiscordContentTeamChannelCommandSender || 
-					sender instanceof DiscordBotspamChannelCommandSender ||
-					sender instanceof DiscordAdminChannelCommandSender
+					sender instanceof ConsoleCommandSender
 					))
 			{
 				String tmplist = "";

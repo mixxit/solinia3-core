@@ -8,10 +8,6 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordBotspamChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordContentTeamChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandWhisper implements CommandExecutor {
@@ -39,11 +35,7 @@ public class CommandWhisper implements CommandExecutor {
             return true;
 		} else {
 			if ((
-					sender instanceof ConsoleCommandSender || 
-					sender instanceof DiscordDefaultChannelCommandSender || 
-					sender instanceof DiscordContentTeamChannelCommandSender || 
-					sender instanceof DiscordBotspamChannelCommandSender ||
-					sender instanceof DiscordAdminChannelCommandSender
+					sender instanceof ConsoleCommandSender
 					))
 			{
 				StringBuilder builder = new StringBuilder();

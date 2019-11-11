@@ -37,11 +37,6 @@ import com.solinia.solinia.Models.SoliniaClass;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
-import com.solinia.solinia.Providers.DiscordAdminChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordBotspamChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordContentTeamChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordDefaultChannelCommandSender;
-import com.solinia.solinia.Providers.DiscordInCharacterChannelCommandSender;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -49,7 +44,6 @@ import de.slikey.effectlib.EffectManager;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import sx.blah.discord.api.IDiscordClient;
 
 public class CoreState {
 	private boolean isInitialised = false;
@@ -63,12 +57,6 @@ public class CoreState {
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
 	//private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
 	private String instanceGuid;
-	private IDiscordClient discordClient;
-	private DiscordAdminChannelCommandSender discordAdminChannelCommandSender;
-	private DiscordDefaultChannelCommandSender discordDefaultChannelCommandSender;
-	private DiscordInCharacterChannelCommandSender discordInCharacterChannelCommandSender;
-	private DiscordContentTeamChannelCommandSender discordContentTeamChannelCommandSender;
-	private DiscordBotspamChannelCommandSender discordBotspamChannelCommandSender;
 	private EffectManager effectManager;
 	
 	private List<Integer> currentHotZones = new ArrayList<Integer>();
@@ -153,11 +141,6 @@ public class CoreState {
 		isInitialised = false;
 		final int SHORT_ID_LENGTH = 8;
 		this.instanceGuid = RandomStringUtils.random(SHORT_ID_LENGTH);
-		this.discordAdminChannelCommandSender = new DiscordAdminChannelCommandSender();
-		this.discordDefaultChannelCommandSender = new DiscordDefaultChannelCommandSender();
-		this.discordInCharacterChannelCommandSender = new DiscordInCharacterChannelCommandSender();
-		this.discordContentTeamChannelCommandSender = new DiscordContentTeamChannelCommandSender();
-		this.discordBotspamChannelCommandSender = new DiscordBotspamChannelCommandSender();
 		
 		// If its tuesday or sunday you will get 100% bonus with XP
 		Date now = new Date();
@@ -946,41 +929,6 @@ public class CoreState {
 
 	public String getInstanceGuid() {
 		return this.instanceGuid;
-	}
-
-	public void setDiscordClient(IDiscordClient discordClient) {
-		this.discordClient = discordClient;
-	}
-
-	public IDiscordClient getDiscordClient() {
-		return this.discordClient;
-	}
-
-	public DiscordDefaultChannelCommandSender getDiscordDefaultChannelCommandSender() {
-		// TODO Auto-generated method stub
-		return this.discordDefaultChannelCommandSender;
-	}
-
-	
-	public DiscordAdminChannelCommandSender getDiscordAdminChannelCommandSender() {
-		// TODO Auto-generated method stub
-		return this.discordAdminChannelCommandSender;
-	}
-
-
-	public DiscordInCharacterChannelCommandSender getDiscordInCharacterChannelCommandSender() {
-		// TODO Auto-generated method stub
-		return this.discordInCharacterChannelCommandSender;
-	}
-	
-	public DiscordContentTeamChannelCommandSender getDiscordContentTeamChannelCommandSender() {
-		// TODO Auto-generated method stub
-		return this.discordContentTeamChannelCommandSender;
-	}
-	
-	public DiscordBotspamChannelCommandSender getDiscordBotspamChannelCommandSender() {
-		// TODO Auto-generated method stub
-		return this.discordBotspamChannelCommandSender;
 	}
 
 	public double getXPDayModifier() {

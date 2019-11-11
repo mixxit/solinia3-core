@@ -44,8 +44,6 @@ public class CommandPray implements CommandExecutor {
         	
         	String message = "[" + solPlayer.getClassObj().getName() + "/" + player.getName() + "] " + player.getDisplayName() + " is praying to the Gods! " + prayerText;
         		
-        	StateManager.getInstance().getChannelManager().sendToDiscordMC(null, StateManager.getInstance().getChannelManager().getDiscordContentTeamChannelId(), message);
-        		
         	sender.sendMessage("* The Gods have heard your prayer");
         } catch (Exception e)
         {

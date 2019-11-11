@@ -126,7 +126,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private ConcurrentHashMap<String, Integer> monthlyVote = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, SoliniaReagent> reagentsPouch = new ConcurrentHashMap<Integer, SoliniaReagent>();
 	private Double pendingXp = 0d;
-	private boolean showDiscord = true;
 	private int oathId = 0;
 
 	@Override
@@ -614,10 +613,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (getClassObj() != null)
 				classname = getClassObj().getName();
 
-			StateManager.getInstance().getChannelManager().sendToDiscordMC(null,
-					StateManager.getInstance().getChannelManager().getDiscordMainChannelId(),
-					getFullName() + " has reached new heights as a level " + (int) Math.floor(newlevel) + " "
-							+ classname.toLowerCase() + "!");
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
 
 			if (newlevel < 6)
@@ -3395,16 +3390,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (experience < 0)
 			experience = 0d;
 		this.pendingXp += experience;
-	}
-
-	@Override
-	public boolean isShowDiscord() {
-		return showDiscord;
-	}
-
-	@Override
-	public void setShowDiscord(boolean showDiscord) {
-		this.showDiscord = showDiscord;
 	}
 
 	@Override
