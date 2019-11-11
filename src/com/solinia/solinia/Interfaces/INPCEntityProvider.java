@@ -14,4 +14,6 @@ public interface INPCEntityProvider {
 
 	void removeAllNpcs();
 
+	void removeAllNpcsLater();
+
 }

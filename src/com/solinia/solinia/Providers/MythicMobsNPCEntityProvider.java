@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
@@ -40,8 +42,15 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 	}
 	
 	@Override
-	public void removeAllNpcs() {
+	public void removeAllNpcsLater() {
 		Utils.dispatchCommandLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "mm mobs killall");
+	}
+	
+	@Override
+	public void removeAllNpcs() {
+		final Plugin pluginToSend = Bukkit.getPluginManager().getPlugin("Solinia3Core");
+		final CommandSender senderToSend = pluginToSend.getServer().getConsoleSender();
+		pluginToSend.getServer().dispatchCommand(senderToSend,"mm mobs killall");
 	}
 
 	@Override
