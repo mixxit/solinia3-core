@@ -18,6 +18,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.dynmap.DynmapAPI;
+import org.dynmap.markers.AreaMarker;
+import org.dynmap.markers.Marker;
+import org.dynmap.markers.MarkerSet;
+
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
@@ -59,9 +64,14 @@ public class CoreState {
 	private String instanceGuid;
 	private EffectManager effectManager;
 	
+	public Map<String, AreaMarker> resareas = new HashMap<String, AreaMarker>();
+    public Map<String, Marker> resmark = new HashMap<String, Marker>();
+	
 	private List<Integer> currentHotZones = new ArrayList<Integer>();
 	private double xpdaybonus = 0;
 	private String requiredModVersion;
+	private DynmapAPI dynmap;
+	private MarkerSet markerset;
 	
 	public String getRequiredModVersion()
 	{
@@ -940,5 +950,22 @@ public class CoreState {
 
 	public void setRequiredModVersion(String expectedClientModVersion) {
 		this.requiredModVersion = expectedClientModVersion;
+	}
+
+	public void setDynmap(DynmapAPI api) {
+		this.dynmap = api;
+	}
+
+	public DynmapAPI getDynmap() {
+		return this.dynmap;
+	}
+
+	public void setMarkerSet(MarkerSet set) {
+		this.markerset = set;
+	}
+	
+	public MarkerSet getMarkerSet()
+	{
+		return this.markerset;
 	}
 }

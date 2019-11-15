@@ -1,15 +1,24 @@
 package com.solinia.solinia;
 
 import java.io.IOException;
+import org.dynmap.DynmapWebChatEvent;
+import org.dynmap.markers.AreaMarker;
+import org.dynmap.markers.Marker;
+import org.dynmap.markers.MarkerAPI;
+import org.dynmap.markers.MarkerIcon;
+import org.dynmap.markers.MarkerSet;
+import org.dynmap.markers.PlayerSet;
 import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Listeners.DynmapListener;
 import com.solinia.solinia.Listeners.PlayerValidatorModListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
 import com.solinia.solinia.Listeners.Solinia3CoreChunkListener;
@@ -53,6 +62,7 @@ import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.ClientVersionTimer;
+import com.solinia.solinia.Timers.DynmapTimer;
 import com.solinia.solinia.Timers.EntityAutoAttackTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
@@ -73,7 +83,7 @@ import org.json.JSONException;
 
 import de.slikey.effectlib.EffectManager;
 import net.milkbowl.vault.economy.Economy;
-
+import org.dynmap.DynmapAPI;
 public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListener  {
 
 	private CastingTimer castingTimer;
@@ -96,12 +106,24 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
 	private ClientVersionTimer clientVersionTimer;
-	
+	private DynmapTimer dynmapTimer;
+	private Plugin dynmap;
+	private DynmapAPI api;
+
 	private Economy economy;
+	private MarkerSet set;
 	
 	@Override
 	public void onEnable() {
-		System.out.println("[Solinia3Core] Plugin Enabled");
+		dynmap = getServer().getPluginManager().getPlugin("dynmap");
+        if(dynmap == null) {
+        	System.out.println("Solinia3-Core! Cannot find dynmap! Disabling plugin...");
+			Bukkit.getPluginManager().disablePlugin(this); 
+			return;
+        }
+        api = (DynmapAPI)dynmap; /* Get API */
+        set = api.getMarkerAPI().createMarkerSet("towny.markerset", "SoliniaZones", api.getMarkerAPI().getMarkerIcons(), false);
+		
 		String expectedClientModVersion = null;
 		try {
 			expectedClientModVersion = ForgeUtils.fetchExpectedForgeClientModVersion();
@@ -145,14 +167,17 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		registerEvents();
 
 		setupEconomy();
+		
 
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setRequiredModVersion(expectedClientModVersion);
-		
+		StateManager.getInstance().setDynmap(this.api);
+		StateManager.getInstance().setMarkerSet(this.set);
 		RegisterEntities();
 		
 		if (!getServer().getPluginManager().isPluginEnabled(this)) return;
-		
+		System.out.println("[Solinia3Core] Plugin Enabled");
+
 		System.out.println("Registered outgoing plugin channel: " + Solinia3UIChannelNames.Outgoing);		
 		getServer().getMessenger().registerOutgoingPluginChannel(this, Solinia3UIChannelNames.Outgoing); // we register the outgoing channel
 	    
@@ -192,6 +217,15 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			StateManager.getInstance().getEntityManager().removeAllPets();
 			StateManager.getInstance().getEntityManager().getNPCEntityProvider().removeAllNpcs();
 			StateManager.getInstance().Commit();
+			
+			
+			// Cleanup Dynmap
+	        StateManager.getInstance().resareas.clear(); 
+	        if(set != null) {
+	            set.deleteMarkerSet();
+	            set = null;
+	        }
+	        
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,8 +234,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		effectManager.dispose();
 		
 		UnregisterEntities();
-		
-		
 		
 		System.out.println("[Solinia3Core] Plugin Disabled");
 	}
@@ -383,6 +415,10 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		clientVersionTimer = new ClientVersionTimer();
 		// every 30 seconds
 		clientVersionTimer.runTaskTimer(this, 30 * 20L, 30 * 20L);
+		
+		dynmapTimer = new DynmapTimer();
+		// every 5 seconds
+		dynmapTimer.runTaskTimer(this, 5 * 20L, 5 * 20L);
 	}
 
 	private void registerEvents() {
@@ -398,6 +434,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreChunkListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerValidatorModListener(this), this);
+		getServer().getPluginManager().registerEvents(new DynmapListener(this), this);
 
 		setupCommands();
 	}
