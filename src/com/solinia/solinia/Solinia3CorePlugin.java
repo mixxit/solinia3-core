@@ -185,7 +185,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		StateManager.getInstance().setRequiredModVersion(expectedClientModVersion);
 		StateManager.getInstance().setDynmap(this.dynmapApi);
 		StateManager.getInstance().setMarkerSet(this.set);
-		//StateManager.getInstance().setTowny(this.townyApi);
+		StateManager.getInstance().setTowny(this.townyApi);
 		RegisterEntities();
 		
 		if (!getServer().getPluginManager().isPluginEnabled(this)) return;

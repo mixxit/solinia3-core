@@ -1,81 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
- 
-<!--
- | This is the configuration file for Maven. It can be specified at two levels:
- |
- |  1. User Level. This settings.xml file provides configuration for a single user,
- |                 and is normally provided in ${user.home}/.m2/settings.xml.
- |
- |                 NOTE: This location can be overridden with the CLI option:
- |
- |                 -s /path/to/user/settings.xml
- |
- |  2. Global Level. This settings.xml file provides configuration for all Maven
- |                 users on a machine (assuming they're all using the same Maven
- |                 installation). It's normally provided in
- |                 ${maven.home}/conf/settings.xml.
- |
- |                 NOTE: This location can be overridden with the CLI option:
- |
- |                 -gs /path/to/global/settings.xml
- | |
- |-->
+
+<!-- | This is the configuration file for Maven. It can be specified at two 
+	levels: | | 1. User Level. This settings.xml file provides configuration 
+	for a single user, | and is normally provided in ${user.home}/.m2/settings.xml. 
+	| | NOTE: This location can be overridden with the CLI option: | | -s /path/to/user/settings.xml 
+	| | 2. Global Level. This settings.xml file provides configuration for all 
+	Maven | users on a machine (assuming they're all using the same Maven | installation). 
+	It's normally provided in | ${maven.home}/conf/settings.xml. | | NOTE: This 
+	location can be overridden with the CLI option: | | -gs /path/to/global/settings.xml 
+	| | | -->
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-          
-  <!--  Change username in below line  -->        
-  <interactiveMode>true</interactiveMode>
- 
-  <offline>false</offline>
- 
-  <pluginGroups>
-    <!-- pluginGroup
-     | Specifies a further group identifier to use for plugin lookup.
-    <pluginGroup>com.your.plugins</pluginGroup>
-    -->
-  </pluginGroups>
- 
-  <proxies>
-    <!--
-    <proxy>
-      <id>optional</id>
-      <active>true</active>
-      <protocol>http</protocol>
-      <username>proxyuser</username>
-      <password>proxypass</password>
-      <host>proxy.host.net</host>
-      <port>80</port>
-      <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
-    </proxy>
-    -->
-  </proxies>
- 
-  <servers>
-<server>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+	<!-- Change username in below line -->
+	<interactiveMode>true</interactiveMode>
+
+	<offline>false</offline>
+
+	<pluginGroups>
+		<!-- pluginGroup | Specifies a further group identifier to use for plugin 
+			lookup. <pluginGroup>com.your.plugins</pluginGroup> -->
+	</pluginGroups>
+
+	<proxies>
+		<!-- <proxy> <id>optional</id> <active>true</active> <protocol>http</protocol> 
+			<username>proxyuser</username> <password>proxypass</password> <host>proxy.host.net</host> 
+			<port>80</port> <nonProxyHosts>local.net|some.host.com</nonProxyHosts> </proxy> -->
+	</proxies>
+
+	<servers>
+		<server>
 			<id>github</id>
 			<username>${env.CI_DEPLOY_USERNAME}</username>
 			<password>${env.CI_DEPLOY_PASSWORD}</password>
 		</server>
-<server>
+		<server>
 			<id>github-Towny</id>
 			<username>${env.CI_DEPLOY_USERNAME}</username>
 			<password>${env.CI_DEPLOY_PASSWORD}</password>
 		</server>
-  </servers>
- 
-  <mirrors>
-    <!--
-    <mirror>
-      <id>mirrorId</id>
-      <mirrorOf>repositoryId</mirrorOf>
-      <name>mirror description</name>
-      <url>http://my.repository.com/repo/path</url> 
-    </mirror>
-    -->
-  </mirrors>
- 
-<activeProfiles>
+	</servers>
+
+	<mirrors>
+		<!-- <mirror> <id>mirrorId</id> <mirrorOf>repositoryId</mirrorOf> <name>mirror 
+			description</name> <url>http://my.repository.com/repo/path</url> </mirror> -->
+	</mirrors>
+
+	<activeProfiles>
 		<activeProfile>github</activeProfile>
 	</activeProfiles>
 
@@ -83,21 +55,21 @@
 		<profile>
 			<id>github</id>
 			<repositories>
-	<repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/mixxit/solinia3-core</url>
-        </repository>
-        <repository>
-            <id>github-Towny</id>
-            <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
+				<repository>
+					<id>github</id>
+					<url>https://maven.pkg.github.com/mixxit/solinia3-core</url>
+				</repository>
+				<repository>
+					<id>github-Towny</id>
+					<url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
 					<releases>
 						<enabled>true</enabled>
 					</releases>
 					<snapshots>
 						<enabled>false</enabled>
 					</snapshots>
-        </repository> 
+				</repository>
 			</repositories>
 		</profile>
-	</profiles> 
+	</profiles>
 </settings>

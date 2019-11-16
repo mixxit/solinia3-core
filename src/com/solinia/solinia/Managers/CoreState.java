@@ -23,6 +23,7 @@ import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerSet;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
@@ -72,6 +73,7 @@ public class CoreState {
 	private String requiredModVersion;
 	private DynmapAPI dynmap;
 	private MarkerSet markerset;
+	private Towny towny;
 	
 	public String getRequiredModVersion()
 	{
@@ -967,5 +969,14 @@ public class CoreState {
 	public MarkerSet getMarkerSet()
 	{
 		return this.markerset;
+	}
+
+	public void setTowny(Towny townyApi) {
+		this.towny = townyApi;
+	}
+	
+	public Towny getTowny()
+	{
+		return this.towny;
 	}
 }

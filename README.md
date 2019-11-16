@@ -3,7 +3,7 @@ Core RPG Plugin
 
 # POM.XML
 
-See our Packages page
+See our Packages page in github
 
 # Libraries required
 Please see Manifest for required files
