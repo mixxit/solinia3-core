@@ -53,7 +53,7 @@
  
   <servers>
 <server>
-			<id>github-solinia</id>
+			<id>github</id>
 			<username>${env.CI_DEPLOY_USERNAME}</username>
 			<password>${env.CI_DEPLOY_PASSWORD}</password>
 		</server>
@@ -84,14 +84,8 @@
 			<id>github</id>
 			<repositories>
 	<repository>
-            <id>github-solinia</id>
+            <id>github</id>
             <url>https://maven.pkg.github.com/mixxit/solinia3-core</url>
-					<releases>
-						<enabled>true</enabled>
-					</releases>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
         </repository>
         <repository>
             <id>github-Towny</id>
