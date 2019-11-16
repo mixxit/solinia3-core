@@ -1,6 +1,10 @@
 package com.solinia.solinia.Timers;
 
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,6 +18,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaZone;
+
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class DynmapTimer extends BukkitRunnable {
 	@Override
@@ -34,14 +40,17 @@ public class DynmapTimer extends BukkitRunnable {
         		handleZone(zone, newmap, newmark);
         	}
         	
-        	if (StateManager.getInstance().renderTownsOnDynmap)
-        	for (Entry<String, Town> town : StateManager.getInstance().getTowny().getTownyUniverse().getTownsMap().entrySet())
-        	{
-        		for(TownBlock townBlock : town.getValue().getTownBlocks())
-        		{
-        			handleTown(townBlock, newmap, newmark);
-        		}
-        	}
+        	if (StateManager.getInstance().renderTownsOnDynmap != null && !StateManager.getInstance().renderTownsOnDynmap.equals(""))
+            	for (Entry<String, Town> town : StateManager.getInstance().getTowny().getTownyUniverse().getTownsMap().entrySet())
+            	{
+            		if (!town.getKey().equals(StateManager.getInstance().renderTownsOnDynmap))
+            			continue;
+            		
+            		for(TownBlock townBlock : town.getValue().getTownBlocks())
+            		{
+            			handleTown(townBlock, newmap, newmark);
+            		}
+            	}
         	
         } catch (CoreStateInitException e)
         {

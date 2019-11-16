@@ -47,8 +47,8 @@ public class CommandCommit implements CommandExecutor {
 				
 			}
 			
-			if (args[0].equals("showtowns")) {
-				StateManager.getInstance().renderTownsOnDynmap = !StateManager.getInstance().renderTownsOnDynmap;
+			if (args.length > 1 && args[0].equals("showtowns")) {
+				StateManager.getInstance().renderTownsOnDynmap = args[1];
 			}
 				
 			

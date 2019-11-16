@@ -74,7 +74,7 @@ public class CoreState {
 	private DynmapAPI dynmap;
 	private MarkerSet markerset;
 	private Towny towny;
-	public boolean renderTownsOnDynmap = false;
+	public String renderTownsOnDynmap = "";
 	
 	public String getRequiredModVersion()
 	{
