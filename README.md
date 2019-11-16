@@ -1,6 +1,10 @@
 # solinia3-core
 Core RPG Plugin
 
+# POM.XML
+
+See our Packages page
+
 # Libraries required
 Please see Manifest for required files
 
