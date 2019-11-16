@@ -47,6 +47,11 @@ public class CommandCommit implements CommandExecutor {
 				
 			}
 			
+			if (args[0].equals("showtowns")) {
+				StateManager.getInstance().renderTownsOnDynmap = !StateManager.getInstance().renderTownsOnDynmap;
+			}
+				
+			
 			if (args[0].equals("patch")) {
 				System.out.println("Patching");
 				Utils.Patcher();

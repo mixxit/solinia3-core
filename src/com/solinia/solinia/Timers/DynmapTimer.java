@@ -34,6 +34,7 @@ public class DynmapTimer extends BukkitRunnable {
         		handleZone(zone, newmap, newmark);
         	}
         	
+        	if (StateManager.getInstance().renderTownsOnDynmap)
         	for (Entry<String, Town> town : StateManager.getInstance().getTowny().getTownyUniverse().getTownsMap().entrySet())
         	{
         		for(TownBlock townBlock : town.getValue().getTownBlocks())
