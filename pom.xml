@@ -60,10 +60,22 @@
 		<repository>
 			<id>md_5-snapshots</id>
 			<url>https://repo.md-5.net/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
 		</repository>
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
 		</repository>
 		<repository>
 			<id>elmakers-repo</id>
@@ -82,19 +94,43 @@
 		<repository>
 			<id>bintray-repo</id>
 			<url>https://dl.bintray.com/nuvotifier/maven/</url>
-		</repository>
-		<repository>
-			<id>zz_lumine-repo</id>
-			<url>http://mvn.lumine.io/repository/maven-snapshots/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 		</repository>
 		<repository>
 			<id>dynmap-repo</id>
 			<url>http://repo.mikeprimm.com/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 		</repository>
-        <repository>
-            <id>github-Towny</id>
-            <url>https://maven.pkg.github.com/TownyAdvanced/Towny/packages/</url>
-        </repository> 
+		<repository>
+			<id>zz_lumine-repo</id>
+			<url>http://mvn.lumine.io/repository/maven-snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+				<repository>
+			<id>github-Towny</id>
+			<url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
@@ -151,13 +187,6 @@
 			<version>1.5</version>
 		</dependency>
 		<dependency>
-			<groupId>io.lumine.xikage</groupId>
-			<artifactId>MythicMobs</artifactId>
-			<version>4.8.0-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -167,11 +196,16 @@
 			<artifactId>dynmap-api</artifactId>
 			<version>2.2</version>
 		</dependency>
-<dependency>
-      <groupId>com.palmergames.bukkit.towny</groupId>
-      <artifactId>Towny</artifactId>
-      <version>0.95.0.5</version>
-      <scope>provided</scope>
-  	</dependency>
+		<dependency>
+			<groupId>com.palmergames.bukkit.towny</groupId>
+			<artifactId>Towny</artifactId>
+			<version>0.95.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.lumine.xikage</groupId>
+			<artifactId>MythicMobs</artifactId>
+			<version>4.8.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>
