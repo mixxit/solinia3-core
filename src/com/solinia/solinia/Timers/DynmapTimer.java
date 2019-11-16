@@ -1,7 +1,9 @@
 package com.solinia.solinia.Timers;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -46,9 +48,28 @@ public class DynmapTimer extends BukkitRunnable {
             		if (!town.getKey().toUpperCase().equals(StateManager.getInstance().renderTownsOnDynmap.toUpperCase()))
             			continue;
             		
+            		HashMap<Point,Boolean> rows = new HashMap<Point,Boolean>();
             		for(TownBlock townBlock : town.getValue().getTownBlocks())
             		{
-            			handleTown(townBlock, newmap, newmark);
+            			rows.put(new Point(townBlock.getX(),townBlock.getZ()), true);
+            		}
+            		HashMap<String,List<Point>> strips = GetStripsX(rows);
+            		for(String stripName : strips.keySet())
+            		{
+            			
+            			String name = stripName;
+
+            	        int townBlockSize = 16;
+            	        
+            	        int minX = strips.get(name).stream().min(Comparator.comparing(v -> v.x)).get().x;
+            			int minZ = strips.get(name).stream().min(Comparator.comparing(v -> v.y)).get().y;
+            			int maxX = strips.get(name).stream().max(Comparator.comparing(v -> v.x)).get().x;
+            			int maxZ = strips.get(name).stream().max(Comparator.comparing(v -> v.y)).get().y;
+            	        
+            	        double[] xVals = {minX*townBlockSize, (maxX*townBlockSize) + townBlockSize};
+            	        double[] zVals = {minZ*townBlockSize, (maxZ*townBlockSize) + townBlockSize};
+            	        
+            			handleAreaMarker(name, xVals,zVals, newmap);
             		}
             	}
         	
@@ -76,18 +97,59 @@ public class DynmapTimer extends BukkitRunnable {
         StateManager.getInstance().resmark = newmark;
 	}
 
-	private void handleTown(TownBlock townBlock, Map<String, AreaMarker> newmap, Map<String, Marker> newmark) {
-		String name = townBlock.getWorldCoord().getX()+"_"+townBlock.getWorldCoord().getZ();
+	public static HashMap<String, List<Point>> GetStripsX(HashMap<Point, Boolean> rows) {
+		HashMap<String, List<Point>> strips = new HashMap<String,List<Point>>();
+		
+		int minX = rows.keySet().stream().min(Comparator.comparing(v -> v.x)).get().x;
+		int minZ = rows.keySet().stream().min(Comparator.comparing(v -> v.y)).get().y;
+		int maxX = rows.keySet().stream().max(Comparator.comparing(v -> v.x)).get().x;
+		int maxZ = rows.keySet().stream().max(Comparator.comparing(v -> v.y)).get().y;
+
+//		System.out.println("minX: " + minX);
+//		System.out.println("minZ: " + minZ);
+//		System.out.println("maxX: " + maxX);
+//		System.out.println("maxZ: " + maxZ);
+		Tuple<String,List<Point>> newStrip = null;
+		
+		for (int x = minX; x <= maxX; x++)
+		{
+			for (int z = minZ; z <= maxZ; z++)
+    		{
+				//System.out.println("x: " + x + " z: " + z);
+				if (!rows.containsKey(new Point(x,z)))
+				{
+					// Skip it and save last Strip
+					if (newStrip != null)
+					{
+						strips.put(newStrip.a(), newStrip.b());
+						newStrip = null;
+					}
+					continue;
+				}
+				
+				if (newStrip == null)
+				{
+					newStrip = new Tuple<String,List<Point>>(x+"_"+z,new ArrayList<Point>());
+				}
+				
+				newStrip.b().add(new Point(x,z));
+    		}
+			
+			// at end, we can write it if we havent already
+			if (newStrip != null)
+			{
+				strips.put(newStrip.a(), newStrip.b());
+				newStrip = null;
+			}
+		}
+		
+		return strips;
+	}
+
+	private void handleAreaMarker(String name, double[] xVals, double[] zVals, Map<String, AreaMarker> newmap) {
         
         /* Build popup */
         String desc = "info: " + name;
-        
-        int townBlockSize = 16;
-        int cornerPosX = townBlock.getX()*townBlockSize;
-        int cornerPosZ = townBlock.getZ()*townBlockSize;
-        
-        double[] xVals = {cornerPosX, cornerPosX + townBlockSize};
-        double[] zVals = {cornerPosZ, cornerPosZ + townBlockSize};
         
         boolean displayLabel = true;
         boolean persistent = false;
