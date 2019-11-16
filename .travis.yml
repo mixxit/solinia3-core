@@ -1,11 +1,8 @@
 language: java
-script:
-- mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-- mvn test -B
 deploy:
   provider: script
   script: 
-  - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn deploy"
+  - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -Drevision=1.14.4-R0.1-$TRAVIS_COMMIT deploy"
   skip_cleanup: true
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
