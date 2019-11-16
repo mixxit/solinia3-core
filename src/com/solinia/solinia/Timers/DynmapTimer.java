@@ -43,7 +43,7 @@ public class DynmapTimer extends BukkitRunnable {
         	if (StateManager.getInstance().renderTownsOnDynmap != null && !StateManager.getInstance().renderTownsOnDynmap.equals(""))
             	for (Entry<String, Town> town : StateManager.getInstance().getTowny().getTownyUniverse().getTownsMap().entrySet())
             	{
-            		if (!town.getKey().equals(StateManager.getInstance().renderTownsOnDynmap))
+            		if (!town.getKey().toUpperCase().equals(StateManager.getInstance().renderTownsOnDynmap.toUpperCase()))
             			continue;
             		
             		for(TownBlock townBlock : town.getValue().getTownBlocks())
@@ -86,8 +86,8 @@ public class DynmapTimer extends BukkitRunnable {
         int cornerPosX = townBlock.getX()*townBlockSize;
         int cornerPosZ = townBlock.getZ()*townBlockSize;
         
-        double[] xVals = {cornerPosX - townBlockSize, cornerPosX + townBlockSize};
-        double[] zVals = {cornerPosZ - townBlockSize, cornerPosZ + townBlockSize};
+        double[] xVals = {cornerPosX, cornerPosX + townBlockSize};
+        double[] zVals = {cornerPosZ, cornerPosZ + townBlockSize};
         
         boolean displayLabel = true;
         boolean persistent = false;
