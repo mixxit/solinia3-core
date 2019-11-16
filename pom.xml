@@ -168,10 +168,9 @@
 			<version>2.2</version>
 		</dependency>
 		<dependency>
-   	        <groupId>com.palmergames.bukkit.towny</groupId>
-	        <artifactId>Towny</artifactId>
-	        <version>LATEST</version>
-	        <scope>provided</scope>
-        </dependency>
+		  <groupId>com.palmergames.bukkit.towny</groupId>
+		  <artifactId>Towny</artifactId>
+		  <version>0.95.1.0</version>
+		</dependency>
 	</dependencies>
 </project>
