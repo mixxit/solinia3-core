@@ -1,11 +1,12 @@
 language: java
 before_install:
+  - "export NOW=$(date +%s)"
+  - "echo $NOW"
   - "cp .travis.settings.xml $HOME/.m2/settings.xml"
 deploy:
   provider: script
   script: 
-  - "export NOW=$(date +%s)"
-  - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -Drevision=1.14.4-R0.1-$now deploy"
+  - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -Drevision=1.14.4-R0.1-$NOW deploy"
   skip_cleanup: true
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
