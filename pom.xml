@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.solinia</groupId>
 	<artifactId>solinia3-core</artifactId>
-	<version>1.14.2-R0.1-SNAPSHOT</version>
+	<version>1.14.4-R0.1</version>
 	<name>solinia3-core</name>
 	<description>The EverQuest like RPG plugin for spigot</description>
 
