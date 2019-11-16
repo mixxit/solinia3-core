@@ -110,7 +110,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private Plugin dynmap;
 	private DynmapAPI dynmapApi;
 	private Plugin towny;
-	//private Towny townyApi;
+	private Towny townyApi;
 
 	private Economy economy;
 	private MarkerSet set;
@@ -127,12 +127,12 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
         set = dynmapApi.getMarkerAPI().createMarkerSet("towny.markerset", "SoliniaZones", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
 		
         towny = getServer().getPluginManager().getPlugin("Towny");
-/*        if(towny == null) {
+        if(towny == null) {
         	System.out.println("Solinia3-Core! Cannot find Towny! Disabling plugin...");
 			Bukkit.getPluginManager().disablePlugin(this); 
 			return;
-        }*/
-        //townyApi = (Towny)towny; /* Get API */
+        }
+        townyApi = (Towny)towny; /* Get API */
         
 		String expectedClientModVersion = null;
 		try {
