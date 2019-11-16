@@ -8,7 +8,7 @@
 	<name>solinia3-core</name>
 	<description>The EverQuest like RPG plugin for Spigot</description>
 	<properties>
-  		<revision>1.14.4-R0.1-${timestamp}</revision>
+  		<revision>1.14.4-R0.1</revision>
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
