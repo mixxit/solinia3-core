@@ -9,6 +9,7 @@
 	<description>The EverQuest like RPG plugin for Spigot</description>
 
 	<build>
+		<finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
