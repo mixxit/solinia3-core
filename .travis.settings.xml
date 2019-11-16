@@ -12,18 +12,12 @@
 			<id>github</id>
 			<repositories>
 				<repository>
-					<id>central</id>
-					<url>https://repo1.maven.org/maven2</url>
-					<releases>
-						<enabled>true</enabled>
-					</releases>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-				</repository>
-				<repository>
 					<id>github-solinia3-core</id>
 					<url>https://maven.pkg.github.com/mixxit/Solinia3-core</url>
+				</repository>
+				<repository>
+					<id>github-towny</id>
+					<url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
 				</repository>
 			</repositories>
 		</profile>
@@ -32,6 +26,11 @@
 	<servers>
 		<server>
 			<id>github</id>
+			<username>${env.CI_DEPLOY_USERNAME}</username>
+			<password>${env.CI_DEPLOY_PASSWORD}</password>
+		</server>
+		<server>
+			<id>github-towny</id>
 			<username>${env.CI_DEPLOY_USERNAME}</username>
 			<password>${env.CI_DEPLOY_PASSWORD}</password>
 		</server>
