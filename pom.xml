@@ -6,7 +6,7 @@
 	<artifactId>solinia3-core</artifactId>
 	<version>1.14.4-R0.1</version>
 	<name>solinia3-core</name>
-	<description>The EverQuest like RPG plugin for spigot</description>
+	<description>The EverQuest like RPG plugin for Spigot</description>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
