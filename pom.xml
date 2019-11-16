@@ -88,17 +88,13 @@
 			<url>http://mvn.lumine.io/repository/maven-snapshots/</url>
 		</repository>
 		<repository>
-			<releases>
-			</releases>
-			<snapshots>
-			</snapshots>
 			<id>dynmap-repo</id>
 			<url>http://repo.mikeprimm.com/</url>
 		</repository>
 		<repository>
-			<id>github-Towny</id>
-			<url>https://maven.pkg.github.com/TownyAdvanced/Towny/packages</url>
-		</repository>
+            <id>github-Towny</id>
+		    <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
+        </repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
@@ -171,12 +167,11 @@
 			<artifactId>dynmap-api</artifactId>
 			<version>2.2</version>
 		</dependency>
-    <dependency>
-      <groupId>com.palmergames.bukkit.towny</groupId>
-      <artifactId>Towny</artifactId>
-      <version>0.95.1.0</version>
-      <scope>provided</scope>
-    </dependency>
-
+		<dependency>
+   	        <groupId>com.palmergames.bukkit.towny</groupId>
+	        <artifactId>Towny</artifactId>
+	        <version>LATEST</version>
+	        <scope>provided</scope>
+        </dependency>
 	</dependencies>
 </project>
