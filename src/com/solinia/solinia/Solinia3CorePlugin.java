@@ -108,7 +108,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private ClientVersionTimer clientVersionTimer;
 	private DynmapTimer dynmapTimer;
 	private Plugin dynmap;
-	private DynmapAPI api;
+	private DynmapAPI dynmapApi;
+	private Plugin towny;
+	//private Towny townyApi;
 
 	private Economy economy;
 	private MarkerSet set;
@@ -121,9 +123,17 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			Bukkit.getPluginManager().disablePlugin(this); 
 			return;
         }
-        api = (DynmapAPI)dynmap; /* Get API */
-        set = api.getMarkerAPI().createMarkerSet("towny.markerset", "SoliniaZones", api.getMarkerAPI().getMarkerIcons(), false);
+        dynmapApi = (DynmapAPI)dynmap; /* Get API */
+        set = dynmapApi.getMarkerAPI().createMarkerSet("towny.markerset", "SoliniaZones", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
 		
+        towny = getServer().getPluginManager().getPlugin("Towny");
+/*        if(towny == null) {
+        	System.out.println("Solinia3-Core! Cannot find Towny! Disabling plugin...");
+			Bukkit.getPluginManager().disablePlugin(this); 
+			return;
+        }*/
+        //townyApi = (Towny)towny; /* Get API */
+        
 		String expectedClientModVersion = null;
 		try {
 			expectedClientModVersion = ForgeUtils.fetchExpectedForgeClientModVersion();
@@ -171,8 +181,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setRequiredModVersion(expectedClientModVersion);
-		StateManager.getInstance().setDynmap(this.api);
+		StateManager.getInstance().setDynmap(this.dynmapApi);
 		StateManager.getInstance().setMarkerSet(this.set);
+		//StateManager.getInstance().setTowny(this.townyApi);
 		RegisterEntities();
 		
 		if (!getServer().getPluginManager().isPluginEnabled(this)) return;
