@@ -1,0 +1,23 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Nov 16 13:57:03 GMT 2019
+http\://repo1.maven.org/maven2/.lastUpdated=1573912617821
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.lastUpdated=1573912596895
+https\://repo.md-5.net/content/repositories/releases/.error=
+http\://nexus.hc.to/content/repositories/pub_releases/.error=
+http\://maven.elmakers.com/repository/.lastUpdated=1573912617754
+http\://nexus.hc.to/content/repositories/pub_releases/.lastUpdated=1573912578104
+https\://repo.md-5.net/content/repositories/snapshots/.error=
+https\://repo.md-5.net/content/repositories/releases/.lastUpdated=1573912595652
+http\://mvn.lumine.io/repository/maven-snapshots/.error=Could not transfer artifact us.dynmap\:dynmap-api\:jar\:2.2 from/to zz_lumine-repo (http\://mvn.lumine.io/repository/maven-snapshots/)\: Failed to transfer file\: http\://mvn.lumine.io/repository/maven-snapshots/us/dynmap/dynmap-api/2.2/dynmap-api-2.2.jar. Return code is\: 400 , ReasonPhrase\:Repository version policy\: SNAPSHOT does not allow version\: 2.2.
+http\://maven.elmakers.com/repository/.error=
+https\://repo.inventivetalent.org/content/groups/public/.lastUpdated=1573912579514
+http\://repo.dmulloy2.net/nexus/repository/public/.error=
+http\://repo.mikeprimm.com/.lastUpdated=1573912623008
+https\://dl.bintray.com/nuvotifier/maven/.lastUpdated=1573912619697
+https\://repo.inventivetalent.org/content/groups/public/.error=
+http\://repo.dmulloy2.net/nexus/repository/public/.lastUpdated=1573912595400
+@default-zz_lumine-repo-http\://mvn.lumine.io/repository/maven-snapshots/.lastUpdated=1573912621928
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.error=
+https\://dl.bintray.com/nuvotifier/maven/.error=
+http\://repo1.maven.org/maven2/.error=
+https\://repo.md-5.net/content/repositories/snapshots/.lastUpdated=1573912596248

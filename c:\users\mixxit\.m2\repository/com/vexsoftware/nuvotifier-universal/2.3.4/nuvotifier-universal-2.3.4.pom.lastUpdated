@@ -1,0 +1,19 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Nov 16 13:56:05 GMT 2019
+http\://maven.elmakers.com/repository/.error=
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.error=
+http\://maven.elmakers.com/repository/.lastUpdated=1573912548999
+http\://nexus.hc.to/content/repositories/pub_releases/.lastUpdated=1573912547871
+https\://repo.md-5.net/content/repositories/snapshots/.error=
+https\://repo.inventivetalent.org/content/groups/public/.lastUpdated=1573912547920
+http\://repo.dmulloy2.net/nexus/repository/public/.error=
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.lastUpdated=1573912548664
+https\://repo.md-5.net/content/repositories/snapshots/.lastUpdated=1573912548518
+http\://repo.dmulloy2.net/nexus/repository/public/.lastUpdated=1573912548093
+https\://repo.md-5.net/content/repositories/releases/.lastUpdated=1573912548303
+http\://nexus.hc.to/content/repositories/pub_releases/.error=
+https\://repo.inventivetalent.org/content/groups/public/.error=
+https\://dl.bintray.com/nuvotifier/maven/.lastUpdated=1573912565429
+https\://repo.md-5.net/content/repositories/releases/.error=
+http\://repo1.maven.org/maven2/.lastUpdated=1573912565054
+http\://repo1.maven.org/maven2/.error=
