@@ -48,29 +48,7 @@ public class DynmapTimer extends BukkitRunnable {
             		if (!town.getKey().toUpperCase().equals(StateManager.getInstance().renderTownsOnDynmap.toUpperCase()))
             			continue;
             		
-            		HashMap<Point,Boolean> rows = new HashMap<Point,Boolean>();
-            		for(TownBlock townBlock : town.getValue().getTownBlocks())
-            		{
-            			rows.put(new Point(townBlock.getX(),townBlock.getZ()), true);
-            		}
-            		HashMap<String,List<Point>> strips = GetStripsX(rows);
-            		for(String stripName : strips.keySet())
-            		{
-            			
-            			String name = stripName;
-
-            	        int townBlockSize = 16;
-            	        
-            	        int minX = strips.get(name).stream().min(Comparator.comparing(v -> v.x)).get().x;
-            			int minZ = strips.get(name).stream().min(Comparator.comparing(v -> v.y)).get().y;
-            			int maxX = strips.get(name).stream().max(Comparator.comparing(v -> v.x)).get().x;
-            			int maxZ = strips.get(name).stream().max(Comparator.comparing(v -> v.y)).get().y;
-            	        
-            	        double[] xVals = {minX*townBlockSize, (maxX*townBlockSize) + townBlockSize};
-            	        double[] zVals = {minZ*townBlockSize, (maxZ*townBlockSize) + townBlockSize};
-            	        
-            			handleAreaMarker(name, xVals,zVals, newmap);
-            		}
+            		RenderTown(town,newmap);
             	}
         	
         } catch (CoreStateInitException e)
@@ -95,6 +73,32 @@ public class DynmapTimer extends BukkitRunnable {
         /* And replace with new map */
         StateManager.getInstance().resareas = newmap;
         StateManager.getInstance().resmark = newmark;
+	}
+
+	private void RenderTown(Entry<String, Town> town, Map<String, AreaMarker> newmap) {
+		HashMap<Point,Boolean> rows = new HashMap<Point,Boolean>();
+		for(TownBlock townBlock : town.getValue().getTownBlocks())
+		{
+			rows.put(new Point(townBlock.getX(),townBlock.getZ()), true);
+		}
+		HashMap<String,List<Point>> strips = GetStripsX(rows);
+		for(String stripName : strips.keySet())
+		{
+			
+			String name = stripName;
+
+	        int townBlockSize = 16;
+	        
+	        int minX = strips.get(name).stream().min(Comparator.comparing(v -> v.x)).get().x;
+			int minZ = strips.get(name).stream().min(Comparator.comparing(v -> v.y)).get().y;
+			int maxX = strips.get(name).stream().max(Comparator.comparing(v -> v.x)).get().x;
+			int maxZ = strips.get(name).stream().max(Comparator.comparing(v -> v.y)).get().y;
+	        
+	        double[] xVals = {minX*townBlockSize, (maxX*townBlockSize) + townBlockSize};
+	        double[] zVals = {minZ*townBlockSize, (maxZ*townBlockSize) + townBlockSize};
+	        
+			handleAreaMarker(name, xVals,zVals, newmap);
+		}
 	}
 
 	public static HashMap<String, List<Point>> GetStripsX(HashMap<Point, Boolean> rows) {
