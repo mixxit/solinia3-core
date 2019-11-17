@@ -127,6 +127,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
         }
         dynmapApi = (DynmapAPI)dynmap; /* Get API */
         set = dynmapApi.getMarkerAPI().createMarkerSet("solinia.markerset", "SoliniaZones", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
+        set.setHideByDefault(true);
         towny = getServer().getPluginManager().getPlugin("Towny");
         if(towny == null) {
         	System.out.println("Solinia3-Core! Cannot find Towny! Disabling plugin...");
