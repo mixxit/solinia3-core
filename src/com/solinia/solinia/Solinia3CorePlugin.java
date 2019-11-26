@@ -32,6 +32,7 @@ import com.solinia.solinia.Listeners.Solinia3CorePlayerListener;
 import com.solinia.solinia.Listeners.Solinia3CoreSpawnGroupUpdatedListener;
 import com.solinia.solinia.Listeners.Solinia3CoreVehicleListener;
 import com.solinia.solinia.Listeners.Solinia3CoreVoteListener;
+import com.solinia.solinia.Listeners.Solinia3CoreZoneTickListener;
 import com.solinia.solinia.Managers.ChannelManager;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
@@ -446,6 +447,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreChunkListener(this), this);
+		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerValidatorModListener(this), this);
 		getServer().getPluginManager().registerEvents(new DynmapListener(this), this);
 
