@@ -98,6 +98,7 @@ import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
+
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -112,7 +113,6 @@ public class Utils {
 	public static final int MP_REGEN_CAP = 48;
 	public static final int MAX_ENTITY_AGGRORANGE = 100;
 	public static final int DMG_INVULNERABLE = -5;
-	public static final String HeartSymbol = "â�¤";
 
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(max, val));
@@ -5961,95 +5961,8 @@ public class Utils {
 		return output;
 	}
 
-	public static List<String> GetRunic()
-	{
-		List<String> runic = new ArrayList<String>();
-		runic.add("áš ");
-		runic.add("áš¡");
-		runic.add("áš¢");
-		runic.add("áš£");
-		runic.add("áš¤");
-		runic.add("áš¥");
-		runic.add("áš¦");
-		runic.add("áš§");
-		runic.add("áš¨");
-		runic.add("áš©");
-		runic.add("ášª");
-		runic.add("áš«");
-		runic.add("áš¬");
-		runic.add("áš­");
-		runic.add("áš®");
-		runic.add("áš¯");
-		runic.add("áš°");
-		runic.add("áš±");
-		runic.add("áš²");
-		runic.add("áš³");
-		runic.add("áš´");
-		runic.add("ášµ");
-		runic.add("áš¶");
-		runic.add("áš·");
-		runic.add("áš¸");
-		runic.add("áš¹");
-		runic.add("ášº");
-		runic.add("áš»");
-		runic.add("áš¼");
-		runic.add("áš½");
-		runic.add("áš¾");
-		runic.add("áš¿");
-		runic.add("á›€");
-		runic.add("á›�");
-		runic.add("á›‚");
-		runic.add("á›ƒ");
-		runic.add("á›„");
-		runic.add("á›…");
-		runic.add("á›†");
-		runic.add("á›‡");
-		runic.add("á›ˆ");
-		runic.add("á›‰");
-		runic.add("á›Š");
-		runic.add("á›‹");
-		runic.add("á›Œ");
-		runic.add("á›�");
-		runic.add("á›Ž");
-		runic.add("á›�");
-		runic.add("á›�");
-		runic.add("á›‘");
-		runic.add("á›’");
-		runic.add("á›“");
-		runic.add("á›”");
-		runic.add("á›•");
-		runic.add("á›–");
-		runic.add("á›—");
-		runic.add("á›˜");
-		runic.add("á›™");
-		runic.add("á›š");
-		runic.add("á››");
-		runic.add("á›œ");
-		runic.add("á›�");
-		runic.add("á›ž");
-		runic.add("á›Ÿ");
-		runic.add("á› ");
-		runic.add("á›¡");
-		runic.add("á›¢");
-		runic.add("á›£");
-		runic.add("á›¤");
-		runic.add("á›¥");
-		runic.add("á›¦");
-		runic.add("á›§");
-		runic.add("á›¨");
-		runic.add("á›©");
-		runic.add("á›ª");
-		runic.add("á›«");
-		runic.add("á›¬");
-		runic.add("á›­");
-		runic.add("á›®");
-		runic.add("á›¯");
-		runic.add("á›°");
-		return runic;
-	}
-
 	public static String ConvertToRunic(String message) {
-		List<String> runicChars = GetRunic();
+		List<String> runicChars = UTF8Utils.GetRunic();
 
 		String newmessage = "";
 		for (int i = 0; i < message.length(); i++) {
