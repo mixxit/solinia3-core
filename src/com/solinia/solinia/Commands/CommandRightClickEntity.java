@@ -45,6 +45,9 @@ public class CommandRightClickEntity implements CommandExecutor {
 		try
 		{
 			LivingEntity targetmob = Utils.getTargettedLivingEntity(player, 50);
+			if (targetmob == null)
+				return true;
+			
 			ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt((LivingEntity)player);
 			if (solLivingEntityPlayer != null)
 			{
@@ -55,6 +58,6 @@ public class CommandRightClickEntity implements CommandExecutor {
 		{
 			
 		}
-		return false;
+		return true;
 	}
 }

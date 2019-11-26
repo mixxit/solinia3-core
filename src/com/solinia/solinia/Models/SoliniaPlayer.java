@@ -1292,7 +1292,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			// Not a clicky!
-			if (!item.isThrowing() && !item.isPetControlRod() && item.getLanguagePrimer().equals("")
+			if (!item.isThrowing() && item.getLanguagePrimer().equals("")
 					&& (item.getAbilityid() < 1))
 				return;
 
@@ -1322,19 +1322,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			if (!item.isPetControlRod())
-				if (isOverAggroDistance(getEntityTarget())) {
-					getBukkitPlayer().sendMessage("You were too far to interact with that entity");
-					return;
-				}
-
 			// we should probably check line of sight here for detrimentals, or maybe in the
 			// spell
-
-			if (item.isPetControlRod()) {
-				item.useItemOnEntity(getBukkitPlayer(), getEntityTarget(), false);
-				return;
-			}
 
 			// try consume language primer
 			if (!item.getLanguagePrimer().equals("")) {

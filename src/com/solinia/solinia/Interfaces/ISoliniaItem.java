@@ -196,10 +196,6 @@ public interface ISoliniaItem {
 
 	void setBaneUndead(int baneUndead);
 
-	boolean isPetControlRod();
-
-	void setPetControlRod(boolean isPetControlRod);
-
 	boolean isAugmentation();
 
 	void setAugmentation(boolean isAugmentation);

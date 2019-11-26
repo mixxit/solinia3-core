@@ -81,7 +81,6 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isTemporary;
 	private boolean isConsumable;
 	private int baneUndead = 0;
-	private boolean isPetControlRod = false;
 	private boolean isAugmentation = false;
 	private boolean isQuest = false;
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
@@ -494,94 +493,13 @@ public class SoliniaItem implements ISoliniaItem {
 		if (targetentity.isDead() || player.isDead())
 			return false;
 		
-		if (!this.isPetControlRod())
-		{
-			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) player,
-					targetentity);
+		double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) player,
+				targetentity);
 
-			if (distanceOverLimit > 0)
-			{
-				player.sendMessage("You were too far to use this item on that entity");
-				return false;
-			}
-		}
-		
-		if (isPetControlRod())
+		if (distanceOverLimit > 0)
 		{
-			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(player.getUniqueId());
-			if (pet != null)
-			{
-				if (pet instanceof Sittable)
-				{
-					Sittable sittable = (Sittable)pet;
-					if (sittable.isSitting())
-					{
-						player.sendMessage("You cannot control a pet which is sitting");
-						return false;
-					}
-				}
-				
-				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
-				if (solLivingEntity  != null)
-				{
-					if (solLivingEntity.isNPC() && solLivingEntity.isCurrentlyNPCPet() && !solLivingEntity.isCharmed())
-					{
-						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
-						if (npc != null)
-						{
-							if (npc.isPetControllable() == false)
-							{
-								player.sendMessage("This pet is not controllable");
-								return false;
-							}
-						}
-					}
-				}
-				if (pet instanceof Creature)
-				{
-					// Move pet to player
-					pet.teleport(player.getLocation());
-					solLivingEntity.clearHateList();
-					
-					// Mez cancel target
-					Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed(targetentity);
-	
-					if (mezExpiry != null) {
-						solLivingEntity.setAttackTarget(null);
-						player.sendMessage("You cannot send your pet to attack a mezzed player");
-						return false;
-					}
-					
-					if (pet.getUniqueId().equals(targetentity.getUniqueId()))
-					{
-						solLivingEntity.setAttackTarget(null);
-						player.sendMessage("You cannot send your pet to attack itself");
-						return false;
-					}
-
-					if (solLivingEntity.getOwnerEntity().getUniqueId().equals(targetentity.getUniqueId()))
-					{
-						solLivingEntity.setAttackTarget(null);
-						player.sendMessage("You cannot send your pet to attack you!");
-						return false;
-					}
-					
-					ISoliniaPlayer tmpPlayer = SoliniaPlayerAdapter.Adapt(player);
-					if (tmpPlayer != null && tmpPlayer.isInGroup(targetentity))
-					{
-						solLivingEntity.setAttackTarget(null);
-						player.sendMessage("You cannot send your pet to attack your group!");
-						return false;
-					}
-					
-					if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
-					{
-						solLivingEntity.setAttackTarget(targetentity);
-						player.sendMessage("You send your pet to attack!");
-						return true;
-					}
-				}
-			}
+			player.sendMessage("You were too far to use this item on that entity");
+			return false;
 		}
 		
 		if (isThrowing())
@@ -779,7 +697,6 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- leatherrgbdecimal: " + ChatColor.GOLD + getLeatherRgbDecimal() + ChatColor.RESET + leathercolor + " See: https://bit.ly/2i02I8k");
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
-		sender.sendMessage("- petcontrolrod: " + ChatColor.GOLD + isPetControlRod() + ChatColor.RESET + " crafting: " + ChatColor.GOLD + isCrafting() + ChatColor.RESET + " quest: " + ChatColor.GOLD + isQuest() + ChatColor.RESET);
 		sender.sendMessage("- bandage: " + ChatColor.GOLD + isBandage() + ChatColor.RESET + " languageprimer: " + ChatColor.GOLD + getLanguagePrimer() + ChatColor.RESET);
 		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET + " - artifact: " + ChatColor.GOLD + isArtifact() + ChatColor.RESET + " Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
@@ -985,9 +902,6 @@ public class SoliniaItem implements ISoliniaItem {
 		case "weaponabilityid":
 			setWeaponabilityid(Integer.parseInt(value));
 			break;
-		case "petcontrolrod":
-			setPetControlRod(Boolean.parseBoolean(value));
-			break;
 		case "consumable":
 			setConsumable(Boolean.parseBoolean(value));
 			break;
@@ -1145,16 +1059,6 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setBaneUndead(int baneUndead) {
 		this.baneUndead = baneUndead;
-	}
-
-	@Override
-	public boolean isPetControlRod() {
-		return isPetControlRod;
-	}
-
-	@Override
-	public void setPetControlRod(boolean isPetControlRod) {
-		this.isPetControlRod = isPetControlRod;
 	}
 
 	@Override
