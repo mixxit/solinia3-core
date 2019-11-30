@@ -32,6 +32,7 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.QuestUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -1113,29 +1114,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 	@Override
 	public String replaceChatWordsWithHints(String message) {
-		message = ChatColor.AQUA + message + ChatColor.RESET;
-		List<String> messages = Arrays.asList(message.toUpperCase().split(" "));
-
-		if (getEventHandlers().size() > 0) {
-			String searchlist = "";
-			for (String messageword : messages) {
-				searchlist += messageword + ",";
-			}
-		}
-
-		for (ISoliniaNPCEventHandler handler : getEventHandlers()) {
-			if (!handler.getInteractiontype().equals(InteractionType.CHAT))
-				continue;
-
-			if (!messages.contains(handler.getTriggerdata().toUpperCase()))
-				continue;
-
-			message = message.toLowerCase().replace(handler.getTriggerdata().toLowerCase(),
-					"[" + handler.getTriggerdata().toLowerCase() + "]");
-		}
-		message = message.replace("[", "[" + ChatColor.LIGHT_PURPLE);
-		message = message.replace("]", ChatColor.AQUA + "]");
-		return message.toLowerCase();
+		return QuestUtils.replaceChatWordsWithHints(message, getEventHandlers());
 	}
 
 	@Override

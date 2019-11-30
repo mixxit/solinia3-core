@@ -761,6 +761,16 @@ public class ConfigurationManager implements IConfigurationManager {
 		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroup.getId()));
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
+	
+	@Override
+	public void updateSpawnGroupLoc(int spawngroupid, Location location) {
+		if (getSpawnGroup(spawngroupid) == null)
+			return;
+		
+		getSpawnGroup(spawngroupid).setLocation(location);
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroupid));
+		Bukkit.getPluginManager().callEvent(soliniaevent);
+	}
 
 	@Override
 	public void editNPC(int npcid, String setting, String value)
@@ -986,16 +996,6 @@ public class ConfigurationManager implements IConfigurationManager {
 			return list.get(0);
 
 		return null;
-	}
-
-	@Override
-	public void updateSpawnGroupLoc(int spawngroupid, Location location) {
-		if (getSpawnGroup(spawngroupid) == null)
-			return;
-		
-		getSpawnGroup(spawngroupid).setLocation(location);
-		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroupid));
-		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 
 	@Override
