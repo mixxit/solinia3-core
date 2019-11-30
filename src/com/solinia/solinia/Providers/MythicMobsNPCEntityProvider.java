@@ -41,17 +41,6 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 	}
 	
-	@Override
-	public void removeAllNpcsLater() {
-		Utils.dispatchCommandLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "mm mobs killall");
-	}
-	
-	@Override
-	public void removeAllNpcs() {
-		final Plugin pluginToSend = Bukkit.getPluginManager().getPlugin("Solinia3Core");
-		final CommandSender senderToSend = pluginToSend.getServer().getConsoleSender();
-		pluginToSend.getServer().dispatchCommand(senderToSend,"mm mobs killall");
-	}
 
 	@Override
 	public void reloadProvider() {

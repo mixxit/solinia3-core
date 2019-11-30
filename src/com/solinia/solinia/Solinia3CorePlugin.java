@@ -229,7 +229,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	public void onDisable() {
 		try {
 			StateManager.getInstance().getEntityManager().removeAllPets();
-			StateManager.getInstance().getEntityManager().getNPCEntityProvider().removeAllNpcs();
 			StateManager.getInstance().Commit();
 			
 			
