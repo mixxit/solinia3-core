@@ -3511,7 +3511,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (player.isOp() || (getLanguage() == null || isSpeaksAllLanguages()
 					|| SoliniaPlayerAdapter.Adapt(player).understandsLanguage(getLanguage()))) {
 				String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + player.getDisplayName() + " '" + message
-						+ "'" + ChatColor.RESET;
+						+ "'"  + " [" + getLanguage() + "]" + ChatColor.RESET;
 				player.sendMessage(decoratedMessage);
 			} else {
 				String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + player.getDisplayName() + " '" + Utils.garbleText(message,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(getLanguage()))
@@ -3545,7 +3545,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (player.isOp() || (getLanguage() == null || isSpeaksAllLanguages()
 					|| SoliniaPlayerAdapter.Adapt(player).understandsLanguage(getLanguage()))) {
-				String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
+				String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'"  + " [" + getLanguage() + "]" + ChatColor.RESET;
 				player.sendMessage(decoratedMessage);
 			} else {
 				String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + Utils.garbleText(message,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(getLanguage())) + "' (You do not fully understand this language)" + ChatColor.RESET;
