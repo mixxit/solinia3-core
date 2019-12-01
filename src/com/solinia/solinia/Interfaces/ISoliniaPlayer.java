@@ -574,4 +574,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setExperienceOn(boolean experienceOn);
 
+	int getLanguageLearnedPercent(String language);
+
 }

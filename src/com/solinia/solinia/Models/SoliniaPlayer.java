@@ -1866,6 +1866,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		return false;
 	}
+	
+	@Override
+	public int getLanguageLearnedPercent(String language) {
+
+		if (getRace() != null)
+			if (getRace().getName().toUpperCase().equals(language.toUpperCase()))
+				return 100;
+
+		SoliniaPlayerSkill soliniaskill = getSkill(language);
+		if (soliniaskill != null && soliniaskill.getValue() >= 0) {
+			return soliniaskill.getValue();
+		}
+		return 0;
+	}
 
 	@Override
 	public void tryImproveLanguage(String language) {

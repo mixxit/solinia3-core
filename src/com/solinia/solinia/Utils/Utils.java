@@ -18,13 +18,18 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -6468,5 +6473,50 @@ public class Utils {
 		}
 		
 		entity.sendMessage(ChatColor.GRAY + message + ChatColor.RESET);
+	}
+	
+	public static List<String> pickNRandom(List<String> lst, int n) {
+	    List<String> copy = new LinkedList<String>(lst);
+	    Collections.shuffle(copy);
+	    return copy.subList(0, n);
+	}
+
+	public static List<Integer> pickNRandomIndex(int length, int n) {
+		List<Integer> list = IntStream.range(0, length-1).boxed().collect(Collectors.toList());
+	    Collections.shuffle(list);
+	    return list.subList(0, n-1);
+	}
+	
+	public static String replaceChar(String str, char ch, int index) {
+	    StringBuilder myString = new StringBuilder(str);
+	    myString.setCharAt(index, ch);
+	    return myString.toString();
+	}
+	
+	public static String garbleText(String coremessage, int languageLearnedPercent) {
+		try
+		{
+			int percentKnown = languageLearnedPercent;
+			if (percentKnown > 100)
+				percentKnown = 100;
+			if (percentKnown < 1)
+				percentKnown = 1;
+			
+			int charsToReplace = coremessage.length()-(int)(((float)coremessage.length()/(float)100F) * (float)percentKnown);
+			if (charsToReplace < 1)
+				return coremessage;
+			
+			List<Integer> replaceIndexes = pickNRandomIndex(coremessage.length(), charsToReplace);
+			
+			for (Integer index : replaceIndexes) {
+				coremessage = replaceChar(coremessage,Utils.ConvertToRunic(String.valueOf(coremessage.charAt(index))).charAt(0),index);
+			}
+			
+			return coremessage;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return coremessage;
+		}
 	}
 }

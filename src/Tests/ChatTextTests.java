@@ -6,13 +6,14 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaNPCEventHandler;
 import com.solinia.solinia.Utils.QuestUtils;
+import com.solinia.solinia.Utils.Utils;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PinkWordTests {
+public class ChatTextTests {
 	@Test
 	public void QuestUtilsreplaceChatWordsWithHints() {
 		String expectsContainsWord = "[§dforward§b]";
@@ -32,4 +33,19 @@ public class PinkWordTests {
         assertEquals(true, QuestUtils.replaceChatWordsWithHints(firstHandler.getChatresponse(), handlers).contains(expectsContainsWord));
     }
 	
+	@Test
+	public void garbleText100PercentReturnsAll() {
+		String test = "This is my test messageThis is my test messageThis is my test messageThis is my test message This is";
+		String message = Utils.garbleText(test, 100);
+
+        assertEquals(test,message);
+    }
+	
+	@Test
+	public void garbleText90PercentReturns90() {
+		String test = "This is my test";
+		String message = Utils.garbleText(test, 100);
+
+        assertEquals(test,message);
+    }
 }

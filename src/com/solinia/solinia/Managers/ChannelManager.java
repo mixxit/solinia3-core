@@ -50,7 +50,7 @@ public class ChannelManager implements IChannelManager {
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 					} else {
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.ConvertToRunic(coremessage)) + " [" + source.getLanguage() + "]"));
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You do not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 
@@ -88,7 +88,7 @@ public class ChannelManager implements IChannelManager {
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 					} else {
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.ConvertToRunic(coremessage)) + " [" + source.getLanguage() + "]"));
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You dot not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 
@@ -126,7 +126,7 @@ public class ChannelManager implements IChannelManager {
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 					} else {
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.ConvertToRunic(coremessage)) + " [" + source.getLanguage() + "]"));
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You do not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 
@@ -478,7 +478,7 @@ public class ChannelManager implements IChannelManager {
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 					} else {
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.AQUA + source.getName() + " says '" + Utils.ConvertToRunic(coremessage) + "' [" + source.getLanguage() + "]" + ChatColor.RESET));
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.AQUA + source.getName() + " says '" + Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage())) + "' (You do not fully understand this language) [" + source.getLanguage() + "]" + ChatColor.RESET));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 						
