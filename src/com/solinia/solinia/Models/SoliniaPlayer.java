@@ -73,6 +73,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String gender = "MALE";
 	private String base64InventoryContents = "";
 	private String base64ArmorContents = "";
+	private boolean experienceOn = true;
 
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
 	private List<Integer> ranks = new ArrayList<Integer>();
@@ -398,14 +399,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void increasePlayerExperience(Double experience, boolean applyModifiers) {
+	public void increasePlayerExperience(Double experience, boolean applyModifiers, boolean ignoreIfExperienceOff) {
+		if (ignoreIfExperienceOff && !this.isExperienceOn())
+			return;
+		
 		if (!isAAOn()) {
-			increasePlayerNormalExperience(experience, applyModifiers);
+			increasePlayerNormalExperience(experience, applyModifiers, ignoreIfExperienceOff);
 		} else {
 			int normalpct = 100 - getAapct();
 			if (normalpct > 0) {
 				Double normalexperience = (experience / 100) * normalpct;
-				increasePlayerNormalExperience(normalexperience, applyModifiers);
+				increasePlayerNormalExperience(normalexperience, applyModifiers, ignoreIfExperienceOff);
 			}
 
 			Double aaexperience = (experience / 100) * getAapct();
@@ -422,8 +426,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void increasePlayerNormalExperience(Double experience, boolean applyModifiers) {
-
+	public void increasePlayerNormalExperience(Double experience, boolean applyModifiers, boolean ignoreIfExperienceOff) {
+		if (ignoreIfExperienceOff && !this.isExperienceOn())
+			return;
+		
 		double classxpmodifier = 0;
 		boolean modified = false;
 		if (applyModifiers) {
@@ -4337,5 +4343,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setForenameAndLastName(String forename, String lastname) {
 		this.forename = forename;
 		this.lastname = lastname;
+	}
+
+	@Override
+	public boolean isExperienceOn() {
+		return experienceOn;
+	}
+
+	@Override
+	public void setExperienceOn(boolean experienceOn) {
+		this.experienceOn = experienceOn;
 	}
 }

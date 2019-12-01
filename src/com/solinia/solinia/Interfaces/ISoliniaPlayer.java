@@ -91,9 +91,9 @@ public interface ISoliniaPlayer extends Serializable {
 
 	Player getBukkitPlayer();
 
-	void increasePlayerExperience(Double experience, boolean applyModifiers);
+	void increasePlayerExperience(Double experience, boolean applyModifiers, boolean ignoreIfExperienceOf);
 
-	void increasePlayerNormalExperience(Double experience, boolean applyModifiers);
+	void increasePlayerNormalExperience(Double experience, boolean applyModifiers, boolean ignoreIfExperienceOf);
 	
 	void increasePlayerAAExperience(Double experience, boolean applyModifiers);
 
@@ -569,5 +569,9 @@ public interface ISoliniaPlayer extends Serializable {
 	Effects getEffects();
 
 	void sendEffects();
+
+	boolean isExperienceOn();
+
+	void setExperienceOn(boolean experienceOn);
 
 }

@@ -25,14 +25,20 @@ public class CommandClaimXp implements CommandExecutor {
 			
 			sender.sendMessage("Claiming XP: " + solplayer.getPendingXp().longValue());
 			
+			if (!solplayer.isExperienceOn())
+			{
+				sender.sendMessage("You currently have experience toggled off");
+				return true;
+			}
+			
 			if (solplayer.isAAOn())
 			{
 				if (pendingXp > Utils.getMaxAAXP())
 				{
-					solplayer.increasePlayerExperience(pendingXp, false);
+					solplayer.increasePlayerExperience(pendingXp, false, false);
 					solplayer.setPendingXp(solplayer.getPendingXp() - Utils.getMaxAAXP());
 				} else {
-					solplayer.increasePlayerExperience(pendingXp, false);
+					solplayer.increasePlayerExperience(pendingXp, false, false);
 					solplayer.setPendingXp(0d);
 				}
 			} else {
@@ -61,7 +67,7 @@ public class CommandClaimXp implements CommandExecutor {
 					return true;
 				}
 				
-				solplayer.increasePlayerExperience(experience, false);
+				solplayer.increasePlayerExperience(experience, false, false);
 				solplayer.setPendingXp(solplayer.getPendingXp()-experience);
 			}
 

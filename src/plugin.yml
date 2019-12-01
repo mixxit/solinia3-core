@@ -15,6 +15,10 @@ commands:
     description: Displays additional information about Solinia3Core
     usage: /solinia
     aliases: []
+  toggleexperience:
+    description: Toggles experience on/off for your character
+    usage: /toggleexperience
+    aliases: []
   autoattack:
     description: Toggles your auto attack state
     usage: /autoattack
