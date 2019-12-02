@@ -1008,8 +1008,17 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void removeAllAbandonedPetsInChunk(Chunk chunk) {
+	public void removeAllAbandonedPetsInChunk(String worldName, int chunkX, int chunkZ) {
 		List<UUID> petsToRemove = new ArrayList<UUID>();
+		Chunk chunk = Bukkit.getWorld(worldName).getChunkAt(chunkX, chunkZ);
+
+		if (chunk == null)
+			return;
+		
+		if (!chunk.isLoaded())
+			return;
+		
+		
 		for (Entity entity : chunk.getEntities())
 		{
 			if (!(entity instanceof LivingEntity))
@@ -1077,13 +1086,25 @@ public class EntityManager implements IEntityManager {
 
 	
 	@Override
-	public void removeAllPetsInChunk(Chunk chunk) {
+	public void removeAllPetsInChunk(String worldName, int chunkX, int chunkZ) {
+		Chunk chunk = Bukkit.getWorld(worldName).getChunkAt(chunkX, chunkZ);
+		if (chunk == null)
+			return;
+		
+		if (chunk.isLoaded())
+			return;
+		
 		for (Map.Entry<UUID, UUID> entry : petownerdata.entrySet()) {
+			
 			UUID key = entry.getKey();
 			LivingEntity livingEntityPet = (LivingEntity)Bukkit.getEntity(entry.getValue());
-			if (livingEntityPet != null && livingEntityPet.getLocation().getChunk().equals(chunk))
+			
+			if (!livingEntityPet.getLocation().getChunk().isLoaded())
+				continue;
+			
+			if (livingEntityPet != null && livingEntityPet.getLocation().getChunk().getX() == chunkX && livingEntityPet.getLocation().getChunk().getZ() == chunkZ && livingEntityPet.getLocation().getChunk().getWorld().getName().equals(worldName))
 			{
-				System.out.println("Cleaning Up pet on chunk unload: " + livingEntityPet.getName() + " in chunk: " + livingEntityPet.getLocation().getChunk().getX() + " "+ livingEntityPet.getLocation().getChunk().getZ() + " vs " + chunk.getX() + " " + chunk.getZ());
+				System.out.println("Cleaning Up pet on chunk unload: " + livingEntityPet.getName() + " in chunk: " + livingEntityPet.getLocation().getChunk().getX() + " "+ livingEntityPet.getLocation().getChunk().getZ() + " vs " + chunkX + " " + chunkZ);
 				this.removePet(key, true);
 			}
 		}
