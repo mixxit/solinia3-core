@@ -18,45 +18,4 @@ public class Solinia3CoreChunkListener implements Listener {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
 	}
-	
-	@EventHandler
-	public void onChunkUnloadEvent(ChunkUnloadEvent event) {
-		
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-					Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
-						public void run() {
-							try {
-							final int chunkX = event.getChunk().getX();
-							final int chunkZ = event.getChunk().getZ();
-							final String world = event.getChunk().getWorld().getName();
-							
-							StateManager.getInstance().getEntityManager().removeAllAbandonedPetsInChunk(world,chunkX,chunkZ);
-							StateManager.getInstance().getEntityManager().removeAllPetsInChunk(world,chunkX,chunkZ);
-							} catch (CoreStateInitException e) {
-
-							}
-						}
-					});
-	}
-	
-	@EventHandler
-	public void onChunkLoadEvent(ChunkLoadEvent event) {
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-				Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
-					public void run() {
-						try {
-						final int chunkX = event.getChunk().getX();
-						final int chunkZ = event.getChunk().getZ();
-						final String world = event.getChunk().getWorld().getName();
-						
-						StateManager.getInstance().getEntityManager().removeAllAbandonedPetsInChunk(world,chunkX,chunkZ);
-						StateManager.getInstance().getEntityManager().removeAllPetsInChunk(world,chunkX,chunkZ);
-						} catch (CoreStateInitException e) {
-
-						}
-					}
-				});
-		
-	}
-
 }
