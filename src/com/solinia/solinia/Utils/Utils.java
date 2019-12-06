@@ -4527,8 +4527,8 @@ public class Utils {
 					+ " [" + entry.getId() + "] - " + ChatColor.RESET);
 			TextComponent tc2 = new TextComponent();
 			tc2.setText("Hover for more details");
-			String details = ChatColor.GOLD + entry.getName() + ChatColor.RESET + "\nRecommended Alignment: "
-					+ ChatColor.GOLD + entry.getAlignment() + ChatColor.RESET + "\n" + entry.getDescription();
+			String details = ChatColor.GOLD + entry.getName() + ChatColor.RESET + System.lineSeparator() + "Recommended Alignment: "
+					+ ChatColor.GOLD + entry.getAlignment() + ChatColor.RESET + System.lineSeparator() + entry.getDescription();
 			tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 			tc.addExtra(tc2);
 			sender.spigot().sendMessage(tc);
@@ -4553,14 +4553,14 @@ public class Utils {
 					+ " [" + race.getId() + "] - " + ChatColor.RESET);
 			TextComponent tc2 = new TextComponent();
 			tc2.setText("Hover for more details");
-			String details = ChatColor.GOLD + race.getName() + ChatColor.RESET + "\nRecommended Alignment: "
-					+ ChatColor.GOLD + race.getAlignment() + ChatColor.RESET + "\n" + race.getDescription() + "\nSTR: "
+			String details = ChatColor.GOLD + race.getName() + ChatColor.RESET + System.lineSeparator() + "Recommended Alignment: "
+					+ ChatColor.GOLD + race.getAlignment() + ChatColor.RESET + System.lineSeparator() + race.getDescription() + System.lineSeparator() + "STR: "
 					+ ChatColor.GOLD + race.getStrength() + ChatColor.RESET + " STA: " + ChatColor.GOLD
 					+ race.getStamina() + ChatColor.RESET + " AGI: " + ChatColor.GOLD + race.getAgility()
 					+ ChatColor.RESET + " DEX: " + ChatColor.GOLD + race.getDexterity() + ChatColor.RESET + " INT: "
 					+ ChatColor.GOLD + race.getIntelligence() + ChatColor.RESET + " WIS: " + ChatColor.GOLD
 					+ race.getWisdom() + ChatColor.RESET + " CHA: " + ChatColor.GOLD + race.getCharisma()
-					+ ChatColor.GOLD + " \nClasses: " + ChatColor.RESET + classBuilder;
+					+ ChatColor.GOLD + System.lineSeparator() + " Classes: " + ChatColor.RESET + classBuilder;
 			tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 			tc.addExtra(tc2);
 			sender.spigot().sendMessage(tc);

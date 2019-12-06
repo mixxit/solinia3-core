@@ -67,7 +67,7 @@ public class CommandAA implements CommandExecutor {
 							+ ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost()
 							+ ChatColor.RESET + " AA points /aa buy " + aarank.getId()));
 							String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()
-									+ ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
+									+ ChatColor.RESET + System.lineSeparator() + aarank.getDescription() + ChatColor.RESET;
 							tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 									new ComponentBuilder(details).create()));
 							sender.spigot().sendMessage(tc);
@@ -76,7 +76,7 @@ public class CommandAA implements CommandExecutor {
 							+ ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost() + ChatColor.GRAY
 							+ " Cannot purchase yet"));
 							String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()
-									+ ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
+									+ ChatColor.RESET + System.lineSeparator() + aarank.getDescription() + ChatColor.RESET;
 							tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 									new ComponentBuilder(details).create()));
 							sender.spigot().sendMessage(tc);
@@ -86,7 +86,7 @@ public class CommandAA implements CommandExecutor {
 						+ ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost() + ChatColor.GRAY
 						+ " Insufficient AA points"));
 						String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()
-								+ ChatColor.RESET + "\n" + aarank.getDescription() + ChatColor.RESET;
+								+ ChatColor.RESET + System.lineSeparator() + aarank.getDescription() + ChatColor.RESET;
 						tc.setHoverEvent(
 								new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 						sender.spigot().sendMessage(tc);

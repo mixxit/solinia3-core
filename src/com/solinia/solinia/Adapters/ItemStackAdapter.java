@@ -813,7 +813,8 @@ public class ItemStackAdapter {
 		
 		}
 		
-		return TextUtils.breakStringOfWordsIntoLines(classesBuilder,41);
+		// we make this 64 to allow for 'special' colour characters in the string
+		return TextUtils.breakStringOfWordsIntoLines(classesBuilder,64);
 	}
 
 	public static ItemMeta buildSkull(SkullMeta meta, UUID skinuuid, String texturebase64, String player) {

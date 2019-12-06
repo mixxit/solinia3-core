@@ -9,12 +9,13 @@ import org.apache.commons.lang.WordUtils;
 public class TextUtils {
 	public static List<String> breakStringOfWordsIntoLines(String input, int maxLineLength) {
 		List<String> lines = new ArrayList<String>();
-		lines = Arrays.asList(addLinebreaks(input,maxLineLength).split("\n"));
+		lines = Arrays.asList(addLinebreaks(input,maxLineLength).split(System.lineSeparator()));
 	    return lines;
 	}
 	
 	public static String addLinebreaks(String input, int maxLineLength) {
-		return WordUtils.wrap(input, maxLineLength, "\n", false);
+		String lines =  WordUtils.wrap(input, maxLineLength, System.lineSeparator(), false);
+		return lines;
 	}
 	
 	public static String FormatAsName(String name) {

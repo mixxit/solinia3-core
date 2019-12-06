@@ -113,12 +113,12 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			String uniquename = "RANDOMNPCID_" + npc.getId();
 			String mobtype = "NPCID_" + npc.getId();
 
-			spawner = uniquename + ":\r\n";
-			spawner += "  MobType: " + mobtype + "\r\n";
-			spawner += "  Worlds: world\r\n";
-			spawner += "  Chance: 1\r\n";
-			spawner += "  Priority: 1\r\n";
-			spawner += "  Action: add\r\n";
+			spawner = uniquename + ":\r" + System.lineSeparator();
+			spawner += "  MobType: " + mobtype + "\r" + System.lineSeparator();
+			spawner += "  Worlds: world\r" + System.lineSeparator();
+			spawner += "  Chance: 1\r" + System.lineSeparator();
+			spawner += "  Priority: 1\r" + System.lineSeparator();
+			spawner += "  Action: add\r" + System.lineSeparator();
 		}
 		return spawner;
 	}
@@ -154,33 +154,33 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		Double z = spawngroup.getZ();
 		int respawnTime = spawngroup.getRespawntime();
 
-		spawner = uniquename + ":\r\n";
-		spawner += "  MobName: " + mobname + "\r\n";
-		spawner += "  World: " + world + "\r\n";
-		spawner += "  X: " + x + "\r\n";
-		spawner += "  Y: " + y + "\r\n";
-		spawner += "  Z: " + z + "\r\n";
-		spawner += "  Radius: 0\r\n";
-		spawner += "  UseTimer: true\r\n";
-		spawner += "  MaxMobs: 1\r\n";
-		spawner += "  MobLevel: 1\r\n";
-		spawner += "  MobsPerSpawn: 1\r\n";
+		spawner = uniquename + ":\r" + System.lineSeparator();
+		spawner += "  MobName: " + mobname + "\r" + System.lineSeparator();
+		spawner += "  World: " + world + "\r" + System.lineSeparator();
+		spawner += "  X: " + x + "\r" + System.lineSeparator();
+		spawner += "  Y: " + y + "\r" + System.lineSeparator();
+		spawner += "  Z: " + z + "\r" + System.lineSeparator();
+		spawner += "  Radius: 0\r" + System.lineSeparator();
+		spawner += "  UseTimer: true\r" + System.lineSeparator();
+		spawner += "  MaxMobs: 1\r" + System.lineSeparator();
+		spawner += "  MobLevel: 1\r" + System.lineSeparator();
+		spawner += "  MobsPerSpawn: 1\r" + System.lineSeparator();
 		// todo
-		// spawner += " Cooldown: 0\r\n";
-		// spawner += " CooldownTimer: 0\r\n";
-		// spawner += " Warmup: " + spawngroup.respawnseconds + "\r\n";
-		// spawner += " WarmupTimer: 0\r\n";
-		spawner += "  Warmup: " + respawnTime + "\r\n";
-		spawner += "  WarmupTimer: 0\r\n";
-		spawner += "  CheckForPlayers: false\r\n";
-		spawner += "  ActivationRange: 112\r\n";
-		spawner += "  LeashRange: 112\r\n";
-		spawner += "  HealOnLeash: true\r\n";
-		spawner += "  ResetThreatOnLeash: true\r\n";
-		spawner += "  ShowFlames: false\r\n";
-		spawner += "  Breakable: false\r\n";
-		spawner += "  Conditions: []\r\n";
-		spawner += "  ActiveMobs: 0\r\n";
+		// spawner += " Cooldown: 0\r" + System.lineSeparator();
+		// spawner += " CooldownTimer: 0\r" + System.lineSeparator();
+		// spawner += " Warmup: " + spawngroup.respawnseconds + "\r" + System.lineSeparator();
+		// spawner += " WarmupTimer: 0\r" + System.lineSeparator();
+		spawner += "  Warmup: " + respawnTime + "\r" + System.lineSeparator();
+		spawner += "  WarmupTimer: 0\r" + System.lineSeparator();
+		spawner += "  CheckForPlayers: false\r" + System.lineSeparator();
+		spawner += "  ActivationRange: 112\r" + System.lineSeparator();
+		spawner += "  LeashRange: 112\r" + System.lineSeparator();
+		spawner += "  HealOnLeash: true\r" + System.lineSeparator();
+		spawner += "  ResetThreatOnLeash: true\r" + System.lineSeparator();
+		spawner += "  ShowFlames: false\r" + System.lineSeparator();
+		spawner += "  Breakable: false\r" + System.lineSeparator();
+		spawner += "  Conditions: []\r" + System.lineSeparator();
+		spawner += "  ActiveMobs: 0\r" + System.lineSeparator();
 		return spawner;
 	}
 
@@ -188,11 +188,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		String customheaditem = "";
 
 		if (npc.isCustomhead()) {
-			customheaditem += "CUSTOMHEADNPCID_" + npc.getId() + ":\r\n";
-			customheaditem += "  Id: 397\r\n";
-			customheaditem += "  Data: 3\r\n";
-			customheaditem += "  Options:\r\n";
-			customheaditem += "    SkinTexture: " + npc.getCustomheaddata() + "\r\n";
+			customheaditem += "CUSTOMHEADNPCID_" + npc.getId() + ":\r" + System.lineSeparator();
+			customheaditem += "  Id: 397\r" + System.lineSeparator();
+			customheaditem += "  Data: 3\r" + System.lineSeparator();
+			customheaditem += "  Options:\r" + System.lineSeparator();
+			customheaditem += "    SkinTexture: " + npc.getCustomheaddata() + "\r" + System.lineSeparator();
 		}
 
 		return customheaditem;
@@ -201,20 +201,20 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 	public String createCustomItemFile(ISoliniaItem item) {
 		String customitem = "";
 
-		customitem += "CUSTOMITEMID_" + item.getId() + ":\r\n";
-		customitem += "  Id: " + item.asItemStack().getType().name() + "\r\n";
-		customitem += "  Display: 'CUSTOMITEMID_" + item.getId() + "'\r\n";
+		customitem += "CUSTOMITEMID_" + item.getId() + ":\r" + System.lineSeparator();
+		customitem += "  Id: " + item.asItemStack().getType().name() + "\r" + System.lineSeparator();
+		customitem += "  Display: 'CUSTOMITEMID_" + item.getId() + "'\r" + System.lineSeparator();
 		if (item.getBasename().toUpperCase().equals("SHIELD"))
 		{
-			customitem += "  Options:\r\n";
-			customitem += "    Color: GRAY\r\n";
+			customitem += "  Options:\r" + System.lineSeparator();
+			customitem += "    Color: GRAY\r" + System.lineSeparator();
 		}
-		customitem += "  Data: " + item.getColor() + "\r\n";
+		customitem += "  Data: " + item.getColor() + "\r" + System.lineSeparator();
 		if (item.getDamage() > 0) {
-			customitem += "  Damage: " + item.getDamage() + "\r\n";
+			customitem += "  Damage: " + item.getDamage() + "\r" + System.lineSeparator();
 		}
-		customitem += "  Enchantments:\r\n";
-		customitem += "    DURABILITY: " + (1000 + item.getId()) + "\r\n";
+		customitem += "  Enchantments:\r" + System.lineSeparator();
+		customitem += "    DURABILITY: " + (1000 + item.getId()) + "\r" + System.lineSeparator();
 		return customitem;
 	}
 
@@ -226,12 +226,12 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		if (npc.getMctype() == null)
 			return "";
 
-		mob = uniquename + ":\r\n";
-		mob = mob + "  Type: SKELETON\r\n";
+		mob = uniquename + ":\r" + System.lineSeparator();
+		mob = mob + "  Type: SKELETON\r" + System.lineSeparator();
 		if (npc.isUpsidedown() == true) {
-			mob = mob + "  Display: Dinnerbone\r\n";
+			mob = mob + "  Display: Dinnerbone\r" + System.lineSeparator();
 		} else {
-			mob = mob + "  Display: " + npc.getName() + "\r\n";
+			mob = mob + "  Display: " + npc.getName() + "\r" + System.lineSeparator();
 		}
 
 		double hp = Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75);
@@ -273,35 +273,35 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		if (npc.getForcedMaxHp() > 0)
 			hp = npc.getForcedMaxHp();
 
-		mob = mob + "  Health: " + hp + "\r\n";
-		mob = mob + "  Damage: " + damage + "\r\n";
-		mob = mob + "  PreventOtherDrops: true\r\n";
-		mob = mob + "  PreventRandomEquipment: true\r\n";
-		mob = mob + "  Options:\r\n";
-		mob = mob + "    MaxCombatDistance: "+Utils.MAX_ENTITY_AGGRORANGE+"\r\n";
-		mob = mob + "    FollowRange: "+Utils.MAX_ENTITY_AGGRORANGE+"\r\n";
-		mob = mob + "    MovementSpeed: " + movementSpeed + "\r\n";
-		mob = mob + "    KnockbackResistance: 1\r\n";
-		mob = mob + "    PreventMobKillDrops: true\r\n";
-		mob = mob + "    PreventOtherDrops: true\r\n";
-		mob = mob + "    Silent: true\r\n";
-		mob = mob + "    Despawn: true\r\n";
-		mob = mob + "    ShowHealth: true\r\n";
-		mob = mob + "    PreventRenaming: true\r\n";
-		mob = mob + "    PreventRandomEquipment: true\r\n";
-		mob = mob + "    AlwaysShowName: true\r\n";
-		mob = mob + "  Modules:\r\n";
-		mob = mob + "    ThreatTable: false\r\n";
+		mob = mob + "  Health: " + hp + "\r" + System.lineSeparator();
+		mob = mob + "  Damage: " + damage + "\r" + System.lineSeparator();
+		mob = mob + "  PreventOtherDrops: true\r" + System.lineSeparator();
+		mob = mob + "  PreventRandomEquipment: true\r" + System.lineSeparator();
+		mob = mob + "  Options:\r" + System.lineSeparator();
+		mob = mob + "    MaxCombatDistance: "+Utils.MAX_ENTITY_AGGRORANGE+"\r" + System.lineSeparator();
+		mob = mob + "    FollowRange: "+Utils.MAX_ENTITY_AGGRORANGE+"\r" + System.lineSeparator();
+		mob = mob + "    MovementSpeed: " + movementSpeed + "\r" + System.lineSeparator();
+		mob = mob + "    KnockbackResistance: 1\r" + System.lineSeparator();
+		mob = mob + "    PreventMobKillDrops: true\r" + System.lineSeparator();
+		mob = mob + "    PreventOtherDrops: true\r" + System.lineSeparator();
+		mob = mob + "    Silent: true\r" + System.lineSeparator();
+		mob = mob + "    Despawn: true\r" + System.lineSeparator();
+		mob = mob + "    ShowHealth: true\r" + System.lineSeparator();
+		mob = mob + "    PreventRenaming: true\r" + System.lineSeparator();
+		mob = mob + "    PreventRandomEquipment: true\r" + System.lineSeparator();
+		mob = mob + "    AlwaysShowName: true\r" + System.lineSeparator();
+		mob = mob + "  Modules:\r" + System.lineSeparator();
+		mob = mob + "    ThreatTable: false\r" + System.lineSeparator();
 
-		mob = mob + "  AIGoalSelectors:\r\n";
-		mob = mob + "  - 0 clear\r\n";
-		mob = mob + "  - 1 skeletonbowattack\r\n";
-		mob = mob + "  - 2 meleeattack\r\n";
-		mob = mob + "  - 3 gotoowner\r\n";
-		mob = mob + "  - 4 lookatplayers\r\n";
-		mob = mob + "  AITargetSelectors:\r\n";
-		mob = mob + "  - 0 clear\r\n";
-		mob = mob + "  - 1 attacker\r\n";
+		mob = mob + "  AIGoalSelectors:\r" + System.lineSeparator();
+		mob = mob + "  - 0 clear\r" + System.lineSeparator();
+		mob = mob + "  - 1 skeletonbowattack\r" + System.lineSeparator();
+		mob = mob + "  - 2 meleeattack\r" + System.lineSeparator();
+		mob = mob + "  - 3 gotoowner\r" + System.lineSeparator();
+		mob = mob + "  - 4 lookatplayers\r" + System.lineSeparator();
+		mob = mob + "  AITargetSelectors:\r" + System.lineSeparator();
+		mob = mob + "  - 0 clear\r" + System.lineSeparator();
+		mob = mob + "  - 1 attacker\r" + System.lineSeparator();
 
 		// Here's the fun part, if the npc has decent loot in his loot drops to use for
 		// himself
@@ -401,7 +401,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							}
 						}
 
-						mob = mob + "  Equipment:\r\n";
+						mob = mob + "  Equipment:\r" + System.lineSeparator();
 
 						if (potentialShields.size() > 0) {
 							Collections.sort(potentialShields, new Comparator<ISoliniaItem>() {
@@ -416,22 +416,22 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							Collections.reverse(potentialShields);
 
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialShields.get(0).getId() + ".yml",potentialShields.get(0));
-							mob = mob + "  - " + "CUSTOMITEMID_" + potentialShields.get(0).getId() + ":5\r\n";
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialShields.get(0).getId() + ":5\r" + System.lineSeparator();
 						} else {
 							if (npc.getOffhanditem() != null)
-								mob = mob + "  - " + npc.getOffhanditem() + ":5\r\n";
+								mob = mob + "  - " + npc.getOffhanditem() + ":5\r" + System.lineSeparator();
 						}
 
 						if (npc.isCustomhead() == true) {
 							if (npc.getCustomheaddata() != null) {
-								mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r\n";
+								mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r" + System.lineSeparator();
 							} else {
 								if (npc.getHeaditem() != null)
-									mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
+									mob = mob + "  - " + npc.getHeaditem() + ":4\r" + System.lineSeparator();
 							}
 						} else {
 							if (npc.getHeaditem() != null)
-								mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
+								mob = mob + "  - " + npc.getHeaditem() + ":4\r" + System.lineSeparator();
 						}
 
 						if (potentialChestArmour.size() > 0) {
@@ -448,10 +448,10 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID"
 									+ potentialChestArmour.get(0).getId() + ".yml", potentialChestArmour.get(0));
-							mob = mob + "  - " + "CUSTOMITEMID_" + potentialChestArmour.get(0).getId() + ":3\r\n";
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialChestArmour.get(0).getId() + ":3\r" + System.lineSeparator();
 						} else {
 							if (npc.getChestitem() != null)
-								mob = mob + "  - " + npc.getChestitem() + ":3\r\n";
+								mob = mob + "  - " + npc.getChestitem() + ":3\r" + System.lineSeparator();
 						}
 
 						if (potentialLegsArmour.size() > 0) {
@@ -468,10 +468,10 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialLegsArmour.get(0).getId()
 									+ ".yml", potentialLegsArmour.get(0));
-							mob = mob + "  - " + "CUSTOMITEMID_" + potentialLegsArmour.get(0).getId() + ":2\r\n";
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialLegsArmour.get(0).getId() + ":2\r" + System.lineSeparator();
 						} else {
 							if (npc.getLegsitem() != null)
-								mob = mob + "  - " + npc.getLegsitem() + ":2\r\n";
+								mob = mob + "  - " + npc.getLegsitem() + ":2\r" + System.lineSeparator();
 						}
 
 						if (potentialFeetArmour.size() > 0) {
@@ -488,10 +488,10 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID" + potentialFeetArmour.get(0).getId()
 									+ ".yml", potentialFeetArmour.get(0));
-							mob = mob + "  - " + "CUSTOMITEMID_" + potentialFeetArmour.get(0).getId() + ":1\r\n";
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialFeetArmour.get(0).getId() + ":1\r" + System.lineSeparator();
 						} else {
 							if (npc.getFeetitem() != null)
-								mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
+								mob = mob + "  - " + npc.getFeetitem() + ":1\r" + System.lineSeparator();
 						}
 
 						if (npc.getClassObj() != null && npc.getClassObj().getName().toUpperCase().equals("RANGER")
@@ -510,7 +510,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							writeCustomItem(
 									"plugins/MythicMobs/Items/CUSTOMITEMID" + potentialBows.get(0).getId() + ".yml",
 									potentialBows.get(0));
-							mob = mob + "  - " + "CUSTOMITEMID_" + potentialBows.get(0).getId() + ":0\r\n";
+							mob = mob + "  - " + "CUSTOMITEMID_" + potentialBows.get(0).getId() + ":0\r" + System.lineSeparator();
 						} else {
 							if (potentialWeapons.size() > 0) {
 								Collections.sort(potentialWeapons, new Comparator<ISoliniaItem>() {
@@ -526,11 +526,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 								writeCustomItem("plugins/MythicMobs/Items/CUSTOMITEMID"
 										+ potentialWeapons.get(0).getId() + ".yml", potentialWeapons.get(0));
-								mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":0\r\n";
+								mob = mob + "  - " + "CUSTOMITEMID_" + potentialWeapons.get(0).getId() + ":0\r" + System.lineSeparator();
 
 							} else {
 								if (npc.getHanditem() != null)
-									mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
+									mob = mob + "  - " + npc.getHanditem() + ":0\r" + System.lineSeparator();
 							}
 						}
 					}
@@ -543,53 +543,53 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		} else {
 			if (npc.getHeaditem() != null || npc.getChestitem() != null || npc.getLegsitem() != null
 					|| npc.getFeetitem() != null || npc.getHanditem() != null || npc.getOffhanditem() != null) {
-				mob = mob + "  Equipment:\r\n";
+				mob = mob + "  Equipment:\r" + System.lineSeparator();
 				if (npc.getOffhanditem() != null && !npc.getOffhanditem().equals(""))
-					mob = mob + "  - " + npc.getOffhanditem() + ":5\r\n";
+					mob = mob + "  - " + npc.getOffhanditem() + ":5\r" + System.lineSeparator();
 
 				if (npc.isCustomhead() == true) {
 					if (npc.getCustomheaddata() != null && !npc.getCustomheaddata().equals("")) {
-						mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r\n";
+						mob = mob + "  - CUSTOMHEADNPCID_" + npc.getId() + ":4\r" + System.lineSeparator();
 					} else {
 						if (npc.getHeaditem() != null && !npc.getHeaditem().equals(""))
-							mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
+							mob = mob + "  - " + npc.getHeaditem() + ":4\r" + System.lineSeparator();
 					}
 				} else {
 					if (npc.getHeaditem() != null && !npc.getHeaditem().equals(""))
-						mob = mob + "  - " + npc.getHeaditem() + ":4\r\n";
+						mob = mob + "  - " + npc.getHeaditem() + ":4\r" + System.lineSeparator();
 				}
 
 				if (npc.getChestitem() != null && !npc.getChestitem().equals(""))
-					mob = mob + "  - " + npc.getChestitem() + ":3\r\n";
+					mob = mob + "  - " + npc.getChestitem() + ":3\r" + System.lineSeparator();
 				if (npc.getLegsitem() != null && !npc.getLegsitem().equals(""))
-					mob = mob + "  - " + npc.getLegsitem() + ":2\r\n";
+					mob = mob + "  - " + npc.getLegsitem() + ":2\r" + System.lineSeparator();
 				if (npc.getFeetitem() != null && !npc.getFeetitem().equals(""))
-					mob = mob + "  - " + npc.getFeetitem() + ":1\r\n";
+					mob = mob + "  - " + npc.getFeetitem() + ":1\r" + System.lineSeparator();
 				if (npc.getHanditem() != null && !npc.getHanditem().equals(""))
-					mob = mob + "  - " + npc.getHanditem() + ":0\r\n";
+					mob = mob + "  - " + npc.getHanditem() + ":0\r" + System.lineSeparator();
 			}
 		}
 
 		if (npc.isUsedisguise() == true && npc.getDisguisetype() != null && !npc.getDisguisetype().equals("")) {
-			mob = mob + "  Disguise:\r\n";
+			mob = mob + "  Disguise:\r" + System.lineSeparator();
 			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
-				mob = mob + "    Type: player\r\n";
+				mob = mob + "    Type: player\r" + System.lineSeparator();
 			} else {
-				mob = mob + "    Type: " + npc.getDisguisetype() + "\r\n";
+				mob = mob + "    Type: " + npc.getDisguisetype() + "\r" + System.lineSeparator();
 			}
 			if (npc.isBurning() == true) {
-				mob = mob + "    Burning: true\r\n";
+				mob = mob + "    Burning: true\r" + System.lineSeparator();
 			}
 			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
 				String[] disguisedata = npc.getDisguisetype().split("-");
-				mob = mob + "    Player: " + npc.getName() + "\r\n";
-				mob = mob + "    Skin: '" + disguisedata[1] + "'\r\n";
+				mob = mob + "    Player: " + npc.getName() + "\r" + System.lineSeparator();
+				mob = mob + "    Skin: '" + disguisedata[1] + "'\r" + System.lineSeparator();
 			}
 		}
 
-		mob = mob + "  Skills:\r\n";
+		mob = mob + "  Skills:\r" + System.lineSeparator();
 		if (npc.isInvisible() == true) {
-			mob = mob + "  - potion{t=INVISIBILITY;d=2147483647;l=1} @self ~onSpawn\r\n";
+			mob = mob + "  - potion{t=INVISIBILITY;d=2147483647;l=1} @self ~onSpawn\r" + System.lineSeparator();
 		}
 
 		return mob;

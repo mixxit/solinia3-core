@@ -12,11 +12,11 @@ public class ForgeUtilsTest {
 		String expectedVersion = "1.14.4.20190902195348";
 		String actualVersion = "";
 		
-		String versionJsonString = "{\r\n" + 
-				"  \"homepage\": \"https://github.com/mixxit/solinia3-ui/releases\",\r\n" + 
-				"  \"promos\": {\r\n" + 
-				"    \"1.14.4-recommended\": \"1.14.4.20190902195348\"\r\n" + 
-				"  }\r\n" + 
+		String versionJsonString = "{\r" + System.lineSeparator() + 
+				"  \"homepage\": \"https://github.com/mixxit/solinia3-ui/releases\",\r" + System.lineSeparator() + 
+				"  \"promos\": {\r" + System.lineSeparator() + 
+				"    \"1.14.4-recommended\": \"1.14.4.20190902195348\"\r" + System.lineSeparator() + 
+				"  }\r" + System.lineSeparator() + 
 				"}";
 		
 		try {

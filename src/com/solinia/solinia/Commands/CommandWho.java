@@ -74,43 +74,43 @@ public class CommandWho implements CommandExecutor {
 		        	
 		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText(hidden+"["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET));
 					
-		        	String worship = "I worship: " + godname + "\n";
+		        	String worship = "I worship: " + godname + System.lineSeparator();
 		        	
-					String ideal = "Ideal: I have no ideal\n";
-					String trait1 = "Trait: I have no primary trait\n";
-					String trait2 = "Trait: I have no secondary trait\n";
-					String bond = "Bond: I have no bond\n";
-					String flaw = "Flaw: I have no flaw\n";
-					String oath = "Oath: I have no oath\n";
+					String ideal = "Ideal: I have no ideal" + System.lineSeparator();
+					String trait1 = "Trait: I have no primary trait" + System.lineSeparator();
+					String trait2 = "Trait: I have no secondary trait" + System.lineSeparator();
+					String bond = "Bond: I have no bond" + System.lineSeparator();
+					String flaw = "Flaw: I have no flaw" + System.lineSeparator();
+					String oath = "Oath: I have no oath" + System.lineSeparator();
 					
 					if (solplayer.getGodId() > 0)
-						worship = "I worship: " + solplayer.getGod().getName() + "\n";
+						worship = "I worship: " + solplayer.getGod().getName() + System.lineSeparator();
 					
 					if (solplayer.getPersonality().getIdealId() > 0)
-					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + "\n";
+					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + System.lineSeparator();
 					if (solplayer.getPersonality().getFirstTraitId() > 0)
-					trait1 = "Trait:" + solplayer.getPersonality().getFirstTrait().description + "\n";
+					trait1 = "Trait:" + solplayer.getPersonality().getFirstTrait().description + System.lineSeparator();
 					if (solplayer.getPersonality().getSecondTraitId() > 0)
-					trait2 = "Trait:" + solplayer.getPersonality().getSecondTrait().description + "\n";
+					trait2 = "Trait:" + solplayer.getPersonality().getSecondTrait().description + System.lineSeparator();
 					if (solplayer.getPersonality().getBondId() > 0)
-					bond = "Bond:" + solplayer.getPersonality().getBond().description + "\n";
+					bond = "Bond:" + solplayer.getPersonality().getBond().description + System.lineSeparator();
 					if (solplayer.getPersonality().getFlawId() > 0)
-					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + "\n";
+					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + System.lineSeparator();
 					String custom = "";
 					for(String customTrait : solplayer.getPersonality().getCustomPersonalityTraits())
 					{
-						custom += "Custom:" + customTrait + "\n";
+						custom += "Custom:" + customTrait + System.lineSeparator();
 					}
 					if (solplayer.getClassObj() != null && solplayer.getClassObj().getOaths().size() > 0 && solplayer.getOathId() != 0)
 					{
-						oath = "Oath: " + solplayer.getOath().oathname + "\n";
+						oath = "Oath: " + solplayer.getOath().oathname + System.lineSeparator();
 						for(String tenet : solplayer.getOath().tenets)
 						{
 							oath += " " + tenet;
 						}
 					}
 					
-					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + "\n" + 
+					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + System.lineSeparator() + 
 					worship + 
 					ideal +
 					trait1 +
@@ -186,38 +186,38 @@ public class CommandWho implements CommandExecutor {
 		        	TextComponent tc = new TextComponent();
 					tc.setText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
 					
-					String ideal = "Ideal: I have no ideal\n";
-					String trait1 = "Trait: I have no primary trait\n";
-					String trait2 = "Trait: I have no secondary trait\n";
-					String bond = "Bond: I have no bond\n";
-					String flaw = "Flaw: I have no flaw\n";
-					String oath = "Oath: I have no oath\n";
+					String ideal = "Ideal: I have no ideal" + System.lineSeparator();
+					String trait1 = "Trait: I have no primary trait" + System.lineSeparator();
+					String trait2 = "Trait: I have no secondary trait" + System.lineSeparator();
+					String bond = "Bond: I have no bond" + System.lineSeparator();
+					String flaw = "Flaw: I have no flaw" + System.lineSeparator();
+					String oath = "Oath: I have no oath" + System.lineSeparator();
 					
 					if (solplayer.getPersonality().getIdealId() > 0)
-					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + "\n";
+					ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + System.lineSeparator();
 					if (solplayer.getPersonality().getFirstTraitId() > 0)
-					trait1 = "Trait:" + solplayer.getPersonality().getFirstTrait().description + "\n";
+					trait1 = "Trait:" + solplayer.getPersonality().getFirstTrait().description + System.lineSeparator();
 					if (solplayer.getPersonality().getSecondTraitId() > 0)
-					trait2 = "Trait:" + solplayer.getPersonality().getSecondTrait().description + "\n";
+					trait2 = "Trait:" + solplayer.getPersonality().getSecondTrait().description + System.lineSeparator();
 					if (solplayer.getPersonality().getBondId() > 0)
-					bond = "Bond:" + solplayer.getPersonality().getBond().description + "\n";
+					bond = "Bond:" + solplayer.getPersonality().getBond().description + System.lineSeparator();
 					if (solplayer.getPersonality().getFlawId() > 0)
-					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + "\n";
+					flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + System.lineSeparator();
 					String custom = "";
 					for(String customTrait : solplayer.getPersonality().getCustomPersonalityTraits())
 					{
-						custom += "Custom:" + customTrait + "\n";
+						custom += "Custom:" + customTrait + System.lineSeparator();
 					}
 					if (solplayer.getClassObj() != null && solplayer.getClassObj().getOaths().size() > 0 && solplayer.getOathId() != 0)
 					{
-						oath = "Oath: " + solplayer.getOath().oathname + "\n";
+						oath = "Oath: " + solplayer.getOath().oathname + System.lineSeparator();
 						for(String tenet : solplayer.getOath().tenets)
 						{
-							oath += "- " + tenet + "\n";
+							oath += "- " + tenet + System.lineSeparator();
 						}
 					}
 					
-					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + "\n" + 
+					String details = ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + System.lineSeparator() + 
 					ideal +
 					trait1 +
 					trait2 + 
