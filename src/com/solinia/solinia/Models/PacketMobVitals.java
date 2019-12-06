@@ -9,7 +9,7 @@ public class PacketMobVitals implements ISoliniaPacket {
 	private int partyMember = 0;
 	private float healthPercent = 0F;
 	private float manaPercent = 0F;
-	private UUID uniqueId = null;
+	private int entityId = 0;
 	private String name = "";
 	
 	public PacketMobVitals()
@@ -32,10 +32,10 @@ public class PacketMobVitals implements ISoliniaPacket {
 		int partyMember = Integer.parseInt(dataArray[0]);
 		float healthPercent = Float.parseFloat(dataArray[1]);
 		float manaPercent = Float.parseFloat(dataArray[2]);
-		UUID uniqueId = null;
+		int entityId = 0;
 		try
 		{
-			uniqueId = UUID.fromString(dataArray[3]);
+			entityId = Integer.parseInt(dataArray[3]);
 		} catch (Exception e)
 		{
 			// not valid UUID (ie null
@@ -45,7 +45,7 @@ public class PacketMobVitals implements ISoliniaPacket {
 		this.partyMember = partyMember;
 		this.healthPercent = healthPercent;
 		this.manaPercent = manaPercent;
-		this.uniqueId = uniqueId;
+		this.entityId = entityId;
 		this.name = name;
 	}
 	
@@ -64,9 +64,9 @@ public class PacketMobVitals implements ISoliniaPacket {
 		return this.manaPercent;
 	}
 
-	public UUID getUniqueId()
+	public int getEntityId()
 	{
-		return this.uniqueId;
+		return this.entityId;
 	}
 
 	public String getName()
@@ -78,8 +78,8 @@ public class PacketMobVitals implements ISoliniaPacket {
 	{
 		String packetData = "";
 		String uniqueString = "";
-		if (this.getUniqueId() != null)
-			uniqueString = this.getUniqueId().toString();
+		if (this.getEntityId() > 0)
+			uniqueString = Integer.toString(this.getEntityId());
 		packetData += getPartyMember() 
 				+ "^" + getHealthPercent() 
 				+ "^" + getManaPercent()
@@ -88,11 +88,11 @@ public class PacketMobVitals implements ISoliniaPacket {
 		return packetData;
 	}
 
-	public void fromData(int partyMember, float healthPercent, float manaPercent, UUID uniqueId, String name) {
+	public void fromData(int partyMember, float healthPercent, float manaPercent, int entityId, String name) {
 		this.partyMember = partyMember;
 		this.healthPercent = healthPercent;
 		this.manaPercent = manaPercent;
-		this.uniqueId = uniqueId;
+		this.entityId = entityId;
 		this.name = name.replaceAll("\\^", "").replaceAll("\\|", "");
 	}
 }
