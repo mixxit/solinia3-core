@@ -275,6 +275,9 @@ public class SoliniaActiveSpell {
 		case BindAffinity:
 			applyBindAffinty(spellEffect, soliniaSpell, casterLevel);
 			return;
+		case GateToHomeCity:
+			applyGateHome(spellEffect, soliniaSpell, casterLevel);
+			return;
 		case Gate:
 			applyGate(spellEffect, soliniaSpell, casterLevel);
 			return;
@@ -945,8 +948,6 @@ public class SoliniaActiveSpell {
 		case ShieldBlock:
 			return;
 		case ReduceHate:
-			return;
-		case GateToHomeCity:
 			return;
 		case DefensiveProc:
 			return;
@@ -2030,6 +2031,34 @@ public class SoliniaActiveSpell {
 		}
 
 	}
+	
+	private void applyGateHome(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!isOwnerPlayer())
+			return;
+
+		Player player = (Player) getLivingEntity();
+		try {
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			
+			if (solPlayer.getClassObj() == null || solPlayer.getRace() == null)
+			{
+				player.sendMessage("Could not teleport to your races home city as you have not set your race and class");
+				return;
+			}
+			
+			Location location = solPlayer.getClassObj().getRaceClass(solPlayer.getRace().getId()).getStartLocation();
+			if (location == null)
+			{
+				player.sendMessage("Could not teleport to your races home city as your race class combination does not appear to have a home point");
+				return;
+			}
+				
+			player.teleport(location);
+		} catch (CoreStateInitException e) {
+
+		}
+		
+	}
 
 	private void applyGate(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
@@ -2038,6 +2067,7 @@ public class SoliniaActiveSpell {
 		Player player = (Player) getLivingEntity();
 		try {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			
 			String blocation = solPlayer.getBindPoint();
 			if (blocation == null || solPlayer.getBindPoint().equals("")) {
 				player.sendMessage("Could not teleport, you are not bound to a location (by bind affinity)");
