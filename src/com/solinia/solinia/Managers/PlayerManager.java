@@ -25,6 +25,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Utils.PartyWindowUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -406,11 +407,11 @@ public class PlayerManager implements IPlayerManager {
 			ISoliniaPlayer solPlayer;
 			try {
 				solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				if (solPlayer.getPendingXp() >= Utils.getMaxAAXP())
+				if (solPlayer.getPendingXp() >= PlayerUtils.getMaxAAXP())
 				{
 					player.sendMessage("You have exceeded your maximum pending XP! Please /claimxp your additional XP before more can be gained (max: " + solPlayer.getPendingXp().longValue() + ")");
 				} else {
-					Double xpReward = Utils.getExperienceRewardAverageForLevel(solPlayer.getLevel()) / 6d;
+					Double xpReward = PlayerUtils.getExperienceRewardAverageForLevel(solPlayer.getLevel()) / 6d;
 					if (xpReward < 0)
 					{
 						xpReward = 1d;

@@ -12,6 +12,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.model.VotifierEvent;
@@ -39,7 +40,7 @@ public class Solinia3CoreVoteListener implements Listener {
         	uuid = player.getUniqueId().toString();
 		else
 			try {
-				uuid = Utils.getUUIDFromPlayerName(vote.getUsername());
+				uuid = PlayerUtils.getUUIDFromPlayerName(vote.getUsername());
 				uuid = java.util.UUID.fromString(
 						uuid
 					    .replaceFirst( 

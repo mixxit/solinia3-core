@@ -7,17 +7,57 @@ import com.solinia.solinia.Models.SoliniaNPC;
 
 public class SoliniaNPCFactory {
 
-	public static ISoliniaNPC CreateNPC(String name, int level, int factionid) throws CoreStateInitException {
+	public static ISoliniaNPC CreateNPC(String name, int level, int factionid) throws Exception {
+		int lootTableId = 0;
+		try
+		{
+			lootTableId = CreateLootTableAndLootDrop(name);
+		} catch (Exception e)
+		{
+			throw new Exception("Failed to create NPC: " + e.getMessage());
+		}
+		
 		SoliniaNPC npc = new SoliniaNPC();
 		npc.setId(StateManager.getInstance().getConfigurationManager().getNextNPCId());
 		npc.setName(name);
 		npc.setLevel(level);
 		npc.setFactionid(factionid);
+		npc.setLoottableid(lootTableId);
+		
 		return StateManager.getInstance().getConfigurationManager().addNPC(npc);
 	}
+	
+	public static int CreateLootTableAndLootDrop(String name) throws CoreStateInitException, Exception
+	{
+		if (StateManager.getInstance().getConfigurationManager().getLootTable(name) != null)
+			throw new Exception("Could not create loot table/lootdrop group as a loottable already exists with the same name");
 
-	public static ISoliniaNPC CreateNPCCopy(int npcid, String name) throws CoreStateInitException {
+		if (StateManager.getInstance().getConfigurationManager().getLootDrop(name) != null)
+			throw new Exception("Could not create loot table/lootdrop group as a lootdrop already exists with the same name");
+		
+		SoliniaLootFactory.CreateLootTable(name);
+		SoliniaLootFactory.CreateLootDrop(name);
+		int lootDropId = StateManager.getInstance().getConfigurationManager().getLootDrop(name).getId();
+		int lootTableId = StateManager.getInstance().getConfigurationManager().getLootTable(name).getId();
+		SoliniaLootFactory.CreateLootTableDrop(lootTableId, lootDropId);
+		
+		return lootTableId;
+	}
+
+	public static ISoliniaNPC CreateNPCCopy(int npcid, String name) throws Exception {
+		
 		ISoliniaNPC sourcenpc = StateManager.getInstance().getConfigurationManager().getNPC(npcid);
+		
+		if (sourcenpc == null)
+			throw new Exception("Source NPC could not be found!");
+		int lootTableId = 0;
+		try
+		{
+			lootTableId = CreateLootTableAndLootDrop(name);
+		} catch (Exception e)
+		{
+			throw new Exception("Failed to create NPC: " + e.getMessage());
+		}
 		
 		SoliniaNPC npc = new SoliniaNPC();
 		npc.setId(StateManager.getInstance().getConfigurationManager().getNextNPCId());
@@ -48,7 +88,10 @@ public class SoliniaNPCFactory {
 		npc.setKillTriggerText(sourcenpc.getKillTriggerText());
 		npc.setLegsitem(sourcenpc.getLegsitem());
 		npc.setLevel(sourcenpc.getLevel());
-		npc.setLoottableid(sourcenpc.getLoottableid());
+		// dont copy loottable use a newly generated one
+		//npc.setLoottableid(sourcenpc.getLoottableid());
+		npc.setLoottableid(lootTableId);
+		
 		npc.setMctype(sourcenpc.getMctype());
 		npc.setMerchantid(sourcenpc.getMerchantid());
 		npc.setOffhanditem(sourcenpc.getOffhanditem());

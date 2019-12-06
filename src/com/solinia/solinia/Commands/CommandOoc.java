@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandOoc implements CommandExecutor {
@@ -50,7 +51,7 @@ public class CommandOoc implements CommandExecutor {
 	            	return false;            	
 	            }
 				
-	            Utils.BroadcastPlayers("Console:" + message);
+	            PlayerUtils.BroadcastPlayers("Console:" + message);
 			}
 		}
 		return false;

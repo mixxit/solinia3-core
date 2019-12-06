@@ -78,9 +78,7 @@ public class CommandCreateNpcCopy implements CommandExecutor {
 		
 			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPCCopy(npcid,name);
 			sender.sendMessage("Created NPC Copy: " + npc.getId());
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
 			sender.sendMessage(e.getMessage());
 		}
 		return true;

@@ -13,6 +13,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -65,18 +66,18 @@ public class CommandStats implements CommandExecutor {
 	            		);
 
 	            Double newlevel = (double) solplayer.getLevel();
-	            Double xpneededforcurrentlevel = Utils.getExperienceRequirementForLevel((int) (newlevel + 0));
-	    		Double xpneededfornextlevel = Utils.getExperienceRequirementForLevel((int) (newlevel + 1));
+	            Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));
+	    		Double xpneededfornextlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 1));
 	    		Double totalxpneeded = xpneededfornextlevel - xpneededforcurrentlevel;
 	    		Double currentxpprogress = solplayer.getExperience() - xpneededforcurrentlevel;
 	    		
 	            Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
-	            Double percenttoaa = Math.floor((solplayer.getAAExperience() / Utils.getMaxAAXP()) * 100);
+	            Double percenttoaa = Math.floor((solplayer.getAAExperience() / PlayerUtils.getMaxAAXP()) * 100);
 	    		int ipercenttolevel = percenttolevel.intValue();
 	    		int ipercenttoaa = percenttoaa.intValue();
 	    		player.sendMessage("Level progress: " + ipercenttolevel + "% into level - Have: " + ChatColor.GOLD+ solplayer.getExperience().longValue() + ChatColor.RESET + " Need: " + ChatColor.GOLD+ xpneededfornextlevel.longValue() + ChatColor.RESET);
 	    		player.sendMessage("AA points: " + solplayer.getAAPoints());
-	    		player.sendMessage("Next AA progress: " + ipercenttoaa + "% into AA - Have: " + ChatColor.GOLD+solplayer.getAAExperience().longValue() + ChatColor.RESET + " Need: " + ChatColor.GOLD+ Utils.getMaxAAXP().longValue() + ChatColor.RESET);
+	    		player.sendMessage("Next AA progress: " + ipercenttoaa + "% into AA - Have: " + ChatColor.GOLD+solplayer.getAAExperience().longValue() + ChatColor.RESET + " Need: " + ChatColor.GOLD+ PlayerUtils.getMaxAAXP().longValue() + ChatColor.RESET);
 	    		player.sendMessage("From being online you have saved up Attendence Xp every minute: " + ChatColor.GOLD+ solplayer.getPendingXp().longValue() + ChatColor.RESET);
 	    		player.sendMessage("Use /claimxp to claim your attendence xp");
 	    		player.sendMessage("Trancing/Meditating: " + ChatColor.GOLD + solplayer.isMeditating() + ChatColor.RESET);

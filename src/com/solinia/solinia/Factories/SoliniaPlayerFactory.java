@@ -14,6 +14,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaPlayer;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaPlayerFactory {
@@ -53,7 +54,7 @@ public class SoliniaPlayerFactory {
 		
 		if (main == true)
 		{
-			Utils.BroadcastPlayers("A new player has entered the world: " + player.getName() + " [" + soliniaPlayer.getFullNameWithTitle() + "]");
+			PlayerUtils.BroadcastPlayers("A new player has entered the world: " + player.getName() + " [" + soliniaPlayer.getFullNameWithTitle() + "]");
 		}
 		
 		return soliniaPlayer;

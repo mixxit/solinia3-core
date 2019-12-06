@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandForceLevel implements CommandExecutor {
@@ -38,7 +39,7 @@ public class CommandForceLevel implements CommandExecutor {
         }
         
         boolean found = false;
-        Double experience = Utils.getExperienceRequirementForLevel(level);
+        Double experience = PlayerUtils.getExperienceRequirementForLevel(level);
         for(Player currentplayer : Bukkit.getServer().getOnlinePlayers())
         {
         	if (!currentplayer.getName().toUpperCase().equals(name.toUpperCase()))

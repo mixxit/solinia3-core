@@ -939,25 +939,25 @@ public class SoliniaItem implements ISoliniaItem {
 			setExperienceBonus(Boolean.parseBoolean(value));
 			break;
 		case "skillmodtype":
-			setSkillModType(SkillType.valueOf(Utils.CapitaliseFirstLetter(value)));
+			setSkillModType(SkillType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
 			break;
 		case "skillmodvalue":
 			setSkillModValue(Integer.parseInt(value));
 			break;
 		case "skillmodtype2":
-			setSkillModType2(SkillType.valueOf(Utils.CapitaliseFirstLetter(value)));
+			setSkillModType2(SkillType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
 			break;
 		case "skillmodvalue2":
 			setSkillModValue2(Integer.parseInt(value));
 			break;
 		case "skillmodtype3":
-			setSkillModType3(SkillType.valueOf(Utils.CapitaliseFirstLetter(value)));
+			setSkillModType3(SkillType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
 			break;
 		case "skillmodvalue3":
 			setSkillModValue3(Integer.parseInt(value));
 			break;
 		case "skillmodtype4":
-			setSkillModType4(SkillType.valueOf(Utils.CapitaliseFirstLetter(value)));
+			setSkillModType4(SkillType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
 			break;
 		case "skillmodvalue4":
 			setSkillModValue4(Integer.parseInt(value));
@@ -966,10 +966,10 @@ public class SoliniaItem implements ISoliniaItem {
 			setWeaponDelay(Integer.parseInt(value));
 			break;
 		case "equipmentslot":
-			setEquipmentSlot(EquipmentSlot.valueOf(Utils.CapitaliseFirstLetter(value)));
+			setEquipmentSlot(EquipmentSlot.valueOf(TextUtils.CapitaliseFirstLetter(value)));
 			break;
 		case "itemtype":
-			setItemType(ItemType.valueOf(Utils.CapitaliseFirstLetter(value)));
+			setItemType(ItemType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
 			break;
 		case "reagent":
 			setReagent(Boolean.parseBoolean(value));

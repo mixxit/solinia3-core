@@ -43,9 +43,11 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -304,7 +306,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public int getLevel() {
-		return Utils.getLevelFromExperience(this.experience);
+		return PlayerUtils.getLevelFromExperience(this.experience);
 	}
 
 	@Override
@@ -433,7 +435,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		double classxpmodifier = 0;
 		boolean modified = false;
 		if (applyModifiers) {
-			classxpmodifier = Utils.getClassXPModifier(getClassObj());
+			classxpmodifier = PlayerUtils.getClassXPModifier(getClassObj());
 			experience = experience * (classxpmodifier / 100);
 
 			double modifier = StateManager.getInstance().getXPDayModifier();
@@ -462,26 +464,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		Double currentexperience = getExperience();
 
 		// make sure someone never gets more than a level per kill
-		double clevel = Utils.getLevelFromExperience(currentexperience);
-		double nlevel = Utils.getLevelFromExperience((currentexperience + experience));
+		double clevel = PlayerUtils.getLevelFromExperience(currentexperience);
+		double nlevel = PlayerUtils.getLevelFromExperience((currentexperience + experience));
 
 		if (nlevel > (clevel + 1)) {
 			// xp is way too high, drop to proper amount
 
-			double xp = Utils.getExperienceRequirementForLevel((int) clevel + 1);
+			double xp = PlayerUtils.getExperienceRequirementForLevel((int) clevel + 1);
 			experience = xp - currentexperience;
 		}
 
 		if (getClassObj() == null) {
 			if (nlevel > 10) {
-				double xp = Utils.getExperienceRequirementForLevel(10);
+				double xp = PlayerUtils.getExperienceRequirementForLevel(10);
 				experience = xp - currentexperience;
 			}
 		}
 
-		if ((currentexperience + experience) > Utils.getExperienceRequirementForLevel(Utils.getMaxLevel())) {
+		if ((currentexperience + experience) > PlayerUtils.getExperienceRequirementForLevel(Utils.getMaxLevel())) {
 			// System.out.println("XP: " + experience);
-			currentexperience = Utils.getExperienceRequirementForLevel(Utils.getMaxLevel());
+			currentexperience = PlayerUtils.getExperienceRequirementForLevel(Utils.getMaxLevel());
 		} else {
 			// System.out.println("XP: " + experience);
 			currentexperience = currentexperience + experience;
@@ -559,14 +561,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			experiencechange = newexperience - originalexperience;
 		}
 
-		double clevel = Utils.getLevelFromExperience(originalexperience);
-		double nlevel = Utils.getLevelFromExperience(newexperience);
+		double clevel = PlayerUtils.getLevelFromExperience(originalexperience);
+		double nlevel = PlayerUtils.getLevelFromExperience(newexperience);
 
 		if (nlevel < (clevel - 1)) {
 			// xp loss is way too high, drop to proper amount
 			System.out.println("XP loss was dropped for being way too high");
 
-			newexperience = Utils.getExperienceRequirementForLevel((int) clevel - 1);
+			newexperience = PlayerUtils.getExperienceRequirementForLevel((int) clevel - 1);
 			experiencechange = newexperience - originalexperience;
 		}
 
@@ -594,8 +596,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		Double newlevel = (double) getLevel();
 
-		Double xpneededforcurrentlevel = Utils.getExperienceRequirementForLevel((int) (newlevel + 0));
-		Double xpneededfornextlevel = Utils.getExperienceRequirementForLevel((int) (newlevel + 1));
+		Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));
+		Double xpneededfornextlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 1));
 		Double totalxpneeded = xpneededfornextlevel - xpneededforcurrentlevel;
 		Double currentxpprogress = experience - xpneededforcurrentlevel;
 
@@ -721,8 +723,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		// Cap at max just under a quarter of an AA experience point
-		if (experience > Utils.getMaxAAXP()) {
-			experience = Utils.getMaxAAXP();
+		if (experience > PlayerUtils.getMaxAAXP()) {
+			experience = PlayerUtils.getMaxAAXP();
 		}
 
 		// System.out.println("AA XP: " + experience);
@@ -749,15 +751,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		boolean givenaapoint = false;
 		// Every time they get aa xp of 2313441000, give them an AA point
-		if (aaexperience > Utils.getMaxAAXP()) {
-			aaexperience = aaexperience - Utils.getMaxAAXP();
+		if (aaexperience > PlayerUtils.getMaxAAXP()) {
+			aaexperience = aaexperience - PlayerUtils.getMaxAAXP();
 			setAAPoints(getAAPoints() + 1);
 			givenaapoint = true;
 		}
 
 		setAAExperience(aaexperience);
 
-		Double percenttoaa = Math.floor((aaexperience / Utils.getMaxAAXP()) * 100);
+		Double percenttoaa = Math.floor((aaexperience / PlayerUtils.getMaxAAXP()) * 100);
 		int ipercenttoaa = percenttoaa.intValue();
 
 		getBukkitPlayer()
@@ -816,7 +818,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public int getSkillCap(String skillName) {
-		return Utils.getSkillCap(skillName, getClassObj(), getLevel(), getSpecialisation());
+		return EntityUtils.getSkillCap(skillName, getClassObj(), getLevel(), getSpecialisation());
 	}
 
 	@Override

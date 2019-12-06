@@ -61,7 +61,9 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.UniversalMerchant;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -579,7 +581,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					continue;
 				}
 				
-				Utils.tryFollow((Player)ent, player, 4);
+				EntityUtils.tryFollow((Player)ent, player, 4);
 			}
 		} catch (CoreStateInitException e)
 		{
@@ -677,7 +679,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			StateManager.getInstance().getEntityManager().clearEntityEffects(event.getEntity().getUniqueId());
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(event.getEntity());
 			if (player != null) {
-				double experienceLoss = Utils.calculateExpLoss(player);
+				double experienceLoss = PlayerUtils.calculateExpLoss(player);
 				player.reducePlayerNormalExperience(experienceLoss);
 				player.dropResurrectionItem((int) experienceLoss);
 			}
@@ -789,7 +791,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					return;
 				}
 
-				if (Utils.getPlayerTotalCountOfItemId(((Player) event.getView().getPlayer()),
+				if (PlayerUtils.getPlayerTotalCountOfItemId(((Player) event.getView().getPlayer()),
 						sourceAugSoliniaItem.getId()) < 1) {
 					event.getView().getPlayer().sendMessage(
 							"You do not have enough of this augmentation in your inventory to apply it to an item");
@@ -806,7 +808,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						.dropItemNaturally(((Player) event.getView().getPlayer()).getLocation(), targetItemStack);
 				((Player) event.getView().getPlayer()).getInventory().setItem(event.getSlot(), null);
 				((Player) event.getView().getPlayer()).updateInventory();
-				Utils.removeItemsFromInventory(((Player) event.getView().getPlayer()), sourceAugSoliniaItem.getId(), 1);
+				PlayerUtils.removeItemsFromInventory(((Player) event.getView().getPlayer()), sourceAugSoliniaItem.getId(), 1);
 
 				event.getView().getPlayer().sendMessage("Augmentation Applied to Item Successfully");
 				StateManager.getInstance().getPlayerManager()
@@ -1485,7 +1487,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		if ((event.getHand() == EquipmentSlot.HAND || event.getHand() == EquipmentSlot.OFF_HAND)
 				&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			try {
-				Utils.checkArmourEquip(SoliniaPlayerAdapter.Adapt(event.getPlayer()), event);
+				PlayerUtils.checkArmourEquip(SoliniaPlayerAdapter.Adapt(event.getPlayer()), event);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1510,13 +1512,13 @@ public class Solinia3CorePlayerListener implements Listener {
 				return;
 		}
 		
-		if (Utils.isMezzed((LivingEntity) event.getPlayer()))
+		if (EntityUtils.isMezzed((LivingEntity) event.getPlayer()))
 		{
 			Utils.CancelEvent(event);
 			return;
 		}
 
-		if (Utils.isStunned((LivingEntity) event.getPlayer()))
+		if (EntityUtils.isStunned((LivingEntity) event.getPlayer()))
 		{
 			Utils.CancelEvent(event);
 			return;

@@ -16,6 +16,7 @@ import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.TextUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaItemFactory {
@@ -279,7 +280,7 @@ public class SoliniaItemFactory {
 				if (prefixClassName == true)
 				{
 					className = classtype.getClassItemPrefix().toLowerCase();
-					className = Utils.FormatAsName(className);
+					className = TextUtils.FormatAsName(className);
 					className += " ";
 				}
 				

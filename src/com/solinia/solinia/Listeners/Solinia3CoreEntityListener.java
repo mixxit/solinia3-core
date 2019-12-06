@@ -50,6 +50,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreEntityListener implements Listener {
@@ -117,13 +119,13 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		}
 
-		if (Utils.isMezzed((LivingEntity)event.getEntity()))
+		if (EntityUtils.isMezzed((LivingEntity)event.getEntity()))
 		{
 			Utils.CancelEvent(event);
 			return;
 		}
 
-		if (Utils.isStunned((LivingEntity)event.getEntity()))
+		if (EntityUtils.isStunned((LivingEntity)event.getEntity()))
 		{
 			Utils.CancelEvent(event);
 			return;
@@ -607,13 +609,13 @@ public class Solinia3CoreEntityListener implements Listener {
 	@EventHandler
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
-		if (Utils.isMezzed(event.getPlayer()))
+		if (EntityUtils.isMezzed(event.getPlayer()))
 		{
 			Utils.CancelEvent(event);
 			return;
 		}
 
-		if (Utils.isStunned(event.getPlayer()))
+		if (EntityUtils.isStunned(event.getPlayer()))
 		{
 			Utils.CancelEvent(event);
 			return;
@@ -641,14 +643,14 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 		
 		if (event.getEntity() instanceof LivingEntity)
-		if (Utils.isMezzed((LivingEntity)event.getEntity()))
+		if (EntityUtils.isMezzed((LivingEntity)event.getEntity()))
 		{
 			Utils.CancelEvent(event);
 			return;
 		}
 		
 		if (event.getEntity() instanceof LivingEntity)
-			if (Utils.isStunned((LivingEntity)event.getEntity()))
+			if (EntityUtils.isStunned((LivingEntity)event.getEntity()))
 			{
 				Utils.CancelEvent(event);
 				return;
@@ -739,7 +741,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				return;
 			}
 
-			Double experience = Utils.getExperienceRewardAverageForLevel(livingEntity.getLevel());
+			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getLevel());
 
 			// try to share with group
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(player.getUUID());

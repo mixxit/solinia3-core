@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaNPCMerchantFactory;
+import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Managers.StateManager;
 
 public class CommandCreateMerchantList implements CommandExecutor {
@@ -50,7 +51,7 @@ public class CommandCreateMerchantList implements CommandExecutor {
 			}
 			
 			SoliniaNPCMerchantFactory.CreateNPCMerchant(merchantlistname);
-			sender.sendMessage("MerchantList created");
+			sender.sendMessage("MerchantList created " + StateManager.getInstance().getConfigurationManager().getNPCMerchant(merchantlistname).getId());
 		} catch (CoreStateInitException e)
 		{
 			sender.sendMessage(e.getMessage());

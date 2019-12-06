@@ -70,14 +70,22 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant {
 				int itemIdToRemove = Integer.parseInt(value);
 				if (itemIdToRemove < 1)
 					throw new InvalidNPCMerchantListSettingException("Invalid item id to remove");
+				int found = 0;
 				for(int i = 0; i < getEntries().size(); i++)
 				{
-					if (getEntries().get(i).getItemid() == itemIdToRemove)
-						getEntries().remove(i);
+					if (getEntries().get(i).getItemid() != itemIdToRemove)
+						continue;
+					
+					getEntries().remove(i);
+					found++;
 				}
+				
+				if (found == 0)
+					throw new InvalidNPCMerchantListSettingException("Invalid item id to remove");
+				
 				break;
 			default:
-				throw new InvalidNPCMerchantListSettingException("Invalid setting. Valid Options are: name,remove");
+				throw new InvalidNPCMerchantListSettingException("Invalid setting. Valid Options are: name,remove,requirespermissionnode,publishedbookstore");
 		}
 	}
 

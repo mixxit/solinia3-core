@@ -39,6 +39,7 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.ColorUtil;
+import com.solinia.solinia.Utils.TextUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -781,28 +782,11 @@ public class ItemStackAdapter {
 				loreTxt.add(ChatColor.WHITE + "Buff Duration: " + ChatColor.YELLOW + (spell.getBuffduration() * 6) + " seconds" + ChatColor.RESET);
 			}
 			loreTxt.add(ChatColor.WHITE + "Target Type: " + ChatColor.YELLOW + Utils.getSpellTargetType(spell.getTargettype()).name() + ChatColor.RESET);
-			String classesBuilder = "";
-			List<SoliniaSpellClass> allowedSpellClasses = spell.getAllowedClasses();
-			int rowcount = 0;
-			for (SoliniaSpellClass spellclass : allowedSpellClasses)
-			{
-				if (StateManager.getInstance().getConfigurationManager().getClassObj(spellclass.getClassname().toUpperCase()) == null)
-					continue;
-				
-				classesBuilder += ChatColor.WHITE + spellclass.getClassname() + " (" + ChatColor.YELLOW + spellclass.getMinlevel() + ChatColor.WHITE + ") " + ChatColor.RESET;
-				rowcount++;
-				if (rowcount > 2)
-				{
-					loreTxt.add(classesBuilder);
-					classesBuilder = "";
-					
-				}
-			}
 			
-			// If we never reached 2 classes on a row, handle the overspill here			
-			if (!classesBuilder.equals(""))
-				loreTxt.add(classesBuilder);
+			List<String> classInfo = generateClassesText(spell);
 			
+			if (classInfo.size() > 0)
+				loreTxt.addAll(classInfo);
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -811,6 +795,25 @@ public class ItemStackAdapter {
 		
 		
 		return loreTxt;
+	}
+
+	private static List<String> generateClassesText(ISoliniaSpell spell) {
+		String classesBuilder = "";
+		List<SoliniaSpellClass> allowedSpellClasses = spell.getAllowedClasses();
+		try
+		{
+			for (SoliniaSpellClass spellclass : allowedSpellClasses)
+			{
+				if (StateManager.getInstance().getConfigurationManager().getClassObj(spellclass.getClassname().toUpperCase()) == null)
+					continue;
+				
+				classesBuilder += ChatColor.WHITE + spellclass.getClassname() + ":(" + ChatColor.YELLOW + spellclass.getMinlevel() + ChatColor.WHITE + ")" + ChatColor.RESET + " ";
+			}
+		} catch (CoreStateInitException e) {
+		
+		}
+		
+		return TextUtils.breakStringOfWordsIntoLines(classesBuilder,41);
 	}
 
 	public static ItemMeta buildSkull(SkullMeta meta, UUID skinuuid, String texturebase64, String player) {

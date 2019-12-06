@@ -31,7 +31,9 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.QuestUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -877,7 +879,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 							if (itemId == 0)
 								continue;
 
-							if (Utils.getPlayerTotalCountOfItemId(solPlayer.getBukkitPlayer(), itemId) < 1)
+							if (PlayerUtils.getPlayerTotalCountOfItemId(solPlayer.getBukkitPlayer(), itemId) < 1)
 								continue;
 
 							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
@@ -1328,7 +1330,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 	@Override
 	public int getSkillCap(String skillName) {
-		return Utils.getSkillCap(skillName, getClassObj(), getLevel(), "");
+		return EntityUtils.getSkillCap(skillName, getClassObj(), getLevel(), "");
 	}
 
 	@Override

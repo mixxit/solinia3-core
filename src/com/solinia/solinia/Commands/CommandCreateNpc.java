@@ -95,9 +95,8 @@ public class CommandCreateNpc implements CommandExecutor {
 			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level, factionid);
 			
 			sender.sendMessage("Created NPC: " + npc.getId());
-		} catch (CoreStateInitException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 			sender.sendMessage(e.getMessage());
 		}
 		return true;

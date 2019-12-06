@@ -20,6 +20,8 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -72,7 +74,7 @@ public class CommandNPCGive implements CommandExecutor {
 			}
 
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
-			if (Utils.getPlayerTotalCountOfItemId(player, itemid) < 1) {
+			if (PlayerUtils.getPlayerTotalCountOfItemId(player, itemid) < 1) {
 				player.sendMessage("Sorry but you do not have the quantity you are trying to give");
 				return true;
 			}
@@ -124,7 +126,7 @@ public class CommandNPCGive implements CommandExecutor {
 						solentity.emote(solnpc.replaceChatWordsWithHints(response), false);
 						
 					eventHandler.awardPlayer((Player)player);
-					Utils.removeItemsFromInventory(player, itemid, 1);
+					PlayerUtils.removeItemsFromInventory(player, itemid, 1);
 					
 					if (eventHandler.getTeleportResponse() != null && !eventHandler.getTeleportResponse().equals("")) {
 						String[] zonedata = eventHandler.getTeleportResponse().split(",");

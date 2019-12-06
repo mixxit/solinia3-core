@@ -22,6 +22,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -123,7 +124,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            {
 	            	latestitem.setDiscoverer(e.getPlayer().getCustomName());
 					StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
-	            	Utils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
+	            	PlayerUtils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
 		    }
 	        if (ItemStackUtils.IsSoliniaItem(pickedUpItemStack) && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
@@ -135,7 +136,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            {
 	            	latestitem.setDiscoverer(e.getPlayer().getCustomName());
 					StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
-	            	Utils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
+	            	PlayerUtils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
 	        	
 	            if (pickedUpItemStack != null)

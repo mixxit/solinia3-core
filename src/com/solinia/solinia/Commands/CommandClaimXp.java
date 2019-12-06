@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandClaimXp implements CommandExecutor {
@@ -33,10 +34,10 @@ public class CommandClaimXp implements CommandExecutor {
 			
 			if (solplayer.isAAOn())
 			{
-				if (pendingXp > Utils.getMaxAAXP())
+				if (pendingXp > PlayerUtils.getMaxAAXP())
 				{
 					solplayer.increasePlayerExperience(pendingXp, false, false);
-					solplayer.setPendingXp(solplayer.getPendingXp() - Utils.getMaxAAXP());
+					solplayer.setPendingXp(solplayer.getPendingXp() - PlayerUtils.getMaxAAXP());
 				} else {
 					solplayer.increasePlayerExperience(pendingXp, false, false);
 					solplayer.setPendingXp(0d);
@@ -49,11 +50,11 @@ public class CommandClaimXp implements CommandExecutor {
 				}
 				
 				Double currentexperience = solplayer.getExperience();
-				double clevel = Utils.getLevelFromExperience(currentexperience);
-				double nlevel = Utils.getLevelFromExperience((currentexperience + pendingXp));
+				double clevel = PlayerUtils.getLevelFromExperience(currentexperience);
+				double nlevel = PlayerUtils.getLevelFromExperience((currentexperience + pendingXp));
 				Double experience = 0d;
 				if (nlevel > (clevel + 1)) {
-					double xp = Utils.getExperienceRequirementForLevel((int) clevel + 1);
+					double xp = PlayerUtils.getExperienceRequirementForLevel((int) clevel + 1);
 					experience = xp - currentexperience;
 					sender.sendMessage("You have more experience than a levels worth, claiming some of the xp: " + experience);
 					sender.sendMessage("Remainder will be: " + (solplayer.getPendingXp()-experience));

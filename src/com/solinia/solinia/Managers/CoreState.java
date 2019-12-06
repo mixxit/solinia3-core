@@ -44,6 +44,7 @@ import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Utils.PartyWindowUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import de.slikey.effectlib.EffectManager;
@@ -336,7 +337,7 @@ public class CoreState {
 			{
 				if (solPlayer.getLevel() > Utils.getMaxLevel())
 				{
-					double maxXp = (Utils.getExperienceRequirementForLevel(Utils.getMaxLevel()) / Utils.getMaxLevel());
+					double maxXp = (PlayerUtils.getExperienceRequirementForLevel(Utils.getMaxLevel()) / Utils.getMaxLevel());
 					solPlayer.setExperience(maxXp);
 					System.out.println(solPlayer.getFullName() + " was greater than max level, setting to max level");
 				}
