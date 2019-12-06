@@ -208,6 +208,8 @@ public class CommandSpellBook implements CommandExecutor {
 				TextComponent tc = new TextComponent(TextComponent.fromLegacyText("Added " + item.getDisplayname() + " to your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET));
 				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
 				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				
+				solPlayer.unMemoriseSpell(item.getAbilityid());
 			} catch (CoreStateInitException e)
 			{
 				

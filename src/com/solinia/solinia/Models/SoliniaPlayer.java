@@ -4370,4 +4370,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setExperienceOn(boolean experienceOn) {
 		this.experienceOn = experienceOn;
 	}
+
+	@Override
+	public void unMemoriseSpell(int abilityid) {
+		// Remove from memorised spells
+		boolean foundSpell = false;
+		if (getMemorisedSpellSlots().getAllSpellIds().contains(abilityid))
+		{
+			for (int i = 1; i <= 8; i++)
+			{
+				if (getMemorisedSpellSlots().getSlotId(i) != abilityid)
+					continue;
+				
+				memoriseSpell(i, 0);
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "Debug: Unmemorised spell: " + abilityid + ChatColor.RESET);
+			}
+		}
+		
+		if (foundSpell)
+			this.sendMemorisedSpellSlots();
+	}
 }

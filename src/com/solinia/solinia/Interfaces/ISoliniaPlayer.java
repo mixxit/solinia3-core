@@ -576,4 +576,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	int getLanguageLearnedPercent(String language);
 
+	public void unMemoriseSpell(int abilityid);
+
 }
