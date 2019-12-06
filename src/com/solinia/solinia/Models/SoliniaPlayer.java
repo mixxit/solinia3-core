@@ -1132,6 +1132,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (spellId < 1) {
 				return;
 			}
+			
+			if (!getMemorisedSpellSlots().getAllSpellIds().contains(spellId))
+			{
+				Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+						"Spell not in spellbook");
+				getBukkitPlayer().sendMessage(
+						"* This spell is no longer in your spellbook");
+				return;
+			}
 
 			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
 					"SoliniaSpell in slot: " + spellId + " target status: " + (getEntityTarget() == null));
