@@ -2905,6 +2905,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue1(effectValue);
 				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid1(effectValue);
+				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula1(effectValue);
 				}
@@ -2912,6 +2915,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case 2:
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue2(effectValue);
+				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid2(effectValue);
 				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula2(effectValue);
@@ -2921,6 +2927,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue3(effectValue);
 				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid3(effectValue);
+				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula3(effectValue);
 				}
@@ -2928,6 +2937,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case 4:
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue4(effectValue);
+				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid4(effectValue);
 				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula4(effectValue);
@@ -2937,6 +2949,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue5(effectValue);
 				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid5(effectValue);
+				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula5(effectValue);
 				}
@@ -2944,6 +2959,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case 6:
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue6(effectValue);
+				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid6(effectValue);
 				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula6(effectValue);
@@ -2953,6 +2971,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue7(effectValue);
 				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid7(effectValue);
+				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula7(effectValue);
 				}
@@ -2960,6 +2981,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case 8:
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue8(effectValue);
+				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid8(effectValue);
 				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula8(effectValue);
@@ -2969,6 +2993,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue9(effectValue);
 				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid9(effectValue);
+				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula9(effectValue);
 				}
@@ -2976,6 +3003,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case 10:
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue10(effectValue);
+				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid10(effectValue);
 				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula10(effectValue);
@@ -2985,6 +3015,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue11(effectValue);
 				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid11(effectValue);
+				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula11(effectValue);
 				}
@@ -2992,6 +3025,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case 12:
 				if (effectSettingType.equals("BASE")) {
 					this.setEffectBaseValue12(effectValue);
+				}
+				if (effectSettingType.equals("ID")) {
+					this.setEffectid12(effectValue);
 				}
 				if (effectSettingType.equals("FORMULA")) {
 					this.setFormula12(effectValue);
