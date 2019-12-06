@@ -4392,6 +4392,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					continue;
 				
 				memoriseSpell(i, 0);
+				foundSpell = true;
 				getBukkitPlayer().sendMessage(ChatColor.GRAY + "Debug: Unmemorised spell: " + abilityid + ChatColor.RESET);
 			}
 		}
