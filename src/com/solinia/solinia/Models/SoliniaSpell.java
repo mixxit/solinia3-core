@@ -2857,6 +2857,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 				throw new InvalidSpellSettingException("Component count must be 0 or higher");
 			setComponentCounts3(Integer.parseInt(value));
 			break;
+		case "targettype":
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidSpellSettingException("Invalid target type");
+			
+			if (Utils.getSpellTargetType(Integer.parseInt(value)).equals(SpellTargetType.Error))
+				throw new InvalidSpellSettingException("Invalid target type");
+
+				setTargettype(Integer.parseInt(value));
+			break;
 		case "requirespermissionnode":
 			setRequiresPermissionNode(value);
 			break;
@@ -2902,134 +2911,158 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 			switch (effectNo) {
 			case 1:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue1(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid1(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula1(effectValue);
 				}
 				break;
 			case 2:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue2(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid2(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula2(effectValue);
 				}
 				break;
 			case 3:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue3(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid3(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula3(effectValue);
 				}
 				break;
 			case 4:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue4(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid4(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula4(effectValue);
 				}
 				break;
 			case 5:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue5(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid5(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula5(effectValue);
 				}
 				break;
 			case 6:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue6(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid6(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula6(effectValue);
 				}
 				break;
 			case 7:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue7(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid7(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula7(effectValue);
 				}
 				break;
 			case 8:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue8(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid8(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula8(effectValue);
 				}
 				break;
 			case 9:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue9(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid9(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula9(effectValue);
 				}
 				break;
 			case 10:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue10(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid10(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula10(effectValue);
 				}
 				break;
 			case 11:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue11(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid11(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula11(effectValue);
 				}
 				break;
 			case 12:
-				if (effectSettingType.equals("BASE")) {
+				if (effectSettingType.toUpperCase().equals("BASE")) {
 					this.setEffectBaseValue12(effectValue);
 				}
-				if (effectSettingType.equals("ID")) {
+				if (effectSettingType.toUpperCase().equals("ID")) {
+					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid12(effectValue);
 				}
-				if (effectSettingType.equals("FORMULA")) {
+				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula12(effectValue);
 				}
 				break;
