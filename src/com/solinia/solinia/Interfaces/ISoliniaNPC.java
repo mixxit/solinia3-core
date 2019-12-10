@@ -267,4 +267,8 @@ public interface ISoliniaNPC {
 	void setTimeto(long timeto);
 
 	ISoliniaRace getRace();
+
+	boolean isMounted();
+
+	void setMounted(boolean isMounted);
 }

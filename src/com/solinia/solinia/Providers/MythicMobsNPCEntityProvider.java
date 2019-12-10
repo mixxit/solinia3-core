@@ -591,7 +591,9 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		if (npc.isInvisible() == true) {
 			mob = mob + "  - potion{t=INVISIBILITY;d=2147483647;l=1} @self ~onSpawn\r" + System.lineSeparator();
 		}
-
+		if (npc.isMounted() == true) {
+			mob = mob + "  - mount{type=Horse} @Self ~onSpawn\r" + System.lineSeparator();
+		}
 		return mob;
 	}
 

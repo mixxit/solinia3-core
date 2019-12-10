@@ -74,6 +74,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private boolean isGuard = false;
 	private boolean isRoamer = false;
 	private boolean isPet = false;
+	private boolean isMounted = false;
 	private boolean isUndead = false;
 	private boolean isAnimal = false;
 	private boolean isPlant = false;
@@ -500,6 +501,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 				throw new InvalidNpcSettingException("Faction ID does not exist");
 			setFactionid(Integer.parseInt(value));
 			break;
+		case "mounted":
+			setMounted(Boolean.parseBoolean(value));
+			break;
 		case "usedisguise":
 			setUsedisguise(Boolean.parseBoolean(value));
 			break;
@@ -709,7 +713,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal,speaksalllanguages");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal,speaksalllanguages,mounted");
 		}
 	}
 
@@ -1563,5 +1567,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setTimeto(long timeto) {
 		this.timeto = timeto;
+	}
+
+	@Override
+	public boolean isMounted() {
+		return isMounted;
+	}
+
+	@Override
+	public void setMounted(boolean isMounted) {
+		this.isMounted = isMounted;
 	}
 }
