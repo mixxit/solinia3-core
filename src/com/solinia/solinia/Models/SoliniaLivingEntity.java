@@ -5381,7 +5381,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getAttackTarget() != null)
 			if (this.getHateList().keySet().size() == 0) {
 				setAttackTarget(null);
-				resetPosition(true);
 				return false;
 			}
 		
@@ -6435,7 +6434,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 
-		this.resetPosition(true);
+		if (!this.isRoamer())
+			this.resetPosition(true);
 	}
 
 	@Override
@@ -6446,6 +6446,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return false;
 	}
 	
+	private boolean isRoamer() {
+		if (this.isCurrentlyNPCPet())
+			return false;
+		
+		if (Utils.isLivingEntityNPC(this.getBukkitLivingEntity())) {
+			
+			try {
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitLivingEntity());
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solEntity.getNpcid());
+				return npc.isRoamer();
+			} catch (CoreStateInitException e) {
+
+			}
+		}
+		
+		return false;
+	}
+
 	private boolean despawnIfWrongTime() {
 		if (this.isCurrentlyNPCPet())
 			return false;

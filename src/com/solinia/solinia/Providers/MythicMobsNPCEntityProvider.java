@@ -589,13 +589,13 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 				mob = mob + "    Skin: '" + disguisedata[1] + "'\r" + System.lineSeparator();
 			}
 		}
+		if (npc.isMounted() == true) {
+			mob = mob + "  Riding: Horse\r" + System.lineSeparator();
+		}
 
 		mob = mob + "  Skills:\r" + System.lineSeparator();
 		if (npc.isInvisible() == true) {
 			mob = mob + "  - potion{t=INVISIBILITY;d=2147483647;l=1} @self ~onSpawn\r" + System.lineSeparator();
-		}
-		if (npc.isMounted() == true) {
-			mob = mob + "  - mount{type=Horse} @Self ~onSpawn\r" + System.lineSeparator();
 		}
 		return mob;
 	}

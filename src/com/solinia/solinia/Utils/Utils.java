@@ -5363,7 +5363,6 @@ public class Utils {
 
 					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
 					solEntity.clearHateList();
-					solEntity.resetPosition(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
