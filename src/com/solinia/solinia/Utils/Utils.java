@@ -5265,15 +5265,9 @@ public class Utils {
 			System.out.println("Recommiting all SpawnGroups via provider");
 			for (ISoliniaSpawnGroup spawngroup : StateManager.getInstance().getConfigurationManager().getSpawnGroups()) {
 				try {
-					spawngroup.editSetting("name", spawngroup.getName());
+					
 					StateManager.getInstance().getEntityManager().getNPCEntityProvider().updateSpawnGroup(spawngroup);
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvalidSpawnGroupSettingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

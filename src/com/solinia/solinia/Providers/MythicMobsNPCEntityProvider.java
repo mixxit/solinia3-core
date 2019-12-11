@@ -11,6 +11,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
@@ -36,12 +37,42 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	@Override
 	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
-		Utils.dispatchCommandLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
-				"mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
-		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
+		updateSpawngroupLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"), spawngroup);
 	}
 	
+	public static void updateSpawngroupLater(Plugin plugin, ISoliniaSpawnGroup spawngroup) {
+		final Plugin pluginToSend = plugin;
+		final CommandSender senderToSend = pluginToSend.getServer().getConsoleSender();
+		final String commandToSend = "mm spawners delete SPAWNGROUPID_" + spawngroup.getId();
+		final String spawngroupPath = "plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml";
+		final int spawnGroupId = spawngroup.getId();
 
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				pluginToSend.getServer().dispatchCommand(senderToSend, commandToSend);
+				writeSpawnerDefinitionbySpawnGroupId(spawngroupPath, spawnGroupId);
+			}
+
+		}.runTaskLater(plugin, 10);
+	}
+
+	public static void writeSpawnerDefinitionbySpawnGroupId(String fileName, int spawngroupId) {
+		try
+		{
+			ISoliniaSpawnGroup spawnGroup = StateManager.getInstance().getConfigurationManager().getSpawnGroup(spawngroupId);
+			if (spawnGroup == null)
+				return;
+			
+			writeSpawnerDefinition(fileName, spawnGroup);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+	}
+	
 	@Override
 	public void reloadProvider() {
 		Utils.dispatchCommandLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "mm reload");
@@ -123,7 +154,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		return spawner;
 	}
 
-	private void writeSpawnerDefinition(String fileName, ISoliniaSpawnGroup spawngroup) {
+	public static void writeSpawnerDefinition(String fileName, ISoliniaSpawnGroup spawngroup) {
 		String fileData = createSpawnerFile(spawngroup);
 
 		if (spawngroup.isDisabled()) {
@@ -143,7 +174,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 	}
 
-	private String createSpawnerFile(ISoliniaSpawnGroup spawngroup) {
+	public static String createSpawnerFile(ISoliniaSpawnGroup spawngroup) {
 		String spawner = "";
 
 		String uniquename = "SPAWNGROUPID_" + spawngroup.getId();
