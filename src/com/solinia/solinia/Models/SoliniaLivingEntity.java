@@ -22,6 +22,7 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
@@ -63,8 +64,12 @@ import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.EntityDamageSource;
+import net.minecraft.server.v1_14_R1.EntityInsentient;
+import net.minecraft.server.v1_14_R1.EntityLiving;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
+import net.minecraft.server.v1_14_R1.GenericAttributes;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
+import net.minecraft.server.v1_14_R1.PathEntity;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -5381,6 +5386,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getAttackTarget() != null)
 			if (this.getHateList().keySet().size() == 0) {
 				setAttackTarget(null);
+				resetPosition(true);
 				return false;
 			}
 		
@@ -6434,8 +6440,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 
-		if (!this.isRoamer())
-			this.resetPosition(true);
+		this.resetPosition(true);
 	}
 
 	@Override
@@ -7233,16 +7238,29 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (resetHealth == true)
+		{
 			if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity()
 					.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
 				this.getBukkitLivingEntity()
 						.setHealth(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+		}
 
-		if (this.getBukkitLivingEntity().getLocation()
-				.distance(BukkitAdapter.adapt(activeMob.getSpawner().getLocation())) < 5)
+		if (this.getBukkitLivingEntity().getLocation().distance(BukkitAdapter.adapt(activeMob.getSpawner().getLocation())) < 5)
 			return;
 
-		this.getBukkitLivingEntity().teleport(BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
+		if (!this.isRoamer())
+		{
+			this.getBukkitLivingEntity().teleport(BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
+		}
+		else
+		{
+			EntityInsentient nmsEntity = ((EntityInsentient) this.getBukkitLivingEntity());
+	        // Create a path to the location
+	        PathEntity path = nmsEntity.getNavigation().a(activeMob.getSpawner().getLocation().getX(), activeMob.getSpawner().getLocation().getY(), activeMob.getSpawner().getLocation().getZ());
+	        // Move to that path at 'speed' speed.
+	        nmsEntity.getNavigation().a(path, nmsEntity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+		}
+		
 	}
 
 	public Location getSpawnPoint() {
