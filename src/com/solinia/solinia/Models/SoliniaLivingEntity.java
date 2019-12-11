@@ -21,6 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
@@ -7254,11 +7255,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		else
 		{
-			EntityInsentient nmsEntity = ((EntityInsentient) this.getBukkitLivingEntity());
+			CraftCreature nmsEntity = ((CraftCreature) this.getBukkitLivingEntity());
 	        // Create a path to the location
-	        PathEntity path = nmsEntity.getNavigation().a(activeMob.getSpawner().getLocation().getX(), activeMob.getSpawner().getLocation().getY(), activeMob.getSpawner().getLocation().getZ());
+	        PathEntity path = nmsEntity.getHandle().getNavigation().a(activeMob.getSpawner().getLocation().getX(), activeMob.getSpawner().getLocation().getY(), activeMob.getSpawner().getLocation().getZ());
 	        // Move to that path at 'speed' speed.
-	        nmsEntity.getNavigation().a(path, nmsEntity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+	        nmsEntity.getHandle().getNavigation().a(path, nmsEntity.getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 		}
 		
 	}
