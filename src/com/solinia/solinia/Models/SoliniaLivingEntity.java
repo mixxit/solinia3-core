@@ -7255,11 +7255,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		else
 		{
+			/* Throwing exception java.lang.NoSuchMethodError: net.minecraft.server.v1_14_R1.NavigationAbstract.a(DDD)Lnet/minecraft/server/v1_14_R1/PathEntity;
 			CraftCreature nmsEntity = ((CraftCreature) this.getBukkitLivingEntity());
 	        // Create a path to the location
 	        PathEntity path = nmsEntity.getHandle().getNavigation().a(activeMob.getSpawner().getLocation().getX(), activeMob.getSpawner().getLocation().getY(), activeMob.getSpawner().getLocation().getZ());
 	        // Move to that path at 'speed' speed.
 	        nmsEntity.getHandle().getNavigation().a(path, nmsEntity.getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+	        */
+			this.getBukkitLivingEntity().teleport(BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
 		}
 		
 	}
