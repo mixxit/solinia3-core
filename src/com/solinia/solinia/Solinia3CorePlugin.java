@@ -38,6 +38,7 @@ import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.ConfigSettings;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
@@ -159,15 +160,16 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		
 		createConfigDir();
 		
-		//config.addDefault("discordbottoken", "");
+		config.addDefault("maxlevel", "70");
 		config.options().copyDefaults(true);
 		saveConfig();
 		
-		/*if (
-				!config.getString("discordbottoken").equals("") 
+		ConfigSettings configSettings = new ConfigSettings();
+		
+		if (!config.getString("maxlevel").equals(""))
 		{
-			discordbottoken = config.getString("discordbottoken");
-		}*/
+			configSettings.MaxLevel = Integer.parseInt(config.getString("maxlevel"));
+		}
 		
 		System.out.println("All local dates stored in format: " + Locale.getDefault().toLanguageTag());
 		
@@ -176,7 +178,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		
 		effectManager = new EffectManager(this);
 
-		initialise();
+		initialise(configSettings);
 		registerEvents();
 
 		setupEconomy();
@@ -259,7 +261,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		return (economy != null);
 	}
 
-	private void initialise() {
+	private void initialise(ConfigSettings configSettings) {
 		// TODO Lets load all this from config settings at some point
 
 		try {
@@ -358,7 +360,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
 					aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
-					accountclaimsrepo, zonesrepo, craftrepo, worldrepo,godrepo);
+					accountclaimsrepo, zonesrepo, craftrepo, worldrepo,godrepo, configSettings);
 
 			ChannelManager channelManager = new ChannelManager();
 			

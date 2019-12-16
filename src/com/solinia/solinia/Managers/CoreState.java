@@ -38,6 +38,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Models.ConfigSettings;
 import com.solinia.solinia.Models.RaceClass;
 import com.solinia.solinia.Models.SoliniaClass;
 import com.solinia.solinia.Models.SoliniaGroup;
@@ -335,9 +336,9 @@ public class CoreState {
 		try {
 			for(ISoliniaPlayer solPlayer : StateManager.getInstance().getPlayerManager().getPlayers())
 			{
-				if (solPlayer.getLevel() > Utils.getMaxLevel())
+				if (solPlayer.getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
 				{
-					double maxXp = (PlayerUtils.getExperienceRequirementForLevel(Utils.getMaxLevel()) / Utils.getMaxLevel());
+					double maxXp = (PlayerUtils.getExperienceRequirementForLevel(StateManager.getInstance().getConfigurationManager().getMaxLevel()) / StateManager.getInstance().getConfigurationManager().getMaxLevel());
 					solPlayer.setExperience(maxXp);
 					System.out.println(solPlayer.getFullName() + " was greater than max level, setting to max level");
 				}

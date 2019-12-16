@@ -61,6 +61,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.AlignmentType;
 import com.solinia.solinia.Models.Bond;
 import com.solinia.solinia.Models.CharacterCreation;
+import com.solinia.solinia.Models.ConfigSettings;
 import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
@@ -133,6 +134,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	// Commit tracking
 	private boolean spellsChanged = false;
 	private boolean itemsChanged = false;
+	private ConfigSettings configSettings = new ConfigSettings();
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
@@ -143,7 +145,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
 			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext,
-			JsonGodRepository godsContext
+			JsonGodRepository godsContext, ConfigSettings configSettings
 			) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
@@ -167,6 +169,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.craftRepository = craftContext;
 		this.worldRepository = worldContext;
 		this.godsRepository = godsContext;
+		this.configSettings  = configSettings;
 		
 		this.setBonds(generateBonds());
 		this.setOaths(generateOaths());
@@ -1982,5 +1985,22 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 		
 		return characterCreation;
+	}
+	
+	@Override
+	public void setConfigSettings(ConfigSettings configSettings) {
+		this.configSettings = configSettings;
+	}
+	
+	@Override
+	public int getMaxLevel()
+	{
+		return this.configSettings.MaxLevel;
+	}
+	
+	@Override
+	public ConfigSettings getConfigSettings()
+	{
+		return this.configSettings;
 	}
 }

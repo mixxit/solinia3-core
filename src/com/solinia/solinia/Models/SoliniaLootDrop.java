@@ -114,7 +114,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			break;
 		case "setallitemminlevel":
 			int minLevel = Integer.parseInt(value);
-			if (minLevel < 1 || minLevel > Utils.getMaxLevel())
+			if (minLevel < 1 || minLevel > StateManager.getInstance().getConfigurationManager().getMaxLevel())
 				throw new InvalidLootDropSettingException("Invalid minlevel");
 			
 			for(int i = 0; i < getEntries().size(); i++)
@@ -125,7 +125,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			break;
 		case "setallitemfireresist":
 			int fireresist = Integer.parseInt(value);
-			if (fireresist < 0 || fireresist > ((Utils.getMaxLevel() / 10) * 5))
+			if (fireresist < 0 || fireresist > ((StateManager.getInstance().getConfigurationManager().getMaxLevel() / 10) * 5))
 				throw new InvalidLootDropSettingException("Invalid fireresist value is it too low or too high?");
 			
 			for(int i = 0; i < getEntries().size(); i++)
@@ -136,7 +136,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			break;
 		case "setallitemcoldresist":
 			int coldresist = Integer.parseInt(value);
-			if (coldresist < 0 || coldresist > ((Utils.getMaxLevel() / 10) * 5))
+			if (coldresist < 0 || coldresist > ((StateManager.getInstance().getConfigurationManager().getMaxLevel() / 10) * 5))
 				throw new InvalidLootDropSettingException("Invalid coldresist value is it too low or too high?");
 			
 			for(int i = 0; i < getEntries().size(); i++)
@@ -147,7 +147,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			break;
 		case "setallitemmagicresist":
 			int magicresist = Integer.parseInt(value);
-			if (magicresist < 0 || magicresist > ((Utils.getMaxLevel() / 10) * 5))
+			if (magicresist < 0 || magicresist > ((StateManager.getInstance().getConfigurationManager().getMaxLevel() / 10) * 5))
 				throw new InvalidLootDropSettingException("Invalid magicresist value is it too low or too high?");
 			
 			for(int i = 0; i < getEntries().size(); i++)
@@ -158,7 +158,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			break;
 		case "setallitempoisonresist":
 			int poisonresist = Integer.parseInt(value);
-			if (poisonresist < 0 || poisonresist > ((Utils.getMaxLevel() / 10) * 5))
+			if (poisonresist < 0 || poisonresist > ((StateManager.getInstance().getConfigurationManager().getMaxLevel() / 10) * 5))
 				throw new InvalidLootDropSettingException("Invalid poisonresist value is it too low or too high?");
 			
 			for(int i = 0; i < getEntries().size(); i++)
@@ -169,7 +169,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			break;
 		case "setallitemdiseaseresist":
 			int diseaseresist = Integer.parseInt(value);
-			if (diseaseresist < 0 || diseaseresist > ((Utils.getMaxLevel() / 10) * 5))
+			if (diseaseresist < 0 || diseaseresist > ((StateManager.getInstance().getConfigurationManager().getMaxLevel() / 10) * 5))
 				throw new InvalidLootDropSettingException("Invalid diseaseresist value is it too low or too high?");
 			
 			for(int i = 0; i < getEntries().size(); i++)

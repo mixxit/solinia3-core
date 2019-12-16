@@ -31,6 +31,7 @@ import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Models.Bond;
 import com.solinia.solinia.Models.CharacterCreation;
+import com.solinia.solinia.Models.ConfigSettings;
 import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
@@ -562,4 +563,10 @@ public interface IConfigurationManager {
 	ISoliniaGod getGod(String name);
 
 	CharacterCreation getCharacterCreationChoices();
+
+	void setConfigSettings(ConfigSettings configSettings);
+
+	ConfigSettings getConfigSettings();
+
+	int getMaxLevel();
 }

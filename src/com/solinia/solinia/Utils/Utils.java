@@ -415,10 +415,6 @@ public class Utils {
 		Random r = new Random();
 		return r.nextInt((maxnumber - minnumber) + 1) + minnumber;
 	}
-
-	public static int getMaxLevel() {
-		return 70;
-	}
 	
 	public static String getDefaultSkillForMaterial(Material material) {
 		String materialstring = material.name().toUpperCase();

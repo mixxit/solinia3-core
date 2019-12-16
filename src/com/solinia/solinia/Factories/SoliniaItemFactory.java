@@ -393,19 +393,25 @@ public class SoliniaItemFactory {
 	}
 	
 	public static void setMinLevel(ISoliniaItem item, int tier, boolean restrictMaxLevel) {
-		int lvlMin = 1;
-		if (tier > 1)
+		try
 		{
-			lvlMin = (tier-1) * 10;
-		}
-		
-		if (restrictMaxLevel == true)
-		if (lvlMin > Utils.getMaxLevel())
+			int lvlMin = 1;
+			if (tier > 1)
+			{
+				lvlMin = (tier-1) * 10;
+			}
+			
+			if (restrictMaxLevel == true)
+			if (lvlMin > StateManager.getInstance().getConfigurationManager().getMaxLevel())
+			{
+				lvlMin = StateManager.getInstance().getConfigurationManager().getMaxLevel();
+			}
+			
+			item.setMinLevel(lvlMin);
+		} catch (CoreStateInitException e)
 		{
-			lvlMin = Utils.getMaxLevel();
+			return;
 		}
-		
-		item.setMinLevel(lvlMin);
 	}
 
 	public static int getBaseAmount(ISoliniaItem item) {

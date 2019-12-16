@@ -149,33 +149,38 @@ public class PlayerUtils {
 	
 
 	public static Double getExperienceRewardAverageForLevel(int level) {
-		Double experience = (Math.pow(level, 2) * 10) * Utils.getMaxLevel() - 1;
-		experience = experience / 2;
-		if (experience < 1) {
-			experience = 1d;
+		try
+		{
+			Double experience = (Math.pow(level, 2) * 10) * StateManager.getInstance().getConfigurationManager().getMaxLevel() - 1;
+			experience = experience / 2;
+			if (experience < 1) {
+				experience = 1d;
+			}
+	
+			if (level < 10) {
+				return experience * 6d;
+			}
+	
+			if (level < 20) {
+				return experience * 5d;
+			}
+	
+			if (level < 30) {
+				return experience * 4d;
+			}
+	
+			if (level < 40) {
+				return experience * 3d;
+			}
+	
+			if (level < 50) {
+				return experience * 2d;
+			}
+			return experience;
+		} catch (CoreStateInitException e)
+		{
+			return 0D;
 		}
-
-		if (level < 10) {
-			return experience * 6d;
-		}
-
-		if (level < 20) {
-			return experience * 5d;
-		}
-
-		if (level < 30) {
-			return experience * 4d;
-		}
-
-		if (level < 40) {
-			return experience * 3d;
-		}
-
-		if (level < 50) {
-			return experience * 2d;
-		}
-
-		return experience;
 	}
 
 	public static Double getMaxAAXP() {

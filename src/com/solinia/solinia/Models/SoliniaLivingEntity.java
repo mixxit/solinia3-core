@@ -765,13 +765,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						// every level over cap reduces the effect by focusSpellEffect.getLimit()
 						// percent unless from a clicky
 						// when ItemCastsUseFocus is true
-						if (lvldiff > 0 && (sclass.getMinlevel() <= Utils.getMaxLevel())) {
-							if (focusSpellEffect.getLimit() > 0) {
-								lvlModifier -= focusSpellEffect.getLimit() * lvldiff;
-								if (lvlModifier < 1)
+						try
+						{
+							if (lvldiff > 0 && (sclass.getMinlevel() <= StateManager.getInstance().getConfigurationManager().getMaxLevel())) {
+								if (focusSpellEffect.getLimit() > 0) {
+									lvlModifier -= focusSpellEffect.getLimit() * lvldiff;
+									if (lvlModifier < 1)
+										return 0;
+								} else
 									return 0;
-							} else
-								return 0;
+							}
+						} catch (CoreStateInitException e)
+						{
+							return 0;
 						}
 					}
 				}
@@ -1250,123 +1256,131 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getDamageCaps(int base_damage) {
-		// this is based on a client function that caps melee base_damage
-		int level = getLevel();
-		int stop_level = Utils.getMaxLevel() + 1;
-		if (stop_level <= level)
-			return base_damage;
-		int cap = 0;
-		if (level >= 125) {
-			cap = 7 * level;
-		} else if (level >= 110) {
-			cap = 6 * level;
-		} else if (level >= 90) {
-			cap = 5 * level;
-		} else if (level >= 70) {
-			cap = 4 * level;
-		} else if (level >= 40) {
-			if (getClassObj() != null)
-				switch (getClassObj().getName()) {
-				case "CLERIC":
-				case "DRUID":
-				case "SHAMAN":
-					cap = 80;
-					break;
-				case "NECROMANCER":
-				case "WIZARD":
-				case "MAGICIAN":
-				case "ENCHANTER":
-					cap = 40;
-					break;
-				default:
-					cap = 200;
-					break;
-				}
-			else
-				cap = 200;
-		} else if (level >= 30) {
-			if (getClassObj() != null)
-				switch (getClassObj().getName()) {
-				case "CLERIC":
-				case "DRUID":
-				case "SHAMAN":
-					cap = 26;
-					break;
-				case "NECROMANCER":
-				case "WIZARD":
-				case "MAGICIAN":
-				case "ENCHANTER":
-					cap = 18;
-					break;
-				default:
-					cap = 60;
-					break;
-				}
-			else
-				cap = 60;
-		} else if (level >= 20) {
-			if (getClassObj() != null)
-				switch (getClassObj().getName()) {
-				case "CLERIC":
-				case "DRUID":
-				case "SHAMAN":
-					cap = 20;
-					break;
-				case "NECROMANCER":
-				case "WIZARD":
-				case "MAGICIAN":
-				case "ENCHANTER":
-					cap = 12;
-					break;
-				default:
-					cap = 30;
-					break;
-				}
-			else
-				cap = 30;
-		} else if (level >= 10) {
-			if (getClassObj() != null)
-				switch (getClassObj().getName()) {
-				case "CLERIC":
-				case "DRUID":
-				case "SHAMAN":
-					cap = 12;
-					break;
-				case "NECROMANCER":
-				case "WIZARD":
-				case "MAGICIAN":
-				case "ENCHANTER":
-					cap = 10;
-					break;
-				default:
-					cap = 14;
-					break;
-				}
-			else
-				cap = 14;
-		} else {
-			if (getClassObj() != null)
-				switch (getClassObj().getName()) {
-				case "CLERIC":
-				case "DRUID":
-				case "SHAMAN":
-					cap = 9;
-					break;
-				case "NECROMANCER":
-				case "WIZARD":
-				case "MAGICIAN":
-				case "ENCHANTER":
-					cap = 6;
-					break;
-				default:
-					cap = 10; // this is where the 20 damage cap comes from
-					break;
-				}
-			else
-				cap = 10;
-		}
+		try
+		{
+			// this is based on a client function that caps melee base_damage
+			int level = getLevel();
 
-		return Math.min(cap, base_damage);
+			int stop_level = StateManager.getInstance().getConfigurationManager().getMaxLevel() + 1;
+			if (stop_level <= level)
+				return base_damage;
+			int cap = 0;
+			if (level >= 125) {
+				cap = 7 * level;
+			} else if (level >= 110) {
+				cap = 6 * level;
+			} else if (level >= 90) {
+				cap = 5 * level;
+			} else if (level >= 70) {
+				cap = 4 * level;
+			} else if (level >= 40) {
+				if (getClassObj() != null)
+					switch (getClassObj().getName()) {
+					case "CLERIC":
+					case "DRUID":
+					case "SHAMAN":
+						cap = 80;
+						break;
+					case "NECROMANCER":
+					case "WIZARD":
+					case "MAGICIAN":
+					case "ENCHANTER":
+						cap = 40;
+						break;
+					default:
+						cap = 200;
+						break;
+					}
+				else
+					cap = 200;
+			} else if (level >= 30) {
+				if (getClassObj() != null)
+					switch (getClassObj().getName()) {
+					case "CLERIC":
+					case "DRUID":
+					case "SHAMAN":
+						cap = 26;
+						break;
+					case "NECROMANCER":
+					case "WIZARD":
+					case "MAGICIAN":
+					case "ENCHANTER":
+						cap = 18;
+						break;
+					default:
+						cap = 60;
+						break;
+					}
+				else
+					cap = 60;
+			} else if (level >= 20) {
+				if (getClassObj() != null)
+					switch (getClassObj().getName()) {
+					case "CLERIC":
+					case "DRUID":
+					case "SHAMAN":
+						cap = 20;
+						break;
+					case "NECROMANCER":
+					case "WIZARD":
+					case "MAGICIAN":
+					case "ENCHANTER":
+						cap = 12;
+						break;
+					default:
+						cap = 30;
+						break;
+					}
+				else
+					cap = 30;
+			} else if (level >= 10) {
+				if (getClassObj() != null)
+					switch (getClassObj().getName()) {
+					case "CLERIC":
+					case "DRUID":
+					case "SHAMAN":
+						cap = 12;
+						break;
+					case "NECROMANCER":
+					case "WIZARD":
+					case "MAGICIAN":
+					case "ENCHANTER":
+						cap = 10;
+						break;
+					default:
+						cap = 14;
+						break;
+					}
+				else
+					cap = 14;
+			} else {
+				if (getClassObj() != null)
+					switch (getClassObj().getName()) {
+					case "CLERIC":
+					case "DRUID":
+					case "SHAMAN":
+						cap = 9;
+						break;
+					case "NECROMANCER":
+					case "WIZARD":
+					case "MAGICIAN":
+					case "ENCHANTER":
+						cap = 6;
+						break;
+					default:
+						cap = 10; // this is where the 20 damage cap comes from
+						break;
+					}
+				else
+					cap = 10;
+			}
+	
+			return Math.min(cap, base_damage);
+		} catch (CoreStateInitException e)
+		{
+			return Math.min(10, base_damage);
+		}
+		
 	}
 
 	public boolean usingValidWeapon() {
@@ -2944,7 +2958,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// tables caped at 105 for now -- future proofed for a while at least :P
-		int level = Math.min(getLevel(), Utils.getMaxLevel());
+		
+		int maxLevel = 70;
+		try
+		{
+			maxLevel = StateManager.getInstance().getConfigurationManager().getMaxLevel();
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		int level = Math.min(getLevel(), maxLevel);
 
 		if (!melee || (!monk && level < 51))
 			return dmg_table[0];
