@@ -68,6 +68,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
+import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -2569,7 +2570,42 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-		
+		try
+		{
+			for(ISoliniaPlayer character : StateManager.getInstance().getConfigurationManager().getCharacters())
+			{
+				Location location = Bukkit.getWorld("world").getSpawnLocation();
+				character.setBindPoint(location.getWorld().getName() + "," + location.getX() + ","
+						+ location.getY() + "," + location.getZ());
+				
+				
+			}
+			
+			System.out.println("Set all characters bind points to world spawn location");
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
+			{
+				Location location = Bukkit.getWorld("world").getSpawnLocation();
+				player.setBindPoint(location.getWorld().getName() + "," + location.getX() + ","
+						+ location.getY() + "," + location.getZ());
+				
+				player.storeInventoryContents();
+				player.storeArmorContents();
+				StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(player);
+			}
+			System.out.println("Set all players bind points to world spawn locations and commited to character lists");
+			
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
+			{
+				player.setForceNewAlt(true);
+			}
+			System.out.println("Set all characters to force new alt");
+			
+			for(Player player : Bukkit.getOnlinePlayers())
+				player.kickPlayer("Patched your account");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	public static void disableLootOverLevel110() {

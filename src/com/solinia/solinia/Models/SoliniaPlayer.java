@@ -76,6 +76,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String base64InventoryContents = "";
 	private String base64ArmorContents = "";
 	private boolean experienceOn = true;
+	private boolean forceNewAlt = false;
 
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
 	private List<Integer> ranks = new ArrayList<Integer>();
@@ -4408,5 +4409,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		if (foundSpell)
 			this.sendMemorisedSpellSlots();
+	}
+
+	@Override
+	public boolean isForceNewAlt() {
+		return forceNewAlt;
+	}
+
+	@Override
+	public void setForceNewAlt(boolean forceNewAlt) {
+		this.forceNewAlt = forceNewAlt;
 	}
 }

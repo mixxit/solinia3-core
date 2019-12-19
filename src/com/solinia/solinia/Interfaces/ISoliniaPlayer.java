@@ -578,4 +578,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void unMemoriseSpell(int abilityid);
 
+	public boolean isForceNewAlt();
+
+	void setForceNewAlt(boolean forceNewAlt);
+
 }

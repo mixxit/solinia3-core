@@ -53,6 +53,17 @@ public class CommandCharacter implements CommandExecutor {
 					if (character.getCharacterId().equals(solplayer.getCharacterId()))
 						continue;
 					
+					String aboveMaxLevel  = "";
+					
+					if (character.getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
+						if (!player.isOp() && !player.hasPermission("solinia.characterdonochangelocation"))
+						{
+							continue;
+						} else {
+							aboveMaxLevel = "[LOCKED]";
+						}
+					
+					
 					if (character.isMain())
 					{
 						main = "MAIN";
@@ -70,7 +81,7 @@ public class CommandCharacter implements CommandExecutor {
 						charclass = character.getClassObj().getName();
 					}
 					
-					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + ChatColor.RESET;
+					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + " " + aboveMaxLevel + ChatColor.RESET;
 					
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getCharacterId().toString();
@@ -157,6 +168,17 @@ public class CommandCharacter implements CommandExecutor {
 			        		player.sendMessage("This is not your character to load");
 			        		return true;
 			        	}
+			        	
+						if (targetCharacter.getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
+						{
+							player.sendMessage("This character is higher level than the character level limit");
+							if (!player.isOp() && !player.hasPermission("solinia.characterdonochangelocation"))
+							{
+								return true;
+							} else {
+								player.sendMessage("However you are a staff member, so you can load it");
+							}
+						}
 
 						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(plugin, player,characterUUID);
 						if (loadedPlayer != null)

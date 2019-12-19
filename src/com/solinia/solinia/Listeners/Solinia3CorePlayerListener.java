@@ -1403,6 +1403,10 @@ public class Solinia3CorePlayerListener implements Listener {
 			solplayer.updateDisplayName();
 			solplayer.updateMaxHp();
 			Bukkit.getPluginManager().callEvent(soliniaevent);
+			
+			// patch
+			if (solplayer.isForceNewAlt())
+				StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, event.getPlayer());
 
 			// patch
 			if (solplayer.getClassObj() != null)
