@@ -183,6 +183,8 @@ public class CommandCharacter implements CommandExecutor {
 						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(plugin, player,characterUUID);
 						if (loadedPlayer != null)
 						{
+							// Remove force new alt since we are now logged in
+							loadedPlayer.setForceNewAlt(false);
 							if (loadedPlayer.getLastLocation() != null)
 								if (resetLocation2 == true)
 									player.teleport(loadedPlayer.getLastLocation());
