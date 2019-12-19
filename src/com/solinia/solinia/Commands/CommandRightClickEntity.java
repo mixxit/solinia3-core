@@ -1,8 +1,10 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -20,7 +22,7 @@ public class CommandRightClickEntity implements CommandExecutor {
 		
 		Player player = (Player)sender;
 		
-		if (tryRightClickTarget(player))
+		if (tryRightClickTarget(player, Integer.parseInt(args[0])))
 		{
 			// cancel feigened if targetting
 			try
@@ -41,10 +43,24 @@ public class CommandRightClickEntity implements CommandExecutor {
 		return true;
 	}
 	
-	private boolean tryRightClickTarget(Player player) {
+	private boolean tryRightClickTarget(Player player, int entityId) {
 		try
 		{
-			LivingEntity targetmob = Utils.getTargettedLivingEntity(player, 50);
+			LivingEntity targetmob = null;
+			
+			if (entityId > 0)
+			for(Entity entity : player.getNearbyEntities(200D, 200D, 200D))
+			{
+				if (!(entity instanceof LivingEntity))
+					continue;
+				
+				if (entity.getEntityId() != entityId)
+					continue;
+				
+				targetmob = (LivingEntity)entity;
+				break;
+			}
+			
 			if (targetmob == null)
 				return true;
 			
