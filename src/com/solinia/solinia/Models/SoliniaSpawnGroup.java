@@ -147,8 +147,8 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 			setName(value);
 			break;
 		case "respawntime":
-			if (Integer.parseInt(value) < 360)
-				throw new InvalidSpawnGroupSettingException("Minimum respawn time is 360 seconds");
+			if (Integer.parseInt(value) < 30)
+				throw new InvalidSpawnGroupSettingException("Minimum respawn time is 30 seconds");
 			setRespawntime(Integer.parseInt(value));
 			break;
 		case "x":
