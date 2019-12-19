@@ -27,7 +27,7 @@ public interface IPlayerManager {
 	public String getPlayerNameByUUID(UUID king);
 	ISoliniaPlayer getMainCharacterDataOnly(UUID playerUUID);
 	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
-	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player);
+	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit);
 	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, UUID characterUUID);
 	Timestamp getPlayerLastChangeChar(UUID playerUUID);
 	void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp);

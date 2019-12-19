@@ -119,7 +119,7 @@ Solinia3CorePlugin plugin;
 		if (!StateManager.getInstance().getPlayerManager().IsNewNameValid(foreName, lastName))
 			throw new Exception("Invalid firstname+lastname");
 		
-		ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
+		ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player, true);
 		if (newPlayer == null)
 			throw new Exception("Failed to create character object");
 		

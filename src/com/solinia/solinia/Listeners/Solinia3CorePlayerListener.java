@@ -1406,7 +1406,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			
 			// patch
 			if (solplayer.isForceNewAlt())
-				StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, event.getPlayer());
+				StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, event.getPlayer(), false);
 
 			// patch
 			if (solplayer.getClassObj() != null)

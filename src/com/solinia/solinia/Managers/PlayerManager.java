@@ -282,8 +282,10 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	@Override
-	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player) {
+	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit) {
 		LocalDateTime datetime = LocalDateTime.now();
+		if (includeChangeTimerLimit == false)
+			datetime = LocalDateTime.now().minusDays(10);
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		
 		ISoliniaPlayer solPlayer;

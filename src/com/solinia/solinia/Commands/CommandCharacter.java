@@ -127,7 +127,7 @@ public class CommandCharacter implements CommandExecutor {
 								resetLocation = false;
 						}
 						
-						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player);
+						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player, true);
 						if (newPlayer != null)
 						{
 							if (resetLocation == true)
