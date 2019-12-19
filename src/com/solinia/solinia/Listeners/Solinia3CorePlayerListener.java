@@ -1386,8 +1386,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		// disable knockback effects
 		try
 	    {
-	      Player player = event.getPlayer();
-	      EntityHuman entityHuman = ((CraftPlayer)player).getHandle();
+	      EntityHuman entityHuman = ((CraftPlayer)event.getPlayer()).getHandle();
 	      entityHuman.getAttributeInstance(GenericAttributes.KNOCKBACK_RESISTANCE).setValue(1.0D);
 	    }
 	    catch (Exception ex)
@@ -1405,7 +1404,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			
 			// patch
-			if (solplayer.isForceNewAlt() || !solplayer.isPlayable())
+			if (solplayer.isForceNewAlt() || (!solplayer.isPlayable() && !event.getPlayer().isOp() && !event.getPlayer().hasPermission("solinia.characterdonochangelocation")))
 			{
 				event.getPlayer().teleport(Bukkit.getWorld("world").getSpawnLocation());
 				StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, event.getPlayer(), false);
