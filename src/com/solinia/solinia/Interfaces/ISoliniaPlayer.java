@@ -582,4 +582,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setForceNewAlt(boolean forceNewAlt);
 
+	public boolean isPlayable();
+
 }

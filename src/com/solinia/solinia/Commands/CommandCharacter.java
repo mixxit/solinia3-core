@@ -53,14 +53,14 @@ public class CommandCharacter implements CommandExecutor {
 					if (character.getCharacterId().equals(solplayer.getCharacterId()))
 						continue;
 					
-					String aboveMaxLevel  = "";
+					String locked  = "";
 					
-					if (character.getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
+					if (!character.isPlayable())
 						if (!player.isOp() && !player.hasPermission("solinia.characterdonochangelocation"))
 						{
 							continue;
 						} else {
-							aboveMaxLevel = "[LOCKED]";
+							locked = "[LOCKED]";
 						}
 					
 					
@@ -81,7 +81,7 @@ public class CommandCharacter implements CommandExecutor {
 						charclass = character.getClassObj().getName();
 					}
 					
-					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + " " + aboveMaxLevel + ChatColor.RESET;
+					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + " " + locked + ChatColor.RESET;
 					
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getCharacterId().toString();
@@ -169,7 +169,7 @@ public class CommandCharacter implements CommandExecutor {
 			        		return true;
 			        	}
 			        	
-						if (targetCharacter.getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
+						if (!targetCharacter.isPlayable())
 						{
 							player.sendMessage("This character is higher level than the character level limit");
 							if (!player.isOp() && !player.hasPermission("solinia.characterdonochangelocation"))

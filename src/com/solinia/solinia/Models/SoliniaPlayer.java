@@ -600,6 +600,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	public void setExperience(Double experience, Double changeamount, boolean modified) {
+		if (!isPlayable())
+		{
+			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You cannot gain or lose experience for a character that is marked as LOCKED");
+			return;
+		}
+		
 		Double level = (double) getLevel();
 
 		this.experience = experience;
@@ -4419,5 +4425,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setForceNewAlt(boolean forceNewAlt) {
 		this.forceNewAlt = forceNewAlt;
+	}
+
+	@Override
+	public boolean isPlayable() {
+		try
+		{
+			if (getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
+				return false;
+			
+			if (getLevel() < 50)
+			if (this.getAARanks().size() > 0)
+				return false;
+		
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+		
+		return true;
 	}
 }

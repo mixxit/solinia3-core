@@ -327,26 +327,7 @@ public class CoreState {
 	
 	private void fixState()
 	{
-		System.out.println("Fixing max levels");
-		enforceMaxLevel();
-	}
-	
-	private void enforceMaxLevel()
-	{
-		try {
-			for(ISoliniaPlayer solPlayer : StateManager.getInstance().getPlayerManager().getPlayers())
-			{
-				if (solPlayer.getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
-				{
-					double maxXp = (PlayerUtils.getExperienceRequirementForLevel(StateManager.getInstance().getConfigurationManager().getMaxLevel()) / StateManager.getInstance().getConfigurationManager().getMaxLevel());
-					solPlayer.setExperience(maxXp);
-					System.out.println(solPlayer.getFullName() + " was greater than max level, setting to max level");
-				}
-			}
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 	
 	private void patchClasses1_13() {

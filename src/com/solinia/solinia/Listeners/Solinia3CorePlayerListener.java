@@ -1405,7 +1405,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			
 			// patch
-			if (solplayer.isForceNewAlt())
+			if (solplayer.isForceNewAlt() || !solplayer.isPlayable())
 			{
 				event.getPlayer().teleport(Bukkit.getWorld("world").getSpawnLocation());
 				StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, event.getPlayer(), false);
