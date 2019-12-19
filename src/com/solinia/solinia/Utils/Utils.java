@@ -126,7 +126,14 @@ public class Utils {
 	
 	public static final int TICKS_PER_SECOND = 20;
 	public static final long MAXDAYTICK = 24000L;
-	
+
+	public static void ConsoleLogTimingDifference(LocalDateTime datetime)
+	{
+		LocalDateTime afterdatetime = LocalDateTime.now();
+
+		System.out.println("Timings after: " + ChronoUnit.MICROS.between(datetime, afterdatetime));
+
+	}
 	
 	public static double calculateYaw(double deltax, double deltaz) {
 		double viewDirection = 90.0D;

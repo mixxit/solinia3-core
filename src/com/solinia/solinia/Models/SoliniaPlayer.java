@@ -1042,6 +1042,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void increasePlayerMana(int mana) {
 		int currentmana = getMana();
 		int maxmp = 1;
+
 		try {
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitPlayer());
 			maxmp = solentity.getMaxMP();
@@ -3737,6 +3738,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// a players mana regen based on if they are meditating (sneaking)
 		manaregen += getPlayerMeditatingManaBonus();
 
+		
+
 		ISoliniaAAAbility aa = null;
 		try {
 			if (getAARanks().size() > 0) {
@@ -3753,6 +3756,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		}
 
+		
 		int aamanaregenrank = 0;
 
 		if (aa != null) {
@@ -3783,7 +3787,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				emaamanaregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), emaa);
 			manaregen += emaamanaregenrank;
 		}
-
 		// Hp and Mana Regen from Items
 		int hpregen = 0;
 
@@ -3808,7 +3811,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			aahpregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), hpaa);
 			hpregen += aahpregenrank;
 		}
-
+		
 		hpregen += sleephpregen;
 
 		// Process HP Regeneration
@@ -3824,11 +3827,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!getBukkitPlayer().isDead())
 				getSoliniaLivingEntity().setHealth(amount);
 		}
+		
 
 		// Process Mana Regeneration
 		// System.out.println(player.getName() + " was found to have " + manaregen + "
 		// mana regen");
 		increasePlayerMana(manaregen);
+		
+
+		
+
 	}
 
 	private int getPlayerMeditatingManaBonus() {

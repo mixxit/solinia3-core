@@ -69,10 +69,10 @@ public class PlayerManager implements IPlayerManager {
 	public ISoliniaPlayer getPlayer(Player player) {
 		try
 		{
-			if (repository.query(p ->p.getUUID().equals(player.getUniqueId())).size() == 0)
+			if (repository.getByKey(player.getUniqueId()) == null)
 				SoliniaPlayerFactory.CreatePlayer(player,true);
 			
-			return repository.query(p ->p.getUUID().equals(player.getUniqueId())).get(0);
+			return repository.getByKey(player.getUniqueId());
 		} catch (CoreStateInitException e)
 		{
 			return null;
@@ -81,21 +81,18 @@ public class PlayerManager implements IPlayerManager {
 	
 	@Override
 	public ISoliniaPlayer getPlayerAndDoNotCreate(UUID playerUUID) {
-		if (repository.query(p ->p.getUUID().equals(playerUUID)).size() == 0)
-			return null;
-		
-		return repository.query(p ->p.getUUID().equals(playerUUID)).get(0);
+		return repository.getByKey(playerUUID);
 	}
 	
 	@Override
 	public ISoliniaPlayer getMainCharacterDataOnly(UUID playerUUID) {
 		// First check if the player even exists
-		if (repository.query(p ->p.getUUID().equals(playerUUID)).size() == 0)
+		if (repository.getByKey(playerUUID) == null)
 		{
 			return null;
 		}
 		
-		ISoliniaPlayer currentLoadedPlayer = repository.query(p ->p.getUUID().equals(playerUUID)).get(0);
+		ISoliniaPlayer currentLoadedPlayer = repository.getByKey(playerUUID);
 		if (currentLoadedPlayer.isMain())
 			return currentLoadedPlayer;
 		
