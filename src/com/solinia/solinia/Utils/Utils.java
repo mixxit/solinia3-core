@@ -2577,7 +2577,7 @@ public class Utils {
 				Location location = Bukkit.getWorld("world").getSpawnLocation();
 				character.setBindPoint(location.getWorld().getName() + "," + location.getX() + ","
 						+ location.getY() + "," + location.getZ());
-				
+				character.setLastLocation(location);
 				
 			}
 			
@@ -2587,15 +2587,16 @@ public class Utils {
 				Location location = Bukkit.getWorld("world").getSpawnLocation();
 				player.setBindPoint(location.getWorld().getName() + "," + location.getX() + ","
 						+ location.getY() + "," + location.getZ());
+				player.setLastLocation(location);
 				StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(player);
 			}
 			System.out.println("Set all players bind points to world spawn locations and commited to character lists");
 			
-			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
+			/*for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
 			{
 				player.setForceNewAlt(true);
 			}
-			System.out.println("Set all characters to force new alt");
+			System.out.println("Set all characters to force new alt");*/
 			
 			for(Player player : Bukkit.getOnlinePlayers())
 				player.kickPlayer("Patched your account");
