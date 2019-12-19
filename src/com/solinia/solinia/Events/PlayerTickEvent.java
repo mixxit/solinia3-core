@@ -1,5 +1,7 @@
 package com.solinia.solinia.Events;
 
+import java.util.UUID;
+
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -9,11 +11,11 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 public class PlayerTickEvent extends Event implements Cancellable {
 	private boolean cancelled;
 	private static final HandlerList handlers = new HandlerList();
-	private ISoliniaPlayer player;
+	private UUID playerUuid;
 
-	public PlayerTickEvent(ISoliniaPlayer player) 
+	public PlayerTickEvent(UUID playerUuid) 
     {
-		this.player = player;
+		this.playerUuid = playerUuid;
 		this.cancelled = false;
     }
 	
@@ -33,8 +35,8 @@ public class PlayerTickEvent extends Event implements Cancellable {
         return handlers;
     }
     
-    public ISoliniaPlayer getPlayer()
+    public UUID getPlayerUuid()
     {
-    	return this.player;
+    	return this.playerUuid;
     }
 }

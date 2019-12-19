@@ -2,6 +2,7 @@ package com.solinia.solinia.Timers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -13,15 +14,21 @@ public class PlayerTickTimer extends BukkitRunnable {
 	@Override
 	public void run() {
 
+		Plugin plugin = Bukkit.getPluginManager().getPlugin("Solinia3Core");
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			try
 			{
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				if (solPlayer == null)
-					continue;
+				final PlayerTickEvent soliniaevent = new PlayerTickEvent(player.getUniqueId());
 				
-				PlayerTickEvent soliniaevent = new PlayerTickEvent(solPlayer);
-				Bukkit.getPluginManager().callEvent(soliniaevent);
+				new BukkitRunnable() {
+
+					@Override
+					public void run() {
+						Bukkit.getPluginManager().callEvent(soliniaevent);
+					}
+
+				}.runTaskLater(plugin, 10);
+				
 			} catch (Exception e)
 			{
 				e.printStackTrace();

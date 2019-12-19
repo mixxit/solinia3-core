@@ -84,19 +84,32 @@ public class Solinia3CorePlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerTick(PlayerTickEvent event)
 	{
-		if (event.isCancelled())
-			return;
-		
-		if (event.getPlayer() == null)
-			return;
-		
-		if (event.getPlayer().getBukkitPlayer().isDead())
-			return;
-		
-		event.getPlayer().doRegenTick();
-		
-		// update last location
-		event.getPlayer().setLastLocation(event.getPlayer().getBukkitPlayer().getLocation());
+			if (event.isCancelled())
+				return;
+			
+			Player player = Bukkit.getPlayer(event.getPlayerUuid());
+			
+			if (player == null)
+				return;
+			
+			if (player.isDead())
+				return;
+			
+			try
+			{
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			if (solPlayer == null)
+				return;
+
+			// update last location
+			solPlayer.setLastLocation(player.getLocation());
+			
+			solPlayer.doRegenTick();
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	@EventHandler
