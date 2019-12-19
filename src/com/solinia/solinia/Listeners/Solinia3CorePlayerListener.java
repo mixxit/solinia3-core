@@ -1404,8 +1404,20 @@ public class Solinia3CorePlayerListener implements Listener {
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			
 			// patch
+			
+			if (event.getPlayer().isOp())
+			{
+				event.getPlayer().sendMessage("Your forcenewalt status: " + solplayer.isForceNewAlt());
+				event.getPlayer().sendMessage("Your isnotplayable status: " + !solplayer.isPlayable());
+				event.getPlayer().sendMessage("Your isnotop status: " + !event.getPlayer().isOp());
+				event.getPlayer().sendMessage("Your isnotop status: " + !event.getPlayer().isOp());
+				event.getPlayer().sendMessage("Your haspermission status: " + event.getPlayer().hasPermission("solinia.characterdonochangelocation"));
+				event.getPlayer().sendMessage("Overall force: " + (!solplayer.isPlayable() && !event.getPlayer().isOp() && !event.getPlayer().hasPermission("solinia.characterdonochangelocation")));
+			}
+			
 			if (solplayer.isForceNewAlt() || (!solplayer.isPlayable() && !event.getPlayer().isOp() && !event.getPlayer().hasPermission("solinia.characterdonochangelocation")))
 			{
+				event.getPlayer().sendMessage("You have been forced to create a new character");
 				event.getPlayer().teleport(Bukkit.getWorld("world").getSpawnLocation());
 				StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, event.getPlayer(), false);
 			}
