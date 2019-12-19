@@ -422,7 +422,9 @@ commands:
   ooc:
     description: Sends a message to the ooc channel
     usage: /ooc message
-    aliases: []
+    aliases:
+    - oo
+    - o
   group:
     description: Group control commands
     usage: /group cmd
