@@ -4888,8 +4888,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getIntelligence() {
-		LocalDateTime datetime = LocalDateTime.now();
-		
 		if (getNpcid() < 1 && !isPlayer())
 			return 1;
 
@@ -4927,14 +4925,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (stat > getMaxStat("INTELLIGENCE"))
 					stat = getMaxStat("INTELLIGENCE");
 
-				Utils.ConsoleLogTimingDifference(datetime);
 				return stat;
 			}
 		} catch (CoreStateInitException e) {
 			return 1;
 		}
 
-		Utils.ConsoleLogTimingDifference(datetime);
 		return 1;
 	}
 
@@ -5177,7 +5173,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getClassObj() == null)
 			return 1;
 
-		System.out.println("------");
 		String profession = getClassObj().getName().toUpperCase();
 
 		int wisintagi = 0;
@@ -5216,8 +5211,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 		}
-		
-		//Utils.ConsoleLogTimingDifference(datetime);
 
 		return (int) Math.floor(maxmana);
 	}
