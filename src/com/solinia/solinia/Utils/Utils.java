@@ -2587,9 +2587,6 @@ public class Utils {
 				Location location = Bukkit.getWorld("world").getSpawnLocation();
 				player.setBindPoint(location.getWorld().getName() + "," + location.getX() + ","
 						+ location.getY() + "," + location.getZ());
-				
-				player.storeInventoryContents();
-				player.storeArmorContents();
 				StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(player);
 			}
 			System.out.println("Set all players bind points to world spawn locations and commited to character lists");
