@@ -271,6 +271,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 	}
 
+	// WARNING POSSIBILITY OF TRAP
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (event.isCancelled())
@@ -290,7 +291,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	public void onLumber(BlockBreakEvent event) {
@@ -1541,13 +1541,14 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 	}
 
-	// note, you can get a crash from consuming items 
+	// note, you can get a crash from nulling items in a playerinteractevent
 	// that are also trying to be placed and handled via BlockPlaceEvent
+	// be sure you cancel event if doing so
 	// java.lang.AssertionError: TRAP could occur
 	// ie
 	// at net.minecraft.server.v1_14_R1.ItemStack.checkEmpty(ItemStack.java:82) ~[spigot-1.14.4.jar:git-Spigot-56f8471-ccd47a5]
     // at net.minecraft.server.v1_14_R1.ItemStack.setCount(ItemStack.java:851) ~[spigot-1.14.4.jar:git-Spigot-56f8471-ccd47a5]
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler()
 	public void onPlayerInteract(PlayerInteractEvent event) 
 	{
 		// Handle changing armour
@@ -1567,7 +1568,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			return;
 		
 		if (event.getHand() != null)
-		HandleHandInteraction(event);
+			HandleHandInteraction(event);
 	}
 
 	private void HandleHandInteraction(PlayerInteractEvent event) {

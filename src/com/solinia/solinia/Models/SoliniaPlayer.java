@@ -1285,11 +1285,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void interact(PlayerInteractEvent event) {
-		//
-		// TODO Auto-generated method stub
-		ItemStack itemstack = event.getItem();
-
-		if (itemstack == null)
+		if (event.getItem() == null)
 			return;
 
 		if (event.getHand() != EquipmentSlot.HAND)
@@ -1298,17 +1294,28 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			return;
 
-		if (itemstack == null || itemstack.getType() == null || itemstack.getType().equals(Material.AIR))
+		if (event.getItem() == null || event.getItem().getType() == null || event.getItem().getType().equals(Material.AIR))
 			return;
 
-		if (!ItemStackUtils.IsSoliniaItem(itemstack))
+		if (!ItemStackUtils.IsSoliniaItem(event.getItem()))
 			return;
 		
-		InteractUsingSoliniaItem(itemstack);
+		// To prevent a trap you must cancel event here
+		Utils.CancelEvent(event);
+		InteractUsingSoliniaItem(event.getItem(), true);
 	}
 
-	private void InteractUsingSoliniaItem(ItemStack itemstack) {
+	private void InteractUsingSoliniaItem(ItemStack itemstack, boolean hasCancelledEvent) {
+		if (!hasCancelledEvent)
+		{
+			System.out.println("Attempt to use InteractUsingSoliniaItem which sets inventory items to null could cause a TRAP assertion");
+			return;
+		}
+		
 		try {
+			if (itemstack == null)
+				return;
+			
 			// We have our custom item id, lets check it exists
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
