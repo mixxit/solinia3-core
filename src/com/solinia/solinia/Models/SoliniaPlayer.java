@@ -1342,7 +1342,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 
 			if (item.isThrowing()) {
-				tryThrowItemInMainHand();
+				tryThrowItemInMainHand(cancellableEvent);
 				return;
 			}
 
