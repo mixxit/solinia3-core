@@ -1,7 +1,5 @@
 package com.solinia.solinia.Models;
 
-import java.util.UUID;
-
 import com.solinia.solinia.Exceptions.InvalidPacketException;
 import com.solinia.solinia.Interfaces.ISoliniaPacket;
 

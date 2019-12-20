@@ -1,13 +1,7 @@
 package com.solinia.solinia;
 
 import java.io.IOException;
-import org.dynmap.DynmapWebChatEvent;
-import org.dynmap.markers.AreaMarker;
-import org.dynmap.markers.Marker;
-import org.dynmap.markers.MarkerAPI;
-import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
-import org.dynmap.markers.PlayerSet;
 import java.util.Locale;
 
 import org.bukkit.Bukkit;

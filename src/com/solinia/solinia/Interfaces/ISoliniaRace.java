@@ -1,6 +1,5 @@
 package com.solinia.solinia.Interfaces;
 
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;

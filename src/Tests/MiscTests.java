@@ -7,9 +7,6 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.List;
 
-import com.solinia.solinia.Exceptions.InvalidPacketException;
-import com.solinia.solinia.Models.PacketOpenSpellbook;
-import com.solinia.solinia.Models.SpellbookPage;
 import com.solinia.solinia.Timers.DynmapTimer;
 
 public class MiscTests {

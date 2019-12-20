@@ -273,11 +273,14 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPlace(BlockPlaceEvent event) {
+		if (event.isCancelled())
+			return;
+		
 		try {
 			ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(event.getItemInHand());
 			if (soliniaitem != null)
 			{
-				if (soliniaitem.getAbilityid() > 0 && soliniaitem.isSkullItem())
+				if (!soliniaitem.isPlaceable() || (soliniaitem.getAbilityid() > 0 && soliniaitem.isSkullItem()))
 				{
 					event.getPlayer().sendMessage(ChatColor.GRAY + "You cannot place a customised head item with an ability as a block");
 					Utils.CancelEvent(event);

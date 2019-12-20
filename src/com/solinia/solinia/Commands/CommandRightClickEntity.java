@@ -1,6 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,7 +11,6 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandRightClickEntity implements CommandExecutor {
 	@Override

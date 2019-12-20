@@ -8,8 +8,6 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
-import org.dynmap.DynmapAPI;
-
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidAASettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;

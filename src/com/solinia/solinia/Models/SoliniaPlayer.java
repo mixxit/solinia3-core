@@ -1302,7 +1302,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (!ItemStackUtils.IsSoliniaItem(itemstack))
 			return;
+		
+		InteractUsingSoliniaItem(itemstack);
+	}
 
+	private void InteractUsingSoliniaItem(ItemStack itemstack) {
 		try {
 			// We have our custom item id, lets check it exists
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
@@ -1369,7 +1373,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
+			// Spell scrolls no longer support right click
 			if (item.getAbilityid() < 1) {
+				return;
+			}
+			
+			if (item.isSpellscroll())
+			{
+				getBukkitPlayer().sendMessage(
+						"* To use this spell you must first pick up the spell and drop it into the spells button in the top right corner of your inventory screen. You can then memorise it from your spellbook (By default K button)");
 				return;
 			}
 

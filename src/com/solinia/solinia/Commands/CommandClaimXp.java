@@ -10,7 +10,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandClaimXp implements CommandExecutor {
 

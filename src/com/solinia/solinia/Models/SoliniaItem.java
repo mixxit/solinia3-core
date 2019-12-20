@@ -11,10 +11,8 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Sittable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -26,7 +24,6 @@ import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -549,6 +546,10 @@ public class SoliniaItem implements ISoliniaItem {
 		return spell.tryCast(player,targetentity,!isConsumable,!isConsumable);
 	}
 
+	
+	/*
+	 * Nothing is calling this so lets remove it
+	 * 
 	@Override
 	public boolean useItemOnBlock(Player player, ISoliniaItem solitem, Block clickedBlock, boolean isConsumable) throws CoreStateInitException {
 		ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(solitem.getAbilityid());
@@ -666,7 +667,7 @@ public class SoliniaItem implements ISoliniaItem {
 
 		return itemUseSuccess;
 	}
-	
+	*/
 	@Override
 	public String asJsonString() {
 		String out = ItemStackUtils.ConvertItemStackToJsonRegular(asItemStack());

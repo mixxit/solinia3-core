@@ -1,30 +1,18 @@
 package com.solinia.solinia.Listeners;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
-
 import com.solinia.solinia.Solinia3CorePlugin;
-import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerValidatedModEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.SoliniaItemException;
-import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.PacketOpenCharacterCreation;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
-import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Utils.ForgeUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;

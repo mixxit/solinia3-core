@@ -6,8 +6,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-
 public class PlayerTickEvent extends Event implements Cancellable {
 	private boolean cancelled;
 	private static final HandlerList handlers = new HandlerList();

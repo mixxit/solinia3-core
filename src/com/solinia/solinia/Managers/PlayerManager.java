@@ -15,7 +15,6 @@ import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerValidatedModEvent;
-import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
@@ -26,8 +25,6 @@ import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerManager implements IPlayerManager {

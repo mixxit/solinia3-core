@@ -160,7 +160,8 @@ public interface ISoliniaItem {
 
 	void setSpellscroll(boolean spellscroll);
 
-	boolean useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock, boolean isConsumable) throws CoreStateInitException;
+	// this doesnt seem to be used so lets remove it
+	//boolean useItemOnBlock(Player player, ISoliniaItem item, Block clickedBlock, boolean isConsumable) throws CoreStateInitException;
 
 	String asJsonString();
 

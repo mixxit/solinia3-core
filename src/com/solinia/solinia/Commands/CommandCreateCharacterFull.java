@@ -1,7 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import java.util.UUID;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,12 +17,6 @@ import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Utils.Utils;
-
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandCreateCharacterFull implements CommandExecutor {
 Solinia3CorePlugin plugin;

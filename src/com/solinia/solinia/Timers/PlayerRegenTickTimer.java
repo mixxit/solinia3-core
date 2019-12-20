@@ -6,7 +6,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Events.PlayerRegenTickEvent;
-import com.solinia.solinia.Events.PlayerTickEvent;
 
 public class PlayerRegenTickTimer extends BukkitRunnable {
 

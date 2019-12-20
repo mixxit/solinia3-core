@@ -37,15 +37,10 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Interfaces.ISoliniaRace;
-import com.solinia.solinia.Models.ConfigSettings;
-import com.solinia.solinia.Models.RaceClass;
-import com.solinia.solinia.Models.SoliniaClass;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Utils.PartyWindowUtils;
-import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import de.slikey.effectlib.EffectManager;

@@ -5,9 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerTickEvent;
-import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 
 public class PlayerTickTimer extends BukkitRunnable {
 
