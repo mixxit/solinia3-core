@@ -333,7 +333,7 @@ public class SoliniaItemFactory {
 				int tierMin = getTierMin(item, armourtier, baseAmount);
 				int tierMax = getTierMax(item, armourtier, baseAmount);
 				
-				setMinLevel(item, armourtier, true);
+				setMinLevel(item, armourtier);
 				
 				int classStrBonus = classtype.getItemGenerationBonus("strength");
 				int classStaBonus = classtype.getItemGenerationBonus("stamina");
@@ -392,26 +392,14 @@ public class SoliniaItemFactory {
 		return items;
 	}
 	
-	public static void setMinLevel(ISoliniaItem item, int tier, boolean restrictMaxLevel) {
-		try
+	public static void setMinLevel(ISoliniaItem item, int tier) {
+		int lvlMin = 1;
+		if (tier > 1)
 		{
-			int lvlMin = 1;
-			if (tier > 1)
-			{
-				lvlMin = (tier-1) * 10;
-			}
-			
-			if (restrictMaxLevel == true)
-			if (lvlMin > StateManager.getInstance().getConfigurationManager().getMaxLevel())
-			{
-				lvlMin = StateManager.getInstance().getConfigurationManager().getMaxLevel();
-			}
-			
-			item.setMinLevel(lvlMin);
-		} catch (CoreStateInitException e)
-		{
-			return;
+			lvlMin = (tier-1) * 10;
 		}
+		
+		item.setMinLevel(lvlMin);
 	}
 
 	public static int getBaseAmount(ISoliniaItem item) {
