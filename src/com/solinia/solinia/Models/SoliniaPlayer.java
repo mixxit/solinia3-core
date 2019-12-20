@@ -23,7 +23,9 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -1218,7 +1220,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void tryThrowItemInMainHand() {
+	public void tryThrowItemInMainHand(Cancellable cancellableEvent) {
 		try {
 			ItemStack itemstack = this.getBukkitPlayer().getEquipment().getItemInMainHand();
 			if ((!ItemStackUtils.IsSoliniaItem(itemstack)))
@@ -1240,9 +1242,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (targetmob != null && !targetmob.getUniqueId().equals(getBukkitPlayer().getUniqueId())) {
 				if (item.useItemOnEntity(getBukkitPlayer(), targetmob, false) == true) {
 					if (newAmount < 1) {
+						// To prevent a trap you must cancel event here
+						Utils.CancelEvent(cancellableEvent);
 						getBukkitPlayer().getEquipment().setItemInMainHand(null);
 						getBukkitPlayer().updateInventory();
 					} else {
+						// To prevent a trap you must cancel event here
+						Utils.CancelEvent(cancellableEvent);
 						itemstack.setAmount(newAmount);
 						getBukkitPlayer().getEquipment().setItemInMainHand(itemstack);
 						getBukkitPlayer().updateInventory();
@@ -1300,18 +1306,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (!ItemStackUtils.IsSoliniaItem(event.getItem()))
 			return;
 		
-		// To prevent a trap you must cancel event here
-		Utils.CancelEvent(event);
-		InteractUsingSoliniaItem(event.getItem(), true);
+		InteractUsingSoliniaItem(event.getItem(), event);
 	}
 
-	private void InteractUsingSoliniaItem(ItemStack itemstack, boolean hasCancelledEvent) {
-		if (!hasCancelledEvent)
-		{
-			System.out.println("Attempt to use InteractUsingSoliniaItem which sets inventory items to null could cause a TRAP assertion");
-			return;
-		}
-		
+	private void InteractUsingSoliniaItem(ItemStack itemstack, Cancellable cancellableEvent) {
+
 		try {
 			if (itemstack == null)
 				return;
@@ -1375,6 +1374,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!item.getLanguagePrimer().equals("")) {
 				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
 				if (item.isConsumable()) {
+					// To prevent a trap you must cancel event here
+					Utils.CancelEvent(cancellableEvent);
 					getBukkitPlayer().getInventory().setItemInMainHand(null);
 					getBukkitPlayer().updateInventory();
 				}
@@ -1424,10 +1425,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				Utils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer().getName(), "using consumable item");
 				item.useItemOnEntity(getBukkitPlayer(), getEntityTarget(), true);
 				if (newAmount < 1) {
+					// To prevent a trap you must cancel event here
+					Utils.CancelEvent(cancellableEvent);
 					getBukkitPlayer().getInventory().setItem(getBukkitPlayer().getInventory().getHeldItemSlot(), null);
 					getBukkitPlayer().updateInventory();
 					return;
 				} else {
+					// To prevent a trap you must cancel event here
+					Utils.CancelEvent(cancellableEvent);
 					itemstack.setAmount(newAmount);
 					getBukkitPlayer().getInventory().setItem(getBukkitPlayer().getInventory().getHeldItemSlot(), null);
 					getBukkitPlayer().updateInventory();

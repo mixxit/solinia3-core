@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -465,8 +466,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void tryApplyAugmentation(ISoliniaItem item);
 
-	void tryThrowItemInMainHand();
-
 	public void tryCastFromSpellbook(ISoliniaItem solItem);
 
 	Location getLastLocation();
@@ -583,5 +582,7 @@ public interface ISoliniaPlayer extends Serializable {
 	void setForceNewAlt(boolean forceNewAlt);
 
 	public boolean isPlayable();
+
+	void tryThrowItemInMainHand(Cancellable cancellableEvent);
 
 }
