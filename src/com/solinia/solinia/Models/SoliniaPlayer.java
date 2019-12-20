@@ -1285,6 +1285,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void interact(PlayerInteractEvent event) {
+		//
 		// TODO Auto-generated method stub
 		ItemStack itemstack = event.getItem();
 
@@ -1367,7 +1368,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!item.getLanguagePrimer().equals("")) {
 				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
 				if (item.isConsumable()) {
-					getBukkitPlayer().setItemInHand(null);
+					getBukkitPlayer().getInventory().setItemInMainHand(null);
 					getBukkitPlayer().updateInventory();
 				}
 				return;
