@@ -64,13 +64,11 @@ public class CommandInspiration implements CommandExecutor {
 						switch(args[1].toLowerCase())
 						{
 							case "gear":
-								//sendGear(sender, cost);
-								//return true;
-								return false;
+								sendGear(sender, cost);
+								return true;
 							case "pregear":
-								//sendPreGear(sender, cost);
-								//return true;
-								return false;
+								sendPreGear(sender, cost);
+								return true;
 							case "aa":
 								if (sender instanceof Player)
 								{
