@@ -5044,7 +5044,8 @@ public class Utils {
 							PlayerUtils.BroadcastPlayers(
 									"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
 						}
-						world.dropItem(location, item.asItemStack());
+						
+						world.dropItemNaturally(location, item.asItemStack());
 
 					}
 				}
@@ -5069,7 +5070,7 @@ public class Utils {
 									"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
 						}
 
-						world.dropItem(location, item.asItemStack());
+						world.dropItemNaturally(location, item.asItemStack());
 
 						// Handle unique item setting also
 						if (item.isArtifact() == true && item.isArtifactFound() == false) {

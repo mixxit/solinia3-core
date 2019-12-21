@@ -16,6 +16,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Utils.PlayerUtils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -105,8 +106,7 @@ public class CommandInspiration implements CommandExecutor {
 									{
 										solPlayer.setInspiration(solPlayer.getInspiration() - cost);
 										ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18019);
-										((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
-										sender.sendMessage("You have purchased an item!");
+										PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());										sender.sendMessage("You have purchased an item!");
 										return true;
 									} else {
 										sender.sendMessage("You require more inspiration points to purchase this");
@@ -126,8 +126,7 @@ public class CommandInspiration implements CommandExecutor {
 								{
 									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
 									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18020);
-									((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
-									sender.sendMessage("You have purchased an item!");
+									PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());									sender.sendMessage("You have purchased an item!");
 									return true;
 								} else {
 									sender.sendMessage("You require more inspiration points to purchase this");
@@ -147,7 +146,7 @@ public class CommandInspiration implements CommandExecutor {
 								{
 									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
 									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18021);
-									((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
+									PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());
 									sender.sendMessage("You have purchased an item!");
 									return true;
 								} else {
@@ -168,7 +167,7 @@ public class CommandInspiration implements CommandExecutor {
 								{
 									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
 									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18022);
-									((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
+									PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());
 									sender.sendMessage("You have purchased an item!");
 									return true;
 								} else {
@@ -189,7 +188,7 @@ public class CommandInspiration implements CommandExecutor {
 									{
 										solPlayer.setInspiration(solPlayer.getInspiration() - cost);
 										ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18024);
-										((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item.asItemStack());
+										PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());
 										sender.sendMessage("You have purchased an item!");
 										return true;
 									} else {

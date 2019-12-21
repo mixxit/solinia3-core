@@ -535,7 +535,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 											{
 												ItemStack itemStack = item.asItemStack();
 												ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(awarditemid);
-												Bukkit.getPlayer(uuid).getWorld().dropItem(Bukkit.getPlayer(uuid).getLocation(), itemStack);
+												
+												PlayerUtils.addToPlayersInventory(Bukkit.getPlayer(uuid), itemStack);
 												System.out.println("Awarded item: " + item.getDisplayname());
 											} catch (CoreStateInitException e)
 											{

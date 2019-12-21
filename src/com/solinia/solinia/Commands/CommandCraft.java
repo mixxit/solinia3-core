@@ -24,6 +24,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandCraft implements CommandExecutor {
@@ -217,7 +218,7 @@ public class CommandCraft implements CommandExecutor {
 	    				if (craftEntry.getOutputItem() > 0)
 	    				{
 	    					ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(craftEntry.getOutputItem());
-		    				player.getWorld().dropItemNaturally(player.getLocation(), outputItem.asItemStack());
+	    					PlayerUtils.addToPlayersInventory(player, outputItem.asItemStack());
 							player.sendMessage("You fashion the items together to make something new!");
 							createCount++;
 	    				} else {

@@ -15,12 +15,15 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Models.SoliniaPlayer;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -274,6 +277,31 @@ public class PlayerUtils {
 				e.printStackTrace();
 			}
 
+		}
+	}
+	public static void addToPlayersInventory(Player player, ItemStack item) {
+		if (player.getInventory().firstEmpty() == -1)
+		{
+			try
+			{
+				SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+				newclaim.setMcname(player.getName());
+				newclaim.setItemid(solPlayer.getEarsItem());
+				newclaim.setClaimed(false);
+				StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+				player.sendMessage(ChatColor.GRAY + "Your inventory was full so we could not place the item into it" + ChatColor.RESET);
+				player.sendMessage(ChatColor.GRAY + "It has been added to your /claims instead" + ChatColor.RESET);
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		} else {
+			player.getInventory().addItem(item);
+			player.updateInventory();
+			player.sendMessage(ChatColor.GRAY + "Item added to your inventory" + ChatColor.RESET);
+			//((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item);
 		}
 	}
 

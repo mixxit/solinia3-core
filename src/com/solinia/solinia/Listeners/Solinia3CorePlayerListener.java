@@ -847,8 +847,8 @@ public class Solinia3CorePlayerListener implements Listener {
 				}
 
 				targetItemStack = ItemStackUtils.applyAugmentation(targetSoliniaItem, targetItemStack, sourceAugSoliniaItem.getId());
-				((Player) event.getView().getPlayer()).getWorld()
-						.dropItemNaturally(((Player) event.getView().getPlayer()).getLocation(), targetItemStack);
+				PlayerUtils.addToPlayersInventory((Player)event.getView().getPlayer(), targetItemStack);
+				
 				((Player) event.getView().getPlayer()).getInventory().setItem(event.getSlot(), null);
 				((Player) event.getView().getPlayer()).updateInventory();
 				PlayerUtils.removeItemsFromInventory(((Player) event.getView().getPlayer()), sourceAugSoliniaItem.getId(), 1);

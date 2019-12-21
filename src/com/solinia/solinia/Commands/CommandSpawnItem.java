@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.PlayerUtils;
 
 public class CommandSpawnItem implements CommandExecutor {
 	@Override
@@ -36,8 +37,7 @@ public class CommandSpawnItem implements CommandExecutor {
 				{
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
 					if (item != null) {
-						player.getLocation().getWorld().dropItem((player).getLocation(),
-								item.asItemStack());
+						PlayerUtils.addToPlayersInventory(player, item.asItemStack());
 					} else {
 						player.sendMessage("Cannot find item by ID");
 						return true;

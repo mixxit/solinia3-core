@@ -71,7 +71,8 @@ public class SoliniaPlayerFactory {
 			for(ISoliniaLootDropEntry lde : ld.getEntries())
 			{
 				ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
-				player.getWorld().dropItemNaturally(player.getLocation(), i.asItemStack());
+				
+				PlayerUtils.addToPlayersInventory(player, i.asItemStack());
 			}
 			
 			}

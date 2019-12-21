@@ -39,6 +39,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -1757,10 +1758,14 @@ public class SoliniaActiveSpell {
 			if (ownerEntity == null)
 				return;
 
+			// This is not really appropriate for anyone but a player
+			if (!(ownerEntity instanceof Player))
+				return;
+			
 			if (!(ownerEntity instanceof LivingEntity))
 				return;
 
-			ownerEntity.getWorld().dropItem(ownerEntity.getLocation(), item.asItemStack());
+			PlayerUtils.addToPlayersInventory((Player)ownerEntity, item.asItemStack());
 
 			// Check if there are any SUMMONITEM_INTO_BAG
 			for (SpellEffect effect : soliniaSpell.getBaseSpellEffects()) {
@@ -1774,7 +1779,7 @@ public class SoliniaActiveSpell {
 						if (!subItem.isTemporary())
 							continue;
 
-						ownerEntity.getWorld().dropItem(ownerEntity.getLocation(), subItem.asItemStack());
+						PlayerUtils.addToPlayersInventory((Player)ownerEntity, subItem.asItemStack());
 					} catch (Exception e) {
 
 					}
