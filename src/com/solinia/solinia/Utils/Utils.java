@@ -61,6 +61,7 @@ import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
@@ -74,6 +75,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -86,6 +88,7 @@ import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.HINT;
+import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -2571,34 +2574,68 @@ public class Utils {
 	public static void Patcher() {
 		try
 		{
-			for(ISoliniaPlayer character : StateManager.getInstance().getConfigurationManager().getCharacters())
+			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
 			{
-				Location location = Bukkit.getWorld("world").getSpawnLocation();
-				character.setBindPoint(location.getWorld().getName() + "," + location.getX() + ","
-						+ location.getY() + "," + location.getZ());
-				character.setLastLocation(location);
-				
+				for(ISoliniaNPCEventHandler handler : npc.getEventHandlers())
+				{
+					if (!handler.getInteractiontype().equals(InteractionType.ITEM))
+						continue;
+					
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(handler.getTriggerdata()));
+					if (item == null)
+						continue;
+					
+					if (item.getQuestId() > 0)
+						continue;
+					
+					if (handler.getRequiresQuestFlag() == null || handler.getRequiresQuestFlag().equals(""))
+						continue;
+					
+					boolean fixed = false;
+					
+					if (handler.getRequiresQuest() > 0)
+					{
+						item.setQuestId(handler.getRequiresQuest());
+						System.out.println("Found untagged quest item " + item.getDisplayname() + " and tagged it the same as the requiresquest " + item.getQuestId());
+						item.setLastUpdatedTimeNow();
+						fixed = true;
+					}
+					
+					if (fixed)
+						continue;
+					
+					System.out.println("Could not fix quest item " + item.getId() + " " + item.getDisplayname() + " that required a quest flag called " + handler.getRequiresQuest());
+					
+
+					if (handler.getRequiresQuestFlag() != null && !handler.getRequiresQuestFlag().equals(""))
+					{
+						// See if we can find if theres is a quest id for the origin
+						for (ISoliniaNPC npc2 : StateManager.getInstance().getConfigurationManager().getNPCs())
+						{
+							for(ISoliniaNPCEventHandler handler2 : npc2.getEventHandlers())
+							{
+								if (!handler2.getAwardsQuestFlag().equals(handler.getRequiresQuestFlag()))
+									continue;
+								
+								// found award
+								if (handler2.getRequiresQuest() < 1)
+								{
+									System.out.println("Seemed to be related to npc ID " + npc.getId());
+									continue;
+								}
+	
+								item.setQuestId(handler.getRequiresQuest());
+								System.out.println("Found untagged quest item " + item.getDisplayname() + " and tagged it the same as the awardsquest " + handler2.getRequiresQuest());
+								item.setLastUpdatedTimeNow();
+								break;
+							}
+						}
+					}
+					
+					if (fixed)
+						continue;
+				}
 			}
-			
-			System.out.println("Set all characters bind points to world spawn location");
-			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
-			{
-				Location location = Bukkit.getWorld("world").getSpawnLocation();
-				player.setBindPoint(location.getWorld().getName() + "," + location.getX() + ","
-						+ location.getY() + "," + location.getZ());
-				player.setLastLocation(location);
-				StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(player);
-			}
-			System.out.println("Set all players bind points to world spawn locations and commited to character lists");
-			
-			/*for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
-			{
-				player.setForceNewAlt(true);
-			}
-			System.out.println("Set all characters to force new alt");*/
-			
-			for(Player player : Bukkit.getOnlinePlayers())
-				player.kickPlayer("Patched your account");
 		} catch (CoreStateInitException e)
 		{
 			

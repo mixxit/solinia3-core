@@ -141,16 +141,18 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- requiresalignment: " + ChatColor.GOLD + getRequiresAlignment() + ChatColor.RESET);
 		sender.sendMessage("- awardsitem: " + ChatColor.GOLD + getAwardsItem() + ChatColor.RESET);
 		sender.sendMessage("- awardsrandomisedgear: " + ChatColor.GOLD + isAwardsRandomisedGear() + ChatColor.RESET);
-		sender.sendMessage("- randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
+		sender.sendMessage(
+				"- randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
 		sender.sendMessage("- title: " + ChatColor.GOLD + this.getTitle() + ChatColor.RESET);
 		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
 		sender.sendMessage("- summonsnpcid: " + ChatColor.GOLD + this.getSummonsNpcId() + ChatColor.RESET);
-		sender.sendMessage("- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
+		sender.sendMessage(
+				"- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 		sender.sendMessage("- awardsfactionid: " + ChatColor.GOLD + this.getAwardsFactionId() + ChatColor.RESET);
 		sender.sendMessage("- awardsfactionvalue: " + ChatColor.GOLD + this.getAwardsFactionValue() + ChatColor.RESET);
 
 		DecimalFormat df = new DecimalFormat("#");
-        df.setMaximumFractionDigits(8);
+		df.setMaximumFractionDigits(8);
 		sender.sendMessage("- awardsxp: " + ChatColor.GOLD + df.format(getAwardsExperience()) + ChatColor.RESET);
 	}
 
@@ -161,8 +163,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			setRandomisedGearSuffix(value);
 			break;
 		case "responsetype":
-			if (!value.toUpperCase().equals("SAY") && !value.toUpperCase().equals("EMOTE"))
-			{
+			if (!value.toUpperCase().equals("SAY") && !value.toUpperCase().equals("EMOTE")) {
 				throw new InvalidNPCEventSettingException("responsetype can either be EMOTE or SAY");
 			}
 			setResponseType(value.toUpperCase());
@@ -184,26 +185,25 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				throw new InvalidNPCEventSettingException("Triggerdata is empty");
 			if (value.contains(" "))
 				throw new InvalidNPCEventSettingException("Triggerdata can only be one value");
-			
+
 			// now we need to check if its an item
-			if (getInteractiontype().equals(InteractionType.ITEM))
-			{
+			if (getInteractiontype().equals(InteractionType.ITEM)) {
 				int itemId = Integer.parseInt(value);
-				try
-				{
+				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 					if (item == null)
 						throw new InvalidNPCEventSettingException("Triggerdata itemID does not exist");
-					
+
 					if (item.getQuestId() < 1 && getRequiresQuestFlag() != null && !getRequiresQuestFlag().equals(""))
-						throw new InvalidNPCEventSettingException("Cannot assign this item to the npc dialogue as you must set the questid on the item first with edititem Itemid questid <questid>");
-						
-				} catch (CoreStateInitException e)
-				{
-					
+						throw new InvalidNPCEventSettingException(
+								"Cannot assign this item to the npc dialogue as you must set the questid on the item first with /edititem "
+										+ itemId + " questid <questid>");
+
+				} catch (CoreStateInitException e) {
+
 				}
 			}
-			
+
 			setTriggerdata(value.toUpperCase());
 			break;
 		case "chatresponse":
@@ -215,16 +215,15 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			if (value.equals(""))
 				throw new InvalidNPCEventSettingException("Faction ID is empty");
 
-			try
-			{
-				ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(Integer.parseInt(value));
+			try {
+				ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
+						.getFaction(Integer.parseInt(value));
 				if (faction == null)
 					throw new InvalidNPCEventSettingException("Invalid faction");
-			} catch (CoreStateInitException e)
-			{
+			} catch (CoreStateInitException e) {
 				throw new InvalidNPCEventSettingException("Faction data not available");
 			}
-			
+
 			setAwardsFactionId(Integer.parseInt(value));
 			break;
 		case "awardsfactionvalue":
@@ -234,41 +233,35 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			break;
 		case "requiresclassid":
 			int classid = Integer.parseInt(value);
-			if (classid < 1)
-			{
+			if (classid < 1) {
 				setRequiresClassId(0);
 				break;
 			}
-			try
-			{
+			try {
 				ISoliniaClass classObj = StateManager.getInstance().getConfigurationManager().getClassObj(classid);
 				if (classObj == null)
 					throw new InvalidNPCEventSettingException("Invalid class id");
-			} catch (CoreStateInitException e)
-			{
+			} catch (CoreStateInitException e) {
 				throw new InvalidNPCEventSettingException("State not initialised");
 			}
 			setRequiresClassId(classid);
 			break;
 		case "requiresalignment":
 			if (!value.equals("GOOD") && !value.equals("NEUTRAL") && !value.equals("EVIL") && !value.equals("NONE"))
-				throw new InvalidNPCEventSettingException("Invalid alignment - must be GOOD NEUTRAL EVIL or NONE");			
+				throw new InvalidNPCEventSettingException("Invalid alignment - must be GOOD NEUTRAL EVIL or NONE");
 			setRequiresAlignment(value);
 			break;
 		case "requiresraceid":
 			int raceid = Integer.parseInt(value);
-			if (raceid < 1)
-			{
+			if (raceid < 1) {
 				setRequiresRaceId(0);
 				break;
 			}
-			try
-			{
+			try {
 				ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(raceid);
 				if (race == null)
 					throw new InvalidNPCEventSettingException("Invalid race id");
-			} catch (CoreStateInitException e)
-			{
+			} catch (CoreStateInitException e) {
 				throw new InvalidNPCEventSettingException("State not initialised");
 			}
 			setRequiresRaceId(raceid);
@@ -277,32 +270,29 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			int questid = Integer.parseInt(value);
 			if (questid < 1)
 				throw new InvalidNPCEventSettingException("Invalid quest id");
-			try
-			{
+			try {
 				ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(questid);
 				if (quest == null)
 					throw new InvalidNPCEventSettingException("Invalid quest id");
-				
+
 				// now we need to check if the item is a quest item
-				if (getInteractiontype().equals(InteractionType.ITEM))
-				{
+				if (getInteractiontype().equals(InteractionType.ITEM)) {
 					int itemId = Integer.parseInt(this.getTriggerdata());
-					try
-					{
+					try {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 						if (item == null)
 							throw new InvalidNPCEventSettingException("Triggerdata itemID does not exist");
-						
+
 						if (item.getQuestId() < 1)
-							throw new InvalidNPCEventSettingException("The item event you are trying to make into a quest does not have the quest flag set on the Item - Please edititem Itemno questid <questid>");
-							
-					} catch (CoreStateInitException e)
-					{
-						
+							throw new InvalidNPCEventSettingException(
+									"The item event you are trying to make into a quest does not have the quest flag set on the Item - Please /edititem "
+											+ itemId + " questid <questid>");
+
+					} catch (CoreStateInitException e) {
+
 					}
 				}
-			} catch (CoreStateInitException e)
-			{
+			} catch (CoreStateInitException e) {
 				throw new InvalidNPCEventSettingException("State not initialised");
 			}
 			setRequiresQuest(questid);
@@ -311,56 +301,69 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			int aquestid = Integer.parseInt(value);
 			if (aquestid < 1)
 				throw new InvalidNPCEventSettingException("Invalid quest id");
-			try
-			{
-			ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(aquestid);
-			if (quest == null)
-				throw new InvalidNPCEventSettingException("Invalid quest id");
-			
+			try {
+				ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(aquestid);
+				if (quest == null)
+					throw new InvalidNPCEventSettingException("Invalid quest id");
+
 				// now we need to check if the item is a quest item
-				if (getInteractiontype().equals(InteractionType.ITEM))
-				{
+				if (getInteractiontype().equals(InteractionType.ITEM)) {
 					int itemId = Integer.parseInt(this.getTriggerdata());
-					try
-					{
+					try {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 						if (item == null)
 							throw new InvalidNPCEventSettingException("Triggerdata itemID does not exist");
-						
+
 						if (item.getQuestId() < 1)
-							throw new InvalidNPCEventSettingException("The item event you are trying to make into a quest does not have the quest flag set on the Item - Please edititem Itemno questid <questid>");
-							
-					} catch (CoreStateInitException e)
-					{
-						
+							throw new InvalidNPCEventSettingException(
+									"The item event you are trying to make into a quest does not have the quest flag set on the Item - Please edititem "
+											+ itemId + " questid <questid>");
+
+					} catch (CoreStateInitException e) {
+
 					}
 				}
-			} catch (CoreStateInitException e)
-			{
+			} catch (CoreStateInitException e) {
 				throw new InvalidNPCEventSettingException("State not initialised");
 			}
 			setAwardsQuest(aquestid);
 			break;
 		case "requiresquestflag":
+			// now we need to check if its an item
+			if (getInteractiontype().equals(InteractionType.ITEM)) {
+				int itemId = Integer.parseInt(value);
+				try {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+					if (item == null)
+						throw new InvalidNPCEventSettingException("Triggerdata itemID does not exist");
+
+					if (item.getQuestId() < 1 && getRequiresQuestFlag() != null && !getRequiresQuestFlag().equals(""))
+						throw new InvalidNPCEventSettingException(
+								"Cannot set this npc event to require a quest flag as the item ID that triggers the event is not marked as requiresquest please set the quest id on the item with /edititem "
+										+ itemId + " questid <questid>");
+
+				} catch (CoreStateInitException e) {
+
+				}
+			}
+
 			setRequiresQuestFlag(value);
 			break;
 		case "awardsquestflag":
 			setAwardsQuestFlag(value);
 			break;
 		case "teleportresponse":
-			try
-			{
+			try {
 				String[] zonedata = value.split(",");
 				// Dissasemble the value to ensure it is correct
 				String world = zonedata[0];
 				double x = Double.parseDouble(zonedata[1]);
 				double y = Double.parseDouble(zonedata[2]);
 				double z = Double.parseDouble(zonedata[3]);
-				
-				setTeleportResponse(world+","+x+","+y+","+z);
+
+				setTeleportResponse(world + "," + x + "," + y + "," + z);
 				break;
-			} catch (Exception e)
-			{
+			} catch (Exception e) {
 				throw new InvalidNPCEventSettingException("Teleport zone value must be in format: world,x,y,z");
 			}
 		case "awardsrandomisedgear":
@@ -368,58 +371,54 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			break;
 		case "summonsnpcid":
 			int npcId = Integer.parseInt(value);
-			try
-			{
+			try {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(npcId);
 				if (npc == null)
 					throw new InvalidNPCEventSettingException("Invalid npc ID");
 				setSummonsNpcId(npcId);
-			} catch (CoreStateInitException e)
-			{
-				
+			} catch (CoreStateInitException e) {
+
 			}
 			break;
 		case "awardsitem":
 			int itemId = Integer.parseInt(value);
 			if (itemId < 1)
 				throw new InvalidNPCEventSettingException("Invalid item ID");
-			
+
 			if (getAwardsQuestFlag() == null || getAwardsQuestFlag().equals(""))
-				throw new InvalidNPCEventSettingException("You cannot set an awardsitem to a npc event handler unless the npc awards a quest flag -  this is to prevent duplicated awards");
-			
-			try
-			{
+				throw new InvalidNPCEventSettingException(
+						"You cannot set an awardsitem to a npc event handler unless the npc awards a quest flag -  this is to prevent duplicated awards");
+
+			try {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 				if (item == null)
 					throw new InvalidNPCEventSettingException("Invalid item id");
-				} catch (CoreStateInitException e)
-				{
-					throw new InvalidNPCEventSettingException("State not initialised");
-				}
-				setAwardsItem(itemId);
+			} catch (CoreStateInitException e) {
+				throw new InvalidNPCEventSettingException("State not initialised");
+			}
+			setAwardsItem(itemId);
 			break;
 		case "awardsxp":
 			double xp = Double.parseDouble(value);
 			int maxLevel = 70;
-			try
-			{
+			try {
 				maxLevel = StateManager.getInstance().getConfigurationManager().getMaxLevel();
-			} catch (CoreStateInitException e)
-			{
-				
+			} catch (CoreStateInitException e) {
+
 			}
 			double maxXp = (PlayerUtils.getExperienceRequirementForLevel(maxLevel) / maxLevel);
-			if (xp < 0 || xp > maxXp)
-			{
+			if (xp < 0 || xp > maxXp) {
 				DecimalFormat df = new DecimalFormat("#");
-		        df.setMaximumFractionDigits(8);
-				
-				throw new InvalidNPCEventSettingException("XP must be greater than -1 and less than " + df.format(maxXp));
+				df.setMaximumFractionDigits(8);
+
+				throw new InvalidNPCEventSettingException(
+						"XP must be greater than -1 and less than " + df.format(maxXp));
 			}
-			
+
 			if (getAwardsQuestFlag() == null || getAwardsQuestFlag().equals(""))
-				throw new InvalidNPCEventSettingException("You cannot set a rewardsxp to a npc event handler unless the npc awards a quest flag -  this is to prevent duplicated awards");
-			
+				throw new InvalidNPCEventSettingException(
+						"You cannot set a rewardsxp to a npc event handler unless the npc awards a quest flag -  this is to prevent duplicated awards");
+
 			setAwardsExperience(xp);
 			break;
 		default:
@@ -448,210 +447,177 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 
 	@Override
 	public boolean playerMeetsRequirements(Player triggerentity) {
-		try
-		{
+		try {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(triggerentity);
-			if (!getRequiresPermissionNode().equals(""))
-			{
-				if (!triggerentity.hasPermission(getRequiresPermissionNode()))
-				{
+			if (!getRequiresPermissionNode().equals("")) {
+				if (!triggerentity.hasPermission(getRequiresPermissionNode())) {
 					triggerentity.sendMessage("This requires a permission node you do not have");
 					return false;
 				}
 			}
-			if (getRequiresQuest() > 0)
-			{
+			if (getRequiresQuest() > 0) {
 				boolean foundQuest = false;
-				for(PlayerQuest playerQuest : player.getPlayerQuests())
-				{
-					if (playerQuest.getQuestId() == getRequiresQuest())
-					{
+				for (PlayerQuest playerQuest : player.getPlayerQuests()) {
+					if (playerQuest.getQuestId() == getRequiresQuest()) {
 						foundQuest = true;
 					}
 				}
-				
+
 				if (foundQuest == false)
 					return false;
 			}
-			
-			if (getRequiresAlignment() != null && !getRequiresAlignment().equals("") && !getRequiresAlignment().equals("NONE"))
-			{
-				if (player.getRace() != null)
-				{
+
+			if (getRequiresAlignment() != null && !getRequiresAlignment().equals("")
+					&& !getRequiresAlignment().equals("NONE")) {
+				if (player.getRace() != null) {
 					if (!player.getRace().getAlignment().toLowerCase().equals(getRequiresAlignment().toLowerCase()))
 						return false;
 				} else {
 					return false;
 				}
 			}
-			
-			if (getRequiresQuestFlag() != null && !getRequiresQuestFlag().equals(""))
-			{
+
+			if (getRequiresQuestFlag() != null && !getRequiresQuestFlag().equals("")) {
 				boolean foundQuestFlag = false;
-				for(String playerQuestFlag : player.getPlayerQuestFlags())
-				{
-					if (playerQuestFlag.equals(getRequiresQuestFlag()))
-					{
+				for (String playerQuestFlag : player.getPlayerQuestFlags()) {
+					if (playerQuestFlag.equals(getRequiresQuestFlag())) {
 						foundQuestFlag = true;
 					}
 				}
-				
+
 				if (foundQuestFlag == false)
 					return false;
 			}
-			
-			if (getRequiresRaceId() > 0)
-			{
-				if (player.getRace() != null)
-				{
+
+			if (getRequiresRaceId() > 0) {
+				if (player.getRace() != null) {
 					if (player.getRace().getId() != getRequiresRaceId())
 						return false;
 				} else {
 					return false;
 				}
 			}
-			
-			if (getRequiresClassId() > 0)
-			{
-				if (player.getClassObj() != null)
-				{
+
+			if (getRequiresClassId() > 0) {
+				if (player.getClassObj() != null) {
 					if (player.getClassObj().getId() != getRequiresClassId())
 						return false;
 				} else {
 					return false;
 				}
 			}
-			
+
 			return true;
-		
-		} catch (CoreStateInitException e)
-		{
+
+		} catch (CoreStateInitException e) {
 			return false;
 		}
 	}
 
 	@Override
 	public void awardPlayer(Player triggerentity) {
-		try
-		{
+		try {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(triggerentity);
-			
-			if (getAwardsQuest() > 0)
-			{
+
+			if (getAwardsQuest() > 0) {
 				boolean foundQuest = false;
-				for(PlayerQuest playerQuest : player.getPlayerQuests())
-				{
-					if (playerQuest.getQuestId() == getAwardsQuest())
-					{
+				for (PlayerQuest playerQuest : player.getPlayerQuests()) {
+					if (playerQuest.getQuestId() == getAwardsQuest()) {
 						foundQuest = true;
 					}
 				}
-				
+
 				if (foundQuest == false)
 					player.addPlayerQuest(getAwardsQuest());
 			}
-			
-			if (getAwardsFactionId() > 0)
-			{
+
+			if (getAwardsFactionId() > 0) {
 				if (getAwardsFactionValue() > 0)
-				player.increaseFactionStanding(getAwardsFactionId(), getAwardsFactionValue());
+					player.increaseFactionStanding(getAwardsFactionId(), getAwardsFactionValue());
 				if (getAwardsFactionValue() < 0)
-				player.decreaseFactionStanding(getAwardsFactionId(), -1*getAwardsFactionValue());
+					player.decreaseFactionStanding(getAwardsFactionId(), -1 * getAwardsFactionValue());
 			}
-			
-			if (getAwardsQuestFlag() != null && !getAwardsQuestFlag().equals(""))
-			{
+
+			if (getAwardsQuestFlag() != null && !getAwardsQuestFlag().equals("")) {
 				boolean foundQuestFlag = false;
-				for(String playerQuestFlag : player.getPlayerQuestFlags())
-				{
-					if (playerQuestFlag.equals(getAwardsQuestFlag()))
-					{
+				for (String playerQuestFlag : player.getPlayerQuestFlags()) {
+					if (playerQuestFlag.equals(getAwardsQuestFlag())) {
 						foundQuestFlag = true;
 					}
 				}
-				
-				if (foundQuestFlag == false)
-				{
+
+				if (foundQuestFlag == false) {
 					player.addPlayerQuestFlag(getAwardsQuestFlag());
-					
-					// All item awards must be accompanied with a quest flag else they will repeat the item return over and over
-					if (getAwardsItem() > 0)
-					{
+
+					// All item awards must be accompanied with a quest flag else they will repeat
+					// the item return over and over
+					if (getAwardsItem() > 0) {
 						System.out.println("Awarding item with awardquestflag: " + getAwardsQuestFlag());
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getAwardsItem());
-						
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(getAwardsItem());
+
 						final int awarditemid = getAwardsItem();
 						final UUID uuid = player.getBukkitPlayer().getUniqueId();
-						
-						if (item != null)
-						{
-							
+
+						if (item != null) {
+
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
 									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 										public void run() {
-											try
-											{
+											try {
 												ItemStack itemStack = item.asItemStack();
-												ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(awarditemid);
-												
+												ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+														.getItem(awarditemid);
+
 												PlayerUtils.addToPlayersInventory(Bukkit.getPlayer(uuid), itemStack);
 												System.out.println("Awarded item: " + item.getDisplayname());
-											} catch (CoreStateInitException e)
-											{
+											} catch (CoreStateInitException e) {
 												// skip
 											}
 										}
 									});
-							
+
 						}
 					}
-					
-					// All xp awards must be accompanied with a quest flag else they will repeat the item return over and over
-					if (getAwardsExperience() > 0)
-					{
+
+					// All xp awards must be accompanied with a quest flag else they will repeat the
+					// item return over and over
+					if (getAwardsExperience() > 0) {
 						System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
 						player.increasePlayerExperience(getAwardsExperience(), false, true);
 					}
-					
-					if (this.isAwardsTitle() == true)
-					{
-						if (this.getTitle() != null)
-						{
-							if (!this.getTitle().equals(""))
-							{
+
+					if (this.isAwardsTitle() == true) {
+						if (this.getTitle() != null) {
+							if (!this.getTitle().equals("")) {
 								player.grantTitle(this.getTitle());
 							}
 						}
 					}
-					
-					if (isAwardsRandomisedGear() == true)
-					{
+
+					if (isAwardsRandomisedGear() == true) {
 						player.getBukkitPlayer().sendMessage("Randomised Gear Rewards are disabled");
-						//awardRandomisedGear(player);
+						// awardRandomisedGear(player);
 					}
 				}
 			}
-		} catch (CoreStateInitException e)
-		{
+		} catch (CoreStateInitException e) {
 			System.out.println(e.getMessage());
 			return;
 		}
 	}
 
 	private void awardRandomisedGear(ISoliniaPlayer player) {
-		try
-		{
+		try {
 			String suffix = "of Randomisation";
-			if (getRandomisedGearSuffix() != null)
-			{
-				if (!getRandomisedGearSuffix().equals(""))
-				{
+			if (getRandomisedGearSuffix() != null) {
+				if (!getRandomisedGearSuffix().equals("")) {
 					suffix = getRandomisedGearSuffix();
 				}
 			}
-			
+
 			System.out.println("Awarding randomisedgear with awardquestflag: " + getAwardsQuestFlag());
-			
+
 			int playertier = 1;
 			if (player.getLevel() >= 1 && player.getLevel() < 11)
 				playertier = 1;
@@ -675,59 +641,58 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				playertier = 10;
 			if (player.getLevel() >= 101 && player.getLevel() < 111)
 				playertier = 11;
-	
-			
+
 			try {
-				
-				// always give the next tier up and then we will reset the player requirements ot current level
+
+				// always give the next tier up and then we will reset the player requirements
+				// ot current level
 				// this ability is for special seasonal rewards only
 				playertier += 1;
-				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix, false, player.getBukkitPlayer().getName());
-				
-				for(int itemid : items)
-				{
+				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix,
+						false, player.getBukkitPlayer().getName());
+
+				for (int itemid : items) {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
 					final String playerName = player.getBukkitPlayer().getName();
 					final int minLevel = player.getLevel();
 					final int finalitemid = itemid;
-					if (item != null)
-					{
-						
+					if (item != null) {
+
 						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
 								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 									public void run() {
-										try
-										{
-											ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(finalitemid);
+										try {
+											ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+													.getItem(finalitemid);
 											item.setMinLevel(minLevel);
 											SoliniaAccountClaim claim = new SoliniaAccountClaim();
-											claim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+											claim.setId(StateManager.getInstance().getConfigurationManager()
+													.getNextAccountClaimId());
 											claim.setMcname(playerName);
 											claim.setItemid(finalitemid);
 											claim.setClaimed(false);
 											Player claimPlayer = Bukkit.getPlayer(playerName);
-											if (claimPlayer != null)
-											{
-												claimPlayer.sendMessage(ChatColor.GOLD + "You have been awarded with a claim item! See /claim");
+											if (claimPlayer != null) {
+												claimPlayer.sendMessage(ChatColor.GOLD
+														+ "You have been awarded with a claim item! See /claim");
 											}
 											StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
-											System.out.println("Awarded Claim: " + item.getDisplayname() + " to " + playerName);
-										} catch (CoreStateInitException e)
-										{
+											System.out.println(
+													"Awarded Claim: " + item.getDisplayname() + " to " + playerName);
+										} catch (CoreStateInitException e) {
 											// skip
 										}
 									}
 								});
 					}
 				}
-				
+
 			} catch (SoliniaItemException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} catch (CoreStateInitException e)
-		{
-			
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 
