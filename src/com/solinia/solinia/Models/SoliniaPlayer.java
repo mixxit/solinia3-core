@@ -281,6 +281,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void setMana(int mana) {
+		if (this.mana == mana)
+			return;
+		
 		this.mana = mana;
 		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer());
 
@@ -1057,7 +1060,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} else {
 			currentmana = currentmana + mana;
 		}
-
+		
 		setMana(currentmana);
 	}
 
