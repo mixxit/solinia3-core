@@ -139,7 +139,7 @@ public class CommandEquip implements CommandExecutor {
 						} else {
 							solPlayer.setShouldersItem(item.getId());
 							solPlayer.setShouldersItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.getInventory().setItemInMainHand(null);
+							player.setItemOnCursor(null);
 							player.updateInventory();
 							player.sendMessage("You have equipped this item");
 							solPlayer.updateMaxHp();
