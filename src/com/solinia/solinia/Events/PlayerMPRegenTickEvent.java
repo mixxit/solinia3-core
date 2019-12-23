@@ -6,12 +6,12 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerRegenTickEvent extends Event implements Cancellable {
+public class PlayerMPRegenTickEvent extends Event implements Cancellable {
 	private boolean cancelled;
 	private static final HandlerList handlers = new HandlerList();
 	private UUID playerUuid;
 
-	public PlayerRegenTickEvent(UUID playerUuid) 
+	public PlayerMPRegenTickEvent(UUID playerUuid) 
     {
 		this.playerUuid = playerUuid;
 		this.cancelled = false;

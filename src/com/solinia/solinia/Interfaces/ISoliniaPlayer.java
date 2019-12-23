@@ -481,7 +481,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	SoliniaZone getFirstZone();
 
-	public void doRegenTick();
+	public void doHPRegenTick();
+	public void doMPRegenTick();
 
 	public void doEquipmentRegenTick(List<ISoliniaItem> items);
 

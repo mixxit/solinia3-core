@@ -46,7 +46,8 @@ import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerEquipmentTickEvent;
-import com.solinia.solinia.Events.PlayerRegenTickEvent;
+import com.solinia.solinia.Events.PlayerHPRegenTickEvent;
+import com.solinia.solinia.Events.PlayerMPRegenTickEvent;
 import com.solinia.solinia.Events.PlayerTickEvent;
 import com.solinia.solinia.Events.PlayerZoneTickEvent;
 import com.solinia.solinia.Events.SoliniaPlayerJoinEvent;
@@ -83,7 +84,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onPlayerRegenTick(PlayerRegenTickEvent event)
+	public void onPlayerHPRegenTick(PlayerHPRegenTickEvent event)
 	{
 			if (event.isCancelled())
 				return;
@@ -102,7 +103,35 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (solPlayer == null)
 				return;
 
-			solPlayer.doRegenTick();
+			solPlayer.doHPRegenTick();
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerMPRegenTick(PlayerMPRegenTickEvent event)
+	{
+			if (event.isCancelled())
+				return;
+			
+			Player player = Bukkit.getPlayer(event.getPlayerUuid());
+			
+			if (player == null)
+				return;
+			
+			if (player.isDead())
+				return;
+			
+			try
+			{
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			if (solPlayer == null)
+				return;
+
+			solPlayer.doMPRegenTick();
 			
 		} catch (CoreStateInitException e)
 		{

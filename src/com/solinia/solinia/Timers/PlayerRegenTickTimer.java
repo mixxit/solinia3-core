@@ -5,7 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.solinia.solinia.Events.PlayerRegenTickEvent;
+import com.solinia.solinia.Events.PlayerHPRegenTickEvent;
+import com.solinia.solinia.Events.PlayerMPRegenTickEvent;
 
 public class PlayerRegenTickTimer extends BukkitRunnable {
 
@@ -16,7 +17,7 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			try
 			{
-				final PlayerRegenTickEvent soliniaevent = new PlayerRegenTickEvent(player.getUniqueId());
+				final PlayerHPRegenTickEvent soliniaevent = new PlayerHPRegenTickEvent(player.getUniqueId());
 				
 				new BukkitRunnable() {
 
@@ -27,6 +28,15 @@ public class PlayerRegenTickTimer extends BukkitRunnable {
 
 				}.runTaskLater(plugin, 10);
 				
+				final PlayerMPRegenTickEvent soliniaevent2 = new PlayerMPRegenTickEvent(player.getUniqueId());
+				new BukkitRunnable() {
+
+					@Override
+					public void run() {
+						Bukkit.getPluginManager().callEvent(soliniaevent2);
+					}
+
+				}.runTaskLater(plugin, 10);
 			} catch (Exception e)
 			{
 				e.printStackTrace();

@@ -3743,7 +3743,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void doRegenTick() {
+	public void doHPRegenTick() {
 		if (getBukkitPlayer().isDead())
 			return;
 
@@ -3751,10 +3751,69 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int manaregen = 1;
 
 		int sleephpregen = 0;
-		int sleepmpregen = 0;
 		// Sleep regen
 		if (getBukkitPlayer().isSleeping()) {
 			sleephpregen += 50;
+		}
+
+		// Hp and Mana Regen from Items
+		int hpregen = 0;
+
+		ISoliniaAAAbility hpaa = null;
+		try {
+			if (getAARanks().size() > 0) {
+				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
+						.getAAbilitiesBySysname("INNATEREGENERATION")) {
+					if (!hasAAAbility(ability.getId()))
+						continue;
+
+					hpaa = ability;
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+
+		int aahpregenrank = 0;
+
+		if (hpaa != null) {
+			aahpregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), hpaa);
+			hpregen += aahpregenrank;
+		}
+		
+		hpregen += sleephpregen;
+
+		// Process HP Regeneration
+		if (hpregen > 0) {
+			int amount = (int) Math.round(getBukkitPlayer().getHealth()) + hpregen;
+			if (amount > getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+				amount = (int) Math.round(getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			}
+
+			if (amount < 0)
+				amount = 0;
+
+			if (!getBukkitPlayer().isDead())
+				getSoliniaLivingEntity().setHealth(amount);
+		}
+		
+		
+
+		
+
+	}
+	
+	@Override
+	public void doMPRegenTick() {
+		if (getBukkitPlayer().isDead())
+			return;
+
+		// Apply Crouch Mana Regen Bonus
+		int manaregen = 1;
+
+		int sleepmpregen = 0;
+		// Sleep regen
+		if (getBukkitPlayer().isSleeping()) {
 			sleepmpregen += 50;
 		}
 
@@ -3812,56 +3871,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				emaamanaregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), emaa);
 			manaregen += emaamanaregenrank;
 		}
-		// Hp and Mana Regen from Items
-		int hpregen = 0;
-
-		ISoliniaAAAbility hpaa = null;
-		try {
-			if (getAARanks().size() > 0) {
-				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
-						.getAAbilitiesBySysname("INNATEREGENERATION")) {
-					if (!hasAAAbility(ability.getId()))
-						continue;
-
-					hpaa = ability;
-				}
-			}
-		} catch (CoreStateInitException e) {
-
-		}
-
-		int aahpregenrank = 0;
-
-		if (hpaa != null) {
-			aahpregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), hpaa);
-			hpregen += aahpregenrank;
-		}
-		
-		hpregen += sleephpregen;
-
-		// Process HP Regeneration
-		if (hpregen > 0) {
-			int amount = (int) Math.round(getBukkitPlayer().getHealth()) + hpregen;
-			if (amount > getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-				amount = (int) Math.round(getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-			}
-
-			if (amount < 0)
-				amount = 0;
-
-			if (!getBukkitPlayer().isDead())
-				getSoliniaLivingEntity().setHealth(amount);
-		}
-		
 
 		// Process Mana Regeneration
 		// System.out.println(player.getName() + " was found to have " + manaregen + "
 		// mana regen");
 		increasePlayerMana(manaregen);
-		
-
-		
-
 	}
 
 	private int getPlayerMeditatingManaBonus() {

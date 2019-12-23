@@ -2614,6 +2614,9 @@ public class Utils {
 						{
 							for(ISoliniaNPCEventHandler handler2 : npc2.getEventHandlers())
 							{
+								if (handler2.getAwardsQuestFlag() == null)
+									continue;
+								
 								if (!handler2.getAwardsQuestFlag().equals(handler.getRequiresQuestFlag()))
 									continue;
 								
