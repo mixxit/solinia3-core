@@ -567,4 +567,6 @@ public interface IConfigurationManager {
 	ConfigSettings getConfigSettings();
 
 	int getMaxLevel();
+
+	int getNextSpellId();
 }

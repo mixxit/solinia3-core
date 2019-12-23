@@ -147,9 +147,15 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		
 		if (expectedClientModVersion == null || expectedClientModVersion.equals(""))
 		{
-			System.out.println("Solinia3-Core Error loading plugin!!! Could not find expected mod version! Disabling plugin...");
-			Bukkit.getPluginManager().disablePlugin(this); 
+			if (!IsOffline())
+			{
+				System.out.println("Solinia3-Core Error loading plugin!!! Could not find expected mod version! Disabling plugin...");
+				Bukkit.getPluginManager().disablePlugin(this); 
 			return;
+			} else {
+				System.out.println("Solinia3-Core detected offline, so running fallback expectedClientModVersion");
+				expectedClientModVersion = "1.14.4";
+			}
 		}
 		
 		System.out.println("Requiring ClientModVersion: " + expectedClientModVersion);
@@ -193,6 +199,10 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		System.out.println("Registered outgoing plugin channel: " + Solinia3UIChannelNames.Outgoing);		
 		getServer().getMessenger().registerOutgoingPluginChannel(this, Solinia3UIChannelNames.Outgoing); // we register the outgoing channel
 	    
+	}
+
+	private boolean IsOffline() {
+		return !Bukkit.getServer().getOnlineMode();
 	}
 
 	@Override
@@ -511,6 +521,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("rebuildspellitems").setExecutor(new CommandRebuildSpellItems());
 		this.getCommand("createfaction").setExecutor(new CommandCreateFaction());
 		this.getCommand("createnpc").setExecutor(new CommandCreateNpc());
+		this.getCommand("createspellcopy").setExecutor(new CommandCreateSpellCopy());
 		this.getCommand("listfactions").setExecutor(new CommandListFactions());
 		this.getCommand("listnpcs").setExecutor(new CommandListNPCs());
 		this.getCommand("editnpc").setExecutor(new CommandEditNpc());

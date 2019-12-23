@@ -284,6 +284,12 @@ commands:
     usage: /createnpc ncpid npcname
     aliases:
     - addnpccopy
+  createspellcopy:
+    description: Creates a new spell from an existing spell
+    usage: /createspellcopy spellid spellname
+    aliases:
+    - addspellcopy
+    - copyspell
   createfaction:
     description: Creates a new faction
     usage: /createfaction basestandingvalue name

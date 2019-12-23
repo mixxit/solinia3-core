@@ -681,6 +681,17 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public int getNextSpellId() {
+		int maxItem = 0;
+		for (ISoliniaSpell itemInstance : getSpells()) {
+			if (itemInstance.getId() > maxItem)
+				maxItem = itemInstance.getId();
+		}
+
+		return maxItem + 1;
+	}
+	
+	@Override
 	public int getNextNPCMerchantId() {
 		int max = 0;
 		for (ISoliniaNPCMerchant merchantInstance : getNPCMerchants()) {
