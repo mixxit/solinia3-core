@@ -891,7 +891,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 							TextComponent tc = new TextComponent(
 									TextComponent.fromLegacyText(ChatColor.YELLOW + "[QUEST] "));
 							TextComponent tc2 = new TextComponent(TextComponent.fromLegacyText(ChatColor.YELLOW
-									+ "- Click here to give " + item.getDisplayname() + ChatColor.RESET));
+									+ "[HAND IN] >> Click here to give " + item.getDisplayname() + " <<"+ ChatColor.RESET));
 							tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/npcgive " + itemId));
 							tc.addExtra(tc2);
 							solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
