@@ -2572,77 +2572,7 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
-			{
-				for(ISoliniaNPCEventHandler handler : npc.getEventHandlers())
-				{
-					if (!handler.getInteractiontype().equals(InteractionType.ITEM))
-						continue;
-					
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(handler.getTriggerdata()));
-					if (item == null)
-						continue;
-					
-					if (item.getQuestId() > 0)
-						continue;
-					
-					if (handler.getRequiresQuestFlag() == null || handler.getRequiresQuestFlag().equals(""))
-						continue;
-					
-					boolean fixed = false;
-					
-					if (handler.getRequiresQuest() > 0)
-					{
-						item.setQuestId(handler.getRequiresQuest());
-						System.out.println("Found untagged quest item " + item.getDisplayname() + " and tagged it the same as the requiresquest " + item.getQuestId());
-						item.setLastUpdatedTimeNow();
-						fixed = true;
-					}
-					
-					if (fixed)
-						continue;
-					
-					System.out.println("Could not fix quest item " + item.getId() + " " + item.getDisplayname() + " that required a quest flag called " + handler.getRequiresQuest());
-					
-
-					if (handler.getRequiresQuestFlag() != null && !handler.getRequiresQuestFlag().equals(""))
-					{
-						// See if we can find if theres is a quest id for the origin
-						for (ISoliniaNPC npc2 : StateManager.getInstance().getConfigurationManager().getNPCs())
-						{
-							for(ISoliniaNPCEventHandler handler2 : npc2.getEventHandlers())
-							{
-								if (handler2.getAwardsQuestFlag() == null)
-									continue;
-								
-								if (!handler2.getAwardsQuestFlag().equals(handler.getRequiresQuestFlag()))
-									continue;
-								
-								// found award
-								if (handler2.getRequiresQuest() < 1)
-								{
-									System.out.println("Seemed to be related to npc ID " + npc.getId());
-									continue;
-								}
-	
-								item.setQuestId(handler.getRequiresQuest());
-								System.out.println("Found untagged quest item " + item.getDisplayname() + " and tagged it the same as the awardsquest " + handler2.getRequiresQuest());
-								item.setLastUpdatedTimeNow();
-								break;
-							}
-						}
-					}
-					
-					if (fixed)
-						continue;
-				}
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 
 	public static void disableLootOverLevel110() {

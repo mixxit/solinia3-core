@@ -1780,7 +1780,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int no_fizzle_level = 0;
 		ISoliniaAAAbility aa = null;
 		try {
-			if (getAARanks().size() > 0) {
+			if (hasAaRanks()) {
 				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
 						.getAAbilitiesBySysname("SPELLCASTINGEXPERTISE")) {
 					if (!hasAAAbility(ability.getId()))
@@ -2202,6 +2202,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return abilities;
+	}
+	
+	@Override
+	public boolean hasAaRanks()
+	{
+		return (ranks.size() > 0);
 	}
 
 	@Override
@@ -3746,7 +3752,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void doHPRegenTick() {
 		if (getBukkitPlayer().isDead())
 			return;
-
+		
 		// Apply Crouch Mana Regen Bonus
 		int manaregen = 1;
 
@@ -3761,7 +3767,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		ISoliniaAAAbility hpaa = null;
 		try {
-			if (getAARanks().size() > 0) {
+			if (hasAaRanks()) {
 				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
 						.getAAbilitiesBySysname("INNATEREGENERATION")) {
 					if (!hasAAAbility(ability.getId()))
@@ -3821,12 +3827,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		// a players mana regen based on if they are meditating (sneaking)
 		manaregen += getPlayerMeditatingManaBonus();
-
 		
-
 		ISoliniaAAAbility aa = null;
 		try {
-			if (getAARanks().size() > 0) {
+			if (hasAaRanks()) {
 				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
 						.getAAbilitiesBySysname("MENTALCLARITY")) {
 					if (!hasAAAbility(ability.getId()))
@@ -3844,14 +3848,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int aamanaregenrank = 0;
 
 		if (aa != null) {
-			if (getAARanks().size() > 0)
+			if (hasAaRanks())
 				aamanaregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), aa);
 			manaregen += aamanaregenrank;
 		}
 
 		ISoliniaAAAbility emaa = null;
 		try {
-			if (getAARanks().size() > 0) {
+			if (hasAaRanks()) {
 				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
 						.getAAbilitiesBySysname("MENTALCLARITY")) {
 					if (!hasAAAbility(ability.getId()))
@@ -3867,7 +3871,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int emaamanaregenrank = 0;
 
 		if (emaa != null) {
-			if (getAARanks().size() > 0)
+			if (hasAaRanks())
 				emaamanaregenrank = Utils.getRankPositionOfAAAbility(getBukkitPlayer(), emaa);
 			manaregen += emaamanaregenrank;
 		}
@@ -4482,7 +4486,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return false;
 			
 			if (getLevel() < 50)
-			if (this.getAARanks().size() > 0)
+			if (hasAaRanks())
 				return false;
 		
 		} catch (CoreStateInitException e)

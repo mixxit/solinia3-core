@@ -586,4 +586,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void tryThrowItemInMainHand(Cancellable cancellableEvent);
 
+	boolean hasAaRanks();
+
 }

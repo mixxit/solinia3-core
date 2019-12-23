@@ -4814,7 +4814,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		try {
 			if (solEntity.isPlayer()) {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) solEntity.getBukkitLivingEntity());
-				if (player.getAARanks().size() > 0) {
+				if (player.hasAaRanks()) {
 					for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
 							.getAAbilitiesBySysname("SPELLCASTINGMASTERY")) {
 						if (!player.hasAAAbility(ability.getId()))

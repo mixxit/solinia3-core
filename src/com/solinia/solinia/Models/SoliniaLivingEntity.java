@@ -4244,7 +4244,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				ISoliniaAAAbility procchanceaa = null;
 				try {
-					if (player.getAARanks().size() > 0) {
+					if (player.hasAaRanks()) {
 						for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
 								.getAAbilitiesBySysname("WEAPONAFFINITY")) {
 							if (!player.hasAAAbility(ability.getId()))
@@ -5032,7 +5032,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try {
 			if (getBukkitLivingEntity() instanceof Player) {
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				if (solplayer != null && solplayer.getAARanks().size() > 0) {
+				if (solplayer != null && solplayer.hasAaRanks()) {
 					for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
 							.getAAbilitiesBySysname("PLANARPOWER")) {
 						if (!solplayer.hasAAAbility(ability.getId()))
