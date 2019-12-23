@@ -184,6 +184,26 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				throw new InvalidNPCEventSettingException("Triggerdata is empty");
 			if (value.contains(" "))
 				throw new InvalidNPCEventSettingException("Triggerdata can only be one value");
+			
+			// now we need to check if its an item
+			if (getInteractiontype().equals(InteractionType.ITEM))
+			{
+				int itemId = Integer.parseInt(value);
+				try
+				{
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+					if (item == null)
+						throw new InvalidNPCEventSettingException("Triggerdata itemID does not exist");
+					
+					if (item.getQuestId() < 1 && getRequiresQuestFlag() != null && !getRequiresQuestFlag().equals(""))
+						throw new InvalidNPCEventSettingException("Cannot assign this item to the npc dialogue as you must set the questid on the item first with edititem Itemid questid <questid>");
+						
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+			
 			setTriggerdata(value.toUpperCase());
 			break;
 		case "chatresponse":
@@ -259,9 +279,28 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				throw new InvalidNPCEventSettingException("Invalid quest id");
 			try
 			{
-			ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(questid);
-			if (quest == null)
-				throw new InvalidNPCEventSettingException("Invalid quest id");
+				ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(questid);
+				if (quest == null)
+					throw new InvalidNPCEventSettingException("Invalid quest id");
+				
+				// now we need to check if the item is a quest item
+				if (getInteractiontype().equals(InteractionType.ITEM))
+				{
+					int itemId = Integer.parseInt(this.getTriggerdata());
+					try
+					{
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+						if (item == null)
+							throw new InvalidNPCEventSettingException("Triggerdata itemID does not exist");
+						
+						if (item.getQuestId() < 1)
+							throw new InvalidNPCEventSettingException("The item event you are trying to make into a quest does not have the quest flag set on the Item - Please edititem Itemno questid <questid>");
+							
+					} catch (CoreStateInitException e)
+					{
+						
+					}
+				}
 			} catch (CoreStateInitException e)
 			{
 				throw new InvalidNPCEventSettingException("State not initialised");
@@ -277,6 +316,25 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(aquestid);
 			if (quest == null)
 				throw new InvalidNPCEventSettingException("Invalid quest id");
+			
+				// now we need to check if the item is a quest item
+				if (getInteractiontype().equals(InteractionType.ITEM))
+				{
+					int itemId = Integer.parseInt(this.getTriggerdata());
+					try
+					{
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+						if (item == null)
+							throw new InvalidNPCEventSettingException("Triggerdata itemID does not exist");
+						
+						if (item.getQuestId() < 1)
+							throw new InvalidNPCEventSettingException("The item event you are trying to make into a quest does not have the quest flag set on the Item - Please edititem Itemno questid <questid>");
+							
+					} catch (CoreStateInitException e)
+					{
+						
+					}
+				}
 			} catch (CoreStateInitException e)
 			{
 				throw new InvalidNPCEventSettingException("State not initialised");

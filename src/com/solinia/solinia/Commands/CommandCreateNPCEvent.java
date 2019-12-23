@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Managers.StateManager;
@@ -88,6 +90,24 @@ public class CommandCreateNPCEvent implements CommandExecutor {
 				sender.sendMessage("Cannot find interaction type specified");
 				return false;
 			}
+			
+			if (interactiontype.equals(InteractionType.ITEM))
+			{
+				int itemId = Integer.parseInt(trigger);
+				try
+				{
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+					if (item == null)
+						throw new InvalidNPCEventSettingException("Triggerdata itemID does not exist");
+				} catch (CoreStateInitException e)
+				{
+					
+				} catch (InvalidNPCEventSettingException e) {
+					sender.sendMessage(e.getMessage());
+					return false;
+				}
+			}
+
 
 			if (trigger == null || trigger.equals("")) {
 				sender.sendMessage("Trigger provided is empty");

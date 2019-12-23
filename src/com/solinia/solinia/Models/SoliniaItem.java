@@ -25,6 +25,7 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.ConfigurationManager;
@@ -79,7 +80,6 @@ public class SoliniaItem implements ISoliniaItem {
 	private boolean isConsumable;
 	private int baneUndead = 0;
 	private boolean isAugmentation = false;
-	private boolean isQuest = false;
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
 	private String discoverer = "";
 	private int minLevel = 0;
@@ -117,6 +117,8 @@ public class SoliniaItem implements ISoliniaItem {
 	
 	private Timestamp lastUpdatedTime;
 	private ItemType itemType = ItemType.None;
+	
+	private int QuestId = 0;
 	
 	@Override
 	public ItemStack asItemStack() {
@@ -271,16 +273,6 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setTexturebase64(String texturebase64) {
 		this.texturebase64 = texturebase64;
-	}
-
-	@Override
-	public boolean getQuestitem() {
-		return questitem;
-	}
-
-	@Override
-	public void setQuestitem(boolean questitem) {
-		this.questitem = questitem;
 	}
 
 	@Override
@@ -869,6 +861,10 @@ public class SoliniaItem implements ISoliniaItem {
 		case "wisdom":
 			setWisdom(Integer.parseInt(value));
 			break;
+		case "questid":
+			ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(Integer.parseInt(value));
+			setQuestId(quest.getId());
+			break;
 		case "basename":
 			Material material = Material.valueOf(value.toUpperCase());
 			setBasename(material.name());
@@ -905,9 +901,6 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "consumable":
 			setConsumable(Boolean.parseBoolean(value));
-			break;
-		case "quest":
-			setQuest(Boolean.parseBoolean(value));
 			break;
 		case "augmentation":
 			setAugmentation(Boolean.parseBoolean(value));
@@ -1080,17 +1073,7 @@ public class SoliniaItem implements ISoliniaItem {
 			return false;
 		}
 	}
-
-	@Override
-	public boolean isQuest() {
-		return isQuest;
-	}
 	
-	@Override
-	public void setQuest(boolean isQuest) {
-		this.isQuest = isQuest;
-	}
-
 	@Override
 	public AugmentationSlotType getAcceptsAugmentationSlotType() {
 		return Utils.getItemStackAugSlotType(getBasename(), isAugmentation);
@@ -1503,5 +1486,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setLeatherRgbDecimal(int leatherRgbDecimal) {
 		this.leatherRgbDecimal = leatherRgbDecimal;
+	}
+
+	@Override
+	public int getQuestId() {
+		return QuestId;
+	}
+
+	@Override
+	public void setQuestId(int questId) {
+		QuestId = questId;
 	}
 }

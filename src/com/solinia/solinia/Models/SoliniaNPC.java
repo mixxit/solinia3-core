@@ -864,43 +864,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 			switch (words[0].toUpperCase()) {
 			case "HAIL":
-				if (triggerentity instanceof Player) {
-					try {
-						if (getMerchantid() > 0) {
-							solentity.sayto((Player) triggerentity,
-									"i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA
-											+ "] available if you are interested in buying or selling something",
-									true);
-						}
-
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) triggerentity);
-						for (ISoliniaNPCEventHandler eventHandler : getEventHandlers()) {
-							if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
-								continue;
-
-							// See if player has any items that are wanted
-							int itemId = Integer.parseInt(eventHandler.getTriggerdata());
-							if (itemId == 0)
-								continue;
-
-							if (PlayerUtils.getPlayerTotalCountOfItemId(solPlayer.getBukkitPlayer(), itemId) < 1)
-								continue;
-
-							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-
-							TextComponent tc = new TextComponent(
-									TextComponent.fromLegacyText(ChatColor.YELLOW + "[QUEST] "));
-							TextComponent tc2 = new TextComponent(TextComponent.fromLegacyText(ChatColor.YELLOW
-									+ "[HAND IN] >> Click here to give " + item.getDisplayname() + " <<"+ ChatColor.RESET));
-							tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/npcgive " + itemId));
-							tc.addExtra(tc2);
-							solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
-
-						}
-					} catch (CoreStateInitException e) {
-
-					}
-				}
+				listenToHail(solentity,triggerentity);
 				break;
 			case "SHOP":
 				if (triggerentity instanceof Player)
@@ -1116,6 +1080,47 @@ public class SoliniaNPC implements ISoliniaNPC {
 			}
 		}
 		return;
+	}
+
+	private void listenToHail(SoliniaLivingEntity myEntity, LivingEntity triggerentity) {
+		if (!(triggerentity instanceof Player))
+			return;
+		
+		try {
+			if (getMerchantid() > 0) {
+				myEntity.sayto((Player) triggerentity,
+						"i have a [" + ChatColor.LIGHT_PURPLE + "SHOP" + ChatColor.AQUA
+								+ "] available if you are interested in buying or selling something",
+						true);
+			}
+
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) triggerentity);
+			for (ISoliniaNPCEventHandler eventHandler : getEventHandlers()) {
+				if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
+					continue;
+
+				// See if player has any items that are wanted
+				int itemId = Integer.parseInt(eventHandler.getTriggerdata());
+				if (itemId == 0)
+					continue;
+
+				if (PlayerUtils.getPlayerTotalCountOfItemId(solPlayer.getBukkitPlayer(), itemId) < 1)
+					continue;
+
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+
+				TextComponent tc = new TextComponent(
+						TextComponent.fromLegacyText(ChatColor.YELLOW + "[QUEST] "));
+				TextComponent tc2 = new TextComponent(TextComponent.fromLegacyText(ChatColor.YELLOW
+						+ "[HAND IN] >> Click here to give " + item.getDisplayname() + " <<"+ ChatColor.RESET));
+				tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/npcgive " + itemId));
+				tc.addExtra(tc2);
+				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+
+			}
+		} catch (CoreStateInitException e) {
+
+		}
 	}
 
 	@Override

@@ -76,10 +76,6 @@ public interface ISoliniaItem {
 
 	void setTexturebase64(String texturebase64);
 
-	boolean getQuestitem();
-
-	void setQuestitem(boolean questitem);
-
 	int getDamage();
 
 	void setDamage(int damage);
@@ -202,10 +198,6 @@ public interface ISoliniaItem {
 	void setAugmentation(boolean isAugmentation);
 
 	boolean isCrafting();
-
-	boolean isQuest();
-
-	void setQuest(boolean isQuest);
 
 	AugmentationSlotType getAcceptsAugmentationSlotType();
 
@@ -358,4 +350,8 @@ public interface ISoliniaItem {
 	int getLeatherRgbDecimal();
 
 	void setLeatherRgbDecimal(int leatherRgbDecimal);
+
+	int getQuestId();
+
+	void setQuestId(int questId);
 }

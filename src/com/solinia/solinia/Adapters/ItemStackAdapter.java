@@ -31,6 +31,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.AugmentationSlotType;
@@ -150,8 +151,17 @@ public class ItemStackAdapter {
 			loretxt.add(ChatColor.GREEN + "This item is a unique artifact!" + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.isQuest() == true) {
-			loretxt.add(ChatColor.YELLOW + "This item is part of a quest line" + ChatColor.RESET);
+		if (soliniaItem.getQuestId() > 0) {
+			try
+			{
+				ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(soliniaItem.getQuestId());
+				if (quest != null)
+					loretxt.add(ChatColor.YELLOW + "Quest: " + quest.getName());
+			
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 		}
 
 		if (soliniaItem.isCrafting() == true) {
