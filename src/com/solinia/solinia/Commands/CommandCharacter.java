@@ -50,6 +50,12 @@ public class CommandCharacter implements CommandExecutor {
 				
 				for (ISoliniaPlayer character : StateManager.getInstance().getPlayerManager().getCharactersByPlayerUUID(player.getUniqueId()))
 				{
+					// Fix if not main
+					if(!solplayer.getCharacterId().equals(character.getCharacterId()))
+						character.setMain(true);
+					else
+						character.setMain(false);
+					
 					if (character.getCharacterId().equals(solplayer.getCharacterId()))
 						continue;
 					
@@ -65,13 +71,6 @@ public class CommandCharacter implements CommandExecutor {
 						} else {
 							locked = "[LOCKED]";
 						}
-					
-					if (character.isMain())
-					{
-						// Fix if not main
-						if(!solplayer.getCharacterId().equals(character.getCharacterId()))
-							character.setMain(false);
-					}
 					
 					if (character.isMain())
 					{

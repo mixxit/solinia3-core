@@ -2572,7 +2572,21 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-		
+		try
+		{
+		for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
+		{
+			if (spell.getId() == 35715)
+				continue;
+			
+			if (spell.getTeleportZone().startsWith("world,"))
+				spell.setTeleportZone("deactivated");
+		}
+		StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	public static void disableLootOverLevel110() {
