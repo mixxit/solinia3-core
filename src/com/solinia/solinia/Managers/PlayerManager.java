@@ -45,7 +45,7 @@ public class PlayerManager implements IPlayerManager {
 	public void resetPlayer(Player player) throws CoreStateInitException
 	{
 		ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
-		repository.update(SoliniaPlayerFactory.CreatePlayer(player, solplayer.isMain()));
+		repository.update(SoliniaPlayerFactory.CreatePlayer(player));
 		SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
 		SoliniaPlayerAdapter.Adapt(player).updateMaxHp();
 	}
@@ -67,7 +67,7 @@ public class PlayerManager implements IPlayerManager {
 		try
 		{
 			if (repository.getByKey(player.getUniqueId()) == null)
-				SoliniaPlayerFactory.CreatePlayer(player,true);
+				SoliniaPlayerFactory.CreatePlayer(player);
 			
 			return repository.getByKey(player.getUniqueId());
 		} catch (CoreStateInitException e)
@@ -79,32 +79,6 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public ISoliniaPlayer getPlayerAndDoNotCreate(UUID playerUUID) {
 		return repository.getByKey(playerUUID);
-	}
-	
-	@Override
-	public ISoliniaPlayer getMainCharacterDataOnly(UUID playerUUID) {
-		// First check if the player even exists
-		if (repository.getByKey(playerUUID) == null)
-		{
-			return null;
-		}
-		
-		ISoliniaPlayer currentLoadedPlayer = repository.getByKey(playerUUID);
-		if (currentLoadedPlayer.isMain())
-			return currentLoadedPlayer;
-		
-		try {
-			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(playerUUID))
-			{
-				if (player.isMain())
-					return player;
-			}
-		} catch (CoreStateInitException e) {
-			return null;
-		}
-		
-		return null;
-		
 	}
 	
 	@Override
@@ -298,7 +272,7 @@ public class PlayerManager implements IPlayerManager {
 			}
 			
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
-			solPlayer = SoliniaPlayerFactory.CreatePlayer(player,false);
+			solPlayer = SoliniaPlayerFactory.CreatePlayer(player);
 			player.getInventory().clear();
             player.getInventory().setArmorContents(null);
             player.updateInventory();

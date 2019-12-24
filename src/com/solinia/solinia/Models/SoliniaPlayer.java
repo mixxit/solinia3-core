@@ -2668,16 +2668,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean isMain() {
-		return main;
-	}
-
-	@Override
-	public void setMain(boolean main) {
-		this.main = main;
-	}
-
-	@Override
 	public UUID getCharacterId() {
 		return characterId;
 	}
@@ -3199,22 +3189,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		getReagents().get(itemId).reduceQty(reduceAmount);
-	}
-
-	@Override
-	public void setMainAndCleanup() {
-		try {
-			// Set alt to all other characters
-			for (ISoliniaPlayer solPlayer : StateManager.getInstance().getConfigurationManager()
-					.getCharactersByPlayerUUID(this.getBukkitPlayer().getUniqueId())) {
-				solPlayer.setMain(false);
-
-				// Set current to main
-				setMain(true);
-			}
-		} catch (CoreStateInitException e) {
-
-		}
 	}
 
 	// Used to schedule a HP update after an event

@@ -41,20 +41,10 @@ public class CommandCharacter implements CommandExecutor {
 			{
 				player.sendMessage("Your Characters: ");
 	
-				String main = "ALT";
-				if (solplayer.isMain())
-				{
-					main = "MAIN";
-				}
-				player.sendMessage("- " + ChatColor.LIGHT_PURPLE + solplayer.getFullName() + ChatColor.RESET + " " + main + " - " + ChatColor.GREEN + "ACTIVE" + ChatColor.RESET);
+				player.sendMessage("- " + ChatColor.LIGHT_PURPLE + solplayer.getFullName() + ChatColor.RESET + " - " + ChatColor.GREEN + "ACTIVE" + ChatColor.RESET);
 				
 				for (ISoliniaPlayer character : StateManager.getInstance().getPlayerManager().getCharactersByPlayerUUID(player.getUniqueId()))
 				{
-					// Fix if not main
-					if(!solplayer.getCharacterId().equals(character.getCharacterId()))
-						character.setMain(true);
-					else
-						character.setMain(false);
 					
 					if (character.getCharacterId().equals(solplayer.getCharacterId()))
 						continue;
@@ -72,15 +62,8 @@ public class CommandCharacter implements CommandExecutor {
 							locked = "[LOCKED]";
 						}
 					
-					if (character.isMain())
-					{
-						main = "MAIN";
-					} else {
-						main = "ALT";
-					}
-					
 					TextComponent tc = new TextComponent();
-					tc.setText("- " + ChatColor.LIGHT_PURPLE + character.getFullNameWithTitle() + ChatColor.RESET + " " + main + " - ");
+					tc.setText("- " + ChatColor.LIGHT_PURPLE + character.getFullNameWithTitle() + ChatColor.RESET + " - ");
 					
 					String charclass = "";
 					
@@ -110,14 +93,11 @@ public class CommandCharacter implements CommandExecutor {
 					tc3.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, transfertext));
 					tc.addExtra(tc3);
 					
-					if (main.equals("ALT"))
-					{
-						TextComponent tc4 = new TextComponent();
-						String deletetext = "/deletecharacter " + character.getCharacterId().toString() + " playername";
-						tc4.setText(ChatColor.RED + " [Delete]" + ChatColor.RESET);
-						tc4.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, deletetext));
-						tc.addExtra(tc4);
-					}
+					TextComponent tc4 = new TextComponent();
+					String deletetext = "/deletecharacter " + character.getCharacterId().toString() + " playername";
+					tc4.setText(ChatColor.RED + " [Delete]" + ChatColor.RESET);
+					tc4.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, deletetext));
+					tc.addExtra(tc4);
 					
 					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 							new ComponentBuilder(details).create()));

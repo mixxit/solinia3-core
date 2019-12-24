@@ -18,11 +18,10 @@ import com.solinia.solinia.Utils.PlayerUtils;
 
 public class SoliniaPlayerFactory {
 
-	public static ISoliniaPlayer CreatePlayer(Player player, boolean main) throws CoreStateInitException {
+	public static ISoliniaPlayer CreatePlayer(Player player) throws CoreStateInitException {
 		// A player is different to a players entity
 		ISoliniaPlayer soliniaPlayer = new SoliniaPlayer();
 		soliniaPlayer.setUUID(player.getUniqueId());
-		soliniaPlayer.setMain(main);
 
 		String forename = getRandomNames(5, 1)[0];
 		String lastname = "";
@@ -49,11 +48,6 @@ public class SoliniaPlayerFactory {
 		if (loottableId > 0)
 		{
 			dropNewLootItems(player, loottableId);
-		}
-		
-		if (main == true)
-		{
-			PlayerUtils.BroadcastPlayers("A new player has entered the world: " + player.getName() + " [" + soliniaPlayer.getFullNameWithTitle() + "]");
 		}
 		
 		return soliniaPlayer;

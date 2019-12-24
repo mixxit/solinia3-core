@@ -248,10 +248,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setCharacterId(UUID characterId);
 
-	boolean isMain();
-
-	void setMain(boolean main);
-
 	int getInspiration();
 
 	void setInspiration(int inspiration);
@@ -326,8 +322,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public void reduceReagents(Integer components1, Integer componentCounts1);
 
 	boolean canUseAASpell(ISoliniaSpell spell);
-
-	public void setMainAndCleanup();
 
 	public void scheduleUpdateMaxHp();
 
