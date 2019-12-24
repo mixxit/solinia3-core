@@ -55,6 +55,9 @@ public class CommandCharacter implements CommandExecutor {
 					
 					String locked  = "";
 					
+					if (character.isDeleted())
+						continue;
+					
 					if (!character.isPlayable())
 						if (!player.isOp() && !player.hasPermission("solinia.characterdonochangelocation"))
 						{
@@ -63,6 +66,12 @@ public class CommandCharacter implements CommandExecutor {
 							locked = "[LOCKED]";
 						}
 					
+					if (character.isMain())
+					{
+						// Fix if not main
+						if(!solplayer.getCharacterId().equals(character.getCharacterId()))
+							character.setMain(false);
+					}
 					
 					if (character.isMain())
 					{
