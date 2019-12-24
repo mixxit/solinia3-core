@@ -39,6 +39,10 @@ commands:
     description: Opens spellbook
     usage: /openspellbook
     aliases: []
+  deletecharacter:
+    description: Deletes a character
+    usage: /deletecharacter charuuid
+    aliases: []
   follow:
     description: Follows target
     usage: /follow

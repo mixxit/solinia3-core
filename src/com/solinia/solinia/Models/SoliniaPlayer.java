@@ -127,6 +127,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String armsItemInstance = "";
 	private String handsItemInstance = "";
 	private String waistItemInstance = "";
+	private boolean deleted = false;
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
 	private ConcurrentHashMap<String, Integer> monthlyVote = new ConcurrentHashMap<String, Integer>();
@@ -4498,5 +4499,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	@Override
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

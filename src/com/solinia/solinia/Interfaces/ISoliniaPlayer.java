@@ -588,4 +588,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	boolean hasAaRanks();
 
+	boolean isDeleted();
+
+	void setDeleted(boolean deleted);
+
 }
