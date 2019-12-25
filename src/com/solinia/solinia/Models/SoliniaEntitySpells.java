@@ -440,6 +440,9 @@ public class SoliniaEntitySpells {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		HashMap<Short, SoliniaActiveSpell> updateSpellsSlots = new HashMap<Short, SoliniaActiveSpell>();
 
+		if (getLivingEntity() == null)
+			return;
+		
 		if (!getLivingEntity().isDead())
 			for (Entry<Short, SoliniaActiveSpell> slot : this.slots.entrySet()) {
 				SoliniaActiveSpell activeSpell = slot.getValue();
