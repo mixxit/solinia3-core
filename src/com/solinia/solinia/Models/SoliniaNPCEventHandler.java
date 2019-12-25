@@ -596,8 +596,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					}
 
 					if (isAwardsRandomisedGear() == true) {
-						player.getBukkitPlayer().sendMessage("Randomised Gear Rewards are disabled");
-						// awardRandomisedGear(player);
+						awardRandomisedGear(player);
 					}
 				}
 			}
