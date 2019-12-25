@@ -1090,6 +1090,12 @@ public class Solinia3CorePlayerListener implements Listener {
 	}
 
 	private void onMerchantInventoryClick(InventoryClickEvent event) {
+		if (event.getCurrentItem() == null)
+		{
+			event.getView().getPlayer().sendMessage("You appeared to not click on a merchant item correctly");
+			Utils.CancelEvent(event);
+		}
+		
 		UniversalMerchant universalmerchant = null;
 		int page = 0;
 		int nextpage = 0;
@@ -1120,7 +1126,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			return;
 		}
 
-		if (event.getCursor() == null || event.getCursor().getType() == null || event.getCursor().getType().equals(Material.AIR)) {
+		if (event.getCursor() == null || event.getCursor().getType() == null && event.getCurrentItem() != null || event.getCursor().getType().equals(Material.AIR)) {
 			if (event.getRawSlot() > 26) {
 
 				try {
