@@ -586,4 +586,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setDeleted(boolean deleted);
 
+	boolean isShowDiscord();
+
+	void setShowDiscord(boolean showDiscord);
+
 }

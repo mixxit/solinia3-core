@@ -60,6 +60,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID characterId = UUID.randomUUID();
 	private UUID motherId;
 	private UUID spouseId;
+	private boolean showDiscord = true;
 	private String forename = "";
 	private String lastname = "";
 	private int mana = 0;
@@ -4483,5 +4484,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	@Override
+	public boolean isShowDiscord() {
+		return showDiscord;
+	}
+
+	@Override
+	public void setShowDiscord(boolean showDiscord) {
+		this.showDiscord = showDiscord;
 	}
 }

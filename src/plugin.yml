@@ -89,6 +89,11 @@ commands:
     usage: /cast <spellid>
     aliases:
     - castspell
+  showdiscord:
+    description: Toggles discord chat on and off
+    usage: /showdiscord
+    aliases:
+    - togglediscord
   cast:
     description: Casts a spell from memory slot 1 to 0
     usage: /cast <memoryslot>
