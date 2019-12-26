@@ -290,7 +290,7 @@ commands:
     aliases: []
   createnpc:
     description: Creates a new npc
-    usage: /createnpc factionid level npcname
+    usage: /createnpc factionid raceid classid level npcname
     aliases:
     - addnpc
   createnpccopy:

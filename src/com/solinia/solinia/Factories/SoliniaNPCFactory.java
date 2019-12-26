@@ -7,7 +7,7 @@ import com.solinia.solinia.Models.SoliniaNPC;
 
 public class SoliniaNPCFactory {
 
-	public static ISoliniaNPC CreateNPC(String name, int level, int factionid) throws Exception {
+	public static ISoliniaNPC CreateNPC(String name, int level, int raceid, int classid, int factionid) throws Exception {
 		int lootTableId = 0;
 		try
 		{
@@ -20,6 +20,8 @@ public class SoliniaNPCFactory {
 		SoliniaNPC npc = new SoliniaNPC();
 		npc.setId(StateManager.getInstance().getConfigurationManager().getNextNPCId());
 		npc.setName(name);
+		npc.setRaceid(raceid);
+		npc.setClassid(classid);
 		npc.setLevel(level);
 		npc.setFactionid(factionid);
 		npc.setLoottableid(lootTableId);

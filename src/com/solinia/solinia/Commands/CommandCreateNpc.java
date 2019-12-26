@@ -28,15 +28,17 @@ public class CommandCreateNpc implements CommandExecutor {
 		// Level
 		// NPC Name
 		
-		if (args.length < 3)
+		if (args.length < 5)
 		{
-			sender.sendMessage("Insufficient arguments: factionid level npcname");
+			sender.sendMessage("Insufficient arguments: factionid raceid classid level npcname");
 			sender.sendMessage("Note: factionid can be 0 to denote KOS to everything");
 			return false;
 		}
 		
 		int factionid = Integer.parseInt(args[0]);
-		int level = Integer.parseInt(args[1]);
+		int raceid = Integer.parseInt(args[1]);
+		int classid = Integer.parseInt(args[2]);
+		int level = Integer.parseInt(args[3]);
 		
 		if (level > 80)
 		{
@@ -49,11 +51,35 @@ public class CommandCreateNpc implements CommandExecutor {
 			sender.sendMessage("Invalid faction id");
 			return false;
 		}
+		
+		if (raceid < 1)
+		{
+			sender.sendMessage("Invalid race id");
+			return false;
+		}
+		
+		if (classid < 1)
+		{
+			sender.sendMessage("Invalid class id");
+			return false;
+		}
 
 		try {
 			if (factionid > 0 && StateManager.getInstance().getConfigurationManager().getFaction(factionid) == null)
 			{
 				sender.sendMessage("Cannot locate faction id: " + factionid);
+				return false;
+			}
+			
+			if (StateManager.getInstance().getConfigurationManager().getRace(raceid) == null)
+			{
+				sender.sendMessage("Cannot locate race id: " + raceid);
+				return false;
+			}
+			
+			if (StateManager.getInstance().getConfigurationManager().getClassObj(classid) == null)
+			{
+				sender.sendMessage("Cannot locate class id: " + classid);
 				return false;
 			}
 		} catch (CoreStateInitException e) {
@@ -67,7 +93,7 @@ public class CommandCreateNpc implements CommandExecutor {
 		int i = 0;
 		for(String element : args)
 		{
-			if (i <= 1)
+			if (i <= 3)
 			{
 				i++;
 				continue;
@@ -92,7 +118,7 @@ public class CommandCreateNpc implements CommandExecutor {
 		name = name.replace(" ", "_");
 		
 		try {
-			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level, factionid);
+			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level,raceid,classid,factionid);
 			
 			sender.sendMessage("Created NPC: " + npc.getId());
 		} catch (Exception e) {
