@@ -83,7 +83,12 @@ commands:
     description: Sets version
     usage: /iamversion <versionid>
     aliases:
-    - castslot
+    - iam
+  castspelladmin:
+    description: Casts any spell by its ID
+    usage: /cast <spellid>
+    aliases:
+    - castspell
   cast:
     description: Casts a spell from memory slot 1 to 0
     usage: /cast <memoryslot>
