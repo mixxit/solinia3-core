@@ -4150,10 +4150,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e) {
 			return;
 		}
-		
-		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
-			PartyWindowUtils.UpdateWindow(((Player)this.getOwnerEntity()));
-		}
 	}
 
 	@Override
