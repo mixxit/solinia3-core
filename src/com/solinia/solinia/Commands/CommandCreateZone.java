@@ -28,10 +28,13 @@ public class CommandCreateZone implements CommandExecutor {
 		// X
 		// Y
 		// Z
+		// SuccorX
+		// SuccorY
+		// SuccorZ
 		
-		if (args.length < 4)
+		if (args.length < 7)
 		{
-			sender.sendMessage("Insufficient arguments: namenospaces x y z");
+			sender.sendMessage("Insufficient arguments: namenospaces x y z succorx succory succorz");
 			return false;
 		}
 		
@@ -39,7 +42,11 @@ public class CommandCreateZone implements CommandExecutor {
 		int x = Integer.parseInt(args[1]);
 		int y = Integer.parseInt(args[2]);
 		int z = Integer.parseInt(args[3]);
-		
+
+		int succorx = Integer.parseInt(args[4]);
+		int succory = Integer.parseInt(args[5]);
+		int succorz = Integer.parseInt(args[6]);
+
 		if (zonename.equals(""))
 		{
 			sender.sendMessage("Name of Zone cannot be null");
@@ -47,7 +54,7 @@ public class CommandCreateZone implements CommandExecutor {
 		}
 		
 		try {
-			SoliniaZone zone = SoliniaZoneFactory.Create(zonename,x, y, z);
+			SoliniaZone zone = SoliniaZoneFactory.Create(zonename,x, y, z, succorx, succory, succorz);
 			
 			sender.sendMessage("Created Zone: " + zone.getId());
 		} catch (CoreStateInitException | SoliniaZoneCreationException e) {
