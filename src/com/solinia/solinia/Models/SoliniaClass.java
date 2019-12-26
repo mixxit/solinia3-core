@@ -53,6 +53,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private String axetypename = "Axe";
 	private String spadetypename = "Staff";
 	private String bowtypename = "Bow";
+	private String crossbowtypename = "Crossbow";
 	private int dodgelevel = 0;
 	private int ripostelevel = 0;
 	private int doubleattacklevel = 0;
@@ -194,6 +195,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- spadetypename: " + ChatColor.GOLD + getSpadetypename() + ChatColor.RESET);
 		sender.sendMessage("- shieldtypename: " + ChatColor.GOLD + getShieldtypename() + ChatColor.RESET);
 		sender.sendMessage("- bowtypename: " + ChatColor.GOLD + getBowtypename() + ChatColor.RESET);
+		sender.sendMessage("- crossbowtypename: " + ChatColor.GOLD + getCrossbowtypename() + ChatColor.RESET);
 		String leathercolor = "NONE";
 		if (getLeatherRgbDecimal() > 0)
 		{
@@ -355,6 +357,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "bowtypename":
 			this.setBowtypename(value);
+			break;
+		case "crossbowtypename":
+			this.setCrossbowtypename(value);
 			break;
 		case "ripostelevel":
 			this.setRipostelevel(Integer.parseInt(value));
@@ -588,6 +593,7 @@ public class SoliniaClass implements ISoliniaClass {
 			case "DIAMOND_SHOVEL": return getSpadetypename(); 
 			case "SHIELD": return getShieldtypename();
 			case "BOW": return getBowtypename();
+			case "CROSSBOW": return getCrossbowtypename();
 			
 			default: return "unknown";
 		}
@@ -1027,5 +1033,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public RaceClass getRaceClass(int raceId) {
 		return getValidRaceClasses().get(raceId);
+	}
+	
+	@Override
+	public String getCrossbowtypename() {
+		return crossbowtypename;
+	}
+
+	@Override
+	public void setCrossbowtypename(String crossbowtypename) {
+		this.crossbowtypename = crossbowtypename;
 	}
 }

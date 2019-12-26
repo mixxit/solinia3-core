@@ -187,4 +187,8 @@ public interface ISoliniaClass {
 
 	RaceClass getRaceClass(int raceId);
 
+	String getCrossbowtypename();
+
+	void setCrossbowtypename(String crossbowtypename);
+
 }

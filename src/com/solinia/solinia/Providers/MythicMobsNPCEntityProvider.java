@@ -388,7 +388,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 								if (item.getAllowedClassNames().size() == 0) {
 									if (item.getBasename().contains("SHIELD"))
 										potentialShields.add(item);
-									else if (item.getBasename().contains("BOW"))
+									else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
 										potentialBows.add(item);
 									else
 										potentialWeapons.add(item);
@@ -400,7 +400,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))
 											potentialShields.add(item);
-										else if (item.getBasename().contains("BOW"))
+										else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
 											potentialBows.add(item);
 										else
 											potentialWeapons.add(item);
@@ -413,7 +413,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 								if (item.getAllowedClassNames().size() == 0) {
 									if (item.getBasename().contains("SHIELD"))
 										potentialShields.add(item);
-									else if (item.getBasename().contains("BOW"))
+									else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
 										potentialBows.add(item);
 									else
 										potentialWeapons.add(item);
@@ -425,7 +425,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))
 											potentialShields.add(item);
-										else if (item.getBasename().contains("BOW"))
+										else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
 											potentialBows.add(item);
 										else
 											potentialWeapons.add(item);

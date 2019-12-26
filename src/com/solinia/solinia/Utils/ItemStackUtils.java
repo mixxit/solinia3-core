@@ -604,4 +604,13 @@ public class ItemStackUtils {
 		
 		return true;
 	}
+
+	public static boolean isRangedWeapon(ItemStack item) {
+		if (item.getType().name().toUpperCase().equals("BOW"))
+			return true;
+		if (item.getType().name().toUpperCase().equals("CROSSBOW"))
+			return true;
+		
+		return false;
+	}
 }

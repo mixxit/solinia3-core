@@ -225,7 +225,7 @@ public class ItemStackAdapter {
 		}
 		
 		if (soliniaItem.getDamage() > 0) {
-			if (soliniaItem.getBasename().equals("BOW")) {
+			if (soliniaItem.getBasename().equals("BOW") || soliniaItem.getBasename().equals("CROSSBOW")) {
 				loretxt.add("Modifies Arrow Dmg: " + ChatColor.GREEN + soliniaItem.getDamage() + ChatColor.RESET);
 			}
 		}

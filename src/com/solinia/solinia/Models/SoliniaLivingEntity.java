@@ -308,13 +308,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
-		if (!getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW"))
+		if (!ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 			if (defender.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) > 3) {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
 				return;
 			}
 
-		if (!getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW"))
+		if (!ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 			if (this.getLocation().distance(defender.getLocation()) > 3) {
 				this.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
 				return;
@@ -354,7 +354,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (getBukkitLivingEntity() instanceof Player) {
 			// BOW
-			if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW")) {
+			if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+			{
 				try {
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
 
@@ -422,8 +423,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			// BOW
-			if (getBukkitLivingEntity().getEquipment().getItemInMainHand().getType().name().equals("BOW")) {
-
+			if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+			{
 				net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
@@ -6898,8 +6899,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// if this is a melee attack and the attacker is too far from the defender
 			// cancel the event
 
-			if (!ismagic && !(originalDamager instanceof Arrow) && !((LivingEntity) attackerEntity).getEquipment()
-					.getItemInMainHand().getType().name().equals("BOW")) {
+			if (!ismagic && !(originalDamager instanceof Arrow) && 					
+					!ItemStackUtils.isRangedWeapon(((LivingEntity)attackerEntity).getEquipment().getItemInMainHand())) 
+			{
 				if (attacker.getLocation().distance(defender.getLocation()) > 3) {
 					attacker.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
 					return 0;
@@ -6948,7 +6950,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (ItemStackUtils.IsSoliniaItem(mainitem)) {
 						try {
 							ISoliniaItem item = SoliniaItemAdapter.Adapt(mainitem);
-							if (item.getDamage() > 0 && item.getBasename().equals("BOW")) {
+							if (item.getDamage() > 0 && (item.getBasename().equals("BOW") || item.getBasename().equals("CROSSBOW"))) {
 								dmgmodifier = item.getDamage();
 							}
 						} catch (SoliniaItemException e) {

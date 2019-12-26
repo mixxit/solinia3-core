@@ -479,6 +479,8 @@ public class Utils {
 			return "CRUSHING";
 		case "BOW":
 			return "ARCHERY";
+		case "CROSSBOW":
+			return "ARCHERY";
 		default:
 			return "CRUSHING";
 		}

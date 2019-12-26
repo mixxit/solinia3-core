@@ -231,6 +231,7 @@ public interface IConfigurationManager {
 			add("DIAMOND_PICKAXE");
 			add("SHIELD");
 			add("BOW");
+			add("CROSSBOW");
 		}};
 		
 
