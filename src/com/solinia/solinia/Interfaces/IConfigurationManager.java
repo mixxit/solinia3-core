@@ -599,4 +599,8 @@ public interface IConfigurationManager {
 	ConcurrentHashMap<UUID, String> getQueueMobVitalsPackets(int queueNumber) throws Exception;
 
 	void setQueueMobVitalsPackets(int queueNumber, ConcurrentHashMap<UUID, String> queueMobVitalsPackets) throws Exception;
+
+	ConcurrentHashMap<UUID, Float> getLastSentPlayerManaPercent();
+
+	void setLastSentPlayerManaPercent(ConcurrentHashMap<UUID, Float> lastSentPlayerManaPercent);
 }

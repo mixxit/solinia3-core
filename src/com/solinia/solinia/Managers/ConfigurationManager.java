@@ -130,7 +130,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	private List<Oath> oaths = new ArrayList<Oath>();
 	private List<Trait> traits = new ArrayList<Trait>();
 	private List<Ideal> ideals = new ArrayList<Ideal>();
-	
+
+	private ConcurrentHashMap<UUID, Float> lastSentPlayerManaPercent = new ConcurrentHashMap<UUID, Float>();
+
 	private ConcurrentHashMap<UUID, String> queuedCastingPercentPackets = new ConcurrentHashMap<UUID, String>();
 	private ConcurrentHashMap<UUID, String> queuedCharCreationPackets = new ConcurrentHashMap<UUID, String>();
 	private ConcurrentHashMap<UUID, String> queuedEffectsPackets = new ConcurrentHashMap<UUID, String>();
@@ -2147,5 +2149,15 @@ public class ConfigurationManager implements IConfigurationManager {
 			default:
 				throw new Exception("Request to call invalid mob vitals packet queue: " + queueNumber);
 		}
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, Float> getLastSentPlayerManaPercent() {
+		return lastSentPlayerManaPercent;
+	}
+
+	@Override
+	public void setLastSentPlayerManaPercent(ConcurrentHashMap<UUID, Float> lastSentPlayerManaPercent) {
+		this.lastSentPlayerManaPercent = lastSentPlayerManaPercent;
 	}
 }

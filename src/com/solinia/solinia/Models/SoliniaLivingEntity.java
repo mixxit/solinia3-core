@@ -7396,8 +7396,32 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public PacketMobVitals toPacketMobVitals(int partyMember, boolean withMana) {
 		PacketMobVitals vitals = new PacketMobVitals();
 		float manaPercent = 0F;
+		// try to use last cached value
+		if (partyMember == 0)
+		{
+			try
+			{
+				if (StateManager.getInstance().getConfigurationManager().getLastSentPlayerManaPercent().get(this.getBukkitLivingEntity().getUniqueId()) != null)
+					manaPercent = StateManager.getInstance().getConfigurationManager().getLastSentPlayerManaPercent().get(this.getBukkitLivingEntity().getUniqueId());
+					
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
 		if (withMana)
+		{
 			manaPercent = ((float)getManaRatio())/100F;
+			try
+			{
+				if (partyMember == 0)
+					StateManager.getInstance().getConfigurationManager().getLastSentPlayerManaPercent().put(this.getBukkitLivingEntity().getUniqueId(),manaPercent);
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		
 		vitals.fromData(partyMember, ((float)getHPRatio())/100F, manaPercent, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""));
 		return vitals;
 	}
