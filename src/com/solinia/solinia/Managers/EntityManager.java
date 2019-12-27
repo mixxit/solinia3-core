@@ -145,13 +145,13 @@ public class EntityManager implements IEntityManager {
 				
 		        if (me instanceof Player)
 				{
-					PartyWindowUtils.UpdateWindow((Player)me, true);
+					PartyWindowUtils.UpdateWindow((Player)me, false, true);
 				}
 			} else {
 				StateManager.getInstance().getEntityManager().getEntityTargets().put(me.getUniqueId(), target.getUniqueId());
 				if (me instanceof Player)
 				{
-					PartyWindowUtils.UpdateWindow((Player)me,true);
+					PartyWindowUtils.UpdateWindow((Player)me,false,true);
 				}
 			}
 		} catch (CoreStateInitException e)
@@ -1689,7 +1689,7 @@ public class EntityManager implements IEntityManager {
 			{
 				if (entity instanceof Player && (!((Player)entity).isDead()))
 				{
-					PartyWindowUtils.UpdateWindow((Player)entity,false);
+					PartyWindowUtils.UpdateWindow((Player)entity,false,false);
 				}
 			}
 		}

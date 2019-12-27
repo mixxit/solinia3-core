@@ -287,7 +287,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		
 		this.mana = mana;
-		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer(),true);
+		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer(),true,false);
 	}
 
 	@Override

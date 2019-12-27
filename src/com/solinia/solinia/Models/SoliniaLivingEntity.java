@@ -7196,7 +7196,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			getBukkitLivingEntity().setHealth(health);
 
 		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
-			PartyWindowUtils.UpdateWindow(((Player)this.getOwnerEntity()),false);
+			PartyWindowUtils.UpdateWindow(((Player)this.getOwnerEntity()),false,false);
 		}
 
 		if (getBukkitLivingEntity() instanceof Player) {

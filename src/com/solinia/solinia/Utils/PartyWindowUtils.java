@@ -19,15 +19,22 @@ import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 
 public class PartyWindowUtils {
 	
-	public static void UpdateWindow(Player player,boolean withMana) {
+	public static void UpdateWindow(Player player,boolean withMana, boolean sendPacketImmediately) {
 		try {
 			// myself (vital: 0)
 			ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
-			ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals(0, withMana).toPacketData(),0);
+			if (!sendPacketImmediately)
+				ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals(0, withMana).toPacketData(),0);
+			else
+				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals(0, withMana).toPacketData());
+			
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			if (solPlayer != null)
 			{
+				if (!sendPacketImmediately)
 				ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CASTINGPERCENT,solPlayer.toPacketCastingPercent().toPacketData(),0);
+				else
+					ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CASTINGPERCENT,solPlayer.toPacketCastingPercent().toPacketData());
 			}
 
 			// Has a target set (vital: -1)
@@ -36,9 +43,12 @@ public class PartyWindowUtils {
 			if (entityTarget != null) {
 				ISoliniaLivingEntity soliniaLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(entityTarget);
 				if (soliniaLivingEntityTarget != null)
-				ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityTarget.toPacketMobVitals(-1, false).toPacketData(),-1);
+					if (!sendPacketImmediately)
+						ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityTarget.toPacketMobVitals(-1, false).toPacketData(),-1);
+					else
+						ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityTarget.toPacketMobVitals(-1, false).toPacketData());
 			} else {
-				SendEmptyVital(player,(-1));
+				SendEmptyVital(player,(-1),sendPacketImmediately);
 			}
 			
 			// Pet (vital: -2)
@@ -47,9 +57,12 @@ public class PartyWindowUtils {
 			if (entityPet != null) {
 				ISoliniaLivingEntity soliniaLivingEntityPet = SoliniaLivingEntityAdapter.Adapt(entityPet);
 				if (soliniaLivingEntityPet != null)
-				ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityPet.toPacketMobVitals(-2,false).toPacketData(),-2);
+					if (!sendPacketImmediately)
+						ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityPet.toPacketMobVitals(-2,false).toPacketData(),-2);
+					else
+						ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityPet.toPacketMobVitals(-2,false).toPacketData());
 			} else {
-				SendEmptyVital(player,(-2));
+				SendEmptyVital(player,(-2),sendPacketImmediately);
 			}
 
 		} catch (Exception e) {
@@ -59,7 +72,7 @@ public class PartyWindowUtils {
 	
 	public static void SendGroupToMember(Player player, ISoliniaGroup group, boolean updatemana)
 	{
-		UpdateWindow(player, updatemana);
+		UpdateWindow(player, updatemana,false);
 		
 		try {
 			if (group != null)
@@ -73,28 +86,28 @@ public class PartyWindowUtils {
 					// 
 					if (uuid == null)
 					{
-						SendEmptyVital(player,(i+1));
+						SendEmptyVital(player,(i+1),false);
 						continue;
 					}
 					
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity == null)
 					{
-						SendEmptyVital(player,(i+1));
+						SendEmptyVital(player,(i+1),false);
 						continue; 
 					}
 					
 					LivingEntity le = (LivingEntity)entity;
 					if (le == null || !(le instanceof Player))
 					{
-						SendEmptyVital(player,(i+1));
+						SendEmptyVital(player,(i+1),false);
 						continue;
 					}
 					
 					ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(le);
 					if (soliniaLivingEntity == null)
 					{
-						SendEmptyVital(player,(i+1));
+						SendEmptyVital(player,(i+1),false);
 						continue;
 					}
 					
@@ -110,12 +123,15 @@ public class PartyWindowUtils {
 		
 	}
 	
-	public static void SendEmptyVital(Player player, int partyMember)
+	public static void SendEmptyVital(Player player, int partyMember, boolean sendPacketImmediately)
 	{
 		PacketMobVitals vitals = new PacketMobVitals();
 		vitals.fromData(partyMember, 0F, 0F, 0, "");
 		try {
+			if (!sendPacketImmediately)
 			ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,vitals.toPacketData(),partyMember);
+			else
+				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,vitals.toPacketData());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
