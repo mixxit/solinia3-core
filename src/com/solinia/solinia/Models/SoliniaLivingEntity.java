@@ -3159,7 +3159,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try {
 			if (isPlayer()) {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				return player.getSkill(skillname.toUpperCase()).getValue();
+				SoliniaPlayerSkill skill = player.getSkill(skillname.toUpperCase());
+				if (skill == null)
+				{
+					getBukkitLivingEntity().sendMessage("ADMIN ALERT, Please inform Moderators that you have called getSkill for an unknown skill: '"+skillname+"'");
+					System.out.println("ADMIN ALERT, " + getBukkitLivingEntity().getName() + " getSkill for an unknown skill: '"+skillname+"'");
+					return defaultskill;
+				}
+				else
+				{
+					return skill.getValue();
+				}
+				
 			}
 
 			if (isNPC()) {
@@ -5297,7 +5308,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (summoningEntity instanceof Player) {
 					this.say("You will not evade me " + ((Player) summoningEntity).getDisplayName() + "!");
 				} else {
-					this.say("You will not evade me " + summoningEntity.getName() + "!");
+					this.say("You will not evade me " + summoningEntity.getCustomName() + "!");
 
 				}
 				summoningEntity.teleport(getBukkitLivingEntity().getLocation());
