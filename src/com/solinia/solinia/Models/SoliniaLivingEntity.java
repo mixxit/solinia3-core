@@ -7395,7 +7395,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public PacketMobVitals toPacketMobVitals(int partyMember, boolean withMana) {
 		PacketMobVitals vitals = new PacketMobVitals();
-		float manaPercent = 0F;
+		// the default draw state of the mana bar is FULL mana
+		float manaPercent = 100F;
 		// try to use last cached value
 		if (partyMember == 0)
 		{
