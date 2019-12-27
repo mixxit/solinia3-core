@@ -268,7 +268,7 @@ public class PlayerManager implements IPlayerManager {
 			if (solPlayer.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(player);
 			} else {
-				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup());
+				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup(), false);
 			}
 			
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
@@ -310,7 +310,7 @@ public class PlayerManager implements IPlayerManager {
 			if (solPlayer.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(player);
 			} else {
-				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup());
+				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup(), true);
 			}
 			
 			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);

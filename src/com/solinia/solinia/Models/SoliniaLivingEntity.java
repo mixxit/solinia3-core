@@ -2027,7 +2027,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
 
 				PartyWindowUtils.UpdateGroupWindowForEveryone(getBukkitLivingEntity().getUniqueId(),
-						solPlayer.getGroup());
+						solPlayer.getGroup(),false);
 
 				// Update group
 				if (solPlayer.getGroup() != null) {
@@ -7203,7 +7203,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
 				PartyWindowUtils.UpdateGroupWindowForEveryone(getBukkitLivingEntity().getUniqueId(),
-						solPlayer.getGroup());
+						solPlayer.getGroup(),false);
 			} catch (CoreStateInitException e) {
 
 			}

@@ -707,11 +707,11 @@ public class CoreState {
 		sendGroupMessage(player, "has left the group!");
 		group.getMembers().remove(player.getUniqueId());
 		
-		PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), null);
+		PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), null, false);
 		
 		for(UUID uuid : group.getMembers())
 		{
-			PartyWindowUtils.UpdateGroupWindow(uuid,group);
+			PartyWindowUtils.UpdateGroupWindow(uuid,group, false);
 		}
 
 		if (group.getOwner().equals(player.getUniqueId())) {
@@ -798,7 +798,7 @@ public class CoreState {
 		group.getMembers().add(player.getUniqueId());
 		System.out.println("group: " + group.getId() + " gained a member: " + player.getDisplayName());
 		
-		PartyWindowUtils.UpdateGroupWindowForEveryone(player.getUniqueId(),group);
+		PartyWindowUtils.UpdateGroupWindowForEveryone(player.getUniqueId(),group, false);
 		
 		sendGroupMessage(player, "has joined the group!");
 		groups.put(group.getId(), group);

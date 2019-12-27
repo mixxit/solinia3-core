@@ -245,7 +245,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (this.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(this.getBukkitPlayer());
 			} else {
-				PartyWindowUtils.UpdateGroupWindow(getBukkitPlayer().getUniqueId(), this.getGroup());
+				PartyWindowUtils.UpdateGroupWindow(getBukkitPlayer().getUniqueId(), this.getGroup(), false);
 			}
 		}
 	}
@@ -399,7 +399,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				getBukkitPlayer().setHealthScaled(true);
 				getBukkitPlayer().setHealthScale(40D);
 
-				PartyWindowUtils.UpdateGroupWindowForEveryone(getBukkitPlayer().getUniqueId(), getGroup());
+				PartyWindowUtils.UpdateGroupWindowForEveryone(getBukkitPlayer().getUniqueId(), getGroup(),false);
 			} catch (CoreStateInitException e) {
 
 			}
