@@ -76,6 +76,7 @@ import com.solinia.solinia.Timers.PlayerTickTimer;
 import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
+import com.solinia.solinia.Timers.UpdatePlayerWindowTimer;
 import com.solinia.solinia.Timers.ZoneTickTimer;
 import com.solinia.solinia.Utils.ForgeUtils;
 import org.json.JSONException;
@@ -98,6 +99,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private NPCRandomChatTimer npcRandomChatTimer;
 	private NPCCheckForEnemiesTimer npcCheckForEnemiesTimer;
 	private PetCheckTickTimer petCheckTickTimer;
+	private UpdatePlayerWindowTimer playerWindowTimer;
 	private PetFastCheckTimer petFastCheckTickTimer;
 	private InvalidItemCheckerTimer invalidItemCheckerTimer;
 	private EntityAutoAttackTimer entityAutoAttackTimer;
@@ -443,6 +445,11 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		dynmapTimer = new DynmapTimer();
 		// every 5 seconds
 		dynmapTimer.runTaskTimer(this, 5 * 20L, 5 * 20L);
+
+		playerWindowTimer = new UpdatePlayerWindowTimer();
+		// every 1/2 seconds
+		playerWindowTimer.runTaskTimer(this, 10L, 10L);
+
 	}
 
 	private void registerEvents() {

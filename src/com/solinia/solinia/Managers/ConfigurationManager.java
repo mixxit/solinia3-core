@@ -131,6 +131,22 @@ public class ConfigurationManager implements IConfigurationManager {
 	private List<Trait> traits = new ArrayList<Trait>();
 	private List<Ideal> ideals = new ArrayList<Ideal>();
 	
+	private ConcurrentHashMap<UUID, String> queuedCastingPercentPackets = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queuedCharCreationPackets = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queuedEffectsPackets = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queuedEquipSlotsPackets = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queuedMemorisedSpellsPackets = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueSpellbookPagePackets = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueMobVitalsPacketsneg2 = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueMobVitalsPacketsneg1 = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueMobVitalsPackets0 = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueMobVitalsPackets1 = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueMobVitalsPackets2 = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueMobVitalsPackets3 = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueMobVitalsPackets4 = new ConcurrentHashMap<UUID, String>();
+	private ConcurrentHashMap<UUID, String> queueMobVitalsPackets5 = new ConcurrentHashMap<UUID, String>();
+
+	
 	// Commit tracking
 	private boolean spellsChanged = false;
 	private boolean itemsChanged = false;
@@ -2013,5 +2029,123 @@ public class ConfigurationManager implements IConfigurationManager {
 	public ConfigSettings getConfigSettings()
 	{
 		return this.configSettings;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, String> getQueuedCastingPercentPackets() {
+		return queuedCastingPercentPackets;
+	}
+
+	@Override
+	public void setQueuedCastingPercentPackets(ConcurrentHashMap<UUID, String> queuedCastingPercentPackets) {
+		this.queuedCastingPercentPackets = queuedCastingPercentPackets;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, String> getQueuedEffectsPackets() {
+		return queuedEffectsPackets;
+	}
+
+	@Override
+	public void setQueuedEffectsPackets(ConcurrentHashMap<UUID, String> queuedEffectsPackets) {
+		this.queuedEffectsPackets = queuedEffectsPackets;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, String> getQueuedEquipSlotsPackets() {
+		return queuedEquipSlotsPackets;
+	}
+
+	@Override
+	public void setQueuedEquipSlotsPackets(ConcurrentHashMap<UUID, String> queuedEquipSlotsPackets) {
+		this.queuedEquipSlotsPackets = queuedEquipSlotsPackets;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, String> getQueuedMemorisedSpellsPackets() {
+		return queuedMemorisedSpellsPackets;
+	}
+
+	@Override
+	public void setQueuedMemorisedSpellsPackets(ConcurrentHashMap<UUID, String> queuedMemorisedSpellsPackets) {
+		this.queuedMemorisedSpellsPackets = queuedMemorisedSpellsPackets;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, String> getQueueSpellbookPagePackets() {
+		return queueSpellbookPagePackets;
+	}
+
+	@Override
+	public void setQueueSpellbookPagePackets(ConcurrentHashMap<UUID, String> queueSpellbookPagePackets) {
+		this.queueSpellbookPagePackets = queueSpellbookPagePackets;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, String> getQueuedCharCreationPackets() {
+		return queuedCharCreationPackets;
+	}
+
+	@Override
+	public void setQueuedCharCreationPackets(ConcurrentHashMap<UUID, String> queuedCharCreationPackets) {
+		this.queuedCharCreationPackets = queuedCharCreationPackets;
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, String> getQueueMobVitalsPackets(int queueNumber) throws Exception {
+		switch (queueNumber)
+		{
+			case -2:
+				return this.queueMobVitalsPacketsneg2;
+			case -1:
+				return this.queueMobVitalsPacketsneg1;
+			case 0:
+				return this.queueMobVitalsPackets0;
+			case 1:
+				return this.queueMobVitalsPackets1;
+			case 2:
+				return this.queueMobVitalsPackets2;
+			case 3:
+				return this.queueMobVitalsPackets3;
+			case 4:
+				return this.queueMobVitalsPackets4;
+			case 5:
+				return this.queueMobVitalsPackets5;
+			default:
+				throw new Exception("Request to call invalid mob vitals packet queue: " + queueNumber);
+		}
+	}
+
+	@Override
+	public void setQueueMobVitalsPackets(int queueNumber, ConcurrentHashMap<UUID, String> queueMobVitalsPackets) throws Exception {
+		switch (queueNumber)
+		{
+			case -2:
+				this.queueMobVitalsPacketsneg2 = queueMobVitalsPackets;
+				break;
+			case -1:
+				this.queueMobVitalsPacketsneg1 = queueMobVitalsPackets;
+				break;
+			case 0:
+				this.queueMobVitalsPackets0 = queueMobVitalsPackets;
+				break;
+			case 1:
+				this.queueMobVitalsPackets1 = queueMobVitalsPackets;
+				break;
+			case 2:
+				this.queueMobVitalsPackets2 = queueMobVitalsPackets;
+				break;
+			case 3:
+				this.queueMobVitalsPackets3 = queueMobVitalsPackets;
+				break;
+			case 4:
+				this.queueMobVitalsPackets4 = queueMobVitalsPackets;
+				break;
+			case 5:
+				this.queueMobVitalsPackets5 = queueMobVitalsPackets;
+				break;
+			default:
+				throw new Exception("Request to call invalid mob vitals packet queue: " + queueNumber);
+		}
 	}
 }

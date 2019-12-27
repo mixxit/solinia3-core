@@ -2841,10 +2841,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 	    	PacketEquipSlots packet = new PacketEquipSlots();
 	    	packet.fromData(getEquipSlots());
-			ForgeUtils.sendForgeMessage(((Player)getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.EQUIPSLOTS,packet.toPacketData());
-		} catch (CoreStateInitException e)
-		{
-			e.printStackTrace();
+			ForgeUtils.QueueSendForgeMessage(((Player)getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.EQUIPSLOTS,packet.toPacketData(),0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4261,8 +4258,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			PacketEffects packet = new PacketEffects();
 			packet.fromData(getEffects());
-			ForgeUtils.sendForgeMessage(((Player) getBukkitPlayer()), Solinia3UIChannelNames.Outgoing,
-					Solinia3UIPacketDiscriminators.EFFECTS, packet.toPacketData());
+			ForgeUtils.QueueSendForgeMessage(((Player) getBukkitPlayer()), Solinia3UIChannelNames.Outgoing,
+					Solinia3UIPacketDiscriminators.EFFECTS, packet.toPacketData(),0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -4273,8 +4270,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			PacketMemorisedSpells spells = new PacketMemorisedSpells();
 			spells.fromData(getMemorisedSpellSlots());
-			ForgeUtils.sendForgeMessage(((Player) getBukkitPlayer()), Solinia3UIChannelNames.Outgoing,
-					Solinia3UIPacketDiscriminators.MEMORISEDSPELLS, spells.toPacketData());
+			ForgeUtils.QueueSendForgeMessage(((Player) getBukkitPlayer()), Solinia3UIChannelNames.Outgoing,
+					Solinia3UIPacketDiscriminators.MEMORISEDSPELLS, spells.toPacketData(),0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

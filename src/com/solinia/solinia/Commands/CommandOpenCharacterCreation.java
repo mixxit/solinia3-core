@@ -21,7 +21,7 @@ public class CommandOpenCharacterCreation implements CommandExecutor {
 	    try {
 	    	PacketOpenCharacterCreation packet = new PacketOpenCharacterCreation();
 	    	packet.fromData(StateManager.getInstance().getConfigurationManager().getCharacterCreationChoices());
-			ForgeUtils.sendForgeMessage(((Player)sender),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,packet.toPacketData());
+			ForgeUtils.QueueSendForgeMessage(((Player)sender),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,packet.toPacketData(), 0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

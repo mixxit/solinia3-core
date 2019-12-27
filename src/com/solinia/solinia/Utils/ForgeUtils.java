@@ -16,6 +16,11 @@ import org.bukkit.entity.Player;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.Solinia3UIChannelNames;
+import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
+
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_14_R1.MinecraftKey;
 import net.minecraft.server.v1_14_R1.PacketDataSerializer;
@@ -81,5 +86,46 @@ public class ForgeUtils {
 	      is.close();
 	    }
 	  }
+
+	public static void QueueSendForgeMessage(Player player, String channelName, byte packetDiscriminator, String packetData,int specialQueueNumber) {
+		try
+		{
+			switch(packetDiscriminator)
+			{
+				case Solinia3UIPacketDiscriminators.CASTINGPERCENT:
+					StateManager.getInstance().getConfigurationManager().getQueuedCastingPercentPackets().put(player.getUniqueId(),packetData);
+					break;
+				case Solinia3UIPacketDiscriminators.CHARCREATION:
+					StateManager.getInstance().getConfigurationManager().getQueuedCharCreationPackets().put(player.getUniqueId(),packetData);
+					break;
+				case Solinia3UIPacketDiscriminators.EFFECTS:
+					StateManager.getInstance().getConfigurationManager().getQueuedEffectsPackets().put(player.getUniqueId(),packetData);
+					break;
+				case Solinia3UIPacketDiscriminators.EQUIPSLOTS:
+					StateManager.getInstance().getConfigurationManager().getQueuedEquipSlotsPackets().put(player.getUniqueId(),packetData);
+					break;
+				case Solinia3UIPacketDiscriminators.MEMORISEDSPELLS:
+					StateManager.getInstance().getConfigurationManager().getQueuedMemorisedSpellsPackets().put(player.getUniqueId(),packetData);
+					break;
+				case Solinia3UIPacketDiscriminators.SPELLBOOKPAGE:
+					StateManager.getInstance().getConfigurationManager().getQueueSpellbookPagePackets().put(player.getUniqueId(),packetData);
+					break;
+				case Solinia3UIPacketDiscriminators.VITALS:
+					try
+					{
+					StateManager.getInstance().getConfigurationManager().getQueueMobVitalsPackets(specialQueueNumber).put(player.getUniqueId(),packetData);
+					} catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+					break;
+				default:
+				break;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
 
 }

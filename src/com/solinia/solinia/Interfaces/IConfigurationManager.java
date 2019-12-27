@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -570,4 +571,32 @@ public interface IConfigurationManager {
 	int getMaxLevel();
 
 	int getNextSpellId();
+
+	ConcurrentHashMap<UUID, String> getQueuedCastingPercentPackets();
+
+	void setQueuedCastingPercentPackets(ConcurrentHashMap<UUID, String> queuedCastingPercentPackets);
+
+	void setQueuedEffectsPackets(ConcurrentHashMap<UUID, String> queuedEffectsPackets);
+
+	ConcurrentHashMap<UUID, String> getQueuedEquipSlotsPackets();
+
+	void setQueuedEquipSlotsPackets(ConcurrentHashMap<UUID, String> queuedEquipSlotsPackets);
+
+	ConcurrentHashMap<UUID, String> getQueuedMemorisedSpellsPackets();
+
+	void setQueuedMemorisedSpellsPackets(ConcurrentHashMap<UUID, String> queuedMemorisedSpellsPackets);
+
+	ConcurrentHashMap<UUID, String> getQueueSpellbookPagePackets();
+
+	void setQueueSpellbookPagePackets(ConcurrentHashMap<UUID, String> queueSpellbookPagePackets);
+
+	ConcurrentHashMap<UUID, String> getQueuedEffectsPackets();
+
+	ConcurrentHashMap<UUID, String> getQueuedCharCreationPackets();
+
+	void setQueuedCharCreationPackets(ConcurrentHashMap<UUID, String> queuedCharCreationPackets);
+
+	ConcurrentHashMap<UUID, String> getQueueMobVitalsPackets(int queueNumber) throws Exception;
+
+	void setQueueMobVitalsPackets(int queueNumber, ConcurrentHashMap<UUID, String> queueMobVitalsPackets) throws Exception;
 }

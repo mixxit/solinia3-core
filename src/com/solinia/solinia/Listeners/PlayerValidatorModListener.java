@@ -94,7 +94,7 @@ public class PlayerValidatorModListener implements Listener {
 			    try {
 			    	PacketOpenCharacterCreation packet = new PacketOpenCharacterCreation();
 			    	packet.fromData(StateManager.getInstance().getConfigurationManager().getCharacterCreationChoices());
-					ForgeUtils.sendForgeMessage(event.getPlayer(),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,packet.toPacketData());
+					ForgeUtils.QueueSendForgeMessage(event.getPlayer(),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,packet.toPacketData(),0);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

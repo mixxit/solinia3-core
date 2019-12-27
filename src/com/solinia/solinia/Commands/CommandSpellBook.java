@@ -43,7 +43,7 @@ public class CommandSpellBook implements CommandExecutor {
 			    	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
 			    	PacketOpenSpellbook spellbookPacket = new PacketOpenSpellbook();
 			    	spellbookPacket.fromData(solPlayer.getSpellbookPage(0));
-					ForgeUtils.sendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.SPELLBOOKPAGE,spellbookPacket.toPacketData());
+					ForgeUtils.QueueSendForgeMessage(((Player)solPlayer.getBukkitPlayer()),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.SPELLBOOKPAGE,spellbookPacket.toPacketData(),0);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

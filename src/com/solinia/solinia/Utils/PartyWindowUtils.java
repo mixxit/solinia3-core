@@ -23,11 +23,11 @@ public class PartyWindowUtils {
 		try {
 			// myself (vital: 0)
 			ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
-			ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals(0, withMana).toPacketData());
+			ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals(0, withMana).toPacketData(),0);
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			if (solPlayer != null)
 			{
-				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CASTINGPERCENT,solPlayer.toPacketCastingPercent().toPacketData());
+				ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CASTINGPERCENT,solPlayer.toPacketCastingPercent().toPacketData(),0);
 			}
 
 			// Has a target set (vital: -1)
@@ -36,7 +36,7 @@ public class PartyWindowUtils {
 			if (entityTarget != null) {
 				ISoliniaLivingEntity soliniaLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(entityTarget);
 				if (soliniaLivingEntityTarget != null)
-				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityTarget.toPacketMobVitals(-1, false).toPacketData());
+				ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityTarget.toPacketMobVitals(-1, false).toPacketData(),-1);
 			} else {
 				SendEmptyVital(player,(-1));
 			}
@@ -47,7 +47,7 @@ public class PartyWindowUtils {
 			if (entityPet != null) {
 				ISoliniaLivingEntity soliniaLivingEntityPet = SoliniaLivingEntityAdapter.Adapt(entityPet);
 				if (soliniaLivingEntityPet != null)
-				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityPet.toPacketMobVitals(-2,false).toPacketData());
+				ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntityPet.toPacketMobVitals(-2,false).toPacketData(),-2);
 			} else {
 				SendEmptyVital(player,(-2));
 			}
@@ -98,7 +98,7 @@ public class PartyWindowUtils {
 						continue;
 					}
 					
-					ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals((i+1),false).toPacketData());
+					ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,soliniaLivingEntity.toPacketMobVitals((i+1),false).toPacketData(),i+1);
 				}
 			}
 		} catch (CoreStateInitException e) {
@@ -115,7 +115,7 @@ public class PartyWindowUtils {
 		PacketMobVitals vitals = new PacketMobVitals();
 		vitals.fromData(partyMember, 0F, 0F, 0, "");
 		try {
-			ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,vitals.toPacketData());
+			ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,vitals.toPacketData(),partyMember);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
