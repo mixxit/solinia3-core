@@ -73,6 +73,11 @@ public class CommandConsider implements CommandExecutor {
 			}
 			
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solEntity.getNpcid());
+			if (npc.isRaidheroic() || npc.isRaidboss())
+			{
+				difficultyMessage += " This creature would take an army to defeat!";
+			}
+			
 			if (npc.getFactionid() < 1)
 			{
 				sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " regards you indifferently. " + difficultyMessage);
