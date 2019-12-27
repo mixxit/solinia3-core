@@ -462,7 +462,7 @@ public class ChannelManager implements IChannelManager {
 				{
 					if (player.isOp() || (source.getLanguage() == null || source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
 					{
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message) + " [" + source.getLanguage() + "]");
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 					} else {
