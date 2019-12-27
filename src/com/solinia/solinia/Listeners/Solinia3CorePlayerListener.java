@@ -617,6 +617,20 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
+		if (event.isCancelled())
+			return;
+		
+		if (!event.getFrom().isWorldLoaded())
+			return;
+
+		if (!event.getTo().isWorldLoaded())
+			return;
+
+		if (!event.getFrom().getChunk().isLoaded())
+			return;
+
+		if (!event.getTo().getChunk().isLoaded())
+			return;
 		try {
 			Player player = event.getPlayer();
 			

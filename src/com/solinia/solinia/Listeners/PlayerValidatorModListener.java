@@ -30,6 +30,18 @@ public class PlayerValidatorModListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
+		if (!event.getFrom().isWorldLoaded())
+			return;
+
+		if (!event.getTo().isWorldLoaded())
+			return;
+
+		if (!event.getFrom().getChunk().isLoaded())
+			return;
+
+		if (!event.getTo().getChunk().isLoaded())
+			return;
+		
 		try
 		{
 			if (StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()) == null ||
