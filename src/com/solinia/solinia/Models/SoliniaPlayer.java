@@ -930,7 +930,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public SoliniaPlayerSkill getSkill(String skillname) {
 		if (!Utils.isValidSkill(skillname))
+		{
+			getBukkitPlayer().sendMessage("ADMIN ALERT, Please inform Moderators that you have called getSkill for an unknown skill: '"+skillname+"'");
+			System.out.println("ADMIN ALERT, " + getBukkitPlayer().getName() + " getSkill for an unknown skill: '"+skillname+"'");
 			return null;
+		}
 
 		for (SoliniaPlayerSkill skill : this.skills) {
 			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase()))

@@ -3159,18 +3159,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try {
 			if (isPlayer()) {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				SoliniaPlayerSkill skill = player.getSkill(skillname.toUpperCase());
-				if (skill == null)
-				{
-					getBukkitLivingEntity().sendMessage("ADMIN ALERT, Please inform Moderators that you have called getSkill for an unknown skill: '"+skillname+"'");
-					System.out.println("ADMIN ALERT, " + getBukkitLivingEntity().getName() + " getSkill for an unknown skill: '"+skillname+"'");
-					return defaultskill;
-				}
-				else
-				{
-					return skill.getValue();
-				}
-				
+				return player.getSkill(skillname.toUpperCase()).getValue();
 			}
 
 			if (isNPC()) {
