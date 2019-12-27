@@ -7196,7 +7196,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			getBukkitLivingEntity().setHealth(health);
 
 		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
-			PartyWindowUtils.UpdateWindow(((Player)this.getOwnerEntity()));
+			PartyWindowUtils.UpdateWindow(((Player)this.getOwnerEntity()),false);
 		}
 
 		if (getBukkitLivingEntity() instanceof Player) {
@@ -7393,9 +7393,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public PacketMobVitals toPacketMobVitals(int partyMember) {
+	public PacketMobVitals toPacketMobVitals(int partyMember, boolean withMana) {
 		PacketMobVitals vitals = new PacketMobVitals();
-		vitals.fromData(partyMember, ((float)getHPRatio())/100F, ((float)getManaRatio())/100F, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""));
+		float manaPercent = 0F;
+		if (withMana)
+			manaPercent = ((float)getManaRatio())/100F;
+		vitals.fromData(partyMember, ((float)getHPRatio())/100F, manaPercent, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""));
 		return vitals;
 	}
 

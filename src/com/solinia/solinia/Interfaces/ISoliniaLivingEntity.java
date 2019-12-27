@@ -354,8 +354,6 @@ public interface ISoliniaLivingEntity
 
 	public void tryApplySpellOnSelf(int spellId);
 
-	public PacketMobVitals toPacketMobVitals(int partyMember);
-
 	public void sendHateList(LivingEntity recipient);
 
 	void clearTargetsAgainstMe();
@@ -363,5 +361,7 @@ public interface ISoliniaLivingEntity
 	void setEntityTarget(LivingEntity target);
 
 	LivingEntity getEntityTarget();
+
+	PacketMobVitals toPacketMobVitals(int partyMember, boolean withMana);
 
 }
