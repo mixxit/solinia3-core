@@ -27,10 +27,6 @@ commands:
     description: Commits Solinia3Core State Data
     usage: /commit
     aliases: []
-  sit:
-    description: Toggles sit state
-    usage: /sit
-    aliases: []
   removevampirism:
     description: Removes vampirism from a player
     usage: /removevampirism mcname
