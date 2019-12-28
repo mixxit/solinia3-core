@@ -44,6 +44,10 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
+import com.solinia.solinia.Models.PacketOpenCharacterCreation;
+import com.solinia.solinia.Models.PacketPlaySoundAnim;
+import com.solinia.solinia.Models.Solinia3UIChannelNames;
+import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
@@ -52,6 +56,7 @@ import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
+import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.MythicMobsUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -1606,11 +1611,30 @@ public class EntityManager implements IEntityManager {
 				}
 				
 				livingEntity.sendMessage("You begin casting " + castingSpell.getSpell().getName());
+				
+				playSpellCastingSoundEffect(livingEntity,castingSpell.getSpell());
+				
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 			} catch (CoreStateInitException e)
 			{
 				
 			}
+		}
+	}
+
+	private void playSpellCastingSoundEffect(LivingEntity livingEntity, ISoliniaSpell spell) {
+		if (livingEntity == null)
+			return;
+		if (!(livingEntity instanceof Player))
+			return;
+			
+		try {
+	    	PacketPlaySoundAnim packet = new PacketPlaySoundAnim();
+	    	packet.fromData(spell.getCastingAnim());
+			ForgeUtils.sendForgeMessage((Player)livingEntity, Solinia3UIChannelNames.Outgoing, Solinia3UIPacketDiscriminators.PLAYSOUNDANIM, packet.toPacketData());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
