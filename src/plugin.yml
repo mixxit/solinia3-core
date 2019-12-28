@@ -82,7 +82,7 @@ commands:
     - iam
   castspelladmin:
     description: Casts any spell by its ID
-    usage: /cast <spellid>
+    usage: /castspelladmin <spellid>
     aliases:
     - castspell
   showdiscord:
