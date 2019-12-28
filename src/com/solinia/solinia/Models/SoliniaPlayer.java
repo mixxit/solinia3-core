@@ -869,7 +869,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void say(String string) {
+	public void say(String message) {
 		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
 			if (getRace() == null) {
 				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
@@ -878,8 +878,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				setLanguage(getRace().getName().toUpperCase());
 			}
 		}
-		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, string, string,
-				getBukkitPlayer().getInventory().getItemInMainHand());
+		
+		boolean onlySendToSource = false;
+		// filter hails
+		if (getEntityTarget() != null)
+		{
+			if (message.toUpperCase().equals("HAIL"))
+			onlySendToSource = true;
+		}
+		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, message, message,
+				getBukkitPlayer().getInventory().getItemInMainHand(),onlySendToSource);
 		
 		// NPC responses (if applicable)
 		if (getEntityTarget() != null)
@@ -891,7 +899,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaLivingEntity solentity;
 				try {
 					solentity = StateManager.getInstance().getEntityManager().getLivingEntity(livingEntity);
-					solentity.processInteractionEvent(getBukkitPlayer(), InteractionType.CHAT, string);
+					solentity.processInteractionEvent(getBukkitPlayer(), InteractionType.CHAT, message);
 				} catch (CoreStateInitException e) {
 					// skip
 				}

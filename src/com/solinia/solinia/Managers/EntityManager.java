@@ -1628,14 +1628,62 @@ public class EntityManager implements IEntityManager {
 		if (!(livingEntity instanceof Player))
 			return;
 			
-		String soundName = getSpellEffectIndexModSound(spell.getSpellAffectIndex());
+		String soundName = getSpellEffectIndexCastingSound(spell.getSpellAffectIndex());
 		if (soundName == null)
 			return;
 		
 		livingEntity.getWorld().playSound(livingEntity.getLocation(), soundName, 1, 1);
 	}
+	
+	private void playSpellFinishedSoundEffect(LivingEntity targetEntity, ISoliniaSpell spell) {
+		if (targetEntity == null)
+			return;
+			
+		String soundName = getSpellEffectIndexFinishedSound(spell.getSpellAffectIndex());
+		if (soundName == null)
+			return;
+		
+		targetEntity.getWorld().playSound(targetEntity.getLocation(), soundName, 1, 1);
+	}
+	
+	public String getSpellEffectIndexFinishedSound(int spellAffectIndex) {
+		System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
+		switch(Utils.getSpellEffectIndex(spellAffectIndex))
+		{
+			case AC_Buff:
+				//return "solinia3ui:spelcast";
+			case Calm:
+				//return "solinia3ui:spel4";
+			case Vanish:
+				//return "solinia3ui:spelcast";
+			case Sight:
+				//return "solinia3ui:spelcast";
+			case Dispell_Sight:
+				//return "solinia3ui:spelcast";
+			case Stat_Buff:
+				//return "solinia3ui:spel4";
+			case Heal_Cure:
+				//return "solinia3ui:spelcast";
+			case Direct_Damage:
+				//return "solinia3ui:spell3";
+			case Gravity_Fling:
+				//return "solinia3ui:spel4";
+			case Summon:
+				//return "solinia3ui:spelhit3";
+			case Combat_Slow:
+				//return "solinia3ui:spelhit3";
+			case Weaken:
+				//return "solinia3ui:spelhit3";
+			case Blind_Poison:
+				//return "solinia3ui:spelhit3";
+			case Teleport:
+				//return "solinia3ui:spelhit3";
+			default:
+				//return null;
+		}
+	}
 
-	public String getSpellEffectIndexModSound(int spellAffectIndex) {
+	public String getSpellEffectIndexCastingSound(int spellAffectIndex) {
 		System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
 		switch(Utils.getSpellEffectIndex(spellAffectIndex))
 		{

@@ -20,10 +20,17 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class ChannelManager implements IChannelManager {
 	
 	@Override
-	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack) {
+	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack, boolean onlySendToSource) {
+		if (source == null || source.getBukkitPlayer() == null)
+			return;
 		
 		message = decorateLocalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
+			// for filtering to just the player
+			if (onlySendToSource == true)
+				if (!player.getUniqueId().equals(source.getBukkitPlayer().getUniqueId()))
+					continue;
+			
 			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 100)
 			{
 				try

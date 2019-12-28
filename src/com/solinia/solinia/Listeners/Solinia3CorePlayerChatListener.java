@@ -31,7 +31,15 @@ public class Solinia3CorePlayerChatListener implements Listener {
 			return;
 		}
 		
-		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand());
+		boolean onlySendToSource = false;
+		// filter hails
+		if (event.getPlayer().getEntityTarget() != null)
+		{
+			if (event.getMessage().toUpperCase().equals("HAIL"))
+			onlySendToSource = true;
+		}
+		
+		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(event.getPlayer(), event.getMessage(), event.getMessage(), event.getPlayer().getBukkitPlayer().getInventory().getItemInMainHand(),onlySendToSource);
 		
 		// NPC responses (if applicable)
 		if (event.getPlayer().getEntityTarget() != null)

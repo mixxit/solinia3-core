@@ -11,7 +11,7 @@ public interface IChannelManager {
 
 	void sendToGlobalChannel(ISoliniaPlayer source, String message, ItemStack itemStack);
 
-	void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack);
+	void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack,boolean onlySendToSource);
 
 	void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message, ItemStack itemStack);
 

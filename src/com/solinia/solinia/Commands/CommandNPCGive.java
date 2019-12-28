@@ -21,6 +21,8 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Utils.PlayerUtils;
+import com.solinia.solinia.Utils.Utils;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandNPCGive implements CommandExecutor {
@@ -83,13 +85,13 @@ public class CommandNPCGive implements CommandExecutor {
 				if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
 					continue;
 				
-				System.out.println("Comparing item id: " + item.getId() + " to triggerdata " + eventHandler.getTriggerdata());
+				Utils.DebugLog("CommandNPCGive","onCommand",player.getName(),"Comparing item id: " + item.getId() + " to triggerdata " + eventHandler.getTriggerdata());
 				if (Integer.parseInt(eventHandler.getTriggerdata()) != item.getId())
 					continue;
 				
 				if (eventHandler.getChatresponse() != null && !eventHandler.getChatresponse().equals(""))
 				{
-					System.out.println("Checking if player meets requirements to hand in item");
+					Utils.DebugLog("CommandNPCGive","onCommand",player.getName(),"Checking if player meets requirements to hand in item");
 					if (!eventHandler.playerMeetsRequirements(player))
 					{
 						player.sendMessage(ChatColor.GRAY + "[Hint] You do not meet the requirements to hand this quest item in. Either you are missing a quest step, have already completed this step");
@@ -113,7 +115,7 @@ public class CommandNPCGive implements CommandExecutor {
 						}
 					}
 					
-					System.out.println("NPC wants the item");
+					Utils.DebugLog("CommandNPCGive","onCommand",player.getName(),"NPC wants the item");
 					npcWantsItem = true;
 					
 					String response = eventHandler.getChatresponse();
