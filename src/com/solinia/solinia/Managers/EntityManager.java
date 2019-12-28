@@ -1628,16 +1628,50 @@ public class EntityManager implements IEntityManager {
 		if (!(livingEntity instanceof Player))
 			return;
 			
-		try {
-	    	PacketPlaySoundAnim packet = new PacketPlaySoundAnim();
-	    	packet.fromData(spell.getSpellAffectIndex());
-			ForgeUtils.sendForgeMessage((Player)livingEntity, Solinia3UIChannelNames.Outgoing, Solinia3UIPacketDiscriminators.PLAYSOUNDANIM, packet.toPacketData());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String soundName = getSpellEffectIndexModSound(spell.getSpellAffectIndex());
+		if (soundName == null)
+			return;
+		
+		livingEntity.getWorld().playSound(livingEntity.getLocation(), soundName, 1, 1);
 	}
 
+	public String getSpellEffectIndexModSound(int spellAffectIndex) {
+		System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
+		switch(Utils.getSpellEffectIndex(spellAffectIndex))
+		{
+			case AC_Buff:
+				return "solinia3ui:spelcast";
+			case Calm:
+				return "solinia3ui:spel4";
+			case Vanish:
+				return "solinia3ui:spelcast";
+			case Sight:
+				return "solinia3ui:spelcast";
+			case Dispell_Sight:
+				return "solinia3ui:spelcast";
+			case Stat_Buff:
+				return "solinia3ui:spel4";
+			case Heal_Cure:
+				return "solinia3ui:spelcast";
+			case Direct_Damage:
+				return "solinia3ui:spell3";
+			case Gravity_Fling:
+				return "solinia3ui:spel4";
+			case Summon:
+				return "solinia3ui:spelhit3";
+			case Combat_Slow:
+				return "solinia3ui:spelhit3";
+			case Weaken:
+				return "solinia3ui:spelhit3";
+			case Blind_Poison:
+				return "solinia3ui:spelhit3";
+			case Teleport:
+				return "solinia3ui:spelhit3";
+			default:
+				return null;
+		}
+	}
+	
 	@Override
 	public void interruptCasting(LivingEntity livingEntity) {
 		if (entitySpellCasting.get(livingEntity.getUniqueId()) != null)
