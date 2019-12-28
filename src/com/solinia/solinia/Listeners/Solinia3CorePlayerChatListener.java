@@ -24,7 +24,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
-		String currentChannel = currentChannel = "LOCAL";
+		String currentChannel = "LOCAL";
 		
 		if (event.getPlayer().getRace() == null)
 		{

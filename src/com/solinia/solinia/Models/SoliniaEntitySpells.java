@@ -203,7 +203,14 @@ public class SoliniaEntitySpells {
 		// Initial run
 		activeSpell.apply(plugin, sendMessages);
 		Utils.playSpecialEffect(getLivingEntity(), activeSpell);
-		getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 0);
+		try
+		{
+		StateManager.getInstance().getEntityManager().playSpellFinishedSoundEffect(getLivingEntity(),soliniaSpell);
+		//getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 0);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 
 		if (duration > 0) {
 			if (slots.get(slot) != null)

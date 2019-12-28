@@ -1627,6 +1627,10 @@ public class EntityManager implements IEntityManager {
 			return;
 		if (!(livingEntity instanceof Player))
 			return;
+		
+		if (spell == null)
+			return;
+
 			
 		String soundName = getSpellEffectIndexCastingSound(spell.getSpellAffectIndex());
 		if (soundName == null)
@@ -1635,8 +1639,12 @@ public class EntityManager implements IEntityManager {
 		livingEntity.getWorld().playSound(livingEntity.getLocation(), soundName, 1, 1);
 	}
 	
-	private void playSpellFinishedSoundEffect(LivingEntity targetEntity, ISoliniaSpell spell) {
+	@Override
+	public void playSpellFinishedSoundEffect(LivingEntity targetEntity, ISoliniaSpell spell) {
 		if (targetEntity == null)
+			return;
+		
+		if (spell == null)
 			return;
 			
 		String soundName = getSpellEffectIndexFinishedSound(spell.getSpellAffectIndex());
@@ -1651,35 +1659,35 @@ public class EntityManager implements IEntityManager {
 		switch(Utils.getSpellEffectIndex(spellAffectIndex))
 		{
 			case AC_Buff:
-				//return "solinia3ui:spelcast";
+				return "solinia3ui:spelgdht"; // done
 			case Calm:
-				//return "solinia3ui:spel4";
+				return "solinia3ui:spelgdht"; // done
 			case Vanish:
-				//return "solinia3ui:spelcast";
+				return "solinia3ui:spelcast"; // done
 			case Sight:
-				//return "solinia3ui:spelcast";
+				return "solinia3ui:spelcast"; // done
 			case Dispell_Sight:
-				//return "solinia3ui:spelcast";
+				return "solinia3ui:spelcast"; // done
 			case Stat_Buff:
-				//return "solinia3ui:spel4";
+				return "solinia3ui:spelhit3"; // done
 			case Heal_Cure:
-				//return "solinia3ui:spelcast";
+				return "solinia3ui:spelgdht"; // done
 			case Direct_Damage:
-				//return "solinia3ui:spell3";
+				return "solinia3ui:spelhit1"; // done
 			case Gravity_Fling:
-				//return "solinia3ui:spel4";
+				return "solinia3ui:spelhit2"; // done
 			case Summon:
-				//return "solinia3ui:spelhit3";
+				return "solinia3ui:spel5"; // done
 			case Combat_Slow:
-				//return "solinia3ui:spelhit3";
+				return "solinia3ui:spel5"; // done
 			case Weaken:
-				//return "solinia3ui:spelhit3";
+				return "solinia3ui:spel5"; // done
 			case Blind_Poison:
-				//return "solinia3ui:spelhit3";
+				return "solinia3ui:spel5"; // done
 			case Teleport:
-				//return "solinia3ui:spelhit3";
+				return "solinia3ui:spel4"; // done
 			default:
-				//return null;
+				return null;
 		}
 	}
 
@@ -1688,33 +1696,33 @@ public class EntityManager implements IEntityManager {
 		switch(Utils.getSpellEffectIndex(spellAffectIndex))
 		{
 			case AC_Buff:
-				return "solinia3ui:spelcast";
+				return "solinia3ui:spelcast"; // done
 			case Calm:
-				return "solinia3ui:spel4";
+				return "solinia3ui:spel4"; // done
 			case Vanish:
-				return "solinia3ui:spelcast";
+				return "solinia3ui:spel4"; // done
 			case Sight:
-				return "solinia3ui:spelcast";
+				return "solinia3ui:spelcast"; // done
 			case Dispell_Sight:
-				return "solinia3ui:spelcast";
+				return "solinia3ui:spelcast"; // done
 			case Stat_Buff:
-				return "solinia3ui:spel4";
+				return "solinia3ui:spel4"; // done
 			case Heal_Cure:
-				return "solinia3ui:spelcast";
+				return "solinia3ui:spelcast"; // done
 			case Direct_Damage:
-				return "solinia3ui:spell3";
+				return "solinia3ui:spell3"; // done
 			case Gravity_Fling:
-				return "solinia3ui:spel4";
+				return "solinia3ui:spel4"; // done
 			case Summon:
-				return "solinia3ui:spelhit3";
+				return "solinia3ui:spelhit3";// done
 			case Combat_Slow:
-				return "solinia3ui:spelhit3";
+				return "solinia3ui:spelhit3";// done
 			case Weaken:
-				return "solinia3ui:spelhit3";
+				return "solinia3ui:spelhit3";// done
 			case Blind_Poison:
-				return "solinia3ui:spelhit3";
+				return "solinia3ui:spelhit3";// done
 			case Teleport:
-				return "solinia3ui:spelhit3";
+				return "solinia3ui:spelhit3";// done
 			default:
 				return null;
 		}
