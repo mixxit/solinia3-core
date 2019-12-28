@@ -2,6 +2,7 @@ package com.solinia.solinia.Listeners;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -33,7 +34,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		
 		boolean onlySendToSource = false;
 		// filter hails
-		if (event.getPlayer().getEntityTarget() != null)
+		if (event.getPlayer().getEntityTarget() != null && !(event.getPlayer().getEntityTarget() instanceof Player))
 		{
 			if (event.getMessage().toUpperCase().equals("HAIL"))
 			onlySendToSource = true;

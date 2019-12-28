@@ -881,7 +881,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		boolean onlySendToSource = false;
 		// filter hails
-		if (getEntityTarget() != null)
+		if (getEntityTarget() != null && !(getEntityTarget() instanceof Player))
 		{
 			if (message.toUpperCase().equals("HAIL"))
 			onlySendToSource = true;
