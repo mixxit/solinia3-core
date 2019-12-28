@@ -1677,15 +1677,15 @@ public class EntityManager implements IEntityManager {
 			case Gravity_Fling:
 				return "solinia3ui:spelhit2"; // done
 			case Summon:
-				return "solinia3ui:spel5"; // done
+				return "solinia3ui:spell5"; // done
 			case Combat_Slow:
-				return "solinia3ui:spel5"; // done
+				return "solinia3ui:spell5"; // done
 			case Weaken:
-				return "solinia3ui:spel5"; // done
+				return "solinia3ui:spell5"; // done
 			case Blind_Poison:
-				return "solinia3ui:spel5"; // done
+				return "solinia3ui:spell5"; // done
 			case Teleport:
-				return "solinia3ui:spel4"; // done
+				return "solinia3ui:spell4"; // done
 			default:
 				return null;
 		}
@@ -1698,21 +1698,21 @@ public class EntityManager implements IEntityManager {
 			case AC_Buff:
 				return "solinia3ui:spelcast"; // done
 			case Calm:
-				return "solinia3ui:spel4"; // done
+				return "solinia3ui:spell4"; // done
 			case Vanish:
-				return "solinia3ui:spel4"; // done
+				return "solinia3ui:spell4"; // done
 			case Sight:
 				return "solinia3ui:spelcast"; // done
 			case Dispell_Sight:
 				return "solinia3ui:spelcast"; // done
 			case Stat_Buff:
-				return "solinia3ui:spel4"; // done
+				return "solinia3ui:spell4"; // done
 			case Heal_Cure:
 				return "solinia3ui:spelcast"; // done
 			case Direct_Damage:
 				return "solinia3ui:spell3"; // done
 			case Gravity_Fling:
-				return "solinia3ui:spel4"; // done
+				return "solinia3ui:spell4"; // done
 			case Summon:
 				return "solinia3ui:spelhit3";// done
 			case Combat_Slow:
