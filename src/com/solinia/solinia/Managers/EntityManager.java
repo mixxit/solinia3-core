@@ -1630,7 +1630,7 @@ public class EntityManager implements IEntityManager {
 			
 		try {
 	    	PacketPlaySoundAnim packet = new PacketPlaySoundAnim();
-	    	packet.fromData(spell.getCastingAnim());
+	    	packet.fromData(spell.getSpellAffectIndex());
 			ForgeUtils.sendForgeMessage((Player)livingEntity, Solinia3UIChannelNames.Outgoing, Solinia3UIPacketDiscriminators.PLAYSOUNDANIM, packet.toPacketData());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
