@@ -1660,6 +1660,12 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	public String getSpellEffectIndexFinishedSound(int spellAffectIndex) {
+		if (spellAffectIndex < 1)
+			return null;
+		
+		if (Utils.getSpellEffectIndex(spellAffectIndex) == null)
+			return null;
+		
 		System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
 		switch(Utils.getSpellEffectIndex(spellAffectIndex))
 		{
@@ -1697,6 +1703,12 @@ public class EntityManager implements IEntityManager {
 	}
 
 	public String getSpellEffectIndexCastingSound(int spellAffectIndex) {
+		if (spellAffectIndex < 1)
+			return null;
+		
+		if (Utils.getSpellEffectIndex(spellAffectIndex) == null)
+			return null;
+
 		System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
 		switch(Utils.getSpellEffectIndex(spellAffectIndex))
 		{
