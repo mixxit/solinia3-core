@@ -634,6 +634,21 @@ public class Solinia3CorePlayerListener implements Listener {
 		try {
 			Player player = event.getPlayer();
 			
+			if (
+					event.getFrom().getBlockX() != event.getTo().getBlockX() ||
+					event.getFrom().getBlockY() != event.getTo().getBlockY() ||
+					event.getFrom().getBlockZ() != event.getTo().getBlockZ()				
+				) 
+			{
+			if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited"))
+			if (!StateManager.getInstance().getPlayerManager().playerModVersion(player).equals(StateManager.getInstance().getRequiredModVersion()))
+			{
+				player.sendMessage("Missing Mod Version '" + StateManager.getInstance().getRequiredModVersion() + "' - See https://www.fallofanempire.com/docs/guides/mod/ '");
+				Utils.CancelEvent(event);
+				return;
+			}
+			}
+			
 			// If player is casting spell and spell is not allowed to be used during moving then cancel
 			
 			/*

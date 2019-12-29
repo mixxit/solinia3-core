@@ -162,6 +162,7 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void sendToGlobalChannelDecorated(ISoliniaPlayer source, String message, ItemStack itemStack) {
 		String originalmessage = message;
+				
 		message = decorateGlobalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			try
@@ -178,6 +179,7 @@ public class ChannelManager implements IChannelManager {
 			}
 				
 			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
+
 			tc = decorateTextComponentsWithHovers(tc, itemStack);
 			player.spigot().sendMessage(tc);
 		}
