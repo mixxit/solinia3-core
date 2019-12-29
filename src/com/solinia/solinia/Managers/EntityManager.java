@@ -1631,6 +1631,8 @@ public class EntityManager implements IEntityManager {
 		if (spell == null)
 			return;
 
+		if (spell.isCombatSkill())
+			return;
 			
 		String soundName = getSpellEffectIndexCastingSound(spell.getSpellAffectIndex());
 		if (soundName == null)
@@ -1647,6 +1649,9 @@ public class EntityManager implements IEntityManager {
 		if (spell == null)
 			return;
 			
+		if (spell.isCombatSkill())
+			return;
+		
 		String soundName = getSpellEffectIndexFinishedSound(spell.getSpellAffectIndex());
 		if (soundName == null)
 			return;
