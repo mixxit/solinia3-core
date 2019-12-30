@@ -498,6 +498,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("creategod").setExecutor(new CommandCreateGod());
 		this.getCommand("listgods").setExecutor(new CommandListGods());
 		this.getCommand("editgod").setExecutor(new CommandEditGod());
+		this.getCommand("unstuck").setExecutor(new CommandUnstuck());
 
 		this.getCommand("godinfo").setExecutor(new CommandGodInfo());
 		this.getCommand("setgod").setExecutor(new CommandSetGod());

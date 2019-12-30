@@ -5488,6 +5488,30 @@ public class Utils {
 		return true;
 
 	}
+	
+	public static boolean canUnstuck(Player player) {
+		Timestamp lastChange = null;
+
+		try {
+			lastChange = StateManager.getInstance().getPlayerManager().getPlayerLastUnstuck(player.getUniqueId());
+
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+
+		if (lastChange == null)
+			return true;
+
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		Timestamp mintimestamp = Timestamp.valueOf(lastChange.toLocalDateTime().plus(3, ChronoUnit.HOURS));
+
+		if (nowtimestamp.before(mintimestamp))
+			return false;
+
+		return true;
+
+	}
 
 	public static <T> void sendFilterByCriteria(List<T> dataSet, CommandSender sender, String[] args, Class classType)
 	{

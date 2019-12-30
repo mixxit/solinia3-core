@@ -33,6 +33,7 @@ public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, Integer> playerApplyAugmentation = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Integer> playerActiveBardSong = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> playerLastChangeChar = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> playerLastUnstuck = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> playerLastSummonSteed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, DebuggerSettings> playerDebugger = new ConcurrentHashMap<UUID, DebuggerSettings>();
 
@@ -349,6 +350,16 @@ public class PlayerManager implements IPlayerManager {
 	public Timestamp getPlayerLastChangeChar(UUID playerUUID) {
 		return playerLastChangeChar.get(playerUUID);
 	}
+	
+	@Override
+	public Timestamp getPlayerLastUnstuck(UUID playerUUID) {
+		return playerLastUnstuck.get(playerUUID);
+	}
+	
+	@Override
+	public void setPlayerLastUnstuck(UUID playerUUID, Timestamp timestamp) {
+		this.playerLastChangeChar.put(playerUUID, timestamp);
+	}
 
 	@Override
 	public void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp) {
@@ -467,4 +478,6 @@ public class PlayerManager implements IPlayerManager {
 		PlayerValidatedModEvent soliniaevent = new PlayerValidatedModEvent(player);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
+	
+	
 }

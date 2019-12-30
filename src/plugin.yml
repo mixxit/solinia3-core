@@ -56,6 +56,11 @@ commands:
     usage: /consider
     aliases:
     - con   
+  unstuck:
+    description: Teleports you to the highest occupied block in the Y direction
+    usage: /unstuck
+    aliases:
+    - stuck
   debugger:
     description: Debugs Solinia Core Functions
     usage: /debugger classname methodname focusid

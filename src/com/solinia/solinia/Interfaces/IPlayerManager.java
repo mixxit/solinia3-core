@@ -29,6 +29,7 @@ public interface IPlayerManager {
 	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit);
 	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, UUID characterUUID);
 	Timestamp getPlayerLastChangeChar(UUID playerUUID);
+	Timestamp getPlayerLastUnstuck(UUID playerUUID);
 	void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp);
 	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException;
 	ISoliniaPlayer getPlayerAndDoNotCreate(UUID playerUUID);
@@ -44,4 +45,5 @@ public interface IPlayerManager {
 	String playerModVersion(Player player);
 	public void setPlayerVersion(UUID uniqueId, String string);
 	void checkPlayerModVersion(Player player);
+	void setPlayerLastUnstuck(UUID playerUUID, Timestamp timestamp);
 }
