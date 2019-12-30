@@ -454,8 +454,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		clientVersionTimer.runTaskTimer(this, 30 * 20L, 30 * 20L);
 		
 		regionExtentsDynmapTimer = new RegionExtentsDynmapTimer();
-		// every 5 minutes
-		regionExtentsDynmapTimer.runTaskTimer(this, 5 * 20L, 300 * 20L);
+		// every 30 minutes
+		regionExtentsDynmapTimer.runTaskTimer(this, 5 * 20L, (60 * 30) * 20L);
 
 		soliniaZonesDynmapTimer = new SoliniaZonesDynmapTimer();
 		// every 5 seconds
