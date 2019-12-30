@@ -21,7 +21,7 @@ import com.solinia.solinia.Models.SoliniaZone;
 
 import net.minecraft.server.v1_14_R1.Tuple;
 
-public class DynmapTimer extends BukkitRunnable {
+public class SoliniaZonesDynmapTimer extends BukkitRunnable {
 	@Override
 	public void run() {
 		updateZones();
@@ -56,21 +56,21 @@ public class DynmapTimer extends BukkitRunnable {
         
         
         /* Now, review old map - anything left is gone */
-        for(AreaMarker oldm : StateManager.getInstance().resareas.values()) {
+        for(AreaMarker oldm : StateManager.getInstance().soliniazonesresareas.values()) {
         	if (oldm == null)
         		continue;
         	
             oldm.deleteMarker();
         }
-        for(Marker oldm : StateManager.getInstance().resmark.values()) {
+        for(Marker oldm : StateManager.getInstance().soliniazonesresmark.values()) {
         	if (oldm == null)
         		continue;
 
             oldm.deleteMarker();
         }
         /* And replace with new map */
-        StateManager.getInstance().resareas = newmap;
-        StateManager.getInstance().resmark = newmark;
+        StateManager.getInstance().soliniazonesresareas = newmap;
+        StateManager.getInstance().soliniazonesresmark = newmark;
 	}
 
 	private void RenderTown(Entry<String, Town> town, Map<String, AreaMarker> newmap) {
@@ -156,12 +156,12 @@ public class DynmapTimer extends BukkitRunnable {
         boolean displayLabel = true;
         boolean persistent = false;
         String markerId = "TownyArea:"+name;
-        AreaMarker marker = StateManager.getInstance().resareas.remove(markerId);
+        AreaMarker marker = StateManager.getInstance().soliniazonesresareas.remove(markerId);
         int fillColor = Color.YELLOW.asRGB();
         double fillOpacity = 0.1;
         
         if(marker == null) {
-        	marker = StateManager.getInstance().getMarkerSet().createAreaMarker(markerId, name, displayLabel, "world",xVals, zVals, persistent);
+        	marker = StateManager.getInstance().getSoliniaZonesMarkerSet().createAreaMarker(markerId, name, displayLabel, "world",xVals, zVals, persistent);
         	if(marker == null) {
         		System.out.println("error adding marker " + markerId);
         		return;
@@ -192,12 +192,12 @@ public class DynmapTimer extends BukkitRunnable {
         boolean displayLabel = true;
         boolean persistent = false;
         String markerId = "SoliniaZone:"+zone.getId();
-        AreaMarker marker = StateManager.getInstance().resareas.remove(markerId);
+        AreaMarker marker = StateManager.getInstance().soliniazonesresareas.remove(markerId);
         int fillColor = Color.AQUA.asRGB();
         double fillOpacity = 0.1;
         
         if(marker == null) {
-        	marker = StateManager.getInstance().getMarkerSet().createAreaMarker(markerId, name, displayLabel, "world",xVals, zVals, persistent);
+        	marker = StateManager.getInstance().getSoliniaZonesMarkerSet().createAreaMarker(markerId, name, displayLabel, "world",xVals, zVals, persistent);
         	if(marker == null) {
         		System.out.println("error adding marker " + markerId);
         		return;

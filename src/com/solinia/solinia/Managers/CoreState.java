@@ -62,14 +62,19 @@ public class CoreState {
 	private String instanceGuid;
 	private EffectManager effectManager;
 	
-	public Map<String, AreaMarker> resareas = new HashMap<String, AreaMarker>();
-    public Map<String, Marker> resmark = new HashMap<String, Marker>();
-	
+	public Map<String, AreaMarker> soliniazonesresareas = new HashMap<String, AreaMarker>();
+    public Map<String, Marker> soliniazonesresmark = new HashMap<String, Marker>();
+
+	public Map<String, AreaMarker> regionextentsresareas = new HashMap<String, AreaMarker>();
+    public Map<String, Marker> regionextentsresmark = new HashMap<String, Marker>();
+
+    
 	private List<Integer> currentHotZones = new ArrayList<Integer>();
 	private double xpdaybonus = 0;
 	private String requiredModVersion;
 	private DynmapAPI dynmap;
-	private MarkerSet markerset;
+	private MarkerSet regionExtentsMarkerSet;
+	private MarkerSet soliniaZonesMarkerSet;
 	private Towny towny;
 	public String renderTownsOnDynmap = "";
 	
@@ -934,14 +939,24 @@ public class CoreState {
 		return this.dynmap;
 	}
 
-	public void setMarkerSet(MarkerSet set) {
-		this.markerset = set;
+	public void setSoliniaZonesMarkerSet(MarkerSet set) {
+		this.soliniaZonesMarkerSet = set;
 	}
 	
-	public MarkerSet getMarkerSet()
+	public MarkerSet getSoliniaZonesMarkerSet()
 	{
-		return this.markerset;
+		return this.soliniaZonesMarkerSet;
 	}
+	
+	public void setRegionExtentsMarkerSet(MarkerSet set) {
+		this.regionExtentsMarkerSet = set;
+	}
+	
+	public MarkerSet getRegionExtentsMarkerSet()
+	{
+		return this.regionExtentsMarkerSet;
+	}
+
 
 	public void setTowny(Towny townyApi) {
 		this.towny = townyApi;

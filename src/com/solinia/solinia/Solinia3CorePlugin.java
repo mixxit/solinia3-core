@@ -60,7 +60,6 @@ import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.ClientVersionTimer;
-import com.solinia.solinia.Timers.DynmapTimer;
 import com.solinia.solinia.Timers.EntityAutoAttackTimer;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
@@ -73,7 +72,9 @@ import com.solinia.solinia.Timers.PlayerEquipmentTickTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.PlayerTickTimer;
+import com.solinia.solinia.Timers.RegionExtentsDynmapTimer;
 import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
+import com.solinia.solinia.Timers.SoliniaZonesDynmapTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
 import com.solinia.solinia.Timers.UpdatePlayerWindowTimer;
@@ -108,14 +109,16 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
 	private ClientVersionTimer clientVersionTimer;
-	private DynmapTimer dynmapTimer;
+	private RegionExtentsDynmapTimer regionExtentsDynmapTimer;
+	private SoliniaZonesDynmapTimer soliniaZonesDynmapTimer;
 	private Plugin dynmap;
 	private DynmapAPI dynmapApi;
 	private Plugin towny;
 	private Towny townyApi;
 
 	private Economy economy;
-	private MarkerSet set;
+	private MarkerSet soliniaZonesSet;
+	private MarkerSet regionExtentsSet;
 	
 	@Override
 	public void onEnable() {
@@ -126,8 +129,10 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			return;
         }
         dynmapApi = (DynmapAPI)dynmap; /* Get API */
-        set = dynmapApi.getMarkerAPI().createMarkerSet("solinia.markerset", "SoliniaZones", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
-        set.setHideByDefault(true);
+        soliniaZonesSet = dynmapApi.getMarkerAPI().createMarkerSet("solinia.markerset", "SoliniaZones", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
+        soliniaZonesSet.setHideByDefault(true);
+        regionExtentsSet = dynmapApi.getMarkerAPI().createMarkerSet("solinia.worldregionsmarkerset", "WorldRegions", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
+        regionExtentsSet.setHideByDefault(true);
         towny = getServer().getPluginManager().getPlugin("Towny");
         if(towny == null) {
         	System.out.println("Solinia3-Core! Cannot find Towny! Disabling plugin...");
@@ -191,7 +196,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		StateManager.getInstance().setEconomy(this.economy);
 		StateManager.getInstance().setRequiredModVersion(expectedClientModVersion);
 		StateManager.getInstance().setDynmap(this.dynmapApi);
-		StateManager.getInstance().setMarkerSet(this.set);
+		StateManager.getInstance().setSoliniaZonesMarkerSet(this.soliniaZonesSet);
+		StateManager.getInstance().setRegionExtentsMarkerSet(this.regionExtentsSet);
 		StateManager.getInstance().setTowny(this.townyApi);
 		RegisterEntities();
 		
@@ -243,10 +249,15 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			
 			
 			// Cleanup Dynmap
-	        StateManager.getInstance().resareas.clear(); 
-	        if(set != null) {
-	            set.deleteMarkerSet();
-	            set = null;
+	        StateManager.getInstance().soliniazonesresareas.clear(); 
+	        StateManager.getInstance().regionextentsresareas.clear(); 
+	        if(this.regionExtentsSet != null) {
+	        	this.regionExtentsSet.deleteMarkerSet();
+	        	this.regionExtentsSet = null;
+	        }
+	        if(this.soliniaZonesSet != null) {
+	        	this.soliniaZonesSet.deleteMarkerSet();
+	        	this.soliniaZonesSet = null;
 	        }
 	        
 		} catch (CoreStateInitException e) {
@@ -442,10 +453,15 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		// every 30 seconds
 		clientVersionTimer.runTaskTimer(this, 30 * 20L, 30 * 20L);
 		
-		dynmapTimer = new DynmapTimer();
-		// every 5 seconds
-		dynmapTimer.runTaskTimer(this, 5 * 20L, 5 * 20L);
+		regionExtentsDynmapTimer = new RegionExtentsDynmapTimer();
+		// every 5 minutes
+		regionExtentsDynmapTimer.runTaskTimer(this, 5 * 20L, 300 * 20L);
 
+		soliniaZonesDynmapTimer = new SoliniaZonesDynmapTimer();
+		// every 5 seconds
+		soliniaZonesDynmapTimer.runTaskTimer(this, 5 * 20L, 5 * 20L);
+
+		
 		playerWindowTimer = new UpdatePlayerWindowTimer();
 		// every 1/2 seconds
 		playerWindowTimer.runTaskTimer(this, 10L, 10L);

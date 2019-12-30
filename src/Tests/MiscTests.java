@@ -1,13 +1,14 @@
 package Tests;
 
 import org.junit.Test;
+
+import com.solinia.solinia.Timers.SoliniaZonesDynmapTimer;
+
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.List;
-
-import com.solinia.solinia.Timers.DynmapTimer;
 
 public class MiscTests {
 	@Test
@@ -21,7 +22,7 @@ public class MiscTests {
 		rows.put(new Point(0,1),true); /*rows.put(new Point(1,1),false);*/ rows.put(new Point(2,1),true);
 		rows.put(new Point(0,0),true); rows.put(new Point(1,0),true); rows.put(new Point(2,0),true);
 		
-		HashMap<String, List<Point>> strips = DynmapTimer.GetStripsX(rows);
+		HashMap<String, List<Point>> strips = SoliniaZonesDynmapTimer.GetStripsX(rows);
 		// Should return four strips
 		assertEquals(4, strips.size());
 		// First Strip should be 3 in length
