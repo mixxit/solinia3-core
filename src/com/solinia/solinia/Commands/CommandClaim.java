@@ -1,5 +1,7 @@
 package com.solinia.solinia.Commands;
 
+import java.util.stream.Collectors;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -36,10 +38,11 @@ public class CommandClaim implements CommandExecutor {
 
 				Player player = (Player) sender;
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
-				sender.sendMessage("Current Claims: " + solplayer.getAccountClaims().size());
+				sender.sendMessage("Current Claims: " + solplayer.getAccountClaims().stream().filter(claim -> claim.getItemid() > 0).collect(Collectors.toList()).size());
 				
-				for (SoliniaAccountClaim claim : solplayer.getAccountClaims()) 
+				for (SoliniaAccountClaim claim : solplayer.getAccountClaims().stream().filter(claim -> claim.getItemid() > 0).collect(Collectors.toList())) 
 				{
+					//sender.sendMessage("Item: " + claim.getItemid());
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(claim.getItemid());
 					
 					if (item == null)

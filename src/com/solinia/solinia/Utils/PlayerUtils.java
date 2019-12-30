@@ -280,29 +280,46 @@ public class PlayerUtils {
 		}
 	}
 	public static void addToPlayersInventory(Player player, ItemStack item) {
-		if (player.getInventory().firstEmpty() == -1)
+		try
 		{
-			try
+			ISoliniaItem solItem = SoliniaItemAdapter.Adapt(item);
+			if (solItem == null)
+				return;
+			
+			if (player.getInventory().firstEmpty() == -1)
 			{
-				SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-				newclaim.setMcname(player.getName());
-				newclaim.setItemid(solPlayer.getEarsItem());
-				newclaim.setClaimed(false);
-				StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-				player.sendMessage(ChatColor.GRAY + "Your inventory was full so we could not place the item into it" + ChatColor.RESET);
-				player.sendMessage(ChatColor.GRAY + "It has been added to your /claims instead" + ChatColor.RESET);
-			} catch (CoreStateInitException e)
-			{
-				
+				try
+				{
+					SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					final int newid = StateManager.getInstance().getConfigurationManager().getNextAccountClaimId();
+					newclaim.setId(newid);
+					newclaim.setMcname(player.getName());
+					newclaim.setItemid(solItem.getId());
+					newclaim.setClaimed(false);
+					StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+					player.sendMessage(ChatColor.GRAY + "Your inventory was full so we could not place the item into it ("+newid+")" + ChatColor.RESET);
+					player.sendMessage(ChatColor.GRAY + "It has been added to your /claims instead" + ChatColor.RESET);
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			} else {
+				player.getInventory().addItem(item);
+				player.updateInventory();
+				player.sendMessage(ChatColor.GRAY + "Item added to your inventory" + ChatColor.RESET);
+				//((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item);
 			}
-		} else {
-			player.getInventory().addItem(item);
-			player.updateInventory();
-			player.sendMessage(ChatColor.GRAY + "Item added to your inventory" + ChatColor.RESET);
-			//((Player)sender).getLocation().getWorld().dropItemNaturally(((Player)sender).getLocation(), item);
+		} catch (CoreStateInitException e)
+		{
+			player.sendMessage("Could not grant item in your inventory as the plugin was inactive");
+			return;
+		} catch (SoliniaItemException e1) {
+			player.sendMessage("Could not grant item in your inventory as the solinia item does not exist");
+			return;
 		}
+
+		
 	}
 
 }
