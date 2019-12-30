@@ -35,7 +35,7 @@ public class CommandUnstuck implements CommandExecutor {
 			StateManager.getInstance().getPlayerManager().setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			int highesty = player.getWorld().getHighestBlockAt(player.getLocation()).getY();
 			int targety = highesty;
-			for (int y = player.getLocation().getBlockY(); y <= highesty; y++)
+			for (int y = player.getLocation().getBlockY()+2; y <= highesty; y++)
 			{
 				if (!isSafeLocation(player.getLocation(),y))
 					continue;
