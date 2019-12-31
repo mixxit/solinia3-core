@@ -358,7 +358,7 @@ public class PlayerManager implements IPlayerManager {
 	
 	@Override
 	public void setPlayerLastUnstuck(UUID playerUUID, Timestamp timestamp) {
-		this.playerLastChangeChar.put(playerUUID, timestamp);
+		this.playerLastUnstuck.put(playerUUID, timestamp);
 	}
 
 	@Override

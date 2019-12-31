@@ -5498,13 +5498,20 @@ public class Utils {
 
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			if (solPlayer == null)
+			{
+				player.sendMessage("You cannot use unstuck as you are not a valid player");
 				return false;
+			}
 			
 			for(SoliniaZone zone : solPlayer.getZones())
 				if (zone.isNoUnstuck())
+				{
+					player.sendMessage("You cannot use unstuck in this zone");
 					return false;
+				}
 				
 		} catch (CoreStateInitException e) {
+			player.sendMessage("You cannot use unstuck at his time");
 			return false;
 		}
 
@@ -5516,7 +5523,10 @@ public class Utils {
 		Timestamp mintimestamp = Timestamp.valueOf(lastChange.toLocalDateTime().plus(3, ChronoUnit.HOURS));
 
 		if (nowtimestamp.before(mintimestamp))
+		{
+			player.sendMessage("You can only unstuck your character every 3 hours");
 			return false;
+		}
 
 		return true;
 

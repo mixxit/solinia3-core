@@ -25,7 +25,6 @@ public class CommandUnstuck implements CommandExecutor {
 		Player player = (Player)sender;
 		if (!player.isOp() && !Utils.canUnstuck(player))
 		{
-			player.sendMessage("You can only unstuck your character every 3 hours");
 			return true;
 		}
 		
