@@ -28,7 +28,7 @@ public class Solinia3CorePlayerChatListener implements Listener {
 		
 		if (event.getPlayer().getRace() == null)
 		{
-			event.getPlayer().getBukkitPlayer().sendMessage("You must set your race to speak in chat - /race");
+			event.getPlayer().getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 			return;
 		}
 		
