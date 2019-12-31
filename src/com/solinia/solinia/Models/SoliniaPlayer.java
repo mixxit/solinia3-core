@@ -868,7 +868,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void say(String message) {
 		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
 			if (getRace() == null) {
-				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
+				getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
 				setLanguage(getRace().getName().toUpperCase());
@@ -907,7 +907,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void whisper(String string) {
 		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
 			if (getRace() == null) {
-				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
+				getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
 				setLanguage(getRace().getName().toUpperCase());
@@ -921,7 +921,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void shout(String string) {
 		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
 			if (getRace() == null) {
-				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
+				getBukkitPlayer().sendMessage("You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
 				setLanguage(getRace().getName().toUpperCase());
