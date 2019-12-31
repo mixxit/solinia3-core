@@ -359,8 +359,8 @@ public class ChannelManager implements IChannelManager {
 			vampire = ChatColor.RED + "V" + ChatColor.RESET;
 		}
 		
-		String race = "UNKNOWN";
-		String profession = "UNKNOWN";
+		String race = "UNK";
+		String profession = "UNK";
 
 		String name = player.getFullNameWithTitle();
 		ChatColor racealignmentcolour = ChatColor.GRAY;

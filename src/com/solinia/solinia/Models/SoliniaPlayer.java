@@ -857,12 +857,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void ooc(String string) {
 		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
-			if (getRace() == null) {
-				getBukkitPlayer().sendMessage("You cannot speak until you set a race /setrace");
-				return;
-			} else {
+			if (getRace() != null)
 				setLanguage(getRace().getName().toUpperCase());
-			}
 		}
 		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this, string,
 				getBukkitPlayer().getInventory().getItemInMainHand());
