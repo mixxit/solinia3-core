@@ -97,6 +97,7 @@ import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
+import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
@@ -5495,6 +5496,14 @@ public class Utils {
 		try {
 			lastChange = StateManager.getInstance().getPlayerManager().getPlayerLastUnstuck(player.getUniqueId());
 
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			if (solPlayer == null)
+				return false;
+			
+			for(SoliniaZone zone : solPlayer.getZones())
+				if (zone.isNoUnstuck())
+					return false;
+				
 		} catch (CoreStateInitException e) {
 			return false;
 		}

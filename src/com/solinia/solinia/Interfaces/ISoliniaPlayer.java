@@ -271,8 +271,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void killAllPets();
 
-	SoliniaZone getZone();
-
 	boolean isInHotzone();
 
 	List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand);
@@ -589,5 +587,7 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isShowDiscord();
 
 	void setShowDiscord(boolean showDiscord);
+
+	List<SoliniaZone> getZones();
 
 }

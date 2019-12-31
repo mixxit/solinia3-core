@@ -506,21 +506,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		setExperience(currentexperience, experience, modified);
 	}
-
+	
 	@Override
-	public SoliniaZone getZone() {
+	public List<SoliniaZone> getZones() {
+		List<SoliniaZone> zones = new ArrayList<SoliniaZone>();
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (this.getBukkitPlayer().getLocation().distance(
 						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
 								.getSize())
-					return zone;
+					zones.add(zone);
 			}
 		} catch (CoreStateInitException e) {
 
 		}
 
-		return null;
+		return zones;
 	}
 
 	@Override

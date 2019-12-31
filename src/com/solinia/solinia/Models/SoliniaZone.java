@@ -32,6 +32,7 @@ public class SoliniaZone {
 	private int foragingMinSkill = 0;
 	private int foragingLootTableId = 0;
 	private int size = 500;
+	private boolean noUnstuck = false;
 	private int manaRegen = 0;
 	private int hpRegen = 0;
 	private String requiresAlignment = "NONE";
@@ -84,6 +85,7 @@ public class SoliniaZone {
 		sender.sendMessage("- x: " + ChatColor.GOLD + getX() + ChatColor.RESET);
 		sender.sendMessage("- y: " + ChatColor.GOLD + getY() + ChatColor.RESET);
 		sender.sendMessage("- z: " + ChatColor.GOLD + getZ() + ChatColor.RESET);
+		sender.sendMessage("- nounstuck: " + ChatColor.GOLD + isNoUnstuck() + ChatColor.RESET);
 		sender.sendMessage("- size: " + ChatColor.GOLD + getSize() + ChatColor.RESET);
 		sender.sendMessage("- hotzone: " + ChatColor.GOLD + isHotzone() + ChatColor.RESET);
 		sender.sendMessage("- succorx: " + ChatColor.GOLD + getSuccorx() + ChatColor.RESET);
@@ -182,6 +184,9 @@ public class SoliniaZone {
 			break;
 		case "hotzone":
 			setHotzone(Boolean.parseBoolean(value));
+			break;
+		case "nounstuck":
+			setNoUnstuck(Boolean.parseBoolean(value));
 			break;
 		case "size":
 			setSize(Integer.parseInt(value));
@@ -398,5 +403,11 @@ public class SoliniaZone {
 	}
 	public void setPassiveAbilityId(int passiveAbilityId) {
 		this.passiveAbilityId = passiveAbilityId;
+	}
+	public boolean isNoUnstuck() {
+		return noUnstuck;
+	}
+	public void setNoUnstuck(boolean noUnstuck) {
+		this.noUnstuck = noUnstuck;
 	}
 }

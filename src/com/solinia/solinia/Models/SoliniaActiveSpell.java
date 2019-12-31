@@ -1444,7 +1444,7 @@ public class SoliniaActiveSpell {
 		try {
 			solPlayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
 
-			SoliniaZone zone = solPlayer.getZone();
+			SoliniaZone zone = solPlayer.getFirstZone();
 			if (zone == null) {
 				getLivingEntity().sendMessage(
 						"Succor failed! Your body could not be pulled by an astral anchor (not found in a zone)!");

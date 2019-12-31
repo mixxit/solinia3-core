@@ -32,7 +32,7 @@ public class CommandUnstuck implements CommandExecutor {
 		try {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-			StateManager.getInstance().getPlayerManager().setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
+			StateManager.getInstance().getPlayerManager().setPlayerLastUnstuck(player.getUniqueId(), nowtimestamp);
 			int highesty = player.getWorld().getHighestBlockAt(player.getLocation()).getY();
 			int targety = highesty;
 			for (int y = player.getLocation().getBlockY()+2; y <= highesty; y++)
