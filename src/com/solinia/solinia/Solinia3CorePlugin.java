@@ -465,7 +465,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		playerMoveCheckTimer = new PlayerMoveCheckTimer();
 		// every 1 seconds
-		playerMoveCheckTimer.runTaskTimer(this, 1 * 20L, 10L);
+		playerMoveCheckTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
 		
 		playerWindowTimer = new UpdatePlayerWindowTimer();
 		// every 1/2 seconds
