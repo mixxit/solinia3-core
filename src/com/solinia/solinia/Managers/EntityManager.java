@@ -1638,7 +1638,7 @@ public class EntityManager implements IEntityManager {
 		if (soundName == null)
 			return;
 		
-		livingEntity.getWorld().playSound(livingEntity.getLocation(), soundName, 1, 1);
+		livingEntity.getWorld().playSound(livingEntity.getLocation(), soundName, 0.05F, 1);
 	}
 	
 	@Override
@@ -1656,7 +1656,7 @@ public class EntityManager implements IEntityManager {
 		if (soundName == null)
 			return;
 		
-		targetEntity.getWorld().playSound(targetEntity.getLocation(), soundName, 1, 1);
+		targetEntity.getWorld().playSound(targetEntity.getLocation(), soundName, 0.05F, 1);
 	}
 	
 	public String getSpellEffectIndexFinishedSound(int spellAffectIndex) {
