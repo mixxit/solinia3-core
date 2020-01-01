@@ -53,7 +53,7 @@ public class PlayerMoveCheckTimer  extends BukkitRunnable {
 				zoneMusic = zone.getMusic();
 			}
 			
-			System.out.println("Checking zone of player " + StateManager.getInstance().getPlayerManager().getPlayerLastZone(player));
+			//System.out.println("Checking zone of player " + StateManager.getInstance().getPlayerManager().getPlayerLastZone(player));
 			if (zoneId == StateManager.getInstance().getPlayerManager().getPlayerLastZone(player))
 				return;
 			
