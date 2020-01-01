@@ -70,6 +70,7 @@ import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PetFastCheckTimer;
 import com.solinia.solinia.Timers.PlayerEquipmentTickTimer;
 import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
+import com.solinia.solinia.Timers.PlayerMoveCheckTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.PlayerTickTimer;
 import com.solinia.solinia.Timers.RegionExtentsDynmapTimer;
@@ -111,6 +112,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private ClientVersionTimer clientVersionTimer;
 	private RegionExtentsDynmapTimer regionExtentsDynmapTimer;
 	private SoliniaZonesDynmapTimer soliniaZonesDynmapTimer;
+	private PlayerMoveCheckTimer playerMoveCheckTimer;
 	private Plugin dynmap;
 	private DynmapAPI dynmapApi;
 	private Plugin towny;
@@ -461,6 +463,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		// every 5 seconds
 		soliniaZonesDynmapTimer.runTaskTimer(this, 5 * 20L, 5 * 20L);
 
+		playerMoveCheckTimer = new PlayerMoveCheckTimer();
+		// every 1 seconds
+		playerMoveCheckTimer.runTaskTimer(this, 1 * 20L, 10L);
 		
 		playerWindowTimer = new UpdatePlayerWindowTimer();
 		// every 1/2 seconds
