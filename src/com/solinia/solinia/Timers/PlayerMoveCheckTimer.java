@@ -62,7 +62,7 @@ public class PlayerMoveCheckTimer  extends BukkitRunnable {
 				player.sendMessage("You have entered zone: " + zoneName);
 			PacketInZone packet = new PacketInZone();
 			packet.fromData(zoneId,zoneMusic);
-			ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.INZONE,packet.toPacketData(), 0);
+			ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.INZONE,packet.toPacketData());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
