@@ -61,6 +61,8 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.PacketInZone;
+import com.solinia.solinia.Models.PacketOpenCharacterCreation;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaWorld;
@@ -739,10 +741,39 @@ public class Solinia3CorePlayerListener implements Listener {
 				return;
 			}
 			
+			notifyZoneChange(player);
 			tryUpdateFollowers(player);
 
 		} catch (CoreStateInitException e) {
 			// do nothing
+		}
+	}
+
+	private void notifyZoneChange(Player player) {
+		try {
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			SoliniaZone zone = solPlayer.getFirstZone();
+			int zoneId = 0;
+			String zoneMusic = "";
+			String zoneName = "";
+
+			if (zone != null)
+			{
+				zoneId = zone.getId();
+				zoneName = zone.getName();
+				zoneMusic = zone.getMusic();
+			}
+			
+			if (zoneId == StateManager.getInstance().getPlayerManager().getPlayerLastZone(player))
+				return;
+			
+			StateManager.getInstance().getPlayerManager().setPlayerLastZone(player,zoneId);
+			player.sendMessage("You have entered zone: " + zone);
+			PacketInZone packet = new PacketInZone();
+			packet.fromData(zoneId,zoneMusic);
+			ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.INZONE,packet.toPacketData(), 0);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

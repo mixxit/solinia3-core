@@ -36,6 +36,7 @@ public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, Timestamp> playerLastUnstuck = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> playerLastSummonSteed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, DebuggerSettings> playerDebugger = new ConcurrentHashMap<UUID, DebuggerSettings>();
+	private ConcurrentHashMap<UUID, Integer> playerLastZoneId = new ConcurrentHashMap<UUID, Integer>();
 
 	public PlayerManager(IRepository<ISoliniaPlayer> context)
 	{
@@ -477,6 +478,19 @@ public class PlayerManager implements IPlayerManager {
 	private void onPlayerValidMod(Player player) {
 		PlayerValidatedModEvent soliniaevent = new PlayerValidatedModEvent(player);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
+	}
+
+	@Override
+	public int getPlayerLastZone(Player player) {
+		if (playerLastZoneId.get(player.getUniqueId()) == null)
+			return 0;
+		
+		return playerLastZoneId.get(player.getUniqueId());
+	}
+
+	@Override
+	public void setPlayerLastZone(Player player, int zoneId) {
+		this.playerLastZoneId.put(player.getUniqueId(), zoneId);
 	}
 	
 	

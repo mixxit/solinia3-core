@@ -46,4 +46,6 @@ public interface IPlayerManager {
 	public void setPlayerVersion(UUID uniqueId, String string);
 	void checkPlayerModVersion(Player player);
 	void setPlayerLastUnstuck(UUID playerUUID, Timestamp timestamp);
+	int getPlayerLastZone(Player player);
+	void setPlayerLastZone(Player player, int zoneId);
 }

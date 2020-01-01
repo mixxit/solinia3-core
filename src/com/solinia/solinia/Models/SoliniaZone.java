@@ -38,6 +38,7 @@ public class SoliniaZone {
 	private String requiresAlignment = "NONE";
 	private int requiresRaceId = 0;
 	private int passiveAbilityId = 0;
+	private String music;
 
 	public int getId() {
 		return id;
@@ -82,6 +83,7 @@ public class SoliniaZone {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage("- music: " + ChatColor.GOLD + getMusic() + ChatColor.RESET);
 		sender.sendMessage("- x: " + ChatColor.GOLD + getX() + ChatColor.RESET);
 		sender.sendMessage("- y: " + ChatColor.GOLD + getY() + ChatColor.RESET);
 		sender.sendMessage("- z: " + ChatColor.GOLD + getZ() + ChatColor.RESET);
@@ -217,6 +219,9 @@ public class SoliniaZone {
 			break;
 		case "foragingminskill":
 			setForagingMinSkill(Integer.parseInt(value));
+			break;
+		case "music":
+			setMusic(value);
 			break;
 		case "foragingloottableid":
 			if (Integer.parseInt(value) == 0)
@@ -409,5 +414,11 @@ public class SoliniaZone {
 	}
 	public void setNoUnstuck(boolean noUnstuck) {
 		this.noUnstuck = noUnstuck;
+	}
+	public String getMusic() {
+		return music;
+	}
+	public void setMusic(String music) {
+		this.music = music;
 	}
 }
