@@ -19,8 +19,6 @@ import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Utils.ForgeUtils;
 
-import net.md_5.bungee.api.ChatColor;
-
 public class PlayerMoveCheckTimer  extends BukkitRunnable {
 	@Override
 	public void run() {
@@ -55,11 +53,13 @@ public class PlayerMoveCheckTimer  extends BukkitRunnable {
 				zoneMusic = zone.getMusic();
 			}
 			
+			System.out.println("Checking zone of player " + StateManager.getInstance().getPlayerManager().getPlayerLastZone(player));
 			if (zoneId == StateManager.getInstance().getPlayerManager().getPlayerLastZone(player))
 				return;
 			
 			StateManager.getInstance().getPlayerManager().setPlayerLastZone(player,zoneId);
-			player.sendMessage("You have entered zone: " + zoneName);
+			if (zoneName != null && !zoneName.equals(""))
+				player.sendMessage("You have entered zone: " + zoneName);
 			PacketInZone packet = new PacketInZone();
 			packet.fromData(zoneId,zoneMusic);
 			ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.INZONE,packet.toPacketData(), 0);
