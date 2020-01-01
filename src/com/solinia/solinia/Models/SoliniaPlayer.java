@@ -6,11 +6,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
@@ -552,12 +554,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public SoliniaZone getFirstZone() {
 		try {
+			List<SoliniaZone> potentialZones = new ArrayList<SoliniaZone>();
+			
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (this.getBukkitPlayer().getLocation().distance(
 						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
 								.getSize())
-					return zone;
+					potentialZones.add(zone);
 			}
+			
+			potentialZones = potentialZones.stream().sorted((o1, o2)->Integer.compare(o1.getSize(),o2.getSize())).collect(Collectors.toList());
+			
+			if (potentialZones.size() > 0)
+				return potentialZones.get(0);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
