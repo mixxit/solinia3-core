@@ -1598,17 +1598,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			solplayer.updateMaxHp();
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			
-			// patch
-			
-			if (event.getPlayer().isOp())
-			{
-				event.getPlayer().sendMessage("Your forcenewalt status: " + solplayer.isForceNewAlt());
-				event.getPlayer().sendMessage("Your isnotplayable status: " + !solplayer.isPlayable());
-				event.getPlayer().sendMessage("Your isnotop status: " + !event.getPlayer().isOp());
-				event.getPlayer().sendMessage("Your isnotop status: " + !event.getPlayer().isOp());
-				event.getPlayer().sendMessage("Your haspermission status: " + event.getPlayer().hasPermission("solinia.characterdonochangelocation"));
-				event.getPlayer().sendMessage("Overall force: " + (!solplayer.isPlayable() && !event.getPlayer().isOp() && !event.getPlayer().hasPermission("solinia.characterdonochangelocation")));
-			}
+			// Reset users Zone Packet
+			StateManager.getInstance().getPlayerManager().setPlayerLastZone(event.getPlayer(), -1);
 			
 			if (solplayer.isForceNewAlt() || (!solplayer.isPlayable() && !event.getPlayer().isOp() && !event.getPlayer().hasPermission("solinia.characterdonochangelocation")))
 			{
