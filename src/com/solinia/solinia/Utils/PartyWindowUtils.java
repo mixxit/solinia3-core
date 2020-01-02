@@ -75,7 +75,7 @@ public class PartyWindowUtils {
 		UpdateWindow(player, updatemana,false);
 		
 		try {
-			if (!sendEmptyGroup)
+			if (!sendEmptyGroup || group != null)
 			{
 				for (int i = 0; i < 5; i++) {
 					UUID uuid = null;
