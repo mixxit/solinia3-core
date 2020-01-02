@@ -699,6 +699,14 @@ public class CoreState {
 		return groupinvites.remove(player.getUniqueId());
 	}
 	
+	public void sendGroupPacketToAllPlayers(ISoliniaGroup group)
+	{
+		for(UUID uuid : group.getMembers())
+		{
+			PartyWindowUtils.UpdateGroupWindow(uuid,group, false, false);
+		}
+	}
+	
 	public void removePlayerFromGroup(Player player) {
 		ISoliniaGroup group = getGroupByMember(player.getUniqueId());
 
@@ -712,12 +720,8 @@ public class CoreState {
 		sendGroupMessage(player, "has left the group!");
 		group.getMembers().remove(player.getUniqueId());
 		
-		PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), null, false);
-		
-		for(UUID uuid : group.getMembers())
-		{
-			PartyWindowUtils.UpdateGroupWindow(uuid,group, false);
-		}
+		PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), null, false, true);
+		sendGroupPacketToAllPlayers(group);
 
 		if (group.getOwner().equals(player.getUniqueId())) {
 			if (group.getMembers().size() > 0) {

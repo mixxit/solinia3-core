@@ -70,16 +70,17 @@ public class PartyWindowUtils {
 		}
 	}
 	
-	public static void SendGroupToMember(Player player, ISoliniaGroup group, boolean updatemana)
+	public static void SendGroupToMember(Player player, ISoliniaGroup group, boolean updatemana, boolean sendEmptyGroup)
 	{
 		UpdateWindow(player, updatemana,false);
 		
 		try {
-			if (group != null)
+			if (!sendEmptyGroup)
 			{
 				for (int i = 0; i < 5; i++) {
 					UUID uuid = null;
 					
+					if (group != null)
 					if (group.getMembersWithoutPlayer(player).size() >= (i+1))
 						uuid = group.getMembersWithoutPlayer(player).get(i);
 					
@@ -137,18 +138,18 @@ public class PartyWindowUtils {
 		}
 	}
 
-	public static void UpdateGroupWindow(UUID uuid, ISoliniaGroup group, boolean updatemana) {
+	public static void UpdateGroupWindow(UUID uuid, ISoliniaGroup group, boolean updatemana, boolean sendEmptyGroup) {
 		Player player = Bukkit.getPlayer(uuid);
 		if (player == null)
 			return;
 		
 		try {
-			SendGroupToMember(player, group,updatemana);
+			SendGroupToMember(player, group,updatemana, sendEmptyGroup);
 			// Now send to groupies, remember to change the party members nad Me
 			if (group != null)
 			for (UUID groupmemberuuid : group.getMembers()) {
 				Player sendToPlayer = Bukkit.getPlayer(groupmemberuuid);
-				SendGroupToMember(sendToPlayer, group, updatemana);
+				SendGroupToMember(sendToPlayer, group, updatemana, sendEmptyGroup);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -157,10 +158,10 @@ public class PartyWindowUtils {
 	}
 
 	public static void UpdateGroupWindowForEveryone(UUID uniqueId, ISoliniaGroup group, boolean updatemana) {
-		PartyWindowUtils.UpdateGroupWindow(uniqueId, group, updatemana);
+		PartyWindowUtils.UpdateGroupWindow(uniqueId, group, updatemana, false);
 		if (group != null) {
 			for (UUID uuid : group.getMembers()) {
-				PartyWindowUtils.UpdateGroupWindow(uuid, group,updatemana);
+				PartyWindowUtils.UpdateGroupWindow(uuid, group,updatemana, false);
 			}
 		}
 

@@ -247,7 +247,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (this.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(this.getBukkitPlayer());
 			} else {
-				PartyWindowUtils.UpdateGroupWindow(getBukkitPlayer().getUniqueId(), this.getGroup(), false);
+				PartyWindowUtils.UpdateGroupWindow(getBukkitPlayer().getUniqueId(), this.getGroup(), false, false);
 			}
 		}
 	}
