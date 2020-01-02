@@ -88,6 +88,7 @@ import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonGodRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
@@ -2025,6 +2026,14 @@ public class ConfigurationManager implements IConfigurationManager {
 	public int getMaxLevel()
 	{
 		return this.configSettings.MaxLevel;
+	}
+	
+	@Override
+	public double getMaxExperience()
+	{
+		// get the max level, then get 1 point of experience less than the next level after it
+		// this allows players to have a buffer experience incase they die
+		return PlayerUtils.getExperienceRequirementForLevel((getMaxLevel() + 1))-1;
 	}
 	
 	@Override

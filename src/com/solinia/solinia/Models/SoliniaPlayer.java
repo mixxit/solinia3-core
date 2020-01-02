@@ -489,18 +489,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 		};
 		
-		int maxLevel = 70;
+		double maxExperience = currentexperience;
 		try
 		{
-			maxLevel = StateManager.getInstance().getConfigurationManager().getMaxLevel();
+			maxExperience = StateManager.getInstance().getConfigurationManager().getMaxExperience();
 		} catch (CoreStateInitException e)
 		{
 			
 		}
 
-		if ((currentexperience + experience) > PlayerUtils.getExperienceRequirementForLevel(maxLevel)) {
+		if ((currentexperience + experience) > maxExperience) {
 			// System.out.println("XP: " + experience);
-			currentexperience = PlayerUtils.getExperienceRequirementForLevel(maxLevel);
+			currentexperience = maxExperience;
 		} else {
 			// System.out.println("XP: " + experience);
 			currentexperience = currentexperience + experience;

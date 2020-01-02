@@ -43,9 +43,9 @@ public class CommandClaimXp implements CommandExecutor {
 					solplayer.setPendingXp(0d);
 				}
 			} else {
-				if (solplayer.getLevel() >= StateManager.getInstance().getConfigurationManager().getMaxLevel())
+				if (solplayer.getExperience() >= StateManager.getInstance().getConfigurationManager().getMaxExperience())
 				{
-					sender.sendMessage("Cancelled claiming XP, you are already max level. Did you mean to toggleaa first?");
+					sender.sendMessage("Cancelled claiming XP, you are already max experience. Did you mean to toggleaa first?");
 					return true;
 				}
 				

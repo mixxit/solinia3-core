@@ -603,4 +603,6 @@ public interface IConfigurationManager {
 	ConcurrentHashMap<UUID, Float> getLastSentPlayerManaPercent();
 
 	void setLastSentPlayerManaPercent(ConcurrentHashMap<UUID, Float> lastSentPlayerManaPercent);
+
+	double getMaxExperience();
 }
