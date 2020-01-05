@@ -5593,6 +5593,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 	}
 	
+	@Override
 	public boolean isEffectIgnoredInStacking(int spellEffectId)
 	{
 		// this should match RoF2
@@ -5668,6 +5669,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 	}
 
+	@Override
 	public boolean isStackableDot() {
 		if (this.getDotStackingExempt() > 0 || this.getBuffdurationformula() < 1)
 			return false;

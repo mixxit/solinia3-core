@@ -1074,4 +1074,8 @@ public interface ISoliniaSpell {
 	boolean isCharmSpell();
 
 	boolean tryCast(LivingEntity sourcemob, LivingEntity targetmob, boolean consumeMana, boolean consumeReagents);
+
+	boolean isEffectIgnoredInStacking(int spellEffectId);
+
+	boolean isStackableDot();
 }

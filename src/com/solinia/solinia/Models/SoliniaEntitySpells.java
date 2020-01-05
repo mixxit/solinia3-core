@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
@@ -99,7 +100,7 @@ public class SoliniaEntitySpells {
 		return false;
 	}
 
-	public boolean addSpell(Plugin plugin, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages) {
+	public boolean addSpell(Plugin plugin, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages) {
 		// This spell ID is already active
 		// TODO We should allow overwriting of higher level 
 		if (containsSpellId(soliniaSpell.getId()) && !soliniaSpell.isStackableDot())
@@ -126,8 +127,29 @@ public class SoliniaEntitySpells {
 			return false;
 		}
 		
-		if(!checkStackConflictCanStack(soliniaSpell,sourceEntity.getUniqueId()))
-			return false;
+		List<Integer> removeSpellIds = new ArrayList<Integer>();
+		for(SoliniaActiveSpell activeSpell : getActiveSpells())
+		{
+			// -1 no stack
+			// 0 can stack
+			// 1 replace 
+			int stackableResponse = checkStackConflict(activeSpell.getSpell(),activeSpell.getSourceUuid(),soliniaSpell,getLivingEntity(),sourceEntity);
+			if(stackableResponse == -1)
+				return false;
+			
+			if (stackableResponse == 1)
+			{
+				removeSpellIds.add(activeSpell.getSpellId());
+			}
+		}
+		for(Integer spellId : removeSpellIds)
+		{
+			try {
+				StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(this.getLivingEntityUUID(), spellId, true, true);
+			} catch (CoreStateInitException e) {
+				return false;
+			}
+		}
 		
 		// Resist spells!
 		if (soliniaSpell.isResistable() && !soliniaSpell.isBeneficial()) {
@@ -219,76 +241,178 @@ public class SoliniaEntitySpells {
 		}
 		return true;
 	}
-
-	private boolean checkStackConflictCanStack(SoliniaSpell newSpell, UUID newSpellsOwner) {
-		for(SoliniaActiveSpell activeSpell : getActiveSpells())
+	
+	private int checkStackConflict(ISoliniaSpell activeSpell, UUID activeSpellSourceUuid, ISoliniaSpell newSpell, LivingEntity targetEntity, LivingEntity sourceEntity)
+	{
+		boolean effect_match = true; // Figure out if we're identical in effects on all slots.
+		
+		if (activeSpell.getId() != newSpell.getId())
 		{
-			/*
-			One of these is a bard song and one isn't and they're both beneficial so they should stack.
-			*/
-			if(newSpell.isBardSong() != activeSpell.getSpell().isBardSong())
-				if(!newSpell.isDetrimental() && !activeSpell.getSpell().isDetrimental())
-					//Log(Logs::Detail, Logs::Spells, "%s and %s are beneficial, and one is a bard song, no action needs to be taken", sp1.name, sp2.name);
-					return true;
-			
-			for(ActiveSpellEffect activeEffect : activeSpell.getActiveSpellEffects())
+			for(SpellEffect activeEffect : activeSpell.getBaseSpellEffects())
 			{
 				for(SpellEffect newEffect : newSpell.getBaseSpellEffects())
 				{
-					if (newEffect.getSpellEffectType().equals(SpellEffectType.CHA) && newEffect.getBase() == 0)
-						continue;
-					
-					// if effects are not same SPA (same effect) they stack 
-					if (!newEffect.getSpellEffectType().equals(activeEffect.getSpellEffectType()))
-						continue;
-					
-					// big ol' list according to the client, wasn't that nice!
-					if (newSpell.isEffectIgnoredInStacking(activeEffect.getSpellEffectId()))
-						continue;
-					
-					// negative AC affects are skipped. Ex. Sun's Corona and Glacier Breath should stack
-					// There may be more SPAs we need to add here ....
-					// The client does just check base rather than calculating the affect change value.
-					if ((activeEffect.getSpellEffectType().equals(SpellEffectType.ArmorClass) || activeEffect.getSpellEffectType().equals(SpellEffectType.ACv2)) && newEffect.getBase() < 0)
-						continue;
-					
-					/*
-					If target is a npc and caster1 and caster2 exist
-					If Caster1 isn't the same as Caster2 and the effect is a DoT then ignore it.
-					*/
-					if(this.isPlayer && activeSpell.getOwnerUuid() != null && newSpellsOwner != null && !activeSpell.getOwnerUuid().equals(newSpellsOwner)) {
-						if(activeEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && activeSpell.getSpell().isDetrimental() && newSpell.isDetrimental()) {
-							//Log(Logs::Detail, Logs::Spells, "Both casters exist and are not the same, the effect is a detrimental dot, moving on");
-							continue;
-						}
+					// we don't want this optimization for mana burns
+					if (activeEffect.getSpellEffectId() != newEffect.getSpellEffectId() || activeEffect.getSpellEffectType().equals(SpellEffectType.ManaBurn)) {
+						effect_match = false;
+						break;
 					}
-					
-					//SE_CompleteHeal never stacks or overwrites ever, always block.
-					if (!newEffect.getSpellEffectType().equals(newEffect.getSpellEffectType().equals(SpellEffectType.CompleteHeal)))
-						return false;
-					
-					/*
-					If the spells aren't the same
-					and the effect is a dot we can go ahead and stack it
-					*/
-					if(activeEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && activeSpell.getSpellId() != newSpell.getId() && activeSpell.getSpell().isDetrimental() && newSpell.isDetrimental()) {
-						//Log(Logs::Detail, Logs::Spells, "The spells are not the same and it is a detrimental dot, passing");
-						continue;
-					}
-					
-					
-					// if effects are not in the same position they stack
-					if (newEffect.getSpellEffectNo() != activeEffect.getSpellEffectNo())
-						continue;
-					
-					// Does the SPA allow stacking
-					if (!newEffect.allowsStacking(activeEffect))
-						return false;
 				}
 			}
+		} else if (activeSpell.isEffectInSpell(SpellEffectType.ManaBurn)) {
+			Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " We have a Mana Burn spell that is the same, they won't stack");
+			return -1;
 		}
-			
-		return true;
+		
+		Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " check begins");
+		/*
+		One of these is a bard song and one isn't and they're both beneficial so they should stack.
+		*/
+		if(newSpell.isBardSong() != activeSpell.isBardSong())
+			if(!newSpell.isDetrimental() && !activeSpell.isDetrimental())
+			{
+				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " are beneficial, and one is a bard song, no action needs to be taken");
+				return 0;
+			}
+		
+		boolean values_equal = false;
+		boolean will_overwrite = false;
+		
+		for(SpellEffect activeEffect : activeSpell.getBaseSpellEffects())
+		{
+			for(SpellEffect newEffect : newSpell.getBaseSpellEffects())
+			{
+				if (newEffect.getSpellEffectType().equals(SpellEffectType.CHA) && newEffect.getBase() == 0)
+					continue;
+				
+				// if effects are not same SPA (same effect) they stack 
+				if (!newEffect.getSpellEffectType().equals(activeEffect.getSpellEffectType()))
+				{
+					continue;
+				}
+				
+				// big ol' list according to the client, wasn't that nice!
+				if (newSpell.isEffectIgnoredInStacking(activeEffect.getSpellEffectId()))
+					continue;
+				
+				// negative AC affects are skipped. Ex. Sun's Corona and Glacier Breath should stack
+				// There may be more SPAs we need to add here ....
+				// The client does just check base rather than calculating the affect change value.
+				if ((activeEffect.getSpellEffectType().equals(SpellEffectType.ArmorClass) || activeEffect.getSpellEffectType().equals(SpellEffectType.ACv2)) && newEffect.getBase() < 0)
+					continue;
+				
+				/*
+				If target is a npc and caster1 and caster2 exist
+				If Caster1 isn't the same as Caster2 and the effect is a DoT then ignore it.
+				*/
+				if(this.isPlayer && activeSpellSourceUuid != null && targetEntity.getUniqueId() != null && !activeSpellSourceUuid.equals(targetEntity.getUniqueId())) {
+					if(activeEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && activeSpell.isDetrimental() && newSpell.isDetrimental()) {
+						//Log(Logs::Detail, Logs::Spells, "Both casters exist and are not the same, the effect is a detrimental dot, moving on");
+						continue;
+					}
+				}
+				
+				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " activespell detrimental: " + activeSpell.isDetrimental());;
+				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " activespell detrimental: " + activeSpell.isDetrimental());;
+				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " newspell detrimental: " + newSpell.isDetrimental());;
+				
+				/*
+				If the spells aren't the same
+				and the effect is a dot we can go ahead and stack it
+				*/
+				if(activeEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && activeSpell.getId() != newSpell.getId() && (activeSpell.isDetrimental() || newSpell.isDetrimental())) {
+					Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + "The spells are not the same and it is a detrimental dot, passing");
+					continue;
+				}
+				
+				// if effects are not in the same position they stack
+				if (newEffect.getSpellEffectNo() != activeEffect.getSpellEffectNo())
+					continue;
+				
+				// Does the SPA allow stacking
+				if (!newEffect.allowsStacking(activeEffect))
+				{
+					Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " SPA does not allow stacking");
+					return 0;
+				}
+				
+				int sp1_value = 1;
+				int sp2_value = 0;
+
+				try
+				{
+					if (Bukkit.getEntity(activeSpellSourceUuid) != null && Bukkit.getEntity(activeSpellSourceUuid) instanceof LivingEntity)
+					{
+						ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(activeSpellSourceUuid));
+						int instrument_mod = 0;
+						if (sourceSoliniaLivingEntity != null) {
+							instrument_mod = sourceSoliniaLivingEntity.getInstrumentMod(activeSpell);
+						}
+						
+						sp1_value = activeSpell.calcSpellEffectValue(activeEffect, sourceSoliniaLivingEntity.getBukkitLivingEntity(), getLivingEntity(),
+								sourceSoliniaLivingEntity.getLevel(), activeSpell.getNumhits(), instrument_mod);
+					}
+					if (sourceEntity != null)
+					{
+						ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
+						
+						int instrument_mod = 0;
+						if (sourceSoliniaLivingEntity != null) {
+							instrument_mod = sourceSoliniaLivingEntity.getInstrumentMod(newSpell);
+						}
+						sp2_value = newSpell.calcSpellEffectValue(newEffect, sourceEntity, getLivingEntity(),
+								sourceSoliniaLivingEntity.getLevel(), newSpell.getNumhits(), instrument_mod);
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+				
+				if
+				(
+					activeEffect.getSpellEffectType().equals(SpellEffectType.AttackSpeed)||
+					activeEffect.getSpellEffectType().equals(SpellEffectType.AttackSpeed2)
+				)
+				{
+					sp1_value -= 100;
+					sp2_value -= 100;
+				}
+				
+				if(sp1_value < 0)
+					sp1_value = 0 - sp1_value;
+				if(sp2_value < 0)
+					sp2_value = 0 - sp2_value;
+				
+				if(sp2_value < sp1_value) {
+					Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " one spell was not as good as the other");
+
+					return -1;	// can't stack
+				}
+				
+				if (sp2_value != sp1_value)
+				{
+					Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " buff values were not equal");
+					values_equal = false;
+				}
+				
+				will_overwrite = true;
+			}
+		}
+		
+		//if we get here, then none of the values on the new spell are "worse"
+		//so now we see if this new spell is any better, or if its not related at all
+		if(will_overwrite) {
+			if (values_equal && effect_match && !newSpell.isGroupSpell() && activeSpell.isGroupSpell()) {
+
+				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " appears to be the single target version of spell");
+
+				return -1;
+			}
+			Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " stacking code decided that it should overwrite");
+			return 1;
+		}		
+		Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " were found to stack ok");
+		return 0;
 	}
 
 	@SuppressWarnings("incomplete-switch")

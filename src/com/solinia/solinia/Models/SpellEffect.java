@@ -74,13 +74,13 @@ public class SpellEffect {
 		this.max = max;
 	}
 
-	public boolean allowsStacking(ActiveSpellEffect activeEffect) {
+	public boolean allowsStacking(SpellEffect activeEffect) {
 		if (this.getSpellEffectType().equals(SpellEffectType.Screech))
 		{
-			if (this.getBase() == -1 && activeEffect.getBase() < 1)
-				return true;
+			if (!(this.getBase() == -1 && activeEffect.getBase() < 1))
+				return false;
 		}
 		
-		return false;
+		return true;
 	}
 }
