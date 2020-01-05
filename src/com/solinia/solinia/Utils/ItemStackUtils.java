@@ -48,15 +48,15 @@ public class ItemStackUtils {
             Collection<AttributeModifier> attributes = map.get(GenericAttributes.ATTACK_DAMAGE.getName());
             if(!attributes.isEmpty()) {
                 for(AttributeModifier am: attributes) {
-                    if(am.getUniqueId().toString().equalsIgnoreCase(uuid.toString()) && am.getOperation() == AttributeModifier.Operation.ADDITION) attackDamage += am.getAmount();
+                    if(am.a().toString().equalsIgnoreCase(uuid.toString()) && am.c() == AttributeModifier.Operation.ADDITION) attackDamage += am.d();
                 }
                 double y = 1;
                 for(AttributeModifier am: attributes) {
-                    if(am.getUniqueId().toString().equalsIgnoreCase(uuid.toString()) && am.getOperation() == AttributeModifier.Operation.MULTIPLY_BASE) y += am.getAmount();
+                    if(am.a().toString().equalsIgnoreCase(uuid.toString()) && am.c() == AttributeModifier.Operation.MULTIPLY_BASE) y += am.d();
                 }
                 attackDamage *= y;
                 for(AttributeModifier am: attributes) {
-                    if(am.getUniqueId().toString().equalsIgnoreCase(uuid.toString()) && am.getOperation() == AttributeModifier.Operation.MULTIPLY_TOTAL) attackDamage *= (1 + am.getAmount());
+                    if(am.a().toString().equalsIgnoreCase(uuid.toString()) && am.c() == AttributeModifier.Operation.MULTIPLY_TOTAL) attackDamage *= (1 + am.d());
                 }
             }
         }
