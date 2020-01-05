@@ -314,7 +314,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.isCancelled())
 			return;
 
-		if (!(event.getEntity() instanceof ArmorStand))
+		if (event.getEntity() instanceof ArmorStand)
 			return;
 		
 		if (!(event.getEntity() instanceof LivingEntity))
@@ -675,7 +675,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		if ((event.getEntity() instanceof ArmorStand)) {
+		if (event.getEntity() instanceof ArmorStand) {
 			return;
 		}
 
