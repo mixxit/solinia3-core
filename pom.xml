@@ -41,6 +41,11 @@
 		</plugins>
 	</build>
 	<repositories>
+	
+	<repository>
+			<id>0_dmulloy2-repo</id>
+			<url>https://repo.dmulloy2.net/nexus/repository/snapshots</url>
+		</repository>
 		<repository>
 			<id>0_vault-repo</id>
 			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
