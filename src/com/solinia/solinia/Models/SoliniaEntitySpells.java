@@ -101,7 +101,8 @@ public class SoliniaEntitySpells {
 
 	public boolean addSpell(Plugin plugin, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages) {
 		// This spell ID is already active
-		if (containsSpellId(soliniaSpell.getId()))
+		// TODO We should allow overwriting of higher level 
+		if (containsSpellId(soliniaSpell.getId()) && !soliniaSpell.isStackableDot())
 			return false;
 		
 		if ((slots.size() + 1) > getMaxTotalSlots())
@@ -125,7 +126,7 @@ public class SoliniaEntitySpells {
 			return false;
 		}
 		
-		if(!canStack(soliniaSpell))
+		if(!checkStackConflictCanStack(soliniaSpell,sourceEntity.getUniqueId()))
 			return false;
 		
 		// Resist spells!
@@ -219,26 +220,71 @@ public class SoliniaEntitySpells {
 		return true;
 	}
 
-	private boolean canStack(SoliniaSpell soliniaSpell) {
+	private boolean checkStackConflictCanStack(SoliniaSpell newSpell, UUID newSpellsOwner) {
 		for(SoliniaActiveSpell activeSpell : getActiveSpells())
-		for(ActiveSpellEffect activeEffect : activeSpell.getActiveSpellEffects())
 		{
-			for(SpellEffect newEffect : soliniaSpell.getBaseSpellEffects())
+			/*
+			One of these is a bard song and one isn't and they're both beneficial so they should stack.
+			*/
+			if(newSpell.isBardSong() != activeSpell.getSpell().isBardSong())
+				if(!newSpell.isDetrimental() && !activeSpell.getSpell().isDetrimental())
+					//Log(Logs::Detail, Logs::Spells, "%s and %s are beneficial, and one is a bard song, no action needs to be taken", sp1.name, sp2.name);
+					return true;
+			
+			for(ActiveSpellEffect activeEffect : activeSpell.getActiveSpellEffects())
 			{
-				if (newEffect.getSpellEffectType().equals(SpellEffectType.CHA) && newEffect.getBase() == 0)
-					continue;
-				
-				// if effects are not same SPA (same effect) they stack 
-				if (!newEffect.getSpellEffectType().equals(activeEffect.getSpellEffectType()))
-					continue;
-				
-				// if effects are not in the same position they stack
-				if (newEffect.getSpellEffectNo() != activeEffect.getSpellEffectNo())
-					continue;
-				
-				// Does the SPA allow stacking
-				if (!newEffect.allowsStacking(activeEffect))
-					return false;
+				for(SpellEffect newEffect : newSpell.getBaseSpellEffects())
+				{
+					if (newEffect.getSpellEffectType().equals(SpellEffectType.CHA) && newEffect.getBase() == 0)
+						continue;
+					
+					// if effects are not same SPA (same effect) they stack 
+					if (!newEffect.getSpellEffectType().equals(activeEffect.getSpellEffectType()))
+						continue;
+					
+					// big ol' list according to the client, wasn't that nice!
+					if (newSpell.isEffectIgnoredInStacking(activeEffect.getSpellEffectId()))
+						continue;
+					
+					// negative AC affects are skipped. Ex. Sun's Corona and Glacier Breath should stack
+					// There may be more SPAs we need to add here ....
+					// The client does just check base rather than calculating the affect change value.
+					if ((activeEffect.getSpellEffectType().equals(SpellEffectType.ArmorClass) || activeEffect.getSpellEffectType().equals(SpellEffectType.ACv2)) && newEffect.getBase() < 0)
+						continue;
+					
+					/*
+					If target is a npc and caster1 and caster2 exist
+					If Caster1 isn't the same as Caster2 and the effect is a DoT then ignore it.
+					*/
+					if(this.isPlayer && activeSpell.getOwnerUuid() != null && newSpellsOwner != null && !activeSpell.getOwnerUuid().equals(newSpellsOwner)) {
+						if(activeEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && activeSpell.getSpell().isDetrimental() && newSpell.isDetrimental()) {
+							//Log(Logs::Detail, Logs::Spells, "Both casters exist and are not the same, the effect is a detrimental dot, moving on");
+							continue;
+						}
+					}
+					
+					//SE_CompleteHeal never stacks or overwrites ever, always block.
+					if (!newEffect.getSpellEffectType().equals(newEffect.getSpellEffectType().equals(SpellEffectType.CompleteHeal)))
+						return false;
+					
+					/*
+					If the spells aren't the same
+					and the effect is a dot we can go ahead and stack it
+					*/
+					if(activeEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && activeSpell.getSpellId() != newSpell.getId() && activeSpell.getSpell().isDetrimental() && newSpell.isDetrimental()) {
+						//Log(Logs::Detail, Logs::Spells, "The spells are not the same and it is a detrimental dot, passing");
+						continue;
+					}
+					
+					
+					// if effects are not in the same position they stack
+					if (newEffect.getSpellEffectNo() != activeEffect.getSpellEffectNo())
+						continue;
+					
+					// Does the SPA allow stacking
+					if (!newEffect.allowsStacking(activeEffect))
+						return false;
+				}
 			}
 		}
 			

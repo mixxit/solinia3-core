@@ -5592,4 +5592,85 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return false;
 		}
 	}
+	
+	public boolean isEffectIgnoredInStacking(int spellEffectId)
+	{
+		// this should match RoF2
+		switch (Utils.getSpellEffectType(spellEffectId)) {
+		case SeeInvis:
+		case DiseaseCounter:
+		case PoisonCounter:
+		case Levitate:
+		case InfraVision:
+		case UltraVision:
+		case CurrentHPOnce:
+		case CurseCounter:
+		case ImprovedDamage:
+		case ImprovedHeal:
+		case SpellResistReduction:
+		case IncreaseSpellHaste:
+		case IncreaseSpellDuration:
+		case IncreaseRange:
+		case SpellHateMod:
+		case ReduceReagentCost:
+		case ReduceManaCost:
+		case FcStunTimeMod:
+		case LimitMaxLevel:
+		case LimitResist:
+		case LimitTarget:
+		case LimitEffect:
+		case LimitSpellType:
+		case LimitSpell:
+		case LimitMinDur:
+		case LimitInstant:
+		case LimitMinLevel:
+		case LimitCastTimeMin:
+		case LimitCastTimeMax:
+		case StackingCommand_Block:
+		case StackingCommand_Overwrite:
+		case PetPowerIncrease:
+		case SkillDamageAmount:
+		case ChannelChanceSpells:
+		case Blank:
+		case FcDamageAmt:
+		case SpellDurationIncByTic:
+		case FcSpellVulnerability:
+		case FcDamageAmtIncoming:
+		case FcDamagePctCrit:
+		case FcDamageAmtCrit:
+		case ReduceReuseTimer:
+		case LimitCombatSkills:
+		case BlockNextSpellFocus:
+		case SpellTrigger:
+		case LimitManaMin:
+		case CorruptionCounter:
+		case ApplyEffect:
+		case NegateSpellEffect:
+		case LimitSpellGroup:
+		case LimitManaMax:
+		case FcHealAmt:
+		case FcHealPctIncoming:
+		case FcHealAmtIncoming:
+		case FcHealPctCritIncoming:
+		case FcHealAmtCrit:
+		case LimitClass:
+		case LimitRace:
+		case FcBaseEffects:
+		case SkillDamageAmount2:
+		case FcLimitUse:
+		case FcIncreaseNumHits:
+		case LimitUseMin:
+		case LimitUseType:
+		case GravityEffect:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean isStackableDot() {
+		if (this.getDotStackingExempt() > 0 || this.getBuffdurationformula() < 1)
+			return false;
+		return isEffectInSpell(SpellEffectType.CurrentHP) || isEffectInSpell(SpellEffectType.GravityEffect);
+	}
 }
