@@ -41,14 +41,17 @@
 		</plugins>
 	</build>
 	<repositories>
-
-		<repository>
-			<id>0_dmulloy2-repo</id>
-			<url>https://repo.dmulloy2.net/nexus/repository/snapshots</url>
-		</repository>
 		<repository>
 			<id>dmulloy2-repo</id>
-			<url>https://repo.dmulloy2.net/nexus/repository/public/</url>
+			<url>http://repo.dmulloy2.net/nexus/repository/public/</url>
+		</repository>
+		<repository>
+			<id>md_5-releases</id>
+			<url>https://repo.md-5.net/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
 			<id>0_vault-repo</id>
@@ -61,30 +64,6 @@
 		<repository>
 			<id>3_dmulloy2-repo</id>
 			<url>http://repo.dmulloy2.net/nexus/repository/public/</url>
-		</repository>
-		<repository>
-			<id>md_5-releases</id>
-			<url>https://repo.md-5.net/content/repositories/releases/</url>
-		</repository>
-		<repository>
-			<id>md_5-snapshots</id>
-			<url>https://repo.md-5.net/content/repositories/snapshots/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
 		</repository>
 		<repository>
 			<id>elmakers-repo</id>
@@ -160,11 +139,6 @@
 			<version>1.14.4-R0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>LibsDisguises</groupId>
-			<artifactId>LibsDisguises</artifactId>
-			<version>9.8.5</version>
-		</dependency>
-		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
 			<version>1.14.4-R0.1-SNAPSHOT</version>
@@ -177,7 +151,12 @@
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
-			<version>4.5.0</version>
+			<version>4.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>LibsDisguises</groupId>
+			<artifactId>LibsDisguises</artifactId>
+			<version>9.8.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jsoup</groupId>
