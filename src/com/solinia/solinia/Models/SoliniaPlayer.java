@@ -967,6 +967,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		int currentskill = 0;
 		if (skill != null) {
 			currentskill = skill.getValue();
+			
+			// Fix any higher than it should be
+			if (currentskill > this.getSkillCap(skillname))
+			{
+				setSkill(skillname, this.getSkillCap(skillname));
+				currentskill = skill.getValue();
+			}
 		}
 
 		int skillcap = getSkillCap(skillname);

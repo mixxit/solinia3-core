@@ -505,31 +505,73 @@ public class EntityUtils {
 		}
 
 		if (skillname.toUpperCase().equals("ALCHEMY")) {
-			return 255;
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("SHAMAN"))) {
+					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
+					return cap;
+				} else {
+					return 0;
+				}
 		}
 
 		if (skillname.equals("JEWELRYMAKING")) {
-			return 255;
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("ENCHANTER"))) {
+					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
+					return cap;
+				} else {
+					return 0;
+				}
 		}
 
 		if (skillname.toUpperCase().equals("TAILORING")) {
-			return 255;
+			int cap = (int) ((5 * level) + 5);
+			if (cap > Utils.getMaxSkillValue())
+				return Utils.getMaxSkillValue();
 		}
 
 		if (skillname.toUpperCase().equals("FLETCHING")) {
-			return 255;
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("RANGER"))) {
+					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
+					return cap;
+				} else {
+					return 0;
+				}
 		}
 
 		if (skillname.equals("BLACKSMITHING")) {
-			return 255;
+			int cap = (int) ((5 * level) + 5);
+			if (cap > Utils.getMaxSkillValue())
+				return Utils.getMaxSkillValue();
 		}
 
 		if (skillname.toUpperCase().equals("TINKERING")) {
-			return 255;
+			int cap = (int) ((5 * level) + 5);
+			if (cap > Utils.getMaxSkillValue())
+				return Utils.getMaxSkillValue();
 		}
 
 		if (skillname.toUpperCase().equals("MAKEPOISON")) {
-			return 255;
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("ROGUE"))) {
+					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+
+					return cap;
+				} else {
+					return 0;
+				}
 		}
 
 		if (skillname.toUpperCase().equals("SPECIALISEEVOCATION")) {
