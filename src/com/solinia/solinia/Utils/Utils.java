@@ -5739,4 +5739,8 @@ public class Utils {
 			return coremessage;
 		}
 	}
+
+	public static boolean isLocationInZone(Location location, SoliniaZone zone) {
+		return (location.distance(new Location(location.getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone.getSize());
+	}
 }

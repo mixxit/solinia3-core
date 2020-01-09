@@ -515,7 +515,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (this.getBukkitPlayer().getLocation().distance(
-						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
+						new Location(Bukkit.getWorld(zone.getWorld()), zone.getX(), zone.getY(), zone.getZ())) < zone
 								.getSize())
 					zones.add(zone);
 			}
@@ -529,8 +529,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean isInHotzone() {
 		for (SoliniaZone zone : StateManager.getInstance().getCurrentHotzones()) {
+			if (!this.getBukkitPlayer().getWorld().getName().equals(zone.getWorld()))
+				continue;
+			
 			if (this.getBukkitPlayer().getLocation().distance(
-					new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
+					new Location(Bukkit.getWorld(zone.getWorld()), zone.getX(), zone.getY(), zone.getZ())) < zone
 							.getSize())
 				return true;
 		}
@@ -543,12 +546,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (zone == null)
 			return false;
 
-		if (this.getBukkitPlayer().getLocation()
-				.distance(new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
-						.getSize())
-			return true;
-
-		return false;
+		return Utils.isLocationInZone(this.getBukkitPlayer().getLocation(),zone);
 	}
 
 	@Override
@@ -558,7 +556,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
 				if (this.getBukkitPlayer().getLocation().distance(
-						new Location(this.getBukkitPlayer().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
+						new Location(Bukkit.getWorld(zone.getWorld()), zone.getX(), zone.getY(), zone.getZ())) < zone
 								.getSize())
 					potentialZones.add(zone);
 			}

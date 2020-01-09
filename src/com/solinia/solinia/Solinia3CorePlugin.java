@@ -86,8 +86,8 @@ import org.json.JSONException;
 import de.slikey.effectlib.EffectManager;
 import net.milkbowl.vault.economy.Economy;
 import org.dynmap.DynmapAPI;
-public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListener  {
-
+public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListener  
+{
 	private CastingTimer castingTimer;
 	private StateCommitTimer commitTimer;
 	private PlayerTickTimer playerTickTimer;

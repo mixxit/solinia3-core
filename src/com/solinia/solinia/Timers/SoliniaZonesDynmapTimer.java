@@ -12,10 +12,12 @@ import org.bukkit.Color;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.Marker;
+import org.dynmap.markers.MarkerIcon;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaZone;
 
@@ -213,6 +215,15 @@ public class SoliniaZonesDynmapTimer extends BukkitRunnable {
         	marker.setFillStyle(fillOpacity, fillColor);
         	marker.setLineStyle(3, 1.0, fillColor);
         }
+        
+        for(ISoliniaSpawnGroup spawnGroup : zone.getSpawnGroups())
+        {
+        	MarkerIcon icon = StateManager.getInstance().getDynmap().getMarkerAPI().getMarkerIcon("skull");
+        	Marker spawnGroupMarker = StateManager.getInstance().getSoliniaZonesMarkerSet().createMarker(name, name, zone.getWorld(), zone.getX(), zone.getY(), zone.getZ(), icon,true);
+        	
+        	newmark.put("SPAWNGROUP_"+spawnGroup.getId(), spawnGroupMarker);
+        }
+        
         newmap.put(markerId, marker);
 	}
 }

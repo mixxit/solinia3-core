@@ -1,11 +1,17 @@
 package com.solinia.solinia.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.SpellTargetType;
@@ -39,6 +45,7 @@ public class SoliniaZone {
 	private int requiresRaceId = 0;
 	private int passiveAbilityId = 0;
 	private String music;
+	private String world = "world";
 
 	public int getId() {
 		return id;
@@ -84,6 +91,7 @@ public class SoliniaZone {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- music: " + ChatColor.GOLD + getMusic() + ChatColor.RESET);
+		sender.sendMessage("- world: " + ChatColor.GOLD + getWorld() + ChatColor.RESET);
 		sender.sendMessage("- x: " + ChatColor.GOLD + getX() + ChatColor.RESET);
 		sender.sendMessage("- y: " + ChatColor.GOLD + getY() + ChatColor.RESET);
 		sender.sendMessage("- z: " + ChatColor.GOLD + getZ() + ChatColor.RESET);
@@ -174,6 +182,9 @@ public class SoliniaZone {
 				throw new InvalidZoneSettingException("State not initialised");
 			}
 			setRequiresRaceId(raceid);
+			break;
+		case "world":
+			setWorld(value);
 			break;
 		case "x":
 			setX(Integer.parseInt(value));
@@ -420,5 +431,29 @@ public class SoliniaZone {
 	}
 	public void setMusic(String music) {
 		this.music = music;
+	}
+	public List<ISoliniaSpawnGroup> getSpawnGroups() {
+		List<ISoliniaSpawnGroup> spawnGroups = new ArrayList<ISoliniaSpawnGroup>();
+		try
+		{
+			for(ISoliniaSpawnGroup spawnGroup : StateManager.getInstance().getConfigurationManager().getSpawnGroups())
+			{
+				if (!(Utils.isLocationInZone(new Location(Bukkit.getWorld(this.getWorld()), this.getX(), this.getY(), this.getZ()), this)))
+					continue;
+				
+				spawnGroups.add(spawnGroup);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return spawnGroups;
+	}
+	public String getWorld() {
+		return world;
+	}
+	
+	public void setWorld(String world) {
+		this.world = world;
 	}
 }

@@ -96,6 +96,9 @@ public class SoliniaChunk {
 		
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
+				if (!zone.getWorld().equals(world.getName()))
+					continue;
+				
 				if (getFirstBlockLocation(world).distance(
 						new Location(world, zone.getX(), 0, zone.getZ())) < zone.getSize())
 					return true;
@@ -121,8 +124,11 @@ public class SoliniaChunk {
 		List<SoliniaZone> zones = new ArrayList<SoliniaZone>();
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
+				if (!zone.getWorld().equals(world.getName()))
+					continue;
+				
 				if (getFirstBlockLocation(world).distance(
-						new Location(world, zone.getX(), 0, zone.getZ())) < zone.getSize())
+						new Location(Bukkit.getWorld(zone.getWorld()), zone.getX(), 0, zone.getZ())) < zone.getSize())
 					zones.add(zone);
 			}
 		} catch (CoreStateInitException e) {

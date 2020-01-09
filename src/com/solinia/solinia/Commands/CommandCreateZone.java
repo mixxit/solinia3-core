@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,11 +33,13 @@ public class CommandCreateZone implements CommandExecutor {
 		// SuccorY
 		// SuccorZ
 		
-		if (args.length < 7)
+		if (args.length < 8)
 		{
-			sender.sendMessage("Insufficient arguments: namenospaces x y z succorx succory succorz");
+			sender.sendMessage("Insufficient arguments: namenospaces x y z succorx succory succorz worldname");
 			return false;
 		}
+		
+		String world = Bukkit.getWorld(args[7]).getName();
 		
 		String zonename = args[0].toUpperCase();
 		int x = Integer.parseInt(args[1]);
@@ -54,7 +57,7 @@ public class CommandCreateZone implements CommandExecutor {
 		}
 		
 		try {
-			SoliniaZone zone = SoliniaZoneFactory.Create(zonename,x, y, z, succorx, succory, succorz);
+			SoliniaZone zone = SoliniaZoneFactory.Create(zonename,world, x, y, z, succorx, succory, succorz);
 			
 			sender.sendMessage("Created Zone: " + zone.getId());
 		} catch (CoreStateInitException | SoliniaZoneCreationException e) {

@@ -24,6 +24,9 @@ public class Solinia3CoreBlockListener implements Listener {
 	public void onEntityBlockFormEvent(EntityBlockFormEvent event) {
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
+				if (!zone.getWorld().equals(event.getEntity().getLocation().getWorld().getName()))
+					continue;
+					
 				if (event.getEntity().getLocation().distance(
 						new Location(event.getEntity().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
 								.getSize())
