@@ -35,6 +35,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ConfigSettings;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
+import com.solinia.solinia.Races.CustomEntityType;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
 import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
@@ -201,7 +202,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		StateManager.getInstance().setSoliniaZonesMarkerSet(this.soliniaZonesSet);
 		StateManager.getInstance().setRegionExtentsMarkerSet(this.regionExtentsSet);
 		StateManager.getInstance().setTowny(this.townyApi);
-		RegisterEntities();
+		registerEntites();
 		
 		if (!getServer().getPluginManager().isPluginEnabled(this)) return;
 		System.out.println("[Solinia3Core] Plugin Enabled");
@@ -232,20 +233,12 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		}
 		*/
 	}
-	
-	private void RegisterEntities() {
-		//NMSUtils.registerEntity("SoliniaMob", NMSUtils.Type.SKELETON, MythicEntitySoliniaMob.class, true);
-		
-		
-	}
-	
-	private void UnregisterEntities() {
-		
-	}
 
 	@Override
 	public void onDisable() {
 		try {
+	        unregisterEntities(); // CustomEntityType.unregisterEntities();
+			
 			StateManager.getInstance().getEntityManager().removeAllPets();
 			StateManager.getInstance().Commit();
 			
@@ -269,10 +262,26 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		
 		effectManager.dispose();
 		
-		UnregisterEntities();
+		unregisterEntities();
 		
 		System.out.println("[Solinia3Core] Plugin Disabled");
 	}
+	
+	private void registerEntites() {
+        try {
+        	CustomEntityType.registerEntities();
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+        }
+    }
+
+    private void unregisterEntities() {
+        try {
+            CustomEntityType.unregisterEntities();
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+        }
+    }
 
 	private boolean setupEconomy() {
 		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
