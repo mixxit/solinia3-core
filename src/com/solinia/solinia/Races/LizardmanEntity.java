@@ -18,7 +18,7 @@ public class LizardmanEntity extends EntityVillager
 {
     public LizardmanEntity(EntityTypes<? extends EntityVillager> entitytypes, World w) {
         super(entitytypes, w);
-        clearPathfinders();
+        //clearPathfinders();
 
         //this.goalSelector.a(10, new PathfinderGoalFollowPlayer(this, 1.0D, 2.0F, 2.0F));
     }
