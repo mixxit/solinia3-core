@@ -77,6 +77,7 @@ public class CoreState {
 	private MarkerSet soliniaZonesMarkerSet;
 	private Towny towny;
 	public String renderTownsOnDynmap = "";
+	public boolean showSpawns = false;
 	
 	public String getRequiredModVersion()
 	{
@@ -969,5 +970,9 @@ public class CoreState {
 	public Towny getTowny()
 	{
 		return this.towny;
+	}
+
+	public void toggleShowSpawns() {
+		this.showSpawns  = !this.showSpawns;
 	}
 }

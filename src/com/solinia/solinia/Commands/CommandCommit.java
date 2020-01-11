@@ -46,19 +46,6 @@ public class CommandCommit implements CommandExecutor {
 				Utils.RecommitSpawnGroups();
 				
 			}
-			
-			if (args.length > 0 && args[0].equals("showtown")) {
-				if (args.length > 1)
-					StateManager.getInstance().renderTownsOnDynmap = args[1];
-				else
-					StateManager.getInstance().renderTownsOnDynmap = "";
-			}
-				
-			
-			if (args[0].equals("patch")) {
-				System.out.println("Patching");
-				Utils.Patcher();
-			}
 		}
 
 		sender.sendMessage("* Completed State Commit");

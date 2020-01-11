@@ -216,6 +216,7 @@ public class SoliniaZonesDynmapTimer extends BukkitRunnable {
         	marker.setLineStyle(3, 1.0, fillColor);
         }
         
+        if (StateManager.getInstance().showSpawns == true)
         for(ISoliniaSpawnGroup spawnGroup : zone.getSpawnGroups())
         {
         	MarkerIcon icon = StateManager.getInstance().getDynmap().getMarkerAPI().getMarkerIcon("skull");

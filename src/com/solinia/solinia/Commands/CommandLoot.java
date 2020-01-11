@@ -21,6 +21,13 @@ public class CommandLoot implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
 			return false;
 		
+		if (!sender.isOp() && !sender.hasPermission("solinia.createlootdrop"))
+		{
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
+		}
+		
+		
 		if (args.length > 0)
 		{
 			String search = "";
