@@ -28,21 +28,22 @@ public class CommandSolinia implements CommandExecutor {
 				(
 						sender.isOp() || sender instanceof ConsoleCommandSender 
 				)) {
-			if (args[0].equals("provider")) {
-				Utils.RecommitNpcs();
-				Utils.RecommitSpawnGroups();
-				
-			}
-			
 			if (args.length > 0 && args[0].equals("showtown")) {
 				if (args.length > 1)
+				{
 					StateManager.getInstance().renderTownsOnDynmap = args[1];
+					sender.sendMessage("Show town on dynmap set to: " + StateManager.getInstance().renderTownsOnDynmap);
+				}
 				else
+				{
 					StateManager.getInstance().renderTownsOnDynmap = "";
+				sender.sendMessage("Show town on dynmap set to off");
+				}
 			}
 			
 			if (args.length > 0 && args[0].equals("showspawns")) {
 				StateManager.getInstance().toggleShowSpawns();
+				sender.sendMessage("Show spawns set to: " + StateManager.getInstance().showSpawns);
 			}
 				
 			

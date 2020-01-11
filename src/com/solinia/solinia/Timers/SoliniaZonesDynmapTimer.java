@@ -219,10 +219,12 @@ public class SoliniaZonesDynmapTimer extends BukkitRunnable {
         if (StateManager.getInstance().showSpawns == true)
         for(ISoliniaSpawnGroup spawnGroup : zone.getSpawnGroups())
         {
+        	String sgMarkerId = "SPAWNGROUP_"+spawnGroup.getId();
+        	Marker sgmarker = StateManager.getInstance().soliniazonesresmark.remove(sgMarkerId);
         	MarkerIcon icon = StateManager.getInstance().getDynmap().getMarkerAPI().getMarkerIcon("skull");
-        	Marker spawnGroupMarker = StateManager.getInstance().getSoliniaZonesMarkerSet().createMarker("SPAWNGROUP_"+spawnGroup.getId(), spawnGroup.getName(), spawnGroup.getWorld(), spawnGroup.getX(), spawnGroup.getY(), spawnGroup.getZ(), icon,true);
+        	sgmarker = StateManager.getInstance().getSoliniaZonesMarkerSet().createMarker(sgMarkerId, spawnGroup.getName(), spawnGroup.getWorld(), spawnGroup.getX(), spawnGroup.getY(), spawnGroup.getZ(), icon,true);
         	
-        	newmark.put("SPAWNGROUP_"+spawnGroup.getId(), spawnGroupMarker);
+        	newmark.put("SPAWNGROUP_"+spawnGroup.getId(), sgmarker);
         }
         
         newmap.put(markerId, marker);

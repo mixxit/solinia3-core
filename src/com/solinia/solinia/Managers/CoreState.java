@@ -973,6 +973,6 @@ public class CoreState {
 	}
 
 	public void toggleShowSpawns() {
-		this.showSpawns  = !this.showSpawns;
+		this.showSpawns = !this.showSpawns;
 	}
 }
