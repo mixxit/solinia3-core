@@ -25,11 +25,11 @@ public class LizardmanEntity extends EntityVillager
     
     public LizardmanEntity(World w, Profession profession) {
         super(EntityTypes.VILLAGER, w);
-        clearPathfinders();
+        //clearPathfinders();
         this.setVillagerData(this.getVillagerData().withType(VillagerType.c).withProfession(VillagerUtils.fromBukkitProfession(profession)));
         //this.goalSelector.a(10, new PathfinderGoalFollowPlayer(this, 1.0D, 2.0F, 2.0F));
     }
-    
+    /*
     private void clearPathfinders() {
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
@@ -43,5 +43,5 @@ public class LizardmanEntity extends EntityVillager
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-    }
+    }*/
 }
