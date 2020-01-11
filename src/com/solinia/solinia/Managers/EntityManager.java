@@ -1666,7 +1666,7 @@ public class EntityManager implements IEntityManager {
 		if (Utils.getSpellEffectIndex(spellAffectIndex) == null)
 			return null;
 		
-		System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
+		//System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
 		switch(Utils.getSpellEffectIndex(spellAffectIndex))
 		{
 			case AC_Buff:
@@ -1709,7 +1709,7 @@ public class EntityManager implements IEntityManager {
 		if (Utils.getSpellEffectIndex(spellAffectIndex) == null)
 			return null;
 
-		System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
+		//System.out.println("Received spellAffectIndex: " + spellAffectIndex + Utils.getSpellEffectIndex(spellAffectIndex).name());
 		switch(Utils.getSpellEffectIndex(spellAffectIndex))
 		{
 			case AC_Buff:
