@@ -555,7 +555,7 @@ commands:
     aliases: []
   createzone:
     description: Creates a new zone
-    usage: /createzone zonenamenospaces x y z succorx succory succorz
+    usage: /createzone zonenamenospaces x y z succorx succory succorz worldname
     aliases: []
   editzone:
     description: Edits a zone

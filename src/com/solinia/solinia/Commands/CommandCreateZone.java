@@ -32,6 +32,7 @@ public class CommandCreateZone implements CommandExecutor {
 		// SuccorX
 		// SuccorY
 		// SuccorZ
+		// worldname
 		
 		if (args.length < 8)
 		{
