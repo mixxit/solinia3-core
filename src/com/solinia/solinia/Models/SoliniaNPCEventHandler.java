@@ -331,7 +331,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		case "requiresquestflag":
 			// now we need to check if its an item
 			if (getInteractiontype().equals(InteractionType.ITEM)) {
-				int itemId = Integer.parseInt(value);
+				int itemId = Integer.parseInt(this.getTriggerdata());
 				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 					if (item == null)
