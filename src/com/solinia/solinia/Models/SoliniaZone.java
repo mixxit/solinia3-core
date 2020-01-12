@@ -513,15 +513,21 @@ public class SoliniaZone {
 		return new Location(Bukkit.getWorld(world), Double.valueOf(this.getBottomLeftCornerX()), this.getBottomLeftCornerY(), this.getBottomLeftCornerZ()).distance(new Location(Bukkit.getWorld(world), this.getTopRightCornerX(), this.getTopRightCornerY(), this.getTopRightCornerZ()));
 	}
 	
-	public boolean isLocationInside(Location location) {
-		if (
-				location.getBlockX() >= this.getBottomLeftCornerX() && location.getBlockX() <= this.getTopRightCornerX() &&  
-						location.getBlockY() >= this.getBottomLeftCornerY() && location.getBlockY() <= this.getTopRightCornerY() &&
-								location.getBlockZ() >= this.getBottomLeftCornerZ() && location.getBlockZ() <= this.getTopRightCornerZ()
-			) 
-			    return true; 
+	public boolean isLocationInside(Location loc) {
+		if (!loc.getWorld().getName().toUpperCase().equals(this.getWorld().toUpperCase()))
+			return false;
+
+		int minX = Math.min(this.getBottomLeftCornerX(), this.getTopRightCornerX());
+		int minY = Math.min(this.getBottomLeftCornerY(), this.getTopRightCornerY());
+		int minZ = Math.min(this.getBottomLeftCornerZ(), this.getTopRightCornerZ());
 		
-		return false; 
+		int maxX = Math.max(this.getBottomLeftCornerX(), this.getTopRightCornerX());
+		int maxY = Math.max(this.getBottomLeftCornerY(), this.getTopRightCornerY());
+		int maxZ = Math.max(this.getBottomLeftCornerZ(), this.getTopRightCornerZ());
+		
+		return loc.getX() > minX && loc.getX() < maxX
+                && loc.getY() > minY && loc.getY() < maxY
+                && loc.getZ() > minZ && loc.getZ() < maxZ;
 	}
 	
 }
