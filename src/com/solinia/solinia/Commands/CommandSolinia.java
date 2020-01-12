@@ -54,7 +54,7 @@ public class CommandSolinia implements CommandExecutor {
 					for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
 					{
 						if (zone.isLocationInside(((Player)sender).getLocation()))
-							sender.sendMessage(zone.getName());
+							sender.sendMessage(zone.getName() + " size: " + zone.getCornerDistances());
 					}
 				} catch (CoreStateInitException e)
 				{
