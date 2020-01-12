@@ -106,11 +106,11 @@ public class CommandCharacter implements CommandExecutor {
 				}
 	
 				player.sendMessage("Note, new characters may not be visible for up to 15 minutes");
-				player.sendMessage("Use '/character new' to create a new character");
+				player.sendMessage("Use '/opencharcreation' to create a new character");
 			} else {
 				switch(args[0].toUpperCase())
 				{
-					case "NEW":
+					/*case "NEW":
 						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
 						{
 							player.sendMessage("You can only change your character every 10 minutes");
@@ -136,7 +136,7 @@ public class CommandCharacter implements CommandExecutor {
 						} else {
 							player.sendMessage("Problem creating your new character");
 						}
-						break;
+						break;*/
 					case "LOAD":
 						if (args.length < 2)
 						{
