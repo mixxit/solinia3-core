@@ -46,6 +46,13 @@ public class SoliniaZone {
 	private int passiveAbilityId = 0;
 	private String music;
 	private String world = "world";
+	private int bottomLeftCornerX = 0;
+	private int bottomLeftCornerY = 0;
+	private int bottomLeftCornerZ = 0;
+	private int topRightCornerX = 0;
+	private int topRightCornerY = 0;
+	private int topRightCornerZ = 0;
+	
 
 	public int getId() {
 		return id;
@@ -455,5 +462,49 @@ public class SoliniaZone {
 	
 	public void setWorld(String world) {
 		this.world = world;
+	}
+
+	public int getBottomLeftCornerX() {
+		return bottomLeftCornerX;
+	}
+	
+	public void setBottomLeftCornerX(int bottomLeftCornerX) {
+		this.bottomLeftCornerX = bottomLeftCornerX;
+	}
+	
+	public int getBottomLeftCornerY() {
+		return bottomLeftCornerY;
+	}
+	
+	public void setBottomLeftCornerY(int bottomLeftCornerY) {
+		this.bottomLeftCornerY = bottomLeftCornerY;
+	}
+	
+	public int getTopRightCornerX() {
+		return topRightCornerX;
+	}
+	
+	public void setTopRightCornerX(int topRightCornerX) {
+		this.topRightCornerX = topRightCornerX;
+	}
+	
+	public int getTopRightCornerY() {
+		return topRightCornerY;
+	}
+	
+	public void setTopRightCornerY(int topRightCornerY) {
+		this.topRightCornerY = topRightCornerY;
+	}
+	public int getBottomLeftCornerZ() {
+		return bottomLeftCornerZ;
+	}
+	public void setBottomLeftCornerZ(int bottomLeftCornerZ) {
+		this.bottomLeftCornerZ = bottomLeftCornerZ;
+	}
+	public int getTopRightCornerZ() {
+		return topRightCornerZ;
+	}
+	public void setTopRightCornerZ(int topRightCornerZ) {
+		this.topRightCornerZ = topRightCornerZ;
 	}
 }
