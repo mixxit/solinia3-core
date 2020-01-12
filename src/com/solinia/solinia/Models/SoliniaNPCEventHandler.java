@@ -215,13 +215,16 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			if (value.equals(""))
 				throw new InvalidNPCEventSettingException("Faction ID is empty");
 
-			try {
-				ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
-						.getFaction(Integer.parseInt(value));
-				if (faction == null)
-					throw new InvalidNPCEventSettingException("Invalid faction");
-			} catch (CoreStateInitException e) {
-				throw new InvalidNPCEventSettingException("Faction data not available");
+			if (!value.equals("0"))
+			{
+				try {
+					ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
+							.getFaction(Integer.parseInt(value));
+					if (faction == null)
+						throw new InvalidNPCEventSettingException("Invalid faction");
+				} catch (CoreStateInitException e) {
+					throw new InvalidNPCEventSettingException("Faction data not available");
+				}
 			}
 
 			setAwardsFactionId(Integer.parseInt(value));
@@ -531,13 +534,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					player.addPlayerQuest(getAwardsQuest());
 			}
 
-			if (getAwardsFactionId() > 0) {
-				if (getAwardsFactionValue() > 0)
-					player.increaseFactionStanding(getAwardsFactionId(), getAwardsFactionValue());
-				if (getAwardsFactionValue() < 0)
-					player.decreaseFactionStanding(getAwardsFactionId(), -1 * getAwardsFactionValue());
-			}
-
 			if (getAwardsQuestFlag() != null && !getAwardsQuestFlag().equals("")) {
 				boolean foundQuestFlag = false;
 				for (String playerQuestFlag : player.getPlayerQuestFlags()) {
@@ -581,10 +577,19 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					}
 
 					// All xp awards must be accompanied with a quest flag else they will repeat the
-					// item return over and over
+					// xp over and over
 					if (getAwardsExperience() > 0) {
 						System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
 						player.increasePlayerExperience(getAwardsExperience(), false, true);
+					}
+					
+					// All factions awards must be accompanied with a quest flag else they will repeat the
+					// faction over and over
+					if (getAwardsFactionId() > 0) {
+						if (getAwardsFactionValue() > 0)
+							player.increaseFactionStanding(getAwardsFactionId(), getAwardsFactionValue());
+						if (getAwardsFactionValue() < 0)
+							player.decreaseFactionStanding(getAwardsFactionId(), -1 * getAwardsFactionValue());
 					}
 
 					if (this.isAwardsTitle() == true) {
