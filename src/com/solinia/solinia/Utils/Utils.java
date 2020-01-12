@@ -125,6 +125,7 @@ public class Utils {
 	public static final double LocalWhisperRange = 4;
 	public static final double LocalSayRange = 15;
 	public static final double LocalShoutRange = 40;
+	public static final double MaxRangeForExperience = 100;
 
 	public static void ConsoleLogTimingDifference(LocalDateTime datetime)
 	{

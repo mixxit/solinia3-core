@@ -813,7 +813,7 @@ public class Solinia3CoreEntityListener implements Listener {
 								continue;
 							}
 
-							if (tgtplayer.getLocation().distance(player.getBukkitPlayer().getLocation()) <= 100) {
+							if (tgtplayer.getLocation().distance(player.getBukkitPlayer().getLocation()) <= Utils.MaxRangeForExperience) {
 								if (livingEntity.getLevel() >= (Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()))) {
 									tgtsolplayer.increasePlayerExperience(experience, true, true);
 
