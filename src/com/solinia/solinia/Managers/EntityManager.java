@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -27,6 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
@@ -647,6 +649,9 @@ public class EntityManager implements IEntityManager {
 			try
 			{
 				Entity ent = Bukkit.getEntity(invalidEntity);
+				if (ent instanceof Animals || ent instanceof Vehicle)
+					continue;
+				
 				if (ent != null)
 					ent.remove();
 			} catch (Exception e)

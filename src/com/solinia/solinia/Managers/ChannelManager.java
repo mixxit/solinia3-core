@@ -31,7 +31,7 @@ public class ChannelManager implements IChannelManager {
 				if (!player.getUniqueId().equals(source.getBukkitPlayer().getUniqueId()))
 					continue;
 			
-			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 100)
+			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalSayRange)
 			{
 				try
 				{
@@ -69,7 +69,7 @@ public class ChannelManager implements IChannelManager {
 		
 		message = decorateWhisperPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 15)
+			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalWhisperRange)
 			{
 				try
 				{
@@ -107,7 +107,7 @@ public class ChannelManager implements IChannelManager {
 		
 		message = decorateShoutPlayerMessage(source, message.toUpperCase());
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 200)
+			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalShoutRange)
 			{
 				try
 				{
@@ -407,7 +407,7 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= 100)
+			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalSayRange)
 			{
 				try
 				{
@@ -442,7 +442,7 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
+			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= Utils.LocalSayRange)
 			{
 				try
 				{
@@ -467,7 +467,7 @@ public class ChannelManager implements IChannelManager {
 		try
 		{
 			for (Player player : Bukkit.getOnlinePlayers()) {
-				if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= 100)
+				if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= Utils.LocalSayRange)
 				{
 					if (player.isOp() || (source.getLanguage() == null || source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
 					{
