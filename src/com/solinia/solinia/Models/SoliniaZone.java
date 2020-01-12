@@ -26,6 +26,10 @@ public class SoliniaZone {
 	private int succorx;
 	private int succory;
 	private int succorz;
+	private int x;
+	private int y;
+	private int z;
+	private int size;
 	private int forestryMinSkill = 0;
 	private int forestryLootTableId = 0;
 	private int fishingMinSkill = 0;
@@ -508,7 +512,7 @@ public class SoliniaZone {
 		this.topRightCornerZ = topRightCornerZ;
 	}
 	
-	public double getSize()
+	public double getCornerDistances()
 	{
 		return new Location(Bukkit.getWorld(world), Double.valueOf(this.getBottomLeftCornerX()), this.getBottomLeftCornerY(), this.getBottomLeftCornerZ()).distance(new Location(Bukkit.getWorld(world), this.getTopRightCornerX(), this.getTopRightCornerY(), this.getTopRightCornerZ()));
 	}
@@ -522,5 +526,29 @@ public class SoliniaZone {
 			    return true; 
 		
 		return false; 
+	}
+	public int getX() {
+		return x;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+	public int getZ() {
+		return z;
+	}
+	public void setZ(int z) {
+		this.z = z;
+	}
+	public int getSize() {
+		return size;
+	}
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

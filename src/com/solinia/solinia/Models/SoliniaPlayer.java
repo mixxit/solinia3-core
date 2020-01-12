@@ -557,7 +557,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					potentialZones.add(zone);
 			}
 			
-			potentialZones = potentialZones.stream().sorted((o1, o2)->Double.compare(o1.getSize(),o2.getSize())).collect(Collectors.toList());
+			potentialZones = potentialZones.stream().sorted((o1, o2)->Double.compare(o1.getCornerDistances(),o2.getCornerDistances())).collect(Collectors.toList());
 			
 			if (potentialZones.size() > 0)
 				return potentialZones.get(0);
