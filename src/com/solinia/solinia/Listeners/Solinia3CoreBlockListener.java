@@ -27,11 +27,11 @@ public class Solinia3CoreBlockListener implements Listener {
 				if (!zone.getWorld().equals(event.getEntity().getLocation().getWorld().getName()))
 					continue;
 					
-				if (event.getEntity().getLocation().distance(
-						new Location(event.getEntity().getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone
-								.getSize())
+				if (zone.isLocationInside(event.getEntity().getLocation()))
+				{
 					event.getEntity().sendMessage(ChatColor.GRAY + "* Blocks cannot be formed in defined Zones (Frostwalk etc)");
 					Utils.CancelEvent(event);
+				}
 			}
 		} catch (CoreStateInitException e) {
 

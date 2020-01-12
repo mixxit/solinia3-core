@@ -15,7 +15,7 @@ public class CommandHotzones implements CommandExecutor {
 		arg0.sendMessage("Current 100% bonus XP Hotzones are: ");
 		for(SoliniaZone zone : StateManager.getInstance().getCurrentHotzones())
 		{
-			arg0.sendMessage(zone.getName() + ": " + zone.getWorld() + ":" +  zone.getX() + "," + zone.getY() + "," + zone.getZ());
+			arg0.sendMessage(zone.getName() + ": " + zone.getWorld() + ":" +  zone.getMiddleX() + "," + zone.getMiddleY() + "," + zone.getMiddleZ());
 		}
 		
 		return true;

@@ -1,5 +1,6 @@
 package com.solinia.solinia.Models;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
@@ -183,5 +184,9 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup {
 	@Override
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+	@Override
+	public Location getLocation() {
+		return new Location(Bukkit.getWorld(this.getWorld()), this.getX(), this.getY(), this.getZ());
 	}
 }

@@ -36,21 +36,25 @@ public class CommandCreateZone implements CommandExecutor {
 		
 		if (args.length < 8)
 		{
-			sender.sendMessage("Insufficient arguments: namenospaces x y z succorx succory succorz worldname");
+			sender.sendMessage("Insufficient arguments: namenospaces bottomleftx bottomlefty bottomleftz toprightx toprighty toprightz succorx succory succorz worldname");
 			return false;
 		}
 		
-		String world = Bukkit.getWorld(args[7]).getName();
-		
 		String zonename = args[0].toUpperCase();
-		int x = Integer.parseInt(args[1]);
-		int y = Integer.parseInt(args[2]);
-		int z = Integer.parseInt(args[3]);
+		int bottomleftx = Integer.parseInt(args[1]);
+		int bottomlefty = Integer.parseInt(args[2]);
+		int bottomleftz = Integer.parseInt(args[3]);
 
-		int succorx = Integer.parseInt(args[4]);
-		int succory = Integer.parseInt(args[5]);
-		int succorz = Integer.parseInt(args[6]);
-
+		int toprightx = Integer.parseInt(args[4]);
+		int toprighty = Integer.parseInt(args[5]);
+		int toprightz = Integer.parseInt(args[6]);
+		
+		int succorx = Integer.parseInt(args[7]);
+		int succory = Integer.parseInt(args[8]);
+		int succorz = Integer.parseInt(args[9]);
+		
+		String world = Bukkit.getWorld(args[10]).getName();
+		
 		if (zonename.equals(""))
 		{
 			sender.sendMessage("Name of Zone cannot be null");
@@ -58,7 +62,7 @@ public class CommandCreateZone implements CommandExecutor {
 		}
 		
 		try {
-			SoliniaZone zone = SoliniaZoneFactory.Create(zonename,world, x, y, z, succorx, succory, succorz);
+			SoliniaZone zone = SoliniaZoneFactory.Create(zonename,world, bottomleftx, bottomlefty, bottomleftz,toprightx,toprighty,toprightz, succorx, succory, succorz);
 			
 			sender.sendMessage("Created Zone: " + zone.getId());
 		} catch (CoreStateInitException | SoliniaZoneCreationException e) {

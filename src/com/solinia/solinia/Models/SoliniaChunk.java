@@ -99,8 +99,7 @@ public class SoliniaChunk {
 				if (!zone.getWorld().equals(world.getName()))
 					continue;
 				
-				if (getFirstBlockLocation(world).distance(
-						new Location(world, zone.getX(), 0, zone.getZ())) < zone.getSize())
+				if (zone.isLocationInside(getFirstBlockLocation(world)))
 					return true;
 			}
 		} catch (CoreStateInitException e) {
@@ -127,8 +126,7 @@ public class SoliniaChunk {
 				if (!zone.getWorld().equals(world.getName()))
 					continue;
 				
-				if (getFirstBlockLocation(world).distance(
-						new Location(Bukkit.getWorld(zone.getWorld()), zone.getX(), 0, zone.getZ())) < zone.getSize())
+				if (zone.isLocationInside(getFirstBlockLocation(world)))
 					zones.add(zone);
 			}
 		} catch (CoreStateInitException e) {

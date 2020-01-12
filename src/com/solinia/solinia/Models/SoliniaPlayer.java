@@ -514,9 +514,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		List<SoliniaZone> zones = new ArrayList<SoliniaZone>();
 		try {
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
-				if (this.getBukkitPlayer().getLocation().distance(
-						new Location(Bukkit.getWorld(zone.getWorld()), zone.getX(), zone.getY(), zone.getZ())) < zone
-								.getSize())
+				
+				if (zone.isLocationInside(this.getBukkitPlayer().getLocation()))
 					zones.add(zone);
 			}
 		} catch (CoreStateInitException e) {
@@ -532,9 +531,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!this.getBukkitPlayer().getWorld().getName().equals(zone.getWorld()))
 				continue;
 			
-			if (this.getBukkitPlayer().getLocation().distance(
-					new Location(Bukkit.getWorld(zone.getWorld()), zone.getX(), zone.getY(), zone.getZ())) < zone
-							.getSize())
+			if (zone.isLocationInside(this.getBukkitPlayer().getLocation()))
 				return true;
 		}
 
@@ -555,13 +552,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			List<SoliniaZone> potentialZones = new ArrayList<SoliniaZone>();
 			
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
-				if (this.getBukkitPlayer().getLocation().distance(
-						new Location(Bukkit.getWorld(zone.getWorld()), zone.getX(), zone.getY(), zone.getZ())) < zone
-								.getSize())
+				
+				if (zone.isLocationInside(this.getBukkitPlayer().getLocation()))
 					potentialZones.add(zone);
 			}
 			
-			potentialZones = potentialZones.stream().sorted((o1, o2)->Integer.compare(o1.getSize(),o2.getSize())).collect(Collectors.toList());
+			potentialZones = potentialZones.stream().sorted((o1, o2)->Double.compare(o1.getSize(),o2.getSize())).collect(Collectors.toList());
 			
 			if (potentialZones.size() > 0)
 				return potentialZones.get(0);

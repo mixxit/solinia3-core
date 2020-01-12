@@ -188,8 +188,8 @@ public class SoliniaZonesDynmapTimer extends BukkitRunnable {
         /* Build popup */
         String desc = "info: " + name;
         
-        double[] xVals = {zone.getX() - zone.getSize(), zone.getX() + zone.getSize()};
-        double[] zVals = {zone.getZ() - zone.getSize(), zone.getZ() + zone.getSize()};
+        double[] xVals = {zone.getBottomLeftCornerX(), zone.getTopRightCornerX()};
+        double[] zVals = {zone.getBottomLeftCornerZ(), zone.getTopRightCornerZ()};
         
         boolean displayLabel = true;
         boolean persistent = false;

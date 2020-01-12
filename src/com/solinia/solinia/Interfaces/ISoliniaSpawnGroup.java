@@ -60,4 +60,6 @@ public interface ISoliniaSpawnGroup {
 	boolean isDisabled();
 
 	void setDisabled(boolean disabled);
+
+	Location getLocation();
 }

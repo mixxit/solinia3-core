@@ -2575,31 +2575,7 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for(SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
-			{
-				int minX = zone.getX()-zone.getSize();
-				int minY = zone.getY()-zone.getSize();
-				int minZ = zone.getZ()-zone.getSize();
-
-				int maxX = zone.getX()-zone.getSize();
-				int maxY = zone.getY()-zone.getSize();
-				int maxZ = zone.getZ()-zone.getSize();
-				
-				zone.setBottomLeftCornerX(minX);
-				zone.setBottomLeftCornerY(minY);
-				zone.setBottomLeftCornerZ(minZ);
-
-				zone.setBottomLeftCornerX(maxX);
-				zone.setBottomLeftCornerY(maxY);
-				zone.setBottomLeftCornerZ(maxZ);
-
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 
 	public static void disableLootOverLevel110() {
@@ -5765,6 +5741,6 @@ public class Utils {
 	}
 
 	public static boolean isLocationInZone(Location location, SoliniaZone zone) {
-		return (location.distance(new Location(location.getWorld(), zone.getX(), zone.getY(), zone.getZ())) < zone.getSize());
+		return zone.isLocationInside(location);
 	}
 }

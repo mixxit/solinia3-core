@@ -22,9 +22,6 @@ import net.md_5.bungee.api.ChatColor;
 public class SoliniaZone {
 	private int id;
 	private String name;
-	private int x;
-	private int y;
-	private int z;
 	private boolean hotzone = false;
 	private int succorx;
 	private int succory;
@@ -37,7 +34,6 @@ public class SoliniaZone {
 	private int miningLootTableId = 0;
 	private int foragingMinSkill = 0;
 	private int foragingLootTableId = 0;
-	private int size = 500;
 	private boolean noUnstuck = false;
 	private int manaRegen = 0;
 	private int hpRegen = 0;
@@ -66,25 +62,7 @@ public class SoliniaZone {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getX() {
-		return x;
-	}
-	public int getY() {
-		return y;
-	}
-	public int getZ() {
-		return z;
-	}
-	public void setX(int x) {
-		this.x = x;
-	}
-	public void setY(int y) {
-		this.y = y;
-	}
-	public void setZ(int z) {
-		this.z = z;
-	}
-	
+
 	public boolean isHotzone() {
 		return hotzone;
 	}
@@ -99,11 +77,13 @@ public class SoliniaZone {
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- music: " + ChatColor.GOLD + getMusic() + ChatColor.RESET);
 		sender.sendMessage("- world: " + ChatColor.GOLD + getWorld() + ChatColor.RESET);
-		sender.sendMessage("- x: " + ChatColor.GOLD + getX() + ChatColor.RESET);
-		sender.sendMessage("- y: " + ChatColor.GOLD + getY() + ChatColor.RESET);
-		sender.sendMessage("- z: " + ChatColor.GOLD + getZ() + ChatColor.RESET);
+		sender.sendMessage("- bottomleftcornerx: " + ChatColor.GOLD + this.getBottomLeftCornerX() + ChatColor.RESET);
+		sender.sendMessage("- bottomleftcornery: " + ChatColor.GOLD + this.getBottomLeftCornerY() + ChatColor.RESET);
+		sender.sendMessage("- bottomleftcornerz: " + ChatColor.GOLD + this.getBottomLeftCornerZ() + ChatColor.RESET);
+		sender.sendMessage("- toprightcornerx: " + ChatColor.GOLD + this.getTopRightCornerX() + ChatColor.RESET);
+		sender.sendMessage("- toprightcornery: " + ChatColor.GOLD + this.getTopRightCornerY() + ChatColor.RESET);
+		sender.sendMessage("- toprightcornerz: " + ChatColor.GOLD + this.getTopRightCornerZ() + ChatColor.RESET);
 		sender.sendMessage("- nounstuck: " + ChatColor.GOLD + isNoUnstuck() + ChatColor.RESET);
-		sender.sendMessage("- size: " + ChatColor.GOLD + getSize() + ChatColor.RESET);
 		sender.sendMessage("- hotzone: " + ChatColor.GOLD + isHotzone() + ChatColor.RESET);
 		sender.sendMessage("- succorx: " + ChatColor.GOLD + getSuccorx() + ChatColor.RESET);
 		sender.sendMessage("- succory: " + ChatColor.GOLD + getSuccory() + ChatColor.RESET);
@@ -193,23 +173,28 @@ public class SoliniaZone {
 		case "world":
 			setWorld(value);
 			break;
-		case "x":
-			setX(Integer.parseInt(value));
+		case "bottomleftcornerx":
+			setBottomLeftCornerX(Integer.parseInt(value));
 			break;
-		case "y":
-			setY(Integer.parseInt(value));
+		case "bottomleftcornery":
+			setBottomLeftCornerY(Integer.parseInt(value));
 			break;
-		case "z":
-			setZ(Integer.parseInt(value));
+		case "bottomleftcornerz":
+			setBottomLeftCornerZ(Integer.parseInt(value));
 			break;
-		case "hotzone":
+		case "toprightcornerx":
+			setTopRightCornerX(Integer.parseInt(value));
+			break;
+		case "toprightcornery":
+			setTopRightCornerY(Integer.parseInt(value));
+			break;
+		case "toprightcornerz":
+			setTopRightCornerZ(Integer.parseInt(value));
+			break;		case "hotzone":
 			setHotzone(Boolean.parseBoolean(value));
 			break;
 		case "nounstuck":
 			setNoUnstuck(Boolean.parseBoolean(value));
-			break;
-		case "size":
-			setSize(Integer.parseInt(value));
 			break;
 		case "succorx":
 			setSuccorx(Integer.parseInt(value));
@@ -325,6 +310,26 @@ public class SoliniaZone {
 					"Invalid zone setting. Valid Options are: name,x,y,z,requiresalignment,hotzone,succorx,succory,succorz,forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill,music,nounstuck");
 		}
 	}
+	
+	private int getMidPoint(int x, int y)
+	{
+		return x/2 + y/2 + (x%2 + y%2)/2;
+	}
+	
+	public int getMiddleX()
+	{
+		return getMidPoint(getBottomLeftCornerX(),getTopRightCornerX());
+		
+	}
+	public int getMiddleY()
+	{
+		return getMidPoint(getBottomLeftCornerY(),getTopRightCornerY());
+	}
+	public int getMiddleZ()
+	{
+		return getMidPoint(getBottomLeftCornerZ(),getTopRightCornerZ());
+	}
+	
 	public int getSuccorx() {
 		return succorx;
 	}
@@ -391,12 +396,7 @@ public class SoliniaZone {
 	public void setForagingMinSkill(int foragingMinSkill) {
 		this.foragingMinSkill = foragingMinSkill;
 	}
-	public int getSize() {
-		return size;
-	}
-	public void setSize(int size) {
-		this.size = size;
-	}
+
 	public int getManaRegen() {
 		return manaRegen;
 	}
@@ -445,7 +445,7 @@ public class SoliniaZone {
 		{
 			for(ISoliniaSpawnGroup spawnGroup : StateManager.getInstance().getConfigurationManager().getSpawnGroups())
 			{
-				if (!(Utils.isLocationInZone(new Location(Bukkit.getWorld(this.getWorld()), this.getX(), this.getY(), this.getZ()), this)))
+				if (!this.isLocationInside(spawnGroup.getLocation()))
 					continue;
 				
 				spawnGroups.add(spawnGroup);
@@ -506,5 +506,21 @@ public class SoliniaZone {
 	}
 	public void setTopRightCornerZ(int topRightCornerZ) {
 		this.topRightCornerZ = topRightCornerZ;
+	}
+	
+	public double getSize()
+	{
+		return new Location(Bukkit.getWorld(world), Double.valueOf(this.getBottomLeftCornerX()), this.getBottomLeftCornerY(), this.getBottomLeftCornerZ()).distance(new Location(Bukkit.getWorld(world), this.getTopRightCornerX(), this.getTopRightCornerY(), this.getTopRightCornerZ()));
+	}
+	
+	public boolean isLocationInside(Location location) {
+		if (
+				location.getBlockX() >= this.getBottomLeftCornerX() && location.getBlockX() <= this.getTopRightCornerX() &&  
+						location.getBlockY() >= this.getBottomLeftCornerY() && location.getBlockY() <= this.getTopRightCornerY() &&
+								location.getBlockZ() >= this.getBottomLeftCornerZ() && location.getBlockZ() <= this.getTopRightCornerZ()
+			) 
+			    return true; 
+		
+		return false; 
 	}
 }
