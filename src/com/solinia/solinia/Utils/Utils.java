@@ -122,6 +122,9 @@ public class Utils {
 	
 	public static final int TICKS_PER_SECOND = 20;
 	public static final long MAXDAYTICK = 24000L;
+	public static final double LocalWhisperRange = 4;
+	public static final double LocalSayRange = 15;
+	public static final double LocalShoutRange = 40;
 
 	public static void ConsoleLogTimingDifference(LocalDateTime datetime)
 	{
