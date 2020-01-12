@@ -209,6 +209,23 @@ public class EntityUtils {
 					return cap;
 				}
 		}
+		
+		if (skillname.toUpperCase().equals("PIERCING")) {
+			if (profession != null)
+				if ((profession.getName().toUpperCase().equals("RANGER")
+						|| profession.getName().toUpperCase().equals("PALADIN")
+						|| profession.getName().toUpperCase().equals("ROGUE")
+						|| profession.getName().toUpperCase().equals("WARRIOR")
+						|| profession.getName().toUpperCase().equals("BERSERKER")
+						|| profession.getName().toUpperCase().equals("SHADOWKNIGHT")
+						|| profession.getName().toUpperCase().equals("HUNTER")
+						|| profession.getName().toUpperCase().equals("KNIGHT"))) {
+					int cap = (int) ((5 * level) + 5);
+					if (cap > Utils.getMaxSkillValue())
+						return Utils.getMaxSkillValue();
+					return cap;
+				}
+		}
 
 		if (skillname.toUpperCase().equals("BACKSTAB")) {
 			if (profession != null)
