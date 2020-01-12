@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandSolinia implements CommandExecutor {
@@ -44,6 +45,21 @@ public class CommandSolinia implements CommandExecutor {
 			if (args.length > 0 && args[0].equals("showspawns")) {
 				StateManager.getInstance().toggleShowSpawns();
 				sender.sendMessage("Show spawns set to: " + StateManager.getInstance().showSpawns);
+			}
+			
+			if (args.length > 0 && args[0].equals("zoneinfo") && sender instanceof Player) {
+				sender.sendMessage("In Zone: ");
+				try
+				{
+					for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
+					{
+						if (zone.isLocationInside(((Player)sender).getLocation()))
+							sender.sendMessage(zone.getName());
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
 			}
 				
 			
