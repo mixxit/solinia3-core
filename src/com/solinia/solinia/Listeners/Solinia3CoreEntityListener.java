@@ -773,6 +773,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					// Only award player the experience
 					// as they are out of range of the group
 					if (livingEntity.getLevel() >= Utils.getMinLevelFromLevel(player.getLevel())) {
+						// Due to being out of range they get the full xp
 						player.increasePlayerExperience(experience, true, true);
 
 						// Grant title for killing mob
@@ -788,13 +789,12 @@ public class Solinia3CoreEntityListener implements Listener {
 							}
 						}
 
-					} else {
-						// player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* The npc was too low
-						// level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " +
-						// Utils.getMinLevelFromLevel(player.getLevel()));
-					}
+					} 
 
 				} else {
+					double experienceReward = experience / group.getMembers().size();
+					double groupBonus = (experienceReward/100)*(group.getMembers().size()*10);
+					
 					for (UUID member : group.getMembers()) {
 						Player tgtplayer = Bukkit.getPlayer(member);
 						if (tgtplayer != null) {
@@ -815,7 +815,12 @@ public class Solinia3CoreEntityListener implements Listener {
 
 							if (tgtplayer.getLocation().distance(player.getBukkitPlayer().getLocation()) <= Utils.MaxRangeForExperience) {
 								if (livingEntity.getLevel() >= (Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()))) {
-									tgtsolplayer.increasePlayerExperience(experience, true, true);
+									// they split the overall experience across the group size
+									
+									// add 10% bonus per player
+									
+									tgtsolplayer.increasePlayerExperience(experienceReward+groupBonus, true, true);
+									
 
 									// Grant title for killing mob
 									if (livingEntity.getNpcid() > 0) {
@@ -846,6 +851,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				}
 			} else {
 				if (livingEntity.getLevel() >= (Utils.getMinLevelFromLevel(player.getLevel()))) {
+					// they are on their own so get the full amount of xp
 					player.increasePlayerExperience(experience, true, true);
 
 					// Grant title for killing mob
