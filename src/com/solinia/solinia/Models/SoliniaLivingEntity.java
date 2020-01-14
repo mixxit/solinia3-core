@@ -3209,7 +3209,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// if less than 10% health and warrior, is in berserk mode
 		if (this.getBukkitLivingEntity()
 				.getHealth() < ((this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()
-						/ 100) * 10))
+						/ 100) * 36))
 			if (this.getClassObj() != null) {
 				if (this.getClassObj().getName().equals("WARRIOR"))
 					return true;
