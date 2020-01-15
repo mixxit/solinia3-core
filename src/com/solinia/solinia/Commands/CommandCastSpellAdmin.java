@@ -46,7 +46,7 @@ public class CommandCastSpellAdmin implements CommandExecutor {
 				return true;
 			}
 			
-			solPlayer.tryCastSpell(solSpell, false, false, true);
+			solPlayer.tryCastSpell(solSpell, false, false, true, "");
 		} catch (CoreStateInitException e)
 		{
 			return true;

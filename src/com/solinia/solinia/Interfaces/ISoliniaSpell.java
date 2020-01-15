@@ -1017,7 +1017,7 @@ public interface ISoliniaSpell {
 
 	boolean isEffectInSpell(SpellEffectType effecttype);
 
-	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages);
+	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages, String requiredWeaponSkillType);
 
 	boolean isWeaponProc();
 
@@ -1073,7 +1073,7 @@ public interface ISoliniaSpell {
 
 	boolean isCharmSpell();
 
-	boolean tryCast(LivingEntity sourcemob, LivingEntity targetmob, boolean consumeMana, boolean consumeReagents);
+	boolean tryCast(LivingEntity sourcemob, LivingEntity targetmob, boolean consumeMana, boolean consumeReagents, String requiredWeaponSkillType);
 
 	boolean isEffectIgnoredInStacking(int spellEffectId);
 

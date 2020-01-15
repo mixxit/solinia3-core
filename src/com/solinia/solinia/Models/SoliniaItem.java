@@ -94,6 +94,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int focusEffectId = 0;
 	private int weaponDelay = 30;
 	private int leatherRgbDecimal = -1;
+	private String requiredWeaponSkillType = "";
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -547,7 +548,7 @@ public class SoliniaItem implements ISoliniaItem {
 			return false;
 		}
 
-		return spell.tryCast(player,targetentity,!isConsumable,!isConsumable);
+		return spell.tryCast(player,targetentity,!isConsumable,!isConsumable,this.getRequiredWeaponSkillType());
 	}
 
 	
@@ -1508,5 +1509,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setQuestId(int questId) {
 		QuestId = questId;
+	}
+
+	@Override
+	public String getRequiredWeaponSkillType() {
+		return requiredWeaponSkillType;
+	}
+
+	@Override
+	public void setRequiredWeaponSkillType(String requiredWeaponSkillType) {
+		this.requiredWeaponSkillType = requiredWeaponSkillType;
 	}
 }

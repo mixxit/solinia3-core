@@ -19,10 +19,12 @@ public class CastingSpell {
 	boolean useMana = true;
 	boolean useReagents = true;
 	boolean ignoreProfessionAndLevel = false;
+	private String requiredWeaponSkillType = "";
 	
-	public CastingSpell(UUID uuid, int spellId, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel)
+	public CastingSpell(UUID uuid, int spellId, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel, String requiredWeaponSkillType)
 	{
 		this.livingEntityUUID = uuid;
+		this.requiredWeaponSkillType = requiredWeaponSkillType;
 
 		try
 		{
@@ -52,6 +54,11 @@ public class CastingSpell {
 	private LivingEntity getLivingEntity()
 	{
 		return (LivingEntity)Bukkit.getEntity(livingEntityUUID);
+	}
+	
+	public String getRequiredWeaponSkillType()
+	{
+		return requiredWeaponSkillType;
 	}
 	
 	public UUID getLivingEntityUUID()

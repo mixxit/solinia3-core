@@ -438,7 +438,7 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages) {
+	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType) {
 		try {
 			if (soliniaSpell.isCharmSpell() && getPet(sourceEntity.getUniqueId()) != null && !getPet(sourceEntity.getUniqueId()).getUniqueId().equals(targetEntity.getUniqueId()))
 				return false;
@@ -454,7 +454,7 @@ public class EntityManager implements IEntityManager {
 				duration = 18;
 			}
 			
-			boolean addSpellResult = entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages);
+			boolean addSpellResult = entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages, requiredWeaponSkillType);
 			
 			if (targetEntity instanceof Player)
 				SoliniaPlayerAdapter.Adapt((Player)targetEntity).sendEffects();

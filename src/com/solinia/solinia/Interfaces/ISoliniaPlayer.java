@@ -464,12 +464,12 @@ public interface ISoliniaPlayer extends Serializable {
 
 
 	void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
-			boolean ignoreProfessionAndLevel);
+			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType);
 
 	void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
-			boolean ignoreProfessionAndLevel);
+			boolean ignoreProfessionAndLevel,String requiredWeaponSkillType);
 
-	void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel);
+	void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel, String requiredWeaponSkillType);
 
 	SoliniaZone getFirstZone();
 
@@ -589,5 +589,7 @@ public interface ISoliniaPlayer extends Serializable {
 	void setShowDiscord(boolean showDiscord);
 
 	List<SoliniaZone> getZones();
+
+	
 
 }

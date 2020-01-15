@@ -100,7 +100,7 @@ public class SoliniaEntitySpells {
 		return false;
 	}
 
-	public boolean addSpell(Plugin plugin, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages) {
+	public boolean addSpell(Plugin plugin, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages, String requiredWeaponSkillType) {
 		// This spell ID is already active
 		// TODO We should allow overwriting of higher level 
 		if (containsSpellId(soliniaSpell.getId()) && !soliniaSpell.isStackableDot())
@@ -198,7 +198,7 @@ public class SoliniaEntitySpells {
 		}
 		
 		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer,
-				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits());
+				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits(), requiredWeaponSkillType);
 		
 		Short slot = getNextAvailableSlot();
 		if (slot == null)
@@ -508,7 +508,7 @@ public class SoliniaEntitySpells {
 						if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity && !Bukkit.getEntity(activeSpell.getOwnerUuid()).isDead() && !Bukkit.getEntity(activeSpell.getSourceUuid()).isDead()) {
 							boolean itemUseSuccess = activeSpell.getSpell().tryApplyOnEntity(
 									(LivingEntity) Bukkit.getEntity(activeSpell.getSourceUuid()),
-									(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()),!removeNonCombatEffects);
+									(LivingEntity) Bukkit.getEntity(activeSpell.getOwnerUuid()),!removeNonCombatEffects,activeSpell.getRequiredWeaponSkillType());
 							if (!itemUseSuccess)
 							{
 								Bukkit.getEntity(activeSpell.getSourceUuid()).sendMessage(ChatColor.GRAY + "* Your song failed to apply to the entity!");

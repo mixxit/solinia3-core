@@ -60,9 +60,10 @@ public class SoliniaActiveSpell {
 	private boolean isFirstRun = true;
 	private List<ActiveSpellEffect> activeSpellEffects = new ArrayList<ActiveSpellEffect>();
 	private int numHits = 0;
+	private String requiredWeaponSkillType = "";
 
 	public SoliniaActiveSpell(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid,
-			boolean sourceIsPlayer, int ticksLeft, int numHits) {
+			boolean sourceIsPlayer, int ticksLeft, int numHits, String requiredWeaponSkillType) {
 		setOwnerUuid(owneruuid);
 		setOwnerPlayer(isOwnerPlayer);
 		setSourceUuid(sourceuuid);
@@ -71,6 +72,7 @@ public class SoliniaActiveSpell {
 		setTicksLeft(ticksLeft);
 		setActiveSpellEffects();
 		setNumHits(numHits);
+		setRequiredWeaponSkillType(requiredWeaponSkillType);
 	}
 
 	private void setActiveSpellEffects() {
@@ -2545,5 +2547,13 @@ public class SoliniaActiveSpell {
 	private void removeActiveSpellNextTick()
 	{
 		this.setTicksLeft(0);
+	}
+
+	public String getRequiredWeaponSkillType() {
+		return requiredWeaponSkillType;
+	}
+
+	public void setRequiredWeaponSkillType(String requiredWeaponSkillType) {
+		this.requiredWeaponSkillType = requiredWeaponSkillType;
 	}
 }

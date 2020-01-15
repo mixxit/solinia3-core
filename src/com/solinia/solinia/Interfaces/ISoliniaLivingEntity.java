@@ -352,7 +352,7 @@ public interface ISoliniaLivingEntity
 
 	ISoliniaGod getGod();
 
-	public void tryApplySpellOnSelf(int spellId);
+	public void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType);
 
 	public void sendHateList(LivingEntity recipient);
 

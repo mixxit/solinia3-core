@@ -2592,6 +2592,7 @@ public class Utils {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(craft.getOutputItem());
 					item.setItemType(ItemType.Potion);
 					item.setMinLevel(15+item.getSkillModValue());
+					item.setRequiredWeaponSkillType("PIERCING");
 				}
 			}
 		} catch (CoreStateInitException e)

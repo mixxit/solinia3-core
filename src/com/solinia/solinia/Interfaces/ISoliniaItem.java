@@ -354,4 +354,8 @@ public interface ISoliniaItem {
 	int getQuestId();
 
 	void setQuestId(int questId);
+
+	String getRequiredWeaponSkillType();
+
+	void setRequiredWeaponSkillType(String requiredWeaponSkillType);
 }

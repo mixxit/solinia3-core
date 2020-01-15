@@ -1085,7 +1085,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents,
-			boolean ignoreProfessionAndLevel) {
+			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType) {
 		if (spell == null)
 			return;
 
@@ -1134,7 +1134,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 
-			startCasting(spell, getBukkitPlayer(), useMana, useReagents, ignoreProfessionAndLevel);
+			startCasting(spell, getBukkitPlayer(), useMana, useReagents, ignoreProfessionAndLevel, requiredWeaponSkillType);
 		} catch (CoreStateInitException e) {
 
 		}
@@ -1156,9 +1156,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		try {
-
 			tryCastSpell(StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid()), true, true,
-					false);
+					false, item.getRequiredWeaponSkillType());
 		} catch (CoreStateInitException e) {
 
 		}
@@ -1235,7 +1234,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 
-			startCasting(spell, getBukkitPlayer(), true, true, false);
+			startCasting(spell, getBukkitPlayer(), true, true, false,"");
 		} catch (CoreStateInitException e) {
 
 		}
@@ -1505,7 +1504,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 
-			startCasting(spell, getBukkitPlayer(), !item.isConsumable(), !item.isConsumable(), false);
+			startCasting(spell, getBukkitPlayer(), !item.isConsumable(), !item.isConsumable(), false, item.getRequiredWeaponSkillType());
 
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
@@ -1559,11 +1558,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
-			boolean ignoreProfessionAndLevel) {
+			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType) {
 		try {
 
 			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), useMana, useReagents,
-					ignoreProfessionAndLevel);
+					ignoreProfessionAndLevel,requiredWeaponSkillType);
 			StateManager.getInstance().getEntityManager().startCasting((LivingEntity) player, castingSpell);
 		} catch (CoreStateInitException e) {
 
@@ -1593,12 +1592,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		 */
 
 		doCastSpell(castingSpell.getSpell(), player, castingSpell.useMana, castingSpell.useReagents,
-				castingSpell.ignoreProfessionAndLevel);
+				castingSpell.ignoreProfessionAndLevel, castingSpell.getRequiredWeaponSkillType());
 	}
 
 	@Override
 	public void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
-			boolean ignoreProfessionAndLevel) {
+			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType) {
 		if (!ignoreProfessionAndLevel && spell.isAASpell() && !canUseAASpell(spell)) {
 			player.sendMessage("You require the correct AA to use this spell");
 			return;
@@ -1747,13 +1746,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (player != null && !player.isDead())
 			if (targetmob != null && !targetmob.isDead()) {
-				boolean success = spell.tryCast(player, targetmob, useMana, useReagents);
+				boolean success = spell.tryCast(player, targetmob, useMana, useReagents, requiredWeaponSkillType);
 				if (success == true) {
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 				}
 				return;
 			} else {
-				boolean success = spell.tryCast(player, player, useMana, useReagents);
+				boolean success = spell.tryCast(player, player, useMana, useReagents, requiredWeaponSkillType);
 				if (success == true) {
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
 				}

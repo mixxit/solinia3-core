@@ -1680,6 +1680,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 										|| spelleffect.getSpellEffectType().equals(SpellEffectType.AddMeleeProc)) {
 									if (spelleffect.getBase() < 0)
 										continue;
+									
+									if (!activeSpell.getRequiredWeaponSkillType().equals(""))
+									{
+										if (!my_hit.skill.equals(activeSpell.getRequiredWeaponSkillType()))
+											continue;
+									}
 
 									ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
 											.getSpell(spelleffect.getBase());
@@ -1692,7 +1698,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 									if (roll < procChance) {
 										boolean itemUseSuccess = procSpell.tryApplyOnEntity(this.getBukkitLivingEntity(),
-												defender.getBukkitLivingEntity(), true);
+												defender.getBukkitLivingEntity(), true, "");
 
 										if (itemUseSuccess) {
 											checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
@@ -1938,15 +1944,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
 						case Self:
 							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									attackerSolEntity.getBukkitLivingEntity(), true);
+									attackerSolEntity.getBukkitLivingEntity(), true,"");
 							break;
 						case Group:
 							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									attackerSolEntity.getBukkitLivingEntity(), true);
+									attackerSolEntity.getBukkitLivingEntity(), true,"");
 							break;
 						default:
 							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									defenderSolEntity.getBukkitLivingEntity(), true);
+									defenderSolEntity.getBukkitLivingEntity(), true, "");
 						}
 
 					}
@@ -2074,14 +2080,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				// try weapon item procs
 
 				ISoliniaItem attackItem = null;
+				ItemStack attackStack = null;
+				
 				ISoliniaLivingEntity attackerSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sourceEntity);
 				
 				if (!isOffhand && ItemStackUtils.IsSoliniaItem(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 					attackItem = SoliniaItemAdapter.Adapt(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInMainHand());
+					attackStack = attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInMainHand();
 				}
 	
 				if (isOffhand && ItemStackUtils.IsSoliniaItem(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand())) {
 					attackItem = SoliniaItemAdapter.Adapt(attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand());
+					attackStack = attackerSolEntity.getBukkitLivingEntity().getEquipment().getItemInOffHand();
 				}
 				
 				if (attackItem != null) {
@@ -2113,6 +2123,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 										.getSpell(spelleffect.getBase());
 								if (spell == null)
 									continue;
+								
+								if (attackStack != null && !activeSpell.getRequiredWeaponSkillType().equals(""))
+								{
+									if (!ItemStackUtils.getMeleeSkillForItemStack(attackStack).equals(activeSpell.getRequiredWeaponSkillType()))
+										continue;
+								}
 
 								// Chance to proc
 								int procChance = getProcChancePct();
@@ -2120,7 +2136,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 								if (roll < procChance) {
 									boolean itemUseSuccess = procSpell.tryApplyOnEntity((LivingEntity)sourceEntity,
-											getBukkitLivingEntity(), true);
+											getBukkitLivingEntity(), true, "");
 
 									if (itemUseSuccess) {
 										checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
@@ -3758,7 +3774,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		boolean success = false;
 		if (getMana() > spell.getActSpellCost(this)) {
-			success = spell.tryApplyOnEntity(this.getBukkitLivingEntity(), target.getBukkitLivingEntity(), true);
+			success = spell.tryApplyOnEntity(this.getBukkitLivingEntity(), target.getBukkitLivingEntity(), true, "");
 		}
 
 		if (success) {
@@ -7378,14 +7394,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void tryApplySpellOnSelf(int spellId) {
+	public void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType) {
 		try
 		{
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
 			if (spell == null)
 				return;
 			
-			spell.tryApplyOnEntity(getBukkitLivingEntity(), getBukkitLivingEntity(), false);
+			spell.tryApplyOnEntity(getBukkitLivingEntity(), getBukkitLivingEntity(), false, requiredWeaponSkillType);
 		} catch (CoreStateInitException e)
 		{
 			

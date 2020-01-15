@@ -48,7 +48,7 @@ public interface IEntityManager {
 	void spellTick();
 
 	boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell,
-			LivingEntity sourceEntity, boolean sendMessages);
+			LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType);
 
 	void doNPCSpellCast();
 
@@ -193,4 +193,5 @@ public interface IEntityManager {
 	void removeAllAbandonedPetsInChunk(String worldName, int chunkX, int chunkZ);
 
 	void playSpellFinishedSoundEffect(LivingEntity targetEntity, ISoliniaSpell spell);
+
 }
