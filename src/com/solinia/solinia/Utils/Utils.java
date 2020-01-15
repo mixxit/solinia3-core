@@ -2583,16 +2583,11 @@ public class Utils {
 	public static void Patcher() {
 		try
 		{
-			for(SoliniaCraft craft : StateManager.getInstance().getConfigurationManager().getCrafts())
+			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 			{
-				if (craft.getClassId() == 4 && craft.getSkill().equals("MAKEPOISON"))
+				if (!item.getItemType().equals(ItemType.OneHandPiercing) && item.getDisplayname().toUpperCase().contains("DAGGER"))
 				{
-					craft.setMinLevel(18);
-					// we need to update all the items bro
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(craft.getOutputItem());
-					item.setItemType(ItemType.Potion);
-					item.setMinLevel(15+item.getSkillModValue());
-					item.setRequiredWeaponSkillType("PIERCING");
+					item.setItemType(ItemType.OneHandPiercing);
 				}
 			}
 		} catch (CoreStateInitException e)
