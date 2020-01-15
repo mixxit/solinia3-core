@@ -2757,6 +2757,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		for (SoliniaSpellClass spellclass : this.getAllowedClasses()) {
 			sender.sendMessage("- " + spellclass.getClassname() + " " + spellclass.getMinlevel());
 		}
+		
 		sender.sendMessage("----------------------------");
 		for (SpellEffect effect : this.getBaseSpellEffects()) {
 			sender.sendMessage("- [" + effect.getSpellEffectNo() + "]" + effect.getSpellEffectType().name() + ": BASE: "

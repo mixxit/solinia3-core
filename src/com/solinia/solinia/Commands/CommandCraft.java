@@ -137,6 +137,12 @@ public class CommandCraft implements CommandExecutor {
     							continue;
     						}
     					}
+    					
+    					if (craftEntry.getMinLevel() > player.getLevel())
+    					{
+    						player.sendMessage("You have insufficient level to produce " + craftEntry.getRecipeName());
+    						continue;
+    					}
     				}
     				
     				if (craftEntry.getOutputItem() > 0 || craftEntry.getOutputLootTableId() > 0)

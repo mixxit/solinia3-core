@@ -529,7 +529,7 @@ public class SoliniaItem implements ISoliniaItem {
 				player.sendMessage(ChatColor.GRAY + "Your class cannot consume this item");
 				return true;
 			}
-
+		
 		if (getAllowedRaceNames() != null && getAllowedRaceNames().size() > 0)
 			if (!getAllowedRaceNames().contains(SoliniaPlayerAdapter.Adapt(player).getRace().getName().toUpperCase())) {
 				player.sendMessage(ChatColor.GRAY + "Your race cannot consume this item");

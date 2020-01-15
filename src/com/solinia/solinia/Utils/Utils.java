@@ -89,11 +89,13 @@ import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
+import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
@@ -2579,7 +2581,23 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-		
+		try
+		{
+			for(SoliniaCraft craft : StateManager.getInstance().getConfigurationManager().getCrafts())
+			{
+				if (craft.getClassId() == 4 && craft.getSkill().equals("MAKEPOISON"))
+				{
+					craft.setMinLevel(18);
+					// we need to update all the items bro
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(craft.getOutputItem());
+					item.setItemType(ItemType.Potion);
+					item.setMinLevel(15+item.getSkillModValue());
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	public static void disableLootOverLevel110() {

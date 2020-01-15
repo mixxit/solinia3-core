@@ -23,6 +23,7 @@ public class SoliniaCraft {
 	private int classId = 0;
 	private int outputItem = 0;
 	private int outputLootTableId = 0;
+	private int minLevel = 0;
 	
 	public int getItem1() {
 		return item1;
@@ -85,6 +86,7 @@ public class SoliniaCraft {
 		sender.sendMessage("- classid: " + ChatColor.GOLD + getClassId() + ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + ChatColor.RESET);
 		sender.sendMessage("- minskill: " + ChatColor.GOLD + getMinSkill() + ChatColor.RESET);
+		sender.sendMessage("- minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 	}
 
 	public void editSetting(String setting, String value)
@@ -114,6 +116,11 @@ public class SoliniaCraft {
 			if (Integer.parseInt(value) < 0)
 				throw new InvalidCraftSettingException("Skill must be greater than or equal to 0");
 			setMinSkill(Integer.parseInt(value));
+			break;
+		case "minlevel":
+			if (Integer.parseInt(value) < 0)
+				throw new InvalidCraftSettingException("Level must be greater than or equal to 0");
+			setMinLevel(Integer.parseInt(value));
 			break;
 		case "item1":
 			int itemId1 = Integer.parseInt(value);
@@ -182,5 +189,11 @@ public class SoliniaCraft {
 	}
 	public void setOutputLootTableId(int outputLootTableId) {
 		this.outputLootTableId = outputLootTableId;
+	}
+	public int getMinLevel() {
+		return minLevel;
+	}
+	public void setMinLevel(int minLevel) {
+		this.minLevel = minLevel;
 	}
 }
