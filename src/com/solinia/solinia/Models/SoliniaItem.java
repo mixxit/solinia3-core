@@ -528,13 +528,13 @@ public class SoliniaItem implements ISoliniaItem {
 		if (getAllowedClassNames() != null && getAllowedClassNames().size() > 0)
 			if (!getAllowedClassNames().contains(SoliniaPlayerAdapter.Adapt(player).getClassObj().getName().toUpperCase())) {
 				player.sendMessage(ChatColor.GRAY + "Your class cannot consume this item");
-				return true;
+				return false;
 			}
 		
 		if (getAllowedRaceNames() != null && getAllowedRaceNames().size() > 0)
 			if (!getAllowedRaceNames().contains(SoliniaPlayerAdapter.Adapt(player).getRace().getName().toUpperCase())) {
 				player.sendMessage(ChatColor.GRAY + "Your race cannot consume this item");
-				return true;
+				return false;
 			}
 		
 		if (getMinLevel() > SoliniaPlayerAdapter.Adapt(player).getLevel())
