@@ -172,6 +172,12 @@ public class CoreState {
 		{
 			xpdaybonus += 400;
 		}
+		
+		// Rogue mourning holiday
+		if (simpleDateformat.format(now).equals("15.01") || simpleDateformat.format(now).equals("16.01"))
+		{
+			xpdaybonus += 400;
+		}
 
 		// Xmas and New Year
 		if (simpleDateformat.format(now).equals("24.12") || simpleDateformat.format(now).equals("25.12") || simpleDateformat.format(now).equals("26.12") || simpleDateformat.format(now).equals("27.12") || simpleDateformat.format(now).equals("28.12") || simpleDateformat.format(now).equals("29.12") || simpleDateformat.format(now).equals("30.12") || simpleDateformat.format(now).equals("31.12") || simpleDateformat.format(now).equals("01.01") || simpleDateformat.format(now).equals("02.01"))

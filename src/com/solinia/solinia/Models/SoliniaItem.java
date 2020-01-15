@@ -700,6 +700,7 @@ public class SoliniaItem implements ISoliniaItem {
 			Color colorTmp = Color.fromRGB(getLeatherRgbDecimal());
 			leathercolor = ColorUtil.fromRGB(colorTmp.getRed(),colorTmp.getGreen(), colorTmp.getBlue()) + "(Closest)" + ChatColor.RESET;
 		}
+		sender.sendMessage("- requiredweaponskilltype: " + ChatColor.GOLD + getRequiredWeaponSkillType() + ChatColor.RESET);
 		sender.sendMessage("- leatherrgbdecimal: " + ChatColor.GOLD + getLeatherRgbDecimal() + ChatColor.RESET + leathercolor + " See: https://bit.ly/2i02I8k");
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
@@ -782,6 +783,15 @@ public class SoliniaItem implements ISoliniaItem {
 			break;
 		case "worth":
 			setWorth(Integer.parseInt(value));
+			break;
+		case "requiredweaponskilltype":
+			if (!value.toUpperCase().equals("PIERCING") && !value.toUpperCase().equals("CLEAR"))
+				throw new InvalidItemSettingException("requiredweaponskilltype can only be PIERCING or CLEAR (clear removes requirement)");
+			
+			if (value.toUpperCase().equals("CLEAR"))
+				value = "";
+			
+			setRequiredWeaponSkillType(value.toUpperCase());
 			break;
 		case "dye":
 			setDye(Integer.parseInt(value));
