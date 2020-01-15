@@ -986,7 +986,18 @@ public class SoliniaItem implements ISoliniaItem {
 			setEquipmentSlot(EquipmentSlot.valueOf(TextUtils.CapitaliseFirstLetter(value)));
 			break;
 		case "itemtype":
-			setItemType(ItemType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
+			try
+			{
+				setItemType(ItemType.valueOf(value));
+			} catch (IllegalArgumentException e)
+			{
+				String types = "";
+				for(ItemType type: ItemType.values())
+				{
+					types += type+",";
+				}
+				throw new InvalidItemSettingException("Invalid Item Type, item type must be exactly the same case and can be one of the following: " + types);
+			}
 			break;
 		case "reagent":
 			setReagent(Boolean.parseBoolean(value));

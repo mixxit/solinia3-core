@@ -2581,19 +2581,7 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
-			{
-				if (!item.getItemType().equals(ItemType.OneHandPiercing) && item.getDisplayname().toUpperCase().contains("DAGGER"))
-				{
-					item.setItemType(ItemType.OneHandPiercing);
-				}
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 
 	public static void disableLootOverLevel110() {
