@@ -84,7 +84,7 @@ public class JsonWorldRepository implements IRepository<SoliniaWorld>  {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(Worlds.values(), new TypeToken<List<SoliniaWorld>>(){}.getType());
 		try {

@@ -87,7 +87,7 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		gsonbuilder.setPrettyPrinting();
+		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(items.values(), new TypeToken<List<SoliniaItem>>(){}.getType());
 		try {
