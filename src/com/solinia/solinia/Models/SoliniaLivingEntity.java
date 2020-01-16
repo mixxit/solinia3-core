@@ -2100,60 +2100,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 				// try spell procs
 				// Check if attacker has any WeaponProc effects
-				SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
-						.getActiveEntitySpells((LivingEntity)sourceEntity);
-
-				if (effects != null) {
-					for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
-						ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-								.getSpell(activeSpell.getSpellId());
-						if (spell == null)
-							continue;
-
-						if (!spell.isWeaponProc())
-							continue;
-
-						for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
-							if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)
-									|| spelleffect.getSpellEffectType().equals(SpellEffectType.AddMeleeProc)) {
-								if (spelleffect.getBase() < 0)
-									continue;
-
-								ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
-										.getSpell(spelleffect.getBase());
-								if (spell == null)
-									continue;
-								
-								if (attackStack != null && !activeSpell.getRequiredWeaponSkillType().equals(""))
-								{
-									if (!ItemStackUtils.getMeleeSkillForItemStack(attackStack).equals(activeSpell.getRequiredWeaponSkillType()))
-										continue;
-								}
-
-								// Chance to proc
-								int procChance = getProcChancePct();
-								int roll = Utils.RandomBetween(0, 100);
-
-								if (roll < procChance) {
-									boolean itemUseSuccess = procSpell.tryApplyOnEntity((LivingEntity)sourceEntity,
-											getBukkitLivingEntity(), true, "");
-
-									if (itemUseSuccess) {
-										checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
-									}
-
-									if (procSpell.getActSpellCost(this) > 0)
-										if (itemUseSuccess) {
-											if (sourceEntity instanceof Player) {
-												SoliniaPlayerAdapter.Adapt((Player) sourceEntity)
-														.reducePlayerMana(procSpell.getActSpellCost(this));
-											}
-										}
-								}
-							}
-						}
-					}
-				}
+				damageEffects(attackStack, sourceEntity, StateManager.getInstance().getEntityManager().getActiveEntitySpells((LivingEntity)sourceEntity));
 			} catch (CoreStateInitException e) {
 				
 			} catch (SoliniaItemException e) {
@@ -2175,6 +2122,85 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			}
 
+		}
+	}
+	
+	private void damageEffectActiveSpell(ItemStack attackStack, Entity sourceEntity, SoliniaActiveSpell activeSpell )
+	{
+		try
+		{
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+					.getSpell(activeSpell.getSpellId());
+			if (spell == null)
+				return;
+	
+			if (!spell.isWeaponProc())
+				return;
+	
+			for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
+				damageEffectActiveSpellEffect(attackStack, sourceEntity,activeSpell,spelleffect);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	private void damageEffectActiveSpellEffect(ItemStack attackStack, Entity sourceEntity,SoliniaActiveSpell activeSpell, ActiveSpellEffect spelleffect)
+	{
+		try
+		{
+		if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)
+				|| spelleffect.getSpellEffectType().equals(SpellEffectType.AddMeleeProc))
+		{
+			if (spelleffect.getBase() < 0)
+				return;
+
+			ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
+					.getSpell(spelleffect.getBase());
+			
+			if (spelleffect == null)
+				return;
+			
+			if (attackStack != null && !activeSpell.getRequiredWeaponSkillType().equals(""))
+			{
+				if (!ItemStackUtils.getMeleeSkillForItemStack(attackStack).equals(activeSpell.getRequiredWeaponSkillType()))
+					return;
+			}
+
+			// Chance to proc
+			int procChance = getProcChancePct();
+			int roll = Utils.RandomBetween(0, 100);
+
+			if (roll < procChance) {
+				boolean itemUseSuccess = procSpell.tryApplyOnEntity((LivingEntity)sourceEntity,
+						getBukkitLivingEntity(), true, "");
+
+				if (itemUseSuccess) {
+					checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
+				}
+
+				if (procSpell.getActSpellCost(this) > 0)
+					if (itemUseSuccess) {
+						if (sourceEntity instanceof Player) {
+							SoliniaPlayerAdapter.Adapt((Player) sourceEntity)
+									.reducePlayerMana(procSpell.getActSpellCost(this));
+						}
+					}
+			}
+		}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+
+	private void damageEffects(ItemStack attackStack, Entity sourceEntity, SoliniaEntitySpells activeEntitySpells)
+	{
+		if (activeEntitySpells != null) {
+			for (SoliniaActiveSpell activeSpell : activeEntitySpells.getActiveSpells()) {
+				damageEffectActiveSpell(attackStack, sourceEntity, activeSpell);
+			}
 		}
 	}
 

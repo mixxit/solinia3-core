@@ -1250,9 +1250,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// We have our custom item id, lets check it exists
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
-			if (item == null) {
+			if (item == null)
 				return;
-			}
 
 			if (!item.isThrowing())
 				return;
