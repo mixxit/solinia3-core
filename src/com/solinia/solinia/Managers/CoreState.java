@@ -174,9 +174,15 @@ public class CoreState {
 		}
 		
 		// Rogue mourning holiday
-		if (simpleDateformat.format(now).equals("15.01") || simpleDateformat.format(now).equals("16.01") || simpleDateformat.format(now).equals("18.01"))
+		if (simpleDateformat.format(now).equals("15.01") || simpleDateformat.format(now).equals("16.01") || simpleDateformat.format(now).equals("19.01"))
 		{
 			xpdaybonus += 400;
+		}
+		
+		// downtime
+		if (simpleDateformat.format(now).equals("17.01") || simpleDateformat.format(now).equals("18.01"))
+		{
+			xpdaybonus += 200;
 		}
 
 		// Xmas and New Year
