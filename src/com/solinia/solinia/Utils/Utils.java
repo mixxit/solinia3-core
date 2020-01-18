@@ -2608,6 +2608,8 @@ public class Utils {
 			if (classtype.getDefaultFeetMaterial().toUpperCase().equals("LEATHER_BOOTS") && classtype.getLeatherRgbDecimal() > 0)
 				if(item.getBasename().toUpperCase().equals("LEATHER_BOOTS"))
 					item.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
+			
+			item.setLastUpdatedTimeNow();
 		}
 		} catch (CoreStateInitException e)
 		{
