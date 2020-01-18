@@ -150,17 +150,17 @@ public class SoliniaItemFactory {
 			
 			ISoliniaItem chestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultChestMaterial().toUpperCase())));
 			chestItem.setDiscoverer(discoverer);
-			if (classtype.getDefaultHeadMaterial().toUpperCase().equals("LEATHER_CHESTPLATE") && classtype.getLeatherRgbDecimal() > 0)
+			if (classtype.getDefaultChestMaterial().toUpperCase().equals("LEATHER_CHESTPLATE") && classtype.getLeatherRgbDecimal() > 0)
 				chestItem.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
 
 			ISoliniaItem legsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultLegsMaterial().toUpperCase())));
 			legsItem.setDiscoverer(discoverer);
-			if (classtype.getDefaultHeadMaterial().toUpperCase().equals("LEATHER_LEGGINGS") && classtype.getLeatherRgbDecimal() > 0)
+			if (classtype.getDefaultLegsMaterial().toUpperCase().equals("LEATHER_LEGGINGS") && classtype.getLeatherRgbDecimal() > 0)
 				legsItem.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
 			
 			ISoliniaItem feetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultFeetMaterial().toUpperCase())));
 			feetItem.setDiscoverer(discoverer);
-			if (classtype.getDefaultHeadMaterial().toUpperCase().equals("LEATHER_BOOTS") && classtype.getLeatherRgbDecimal() > 0)
+			if (classtype.getDefaultFeetMaterial().toUpperCase().equals("LEATHER_BOOTS") && classtype.getLeatherRgbDecimal() > 0)
 				feetItem.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
 			
 			ISoliniaItem handItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaulthandMaterial().toUpperCase())));
