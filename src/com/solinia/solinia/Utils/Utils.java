@@ -2582,39 +2582,7 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-		try
-		{
-		for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
-		{
-			if (item.getAllowedClassNames().size() != 1)
-				continue;
-			
-			ISoliniaClass classtype = StateManager.getInstance().getConfigurationManager().getClassObj(item.getAllowedClassNames().get(0));
-			if (classtype == null)
-				continue;
-			
-			if (classtype.getDefaultHeadMaterial().toUpperCase().equals("LEATHER_HELMET") && classtype.getLeatherRgbDecimal() > 0)
-				if(item.getBasename().toUpperCase().equals("LEATHER_HELMET"))
-					item.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
-			
-			if (classtype.getDefaultChestMaterial().toUpperCase().equals("LEATHER_CHESTPLATE") && classtype.getLeatherRgbDecimal() > 0)
-				if(item.getBasename().toUpperCase().equals("LEATHER_CHESTPLATE"))
-					item.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
-	
-			if (classtype.getDefaultLegsMaterial().toUpperCase().equals("LEATHER_LEGGINGS") && classtype.getLeatherRgbDecimal() > 0)
-				if(item.getBasename().toUpperCase().equals("LEATHER_LEGGINGS"))
-					item.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
-			
-			if (classtype.getDefaultFeetMaterial().toUpperCase().equals("LEATHER_BOOTS") && classtype.getLeatherRgbDecimal() > 0)
-				if(item.getBasename().toUpperCase().equals("LEATHER_BOOTS"))
-					item.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
-			
-			item.setLastUpdatedTimeNow();
-		}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 
 	public static void disableLootOverLevel110() {
