@@ -7578,6 +7578,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (!nearbySolEntity.isSocial())
 					continue;
 				
+				if (nearbySolEntity.isCharmed() || nearbySolEntity.isRooted())
+					continue;
+				
 				if (nearbySolEntity.isSpecialKOSOrNeutralFaction())
 					continue;
 				
@@ -7588,6 +7591,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					continue;
 	
 				if (nearbySolEntity.checkAggro(attacker))
+					continue;
+				
+				if (nearbySolEntity.hasSpellEffectType(SpellEffectType.Harmony))
 					continue;
 				
 				// TODO assist cap check here
@@ -7835,5 +7841,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		return this.getHateList().entrySet().stream()
 	            .anyMatch(t -> t.getKey().equals(attacker.getBukkitLivingEntity().getUniqueId()));
+	}
+
+	@Override
+	public boolean hasSpellEffectType(SpellEffectType type) {
+		if (this.getBukkitLivingEntity() == null)
+			return false;
+		
+		try
+		{
+		return StateManager.getInstance().getEntityManager().hasEntityEffectType(this.getBukkitLivingEntity(),
+				type);
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
 	}
 }

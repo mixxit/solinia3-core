@@ -392,5 +392,7 @@ public interface ISoliniaLivingEntity
 
 	public boolean checkAggro(ISoliniaLivingEntity attacker);
 
+	public boolean hasSpellEffectType(SpellEffectType harmony);
+
 
 }
