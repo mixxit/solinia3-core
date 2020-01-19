@@ -219,6 +219,9 @@ public class SoliniaZonesDynmapTimer extends BukkitRunnable {
         if (StateManager.getInstance().showSpawns == true)
         for(ISoliniaSpawnGroup spawnGroup : zone.getSpawnGroups())
         {
+        	if (spawnGroup.isDisabled())
+        		continue;
+        	
         	String sgMarkerId = "SPAWNGROUP_"+spawnGroup.getId();
         	Marker sgmarker = StateManager.getInstance().soliniazonesresmark.remove(sgMarkerId);
         	MarkerIcon icon = StateManager.getInstance().getDynmap().getMarkerAPI().getMarkerIcon("skull");
