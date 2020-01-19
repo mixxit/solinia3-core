@@ -93,6 +93,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 	private String teleportAttackLocation = "";
 	private long timefrom = 0L;
 	private long timeto = Utils.MAXDAYTICK;
+	private boolean isSocial = true;
 
 	@Override
 	public int getId() {
@@ -367,7 +368,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 				+ ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal()
 				+ ChatColor.RESET);
 		sender.sendMessage("- pet: " + ChatColor.GOLD + isCorePet() + ChatColor.RESET + " " + "petcontrollable: "
-				+ ChatColor.GOLD + isPetControllable());
+				+ ChatColor.GOLD + isPetControllable() + ChatColor.RESET + " " + "social: "
+						+ ChatColor.GOLD + isSocial());
 		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET + " - guard: "
 				+ ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer()
 				+ ChatColor.RESET);
@@ -503,6 +505,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "mounted":
 			setMounted(Boolean.parseBoolean(value));
+			break;
+		case "social":
+			setSocial(Boolean.parseBoolean(value));
 			break;
 		case "usedisguise":
 			setUsedisguise(Boolean.parseBoolean(value));
@@ -1585,5 +1590,15 @@ public class SoliniaNPC implements ISoliniaNPC {
 	@Override
 	public void setMounted(boolean isMounted) {
 		this.isMounted = isMounted;
+	}
+
+	@Override
+	public boolean isSocial() {
+		return isSocial;
+	}
+
+	@Override
+	public void setSocial(boolean isSocial) {
+		this.isSocial = isSocial;
 	}
 }

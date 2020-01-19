@@ -271,4 +271,8 @@ public interface ISoliniaNPC {
 	boolean isMounted();
 
 	void setMounted(boolean isMounted);
+
+	boolean isSocial();
+
+	void setSocial(boolean isSocial);
 }
