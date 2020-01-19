@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Models.DamageHitInfo;
+import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.FocusEffect;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.NumHit;
@@ -118,7 +120,7 @@ public interface ISoliniaLivingEntity
 
 	int getOffense(String skillname);
 
-	public void addToHateList(UUID uniqueId, int hate);
+	public void addToHateList(UUID uniqueId, int hate, boolean isYellForHelp);
 
 	int getTotalToHit(String skillname, int hitChanceBonus);
 
@@ -363,5 +365,32 @@ public interface ISoliniaLivingEntity
 	LivingEntity getEntityTarget();
 
 	PacketMobVitals toPacketMobVitals(int partyMember, boolean withMana);
+
+	void setLastCallForAssist();
+
+	Timestamp getLastCallForAssist();
+
+	boolean canCallForAssist();
+
+	boolean isSocial();
+
+	ISoliniaNPC getNPC();
+
+	boolean isSpecialKOSOrNeutralFaction();
+
+	List<ISoliniaLivingEntity> getNPCsInRange(int iRange);
+
+	void aIYellForHelp(ISoliniaLivingEntity attacker);
+
+	void doCallForAssist(LivingEntity livingEntity);
+
+	public ISoliniaLivingEntity getOwnerOrSelf();
+
+	FactionStandingType getNPCvsNPCReverseFactionCon(ISoliniaLivingEntity iOther);
+
+	ISoliniaLivingEntity getOwnerSoliniaLivingEntity();
+
+	public boolean checkAggro(ISoliniaLivingEntity attacker);
+
 
 }

@@ -99,7 +99,7 @@ public class CommandNPCAttack implements CommandExecutor {
 					if (!targetEntity.getName().equals(targetentityname))
 						continue;
 					
-					solEntity.addToHateList(targetEntity.getUniqueId(), 999999);
+					solEntity.addToHateList(targetEntity.getUniqueId(), 999999, true);
 					sender.sendMessage("Added " + targetEntity.getName() + " to hate list of " + entity.getName() + " with 999999 hate");
 				}
 				

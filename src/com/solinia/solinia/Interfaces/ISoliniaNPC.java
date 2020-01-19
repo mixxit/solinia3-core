@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
+import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaNPCEventHandler;
@@ -275,4 +276,7 @@ public interface ISoliniaNPC {
 	boolean isSocial();
 
 	void setSocial(boolean isSocial);
+
+	FactionStandingType checkNPCFactionAlly(int factionid);
+
 }

@@ -174,7 +174,7 @@ public class SoliniaEntitySpells {
 							if (solCreature != null)
 							{
 								solCreature.setEntityTarget((LivingEntity) sourceEntity);
-								solCreature.addToHateList(sourceEntity.getUniqueId(), 1);
+								solCreature.addToHateList(sourceEntity.getUniqueId(), 1, true);
 							}
 						} catch (CoreStateInitException e) {
 

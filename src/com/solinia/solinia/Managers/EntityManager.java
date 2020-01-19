@@ -74,14 +74,16 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.GenericAttributes;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, Integer> entitySinging = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> lastCallForAssist = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
-	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Integer>> hateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Integer>>();
+	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>> hateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>>();
 	private ConcurrentHashMap<UUID, Timestamp> lastRiposte = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastBindwound = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastMeleeAttack = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1875,6 +1877,16 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
+	public ConcurrentHashMap<UUID, Timestamp> getLastCallForAssist() {
+		return lastCallForAssist;
+	}
+
+	@Override
+	public void setLastCallForAssist(UUID uuid, Timestamp lasttimestamp) {
+		this.lastCallForAssist.put(uuid, lasttimestamp);
+	}
+	
+	@Override
 	public ConcurrentHashMap<UUID, Timestamp> getLastDoubleAttack() {
 		return lastDoubleAttack;
 	}
@@ -1916,35 +1928,34 @@ public class EntityManager implements IEntityManager {
 
 	
 	@Override
-	public void addToHateList(UUID entity, UUID provoker, int hate) {
+	public void addToHateList(UUID entity, UUID provoker, int hate, boolean isYellForHelp) {
 		if (hateList.get(entity) == null)
-			hateList.put(entity, new ConcurrentHashMap<UUID, Integer>());
+			hateList.put(entity, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 		
 		if (hateList.get(entity).get(provoker) == null)
 		{
-			hateList.get(entity).put(provoker, hate);
+			hateList.get(entity).put(provoker, new Tuple<Integer,Boolean>(hate,isYellForHelp));
 			return;
 		}
 		
-		int newvalue = hateList.get(entity).get(provoker);
-		if ((newvalue + hate) > Integer.MAX_VALUE)
-			newvalue = Integer.MAX_VALUE;
-		else if ((newvalue + hate) < 0)
-			newvalue = 0;
+		Tuple<Integer,Boolean> newvalue = hateList.get(entity).get(provoker);
+		if ((newvalue.a() + hate) > Integer.MAX_VALUE)
+			newvalue = new Tuple<Integer,Boolean>(Integer.MAX_VALUE,newvalue.b());
+		else if ((newvalue.a() + hate) < 0)
+			newvalue = new Tuple<Integer,Boolean>(0,newvalue.b());
 		else
-			newvalue += hate;
-		
-		if (newvalue == 0)
+			newvalue = new Tuple<Integer,Boolean>(newvalue.a()+hate,newvalue.b());
+		if (newvalue.a() == 0)
 			hateList.get(entity).remove(provoker);
 		else
 			hateList.get(entity).put(provoker, newvalue);
 	}
 	
 	@Override
-	public ConcurrentHashMap<UUID, Integer> getHateList(UUID entity)
+	public ConcurrentHashMap<UUID, Tuple<Integer,Boolean>> getHateList(UUID entity)
 	{
 		if (hateList.get(entity) == null)
-			hateList.put(entity, new ConcurrentHashMap<UUID, Integer>());
+			hateList.put(entity, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 		
 		return hateList.get(entity);
 	}
@@ -1956,20 +1967,20 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public Integer getHateListEntry(UUID entity, UUID provoker)
+	public Tuple<Integer,Boolean> getHateListEntry(UUID entity, UUID provoker)
 	{
 		if (hateList.get(entity) == null)
-			hateList.put(entity, new ConcurrentHashMap<UUID, Integer>());
+			hateList.put(entity, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 		
 		if (hateList.get(entity).get(provoker) == null)
-			return 0;
+			return new Tuple<Integer,Boolean>(0,true);
 		
 		return hateList.get(entity).get(provoker);
 	}
 
 	@Override
 	public void clearHateList(UUID entityUuid) {
-		hateList.put(entityUuid,  new ConcurrentHashMap<UUID, Integer>());
+		hateList.put(entityUuid,  new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 		Entity entity = Bukkit.getEntity(entityUuid);
 		if (entity == null)
 			return;
@@ -1999,5 +2010,53 @@ public class EntityManager implements IEntityManager {
 		}
 		
 		return followers;
+	}
+
+	@Override
+	public void doNPCYellForAssist() {
+		List<Integer> completedNpcsIds = new ArrayList<Integer>();
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			for(Entity entity : player.getNearbyEntities(50, 50, 50))
+			{
+				if (entity instanceof Player)
+					continue;
+				
+				if (!(entity instanceof LivingEntity))
+					continue;
+				
+				LivingEntity livingEntity = (LivingEntity)entity;
+				
+				if (!(entity instanceof Creature))
+					continue;
+				
+				if(entity.isDead())
+					continue;
+				
+				Creature creature = (Creature)entity;
+				if (creature.getTarget() == null)
+					continue;
+				
+				if (!Utils.isLivingEntityNPC(livingEntity))
+					continue;
+				
+				try {
+					ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(livingEntity);
+					if (completedNpcsIds.contains(solLivingEntity.getNpcid()))
+						continue;
+					
+					if (!solLivingEntity.isSocial())
+						continue;
+					
+					completedNpcsIds.add(solLivingEntity.getNpcid());
+					
+					solLivingEntity.doCallForAssist(creature.getTarget());
+					
+				} catch (CoreStateInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

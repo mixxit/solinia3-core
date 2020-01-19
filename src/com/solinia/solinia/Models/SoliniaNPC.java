@@ -1601,4 +1601,31 @@ public class SoliniaNPC implements ISoliniaNPC {
 	public void setSocial(boolean isSocial) {
 		this.isSocial = isSocial;
 	}
+
+	@Override
+	public FactionStandingType checkNPCFactionAlly(int other_faction) {
+		try
+		{
+			if (this.getFactionid() < 1)
+				return FactionStandingType.FACTION_INDIFFERENT;
+			
+			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(this.getFactionid());
+			
+			FactionStandingEntry fac = faction.getFactionEntry(other_faction);
+			if (fac == null)
+				return FactionStandingType.FACTION_INDIFFERENT;
+	
+			if (fac.getValue() > 0)
+				return FactionStandingType.FACTION_ALLY;
+			else if (fac.getValue() < 0)
+				return FactionStandingType.FACTION_SCOWLS;
+			else
+				return FactionStandingType.FACTION_INDIFFERENT;
+		} catch (CoreStateInitException e)
+		{
+			return FactionStandingType.FACTION_INDIFFERENT;
+		}
+	}
+	
+	
 }

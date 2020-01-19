@@ -16,6 +16,8 @@ import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.UniversalMerchant;
 
+import net.minecraft.server.v1_14_R1.Tuple;
+
 public interface IEntityManager {
 	ISoliniaLivingEntity getLivingEntity(LivingEntity livingentity);
 
@@ -138,13 +140,13 @@ public interface IEntityManager {
 
 	void setLastRiposte(UUID uuid, Timestamp lasttimestamp);
 
-	void addToHateList(UUID entity, UUID provoker, int hate);
+	void addToHateList(UUID entity, UUID provoker, int hate, boolean isYellForHelp);
 
-	Integer getHateListEntry(UUID entity, UUID provoker);
+	Tuple<Integer, Boolean> getHateListEntry(UUID entity, UUID provoker);
 
 	void doNPCTeleportAttack();
 
-	ConcurrentHashMap<UUID, Integer> getHateList(UUID entity);
+	ConcurrentHashMap<UUID, Tuple<Integer, Boolean>> getHateList(UUID entity);
 
 	void clearHateList(UUID uuid);
 
@@ -193,5 +195,11 @@ public interface IEntityManager {
 	void removeAllAbandonedPetsInChunk(String worldName, int chunkX, int chunkZ);
 
 	void playSpellFinishedSoundEffect(LivingEntity targetEntity, ISoliniaSpell spell);
+
+	void doNPCYellForAssist();
+
+	ConcurrentHashMap<UUID, Timestamp> getLastCallForAssist();
+
+	void setLastCallForAssist(UUID uuid, Timestamp lasttimestamp);
 
 }

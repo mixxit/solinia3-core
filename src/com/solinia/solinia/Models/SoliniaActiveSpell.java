@@ -1856,7 +1856,7 @@ public class SoliniaActiveSpell {
 		if (source instanceof LivingEntity) {
 			try {
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) source);
-				solLivingEntity.addToHateList(getLivingEntity().getUniqueId(), spellEffect.getBase());
+				solLivingEntity.addToHateList(getLivingEntity().getUniqueId(), spellEffect.getBase(), true);
 			} catch (CoreStateInitException e) {
 
 			}

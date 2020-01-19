@@ -65,6 +65,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.EntityDamageSource;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -412,13 +413,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			double damage = 1;
 
 			if (this.isNPC()) {
-				try {
-					ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-					if (npc != null) {
-						damage = Utils.getNPCDefaultDamage(npc);
-					}
-				} catch (CoreStateInitException e) {
-
+				ISoliniaNPC npc = getNPC();
+				if (npc != null) {
+					damage = Utils.getNPCDefaultDamage(npc);
 				}
 			}
 
@@ -573,6 +570,52 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public FactionStandingType getNPCvsNPCReverseFactionCon(ISoliniaLivingEntity iOther)
+	{
+		if (iOther == null)
+			return FactionStandingType.FACTION_INDIFFERENT;
+		
+		if (!this.isNPC())
+			return FactionStandingType.FACTION_INDIFFERENT;
+		
+		if (!iOther.isNPC())
+			return FactionStandingType.FACTION_INDIFFERENT;
+			
+		iOther = iOther.getOwnerOrSelf();
+		int primaryFaction= iOther.getNPC().getFactionid();
+
+		//I am pretty sure that this special faction call is backwards
+		//and should be iOther->GetSpecialFactionCon(this)
+		if (primaryFaction < 0)
+			return GetSpecialFactionCon(iOther);
+
+		if (primaryFaction == 0)
+			return FactionStandingType.FACTION_INDIFFERENT;
+
+		//if we are a pet, use our owner's faction stuff
+		ISoliniaLivingEntity owner = getOwnerSoliniaLivingEntity();
+		if (owner != null)
+			return owner.getNPCvsNPCReverseFactionCon(iOther);
+
+		//make sure iOther is an npc
+		//also, if we dont have a faction, then they arnt gunna think anything of us either
+		if(!iOther.isNPC() || this.getNPC().getFactionid() == 0)
+			return(FactionStandingType.FACTION_INDIFFERENT);
+
+		//if we get here, iOther is an NPC too
+
+		//otherwise, employ the npc faction stuff
+		//so we need to look at iOther's faction table to see
+		//what iOther thinks about our primary faction
+		return(iOther.getNPC().checkNPCFactionAlly(this.getNPC().getFactionid()));
+	}
+
+	private FactionStandingType GetSpecialFactionCon(ISoliniaLivingEntity iOther) {
+		// TODO Auto-generated method stub
+		return FactionStandingType.FACTION_INDIFFERENT;
 	}
 
 	@Override
@@ -2009,7 +2052,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (my_hit.damage_done > 0 && hate < 1)
 			hate = 1;
 
-		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate);
+		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate, true);
 
 		return my_hit;
 	}
@@ -3205,7 +3248,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			if (isNPC()) {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				ISoliniaNPC npc = getNPC();
 				return npc.getSkill(skillname.toUpperCase());
 			}
 		} catch (CoreStateInitException e) {
@@ -3220,13 +3263,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		double tohit = getSkill("OFFENSE") + 7;
 		tohit += getSkill(skillname.toUpperCase());
 		if (isNPC()) {
-			try {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-				if (npc != null)
-					tohit += npc.getAccuracyRating();
-			} catch (CoreStateInitException e) {
-				//
-			}
+			ISoliniaNPC npc = getNPC();
+			if (npc != null)
+				tohit += npc.getAccuracyRating();
 		}
 		if (isPlayer()) {
 			double reduction = getIntoxication() / 2.0;
@@ -3299,12 +3338,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO Item bonsues
 		// defense += itembonuses.AvoidMeleeChance; // item mod2
 		if (isNPC()) {
-			try {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-				defense += npc.getAvoidanceRating();
-			} catch (CoreStateInitException e) {
-				// no bonus
-			}
+			ISoliniaNPC npc = getNPC();
+			defense += npc.getAvoidanceRating();
 		}
 
 		if (isPlayer()) {
@@ -3394,14 +3429,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() < 1)
 			return false;
 
-		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.isUndead())
-				return true;
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ISoliniaNPC npc = getNPC();
+		if (npc.isUndead())
+			return true;
 
 		return false;
 	}
@@ -3414,14 +3444,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() < 1)
 			return false;
 
-		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.isPlant())
-				return true;
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ISoliniaNPC npc = getNPC();
+		if (npc.isPlant())
+			return true;
 
 		return false;
 	}
@@ -3434,14 +3459,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() < 1)
 			return false;
 
-		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.isAnimal())
-				return true;
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ISoliniaNPC npc = getNPC();
+		if (npc.isAnimal())
+			return true;
 
 		return false;
 	}
@@ -3492,6 +3512,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public int getNpcid() {
 		return npcid;
 	}
+	
+	@Override
+	public ISoliniaNPC getNPC()
+	{
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
 
 	@Override
 	public void setNpcid(int npcid) {
@@ -3523,19 +3555,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() < 1)
 			return;
 
-		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
-				return;
+		ISoliniaNPC npc = getNPC();
+		if (npc.getRandomchatTriggerText() == null || npc.getRandomchatTriggerText().equals(""))
+			return;
 
-			// 2% chance of saying something
-			int random = Utils.RandomBetween(1, 100);
-			if (random < 2) {
-				this.say(npc.getRandomchatTriggerText());
-			}
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// 2% chance of saying something
+		int random = Utils.RandomBetween(1, 100);
+		if (random < 2) {
+			this.say(npc.getRandomchatTriggerText());
 		}
 	}
 
@@ -3547,19 +3574,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() < 1)
 			return;
 
-		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc == null)
-				return;
+		ISoliniaNPC npc = getNPC();
+		if (npc == null)
+			return;
 
-			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
-			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage,
-					true, message, getBukkitLivingEntity().getEquipment().getItemInMainHand());
-
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
+		StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage,
+				true, message, getBukkitLivingEntity().getEquipment().getItemInMainHand());
 	}
 
 	@Override
@@ -3571,7 +3592,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			ISoliniaNPC npc = getNPC();
 			if (npc == null)
 				return;
 			
@@ -3606,7 +3627,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			ISoliniaNPC npc = getNPC();
 			if (npc == null)
 				return;
 
@@ -3653,7 +3674,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			ISoliniaNPC npc = getNPC();
 			if (npc == null)
 				return;
 			
@@ -4150,6 +4171,37 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return false;
 	}
+	
+	@Override
+	public boolean isSocial() {
+		if (isPlayer())
+			return false;
+
+		if (!isNPC())
+			return false;
+
+		if (this.livingentity == null)
+			return false;
+
+		ISoliniaNPC npc;
+		try {
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			
+			if (npc == null)
+				return false;
+			
+			if (npc.getClassid() < 1)
+				return false;
+
+			return npc.isSocial();
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 
 	@Override
 	public void doSpellCast(Plugin plugin, LivingEntity castingAtEntity) {
@@ -4185,7 +4237,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			ISoliniaNPC npc = getNPC();
 			if (npc == null)
 				return;
 			StateManager.getInstance().getEntityManager().setNPCMana(this.getBukkitLivingEntity(), npc, amount);
@@ -4209,7 +4261,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 0;
 
 		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			ISoliniaNPC npc = getNPC();
 			if (npc == null)
 				return 0;
 			return StateManager.getInstance().getEntityManager().getNPCMana(this.getBukkitLivingEntity(), npc);
@@ -4527,6 +4579,44 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		}
 	}
+	
+	@Override
+	public Timestamp getLastCallForAssist() {
+		try {
+			return StateManager.getInstance().getEntityManager().getLastCallForAssist()
+					.get(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e) {
+		}
+		return null;
+	}
+	
+	@Override
+	public void setLastCallForAssist() {
+		try {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			StateManager.getInstance().getEntityManager().setLastCallForAssist(this.getBukkitLivingEntity().getUniqueId(),
+					nowtimestamp);
+		} catch (CoreStateInitException e) {
+
+		}
+	}
+	
+	@Override
+	public boolean canCallForAssist()
+	{
+		Timestamp expiretimestamp = getLastCallForAssist();
+		if (expiretimestamp != null) {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus(3, ChronoUnit.SECONDS));
+
+			if (nowtimestamp.before(mintimestamp))
+				return false;
+		}
+		
+		return true;
+	}
 
 	@Override
 	public Timestamp getLastDoubleAttack() {
@@ -4709,13 +4799,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (isNPC()) {
-			try {
-				Utils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity().getName(), "Found NPC, seeking equipped soliniaitems");
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-				return npc.getEquippedSoliniaItems(getBukkitLivingEntity(), ignoreMainhand);
-			} catch (CoreStateInitException e) {
-
-			}
+			Utils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity().getName(), "Found NPC, seeking equipped soliniaitems");
+			ISoliniaNPC npc = getNPC();
+			return npc.getEquippedSoliniaItems(getBukkitLivingEntity(), ignoreMainhand);
 		}
 
 		return new ArrayList<ISoliniaItem>();
@@ -5222,25 +5308,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() > 0) {
 			maxmana = maxmana + (50 * getLevel());
 
-			try {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-				if (npc != null) {
-					if (npc.isBoss()) {
-						maxmana += (Utils.getBossMPRegenMultipler() * npc.getLevel());
-					}
-					if (npc.isHeroic()) {
-						maxmana += (Utils.getHeroicMPRegenMultipler() * npc.getLevel());
-					}
-
-					if (npc.isRaidboss()) {
-						maxmana += (Utils.getRaidBossMPRegenMultipler() * npc.getLevel());
-					}
-					if (npc.isRaidheroic()) {
-						maxmana += (Utils.getRaidHeroicMPRegenMultipler() * npc.getLevel());
-					}
+			ISoliniaNPC npc = getNPC();
+			if (npc != null) {
+				if (npc.isBoss()) {
+					maxmana += (Utils.getBossMPRegenMultipler() * npc.getLevel());
 				}
-			} catch (CoreStateInitException e) {
+				if (npc.isHeroic()) {
+					maxmana += (Utils.getHeroicMPRegenMultipler() * npc.getLevel());
+				}
 
+				if (npc.isRaidboss()) {
+					maxmana += (Utils.getRaidBossMPRegenMultipler() * npc.getLevel());
+				}
+				if (npc.isRaidheroic()) {
+					maxmana += (Utils.getRaidHeroicMPRegenMultipler() * npc.getLevel());
+				}
 			}
 
 		}
@@ -5388,7 +5470,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void addToHateList(UUID uniqueId, int hate) {
+	public void addToHateList(UUID uniqueId, int hate, boolean isYellForHelp) {
 		if (this.isCurrentlyNPCPet()) {
 			// Never add a member to hate list that is a friend of owner or pet
 			if (this.getOwnerEntity().getUniqueId().equals(uniqueId))
@@ -5411,13 +5493,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		try {
 			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(),
-					uniqueId, hate);
+					uniqueId, hate, true);
 			checkHateTargets();
 		} catch (CoreStateInitException e) {
 		}
 	}
 
-	public ConcurrentHashMap<UUID, Integer> getHateList() {
+	public ConcurrentHashMap<UUID, Tuple<Integer,Boolean>> getHateList() {
 		try {
 			return StateManager.getInstance().getEntityManager()
 					.getHateList(this.getBukkitLivingEntity().getUniqueId());
@@ -5455,7 +5537,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int maxHate = 0;
 		UUID bestUUID = null;
 		for (UUID uuid : this.getHateList().keySet()) {
-			int hate = this.getHateList().get(uuid);
+			int hate = this.getHateList().get(uuid).a();
 			if (hate < 1) {
 				removeUuids.add(uuid);
 				continue;
@@ -6163,7 +6245,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				CanSkillProc = false; // Disable skill procs
 			}
 
-			solOther.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate);
+			solOther.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate, true);
 			/*
 			 * skill attack proc AAs) if (damage > 0 && aabonuses.SkillAttackProc[0] &&
 			 * aabonuses.SkillAttackProc[1] == skillinuse &&
@@ -6350,9 +6432,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (this.getBukkitLivingEntity() instanceof Creature) {
 			if (entity != null && !this.getHateList().containsKey(entity.getUniqueId())) {
-				this.addToHateList(entity.getUniqueId(), 1);
+				this.addToHateList(entity.getUniqueId(), 1, true);
 			}
-
+			
 			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
 		}
 	}
@@ -6386,7 +6468,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		try {
-			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			ISoliniaNPC npc = getNPC();
 			if (npc.getFactionid() == 0)
 				return;
 
@@ -6449,7 +6531,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 						if (hatedFactions.contains((Integer) targetNpc.getFactionid())) {
 							if (Utils.isEntityInLineOfSight(getBukkitLivingEntity(),le)) {
-								addToHateList(le.getUniqueId(), 1);
+								addToHateList(le.getUniqueId(), 1, true);
 								return;
 							}
 						}
@@ -6464,7 +6546,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					Player player = (Player) entity;
 					if (faction.getName().equals("KOS")) {
 						if (Utils.isEntityInLineOfSight(getBukkitLivingEntity(),player)) {
-							addToHateList(player.getUniqueId(), 1);
+							addToHateList(player.getUniqueId(), 1, true);
 							return;
 						}
 					}
@@ -6480,7 +6562,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						case FACTION_THREATENLY:
 						case FACTION_SCOWLS:
 							if (Utils.isEntityInLineOfSight(getBukkitLivingEntity(),player)) {
-								addToHateList(player.getUniqueId(), 1);
+								addToHateList(player.getUniqueId(), 1, true);
 								return;
 							} else {
 								continue;
@@ -6554,7 +6636,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public String getLanguage() {
 		if (isNPC()) {
 			try {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+				ISoliniaNPC npc = getNPC();
 				if (npc.getRaceid() > 0) {
 					ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(npc.getRaceid());
 					return race.getName().toUpperCase();
@@ -6578,12 +6660,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean isSpeaksAllLanguages() {
 		if (isNPC()) {
-			try {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-				return npc.isSpeaksAllLanguages();
-			} catch (CoreStateInitException e) {
-				//
-			}
+			ISoliniaNPC npc = getNPC();
+			return npc.isSpeaksAllLanguages();
 		}
 
 		return false;
@@ -6592,12 +6670,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void setSpeaksAllLanguages(boolean speaksAllLanguages) {
 		if (isNPC()) {
-			try {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-				npc.setSpeaksAllLanguages(speaksAllLanguages);
-			} catch (CoreStateInitException e) {
-				//
-			}
+			ISoliniaNPC npc = getNPC();
+			if(npc == null)
+				return;
+			
+			npc.setSpeaksAllLanguages(speaksAllLanguages);
 		}
 	}
 
@@ -7395,6 +7472,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return Bukkit.getEntity(this.getActiveMob().getOwner().get());
 	}
+	
+	@Override
+	public ISoliniaLivingEntity getOwnerSoliniaLivingEntity() {
+		if (!isCurrentlyNPCPet())
+			return null;
+
+		try {
+			return SoliniaLivingEntityAdapter.Adapt((LivingEntity)(Bukkit.getEntity(this.getActiveMob().getOwner().get())));
+		} catch (CoreStateInitException e) {
+			return null;
+		}
+	}
 
 	@Override
 	public int getMaxTotalSlots() {
@@ -7418,6 +7507,140 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		return false;
 	}
+	
+	@Override
+	public boolean isSpecialKOSOrNeutralFaction()
+	{
+		if (!isNPC())
+			return false;
+		
+		ISoliniaNPC npc = getNPC();
+		if (npc == null)
+			return false;
+		
+		if (npc.getFactionid() <= 0)
+			return true;
+
+		try
+		{
+		ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
+				.getFaction(npc.getFactionid());
+		if (faction.getName().equals("NEUTRAL") || faction.getName().toUpperCase().equals("KOS"))
+			return true;
+		} catch (CoreStateInitException e)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public void aIYellForHelp(ISoliniaLivingEntity attacker) {
+		try
+		{
+			if (this.getBukkitLivingEntity() == null)
+				return;
+			
+			if (this.getBukkitLivingEntity().isDead())
+				return;
+			
+			if (!(this.getBukkitLivingEntity() instanceof Creature))
+				return;
+			
+			if (attacker == null || attacker.getBukkitLivingEntity() == null || attacker.getBukkitLivingEntity().isDead())
+				return;
+	
+			if (!isNPC())
+				return;
+			
+			ISoliniaNPC npc = getNPC();
+			if (npc == null)
+				return;
+			
+			if (this.isSpecialKOSOrNeutralFaction())
+				return;
+			
+			if (hasAssistAggro())
+				return;
+			
+			for(ISoliniaLivingEntity nearbySolEntity : getNPCsInRange(Utils.CALL_FOR_ASSIST_RANGE))
+			{
+				if (nearbySolEntity == null || nearbySolEntity.getBukkitLivingEntity() == null || nearbySolEntity.getBukkitLivingEntity().isDead())
+					continue;
+				
+				if (!(nearbySolEntity.getBukkitLivingEntity() instanceof Creature))
+					continue;
+				
+				if ((((Creature)nearbySolEntity.getBukkitLivingEntity()).getTarget()) != null)
+					continue;
+	
+				if (!nearbySolEntity.isSocial())
+					continue;
+				
+				if (nearbySolEntity.isSpecialKOSOrNeutralFaction())
+					continue;
+				
+				if (nearbySolEntity.getBukkitLivingEntity().getUniqueId().equals(attacker.getBukkitLivingEntity().getUniqueId()))
+					continue;
+	
+				if (nearbySolEntity.isCurrentlyNPCPet())
+					continue;
+	
+				if (nearbySolEntity.checkAggro(attacker))
+					continue;
+				
+				// TODO assist cap check here
+				
+				if (nearbySolEntity.getBukkitLivingEntity().getLocation().distance(this.getBukkitLivingEntity().getLocation()) > Utils.MAX_ENTITY_AGGRORANGE)
+					continue;
+					
+				//if they are in range, make sure we are not green...
+				//then jump in if they are our friend
+				if (attacker.getLevelCon(nearbySolEntity).equals(ChatColor.GRAY) && nearbySolEntity.getLevel() < 50)
+					continue;
+				
+				if (nearbySolEntity.getNPC() == null)
+					continue;
+				
+				if (nearbySolEntity.getNPC().getFactionid() < 1)
+					continue;
+				
+				boolean useprimfaction = false;
+				
+				if (nearbySolEntity.getNPC().getFactionid() == this.getNpcid())
+					useprimfaction = true;
+				
+				ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(nearbySolEntity.getNPC().getFactionid());
+				if (faction == null)
+					continue;
+				
+				if (useprimfaction == true || 
+						!(
+								this.getNPCvsNPCReverseFactionCon(nearbySolEntity).equals(FactionStandingType.FACTION_ALLY) ||
+								this.getNPCvsNPCReverseFactionCon(nearbySolEntity).equals(FactionStandingType.FACTION_WARMLY) ||
+								this.getNPCvsNPCReverseFactionCon(nearbySolEntity).equals(FactionStandingType.FACTION_KINDLY) ||
+								this.getNPCvsNPCReverseFactionCon(nearbySolEntity).equals(FactionStandingType.FACTION_AMIABLE)
+						)
+						)
+				{
+					if (!Utils.isEntityInLineOfSight(nearbySolEntity.getBukkitLivingEntity(), this.getBukkitLivingEntity()))
+						continue;
+					
+					nearbySolEntity.addToHateList(attacker.getBukkitLivingEntity().getUniqueId(), 25,false);
+				}
+				
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+
+	private boolean hasAssistAggro() {
+		return this.getHateList().entrySet().stream()
+	            .anyMatch(t -> t.getValue().b() == true);
+	}
 
 	@Override
 	public void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType) {
@@ -7432,6 +7655,34 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			
 		}
+	}
+	
+	@Override
+	public List<ISoliniaLivingEntity> getNPCsInRange(int iRange)
+	{
+		List<ISoliniaLivingEntity> entities = new ArrayList<ISoliniaLivingEntity>();
+		try
+		{
+			for(Entity entity : this.getBukkitLivingEntity().getNearbyEntities(iRange,iRange,iRange))
+			{
+				if (!(entity instanceof LivingEntity))
+					continue;
+				
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+				if (!solEntity.isNPC())
+					continue;
+				
+				if (solEntity.getNpcid() != npcid)
+					continue;
+				
+				entities.add(solEntity);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return entities;
 	}
 
 	@Override
@@ -7475,7 +7726,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (recipient instanceof Player && (((Player) recipient).isOp() || this.isCurrentlyNPCPet())) {
 			for(UUID uuid : getHateList().keySet())
 			{
-				int hate = getHateList().get(uuid);
+				int hate = getHateList().get(uuid).a();
 				String name = "";
 				org.bukkit.entity.Entity entity = Bukkit.getEntity(uuid);
 				if (entity != null)
@@ -7520,5 +7771,63 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 		}
 		return null;
+	}
+
+	@Override
+	public void doCallForAssist(LivingEntity target) {
+		// have assist cap
+		if (canCallForAssist() && this.getHateList().size() > 0 && !isCharmed() && !hasAssistAggro()
+			    // && NPCAssistCap() < RuleI(Combat, NPCAssistCap)
+				) 
+		{
+			if (target == null)
+				return;
+			
+			if (target.isDead())
+				return;
+			
+			try
+			{
+				ISoliniaLivingEntity solTarget = SoliniaLivingEntityAdapter.Adapt(target);
+				if (solTarget == null)
+					return;
+				
+				aIYellForHelp(solTarget);
+				this.setLastCallForAssist();
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+	}
+
+	@Override
+	public ISoliniaLivingEntity getOwnerOrSelf() {
+		if (this.getOwnerEntity() == null)
+			return this;
+		
+		if (!(this.getOwnerEntity() instanceof LivingEntity))
+			return this;
+		
+		try {
+			return SoliniaLivingEntityAdapter.Adapt((LivingEntity)this.getOwnerEntity());
+		} catch (CoreStateInitException e) {
+			return this;
+		} 
+	}
+
+	@Override
+	public boolean checkAggro(ISoliniaLivingEntity attacker) {
+		if (attacker == null)
+			return false;
+		
+		if (attacker.getBukkitLivingEntity() == null)
+			return false;
+
+		if (attacker.getBukkitLivingEntity().isDead())
+			return false;
+		
+		return this.getHateList().entrySet().stream()
+	            .anyMatch(t -> t.getKey().equals(attacker.getBukkitLivingEntity().getUniqueId()));
 	}
 }

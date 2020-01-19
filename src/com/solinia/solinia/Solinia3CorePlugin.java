@@ -66,6 +66,7 @@ import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
 import com.solinia.solinia.Timers.NPCSpellCastTimer;
 import com.solinia.solinia.Timers.NPCSummonAndTeleportCastTimer;
+import com.solinia.solinia.Timers.NPCYellForAssistTimer;
 import com.solinia.solinia.Timers.PetCheckTickTimer;
 import com.solinia.solinia.Timers.PetFastCheckTimer;
 import com.solinia.solinia.Timers.PlayerEquipmentTickTimer;
@@ -121,6 +122,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private Economy economy;
 	private MarkerSet soliniaZonesSet;
 	private MarkerSet regionExtentsSet;
+	private NPCYellForAssistTimer npcYellForAssistTimer;
 	
 	@Override
 	public void onEnable() {
@@ -418,6 +420,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		npcSummonCastTimer = new NPCSummonAndTeleportCastTimer(this);
 		npcSummonCastTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+
+		npcYellForAssistTimer = new NPCYellForAssistTimer();
+		npcYellForAssistTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
 		
 		petCheckTickTimer = new PetCheckTickTimer();
 		petCheckTickTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
