@@ -22,7 +22,7 @@ public class SoliniaSpawnGroupFactory {
 		sg.setLocation(location);
 		sg.setRespawntime(900);
 		
-		StateManager.getInstance().getConfigurationManager().addSpawnGroup(sg);
+		StateManager.getInstance().getConfigurationManager().addSpawnGroup(sg, false);
 		return sg.getId();
 	}
 }

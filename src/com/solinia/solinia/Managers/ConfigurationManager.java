@@ -767,9 +767,9 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
-	public void addSpawnGroup(ISoliniaSpawnGroup spawngroup) {
+	public void addSpawnGroup(ISoliniaSpawnGroup spawngroup, boolean providerReload) {
 		this.spawngroupRepository.add(spawngroup);
-		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroup.getId()));
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroup.getId()),providerReload);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 
@@ -791,7 +791,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
 		this.spawngroupRepository.update(spawngroup);
-		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroup.getId()));
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroup.getId()),true);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 	
@@ -801,7 +801,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			return;
 		
 		getSpawnGroup(spawngroupid).setLocation(location);
-		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroupid));
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawngroupid), true);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 
@@ -1170,7 +1170,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		ISoliniaSpawnGroup spawnGroup = getSpawnGroup(spawngroupid);
 		spawnGroup.editSetting(setting, value);
 
-		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawnGroup.getId()));
+		SoliniaSpawnGroupUpdatedEvent soliniaevent = new SoliniaSpawnGroupUpdatedEvent(getSpawnGroup(spawnGroup.getId()), true);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 	}
 

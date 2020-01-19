@@ -82,6 +82,7 @@ public class CommandCreateSpawnGroup implements CommandExecutor{
 		try {
 			int id = SoliniaSpawnGroupFactory.Create(spawngroupname, npcid, player.getLocation());
 			sender.sendMessage("SpawnGroup ID " + id + " created at your location");
+			sender.sendMessage("To see the npc in the world you will need to /mm reloadall");
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

@@ -339,7 +339,7 @@ public interface IConfigurationManager {
 
 	int getNextSpawnGroupId();
 
-	void addSpawnGroup(ISoliniaSpawnGroup spawngroup);
+	void addSpawnGroup(ISoliniaSpawnGroup spawngroup, boolean providerReload);
 
 	void updateSpawnGroup(ISoliniaSpawnGroup spawngroup);
 
