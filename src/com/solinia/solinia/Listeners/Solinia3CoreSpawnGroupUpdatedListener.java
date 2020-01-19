@@ -21,11 +21,13 @@ public class Solinia3CoreSpawnGroupUpdatedListener implements Listener {
 			return;
 		
 		try {
-			System.out.println("Spawngroup Update, reloading provider");
 			
 			StateManager.getInstance().getEntityManager().getNPCEntityProvider().updateSpawnGroup(event.getSpawnGroup());
 			if (event.getProviderReload() == true)
+			{
+				System.out.println("Spawngroup Update, reloading provider");
 				StateManager.getInstance().getEntityManager().getNPCEntityProvider().reloadProvider();
+			}
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

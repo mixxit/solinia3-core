@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -82,7 +83,7 @@ public class CommandCreateSpawnGroup implements CommandExecutor{
 		try {
 			int id = SoliniaSpawnGroupFactory.Create(spawngroupname, npcid, player.getLocation());
 			sender.sendMessage("SpawnGroup ID " + id + " created at your location");
-			sender.sendMessage("To see the npc in the world you will need to /mm reloadall");
+			sender.sendMessage(ChatColor.GRAY + "To see the npc in the world you will need to /mm reload" + ChatColor.RESET);
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
