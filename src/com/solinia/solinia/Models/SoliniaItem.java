@@ -1466,7 +1466,7 @@ public class SoliniaItem implements ISoliniaItem {
 	public void setLastUpdatedTimeNow() {
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-		System.out.println("Set LastUpdatedTime on " + getId());
+		//System.out.println("Set LastUpdatedTime on " + getId());
 		this.setLastUpdatedTime(nowtimestamp);
 	}
 

@@ -72,16 +72,16 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 				return false;
 			}
 			
-			String itemscreated = "";
+			int itemscreated = 0;
 			for(ISoliniaClass classEntry : StateManager.getInstance().getConfigurationManager().getClasses())
 			{
 				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true,"");
 				for (Integer item : items) {
 					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, 1, false, chance);
-					itemscreated += item + " ";
+					itemscreated++;
 				}
 			}
-			sender.sendMessage("Created items as IDs: " + itemscreated + " with " + chance + "% chance in lootdrop: " + lootdropid);
+			sender.sendMessage("Added item count " + itemscreated + " with " + chance + "% chance in lootdrop: " + lootdropid);
 		} catch (CoreStateInitException e) {
 			sender.sendMessage(e.getMessage());
 		} catch (SoliniaItemException e) {

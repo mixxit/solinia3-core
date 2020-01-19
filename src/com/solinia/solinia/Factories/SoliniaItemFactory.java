@@ -81,7 +81,7 @@ public class SoliniaItemFactory {
 	    }
 		
 		StateManager.getInstance().getConfigurationManager().addItem(item);
-		System.out.println("New Item Added: " + item.getId() + " - " + item.getDisplayname());
+		//System.out.println("New Item Added: " + item.getId() + " - " + item.getDisplayname());
 		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 		return item;
 	}
@@ -128,7 +128,7 @@ public class SoliniaItemFactory {
 	    }
 		
 		StateManager.getInstance().getConfigurationManager().addItem(item);
-		System.out.println("New Item Added: " + item.getId() + " - " + item.getDisplayname());
+		//System.out.println("New Item Added: " + item.getId() + " - " + item.getDisplayname());
 		StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 		return item;
 	}
