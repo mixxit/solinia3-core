@@ -226,7 +226,7 @@ public class EntityManager implements IEntityManager {
 				forceSetEntityTarget(me,null);
 		}
 		
-		for(Entity entity : me.getNearbyEntities(50, 50, 50))
+		for(Entity entity : me.getNearbyEntities(25, 25, 25))
 		{
 			if (entity instanceof Creature)
 			{
@@ -552,7 +552,7 @@ public class EntityManager implements IEntityManager {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			for(Entity entity : player.getNearbyEntities(50, 50, 50))
+			for(Entity entity : player.getNearbyEntities(25, 25, 25))
 			{
 				if (entity instanceof Player)
 					continue;
@@ -588,7 +588,7 @@ public class EntityManager implements IEntityManager {
 		
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			for(Entity entity : player.getNearbyEntities(50, 50, 50))
+			for(Entity entity : player.getNearbyEntities(25, 25, 25))
 			{
 				try
 				{
@@ -669,7 +669,7 @@ public class EntityManager implements IEntityManager {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			for(Entity entityThatWillCast : player.getNearbyEntities(50, 50, 50))
+			for(Entity entityThatWillCast : player.getNearbyEntities(25, 25, 25))
 			{
 				if (entityThatWillCast instanceof Player)
 					continue;
@@ -1343,7 +1343,7 @@ public class EntityManager implements IEntityManager {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			for(Entity entityThatWillTeleportAttack : player.getNearbyEntities(50, 50, 50))
+			for(Entity entityThatWillTeleportAttack : player.getNearbyEntities(25, 25, 25))
 			{
 				if (entityThatWillTeleportAttack instanceof Player)
 					continue;

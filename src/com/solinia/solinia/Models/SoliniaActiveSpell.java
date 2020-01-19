@@ -1726,7 +1726,7 @@ public class SoliniaActiveSpell {
 		// run to a nearby mob
 		try {
 			if (!SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).isPlayer())
-				for (Entity nearbyEntity : getLivingEntity().getNearbyEntities(20, 20, 20)) {
+				for (Entity nearbyEntity : getLivingEntity().getNearbyEntities(25, 25, 25)) {
 					StateManager.getInstance().getEntityManager().clearHateList(this.getLivingEntity().getUniqueId());
 
 					((CraftCreature) getLivingEntity()).getHandle().getNavigation().a(nearbyEntity.getLocation().getX(),

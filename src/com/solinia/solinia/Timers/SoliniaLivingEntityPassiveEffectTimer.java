@@ -38,7 +38,7 @@ public class SoliniaLivingEntityPassiveEffectTimer extends BukkitRunnable {
 			try
 			{
 				// Then nearby npcs
-				for(Entity entity : player.getNearbyEntities(50, 50, 50))
+				for(Entity entity : player.getNearbyEntities(25, 25, 25))
 				{
 					if (entity instanceof Player)
 						continue;

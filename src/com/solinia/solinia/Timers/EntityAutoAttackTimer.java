@@ -43,7 +43,7 @@ List<String> completedEntities = new ArrayList<String>();
 			try
 			{
 				// Then nearby npcs
-				for(Entity entityThatWillAutoAttack : player.getNearbyEntities(50, 50, 50))
+				for(Entity entityThatWillAutoAttack : player.getNearbyEntities(25, 25, 25))
 				{
 					if (entityThatWillAutoAttack instanceof Player)
 						continue;

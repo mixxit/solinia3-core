@@ -2406,7 +2406,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
 			((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
 
-			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(100, 100, 100)) {
+			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(25, 25, 25)) {
 				if (listening instanceof Player)
 					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
 			}
