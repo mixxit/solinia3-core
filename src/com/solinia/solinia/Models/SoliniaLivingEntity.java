@@ -7624,8 +7624,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						)
 						)
 				{
-					if (!Utils.isEntityInLineOfSight(nearbySolEntity.getBukkitLivingEntity(), this.getBukkitLivingEntity()))
-						continue;
+					//nearbySolEntity.getBukkitLivingEntity().face
+					//if (!Utils.isEntityInLineOfSight(nearbySolEntity.getBukkitLivingEntity(), this.getBukkitLivingEntity()))
+					//	continue;
 					
 					nearbySolEntity.addToHateList(attacker.getBukkitLivingEntity().getUniqueId(), 25,false);
 				}
@@ -7639,7 +7640,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	private boolean hasAssistAggro() {
 		return this.getHateList().entrySet().stream()
-	            .anyMatch(t -> t.getValue().b() == true);
+	            .anyMatch(t -> t.getValue().b() == false);
 	}
 
 	@Override
@@ -7776,6 +7777,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void doCallForAssist(LivingEntity target) {
 		// have assist cap
+		boolean canAssist = canCallForAssist();
+		int size = this.getHateList().size();
+		boolean ischarm = !isCharmed();
+		boolean hasAssist = !hasAssistAggro();
+
 		if (canCallForAssist() && this.getHateList().size() > 0 && !isCharmed() && !hasAssistAggro()
 			    // && NPCAssistCap() < RuleI(Combat, NPCAssistCap)
 				) 
