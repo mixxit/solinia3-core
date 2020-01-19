@@ -669,6 +669,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "ac":
 			setAC(Integer.parseInt(value));
+		case "clearrandomchattriggertext":
+			setRandomchatTriggerText("");
+			break;
 		case "randomchattriggertext":
 			setRandomchatTriggerText(value);
 			break;
@@ -713,7 +716,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		default:
 			throw new InvalidNpcSettingException(
-					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal,speaksalllanguages,mounted");
+					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal,speaksalllanguages,mounted,clearrandomchattriggertext");
 		}
 	}
 

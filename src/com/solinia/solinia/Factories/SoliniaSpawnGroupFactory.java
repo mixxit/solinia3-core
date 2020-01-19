@@ -8,7 +8,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaSpawnGroup;
 
 public class SoliniaSpawnGroupFactory {
-	public static void Create(String spawngroupname, int npcid, Location location) throws CoreStateInitException, SoliniaSpawnGroupCreationException {
+	public static int Create(String spawngroupname, int npcid, Location location) throws CoreStateInitException, SoliniaSpawnGroupCreationException {
 		if (StateManager.getInstance().getConfigurationManager().getSpawnGroup(spawngroupname.toUpperCase()) != null)
 			throw new SoliniaSpawnGroupCreationException("Spawngroup already exists");
 		
@@ -23,5 +23,6 @@ public class SoliniaSpawnGroupFactory {
 		sg.setRespawntime(900);
 		
 		StateManager.getInstance().getConfigurationManager().addSpawnGroup(sg);
+		return sg.getId();
 	}
 }

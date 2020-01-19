@@ -80,8 +80,8 @@ public class CommandCreateSpawnGroup implements CommandExecutor{
 		
 		spawngroupname.replace(" ", "_");
 		try {
-			SoliniaSpawnGroupFactory.Create(spawngroupname, npcid, player.getLocation());
-			sender.sendMessage("SpawnGroup created at your location");
+			int id = SoliniaSpawnGroupFactory.Create(spawngroupname, npcid, player.getLocation());
+			sender.sendMessage("SpawnGroup ID " + id + " created at your location");
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
