@@ -2,11 +2,16 @@ package Tests;
 
 import org.junit.Test;
 
+import com.solinia.solinia.Commands.CommandToday;
 import com.solinia.solinia.Timers.SoliniaZonesDynmapTimer;
 
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Point;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,4 +36,45 @@ public class MiscTests {
 		assertEquals(1, strips.get("1_2").size());
 		assertEquals(2, strips.get("2_0").size());
     }
+	
+	@Test
+	public void getCurrentYear() {
+		String fromDateStr = "2020-01-01 00:00:00.00";
+		LocalDateTime fromDate = Timestamp.valueOf(fromDateStr).toLocalDateTime();
+
+		String toDateStr = "2020-01-01 00:00:00.00";
+		LocalDateTime toDate = Timestamp.valueOf(toDateStr).toLocalDateTime();
+
+		assertEquals(197134, CommandToday.getCurrentYear(fromDate, toDate));
+
+		toDateStr = "2020-02-13 00:00:00.00";
+		toDate = Timestamp.valueOf(toDateStr).toLocalDateTime();
+
+		assertEquals(197135, CommandToday.getCurrentYear(fromDate, toDate));
+	}
+	
+	@Test
+	public void getCurrentYear2() {
+		String fromDateStr = "2020-01-01 00:00:00.00";
+		LocalDateTime fromDate = Timestamp.valueOf(fromDateStr).toLocalDateTime();
+
+		String toDateStr = "2020-03-25 00:00:00.00";
+		LocalDateTime toDate = Timestamp.valueOf(toDateStr).toLocalDateTime();
+
+		assertEquals(197135, CommandToday.getCurrentYear(fromDate, toDate));
+	}
+	
+	
+	@Test
+	public void getWeeksSince() {
+		ZoneId zoneId = ZoneId.systemDefault();
+		
+		String fromDateStr = "2020-01-01 00:00:00.00";
+		ZonedDateTime fromDate = Timestamp.valueOf(fromDateStr).toLocalDateTime().atZone(zoneId);
+
+		String toDateStr = "2020-02-12 00:00:00.00";
+		ZonedDateTime toDate = Timestamp.valueOf(toDateStr).toLocalDateTime().atZone(zoneId);
+
+		assertEquals(6, CommandToday.getWeeksSince(fromDate.toEpochSecond(), toDate.toEpochSecond()));
+	}
 }
