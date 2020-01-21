@@ -381,8 +381,6 @@ public class EntityUtils {
 	    int r_value = 0;
 	    switch (skillid) {
 	        // Rogue
-	        case "APPLY_POISON":
-	        case "MAKE_POISON":
 	        case "MAKEPOISON":
 	        case "PICK_POCKETS":
 	        case "BACKSTAB":
@@ -394,7 +392,7 @@ public class EntityUtils {
 	                        {
 	                            r_value = ((level * 5) + 5);
 	                            switch (skillid) {
-	                                case "APPLY_POISON":
+	                                case "MAKEPOISON":
 	                                    {
 	                                        // 18 200 200
 	                                        if (level < 18) {
@@ -405,7 +403,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }
-	                                case "MAKE_POISON":
+	                                /*case "MAKEPOISON":
 	                                    {
 	                                        // 20 200 250
 	                                        if (level < 20) {
@@ -418,7 +416,7 @@ public class EntityUtils {
 	                                            r_value = 250;
 	                                        }
 	                                        break;
-	                                    }
+	                                    }*/
 	                                case "PICK_POCKETS":
 	                                    {
 	                                        // 7 200 210
@@ -999,7 +997,7 @@ public class EntityUtils {
 					r_value = EntityUtils.maxSkillDefensive(skillid, classname, level);
 					break;
 				}
-			case "MEDITATE":
+			case "MEDITATION":
 			case "ABJURE":
 			case "ALTERATION":
 			case "CHANNELING":
@@ -1024,8 +1022,8 @@ public class EntityUtils {
 	///////////////////////////////////////////
 	// Class skills
 			// Rogue
-			case "APPLY_POISON":
-			case "MAKE_POISON":
+			//case "MAKEPOISON":
+			case "MAKEPOISON":
 			case "PICK_POCKETS":
 			case "BACKSTAB":
 			// Monk
@@ -1259,7 +1257,7 @@ public class EntityUtils {
 	{
 		int r_value = 0;
 		switch (skillid) {
-			case "MEDITATE":
+			case "MEDITATION":
 			case "ABJURE":
 			case "ALTERATION":
 			case "CHANNELING":
@@ -1277,7 +1275,7 @@ public class EntityUtils {
 								if (level < 9) {
 									r_value = 0;
 								}
-								if (level < 12 && skillid == "MEDITATE") {
+								if (level < 12 && skillid == "MEDITATION") {
 									r_value = 0;
 								}
 								if (r_value > 0 && skillid == "CHANNELING") {
@@ -1288,7 +1286,7 @@ public class EntityUtils {
 										r_value = 215;
 									}
 								}
-								if (r_value > 0 && skillid == "MEDITATE") {
+								if (r_value > 0 && skillid == "MEDITATION") {
 									if ( level < 51 && r_value > 185) {
 										r_value = 185;
 									}
@@ -1310,7 +1308,7 @@ public class EntityUtils {
 								if (level < 9) {
 									r_value = 0;
 								}
-								if (level < 12 && skillid == "MEDITATE") {
+								if (level < 12 && skillid == "MEDITATION") {
 									r_value = 0;
 								}
 								if (r_value > 0 && skillid == "CHANNELING") {
@@ -1321,7 +1319,7 @@ public class EntityUtils {
 										r_value = 220;
 									}
 								}
-								if (r_value > 0 && skillid == "MEDITATE") {
+								if (r_value > 0 && skillid == "MEDITATION") {
 									if ( level < 51 && r_value > 185) {
 										r_value = 185;
 									}
@@ -1344,7 +1342,7 @@ public class EntityUtils {
 								if (level < 4 && skillid == "CHANNELING") {
 									r_value = 0;
 								}
-								if (level < 8 && skillid == "MEDITATE") {
+								if (level < 8 && skillid == "MEDITATION") {
 									r_value = 0;
 								}
 								if (r_value > 0 && skillid == "CHANNELING") {
@@ -1355,7 +1353,7 @@ public class EntityUtils {
 										r_value = 220;
 									}
 								}
-								if (r_value > 0 && skillid == "MEDITATE") {
+								if (r_value > 0 && skillid == "MEDITATION") {
 									if ( level < 51 && r_value > 235) {
 										r_value = 235;
 									}
@@ -1377,7 +1375,7 @@ public class EntityUtils {
 								// 1 235 235
 								// Channel 1 200 220
 								// Med 4 235 252
-								if (level < 4 && skillid == "MEDITATE") {
+								if (level < 4 && skillid == "MEDITATION") {
 									r_value = 0;
 								}
 								if (r_value > 0 && skillid == "CHANNELING") {
@@ -1388,7 +1386,7 @@ public class EntityUtils {
 										r_value = 220;
 									}
 								}
-								if (r_value > 0 && skillid == "MEDITATE") {
+								if (r_value > 0 && skillid == "MEDITATION") {
 									if ( level < 51 && r_value > 235) {
 										r_value = 235;
 									}
@@ -1401,7 +1399,7 @@ public class EntityUtils {
 						case "BARD":
 						case "BARDGM": {
 								r_value = 0;
-								if (level > 9 && skillid == "MEDITATE") {
+								if (level > 9 && skillid == "MEDITATION") {
 									r_value = 1;
 								}
 								break;
