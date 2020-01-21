@@ -1296,6 +1296,7 @@ public class EntityUtils {
 								}
 								break;
 							}
+						// temporary until endurance is added
 						case "BEASTLORD":
 						case "BEASTLORDGM":
 						case "PALADIN":
@@ -1396,18 +1397,45 @@ public class EntityUtils {
 								}
 								break;
 							}
-						case "BARD":
+						/*case "BARD":
 						case "BARDGM": {
 								r_value = 0;
 								if (level > 9 && skillid == "MEDITATION") {
 									r_value = 1;
 								}
 								break;
-							}
+							}*/
 						default:
 							// Unknown class
-							r_value = 0;
+							// TODO temporary until endurance is added
+							// 9 235 235
+							// Channel 9 200 220
+							// Med 12 185 235
+							if (level < 9) {
+								r_value = 0;
+							}
+							if (level < 12 && skillid == "MEDITATION") {
+								r_value = 0;
+							}
+							if (r_value > 0 && skillid == "CHANNELING") {
+								if ( level < 51 && r_value > 185) {
+									r_value = 185;
+								}
+								if (r_value > 220) {
+									r_value = 220;
+								}
+							}
+							if (r_value > 0 && skillid == "MEDITATION") {
+								if ( level < 51 && r_value > 185) {
+									r_value = 185;
+								}
+								if (r_value > 235) {
+									r_value = 235;
+								}
+							}
 							break;
+							//r_value = 0;
+							//break;
 					}// Class Switch
 					break;
 				}
