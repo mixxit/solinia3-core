@@ -132,6 +132,8 @@ public class Utils {
 	public static final double LocalShoutRange = 40;
 	public static final double MaxRangeForExperience = 100;
 
+	public static final int HIGHESTSKILL = 255;
+
 	public static void ConsoleLogTimingDifference(LocalDateTime datetime)
 	{
 		LocalDateTime afterdatetime = LocalDateTime.now();
@@ -4650,11 +4652,6 @@ public class Utils {
 		return Integer.parseInt(identifierStack.getItemMeta().getLore().get(2));
 	}
 
-	public static int getMaxSkillValue() {
-		// TODO Auto-generated method stub
-		return 255;
-	}
-
 	// Heroic
 
 	public static float getHeroicRunSpeed() {
@@ -5752,4 +5749,5 @@ public class Utils {
 	public static boolean isLocationInZone(Location location, SoliniaZone zone) {
 		return zone.isLocationInside(location);
 	}
+
 }

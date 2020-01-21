@@ -843,7 +843,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public int getSkillCap(String skillName) {
-		return EntityUtils.getSkillCap(skillName, getClassObj(), getLevel(), getSpecialisation());
+		return EntityUtils.getSkillCap(skillName, getClassObj(), getLevel(), getSpecialisation(), this.getSkill(skillName).getValue());
 	}
 
 	@Override
@@ -1022,7 +1022,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		// max skill point
-		if (value > Utils.getMaxSkillValue())
+		if (value > Utils.HIGHESTSKILL)
 			return;
 
 		skillname = skillname.toUpperCase();
