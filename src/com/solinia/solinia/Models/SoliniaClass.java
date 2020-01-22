@@ -71,6 +71,8 @@ public class SoliniaClass implements ISoliniaClass {
 	private List<Integer> oaths = new ArrayList<Integer>();
 	private int weaponDelayItemBonus = 0;
 	private boolean canPray = false;
+	private int trackingLevel = 0;
+	private int disarmLevel = 0;
 	
 	
 	@Override
@@ -210,6 +212,8 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- safefalllevel: " + ChatColor.GOLD + getSafefalllevel() + ChatColor.RESET);
 		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
 		sender.sendMessage("- dualwieldlevel: " + ChatColor.GOLD + getDualwieldlevel() + ChatColor.RESET);
+		sender.sendMessage("- trackinglevel: " + ChatColor.GOLD + getTrackingLevel() + ChatColor.RESET);
+		sender.sendMessage("- disarmlevel: " + ChatColor.GOLD + getDisarmLevel() + ChatColor.RESET);
 		sender.sendMessage("- canpray: " + ChatColor.GOLD + canPray() + ChatColor.RESET);
 		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
 		sender.sendMessage("- oaths: " + ChatColor.GOLD + getOaths().toString() + ChatColor.RESET);
@@ -375,6 +379,12 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "safefalllevel":
 			this.setSafefalllevel(Integer.parseInt(value));
+			break;
+		case "trackinglevel":
+			this.setTrackingLevel(Integer.parseInt(value));
+			break;
+		case "disarmlevel":
+			this.setDisarmLevel(Integer.parseInt(value));
 			break;
 		case "classitemprefix":
 			this.setClassItemPrefix(value);
@@ -1043,5 +1053,25 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setCrossbowtypename(String crossbowtypename) {
 		this.crossbowtypename = crossbowtypename;
+	}
+
+	@Override
+	public int getTrackingLevel() {
+		return trackingLevel;
+	}
+
+	@Override
+	public void setTrackingLevel(int trackingLevel) {
+		this.trackingLevel = trackingLevel;
+	}
+
+	@Override
+	public int getDisarmLevel() {
+		return disarmLevel;
+	}
+
+	@Override
+	public void setDisarmLevel(int disarmLevel) {
+		this.disarmLevel = disarmLevel;
 	}
 }

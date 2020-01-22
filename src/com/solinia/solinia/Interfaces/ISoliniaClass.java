@@ -191,4 +191,12 @@ public interface ISoliniaClass {
 
 	void setCrossbowtypename(String crossbowtypename);
 
+	int getTrackingLevel();
+
+	void setTrackingLevel(int trackingLevel);
+
+	int getDisarmLevel();
+
+	void setDisarmLevel(int disarmLevel);
+
 }
