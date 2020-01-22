@@ -83,6 +83,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastCallForAssist = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> lastDisarm = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>> hateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>>();
 	private ConcurrentHashMap<UUID, Timestamp> lastRiposte = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastBindwound = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1894,6 +1895,16 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setLastDoubleAttack(UUID uuid, Timestamp lasttimestamp) {
 		this.lastDoubleAttack.put(uuid, lasttimestamp);
+	}
+	
+	@Override
+	public ConcurrentHashMap<UUID, Timestamp> getLastDisarm() {
+		return lastDisarm;
+	}
+
+	@Override
+	public void setLastDisarm(UUID uuid, Timestamp lasttimestamp) {
+		this.lastDisarm.put(uuid, lasttimestamp);
 	}
 	
 	@Override

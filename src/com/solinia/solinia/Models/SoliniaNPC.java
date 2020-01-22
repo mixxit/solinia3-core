@@ -1203,6 +1203,20 @@ public class SoliniaNPC implements ISoliniaNPC {
 
 		return true;
 	}
+	
+	@Override
+	public boolean canDisarm() {
+		if (getClassObj() == null)
+			return false;
+
+		if (getClassObj().canDisarm() == false)
+			return false;
+
+		if (getClassObj().getDisarmLevel() > getLevel())
+			return false;
+
+		return true;
+	}
 
 	@Override
 	public boolean getDodgeCheck() {

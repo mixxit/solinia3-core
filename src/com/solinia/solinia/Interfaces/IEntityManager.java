@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -201,5 +202,9 @@ public interface IEntityManager {
 	ConcurrentHashMap<UUID, Timestamp> getLastCallForAssist();
 
 	void setLastCallForAssist(UUID uuid, Timestamp lasttimestamp);
+
+	ConcurrentHashMap<UUID, Timestamp> getLastDisarm();
+
+	void setLastDisarm(UUID uuid, Timestamp lasttimestamp);
 
 }

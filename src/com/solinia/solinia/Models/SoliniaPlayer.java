@@ -2332,6 +2332,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return true;
 	}
+	
+	@Override
+	public boolean canDisarm() {
+		if (getClassObj() == null)
+			return false;
+
+		if (getClassObj().canDisarm() == false)
+			return false;
+
+		if (getClassObj().getDisarmLevel() > getLevel())
+			return false;
+
+		return true;
+	}
 
 	@Override
 	public boolean getDualWieldCheck(ISoliniaLivingEntity solEntity) {

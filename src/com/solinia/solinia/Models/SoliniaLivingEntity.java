@@ -1670,6 +1670,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (!arrowHit)
 				TryDualWield(this.getBukkitLivingEntity(),defender);
+			
+			if (!arrowHit)
+				this.tryDisarm(defender);
 
 			// end of what was old only player code
 
@@ -4629,6 +4632,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
+	public Timestamp getLastDisarm() {
+		try {
+			return StateManager.getInstance().getEntityManager().getLastDisarm()
+					.get(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e) {
+		}
+		return null;
+	}
+	
+	@Override
 	public Timestamp getLastMeleeAttack() {
 		try {
 			return StateManager.getInstance().getEntityManager().getLastMeleeAttack()
@@ -7287,18 +7300,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			List<Integer> removeSpells = new ArrayList<Integer>();
 			for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
 					.getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells()) {
-				if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
-						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez)
-						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
-						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)
-						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2)
-						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals)
+				if (	spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Mez)
 						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat)
-						|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)) {
+						) {
 					if (!removeSpells.contains(spell.getSpell().getId()))
 						removeSpells.add(spell.getSpell().getId());
 				}
 			}
+			
+			BreakInvis();
 
 			for (Integer spellId : removeSpells) {
 				StateManager.getInstance().getEntityManager()
@@ -7307,6 +7317,35 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e) {
 
 		}
+	}
+
+	public void BreakInvis() {
+		List<Integer> removeSpells = new ArrayList<Integer>();
+		try
+		{
+		for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
+				.getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells()) {
+			if (spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead)
+					|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsUndead2)
+					|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility)
+					|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Invisibility2)
+					|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.InvisVsAnimals)
+					|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.NegateIfCombat)
+					|| spell.getSpell().getSpellEffectTypes().contains(SpellEffectType.ImprovedInvisAnimals)) {
+				if (!removeSpells.contains(spell.getSpell().getId()))
+					removeSpells.add(spell.getSpell().getId());
+			}
+		}
+		
+
+		for (Integer spellId : removeSpells) {
+						StateManager.getInstance().getEntityManager()
+								.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false, true);
+					}
+		} catch (CoreStateInitException e) {
+
+		}
+
 	}
 
 	@Override
@@ -7855,6 +7894,266 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e)
 		{
 			return false;
+		}
+	}
+	
+	@Override
+	public boolean canDisarm() {
+		if (getNpcid() < 1 && !isPlayer())
+			return false;
+
+		Timestamp expiretimestamp = getLastDisarm();
+		if (expiretimestamp != null) {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus(3, ChronoUnit.SECONDS));
+
+			if (nowtimestamp.before(mintimestamp))
+				return false;
+		}
+
+		try {
+			if (getNpcid() > 0) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
+				if (npc == null)
+					return false;
+
+				return npc.canDisarm();
+			}
+
+			if (isPlayer()) {
+				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
+				if (solplayer == null)
+					return false;
+				return solplayer.canDisarm();
+			}
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+
+		return false;
+	}
+	
+	@Override
+	public void tryDisarm(ISoliniaLivingEntity tmob) {
+		if (this.getBukkitLivingEntity().isDead())
+			return;
+		
+		if (!this.canDisarm())
+			return;
+		
+		BreakInvis();
+		ISoliniaLivingEntity pmob = this;
+		
+		if (pmob == null || tmob == null)
+			return;
+		
+		// No disarm on corpses
+		if (tmob.getBukkitLivingEntity().isDead())
+			return;
+		
+		// No target
+		// Targets don't match (possible hack, but not flagging)
+		if (!this.getAttackTarget().equals(tmob.getBukkitLivingEntity()))
+			return;
+		
+		// Too far away
+		if (pmob.getLocation().distance(tmob.getLocation()) > 4)
+			return;
+
+		// How can we disarm someone if we are feigned.
+		if (this.isFeigned())
+			return;
+		
+		// We can't disarm someone who is feigned.
+		if (tmob.isFeignedDeath())
+			return;
+
+		if (isAttackAllowed(tmob, false)) {
+			int p_level = pmob.getLevel();
+			if (p_level < 1)
+				p_level = 1;
+			int t_level = tmob.getLevel();
+			if (t_level < 1)
+				t_level = 1;
+
+			// We have a disarmable target - sucess or fail, we always aggro the mob
+			
+			// why
+			if (tmob.isNPC()) {
+				if (!tmob.checkAggro(pmob)) {
+					tmob.addToHateList(pmob.getBukkitLivingEntity().getUniqueId(), 1, false);
+				}
+				else {
+					tmob.addToHateList(pmob.getBukkitLivingEntity().getUniqueId(), 1, false);
+				}
+			}
+			
+			int chance = getSkill("DISARM"); // (1% @ 0 skill) (11% @ 200 skill) - against even con
+			chance /= 2;
+			chance += 10;
+			// Modify chance based on level difference
+			float lvl_mod = p_level / t_level;
+			chance *= lvl_mod;
+			if (chance > 300)
+				chance = 300; // max chance of 30%
+
+			tmob.disarm(this, chance);
+			return;
+		}
+
+		return;
+	}
+	
+	@Override
+	public boolean isAttackAllowed(ISoliniaLivingEntity target, boolean isSpellAttack)
+	{
+
+		int reverse;
+
+		// some special cases
+		if(target == null)
+			return false;
+
+		if (target.getBukkitLivingEntity() == null)
+			return false;
+		
+		if (target.getBukkitLivingEntity().isDead())
+			return false;
+		
+		if (this.getBukkitLivingEntity() == null)
+			return false;
+		
+		if (this.getBukkitLivingEntity().isDead())
+			return false;
+		
+		if(this.getBukkitLivingEntity().getUniqueId().equals(target.getBukkitLivingEntity().getUniqueId()))	// you can attack yourself
+			return false;
+
+		if (target.getBukkitLivingEntity().isOp())
+			return false;
+		
+		
+		/*if(target->GetSpecialAbility(NO_HARM_FROM_CLIENT)){
+			return false;
+		}*/
+
+		// can't damage own pet (applies to everthing)
+		if (target.isCurrentlyNPCPet() && this.getOwnerSoliniaLivingEntity() != null && this.getOwnerSoliniaLivingEntity().getBukkitLivingEntity().equals(this.getBukkitLivingEntity().getUniqueId()))
+			return false;
+		
+		return true;
+	}
+
+	@Override
+	public void disarm(SoliniaLivingEntity disarmer, int chance) {
+		if (this.getBukkitLivingEntity() == null)
+			return;
+		
+		if (this.getBukkitLivingEntity().isDead())
+			return;
+		
+		if (disarmer == null)
+			return;
+		
+		if (disarmer.getBukkitLivingEntity() == null)
+			return;
+		
+		if (disarmer.getBukkitLivingEntity().isDead())
+			return;
+
+		ItemStack mainHandItemStack = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+		ItemStack offHandItemStack = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+
+		
+		ISoliniaItem mainHandItem = getSoliniaItemInMainHand();
+		ISoliniaItem offHandItem = getSoliniaItemInOffHand();
+		
+		if (mainHandItem == null && offHandItem == null)
+			return;
+		
+		boolean primary = true;
+		if (!mainHandItem.isWeaponOrBowOrShield())
+			primary = false;
+		
+		if (primary == false && !offHandItem.isWeaponOrBowOrShield())
+			return;
+		
+		
+		ISoliniaItem item = null;
+		ItemStack itemStack = null;
+		if (primary == true)
+		{
+			item = mainHandItem;
+			itemStack = mainHandItemStack;
+		}
+		else
+		{
+			item = offHandItem;
+			itemStack = offHandItemStack;
+		}
+		
+		
+		try
+		{
+		if (Utils.RandomBetween(0, 1000) <= chance)
+		{
+			// We have an item that can be disarmed
+				
+			if (this.isPlayer()) {
+				
+				Player player = (Player)this.getBukkitLivingEntity();
+
+				
+				if (ItemStackUtils.getAugmentationItemId(itemStack) != null)
+				{
+					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemStack);
+					ISoliniaItem augItem = null;
+					if (augmentationId != null && augmentationId != 0) {
+						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+						Utils.AddAccountClaim(player.getName(),augItem.getId());
+					}
+				}
+				
+				int count = itemStack.getAmount();
+				if (count == 0)
+					count = 1;
+				for (int x = 0; x < count; x++)
+				{
+					Utils.AddAccountClaim(player.getName(),item.getId());
+				}
+				
+				((Player) (this.getBukkitLivingEntity())).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+						new TextComponent(ChatColor.GRAY + "* You have been disarmed!"));
+				player.sendMessage(ChatColor.GRAY + "Your item " + item.getDisplayname() + " has been added to your claims");
+				
+			}
+			
+			if (primary == true)
+				this.getBukkitLivingEntity().getEquipment().setItemInMainHand(null);
+			else
+				this.getBukkitLivingEntity().getEquipment().setItemInOffHand(null);
+			if (this.isPlayer())
+			{
+				Player player = (Player)this.getBukkitLivingEntity();
+				player.updateInventory();
+			}
+
+			if (disarmer.isPlayer()) {
+				((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* "
+						+ this.getBukkitLivingEntity().getCustomName() + " is disarmed!");
+				
+				disarmer.tryIncreaseSkill("DISARM",1);
+			}
+		} else {
+			if (disarmer.isPlayer()) {
+				((Player) disarmer.getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* You failed to disarm "
+						+ this.getBukkitLivingEntity().getCustomName() + "!");
+			}
+		}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 }

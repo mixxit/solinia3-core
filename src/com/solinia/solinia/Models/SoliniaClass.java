@@ -769,6 +769,14 @@ public class SoliniaClass implements ISoliniaClass {
 
 		return true;
 	}
+	
+	@Override
+	public boolean canDisarm() {
+		if (getDisarmLevel() < 1)
+			return false;
+
+		return true;
+	}
 
 	@Override
 	public int getDodgelevel() {

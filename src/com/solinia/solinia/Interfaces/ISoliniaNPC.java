@@ -279,4 +279,6 @@ public interface ISoliniaNPC {
 
 	FactionStandingType checkNPCFactionAlly(int factionid);
 
+	boolean canDisarm();
+
 }

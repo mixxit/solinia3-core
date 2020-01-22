@@ -199,4 +199,6 @@ public interface ISoliniaClass {
 
 	void setDisarmLevel(int disarmLevel);
 
+	public boolean canDisarm();
+
 }

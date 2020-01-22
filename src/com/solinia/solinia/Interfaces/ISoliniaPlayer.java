@@ -590,6 +590,5 @@ public interface ISoliniaPlayer extends Serializable {
 
 	List<SoliniaZone> getZones();
 
-	
-
+	boolean canDisarm();
 }

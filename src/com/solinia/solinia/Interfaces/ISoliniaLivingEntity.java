@@ -394,5 +394,15 @@ public interface ISoliniaLivingEntity
 
 	public boolean hasSpellEffectType(SpellEffectType harmony);
 
+	Timestamp getLastDisarm();
+
+	void tryDisarm(ISoliniaLivingEntity target);
+
+	boolean canDisarm();
+
+	boolean isAttackAllowed(ISoliniaLivingEntity target, boolean isSpellAttack);
+
+	public void disarm(SoliniaLivingEntity disarmer, int chance);
+
 
 }
