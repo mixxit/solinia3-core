@@ -2570,6 +2570,8 @@ public class Utils {
 			return SpellEffectType.Double_Melee_Round;
 		case 472:
 			return SpellEffectType.Backstab;
+		case 473:
+			return SpellEffectType.Disarm;
 		default:
 			return SpellEffectType.ERROR;
 		}

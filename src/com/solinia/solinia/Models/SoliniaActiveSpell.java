@@ -1264,6 +1264,9 @@ public class SoliniaActiveSpell {
 		case Backstab:
 			applyBackstab(spellEffect, soliniaSpell, casterLevel);
 			return;
+		case Disarm:
+			applyDisarm(spellEffect, soliniaSpell, casterLevel);
+			return;
 		default:
 			return;
 		}
@@ -1848,6 +1851,33 @@ public class SoliniaActiveSpell {
 		}
 	}
 
+	private void applyDisarm(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!isOwnerPlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+		
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.tryDisarm(targetSoliniaLivingEntity);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+	
 	private void applyTauntSpell(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!(getLivingEntity() instanceof Creature))
 			return;

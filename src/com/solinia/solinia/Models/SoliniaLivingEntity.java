@@ -1670,9 +1670,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (!arrowHit)
 				TryDualWield(this.getBukkitLivingEntity(),defender);
-			
-			if (!arrowHit)
-				this.tryDisarm(defender);
 
 			// end of what was old only player code
 
