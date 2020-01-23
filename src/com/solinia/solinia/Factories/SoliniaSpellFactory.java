@@ -13,14 +13,14 @@ public class SoliniaSpellFactory {
 	public static void CreateSpellCopy(int spellid, String name) throws Exception {
 		try
 		{
-			ISoliniaSpell source = StateManager.getInstance().getConfigurationManager().getSpell(spellid);
+			SoliniaSpell source = (SoliniaSpell) StateManager.getInstance().getConfigurationManager().getSpell(spellid);
 			
 			if (source == null)
 				throw new Exception("Source Spell could not be found!");
 			
 			Gson gson= new Gson();
 			String tmp = gson.toJson(source);
-			ISoliniaSpell obj = gson.fromJson(tmp,ISoliniaSpell.class);
+			SoliniaSpell obj = gson.fromJson(tmp,SoliniaSpell.class);
 			obj.setId(StateManager.getInstance().getConfigurationManager().getNextSpellId());
 			obj.setName(name);
 			StateManager.getInstance().getConfigurationManager().addSpell(obj);
