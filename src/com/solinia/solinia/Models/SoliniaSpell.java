@@ -2760,7 +2760,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		
 		sender.sendMessage("----------------------------");
 		for (SpellEffect effect : this.getBaseSpellEffects()) {
-			sender.sendMessage("- [" + effect.getSpellEffectNo() + "]" + effect.getSpellEffectType().name() + ": BASE: "
+			sender.sendMessage("- [" + effect.getSpellEffectNo() + "] " + "ID: " + effect.getSpellEffectType().name() + ": BASE: "
 					+ ChatColor.GOLD + effect.getBase() + " FORMULA: " + ChatColor.GOLD + effect.getFormula() + " Max: "
 					+ effect.getMax() + ChatColor.RESET);
 		}
