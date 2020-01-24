@@ -1635,6 +1635,7 @@ public class EntityUtils {
 										r_value = 240;
 									}
 								switch (skillid) {
+									case "CRUSHING":
 									case "HAND_TO_HAND": {
 											if ( r_value > 225 && level < 51 ) {
 												r_value = 225;
@@ -1690,6 +1691,8 @@ public class EntityUtils {
 											}
 											break;
 										}
+									case "SLASHING":
+									case "CRUSHING":
 									case "_2H_BLUNT":
 									case "_2H_SLASHING": {
 											if ( r_value > 252 ) {
@@ -1741,6 +1744,7 @@ public class EntityUtils {
 											}
 										}
 									case "PIERCING":
+									case "SLASHING":
 									case "_2H_SLASHING": {
 											r_value = 0;
 											break;
