@@ -276,7 +276,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 
 		if (npc.isBoss()) {
-			hp += (Utils.getBossHPMultiplier() * npc.getLevel());
+			hp += (Utils.getBossHPMultiplier(npc.isHeroic()) * npc.getLevel());
 		}
 
 		if (npc.isRaidheroic()) {

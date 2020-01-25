@@ -4547,7 +4547,7 @@ public class Utils {
 
 	public static Integer getDefaultNPCManaRegen(ISoliniaNPC npc) {
 		if (npc.isBoss())
-			return npc.getLevel() * Utils.getBossMPRegenMultipler();
+			return npc.getLevel() * Utils.getBossMPRegenMultipler(npc.isHeroic());
 		if (npc.isHeroic())
 			return npc.getLevel() * Utils.getHeroicMPRegenMultipler();
 		if (npc.isRaidboss())
@@ -4715,19 +4715,29 @@ public class Utils {
 		return 0.4f;
 	}
 
-	public static int getBossDamageMultiplier() {
+	public static int getBossDamageMultiplier(boolean heroicBoss) {
 		// TODO Auto-generated method stub
-		return 10;
+		if (heroicBoss)
+			return getHeroicDamageMultiplier() * 6;
+		else
+			return getHeroicDamageMultiplier() * 2;
 	}
 
-	public static int getBossHPMultiplier() {
+	public static int getBossHPMultiplier(boolean heroicBoss) {
 		// TODO Auto-generated method stub
-		return 200;
+		if (heroicBoss)
+			return getHeroicHPMultiplier() * 6;
+		else
+			return getHeroicHPMultiplier() * 2;
 	}
 
-	public static int getBossMPRegenMultipler() {
+	public static int getBossMPRegenMultipler(boolean heroicBoss) {
 		// TODO Auto-generated method stub
-		return 40;
+		// TODO Auto-generated method stub
+		if (heroicBoss)
+			return getHeroicMPRegenMultipler() * 6;
+		else
+			return getHeroicMPRegenMultipler() * 2;
 	}
 
 	// Raid Heroic
@@ -5230,7 +5240,7 @@ public class Utils {
 		}
 
 		if (npc.isBoss()) {
-			damage += (Utils.getBossDamageMultiplier() * npc.getLevel());
+			damage += (Utils.getBossDamageMultiplier(npc.isHeroic()) * npc.getLevel());
 		}
 
 		if (npc.isRaidheroic()) {

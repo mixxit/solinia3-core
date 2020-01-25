@@ -4424,7 +4424,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());
 
 				if (npc.isBoss()) {
-					totalHp += (Utils.getBossHPMultiplier() * npc.getLevel());
+					totalHp += (Utils.getBossHPMultiplier(npc.isHeroic()) * npc.getLevel());
 					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Boss hp is now: " + totalHp);
 				}
 
@@ -5322,7 +5322,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ISoliniaNPC npc = getNPC();
 			if (npc != null) {
 				if (npc.isBoss()) {
-					maxmana += (Utils.getBossMPRegenMultipler() * npc.getLevel());
+					maxmana += (Utils.getBossMPRegenMultipler(npc.isHeroic()) * npc.getLevel());
 				}
 				if (npc.isHeroic()) {
 					maxmana += (Utils.getHeroicMPRegenMultipler() * npc.getLevel());
