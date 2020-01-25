@@ -93,8 +93,12 @@ public class CommandEffects implements CommandExecutor {
 		            		spellcolor = ChatColor.RED;
 		            	}
 		            	
+		            	String requiresType = "";
+		            	if (activeSpell.getRequiredWeaponSkillType() != null && activeSpell.getRequiredWeaponSkillType().equals(""))
+		            		requiresType = "Requires Weapon: " + requiresType + " ";
+		            	
 		            	TextComponent tc = new TextComponent();
-						tc.setText("- " + spellcolor + spell.getName() + ChatColor.RESET + " " + activeSpell.getTicksLeft() + " ticks left - ");
+						tc.setText("- " + spellcolor + spell.getName() + ChatColor.RESET + " " + activeSpell.getTicksLeft() + " ticks left " + requiresType + "  - ");
 						TextComponent tc2 = new TextComponent();
 						tc2.setText(removetext);
 						if (spell.isBeneficial())
