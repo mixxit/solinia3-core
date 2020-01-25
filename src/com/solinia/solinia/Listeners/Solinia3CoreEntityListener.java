@@ -13,6 +13,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
@@ -33,6 +34,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
+import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
@@ -54,6 +56,10 @@ import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
+import net.minecraft.server.v1_14_R1.PathfinderGoal.Type;
+import net.minecraft.server.v1_14_R1.PathfinderGoalOwnerHurtByTarget;
+import net.minecraft.server.v1_14_R1.PathfinderGoalTarget;
+
 public class Solinia3CoreEntityListener implements Listener {
 	Solinia3CorePlugin plugin;
 
@@ -68,14 +74,14 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
-		System.out.println("I have a target event for : " + event.getTarget());
 		if (event.getTarget() != null && event.getEntity() != null && event.getEntity() instanceof Creature && event.getEntity() instanceof LivingEntity)
 		{
 			try
 			{
-			ISoliniaLivingEntity solLivingEntityAttacker = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-			if (solLivingEntityAttacker.getHateList() == null || solLivingEntityAttacker.getHateList().keySet().size() == 0) {
-				solLivingEntityAttacker.setAttackTarget(null);
+			if (StateManager.getInstance().getEntityManager()
+					.getHateList(event.getEntity().getUniqueId()) == null || StateManager.getInstance().getEntityManager()
+							.getHateList(event.getEntity().getUniqueId()).keySet().size() == 0) {
+				// TODO why is this happening? We already cleared their target and last target - why is it setting it back?
 				Utils.CancelEvent(event);
 				return;
 			}	

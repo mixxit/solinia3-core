@@ -6439,6 +6439,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 				Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "i am being told to set my target to " + null);
 				((Creature) this.getBukkitLivingEntity()).setTarget(null);
+
 				Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "my new target is " + ((Creature) this.getBukkitLivingEntity()).getTarget());
 			}
 			return;
