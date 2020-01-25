@@ -1948,21 +1948,37 @@ public class EntityManager implements IEntityManager {
 		{
 			hateList.get(entity).put(provoker, new Tuple<Integer,Boolean>(hate,isYellForHelp));
 			
-			this.incrementEntityAggroCount(provoker);
+			if (hate > 0)
+				this.incrementEntityAggroCount(provoker);
+			
 			return;
 		}
 		
 		Tuple<Integer,Boolean> newvalue = hateList.get(entity).get(provoker);
+		
+		boolean wasAggro = false;
+		if (newvalue.a() > 0)
+			wasAggro = true;
+		
 		if ((newvalue.a() + hate) > Integer.MAX_VALUE)
 			newvalue = new Tuple<Integer,Boolean>(Integer.MAX_VALUE,newvalue.b());
 		else if ((newvalue.a() + hate) < 0)
 			newvalue = new Tuple<Integer,Boolean>(0,newvalue.b());
 		else
 			newvalue = new Tuple<Integer,Boolean>(newvalue.a()+hate,newvalue.b());
+		
 		if (newvalue.a() == 0)
+		{
 			hateList.get(entity).remove(provoker);
-		else
+			if (wasAggro)
+				this.decrementEntityAggroCount(provoker);
+		}
+		else {
 			hateList.get(entity).put(provoker, newvalue);
+
+			if (!wasAggro)
+				this.incrementEntityAggroCount(provoker);
+		}
 	}
 	
 	@Override
