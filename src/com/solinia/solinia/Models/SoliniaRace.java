@@ -196,7 +196,7 @@ public class SoliniaRace implements ISoliniaRace {
 				if (ability == null)
 					throw new InvalidRaceSettingException("Invalid id");
 				
-				if (!ability.isBuffSpell() || !Utils.getSpellTargetType(ability.getTargettype()).name().equals(SpellTargetType.Self))
+				if (!ability.isBuffSpell() || !Utils.getSpellTargetType(ability.getTargettype()).equals(SpellTargetType.Self))
 					throw new InvalidRaceSettingException("Only Self only buff type spells can be set as a passive spell");
 
 			} catch (CoreStateInitException e)

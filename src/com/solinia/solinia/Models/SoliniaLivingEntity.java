@@ -2208,7 +2208,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			if (attackStack != null && !activeSpell.getRequiredWeaponSkillType().equals(""))
 			{
-				if (!ItemStackUtils.getMeleeSkillForItemStack(attackStack).equals(activeSpell.getRequiredWeaponSkillType()))
+				if (!ItemStackUtils.getMeleeSkillForItemStack(attackStack).getSkillname().toUpperCase().equals(activeSpell.getRequiredWeaponSkillType().toUpperCase()))
 					return;
 			}
 
@@ -8037,7 +8037,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}*/
 
 		// can't damage own pet (applies to everthing)
-		if (target.isCurrentlyNPCPet() && this.getOwnerSoliniaLivingEntity() != null && this.getOwnerSoliniaLivingEntity().getBukkitLivingEntity().equals(this.getBukkitLivingEntity().getUniqueId()))
+		if (target.isCurrentlyNPCPet() && this.getOwnerSoliniaLivingEntity() != null && this.getOwnerSoliniaLivingEntity().getBukkitLivingEntity().getUniqueId().equals(this.getBukkitLivingEntity().getUniqueId()))
 			return false;
 		
 		return true;

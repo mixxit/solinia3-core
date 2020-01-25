@@ -91,7 +91,7 @@ public class SoliniaGod implements ISoliniaGod {
 				if (ability == null)
 					throw new InvalidGodSettingException("Invalid id");
 				
-				if (!ability.isBuffSpell() || !Utils.getSpellTargetType(ability.getTargettype()).name().equals(SpellTargetType.Self))
+				if (!ability.isBuffSpell() || !Utils.getSpellTargetType(ability.getTargettype()).equals(SpellTargetType.Self))
 					throw new InvalidGodSettingException("Only Self only buff type spells can be set as a passive spell");
 					
 			} catch (CoreStateInitException e)
