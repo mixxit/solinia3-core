@@ -4764,6 +4764,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public int getMinLevelClass(String name) {
+		if (name != null)
 		for (SoliniaSpellClass spellclass : this.getAllowedClasses()) {
 			if (spellclass.getClassname().toUpperCase().equals(name.toUpperCase()))
 				return spellclass.getMinlevel();

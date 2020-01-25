@@ -33,7 +33,8 @@ public class PacketMemorisedSpells implements ISoliniaPacket {
 			int NewIcon = Integer.parseInt(spellArray[3]);
 			int MemIcon = Integer.parseInt(spellArray[4]);
 			String Name = spellArray[5];
-			this.memorisedSpells.setSlot(slotNo,Id,Icon,NewIcon,MemIcon,Name);
+			int Level = Integer.parseInt(spellArray[6]);
+			this.memorisedSpells.setSlot(slotNo,Id,Icon,NewIcon,MemIcon,Name,Level);
 		}
 	}
 	
@@ -56,7 +57,8 @@ public class PacketMemorisedSpells implements ISoliniaPacket {
 					+ this.memorisedSpells.getSlotIcon(i)+ "|" 
 					+ this.memorisedSpells.getSlotNewIcon(i)+ "|" 
 					+ this.memorisedSpells.getSlotMemIcon(i)+ "|" 
-					+ this.memorisedSpells.getSlotName(i);
+					+ this.memorisedSpells.getSlotName(i) + "|"
+					+ this.memorisedSpells.getSlotLevel(i);
 		}
 		
 		return packetData;
