@@ -424,8 +424,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setSongsEnabled(boolean songsEnabled);
 
-	void emote(String string, boolean isBardSongFilterable);
-
 	void increaseMonthlyVote(Integer amount);
 
 	Integer getMonthlyVote();
@@ -591,4 +589,6 @@ public interface ISoliniaPlayer extends Serializable {
 	List<SoliniaZone> getZones();
 
 	boolean canDisarm();
+
+	void emote(String string, boolean isBardSongFilterable, boolean isManual);
 }

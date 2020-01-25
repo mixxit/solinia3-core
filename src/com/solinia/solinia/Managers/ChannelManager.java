@@ -20,9 +20,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class ChannelManager implements IChannelManager {
 	
 	@Override
-	public void sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack, boolean onlySendToSource) {
+	public int sendToLocalChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack, boolean onlySendToSource) {
 		if (source == null || source.getBukkitPlayer() == null)
-			return;
+			return 0;
+		
+		int numberReached = 0;
 		
 		message = decorateLocalPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -44,10 +46,12 @@ public class ChannelManager implements IChannelManager {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
+						numberReached++;
 					} else {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You do not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
+						numberReached++;
 
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
@@ -56,16 +60,20 @@ public class ChannelManager implements IChannelManager {
 					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised"));
 					tc = decorateTextComponentsWithHovers(tc, itemStack);
 					player.spigot().sendMessage(tc);
+					numberReached++;
 					e.printStackTrace();
 				}
 			}
 		}
 		
 		System.out.println(message);
+		return numberReached;
 	}
 	
 	@Override
-	public void sendToWhisperChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack) {
+	public int sendToWhisperChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack) {
+		
+		int numberReached = 0;
 		
 		message = decorateWhisperPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -82,11 +90,12 @@ public class ChannelManager implements IChannelManager {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
+						numberReached++;
 					} else {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You dot not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
-
+						numberReached++;
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
 				} catch (CoreStateInitException e)
@@ -94,16 +103,19 @@ public class ChannelManager implements IChannelManager {
 					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised"));
 					tc = decorateTextComponentsWithHovers(tc, itemStack);
 					player.spigot().sendMessage(tc);
+					numberReached++;
 					e.printStackTrace();
 				}
 			}
 		}
 		
 		System.out.println(message);
+		return numberReached;
 	}
 	
 	@Override
-	public void sendToShoutChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack) {
+	public int sendToShoutChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack) {
+		int numberReached = 0;
 		
 		message = decorateShoutPlayerMessage(source, message.toUpperCase());
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -120,10 +132,12 @@ public class ChannelManager implements IChannelManager {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
+						numberReached++;
 					} else {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You do not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
+						numberReached++;
 
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 					}
@@ -132,12 +146,14 @@ public class ChannelManager implements IChannelManager {
 					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised"));
 					tc = decorateTextComponentsWithHovers(tc, itemStack);
 					player.spigot().sendMessage(tc);
+					numberReached++;
 					e.printStackTrace();
 				}
 			}
 		}
 		
 		System.out.println(message);
+		return numberReached;
 	}
 
 	private TextComponent decorateTextComponentsWithHovers(TextComponent tc, ItemStack itemStack) {
@@ -405,7 +421,8 @@ public class ChannelManager implements IChannelManager {
 	}
 
 	@Override
-	public void sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
+	public int sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
+		int numberReached = 0;
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalSayRange)
 			{
@@ -422,10 +439,12 @@ public class ChannelManager implements IChannelManager {
 				TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
 				tc = decorateTextComponentsWithHovers(tc, itemStack);
 				player.spigot().sendMessage(tc);
+				numberReached++;
 			}
 		}
 		
 		System.out.println(message);
+		return numberReached;
 	}
 
 	@Override

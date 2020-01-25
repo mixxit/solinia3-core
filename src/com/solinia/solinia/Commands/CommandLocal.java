@@ -46,6 +46,7 @@ public class CommandLocal implements CommandExecutor {
             }
 			
             PlayerUtils.BroadcastPlayers("Console:" + message);
+            
 			
 			return true;
 		}

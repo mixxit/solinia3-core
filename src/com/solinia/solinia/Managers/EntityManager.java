@@ -1613,7 +1613,7 @@ public class EntityManager implements IEntityManager {
 				// Move fizzle check to before casting
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)livingEntity);
 				if (solPlayer != null && !solPlayer.checkDoesntFizzle(castingSpell.getSpell())) {
-					solPlayer.emote("* " + solPlayer.getFullName() + "'s spell fizzles", false);
+					solPlayer.emote("* " + solPlayer.getFullName() + "'s spell fizzles", false, false);
 					solPlayer.reducePlayerMana(castingSpell.getSpell().getActSpellCost(solPlayer.getSoliniaLivingEntity()));
 					return;
 				}

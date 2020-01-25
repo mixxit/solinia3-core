@@ -853,9 +853,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void emote(String string, boolean isBardSongFilterable) {
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + string,
+	public void emote(String string, boolean isBardSongFilterable, boolean isManual) {
+		int numberReached = StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + string,
 				isBardSongFilterable, getBukkitPlayer().getInventory().getItemInMainHand());
+
+		if (isManual && numberReached < 1)
+			getBukkitPlayer().sendMessage("You feel like nobody could see you");
 	}
 
 	@Override
@@ -886,8 +889,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (message.toUpperCase().equals("HAIL"))
 			onlySendToSource = true;
 		}
-		StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, message, message,
+		
+		int numberReached = StateManager.getInstance().getChannelManager().sendToLocalChannelDecorated(this, message, message,
 				getBukkitPlayer().getInventory().getItemInMainHand(),onlySendToSource);
+		
+		if (numberReached < 1)
+			getBukkitPlayer().sendMessage("You feel like nobody could hear you");
 		
 		// NPC responses (if applicable)
 		if (getEntityTarget() != null)
@@ -917,8 +924,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				setLanguage(getRace().getName().toUpperCase());
 			}
 		}
-		StateManager.getInstance().getChannelManager().sendToWhisperChannelDecorated(this, string, string,
+		int numberReached = StateManager.getInstance().getChannelManager().sendToWhisperChannelDecorated(this, string, string,
 				getBukkitPlayer().getInventory().getItemInMainHand());
+
+		if (numberReached < 1)
+			getBukkitPlayer().sendMessage("You feel like nobody could hear you");
 	}
 
 	@Override
@@ -931,8 +941,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				setLanguage(getRace().getName().toUpperCase());
 			}
 		}
-		StateManager.getInstance().getChannelManager().sendToShoutChannelDecorated(this, string, string,
+		int numberReached = StateManager.getInstance().getChannelManager().sendToShoutChannelDecorated(this, string, string,
 				getBukkitPlayer().getInventory().getItemInMainHand());
+		if (numberReached < 1)
+			getBukkitPlayer().sendMessage("You feel like nobody could hear you");
+
 	}
 
 	@Override
