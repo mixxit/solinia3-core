@@ -94,7 +94,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private List<String> playerQuestFlags = new ArrayList<String>();
 	private String specialisation = "";
 	private boolean vampire = false;
-	private boolean main = true;
+	private boolean modMessageEnabled = true;
 	private int inspiration = 0;
 	private Timestamp experienceBonusExpires;
 	private boolean oocEnabled = true;
@@ -2778,6 +2778,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setOocEnabled(boolean oocEnabled) {
 		this.oocEnabled = oocEnabled;
+	}
+	
+	@Override
+	public boolean isModMessageEnabled() {
+		return modMessageEnabled;
+	}
+
+	@Override
+	public void setModMessageEnabled(boolean oocEnabled) {
+		this.modMessageEnabled = oocEnabled;
 	}
 
 	@Override

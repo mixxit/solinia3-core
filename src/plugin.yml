@@ -601,6 +601,12 @@ commands:
     usage: /hideooc
     aliases:
     - toggleooc
+  ignoremodmessage:
+    description: Toggles hiding of the mod message channel
+    usage: /ignoremodmessage
+    aliases:
+    - togglemodmessage
+    - hidemodmessage
   listnpcspells:
     description: Lists an npcs spell list
     usage: /listnpcspells

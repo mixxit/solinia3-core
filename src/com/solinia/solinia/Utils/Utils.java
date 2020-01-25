@@ -2615,6 +2615,7 @@ public class Utils {
 					continue;
 				
 				item.setRequiredWeaponSkillType("PIERCING");
+				item.setLastUpdatedTimeNow();
 			}
 		} catch (CoreStateInitException e)
 		{

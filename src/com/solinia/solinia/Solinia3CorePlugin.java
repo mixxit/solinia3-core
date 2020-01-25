@@ -611,6 +611,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("editnpcspelllist").setExecutor(new CommandEditNpcSpellList());
 		this.getCommand("claim").setExecutor(new CommandClaim());
 		this.getCommand("hideooc").setExecutor(new CommandHideOoc());
+		this.getCommand("ignoremodmessage").setExecutor(new CommandIgnoreModMessage(this));
 		this.getCommand("skillcheck").setExecutor(new CommandSkillCheck());
 		this.getCommand("createzone").setExecutor(new CommandCreateZone());
 		this.getCommand("editzone").setExecutor(new CommandEditZone());

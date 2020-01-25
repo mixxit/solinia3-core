@@ -591,4 +591,8 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean canDisarm();
 
 	void emote(String string, boolean isBardSongFilterable, boolean isManual);
+
+	public void setModMessageEnabled(boolean enabled);
+
+	public boolean isModMessageEnabled();
 }
