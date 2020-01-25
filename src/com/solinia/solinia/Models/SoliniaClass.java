@@ -73,6 +73,8 @@ public class SoliniaClass implements ISoliniaClass {
 	private boolean canPray = false;
 	private int trackingLevel = 0;
 	private int disarmLevel = 0;
+	private int meditationLevel = 0;
+	private int makePoisonLevel = 0;
 	
 	
 	@Override
@@ -214,6 +216,8 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- dualwieldlevel: " + ChatColor.GOLD + getDualwieldlevel() + ChatColor.RESET);
 		sender.sendMessage("- trackinglevel: " + ChatColor.GOLD + getTrackingLevel() + ChatColor.RESET);
 		sender.sendMessage("- disarmlevel: " + ChatColor.GOLD + getDisarmLevel() + ChatColor.RESET);
+		sender.sendMessage("- meditationlevel: " + ChatColor.GOLD + getMeditationLevel() + ChatColor.RESET);
+		sender.sendMessage("- makepoisonlevel: " + ChatColor.GOLD + getMakePoisonLevel() + ChatColor.RESET);
 		sender.sendMessage("- canpray: " + ChatColor.GOLD + canPray() + ChatColor.RESET);
 		sender.sendMessage("- sneakfromcrouch: " + ChatColor.GOLD + isSneakFromCrouch() + ChatColor.RESET);
 		sender.sendMessage("- oaths: " + ChatColor.GOLD + getOaths().toString() + ChatColor.RESET);
@@ -385,6 +389,12 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "disarmlevel":
 			this.setDisarmLevel(Integer.parseInt(value));
+			break;
+		case "meditationlevel":
+			this.setMeditationLevel(Integer.parseInt(value));
+			break;
+		case "makepoison":
+			this.setMakePoisonLevel(Integer.parseInt(value));
 			break;
 		case "classitemprefix":
 			this.setClassItemPrefix(value);
@@ -1081,5 +1091,25 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setDisarmLevel(int disarmLevel) {
 		this.disarmLevel = disarmLevel;
+	}
+
+	@Override
+	public int getMakePoisonLevel() {
+		return makePoisonLevel;
+	}
+
+	@Override
+	public void setMakePoisonLevel(int makePoisonLevel) {
+		this.makePoisonLevel = makePoisonLevel;
+	}
+
+	@Override
+	public int getMeditationLevel() {
+		return meditationLevel;
+	}
+
+	@Override
+	public void setMeditationLevel(int meditationLevel) {
+		this.meditationLevel = meditationLevel;
 	}
 }

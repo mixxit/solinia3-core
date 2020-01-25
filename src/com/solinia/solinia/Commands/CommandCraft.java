@@ -122,6 +122,12 @@ public class CommandCraft implements CommandExecutor {
     				
     				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
     				{
+    					if (solPlayer.getSkillCap(craftEntry.getSkill().toUpperCase()) < 1)
+    					{
+				        	player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
+    						continue;
+    					}
+    					
     					if (craftEntry.getMinSkill() > 0)
     					{
     						SoliniaPlayerSkill skill = solPlayer.getSkill(craftEntry.getSkill().toUpperCase());

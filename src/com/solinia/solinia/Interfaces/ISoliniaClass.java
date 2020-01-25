@@ -201,4 +201,12 @@ public interface ISoliniaClass {
 
 	public boolean canDisarm();
 
+	int getMakePoisonLevel();
+
+	void setMakePoisonLevel(int makePoisonLevel);
+
+	int getMeditationLevel();
+
+	void setMeditationLevel(int meditationLevel);
+
 }

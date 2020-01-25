@@ -43,11 +43,21 @@ public class CommandSkills implements CommandExecutor
 	            	if (soliniaplayer.getClassObj().getTrackingLevel() > 0)
 	            	player.sendMessage(ChatColor.GRAY + "You gain the Tracking Skill at: " + soliniaplayer.getClassObj().getTrackingLevel());	            	
 	            	if (soliniaplayer.getClassObj().getDisarmLevel() > 0)
-	            	player.sendMessage(ChatColor.GRAY + "You gain the Disarm Skill Skill at: " + soliniaplayer.getClassObj().getDisarmLevel());	            	
+	            	player.sendMessage(ChatColor.GRAY + "You gain the Disarm Skill at: " + soliniaplayer.getClassObj().getDisarmLevel());	            	
+	            	if (soliniaplayer.getClassObj().getMakePoisonLevel() > 0)
+	            	player.sendMessage(ChatColor.GRAY + "You gain the Make Poison Skill at: " + soliniaplayer.getClassObj().getMakePoisonLevel());	            	
+	            	if (soliniaplayer.getClassObj().getMeditationLevel() > 0)
+	            	player.sendMessage(ChatColor.GRAY + "You gain the Meditation Skill at: " + soliniaplayer.getClassObj().getMeditationLevel());	            	
 	            }
 	            
 	            for(SoliniaPlayerSkill skill : soliniaplayer.getSkills())
 	            {
+	            	if (skill.getValue() == 0)
+	            		continue;
+	            	
+	            	if (soliniaplayer.getSkillCap(skill.getSkillName()) == 0)
+	            		continue;
+	            	
 	            	player.sendMessage(ChatColor.BLUE + skill.getSkillName() + ": " + skill.getValue() + "/" + soliniaplayer.getSkillCap(skill.getSkillName()));
 	            }
 	            
