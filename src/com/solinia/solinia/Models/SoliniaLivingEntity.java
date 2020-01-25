@@ -7833,10 +7833,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void doCallForAssist(LivingEntity target) {
 		// have assist cap
-		boolean canAssist = canCallForAssist();
-		int size = this.getHateList().size();
-		boolean ischarm = !isCharmed();
-		boolean hasAssist = !hasAssistAggro();
 
 		if (canCallForAssist() && this.getHateList().size() > 0 && !isCharmed() && !hasAssistAggro()
 			    // && NPCAssistCap() < RuleI(Combat, NPCAssistCap)

@@ -1947,7 +1947,8 @@ public class EntityManager implements IEntityManager {
 		if (hateList.get(entity).get(provoker) == null)
 		{
 			hateList.get(entity).put(provoker, new Tuple<Integer,Boolean>(hate,isYellForHelp));
-			this.incrementEntityAggroCount(entity);
+			
+			this.incrementEntityAggroCount(provoker);
 			return;
 		}
 		
