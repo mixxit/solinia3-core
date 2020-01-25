@@ -130,6 +130,17 @@ List<String> completedEntities = new ArrayList<String>();
 				ISoliniaLivingEntity solLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(target);
 				ISoliniaLivingEntity solLivingEntityAttacker = SoliniaLivingEntityAdapter.Adapt(entityForAutoAttack);
 				
+				// Patch to fix mobs keeping aggro despite not being in hate list
+				// Mythicmobs bug? 
+				// TODO
+				if (!(target instanceof Player))
+				if (target != null)
+					if (solLivingEntityAttacker.getHateList() == null || solLivingEntityAttacker.getHateList().keySet().size() == 0) {
+						solLivingEntityAttacker.setAttackTarget(null);
+						solLivingEntityAttacker.resetPosition(true);
+						return;
+					}
+				
 				if (solLivingEntityTarget != null && solLivingEntityAttacker != null)
 				{
 					// reset timer

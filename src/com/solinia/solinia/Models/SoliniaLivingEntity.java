@@ -5507,6 +5507,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
+	@Override
 	public ConcurrentHashMap<UUID, Tuple<Integer,Boolean>> getHateList() {
 		try {
 			return StateManager.getInstance().getEntityManager()
@@ -5534,7 +5535,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return false;
 
 		if (this.getAttackTarget() != null)
-			if (this.getHateList().keySet().size() == 0) {
+			if (this.getHateList() == null || this.getHateList().keySet().size() == 0) {
 				setAttackTarget(null);
 				resetPosition(true);
 				return false;
@@ -6439,7 +6440,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (this.getBukkitLivingEntity() instanceof Creature) {
-			if (entity != null && !this.getHateList().containsKey(entity.getUniqueId())) {
+			if (entity != null && (this.getHateList() == null || !this.getHateList().containsKey(entity.getUniqueId()))) {
 				this.addToHateList(entity.getUniqueId(), 1, true);
 			}
 			Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "i am being told to set my target to " + entity);
@@ -7680,6 +7681,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private boolean hasAssistAggro() {
+		if (this.getHateList() == null)
+			return false;
+		
 		return this.getHateList().entrySet().stream()
 	            .anyMatch(t -> t.getValue().b() == false);
 	}
@@ -7766,6 +7770,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void sendHateList(LivingEntity recipient) {
 		recipient.sendMessage("HateList:");
 		if (recipient instanceof Player) {
+			if (this.getHateList() != null)
 			for(UUID uuid : getHateList().keySet())
 			{
 				int hate = getHateList().get(uuid).a();
@@ -7819,7 +7824,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void doCallForAssist(LivingEntity target) {
 		// have assist cap
 
-		if (canCallForAssist() && this.getHateList().size() > 0 && !isCharmed() && !hasAssistAggro()
+		if (canCallForAssist() && this.getHateList() != null && this.getHateList().size() > 0 && !isCharmed() && !hasAssistAggro()
 			    // && NPCAssistCap() < RuleI(Combat, NPCAssistCap)
 				) 
 		{
@@ -7868,6 +7873,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return false;
 
 		if (attacker.getBukkitLivingEntity().isDead())
+			return false;
+		
+		if (this.getHateList() == null)
 			return false;
 		
 		return this.getHateList().entrySet().stream()

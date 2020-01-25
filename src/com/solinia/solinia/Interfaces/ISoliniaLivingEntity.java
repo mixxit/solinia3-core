@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -29,6 +30,7 @@ import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public interface ISoliniaLivingEntity 
 {
@@ -410,6 +412,8 @@ public interface ISoliniaLivingEntity
 	int getAggroCount();
 
 	Location getSpawnPoint();
+
+	ConcurrentHashMap<UUID, Tuple<Integer, Boolean>> getHateList();
 
 
 }
