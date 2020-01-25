@@ -2007,6 +2007,9 @@ public class EntityManager implements IEntityManager {
 	public void clearHateList(UUID entityUuid) {
 		if (hateList.get(entityUuid) != null)
 		{
+			if (hateList.get(entityUuid).size() == 0)
+				return;
+			
 			for (UUID entity : hateList.get(entityUuid).keySet())
 				this.decrementEntityAggroCount(entity);
 		}

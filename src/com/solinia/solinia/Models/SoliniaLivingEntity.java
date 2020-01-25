@@ -6427,11 +6427,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
-		if (entity == null)
-		{
-			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
-		}
-		
 		if (entity instanceof Player)
 			if (((Player)entity).getGameMode() != GameMode.SURVIVAL)
 				return;
@@ -6447,7 +6442,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (entity != null && !this.getHateList().containsKey(entity.getUniqueId())) {
 				this.addToHateList(entity.getUniqueId(), 1, true);
 			}
-			
+			Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "i am being told to set my target to " + entity);
 			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
 		}
 	}
