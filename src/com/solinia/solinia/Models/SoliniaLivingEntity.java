@@ -7441,6 +7441,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 	}
 
+	@Override
 	public Location getSpawnPoint() {
 		if (!isNPC())
 			return null;

@@ -10,8 +10,12 @@ import org.bukkit.metadata.MetadataValue;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.ActiveSpellEffect;
+import com.solinia.solinia.Models.SoliniaActiveSpell;
 
 public class CommandSolNPCInfo implements CommandExecutor {
 
@@ -53,6 +57,72 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			{
 				player.sendMessage("NPCID: " + solLivingEntity.getNpcid());
 			}
+			player.sendMessage("EQUIPMENT");
+			if (player instanceof Player && ((Player) player).isOp()) {
+				for(ISoliniaItem solItem : solLivingEntity.getEquippedSoliniaItems())
+				{
+					System.out.println("SolItemId: " + solItem.getId() + " " + solItem.getDisplayname());
+					player.sendMessage("SolItemId: " + solItem.getId() + " " + solItem.getDisplayname());
+				}
+			}
+			player.sendMessage("METADATA");
+			player.sendMessage("MetaData:");
+			if (player instanceof Player && ((Player) player).isOp()) {
+				if (solLivingEntity.getBukkitLivingEntity().hasMetadata("mobname"))
+				{
+					String metadata = "";
+					for (MetadataValue val : solLivingEntity.getBukkitLivingEntity().getMetadata("mobname")) {
+						metadata = val.asString();
+					}
+					
+					player.sendMessage("mobname: " + metadata);
+				}
+				
+				if (solLivingEntity.getSpawnPoint() == null)
+				{
+					player.sendMessage("spawnpoint: null");
+				} else {
+					player.sendMessage("spawnpoint: " + solLivingEntity.getSpawnPoint().getWorld().getName() + "," + solLivingEntity.getSpawnPoint().getX() + "," + solLivingEntity.getSpawnPoint().getY() + "," + solLivingEntity.getSpawnPoint().getZ());
+				}
+				
+				if (solLivingEntity.getBukkitLivingEntity().hasMetadata("mythicmob"))
+				{
+					String metadata = "";
+					for (MetadataValue val : solLivingEntity.getBukkitLivingEntity().getMetadata("mythicmob")) {
+						metadata = val.asString();
+					}
+					
+					player.sendMessage("mythicmob: " + metadata);
+				}
+				
+				if (solLivingEntity.getBukkitLivingEntity().hasMetadata("Faction"))
+				{
+					String metadata = "";
+					for (MetadataValue val : solLivingEntity.getBukkitLivingEntity().getMetadata("Faction")) {
+						metadata = val.asString();
+					}
+					
+					player.sendMessage("Faction: " + metadata);
+				}
+			}
+			player.sendMessage("LISTEFFECTS");
+			if (player instanceof Player && ((Player) player).isOp()) {
+				try {
+					for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
+							.getActiveEntitySpells(solLivingEntity.getBukkitLivingEntity()).getActiveSpells()) {
+						player.sendMessage(spell.getSpell().getName());
+						for (ActiveSpellEffect effect : spell.getActiveSpellEffects()) {
+							player.sendMessage(
+									" - " + effect.getSpellEffectType().name() + " " + effect.getRemainingValue());
+						}
+					}
+				} catch (CoreStateInitException e) {
+					//
+				}
+			}
+			player.sendMessage("HATELIST");
+			solLivingEntity.sendHateList(player);
+			
 		} catch (CoreStateInitException e)
 		{
 			player.sendMessage("SoliniaNPCInfo: " + "Could not fetch information");

@@ -411,5 +411,7 @@ public interface ISoliniaLivingEntity
 
 	int getAggroCount();
 
+	Location getSpawnPoint();
+
 
 }
