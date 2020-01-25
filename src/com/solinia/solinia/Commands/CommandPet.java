@@ -27,8 +27,6 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Utils.ItemStackUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.EntityInsentient;
@@ -180,10 +178,7 @@ public class CommandPet implements CommandExecutor {
 						if (solLivingEntity != null)
 						{
 							solLivingEntity.sendHateList(player);							
-							return true;
 						}
-						
-						return true;
 					}
 				}
 				

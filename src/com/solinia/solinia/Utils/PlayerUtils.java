@@ -23,8 +23,6 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
-import com.solinia.solinia.Models.SoliniaPlayer;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerUtils {

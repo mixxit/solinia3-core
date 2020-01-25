@@ -2203,9 +2203,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
 					.getSpell(spelleffect.getBase());
 			
-			if (spelleffect == null)
-				return;
-			
 			if (attackStack != null && !activeSpell.getRequiredWeaponSkillType().equals(""))
 			{
 				if (!ItemStackUtils.getMeleeSkillForItemStack(attackStack).getSkillname().toUpperCase().equals(activeSpell.getRequiredWeaponSkillType().toUpperCase()))

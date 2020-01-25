@@ -5,10 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.solinia.solinia.Factories.SoliniaNPCFactory;
 import com.solinia.solinia.Factories.SoliniaSpellFactory;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
-import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 
 public class CommandCreateSpellCopy implements CommandExecutor {

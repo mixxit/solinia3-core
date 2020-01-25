@@ -3,15 +3,8 @@ package com.solinia.solinia.Utils;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.entity.Player;
-
-import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
-import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
-import com.solinia.solinia.Models.SoliniaItem;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class QuestUtils {

@@ -3,7 +3,6 @@ package com.solinia.solinia.Interfaces;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
