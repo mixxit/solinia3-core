@@ -7765,7 +7765,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void sendHateList(LivingEntity recipient) {
 		recipient.sendMessage("HateList:");
-		if (recipient instanceof Player && (((Player) recipient).isOp() || this.isCurrentlyNPCPet())) {
+		if (recipient instanceof Player) {
 			for(UUID uuid : getHateList().keySet())
 			{
 				int hate = getHateList().get(uuid).a();

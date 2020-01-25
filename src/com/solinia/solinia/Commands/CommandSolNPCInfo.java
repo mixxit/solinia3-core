@@ -58,7 +58,7 @@ public class CommandSolNPCInfo implements CommandExecutor {
 				player.sendMessage("NPCID: " + solLivingEntity.getNpcid());
 			}
 			player.sendMessage("EQUIPMENT");
-			if (player instanceof Player && ((Player) player).isOp()) {
+			if (player instanceof Player) {
 				for(ISoliniaItem solItem : solLivingEntity.getEquippedSoliniaItems())
 				{
 					System.out.println("SolItemId: " + solItem.getId() + " " + solItem.getDisplayname());
@@ -67,7 +67,7 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			}
 			player.sendMessage("METADATA");
 			player.sendMessage("MetaData:");
-			if (player instanceof Player && ((Player) player).isOp()) {
+			if (player instanceof Player) {
 				if (solLivingEntity.getBukkitLivingEntity().hasMetadata("mobname"))
 				{
 					String metadata = "";
@@ -106,7 +106,7 @@ public class CommandSolNPCInfo implements CommandExecutor {
 				}
 			}
 			player.sendMessage("LISTEFFECTS");
-			if (player instanceof Player && ((Player) player).isOp()) {
+			if (player instanceof Player) {
 				try {
 					for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
 							.getActiveEntitySpells(solLivingEntity.getBukkitLivingEntity()).getActiveSpells()) {
