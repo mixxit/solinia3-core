@@ -1271,7 +1271,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			int newAmount = itemstack.getAmount() - 1;
 
-			LivingEntity targetmob = Utils.getTargettedLivingEntity(getBukkitPlayer(), 50);
+			if (getEntityTarget() == null) {
+				getBukkitPlayer().sendMessage("* You must select a target [See keybinds]");
+			}
+			LivingEntity targetmob = getEntityTarget();
 			if (targetmob != null && !targetmob.getUniqueId().equals(getBukkitPlayer().getUniqueId())) {
 				if (item.useItemOnEntity(getBukkitPlayer(), targetmob, false) == true) {
 					if (newAmount < 1) {

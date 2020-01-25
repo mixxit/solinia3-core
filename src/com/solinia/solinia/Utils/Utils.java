@@ -596,6 +596,7 @@ public class Utils {
 		return false;
 	}
 
+	/*
 	public static LivingEntity getTargettedLivingEntity(LivingEntity observer, int reach) {
 		Location observerPos = observer.getEyeLocation();
 		Vector3D observerDir = new Vector3D(observerPos.getDirection());
@@ -627,6 +628,7 @@ public class Utils {
 
 		return hit;
 	}
+	*/
 
 	private static boolean hasIntersection(Vector3D p1, Vector3D p2, Vector3D min, Vector3D max) {
 		final double epsilon = 0.0001f;

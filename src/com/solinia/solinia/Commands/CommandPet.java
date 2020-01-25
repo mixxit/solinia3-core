@@ -63,6 +63,10 @@ public class CommandPet implements CommandExecutor {
 				}
 				
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solLivingEntity == null || solPlayer == null)
+					return false;
+				
 				
 				if (args.length > 0)
 				{
@@ -88,7 +92,11 @@ public class CommandPet implements CommandExecutor {
 					
 					if (petcommand.equals("attack"))
 					{
-						LivingEntity targetentity = Utils.getTargettedLivingEntity(player, 50);
+						if (solPlayer.getEntityTarget() == null) {
+							player.sendMessage("* You must select a target [See keybinds]");
+						}
+						
+						LivingEntity targetentity = solPlayer.getEntityTarget();
 						if (targetentity != null && !targetentity.getUniqueId().equals(player.getUniqueId())) {
 							if (solLivingEntity != null)
 							{
