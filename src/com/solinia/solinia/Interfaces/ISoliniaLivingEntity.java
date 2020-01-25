@@ -309,7 +309,6 @@ public interface ISoliniaLivingEntity
 
 	void checkNumHitsRemaining(NumHit type, int buffSlot, Integer spellId);
 
-
 	LivingEntity getAttackTarget();
 
 	void resetPosition(boolean resetHealth);

@@ -122,6 +122,7 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			}
 			player.sendMessage("HATELIST");
 			solLivingEntity.sendHateList(player);
+			player.sendMessage("MINECRAFT AGGRO");
 			
 		} catch (CoreStateInitException e)
 		{

@@ -6427,6 +6427,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
+		if (entity == null)
+		{
+			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
+		}
+		
 		if (entity instanceof Player)
 			if (((Player)entity).getGameMode() != GameMode.SURVIVAL)
 				return;
