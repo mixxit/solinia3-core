@@ -2588,7 +2588,38 @@ public class Utils {
 
 	// Used for one off patching, added in /commit patch command for console sender
 	public static void Patcher() {
-		
+		try
+		{
+			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
+			{
+				if (item.getAbilityid() < 1)
+					continue;
+				
+				if (!item.getBasename().toUpperCase().equals("POTION"))
+					continue;
+				
+				if (item.getAllowedClassNames().size() != 1)
+					continue;
+				
+				if (!item.getAllowedClassNames().get(0).toUpperCase().equals("ROGUE"))
+					continue;
+				
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+				if (spell ==  null)
+					continue;
+				
+				if (!spell.isEffectInSpell(SpellEffectType.AddMeleeProc))
+					continue;
+				
+				if (item.getRequiredWeaponSkillType().equals("PIERCING"))
+					continue;
+				
+				item.setRequiredWeaponSkillType("PIERCING");
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	public static void disableLootOverLevel110() {

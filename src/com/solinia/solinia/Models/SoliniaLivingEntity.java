@@ -1726,7 +1726,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									
 									if (!activeSpell.getRequiredWeaponSkillType().equals(""))
 									{
-										Utils.DebugLog("SoliniaLivingEntity","AttackWithMainHand",this.getBukkitLivingEntity().getName(),"RequiredWeaponSkillType check : " + activeSpell.getRequiredWeaponSkillType() " vs " + my_hit.skill);
+										Utils.DebugLog("SoliniaLivingEntity","AttackWithMainHand",this.getBukkitLivingEntity().getName(),"RequiredWeaponSkillType check : " + activeSpell.getRequiredWeaponSkillType() + " vs " + my_hit.skill);
 										if (!my_hit.skill.equals(activeSpell.getRequiredWeaponSkillType()))
 											continue;
 									}
