@@ -62,6 +62,7 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.EntityCreature;
 import net.minecraft.server.v1_14_R1.EntityDamageSource;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
@@ -6434,7 +6435,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (entity != null && (entity.isDead() || entity.isInvulnerable())) {
 			if (this.getBukkitLivingEntity() instanceof Creature) {
+				this.getBukkitLivingEntity().setLastDamageCause(null);
+				
+				Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "i am being told to set my target to " + null);
 				((Creature) this.getBukkitLivingEntity()).setTarget(null);
+				Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "my new target is " + ((Creature) this.getBukkitLivingEntity()).getTarget());
 			}
 			return;
 		}
@@ -6443,8 +6448,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (entity != null && (this.getHateList() == null || !this.getHateList().containsKey(entity.getUniqueId()))) {
 				this.addToHateList(entity.getUniqueId(), 1, true);
 			}
+			
 			Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "i am being told to set my target to " + entity);
+			if (entity == null)
+				this.getBukkitLivingEntity().setLastDamageCause(null);
 			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
+			Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "my new target is " + ((Creature) this.getBukkitLivingEntity()).getTarget());
 		}
 	}
 

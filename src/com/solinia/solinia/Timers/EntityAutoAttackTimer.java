@@ -133,13 +133,8 @@ List<String> completedEntities = new ArrayList<String>();
 				// Patch to fix mobs keeping aggro despite not being in hate list
 				// Mythicmobs bug? 
 				// TODO
-				if (!(entityForAutoAttack instanceof Player))
-				if (target != null)
-					if (solLivingEntityAttacker.getHateList() == null || solLivingEntityAttacker.getHateList().keySet().size() == 0) {
-						solLivingEntityAttacker.setAttackTarget(null);
-						solLivingEntityAttacker.resetPosition(true);
-						return;
-					}
+				
+				// nm
 				
 				if (solLivingEntityTarget != null && solLivingEntityAttacker != null)
 				{

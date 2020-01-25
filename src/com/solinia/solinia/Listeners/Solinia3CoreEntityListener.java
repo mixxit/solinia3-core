@@ -1,9 +1,11 @@
 package com.solinia.solinia.Listeners;
 
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -65,6 +67,23 @@ public class Solinia3CoreEntityListener implements Listener {
 	public void onEntityTargetEvent(EntityTargetEvent event) {
 		if (event.isCancelled())
 			return;
+		
+		System.out.println("I have a target event for : " + event.getTarget());
+		if (event.getTarget() != null && event.getEntity() != null && event.getEntity() instanceof Creature && event.getEntity() instanceof LivingEntity)
+		{
+			try
+			{
+			ISoliniaLivingEntity solLivingEntityAttacker = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+			if (solLivingEntityAttacker.getHateList() == null || solLivingEntityAttacker.getHateList().keySet().size() == 0) {
+				solLivingEntityAttacker.setAttackTarget(null);
+				Utils.CancelEvent(event);
+				return;
+			}	
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
 		
 		if (event.getTarget() != null && (event.getTarget().isInvulnerable() || event.getTarget().isDead()))
 		{
