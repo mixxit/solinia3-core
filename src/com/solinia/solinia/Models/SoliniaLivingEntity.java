@@ -6412,7 +6412,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return null;
 
 		if (this.getBukkitLivingEntity() instanceof Creature) {
-			((Creature) this.getBukkitLivingEntity()).getTarget();
+			return ((Creature) this.getBukkitLivingEntity()).getTarget();
 		}
 
 		return null;
