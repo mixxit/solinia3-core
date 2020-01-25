@@ -12,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
@@ -78,6 +79,10 @@ public class CommandTarget implements CommandExecutor {
 					
 					// Skip over existing target
 					if (currentTarget != null && currentTarget.getUniqueId().equals(entity.getUniqueId()))
+						continue;
+					
+					if (SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity) != null)
+					if (SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity).isCurrentlyNPCPet())
 						continue;
 					
 					solPlayer.setEntityTarget((LivingEntity)entity);
