@@ -4087,7 +4087,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
 						.getSpell(activeSpell.getSpellId());
 				effects.effectSlots.put(activeSpell.getSpellId(), new EffectSlot(activeSpell.getSpellId(),
-						spell.getIcon(), spell.getMemicon(), spell.getNewIcon(), spell.getName()));
+						spell.getIcon(), spell.getMemicon(), spell.getNewIcon(), spell.getName(), activeSpell.getTicksLeft()));
 			}
 
 		} catch (CoreStateInitException e) {
@@ -4326,7 +4326,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (spellBookItemPages.size() >= (pageNo + 1))
 			spellBookPage = spellBookItemPages.get(pageNo);
 
-		return new SpellbookPage(pageNo, spellBookPage);
+		return new SpellbookPage(pageNo, spellBookPage, this.getClassObj().getName().toUpperCase());
 	}
 
 	@Override

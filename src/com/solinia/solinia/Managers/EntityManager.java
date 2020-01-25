@@ -80,6 +80,7 @@ public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, Integer> entitySinging = new ConcurrentHashMap<UUID, Integer>();
+	private ConcurrentHashMap<UUID, Integer> entityAggroCount = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastCallForAssist = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1946,6 +1947,7 @@ public class EntityManager implements IEntityManager {
 		if (hateList.get(entity).get(provoker) == null)
 		{
 			hateList.get(entity).put(provoker, new Tuple<Integer,Boolean>(hate,isYellForHelp));
+			this.incrementEntityAggroCount(entity);
 			return;
 		}
 		
@@ -1991,6 +1993,12 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void clearHateList(UUID entityUuid) {
+		if (hateList.get(entityUuid) != null)
+		{
+			for (UUID entity : hateList.get(entityUuid).keySet())
+				this.decrementEntityAggroCount(entity);
+		}
+		
 		hateList.put(entityUuid,  new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 		Entity entity = Bukkit.getEntity(entityUuid);
 		if (entity == null)
@@ -2069,5 +2077,40 @@ public class EntityManager implements IEntityManager {
 				}
 			}
 		}
+	}
+
+	@Override
+	public ConcurrentHashMap<UUID, Integer> getEntityAggroCount() {
+		return entityAggroCount;
+	}
+
+	@Override
+	public void setEntityAggroCount(ConcurrentHashMap<UUID, Integer> entityAggroCount) {
+		this.entityAggroCount = entityAggroCount;
+	}
+	
+	@Override
+	public void incrementEntityAggroCount(UUID uniqueId) {
+		if (entityAggroCount.get(uniqueId) == null)
+			entityAggroCount.put(uniqueId, 0);
+		
+		entityAggroCount.put(uniqueId,entityAggroCount.get(uniqueId)+1);
+	}
+	
+	@Override
+	public void decrementEntityAggroCount(UUID uniqueId) {
+		if (entityAggroCount.get(uniqueId) == null)
+			entityAggroCount.put(uniqueId, 0);
+		
+		if (entityAggroCount.get(uniqueId) > 0)
+			entityAggroCount.put(uniqueId,entityAggroCount.get(uniqueId)-1);
+	}
+	
+	@Override
+	public int getAggroCount(UUID uniqueId) {
+		if (entityAggroCount.get(uniqueId) == null)
+			entityAggroCount.put(uniqueId, 0);
+		
+		return entityAggroCount.get(uniqueId);
 	}
 }

@@ -5519,6 +5519,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return null;
 	}
+	
+	public boolean isHateListEmpty() {
+		try {
+			if (StateManager.getInstance().getEntityManager().getHateList(this.getBukkitLivingEntity().getUniqueId()) == null)
+				return true;
+			
+			if (StateManager.getInstance().getEntityManager().getHateList(this.getBukkitLivingEntity().getUniqueId()).size() > 0)
+				return false;
+		} catch (CoreStateInitException e) {
+		}
+
+		return true;
+	}
 
 	@Override
 	public void clearHateList() {
@@ -8153,5 +8166,37 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			
 		}
+	}
+
+	@Override
+	public boolean isInCombat() {
+		if (this.isNPC() && this.isEngaged())
+			return true;
+		if (this.isPlayer() && this.getAggroCount() > 0)
+			return true;
+		
+		return false;
+	}
+	
+	@Override
+	public int getAggroCount() {
+		try
+		{
+			return StateManager.getInstance().getEntityManager().getAggroCount(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e)
+		{
+			return 0;
+		}
+	}
+
+	@Override
+	public boolean isEngaged() {
+		
+		return false;
+	}
+
+	@Override
+	public void wipeHateList() {
+		this.clearHateList();
 	}
 }

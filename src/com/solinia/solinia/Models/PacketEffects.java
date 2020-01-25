@@ -35,7 +35,8 @@ public class PacketEffects implements ISoliniaPacket {
 			int NewIcon = Integer.parseInt(effectArray[2]);
 			int MemIcon = Integer.parseInt(effectArray[3]);
 			String Name = effectArray[4];
-			this.effects.effectSlots.put(SpellId, new EffectSlot(SpellId,Icon,MemIcon,NewIcon,Name));
+			int TicksLeft = Integer.parseInt(effectArray[5]);
+			this.effects.effectSlots.put(SpellId, new EffectSlot(SpellId,Icon,MemIcon,NewIcon,Name,TicksLeft));
 		}
 	}
 	
@@ -55,7 +56,8 @@ public class PacketEffects implements ISoliniaPacket {
 					+ entry.getValue().Icon + "|" 
 					+ entry.getValue().NewIcon + "|" 
 					+ entry.getValue().MemIcon + "|" 
-					+ entry.getValue().Name;
+					+ entry.getValue().Name + "|"
+					+ entry.getValue().TicksLeft;
 		}
 		
 		return packetData;

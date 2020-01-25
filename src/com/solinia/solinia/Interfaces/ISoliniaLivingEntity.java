@@ -301,6 +301,8 @@ public interface ISoliniaLivingEntity
 	boolean checkHateTargets();
 
 	void clearHateList();
+	
+	void wipeHateList();
 
 	void setAttackTarget(LivingEntity entity);
 
@@ -403,6 +405,11 @@ public interface ISoliniaLivingEntity
 	boolean isAttackAllowed(ISoliniaLivingEntity target, boolean isSpellAttack);
 
 	public void disarm(SoliniaLivingEntity disarmer, int chance);
+
+	public boolean isInCombat();
+	public boolean isEngaged();
+
+	int getAggroCount();
 
 
 }

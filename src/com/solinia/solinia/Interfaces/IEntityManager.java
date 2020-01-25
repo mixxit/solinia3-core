@@ -207,4 +207,14 @@ public interface IEntityManager {
 
 	void setLastDisarm(UUID uuid, Timestamp lasttimestamp);
 
+	int getAggroCount(UUID uniqueId);
+
+	ConcurrentHashMap<UUID, Integer> getEntityAggroCount();
+
+	void setEntityAggroCount(ConcurrentHashMap<UUID, Integer> entityAggroCount);
+
+	void incrementEntityAggroCount(UUID uniqueId);
+
+	void decrementEntityAggroCount(UUID uniqueId);
+
 }
