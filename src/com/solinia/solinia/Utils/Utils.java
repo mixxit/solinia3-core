@@ -5790,9 +5790,9 @@ public class Utils {
 		return zone.isLocationInside(location);
 	}
 
-	public static org.bukkit.ChatColor getLevelCon(int level, ISoliniaLivingEntity solEntity) {
+	public static org.bukkit.ChatColor getLevelCon(int myLevel, ISoliniaLivingEntity solEntity) {
 		// TODO Auto-generated method stub
-		return null;
+		return getLevelCon(myLevel, solEntity.getLevel());
 	}
 	
 	public static org.bukkit.ChatColor getLevelCon(int mylevel, int iOtherLevel) {
