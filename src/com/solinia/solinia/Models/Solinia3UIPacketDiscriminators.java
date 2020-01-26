@@ -11,4 +11,5 @@ public class Solinia3UIPacketDiscriminators {
 	public static final byte CHARCREATION = 7;
 	public static final byte PLAYSOUNDANIM = 8;
 	public static final byte INZONE = 9;
+	public static final byte TRACKING = 10;
 }

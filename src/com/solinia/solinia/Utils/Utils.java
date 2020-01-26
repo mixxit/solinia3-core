@@ -5790,4 +5790,143 @@ public class Utils {
 		return zone.isLocationInside(location);
 	}
 
+	public static org.bukkit.ChatColor getLevelCon(int level, ISoliniaLivingEntity solEntity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public static org.bukkit.ChatColor getLevelCon(int mylevel, int iOtherLevel) {
+		org.bukkit.ChatColor conlevel = org.bukkit.ChatColor.WHITE;
+
+		int diff = iOtherLevel - mylevel;
+
+		if (diff == 0)
+			return org.bukkit.ChatColor.WHITE;
+		else if (diff >= 1 && diff <= 2)
+			return org.bukkit.ChatColor.YELLOW;
+		else if (diff >= 3)
+			return org.bukkit.ChatColor.RED;
+
+		if (mylevel <= 8) {
+			if (diff <= -4)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 9) {
+			if (diff <= -6)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -4)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 13) {
+			if (diff <= -7)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -5)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 15) {
+			if (diff <= -7)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -5)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 17) {
+			if (diff <= -8)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -6)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 21) {
+			if (diff <= -9)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -7)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 25) {
+			if (diff <= -10)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -8)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 29) {
+			if (diff <= -11)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -9)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 31) {
+			if (diff <= -12)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -9)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 33) {
+			if (diff <= -13)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -10)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 37) {
+			if (diff <= -14)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -11)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 41) {
+			if (diff <= -16)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -12)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 45) {
+			if (diff <= -17)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -13)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 49) {
+			if (diff <= -18)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -14)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 53) {
+			if (diff <= -19)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -15)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 55) {
+			if (diff <= -20)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -15)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else {
+			if (diff <= -21)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -16)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		}
+
+		return conlevel;
+	}
+
 }

@@ -225,8 +225,6 @@ public interface ISoliniaLivingEntity
 
 	boolean isPlant();
 
-	ChatColor getLevelCon(ISoliniaLivingEntity solLivingEntity);
-
 	int getMaxBindWound_SE();
 
 	int getBindWound_SE();
@@ -415,5 +413,5 @@ public interface ISoliniaLivingEntity
 
 	ConcurrentHashMap<UUID, Tuple<Integer, Boolean>> getHateList();
 
-
+	org.bukkit.ChatColor getLevelCon(int mylevel);
 }

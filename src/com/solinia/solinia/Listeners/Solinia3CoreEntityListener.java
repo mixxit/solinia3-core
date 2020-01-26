@@ -81,6 +81,8 @@ public class Solinia3CoreEntityListener implements Listener {
 			if (StateManager.getInstance().getEntityManager()
 					.getHateList(event.getEntity().getUniqueId()) == null || StateManager.getInstance().getEntityManager()
 							.getHateList(event.getEntity().getUniqueId()).keySet().size() == 0) {
+				event.getReason();
+				//PathfinderGoalTarget
 				// TODO why is this happening? We already cleared their target and last target - why is it setting it back?
 				Utils.CancelEvent(event);
 				return;

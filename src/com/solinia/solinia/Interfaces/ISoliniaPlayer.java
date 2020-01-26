@@ -32,6 +32,7 @@ import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.SpellbookPage;
+import com.solinia.solinia.Models.TrackingChoice;
 
 public interface ISoliniaPlayer extends Serializable {
 	public UUID getUUID();
@@ -595,4 +596,6 @@ public interface ISoliniaPlayer extends Serializable {
 	public void setModMessageEnabled(boolean enabled);
 
 	public boolean isModMessageEnabled();
+
+	public List<TrackingChoice> getTrackingChoices();
 }

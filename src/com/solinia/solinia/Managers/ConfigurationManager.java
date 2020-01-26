@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
@@ -2168,5 +2169,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public void setLastSentPlayerManaPercent(ConcurrentHashMap<UUID, Float> lastSentPlayerManaPercent) {
 		this.lastSentPlayerManaPercent = lastSentPlayerManaPercent;
+	}
+
+	@Override
+	public String getTrackingChoices(Player sender) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

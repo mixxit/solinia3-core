@@ -15,6 +15,10 @@ commands:
     description: Displays additional information about Solinia3Core
     usage: /solinia
     aliases: []
+  track:
+    description: Tracking tool
+    usage: /track
+    aliases: []
   toggleexperience:
     description: Toggles experience on/off for your character
     usage: /toggleexperience

@@ -6,8 +6,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,6 +44,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
@@ -52,6 +56,12 @@ import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
+
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.adapters.AbstractLocation;
+import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
+import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
+import io.lumine.xikage.mythicmobs.spawning.spawners.MythicSpawner;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
 
@@ -4562,5 +4572,60 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setShowDiscord(boolean showDiscord) {
 		this.showDiscord = showDiscord;
+	}
+
+	@Override
+	public List<TrackingChoice> getTrackingChoices() {
+		List<TrackingChoice> tracking_list = new ArrayList<TrackingChoice>();
+		int distance = 0;
+
+		if (this.getClassObj() == null)
+			return new ArrayList<TrackingChoice>();
+		
+		if (this.getClassObj().getName().equals("DRUID"))
+			distance = ((getSkill("TRACKING").getValue() + 1) * 10);
+		else if (this.getClassObj().getName().equals("RANGER"))
+			distance = ((getSkill("TRACKING").getValue() + 1) * 12);
+		else if (this.getClassObj().getName().equals("BARD"))
+			distance = ((getSkill("TRACKING").getValue() + 1) * 7);
+		if (distance <= 0)
+			return new ArrayList<TrackingChoice>();
+		
+		if (distance < 300)
+			distance = 300;
+		
+		// NPCs first
+		for(MythicSpawner msl : MythicMobs.inst().getSpawnerManager().getSpawnersByString(BukkitAdapter.adapt(this.getBukkitPlayer().getLocation()),"r:"+distance))
+		{
+			if (msl.isOnCooldown() || msl.isOnWarmup())
+				continue;
+			
+			if (!msl.getTypeName().contains("NPCID_"))
+				continue;
+
+			int npcId = Integer.parseInt(msl.getTypeName().substring(6));
+			try {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(npcId);
+
+				if (npc == null)
+					continue;
+
+				TrackingChoice trackingChoice = new TrackingChoice();
+				trackingChoice.Name = npc.getName();
+				// cast to int as its never more than skill limit of tracking
+				trackingChoice.Distance = (int) msl.getLocation().distance(BukkitAdapter.adapt(this.getBukkitPlayer().getLocation()));
+				trackingChoice.Color = Utils.getLevelCon(this.getLevel(), npc.getLevel()).name();
+				trackingChoice.Id = msl.getName();
+				
+				tracking_list.add(trackingChoice);
+				
+			} catch (CoreStateInitException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// SORT IT
+		Collections.sort(tracking_list, (e1, e2) -> ((Integer)((TrackingChoice)e1).Distance).compareTo((Integer)((TrackingChoice)e2).Distance));
+		return tracking_list;
 	}
 }

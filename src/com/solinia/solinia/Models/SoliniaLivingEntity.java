@@ -6812,141 +6812,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public ChatColor getLevelCon(ISoliniaLivingEntity solLivingEntity) {
-		ChatColor conlevel = ChatColor.WHITE;
-
-		int mylevel = solLivingEntity.getLevel();
+	public org.bukkit.ChatColor getLevelCon(int mylevel) {
 		int iOtherLevel = getLevel();
-
-		int diff = iOtherLevel - mylevel;
-
-		if (diff == 0)
-			return ChatColor.WHITE;
-		else if (diff >= 1 && diff <= 2)
-			return ChatColor.YELLOW;
-		else if (diff >= 3)
-			return ChatColor.RED;
-
-		if (mylevel <= 8) {
-			if (diff <= -4)
-				conlevel = ChatColor.GRAY;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 9) {
-			if (diff <= -6)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -4)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 13) {
-			if (diff <= -7)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -5)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 15) {
-			if (diff <= -7)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -5)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 17) {
-			if (diff <= -8)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -6)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 21) {
-			if (diff <= -9)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -7)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 25) {
-			if (diff <= -10)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -8)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 29) {
-			if (diff <= -11)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -9)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 31) {
-			if (diff <= -12)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -9)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 33) {
-			if (diff <= -13)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -10)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 37) {
-			if (diff <= -14)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -11)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 41) {
-			if (diff <= -16)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -12)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 45) {
-			if (diff <= -17)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -13)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 49) {
-			if (diff <= -18)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -14)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 53) {
-			if (diff <= -19)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -15)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else if (mylevel <= 55) {
-			if (diff <= -20)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -15)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		} else {
-			if (diff <= -21)
-				conlevel = ChatColor.GRAY;
-			else if (diff <= -16)
-				conlevel = ChatColor.AQUA;
-			else
-				conlevel = ChatColor.BLUE;
-		}
-
-		return conlevel;
+		return Utils.getLevelCon(mylevel,iOtherLevel);
 	}
 
 	@Override
@@ -7649,7 +7517,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					
 				//if they are in range, make sure we are not green...
 				//then jump in if they are our friend
-				if (attacker.getLevelCon(nearbySolEntity).equals(ChatColor.GRAY) && nearbySolEntity.getLevel() < 50)
+				if (attacker.getLevelCon(nearbySolEntity.getLevel()).equals(ChatColor.GRAY) && nearbySolEntity.getLevel() < 50)
 					continue;
 				
 				if (nearbySolEntity.getNPC() == null)
