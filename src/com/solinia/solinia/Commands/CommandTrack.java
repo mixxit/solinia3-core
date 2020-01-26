@@ -45,10 +45,10 @@ public class CommandTrack implements CommandExecutor {
 				// Send Tracking Choices
 				PacketTrackingChoices trackingChoicesPacket = new PacketTrackingChoices();
 				trackingChoicesPacket.fromData(solPlayer.getTrackingChoices());
-				ForgeUtils.QueueSendForgeMessage(((Player) solPlayer.getBukkitPlayer()),
+				ForgeUtils.sendForgeMessage(((Player) solPlayer.getBukkitPlayer()),
 						Solinia3UIChannelNames.Outgoing, Solinia3UIPacketDiscriminators.TRACKING,
-						trackingChoicesPacket.toPacketData(), 0);
-
+						trackingChoicesPacket.toPacketData());
+				player.sendMessage("You check for tracks...");
 				return true;
 			} else {
 				// Start Track
