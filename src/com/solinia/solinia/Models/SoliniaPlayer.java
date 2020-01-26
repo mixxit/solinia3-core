@@ -4076,8 +4076,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		spells.add(memorisedSpellSlot6);
 		spells.add(memorisedSpellSlot7);
 		spells.add(memorisedSpellSlot8);
+		String className = "";
+		if (this.getClassObj() != null)
+			className = this.getClassObj().getName();
 
-		return new MemorisedSpells(spells, this.getClassObj().getName());
+		return new MemorisedSpells(spells, className);
 	}
 
 	@Override
