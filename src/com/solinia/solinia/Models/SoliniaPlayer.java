@@ -1184,7 +1184,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
 				this.setEntityTarget(getBukkitPlayer());
 			} else if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Pet)) {
@@ -1586,7 +1585,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
 				this.setEntityTarget(getBukkitPlayer());
 				return true;
@@ -1670,7 +1668,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
 				setEntityTarget(getBukkitPlayer());
 			} else {
