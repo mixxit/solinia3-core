@@ -3498,8 +3498,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc.getLoottableid() == 0)
 					return;
 
-				Utils.DropLoot(npc.getLoottableid(), this.getBukkitLivingEntity().getWorld(),
-						this.getBukkitLivingEntity().getLocation());
+				Utils.DropLoot(npc.getLoottableid(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation());
+				if (npc.getRace() != null)
+					if (npc.getRace().getRaceLootTableId() > 0)
+						Utils.DropLoot(npc.getLoottableid(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation());
+						
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

@@ -4,6 +4,8 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
+import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
@@ -32,6 +34,7 @@ public class SoliniaRace implements ISoliniaRace {
 	private boolean vampire = false;
 
 	private int passiveAbilityId = 0;
+	private int raceLootTableId = 0;
 	
 	@Override
 	public String getName() {
@@ -157,9 +160,27 @@ public class SoliniaRace implements ISoliniaRace {
 			sender.sendMessage(
 					"- passiveabilityid: " + ChatColor.GOLD + getPassiveAbilityId() + " (No Ability)" + ChatColor.RESET);
 		}
-
+		if (getRaceLootTableId() != 0) {
+			sender.sendMessage("- raceloottableid: " + ChatColor.GOLD + getRaceLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getRaceLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- raceloottableid: " + ChatColor.GOLD + getRaceLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
 		sender.sendMessage("----------------------------");
 	}
+	
+	@Override
+	public int getRaceLootTableId() {
+		return raceLootTableId ;
+	}
+
+	@Override
+	public void setRaceLootTableId(int raceLootTableId) {
+		this.raceLootTableId = raceLootTableId;
+	}
+
 
 	@Override
 	public void editSetting(String setting, String value)
@@ -182,6 +203,19 @@ public class SoliniaRace implements ISoliniaRace {
 			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
 				throw new InvalidRaceSettingException("Invalid Race Alignment (GOOD,NEUTRAL,EVIL)");
 			setAlignment(value.toUpperCase());
+			break;
+		case "raceloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setRaceLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable1 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable1 == null)
+				throw new InvalidRaceSettingException("Loottable ID does not exist");
+			setRaceLootTableId(Integer.parseInt(value));
 			break;
 		case "passiveabilityid":
 			int abilityid = Integer.parseInt(value);

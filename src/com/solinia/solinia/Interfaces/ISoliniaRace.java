@@ -71,4 +71,8 @@ public interface ISoliniaRace {
 	int getPassiveAbilityId();
 
 	void setPassiveAbilityId(int passiveAbilityId);
+
+	int getRaceLootTableId();
+
+	void setRaceLootTableId(int raceLootTableId);
 }
