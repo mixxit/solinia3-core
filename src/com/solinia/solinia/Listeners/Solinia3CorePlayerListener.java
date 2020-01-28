@@ -430,7 +430,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				if (zone.getForestryLootTableId() > 0)
 					Utils.DropLoot(zone.getForestryLootTableId(), event.getPlayer().getWorld(),
-							event.getPlayer().getLocation());
+							event.getPlayer().getLocation(),"",0);
 			}
 
 			SoliniaWorld world = solplayer.getSoliniaWorld();
@@ -446,7 +446,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				if (world.getForestryLootTableId() > 0)
 					Utils.DropLoot(world.getForestryLootTableId(), event.getPlayer().getWorld(),
-							event.getPlayer().getLocation());
+							event.getPlayer().getLocation(),"",0);
 			}
 
 		} catch (CoreStateInitException e) {
@@ -476,7 +476,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				if (zone.getForagingLootTableId() > 0)
 					Utils.DropLoot(zone.getForagingLootTableId(), event.getPlayer().getWorld(),
-							event.getPlayer().getLocation());
+							event.getPlayer().getLocation(),"",0);
 			}
 
 			SoliniaWorld world = solplayer.getSoliniaWorld();
@@ -492,7 +492,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				if (world.getForagingLootTableId() > 0)
 					Utils.DropLoot(world.getForagingLootTableId(), event.getPlayer().getWorld(),
-							event.getPlayer().getLocation());
+							event.getPlayer().getLocation(),"",0);
 			}
 
 		} catch (CoreStateInitException e) {
@@ -522,7 +522,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				if (zone.getMiningLootTableId() > 0)
 					Utils.DropLoot(zone.getMiningLootTableId(), event.getPlayer().getWorld(),
-							event.getPlayer().getLocation());
+							event.getPlayer().getLocation(),"",0);
 			}
 
 			SoliniaWorld world = solplayer.getSoliniaWorld();
@@ -538,7 +538,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				if (world.getMiningLootTableId() > 0)
 					Utils.DropLoot(world.getMiningLootTableId(), event.getPlayer().getWorld(),
-							event.getPlayer().getLocation());
+							event.getPlayer().getLocation(),"",0);
 			}
 
 		} catch (CoreStateInitException e) {
@@ -572,7 +572,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				if (zone.getFishingLootTableId() > 0)
 					Utils.DropLoot(zone.getFishingLootTableId(), event.getPlayer().getWorld(),
-							event.getPlayer().getLocation());
+							event.getPlayer().getLocation(),"",0);
 			}
 
 			SoliniaWorld world = solplayer.getSoliniaWorld();
@@ -588,7 +588,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				if (world.getFishingLootTableId() > 0)
 					Utils.DropLoot(world.getFishingLootTableId(), event.getPlayer().getWorld(),
-							event.getPlayer().getLocation());
+							event.getPlayer().getLocation(),"",0);
 			}
 
 		} catch (CoreStateInitException e) {

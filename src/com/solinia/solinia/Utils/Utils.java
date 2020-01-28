@@ -4990,7 +4990,7 @@ public class Utils {
 		return 1000;
 	}
 
-	public static void DropLoot(int lootTableId, World world, Location location) {
+	public static void DropLoot(int lootTableId, World world, Location location, String className, int levelLimit) {
 		try {
 			ISoliniaLootTable table = StateManager.getInstance().getConfigurationManager().getLootTable(lootTableId);
 
@@ -5004,6 +5004,28 @@ public class Utils {
 				for (ISoliniaLootDropEntry dropentry : StateManager.getInstance().getConfigurationManager()
 						.getLootDrop(droptable.getId()).getEntries()) {
 
+					// this is only used for spells
+					if (className != null && !className.equals("") && levelLimit > 0)
+					{
+						// validate item
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(dropentry.getLootdropid());
+						if (item == null)
+							continue;
+						
+						if (item.getAbilityid() < 1)
+							continue;
+
+						if (item.getAbilityid() < 1)
+							continue;
+						
+						ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+						if (spell == null)
+							continue;
+						
+						if (spell.getMinLevelClass(className) > levelLimit)
+							continue;
+					}
+					
 					if (dropentry.isAlways() == true) {
 						absoluteitems.add(dropentry);
 						continue;

@@ -239,7 +239,7 @@ public class CommandCraft implements CommandExecutor {
 	    						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craftEntry.getOutputLootTableId());
 	    						if (loottable != null)
 	    						{
-	    							Utils.DropLoot(loottable.getId(), player.getWorld(), player.getLocation());
+	    							Utils.DropLoot(loottable.getId(), player.getWorld(), player.getLocation(),"",0);
 	    							player.sendMessage("You fashion the items together to attempt to make something random!");
 	    							createCount++;
 	    						}

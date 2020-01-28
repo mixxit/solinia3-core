@@ -209,4 +209,8 @@ public interface ISoliniaClass {
 
 	void setMeditationLevel(int meditationLevel);
 
+	int getDropSpellsLootTableId();
+
+	void setDropSpellsLootTableId(int dropSpellsLootTableId);
+
 }

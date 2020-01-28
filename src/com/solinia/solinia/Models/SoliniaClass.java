@@ -10,8 +10,10 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
@@ -75,7 +77,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private int disarmLevel = 0;
 	private int meditationLevel = 0;
 	private int makePoisonLevel = 0;
-	
+	private int dropSpellsLootTableId = 0;
 	
 	@Override
 	public String getName() {
@@ -225,6 +227,14 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- level51title: " + ChatColor.GOLD + getLevel51Title() + ChatColor.RESET);
 		sender.sendMessage("- level55title: " + ChatColor.GOLD + getLevel55Title() + ChatColor.RESET);
 		sender.sendMessage("- level60title: " + ChatColor.GOLD + getLevel60Title() + ChatColor.RESET);
+		if (getDropSpellsLootTableId() != 0) {
+			sender.sendMessage("- dropspellsloottableid: " + ChatColor.GOLD + getDropSpellsLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getDropSpellsLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- dropspellsloottableid: " + ChatColor.GOLD + getDropSpellsLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
 		if (StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()) != null)
 		{
 			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + getNpcspelllist() + "(" + StateManager.getInstance().getConfigurationManager().getNPCSpellList(getNpcspelllist()).getName() + ")" + ChatColor.RESET);
@@ -419,6 +429,19 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "level60title":
 			this.setLevel60Title(value);
+			break;
+		case "dropspellsloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setDropSpellsLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable1 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable1 == null)
+				throw new InvalidClassSettingException("Loottable ID does not exist");
+			setDropSpellsLootTableId(Integer.parseInt(value));
 			break;
 		case "startlocationall":
 			try {
@@ -1111,5 +1134,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setMeditationLevel(int meditationLevel) {
 		this.meditationLevel = meditationLevel;
+	}
+
+	@Override
+	public int getDropSpellsLootTableId() {
+		return dropSpellsLootTableId;
+	}
+
+	@Override
+	public void setDropSpellsLootTableId(int dropSpellsLootTableId) {
+		this.dropSpellsLootTableId = dropSpellsLootTableId;
 	}
 }
