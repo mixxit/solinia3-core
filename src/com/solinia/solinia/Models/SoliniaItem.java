@@ -953,25 +953,69 @@ public class SoliniaItem implements ISoliniaItem {
 			setExperienceBonus(Boolean.parseBoolean(value));
 			break;
 		case "skillmodtype":
-			setSkillModType(SkillType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
+			try
+			{
+			setSkillModType(SkillType.valueOf(value));
+			} catch (IllegalArgumentException e)
+			{
+				String types = "";
+				for(SkillType type: SkillType.values())
+				{
+					types += type+",";
+				}
+				throw new InvalidItemSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
+			}
 			break;
 		case "skillmodvalue":
 			setSkillModValue(Integer.parseInt(value));
 			break;
 		case "skillmodtype2":
-			setSkillModType2(SkillType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
+			try
+			{
+			setSkillModType2(SkillType.valueOf(value));
+			} catch (IllegalArgumentException e)
+			{
+				String types = "";
+				for(SkillType type: SkillType.values())
+				{
+					types += type+",";
+				}
+				throw new InvalidItemSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
+			}
 			break;
 		case "skillmodvalue2":
 			setSkillModValue2(Integer.parseInt(value));
 			break;
 		case "skillmodtype3":
-			setSkillModType3(SkillType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
+			try
+			{
+			setSkillModType3(SkillType.valueOf(value));
+			} catch (IllegalArgumentException e)
+			{
+				String types = "";
+				for(SkillType type: SkillType.values())
+				{
+					types += type+",";
+				}
+				throw new InvalidItemSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
+			}
 			break;
 		case "skillmodvalue3":
 			setSkillModValue3(Integer.parseInt(value));
 			break;
 		case "skillmodtype4":
-			setSkillModType4(SkillType.valueOf(TextUtils.CapitaliseFirstLetter(value)));
+			try
+			{
+			setSkillModType4(SkillType.valueOf(value));
+			} catch (IllegalArgumentException e)
+			{
+				String types = "";
+				for(SkillType type: SkillType.values())
+				{
+					types += type+",";
+				}
+				throw new InvalidItemSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
+			}
 			break;
 		case "skillmodvalue4":
 			setSkillModValue4(Integer.parseInt(value));
