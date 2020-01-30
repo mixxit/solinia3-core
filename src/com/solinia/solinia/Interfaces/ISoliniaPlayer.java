@@ -598,4 +598,12 @@ public interface ISoliniaPlayer extends Serializable {
 	public boolean isModMessageEnabled();
 
 	public List<TrackingChoice> getTrackingChoices();
+
+	public void startTracking(Location location);
+
+	public boolean isTracking();
+
+	Location getTrackingLocation();
+
+	boolean isTrackingLocation();
 }

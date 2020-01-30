@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Listeners.DynmapListener;
+import com.solinia.solinia.Listeners.PlayerTrackListener;
 import com.solinia.solinia.Listeners.PlayerValidatorModListener;
 import com.solinia.solinia.Listeners.Solinia3CoreBlockListener;
 import com.solinia.solinia.Listeners.Solinia3CoreChunkListener;
@@ -74,6 +75,7 @@ import com.solinia.solinia.Timers.PlayerInventoryValidatorTimer;
 import com.solinia.solinia.Timers.PlayerMoveCheckTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.PlayerTickTimer;
+import com.solinia.solinia.Timers.PlayerTrackingTimer;
 import com.solinia.solinia.Timers.RegionExtentsDynmapTimer;
 import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
 import com.solinia.solinia.Timers.SoliniaZonesDynmapTimer;
@@ -114,6 +116,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private RegionExtentsDynmapTimer regionExtentsDynmapTimer;
 	private SoliniaZonesDynmapTimer soliniaZonesDynmapTimer;
 	private PlayerMoveCheckTimer playerMoveCheckTimer;
+	private PlayerTrackingTimer playerTrackingTimer;
 	private Plugin dynmap;
 	private DynmapAPI dynmapApi;
 	private Plugin towny;
@@ -461,6 +464,10 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		playerMoveCheckTimer = new PlayerMoveCheckTimer();
 		// every 1 seconds
 		playerMoveCheckTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
+
+		playerTrackingTimer = new PlayerTrackingTimer();
+		// every 1 seconds
+		playerTrackingTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
 		
 		playerWindowTimer = new UpdatePlayerWindowTimer();
 		// every 1/2 seconds
@@ -481,6 +488,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		getServer().getPluginManager().registerEvents(new Solinia3CoreBlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreChunkListener(this), this);
 		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerTrackListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerValidatorModListener(this), this);
 		getServer().getPluginManager().registerEvents(new DynmapListener(this), this);
 

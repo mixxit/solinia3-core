@@ -8,7 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.PacketOpenSpellbook;
 import com.solinia.solinia.Models.PacketTrackingChoices;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
@@ -40,7 +42,6 @@ public class CommandTrack implements CommandExecutor {
 				player.sendMessage("You do not have the tracking ability");
 				return true;
 			}
-			
 			if (args.length < 1) {
 				// Send Tracking Choices
 				PacketTrackingChoices trackingChoicesPacket = new PacketTrackingChoices();
@@ -49,11 +50,28 @@ public class CommandTrack implements CommandExecutor {
 						Solinia3UIChannelNames.Outgoing, Solinia3UIPacketDiscriminators.TRACKING,
 						trackingChoicesPacket.toPacketData());
 				player.sendMessage("You check for tracks...");
+				player.sendMessage("/track stop to stop tracking");
 				return true;
 			} else {
+				if (args[0].toUpperCase().equals("STOP"))
+				{
+					try {
+						StateManager.getInstance().getEntityManager().stopTracking(player.getUniqueId());
+
+						} catch (CoreStateInitException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					return true;
+				}
+				
 				// Start Track
 				String spawngroupId = args[0];
-				player.sendMessage("You start tracking...");
+				int spawnGroup = Integer.parseInt(spawngroupId.split("SPAWNGROUPID_")[1]);
+				player.sendMessage("Debug Tracking... ["+spawnGroup+"]");
+				// Get spawngroup
+				solPlayer.startTracking(StateManager.getInstance().getConfigurationManager().getSpawnGroup(spawnGroup).getLocation());
+				
 				return true;
 			}
 		} catch (Exception e) {

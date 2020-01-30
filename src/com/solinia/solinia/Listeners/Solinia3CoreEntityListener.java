@@ -938,12 +938,12 @@ public class Solinia3CoreEntityListener implements Listener {
 						player.grantTitle("the Vanquisher");
 					}
 
-					/*
-					 * if (npc.isBoss() || npc.isRaidboss()) { Utils.
-					 * BroadcastPlayers("[VICTORY] The foundations of the earth shake following the destruction of "
-					 * + npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!");
-					 * }
-					 */
+					// Dern wants this back
+					 if (
+							 //npc.isBoss() || 
+							 npc.isRaidboss()) { PlayerUtils.BroadcastPlayers("[VICTORY] The foundations of the earth shake following the destruction of " + npc.getName() + " at the hands of " + player.getFullNameWithTitle() + "!");
+					 }
+					 
 				}
 			}
 

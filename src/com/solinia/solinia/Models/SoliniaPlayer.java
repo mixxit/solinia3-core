@@ -1620,6 +1620,34 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		}
 	}
+	
+	@Override
+	public void startTracking(Location location) {
+		try {
+		StateManager.getInstance().getEntityManager().startTracking((LivingEntity)this.getBukkitPlayer(), location);
+		} catch (CoreStateInitException e) {
+
+		}
+	}
+	
+	@Override
+	public Location getTrackingLocation() {
+		try {
+		return StateManager.getInstance().getEntityManager().getEntityTracking((LivingEntity)this.getBukkitPlayer());
+		} catch (CoreStateInitException e) {
+
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public boolean isTrackingLocation() {
+		if (getTrackingLocation() != null)
+			return true;
+		
+		return false;
+	}
 
 	@Override
 	public void castingComplete(CastingSpell castingSpell) {
@@ -4627,5 +4655,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// SORT IT
 		Collections.sort(tracking_list, (e1, e2) -> ((Integer)((TrackingChoice)e1).Distance).compareTo((Integer)((TrackingChoice)e2).Distance));
 		return tracking_list;
+	}
+
+	@Override
+	public boolean isTracking() {
+		return isTrackingLocation();
 	}
 }

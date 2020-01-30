@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -215,5 +216,11 @@ public interface IEntityManager {
 	void incrementEntityAggroCount(UUID uniqueId);
 
 	void decrementEntityAggroCount(UUID uniqueId);
+
+	void startTracking(LivingEntity bukkitPlayer, Location location);
+
+	void stopTracking(UUID entityUUID);
+
+	Location getEntityTracking(LivingEntity bukkitPlayer);
 
 }

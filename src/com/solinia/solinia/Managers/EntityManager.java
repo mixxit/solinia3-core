@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -104,6 +105,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Boolean> feignedDeath = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, UUID> following = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, CastingSpell> entitySpellCasting = new ConcurrentHashMap<UUID, CastingSpell>();
+	private ConcurrentHashMap<UUID, Location> entityTracking = new ConcurrentHashMap<UUID, Location>();
 	
 	private Plugin plugin;
 	
@@ -1596,6 +1598,41 @@ public class EntityManager implements IEntityManager {
 
 	public void setEntitySpellCasting(ConcurrentHashMap<UUID, CastingSpell> entitySpellCasting) {
 		this.entitySpellCasting = entitySpellCasting;
+	}
+	
+	@Override
+	public void startTracking(LivingEntity livingEntity, Location location)
+	{
+		if (livingEntity instanceof Player)
+		{
+			livingEntity.sendMessage("You start tracking");
+			entityTracking.put(livingEntity.getUniqueId(), location);
+		}
+	}
+	
+	@Override
+	public Location getEntityTracking(LivingEntity livingEntity)
+	{
+		if (livingEntity instanceof Player)
+		{
+			return entityTracking.get(livingEntity.getUniqueId());
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public void stopTracking(UUID entityUUID) {
+		if (entityTracking.get(entityUUID) != null)
+		{
+			Entity entity = Bukkit.getEntity(entityUUID);
+			if (entity instanceof Player && (!((Player)entity).isDead()))
+			{
+				Player player = (Player)entity;
+				player.sendMessage("You finish tracking");
+				entityTracking.remove(entityUUID);
+			}
+		}
 	}
 	
 	@Override
