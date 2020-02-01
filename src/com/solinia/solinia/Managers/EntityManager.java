@@ -1984,14 +1984,12 @@ public class EntityManager implements IEntityManager {
 			hateList.get(entity).put(provoker, new Tuple<Integer,Boolean>(hate,isYellForHelp));
 			
 			if (reverseHateList.get(provoker).get(entity) == null)
-			{
 				reverseHateList.get(provoker).put(entity, new Tuple<Integer,Boolean>(hate,isYellForHelp));
-			}
 			return;
 		}
 		
 		Tuple<Integer,Boolean> newvalueHate = hateList.get(entity).get(provoker);
-		Tuple<Integer,Boolean> newvalueReverseHate = hateList.get(provoker).get(entity);
+		Tuple<Integer,Boolean> newvalueReverseHate = reverseHateList.get(provoker).get(entity);
 		
 		if ((newvalueHate.a() + hate) > Integer.MAX_VALUE)
 		{
@@ -2026,6 +2024,14 @@ public class EntityManager implements IEntityManager {
 		
 		return hateList.get(entity);
 	}
+	
+	private ConcurrentHashMap<UUID, Tuple<Integer,Boolean>> getReverseHateList(UUID entity)
+	{
+		if (reverseHateList.get(entity) == null)
+			reverseHateList.put(entity, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
+		
+		return reverseHateList.get(entity);
+	}
 
 	@Override
 	public List<UUID> getActiveHateListUUIDs()
@@ -2047,7 +2053,6 @@ public class EntityManager implements IEntityManager {
 		if (reverseHateList.get(provoker).get(entity) == null)
 			return new Tuple<Integer,Boolean>(0,true);
 
-		
 		return hateList.get(entity).get(provoker);
 	}
 
@@ -2230,7 +2235,7 @@ public class EntityManager implements IEntityManager {
 		
 		for(Entry<UUID, Tuple<Integer, Boolean>> entitesHateList : hateList.get(uuid).entrySet())
 		{
-			if (hatelist.contains(entitesHateList.getKey()))
+			if (!hatelist.contains(entitesHateList.getKey()))
 				hatelist.add(entitesHateList.getKey());
 		}
 		
@@ -2240,8 +2245,11 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public long getReverseAggroCount(UUID uniqueId) {
 		if (reverseHateList.get(uniqueId) != null)
-			return getHateList(uniqueId).entrySet().stream()
+		{
+			long hateList = getReverseHateList(uniqueId).entrySet().stream()
 		            .filter(t -> t.getValue().a() > 0).count();
+			return hateList;
+		}
 
 		return 0;
 	}

@@ -7686,7 +7686,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				org.bukkit.entity.Entity entity = Bukkit.getEntity(uuid);
 				if (entity != null)
 					name = entity.getName();
-				System.out.println("UUID: " + uuid + "(" + name + ") Value: " + hate);
 				recipient.sendMessage("UUID: " + uuid + "(" + name + ") Value: " + hate);
 			}
 		}
