@@ -76,12 +76,12 @@ public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, Integer> entitySinging = new ConcurrentHashMap<UUID, Integer>();
-	private ConcurrentHashMap<UUID, Integer> entityAggroCount = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastCallForAssist = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDisarm = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>> hateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>>();
+	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>> reverseHateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>>();
 	private ConcurrentHashMap<UUID, Timestamp> lastRiposte = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastBindwound = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastMeleeAttack = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1975,46 +1975,51 @@ public class EntityManager implements IEntityManager {
 	public void addToHateList(UUID entity, UUID provoker, int hate, boolean isYellForHelp) {
 		if (hateList.get(entity) == null)
 			hateList.put(entity, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
+
+		if (reverseHateList.get(provoker) == null)
+			reverseHateList.put(provoker, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 		
 		if (hateList.get(entity).get(provoker) == null)
 		{
 			hateList.get(entity).put(provoker, new Tuple<Integer,Boolean>(hate,isYellForHelp));
 			
-			if (hate > 0)
-				this.incrementEntityAggroCount(provoker);
-			
+			if (reverseHateList.get(provoker).get(entity) == null)
+			{
+				reverseHateList.get(provoker).put(entity, new Tuple<Integer,Boolean>(hate,isYellForHelp));
+			}
 			return;
 		}
 		
-		Tuple<Integer,Boolean> newvalue = hateList.get(entity).get(provoker);
+		Tuple<Integer,Boolean> newvalueHate = hateList.get(entity).get(provoker);
+		Tuple<Integer,Boolean> newvalueReverseHate = hateList.get(provoker).get(entity);
 		
-		boolean wasAggro = false;
-		if (newvalue.a() > 0)
-			wasAggro = true;
-		
-		if ((newvalue.a() + hate) > Integer.MAX_VALUE)
-			newvalue = new Tuple<Integer,Boolean>(Integer.MAX_VALUE,newvalue.b());
-		else if ((newvalue.a() + hate) < 0)
-			newvalue = new Tuple<Integer,Boolean>(0,newvalue.b());
+		if ((newvalueHate.a() + hate) > Integer.MAX_VALUE)
+		{
+			newvalueHate = new Tuple<Integer,Boolean>(Integer.MAX_VALUE,newvalueHate.b());
+			newvalueReverseHate = new Tuple<Integer,Boolean>(Integer.MAX_VALUE,newvalueReverseHate.b());
+		}
+		else if ((newvalueHate.a() + hate) < 0)
+		{
+			newvalueHate = new Tuple<Integer,Boolean>(0,newvalueHate.b());
+			newvalueReverseHate = new Tuple<Integer,Boolean>(0,newvalueReverseHate.b());
+		}
 		else
-			newvalue = new Tuple<Integer,Boolean>(newvalue.a()+hate,newvalue.b());
+		{
+			newvalueHate = new Tuple<Integer,Boolean>(newvalueHate.a()+hate,newvalueHate.b());
+			newvalueReverseHate = new Tuple<Integer,Boolean>(newvalueReverseHate.a()+hate,newvalueReverseHate.b());
+		}
 		
-		if (newvalue.a() == 0)
+		if (newvalueHate.a() == 0)
 		{
 			hateList.get(entity).remove(provoker);
-			if (wasAggro)
-				this.decrementEntityAggroCount(provoker);
-		}
-		else {
-			hateList.get(entity).put(provoker, newvalue);
-
-			if (!wasAggro)
-				this.incrementEntityAggroCount(provoker);
+			reverseHateList.get(provoker).remove(entity);
+		} else {
+			hateList.get(entity).put(provoker, newvalueHate);
+			reverseHateList.get(provoker).put(entity, newvalueReverseHate);
 		}
 	}
 	
-	@Override
-	public ConcurrentHashMap<UUID, Tuple<Integer,Boolean>> getHateList(UUID entity)
+	private ConcurrentHashMap<UUID, Tuple<Integer,Boolean>> getHateList(UUID entity)
 	{
 		if (hateList.get(entity) == null)
 			hateList.put(entity, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
@@ -2033,9 +2038,15 @@ public class EntityManager implements IEntityManager {
 	{
 		if (hateList.get(entity) == null)
 			hateList.put(entity, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
+		if (reverseHateList.get(provoker) == null)
+			reverseHateList.put(provoker, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 		
 		if (hateList.get(entity).get(provoker) == null)
 			return new Tuple<Integer,Boolean>(0,true);
+
+		if (reverseHateList.get(provoker).get(entity) == null)
+			return new Tuple<Integer,Boolean>(0,true);
+
 		
 		return hateList.get(entity).get(provoker);
 	}
@@ -2047,11 +2058,20 @@ public class EntityManager implements IEntityManager {
 			if (hateList.get(entityUuid).size() == 0)
 				return;
 			
-			for (UUID entity : hateList.get(entityUuid).keySet())
-				this.decrementEntityAggroCount(entity);
+			// clear reverse hate list in advance
+			for(Entry<UUID, Tuple<Integer, Boolean>> entitesHateList : hateList.get(entityUuid).entrySet())
+			{
+				if (reverseHateList.get(entitesHateList.getKey()) == null)
+					continue;
+				
+				if (reverseHateList.get(entitesHateList.getKey()).get(entityUuid) != null)
+					reverseHateList.get(entitesHateList.getKey()).remove(entityUuid);
+			}
 		}
 		
 		hateList.put(entityUuid,  new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
+		
+		
 		Entity entity = Bukkit.getEntity(entityUuid);
 		if (entity == null)
 			return;
@@ -2060,6 +2080,37 @@ public class EntityManager implements IEntityManager {
 		{	
 			try {
 				SoliniaLivingEntityAdapter.Adapt((Creature)entity).setAttackTarget(null);
+			} catch (CoreStateInitException e) {
+			}
+		}
+	}
+	
+	@Override
+	public void removeFromHateList(UUID entityUuid, UUID target) {
+		if (hateList.get(entityUuid) == null)
+			return;
+		
+		if (hateList.get(entityUuid).size() == 0)
+			return;
+		
+		if (hateList.get(entityUuid).get(target) == null)
+			return;
+
+		// clear reverse hate first
+		if (reverseHateList.get(target).get(entityUuid) != null)
+			reverseHateList.get(target).remove(entityUuid);
+
+		hateList.get(entityUuid).remove(target);
+		
+		Entity entity = Bukkit.getEntity(entityUuid);
+		if (entity == null)
+			return;
+		
+		if (entity instanceof Creature)
+		{	
+			try {
+				if (((Creature) entity).getTarget() != null && ((Creature) entity).getTarget().getUniqueId().equals(target))
+					SoliniaLivingEntityAdapter.Adapt((Creature)entity).setAttackTarget(null);
 			} catch (CoreStateInitException e) {
 			}
 		}
@@ -2130,39 +2181,89 @@ public class EntityManager implements IEntityManager {
 			}
 		}
 	}
+	
+	@Override
+	public int getHateListAmount(UUID uniqueId, UUID target) {
+		if (getHateList(uniqueId) == null || this.getHateList(uniqueId).keySet().size() == 0)
+			return 0;
+		
+		if (getHateList(uniqueId).get(target) == null)
+			return 0;
+		
+		Tuple<Integer,Boolean> newvalueHate = hateList.get(uniqueId).get(target);
+		return newvalueHate.a();
+	}
+	
+	@Override
+	public boolean isInHateList(UUID uniqueId, UUID target) {
+		if (getHateList(uniqueId) == null || this.getHateList(uniqueId).keySet().size() == 0)
+			return false;
+		
+		if (getHateList(uniqueId).get(target) == null)
+			return false;
+		
+		return true;
+	}
 
 	@Override
-	public ConcurrentHashMap<UUID, Integer> getEntityAggroCount() {
-		return entityAggroCount;
+	public boolean hasHate(UUID uniqueId) {
+		if (getHateList(uniqueId) == null || this.getHateList(uniqueId).keySet().size() == 0)
+			return false;
+		
+		return true;
+	}
+	
+	@Override
+	public boolean hasAssistHate(UUID uniqueId) {
+		if (getHateList(uniqueId) == null || this.getHateList(uniqueId).keySet().size() == 0)
+			return false;
+		
+		return getHateList(uniqueId).entrySet().stream()
+	            .anyMatch(t -> t.getValue().b() == false);
 	}
 
 	@Override
-	public void setEntityAggroCount(ConcurrentHashMap<UUID, Integer> entityAggroCount) {
-		this.entityAggroCount = entityAggroCount;
-	}
-	
-	@Override
-	public void incrementEntityAggroCount(UUID uniqueId) {
-		if (entityAggroCount.get(uniqueId) == null)
-			entityAggroCount.put(uniqueId, 0);
+	public List<UUID> getHateListUUIDs(UUID uuid) {
+		List<UUID> hatelist = new ArrayList<UUID>();
+		if (!this.hasHate(uuid))
+			return hatelist;
 		
-		entityAggroCount.put(uniqueId,entityAggroCount.get(uniqueId)+1);
-	}
-	
-	@Override
-	public void decrementEntityAggroCount(UUID uniqueId) {
-		if (entityAggroCount.get(uniqueId) == null)
-			entityAggroCount.put(uniqueId, 0);
+		for(Entry<UUID, Tuple<Integer, Boolean>> entitesHateList : hateList.get(uuid).entrySet())
+		{
+			if (hatelist.contains(entitesHateList.getKey()))
+				hatelist.add(entitesHateList.getKey());
+		}
 		
-		if (entityAggroCount.get(uniqueId) > 0)
-			entityAggroCount.put(uniqueId,entityAggroCount.get(uniqueId)-1);
+		return hatelist;
 	}
-	
+
 	@Override
-	public int getAggroCount(UUID uniqueId) {
-		if (entityAggroCount.get(uniqueId) == null)
-			entityAggroCount.put(uniqueId, 0);
+	public long getReverseAggroCount(UUID uniqueId) {
+		if (reverseHateList.get(uniqueId) != null)
+			return getHateList(uniqueId).entrySet().stream()
+		            .filter(t -> t.getValue().a() > 0).count();
+
+		return 0;
+	}
+
+	@Override
+	public void resetReverseAggro(UUID uniqueId) {
+		if (reverseHateList.get(uniqueId) != null)
+		{
+			if (reverseHateList.get(uniqueId).size() == 0)
+				return;
+			
+			// clear reverse hate list in advance
+			for(Entry<UUID, Tuple<Integer, Boolean>> entitesReverseHateList : reverseHateList.get(uniqueId).entrySet())
+			{
+				if (hateList.get(entitesReverseHateList.getKey()) == null)
+					continue;
+				
+				if (hateList.get(entitesReverseHateList.getKey()).get(uniqueId) != null)
+					hateList.get(entitesReverseHateList.getKey()).remove(uniqueId);
+			}
+		}
 		
-		return entityAggroCount.get(uniqueId);
+		reverseHateList.put(uniqueId,  new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 	}
 }

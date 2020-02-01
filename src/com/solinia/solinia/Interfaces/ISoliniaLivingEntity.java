@@ -407,11 +407,21 @@ public interface ISoliniaLivingEntity
 	public boolean isInCombat();
 	public boolean isEngaged();
 
-	int getAggroCount();
-
 	Location getSpawnPoint();
 
-	ConcurrentHashMap<UUID, Tuple<Integer, Boolean>> getHateList();
-
 	org.bukkit.ChatColor getLevelCon(int mylevel);
+
+	boolean hasHate();
+
+	List<UUID> getHateListUUIDs();
+
+	int getHateListAmount(UUID target);
+
+	boolean isInHateList(UUID uniqueId);
+
+	void removeFromHateList(UUID targetUUID);
+
+	long getReverseAggroCount();
+
+	public void resetReverseAggro();
 }

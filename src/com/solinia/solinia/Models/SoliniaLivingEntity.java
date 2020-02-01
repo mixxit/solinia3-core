@@ -5514,22 +5514,32 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public ConcurrentHashMap<UUID, Tuple<Integer,Boolean>> getHateList() {
-		try {
-			return StateManager.getInstance().getEntityManager()
-					.getHateList(this.getBukkitLivingEntity().getUniqueId());
-		} catch (CoreStateInitException e) {
-		}
-
-		return null;
-	}
-
-	@Override
 	public void clearHateList() {
 		try {
 			StateManager.getInstance().getEntityManager().clearHateList(this.getBukkitLivingEntity().getUniqueId());
 		} catch (CoreStateInitException e) {
 		}
+	}
+	
+	@Override
+	public int getHateListAmount(UUID target)
+	{
+		try {
+			return StateManager.getInstance().getEntityManager().getHateListAmount(this.getBukkitLivingEntity().getUniqueId(), target);
+		} catch (CoreStateInitException e) {
+		}
+		
+		return 0;
+	}
+	
+	@Override
+	public boolean isInHateList(UUID target) {
+		try {
+			return StateManager.getInstance().getEntityManager().isInHateList(this.getBukkitLivingEntity().getUniqueId(), target);
+		} catch (CoreStateInitException e) {
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -5541,7 +5551,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return false;
 
 		if (this.getAttackTarget() != null)
-			if (this.getHateList() == null || this.getHateList().keySet().size() == 0) {
+			if (!this.hasHate()) {
 				setAttackTarget(null);
 				resetPosition(true);
 				return false;
@@ -5551,8 +5561,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		int maxHate = 0;
 		UUID bestUUID = null;
-		for (UUID uuid : this.getHateList().keySet()) {
-			int hate = this.getHateList().get(uuid).a();
+		for (UUID uuid : this.getHateListUUIDs()) {
+			int hate = this.getHateListAmount(uuid);
 			if (hate < 1) {
 				removeUuids.add(uuid);
 				continue;
@@ -5593,7 +5603,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		for (UUID uuid : removeUuids) {
-			this.getHateList().remove(uuid);
+			this.removeFromHateList(uuid);
 		}
 
 		if (bestUUID != null) {
@@ -5603,6 +5613,29 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		return false;
+	}
+
+	@Override
+	public List<UUID> getHateListUUIDs() {
+		try
+		{
+			return StateManager.getInstance().getEntityManager().getHateListUUIDs(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e)
+		{
+			return new ArrayList<UUID>();
+		}
+		
+	}
+	
+	@Override
+	public void removeFromHateList(UUID targetUUID) {
+		try
+		{
+			StateManager.getInstance().getEntityManager().removeFromHateList(this.getBukkitLivingEntity().getUniqueId(), targetUUID);
+		} catch (CoreStateInitException e)
+		{
+		}
+		
 	}
 
 	@Override
@@ -6451,7 +6484,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (this.getBukkitLivingEntity() instanceof Creature) {
-			if (entity != null && (this.getHateList() == null || !this.getHateList().containsKey(entity.getUniqueId()))) {
+			if (entity != null && (!this.hasHate() || !this.isInHateList(entity.getUniqueId()))) {
 				this.addToHateList(entity.getUniqueId(), 1, true);
 			}
 			
@@ -7277,7 +7310,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isCurrentlyNPCPet())
 			return;
 
-		if (this.getHateList().size() > 0)
+		if (this.hasHate())
 			return;
 
 		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
@@ -7480,7 +7513,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (this.isSpecialKOSOrNeutralFaction())
 				return;
 			
-			if (hasAssistAggro())
+			if (hasAssistHate())
 				return;
 			
 			for(ISoliniaLivingEntity nearbySolEntity : getNPCsInRange(Utils.CALL_FOR_ASSIST_RANGE))
@@ -7561,14 +7594,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			
 		}
-	}
-
-	private boolean hasAssistAggro() {
-		if (this.getHateList() == null)
-			return false;
-		
-		return this.getHateList().entrySet().stream()
-	            .anyMatch(t -> t.getValue().b() == false);
 	}
 
 	@Override
@@ -7653,10 +7678,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void sendHateList(LivingEntity recipient) {
 		recipient.sendMessage("HateList:");
 		if (recipient instanceof Player) {
-			if (this.getHateList() != null)
-			for(UUID uuid : getHateList().keySet())
+			if (this.hasHate())
+			for(UUID uuid : this.getHateListUUIDs())
 			{
-				int hate = getHateList().get(uuid).a();
+				int hate = this.getHateListAmount(uuid);
 				String name = "";
 				org.bukkit.entity.Entity entity = Bukkit.getEntity(uuid);
 				if (entity != null)
@@ -7707,7 +7732,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void doCallForAssist(LivingEntity target) {
 		// have assist cap
 
-		if (canCallForAssist() && this.getHateList() != null && this.getHateList().size() > 0 && !isCharmed() && !hasAssistAggro()
+		if (canCallForAssist() && this.hasHate() && !isCharmed() && !hasAssistHate()
 			    // && NPCAssistCap() < RuleI(Combat, NPCAssistCap)
 				) 
 		{
@@ -7758,11 +7783,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (attacker.getBukkitLivingEntity().isDead())
 			return false;
 		
-		if (this.getHateList() == null)
+		if (!hasHate())
 			return false;
 		
-		return this.getHateList().entrySet().stream()
-	            .anyMatch(t -> t.getKey().equals(attacker.getBukkitLivingEntity().getUniqueId()));
+		return this.isInHateList(attacker.getBukkitLivingEntity().getUniqueId());
+	}
+	
+	@Override
+	public boolean hasHate() {
+		try
+		{
+			return StateManager.getInstance().getEntityManager().hasHate(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
 	}
 
 	@Override
@@ -8044,20 +8079,34 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean isInCombat() {
 		if (this.isNPC() && this.isEngaged())
 			return true;
-		if (this.isPlayer() && this.getAggroCount() > 0)
+		if (this.isPlayer() && this.getReverseAggroCount() > 0)
 			return true;
 		
 		return false;
 	}
 	
 	@Override
-	public int getAggroCount() {
+	public long getReverseAggroCount() {
 		try
 		{
-			return StateManager.getInstance().getEntityManager().getAggroCount(this.getBukkitLivingEntity().getUniqueId());
+			return StateManager.getInstance().getEntityManager().getReverseAggroCount(this.getBukkitLivingEntity().getUniqueId());
 		} catch (CoreStateInitException e)
 		{
 			return 0;
+		}
+	}
+	
+
+	private boolean hasAssistHate() {
+		if (!this.hasHate())
+			return false;
+		
+		try
+		{
+			return StateManager.getInstance().getEntityManager().hasAssistHate(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e)
+		{
+			return false;
 		}
 	}
 
@@ -8070,5 +8119,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void wipeHateList() {
 		this.clearHateList();
+	}
+
+	@Override
+	public void resetReverseAggro() {
+		try {
+			StateManager.getInstance().getEntityManager().resetReverseAggro(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

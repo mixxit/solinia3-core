@@ -4661,4 +4661,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public boolean isTracking() {
 		return isTrackingLocation();
 	}
+
+	@Override
+	public void resetReverseAggro() {
+		try {
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(this.getBukkitPlayer());
+			solentity.resetReverseAggro();
+		} catch (CoreStateInitException e) {
+			// do nothing
+		}	}
+
 }

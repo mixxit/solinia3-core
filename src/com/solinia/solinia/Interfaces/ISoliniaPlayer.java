@@ -606,4 +606,6 @@ public interface ISoliniaPlayer extends Serializable {
 	Location getTrackingLocation();
 
 	boolean isTrackingLocation();
+
+	public void resetReverseAggro();
 }

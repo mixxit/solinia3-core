@@ -97,7 +97,7 @@ public class CommandStats implements CommandExecutor {
 				}
 				
 				player.sendMessage("* Your currently XP Day modifier sits at (" + StateManager.getInstance().getXPDayModifier() + ")%");
-				player.sendMessage("* AggroCount: " + solPlayer.getSoliniaLivingEntity().getAggroCount());
+				player.sendMessage("* ReverseAggroCount: " + solPlayer.getSoliniaLivingEntity().getReverseAggroCount());
 				
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

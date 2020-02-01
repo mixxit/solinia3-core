@@ -1431,6 +1431,8 @@ public class SoliniaActiveSpell {
 		ISoliniaPlayer solPlayer;
 		try {
 			solPlayer = SoliniaPlayerAdapter.Adapt((Player) getLivingEntity());
+			
+			solPlayer.resetReverseAggro();
 
 			if (solPlayer != null) {
 				solPlayer.setFeigned(true);

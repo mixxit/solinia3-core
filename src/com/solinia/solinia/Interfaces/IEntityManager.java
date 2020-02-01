@@ -147,8 +147,6 @@ public interface IEntityManager {
 
 	void doNPCTeleportAttack();
 
-	ConcurrentHashMap<UUID, Tuple<Integer, Boolean>> getHateList(UUID entity);
-
 	void clearHateList(UUID uuid);
 
 	List<UUID> getActiveHateListUUIDs();
@@ -207,20 +205,26 @@ public interface IEntityManager {
 
 	void setLastDisarm(UUID uuid, Timestamp lasttimestamp);
 
-	int getAggroCount(UUID uniqueId);
-
-	ConcurrentHashMap<UUID, Integer> getEntityAggroCount();
-
-	void setEntityAggroCount(ConcurrentHashMap<UUID, Integer> entityAggroCount);
-
-	void incrementEntityAggroCount(UUID uniqueId);
-
-	void decrementEntityAggroCount(UUID uniqueId);
-
 	void startTracking(LivingEntity bukkitPlayer, Location location);
 
 	void stopTracking(UUID entityUUID);
 
 	Location getEntityTracking(LivingEntity bukkitPlayer);
+
+	boolean hasHate(UUID uniqueId);
+
+	List<UUID> getHateListUUIDs(UUID uuid);
+
+	int getHateListAmount(UUID uniqueId, UUID target);
+
+	boolean isInHateList(UUID uniqueId, UUID target);
+
+	void removeFromHateList(UUID entityUuid, UUID target);
+
+	boolean hasAssistHate(UUID uniqueId);
+
+	long getReverseAggroCount(UUID uniqueId);
+
+	void resetReverseAggro(UUID uniqueId);
 
 }
