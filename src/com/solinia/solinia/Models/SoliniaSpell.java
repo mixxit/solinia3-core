@@ -2692,6 +2692,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				+ getResisttype() + "]" + ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name()
 				+ ")" + ChatColor.RESET);
+		sender.sendMessage("- icon: " + ChatColor.GOLD + getIcon() + ChatColor.RESET);
+		sender.sendMessage("- memicon: " + ChatColor.GOLD + getMemicon() + ChatColor.RESET);
+		sender.sendMessage("- new_icon: " + ChatColor.GOLD + getNewIcon() + ChatColor.RESET);
 		sender.sendMessage(
 				"- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 		SpellEffectIndex sei = Utils.getSpellEffectIndex(getSpellAffectIndex());
@@ -2898,6 +2901,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 			break;
 		case "castonother":
 			setCastOnOther(value);
+			break;
+		case "icon":
+			this.setIcon(Integer.parseInt(value));
+			break;
+		case "memicon":
+			this.setMemicon(Integer.parseInt(value));
+			break;
+		case "new_icon":
+			this.setNewIcon(Integer.parseInt(value));
 			break;
 		case "effect":
 			int effectNo = Integer.parseInt(value);
