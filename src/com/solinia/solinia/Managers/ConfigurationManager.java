@@ -63,6 +63,7 @@ import com.solinia.solinia.Models.AlignmentType;
 import com.solinia.solinia.Models.Bond;
 import com.solinia.solinia.Models.CharacterCreation;
 import com.solinia.solinia.Models.ConfigSettings;
+import com.solinia.solinia.Models.Fellowship;
 import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
@@ -86,6 +87,7 @@ import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
+import com.solinia.solinia.Repositories.JsonFellowshipRepository;
 import com.solinia.solinia.Repositories.JsonGodRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Utils.ItemStackUtils;
@@ -127,6 +129,8 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<SoliniaCraft> craftRepository;
 	private IRepository<ISoliniaGod> godsRepository;
 	private IRepository<SoliniaWorld> worldRepository;
+	private IRepository<Fellowship> fellowshipRepository;
+
 	private List<Bond> bonds = new ArrayList<Bond>();
 	private List<Flaw> flaws = new ArrayList<Flaw>();
 	private List<Oath> oaths = new ArrayList<Oath>();
@@ -165,7 +169,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
 			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext,
-			JsonGodRepository godsContext, ConfigSettings configSettings
+			JsonGodRepository godsContext, JsonFellowshipRepository fellowshipContext, ConfigSettings configSettings
 			) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
@@ -190,6 +194,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.worldRepository = worldContext;
 		this.godsRepository = godsContext;
 		this.configSettings  = configSettings;
+		this.fellowshipRepository = fellowshipContext;
 		
 		this.setBonds(generateBonds());
 		this.setOaths(generateOaths());
@@ -235,6 +240,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.craftRepository.commit();
 		this.worldRepository.commit();
 		this.godsRepository.commit();
+		this.fellowshipRepository.commit();
 	}
 	
 	@Override 
@@ -353,6 +359,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<SoliniaWorld> getWorlds() {
 		return worldRepository.query(q -> q.getId() > 0);
+	}
+	
+	@Override
+	public List<Fellowship> getFellowships() {
+		return fellowshipRepository.query(q -> q.getId() > 0);
 	}
 	
 	@Override
@@ -631,6 +642,12 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.worldRepository.add(world);
 
 	}
+	
+	@Override
+	public Fellowship addFellowship(Fellowship fellowship) {
+		this.fellowshipRepository.add(fellowship);
+		return getFellowship(fellowship.getId());
+	}
 
 	@Override
 	public ISoliniaGod addGod(SoliniaGod god) {
@@ -654,6 +671,17 @@ public class ConfigurationManager implements IConfigurationManager {
 		}
 
 		return maxRace + 1;
+	}
+	
+	@Override
+	public int getNextFellowshipId() {
+		int max = 0;
+		for (Fellowship fellowship : getFellowships()) {
+			if (fellowship.getId() > max)
+				max = fellowship.getId();
+		}
+
+		return max + 1;
 	}
 	
 	@Override
@@ -1133,6 +1161,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public SoliniaWorld getWorld(int Id) {
 		return worldRepository.getByKey(Id);
+	}
+	
+	@Override
+	public Fellowship getFellowship(int Id) {
+		return fellowshipRepository.getByKey(Id);
 	}
 	
 	@Override
@@ -2172,8 +2205,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public String getTrackingChoices(Player sender) {
-		// TODO Auto-generated method stub
-		return null;
+	public void removeFellowship(int id) {
+		this.fellowshipRepository.remove(this.getFellowship(id));
 	}
 }

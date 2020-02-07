@@ -32,6 +32,7 @@ import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Models.Bond;
 import com.solinia.solinia.Models.CharacterCreation;
 import com.solinia.solinia.Models.ConfigSettings;
+import com.solinia.solinia.Models.Fellowship;
 import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
@@ -607,5 +608,13 @@ public interface IConfigurationManager {
 
 	double getMaxExperience();
 
-	String getTrackingChoices(Player sender);
+	List<Fellowship> getFellowships();
+
+	Fellowship addFellowship(Fellowship fellowship);
+
+	int getNextFellowshipId();
+
+	Fellowship getFellowship(int Id);
+
+	void removeFellowship(int id);
 }

@@ -18,6 +18,7 @@ import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.Effects;
 import com.solinia.solinia.Models.EquipSlots;
 import com.solinia.solinia.Models.EquipmentSlot;
+import com.solinia.solinia.Models.Fellowship;
 import com.solinia.solinia.Models.MemorisedSpells;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.PacketCastingPercent;
@@ -608,4 +609,12 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isTrackingLocation();
 
 	public void resetReverseAggro();
+
+	public void fellowshipchat(String message);
+
+	Fellowship getFellowship();
+
+	int getFellowshipId();
+
+	void setFellowshipId(int fellowshipId);
 }

@@ -43,6 +43,7 @@ import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
+import com.solinia.solinia.Repositories.JsonFellowshipRepository;
 import com.solinia.solinia.Repositories.JsonGodRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
@@ -368,7 +369,10 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			JsonGodRepository godrepo = new JsonGodRepository();
 			godrepo.setJsonFile(getDataFolder() + "/" + "gods.json");
 			godrepo.reload();
-
+			
+			JsonFellowshipRepository fellowshiprepo = new JsonFellowshipRepository();
+			fellowshiprepo.setJsonFile(getDataFolder() + "/" + "fellowships.json");
+			fellowshiprepo.reload();
 			
 			PlayerManager playerManager = new PlayerManager(repo);
 			EntityManager entityManager = new EntityManager(this, new MythicMobsNPCEntityProvider());
@@ -376,7 +380,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
 					aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
-					accountclaimsrepo, zonesrepo, craftrepo, worldrepo,godrepo, configSettings);
+					accountclaimsrepo, zonesrepo, craftrepo, worldrepo,godrepo, fellowshiprepo, configSettings);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -508,7 +512,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("listgods").setExecutor(new CommandListGods());
 		this.getCommand("editgod").setExecutor(new CommandEditGod());
 		this.getCommand("unstuck").setExecutor(new CommandUnstuck());
-
+		this.getCommand("fellowshipchat").setExecutor(new CommandFellowshipChat());
 		this.getCommand("godinfo").setExecutor(new CommandGodInfo());
 		this.getCommand("setgod").setExecutor(new CommandSetGod());
 		this.getCommand("scribeallspells").setExecutor(new CommandScribeAllSpells());
@@ -657,6 +661,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("givehead").setExecutor(new CommandGiveHead(this));
 		this.getCommand("iamversion").setExecutor(new CommandIamVersion(this));
 		this.getCommand("rightclickentity").setExecutor(new CommandRightClickEntity());
+		this.getCommand("fellowship").setExecutor(new CommandFellowship());
 	}
 
 	private void createConfigDir() {

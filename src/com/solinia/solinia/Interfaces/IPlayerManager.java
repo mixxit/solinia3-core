@@ -48,4 +48,5 @@ public interface IPlayerManager {
 	void setPlayerLastUnstuck(UUID playerUUID, Timestamp timestamp);
 	int getPlayerLastZone(Player player);
 	void setPlayerLastZone(Player player, int zoneId);
+	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUuid) throws CoreStateInitException;
 }

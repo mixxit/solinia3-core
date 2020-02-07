@@ -10,10 +10,11 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.FellowshipMemberNotFoundException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 
-public class CommandGroup implements CommandExecutor {
+public class CommandFellowship implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		// TODO Auto-generated method stub
@@ -26,20 +27,8 @@ public class CommandGroup implements CommandExecutor {
 		{
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 			
-			String groupname = "You have no group";
-			if (solplayer.getGroup() != null)
-			{
-				UUID ownerid = solplayer.getGroup().getOwner();
-				Player owner = Bukkit.getPlayer(ownerid);
-				if (owner != null)
-				{
-					groupname = owner.getDisplayName() + "'s group";
-				}
-			}
-			
 			if (args.length == 0) {
-				player.sendMessage("Your group: " + groupname);
-				player.sendMessage("Valid commands are: /group invite <name>, /group list, /group accept, /group decline, /group leave,/g <msg>");
+				player.sendMessage("Valid commands are: /fellowship invite <name>, /fellowship list, /fellowship accept, /fellowship decline, /fellowship leave,/f <msg>");
 				return true;
 			}
 			
@@ -52,44 +41,56 @@ public class CommandGroup implements CommandExecutor {
 					{
 						if (!target.equals(player))
 						{
-							StateManager.getInstance().invitePlayerToGroup(player,target);					
+							ISoliniaPlayer solOwner = SoliniaPlayerAdapter.Adapt(player);
+							ISoliniaPlayer solTarget = SoliniaPlayerAdapter.Adapt(target);
+							if (solOwner == null && solTarget == null)
+							{
+								player.sendMessage("You or the target appears to be unavailable for invite right now");
+								return true;
+							}
+							
+							StateManager.getInstance().invitePlayerToFellowship(solOwner,solTarget);					
 						} else {
-							player.sendMessage("You cannot invite yourself to a group");
+							player.sendMessage("You cannot invite yourself to a fellowship");
 						}
 					} else {
 						player.sendMessage(args[1] + " is not online");
 					}
 					return true;
 				} else {
-					player.sendMessage("Incorrect arguments ["+args.length+"] for group invite - see /group");
+					player.sendMessage("Incorrect arguments ["+args.length+"] for fellowship invite - see /fellowship");
 					return true;
 				}
 			}
 			
 			if (args[0].equals("leave"))
 			{
-				if (solplayer.getGroup() == null)
+				if (solplayer.getFellowship() == null)
 					return true;
 				
-				solplayer.getGroup().removePlayer(player);
+				solplayer.getFellowship().removePlayer(solplayer);
 				return true;
 			}
 			if (args[0].equals("list"))
 			{
-				if (solplayer.getGroup() == null)
+				if (solplayer.getFellowship() == null)
 					return true;
 				
-				solplayer.getGroup().sendGroupList(player);
+				try {
+					solplayer.getFellowship().sendGroupList(solplayer);
+				} catch (FellowshipMemberNotFoundException e) {
+					solplayer.getBukkitPlayer().sendMessage("You do not appear to be in a fellowship");
+				}
 				return true;
 			}
 			if (args[0].equals("accept"))
 			{
-				StateManager.getInstance().acceptGroupInvite(player);
+				StateManager.getInstance().acceptFellowshipInvite(solplayer);
 				return true;
 			}
 			if (args[0].equals("decline"))
 			{
-				StateManager.getInstance().declineGroupInvite(player);
+				StateManager.getInstance().declineFellowshipInvite(solplayer);
 				return true;
 			}
 		} catch (CoreStateInitException e)

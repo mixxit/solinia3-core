@@ -250,6 +250,12 @@ public class PlayerManager implements IPlayerManager {
 	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException {
 		return StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(playerUUID);
 	}
+	
+	@Override
+	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID) throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+	}
+
 
 	@Override
 	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit) {

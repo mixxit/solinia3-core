@@ -450,12 +450,24 @@ commands:
     aliases:
     - oo
     - o
+  fellowshipchat:
+    description: Sends a message to the fellowship channel
+    usage: /f message
+    aliases:
+    - f
+    - fc
   group:
     description: Group control commands
     usage: /group cmd
     aliases:
     - grp
     - grou
+  fellowship:
+    description: Fellowship control commands
+    usage: /fellowship cmd
+    aliases:
+    - flws
+    - fl
   groupchat:
     description: Sends a message to the group channel
     usage: /groupchat message

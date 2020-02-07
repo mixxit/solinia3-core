@@ -69,6 +69,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID uuid;
 	private UUID characterId = UUID.randomUUID();
 	private UUID motherId;
+	private int fellowshipId = 0;
 	private UUID spouseId;
 	private boolean showDiscord = true;
 	private String forename = "";
@@ -2050,6 +2051,21 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public ISoliniaGroup getGroup() {
 		// TODO Auto-generated method stub
 		return StateManager.getInstance().getGroupByMember(this.getBukkitPlayer().getUniqueId());
+	}
+	
+	@Override
+	public Fellowship getFellowship() {
+		// TODO Auto-generated method stub
+		if (this.getFellowshipId() < 1)
+			return null;
+		
+		try {
+			return StateManager.getInstance().getConfigurationManager().getFellowship(this.getFellowshipId());
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -4670,5 +4686,32 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 			// do nothing
 		}	}
+
+	@Override
+	public void fellowshipchat(String message) {
+		if (getFellowship() == null)
+		{
+			this.getBukkitPlayer().sendMessage("Fellowship does not exist");
+			return;
+		}
+		
+		if (getFellowship().getMembers().size() < 2)
+		{
+			this.getBukkitPlayer().sendMessage("There is only 1 person in the fellowship");
+			return;
+		}
+		
+		getFellowship().sendMessage(this,ChatColor.AQUA + message + ChatColor.RESET);
+	}
+
+	@Override
+	public int getFellowshipId() {
+		return fellowshipId;
+	}
+
+	@Override
+	public void setFellowshipId(int fellowshipId) {
+		this.fellowshipId = fellowshipId;
+	}
 
 }
