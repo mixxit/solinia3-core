@@ -26,6 +26,7 @@ import org.dynmap.markers.MarkerSet;
 import com.palmergames.bukkit.towny.Towny;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.FellowshipMemberNotFoundException;
 import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
 import com.solinia.solinia.Factories.FellowshipFactory;
 import com.solinia.solinia.Factories.SoliniaWorldFactory;
@@ -930,13 +931,22 @@ public class CoreState {
 				return;
 			}
 	
-			Player owner = Bukkit.getPlayer(fellowship.getOwnerUuid());
-			if (owner != null) {
-				System.out.println("fellowship: " + fellowship.getId() + " got a membership decline: " + solplayer.getFullName());
-				owner.sendMessage(solplayer.getFullName() + " declined your fellowship invite");
+			try
+			{
+				Player owner = fellowship.getMemberPlayerIfOnline(fellowship.getOwnerUuid());
+				if (owner != null) {
+					System.out.println("fellowship: " + fellowship.getId() + " got a membership decline: " + solplayer.getFullName());
+					owner.sendMessage(solplayer.getFullName() + " declined your fellowship invite");
+				}
+			} catch (FellowshipMemberNotFoundException e)
+			{
+				System.out.println("Tried to send decline message to a member of a fellowship that didnt exist - Fellowship ID: " + fellowship.getId());
 			}
 			
+			
 			removeFellowshipInvite(solplayer);
+			solplayer.getBukkitPlayer().sendMessage("You declined your fellowship invite");
+			return;
 		} catch (CoreStateInitException e)
 		{
 			
