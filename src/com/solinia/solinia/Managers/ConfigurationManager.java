@@ -2206,6 +2206,24 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public void removeFellowship(int id) {
-		this.fellowshipRepository.remove(this.getFellowship(id));
+		Fellowship fellowship = this.getFellowship(id);
+		if(fellowship == null)
+			return;
+		
+		try
+		{
+			for (int i = 0; i < fellowship.getMembers().size(); i++) {
+				UUID newownerCharacterId = fellowship.getMembers().get(i);
+				ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(newownerCharacterId);
+				member.setFellowshipId(0);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		fellowship.getMembers().clear();
+		fellowship.setOwnerUuid(null);
+		
+		this.fellowshipRepository.remove(fellowship);
 	}
 }

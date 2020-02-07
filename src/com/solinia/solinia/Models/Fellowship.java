@@ -208,6 +208,11 @@ public class Fellowship {
 					}
 	
 					if (foundnewowner == false) {
+						for (int i = 0; i < this.members.size(); i++) {
+							UUID newownerCharacterId = this.members.get(i);
+							ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(newownerCharacterId);
+							member.setFellowshipId(0);
+						}
 						memberPlayer.getBukkitPlayer().sendMessage("The fellowship has disbanded");
 						StateManager.getInstance().getConfigurationManager().removeFellowship(getId());
 						return;
