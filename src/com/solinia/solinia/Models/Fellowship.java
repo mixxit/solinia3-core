@@ -120,7 +120,10 @@ public class Fellowship {
 	
 	public void removePlayer(ISoliniaPlayer memberPlayer) {
 		if (this.members.contains(memberPlayer.getCharacterId()))
+		{
+			System.out.println("Could not remove member htat was not in fellowship");
 			return;
+		}
 		
 		StateManager.getInstance().removeFellowshipInvite(memberPlayer);
 		
