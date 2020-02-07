@@ -16,6 +16,7 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerValidatedModEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.PlayerDoesNotExistException;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
 import com.solinia.solinia.Interfaces.IRepository;
@@ -76,6 +77,24 @@ public class PlayerManager implements IPlayerManager {
 		{
 			return null;
 		}
+	}
+	
+	@Override
+	public ISoliniaPlayer getPlayerByCharacterUUID(UUID characterUUID) throws PlayerDoesNotExistException {
+		List<ISoliniaPlayer> player = repository.query(p -> p.getCharacterId().equals(characterUUID));
+		if (player.size() != 1)
+			throw new PlayerDoesNotExistException();
+		
+		return player.get(0);
+	}
+
+	
+	@Override
+	public ISoliniaPlayer getPlayer(UUID bukkitUniqueId) throws PlayerDoesNotExistException {
+		if (repository.getByKey(bukkitUniqueId) == null)
+			throw new PlayerDoesNotExistException();
+		
+		return repository.getByKey(bukkitUniqueId);
 	}
 	
 	@Override
@@ -247,16 +266,27 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	@Override
-	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException {
-		return StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(playerUUID);
+	public List<ISoliniaPlayer> getArchivedCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getArchivedCharactersByPlayerUUID(playerUUID);
 	}
 	
 	@Override
-	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID) throws CoreStateInitException {
-		return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+	public ISoliniaPlayer getArchivedCharacterByCharacterUUID(UUID characterUUID) throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
 	}
 
-
+	@Override
+	public ISoliniaPlayer getArchivedCharacterOrActivePlayerByCharacterUUID(UUID characterUUID) throws CoreStateInitException, PlayerDoesNotExistException {
+		
+		ISoliniaPlayer archived = StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
+		ISoliniaPlayer player = StateManager.getInstance().getPlayerManager().getPlayerByCharacterUUID(characterUUID);
+		
+		if (player.getUUID().equals(characterUUID))
+			return player;
+		
+		return archived;
+	}
+	
 	@Override
 	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit) {
 		LocalDateTime datetime = LocalDateTime.now();
@@ -323,7 +353,7 @@ public class PlayerManager implements IPlayerManager {
 				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup(), true, true);
 			}
 			
-			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
 			if (altSolPlayer == null)
 				return null;
 			
@@ -386,8 +416,8 @@ public class PlayerManager implements IPlayerManager {
 	}
 	
 	@Override
-	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException {
-		return StateManager.getInstance().getConfigurationManager().getCharacters();
+	public List<ISoliniaPlayer> getArchivedCharacters() throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getArchivedCharacters();
 	}
 
 	@Override
@@ -508,6 +538,5 @@ public class PlayerManager implements IPlayerManager {
 	public void setPlayerLastZone(Player player, int zoneId) {
 		this.playerLastZoneId.put(player.getUniqueId(), zoneId);
 	}
-	
-	
+
 }

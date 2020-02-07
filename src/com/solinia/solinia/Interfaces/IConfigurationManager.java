@@ -416,11 +416,11 @@ public interface IConfigurationManager {
 
 	void addAlignment(String upperCase) throws Exception;
 
-	List<ISoliniaPlayer> getCharacters();
+	List<ISoliniaPlayer> getArchivedCharacters();
 
-	List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID);
+	List<ISoliniaPlayer> getArchivedCharactersByPlayerUUID(UUID playerUUID);
 
-	ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID);
+	ISoliniaPlayer getArchivedCharacterByCharacterUUID(UUID characterUUID);
 
 	void commitPlayerToCharacterLists(ISoliniaPlayer player);
 

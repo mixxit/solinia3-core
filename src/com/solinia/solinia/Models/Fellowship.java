@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.FellowshipMemberNotFoundException;
+import com.solinia.solinia.Exceptions.PlayerDoesNotExistException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
@@ -89,12 +90,18 @@ public class Fellowship {
 		try
 		{
 			for (UUID memberid : getMembers()) {
-				ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(memberid);
+				try
+				{
+				ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberid);
 				if (character == null)
 					continue;
 				
 				if (character.getUUID().equals(player.getUniqueId()))
 					return true;
+				} catch (PlayerDoesNotExistException e)
+				{
+					continue;
+				}
 			}
 		} catch (CoreStateInitException e)
 		{
@@ -109,23 +116,31 @@ public class Fellowship {
 			throw new FellowshipMemberNotFoundException();
 		
 		try {
-			ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(memberCharacter);
-			if (character == null)
+			
+			
+			try
+			{
+				ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberCharacter);
+				if (character == null)
+					return null;
+				
+				Player player = Bukkit.getPlayer(character.getUUID());
+				
+				if (player == null)
+					return null;
+				
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solPlayer == null)
+					return null;
+				
+				if (!solPlayer.getCharacterId().equals(character.getCharacterId()))
+					return null;
+				
+				return player;
+			} catch (PlayerDoesNotExistException e)
+			{
 				return null;
-			
-			Player player = Bukkit.getPlayer(character.getUUID());
-			
-			if (player == null)
-				return null;
-			
-			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			if (solPlayer == null)
-				return null;
-			
-			if (!solPlayer.getCharacterId().equals(character.getCharacterId()))
-				return null;
-			
-			return player;
+			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -141,14 +156,20 @@ public class Fellowship {
 		{
 			if (getMembers().size() > 0) {
 				for (UUID memberCharacterId : getMembers()) {
-					ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(memberCharacterId);
-					if (member != null) {
-						String leader = "";
-						if (member.getCharacterId().equals(this.getOwnerUuid())) {
-							leader = " - Leader";
+					try
+					{
+						ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberCharacterId);
+						if (member != null) {
+							String leader = "";
+							if (member.getCharacterId().equals(this.getOwnerUuid())) {
+								leader = " - Leader";
+							}
+							
+							player.getBukkitPlayer().sendMessage(member.getFullName() + leader);
 						}
-						
-						player.getBukkitPlayer().sendMessage(member.getFullName() + leader);
+					} catch (PlayerDoesNotExistException e)
+					{
+						continue;
 					}
 				}
 			} else {
@@ -182,35 +203,41 @@ public class Fellowship {
 					boolean foundnewowner = false;
 	
 					for (int i = 0; i < this.members.size(); i++) {
-						UUID newownerCharacterId = this.members.get(i);
-						ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(newownerCharacterId);
-						
-						Player player = Bukkit.getPlayer(member.getUUID());
-						
-						if (player == null)
+						try
+						{
+							UUID newownerCharacterId = this.members.get(i);
+							ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(newownerCharacterId);
+							
+							Player player = Bukkit.getPlayer(member.getUUID());
+							
+							if (player == null)
+								continue;
+							
+							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+							if (solPlayer == null)
+								continue;
+							
+							if (!solPlayer.getCharacterId().equals(member.getCharacterId()))
+								continue;
+							
+							if (member != null) {
+								setOwnerUuid(newownerCharacterId);
+								System.out.println(
+										"fellowship: " + getId() + " has a new leader: " + member.getFullName());
+								sendMessage(member, "is now the fellowship leader!");
+								foundnewowner = true;
+								break;
+							}
+						} catch (PlayerDoesNotExistException e)
+						{
 							continue;
-						
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-						if (solPlayer == null)
-							continue;
-						
-						if (!solPlayer.getCharacterId().equals(member.getCharacterId()))
-							continue;
-						
-						if (member != null) {
-							setOwnerUuid(newownerCharacterId);
-							System.out.println(
-									"fellowship: " + getId() + " has a new leader: " + member.getFullName());
-							sendMessage(member, "is now the fellowship leader!");
-							foundnewowner = true;
-							break;
 						}
 					}
 	
 					if (foundnewowner == false) {
 						for (int i = 0; i < this.members.size(); i++) {
 							UUID newownerCharacterId = this.members.get(i);
-							ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(newownerCharacterId);
+							ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterByCharacterUUID(newownerCharacterId);
 							member.setFellowshipId(0);
 						}
 						memberPlayer.getBukkitPlayer().sendMessage("The fellowship has disbanded");

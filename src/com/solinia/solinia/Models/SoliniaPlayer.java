@@ -3188,14 +3188,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (spouseId != null) {
 
 				ISoliniaPlayer spousePlayer = StateManager.getInstance().getConfigurationManager()
-						.getCharacterByCharacterUUID(spouseId);
+						.getArchivedCharacterByCharacterUUID(spouseId);
 				spouse = spousePlayer.getFullName();
 
 			}
 
 			this.getBukkitPlayer().sendMessage(self + " -> " + spouse);
 
-			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters()) {
+			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getArchivedCharacters()) {
 				if (player.getMotherId() == null)
 					continue;
 

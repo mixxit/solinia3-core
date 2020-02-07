@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.PlayerDoesNotExistException;
 import com.solinia.solinia.Models.DebuggerSettings;
 
 public interface IPlayerManager {
@@ -25,13 +26,13 @@ public interface IPlayerManager {
 	List<ISoliniaPlayer> getPlayers();
 	List<ISoliniaPlayer> getTopLevelPlayers(String classname);
 	public String getPlayerNameByUUID(UUID king);
-	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
+	public List<ISoliniaPlayer> getArchivedCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
 	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit);
 	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, UUID characterUUID);
 	Timestamp getPlayerLastChangeChar(UUID playerUUID);
 	Timestamp getPlayerLastUnstuck(UUID playerUUID);
 	void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp);
-	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException;
+	public List<ISoliniaPlayer> getArchivedCharacters() throws CoreStateInitException;
 	ISoliniaPlayer getPlayerAndDoNotCreate(UUID playerUUID);
 	Timestamp getPlayerLastSteed(UUID playerUUID);
 	void setPlayerLastSteed(UUID playerUUID, Timestamp timestamp);
@@ -48,5 +49,8 @@ public interface IPlayerManager {
 	void setPlayerLastUnstuck(UUID playerUUID, Timestamp timestamp);
 	int getPlayerLastZone(Player player);
 	void setPlayerLastZone(Player player, int zoneId);
-	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUuid) throws CoreStateInitException;
+	public ISoliniaPlayer getArchivedCharacterByCharacterUUID(UUID characterUuid) throws CoreStateInitException;
+	public ISoliniaPlayer getArchivedCharacterOrActivePlayerByCharacterUUID(UUID newownerCharacterId) throws CoreStateInitException, PlayerDoesNotExistException;
+	ISoliniaPlayer getPlayer(UUID bukkitUniqueId) throws PlayerDoesNotExistException;
+	public ISoliniaPlayer getPlayerByCharacterUUID(UUID characterUUID) throws PlayerDoesNotExistException;
 }

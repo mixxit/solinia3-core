@@ -36,6 +36,7 @@ import com.solinia.solinia.Exceptions.InvalidSpawnGroupSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Exceptions.PlayerDoesNotExistException;
 import com.solinia.solinia.Exceptions.SoliniaWorldCreationException;
 import com.solinia.solinia.Factories.SoliniaWorldFactory;
 import com.solinia.solinia.Interfaces.IConfigurationManager;
@@ -1279,19 +1280,19 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public List<ISoliniaPlayer> getCharacters() {
+	public List<ISoliniaPlayer> getArchivedCharacters() {
 		// TODO Auto-generated method stub
 		return characterlistsRepository.query(q -> q.getCharacterId() != null);
 	}
 	
 	@Override
-	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) {
+	public List<ISoliniaPlayer> getArchivedCharactersByPlayerUUID(UUID playerUUID) {
 		// TODO Auto-generated method stub
 		return characterlistsRepository.query(q -> q.getCharacterId() != null && q.getUUID().equals(playerUUID));
 	}
 	
 	@Override
-	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID) {
+	public ISoliniaPlayer getArchivedCharacterByCharacterUUID(UUID characterUUID) {
 		List<ISoliniaPlayer> results = characterlistsRepository.query(q -> q.getCharacterId() != null && q.getCharacterId().equals(characterUUID));
 		if (results.size() != 1)
 			return null;
@@ -2214,8 +2215,14 @@ public class ConfigurationManager implements IConfigurationManager {
 		{
 			for (int i = 0; i < fellowship.getMembers().size(); i++) {
 				UUID newownerCharacterId = fellowship.getMembers().get(i);
-				ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(newownerCharacterId);
-				member.setFellowshipId(0);
+				try
+				{
+					ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(newownerCharacterId);
+					member.setFellowshipId(0);
+				} catch (PlayerDoesNotExistException e)
+				{
+					
+				}
 			}
 		} catch (CoreStateInitException e)
 		{

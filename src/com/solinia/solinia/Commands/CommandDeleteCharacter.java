@@ -39,7 +39,7 @@ public class CommandDeleteCharacter implements CommandExecutor {
 				return true;
 			}
 			
-        	ISoliniaPlayer solPlayerToDelete = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+        	ISoliniaPlayer solPlayerToDelete = StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
         	if (!(solPlayerToDelete.getUUID().equals(player.getUniqueId())))
         	{
         		player.sendMessage("This is not your character to delete");
