@@ -1004,7 +1004,7 @@ public class CoreState {
 		fellowshipinvites.put(member.getCharacterId(), inviterfellowship.getId());
 		leader.getBukkitPlayer().sendMessage("Invited " + member.getFullName() + " to join your fellowship");
 		member.getBukkitPlayer().sendMessage(
-				"You have been invited to join " + leader.getFullName() + "'s fellowship - /group accept | /group decline");
+				"You have been invited to join " + leader.getFullName() + "'s fellowship - /fellowship accept | /fellowship decline");
 	}
 	
 	public void invitePlayerToGroup(Player leader, Player member) {
