@@ -41,6 +41,12 @@ public class Fellowship {
 		this.ownerUuid = ownerUuid;
 	}
 	public void sendMessage(ISoliniaPlayer player, String message) {
+		if (player.getFellowship() == null)
+			return;
+		
+		if (player.getFellowshipId() != this.getId())
+			return;
+		
 		if (message == null || message.equals("")) {
 			player.getBukkitPlayer().sendMessage("You cannot send an empty message");
 			return;
@@ -106,7 +112,20 @@ public class Fellowship {
 			ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(memberCharacter);
 			if (character == null)
 				return null;
-			return Bukkit.getPlayer(character.getUUID());
+			
+			Player player = Bukkit.getPlayer(character.getUUID());
+			
+			if (player == null)
+				return null;
+			
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			if (solPlayer == null)
+				return null;
+			
+			if (!solPlayer.getCharacterId().equals(character.getCharacterId()))
+				return null;
+			
+			return player;
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -165,6 +184,19 @@ public class Fellowship {
 					for (int i = 0; i < this.members.size(); i++) {
 						UUID newownerCharacterId = this.members.get(i);
 						ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(newownerCharacterId);
+						
+						Player player = Bukkit.getPlayer(member.getUUID());
+						
+						if (player == null)
+							continue;
+						
+						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+						if (solPlayer == null)
+							continue;
+						
+						if (!solPlayer.getCharacterId().equals(member.getCharacterId()))
+							continue;
+						
 						if (member != null) {
 							setOwnerUuid(newownerCharacterId);
 							System.out.println(
