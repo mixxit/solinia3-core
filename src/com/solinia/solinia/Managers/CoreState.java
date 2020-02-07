@@ -825,12 +825,20 @@ public class CoreState {
 			player.getBukkitPlayer().sendMessage("You have not been invited to join a fellowship");
 			return;
 		}
-
+		
 		removeFellowshipInvite(player);
 		
 		try
 		{
 			Fellowship ship = StateManager.getInstance().getConfigurationManager().getFellowship(targetFellowShipId);
+			
+			if (ship.isPlayerAlreadyInFellowship(player.getBukkitPlayer()))
+			{
+				player.getBukkitPlayer().sendMessage("You cannot join the fellowship as you already have another character in it");
+				System.out.println("fellowship: " + targetFellowShipId + " already had a character of same player in it : " + player.getBukkitPlayer());
+				return;
+			}
+			
 			System.out.println("fellowship: " + targetFellowShipId + " got a membership accept: " + player.getFullName());
 			ship.addPlayer(player);
 		} catch (CoreStateInitException e)

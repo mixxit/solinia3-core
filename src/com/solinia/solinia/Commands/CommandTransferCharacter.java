@@ -55,6 +55,12 @@ public class CommandTransferCharacter implements CommandExecutor {
         		return true;
         	}
         	
+        	if (solPlayerToSell.getFellowship() != null)
+			{
+				player.sendMessage("You cannot transfer a character that is currently in a fellowship");
+				return true;
+			}
+        	
         	solPlayerToSell.setUUID(targetPlayer.getUniqueId());
         	player.sendMessage("* You have sent character [" + solPlayerToSell.getFullName() + "] to " + targetPlayer.getCustomName());
         	targetPlayer.sendMessage("* You have received a new character [" + solPlayerToSell.getFullName() + "] from " + player.getCustomName());

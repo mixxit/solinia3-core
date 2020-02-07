@@ -75,6 +75,29 @@ public class Fellowship {
 		}
 	}
 	
+	public boolean isPlayerAlreadyInFellowship(Player player)
+	{
+		if (getMembers().size() < 1)
+			return false;
+		
+		try
+		{
+			for (UUID memberid : getMembers()) {
+				ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getCharacterByCharacterUUID(memberid);
+				if (character == null)
+					continue;
+				
+				if (character.getUUID().equals(player.getUniqueId()))
+					return true;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return false;
+	}
+	
 	public Player getMemberPlayerIfOnline(UUID memberCharacter) throws FellowshipMemberNotFoundException {
 		if (!this.members.contains(memberCharacter))
 			throw new FellowshipMemberNotFoundException();
