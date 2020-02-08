@@ -20,9 +20,7 @@ public class CommandFellowship implements CommandExecutor {
 			return false;
 		}
 		Player player = (Player)sender;
-		
-		player.sendMessage("This is currently disabled");
-		/*
+
 		try
 		{
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
@@ -112,7 +110,7 @@ public class CommandFellowship implements CommandExecutor {
 		{
 			sender.sendMessage(e.getMessage());
 		}
-		*/
+		
 		return true;
 	}
 }

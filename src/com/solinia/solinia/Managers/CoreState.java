@@ -1027,7 +1027,7 @@ public class CoreState {
 	
 	public void invitePlayerToGroup(Player leader, Player member) {
 		if (getPlayerInviteGroupID(member) != null) {
-			leader.sendMessage("You cannot invite that player, they are already pending a fellowship invite");
+			leader.sendMessage("You cannot invite that player, they are already pending a group invite");
 			return;
 		}
 
@@ -1035,35 +1035,35 @@ public class CoreState {
 		ISoliniaGroup invitergroup = getGroupByMember(leader.getUniqueId());
 
 		if (inviteegroup != null) {
-			leader.sendMessage("You cannot invite that player, they are already in a fellowship");
+			leader.sendMessage("You cannot invite that player, they are already in a group");
 			return;
 		}
 
 		if (invitergroup == null) {
 			// No group exists, create it
 			invitergroup = createNewGroup(leader);
-			leader.sendMessage("You have joined a new fellowship");
+			leader.sendMessage("You have joined a new group");
 		}
 
 		if (invitergroup == null) {
-			leader.sendMessage("Your fellowship does not exist");
+			leader.sendMessage("Your group does not exist");
 			return;
 		}
 
 		if (!invitergroup.getOwner().equals(leader.getUniqueId())) {
-			leader.sendMessage("You cannot invite that player, you are not the fellowship leader");
+			leader.sendMessage("You cannot invite that player, you are not the group leader");
 			return;
 		}
 
 		if (invitergroup.getMembers().size() > 5) {
-			leader.sendMessage("You cannot invite that player, your fellowship is already full");
+			leader.sendMessage("You cannot invite that player, your group is already full");
 			return;
 		}
 
 		groupinvites.put(member.getUniqueId(), invitergroup.getId());
-		leader.sendMessage("Invited " + member.getDisplayName() + " to join your fellowship");
+		leader.sendMessage("Invited " + member.getDisplayName() + " to join your group");
 		member.sendMessage(
-				"You have been invited to join " + leader.getName() + "'s fellowship - /fellowship accept | /fellowship decline");
+				"You have been invited to join " + leader.getName() + "'s group - /group accept | /group decline");
 	}
 
 	public String getInstanceGuid() {
