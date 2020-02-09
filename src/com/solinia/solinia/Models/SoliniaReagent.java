@@ -44,7 +44,7 @@ public class SoliniaReagent  {
 
 	public void addQty(int amount) {
 		removeOldSummonedItems();
-		this.qty += amount;
+		this.qty = this.qty + amount;
 		if (this.qty > Integer.MAX_VALUE)
 			this.qty = Integer.MAX_VALUE;
 	}
@@ -63,13 +63,14 @@ public class SoliniaReagent  {
 			if (item == null)
 			{				
 				this.qty = 0;
-				return;
+				this.creationstamp = StateManager.getInstance().getInstanceGuid();
 			}
 			
 			if (item.isTemporary())
 			if (!this.creationstamp.equals(StateManager.getInstance().getInstanceGuid()))
 			{
 				this.qty = 0;
+				this.creationstamp = StateManager.getInstance().getInstanceGuid();
 			}
 		} catch (CoreStateInitException e)
 		{

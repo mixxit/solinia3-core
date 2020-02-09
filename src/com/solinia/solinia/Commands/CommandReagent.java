@@ -104,10 +104,10 @@ public class CommandReagent implements CommandExecutor {
 	        {
 	        	solplayer.getReagents().put(item.getId(), new SoliniaReagent(item.getId(), 0, StateManager.getInstance().getInstanceGuid()));
 	        }
-	        
 	        solplayer.getReagents().get(item.getId()).addQty(itemstack.getAmount());
 	        
 	        solplayer.getBukkitPlayer().sendMessage("Item added to your reagent pouch");
+	        solplayer.getBukkitPlayer().sendMessage("New QTY: " + solplayer.getReagents().get(item.getId()).getQty());
 	        if (!addByCursor)
 	        	solplayer.getBukkitPlayer().getInventory().setItemInMainHand(null);
 	    		else
