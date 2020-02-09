@@ -5552,21 +5552,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (this.getBukkitLivingEntity().isDead())
 		{
-			System.out.println("DEAD I have hate: " + this.getBukkitLivingEntity().getName());
 			return false;
 		}
 		
 
 		if (!(this.getBukkitLivingEntity() instanceof Creature))
 		{
-			System.out.println(this.getBukkitLivingEntity().getName() + " vs " + (this.getBukkitLivingEntity() instanceof Creature));
-			System.out.println("NAC I have hate: " + this.getBukkitLivingEntity().getName());
 			return false;
 		}
 
 		if (this.getAttackTarget() != null)
 		{
-			System.out.println("GAT I have hate: " + this.getBukkitLivingEntity().getName());
 			if (!this.hasHate()) {
 				setAttackTarget(null);
 				resetPosition(true);
@@ -5574,6 +5570,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
+		if (this.isMezzed() || this.isRooted())
+			return false;
 		
 		List<UUID> removeUuids = new ArrayList<UUID>();
 
@@ -6520,6 +6518,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		if (this.getNpcid() < 1)
+			return;
+		
+		if (this.isMezzed() || this.isRooted())
 			return;
 
 		if (getBukkitLivingEntity().isDead())
