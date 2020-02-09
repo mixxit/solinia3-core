@@ -20,12 +20,6 @@ public class CommandFellowship implements CommandExecutor {
 			return false;
 		}
 		Player player = (Player)sender;
-
-		if (!sender.hasPermission("solinia.fellowship"))
-		{
-			sender.sendMessage("You do not have permission to access this command");
-			return false;
-		}
 		
 		try
 		{
