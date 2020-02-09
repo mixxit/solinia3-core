@@ -614,7 +614,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	Fellowship getFellowship();
 
-	int getFellowshipId();
+	int getCharacterFellowshipId();
 
-	void setFellowshipId(int fellowshipId);
+	void setCharacterFellowshipId(int characterFellowshipId);
 }

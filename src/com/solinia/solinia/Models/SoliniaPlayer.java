@@ -69,7 +69,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID uuid;
 	private UUID characterId = UUID.randomUUID();
 	private UUID motherId;
-	private int fellowshipId = 0;
+	private int characterFellowshipId = 0;
 	private UUID spouseId;
 	private boolean showDiscord = true;
 	private String forename = "";
@@ -2056,11 +2056,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public Fellowship getFellowship() {
 		// TODO Auto-generated method stub
-		if (this.getFellowshipId() < 1)
+		if (this.getCharacterFellowshipId() < 1)
 			return null;
 		
 		try {
-			return StateManager.getInstance().getConfigurationManager().getFellowship(this.getFellowshipId());
+			return StateManager.getInstance().getConfigurationManager().getFellowship(this.getCharacterFellowshipId());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4705,13 +4705,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public int getFellowshipId() {
-		return fellowshipId;
+	public int getCharacterFellowshipId() {
+		return characterFellowshipId;
 	}
 
 	@Override
-	public void setFellowshipId(int fellowshipId) {
-		this.fellowshipId = fellowshipId;
+	public void setCharacterFellowshipId(int characterFellowshipId) {
+		this.characterFellowshipId = characterFellowshipId;
 	}
 
 }

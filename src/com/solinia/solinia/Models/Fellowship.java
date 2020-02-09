@@ -45,7 +45,7 @@ public class Fellowship {
 		if (player.getFellowship() == null)
 			return;
 		
-		if (player.getFellowshipId() != this.getId())
+		if (player.getCharacterFellowshipId() != this.getId())
 			return;
 		
 		if (message == null || message.equals("")) {
@@ -194,7 +194,7 @@ public class Fellowship {
 		sendMessage(memberPlayer, "has left the fellowship!");
 		
 		this.members.remove(memberPlayer.getCharacterId());
-		memberPlayer.setFellowshipId(0);
+		memberPlayer.setCharacterFellowshipId(0);
 
 		try
 		{
@@ -238,7 +238,7 @@ public class Fellowship {
 						for (int i = 0; i < this.members.size(); i++) {
 							UUID newownerCharacterId = this.members.get(i);
 							ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterByCharacterUUID(newownerCharacterId);
-							member.setFellowshipId(0);
+							member.setCharacterFellowshipId(0);
 						}
 						memberPlayer.getBukkitPlayer().sendMessage("The fellowship has disbanded");
 						StateManager.getInstance().getConfigurationManager().removeFellowship(getId());
@@ -263,7 +263,7 @@ public class Fellowship {
 		StateManager.getInstance().removeFellowshipInvite(player);
 		
 		this.members.add(player.getCharacterId());
-		player.setFellowshipId(this.getId());
+		player.setCharacterFellowshipId(this.getId());
 		System.out.println("fellowship: " + getId() + " gained a member: " + player.getFullName());
 		sendMessage(player, "has joined the fellowship!");
 	}

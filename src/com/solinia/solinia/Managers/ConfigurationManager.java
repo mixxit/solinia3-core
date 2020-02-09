@@ -2218,7 +2218,7 @@ public class ConfigurationManager implements IConfigurationManager {
 				try
 				{
 					ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(newownerCharacterId);
-					member.setFellowshipId(0);
+					member.setCharacterFellowshipId(0);
 				} catch (PlayerDoesNotExistException e)
 				{
 					

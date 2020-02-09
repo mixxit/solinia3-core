@@ -21,6 +21,12 @@ public class CommandFellowship implements CommandExecutor {
 		}
 		Player player = (Player)sender;
 
+		if (!sender.hasPermission("solinia.fellowship"))
+		{
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
+		}
+		
 		try
 		{
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);

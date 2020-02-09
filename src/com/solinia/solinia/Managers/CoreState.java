@@ -701,7 +701,7 @@ public class CoreState {
 	public Fellowship createNewFellowship(ISoliniaPlayer leader) {
 		try {
 			Fellowship fellowship = FellowshipFactory.CreateFellowship(leader.getCharacterId());
-			leader.setFellowshipId(fellowship.getId());
+			leader.setCharacterFellowshipId(fellowship.getId());
 			return fellowship;
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
