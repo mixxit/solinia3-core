@@ -1164,6 +1164,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						return;
 					}
 			}
+			
+			if (this.isMezzed())
+			{
+				getBukkitPlayer().sendMessage("* You cannot cast while mezzed!");
+				return;
+			}
+			
+			if (this.isStunned())
+			{
+				getBukkitPlayer().sendMessage("* You cannot cast while stunned!");
+				return;
+			}
 
 			startCasting(spell, getBukkitPlayer(), useMana, useReagents, ignoreProfessionAndLevel,
 					requiredWeaponSkillType);
@@ -1231,6 +1243,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					"Trying to cast from item in memory slot: " + slotId);
 			int spellId = this.getMemorisedSpellSlot(slotId);
 			if (spellId < 1) {
+				return;
+			}
+			
+			if (this.isMezzed())
+			{
+				getBukkitPlayer().sendMessage("* You cannot cast while mezzed!");
+				return;
+			}
+			
+			if (this.isStunned())
+			{
+				getBukkitPlayer().sendMessage("* You cannot cast while stunned!");
 				return;
 			}
 
@@ -1304,6 +1328,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if ((!ItemStackUtils.IsSoliniaItem(itemstack)))
 				return;
 
+			if (this.isMezzed())
+			{
+				getBukkitPlayer().sendMessage("* You cannot do this while mezzed!!");
+				return;
+			}
+			
+			if (this.isStunned())
+			{
+				getBukkitPlayer().sendMessage("* You cannot do this while stunned!");
+				return;
+			}
+			
 			// We have our custom item id, lets check it exists
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
@@ -1395,6 +1431,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			if (itemstack == null)
 				return;
+			
+			if (this.isMezzed())
+			{
+				getBukkitPlayer().sendMessage("* You cannot do this while mezzed!");
+				return;
+			}
+			
+			if (this.isStunned())
+			{
+				getBukkitPlayer().sendMessage("* You cannot do this while stunned!");
+				return;
+			}
 
 			// We have our custom item id, lets check it exists
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
@@ -1555,6 +1603,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
 						return;
 					}
+			}
+			
+			if (this.isMezzed())
+			{
+				getBukkitPlayer().sendMessage("* You cannot cast while mezzed!");
+				return;
+			}
+			
+			if (this.isStunned())
+			{
+				getBukkitPlayer().sendMessage("* You cannot cast while stunned!");
+				return;
 			}
 
 			startCasting(spell, getBukkitPlayer(), !item.isConsumable(), !item.isConsumable(), false,

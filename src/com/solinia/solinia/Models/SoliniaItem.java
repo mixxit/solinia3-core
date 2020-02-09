@@ -487,6 +487,18 @@ public class SoliniaItem implements ISoliniaItem {
 		if (targetentity.isDead() || player.isDead())
 			return false;
 		
+		if (EntityUtils.isMezzed(player))
+		{
+			player.sendMessage("* You cannot do this while mezzed!");
+			return false;
+		}
+		
+		if (EntityUtils.isStunned(player))
+		{
+			player.sendMessage("* You cannot do this while stunned!");
+			return false;
+		}
+		
 		double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) player,
 				targetentity);
 
