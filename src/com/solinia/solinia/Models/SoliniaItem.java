@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -34,6 +36,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.*;
 
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_14_R1.EntityDamageSource;
 
 public class SoliniaItem implements ISoliniaItem {
 
@@ -514,7 +517,13 @@ public class SoliniaItem implements ISoliniaItem {
 				if (target.isNPC())
 					target.addToHateList(player.getUniqueId(), 1, false);
 				player.sendMessage("You throw a " + getDisplayname() + " for [" + getDamage() + "] damage");
-				targetentity.damage(getDamage());
+
+				EntityDamageSource source = new EntityDamageSource("thorns",
+						((CraftEntity) Bukkit.getEntity(player.getUniqueId())).getHandle());
+				source.sweep();
+				source.ignoresArmor();
+				
+				((CraftEntity) targetentity).getHandle().damageEntity(source, getDamage());
 				return true;
 			}
 			
