@@ -5544,18 +5544,31 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean checkHateTargets() {
+
 		if (this.getBukkitLivingEntity().isDead())
+		{
+			System.out.println("DEAD I have hate: " + this.getBukkitLivingEntity().getName());
 			return false;
+		}
+		
 
 		if (!(this.getBukkitLivingEntity() instanceof Creature))
+		{
+			System.out.println(this.getBukkitLivingEntity().getName() + " vs " + (this.getBukkitLivingEntity() instanceof Creature));
+			System.out.println("NAC I have hate: " + this.getBukkitLivingEntity().getName());
 			return false;
+		}
 
 		if (this.getAttackTarget() != null)
+		{
+			System.out.println("GAT I have hate: " + this.getBukkitLivingEntity().getName());
 			if (!this.hasHate()) {
 				setAttackTarget(null);
 				resetPosition(true);
 				return false;
 			}
+		}
+		
 		
 		List<UUID> removeUuids = new ArrayList<UUID>();
 

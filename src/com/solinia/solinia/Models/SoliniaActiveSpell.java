@@ -1885,10 +1885,10 @@ public class SoliniaActiveSpell {
 			return;
 
 		Entity source = Bukkit.getEntity(getSourceUuid());
-		if (source instanceof LivingEntity) {
+		if (getLivingEntity() instanceof Creature) {
 			try {
-				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) source);
-				solLivingEntity.addToHateList(getLivingEntity().getUniqueId(), spellEffect.getBase(), true);
+				ISoliniaLivingEntity solLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+				solLivingEntityTarget.addToHateList(source.getUniqueId(), spellEffect.getBase(), true);
 			} catch (CoreStateInitException e) {
 
 			}
