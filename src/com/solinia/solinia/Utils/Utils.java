@@ -2586,32 +2586,10 @@ public class Utils {
 	public static void Patcher() {
 		try
 		{
-			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
+			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
 			{
-				if (item.getAbilityid() < 1)
-					continue;
-				
-				if (!item.getBasename().toUpperCase().equals("POTION"))
-					continue;
-				
-				if (item.getAllowedClassNames().size() != 1)
-					continue;
-				
-				if (!item.getAllowedClassNames().get(0).toUpperCase().equals("ROGUE"))
-					continue;
-				
-				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
-				if (spell ==  null)
-					continue;
-				
-				if (!spell.isEffectInSpell(SpellEffectType.AddMeleeProc))
-					continue;
-				
-				if (item.getRequiredWeaponSkillType().equals("PIERCING"))
-					continue;
-				
-				item.setRequiredWeaponSkillType("PIERCING");
-				item.setLastUpdatedTimeNow();
+				StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(player);
+				System.out.println("Commiting player - " + player.getFullName());
 			}
 		} catch (CoreStateInitException e)
 		{
