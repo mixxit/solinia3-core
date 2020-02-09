@@ -4720,4 +4720,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.characterFellowshipId = characterFellowshipId;
 	}
 
+	@Override
+	public void grantFellowshipXPBonusToFellowship(Double experience) {
+		if (getFellowship() != null)
+		{
+			getFellowship().grantFellowshipXPBonus(experience);
+			if (getBukkitPlayer() != null)
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Some of your XP has been granteqd to your fellowship members (see /claimxp)");
+		}
+	}
+
 }

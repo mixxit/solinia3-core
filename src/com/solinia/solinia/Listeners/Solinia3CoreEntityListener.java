@@ -799,6 +799,8 @@ public class Solinia3CoreEntityListener implements Listener {
 					if (livingEntity.getLevel() >= Utils.getMinLevelFromLevel(player.getLevel())) {
 						// Due to being out of range they get the full xp
 						player.increasePlayerExperience(experience, true, true);
+						if (player.getFellowship() != null)
+							player.grantFellowshipXPBonusToFellowship(experience);
 
 						// Grant title for killing mob
 						if (livingEntity.getNpcid() > 0) {
@@ -818,6 +820,8 @@ public class Solinia3CoreEntityListener implements Listener {
 				} else {
 					double experienceReward = experience / group.getMembers().size();
 					double groupBonus = (experienceReward/100)*(group.getMembers().size()*10);
+					
+					List<Integer> awardsFellowshipIds = new ArrayList<Integer>();
 					
 					for (UUID member : group.getMembers()) {
 						Player tgtplayer = Bukkit.getPlayer(member);
@@ -845,6 +849,12 @@ public class Solinia3CoreEntityListener implements Listener {
 									
 									tgtsolplayer.increasePlayerExperience(experienceReward+groupBonus, true, true);
 									
+									if (player.getFellowship() != null)
+									if (!awardsFellowshipIds.contains(player.getFellowship().getId()))
+									{
+										awardsFellowshipIds.add(player.getFellowship().getId());
+										player.grantFellowshipXPBonusToFellowship(experience);
+									}
 
 									// Grant title for killing mob
 									if (livingEntity.getNpcid() > 0) {
@@ -860,7 +870,7 @@ public class Solinia3CoreEntityListener implements Listener {
 									}
 
 								} else {
-									// tgtplayer.sendMessage(ChatColor.GRAY + "* The npc was too low level to gain
+									// The npc was too low level to gain
 									// experience from - Was: " + livingEntity.getLevel() + " Min: " +
 									// Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()));
 								}
@@ -877,6 +887,9 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (livingEntity.getLevel() >= (Utils.getMinLevelFromLevel(player.getLevel()))) {
 					// they are on their own so get the full amount of xp
 					player.increasePlayerExperience(experience, true, true);
+					
+					if (player.getFellowship() != null)
+					player.grantFellowshipXPBonusToFellowship(experience);
 
 					// Grant title for killing mob
 					if (livingEntity.getNpcid() > 0) {

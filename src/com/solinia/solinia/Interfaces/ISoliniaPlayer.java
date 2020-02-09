@@ -617,4 +617,6 @@ public interface ISoliniaPlayer extends Serializable {
 	int getCharacterFellowshipId();
 
 	void setCharacterFellowshipId(int characterFellowshipId);
+
+	public void grantFellowshipXPBonusToFellowship(Double experience);
 }

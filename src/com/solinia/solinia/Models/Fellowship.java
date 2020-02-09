@@ -16,6 +16,7 @@ import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.PartyWindowUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -82,6 +83,37 @@ public class Fellowship {
 		}
 	}
 	
+	public void grantFellowshipXPBonus(double experience) {
+		experience = experience / (double)getMembers().size();
+		for (UUID memberid : getMembers())
+		{
+			try
+			{
+				ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberid);
+				if (character == null)
+					continue;
+				
+				if (character.getPendingXp() >= PlayerUtils.getMaxAAXP())
+				{
+					Player player = Bukkit.getPlayer(character.getUUID());
+					if (player != null)
+					player.sendMessage("You have exceeded your maximum pending XP for fellowship rewards! Please /claimxp your additional XP before more can be gained (max: " + character.getPendingXp().longValue() + ")");
+				} else {
+					if (experience < 0)
+						experience = 1d;
+					
+					character.addXpToPendingXp(experience);
+				}
+			} catch (PlayerDoesNotExistException e)
+			{
+				continue;
+			} catch (CoreStateInitException e) {
+				continue;
+			}
+			
+		}
+	}
+	
 	public boolean isPlayerAlreadyInFellowship(Player player)
 	{
 		if (getMembers().size() < 1)
@@ -92,16 +124,16 @@ public class Fellowship {
 			for (UUID memberid : getMembers()) {
 				try
 				{
-				ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberid);
-				if (character == null)
-					continue;
-				
-				if (character.getUUID().equals(player.getUniqueId()))
-					return true;
-				} catch (PlayerDoesNotExistException e)
-				{
-					continue;
-				}
+					ISoliniaPlayer character = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberid);
+					if (character == null)
+						continue;
+					
+					if (character.getUUID().equals(player.getUniqueId()))
+						return true;
+					} catch (PlayerDoesNotExistException e)
+					{
+						continue;
+					}
 			}
 		} catch (CoreStateInitException e)
 		{
