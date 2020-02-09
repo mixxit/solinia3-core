@@ -16,12 +16,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Adapters.ItemStackAdapter;
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
@@ -503,11 +505,20 @@ public class SoliniaItem implements ISoliniaItem {
 						return false;
 					}
 				}
+				
 			}
 			
-			player.sendMessage("You throw a " + getDisplayname() + " for [" + getDamage() + "] damage");
-			targetentity.damage(getDamage());
-			return true;
+			ISoliniaLivingEntity target = SoliniaLivingEntityAdapter.Adapt(targetentity);
+			if (target != null)
+			{
+				if (target.isNPC())
+					target.addToHateList(player.getUniqueId(), 1, false);
+				player.sendMessage("You throw a " + getDisplayname() + " for [" + getDamage() + "] damage");
+				targetentity.damage(getDamage());
+				return true;
+			}
+			
+			return false;
 		}
 		
 		if (isConsumable == true && isExperienceBonus())
