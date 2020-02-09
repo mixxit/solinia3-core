@@ -819,8 +819,8 @@ public class CoreState {
 	
 	
 	public void acceptFellowshipInvite(ISoliniaPlayer player) {
-		int targetFellowShipId = getCharacterInviteFellowshipID(player);
-		if (targetFellowShipId < 1) {
+		Integer targetFellowShipId = getCharacterInviteFellowshipID(player);
+		if (targetFellowShipId == null || targetFellowShipId < 1) {
 			player.getBukkitPlayer().sendMessage("You have not been invited to join a fellowship");
 			return;
 		}
@@ -924,7 +924,7 @@ public class CoreState {
 	
 	public void declineFellowshipInvite(ISoliniaPlayer solplayer) {
 		Integer targetfellowshipid = getCharacterInviteFellowshipID(solplayer);
-		if (targetfellowshipid == null) {
+		if (targetfellowshipid == null || targetfellowshipid < 1) {
 			solplayer.getBukkitPlayer().sendMessage("You have not been invited to join a fellowship");
 			return;
 		}
@@ -989,18 +989,27 @@ public class CoreState {
 			return;
 		}
 
-		Fellowship invitefellowship = member.getFellowship();
-		Fellowship inviterfellowship = member.getFellowship();
-
-		if (invitefellowship != null) {
+		Fellowship inviteefellowship = member.getFellowship();
+		Fellowship inviterfellowship = leader.getFellowship();
+		
+		if (inviteefellowship != null) {
 			leader.getBukkitPlayer().sendMessage("You cannot invite that player, they are already in a fellowship");
 			return;
+		}
+
+		if (inviterfellowship != null) {
+			if (inviterfellowship.isPlayerAlreadyInFellowship(member.getBukkitPlayer()))
+			{
+				leader.getBukkitPlayer().sendMessage("You cannot join the fellowship as you already have another character in it");
+				System.out.println("fellowship: " + inviterfellowship.getId() + " already had a character of same player in it : " + member.getFullName());
+				return;
+			}
 		}
 
 		if (inviterfellowship == null) {
 			// No fellowship exists, create it
 			inviterfellowship = createNewFellowship(leader);
-			leader.getBukkitPlayer().sendMessage("You have joined a new fellowship");
+			leader.getBukkitPlayer().sendMessage("You have created a new fellowship!");
 		}
 
 		if (inviterfellowship == null) {

@@ -4701,6 +4701,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		}
 		
+		if (getFellowship().getMembersOnline().size() < 2)
+		{
+			this.getBukkitPlayer().sendMessage("There is only 1 person in the fellowship online");
+			return;
+		}
+		
 		getFellowship().sendMessage(this,ChatColor.AQUA + message + ChatColor.RESET);
 	}
 
