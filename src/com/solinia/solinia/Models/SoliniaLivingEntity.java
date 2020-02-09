@@ -5570,7 +5570,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
-		if (this.isMezzed() || this.isRooted())
+		if (this.isMezzed() || this.isStunned())
 			return false;
 		
 		List<UUID> removeUuids = new ArrayList<UUID>();
@@ -6520,7 +6520,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() < 1)
 			return;
 		
-		if (this.isMezzed() || this.isRooted())
+		if (this.isMezzed() || this.isStunned())
 			return;
 
 		if (getBukkitLivingEntity().isDead())
