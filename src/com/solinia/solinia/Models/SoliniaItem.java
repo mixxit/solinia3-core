@@ -19,8 +19,10 @@ import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -781,6 +783,14 @@ public class SoliniaItem implements ISoliniaItem {
 		case "worth":
 			setWorth(Integer.parseInt(value));
 			break;
+		case "texturebase64fromitem":
+			int itemid = Integer.parseInt(value);
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
+			if (item == null)
+				throw new InvalidItemSettingException("ITEMID does not exist");
+			// fetches custom head texture by existing npc
+			this.setTexturebase64(item.getTexturebase64());
+			break;
 		case "requiredweaponskilltype":
 			if (!value.toUpperCase().equals("PIERCING") && !value.toUpperCase().equals("CLEAR"))
 				throw new InvalidItemSettingException("requiredweaponskilltype can only be PIERCING or CLEAR (clear removes requirement)");
@@ -1065,7 +1075,7 @@ public class SoliniaItem implements ISoliniaItem {
 			setLanguagePrimer("");
 			break;
 		default:
-			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,clearallowedraces,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,allowedracenames,identifymessage,languageprimer,clearlanguageprimer");
+			throw new InvalidItemSettingException("Invalid Item setting. Valid Options are: displayname,worth,color,damage,hpregen,mpregen,strength,stamina,agility,dexterity,intelligence,wisdom,charisma,abilityid,consumable,crafting,quest,augmentation,cleardiscoverer,clearallowedclasses,clearallowedraces,ac,hp,mana,experiencebonus,skillmodtype,skillmodvalue,skillmodtype2,skillmodvalue2,skillmodtype3,skillmodvalue3,skillmodtype4,skillmodvalue4,artifact,spellscroll,territoryflag,reagent,allowedclassnames,allowedracenames,identifymessage,languageprimer,clearlanguageprimer,texturebase64fromitem");
 		}
 		
 		this.setLastUpdatedTimeNow();
