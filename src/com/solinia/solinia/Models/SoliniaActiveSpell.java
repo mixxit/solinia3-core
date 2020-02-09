@@ -2316,6 +2316,9 @@ public class SoliniaActiveSpell {
 			if (solSourceEntity.isBehindEntity(this.getLivingEntity()))
 				hpToRemove = (int) Math.floor((2 + backstabSkill / 50) * weaponDamage);
 
+			ISoliniaLivingEntity targetOfSpell = SoliniaLivingEntityAdapter.Adapt(this.getLivingEntity());
+			if (targetOfSpell != null)
+				targetOfSpell.addToHateList(source.getEntity().getUniqueID(), hpToRemove, false);
 			((CraftEntity) getLivingEntity()).getHandle().damageEntity(source, hpToRemove);
 			solSourceEntity.tryIncreaseSkill("BACKSTAB", 1);
 
@@ -2375,6 +2378,7 @@ public class SoliniaActiveSpell {
 				source.setMagic();
 				source.ignoresArmor();
 
+				targetSoliniaLivingEntity.addToHateList(source.getEntity().getUniqueID(), hpToAdd, false);
 				((CraftEntity) getLivingEntity()).getHandle().damageEntity(source, hpToAdd);
 				// getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 				if (soliniaSpell.isLifetapSpell()) {

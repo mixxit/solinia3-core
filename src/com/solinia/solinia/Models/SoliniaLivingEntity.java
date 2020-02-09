@@ -466,6 +466,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						((CraftEntity) getBukkitLivingEntity()).getHandle());
 				source.sweep();
 				source.ignoresArmor();
+				
+				defender.addToHateList(source.getEntity().getUniqueID(), (int)damage, false);
+
 				((CraftEntity) defender.getBukkitLivingEntity()).getHandle().damageEntity(source, (float) damage);
 			}
 
@@ -2280,6 +2283,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
 							source.setMagic();
 							source.ignoresArmor();
+
+							addToHateList(source.getEntity().getUniqueID(), (spelleffect.getCalculatedValue() * -1), false);
 
 							((CraftEntity) this.getBukkitLivingEntity()).getHandle().damageEntity(source,
 									spelleffect.getCalculatedValue() * -1);
