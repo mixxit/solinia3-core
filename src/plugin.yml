@@ -211,10 +211,6 @@ commands:
     description: Edits a chunk
     usage: /editchunk
     aliases: []
-  resetplayer:
-    description: Resets players to a default state
-    usage: /resetplayer <mcaccountname>
-    aliases: []
   setgender:
     description: Sets players gender
     usage: /setgender male/female

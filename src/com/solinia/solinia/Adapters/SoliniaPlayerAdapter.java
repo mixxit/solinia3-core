@@ -9,7 +9,7 @@ import com.solinia.solinia.Managers.StateManager;
 public class SoliniaPlayerAdapter {
 
 	public static ISoliniaPlayer Adapt(Player player) throws CoreStateInitException {
-		return StateManager.getInstance().getPlayerManager().getPlayer(player);
+		return StateManager.getInstance().getPlayerManager().getActivePlayer(player);
 	}
 	
 }

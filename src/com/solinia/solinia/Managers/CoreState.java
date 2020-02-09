@@ -630,7 +630,6 @@ public class CoreState {
 			throw new CoreStateInitException("State not initialised");
 		System.out.println("Commit");
 		try {
-			playerManager.commit();
 			configurationManager.commit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

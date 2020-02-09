@@ -53,7 +53,7 @@ import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
 import com.solinia.solinia.Repositories.JsonNPCSpellListRepository;
 import com.solinia.solinia.Repositories.JsonPatchRepository;
-import com.solinia.solinia.Repositories.JsonPlayerRepository;
+import com.solinia.solinia.Repositories.JsonPlayerStateRepository;
 import com.solinia.solinia.Repositories.JsonQuestRepository;
 import com.solinia.solinia.Repositories.JsonRaceRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
@@ -282,10 +282,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		// TODO Lets load all this from config settings at some point
 
 		try {
-			JsonPlayerRepository repo = new JsonPlayerRepository();
-			repo.setJsonFile(getDataFolder() + "/" + "players.json");
-			repo.reload();
-
 			JsonRaceRepository racerepo = new JsonRaceRepository();
 			racerepo.setJsonFile(getDataFolder() + "/" + "races.json");
 			racerepo.reload();
@@ -373,14 +369,18 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			JsonFellowshipRepository fellowshiprepo = new JsonFellowshipRepository();
 			fellowshiprepo.setJsonFile(getDataFolder() + "/" + "fellowships.json");
 			fellowshiprepo.reload();
+
+			JsonPlayerStateRepository playerstatesrepo = new JsonPlayerStateRepository();
+			playerstatesrepo.setJsonFile(getDataFolder() + "/" + "playerstates.json");
+			playerstatesrepo.reload();
 			
-			PlayerManager playerManager = new PlayerManager(repo);
+			PlayerManager playerManager = new PlayerManager();
 			EntityManager entityManager = new EntityManager(this, new MythicMobsNPCEntityProvider());
 
 			ConfigurationManager configurationManager = new ConfigurationManager(racerepo, classrepo, itemrepo,
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
 					aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
-					accountclaimsrepo, zonesrepo, craftrepo, worldrepo,godrepo, fellowshiprepo, configSettings);
+					accountclaimsrepo, zonesrepo, craftrepo, worldrepo,godrepo, fellowshiprepo, playerstatesrepo, configSettings);
 
 			ChannelManager channelManager = new ChannelManager();
 			
@@ -542,7 +542,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("addraceclass").setExecutor(new CommandAddRaceClass());
 		this.getCommand("stats").setExecutor(new CommandStats());
 		this.getCommand("follow").setExecutor(new CommandFollow());
-		this.getCommand("resetplayer").setExecutor(new CommandResetPlayer());
 		this.getCommand("who").setExecutor(new CommandWho());
 		this.getCommand("soliteminfo").setExecutor(new CommandSolItemInfo());
 		this.getCommand("solnpcinfo").setExecutor(new CommandSolNPCInfo());

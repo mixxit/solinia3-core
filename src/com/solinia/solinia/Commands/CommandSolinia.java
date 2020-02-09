@@ -17,13 +17,6 @@ public class CommandSolinia implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		// TODO Auto-generated method stub
 		sender.sendMessage("Solinia Stats:");
-		try {
-			sender.sendMessage("Cached Players: " + StateManager.getInstance().getPlayerManager().getCachedPlayersCount());
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		
 		if (args.length > 0 && 
 				(

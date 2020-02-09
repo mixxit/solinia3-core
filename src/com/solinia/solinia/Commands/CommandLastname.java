@@ -44,11 +44,6 @@ public class CommandLastname implements CommandExecutor {
 					try {
 						final String nametest = newname;
 						
-						if (StateManager.getInstance().getPlayerManager().getPlayersRepository().query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() != 0)
-						{
-							player.sendMessage("That name combination already exists in an active player");
-						}
-						
 						if (StateManager.getInstance().getConfigurationManager().getCharactersRepository().query(p ->p.getFullName().toUpperCase().equals(nametest.toUpperCase())).size() != 0)
 						{
 							player.sendMessage("That name combination already exists in a cached character");

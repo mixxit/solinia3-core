@@ -1,6 +1,7 @@
 package com.solinia.solinia.Factories;
 
 import java.util.HashSet;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -22,6 +23,7 @@ public class SoliniaPlayerFactory {
 		// A player is different to a players entity
 		ISoliniaPlayer soliniaPlayer = new SoliniaPlayer();
 		soliniaPlayer.setUUID(player.getUniqueId());
+		soliniaPlayer.setCharacterId(UUID.randomUUID());
 
 		String forename = getRandomNames(5, 1)[0];
 		String lastname = "";
@@ -37,7 +39,8 @@ public class SoliniaPlayerFactory {
 			e.printStackTrace();
 		}
 		
-		StateManager.getInstance().getPlayerManager().addPlayer(soliniaPlayer);
+		StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(soliniaPlayer);
+		StateManager.getInstance().getPlayerManager().setActiveCharacter(player,soliniaPlayer.getCharacterId());
 		soliniaPlayer = SoliniaPlayerAdapter.Adapt(player);
 		soliniaPlayer.setExperience(0d);
 		soliniaPlayer.setAAExperience(0d);

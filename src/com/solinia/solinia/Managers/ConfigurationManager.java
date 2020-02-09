@@ -69,6 +69,7 @@ import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.Oath;
+import com.solinia.solinia.Models.PlayerState;
 import com.solinia.solinia.Models.RaceChoice;
 import com.solinia.solinia.Models.RaceClass;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
@@ -101,6 +102,7 @@ import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
 import com.solinia.solinia.Repositories.JsonNPCRepository;
 import com.solinia.solinia.Repositories.JsonNPCSpellListRepository;
 import com.solinia.solinia.Repositories.JsonPatchRepository;
+import com.solinia.solinia.Repositories.JsonPlayerStateRepository;
 import com.solinia.solinia.Repositories.JsonQuestRepository;
 import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
@@ -131,6 +133,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<ISoliniaGod> godsRepository;
 	private IRepository<SoliniaWorld> worldRepository;
 	private IRepository<Fellowship> fellowshipRepository;
+	private IRepository<PlayerState> playerStateRepository;
 
 	private List<Bond> bonds = new ArrayList<Bond>();
 	private List<Flaw> flaws = new ArrayList<Flaw>();
@@ -170,7 +173,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
 			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext,
-			JsonGodRepository godsContext, JsonFellowshipRepository fellowshipContext, ConfigSettings configSettings
+			JsonGodRepository godsContext, JsonFellowshipRepository fellowshipContext,JsonPlayerStateRepository playerstateContext, ConfigSettings configSettings
 			) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
@@ -196,6 +199,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.godsRepository = godsContext;
 		this.configSettings  = configSettings;
 		this.fellowshipRepository = fellowshipContext;
+		this.playerStateRepository = playerstateContext;
 		
 		this.setBonds(generateBonds());
 		this.setOaths(generateOaths());
@@ -232,8 +236,6 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.questRepository.commit();
 		this.alignmentsRepository.commit();
 		
-		commitPlayersToCharacterLists();
-		
 		this.characterlistsRepository.commit();
 		this.npcspelllistsRepository.commit();
 		this.accountClaimsRepository.commit();
@@ -242,6 +244,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.worldRepository.commit();
 		this.godsRepository.commit();
 		this.fellowshipRepository.commit();
+		this.playerStateRepository.commit();
 	}
 	
 	@Override 
@@ -360,6 +363,26 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<SoliniaWorld> getWorlds() {
 		return worldRepository.query(q -> q.getId() > 0);
+	}
+	
+	@Override
+	public List<PlayerState> getPlayerStates() {
+		return playerStateRepository.query(q -> q.getId() != null);
+	}
+	
+	@Override
+	public List<UUID> getActiveCharacterCharacterIds() {
+		List<UUID> characterIds = new ArrayList<UUID>();
+		for(PlayerState state : getPlayerStates())
+			characterIds.add(state.getActiveCharacterId());
+		
+		return characterIds;
+	}
+	
+	@Override
+	public List<ISoliniaPlayer> getActiveCharacters() {
+		List<UUID> characterIds = getActiveCharacterCharacterIds();
+		return characterlistsRepository.query(q -> characterIds.contains(q.getCharacterId()));
 	}
 	
 	@Override
@@ -586,23 +609,6 @@ public class ConfigurationManager implements IConfigurationManager {
 
 		return null;
 	}
-
-	private void commitPlayersToCharacterLists() {
-		try {
-			int count = 0;
-			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getPlayers())
-			{
-				commitPlayerToCharacterLists(player);
-				
-				count++;
-			}
-			System.out.println("Commited " + count + " characters to the CharacterList repository");
-			
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
 	@Override
 	public void commitPlayerToCharacterLists(ISoliniaPlayer player) {
@@ -648,6 +654,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	public Fellowship addFellowship(Fellowship fellowship) {
 		this.fellowshipRepository.add(fellowship);
 		return getFellowship(fellowship.getId());
+	}
+	
+	@Override
+	public PlayerState addPlayerState(PlayerState playerstate) {
+		this.playerStateRepository.add(playerstate);
+		return getPlayerState(playerstate.getId());
 	}
 
 	@Override
@@ -1167,6 +1179,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public Fellowship getFellowship(int Id) {
 		return fellowshipRepository.getByKey(Id);
+	}
+	
+	@Override
+	public PlayerState getPlayerState(UUID Id) {
+		return playerStateRepository.getByKey(Id);
 	}
 	
 	@Override

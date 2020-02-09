@@ -37,6 +37,7 @@ import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.Oath;
+import com.solinia.solinia.Models.PlayerState;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
@@ -617,4 +618,14 @@ public interface IConfigurationManager {
 	Fellowship getFellowship(int Id);
 
 	void removeFellowship(int id);
+
+	List<PlayerState> getPlayerStates();
+
+	PlayerState addPlayerState(PlayerState playerstate);
+
+	PlayerState getPlayerState(UUID Id);
+
+	List<ISoliniaPlayer> getActiveCharacters();
+
+	List<UUID> getActiveCharacterCharacterIds();
 }
