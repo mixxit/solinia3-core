@@ -115,7 +115,7 @@ public class SpellbookPage {
 	public SpellbookPage(int pageNo, List<Integer> itemIdsOnPage, String className) {
 		this.PageNo = pageNo;
 		
-		System.out.println("Generating spell book with page size of: " + itemIdsOnPage.size());
+		//System.out.println("Generating spell book with page size of: " + itemIdsOnPage.size());
 		
 		if (itemIdsOnPage.size() >= 1)
 		setSlot(1,itemIdsOnPage.get(0),className);
