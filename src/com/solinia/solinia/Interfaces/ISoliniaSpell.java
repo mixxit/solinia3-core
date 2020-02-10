@@ -1078,4 +1078,6 @@ public interface ISoliniaSpell {
 	boolean isEffectIgnoredInStacking(int spellEffectId);
 
 	boolean isStackableDot();
+
+	int calcBuffDuration(ISoliniaLivingEntity solEntity, int level);
 }

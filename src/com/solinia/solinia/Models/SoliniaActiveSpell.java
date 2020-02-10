@@ -196,9 +196,33 @@ public class SoliniaActiveSpell {
 			for (ActiveSpellEffect spellEffect : getActiveSpellEffects()) {
 				applySpellEffect(plugin, spellEffect, soliniaSpell, isFirstRun, solsource.getLevel(), sendMessages);
 			}
+			
+			if (soliniaSpell.getRecourseLink() > 0)
+			{
+				ISoliniaSpell soliniaRecourseSpell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaSpell.getRecourseLink());
+				if (soliniaRecourseSpell == null) {
+					System.out.print("Recourse Spell not found");
+					return;
+				}
+				
+				applyRecourseSpell(solsource, soliniaSpell, requiredWeaponSkillType);
+			}
+			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	private void applyRecourseSpell(ISoliniaLivingEntity solsource, ISoliniaSpell soliniaRecourseSpell, String requiredWeaponSkillType2)
+	{
+		try
+		{
+			StateManager.getInstance().getEntityManager().addActiveEntitySpell(solsource.getBukkitLivingEntity(), soliniaRecourseSpell,
+					solsource.getBukkitLivingEntity(), true, requiredWeaponSkillType2);
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 

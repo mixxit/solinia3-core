@@ -5433,6 +5433,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		return false;
 	}
 
+	@Override
 	public int calcBuffDuration(ISoliniaLivingEntity solEntity, int level) {
 		// TODO do caster level overide
 

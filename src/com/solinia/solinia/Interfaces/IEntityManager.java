@@ -50,7 +50,7 @@ public interface IEntityManager {
 
 	void spellTick();
 
-	boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell,
+	boolean addActiveEntitySpell(LivingEntity targetEntity, ISoliniaSpell soliniaSpell,
 			LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType);
 
 	void doNPCSpellCast();

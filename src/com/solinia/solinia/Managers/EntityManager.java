@@ -439,7 +439,7 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public boolean addActiveEntitySpell(LivingEntity targetEntity, SoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType) {
+	public boolean addActiveEntitySpell(LivingEntity targetEntity, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType) {
 		try {
 			if (soliniaSpell.isCharmSpell() && getPet(sourceEntity.getUniqueId()) != null && !getPet(sourceEntity.getUniqueId()).getUniqueId().equals(targetEntity.getUniqueId()))
 				return false;

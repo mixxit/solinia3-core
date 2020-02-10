@@ -2575,7 +2575,7 @@ public class Utils {
 		}
 	}
 
-	public static int getDurationFromSpell(ISoliniaLivingEntity solEntity, SoliniaSpell soliniaSpell) {
+	public static int getDurationFromSpell(ISoliniaLivingEntity solEntity, ISoliniaSpell soliniaSpell) {
 		int duration = soliniaSpell.calcBuffDuration(solEntity, solEntity.getLevel());
 		if (duration > 0) {
 			duration = soliniaSpell.getActSpellDuration(solEntity, duration);
