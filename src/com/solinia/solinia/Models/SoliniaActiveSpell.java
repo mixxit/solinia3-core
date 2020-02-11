@@ -1978,7 +1978,9 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.LEVITATION, 255);
+		if (this.getLivingEntity() instanceof Player)
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.LEVITATION, 255);
+		
 	}
 
 	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
