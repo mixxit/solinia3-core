@@ -3870,7 +3870,10 @@ public class Utils {
 		double newdmg = damagemlt;
 		double damagepct = newdmg / basedmg;
 
-		return (int) Math.floor(basedmg * damagepct);
+		int maxDamage = (int) Math.floor(basedmg * damagepct);
+		if (maxDamage < 1)
+			maxDamage = 1;
+		return maxDamage;
 	}
 
 	public static SkillType getSkillType(Integer skill) {
