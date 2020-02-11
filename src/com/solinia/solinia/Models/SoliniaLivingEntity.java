@@ -420,17 +420,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					
 					if (getBukkitLivingEntity().getEquipment().getItemInMainHand() != null)
 					{
-					try {
-						ISoliniaItem item = SoliniaItemAdapter.Adapt(getBukkitLivingEntity().getEquipment().getItemInMainHand());
-						if (item.getDamage() > damage)
-							damage = item.getDamage();
-					} catch (SoliniaItemException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (CoreStateInitException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						if (ItemStackUtils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+						try {
+							ISoliniaItem item = SoliniaItemAdapter.Adapt(getBukkitLivingEntity().getEquipment().getItemInMainHand());
+							if (item.getDamage() > damage)
+								damage = item.getDamage();
+						} catch (SoliniaItemException e) {
+							
+						} catch (CoreStateInitException e) {
+							
+						}
 					}
 					
 				}
@@ -484,8 +483,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				source.ignoresArmor();
 				
 				defender.addToHateList(source.getEntity().getUniqueID(), (int)damage, false);
-				System.out.println("default damage for npc: " + damage);
-
+				
 				((CraftEntity) defender.getBukkitLivingEntity()).getHandle().damageEntity(source, (float) damage);
 			}
 
