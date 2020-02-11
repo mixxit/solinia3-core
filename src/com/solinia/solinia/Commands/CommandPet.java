@@ -84,6 +84,7 @@ public class CommandPet implements CommandExecutor {
 							player.setLastDamageCause(null);
 							solLivingEntity.clearHateList();
 							player.sendMessage("* As you wish my master");
+							pet.teleport(player.getLocation());
 						}
 						
 					}

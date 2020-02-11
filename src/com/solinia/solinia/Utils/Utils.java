@@ -5411,6 +5411,7 @@ public class Utils {
 	public static void RemoveEntity(Entity entity, String caller) {
 		// System.out.println("removing entity via caller: " + caller + " " +
 		// entity.getName());
+		Utils.DebugLog("Utils", "RemoveEntity", entity.getName(), "Removing entity via caller: " + caller + " " +entity.getName());
 		if (entity instanceof Player)
 			return;
 

@@ -187,8 +187,6 @@ public interface IEntityManager {
 
 	LivingEntity forceGetEntityTarget(LivingEntity me);
 
-	void removeAllPetsInChunk(String worldName, int chunkX, int chunkZ);
-
 	List<UUID> getAllWorldPetUUIDs();
 
 	void removeAllAbandonedPetsInChunk(String worldName, int chunkX, int chunkZ);

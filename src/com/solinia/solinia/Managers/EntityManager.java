@@ -654,7 +654,7 @@ public class EntityManager implements IEntityManager {
 					continue;
 				
 				if (ent != null)
-					ent.remove();
+					Utils.RemoveEntity(ent,"doNPCCheckForEnemies");
 			} catch (Exception e)
 			{
 				
@@ -1012,7 +1012,7 @@ public class EntityManager implements IEntityManager {
 			if (livingEntityPet != null)
 			{
 				System.out.println("Cleaning Up pet: " + livingEntityPet.getName());
-				livingEntityPet.remove();
+				Utils.RemoveEntity(livingEntityPet,"removeAllPets");
 			}
 			this.removePet(key, true);
 		}
@@ -1090,33 +1090,7 @@ public class EntityManager implements IEntityManager {
 			if (Bukkit.getEntity(uuid) != null)
 			{
 				System.out.println("Found a pet without an owner... removing " + Bukkit.getEntity(uuid).getName());
-				Bukkit.getEntity(uuid).remove();
-			}
-		}
-	}
-
-	
-	@Override
-	public void removeAllPetsInChunk(String worldName, int chunkX, int chunkZ) {
-		Chunk chunk = Bukkit.getWorld(worldName).getChunkAt(chunkX, chunkZ);
-		if (chunk == null)
-			return;
-		
-		if (chunk.isLoaded())
-			return;
-		
-		for (Map.Entry<UUID, UUID> entry : petownerdata.entrySet()) {
-			
-			UUID key = entry.getKey();
-			LivingEntity livingEntityPet = (LivingEntity)Bukkit.getEntity(entry.getValue());
-			
-			if (!livingEntityPet.getLocation().getChunk().isLoaded())
-				continue;
-			
-			if (livingEntityPet != null && livingEntityPet.getLocation().getChunk().getX() == chunkX && livingEntityPet.getLocation().getChunk().getZ() == chunkZ && livingEntityPet.getLocation().getChunk().getWorld().getName().equals(worldName))
-			{
-				System.out.println("Cleaning Up pet on chunk unload: " + livingEntityPet.getName() + " in chunk: " + livingEntityPet.getLocation().getChunk().getX() + " "+ livingEntityPet.getLocation().getChunk().getZ() + " vs " + chunkX + " " + chunkZ);
-				this.removePet(key, true);
+				Utils.RemoveEntity(Bukkit.getEntity(uuid),"removeAllAbandonedPetsInChunk");
 			}
 		}
 	}
