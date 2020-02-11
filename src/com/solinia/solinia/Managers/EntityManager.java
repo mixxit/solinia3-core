@@ -945,6 +945,7 @@ public class EntityManager implements IEntityManager {
 			spawnedMob.setCustomName(solplayer.getForename() + "'s Pet");
 			spawnedMob.setCustomNameVisible(true);
 			spawnedMob.setCanPickupItems(false);
+			spawnedMob.setRemoveWhenFarAway(false);
 			
 			double maxHp = solPet.getMaxHP();
 			if (npc.getForcedMaxHp() > 0)
