@@ -422,7 +422,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					{
 					try {
 						ISoliniaItem item = SoliniaItemAdapter.Adapt(getBukkitLivingEntity().getEquipment().getItemInMainHand());
-						damage = item.getDamage();
+						if (item.getDamage() > damage)
+							damage = item.getDamage();
 					} catch (SoliniaItemException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
