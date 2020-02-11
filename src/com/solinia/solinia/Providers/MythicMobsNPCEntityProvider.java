@@ -319,7 +319,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "    PreventMobKillDrops: true\r" + System.lineSeparator();
 		mob = mob + "    PreventOtherDrops: true\r" + System.lineSeparator();
 		mob = mob + "    Silent: true\r" + System.lineSeparator();
-		if (npc.isPetControllable())
+		if (npc.isCorePet())
 			mob = mob + "    Despawn: false\r" + System.lineSeparator();
 		else
 			mob = mob + "    Despawn: true\r" + System.lineSeparator();
