@@ -189,8 +189,6 @@ public interface IEntityManager {
 
 	List<UUID> getAllWorldPetUUIDs();
 
-	void removeAllAbandonedPetsInChunk(String worldName, int chunkX, int chunkZ);
-
 	void playSpellFinishedSoundEffect(LivingEntity targetEntity, ISoliniaSpell spell);
 
 	void doNPCYellForAssist();

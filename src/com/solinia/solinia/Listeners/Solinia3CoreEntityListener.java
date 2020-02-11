@@ -33,6 +33,8 @@ import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 import org.bukkit.inventory.EquipmentSlot;
@@ -53,6 +55,7 @@ import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.MythicMobsUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -67,7 +70,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
 	}
-
+	
 	// Needs to occur before anything else
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityTargetEvent(EntityTargetEvent event) {

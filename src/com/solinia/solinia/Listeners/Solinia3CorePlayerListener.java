@@ -36,6 +36,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -85,6 +86,30 @@ public class Solinia3CorePlayerListener implements Listener {
 	public Solinia3CorePlayerListener(Solinia3CorePlugin solinia3CorePlugin) {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
+	}
+	
+	// Needs to occur before anything else
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onEntityDespawn(PlayerTeleportEvent event) {
+		if (event.isCancelled())
+			return;
+		
+		if (event.getPlayer() == null)
+			return;
+		
+		try
+		{
+			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer().getUniqueId());
+			
+			if (pet == null)
+				return;
+			
+			System.out.println("Moving pet with player");
+			pet.teleport(event.getPlayer().getLocation());
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	@EventHandler
