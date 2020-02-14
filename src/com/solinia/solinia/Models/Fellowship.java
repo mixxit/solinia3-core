@@ -95,9 +95,9 @@ public class Fellowship {
 				
 				if (character.getPendingXp() >= PlayerUtils.getMaxAAXP())
 				{
-					Player player = Bukkit.getPlayer(character.getUUID());
-					if (player != null)
-					player.sendMessage("You have exceeded your maximum pending XP for fellowship rewards! Please /claimxp your additional XP before more can be gained (max: " + character.getPendingXp().longValue() + ")");
+					//Player player = Bukkit.getPlayer(character.getUUID());
+					//if (player != null)
+					//player.sendMessage("You have exceeded your maximum pending XP for fellowship rewards! Please /claimxp your additional XP before more can be gained (max: " + character.getPendingXp().longValue() + ")");
 				} else {
 					if (experience < 0)
 						experience = 1d;

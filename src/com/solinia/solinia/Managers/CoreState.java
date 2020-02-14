@@ -200,6 +200,12 @@ public class CoreState {
 		{
 			xpdaybonus = 400;
 		}
+
+		// 14th of Feb - Valentines
+		if (simpleDateformat.format(now).equals("14.02") || simpleDateformat.format(now).equals("15.02"))
+		{
+			xpdaybonus = 400;
+		}
 		
 		// Halloween
 		if (simpleDateformat.format(now).equals("30.10") || simpleDateformat.format(now).equals("31.10") || simpleDateformat.format(now).equals("01.11"))

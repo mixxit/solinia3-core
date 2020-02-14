@@ -27,6 +27,7 @@ public class SoliniaWorld {
 	private int foragingMinSkill = 0;
 	private int foragingLootTableId = 0;
 	private int playerStartLootTableId = 0;
+	private int globalLootTableId = 0;
 	private ConcurrentHashMap<String, ArrayList<String>> playerIpNameMappings = new ConcurrentHashMap<String, ArrayList<String>>(); 
 	
 	public Integer getId() {
@@ -68,6 +69,17 @@ public class SoliniaWorld {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- chunkcount: " + ChatColor.GRAY + chunks.size() + ChatColor.RESET);
+		
+		if (getGlobalLootTableId() != 0) {
+			sender.sendMessage("- globalloottableid: " + ChatColor.GOLD + getGlobalLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getGlobalLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- globalloottableid: " + ChatColor.GOLD + getGlobalLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
+
+		
 		sender.sendMessage("- forestryminskill: " + ChatColor.GOLD + getForestryMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- fishingminskill: " + ChatColor.GOLD + getFishingMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- miningminskill: " + ChatColor.GOLD + getMiningMinSkill() + ChatColor.RESET);
@@ -175,6 +187,19 @@ public class SoliniaWorld {
 				throw new InvalidWorldSettingException("Loottable ID does not exist");
 			setFishingLootTableId(Integer.parseInt(value));
 			break;
+		case "globalloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setGlobalLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable3 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable3 == null)
+				throw new InvalidWorldSettingException("Loottable ID does not exist");
+			setGlobalLootTableId(Integer.parseInt(value));
+			break;
 		case "miningloottableid":
 			if (Integer.parseInt(value) == 0)
 			{
@@ -182,9 +207,9 @@ public class SoliniaWorld {
 				break;
 			}
 			
-			ISoliniaLootTable loottable3 = StateManager.getInstance().getConfigurationManager()
+			ISoliniaLootTable loottable4 = StateManager.getInstance().getConfigurationManager()
 			.getLootTable(Integer.parseInt(value));
-			if (loottable3 == null)
+			if (loottable4 == null)
 				throw new InvalidWorldSettingException("Loottable ID does not exist");
 			setMiningLootTableId(Integer.parseInt(value));
 			break;
@@ -195,9 +220,9 @@ public class SoliniaWorld {
 				break;
 			}
 			
-			ISoliniaLootTable loottable4 = StateManager.getInstance().getConfigurationManager()
+			ISoliniaLootTable loottable5 = StateManager.getInstance().getConfigurationManager()
 			.getLootTable(Integer.parseInt(value));
-			if (loottable4 == null)
+			if (loottable5 == null)
 				throw new InvalidWorldSettingException("Loottable ID does not exist");
 			setPlayerStartLootTableId(Integer.parseInt(value));
 			break;
@@ -287,5 +312,13 @@ public class SoliniaWorld {
 
 	public void setPlayerIpNameMappings(ConcurrentHashMap<String, ArrayList<String>> playerIpNameMappings) {
 		this.playerIpNameMappings = playerIpNameMappings;
+	}
+
+	public int getGlobalLootTableId() {
+		return globalLootTableId;
+	}
+
+	public void setGlobalLootTableId(int globalLootTableId) {
+		this.globalLootTableId = globalLootTableId;
 	}
 }
