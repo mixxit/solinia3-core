@@ -3526,6 +3526,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc.getClassObj() != null)
 					if (npc.getClassObj().getDropSpellsLootTableId() > 0)
 						Utils.DropLoot(npc.getClassObj().getDropSpellsLootTableId(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation(),npc.getClassObj().getName().toUpperCase(),npc.getLevel());
+				
+				SoliniaWorld world = StateManager.getInstance().getConfigurationManager().getWorld(this.getBukkitLivingEntity().getWorld().getName());
+				if (world != null)
+					if (world.getGlobalLootTableId() > 0)
+						Utils.DropLoot(world.getGlobalLootTableId(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation(),"",0);
+						
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
