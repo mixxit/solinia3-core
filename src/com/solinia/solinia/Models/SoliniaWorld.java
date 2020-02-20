@@ -28,6 +28,7 @@ public class SoliniaWorld {
 	private int foragingLootTableId = 0;
 	private int playerStartLootTableId = 0;
 	private int globalLootTableId = 0;
+	private int localchatrange = 32;
 	private ConcurrentHashMap<String, ArrayList<String>> playerIpNameMappings = new ConcurrentHashMap<String, ArrayList<String>>(); 
 	
 	public Integer getId() {
@@ -69,6 +70,7 @@ public class SoliniaWorld {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- chunkcount: " + ChatColor.GRAY + chunks.size() + ChatColor.RESET);
+		sender.sendMessage("- localchatrange: " + ChatColor.GRAY + this.getLocalchatrange() + ChatColor.RESET);
 		
 		if (getGlobalLootTableId() != 0) {
 			sender.sendMessage("- globalloottableid: " + ChatColor.GOLD + getGlobalLootTableId() + " ("
@@ -136,6 +138,8 @@ public class SoliniaWorld {
 			throws InvalidWorldSettingException, NumberFormatException, CoreStateInitException {
 
 		switch (setting.toLowerCase()) {
+		case "localchatrange":
+			setLocalchatrange(Integer.parseInt(value));
 		case "forestryminskill":
 			setForestryMinSkill(Integer.parseInt(value));
 			break;
@@ -320,5 +324,13 @@ public class SoliniaWorld {
 
 	public void setGlobalLootTableId(int globalLootTableId) {
 		this.globalLootTableId = globalLootTableId;
+	}
+
+	public int getLocalchatrange() {
+		return localchatrange;
+	}
+
+	public void setLocalchatrange(int localchatrange) {
+		this.localchatrange = localchatrange;
 	}
 }

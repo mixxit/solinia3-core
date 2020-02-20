@@ -33,7 +33,7 @@ public class ChannelManager implements IChannelManager {
 				if (!player.getUniqueId().equals(source.getBukkitPlayer().getUniqueId()))
 					continue;
 			
-			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalSayRange)
+			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.GetLocalSayRange(source.getBukkitPlayer().getLocation().getWorld().getName()))
 			{
 				try
 				{
@@ -424,7 +424,7 @@ public class ChannelManager implements IChannelManager {
 	public int sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
 		int numberReached = 0;
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalSayRange)
+			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.GetLocalSayRange(source.getBukkitPlayer().getLocation().getWorld().getName()))
 			{
 				try
 				{
@@ -461,7 +461,7 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= Utils.LocalSayRange)
+			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= Utils.GetLocalSayRange(source.getBukkitLivingEntity().getLocation().getWorld().getName()))
 			{
 				try
 				{
@@ -486,7 +486,7 @@ public class ChannelManager implements IChannelManager {
 		try
 		{
 			for (Player player : Bukkit.getOnlinePlayers()) {
-				if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= Utils.LocalSayRange)
+				if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= Utils.GetLocalSayRange(source.getBukkitLivingEntity().getLocation().getWorld().getName()))
 				{
 					if (player.isOp() || (source.getLanguage() == null || source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
 					{
