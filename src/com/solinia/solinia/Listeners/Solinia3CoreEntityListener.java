@@ -62,6 +62,7 @@ import com.solinia.solinia.Utils.Utils;
 import net.minecraft.server.v1_14_R1.PathfinderGoal.Type;
 import net.minecraft.server.v1_14_R1.PathfinderGoalOwnerHurtByTarget;
 import net.minecraft.server.v1_14_R1.PathfinderGoalTarget;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class Solinia3CoreEntityListener implements Listener {
 	Solinia3CorePlugin plugin;
@@ -774,29 +775,19 @@ public class Solinia3CoreEntityListener implements Listener {
 			// try to share with group
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(player.getUUID());
 			if (group != null) {
-				Integer dhighestlevel = 0;
 
-				List<Integer> levelranges = new ArrayList<Integer>();
-
+				List<Integer> levelRanges = new ArrayList<Integer>();
 				for (UUID member : group.getMembers()) {
 					ISoliniaPlayer playerchecked = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(member));
 					int checkedlevel = playerchecked.getLevel();
-					levelranges.add(checkedlevel);
+					levelRanges.add(checkedlevel);
 				}
+				
+				Tuple<Integer,Integer> lowhighlvl = Utils.GetGroupExpMinAndMaxLevel(levelRanges);
+				int ilowlvl = lowhighlvl.a();
+				int ihighlvl = lowhighlvl.b();
 
-				Collections.sort(levelranges);
-
-				// get the highest person in the group
-				dhighestlevel = levelranges.get(levelranges.size() - 1);
-
-				int ihighlvl = (int) Math.floor(dhighestlevel);
-				int ilowlvl = Utils.getMinLevelFromLevel(ihighlvl);
-
-				if (ilowlvl < 1) {
-					ilowlvl = 1;
-				}
-
-				if (player.getLevel() < ilowlvl) {
+				if (player.getLevel() < ilowlvl || player.getLevel() > ihighlvl) {
 					// Only award player the experience
 					// as they are out of range of the group
 					if (livingEntity.getLevel() >= Utils.getMinLevelFromLevel(player.getLevel())) {
@@ -832,7 +823,7 @@ public class Solinia3CoreEntityListener implements Listener {
 							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);
 							int tgtlevel = tgtsolplayer.getLevel();
 
-							if (tgtlevel < ilowlvl) {
+							if (tgtlevel < ilowlvl || tgtlevel > ihighlvl) {
 								tgtplayer.sendMessage(ChatColor.GRAY
 										+ "You were out of level range to gain experience in this group (Min: "
 										+ ilowlvl + " Max: " + ihighlvl + ")");

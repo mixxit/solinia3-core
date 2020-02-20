@@ -37,6 +37,7 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.PlayerDoesNotExistException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -62,6 +63,7 @@ import io.lumine.xikage.mythicmobs.adapters.AbstractLocation;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import io.lumine.xikage.mythicmobs.spawning.spawners.MythicSpawner;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
 
@@ -4782,11 +4784,42 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void grantFellowshipXPBonusToFellowship(Double experience) {
-		if (getFellowship() != null)
+		if (getFellowship() == null)
+			return;
+			
+		try
 		{
-			getFellowship().grantFellowshipXPBonus(experience);
+			List<Integer> levelRanges = new ArrayList<Integer>();
+			for(UUID memberUUID : this.getFellowship().getMembers())
+			{
+				try
+				{
+					ISoliniaPlayer memberPlayer = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberUUID);
+					if (memberPlayer == null)
+						continue;
+					levelRanges.add(memberPlayer.getLevel());
+				} catch (PlayerDoesNotExistException e)
+				{
+					continue;
+				}
+			}
+			
+			Tuple<Integer,Integer> lowhighlvl = Utils.GetGroupExpMinAndMaxLevel(levelRanges);
+			int ilowlvl = lowhighlvl.a();
+			int ihighlvl = lowhighlvl.b();
+			
+			if (getLevel() < ilowlvl || getLevel() > ihighlvl) {
+				// Only award player the experience
+				// as they are out of range of the group
+				return;
+			}
+			
+			getFellowship().grantFellowshipXPBonus(experience,ilowlvl,ihighlvl);
 			if (getBukkitPlayer() != null)
-				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Some of your XP has been granteqd to your fellowship members (see /claimxp)");
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Some of your XP has been granted to your fellowship members (see /claimxp)");
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 

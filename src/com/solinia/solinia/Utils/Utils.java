@@ -108,6 +108,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.GenericAttributes;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class Utils {
 	public static final int CALL_FOR_ASSIST_RANGE = 10;
@@ -136,6 +137,24 @@ public class Utils {
 
 		System.out.println("Timings after: " + ChronoUnit.MICROS.between(datetime, afterdatetime));
 
+	}
+	
+	public static Tuple<Integer,Integer> GetGroupExpMinAndMaxLevel(List<Integer> levelRanges)
+	{
+		Integer dhighestlevel = 0;
+		Collections.sort(levelRanges);
+
+		// get the highest person in the group
+		dhighestlevel = levelRanges.get(levelRanges.size() - 1);
+
+		int ihighlvl = (int) Math.floor(dhighestlevel);
+		int ilowlvl = Utils.getMinLevelFromLevel(ihighlvl);
+
+		if (ilowlvl < 1) {
+			ilowlvl = 1;
+		}
+		
+		return new Tuple<Integer,Integer>(ilowlvl,ihighlvl);
 	}
 	
 	public static double calculateYaw(double deltax, double deltaz) {
