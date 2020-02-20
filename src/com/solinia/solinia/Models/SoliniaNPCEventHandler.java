@@ -234,6 +234,11 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				throw new InvalidNPCEventSettingException("Faction value is empty");
 			setAwardsFactionValue(Integer.parseInt(value));
 			break;
+		case "interactiontype":
+			if (!value.equals("ITEM") && !value.equals("CHAT"))
+				throw new InvalidNPCEventSettingException("interactiontype is neither ITEM or CHAT");
+			setInteractiontype(InteractionType.valueOf(value));
+			break;
 		case "requiresclassid":
 			int classid = Integer.parseInt(value);
 			if (classid < 1) {
