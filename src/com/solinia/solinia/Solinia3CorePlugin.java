@@ -3,6 +3,7 @@ package com.solinia.solinia;
 import java.io.IOException;
 import org.dynmap.markers.MarkerSet;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -85,7 +86,6 @@ import com.solinia.solinia.Timers.StateCommitTimer;
 import com.solinia.solinia.Timers.UpdatePlayerWindowTimer;
 import com.solinia.solinia.Timers.ZoneTickTimer;
 import com.solinia.solinia.Utils.ForgeUtils;
-import org.json.JSONException;
 
 import de.slikey.effectlib.EffectManager;
 import net.milkbowl.vault.economy.Economy;
@@ -152,10 +152,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		String expectedClientModVersion = null;
 		try {
 			expectedClientModVersion = ForgeUtils.fetchExpectedForgeClientModVersion();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -213,7 +210,17 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		System.out.println("Registered outgoing plugin channel: " + Solinia3UIChannelNames.Outgoing);		
 		getServer().getMessenger().registerOutgoingPluginChannel(this, Solinia3UIChannelNames.Outgoing); // we register the outgoing channel
+		
+		
+		startHttpListener();
 	    
+	}
+
+	public static final String API_V1 = "v1";
+	private final Logger log = getLogger();
+	
+	private void startHttpListener() {
+		
 	}
 
 	private boolean IsOffline() {
