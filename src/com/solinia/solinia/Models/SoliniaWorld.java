@@ -28,7 +28,9 @@ public class SoliniaWorld {
 	private int foragingLootTableId = 0;
 	private int playerStartLootTableId = 0;
 	private int globalLootTableId = 0;
+	private int whisperchatrange = 5;
 	private int localchatrange = 32;
+	private int shoutchatrange = 64;
 	private ConcurrentHashMap<String, ArrayList<String>> playerIpNameMappings = new ConcurrentHashMap<String, ArrayList<String>>(); 
 	
 	public Integer getId() {
@@ -70,7 +72,9 @@ public class SoliniaWorld {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- chunkcount: " + ChatColor.GRAY + chunks.size() + ChatColor.RESET);
+		sender.sendMessage("- whisperchatrange: " + ChatColor.GRAY + this.getWhisperchatrange() + ChatColor.RESET);
 		sender.sendMessage("- localchatrange: " + ChatColor.GRAY + this.getLocalchatrange() + ChatColor.RESET);
+		sender.sendMessage("- shoutchatrange: " + ChatColor.GRAY + this.getShoutchatrange() + ChatColor.RESET);
 		
 		if (getGlobalLootTableId() != 0) {
 			sender.sendMessage("- globalloottableid: " + ChatColor.GOLD + getGlobalLootTableId() + " ("
@@ -138,8 +142,15 @@ public class SoliniaWorld {
 			throws InvalidWorldSettingException, NumberFormatException, CoreStateInitException {
 
 		switch (setting.toLowerCase()) {
+		case "whisperchatrange":
+			setWhisperchatrange(Integer.parseInt(value));
+			break;
 		case "localchatrange":
 			setLocalchatrange(Integer.parseInt(value));
+			break;
+		case "shoutchatrange":
+			setShoutchatrange(Integer.parseInt(value));
+			break;
 		case "forestryminskill":
 			setForestryMinSkill(Integer.parseInt(value));
 			break;
@@ -332,5 +343,21 @@ public class SoliniaWorld {
 
 	public void setLocalchatrange(int localchatrange) {
 		this.localchatrange = localchatrange;
+	}
+
+	public int getWhisperchatrange() {
+		return whisperchatrange;
+	}
+
+	public void setWhisperchatrange(int whisperchatrange) {
+		this.whisperchatrange = whisperchatrange;
+	}
+
+	public int getShoutchatrange() {
+		return shoutchatrange;
+	}
+
+	public void setShoutchatrange(int shoutchatrange) {
+		this.shoutchatrange = shoutchatrange;
 	}
 }

@@ -124,8 +124,6 @@ public class Utils {
 	
 	public static final int TICKS_PER_SECOND = 20;
 	public static final long MAXDAYTICK = 24000L;
-	public static final double LocalWhisperRange = 4;
-	public static final double LocalShoutRange = 40;
 	public static final double MaxRangeForExperience = 100;
 
 	public static final int HIGHESTSKILL = 255;
@@ -138,6 +136,28 @@ public class Utils {
 		} catch (CoreStateInitException e)
 		{
 			return 25;
+		}
+	}
+	
+	public static int GetLocalShoutRange(String worldName)
+	{
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().getWorld(worldName).getShoutchatrange();
+		} catch (CoreStateInitException e)
+		{
+			return 64;
+		}
+	}
+	
+	public static int GetLocalWhisperRange(String worldName)
+	{
+		try
+		{
+			return StateManager.getInstance().getConfigurationManager().getWorld(worldName).getWhisperchatrange();
+		} catch (CoreStateInitException e)
+		{
+			return 5;
 		}
 	}
 

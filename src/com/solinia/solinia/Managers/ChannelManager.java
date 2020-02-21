@@ -77,7 +77,7 @@ public class ChannelManager implements IChannelManager {
 		
 		message = decorateWhisperPlayerMessage(source, message);
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalWhisperRange)
+			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.GetLocalWhisperRange(source.getBukkitPlayer().getLocation().getWorld().getName()))
 			{
 				try
 				{
@@ -119,7 +119,7 @@ public class ChannelManager implements IChannelManager {
 		
 		message = decorateShoutPlayerMessage(source, message.toUpperCase());
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.LocalShoutRange)
+			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.GetLocalShoutRange(source.getBukkitPlayer().getLocation().getWorld().getName()))
 			{
 				try
 				{
