@@ -1,6 +1,7 @@
 package com.solinia.solinia;
 
 import java.io.IOException;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.dynmap.markers.MarkerSet;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -35,6 +36,7 @@ import com.solinia.solinia.Managers.EntityManager;
 import com.solinia.solinia.Managers.PlayerManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ConfigSettings;
+import com.solinia.solinia.Models.ServerApi;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Providers.MythicMobsNPCEntityProvider;
 import com.solinia.solinia.Repositories.JsonAAAbilityRepository;
@@ -88,8 +90,19 @@ import com.solinia.solinia.Timers.ZoneTickTimer;
 import com.solinia.solinia.Utils.ForgeUtils;
 
 import de.slikey.effectlib.EffectManager;
+import io.javalin.Javalin;
+import io.javalin.http.NotFoundResponse;
 import net.milkbowl.vault.economy.Economy;
 import org.dynmap.DynmapAPI;
+
+import io.javalin.Javalin;
+import io.javalin.http.NotFoundResponse;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Logger;
+
+import static io.javalin.apibuilder.ApiBuilder.*;
+
 public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListener  
 {
 	private CastingTimer castingTimer;
@@ -220,7 +233,37 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private final Logger log = getLogger();
 	
 	private void startHttpListener() {
-		
+		// Get the current class loader.
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        // Temporarily set this thread's class loader to the plugin's class loader.
+        // Replace JavalinTestPlugin.class with your own plugin's class.
+        Thread.currentThread().setContextClassLoader(Solinia3CorePlugin.class.getClassLoader());
+
+        // Instantiate the web server (which will now load using the plugin's class loader).
+        Javalin app = Javalin.create(config -> {
+            config.defaultContentType = "text/plain";
+        }).start(4567);
+
+        System.out.println("Listening on port 4567");
+        
+        app.before(ctx -> log.info(ctx.req.getPathInfo()));
+
+        app.routes(() -> {
+            //Routes for v1 of the API
+            path(API_V1, () -> {
+                // Communication
+                post("discord", ServerApi::discordPost);
+            });
+        });
+
+        // Default fallthrough. Just give them a 404.
+        app.get("*", ctx -> {
+            throw new NotFoundResponse();
+        });
+
+        // Put the original class loader back where it was.
+        Thread.currentThread().setContextClassLoader(classLoader);
 	}
 
 	private boolean IsOffline() {
@@ -248,7 +291,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	@Override
 	public void onDisable() {
 		try {
-			
 			StateManager.getInstance().getEntityManager().removeAllPets();
 			StateManager.getInstance().Commit();
 			
@@ -680,4 +722,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		}
 	}
+
+    private void initControllers() {
+    	
+
+    }
 }

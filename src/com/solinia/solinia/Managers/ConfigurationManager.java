@@ -976,8 +976,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public SoliniaWorld getWorld(String name) {
+		if (name == null)
+			return null;
+		
 		// TODO Auto-generated method stub
-		List<SoliniaWorld> list = worldRepository.query(q -> q.getName().equals(name));
+		List<SoliniaWorld> list = worldRepository.query(q -> q.getName().equals(name.toUpperCase()));
 		if (list.size() > 0)
 			return list.get(0);
 
