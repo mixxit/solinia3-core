@@ -34,6 +34,9 @@ public class ServerApi {
 		
 		try
 		{
+			if (!Bukkit.getPluginManager().getPlugin("Solinia3Core").isEnabled())
+				return;
+			
 			final String message = ctx.body();
 			new BukkitRunnable() {
 

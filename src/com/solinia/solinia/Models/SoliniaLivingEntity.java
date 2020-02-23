@@ -65,6 +65,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.EntityCreature;
 import net.minecraft.server.v1_14_R1.EntityDamageSource;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
+import net.minecraft.server.v1_14_R1.GenericAttributes;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
 import net.minecraft.server.v1_14_R1.Tuple;
 
@@ -404,9 +405,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
 				}
 
+				float f = 1;
 				if (getBukkitLivingEntity() instanceof Player)
 					((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
 
+				if (getBukkitLivingEntity() instanceof CraftPlayer)
+				{
+					double baseValue = getBukkitLivingEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
+					double value = getBukkitLivingEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
+					double defaultValue = getBukkitLivingEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getDefaultValue();
+					Utils.DebugLog("SoliniaLivingEntity", "autoAttackEnemy", getBukkitLivingEntity().getName(), "Triggering an auto attack damage event base: " + baseValue + " value: " + value + " default: " + defaultValue);
+				}
+				
 				((CraftPlayer) getBukkitLivingEntity()).getHandle()
 						.attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
 			}
@@ -483,7 +493,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				source.ignoresArmor();
 				
 				defender.addToHateList(source.getEntity().getUniqueID(), (int)damage, false);
-				
+				Utils.DebugLog("SoliniaLivingEntity", "autoAttackEnemy", source.getEntity().getName(), "Triggering an auto attack damage event: " + damage);
 				((CraftEntity) defender.getBukkitLivingEntity()).getHandle().damageEntity(source, (float) damage);
 			}
 
@@ -2030,25 +2040,35 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	private DamageHitInfo GetHitInfo(ItemStack weapon, int baseDamage, boolean arrowHit,
 			ISoliniaLivingEntity defender) {
+		
+		Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo starts with baseDamage: " + baseDamage + " arrowHit: " + arrowHit);
 		DamageHitInfo my_hit = new DamageHitInfo();
 		my_hit.skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillname();
 		if (arrowHit) {
 			my_hit.skill = "ARCHERY";
 		}
+		Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo skill will be: " + my_hit.skill);
 
 		// Now figure out damage
 		my_hit.damage_done = 1;
 		my_hit.min_damage = 0;
-		getLevel();
+		//getLevel();
 		int hate = 0;
 
 		my_hit.base_damage = baseDamage;
+		Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo base damage: " + my_hit.base_damage);
 		// amount of hate is based on the damage done
 		if (hate == 0 && my_hit.base_damage > 1)
+		{
 			hate = my_hit.base_damage;
+			Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo hate set to: " + my_hit.base_damage);
+		}
 
 		if (my_hit.base_damage > 0) {
-			my_hit.base_damage = getDamageCaps(my_hit.base_damage);
+			Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo hate set to: " + my_hit.base_damage);
+			int damageCaps = getDamageCaps(my_hit.base_damage);
+			Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo ran through damage caps and output is now: " + damageCaps);
+			my_hit.base_damage = damageCaps;
 
 			tryIncreaseSkill(my_hit.skill, 1);
 			tryIncreaseSkill("OFFENSE", 1);
@@ -2057,6 +2077,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (getClassObj() != null && getClassObj().isWarriorClass() && getLevel() >= 28) {
 				ucDamageBonus = getWeaponDamageBonus(weapon);
+				Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo ucDamageBonus from weapon is: " + ucDamageBonus);
 				my_hit.min_damage = ucDamageBonus;
 				hate += ucDamageBonus;
 			}
@@ -2066,6 +2087,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			int hit_chance_bonus = 0;
 			my_hit.offense = getOffense(my_hit.skill); // we need this a few times
 			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
+			Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo my_hit.offense + " + my_hit.offense + " my_hit.tohit " + my_hit.tohit);
 
 			my_hit = doAttack(defender, my_hit);
 		}
@@ -2075,6 +2097,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		defender.addToHateList(getBukkitLivingEntity().getUniqueId(), hate, true);
 
+		Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo final my_hit is my_hit.damage_done " + my_hit.damage_done + " my_hit.base_damage " + my_hit.base_damage + " my_hit.offense " + my_hit.offense + " my_hit.tohit " + my_hit.tohit);
 		return my_hit;
 	}
 
@@ -3168,17 +3191,31 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getOffense(String skillname) {
+		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getOffense starts for " + skillname);
 		int offense = getSkill(skillname);
+		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getSkill value found " + offense);
 		int stat_bonus = 0;
 		if (skillname.equals("ARCHERY") || skillname.equals("THROWING"))
+		{
 			stat_bonus = getDexterity();
+			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"Using dexterity value for stat bonus " + stat_bonus);
+		}
 		else
+		{
 			stat_bonus = getStrength();
+			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"Using strength value for stat bonus " + stat_bonus);
+		}
 		if (stat_bonus >= 75)
+		{
+			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " was found to be greater than 75 so capping");
 			offense += (2 * stat_bonus - 150) / 3;
+			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " offense now capped at " + offense);
+		}
 
 		// TODO do ATTK
-		offense += getAttk();
+		int attk = getAttk();
+		offense += attk;
+		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " added attk (" +attk + ") to offense - final offense value is: " + offense);
 		return offense;
 	}
 
@@ -5724,19 +5761,28 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public DamageHitInfo meleeMitigation(SoliniaLivingEntity attacker, DamageHitInfo hit) {
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "Melee Mitigation starts with hit: offense " + hit.offense + " damagedone " + hit.damage_done + " base_damage " + hit.base_damage);
+
 		if (hit.damage_done < 0 || hit.base_damage == 0)
 			return hit;
 
 		ISoliniaLivingEntity defender = this;
 		int mitigation = defender.getMitigationAC();
 
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "mitigationAC : " + mitigation);
+
 		if (isPlayer() && attacker.isPlayer())
+		{
 			mitigation = mitigation * 80 / 100; // PvP
+			Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "PVP mitigationAC capped over to: " + mitigation);
+		}
 
 		int roll = (int) rollD20(hit.offense, mitigation);
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "mitigation dice d20 roll was: " + roll);
 
 		// +0.5 for rounding, min to 1 dmg
 		hit.damage_done = Math.max((int) (roll * (double) (hit.base_damage) + 0.5), 1);
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "new damage done is: " + hit.damage_done);
 
 		return hit;
 	}
