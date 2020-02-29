@@ -23,6 +23,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Utils.DropUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -239,7 +240,7 @@ public class CommandCraft implements CommandExecutor {
 	    						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craftEntry.getOutputLootTableId());
 	    						if (loottable != null)
 	    						{
-	    							Utils.DropLoot(loottable.getId(), player.getWorld(), player.getLocation(),"",0);
+	    							DropUtils.DropLoot(loottable.getId(), player.getWorld(), player.getLocation(),"",0);
 	    							player.sendMessage("You fashion the items together to attempt to make something random!");
 	    							createCount++;
 	    						}
