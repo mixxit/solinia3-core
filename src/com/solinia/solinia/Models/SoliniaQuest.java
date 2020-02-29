@@ -133,7 +133,7 @@ public class SoliniaQuest implements ISoliniaQuest {
 
 	private void sendQuestStep(CommandSender sender, int questStepId) {
 		QuestStep questStep = this.getQuestSteps().get(questStepId);
-		sender.sendMessage("  [" +  questStep.getSequence() + "] - Description: " + questStep.getDescription() + " Trigger Flag: " + questStep.getTriggerQuestFlag() + " Completion Flag: " + questStep.getCompleteQuestFlag());
+		sender.sendMessage("  [" +  questStep.getSequence() + "] - Description: " + questStep.getDescription() + " triggerquestflag: " + questStep.getTriggerQuestFlag() + " completequestflag: " + questStep.getCompleteQuestFlag());
 	}
 
 	@Override

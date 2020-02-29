@@ -1774,7 +1774,19 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		try {
 			ISoliniaItem item = SoliniaItemAdapter.Adapt(event.getItem());
+			
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(event.getPlayer());
+			if (player != null)
+			{
+				if (item.getMinLevel() > player.getLevel())
+				{
+					Utils.CancelEvent(event);
+					player.getBukkitPlayer().sendMessage("This item requires a level greater than you have");
+					return;
+				}
+			
 			item.consume(plugin, event.getPlayer());
+			}
 		} catch (SoliniaItemException | CoreStateInitException e) {
 
 		}
