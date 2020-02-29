@@ -2634,22 +2634,9 @@ public class Utils {
 		return duration;
 	}
 
-	// Used for one off patching, added in /commit patch command for console sender
+	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for(ISoliniaLootDrop lootdrop : StateManager.getInstance().getConfigurationManager().getLootDrops())
-			{
-				for (ISoliniaLootDropEntry entry : lootdrop.getEntries())
-				{
-					if (entry.isAlways() && entry.getChance() != 100)
-						entry.setChance(100);
-				}
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 
 	public static void disableLootOverLevel110() {
