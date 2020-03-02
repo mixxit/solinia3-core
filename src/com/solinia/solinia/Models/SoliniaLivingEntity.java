@@ -3214,14 +3214,54 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// TODO do ATTK
-		int attk = getAttk();
+		int attk = getTotalAtk();
 		offense += attk;
 		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " added attk (" +attk + ") to offense - final offense value is: " + offense);
 		return offense;
 	}
-
+	
 	@Override
-	public int getAttk() {
+	public int getTotalAtk()
+	{
+		int attackRating = 0;
+		
+		int itemBonusesAtk = 0; // todo
+		int aabonusesAtk = 0; // todo
+		int spellbonusesAtk = getSpellBonuses(SpellEffectType.ATK);
+		
+		int WornCap = itemBonusesAtk;
+
+		if(this.isPlayer()) {
+			
+			double attackRatingDbl = Math.floor(((WornCap * 1.342) + (getSkill("OFFENSE") * 1.345) + ((getStrength() - 66) * 0.9) + (getPrimarySkillValue() * 2.69)));
+			if (attackRatingDbl > Integer.MAX_VALUE)
+				attackRatingDbl = Integer.MAX_VALUE;
+			
+			attackRating = (int)attackRatingDbl;
+			attackRating += aabonusesAtk; //+ GroupLeadershipAAOffenseEnhancement();
+
+			if (attackRating < 10)
+				attackRating = 10;
+		}
+		else
+			attackRating = getAtk();
+
+		attackRating += spellbonusesAtk;
+
+		return attackRating;
+	}
+	
+	public int getPrimarySkillValue()
+	{
+		if (this.getBukkitLivingEntity() == null)
+			return 0;
+		
+		String skill = ItemStackUtils.getMeleeSkillForItemStack(this.getBukkitLivingEntity().getEquipment().getItemInMainHand()).getSkillname().toUpperCase();
+		return getSkill(skill);
+	}
+
+	public int getAtk() {
+		// this should really only be happening for npcs
 		int attackItemBonuses = 0;
 		// todo, item bonuses
 
@@ -3231,10 +3271,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// TODO, find a place for this base value, possibly on race?
 		int ATK = 0;
-
+		// this is from the bot code..
 		return ATK + attackItemBonuses + attackSpellBonsues + ((getStrength() + getSkill("OFFENSE")) * 9 / 10);
 	}
-
+	
 	@Override
 	public void tryIncreaseSkill(String skillName, int amount) {
 		if (!isPlayer())

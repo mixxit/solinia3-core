@@ -51,7 +51,7 @@ public class CommandStats implements CommandExecutor {
 	            player.sendMessage("You have a maximum HP of: " + ChatColor.RED + player.getHealth() + "/" + player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + ChatColor.RESET);
 	            player.sendMessage("You have a maximum MP of: " + ChatColor.AQUA +solplayer.getMana() + "/" + solentity.getMaxMP() + " (" + solplayer.getSoliniaLivingEntity().getItemMana() + " of this is from items)" + ChatColor.RESET);
 	            player.sendMessage("You currently have a Armour Class Mitigation of: " + ChatColor.GOLD + solentity.getMitigationAC() + ChatColor.RESET);
-	            player.sendMessage("You currently have a Attack Value of: " + ChatColor.GOLD+ solentity.getAttk() + ChatColor.RESET);
+	            player.sendMessage("You currently have a Attack Value of: " + ChatColor.GOLD+ solentity.getTotalAtk() + ChatColor.RESET);
 	            player.sendMessage("You currently have a Attack Speed of: " + ChatColor.GOLD+ solentity.getAttackSpeed() + "%" + ChatColor.RESET);
 	            player.sendMessage("You currently have a MainWeapon Attack Rate (Seconds) of: " + ChatColor.GOLD+ solentity.getAutoAttackTimerFrequencySeconds() + ChatColor.RESET);
 	            player.sendMessage("You currently have a Total Rune of: " + ChatColor.GOLD + solentity.getRune() + ChatColor.RESET);

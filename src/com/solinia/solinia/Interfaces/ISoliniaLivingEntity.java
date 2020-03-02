@@ -171,8 +171,6 @@ public interface ISoliniaLivingEntity
 
 	Collection<SoliniaActiveSpell> getActiveSpells();
 
-	int getAttk();
-
 	public int getInstrumentMod(ISoliniaSpell iSoliniaSpell);
 
 	public void doCheckForEnemies();
@@ -424,4 +422,6 @@ public interface ISoliniaLivingEntity
 	long getReverseAggroCount();
 
 	public void resetReverseAggro();
+
+	int getTotalAtk();
 }
