@@ -7985,7 +7985,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		
 		if (!this.canDisarm())
+		{
+			this.getBukkitLivingEntity().sendMessage("You cannot disarm this target right now");
 			return;
+		}
 		
 		BreakInvis();
 		ISoliniaLivingEntity pmob = this;
@@ -8000,19 +8003,31 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// No target
 		// Targets don't match (possible hack, but not flagging)
 		if (!this.getAttackTarget().equals(tmob.getBukkitLivingEntity()))
+		{
+			this.getBukkitLivingEntity().sendMessage("You target does not match your attack target for disarm");
 			return;
+		}
 		
 		// Too far away
 		if (pmob.getLocation().distance(tmob.getLocation()) > 4)
+		{
+			this.getBukkitLivingEntity().sendMessage("You target for disarm is too far away");
 			return;
+		}
 
 		// How can we disarm someone if we are feigned.
 		if (this.isFeigned())
+		{
+			this.getBukkitLivingEntity().sendMessage("You cannot disarm when feigned");
 			return;
+		}
 		
 		// We can't disarm someone who is feigned.
 		if (tmob.isFeignedDeath())
+		{
+			this.getBukkitLivingEntity().sendMessage("You cannot disarm a feigned target");
 			return;
+		}
 
 		if (isAttackAllowed(tmob, false)) {
 			int p_level = pmob.getLevel();
@@ -8045,6 +8060,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			tmob.disarm(this, chance);
 			return;
+		} else {
+			this.getBukkitLivingEntity().sendMessage("You are not allowed to attack this target");
 		}
 
 		return;
