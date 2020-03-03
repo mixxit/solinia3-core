@@ -2900,6 +2900,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 			int recasttime = Integer.parseInt(value);
 			setRecastTime(recasttime);
 			break;
+		case "casttime":
+			if (value.equals(""))
+				throw new InvalidSpellSettingException("casttime is empty");
+
+			int casttime = Integer.parseInt(value);
+			setCastTime(casttime);
+			break;
 		case "spelleffectindex":
 			setSpellAffectIndex(Integer.parseInt(value));
 			break;
