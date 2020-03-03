@@ -2893,7 +2893,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 			int buffduration = Integer.parseInt(value);
 			setBuffduration(buffduration);
 			break;
+		case "recasttime":
+			if (value.equals(""))
+				throw new InvalidSpellSettingException("recasttime is empty");
 
+			int recasttime = Integer.parseInt(value);
+			setRecastTime(recasttime);
+			break;
 		case "spelleffectindex":
 			setSpellAffectIndex(Integer.parseInt(value));
 			break;
