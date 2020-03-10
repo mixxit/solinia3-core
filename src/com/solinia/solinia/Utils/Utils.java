@@ -86,6 +86,7 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
+import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.NumHit;
@@ -2644,6 +2645,12 @@ public class Utils {
 				if (item.getAllowedClassNames().size() != 1)
 					continue;
 				
+				if (!item.isArmour() && !item.isWeaponOrBowOrShield())
+					continue;
+				
+				if (item.getEquipmentSlot() != EquipmentSlot.None)
+					continue;
+
 				ISoliniaClass classObj = StateManager.getInstance().getConfigurationManager().getClassObj(item.getAllowedClassNames().get(0).toUpperCase());
 				if (classObj == null)
 					continue;
