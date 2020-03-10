@@ -2636,7 +2636,28 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		
+		try
+		{
+			long patched = 0;
+			for (ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
+			{
+				if (item.getAllowedClassNames().size() != 1)
+					continue;
+				
+				ISoliniaClass classObj = StateManager.getInstance().getConfigurationManager().getClassObj(item.getAllowedClassNames().get(0).toUpperCase());
+				if (classObj == null)
+					continue;
+				
+				item.setAppearanceId(classObj.getAppearanceId());
+				item.setLastUpdatedTimeNow();
+				patched++;
+			}
+			
+			System.out.println("patched " + patched + " items with apperance ids");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	public static void disableLootOverLevel110() {
