@@ -213,4 +213,8 @@ public interface ISoliniaClass {
 
 	void setDropSpellsLootTableId(int dropSpellsLootTableId);
 
+	int getAppearanceId();
+
+	void setAppearanceId(int appearanceId);
+
 }

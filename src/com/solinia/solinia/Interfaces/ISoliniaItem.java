@@ -357,4 +357,8 @@ public interface ISoliniaItem {
 	String getRequiredWeaponSkillType();
 
 	void setRequiredWeaponSkillType(String requiredWeaponSkillType);
+
+	int getAppearanceId();
+
+	void setAppearanceId(int appearanceId);
 }

@@ -125,6 +125,8 @@ public class SoliniaItem implements ISoliniaItem {
 	
 	private int QuestId = 0;
 	
+	private int appearanceId = 0;
+	
 	@Override
 	public ItemStack asItemStack() {
 		return ItemStackAdapter.Adapt(this, 1, false);
@@ -1623,5 +1625,15 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setRequiredWeaponSkillType(String requiredWeaponSkillType) {
 		this.requiredWeaponSkillType = requiredWeaponSkillType;
+	}
+
+	@Override
+	public int getAppearanceId() {
+		return appearanceId;
+	}
+
+	@Override
+	public void setAppearanceId(int appearanceId) {
+		this.appearanceId = appearanceId;
 	}
 }

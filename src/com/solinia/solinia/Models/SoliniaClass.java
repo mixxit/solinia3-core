@@ -52,6 +52,7 @@ public class SoliniaClass implements ISoliniaClass {
 	private String bootstypename = "Boots";
 	private String swordtypename = "Sword";
 	private String shieldtypename = "Shield";
+	private int appearanceId = 0;
 	private String axetypename = "Axe";
 	private String spadetypename = "Staff";
 	private String bowtypename = "Bow";
@@ -170,6 +171,7 @@ public class SoliniaClass implements ISoliniaClass {
 		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET + " admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
+		sender.sendMessage("- appearanceid: " + ChatColor.GOLD + getAppearanceId() + ChatColor.RESET);
 		sender.sendMessage("- defaultheadmaterial: " + ChatColor.GOLD + getDefaultHeadMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultchestmaterial: " + ChatColor.GOLD + getDefaultChestMaterial() + ChatColor.RESET);
 		sender.sendMessage("- defaultlegsmaterial: " + ChatColor.GOLD + getDefaultLegsMaterial() + ChatColor.RESET);
@@ -330,6 +332,9 @@ public class SoliniaClass implements ISoliniaClass {
 			break;
 		case "agilityitembonus":
 			this.setAgilityitembonus(Integer.parseInt(value));
+			break;
+		case "appearanceid":
+			this.setAppearanceId(Integer.parseInt(value));
 			break;
 		case "dexterityitembonus":
 			this.setDexterityitembonus(Integer.parseInt(value));
@@ -1144,5 +1149,15 @@ public class SoliniaClass implements ISoliniaClass {
 	@Override
 	public void setDropSpellsLootTableId(int dropSpellsLootTableId) {
 		this.dropSpellsLootTableId = dropSpellsLootTableId;
+	}
+
+	@Override
+	public int getAppearanceId() {
+		return appearanceId;
+	}
+
+	@Override
+	public void setAppearanceId(int appearanceId) {
+		this.appearanceId = appearanceId;
 	}
 }
