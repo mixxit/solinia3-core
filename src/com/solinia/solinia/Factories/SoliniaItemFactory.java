@@ -145,30 +145,36 @@ public class SoliniaItemFactory {
 			// Get the appropriate material for the class and generate the base item
 			ISoliniaItem headItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultHeadMaterial().toUpperCase())));
 			headItem.setDiscoverer(discoverer);
+			headItem.setAppearanceId(classtype.getAppearanceId());
 			if (classtype.getDefaultHeadMaterial().toUpperCase().equals("LEATHER_HELMET") && classtype.getLeatherRgbDecimal() > 0)
 				headItem.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
 			
 			ISoliniaItem chestItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultChestMaterial().toUpperCase())));
 			chestItem.setDiscoverer(discoverer);
+			chestItem.setAppearanceId(classtype.getAppearanceId());
 			if (classtype.getDefaultChestMaterial().toUpperCase().equals("LEATHER_CHESTPLATE") && classtype.getLeatherRgbDecimal() > 0)
 				chestItem.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
 
 			ISoliniaItem legsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultLegsMaterial().toUpperCase())));
 			legsItem.setDiscoverer(discoverer);
+			legsItem.setAppearanceId(classtype.getAppearanceId());
 			if (classtype.getDefaultLegsMaterial().toUpperCase().equals("LEATHER_LEGGINGS") && classtype.getLeatherRgbDecimal() > 0)
 				legsItem.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
 			
 			ISoliniaItem feetItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultFeetMaterial().toUpperCase())));
 			feetItem.setDiscoverer(discoverer);
+			feetItem.setAppearanceId(classtype.getAppearanceId());
 			if (classtype.getDefaultFeetMaterial().toUpperCase().equals("LEATHER_BOOTS") && classtype.getLeatherRgbDecimal() > 0)
 				feetItem.setLeatherRgbDecimal(classtype.getLeatherRgbDecimal());
 			
 			ISoliniaItem handItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaulthandMaterial().toUpperCase())));
 			handItem.setDiscoverer(discoverer);
 			handItem.setItemType(classtype.getDefaultHandItemType());
+			handItem.setAppearanceId(classtype.getAppearanceId());
 			ISoliniaItem offhandItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultoffHandMaterial().toUpperCase())));
 			offhandItem.setDiscoverer(discoverer);
 			offhandItem.setItemType(classtype.getDefaultOffHandItemType());
+			offhandItem.setAppearanceId(classtype.getAppearanceId());
 			
 			ISoliniaItem alternateHandItem = null;
 			if (!classtype.getDefaultAlternateHandMaterial().toUpperCase().equals("NONE"))
@@ -176,6 +182,7 @@ public class SoliniaItemFactory {
 				alternateHandItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.valueOf(classtype.getDefaultAlternateHandMaterial().toUpperCase())));
 				alternateHandItem.setDiscoverer(discoverer);
 				alternateHandItem.setItemType(classtype.getDefaultAlternateHandItemType());
+				alternateHandItem.setAppearanceId(classtype.getAppearanceId());
 			}
 
 			
