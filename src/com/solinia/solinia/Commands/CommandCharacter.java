@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryView;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -143,6 +144,14 @@ public class CommandCharacter implements CommandExecutor {
 							player.sendMessage("You must provide the character UUID");
 							return true;
 						}
+						
+						InventoryView view = player.getOpenInventory();
+
+						if(view == null) {
+							player.sendMessage("Cannot change char when in an inventory");
+						  return true;
+						}
+
 						
 			        	boolean resetLocation2 = true;
 						if (args.length > 2 && (player.isOp() || player.hasPermission("solinia.characterdonochangelocation")))
