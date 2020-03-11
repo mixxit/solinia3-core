@@ -583,6 +583,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("toggleexperience").setExecutor(new CommandToggleExperience());
 		this.getCommand("forename").setExecutor(new CommandForename());
 		this.getCommand("copycharacter").setExecutor(new CommandCopyCharacter());
+		this.getCommand("solplayerinfo").setExecutor(new CommandSolPlayerInfo());
 		this.getCommand("lastname").setExecutor(new CommandLastname());
 		this.getCommand("mana").setExecutor(new CommandMana());
 		this.getCommand("addrace").setExecutor(new CommandAddRace());

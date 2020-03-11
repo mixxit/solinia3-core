@@ -77,6 +77,10 @@ commands:
     description: Copy a players character to another player
     usage: /copycharacter <characteruuid> <playername>
     aliases: []
+  solplayerinfo:
+    description: Lists info about a player
+    usage: /solplayerinfo <playerminecraftuuid>
+    aliases: []
   memorisespell:
     description: Memorises a spell into spell slot
     usage: /memorisespell spellslotnumber spellid
