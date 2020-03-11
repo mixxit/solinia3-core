@@ -2649,7 +2649,7 @@ public class Utils {
 			long updated = 0;
 			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 			{
-				if (!item.isAdditionalArmour())
+				if (!item.isAdditionalArmour() || item.isJewelry())
 					continue;
 				
 				if (item.getAllowedClassNames().size() != 1)
@@ -2678,7 +2678,11 @@ public class Utils {
 					rarityBonus = 5;
 				}
 				
-				item.setAC(SoliniaItemFactory.generateArmourClass(classObj.getACItemBonus(), item.getTier(), rarityBonus));
+				if (item.isAdditionalArmour())
+					item.setAC(SoliniaItemFactory.generateArmourClass(classObj.getACItemBonus(), item.getTier(), rarityBonus));
+				else
+					item.setAC((int)Math.floor(SoliniaItemFactory.generateArmourClass(classObj.getACItemBonus(), item.getTier(), rarityBonus)/2));
+					
 				item.setLastUpdatedTimeNow();
 				updated++;
 			}

@@ -473,8 +473,11 @@ public class SoliniaItemFactory {
 		if (item.isJewelry())
 		{
 			int ac = SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus);
-			ac = (int)Math.floor(ac/2);
-			item.setAC(ac);
+			if (ac > 0)
+			{
+				ac = (int)Math.floor(ac/2);
+				item.setAC(ac);
+			}
 		}
 	}
 
