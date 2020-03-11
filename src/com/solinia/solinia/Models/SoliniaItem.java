@@ -723,7 +723,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage(ChatColor.RED + "Item Settings for " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET + " - minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
-		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET);
+		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET + " tier: " + ChatColor.GOLD + getTier() + ChatColor.RESET);
 		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET + " placeable: " + ChatColor.GOLD + isPlaceable() + ChatColor.RESET);
 		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
@@ -1635,5 +1635,13 @@ public class SoliniaItem implements ISoliniaItem {
 	@Override
 	public void setAppearanceId(int appearanceId) {
 		this.appearanceId = appearanceId;
+	}
+
+	@Override
+	public int getTier() {
+		int tier = (int) Math.floor((this.getMinLevel() / 10)+1);
+		if (tier < 1)
+			tier = 1;
+		return tier;
 	}
 }

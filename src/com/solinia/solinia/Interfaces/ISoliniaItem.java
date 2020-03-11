@@ -361,4 +361,6 @@ public interface ISoliniaItem {
 	int getAppearanceId();
 
 	void setAppearanceId(int appearanceId);
+
+	int getTier();
 }

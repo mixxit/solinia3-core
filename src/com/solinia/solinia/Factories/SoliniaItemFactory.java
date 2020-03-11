@@ -466,7 +466,7 @@ public class SoliniaItemFactory {
 				item.setAC(SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus));
 			}
 		}
-		if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()))
+		if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase()) || item.isAdditionalArmour())
 		{
 			item.setAC(SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus));
 		}
