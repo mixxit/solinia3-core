@@ -2649,7 +2649,7 @@ public class Utils {
 			long updated = 0;
 			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 			{
-				if (!item.isAdditionalArmour() || !item.isJewelry())
+				if (!item.isAdditionalArmour() && !item.isJewelry())
 					continue;
 				
 				if (item.getAllowedClassNames().size() != 1)
