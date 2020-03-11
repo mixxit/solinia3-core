@@ -1313,6 +1313,9 @@ public class SoliniaActiveSpell {
 			return;
 		
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
 
 		try {
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);

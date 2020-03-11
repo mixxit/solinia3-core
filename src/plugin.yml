@@ -151,7 +151,7 @@ commands:
     - bw
   lastname:
     description: Sets player lastname
-    usage: /lastname <lastname>
+    usage: /lastname <lastname> (or type reset to remove)
     aliases: 
     - surname
   solignore:
