@@ -657,6 +657,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		if (!event.getTo().getChunk().isLoaded())
 			return;
+		
 		try {
 			Player player = event.getPlayer();
 			

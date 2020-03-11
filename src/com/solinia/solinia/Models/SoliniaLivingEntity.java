@@ -5802,6 +5802,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public DamageHitInfo meleeMitigation(SoliniaLivingEntity attacker, DamageHitInfo hit) {
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "-------------");
 		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "Melee Mitigation starts with hit: offense " + hit.offense + " damagedone " + hit.damage_done + " base_damage " + hit.base_damage);
 
 		if (hit.damage_done < 0 || hit.base_damage == 0)
@@ -5819,11 +5820,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		int roll = (int) rollD20(hit.offense, mitigation);
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "mitigation dice d20 roll was: " + roll);
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "mitigation dice d20 ( roll was: " + roll + " from offense: "+hit.offense + " and mitigation: " + mitigation);
 
 		// +0.5 for rounding, min to 1 dmg
 		hit.damage_done = Math.max((int) (roll * (double) (hit.base_damage) + 0.5), 1);
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "new damage done is: " + hit.damage_done);
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "new damage done is: " + hit.damage_done + " (this was: roll("+roll+")*basedamage("+hit.base_damage+")+0.5");
 
 		return hit;
 	}
