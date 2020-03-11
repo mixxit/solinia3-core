@@ -42,23 +42,23 @@ public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, Integer> playerLastZoneId = new ConcurrentHashMap<UUID, Integer>();
 	
 	@Override
-	public void setActiveCharacter(Player player, UUID characterId) {
+	public void setActiveCharacter(UUID playerUuid, UUID characterId) {
 		try {
 		
 			try
 			{
-			if (StateManager.getInstance().getConfigurationManager().getPlayerState(player.getUniqueId()) == null)
-				PlayerStateFactory.Create(player.getUniqueId(), characterId);
+			if (StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid) == null)
+				PlayerStateFactory.Create(playerUuid, characterId);
 			
 			} catch (PlayerStateCreationException e2)
 			{
 				
 			}
 		
-			StateManager.getInstance().getConfigurationManager().getPlayerState(player.getUniqueId()).setActiveCharacterId(characterId);
+			StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid).setActiveCharacterId(characterId);
 		
-			SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
-			SoliniaPlayerAdapter.Adapt(player).updateMaxHp();
+			SoliniaPlayerAdapter.Adapt(playerUuid).updateDisplayName();
+			SoliniaPlayerAdapter.Adapt(playerUuid).updateMaxHp();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,28 +67,33 @@ public class PlayerManager implements IPlayerManager {
 	
 	@Override
 	public ISoliniaPlayer getActivePlayer(Player player) {
+		return getActivePlayer(player.getUniqueId());
+	}
+	
+	@Override
+	public ISoliniaPlayer getActivePlayer(UUID playerUuid) {
 		try
 		{
 			try
 			{
-				if (StateManager.getInstance().getConfigurationManager().getPlayerState(player.getUniqueId()) == null)
-					PlayerStateFactory.Create(player.getUniqueId(), null);
+				if (StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid) == null)
+					PlayerStateFactory.Create(playerUuid, null);
 			} catch (PlayerStateCreationException e)
 			{
 				
 			}
 			
-			PlayerState state = StateManager.getInstance().getConfigurationManager().getPlayerState(player.getUniqueId());
+			PlayerState state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid);
 			if (state.getActiveCharacterId() == null)
 			{
-				SoliniaPlayerFactory.CreatePlayer(player);
-				state = StateManager.getInstance().getConfigurationManager().getPlayerState(player.getUniqueId());
+				SoliniaPlayerFactory.CreatePlayer(playerUuid);
+				state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid);
 			}
 			
 			if (StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(state.getActiveCharacterId()) == null)
 			{
-				SoliniaPlayerFactory.CreatePlayer(player);
-				state = StateManager.getInstance().getConfigurationManager().getPlayerState(player.getUniqueId());
+				SoliniaPlayerFactory.CreatePlayer(playerUuid);
+				state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid);
 			}
 			
 			return StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(state.getActiveCharacterId());
@@ -242,7 +247,7 @@ public class PlayerManager implements IPlayerManager {
 			}
 			
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
-			solPlayer = SoliniaPlayerFactory.CreatePlayer(player);
+			solPlayer = SoliniaPlayerFactory.CreatePlayer(player.getUniqueId());
 			player.getInventory().clear();
             player.getInventory().setArmorContents(null);
             player.updateInventory();
@@ -295,7 +300,7 @@ public class PlayerManager implements IPlayerManager {
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
 			
 			// Now clear the player and load the old one
-			setActiveCharacter(player, altSolPlayer.getCharacterId());
+			setActiveCharacter(player.getUniqueId(), altSolPlayer.getCharacterId());
 
 			player.getInventory().clear();
             player.getInventory().setArmorContents(null);

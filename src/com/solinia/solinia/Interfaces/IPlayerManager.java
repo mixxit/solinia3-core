@@ -42,6 +42,7 @@ public interface IPlayerManager {
 	void setPlayerLastZone(Player player, int zoneId);
 	public ISoliniaPlayer getArchivedCharacterByCharacterUUID(UUID characterUuid) throws CoreStateInitException;
 	public ISoliniaPlayer getArchivedCharacterOrActivePlayerByCharacterUUID(UUID newownerCharacterId) throws CoreStateInitException, PlayerDoesNotExistException;
-	void setActiveCharacter(Player player, UUID characterId);
+	void setActiveCharacter(UUID playerUuid, UUID characterId);
 	ISoliniaPlayer getActivePlayer(Player player);
+	ISoliniaPlayer getActivePlayer(UUID playerUUID);
 }

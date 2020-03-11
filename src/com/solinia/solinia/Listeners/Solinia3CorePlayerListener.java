@@ -906,6 +906,19 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (Utils.isInventoryMerchant(event.getInventory())) {
 			onMerchantInventoryClose(event);
 			return;
+		} else {
+			try
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer().getUniqueId());
+				if (solPlayer != null)
+				{
+					solPlayer.storeArmorContents();
+					solPlayer.storeInventoryContents();
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 		}
 	}
 

@@ -21,10 +21,10 @@ import com.solinia.solinia.Utils.PlayerUtils;
 
 public class SoliniaPlayerFactory {
 
-	public static ISoliniaPlayer CreatePlayer(Player player) throws CoreStateInitException {
+	public static ISoliniaPlayer CreatePlayer(UUID playerUuid) throws CoreStateInitException {
 		// A player is different to a players entity
 		ISoliniaPlayer soliniaPlayer = new SoliniaPlayer();
-		soliniaPlayer.setUUID(player.getUniqueId());
+		soliniaPlayer.setUUID(playerUuid);
 		soliniaPlayer.setCharacterId(UUID.randomUUID());
 
 		String forename = getRandomNames(5, 1)[0];
@@ -42,8 +42,8 @@ public class SoliniaPlayerFactory {
 		}
 		
 		StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(soliniaPlayer);
-		StateManager.getInstance().getPlayerManager().setActiveCharacter(player,soliniaPlayer.getCharacterId());
-		soliniaPlayer = SoliniaPlayerAdapter.Adapt(player);
+		StateManager.getInstance().getPlayerManager().setActiveCharacter(playerUuid,soliniaPlayer.getCharacterId());
+		soliniaPlayer = SoliniaPlayerAdapter.Adapt(playerUuid);
 		soliniaPlayer.setExperience(0d);
 		soliniaPlayer.setAAExperience(0d);
 		soliniaPlayer.setMana(0);
@@ -52,7 +52,7 @@ public class SoliniaPlayerFactory {
 		int loottableId = soliniaPlayer.getWorld().getPlayerStartLootTableId();
 		if (loottableId > 0)
 		{
-			dropNewLootItems(player, loottableId);
+			dropNewLootItems(soliniaPlayer.getBukkitPlayer(), loottableId);
 		}
 		
 		return soliniaPlayer;
