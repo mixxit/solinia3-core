@@ -42,6 +42,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 		{
 		
 			Utils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player.getName(),"Debug: Validating player items");
+			
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 			
 			List<Integer> slots = new ArrayList<Integer>();
@@ -248,12 +249,19 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			validateEquipSlot(solplayer, solplayer.getShouldersItem(),solplayer.getShouldersItemInstance(), EquipmentSlot.Shoulders);
 			validateEquipSlot(solplayer, solplayer.getWaistItem(),solplayer.getWaistItemInstance(), EquipmentSlot.Waist);
 
-		
+			backupInventory(solplayer);
+
 		} catch (CoreStateInitException e)
 		{
 			// try next loop
 			return;
 		}
+	}
+
+	private void backupInventory(ISoliniaPlayer solplayer) {
+		solplayer.storeArmorContents();
+		solplayer.storeInventoryContents();
+		solplayer.getBukkitPlayer().sendMessage("Commited your inventory to cache");
 	}
 
 	private void validateEquipSlot(ISoliniaPlayer solPlayer, int itemId, String itemInstance, EquipmentSlot slot) {
