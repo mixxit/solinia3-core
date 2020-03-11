@@ -1914,7 +1914,13 @@ public class SoliniaActiveSpell {
 		if (sourceEntity == null)
 			return;
 		
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+		
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (!(sourceLivingEntity instanceof Player))
+			return;
 
 		try {
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
@@ -1923,7 +1929,7 @@ public class SoliniaActiveSpell {
 				return;
 			}
 			
-			Player player = (Player) sourceSoliniaLivingEntity;
+			Player player = (Player) sourceLivingEntity;
 			
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			if (!solPlayer.hasSufficientBandageReagents(1))
