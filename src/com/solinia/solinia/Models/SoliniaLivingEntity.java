@@ -6098,8 +6098,137 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private int getClassRaceACBonus() {
-		// TODO Class Race Bonus
-		return 1;
+		int ac_bonus = 0;
+		int level = getLevel();
+		
+		if (this.getClassObj() == null)
+			return 0;
+		
+		if (getClassObj().getName().equals("MONK")) 
+		{
+			int hardcap = 30;
+			int softcap = 14;
+			if (level > 99) {
+				hardcap = 58;
+				softcap = 35;
+			}
+			else if (level > 94) {
+				hardcap = 57;
+				softcap = 34;
+			}
+			else if (level > 89) {
+				hardcap = 56;
+				softcap = 33;
+			}
+			else if (level > 84) {
+				hardcap = 55;
+				softcap = 32;
+			}
+			else if (level > 79) {
+				hardcap = 54;
+				softcap = 31;
+			}
+			else if (level > 74) {
+				hardcap = 53;
+				softcap = 30;
+			}
+			else if (level > 69) {
+				hardcap = 53;
+				softcap = 28;
+			}
+			else if (level > 64) {
+				hardcap = 53;
+				softcap = 26;
+			}
+			else if (level > 63) {
+				hardcap = 50;
+				softcap = 24;
+			}
+			else if (level > 61) {
+				hardcap = 47;
+				softcap = 24;
+			}
+			else if (level > 59) {
+				hardcap = 45;
+				softcap = 24;
+			}
+			else if (level > 54) {
+				hardcap = 40;
+				softcap = 20;
+			}
+			else if (level > 50) {
+				hardcap = 38;
+				softcap = 18;
+			}
+			else if (level > 44) {
+				hardcap = 36;
+				softcap = 17;
+			}
+			else if (level > 29) {
+				hardcap = 34;
+				softcap = 16;
+			}
+			else if (level > 14) {
+				hardcap = 32;
+				softcap = 15;
+			}
+			
+			//TODO Item Weight
+			int weight = 1;
+			if (weight < hardcap - 1) {
+				int temp = level + 5;
+				if (weight > softcap) {
+					double redux = (weight - softcap) * 6.66667;
+					redux = (100.0 - Math.min(100.0, redux)) * 0.01;
+					temp = Math.max(0, (int)(temp * redux));
+				}
+				ac_bonus = (4 * temp) / 3;
+			}
+			else if (weight > hardcap + 1) {
+				int temp = level + 5;
+				double multiplier = Math.min(1.0, (weight - (hardcap - 10.0)) / 100.0);
+				temp = (4 * temp) / 3;
+				ac_bonus -= (int)(temp * multiplier);
+			}
+		}
+
+		if (getClassObj().getName().equals("ROGUE")) {
+			int level_scaler = level - 26;
+			if (getAgility() < 80)
+				ac_bonus = level_scaler / 4;
+			else if (getAgility() < 85)
+				ac_bonus = (level_scaler * 2) / 4;
+			else if (getAgility() < 90)
+				ac_bonus = (level_scaler * 3) / 4;
+			else if (getAgility() < 100)
+				ac_bonus = (level_scaler * 4) / 4;
+			else if (getAgility() >= 100)
+				ac_bonus = (level_scaler * 5) / 4;
+			if (ac_bonus > 12)
+				ac_bonus = 12;
+		}
+
+		if (getClassObj().getName().equals("BEASTLORD")) {
+			int level_scaler = level - 6;
+			if (getAgility() < 80)
+				ac_bonus = level_scaler / 5;
+			else if (getAgility() < 85)
+				ac_bonus = (level_scaler * 2) / 5;
+			else if (getAgility() < 90)
+				ac_bonus = (level_scaler * 3) / 5;
+			else if (getAgility() < 100)
+				ac_bonus = (level_scaler * 4) / 5;
+			else if (getAgility() >= 100)
+				ac_bonus = (level_scaler * 5) / 5;
+			if (ac_bonus > 16)
+				ac_bonus = 16;
+		}
+
+		// racial benefit
+		//if (GetRace() == IKSAR)
+		//	ac_bonus += EQEmu::Clamp(static_cast<int>(level), 10, 35);
+
+		return ac_bonus;
 	}
 
 	@Override
