@@ -5876,14 +5876,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public int ACSum() {
 		double ac = 0;
 		ac += getTotalItemAC();
+		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "Start ACSum with totalItemAC " + ac);
 		double shield_ac = 0;
 
 		// EQ math
 		ac = (ac * 4) / 3;
+		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after eq math " + ac);
 		// anti-twink
 		if (isPlayer() && getLevel() < 50)
 			ac = Math.min(ac, 25 + 6 * getLevel());
+
+		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after antitwink" + ac);
+
 		ac = Math.max(0, ac + getClassRaceACBonus());
+		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after raceacbonus" + ac);
 
 		if (isNPC()) {
 			try {
@@ -5929,16 +5935,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			} else {
 				ac += getSkill("DEFENSE") / 3 + spell_aa_ac / 4;
 			}
+
+			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after defense & spellbonus " + ac);
+
 		}
 
 		if (getAgility() > 70)
 			ac += getAgility() / 20;
+		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after agility " + ac);
+
 		if (ac < 0)
 			ac = 0;
 
 		if (isPlayer()) {
 			double softcap = getACSoftcap();
 			double returns = getSoftcapReturns();
+
+			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac softcap " + softcap);
+			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac softcapreturns " + returns);
 
 			// TODO itembonuses
 
@@ -5952,11 +5966,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (total_aclimitmod > 0)
 				softcap = (softcap * (100 + total_aclimitmod)) / 100;
 			softcap += shield_ac;
+
+			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "softcap after aclimitmods and shieldac " + softcap);
+
 			if (ac > softcap) {
 				double over_cap = ac - softcap;
 				ac = softcap + (over_cap * returns);
+				Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac was over softcap, ac now: " + ac);
 			}
 		}
+
+		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "final ac: " + ac);
 		return (int) ac;
 	}
 

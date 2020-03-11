@@ -2644,55 +2644,6 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			long updated = 0;
-			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
-			{
-				if (!item.isAdditionalArmour() && !item.isJewelry())
-					continue;
-				
-				if (item.getAllowedClassNames().size() != 1)
-					continue;
-				
-				ISoliniaClass classObj = StateManager.getInstance().getConfigurationManager().getClassObj(item.getAllowedClassNames().get(0));
-				
-				int rarityBonus = 0;
-				if (item.getDisplayname().startsWith("Uncommon")) {
-					rarityBonus = 1;
-				}
-
-				if (item.getDisplayname().startsWith("Rare")) {
-					rarityBonus = 2;
-				}
-
-				if (item.getDisplayname().startsWith("Legendary")) {
-					rarityBonus = 3;
-				}
-				
-				if (item.getDisplayname().startsWith("Mythical")) {
-					rarityBonus = 4;
-				}
-
-				if (item.getDisplayname().startsWith("Ancient")) {
-					rarityBonus = 5;
-				}
-				
-				if (item.isAdditionalArmour())
-					item.setAC(SoliniaItemFactory.generateArmourClass(classObj.getACItemBonus(), item.getTier(), rarityBonus));
-				else
-					item.setAC((int)Math.floor(SoliniaItemFactory.generateArmourClass(classObj.getACItemBonus(), item.getTier(), rarityBonus)/2));
-					
-				item.setLastUpdatedTimeNow();
-				updated++;
-			}
-			
-			StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
-			System.out.println("Updated items: " + updated);
-		} catch (CoreStateInitException e)
-		{
-			
-		}
 		
 	}
 
