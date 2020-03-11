@@ -73,6 +73,10 @@ commands:
     description: Transfers a character to another player
     usage: /transfercharacter <characteruuid> <playername>
     aliases: []
+  copycharacter:
+    description: Copy a players character to another player
+    usage: /copycharacter <characteruuid> <playername>
+    aliases: []
   memorisespell:
     description: Memorises a spell into spell slot
     usage: /memorisespell spellslotnumber spellid

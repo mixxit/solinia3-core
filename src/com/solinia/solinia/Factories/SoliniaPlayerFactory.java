@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
+import com.google.gson.Gson;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -15,6 +16,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaPlayer;
+import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Utils.PlayerUtils;
 
 public class SoliniaPlayerFactory {
@@ -92,5 +94,42 @@ public class SoliniaPlayerFactory {
 	        list.add(name);
 	    }
 	    return list.toArray(new String[]{});
+	}
+
+	public static SoliniaPlayer CreatePlayerCopy(SoliniaPlayer solPlayerToCopy, UUID uniqueId) {
+		try
+		{
+			Gson gson= new Gson();
+			String tmp = gson.toJson(solPlayerToCopy);
+			SoliniaPlayer obj = gson.fromJson(tmp,SoliniaPlayer.class);
+			obj.setUUID(uniqueId);
+			obj.setCharacterId(UUID.randomUUID());
+			obj.setCharacterFellowshipId(0);
+			
+			String forename = getRandomNames(5, 1)[0];
+			String lastname = "";
+			try {
+				while (StateManager.getInstance().getPlayerManager().IsNewNameValid(forename, lastname) == false) {
+					forename = getRandomNames(5, 1)[0];
+				}
+				
+				obj.setForename(forename);
+				obj.setLastname(lastname);
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+
+			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(obj);
+
+			System.out.println("New Character Copied: " + obj.getCharacterId() + " - " + obj.getFullName());
+			return obj;
+
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return null;
 	}
 }
