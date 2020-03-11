@@ -470,6 +470,12 @@ public class SoliniaItemFactory {
 		{
 			item.setAC(SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus));
 		}
+		if (item.isJewelry())
+		{
+			int ac = SoliniaItemFactory.generateArmourClass(acBonus, tier, rarityBonus);
+			ac = (int)Math.floor(ac/2);
+			item.setAC(ac);
+		}
 	}
 
 	public static int generateArmourClass(int classAcBonus, int armourTier, int rarityBonus) {
