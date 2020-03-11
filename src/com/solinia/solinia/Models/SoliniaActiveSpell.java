@@ -1291,8 +1291,37 @@ public class SoliniaActiveSpell {
 		case Disarm:
 			applyDisarm(spellEffect, soliniaSpell, casterLevel);
 			return;
+		case BindWound:
+			applyBindWound(spellEffect, soliniaSpell, casterLevel);
 		default:
 			return;
+		}
+	}
+	
+	private void applyDisarm(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!isOwnerPlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+		
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.tryDisarm(targetSoliniaLivingEntity);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
 		}
 	}
 
@@ -1877,18 +1906,12 @@ public class SoliniaActiveSpell {
 		}
 	}
 
-	private void applyDisarm(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+	private void applyBindWound(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
 		
 		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
 		if (sourceEntity == null)
-			return;
-
-		if (!(sourceEntity instanceof LivingEntity))
-			return;
-
-		if (!(getLivingEntity() instanceof Creature))
 			return;
 		
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
@@ -1896,9 +1919,52 @@ public class SoliniaActiveSpell {
 		try {
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
 			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
-				sourceSoliniaLivingEntity.tryDisarm(targetSoliniaLivingEntity);
+			if (sourceSoliniaLivingEntity == null || targetSoliniaLivingEntity == null) {
+				return;
 			}
+			
+			Player player = (Player) sourceSoliniaLivingEntity;
+			
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			if (!solPlayer.hasSufficientBandageReagents(1))
+			{
+				player.sendMessage("You do not have enough bandages in your /reagent pouch");
+				return;
+			}
+			
+			LivingEntity targetmob = getLivingEntity();
+			
+			if (targetmob == null)
+			{
+				player.sendMessage("Selecting yourself");
+				solPlayer.setEntityTarget(player);
+				targetmob = player;
+			}
+			
+			if (targetmob instanceof Creature)
+			{
+				if (((Creature)targetmob).getTarget() != null)
+				if (((Creature)targetmob).getTarget().getUniqueId().equals(player.getUniqueId()))
+				{
+					player.sendMessage("You cannot bind wound a mob that is currently trying to attack you! Perhaps you meant to target yourself first? [See keybinds]");
+					return;
+				}
+			}
+			
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(targetmob);
+			if (solLivingEntity == null)
+			{
+				player.sendMessage("You must select a target to bind wound");
+				return;
+			}
+			
+			if (solPlayer.bindWound(solLivingEntity) == true)
+			{
+				// Remove one of the reagents
+				int itemid = solPlayer.getBandageReagents().get(0);
+				solPlayer.reduceReagents(itemid, 1);
+			}
+			
 		} catch (CoreStateInitException e) {
 			// just skip it
 		}

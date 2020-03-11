@@ -1666,6 +1666,10 @@ public class Utils {
 			return 471;
 		case Backstab:
 			return 472;
+		case Disarm:
+			return 473;
+		case BindWound:
+			return 474;
 		default:
 			return -1;
 		}
@@ -2621,6 +2625,8 @@ public class Utils {
 			return SpellEffectType.Backstab;
 		case 473:
 			return SpellEffectType.Disarm;
+		case 474:
+			return SpellEffectType.BindWound;
 		default:
 			return SpellEffectType.ERROR;
 		}

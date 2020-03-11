@@ -180,7 +180,7 @@ public class ItemStackAdapter {
 		
 		if (soliniaItem.isBandage())
 		{
-			loretxt.add(ChatColor.AQUA + "This item can be used to /bindwound" + ChatColor.RESET);
+			loretxt.add(ChatColor.AQUA + "This item can be used with the bindwound ability" + ChatColor.RESET);
 		}
 		
 		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Fingers))
