@@ -38,6 +38,12 @@ public class CommandCharacter implements CommandExecutor {
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 			
+			if (StateManager.getInstance().charChange == false)
+			{
+				sender.sendMessage("This character cannot be used when the server has been set to charchange false (ie a restart is coming)");
+				return true;
+			}
+			
 			if (args.length == 0)
 			{
 				player.sendMessage("Your Characters: ");

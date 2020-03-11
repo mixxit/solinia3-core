@@ -82,6 +82,7 @@ public class CoreState {
 	private Towny towny;
 	public String renderTownsOnDynmap = "";
 	public boolean showSpawns = false;
+	public boolean charChange = true;
 	
 	public String getRequiredModVersion()
 	{

@@ -35,6 +35,15 @@ public class CommandSolinia implements CommandExecutor {
 				}
 			}
 			
+			if (args.length > 0 && args[0].equals("allowcharchange")) {
+				StateManager.getInstance().charChange = true;
+				sender.sendMessage("Charachter Change Set to: " + StateManager.getInstance().charChange);
+			}
+			if (args.length > 0 && args[0].equals("stopcharchange")) {
+				StateManager.getInstance().charChange = false;
+				sender.sendMessage("Charachter Change Set to: " + StateManager.getInstance().charChange);
+			}
+			
 			if (args.length > 0 && args[0].equals("showspawns")) {
 				StateManager.getInstance().toggleShowSpawns();
 				sender.sendMessage("Show spawns set to: " + StateManager.getInstance().showSpawns);
