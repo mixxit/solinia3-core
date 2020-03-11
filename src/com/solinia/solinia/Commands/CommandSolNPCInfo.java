@@ -105,6 +105,7 @@ public class CommandSolNPCInfo implements CommandExecutor {
 					player.sendMessage("Faction: " + metadata);
 				}
 			}
+			
 			player.sendMessage("LISTEFFECTS");
 			if (player instanceof Player) {
 				try {
@@ -124,6 +125,7 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			solLivingEntity.sendHateList(player);
 			player.sendMessage("MINECRAFT AGGRO");
 			player.sendMessage("Minecraft attack target: " + solLivingEntity.getAttackTarget());
+			solLivingEntity.sendStats(player);
 			
 		} catch (CoreStateInitException e)
 		{

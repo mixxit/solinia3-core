@@ -8424,4 +8424,46 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void sendStats(LivingEntity targetMessage) {
+		targetMessage.sendMessage("Level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
+
+		if (getClassObj() != null)
+		{
+			targetMessage.sendMessage("Class: " + ChatColor.GOLD + getClassObj().getName() + ChatColor.RESET);
+		} else {
+			targetMessage.sendMessage("Class: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET);
+		}
+		if (getRace() != null)
+		{
+			targetMessage.sendMessage("Race: " + ChatColor.GOLD + getRace().getName() + ChatColor.RESET);
+		} else {
+			targetMessage.sendMessage("Race: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET);
+		}
+		
+		targetMessage.sendMessage(
+				"STR: " + ChatColor.GOLD + getStrength() + ChatColor.RESET + 
+				" STA: " + ChatColor.GOLD + getStamina() + ChatColor.RESET + 
+				" AGI: " + ChatColor.GOLD + getAgility() + ChatColor.RESET + 
+				" DEX: " + ChatColor.GOLD + getDexterity() + ChatColor.RESET + 
+				" INT: " + ChatColor.GOLD + getIntelligence() + ChatColor.RESET + 
+				" WIS: " + ChatColor.GOLD + getWisdom() + ChatColor.RESET + 
+				" CHA: " + ChatColor.GOLD + getCharisma() + ChatColor.RESET 
+				);
+		targetMessage.sendMessage("Maximum HP of: " + ChatColor.RED + getBukkitLivingEntity().getHealth() + "/" + getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + ChatColor.RESET);
+		targetMessage.sendMessage("Maximum MP of: " + ChatColor.AQUA +getMana() + "/" + getMaxMP() + " (" + getItemMana() + " of this is from items)" + ChatColor.RESET);
+		targetMessage.sendMessage("Armour Class Mitigation of: " + ChatColor.GOLD + getMitigationAC() + ChatColor.RESET);
+		targetMessage.sendMessage("Attack Value of: " + ChatColor.GOLD+ getTotalAtk() + ChatColor.RESET);
+		targetMessage.sendMessage("Attack Speed of: " + ChatColor.GOLD+ getAttackSpeed() + "%" + ChatColor.RESET);
+        targetMessage.sendMessage("MainWeapon Attack Rate (Seconds) of: " + ChatColor.GOLD+ getAutoAttackTimerFrequencySeconds() + ChatColor.RESET);
+        targetMessage.sendMessage("Total Rune of: " + ChatColor.GOLD + getRune() + ChatColor.RESET);
+        targetMessage.sendMessage(
+        		"FR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_FIRE) + ChatColor.RESET + 
+        		" CR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_COLD) + ChatColor.RESET + 
+        		" MR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_MAGIC) + ChatColor.RESET + 
+        		" PR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_POISON) + ChatColor.RESET + 
+        		" DR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_DISEASE) + ChatColor.RESET
+        		);
+	}
 }

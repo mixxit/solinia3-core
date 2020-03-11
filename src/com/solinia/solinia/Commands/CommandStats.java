@@ -4,6 +4,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
@@ -23,45 +24,7 @@ public class CommandStats implements CommandExecutor {
 	            Player player = (Player) sender;
 	            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 	            ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
-
-				player.sendMessage("Level: " + ChatColor.GOLD + solplayer.getLevel() + ChatColor.RESET);
-
-				if (solplayer.getClassObj() != null)
-				{
-					player.sendMessage("Your Class: " + ChatColor.GOLD + solplayer.getClassObj().getName() + ChatColor.RESET);
-				} else {
-					player.sendMessage("Your Class: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET);
-				}
-				if (solplayer.getRace() != null)
-				{
-					player.sendMessage("Your Race: " + ChatColor.GOLD + solplayer.getRace().getName() + ChatColor.RESET);
-				} else {
-					player.sendMessage("Your Race: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET);
-				}
-				
-				player.sendMessage(
-						"STR: " + ChatColor.GOLD + solentity.getStrength() + ChatColor.RESET + 
-						" STA: " + ChatColor.GOLD + solentity.getStamina() + ChatColor.RESET + 
-						" AGI: " + ChatColor.GOLD + solentity.getAgility() + ChatColor.RESET + 
-						" DEX: " + ChatColor.GOLD + solentity.getDexterity() + ChatColor.RESET + 
-						" INT: " + ChatColor.GOLD + solentity.getIntelligence() + ChatColor.RESET + 
-						" WIS: " + ChatColor.GOLD + solentity.getWisdom() + ChatColor.RESET + 
-						" CHA: " + ChatColor.GOLD + solentity.getCharisma() + ChatColor.RESET 
-						);
-	            player.sendMessage("You have a maximum HP of: " + ChatColor.RED + player.getHealth() + "/" + player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + ChatColor.RESET);
-	            player.sendMessage("You have a maximum MP of: " + ChatColor.AQUA +solplayer.getMana() + "/" + solentity.getMaxMP() + " (" + solplayer.getSoliniaLivingEntity().getItemMana() + " of this is from items)" + ChatColor.RESET);
-	            player.sendMessage("You currently have a Armour Class Mitigation of: " + ChatColor.GOLD + solentity.getMitigationAC() + ChatColor.RESET);
-	            player.sendMessage("You currently have a Attack Value of: " + ChatColor.GOLD+ solentity.getTotalAtk() + ChatColor.RESET);
-	            player.sendMessage("You currently have a Attack Speed of: " + ChatColor.GOLD+ solentity.getAttackSpeed() + "%" + ChatColor.RESET);
-	            player.sendMessage("You currently have a MainWeapon Attack Rate (Seconds) of: " + ChatColor.GOLD+ solentity.getAutoAttackTimerFrequencySeconds() + ChatColor.RESET);
-	            player.sendMessage("You currently have a Total Rune of: " + ChatColor.GOLD + solentity.getRune() + ChatColor.RESET);
-	            player.sendMessage(
-	            		"FR: " + ChatColor.GOLD + solplayer.getResist(SpellResistType.RESIST_FIRE) + ChatColor.RESET + 
-	            		" CR: " + ChatColor.GOLD + solplayer.getResist(SpellResistType.RESIST_COLD) + ChatColor.RESET + 
-	            		" MR: " + ChatColor.GOLD + solplayer.getResist(SpellResistType.RESIST_MAGIC) + ChatColor.RESET + 
-	            		" PR: " + ChatColor.GOLD + solplayer.getResist(SpellResistType.RESIST_POISON) + ChatColor.RESET + 
-	            		" DR: " + ChatColor.GOLD + solplayer.getResist(SpellResistType.RESIST_DISEASE) + ChatColor.RESET
-	            		);
+	            solentity.sendStats((LivingEntity)player);
 
 	            Double newlevel = (double) solplayer.getLevel();
 	            Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));

@@ -424,4 +424,6 @@ public interface ISoliniaLivingEntity
 	public void resetReverseAggro();
 
 	int getTotalAtk();
+
+	public void sendStats(LivingEntity player);
 }
