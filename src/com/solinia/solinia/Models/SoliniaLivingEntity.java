@@ -8465,5 +8465,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
         		" PR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_POISON) + ChatColor.RESET + 
         		" DR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_DISEASE) + ChatColor.RESET
         		);
+        
+        ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+        String skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillname();
+        targetMessage.sendMessage("Skill of Held Item: " + skill);
+        targetMessage.sendMessage("DEBUG: tohit: " + this.computeToHit(skill) + " / " + this.getTotalToHit(skill, 0));
+        targetMessage.sendMessage("DEBUG: Offense: " + this.getOffense(skill) + " | Item: " + 0 /*todo itembonuses for atk*/ + " ~Used: " + (0 /*todo itembonuses for atk*/ * 1.342) + " | Spell: " + getSpellBonuses(SpellEffectType.ATK));
+        targetMessage.sendMessage("DEBUG: mitigation AC: " + this.getMitigationAC());
 	}
 }
