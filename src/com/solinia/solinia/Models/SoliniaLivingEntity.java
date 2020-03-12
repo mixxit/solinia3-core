@@ -3195,17 +3195,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getOffense starts for " + skillname);
 		int offense = getSkill(skillname);
 		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getSkill value found " + offense);
-		int stat_bonus = 0;
+		int stat_bonus = getStrength();
 		if (skillname.equals("ARCHERY") || skillname.equals("THROWING"))
 		{
 			stat_bonus = getDexterity();
 			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"Using dexterity value for stat bonus " + stat_bonus);
 		}
-		else
-		{
-			stat_bonus = getStrength();
-			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"Using strength value for stat bonus " + stat_bonus);
-		}
+		
 		if (stat_bonus >= 75)
 		{
 			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " was found to be greater than 75 so capping");
@@ -3214,7 +3210,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// TODO do ATTK
-		int attk = getTotalAtk();
+		int attk = getAtk();
 		offense += attk;
 		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " added attk (" +attk + ") to offense - final offense value is: " + offense);
 		return offense;
@@ -3429,7 +3425,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int getDefenseByDefenseSkill() {
+	public int computeDefense() {
 		double defense = getSkill("DEFENSE") * 400 / 225;
 		defense += (8000 * (getAgility() - 40)) / 36000;
 
@@ -3500,7 +3496,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getTotalDefense() {
-		double avoidance = getDefenseByDefenseSkill() + 10;
+		double avoidance = computeDefense() + 10;
 
 		int evasion_bonus = getSpellBonuses(SpellEffectType.AvoidMeleeChance);
 
@@ -8471,6 +8467,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
         targetMessage.sendMessage("Skill of Held Item: " + skill);
         targetMessage.sendMessage("DEBUG: tohit: " + this.computeToHit(skill) + " / " + this.getTotalToHit(skill, 0));
         targetMessage.sendMessage("DEBUG: Offense: " + this.getOffense(skill) + " | Item: " + 0 /*todo itembonuses for atk*/ + " ~Used: " + (0 /*todo itembonuses for atk*/ * 1.342) + " | Spell: " + getSpellBonuses(SpellEffectType.ATK));
+        targetMessage.sendMessage("DEBUG: ATK: " + this.getAtk());
         targetMessage.sendMessage("DEBUG: mitigation AC: " + this.getMitigationAC());
+        targetMessage.sendMessage("DEBUG: defense: " + this.computeDefense() + "/" + this.getTotalDefense() + " Spell: " + getSpellBonuses(SpellEffectType.ArmorClass) );
 	}
 }

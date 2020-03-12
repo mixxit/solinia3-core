@@ -109,7 +109,7 @@ public interface ISoliniaLivingEntity
 
 	int getTotalDefense();
 
-	int getDefenseByDefenseSkill();
+	int computeDefense();
 
 	boolean isBerserk();
 
