@@ -3268,7 +3268,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO, find a place for this base value, possibly on race?
 		int ATK = 0;
 		// this is from the bot code..
-		return ATK + attackItemBonuses + attackSpellBonsues + ((getStrength() + getSkill("OFFENSE")) * 9 / 10);
+		return ATK + attackItemBonuses + attackSpellBonsues; // todo AA bonuses;
 	}
 	
 	@Override
