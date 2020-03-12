@@ -1671,6 +1671,22 @@ public class Utils {
 			return 473;
 		case BindWound:
 			return 474;
+		case Kick:
+			return 475;
+		case Mend:
+			return 476;
+		case RoundKick:
+			return 477;
+		case TigerClaw:
+			return 478;
+		case Intimidation:
+			return 479;
+		case EagleStrike:
+			return 480;
+		case DragonPunch:
+			return 481;
+		case FlyingKick:
+			return 482;
 		default:
 			return -1;
 		}
@@ -2628,6 +2644,22 @@ public class Utils {
 			return SpellEffectType.Disarm;
 		case 474:
 			return SpellEffectType.BindWound;
+		case 475:
+			return SpellEffectType.Kick;
+		case 476:
+			return SpellEffectType.Mend;
+		case 477:
+			return SpellEffectType.RoundKick;
+		case 478:
+			return SpellEffectType.TigerClaw;
+		case 479:
+			return SpellEffectType.Intimidation;
+		case 480:
+			return SpellEffectType.EagleStrike;
+		case 481:
+			return SpellEffectType.DragonPunch;
+		case 482:
+			return SpellEffectType.FlyingKick;
 		default:
 			return SpellEffectType.ERROR;
 		}
