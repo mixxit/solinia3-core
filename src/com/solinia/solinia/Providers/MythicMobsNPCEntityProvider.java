@@ -247,6 +247,12 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		if (item.getDamage() > 0) {
 			customitem += "  Damage: " + item.getDamage() + "\r" + System.lineSeparator();
 		}
+		
+		// Appearance
+		customitem += "  NBT:\r" + System.lineSeparator();
+		customitem += "    PublicBukkitValues:\r" + System.lineSeparator();
+		customitem += "      solinia3core:appearanceid: "+item.getAppearanceId()+"\r" + System.lineSeparator();
+		
 		customitem += "  Enchantments:\r" + System.lineSeparator();
 		customitem += "    DURABILITY: " + (1000 + item.getId()) + "\r" + System.lineSeparator();
 		return customitem;
