@@ -3118,6 +3118,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 		case "skill":
 			this.setSkill(Integer.parseInt(value));
 			break;
+		case "clearspellclass":
+			this.allowedClasses = new ArrayList<SoliniaSpellClass>();
+			break;
 		case "addspellclass":
 			try {
 				String[] spellclassdata = value.split(",");
@@ -3156,7 +3159,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		default:
 			throw new InvalidSpellSettingException(
-					"Invalid Spell setting. Valid Options are: name, teleportzone, effect, castonyou, castonother, spelleffectindex, duration, mana, componentsX, componentscountX, addspellclass");
+					"Invalid Spell setting. Valid Options are: name, teleportzone, effect, castonyou, castonother, spelleffectindex, duration, mana, componentsX, componentscountX, addspellclass, clearspellclass");
 		}
 
 		StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
