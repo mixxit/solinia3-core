@@ -4229,7 +4229,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 
 		if (!solSource.isNPC() && solTarget.isImmuneToSpell(soliniaSpell)) {
-			source.sendMessage(ChatColor.RED + "Your target cannot be affected (with this spell)");
+			source.sendMessage(ChatColor.RED + "Your target cannot be affected (with this spell) [Spell has maxlevel or effect already]");
 			return false;
 		}
 
