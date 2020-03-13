@@ -39,7 +39,7 @@ import net.minecraft.server.v1_14_R1.NBTTagCompound;
 
 public class ItemStackUtils {
 	
-	public static int getWeaponDamage(ItemStack itemStack, EnumItemSlot itemSlot) {
+	public static int getWeaponDamageFromItemStack(ItemStack itemStack, EnumItemSlot itemSlot) {
         double attackDamage = 1.0;
         UUID uuid = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
         net.minecraft.server.v1_14_R1.ItemStack craftItemStack = CraftItemStack.asNMSCopy(itemStack);

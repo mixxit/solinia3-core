@@ -1541,7 +1541,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return false;
 	}
 
-	// This is known as Client::Attack
+	// This might be Client::Attack
 	@Override
 	public int AttackWithMainHand(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage) {
 		try {
@@ -1616,7 +1616,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
 
-		DamageHitInfo my_hit = this.GetHitInfo(weapon, baseDamage, arrowHit, defender);
+		DamageHitInfo my_hit = this.GetHitInfo(weapon, arrowHit, defender);
 
 		///////////////////////////////////////////////////////////
 		////// Send Attack Damage
@@ -1883,9 +1883,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private void TryDualWield(LivingEntity attackerEntity, ISoliniaLivingEntity defender) {
 		if (getDualWieldCheck() && !attackerEntity.isDead() && !defender.getBukkitLivingEntity().isDead()) {
 			ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
-			int baseDamage2 = (int) ItemStackUtils.getWeaponDamage(weapon2, EnumItemSlot.OFFHAND);
-
-			DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, baseDamage2, false, defender);
+			int baseDamage2 = (int) ItemStackUtils.getWeaponDamageFromItemStack(weapon2, EnumItemSlot.OFFHAND);
+			
+			DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, false, defender);
 
 			final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
 			final UUID attackerUUID = this.getBukkitLivingEntity().getUniqueId();
@@ -2045,10 +2045,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
-	private DamageHitInfo GetHitInfo(ItemStack weapon, int baseDamage, boolean arrowHit,
+	private DamageHitInfo GetHitInfo(ItemStack weapon, boolean arrowHit,
 			ISoliniaLivingEntity defender) {
 		
-		Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo starts with baseDamage: " + baseDamage + " arrowHit: " + arrowHit);
+		Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo starts with arrowHit: " + arrowHit);
 		DamageHitInfo my_hit = new DamageHitInfo();
 		my_hit.skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillname();
 		if (arrowHit) {
@@ -2062,7 +2062,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		//getLevel();
 		int hate = 0;
 
-		my_hit.base_damage = baseDamage;
+		my_hit.base_damage = getWeaponDamage(defender, weapon, hate);
+		
 		Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo base damage: " + my_hit.base_damage);
 		// amount of hate is based on the damage done
 		if (hate == 0 && my_hit.base_damage > 1)
