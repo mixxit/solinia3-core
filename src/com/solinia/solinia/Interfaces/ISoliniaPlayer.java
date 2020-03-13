@@ -619,4 +619,6 @@ public interface ISoliniaPlayer extends Serializable {
 	void setCharacterFellowshipId(int characterFellowshipId);
 
 	public void grantFellowshipXPBonusToFellowship(Double experience);
+
+	boolean hasReagents(ISoliniaSpell spell, Player player);
 }

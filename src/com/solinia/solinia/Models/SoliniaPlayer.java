@@ -1112,6 +1112,103 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		setMana(currentmana);
 	}
+	
+	@Override
+	public void tryCastFromMemorySlot(int slotId) {
+		try {
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+					"Trying to cast from item in memory slot: " + slotId);
+			int spellId = this.getMemorisedSpellSlot(slotId);
+			if (spellId < 1) {
+				return;
+			}
+			
+			if (this.isMezzed())
+			{
+				getBukkitPlayer().sendMessage("* You cannot cast while mezzed!");
+				return;
+			}
+			
+			if (this.isStunned())
+			{
+				getBukkitPlayer().sendMessage("* You cannot cast while stunned!");
+				return;
+			}
+
+			if (!getMemorisedSpellSlots().getAllSpellIds().contains(spellId)) {
+				Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+						"Spell not in spellbook");
+				getBukkitPlayer().sendMessage("* This spell is no longer in your spellbook");
+				return;
+			}
+
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+					"SoliniaSpell in slot: " + spellId + " target status: " + (getEntityTarget() == null));
+
+			// Some spells auto target self, if they don't have a target try to do that
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+			if (spell != null) {
+				this.tryForceTargetIfNeededForSpell(spell);
+
+				if (getEntityTarget() == null) {
+					if (!tryFixSpellTarget(spell)) {
+						getBukkitPlayer().sendMessage("* You must select a target [See keybinds]");
+						return;
+					}
+				}
+			}
+			
+			if (!this.hasReagents(spell,getBukkitPlayer()))
+				return;
+			
+			// Special check for ability Bind Wound
+			if (spell.getSpellEffectTypes().contains(SpellEffectType.BindWound)) {
+				if (!hasSufficientBandageReagents(1))
+				{
+					this.getBukkitPlayer().sendMessage("You do not have enough bandages in your /reagent pouch");
+					return;
+				}
+			}
+
+			if (getEntityTarget() == null) {
+				getBukkitPlayer().sendMessage("* You must select a target [See keybinds]");
+				return;
+			}
+
+			// Reroute action depending on target
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
+			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
+				return;
+			}
+
+			if (!spell.getRequiresPermissionNode().equals("")) {
+				if (!getBukkitPlayer().hasPermission(spell.getRequiresPermissionNode())) {
+					getBukkitPlayer().sendMessage("This requires a permission node you do not have");
+					return;
+				}
+			}
+
+			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
+					spell.getId()) != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+						.getEntitySpellCooldown(getBukkitPlayer(), spell.getId());
+
+				if (expiretimestamp != null)
+					if (!nowtimestamp.after(expiretimestamp)) {
+						getBukkitPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName()
+								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+						return;
+					}
+			}
+
+			startCasting(spell, getBukkitPlayer(), true, true, false, "");
+		} catch (CoreStateInitException e) {
+
+		}
+	}
 
 	@Override
 	public void tryCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents,
@@ -1238,90 +1335,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 	}
 
-	@Override
-	public void tryCastFromMemorySlot(int slotId) {
-		try {
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
-					"Trying to cast from item in memory slot: " + slotId);
-			int spellId = this.getMemorisedSpellSlot(slotId);
-			if (spellId < 1) {
-				return;
-			}
-			
-			if (this.isMezzed())
-			{
-				getBukkitPlayer().sendMessage("* You cannot cast while mezzed!");
-				return;
-			}
-			
-			if (this.isStunned())
-			{
-				getBukkitPlayer().sendMessage("* You cannot cast while stunned!");
-				return;
-			}
-
-			if (!getMemorisedSpellSlots().getAllSpellIds().contains(spellId)) {
-				Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
-						"Spell not in spellbook");
-				getBukkitPlayer().sendMessage("* This spell is no longer in your spellbook");
-				return;
-			}
-
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
-					"SoliniaSpell in slot: " + spellId + " target status: " + (getEntityTarget() == null));
-
-			// Some spells auto target self, if they don't have a target try to do that
-			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
-			if (spell != null) {
-				this.tryForceTargetIfNeededForSpell(spell);
-
-				if (getEntityTarget() == null) {
-					if (!tryFixSpellTarget(spell)) {
-						getBukkitPlayer().sendMessage("* You must select a target [See keybinds]");
-						return;
-					}
-				}
-			}
-
-			if (getEntityTarget() == null) {
-				getBukkitPlayer().sendMessage("* You must select a target [See keybinds]");
-				return;
-			}
-
-			// Reroute action depending on target
-			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
-			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
-				getBukkitPlayer().sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
-				return;
-			}
-
-			if (!spell.getRequiresPermissionNode().equals("")) {
-				if (!getBukkitPlayer().hasPermission(spell.getRequiresPermissionNode())) {
-					getBukkitPlayer().sendMessage("This requires a permission node you do not have");
-					return;
-				}
-			}
-
-			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
-					spell.getId()) != null) {
-				LocalDateTime datetime = LocalDateTime.now();
-				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
-						.getEntitySpellCooldown(getBukkitPlayer(), spell.getId());
-
-				if (expiretimestamp != null)
-					if (!nowtimestamp.after(expiretimestamp)) {
-						getBukkitPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName()
-								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
-						return;
-					}
-			}
-
-			startCasting(spell, getBukkitPlayer(), true, true, false, "");
-		} catch (CoreStateInitException e) {
-
-		}
-	}
+	
 
 	@Override
 	public void tryThrowItemInMainHand(Cancellable cancellableEvent) {
@@ -1822,65 +1836,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			if (!spell.isBardSong() && useReagents) {
-				if (spell.getComponents1() > 0) {
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-							.getItem(spell.getComponents1());
-					if (item == null || !item.isReagent()) {
-						player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
-								+ spell.getId() + "-ID" + spell.getComponents1());
-						return;
-					}
-					if (!solPlayer.hasSufficientReagents(spell.getComponents1(), spell.getComponentCounts1())) {
-						player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
-						return;
-					}
-				}
-
-				if (spell.getComponents2() > 0) {
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-							.getItem(spell.getComponents2());
-					if (item == null || !item.isReagent()) {
-						player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
-								+ spell.getId() + "-ID" + spell.getComponents2());
-						return;
-					}
-					if (!solPlayer.hasSufficientReagents(spell.getComponents2(), spell.getComponentCounts2())) {
-						player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
-						return;
-					}
-				}
-
-				if (spell.getComponents3() > 0) {
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-							.getItem(spell.getComponents3());
-					if (item == null || !item.isReagent()) {
-						player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
-								+ spell.getId() + "-ID" + spell.getComponents3());
-						return;
-					}
-					if (!solPlayer.hasSufficientReagents(spell.getComponents3(), spell.getComponentCounts3())) {
-						player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
-						return;
-					}
-				}
-
-				if (spell.getComponents4() > 0) {
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-							.getItem(spell.getComponents4());
-					if (item == null || !item.isReagent()) {
-						player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
-								+ spell.getId() + "-ID" + spell.getComponents4());
-						return;
-					}
-					if (!solPlayer.hasSufficientReagents(spell.getComponents4(), spell.getComponentCounts4())) {
-						player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
-						return;
-					}
-				}
+				if (hasReagents(spell,player))
+					return;
 			}
 		} catch (CoreStateInitException e) {
 			return;
@@ -1900,6 +1857,78 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 				return;
 			}
+	}
+	
+	@Override
+	public boolean hasReagents(ISoliniaSpell spell, Player player)
+	{
+		try
+		{
+			if (spell.getComponents1() > 0) {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(spell.getComponents1());
+				if (item == null || !item.isReagent()) {
+					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+							+ spell.getId() + "-ID" + spell.getComponents1());
+					return false;
+				}
+				if (!solPlayer.hasSufficientReagents(spell.getComponents1(), spell.getComponentCounts1())) {
+					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					return false;
+				}
+			}
+	
+			if (spell.getComponents2() > 0) {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(spell.getComponents2());
+				if (item == null || !item.isReagent()) {
+					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+							+ spell.getId() + "-ID" + spell.getComponents2());
+					return false;
+				}
+				if (!solPlayer.hasSufficientReagents(spell.getComponents2(), spell.getComponentCounts2())) {
+					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					return false;
+				}
+			}
+	
+			if (spell.getComponents3() > 0) {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(spell.getComponents3());
+				if (item == null || !item.isReagent()) {
+					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+							+ spell.getId() + "-ID" + spell.getComponents3());
+					return false;
+				}
+				if (!solPlayer.hasSufficientReagents(spell.getComponents3(), spell.getComponentCounts3())) {
+					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					return false;
+				}
+			}
+	
+			if (spell.getComponents4() > 0) {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+						.getItem(spell.getComponents4());
+				if (item == null || !item.isReagent()) {
+					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+							+ spell.getId() + "-ID" + spell.getComponents4());
+					return false;
+				}
+				if (!solPlayer.hasSufficientReagents(spell.getComponents4(), spell.getComponentCounts4())) {
+					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					return false;
+				}
+			}
+			
+			return true;
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
 	}
 
 	@Override
