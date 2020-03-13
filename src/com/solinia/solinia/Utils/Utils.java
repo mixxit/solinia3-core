@@ -130,6 +130,8 @@ public class Utils {
 	public static final double MaxRangeForExperience = 100;
 
 	public static final int HIGHESTSKILL = 255;
+
+	public static final int PetAttackMagicLevel = 11;
 	
 	public static int GetLocalSayRange(String worldName)
 	{
@@ -474,6 +476,16 @@ public class Utils {
 		return false;
 	}
 
+	public static boolean Roll(int chance)
+	{
+		return Utils.RandomBetween(0, 100) < chance;
+	}
+	
+	public static boolean Roll(float chance)
+	{
+		return ((float)Utils.RandomBetween(0, 100)) < chance;
+	}
+	
 	public static int RandomBetween(int minnumber, int maxnumber) {
 		Random r = new Random();
 		return r.nextInt((maxnumber - minnumber) + 1) + minnumber;

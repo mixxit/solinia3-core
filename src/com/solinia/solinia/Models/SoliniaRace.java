@@ -27,6 +27,7 @@ public class SoliniaRace implements ISoliniaRace {
 	private int wisdom = 1;
 	private int intelligence = 1;
 	private int charisma = 1;
+	private int bodyType = 1;
 	
 	private String description = "";
 	private String alignment = "NEUTRAL";
@@ -150,6 +151,7 @@ public class SoliniaRace implements ISoliniaRace {
 		sender.sendMessage("- shortname: " + ChatColor.GOLD + getShortName() + ChatColor.RESET);
 		sender.sendMessage("- description: " + ChatColor.GOLD + getDescription() + ChatColor.RESET);
 		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
+		sender.sendMessage("- bodytype: " + ChatColor.GOLD + getBodyType() + ChatColor.RESET);
 		sender.sendMessage("- vampire: " + ChatColor.GOLD + isVampire() + ChatColor.RESET);
 		sender.sendMessage("- admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
 		if (getPassiveAbilityId() != 0) {
@@ -198,6 +200,9 @@ public class SoliniaRace implements ISoliniaRace {
 			break;
 		case "admin":
 			setAdmin(Boolean.parseBoolean(value));
+			break;
+		case "bodytype":
+			setBodyType(Integer.parseInt(value));
 			break;
 		case "alignment":
 			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
@@ -292,6 +297,16 @@ public class SoliniaRace implements ISoliniaRace {
 	@Override
 	public void setPassiveAbilityId(int passiveAbilityId) {
 		this.passiveAbilityId = passiveAbilityId;
+	}
+
+	@Override
+	public int getBodyType() {
+		return bodyType;
+	}
+
+	@Override
+	public void setBodyType(int bodyType) {
+		this.bodyType = bodyType;
 	}
 
 }

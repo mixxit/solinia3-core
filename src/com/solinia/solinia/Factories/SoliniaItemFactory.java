@@ -95,7 +95,7 @@ public class SoliniaItemFactory {
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(originalItem.getDisplayname());
 		item.setEquipmentSlot(originalItem.getEquipmentSlot());
-		item.setDamage(originalItem.getDamage());
+		item.setDefinedItemDamage(originalItem.getDefinedItemDamage());
 		item.setAC(originalItem.getAC());
 		item.setLastUpdatedTimeNow();
 		item.setItemType(originalItem.getItemType());
@@ -454,7 +454,7 @@ public class SoliniaItemFactory {
 				if (itemType.equals(ItemType.TwoHandBlunt) || itemType.equals(ItemType.TwoHandPiercing) || itemType.equals(ItemType.TwoHandSlashing) )
 					damage = damage*2;
 				
-				item.setDamage(damage);
+				item.setDefinedItemDamage(damage);
 				
 				int delay = (item.getWeaponDelay() - delayBonus);
 				if (itemType.equals(ItemType.TwoHandBlunt) || itemType.equals(ItemType.TwoHandPiercing) || itemType.equals(ItemType.TwoHandSlashing) )

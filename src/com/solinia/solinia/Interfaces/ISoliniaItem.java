@@ -75,9 +75,9 @@ public interface ISoliniaItem {
 
 	void setTexturebase64(String texturebase64);
 
-	int getDamage();
+	int getDefinedItemDamage();
 
-	void setDamage(int damage);
+	void setDefinedItemDamage(int damage);
 
 	int getWeaponabilityid();
 
@@ -363,4 +363,45 @@ public interface ISoliniaItem {
 	void setAppearanceId(int appearanceId);
 
 	int getTier();
+
+	boolean isMagic();
+
+	void setMagic(boolean magic);
+
+	boolean isItemMagical(ItemStack itemStack);
+
+	boolean isEquipable(ISoliniaRace race, ISoliniaClass classObj);
+
+	int getItemWeaponDamage(boolean checkAugmentations, ItemStack itemStack);
+
+	int getItemElementalFlag(boolean checkAugmentations, ItemStack itemStack);
+
+	int getElementalDamageType();
+
+	void setElementalDamageType(int elementalDamageType);
+
+	ISoliniaItem getAugmentation(ItemStack itemStack);
+
+	int getItemElementalDamage(int magic, int fire, int cold, int poison, int disease, int chromatic, int prismatic,
+			int physical, int corruption, boolean augments, ItemStack itemStack);
+
+	int getElementalDamageAmount();
+
+	void setElementalDamageAmount(int elementalDamageAmount);
+
+	int getItemBaneDamageBody(int bodyType, boolean augmentations, ItemStack itemStack);
+
+	int getItemBaneDamageRace(ISoliniaRace race, boolean augmentations, ItemStack itemStack);
+
+	int getItemBaneDamageBody(boolean augmentations, ItemStack itemStack);
+
+	int getItemBaneDamageRace(boolean augmentations, ItemStack itemStack);
+
+	int getBaneDmgBody();
+
+	int getBaneDmgRace();
+
+	int getBaneDmgBodyAmount();
+
+	int getBaneDmgRaceAmount();
 }

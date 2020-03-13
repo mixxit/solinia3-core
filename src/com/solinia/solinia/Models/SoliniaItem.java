@@ -77,6 +77,9 @@ public class SoliniaItem implements ISoliniaItem {
 	private int magicResist = 0;
 	private int poisonResist = 0;
 	private int diseaseResist = 0;
+	private boolean magic = false;
+	private int elementalDamageType = 0;
+	private int elementalDamageAmount = 0;
 	private boolean spellscroll = false;
 	private short color;
 	private int dye;
@@ -126,6 +129,11 @@ public class SoliniaItem implements ISoliniaItem {
 	private int QuestId = 0;
 	
 	private int appearanceId = 0;
+	
+	private int baneDmgBody = 0;
+	private int baneDmgRace = 0;
+	private int baneDmgBodyAmount = 0;
+	private int baneDmgRaceAmount = 0;
 	
 	@Override
 	public ItemStack asItemStack() {
@@ -283,12 +291,12 @@ public class SoliniaItem implements ISoliniaItem {
 	}
 
 	@Override
-	public int getDamage() {
+	public int getDefinedItemDamage() {
 		return damage;
 	}
 
 	@Override
-	public void setDamage(int damage) {
+	public void setDefinedItemDamage(int damage) {
 		this.damage = damage;
 	}
 
@@ -530,14 +538,14 @@ public class SoliniaItem implements ISoliniaItem {
 			{
 				if (target.isNPC())
 					target.addToHateList(player.getUniqueId(), 1, false);
-				player.sendMessage("You throw a " + getDisplayname() + " for [" + getDamage() + "] damage");
+				player.sendMessage("You throw a " + getDisplayname() + " for [" + getItemWeaponDamage(false, null) + "] damage");
 
 				EntityDamageSource source = new EntityDamageSource("thorns",
 						((CraftEntity) Bukkit.getEntity(player.getUniqueId())).getHandle());
 				source.sweep();
 				source.ignoresArmor();
 				
-				((CraftEntity) targetentity).getHandle().damageEntity(source, getDamage());
+				((CraftEntity) targetentity).getHandle().damageEntity(source, getItemWeaponDamage(false, null));
 				return true;
 			}
 			
@@ -746,7 +754,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpregen() + ChatColor.RESET + " mpregen: " + ChatColor.GOLD + getMpregen() + ChatColor.RESET);
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
-		sender.sendMessage("- damage: " + ChatColor.GOLD + getDamage() + ChatColor.RESET + " weapondelay: " + ChatColor.GOLD + getWeaponDelay() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
+		sender.sendMessage("- damage: " + ChatColor.GOLD + getDefinedItemDamage() + ChatColor.RESET + " weapondelay: " + ChatColor.GOLD + getWeaponDelay() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET + " - weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
 		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + "%" + ChatColor.RESET);
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET +
@@ -884,7 +892,7 @@ public class SoliniaItem implements ISoliniaItem {
 			setBandage(Boolean.parseBoolean(value));
 			break;
 		case "damage":
-			setDamage(Integer.parseInt(value));
+			setDefinedItemDamage(Integer.parseInt(value));
 			break;
 		case "leatherrgbdecimal":
 			setLeatherRgbDecimal(Integer.parseInt(value));
@@ -1643,5 +1651,264 @@ public class SoliniaItem implements ISoliniaItem {
 		if (tier < 1)
 			tier = 1;
 		return tier;
+	}
+
+	@Override
+	public boolean isMagic() {
+		return magic;
+	}
+	
+	
+	@Override
+	public boolean isItemMagical(ItemStack itemStack)
+	{
+		if (isMagic())
+			return true;
+		
+		if (itemStack != null)
+		{
+			Integer augItemId = ItemStackUtils.getAugmentationItemId(itemStack);
+			if (augItemId != null
+					&& augItemId != 0) 
+			{
+				try
+				{
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(augItemId);
+					if (item != null && item.isMagic())
+						return true;
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public void setMagic(boolean magic) {
+		this.magic = magic;
+	}
+
+	@Override
+	public boolean isEquipable(ISoliniaRace race, ISoliniaClass classObj) {
+		if (getAllowedClassNames() != null && getAllowedClassNames().size() > 0)
+			if (!getAllowedClassNames().contains(classObj.getName().toUpperCase())) {
+				return false;
+			}
+
+		if (getAllowedRaceNames() != null && getAllowedRaceNames().size() > 0)
+			if (!getAllowedRaceNames().contains(race.getName().toUpperCase())) {
+				return false;
+			}
+		
+		return true;
+	}
+	
+	@Override
+	public ISoliniaItem getAugmentation(ItemStack itemStack)
+	{
+		if (itemStack == null)
+			return null;
+		
+		Integer augItemId = ItemStackUtils.getAugmentationItemId(itemStack);
+
+		if (augItemId != null && augItemId != 0) {
+			try
+			{
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(augItemId);
+				return item;
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public int getItemElementalFlag(boolean checkAugmentations, ItemStack itemStack) {
+		int elementalDamageType = this.getElementalDamageType();
+		
+		if (checkAugmentations && itemStack != null)
+		if (getAugmentation(itemStack) != null)
+		{
+			int elementalDamageTypeAug = getAugmentation(itemStack).getElementalDamageType();
+			if (elementalDamageTypeAug > 0)
+				return elementalDamageTypeAug;
+		}
+		return elementalDamageType;
+	}
+
+	@Override
+	public int getItemWeaponDamage(boolean checkAugmentations, ItemStack itemStack) {
+		int damage = this.getDefinedItemDamage();
+		if (checkAugmentations && itemStack != null)
+		if (getAugmentation(itemStack) != null)
+		{
+			damage += getAugmentation(itemStack).getDefinedItemDamage();
+		}
+		return damage;
+	}
+
+	@Override
+	public int getElementalDamageType() {
+		return elementalDamageType;
+	}
+
+	@Override
+	public void setElementalDamageType(int elementalDamageType) {
+		this.elementalDamageType = elementalDamageType;
+	}
+
+	@Override
+	public int getItemElementalDamage(int magic, int fire, int cold, int poison, int disease, int chromatic,
+			int prismatic, int physical, int corruption, boolean augments, ItemStack itemStack) {
+		
+		switch (Utils.getSpellResistType(this.elementalDamageType)) {
+		case RESIST_MAGIC:
+			magic += this.getElementalDamageAmount();
+			break;
+		case RESIST_FIRE:
+			fire += this.getElementalDamageAmount();
+			break;
+		case RESIST_COLD:
+			cold += this.getElementalDamageAmount();
+			break;
+		case RESIST_POISON:
+			poison += this.getElementalDamageAmount();
+			break;
+		case RESIST_DISEASE:
+			disease += this.getElementalDamageAmount();
+			break;
+		case RESIST_CHROMATIC:
+			chromatic += this.getElementalDamageAmount();
+			break;
+		case RESIST_PRISMATIC:
+			prismatic += this.getElementalDamageAmount();
+			break;
+		case RESIST_PHYSICAL:
+			physical += this.getElementalDamageAmount();
+			break;
+		case RESIST_CORRUPTION:
+			corruption += this.getElementalDamageAmount();
+			break;
+		default:
+			break;
+		}
+
+		if (augments)
+			if (getAugmentation(itemStack) != null)
+				getAugmentation(itemStack).getItemElementalDamage(magic, fire, cold, poison, disease, chromatic, prismatic, physical, corruption, false, null);
+		
+		return magic + fire + cold + poison + disease + chromatic + prismatic + physical + corruption;
+	}
+
+	@Override
+	public int getElementalDamageAmount() {
+		return elementalDamageAmount;
+	}
+
+	@Override
+	public void setElementalDamageAmount(int elementalDamageAmount) {
+		this.elementalDamageAmount = elementalDamageAmount;
+	}
+
+	@Override
+	public int getItemBaneDamageBody(int bodyType, boolean augmentations, ItemStack itemStack) {
+		int damage = 0;
+		
+		if (this.getBaneDmgBody() == bodyType)
+			damage += getBaneDmgBodyAmount();
+		
+		if (augmentations && itemStack != null)
+		if (getAugmentation(itemStack) != null)
+		{
+			if (getAugmentation(itemStack).getBaneDmgBody() == bodyType)
+			damage += getAugmentation(itemStack).getBaneDmgBodyAmount();
+		}
+		return damage;
+	}
+
+	@Override
+	public int getItemBaneDamageRace(ISoliniaRace race, boolean augmentations, ItemStack itemStack) {
+		int damage = 0;
+		
+		if (this.getBaneDmgRace() == race.getId())
+			damage += getBaneDmgRaceAmount();
+		
+		if (augmentations && itemStack != null)
+		if (getAugmentation(itemStack) != null)
+		{
+			if (getAugmentation(itemStack).getBaneDmgRace() == race.getId())
+			damage += getAugmentation(itemStack).getBaneDmgRaceAmount();
+		}
+		return damage;
+	}
+
+	@Override
+	public int getBaneDmgBody() {
+		return baneDmgBody;
+	}
+
+	private void setBaneDmgBody(int baneDmgBody) {
+		this.baneDmgBody = baneDmgBody;
+	}
+
+	@Override
+	public int getBaneDmgRace() {
+		return baneDmgRace;
+	}
+
+	private void setBaneDmgRace(int baneDmgRace) {
+		this.baneDmgRace = baneDmgRace;
+	}
+
+	@Override
+	public int getBaneDmgBodyAmount() {
+		return baneDmgBodyAmount;
+	}
+
+	private void setBaneDmgBodyAmount(int baneDmgBodyAmount) {
+		this.baneDmgBodyAmount = baneDmgBodyAmount;
+	}
+
+	@Override
+	public  int getBaneDmgRaceAmount() {
+		return baneDmgRaceAmount;
+	}
+
+	private void setBaneDmgRaceAmount(int baneDmgRaceAmount) {
+		this.baneDmgRaceAmount = baneDmgRaceAmount;
+	}
+
+	@Override
+	public int getItemBaneDamageBody(boolean augmentations, ItemStack itemStack) {
+		int body = this.getBaneDmgBody();
+		
+		if (augmentations && itemStack != null)
+		if (getAugmentation(itemStack) != null)
+		{
+			int elementalDamageTypeAug = getAugmentation(itemStack).getBaneDmgBody();
+			if (elementalDamageTypeAug > 0)
+				return elementalDamageTypeAug;
+		}
+		return body;
+	}
+
+	@Override
+	public int getItemBaneDamageRace(boolean augmentations, ItemStack itemStack) {
+		int race = this.getBaneDmgRace();
+		
+		if (augmentations && itemStack != null)
+		if (getAugmentation(itemStack) != null)
+		{
+			int elementalDamageTypeAug = getAugmentation(itemStack).getBaneDmgRace();
+			if (elementalDamageTypeAug > 0)
+				return elementalDamageTypeAug;
+		}
+		return race;
 	}
 }

@@ -1293,11 +1293,45 @@ public class SoliniaActiveSpell {
 			return;
 		case BindWound:
 			applyBindWound(spellEffect, soliniaSpell, casterLevel);
+		case Kick:
+			applyKick(spellEffect,soliniaSpell,casterLevel);
 		default:
 			return;
 		}
 	}
 	
+	private void applyKick(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!isOwnerPlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+		
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.Kick.name().toUpperCase(), false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+		
+		
+	}
+
 	private void applyDisarm(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!isOwnerPlayer())
 			return;
@@ -2400,8 +2434,8 @@ public class SoliniaActiveSpell {
 				try {
 					ISoliniaItem item = SoliniaItemAdapter.Adapt(mainitem);
 					if (item != null)
-						if (item.getDamage() > 0) {
-							weaponDamage = item.getDamage();
+						if (item.getItemWeaponDamage(false, mainitem) > 0) {
+							weaponDamage = item.getItemWeaponDamage(false, mainitem);
 						}
 				} catch (SoliniaItemException e) {
 

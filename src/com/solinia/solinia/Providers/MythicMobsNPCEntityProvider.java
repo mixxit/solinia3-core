@@ -244,8 +244,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			customitem += "    Color: GRAY\r" + System.lineSeparator();
 		}
 		customitem += "  Data: " + item.getColor() + "\r" + System.lineSeparator();
-		if (item.getDamage() > 0) {
-			customitem += "  Damage: " + item.getDamage() + "\r" + System.lineSeparator();
+		if (item.getItemWeaponDamage(false, null) > 0) {
+			customitem += "  Damage: " + item.getItemWeaponDamage(false, null) + "\r" + System.lineSeparator();
 		}
 		
 		// Appearance

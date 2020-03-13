@@ -119,25 +119,23 @@ public interface ISoliniaLivingEntity
 
 	int getWeaponDamageBonus(ItemStack itemStack);
 
-	int getOffense(String skillname);
-
 	public void addToHateList(UUID uniqueId, int hate, boolean isYellForHelp);
 
 	int getTotalToHit(String skillname, int hitChanceBonus);
 
 	int computeToHit(String skillname);
 
-	public DamageHitInfo avoidDamage(SoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
+	public DamageHitInfo avoidDamage(ISoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
 
-	public boolean checkHitChance(SoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
+	public boolean checkHitChance(ISoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
 
-	public DamageHitInfo meleeMitigation(SoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
+	public DamageHitInfo meleeMitigation(ISoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
 
 	public int getMitigationAC();
 
 	public int getSkillDmgTaken(String skill);
 
-	public int getFcDamageAmtIncoming(SoliniaLivingEntity soliniaLivingEntity, int i, boolean b, String skill);
+	public int getFcDamageAmtIncoming(ISoliniaLivingEntity soliniaLivingEntity, int i, boolean b, String skill);
 
 	int getActSpellDamage(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect, ISoliniaLivingEntity target);
 
@@ -400,7 +398,7 @@ public interface ISoliniaLivingEntity
 
 	boolean isAttackAllowed(ISoliniaLivingEntity target, boolean isSpellAttack);
 
-	public void disarm(SoliniaLivingEntity disarmer, int chance);
+	public void disarm(ISoliniaLivingEntity disarmer, int chance);
 
 	public boolean isInCombat();
 	public boolean isEngaged();
@@ -426,4 +424,25 @@ public interface ISoliniaLivingEntity
 	int getTotalAtk();
 
 	public void sendStats(LivingEntity player);
+
+	void doClassAttacks(ISoliniaLivingEntity ca_target, String skill, boolean isRiposte);
+	int getSpecialAbility(int specialAbilityId);
+
+	int getItemBonuses(SpellEffectType spellEffectType);
+
+	boolean getInvul();
+
+	boolean combatRange(ISoliniaLivingEntity ca_target);
+
+	int checkBaneDamage(ISoliniaItem item, ItemStack itemStack);
+
+	int getBaseSkillDamage(SkillType skill_to_use, LivingEntity entityTarget);
+
+	int getSkill(SkillType skilltype);
+
+	int offense(String skillname);
+
+	int getWeaponDamage(ISoliniaLivingEntity against, ItemStack weaponItemStack, int hate);
+
+	public int resistElementalWeaponDmg(ISoliniaItem weapon_item, ItemStack weaponItemStack);
 }

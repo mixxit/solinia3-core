@@ -77,7 +77,7 @@ public class ItemStackAdapter {
 		nmsStack.setTag(compound);
 		stack = CraftItemStack.asBukkitCopy(nmsStack);
 
-		if (soliniaItem.getDamage() > 0) {
+		if (soliniaItem.getItemWeaponDamage(false, stack) > 0) {
 			if (soliniaItem.isMeleeWeapon()) {
 				nmsStack = CraftItemStack.asNMSCopy(stack);
 
@@ -86,7 +86,7 @@ public class ItemStackAdapter {
 				NBTTagCompound damagecompound = new NBTTagCompound();
 				damagecompound.set("AttributeName", new NBTTagString("generic.attackDamage"));
 				damagecompound.set("Name", new NBTTagString("generic.attackDamage"));
-				damagecompound.set("Amount", new NBTTagInt(soliniaItem.getDamage()));
+				damagecompound.set("Amount", new NBTTagInt(soliniaItem.getItemWeaponDamage(false, null)));
 				damagecompound.set("Operation", new NBTTagInt(0));
 				damagecompound.set("UUIDLeast", new NBTTagInt(894654));
 				damagecompound.set("UUIDMost", new NBTTagInt(2872));
@@ -138,8 +138,8 @@ public class ItemStackAdapter {
 			loretxt.addAll(Arrays.asList(lorestr));
 		}
 		
-		if (soliniaItem.getDamage() > 0) {
-			loretxt.add("Damage: " + ChatColor.GREEN + soliniaItem.getDamage() + ChatColor.RESET);
+		if (soliniaItem.getItemWeaponDamage(false, null) > 0) {
+			loretxt.add("Damage: " + ChatColor.GREEN + soliniaItem.getItemWeaponDamage(false, null) + ChatColor.RESET);
 			if (soliniaItem.getWeaponDelay() > 0) {
 				loretxt.add("WeaponDelay: " + ChatColor.GREEN + soliniaItem.getWeaponDelay() + ChatColor.RESET);
 			}
@@ -229,9 +229,9 @@ public class ItemStackAdapter {
 				loretxt.add(ChatColor.AQUA + "Augments Item Slots: " + soliniaItem.getAugmentationFitsSlotType().name() + ChatColor.RESET);
 		}
 		
-		if (soliniaItem.getDamage() > 0) {
+		if (soliniaItem.getItemWeaponDamage(false, null) > 0) {
 			if (soliniaItem.getBasename().equals("BOW") || soliniaItem.getBasename().equals("CROSSBOW")) {
-				loretxt.add("Modifies Arrow Dmg: " + ChatColor.GREEN + soliniaItem.getDamage() + ChatColor.RESET);
+				loretxt.add("Modifies Arrow Dmg: " + ChatColor.GREEN + soliniaItem.getItemWeaponDamage(false, null) + ChatColor.RESET);
 			}
 		}
 

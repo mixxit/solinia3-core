@@ -993,9 +993,11 @@ public class Solinia3CorePlayerListener implements Listener {
 					Utils.CancelEvent(event);
 					return;
 				}
+				
+				Integer augItemId = ItemStackUtils.getAugmentationItemId(targetItemStack);
 
-				if (ItemStackUtils.getAugmentationItemId(targetItemStack) != null
-						&& ItemStackUtils.getAugmentationItemId(targetItemStack) != 0) {
+				if (augItemId != null
+						&& augItemId != 0) {
 					event.getView().getPlayer().sendMessage("This item already has an augmentation applied");
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);

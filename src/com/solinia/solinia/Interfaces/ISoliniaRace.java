@@ -75,4 +75,8 @@ public interface ISoliniaRace {
 	int getRaceLootTableId();
 
 	void setRaceLootTableId(int raceLootTableId);
+
+	int getBodyType();
+
+	void setBodyType(int bodyType);
 }
