@@ -143,17 +143,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	
 	@Override
 	public void onEnable() {
-		dynmap = getServer().getPluginManager().getPlugin("dynmap");
-        if(dynmap == null) {
-        	System.out.println("Solinia3-Core! Cannot find dynmap! Disabling plugin...");
-			Bukkit.getPluginManager().disablePlugin(this); 
-			return;
-        }
-        dynmapApi = (DynmapAPI)dynmap; /* Get API */
-        soliniaZonesSet = dynmapApi.getMarkerAPI().createMarkerSet("solinia.markerset", "SoliniaZones", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
-        soliniaZonesSet.setHideByDefault(true);
-        regionExtentsSet = dynmapApi.getMarkerAPI().createMarkerSet("solinia.worldregionsmarkerset", "WorldRegions", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
-        regionExtentsSet.setHideByDefault(true);
+		loadDynmap();
         towny = getServer().getPluginManager().getPlugin("Towny");
         if(towny == null) {
         	System.out.println("Solinia3-Core! Cannot find Towny! Disabling plugin...");
@@ -228,6 +218,38 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		startHttpListener();
 	    
 	}
+	
+	private void unloadDynmap()
+	{
+		dynmap = getServer().getPluginManager().getPlugin("dynmap");
+        if(dynmap == null) {
+			return;
+        }
+        
+		// Cleanup Dynmap
+        StateManager.getInstance().soliniazonesresareas.clear(); 
+        StateManager.getInstance().regionextentsresareas.clear(); 
+        if(this.regionExtentsSet != null) {
+        	this.regionExtentsSet.deleteMarkerSet();
+        	this.regionExtentsSet = null;
+        }
+        if(this.soliniaZonesSet != null) {
+        	this.soliniaZonesSet.deleteMarkerSet();
+        	this.soliniaZonesSet = null;
+        }
+	}
+
+	private void loadDynmap() {
+		dynmap = getServer().getPluginManager().getPlugin("dynmap");
+        if(dynmap == null) {
+			return;
+        }
+        dynmapApi = (DynmapAPI)dynmap; /* Get API */
+        soliniaZonesSet = dynmapApi.getMarkerAPI().createMarkerSet("solinia.markerset", "SoliniaZones", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
+        soliniaZonesSet.setHideByDefault(true);
+        regionExtentsSet = dynmapApi.getMarkerAPI().createMarkerSet("solinia.worldregionsmarkerset", "WorldRegions", dynmapApi.getMarkerAPI().getMarkerIcons(), false);
+        regionExtentsSet.setHideByDefault(true);
+	}
 
 	public static final String API_V1 = "v1";
 	private final Logger log = getLogger();
@@ -295,17 +317,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			StateManager.getInstance().Commit();
 			
 			
-			// Cleanup Dynmap
-	        StateManager.getInstance().soliniazonesresareas.clear(); 
-	        StateManager.getInstance().regionextentsresareas.clear(); 
-	        if(this.regionExtentsSet != null) {
-	        	this.regionExtentsSet.deleteMarkerSet();
-	        	this.regionExtentsSet = null;
-	        }
-	        if(this.soliniaZonesSet != null) {
-	        	this.soliniaZonesSet.deleteMarkerSet();
-	        	this.soliniaZonesSet = null;
-	        }
+			unloadDynmap();
 	        
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -317,8 +329,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		System.out.println("[Solinia3Core] Plugin Disabled");
 	}
 	
-	
-
 	private boolean setupEconomy() {
 		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
 				.getRegistration(net.milkbowl.vault.economy.Economy.class);
@@ -506,13 +516,15 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		// every 30 seconds
 		clientVersionTimer.runTaskTimer(this, 30 * 20L, 30 * 20L);
 		
-		regionExtentsDynmapTimer = new RegionExtentsDynmapTimer();
-		// every 30 minutes
-		regionExtentsDynmapTimer.runTaskTimer(this, 5 * 20L, (60 * 30) * 20L);
+        if(dynmap != null) {
+    		regionExtentsDynmapTimer = new RegionExtentsDynmapTimer();
+    		// every 30 minutes
+    		regionExtentsDynmapTimer.runTaskTimer(this, 5 * 20L, (60 * 30) * 20L);
 
-		soliniaZonesDynmapTimer = new SoliniaZonesDynmapTimer();
-		// every 5 seconds
-		soliniaZonesDynmapTimer.runTaskTimer(this, 5 * 20L, 5 * 20L);
+    		soliniaZonesDynmapTimer = new SoliniaZonesDynmapTimer();
+    		// every 5 seconds
+    		soliniaZonesDynmapTimer.runTaskTimer(this, 5 * 20L, 5 * 20L);
+        }
 
 		playerMoveCheckTimer = new PlayerMoveCheckTimer();
 		// every 1 seconds
@@ -543,7 +555,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		getServer().getPluginManager().registerEvents(new Solinia3CoreZoneTickListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerTrackListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerValidatorModListener(this), this);
-		getServer().getPluginManager().registerEvents(new DynmapListener(this), this);
+		if(dynmap != null) {
+			getServer().getPluginManager().registerEvents(new DynmapListener(this), this);
+		}
 
 		setupCommands();
 	}

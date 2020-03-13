@@ -758,5 +758,6 @@ depend:
 - Votifier
 - EffectLib
 - Towny
-- dynmap
 - Towny
+softdepend:
+- dynmap
