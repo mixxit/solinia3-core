@@ -320,7 +320,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 		if (!ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
-			if (defender.combatRange(this)) {
+			if (!defender.combatRange(this)) {
 				this.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
 				return;
 			}
@@ -7861,7 +7861,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (!ismagic && !(originalDamager instanceof Arrow) && 					
 					!ItemStackUtils.isRangedWeapon(((LivingEntity)attackerEntity).getEquipment().getItemInMainHand())) 
 			{
-				if (attacker.getLocation().distance(defender.getLocation()) > 3) {
+				if (!attacker.combatRange(defender)) {
 					attacker.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
 					return 0;
 				}
