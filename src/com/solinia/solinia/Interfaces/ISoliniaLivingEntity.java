@@ -344,8 +344,6 @@ public interface ISoliniaLivingEntity
 
 	float getAutoAttackTimerFrequencySeconds();
 
-	int AttackWithMainHand(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage);
-
 	ISoliniaRace getRace();
 
 	ISoliniaGod getGod();
@@ -445,4 +443,6 @@ public interface ISoliniaLivingEntity
 	int getWeaponDamage(ISoliniaLivingEntity against, ItemStack weaponItemStack, int hate);
 
 	public int resistElementalWeaponDmg(ISoliniaItem weapon_item, ItemStack weaponItemStack);
+
+	int Attack(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage);
 }

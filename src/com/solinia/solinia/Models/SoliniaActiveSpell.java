@@ -1301,7 +1301,7 @@ public class SoliniaActiveSpell {
 	}
 	
 	private void applyKick(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!isOwnerPlayer())
+		if (!this.isSourcePlayer())
 			return;
 		
 		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());

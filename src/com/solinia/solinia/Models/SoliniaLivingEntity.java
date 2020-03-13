@@ -1542,8 +1542,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	// This might be Client::Attack
+	// This triggers when a damage event happens on an entity ( see calculateDamageFromDamageEvent)
+	// This previously was treated as the attack with Main Hand method
 	@Override
-	public int AttackWithMainHand(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage) {
+	public int Attack(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage) {
 		try {
 			if (defender.isPlayer() && isPlayer()) {
 				ISoliniaPlayer defenderPlayer = SoliniaPlayerAdapter.Adapt((Player) defender.getBukkitLivingEntity());
@@ -1615,8 +1617,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
-
-		DamageHitInfo my_hit = this.GetHitInfo(weapon, arrowHit, defender);
+		String skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillname();
+		DamageHitInfo my_hit = this.GetHitInfo(weapon, arrowHit, defender, skill);
 
 		///////////////////////////////////////////////////////////
 		////// Send Attack Damage
@@ -1883,9 +1885,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private void TryDualWield(LivingEntity attackerEntity, ISoliniaLivingEntity defender) {
 		if (getDualWieldCheck() && !attackerEntity.isDead() && !defender.getBukkitLivingEntity().isDead()) {
 			ItemStack weapon2 = attackerEntity.getEquipment().getItemInOffHand();
-			int baseDamage2 = (int) ItemStackUtils.getWeaponDamageFromItemStack(weapon2, EnumItemSlot.OFFHAND);
-			
-			DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, false, defender);
+			//int baseDamage2 = (int) ItemStackUtils.getWeaponDamageFromItemStack(weapon2, EnumItemSlot.OFFHAND);
+			String skill = ItemStackUtils.getMeleeSkillForItemStack(weapon2).getSkillname();
+			DamageHitInfo my_hit2 = this.GetHitInfo(weapon2, false, defender, skill);
 
 			final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
 			final UUID attackerUUID = this.getBukkitLivingEntity().getUniqueId();
@@ -2046,11 +2048,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private DamageHitInfo GetHitInfo(ItemStack weapon, boolean arrowHit,
-			ISoliniaLivingEntity defender) {
+			ISoliniaLivingEntity defender, String skill) {
 		
 		Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo starts with arrowHit: " + arrowHit);
 		DamageHitInfo my_hit = new DamageHitInfo();
-		my_hit.skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillname();
+		my_hit.skill = skill;
 		if (arrowHit) {
 			my_hit.skill = "ARCHERY";
 		}
@@ -2356,6 +2358,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				skill_to_use = SkillType.Backstab;
 				break;
 			}
+		} else {
+			if (Utils.isValidSkill(skill))
+			{
+				for (SkillType skillType : SkillType.values()) {
+					if (!skillType.name().toUpperCase().equals(skill.toUpperCase()))
+						continue;
+					
+					skill_to_use = skillType;
+				}
+				
+				
+			}
 		}
 
 		if(skill_to_use.equals(SkillType.None))
@@ -2453,7 +2467,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		*/
 
 		// TODO Guessing that this is melee not spell
-		who.damage((double)my_hit.damage_done, (Entity)this.getBukkitLivingEntity(), true, true, false);
+		who.damage(my_hit.damage_done, (Entity)this.getBukkitLivingEntity(), true, true, false);
 
 		// We do procs above so no need to do the below
 		/*
@@ -8001,7 +8015,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			// MELEE / BOW STARTS HERE
 			defender.damageAlertHook(damage, attacker.getBukkitLivingEntity());
-			return attacker.AttackWithMainHand(defender, (originalDamager instanceof Arrow), damage);
+			return attacker.Attack(defender, (originalDamager instanceof Arrow), damage);
 		} catch (CoreStateInitException e) {
 			return 0;
 		}
