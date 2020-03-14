@@ -62,9 +62,6 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
-import com.solinia.solinia.Exceptions.PlayerStateCreationException;
-import com.solinia.solinia.Factories.PlayerStateFactory;
-import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -74,8 +71,6 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
-import com.solinia.solinia.Interfaces.ISoliniaLootTable;
-import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -87,7 +82,6 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
-import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.NumHit;
@@ -95,9 +89,7 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
-import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
-import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellEffectIndex;
@@ -2776,26 +2768,6 @@ public class Utils {
 			return 14;
 		default:
 			return 0;
-		}
-	}
-
-	private static void patchNpcClasses() {
-		try {
-			for (ISoliniaPatch patch : StateManager.getInstance().getConfigurationManager().getPatches()) {
-				// Lookup npc and edit class
-				String npcName = patch.getClasses().get(0);
-				int rawClassId = Integer.parseInt(patch.getClasses().get(1));
-				int convertedClass = convertRawClassToClass(rawClassId);
-
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(npcName);
-				if (npc == null)
-					continue;
-
-				npc.setClassid(convertedClass);
-				System.out.println("Updated NPC: " + npc.getName() + " to class " + convertedClass);
-			}
-		} catch (CoreStateInitException e) {
-			// skip
 		}
 	}
 

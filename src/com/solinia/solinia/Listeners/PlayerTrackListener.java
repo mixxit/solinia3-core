@@ -1,24 +1,16 @@
 package com.solinia.solinia.Listeners;
 
-import java.util.Vector;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.EntityBlockFormEvent;
-
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerTrackEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaZone;
-import com.solinia.solinia.Utils.Utils;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class PlayerTrackListener implements Listener {
 
@@ -77,10 +69,7 @@ public class PlayerTrackListener implements Listener {
 			}
 		
 	}
-	
-	private double getHeading(org.bukkit.entity.Entity playerEntity) {
-		return 0;
-	}
+
 
 	// All numbers derived from the client
 	double calculateHeadingToTarget(Location location, Location targetLocation)

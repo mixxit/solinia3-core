@@ -21,8 +21,6 @@ import com.solinia.solinia.Exceptions.PlayerStateCreationException;
 import com.solinia.solinia.Factories.PlayerStateFactory;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;
 import com.solinia.solinia.Interfaces.IPlayerManager;
-import com.solinia.solinia.Interfaces.IRepository;
-import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.Personality;

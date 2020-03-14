@@ -10,7 +10,6 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
-import com.solinia.solinia.Utils.PlayerUtils;
 
 public class CommandForceSkill implements CommandExecutor {
 	@Override

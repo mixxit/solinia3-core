@@ -11,8 +11,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -23,7 +21,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -35,7 +32,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import com.rit.sucy.player.TargetHelper;
-import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -66,12 +62,7 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_14_R1.EntityCreature;
-import net.minecraft.server.v1_14_R1.EntityDamageSource;
-import net.minecraft.server.v1_14_R1.EnumItemSlot;
-import net.minecraft.server.v1_14_R1.GenericAttributes;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
-import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -835,6 +826,56 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 		
 		Attack(target, hand, false, false, isFromSpell);
+		
+		boolean candouble = canThisClassDoubleAttack();
+		// extra off hand non-sense, can only double with skill of 150 or above
+		// or you have any amount of GiveDoubleAttack
+		if (candouble && hand == InventorySlot.Secondary)
+			candouble =
+			    getSkill(SkillType.DoubleAttack.name().toUpperCase()) > 149 ||
+			    (/*aabonuses.GiveDoubleAttack +*/ getSpellBonuses(SpellEffectType.GiveDoubleAttack) + getItemBonuses(SpellEffectType.GiveDoubleAttack)) > 0;
+
+		if (candouble) {
+			tryIncreaseSkill(SkillType.DoubleAttack.name().toUpperCase(), 1);
+			if (checkDoubleAttack()) {
+				Attack(target, hand, false, false, isFromSpell);
+
+				// Modern AA description: Increases your chance of ... performing one additional hit with a 2-handed weapon when double attacking by 2%.
+				if (hand == InventorySlot.Primary) {
+					int extraattackchance = /*abonuses.ExtraAttackChance +*/ getSpellBonuses(SpellEffectType.ExtraAttackChance) + getItemBonuses(SpellEffectType.ExtraAttackChance);
+					if (extraattackchance > 0 && hasTwoHanderEquipped() && Utils.Roll(extraattackchance))
+						Attack(target, hand, false, false, isFromSpell);
+				}
+
+				/*
+				// you can only triple from the main hand
+				if (hand == EQEmu::invslot::slotPrimary && CanThisClassTripleAttack()) {
+					CheckIncreaseSkill(EQEmu::skills::SkillTripleAttack, target, -10);
+					if (CheckTripleAttack()) {
+						Attack(target, hand, false, false, IsFromSpell);
+						auto flurrychance = aabonuses.FlurryChance + spellbonuses.FlurryChance +
+								    itembonuses.FlurryChance;
+						if (flurrychance && zone->random.Roll(flurrychance)) {
+							Attack(target, hand, false, false, IsFromSpell);
+							if (zone->random.Roll(flurrychance))
+								Attack(target, hand, false, false, IsFromSpell);
+							Message_StringID(MT_NPCFlurry, YOU_FLURRY);
+						}
+					}
+				}
+				*/
+			}
+		}
+	}
+
+	private boolean hasTwoHanderEquipped() {
+		return holdingTwoHander();
+	}
+
+	private boolean canThisClassDoubleAttack() {
+		if (this.getClassObj() != null)
+			return this.getClassObj().canDoubleAttack();
+		return false;
 	}
 
 	@Override
@@ -6275,45 +6316,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return true;
 	}
-
+	
 	@Override
-	public boolean getDoubleAttackCheck() {
-		if (getNpcid() < 1 && !isPlayer())
-			return false;
+	public boolean checkDoubleAttack()
+	{
+		// Not 100% certain pets follow this or if it's just from pets not always
+		// having the same skills as most mobs
+		int chance = getSkill(SkillType.DoubleAttack.name().toUpperCase());
+		if (getLevel() > 35)
+			chance += getLevel();
 
-		// If dual wield less than 3 second ago return false
-		// Ugly hack to work around looping dual wields (cant get source of offhand on
-		// damage event)
-		Timestamp expiretimestamp = getLastDoubleAttack();
-		if (expiretimestamp != null) {
-			LocalDateTime datetime = LocalDateTime.now();
-			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-			Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus(3, ChronoUnit.SECONDS));
+		int per_inc = /*aabonuses.DoubleAttackChance +*/ getSpellBonuses(SpellEffectType.DoubleAttackChance) + getItemBonuses(SpellEffectType.DoubleAttackChance);
+		if (per_inc > 0)
+			chance += chance * per_inc / 100;
 
-			if (nowtimestamp.before(mintimestamp))
-				return false;
-		}
-
-		try {
-			if (getNpcid() > 0) {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
-				if (npc == null)
-					return false;
-
-				return npc.getDoubleAttackCheck();
-			}
-
-			if (isPlayer()) {
-				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				if (solplayer == null)
-					return false;
-				return solplayer.getDoubleAttackCheck();
-			}
-		} catch (CoreStateInitException e) {
-			return false;
-		}
-
-		return false;
+		return Utils.RandomBetween(1, 500) <= chance;
 	}
 
 	@Override
@@ -6762,19 +6779,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		index = (int) Utils.clamp((index * 20) / avg, 0, 19);
 
 		return mods[index];
-	}
-
-	private boolean isMeditating() {
-		if (isPlayer()) {
-			ISoliniaPlayer player;
-			try {
-				player = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				return player.isMeditating();
-			} catch (CoreStateInitException e) {
-				return false;
-			}
-		}
-		return false;
 	}
 
 	@Override

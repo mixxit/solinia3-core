@@ -13,7 +13,6 @@ import org.bukkit.inventory.Inventory;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
-import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.UniversalMerchant;
 

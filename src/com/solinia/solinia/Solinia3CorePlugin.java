@@ -1,7 +1,5 @@
 package com.solinia.solinia;
 
-import java.io.IOException;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.dynmap.markers.MarkerSet;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -94,12 +92,6 @@ import io.javalin.Javalin;
 import io.javalin.http.NotFoundResponse;
 import net.milkbowl.vault.economy.Economy;
 import org.dynmap.DynmapAPI;
-
-import io.javalin.Javalin;
-import io.javalin.http.NotFoundResponse;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Logger;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
@@ -739,9 +731,4 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		}
 	}
-
-    private void initControllers() {
-    	
-
-    }
 }

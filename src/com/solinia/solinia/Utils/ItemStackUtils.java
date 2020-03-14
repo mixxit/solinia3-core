@@ -28,8 +28,6 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SkillReward;
-import com.solinia.solinia.Models.SoliniaLivingEntity;
-
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_14_R1.AttributeModifier;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;

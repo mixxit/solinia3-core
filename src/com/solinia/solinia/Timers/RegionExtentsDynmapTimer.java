@@ -58,11 +58,6 @@ public class RegionExtentsDynmapTimer extends BukkitRunnable {
         StateManager.getInstance().regionextentsresmark = newmark;
 	}
 	
-	private List<Coord> getChunksInsideBorder(org.bukkit.World world)
-	{
-		return new ArrayList<Coord>();
-	}
-
 	private List<Coord> getRegionsInsideBorder(org.bukkit.World world) {
 		List<Coord> coords = new ArrayList<Coord>();
 		

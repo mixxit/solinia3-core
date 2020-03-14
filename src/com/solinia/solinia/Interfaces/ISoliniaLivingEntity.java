@@ -4,9 +4,6 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -30,7 +27,6 @@ import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
-import net.minecraft.server.v1_14_R1.Tuple;
 
 public interface ISoliniaLivingEntity {
 	public LivingEntity getBukkitLivingEntity();
@@ -446,8 +442,6 @@ public interface ISoliniaLivingEntity {
 
 	void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange);
 
-	boolean getDoubleAttackCheck();
-
 	public boolean isFacingMob(SoliniaLivingEntity soliniaLivingEntity);
 
 	void buffFadeByEffect(SpellEffectType type);
@@ -461,4 +455,6 @@ public interface ISoliniaLivingEntity {
 	boolean IsPet();
 
 	boolean hasSufficientArrowReagents(int count);
+
+	boolean checkDoubleAttack();
 }

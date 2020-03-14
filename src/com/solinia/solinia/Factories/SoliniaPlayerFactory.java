@@ -16,7 +16,6 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaPlayer;
-import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Utils.PlayerUtils;
 
 public class SoliniaPlayerFactory {

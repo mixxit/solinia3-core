@@ -26,7 +26,6 @@ import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Utils.DropUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandCraft implements CommandExecutor {
 
