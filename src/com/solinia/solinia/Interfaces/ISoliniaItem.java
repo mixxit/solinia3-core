@@ -404,4 +404,6 @@ public interface ISoliniaItem {
 	int getBaneDmgBodyAmount();
 
 	int getBaneDmgRaceAmount();
+
+	boolean isWeapon();
 }

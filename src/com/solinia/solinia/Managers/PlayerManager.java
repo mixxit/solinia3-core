@@ -257,7 +257,7 @@ public class PlayerManager implements IPlayerManager {
 
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
-				solPlayer.getSoliniaLivingEntity().setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+				solPlayer.getSoliniaLivingEntity().setHPChange((int)Math.floor(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()),player);
 			return solPlayer;
 		} catch (CoreStateInitException e) {
 			return null;
@@ -314,7 +314,7 @@ public class PlayerManager implements IPlayerManager {
             
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
 			if (!player.isDead())
-				solPlayer.getSoliniaLivingEntity().setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+				solPlayer.getSoliniaLivingEntity().setHPChange((int)(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()-player.getHealth()),player);
 			return altSolPlayer;
 		} catch (CoreStateInitException e) {
 			return null;

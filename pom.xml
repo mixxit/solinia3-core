@@ -94,6 +94,10 @@
 			</releases>
 		</repository>
 		<repository>
+        <id>ess-repo</id>
+        <url>https://ci.ender.zone/plugin/repository/everything/</url>
+    </repository>
+		<repository>
 			<id>bintray-repo</id>
 			<url>https://dl.bintray.com/nuvotifier/maven/</url>
 			<snapshots>
@@ -187,6 +191,12 @@
 			<artifactId>Vault</artifactId>
 			<version>1.7.2</version>
 		</dependency>
+		<dependency>
+        <groupId>net.ess3</groupId>
+        <artifactId>EssentialsX</artifactId>
+        <version>2.16.1</version>
+        <scope>provided</scope>
+    </dependency>
 		<dependency>
 			<groupId>com.vexsoftware</groupId>
 			<artifactId>nuvotifier-universal</artifactId>

@@ -336,16 +336,8 @@ public class Solinia3CorePlayerListener implements Listener {
 		int mpregen = event.getZone().getManaRegen();
 		
 		if (hpregen > 0 && !event.getPlayer().getSoliniaLivingEntity().isInCombat()) {
-			int amount = (int) Math.round(event.getPlayer().getBukkitPlayer().getHealth()) + hpregen;
-			if (amount > event.getPlayer().getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-				amount = (int) Math.round(event.getPlayer().getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-			}
-			
-			if (amount < 0)
-				amount = 0;
-
 			if (!event.getPlayer().getBukkitPlayer().isDead())
-			event.getPlayer().getSoliniaLivingEntity().setHealth(amount);
+				event.getPlayer().getSoliniaLivingEntity().setHPChange(hpregen, event.getPlayer().getBukkitPlayer());
 		}
 		
 		if (mpregen > 0 && !event.getPlayer().getSoliniaLivingEntity().isInCombat())

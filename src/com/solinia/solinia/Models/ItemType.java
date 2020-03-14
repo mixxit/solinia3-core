@@ -15,5 +15,6 @@ public enum ItemType {
 	Drink,
 	Potion,
 	Key,
-	HandToHand
+	HandToHand,
+	Martial
 }

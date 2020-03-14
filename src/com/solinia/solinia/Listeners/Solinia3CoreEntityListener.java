@@ -96,7 +96,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 		}
 		
-		if (event.getTarget() != null && (event.getTarget().isInvulnerable() || event.getTarget().isDead()))
+		if (event.getTarget() != null && (EntityUtils.IsInvulnerable(event.getTarget()) || event.getTarget().isDead()))
 		{
 			Utils.CancelEvent(event);
 			return;
@@ -200,15 +200,11 @@ public class Solinia3CoreEntityListener implements Listener {
 
 			// rogue sneak
 			if (event.getTarget() instanceof Player && !(event.getEntity() instanceof Player)) {
-				Player targetPlayer = (Player) event.getTarget();
-				if (targetPlayer.isSneaking()) {
-					ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) event.getTarget());
-					if (player.getClassObj() != null) {
-						if (player.getClassObj().isSneakFromCrouch()) {
-							Utils.CancelEvent(event);
-							return;
-						}
-					}
+				ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getTarget());
+				if(soliniaLivingEntity != null && soliniaLivingEntity.isSneaking())
+				{
+					Utils.CancelEvent(event);
+					return;
 				}
 			}
 
@@ -363,170 +359,17 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.getCause().equals(EntityDamageEvent.DamageCause.LAVA)) {
 			onEntityLavaDamageEvent(event);
 		}
+		
+		// WE ARE NO LONGER USING THE CLASSIC ENTITY DAMAGE BY ENTITY SYSTEM
+		
+		if (event instanceof EntityDamageByEntityEvent) {
+			Utils.CancelEvent(event);
+			return;
+		}
 
 		if (!(event instanceof EntityDamageByEntityEvent)) {
 			return;
 		}
-		
-		// Close range weapon
-		EntityDamageByEntityEvent damagecause = (EntityDamageByEntityEvent) event;
-		Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Start of onEntityDamageEvent from an entity source");
-		if (damagecause.getDamager() instanceof Player && (event.getEntity() instanceof LivingEntity)) {
-			// Some players had a mental value for GenericAttributes.ATTACK_DAMAGE
-			tryfixPlayerGenericAttributes((Player)damagecause.getDamager());
-			
-			try {
-				
-				Player damager = (Player) damagecause.getDamager();
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(damager);
-				if (solPlayer == null)
-				{
-					Utils.CancelEvent(event);
-					return;
-				}
-			} catch (CoreStateInitException e) {
-
-			}
-		}
-
-		if (damagecause.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
-			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) damagecause.getDamager(),
-					(LivingEntity) event.getEntity());
-			if (distanceOverLimit > 0) {
-				Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Two entities were over the aggro limit, aborting");
-				if (damagecause.getDamager() instanceof Player)
-					damagecause.getDamager()
-							.sendMessage("You were too far to cause damage [" + distanceOverLimit + " blocks too far]");
-
-				Utils.CancelEvent(event);
-				return;
-			}
-		}
-		Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Raw minecraft damage coming in as " + damagecause.getDamage(DamageModifier.BASE));
-
-		// Disable jumping crits for melee
-		if (!event.getCause().equals(EntityDamageEvent.DamageCause.THORNS)
-				&& damagecause.getDamager() instanceof LivingEntity) {
-			LivingEntity damager = (LivingEntity) damagecause.getDamager();
-			boolean flag = damager.getFallDistance() > 0.0F && !damager.isOnGround();
-
-
-			double f = damagecause.getDamage(DamageModifier.BASE);
-			Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Killing melee bonus from jumping - was " + f);
-			if (flag && f > 0.0D) {
-				damagecause.setDamage(DamageModifier.BASE, f / 1.5D);
-				Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Killing melee bonus from jumping - now " + damagecause.getDamage(DamageModifier.BASE));
-			}
-		}
-
-		if (damagecause.getDamager() instanceof Arrow) {
-			Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Damage was arrow " + damagecause.getDamage(DamageModifier.BASE));
-			ProjectileSource source = ((Arrow) damagecause.getDamager()).getShooter();
-			if (source instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
-				double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) source,
-						(LivingEntity) event.getEntity());
-
-				if (distanceOverLimit > 0D) {
-					if (source instanceof Player)
-						((Player) source).sendMessage(
-								"You were too far to cause damage [" + distanceOverLimit + " blocks too far]");
-
-					Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Two entities were over the aggro limit, aborting");
-
-					Utils.CancelEvent(event);
-					return;
-				}
-			}
-
-			// cancel crit jump damage for bows
-			if (!event.getCause().equals(EntityDamageEvent.DamageCause.THORNS) && source instanceof LivingEntity) {
-				LivingEntity damager = (LivingEntity) source;
-				boolean flag = damager.getFallDistance() > 0.0F && !damager.isOnGround();
-
-				double f = damagecause.getDamage(DamageModifier.BASE);
-				Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Cancelled crit damage from bows - started at " + f);
-				if (flag && f > 0.0D) {
-					damagecause.setDamage(DamageModifier.BASE, f / 1.5D);
-					Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Cancelled crit damage from bows - is now " + damagecause.getDamage(DamageModifier.BASE));
-				}
-			}
-		}
-
-		// Detect damage caused by entity collision response and cancel it
-		// We will move all damage from NPCs to the NPC combat loop
-		// This allows implementation of NPC Slow and Haste
-		if (!(damagecause.getDamager() instanceof Player) && !(damagecause.getDamager() instanceof Arrow)
-				&& event.getEntity() instanceof LivingEntity) {
-			// TODO
-			// ALWAYS CANCEL DAMAGE EVENTS THAT ARE NOT ENTITY SWEEP CAUSE
-
-			if (!damagecause.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)) {
-				Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Ignored non sweep damage");
-				Utils.CancelEvent(event);
-				return;
-			}
-
-			// event.setCancelled(true);
-		}
-
-		// Negate normal modifiers
-		try {
-			damagecause.setDamage(DamageModifier.ABSORPTION, 0);
-		} catch (UnsupportedOperationException e) {
-
-		}
-		try {
-			damagecause.setDamage(DamageModifier.ARMOR, 0);
-		} catch (UnsupportedOperationException e) {
-
-		}
-		try {
-			damagecause.setDamage(DamageModifier.BLOCKING, 0);
-		} catch (UnsupportedOperationException e) {
-
-		}
-		try {
-			damagecause.setDamage(DamageModifier.RESISTANCE, 0);
-		} catch (UnsupportedOperationException e) {
-
-		}
-		try {
-			damagecause.setDamage(DamageModifier.MAGIC, 0);
-		} catch (UnsupportedOperationException e) {
-
-		}
-		try {
-			damagecause.setDamage(DamageModifier.HARD_HAT, 0);
-		} catch (UnsupportedOperationException e) {
-
-		}
-		try {
-			damagecause.setDamage(DamageModifier.BLOCKING, 0);
-		} catch (UnsupportedOperationException e) {
-
-		}
-
-		ISoliniaLivingEntity solLivingEntity;
-		try {
-			solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) event.getEntity());
-			int damage = solLivingEntity.calculateDamageFromDamageEvent(damagecause.getDamager(),
-					event.getCause().equals(EntityDamageEvent.DamageCause.THORNS), (int) Math.floor(event.getDamage()));
-
-			Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Damage calcuation from calculateDamageFromDamageEvent is " + damage);
-			if (damage < 1) {
-				Utils.CancelEvent(event);
-				return;
-			}
-
-			event.setDamage(DamageModifier.BASE, damage);
-			Utils.DebugLog("Solinia3CoreEntityListener", "onEntityDamageEvent", damagecause.getDamager().getName(), "Final damage " + damage);
-
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return;
 	}
 
 	private void tryfixPlayerGenericAttributes(Player player) {

@@ -761,3 +761,4 @@ depend:
 - Towny
 softdepend:
 - dynmap
+- Essentials

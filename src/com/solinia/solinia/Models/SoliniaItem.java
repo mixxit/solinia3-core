@@ -539,13 +539,8 @@ public class SoliniaItem implements ISoliniaItem {
 				if (target.isNPC())
 					target.addToHateList(player.getUniqueId(), 1, false);
 				player.sendMessage("You throw a " + getDisplayname() + " for [" + getItemWeaponDamage(false, null) + "] damage");
-
-				EntityDamageSource source = new EntityDamageSource("thorns",
-						((CraftEntity) Bukkit.getEntity(player.getUniqueId())).getHandle());
-				source.sweep();
-				source.ignoresArmor();
 				
-				((CraftEntity) targetentity).getHandle().damageEntity(source, getItemWeaponDamage(false, null));
+				target.setHPChange(getItemWeaponDamage(false, null)*-1, player);
 				return true;
 			}
 			
@@ -1788,5 +1783,16 @@ public class SoliniaItem implements ISoliniaItem {
 				return elementalDamageTypeAug;
 		}
 		return race;
+	}
+
+	@Override
+	public boolean isWeapon() {
+		/*if (!m_item || !m_item->IsClassCommon())
+			return false;*/
+
+		if (this.isArrow() && this.damage != 0)
+			return true;
+		else
+			return ((this.damage != 0) && (this.weaponDelay != 0));
 	}
 }

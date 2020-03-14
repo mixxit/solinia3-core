@@ -3589,24 +3589,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (bindhps < 3)
 					bindhps = 3;
 
-				double originalHealth = solLivingEntity.getBukkitLivingEntity().getHealth();
-
-				bindhps += solLivingEntity.getBukkitLivingEntity().getHealth();
-				if (bindhps > max_hp)
-					bindhps = max_hp;
-
-				int amount = bindhps;
-				if (amount > solLivingEntity.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH)
-						.getValue()) {
-					amount = (int) Math.round(solLivingEntity.getBukkitLivingEntity()
-							.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-				}
-
-				if (amount < 0)
-					amount = 0;
-
-				double boundHealth = amount - originalHealth;
-
 				if (triedSkillIncrease == false) {
 					tryIncreaseSkill("BINDWOUND", 1);
 					triedSkillIncrease = true;
@@ -3618,7 +3600,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						nowtimestamp);
 
 				getBukkitPlayer().sendMessage(
-						"You bind " + solLivingEntity.getName() + "'s wounds for " + (int) boundHealth + " hp");
+						"You bind " + solLivingEntity.getName() + "'s wounds for " + (int) bindhps + " hp");
 				if (solLivingEntity.getBukkitLivingEntity() instanceof Player
 						&& !solLivingEntity.getBukkitLivingEntity().getUniqueId().toString()
 								.equals(getBukkitPlayer().getUniqueId().toString()))
@@ -3626,7 +3608,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							.sendMessage("Your wounds are being bound by " + getBukkitPlayer().getDisplayName());
 
 				if (!solLivingEntity.getBukkitLivingEntity().isDead()) {
-					solLivingEntity.setHealth(amount);
+					solLivingEntity.setHPChange(bindhps,getBukkitPlayer());
 				}
 				return true;
 			} else {
@@ -4018,16 +4000,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		// Process HP Regeneration
 		if (hpregen > 0) {
-			int amount = (int) Math.round(getBukkitPlayer().getHealth()) + hpregen;
-			if (amount > getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-				amount = (int) Math.round(getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-			}
-
-			if (amount < 0)
-				amount = 0;
-
 			if (!getBukkitPlayer().isDead())
-				getSoliniaLivingEntity().setHealth(amount);
+				getSoliniaLivingEntity().setHPChange(hpregen, this.getBukkitPlayer());
 		}
 
 	}
@@ -4155,17 +4129,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (hpAmount > Utils.HP_REGEN_CAP)
 				hpAmount = Utils.HP_REGEN_CAP;
 
-			hpAmount = (int) Math.round(getBukkitPlayer().getHealth()) + hpAmount;
-
-			if (hpAmount > getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-				hpAmount = (int) Math.round(getBukkitPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-			}
-
+			hpAmount = (int) Math.round(hpAmount);
 			if (hpAmount < 0)
 				hpAmount = 0;
 
 			if (!getBukkitPlayer().isDead())
-				getSoliniaLivingEntity().setHealth(hpAmount);
+				getSoliniaLivingEntity().setHPChange(hpAmount, this.getBukkitPlayer());
 		}
 
 		if (mpAmount > 0) {

@@ -38,6 +38,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -2420,11 +2421,6 @@ public class SoliniaActiveSpell {
 			if (backstabSkill < 1)
 				backstabSkill = 1;
 
-			EntityDamageSource source = new EntityDamageSource("thorns",
-					((CraftEntity) Bukkit.getEntity(getSourceUuid())).getHandle());
-			source.setMagic();
-			source.ignoresArmor();
-
 			int weaponDamage = 0;
 
 			// Offhand item only
@@ -2453,8 +2449,8 @@ public class SoliniaActiveSpell {
 
 			ISoliniaLivingEntity targetOfSpell = SoliniaLivingEntityAdapter.Adapt(this.getLivingEntity());
 			if (targetOfSpell != null)
-				targetOfSpell.addToHateList(source.getEntity().getUniqueID(), hpToRemove, false);
-			((CraftEntity) getLivingEntity()).getHandle().damageEntity(source, hpToRemove);
+				targetOfSpell.addToHateList(getSourceUuid(), hpToRemove, false);
+			targetOfSpell.setHPChange(hpToRemove*-1, sourceLivingEntity);
 			solSourceEntity.tryIncreaseSkill("BACKSTAB", 1);
 
 		} catch (CoreStateInitException e) {
@@ -2507,48 +2503,26 @@ public class SoliniaActiveSpell {
 							targetSoliniaLivingEntity) * -1);
 				}
 
-				hpToAdd = hpToAdd * -1;
-				EntityDamageSource source = new EntityDamageSource("thorns",
-						((CraftEntity) Bukkit.getEntity(getSourceUuid())).getHandle());
-				source.setMagic();
-				source.ignoresArmor();
-
-				targetSoliniaLivingEntity.addToHateList(source.getEntity().getUniqueID(), hpToAdd, false);
-				((CraftEntity) getLivingEntity()).getHandle().damageEntity(source, hpToAdd);
+				targetSoliniaLivingEntity.addToHateList(getSourceUuid(), hpToAdd, false);
+				targetSoliniaLivingEntity.setHPChange(hpToAdd*-1, sourceLivingEntity);
 				// getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 				if (soliniaSpell.isLifetapSpell()) {
 
 					if (!(sourceEntity instanceof LivingEntity))
 						return;
 
-					int amount = (int) Math.round(sourceLivingEntity.getHealth()) + hpToAdd;
-					if (amount > sourceLivingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-						amount = (int) Math
-								.round(sourceLivingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-					}
-
-					if (amount < 0)
-						amount = 0;
 					if (!sourceLivingEntity.isDead())
-						sourceSoliniaLivingEntity.setHealth(amount);
+						sourceSoliniaLivingEntity.setHPChange(hpToAdd,targetSoliniaLivingEntity.getBukkitLivingEntity());
 				}
 			}
 			// Heal
 			else {
 				if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
-					hpToAdd = sourceSoliniaLivingEntity.getActSpellHealing(soliniaSpell, hpToAdd, spellEffect,
-							targetSoliniaLivingEntity);
+					hpToAdd = sourceSoliniaLivingEntity.getActSpellHealing(soliniaSpell, hpToAdd);
 				}
 
-				int amount = (int) Math.round(getLivingEntity().getHealth()) + hpToAdd;
-				if (amount > getLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-					amount = (int) Math.round(getLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-				}
-
-				if (amount < 0)
-					amount = 0;
 				if (!getLivingEntity().isDead())
-					targetSoliniaLivingEntity.setHealth(amount);
+					targetSoliniaLivingEntity.setHPChange(hpToAdd, sourceSoliniaLivingEntity.getBukkitLivingEntity());
 			}
 		} catch (CoreStateInitException e) {
 
@@ -2595,26 +2569,11 @@ public class SoliniaActiveSpell {
 			sourceSolPlayer.setMana(0);
 
 			if (soliniaSpell.isDetrimental()) {
-				int amount = (int) Math.round(sourceLivingEntity.getHealth()) - dmg;
-				if (amount > sourceLivingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-					amount = (int) Math.round(sourceLivingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-				}
-
-				if (amount < 0)
-					amount = 0;
 				if (!getLivingEntity().isDead())
-					targetSoliniaLivingEntity.setHealth(amount);
+					targetSoliniaLivingEntity.setHPChange(dmg*-1,sourceSolPlayer.getBukkitPlayer());
 			} else {
-				int amount = (int) Math.round(getLivingEntity().getHealth()) + dmg;
-				if (amount > getLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-					amount = (int) Math.round(getLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-				}
-
-				if (amount < 0)
-					amount = 0;
-
 				if (!getLivingEntity().isDead())
-					targetSoliniaLivingEntity.setHealth(amount);
+					targetSoliniaLivingEntity.setHPChange(dmg,sourceSolPlayer.getBukkitPlayer());
 			}
 		} catch (CoreStateInitException e) {
 		}

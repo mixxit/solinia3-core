@@ -4,21 +4,35 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.DamageSource;
+import net.minecraft.server.v1_14_R1.EntityLiving;
+import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
 
 public class EntityUtils {
 	private static final List<Material> SAFE_TO_SHARE;
@@ -3370,5 +3384,82 @@ public class EntityUtils {
 		}
 
 		return newy.doubleValue();
+	}
+
+	public static void PSetHPChange(LivingEntity targetToDamage, int hpchange, LivingEntity sourceEntityOfChange) {
+		PSetHPChange(targetToDamage, (double)hpchange, sourceEntityOfChange);
+	}
+
+	public static void PSetHPChange(LivingEntity targetToDamage, Double hpchange, LivingEntity sourceEntityOfChange) {
+		if (hpchange == 0)
+			return;
+		
+		if (hpchange < 0 && EntityUtils.IsInvulnerable(targetToDamage))
+			return;
+		
+		float cur_hp =  ((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).getHealth();
+		float max_hp = ((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).getMaxHealth();
+		
+		float hp = cur_hp - hpchange.floatValue();
+		if (hp >= max_hp) 
+			cur_hp = max_hp; 
+		else 
+			cur_hp = hp;
+		
+		((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).setHealth(hp);
+		
+		float soundVolume = 1.0F;
+		if (hpchange < 0)
+		{
+			((CraftLivingEntity)targetToDamage).setLastDamage(hpchange.doubleValue());
+			((CraftLivingEntity)targetToDamage).setNoDamageTicks(20);
+			((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).hurtDuration = 10;
+			((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).hurtTicks = ((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).hurtDuration;
+
+			DamageSource damagesource = net.minecraft.server.v1_14_R1.DamageSource.mobAttack(((EntityLiving)((CraftLivingEntity) sourceEntityOfChange).getHandle()));
+			((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).getCombatTracker().trackDamage(damagesource, cur_hp, hpchange.floatValue());
+			
+			if (((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).getHealth() <= 0.0F) {
+	        	targetToDamage.getWorld().playSound(targetToDamage.getLocation(), Sound.ENTITY_GENERIC_DEATH, soundVolume, GetSoundPitch(((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle())));
+	
+	            ((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).die(damagesource);
+	            
+	        } else {
+	        	if (targetToDamage instanceof Player)
+	        	{
+		        	PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer)targetToDamage).getHandle(), 1);
+		        	((CraftPlayer)targetToDamage).getHandle().playerConnection.sendPacket(packet);
+	        	}
+	        	targetToDamage.getWorld().playSound(targetToDamage.getLocation(), Sound.ENTITY_GENERIC_HURT, soundVolume, GetSoundPitch(((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle())));
+	        }
+		}
+	}
+
+
+	private static float GetSoundPitch(EntityLiving targetToDamage) {
+        return targetToDamage.isBaby() ? (targetToDamage.getRandom().nextFloat() - targetToDamage.getRandom().nextFloat()) * 0.2F + 1.5F : (targetToDamage.getRandom().nextFloat() - targetToDamage.getRandom().nextFloat()) * 0.2F + 1.0F;
+
+	}
+
+
+	public static boolean IsInvulnerable(Entity entity) {
+		if (entity.isInvulnerable())
+			return true;
+		
+		if (entity instanceof Player)
+		{
+			if (!((Player)entity).getGameMode().equals(GameMode.SURVIVAL))
+				return true;
+			
+			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+			if (ess != null)
+			{
+				User user = ess.getUser((Player) entity);
+				if (user != null && user.isGodModeEnabled())
+					return true;
+			}
+		}
+		
+		return false;
 	}
 }

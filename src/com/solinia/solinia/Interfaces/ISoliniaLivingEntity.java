@@ -32,8 +32,7 @@ import com.solinia.solinia.Models.SpellResistType;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.minecraft.server.v1_14_R1.Tuple;
 
-public interface ISoliniaLivingEntity 
-{
+public interface ISoliniaLivingEntity {
 	public LivingEntity getBukkitLivingEntity();
 
 	int getLevel();
@@ -70,14 +69,12 @@ public interface ISoliniaLivingEntity
 
 	boolean getDodgeCheck();
 
-	boolean getDoubleAttackCheck();
-
 	boolean getRiposteCheck();
 
 	int getMaxDamage();
 
 	int getStrength();
-	
+
 	int getTotalItemStat(String stat);
 
 	int getStamina();
@@ -99,6 +96,7 @@ public interface ISoliniaLivingEntity
 	public double getMaxHP();
 
 	boolean isUndead();
+
 	boolean isAnimal();
 
 	public void doSummon(LivingEntity target);
@@ -139,7 +137,7 @@ public interface ISoliniaLivingEntity
 
 	int getActSpellDamage(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect, ISoliniaLivingEntity target);
 
-	int getActSpellHealing(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect, ISoliniaLivingEntity target);
+	int getActSpellHealing(ISoliniaSpell soliniaSpell, int value);
 
 	int getMaxStat(String skillname);
 
@@ -155,13 +153,15 @@ public interface ISoliniaLivingEntity
 
 	double getManaRatio();
 
-	boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes) throws CoreStateInitException;
+	boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes)
+			throws CoreStateInitException;
 
 	boolean aiDoSpellCast(Plugin plugin, ISoliniaSpell spell, ISoliniaLivingEntity target, int manaCost);
 
 	void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity) throws CoreStateInitException;
 
-	boolean aiCheckCloseBeneficialSpells(Plugin plugin, ISoliniaNPC npc, int iChance, int iRange, int iSpellTypes) throws CoreStateInitException;
+	boolean aiCheckCloseBeneficialSpells(Plugin plugin, ISoliniaNPC npc, int iChance, int iRange, int iSpellTypes)
+			throws CoreStateInitException;
 
 	public boolean isRooted();
 
@@ -180,14 +180,12 @@ public interface ISoliniaLivingEntity
 	public String getName();
 
 	public boolean isSpeaksAllLanguages();
-	
+
 	public void setSpeaksAllLanguages(boolean speaksAllLanguages);
 
 	public int hasDeathSave();
 
 	void removeDeathSaves();
-
-	void damage(double damage, Entity sourceEntity, boolean tryProc, boolean isMelee, boolean isOffhand);
 
 	public boolean isBehindEntity(LivingEntity livingEntity);
 
@@ -231,8 +229,6 @@ public interface ISoliniaLivingEntity
 
 	public void PetFastThink(Player playerOwner);
 
-	void removeActiveSpellsWithEffectType(SpellEffectType spellEffectType);
-
 	int getFocusEffect(FocusEffect focusEffectType, ISoliniaSpell spell);
 
 	boolean isCombatProc(ISoliniaSpell spell);
@@ -253,15 +249,11 @@ public interface ISoliniaLivingEntity
 
 	public void removeNonCombatSpells();
 
-	int calculateDamageFromDamageEvent(Entity originalDamager, boolean ismagic, int damage);
-
 	void damageAlertHook(double damage, Entity sourceEntity);
 
 	void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity);
 
 	SoliniaWorld getWorld();
-
-	public void setHealth(double health);
 
 	boolean canUseItem(ItemStack itemInMainHand);
 
@@ -279,12 +271,6 @@ public interface ISoliniaLivingEntity
 
 	void setLastRiposte();
 
-	void doRiposte(UUID defenderUuid, int originalDamage);
-
-	public void doDoubleAttack(UUID defenderUUID, int final_damagedone);
-
-	public void doDualWield(UUID defenderUUID, int final_damagedone, int offHandItemId);
-
 	void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean offHand);
 
 	void doTeleportAttack(LivingEntity teleportedEntity);
@@ -296,7 +282,7 @@ public interface ISoliniaLivingEntity
 	boolean checkHateTargets();
 
 	void clearHateList();
-	
+
 	void wipeHateList();
 
 	void setAttackTarget(LivingEntity entity);
@@ -386,7 +372,7 @@ public interface ISoliniaLivingEntity
 
 	public boolean checkAggro(ISoliniaLivingEntity attacker);
 
-	public boolean hasSpellEffectType(SpellEffectType harmony);
+	public boolean hasSpellEffectType(SpellEffectType type);
 
 	Timestamp getLastDisarm();
 
@@ -399,6 +385,7 @@ public interface ISoliniaLivingEntity
 	public void disarm(ISoliniaLivingEntity disarmer, int chance);
 
 	public boolean isInCombat();
+
 	public boolean isEngaged();
 
 	Location getSpawnPoint();
@@ -424,6 +411,7 @@ public interface ISoliniaLivingEntity
 	public void sendStats(LivingEntity player);
 
 	void doClassAttacks(ISoliniaLivingEntity ca_target, String skill, boolean isRiposte);
+
 	int getSpecialAbility(int specialAbilityId);
 
 	int getItemBonuses(SpellEffectType spellEffectType);
@@ -444,5 +432,27 @@ public interface ISoliniaLivingEntity
 
 	public int resistElementalWeaponDmg(ISoliniaItem weapon_item, ItemStack weaponItemStack);
 
-	int Attack(ISoliniaLivingEntity defender, boolean arrowHit, int baseDamage);
+	boolean Attack(ISoliniaLivingEntity defender, int Hand, boolean bRiposte, boolean IsStrikethrough,
+			boolean IsFromSpell);
+
+	boolean isCasting();
+
+	void Damage(ISoliniaLivingEntity mob, int damage, int spell_id, String attack_skill, boolean avoidable,
+			int buffslot, boolean iBuffTic);
+
+	boolean DivineAura();
+
+	boolean IsValidSpell(int spell_id);
+
+	boolean isSneaking();
+
+	void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange);
+
+	boolean getDoubleAttackCheck();
+
+	public boolean isFacingMob(SoliniaLivingEntity soliniaLivingEntity);
+
+	void buffFadeByEffect(SpellEffectType type);
+
+	void healDamage(double amount, ISoliniaLivingEntity caster, int spell_id);
 }

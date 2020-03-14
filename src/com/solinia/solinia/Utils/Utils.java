@@ -132,6 +132,8 @@ public class Utils {
 	public static final int HIGHESTSKILL = 255;
 
 	public static final int PetAttackMagicLevel = 11;
+
+	public static final int SPELL_UNKNOWN = 0xFFFF;
 	
 	public static int GetLocalSayRange(String worldName)
 	{
