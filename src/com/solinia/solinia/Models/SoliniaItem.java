@@ -49,6 +49,7 @@ public class SoliniaItem implements ISoliniaItem {
 	private int stamina = 0;
 	private int agility = 0;
 	private int dexterity = 0;
+	private int procRate = 0;
 	private boolean placeable = true;
 	private int intelligence = 0;
 	private int wisdom = 0;
@@ -629,7 +630,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
 		sender.sendMessage("- damage: " + ChatColor.GOLD + getDefinedItemDamage() + ChatColor.RESET + " weapondelay: " + ChatColor.GOLD + getWeaponDelay() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET + " - weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
-		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + "%" + ChatColor.RESET);
+		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + "%" + ChatColor.RESET + " procrate: " + ChatColor.GOLD + getProcRate() + ChatColor.RESET);
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET +
 		" - stamina: " + ChatColor.GOLD + getStamina() + ChatColor.RESET + 
 		" - agility: " + ChatColor.GOLD + getAgility() + ChatColor.RESET + 
@@ -714,6 +715,9 @@ public class SoliniaItem implements ISoliniaItem {
 				value = "";
 			
 			setRequiredWeaponSkillType(value.toUpperCase());
+			break;
+		case "procrate":
+			setProcRate(Integer.parseInt(value));
 			break;
 		case "dye":
 			setDye(Integer.parseInt(value));
@@ -1794,5 +1798,15 @@ public class SoliniaItem implements ISoliniaItem {
 			return true;
 		else
 			return ((this.damage != 0) && (this.weaponDelay != 0));
+	}
+	
+	@Override
+	public int getProcRate() {
+		return procRate;
+	}
+
+	@Override
+	public void setProcRate(int procRate) {
+		this.procRate = procRate;
 	}
 }

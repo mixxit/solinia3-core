@@ -372,18 +372,6 @@ public class Solinia3CoreEntityListener implements Listener {
 		}
 	}
 
-	private void tryfixPlayerGenericAttributes(Player player) {
-		if (!(player instanceof CraftPlayer))
-			return;
-		
-		double d = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
-		if (d != player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getDefaultValue())
-		{
-			System.out.println("Player: " + player.getName() + " default damage not equal to base value - fixing");
-			player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getDefaultValue());
-		}
-	}
-
 	private float getLavaDamageEffectiveness(Player victim) {
 		try
 		{

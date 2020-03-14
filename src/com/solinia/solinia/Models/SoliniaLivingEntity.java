@@ -329,18 +329,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
-		if (!ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
-			if (!defender.combatRange(this)) {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
-				return;
-			}
-
-		if (!ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
-			if (!defender.combatRange(this)) {
-				this.sendMessage(ChatColor.GRAY + "* You are too far away to attack!");
-				return;
-			}
-
 		// Remove buffs on attacker (invis should drop)
 		// and check they are not mezzed
 
@@ -373,144 +361,252 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
-		if (getBukkitLivingEntity() instanceof Player) {
-			// BOW
-			if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
-			{
-				try {
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-
-					if (!solPlayer.hasSufficientArrowReagents(1)) {
-						getBukkitLivingEntity().sendMessage(
-								"* You do not have sufficient arrows in your /reagents to auto fire your bow!");
-						return;
-					}
-
-					// Remove one of the reagents
-					int itemid = solPlayer.getArrowReagents().get(0);
-					solPlayer.reduceReagents(itemid, 1);
-
-					net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-					getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
-							Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
-
-					for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-						if (listening instanceof Player)
-							((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
-					}
-
-					if (getBukkitLivingEntity() instanceof Player)
-						((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
-
-					Arrow projectile = getBukkitLivingEntity().launchProjectile(Arrow.class);
-					projectile.setPickupStatus(org.bukkit.entity.AbstractArrow.PickupStatus.DISALLOWED);
-					projectile.setVelocity(defender.getBukkitLivingEntity().getEyeLocation().toVector()
-							.subtract(projectile.getLocation().toVector()).normalize().multiply(4));
-					// .attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
-				} catch (CoreStateInitException e) {
-
-				}
-
-			} else {
-				net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
-						Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
-
-				for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-					if (listening instanceof Player)
-						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
-				}
-
-				float f = 1;
-				if (getBukkitLivingEntity() instanceof Player)
-					((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
-
-				doAttackRounds(defender,InventorySlot.Primary, false);
-				
-				((CraftPlayer) getBukkitLivingEntity()).getHandle()
-						.attack(((CraftEntity) defender.getBukkitLivingEntity()).getHandle());
-			}
+		if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+		{
+			// if (AutoFireEnabled()) {
 		} else {
-			double damage = 1;
+			//check if change
+			//only check on primary attack.. sorry offhand you gotta wait!
+			
+			if (!defender.combatRange(this)) {
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
+				return;
+			}	
+			
+			if (defender.getBukkitLivingEntity().getUniqueId().equals(this.getBukkitLivingEntity().getUniqueId())) {
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Try attacking someone other than yourself!");
+				return;
+			}	
+			
+			tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Primary);
+			//triggerDefensiveProcs(auto_attack_target, InventorySlot.Primary, false);
+			
+			doAttackRounds(defender, InventorySlot.Primary, false);
+		}
+	}
 
-			if (this.isNPC()) {
-				ISoliniaNPC npc = getNPC();
-				if (npc != null) {
-					damage = Utils.getNPCDefaultDamage(npc);
-					
-					if (getBukkitLivingEntity().getEquipment().getItemInMainHand() != null)
-					{
-						if (ItemStackUtils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
-						try {
-							ISoliniaItem item = SoliniaItemAdapter.Adapt(getBukkitLivingEntity().getEquipment().getItemInMainHand());
-							if (item.getItemWeaponDamage(false, getBukkitLivingEntity().getEquipment().getItemInMainHand()) > damage)
-								damage = item.getItemWeaponDamage(false, getBukkitLivingEntity().getEquipment().getItemInMainHand());
-						} catch (SoliniaItemException e) {
-							
-						} catch (CoreStateInitException e) {
-							
+	@Override
+	public void tryWeaponProc(ItemStack weaponItemStack, ISoliniaLivingEntity on, int hand) {
+		if (on == null) {
+			setAttackTarget(null);
+			//Log(Logs::General, Logs::Error, "A null Mob object was passed to Mob::TryWeaponProc for evaluation!");
+			return;
+		}
+
+		if (!isAttackAllowed(on, false)) {
+			//Log(Logs::Detail, Logs::Combat, "Preventing procing off of unattackable things.");
+			return;
+		}
+
+		if (DivineAura()) {
+			//Log(Logs::Detail, Logs::Combat, "Procs canceled, Divine Aura is in effect.");
+			return;
+		}
+
+		if (weaponItemStack == null) {
+			//trySpellProc(null, null, on);
+			return;
+		}
+		
+		if (!ItemStackUtils.IsSoliniaItem(weaponItemStack))
+			return;
+		
+		try
+		{
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(weaponItemStack);
+			if (item == null)
+				return;
+	
+			// Innate + aug procs from weapons
+			// TODO: powersource procs -- powersource procs are on invis augs, so shouldn't need anything extra
+			tryWeaponProc(weaponItemStack, item, on, hand);
+			// Procs from Buffs and AA both melee and range
+			//trySpellProc(weaponItemStack, item, on, hand);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+
+		return;
+	}
+
+	@Override
+	public void tryWeaponProc(ItemStack inst, ISoliniaItem weapon, ISoliniaLivingEntity on, int hand) {
+		if (weapon == null)
+			return;
+
+		SkillType skillinuse = SkillType.HandtoHand;
+		int ourlevel = getLevel();
+		/*float ProcBonus = static_cast<float>(aabonuses.ProcChanceSPA +
+			spellbonuses.ProcChanceSPA + itembonuses.ProcChanceSPA);*/
+		float ProcBonus = 0;
+		ProcBonus += (float)this.getItemBonuses(SpellEffectType.ProcChance) / 10.0f; // Combat Effects
+		float ProcChance = getProcChances(ProcBonus, hand);
+
+		if (hand != InventorySlot.Primary) //Is Archery intened to proc at 50% rate?
+			ProcChance /= 2;
+
+		// Try innate proc on weapon
+		// We can proc once here, either weapon or one aug
+		boolean proced = false; // silly bool to prevent augs from going if weapon does
+		skillinuse = getSkillByItemType(weapon.getItemType());
+		if (weapon.getWeaponabilityid() > 0 && IsValidSpell(weapon.getWeaponabilityid())) {
+			try
+			{
+				ISoliniaSpell weaponSpell = StateManager.getInstance().getConfigurationManager().getSpell(weapon.getWeaponabilityid());
+				if (weaponSpell != null)
+				{
+					float WPC = ProcChance * (100.0f + // Proc chance for this weapon
+						(float)(weapon.getProcRate())) / 100.0f;
+					if (Utils.Roll(WPC)) {	// 255 dex = 0.084 chance of proc. No idea what this number should be really.
+						//if (weapon->Proc.Level2 > ourlevel) { TODO - Specific proc level
+						if (weapon.getMinLevel() > getLevel())
+						{
+							//Log(Logs::Detail, Logs::Combat, "Tried to proc (%s), but our level (%d) is lower than required (%d)",weapon->Name, ourlevel, weapon->Proc.Level2);
+							/*if (isPet()) {
+								Entity own = this.getOwnerEntity();
+								if (own != null)
+									own.sendMessage("Pet cannot use Proc");
+							}
+							else {
+								Message_StringID(13, PROC_TOOLOW);
+							}*/
+						}
+						else {
+							/*Log(Logs::Detail, Logs::Combat,
+								"Attacking weapon (%s) successfully procing spell %d (%.2f percent chance)",
+								weapon->Name, weapon->Proc.Effect, WPC * 100);*/
+							ExecWeaponProc(inst, weaponSpell, on, -1);
+							proced = true;
 						}
 					}
-					
 				}
-			}
-
-			// BOW
-			if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+			} catch (CoreStateInitException e)
 			{
-				// THEY HAVE AN ITEM IN THEIR HAND (BOW)
 				
-				net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
-						Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
-
-				for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-					if (listening instanceof Player)
-						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
-				}
-
-				if (getBukkitLivingEntity() instanceof Player)
-					((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
-				EntityDamageSource source = new EntityDamageSource("mob",
-						((CraftEntity) getBukkitLivingEntity()).getHandle());
-				source.sweep();
-				source.ignoresArmor();
-
-				Arrow projectile = getBukkitLivingEntity().launchProjectile(Arrow.class);
-				projectile.setVelocity(defender.getBukkitLivingEntity().getEyeLocation().toVector()
-						.subtract(projectile.getLocation().toVector()).normalize().multiply(4));
-				projectile.setPickupStatus(org.bukkit.entity.AbstractArrow.PickupStatus.DISALLOWED);
-
-				// ((CraftEntity)
-				// defender.getBukkitLivingEntity()).getHandle().damageEntity(source,
-				// (float)damage);
-
-			} else {
-				// THEY DONT HAVE A BOW IN THEIR HAND
-				
-				net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-				getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
-						Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
-
-				for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-					if (listening instanceof Player)
-						((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
-				}
-
-				if (getBukkitLivingEntity() instanceof Player)
-					((CraftPlayer) getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(packet);
-				
-				defender.addToHateList(getBukkitLivingEntity().getUniqueId(), (int)damage, false);
-				Utils.DebugLog("SoliniaLivingEntity", "autoAttackEnemy", getBukkitLivingEntity().getName(), "Triggering an auto attack damage event: " + damage);
-				defender.setHPChange((int)Math.floor(damage), getBukkitLivingEntity());
 			}
+		}
+		/* TODO Aug Procs
+		if (!proced && inst) {
+			for (int r = EQEmu::invaug::SOCKET_BEGIN; r <= EQEmu::invaug::SOCKET_END; r++) {
+				const EQEmu::ItemInstance *aug_i = inst->GetAugment(r);
+				if (!aug_i) // no aug, try next slot!
+					continue;
+				const EQEmu::ItemData *aug = aug_i->GetItem();
+				if (!aug)
+					continue;
 
-			// solLivingEntity.getBukkitLivingEntity().damage(damage,
-			// getBukkitLivingEntity());
+				if (aug->Proc.Type == EQEmu::item::ItemEffectCombatProc && IsValidSpell(aug->Proc.Effect)) {
+					float APC = ProcChance * (100.0f + // Proc chance for this aug
+						static_cast<float>(aug->ProcRate)) / 100.0f;
+					if (zone->random.Roll(APC)) {
+						if (aug->Proc.Level2 > ourlevel) {
+							if (IsPet()) {
+								Mob *own = GetOwner();
+								if (own)
+									own->Message_StringID(13, PROC_PETTOOLOW);
+							}
+							else {
+								Message_StringID(13, PROC_TOOLOW);
+							}
+						}
+						else {
+							ExecWeaponProc(aug_i, aug->Proc.Effect, on);
+							if (RuleB(Combat, OneProcPerWeapon))
+								break;
+						}
+					}
+				}
+			}
+		}
+		*/
+		// TODO: Powersource procs -- powersource procs are from augs so shouldn't need anything extra
+
+		return;
+	}
+
+	private void ExecWeaponProc(ItemStack inst, ISoliniaSpell weaponSpell, ISoliniaLivingEntity on, int level_override) {
+		if(weaponSpell == null || on.getSpecialAbility(SpecialAbility.NO_HARM_FROM_CLIENT) > 0) {
+			return;
+		}
+
+		/*if (IsNoCast())
+			return;
+*/
+		if(!IsValidSpell(weaponSpell.getId())) { // Check for a valid spell otherwise it will crash through the function
+			if(isPlayer()){
+				getBukkitLivingEntity().sendMessage("Invalid spell proc " + weaponSpell.getId());
+				//Log(Logs::Detail, Logs::Spells, "Player %s, Weapon Procced invalid spell %u", this->GetName(), spell_id);
+			}
+			return;
+		}
+		
+		// TODO Twin Cast
+		
+		if (weaponSpell.isBeneficial() && (!isNPC())) { // TODO NPC innate procs don't take this path ever
+			SpellFinished(weaponSpell.getId(), this, CastingSlot.Item, 0, -1, weaponSpell.getResistDiff(), true, level_override);
+		}
+		else if(!(on.isPlant() && on.getBukkitLivingEntity().isDead())) { //dont proc on dead clients
+			SpellFinished(weaponSpell.getId(), on, CastingSlot.Item, 0, -1, weaponSpell.getResistDiff(), true, level_override);
+		}
+	}
+
+	private void SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
+			int inventory_slot, int resist_adjust, boolean isproc, int level_override) {
+		
+		if (spell_target == null)
+			return;
+		
+		if (!this.IsValidSpell(spell_id))
+			return;
+		
+		// TODO
+		
+		try
+		{
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spell_id);
+			switch (Utils.getSpellTargetType(spell.getTargettype())) {
+			case Self:
+				spell.tryApplyOnEntity(getBukkitLivingEntity(),
+						getBukkitLivingEntity(), true,"");
+				break;
+			case Group:
+				spell.tryApplyOnEntity(getBukkitLivingEntity(),
+						getBukkitLivingEntity(), true,"");
+				break;
+			default:
+				spell.tryApplyOnEntity(getBukkitLivingEntity(),
+						spell_target.getBukkitLivingEntity(), true, "");			
+			}
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+
+	private SkillType getSkillByItemType(ItemType itemType) {
+		switch (itemType) {
+		case OneHandSlashing:
+			return SkillType.Slashing;
+		case TwoHandSlashing:
+			return SkillType.TwoHandSlashing;
+		case OneHandPiercing:
+			return SkillType.Piercing;
+		case OneHandBlunt:
+			return SkillType.Crushing;
+		case TwoHandBlunt:
+			return SkillType.TwoHandBlunt;
+		case TwoHandPiercing:
+			return SkillType.TwoHandPiercing;
+		case BowArchery:
+			return SkillType.Archery;
+		case ThrowingWeapon:
+			return SkillType.Throwing;
+		case Martial:
+			return SkillType.HandtoHand;
+		default:
+			return SkillType.HandtoHand;
 		}
 	}
 
@@ -535,15 +631,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (this.getAttackTarget() == null)
 				this.setAttackTarget(other.getBukkitLivingEntity());
 			
-			if (
-					(isCasting() && getClassObj() != null && !getClassObj().getName().equals("BARD") && !IsFromSpell)
-					|| other == null
-					|| ((isPlayer() && this.getBukkitLivingEntity() != null && this.getBukkitLivingEntity().isDead()) || (other.isPlayer() && other.getBukkitLivingEntity() != null && other.getBukkitLivingEntity().isDead()))
-					|| (this.getBukkitLivingEntity() != null && this.getBukkitLivingEntity().getHealth() < 0)
-					|| (!isAttackAllowed(other,IsFromSpell))
-					) {
-					return false; // Only bards can attack while casting
-				}
+			if (isCasting() && getClassObj() != null && !getClassObj().getName().equals("BARD") && !IsFromSpell)
+			{
+				return false; // Only bards can attack while casting
+			}
+
+			if (other == null)
+			{
+				return false; // Only bards can attack while casting
+			}
+
+			if ((isPlayer() && this.getBukkitLivingEntity() != null && this.getBukkitLivingEntity().isDead()) || (other.isPlayer() && other.getBukkitLivingEntity() != null && other.getBukkitLivingEntity().isDead()))
+			{
+				return false; // Only bards can attack while casting
+			}
+
+			if(this.getBukkitLivingEntity() != null && this.getBukkitLivingEntity().getHealth() < 0)
+			{
+				return false; // Only bards can attack while casting
+			}
+
+			if(!isAttackAllowed(other,IsFromSpell))
+			{
+				return false; // Only bards can attack while casting
+			}
 			
 			if (divineAura() && !getGM()) {//cant attack while invulnerable unless your a gm
 				return false;
@@ -2315,120 +2426,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return null;
 		}
 	}
-	
-
-	
-
-	private void TryProcItem(ISoliniaItem soliniaitem, ISoliniaLivingEntity attackerSolEntity,
-			ISoliniaLivingEntity defender, boolean isDualWield) {
-		final UUID defenderUUID = defender.getBukkitLivingEntity().getUniqueId();
-		final UUID attackerUUID = attackerSolEntity.getBukkitLivingEntity().getUniqueId();
-
-		final int finalitemid = soliniaitem.getId();
-		final boolean fisDualWield = isDualWield;
-
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
-				new Runnable() {
-					public void run() {
-						try {
-							Entity entity = Bukkit.getEntity(attackerUUID);
-
-							if (entity == null || !(entity instanceof LivingEntity))
-								return;
-
-							ISoliniaLivingEntity solLivingEntity = null;
-							try {
-								solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
-							} catch (CoreStateInitException e) {
-
-							}
-
-							if (solLivingEntity == null)
-								return;
-
-							solLivingEntity.doProcItem(finalitemid, attackerUUID, defenderUUID, fisDualWield);
-						} catch (Exception e) {
-							System.out.println("An error occured during the doProcItem scheduler: " + e.getMessage()
-									+ " " + e.getStackTrace());
-						}
-					}
-				});
-	}
-
-	@Override
-	public void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean isDualWield) {
-		if (procItemId < 1)
-			return;
-		
-		Entity attackerEntity = Bukkit.getEntity(attackerEntityUUID);
-		Entity defenderEntity = Bukkit.getEntity(defenderEntityUUID);
-
-		if (attackerEntity == null || defenderEntity == null)
-			return;
-
-		Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), "Starting doProcItem for " + attackerEntity.getName());
-		
-		if (attackerEntity.isDead() || defenderEntity.isDead())
-			return;
-
-		if (!(attackerEntity instanceof LivingEntity) || !(defenderEntity instanceof LivingEntity))
-			return;
-
-		ISoliniaLivingEntity attackerSolEntity = null;
-		ISoliniaLivingEntity defenderSolEntity = null;
-
-		try {
-			attackerSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) attackerEntity);
-			defenderSolEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) defenderEntity);
-
-			if (attackerSolEntity == null || defenderSolEntity == null)
-				return;
-
-			ISoliniaItem handItem = StateManager.getInstance().getConfigurationManager().getItem(procItemId);
-			if (handItem == null)
-				return;
-			
-			Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), " is using Weapon : " + handItem.getDisplayname() + " with weapon ability id: " + handItem.getWeaponabilityid());
-
-			// Check if item has any proc effects
-			if (handItem.getWeaponabilityid() > 0) {
-				ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
-						.getSpell(handItem.getWeaponabilityid());
-
-				if (procSpell != null && attackerSolEntity.getLevel() >= handItem.getMinLevel()) {
-					// Chance to proc
-					int procChance = getProcChancePct();
-					int roll = Utils.RandomBetween(0, 100);
-					
-					Utils.DebugLog("SoliniaLivingEntity", "doProcItem", attackerEntity.getName(), "Chance to proc on hit: " + procChance + " roll: " + roll + " isDualWield: " + isDualWield);
-
-					if (roll < procChance) {
-
-						// TODO - For now apply self and group to attacker, else attach to target
-						switch (Utils.getSpellTargetType(procSpell.getTargettype())) {
-						case Self:
-							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									attackerSolEntity.getBukkitLivingEntity(), true,"");
-							break;
-						case Group:
-							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									attackerSolEntity.getBukkitLivingEntity(), true,"");
-							break;
-						default:
-							procSpell.tryApplyOnEntity(attackerSolEntity.getBukkitLivingEntity(),
-									defenderSolEntity.getBukkitLivingEntity(), true, "");
-						}
-
-					}
-				}
-			}
-
-		} catch (CoreStateInitException e) {
-
-		}
-	}
-
-	
 
 	@Override
 	public void damageAlertHook(double damage, Entity sourceEntity) {
@@ -2825,69 +2822,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			for (SoliniaActiveSpell activeSpell : activeEntitySpells.getActiveSpells()) {
 				damageEffectActiveSpell(attackStack, sourceEntity, activeSpell);
 			}
-		}
-	}
-
-	private void triggerDefensiveProcs(ISoliniaLivingEntity defender, int damage, boolean arrowHit) {
-		if (damage < 0)
-			return;
-
-		if (arrowHit)
-			return;
-
-		if (this.getBukkitLivingEntity().isDead() || defender.getBukkitLivingEntity().isDead())
-			return;
-
-		try {
-			SoliniaEntitySpells effects = StateManager.getInstance().getEntityManager()
-					.getActiveEntitySpells(defender.getBukkitLivingEntity());
-			if (effects == null)
-				return;
-
-			for (SoliniaActiveSpell activeSpell : effects.getActiveSpells()) {
-				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-						.getSpell(activeSpell.getSpellId());
-
-				if (spell == null)
-					continue;
-
-				if (!spell.isDamageShield())
-					continue;
-
-				for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
-					if (spelleffect.getSpellEffectType().equals(SpellEffectType.DamageShield)) {
-						// hurt enemy with damage shield
-						if (spelleffect.getCalculatedValue() < 0) {
-
-							addToHateList(defender.getBukkitLivingEntity().getUniqueId(), (spelleffect.getCalculatedValue() * -1), false);
-
-							this.setHPChange(spelleffect.getCalculatedValue() * -1, defender.getBukkitLivingEntity());
-							
-							// attacker.damage(spelleffect.getBase() * -1);
-
-							DecimalFormat df = new DecimalFormat();
-							df.setMaximumFractionDigits(2);
-
-							defender.checkNumHitsRemaining(NumHit.DefensiveSpellProcs, 0, activeSpell.getSpellId());
-
-							if (defender instanceof Player) {
-								((Player) defender.getBukkitLivingEntity()).spigot().sendMessage(
-										ChatMessageType.ACTION_BAR,
-										new TextComponent("Your damage shield hit "
-												+ this.getBukkitLivingEntity().getName() + " for "
-												+ df.format(spelleffect.getCalculatedValue() * -1) + "["
-												+ df.format(this.getBukkitLivingEntity().getHealth()
-														- (spelleffect.getCalculatedValue() * -1))
-												+ "/" + df.format(this.getBukkitLivingEntity()
-														.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
-												+ "]"));
-							}
-						}
-					}
-				}
-			}
-		} catch (CoreStateInitException e) {
-			return;
 		}
 	}
 
@@ -5247,6 +5181,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private float getProcChances(float ProcBonus, int hand) {
+		int mydex = getDexterity();
+		float ProcChance = 0.0f;
+
+		ProcChance = (float) (Utils.BaseProcChance +
+				(float)(mydex) / Utils.ProcDexDivideBy);
+			ProcChance += ProcChance * ProcBonus / 100.0f;
+
+		//Log(Logs::Detail, Logs::Combat, "Proc chance %.2f (%.2f from bonuses)", ProcChance, ProcBonus);
+		return ProcChance;
 	}
 
 	@Override
@@ -8860,9 +8806,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if(this.getBukkitLivingEntity().getUniqueId().equals(target.getBukkitLivingEntity().getUniqueId()))	// you can attack yourself
 			return false;
 
-		if (target.getBukkitLivingEntity().isOp())
+		if (target.isInvulnerable())
 			return false;
-		
 		
 		if(target.getSpecialAbility(SpecialAbility.NO_HARM_FROM_CLIENT) > 0){
 			return false;

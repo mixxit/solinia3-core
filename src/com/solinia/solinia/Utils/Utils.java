@@ -134,6 +134,12 @@ public class Utils {
 	public static final int PetAttackMagicLevel = 11;
 
 	public static final int SPELL_UNKNOWN = 0xFFFF;
+
+	public static final double BaseProcChance = 0.0350000001490;
+
+	public static final float ProcDexDivideBy = 11000;
+
+	public static final int MinHastedDelay = 400;
 	
 	public static int GetLocalSayRange(String worldName)
 	{

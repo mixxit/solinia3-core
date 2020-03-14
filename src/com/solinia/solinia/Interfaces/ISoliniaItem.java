@@ -406,4 +406,8 @@ public interface ISoliniaItem {
 	int getBaneDmgRaceAmount();
 
 	boolean isWeapon();
+
+	void setProcRate(int procRate);
+
+	int getProcRate();
 }

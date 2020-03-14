@@ -271,8 +271,6 @@ public interface ISoliniaLivingEntity {
 
 	void setLastRiposte();
 
-	void doProcItem(int procItemId, UUID attackerEntityUUID, UUID defenderEntityUUID, boolean offHand);
-
 	void doTeleportAttack(LivingEntity teleportedEntity);
 
 	boolean doCheckForDespawn();
@@ -455,4 +453,8 @@ public interface ISoliniaLivingEntity {
 	void buffFadeByEffect(SpellEffectType type);
 
 	void healDamage(double amount, ISoliniaLivingEntity caster, int spell_id);
+
+	void tryWeaponProc(ItemStack itemInMainHand, ISoliniaLivingEntity defender, int hand);
+
+	void tryWeaponProc(ItemStack inst, ISoliniaItem weapon, ISoliniaLivingEntity on, int hand);
 }

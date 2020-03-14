@@ -3400,7 +3400,7 @@ public class EntityUtils {
 		float cur_hp =  ((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).getHealth();
 		float max_hp = ((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).getMaxHealth();
 		
-		float hp = cur_hp - hpchange.floatValue();
+		float hp = cur_hp + hpchange.floatValue();
 		if (hp >= max_hp) 
 			cur_hp = max_hp; 
 		else 
