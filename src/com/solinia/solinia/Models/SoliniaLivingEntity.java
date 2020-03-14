@@ -474,85 +474,88 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private void trySpellProc(ItemStack inst, ISoliniaItem weapon, ISoliniaLivingEntity on, int hand) {
-		float ProcBonus = (float)(this.getSpellBonuses(SpellEffectType.SpellProcChance) +
-				getItemBonuses(SpellEffectType.SpellProcChance) /*+ aabonuses.SpellProcChance*/);
-		
-			float ProcChance = 0.0f;
-			ProcChance = getProcChances(ProcBonus, hand);
+		float ProcBonus = (float) (this.getSpellBonuses(SpellEffectType.SpellProcChance)
+				+ getItemBonuses(SpellEffectType.SpellProcChance) /* + aabonuses.SpellProcChance */);
 
-			if (hand != InventorySlot.Primary) //Is Archery intened to proc at 50% rate?
-				ProcChance /= 2;
+		float ProcChance = 0.0f;
+		ProcChance = getProcChances(ProcBonus, hand);
 
-			boolean rangedattk = false;
-			if (weapon != null && hand == InventorySlot.Range) {
-				if (//weapon.getItemType() == ItemType.Arrow ||
-					weapon.getItemType() == ItemType.ThrowingWeapon ||
-					weapon.getItemType() == ItemType.BowArchery) {
-					rangedattk = true;
-				}
-			}
+		if (hand != InventorySlot.Primary) // Is Archery intened to proc at 50% rate?
+			ProcChance /= 2;
 
-			if (weapon == null && hand == InventorySlot.Range && getSpecialAbility(SpecialAbility.SPECATK_RANGED_ATK) > 0)
+		boolean rangedattk = false;
+		if (weapon != null && hand == InventorySlot.Range) {
+			if (// weapon.getItemType() == ItemType.Arrow ||
+			weapon.getItemType() == ItemType.ThrowingWeapon || weapon.getItemType() == ItemType.BowArchery) {
 				rangedattk = true;
-
-			/*
-			for (int i = 0; i < MAX_PROCS; i++) {
-				
 			}
-			*/
-			try
-			{
-				for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(this.getBukkitLivingEntity()).getActiveSpells()) {
-					if (!activeSpell.getSpell().isWeaponProc())
+		}
+
+		if (weapon == null && hand == InventorySlot.Range && getSpecialAbility(SpecialAbility.SPECATK_RANGED_ATK) > 0)
+			rangedattk = true;
+
+		/*
+		 * for (int i = 0; i < MAX_PROCS; i++) {
+		 * 
+		 * }
+		 */
+		try {
+			for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager()
+					.getActiveEntitySpells(this.getBukkitLivingEntity()).getActiveSpells()) {
+				if (!activeSpell.getSpell().isWeaponProc())
+					continue;
+
+				// Now we need to get the other proc
+				int level_override = activeSpell.getSourceLevel();
+				
+				if (IsPet() && hand != InventorySlot.Primary)
+					continue;
+
+				for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
+					if (effect.getSpellEffectType() != SpellEffectType.AddMeleeProc
+							&& effect.getSpellEffectType() != SpellEffectType.WeaponProc)
+						continue;
+
+					ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getBase());
+					if (procSpell == null)
 						continue;
 					
-					if (IsPet() && hand != InventorySlot.Primary)
-						continue;
-	
-					for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
+					for(SpellEffect procSpellEffects : procSpell.getBaseSpellEffects())
 					{
-						if (effect.getSpellEffectType() != SpellEffectType.AddMeleeProc && effect.getSpellEffectType() != SpellEffectType.WeaponProc)
-							continue;
-						
-						if (!rangedattk)
-						{
+						if (!rangedattk) {
 							// TODO Perma procs (AAs)
-						
+
 							// Spell procs (buffs)
 							int echance = 100;
-							if (effect.getBase2() == 0)
+							if (procSpellEffects.getBase2() == 0)
 								echance = 100;
 							else
-								echance = effect.getBase2()+100;
-							
-							int level_override = activeSpell.getSourceLevel();
-						
-							float chance = ProcChance * (float)(echance / 100.0f);
+								echance = procSpellEffects.getBase2() + 100;
+
+
+							float chance = ProcChance * (float) (echance / 100.0f);
 							if (Utils.Roll(chance)) {
-								ExecWeaponProc(null, activeSpell.getSpell(), on, level_override);
-								checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0,
-										activeSpell.getSpell().getId());
+								ExecWeaponProc(null, procSpell, on, level_override);
+								checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
 							}
 						}
 					}
-					
 				}
-			} catch (CoreStateInitException e)
-			{
-				
+
 			}
+		} catch (CoreStateInitException e) {
 
-			/* TODO Skill Procs
-			if (HasSkillProcs() && hand != EQEmu::invslot::slotRange) { //We check ranged skill procs within the attack functions.
-				uint16 skillinuse = 28;
-				if (weapon)
-					skillinuse = GetSkillByItemType(weapon->ItemType);
+		}
 
-				TrySkillProc(on, skillinuse, 0, false, hand);
-			}
-			*/
+		/*
+		 * TODO Skill Procs if (HasSkillProcs() && hand != EQEmu::invslot::slotRange) {
+		 * //We check ranged skill procs within the attack functions. uint16 skillinuse
+		 * = 28; if (weapon) skillinuse = GetSkillByItemType(weapon->ItemType);
+		 * 
+		 * TrySkillProc(on, skillinuse, 0, false, hand); }
+		 */
 
-			return;
+		return;
 	}
 	
 	@Override
@@ -678,25 +681,65 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (weaponSpell.isBeneficial() && (!isNPC())) { // TODO NPC innate procs don't take this path ever
 			SpellFinished(weaponSpell.getId(), this, CastingSlot.Item, 0, -1, weaponSpell.getResistDiff(), true, level_override);
 		}
-		else if(!(on.isPlant() && on.getBukkitLivingEntity().isDead())) { //dont proc on dead clients
+		else if(!(on.isPlayer() && on.getBukkitLivingEntity().isDead())) { //dont proc on dead clients
 			SpellFinished(weaponSpell.getId(), on, CastingSlot.Item, 0, -1, weaponSpell.getResistDiff(), true, level_override);
 		}
 	}
 
-	private void SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
+	private boolean SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
 			int inventory_slot, int resist_adjust, boolean isproc, int level_override) {
 		
 		if (spell_target == null)
-			return;
+			return false;
 		
 		if (!this.IsValidSpell(spell_id))
-			return;
+			return false;
+		
+		ISoliniaLivingEntity ae_center = null;
 		
 		// TODO
 		
 		try
 		{
+			//determine the type of spell target we have
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spell_id);
+			// TODO check if outdoors
+			// TODO check if levitate in non levtiate area
+			// Check if spell blocked in area
+			// Check if Blocked to GM
+			// 
+			
+			CastAction_type CastAction = new CastAction_type();
+			// TODO Determine Targets
+			// TODO: AE Duration
+			// TODO check line of sight to target if it's a detrimental spell
+			// TODO check to see if target is a caster mob before performing a mana tap
+			// TODO range check our target, if we have one and it is not us
+			
+			if(spell_target == null) {
+				//Log(Logs::Detail, Logs::Spells, "Spell %d: Targeted spell, but we have no target", spell_id);
+				return(false);
+			}
+			if (isproc) {
+				spellOnTarget(spell_id, spell_target, false, true, resist_adjust, true, level_override);
+			}/* else {
+				if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.TargetOptional)){
+					if (!trySpellProjectile(spell_target, spell_id))
+						return false;
+				}
+
+				else if(!spellOnTarget(spell_id, spell_target, false, true, resist_adjust, false, level_override)) {
+					if(spell.isBuffSpell() && spell.isBeneficialSpell()) {
+						// Prevent mana usage/timers being set for beneficial buffs
+						if(casting_spell_aa_id)
+							interruptSpell();
+						return false;
+					}
+				}
+			}*/
+			
+			// Do casting animation
+			
 			switch (Utils.getSpellTargetType(spell.getTargettype())) {
 			case Self:
 				spell.tryApplyOnEntity(getBukkitLivingEntity(),
@@ -708,13 +751,57 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				break;
 			default:
 				spell.tryApplyOnEntity(getBukkitLivingEntity(),
-						spell_target.getBukkitLivingEntity(), true, "");			
+						spell_target.getBukkitLivingEntity(), true, "");		
+				break;
 			}
 			
 		} catch (CoreStateInitException e)
 		{
 			
 		}
+		
+		return true;
+	}
+
+	private boolean spellOnTarget(int spell_id, ISoliniaLivingEntity spelltar, boolean reflect, boolean use_resist_adjust, int resist_adjust,
+			boolean isproc, int level_override) {
+		// TODO Auto-generated method stub
+		// well we can't cast a spell on target without a target
+		if(spelltar == null)
+		{
+			//Log(Logs::Detail, Logs::Spells, "Unable to apply spell %d without a target", spell_id);
+			//Message(13, "SOT: You must have a target for this spell.");
+			this.getBukkitLivingEntity().sendMessage("You must have a target for this spell");
+			return false;
+		}
+		
+		if(spelltar.isPlayer() && spelltar.getBukkitLivingEntity() != null && spelltar.getBukkitLivingEntity().isDead())
+			return false;
+		
+		// TODO Check resurrection effect
+		
+		if(!IsValidSpell(spell_id))
+			return false;
+		
+		//int caster_level = level_override > 0 ? level_override : getCasterLevel(spell_id);
+		
+		//mod_spell_cast(spell_id, spelltar, reflect, use_resist_adjust, resist_adjust, isproc);
+		if(spelltar.getInvul() || spelltar.DivineAura()) {
+			//Log(Logs::Detail, Logs::Spells, "Casting spell %d on %s aborted: they are invulnerable.", spell_id, spelltar->GetName());
+			return false;
+		}
+		
+		//cannot hurt untargetable mobs
+		// resist check - every spell can be resisted, beneficial or not
+		// add: ok this isn't true, eqlive's spell data is fucked up, buffs are
+		// not all unresistable, so changing this to only check certain spells
+		
+		/* RECOURSE
+		if (IsValidSpell(spells[spell_id].RecourseLink) && spells[spell_id].RecourseLink != spell_id)
+			SpellFinished(spells[spell_id].RecourseLink, this, CastingSlot::Item, 0, -1, spells[spells[spell_id].RecourseLink].ResistDiff);
+			*/
+		
+		return true;
 	}
 
 	private SkillType getSkillByItemType(ItemType itemType) {
@@ -1107,7 +1194,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			//final damage has been determined.
-			
+
 			setHPChange(damage*-1, attacker.getBukkitLivingEntity());
 
 			/* TODO DEATH SAVE
@@ -1303,7 +1390,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange) {
 		if (hpchange == 0)
 			return;
-		
+
 		EntityUtils.PSetHPChange(this.getBukkitLivingEntity(), hpchange, causeOfEntityHpChange);
 
 		// SEND ENTITY HP CHANGES
@@ -1320,6 +1407,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			}
 		}
+		
+		if (hpchange < 0)
+		damageAlertHook(hpchange,causeOfEntityHpChange);
 	}
 
 	private double getHP() {
@@ -6358,7 +6448,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (chanceToSummon > 8) {
 				if (summoningEntity instanceof Player) {
-					this.say("You will not evade me " + ((Player) summoningEntity).getDisplayName() + "!");
+					this.say("You will not evade me " + ((Player) summoningEntity).getCustomName() + "!");
 				} else {
 					this.say("You will not evade me " + summoningEntity.getCustomName() + "!");
 
@@ -8209,7 +8299,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		if (this.hasHate())
+		{
 			return;
+		}
 
 		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());
 		if (activeMob == null) {
@@ -8228,8 +8320,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity()
 					.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+			{
 				this.getBukkitLivingEntity()
 						.setHealth(this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			}
 		}
 
 		if (this.getBukkitLivingEntity().getLocation().distance(BukkitAdapter.adapt(activeMob.getSpawner().getLocation())) < 5)

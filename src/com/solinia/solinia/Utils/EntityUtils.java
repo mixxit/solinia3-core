@@ -17,6 +17,8 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
@@ -3405,18 +3407,22 @@ public class EntityUtils {
 			cur_hp = max_hp; 
 		else 
 			cur_hp = hp;
-		
-		((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).setHealth(hp);
+
+		((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).setHealth(cur_hp);
 		
 		float soundVolume = 1.0F;
 		if (hpchange < 0)
 		{
+			DamageSource damagesource = net.minecraft.server.v1_14_R1.DamageSource.mobAttack(((EntityLiving)((CraftLivingEntity) sourceEntityOfChange).getHandle()));
+			DamageCause damagecause = DamageCause.ENTITY_ATTACK;
+			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(sourceEntityOfChange,targetToDamage,damagecause,hpchange);
+			
 			((CraftLivingEntity)targetToDamage).setLastDamage(hpchange.doubleValue());
+			((CraftLivingEntity)targetToDamage).setLastDamageCause(event);
 			((CraftLivingEntity)targetToDamage).setNoDamageTicks(20);
 			((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).hurtDuration = 10;
 			((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).hurtTicks = ((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).hurtDuration;
 
-			DamageSource damagesource = net.minecraft.server.v1_14_R1.DamageSource.mobAttack(((EntityLiving)((CraftLivingEntity) sourceEntityOfChange).getHandle()));
 			((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).getCombatTracker().trackDamage(damagesource, cur_hp, hpchange.floatValue());
 			
 			if (((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).getHealth() <= 0.0F) {

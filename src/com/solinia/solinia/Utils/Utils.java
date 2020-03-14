@@ -491,7 +491,7 @@ public class Utils {
 	
 	public static boolean Roll(float chance)
 	{
-		return Utils.RandomBetween(0, 100)/100 < chance;
+		return Utils.RandomBetween(0, 100)/100F < chance;
 	}
 	
 	public static int RandomBetween(int minnumber, int maxnumber) {
@@ -5361,7 +5361,7 @@ public class Utils {
 				try {
 					if (entitiesNearPlayers.contains(uuid))
 						continue;
-
+					
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity == null) {
 						StateManager.getInstance().getEntityManager().clearHateList(uuid);

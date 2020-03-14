@@ -2524,8 +2524,8 @@ public class SoliniaActiveSpell {
 							targetSoliniaLivingEntity) * -1);
 				}
 
-				targetSoliniaLivingEntity.addToHateList(getSourceUuid(), hpToAdd, false);
-				targetSoliniaLivingEntity.setHPChange(hpToAdd*-1, sourceLivingEntity);
+				targetSoliniaLivingEntity.addToHateList(getSourceUuid(), hpToAdd*-1, false);
+				targetSoliniaLivingEntity.setHPChange(hpToAdd, sourceLivingEntity);
 				// getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 				if (soliniaSpell.isLifetapSpell()) {
 
@@ -2533,7 +2533,7 @@ public class SoliniaActiveSpell {
 						return;
 
 					if (!sourceLivingEntity.isDead())
-						sourceSoliniaLivingEntity.setHPChange(hpToAdd,targetSoliniaLivingEntity.getBukkitLivingEntity());
+						sourceSoliniaLivingEntity.setHPChange(hpToAdd*-1,targetSoliniaLivingEntity.getBukkitLivingEntity());
 				}
 			}
 			// Heal
@@ -2644,8 +2644,8 @@ public class SoliniaActiveSpell {
 			if (owner.isDead())
 				return;
 
-			System.out.println(
-					"Attempting fade effect for " + this.getSpellId() + " for owner: " + owner.getCustomName());
+			/*System.out.println(
+					"Attempting fade effect for " + this.getSpellId() + " for owner: " + owner.getCustomName());*/
 
 			StateManager.getInstance().getEntityManager().removeSpellEffectsOfSpellId(ownerUuid, spellId, true, true);
 		} catch (Exception e) {
