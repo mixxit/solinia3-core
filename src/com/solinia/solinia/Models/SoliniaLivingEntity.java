@@ -363,7 +363,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 		{
+
+			if (!this.hasSufficientArrowReagents(1)) {
+				getBukkitLivingEntity().sendMessage(
+						"* You do not have sufficient arrows in your /reagents to auto fire your bow!");
+				return;
+			}
+			
 			// if (AutoFireEnabled()) {
+			net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
+					Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
+
+			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+				if (listening instanceof Player)
+					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+			}
+			
 		} else {
 			//check if change
 			//only check on primary attack.. sorry offhand you gotta wait!
@@ -378,11 +395,37 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			}	
 			
+			net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
+					Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
+			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+				if (listening instanceof Player)
+					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+			}
+			
 			tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Primary);
 			//triggerDefensiveProcs(auto_attack_target, InventorySlot.Primary, false);
 			
 			doAttackRounds(defender, InventorySlot.Primary, false);
 		}
+	}
+
+	@Override
+	public boolean hasSufficientArrowReagents(int count) {
+		if (!this.isPlayer())
+			return true;
+		
+		try
+		{
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
+			return solPlayer.hasSufficientArrowReagents(count);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return false;
 	}
 
 	@Override

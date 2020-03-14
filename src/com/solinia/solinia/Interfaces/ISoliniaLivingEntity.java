@@ -459,4 +459,6 @@ public interface ISoliniaLivingEntity {
 	void tryWeaponProc(ItemStack inst, ISoliniaItem weapon, ISoliniaLivingEntity on, int hand);
 
 	boolean IsPet();
+
+	boolean hasSufficientArrowReagents(int count);
 }
