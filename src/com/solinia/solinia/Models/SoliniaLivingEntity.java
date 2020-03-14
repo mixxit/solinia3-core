@@ -806,7 +806,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 							//we used to do a message to the client, but its gone now.
 							// emote goes with every one ... even npcs
-							attacker.emote(attacker.getName() + " beams a smile at " + this.getName(), false);
+							this.filteredMessageClose(attacker.getBukkitLivingEntity(),attacker.getName() + " beams a smile at " + this.getName());
 						 }
 					} catch (CoreStateInitException e)
 					{
@@ -825,6 +825,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					//Log(Logs::Detail, Logs::Aggro, "Sending pet %s into battle due to attack.", pet->GetName());
 					pet.addToHateList(attacker.getBukkitLivingEntity().getUniqueId(), 1,true);
 					pet.setAttackTarget(attacker.getBukkitLivingEntity());
+					pet.getOwnerEntity().sendMessage(pet.getName() + " tells you 'Attacking " + attacker.getName() + " master'");
 					//Message_StringID(10, PET_ATTACKING, pet->GetCleanName(), attacker->GetCleanName());
 				//}
 			}
@@ -892,7 +893,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			//fade mez if we are mezzed
 			if (isMezzed() && attacker.getBukkitLivingEntity() != null) {
-				this.emote(this.getName() + " has been awaked by " + attacker.getName(), false);
+				this.filteredMessageClose(this.getBukkitLivingEntity(),this.getName() + " has been awaked by " + attacker.getName());
 				buffFadeByEffect(SpellEffectType.Mez);
 			}
 
@@ -988,6 +989,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (!iBuffTic) { //buff ticks do not send damage, instead they just call SendHPUpdate(), which is done above
 				//Note: if players can become pets, they will not receive damage messages of their own
 				//this was done to simplify the code here (since we can only effectively skip one mob on queue)
+				
+				this.filteredMessageClose(this.getBukkitLivingEntity(),getName() + " was hit for " + damage + " points of " + skill_used + " damage by " + attacker.getName());
+				
 				ISoliniaLivingEntity skip = attacker;
 				if (attacker != null && attacker.getOwnerEntity() != null) {
 					//attacker is a pet, let pet owners see their pet's damage
