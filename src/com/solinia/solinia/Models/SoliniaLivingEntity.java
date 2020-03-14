@@ -404,7 +404,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (weaponItemStack == null) {
-			//trySpellProc(null, null, on);
+			trySpellProc(null, null, on, InventorySlot.Primary);
 			return;
 		}
 		
@@ -421,13 +421,101 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO: powersource procs -- powersource procs are on invis augs, so shouldn't need anything extra
 			tryWeaponProc(weaponItemStack, item, on, hand);
 			// Procs from Buffs and AA both melee and range
-			//trySpellProc(weaponItemStack, item, on, hand);
+			trySpellProc(weaponItemStack, item, on, hand);
 		} catch (CoreStateInitException e)
 		{
 			
 		}
 
 		return;
+	}
+
+	private void trySpellProc(ItemStack inst, ISoliniaItem weapon, ISoliniaLivingEntity on, int hand) {
+		float ProcBonus = (float)(this.getSpellBonuses(SpellEffectType.SpellProcChance) +
+				getItemBonuses(SpellEffectType.SpellProcChance) /*+ aabonuses.SpellProcChance*/);
+		
+			float ProcChance = 0.0f;
+			ProcChance = getProcChances(ProcBonus, hand);
+
+			if (hand != InventorySlot.Primary) //Is Archery intened to proc at 50% rate?
+				ProcChance /= 2;
+
+			boolean rangedattk = false;
+			if (weapon != null && hand == InventorySlot.Range) {
+				if (//weapon.getItemType() == ItemType.Arrow ||
+					weapon.getItemType() == ItemType.ThrowingWeapon ||
+					weapon.getItemType() == ItemType.BowArchery) {
+					rangedattk = true;
+				}
+			}
+
+			if (weapon == null && hand == InventorySlot.Range && getSpecialAbility(SpecialAbility.SPECATK_RANGED_ATK) > 0)
+				rangedattk = true;
+
+			/*
+			for (int i = 0; i < MAX_PROCS; i++) {
+				
+			}
+			*/
+			try
+			{
+				for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(this.getBukkitLivingEntity()).getActiveSpells()) {
+					if (!activeSpell.getSpell().isWeaponProc())
+						continue;
+					
+					if (IsPet() && hand != InventorySlot.Primary)
+						continue;
+	
+					for(ActiveSpellEffect effect : activeSpell.getActiveSpellEffects())
+					{
+						if (effect.getSpellEffectType() != SpellEffectType.AddMeleeProc && effect.getSpellEffectType() != SpellEffectType.WeaponProc)
+							continue;
+						
+						if (!rangedattk)
+						{
+							// TODO Perma procs (AAs)
+						
+							// Spell procs (buffs)
+							int echance = 100;
+							if (effect.getBase2() == 0)
+								echance = 100;
+							else
+								echance = effect.getBase2()+100;
+							
+							int level_override = activeSpell.getSourceLevel();
+						
+							float chance = ProcChance * (float)(echance / 100.0f);
+							if (Utils.Roll(chance)) {
+								ExecWeaponProc(null, activeSpell.getSpell(), on, level_override);
+								checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0,
+										activeSpell.getSpell().getId());
+							}
+						}
+					}
+					
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+
+			/* TODO Skill Procs
+			if (HasSkillProcs() && hand != EQEmu::invslot::slotRange) { //We check ranged skill procs within the attack functions.
+				uint16 skillinuse = 28;
+				if (weapon)
+					skillinuse = GetSkillByItemType(weapon->ItemType);
+
+				TrySkillProc(on, skillinuse, 0, false, hand);
+			}
+			*/
+
+			return;
+	}
+	
+	@Override
+	public boolean IsPet()
+	{
+		return isCurrentlyNPCPet();
 	}
 
 	@Override
@@ -2482,75 +2570,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return false;
 	}
 
-	
-	
-	private void damageEffectActiveSpell(ItemStack attackStack, Entity sourceEntity, SoliniaActiveSpell activeSpell )
-	{
-		try
-		{
-			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-					.getSpell(activeSpell.getSpellId());
-			if (spell == null)
-				return;
-	
-			if (!spell.isWeaponProc())
-				return;
-	
-			for (ActiveSpellEffect spelleffect : activeSpell.getActiveSpellEffects()) {
-				damageEffectActiveSpellEffect(attackStack, sourceEntity,activeSpell,spelleffect);
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-	}
-	
-	private void damageEffectActiveSpellEffect(ItemStack attackStack, Entity sourceEntity,SoliniaActiveSpell activeSpell, ActiveSpellEffect spelleffect)
-	{
-		try
-		{
-		if (spelleffect.getSpellEffectType().equals(SpellEffectType.WeaponProc)
-				|| spelleffect.getSpellEffectType().equals(SpellEffectType.AddMeleeProc))
-		{
-			if (spelleffect.getBase() < 0)
-				return;
-
-			ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager()
-					.getSpell(spelleffect.getBase());
-			
-			if (attackStack != null && !activeSpell.getRequiredWeaponSkillType().equals(""))
-			{
-				if (!ItemStackUtils.getMeleeSkillForItemStack(attackStack).getSkillname().toUpperCase().equals(activeSpell.getRequiredWeaponSkillType().toUpperCase()))
-					return;
-			}
-
-			// Chance to proc
-			int procChance = getProcChancePct();
-			int roll = Utils.RandomBetween(0, 100);
-
-			if (roll < procChance) {
-				boolean itemUseSuccess = procSpell.tryApplyOnEntity((LivingEntity)sourceEntity,
-						getBukkitLivingEntity(), true, "");
-
-				if (itemUseSuccess) {
-					checkNumHitsRemaining(NumHit.OffensiveSpellProcs, 0, procSpell.getId());
-				}
-
-				if (procSpell.getActSpellCost(this) > 0)
-					if (itemUseSuccess) {
-						if (sourceEntity instanceof Player) {
-							SoliniaPlayerAdapter.Adapt((Player) sourceEntity)
-									.reducePlayerMana(procSpell.getActSpellCost(this));
-						}
-					}
-			}
-		}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-	}
-
 	@Override
 	public void doClassAttacks(ISoliniaLivingEntity ca_target, String skill, boolean isRiposte)
 	{
@@ -2814,15 +2833,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return false;
 		
 		return ca_target.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) <= 3;
-	}
-
-	private void damageEffects(ItemStack attackStack, Entity sourceEntity, SoliniaEntitySpells activeEntitySpells)
-	{
-		if (activeEntitySpells != null) {
-			for (SoliniaActiveSpell activeSpell : activeEntitySpells.getActiveSpells()) {
-				damageEffectActiveSpell(attackStack, sourceEntity, activeSpell);
-			}
-		}
 	}
 
 	private DamageHitInfo doAttack(ISoliniaLivingEntity other, DamageHitInfo hit) {

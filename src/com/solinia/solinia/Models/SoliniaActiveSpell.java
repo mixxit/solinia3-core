@@ -157,6 +157,27 @@ public class SoliniaActiveSpell {
 		this.spellId = spellId;
 	}
 
+	public int getSourceLevel()
+	{
+		Entity sourceEntity = Bukkit.getEntity(this.getSourceUuid());
+		if (sourceEntity == null || (!(sourceEntity instanceof LivingEntity)))
+			return 1;
+
+		try
+		{
+			ISoliniaLivingEntity solsource = SoliniaLivingEntityAdapter.Adapt((LivingEntity) sourceEntity);
+			if (solsource == null)
+				return 1;
+			
+			return solsource.getLevel();
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return 1;
+	}
+	
 	public void apply(Plugin plugin, boolean sendMessages) {
 		try {
 			ISoliniaSpell soliniaSpell = StateManager.getInstance().getConfigurationManager().getSpell(getSpellId());
