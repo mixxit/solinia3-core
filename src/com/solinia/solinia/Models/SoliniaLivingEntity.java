@@ -546,7 +546,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				{
 					float WPC = ProcChance * (100.0f + // Proc chance for this weapon
 						(float)(weapon.getProcRate())) / 100.0f;
-					if (Utils.Roll(WPC)) {	// 255 dex = 0.084 chance of proc. No idea what this number should be really.
+					boolean roll = Utils.Roll(WPC);
+					if (roll) {	// 255 dex = 0.084 chance of proc. No idea what this number should be really.
 						//if (weapon->Proc.Level2 > ourlevel) { TODO - Specific proc level
 						if (weapon.getMinLevel() > getLevel())
 						{
@@ -1005,7 +1006,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 							//we used to do a message to the client, but its gone now.
 							// emote goes with every one ... even npcs
-							this.filteredMessageClose(attacker.getBukkitLivingEntity(),attacker.getName() + " beams a smile at " + this.getName());
+							this.filteredMessageClose(attacker.getBukkitLivingEntity(),attacker.getName() + " beams a smile at " + this.getName(), false);
 						 }
 					} catch (CoreStateInitException e)
 					{
@@ -1092,7 +1093,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			//fade mez if we are mezzed
 			if (isMezzed() && attacker.getBukkitLivingEntity() != null) {
-				this.filteredMessageClose(this.getBukkitLivingEntity(),this.getName() + " has been awaked by " + attacker.getName());
+				this.filteredMessageClose(this.getBukkitLivingEntity(),this.getName() + " has been awaked by " + attacker.getName(), false);
 				buffFadeByEffect(SpellEffectType.Mez);
 			}
 
@@ -1189,7 +1190,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				//Note: if players can become pets, they will not receive damage messages of their own
 				//this was done to simplify the code here (since we can only effectively skip one mob on queue)
 				
-				this.filteredMessageClose(this.getBukkitLivingEntity(),getName() + " was hit for " + damage + " points of " + skill_used + " damage by " + attacker.getName());
+				this.filteredMessageClose(this.getBukkitLivingEntity(),getName() + " was hit for " + damage + " points of " + skill_used + " damage by " + attacker.getName(), true);
 				
 				ISoliniaLivingEntity skip = attacker;
 				if (attacker != null && attacker.getOwnerEntity() != null) {
@@ -1216,7 +1217,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								attacker.sendMessage(this.getName() + " was hit by non-melee for "+ damage + " points of damage.");
 							}
 							else {
-								this.filteredMessageClose(this.getBukkitLivingEntity(),attacker.getName() + " hit "+getName()+" for "+damage+" points of non-melee damage.");
+								this.filteredMessageClose(this.getBukkitLivingEntity(),attacker.getName() + " hit "+getName()+" for "+damage+" points of non-melee damage.", true);
 							}
 						}
 						else {
@@ -1233,18 +1234,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					//might filter on (attack_skill>200 && attack_skill<250), but I dont think we need it
 					attacker.sendMessage(getName() + " has taken " + damage +" damage from your DOT.");
 
-					this.filteredMessageClose(this.getBukkitLivingEntity(),getName() +" has taken "+damage+" damage from DOT by "+attacker.getName()+".");
+					this.filteredMessageClose(this.getBukkitLivingEntity(),getName() +" has taken "+damage+" damage from DOT by "+attacker.getName()+".", true);
 				}
 			} //end packet sending
 		}
 	}
 
-	private void filteredMessageClose(LivingEntity source, String message) {
+	private void filteredMessageClose(LivingEntity source, String message, boolean actionBar) {
+		ChatMessageType type = ChatMessageType.CHAT;
+		if (actionBar)
+			type = ChatMessageType.ACTION_BAR;
+		
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getLocation()) <= Utils.GetLocalSayRange(source.getLocation().getWorld().getName()))
-			{
-				player.sendMessage(message);
-			}
+				(player).spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(message));
 		}
 	}
 

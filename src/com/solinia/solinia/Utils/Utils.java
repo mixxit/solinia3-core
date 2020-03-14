@@ -491,7 +491,7 @@ public class Utils {
 	
 	public static boolean Roll(float chance)
 	{
-		return ((float)Utils.RandomBetween(0, 100)) < chance;
+		return Utils.RandomBetween(0, 100)/100 < chance;
 	}
 	
 	public static int RandomBetween(int minnumber, int maxnumber) {
