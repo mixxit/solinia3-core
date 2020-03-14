@@ -984,6 +984,64 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (getHP() < getMaxHP())
 				SendHPUpdate(!iBuffTic); // the OP_Damage actually updates the client in these cases, so we skip the HP update for them
 				*/
+			
+			if (!iBuffTic) { //buff ticks do not send damage, instead they just call SendHPUpdate(), which is done above
+				//Note: if players can become pets, they will not receive damage messages of their own
+				//this was done to simplify the code here (since we can only effectively skip one mob on queue)
+				ISoliniaLivingEntity skip = attacker;
+				if (attacker != null && attacker.getOwnerEntity() != null) {
+					//attacker is a pet, let pet owners see their pet's damage
+					ISoliniaLivingEntity owner = attacker.getOwnerSoliniaLivingEntity();
+					if (owner != null && owner.isPlayer()) {
+						if (((spell_id != Utils.SPELL_UNKNOWN) || (FromDamageShield)) && damage>0) {
+							//special crap for spell damage, looks hackish to me
+							owner.sendMessage(this.getName() + " was hit by non-melee for "+ damage + " points of damage.");
+						}
+						else {
+							// ?
+						}
+					}
+					skip = owner;
+				}
+				else {
+					//attacker is not a pet, send to the attacker
+
+					//if the attacker is a client, try them with the correct filter
+					if (attacker != null && attacker.isPlayer()) {
+						if ((spell_id != Utils.SPELL_UNKNOWN || FromDamageShield) && damage > 0) {
+							if (FromDamageShield) {
+								attacker.sendMessage(this.getName() + " was hit by non-melee for "+ damage + " points of damage.");
+							}
+							else {
+								this.filteredMessageClose(this.getBukkitLivingEntity(),attacker.getName() + " hit "+getName()+" for "+damage+" points of non-melee damage.");
+							}
+						}
+						else {
+							// ?
+						}
+					}
+					skip = attacker;
+				}
+			}
+			else {
+				//else, it is a buff tic...
+				// So we can see our dot dmg like live shows it.
+				if (spell_id != Utils.SPELL_UNKNOWN && damage > 0 && attacker != null && !(attacker.getBukkitLivingEntity().getUniqueId().equals(this.getBukkitLivingEntity().getUniqueId()) && attacker.isPlayer())) {
+					//might filter on (attack_skill>200 && attack_skill<250), but I dont think we need it
+					attacker.sendMessage(getName() + " has taken " + damage +" damage from your DOT.");
+
+					this.filteredMessageClose(this.getBukkitLivingEntity(),getName() +" has taken "+damage+" damage from DOT by "+attacker.getName()+".");
+				}
+			} //end packet sending
+		}
+	}
+
+	private void filteredMessageClose(LivingEntity source, String message) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.getLocation().distance(source.getLocation()) <= Utils.GetLocalSayRange(source.getLocation().getWorld().getName()))
+			{
+				player.sendMessage(message);
+			}
 		}
 	}
 
