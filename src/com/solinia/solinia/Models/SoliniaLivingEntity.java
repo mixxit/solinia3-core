@@ -24,6 +24,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -351,8 +352,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (!this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 			if (getBukkitLivingEntity() instanceof Player) {
-				getBukkitLivingEntity().sendMessage("Your cannot use this item (level or class)");
+				getBukkitLivingEntity().sendMessage("You cannot use this item (level or class)");
 			}
+			return;
 		}
 
 		//if (AutoFireEnabled()) {
@@ -661,6 +663,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			PacketPlayOutAnimation animationPacket = new PacketPlayOutAnimation(((CraftEntity)getBukkitLivingEntity()).getHandle(), 0);
 			((CraftPlayer)getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(animationPacket);
 			}
+			
+			Arrow arrow = getBukkitLivingEntity().launchProjectile(Arrow.class);
+			arrow.setPickupStatus(org.bukkit.entity.AbstractArrow.PickupStatus.DISALLOWED);
+			arrow.setBounce(false);
+			arrow.setVelocity(other.getBukkitLivingEntity().getEyeLocation().toVector()
+                     .subtract(arrow.getLocation().toVector()).normalize().multiply(4));
 		}
 	}
 

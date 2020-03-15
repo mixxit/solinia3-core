@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -330,6 +331,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
+		
 		// Fall damage
 
 		if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
@@ -344,6 +346,19 @@ public class Solinia3CoreEntityListener implements Listener {
 			onEntityLavaDamageEvent(event);
 		}
 		
+		if (!(event instanceof EntityDamageByEntityEvent)) {
+			return;
+		}
+		
+		// This is a hack we use to hide arrows bouncing off an enemy when the event is cancelled below
+		EntityDamageByEntityEvent entityDamageByEntityEvent = (EntityDamageByEntityEvent)event;
+		if (entityDamageByEntityEvent.getDamager() instanceof Projectile)
+		{
+			Projectile entity = (Projectile)entityDamageByEntityEvent.getDamager();
+			entity.remove();
+		}
+		
+		
 		// WE ARE NO LONGER USING THE CLASSIC ENTITY DAMAGE BY ENTITY SYSTEM
 		
 		if (event instanceof EntityDamageByEntityEvent) {
@@ -351,9 +366,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 		}
 
-		if (!(event instanceof EntityDamageByEntityEvent)) {
-			return;
-		}
+		
 	}
 
 	private float getLavaDamageEffectiveness(Player victim) {
@@ -518,34 +531,27 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
-		if (event.getEntity() instanceof LivingEntity)
-		if (EntityUtils.isMezzed((LivingEntity)event.getEntity()))
-		{
-			Utils.CancelEvent(event);
-			return;
-		}
-		
-		if (event.getEntity() instanceof LivingEntity)
-			if (EntityUtils.isStunned((LivingEntity)event.getEntity()))
-			{
-				Utils.CancelEvent(event);
-				return;
-			}
-
 		if (event.getEntity() instanceof Player) {
 			Player shooter = (Player) event.getEntity();
 			{
 				ItemStack seconditem = shooter.getInventory().getItemInOffHand();
 
 				if (seconditem != null) {
-					if (seconditem.getType() == Material.BOW) {
+					if (seconditem.getType() == Material.BOW || seconditem.getType() == Material.CROSSBOW
+							|| seconditem.getType() == Material.LEGACY_BOW) {
 						shooter.sendMessage("You cannot shoot while you have a bow in your offhand");
 						Utils.CancelEvent(event);
-						;
+						return;
 					}
 				}
 			}
 		}
+		
+		// This is done from auto attack now
+		Utils.CancelEvent(event);
+		
+		// TODO Try Auto Attack here if timer is ok
+		return;
 	}
 
 	@EventHandler
