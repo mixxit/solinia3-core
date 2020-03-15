@@ -457,4 +457,6 @@ public interface ISoliniaLivingEntity {
 	boolean checkDoubleAttack();
 
 	public void tryDefensiveProc(SoliniaLivingEntity soliniaLivingEntity, int hand);
+
+	SoliniaActiveSpell getFirstActiveSpellWithSpellEffectType(SpellEffectType type);
 }

@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
+import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.UniversalMerchant;
@@ -221,5 +222,7 @@ public interface IEntityManager {
 	long getReverseAggroCount(UUID uniqueId);
 
 	void resetReverseAggro(UUID uniqueId);
+
+	SoliniaActiveSpell getFirstActiveSpellOfSpellEffectType(LivingEntity livingEntity, SpellEffectType type);
 
 }

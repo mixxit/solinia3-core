@@ -1063,6 +1063,14 @@ public class EntityManager implements IEntityManager {
 		}
 
 	}
+	
+	@Override
+	public SoliniaActiveSpell getFirstActiveSpellOfSpellEffectType(LivingEntity livingEntity, SpellEffectType type) {
+		if (entitySpells.get(livingEntity.getUniqueId()) == null)
+			return null;
+		
+		return entitySpells.get(livingEntity.getUniqueId()).getFirstActiveSpellOfEffectType(type);
+	}
 
 	@Override
 	public void clearEntityFirstEffectOfType(LivingEntity livingEntity, SpellEffectType type, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {

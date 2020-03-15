@@ -663,6 +663,16 @@ public class SoliniaEntitySpells {
 		
 		return null;
 	}
+	
+	public SoliniaActiveSpell getFirstActiveSpellOfEffectType(SpellEffectType type) {
+		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : slots.entrySet()) {
+			if (activeSpellSlot.getValue().getSpell().isEffectInSpell(type)) {
+				return activeSpellSlot.getValue();
+			}
+		}
+
+		return null;
+	}
 
 	// Mainly used for cures
 	public void removeFirstSpellOfEffectType(Plugin plugin, SpellEffectType type, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {

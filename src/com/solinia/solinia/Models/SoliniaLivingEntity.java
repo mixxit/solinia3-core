@@ -1447,13 +1447,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (spell_id != Utils.SPELL_UNKNOWN || attacker == null)
 			avoidable = false;
 		
-		/* TODO Damage Shield
 		// only apply DS if physical damage (no spell damage)
 		// damage shield calls this function with spell_id set, so its unavoidable
-		if (attacker && damage > 0 && spell_id == SPELL_UNKNOWN && skill_used != EQEmu::skills::SkillArchery && skill_used != EQEmu::skills::SkillThrowing) {
-			DamageShield(attacker);
+		if (attacker != null && attacker.getBukkitLivingEntity() != null && damage > 0 && spell_id == Utils.SPELL_UNKNOWN && !skill_used.equals(SkillType.Archery.name().toUpperCase()) && !skill_used.equals(SkillType.Throwing.name().toUpperCase())) {
+			damageShield(attacker, false);
 		}
-		*/
 		
 		if (spell_id == Utils.SPELL_UNKNOWN && skill_used != null) {
 			checkNumHitsRemaining(NumHit.IncomingHitAttempts);
@@ -1718,6 +1716,95 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					this.filteredMessageClose(this.getBukkitLivingEntity(),getName() +" has taken "+damage+" damage from DOT by "+attacker.getName()+".", true);
 				}
 			} //end packet sending
+		}
+	}
+
+	// this is called from Damage() when 'this' is attacked by 'other.
+	// 'this' is the one being attacked
+	// 'other' is the attacker
+	// a damage shield causes damage (or healing) to whoever attacks the wearer
+	// a reverse ds causes damage to the wearer whenever it attack someone
+	// given this, a reverse ds must be checked each time the wearer is attacking
+	// and not when they're attacked
+	//a damage shield on a spell is a negative value but on an item it's a positive value so add the spell value and subtract the item value to get the end ds value
+	private void damageShield(ISoliniaLivingEntity attacker, boolean spell_ds) {
+		if (attacker == null || attacker.getBukkitLivingEntity() == null || this.getBukkitLivingEntity().getUniqueId().equals(attacker.getBukkitLivingEntity().getUniqueId()))
+			return;
+
+		int DS = 0;
+		int rev_ds = 0;
+		int spellid = 0;
+
+		if (!spell_ds)
+		{
+			DS = getSpellBonuses(SpellEffectType.DamageShield);
+			rev_ds = attacker.getSpellBonuses(SpellEffectType.ReverseDS);
+
+			SoliniaActiveSpell spell = getFirstActiveSpellWithSpellEffectType(SpellEffectType.DamageShield);
+			if (spell != null && spell.getSpell() != null && spell.getSpellId() != Utils.SPELL_UNKNOWN)
+				spellid = spell.getSpellId();
+		}
+		else {
+			DS = getSpellBonuses(SpellEffectType.DamageShield);
+			rev_ds = 0;
+			// This ID returns "you are burned", seemed most appropriate for spell DS
+			spellid = 2166;
+		}
+
+		if (DS == 0 && rev_ds == 0)
+			return;
+
+		//Log(Logs::Detail, Logs::Combat, "Applying Damage Shield of value %d to %s", DS, attacker->GetName());
+
+		//invert DS... spells yield negative values for a true damage shield
+		if (DS < 0) {
+//			if (!spell_ds) {
+//
+//				// TODO AA DS += aabonuses.DamageShield; //Live AA - coat of thistles. (negative value)
+//				DS -= getItemBonuses(SpellEffectType.DamageShield); //+Damage Shield should only work when you already have a DS spell
+//
+//												//Spell data for damage shield mitigation shows a negative value for spells for clients and positive
+//												//value for spells that effect pets. Unclear as to why. For now will convert all positive to be consistent.
+//				if (attacker->IsOffHandAtk()) {
+//					int mitigation = attacker.getItemBonuses(SpellEffectType.DSMitigationOffHand) +
+//						attacker.getSpellBonuses(SpellEffectType.DSMitigationOffHand) /*+
+//						attacker->aabonuses.DSMitigationOffHand*/;
+//					DS -= DS*mitigation / 100;
+//				}
+//				DS -= DS * attacker.getItemBonuses(SpellEffectType.DSMitigation) / 100;
+//			}
+			attacker.Damage(this, -DS, spellid, SkillType.Abjuration.name().toUpperCase()/*hackish*/, false, -1, false);
+			//we can assume there is a spell now
+			// TOODO Send DS Message
+			/*auto outapp = new EQApplicationPacket(OP_Damage, sizeof(CombatDamage_Struct));
+			CombatDamage_Struct* cds = (CombatDamage_Struct*)outapp->pBuffer;
+			cds->target = attacker->GetID();
+			cds->source = GetID();
+			cds->type = spellbonuses.DamageShieldType;
+			cds->spellid = 0x0;
+			cds->damage = DS;
+			entity_list.QueueCloseClients(this, outapp);
+			safe_delete(outapp);*/
+		}
+		else if (DS > 0 && !spell_ds) {
+			//we are healing the attacker...
+			attacker.healDamage(DS,null,Utils.SPELL_UNKNOWN);
+			//TODO: send a packet???
+		}
+
+		//Reverse DS
+		//this is basically a DS, but the spell is on the attacker, not the attackee
+		//if we've gotten to this point, we know we know "attacker" hit "this" (us) for damage & we aren't invulnerable
+		int rev_ds_spell_id = Utils.SPELL_UNKNOWN;
+
+		SoliniaActiveSpell spell = getFirstActiveSpellWithSpellEffectType(SpellEffectType.ReverseDS);
+		if (spell != null && spell.getSpell() != null && spell.getSpellId() != Utils.SPELL_UNKNOWN)
+			rev_ds_spell_id = spell.getSpellId();
+
+		if (rev_ds < 0) {
+			//Log(Logs::Detail, Logs::Combat, "Applying Reverse Damage Shield of value %d to %s", rev_ds, attacker->GetName());
+			attacker.Damage(this, -rev_ds, rev_ds_spell_id, SkillType.Abjuration.name().toUpperCase()/*hackish*/, false, -1, false); //"this" (us) will get the hate, etc. not sure how this works on Live, but it'll works for now, and tanks will love us for this
+																												//do we need to send a damage packet here also?
 		}
 	}
 
@@ -9034,6 +9121,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
+	@Override
+	public SoliniaActiveSpell getFirstActiveSpellWithSpellEffectType(SpellEffectType type)
+	{
+		if (this.getBukkitLivingEntity() == null)
+			return null;
+		
+		try
+		{
+		return StateManager.getInstance().getEntityManager().getFirstActiveSpellOfSpellEffectType(this.getBukkitLivingEntity(),
+				type);
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
+	
 	@Override
 	public boolean hasSpellEffectType(SpellEffectType type) {
 		if (this.getBukkitLivingEntity() == null)
