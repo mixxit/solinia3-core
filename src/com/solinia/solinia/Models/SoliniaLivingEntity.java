@@ -1686,7 +1686,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (owner != null && owner.isPlayer()) {
 						if (((spell_id != Utils.SPELL_UNKNOWN) || (FromDamageShield)) && damage>0) {
 							//special crap for spell damage, looks hackish to me
-							owner.sendMessage(this.getName() + " was hit by non-melee for "+ damage + " points of damage.");
+							if (owner.getBukkitLivingEntity() instanceof Player)
+							((Player)owner.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(this.getName() + " was hit by non-melee for "+ damage + " points of damage."));
 						}
 						else {
 							// ?
@@ -1701,7 +1702,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (attacker != null && attacker.isPlayer()) {
 						if ((spell_id != Utils.SPELL_UNKNOWN || FromDamageShield) && damage > 0) {
 							if (FromDamageShield) {
-								attacker.sendMessage(this.getName() + " was hit by non-melee for "+ damage + " points of damage.");
+								if (attacker.getBukkitLivingEntity() instanceof Player)
+									((Player)attacker.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(this.getName() + " was hit by non-melee for "+ damage + " points of damage."));
 							}
 							else {
 								this.filteredMessageClose(this.getBukkitLivingEntity(),attacker.getName() + " hit "+getName()+" for "+damage+" points of non-melee damage.", true);
