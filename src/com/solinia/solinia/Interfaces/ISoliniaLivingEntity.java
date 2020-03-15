@@ -61,8 +61,6 @@ public interface ISoliniaLivingEntity {
 
 	void doSpellCast(Plugin plugin, LivingEntity livingEntity);
 
-	public int getProcChancePct();
-
 	boolean getDodgeCheck();
 
 	boolean getRiposteCheck();
@@ -457,4 +455,6 @@ public interface ISoliniaLivingEntity {
 	boolean hasSufficientArrowReagents(int count);
 
 	boolean checkDoubleAttack();
+
+	public void tryDefensiveProc(SoliniaLivingEntity soliniaLivingEntity, int hand);
 }

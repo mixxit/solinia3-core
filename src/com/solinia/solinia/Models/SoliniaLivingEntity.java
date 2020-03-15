@@ -405,7 +405,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 			tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Primary);
-			//triggerDefensiveProcs(auto_attack_target, InventorySlot.Primary, false);
+			triggerDefensiveProcs(defender, InventorySlot.Primary, false, 0);
 			
 			doAttackRounds(defender, InventorySlot.Primary, false);
 			
@@ -530,11 +530,53 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 	
 			tryIncreaseSkill(SkillType.Archery.name().toUpperCase(),1);
-			//commonBreakInvisibleFromCombat();
+			commonBreakInvisibleFromCombat();
 		} catch (CoreStateInitException e)
 		{
 			
 		}
+	}
+
+	private void commonBreakInvisibleFromCombat() {
+		// TODO Auto-generated method stub
+		//break invis when you attack
+		if (this.isInvisible()) {
+			//Log(Logs::Detail, Logs::Combat, "Removing invisibility due to melee attack.");
+			buffFadeByEffect(SpellEffectType.Invisibility);
+			buffFadeByEffect(SpellEffectType.Invisibility2);
+		}
+		if (this.isInvisibleToUndead()) {
+			//Log(Logs::Detail, Logs::Combat, "Removing invisibility vs. undead due to melee attack.");
+			buffFadeByEffect(SpellEffectType.InvisVsUndead);
+			buffFadeByEffect(SpellEffectType.InvisVsUndead2);
+		}
+		if (this.isInvisibleToAnimals()) {
+			//Log(Logs::Detail, Logs::Combat, "Removing invisibility vs. animals due to melee attack.");
+			buffFadeByEffect(SpellEffectType.InvisVsAnimals);
+		}
+
+		cancelSneakHide();
+
+		if (getSpellBonuses(SpellEffectType.NegateIfCombat) > 0)
+			buffFadeByEffect(SpellEffectType.NegateIfCombat);
+
+	}
+
+	private void cancelSneakHide() {
+		if (this.getBukkitLivingEntity() instanceof Player)
+			((Player)this.getBukkitLivingEntity()).setSneaking(false);
+	}
+
+	private boolean isInvisibleToAnimals() {
+		return this.hasSpellEffectType(SpellEffectType.InvisVsAnimals);
+	}
+
+	private boolean isInvisibleToUndead() {
+		return this.hasSpellEffectType(SpellEffectType.InvisVsUndead) || this.hasSpellEffectType(SpellEffectType.InvisVsUndead2);
+	}
+
+	private boolean isInvisible() {
+		return this.hasSpellEffectType(SpellEffectType.Invisibility) || this.hasSpellEffectType(SpellEffectType.Invisibility2);
 	}
 
 	private void doArcheryAttackDmg(ISoliniaLivingEntity other, ItemStack rangeWeaponItemStack, ISoliniaItem rangedWeapon, int weapon_damage, int chance_mod, int focus, int ReuseTime, int range_id, float speed) {
@@ -1269,6 +1311,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			other.Damage(this, my_hit.damage_done, Utils.SPELL_UNKNOWN, my_hit.skill, true, -1, false);
 			
+			commonBreakInvisibleFromCombat();
+			if (!other.getBukkitLivingEntity().isDead())
+			{
+				triggerDefensiveProcs(other, Hand, true, my_hit.damage_done);
+			}
+			
 			if (my_hit.damage_done > 0)
 				return true;
 	
@@ -1280,6 +1328,44 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 	
+	private void triggerDefensiveProcs(ISoliniaLivingEntity on, int hand, boolean fromSkillProc, int damage) {
+		if (on == null || on.getBukkitLivingEntity() == null)
+			return;
+
+		if (!fromSkillProc)
+			on.tryDefensiveProc(this, hand);
+
+		//Defensive Skill Procs
+		/*
+		if (damage < 0 && damage >= -4) {
+			SkillType skillinuse = SkillType.None;
+			switch (damage) {
+				case (-1):
+					skillinuse = SkillType.Block;
+				break;
+
+				case (-2):
+					skillinuse = SkillType.Parry;
+				break;
+
+				case (-3):
+					skillinuse = SkillType.Riposte;
+				break;
+
+				case (-4):
+					skillinuse = SkillType.Dodge;
+				break;
+			}
+
+			if (on.hasSkillProcs())
+				on.trySkillProc(this, skillinuse, 0, false, hand, true);
+
+			if (on.hasSkillProcSuccess())
+				on.trySkillProc(this, skillinuse, 0, true, hand, true);
+		}
+		*/
+	}
+
 	@Override
 	public void Damage(ISoliniaLivingEntity other, int damage, int spell_id, String attack_skill, boolean avoidable, int buffslot, boolean iBuffTic)
 	{
@@ -5607,77 +5693,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int getProcChancePct() {
-		int dexterity = 75;
-		int procchanceextra = 0;
-		
-		if (this.getBukkitLivingEntity() instanceof Player) {
-			try {
-				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
-				if (player != null)
-					dexterity = getDexterity();
-
-				ISoliniaAAAbility procchanceaa = null;
-				try {
-					if (player.hasAaRanks()) {
-						for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
-								.getAAbilitiesBySysname("WEAPONAFFINITY")) {
-							if (!player.hasAAAbility(ability.getId()))
-								continue;
-
-							procchanceaa = ability;
-						}
-					}
-				} catch (CoreStateInitException e) {
-
-				}
-
-				if (procchanceaa != null) {
-					int procchancerank = Utils.getRankPositionOfAAAbility(this.getBukkitLivingEntity(), procchanceaa);
-					procchanceextra += (procchancerank * 10);
-				}
-
-			} catch (CoreStateInitException e) {
-
-			}
-		}
-
-		if (this.getNpcid() > 0)
-			dexterity = getDexterity();
-		
-		// settings
-		int averageProcsPerMinute = 2;
-		float procsPerMinDexContrib = 0.07f;
-		int weaponSpeed = 35;
-		float procChance = (weaponSpeed * averageProcsPerMinute) / 6;
-		float procBonus = dexterity * procsPerMinDexContrib;
-		int procChanceFinal = (int)Math.floor(procChance + procBonus);
-
-		int lowestProcChanceSpellBuff = 0;
-		int highestProcChanceSpellBuff = 100;
-
-		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
-				SpellEffectType.ProcChance)) {
-			if (effect.getRemainingValue() > 100) {
-				if (effect.getRemainingValue() > highestProcChanceSpellBuff)
-					highestProcChanceSpellBuff = effect.getRemainingValue();
-			} else {
-				if (effect.getRemainingValue() < lowestProcChanceSpellBuff)
-					lowestProcChanceSpellBuff = effect.getRemainingValue();
-			}
-		}
-
-		if (lowestProcChanceSpellBuff < 100)
-			procchanceextra += lowestProcChanceSpellBuff;
-		else
-			procchanceextra += highestProcChanceSpellBuff;
-
-		int finalprocchanceextra = (int)Math.floor(procchanceextra / 10);
-		
-		return (int)Math.floor(procChanceFinal + finalprocchanceextra);
-	}
-
-	@Override
 	public int getMaxDamage() {
 		return Utils.getMaxDamage(getLevel(), getStrength());
 	}
@@ -9473,5 +9488,121 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		this.setHPChange(amount, this.getBukkitLivingEntity());
+	}
+
+	@Override
+	public void tryDefensiveProc(SoliniaLivingEntity on, int hand) {
+		if (on == null || on.getBukkitLivingEntity() == null) {
+			setAttackTarget(null);
+			//Log(Logs::General, Logs::Error, "A null Mob object was passed to Mob::TryDefensiveProc for evaluation!");
+			return;
+		}
+
+		if (!hasDefensiveProcs())
+			return;
+
+		if (!on.getBukkitLivingEntity().isDead() && on.getHP() > 0) {
+
+			float ProcChance = 0F, ProcBonus = 0F;
+			on.getDefensiveProcChances(ProcBonus, ProcChance, hand, this);
+
+			if (hand != InventorySlot.Primary)
+				ProcChance /= 2;
+
+			int level_penalty = 0;
+			int level_diff = getLevel() - on.getLevel();
+			if (level_diff > 6)//10% penalty per level if > 6 levels over target.
+				level_penalty = (level_diff - 6) * 10;
+
+			ProcChance -= ProcChance*level_penalty / 100;
+
+			if (ProcChance < 0)
+				return;
+			
+			try
+			{
+				//for (int i = 0; i < MAX_PROCS; i++) {
+				for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager()
+						.getActiveEntitySpells(this.getBukkitLivingEntity()).getActiveSpells()) 
+				{
+					
+					int level_override = activeSpell.getSourceLevel();
+					
+					for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
+						if (effect.getSpellEffectType() != SpellEffectType.DefensiveProc)
+							continue;
+	
+						ISoliniaSpell procSpell = StateManager.getInstance().getConfigurationManager().getSpell(effect.getBase());
+						if (procSpell == null)
+							continue;
+						
+						for(SpellEffect procSpellEffects : procSpell.getBaseSpellEffects())
+						{
+							int echance = 100;
+							if (procSpellEffects.getBase2() == 0)
+								echance = 100;
+							else
+								echance = procSpellEffects.getBase2() + 100;
+							
+							float chance = ProcChance * ((float)(echance) / 100.0f);
+							if (Utils.Roll(chance)) {
+								ExecWeaponProc(null, procSpell, on, level_override);
+								checkNumHitsRemaining(NumHit.DefensiveSpellProcs, 0, procSpell.getId());
+							}
+						}
+					}
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+	}
+
+	private float getDefensiveProcChances(float ProcBonus, float ProcChance, int hand,
+			SoliniaLivingEntity on) {
+		if (on == null || on.getBukkitLivingEntity() == null)
+			return ProcChance;
+
+		int myagi = on.getAgility();
+		ProcBonus = 0;
+		ProcChance = 0;
+
+		int weapon_speed = getWeaponSpeedbyHand(hand);
+
+		ProcChance = ((float)(weapon_speed) * Utils.AvgDefProcsPerMinute / 60000.0f); // compensate for weapon_speed being in ms
+		ProcBonus += (float)(myagi) * Utils.DefProcPerMinAgiContrib / 100.0f;
+		ProcChance = ProcChance + (ProcChance * ProcBonus);
+
+		//Log(Logs::Detail, Logs::Combat, "Defensive Proc chance %.2f (%.2f from bonuses)", ProcChance, ProcBonus);
+		return ProcChance;
+	}
+
+	private int getWeaponSpeedbyHand(int hand) {
+		int weapon_speed = 0;
+		// So these attack timers are generally in the 1000s range (1000 = 1sec?)
+		switch (hand) {
+			case 13:
+				// TODO weapon_speed = attack_timer.GetDuration();
+				weapon_speed = (int)(getAutoAttackTimerFrequencySeconds() * 1000);
+				break;
+			case 14:
+				// TODO weapon_speed = attack_dw_timer.GetDuration();
+				weapon_speed = (int)(getAutoAttackTimerFrequencySeconds() * 1000);
+				break;
+			case 11:
+				// TODO weapon_speed = ranged_timer.GetDuration();
+				weapon_speed = (int)(getAutoAttackTimerFrequencySeconds() * 1000);
+				break;
+		}
+
+		if (weapon_speed < Utils.MinHastedDelay)
+			weapon_speed = Utils.MinHastedDelay;
+
+		return weapon_speed;
+	}
+
+	private boolean hasDefensiveProcs() {
+		return this.hasSpellEffectType(SpellEffectType.DefensiveProc);
 	}
 }

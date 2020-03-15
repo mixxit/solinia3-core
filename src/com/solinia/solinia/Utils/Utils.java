@@ -134,6 +134,10 @@ public class Utils {
 	public static final int MinHastedDelay = 400;
 
 	public static final double MinRangedAttackDist = 2;
+
+	public static final double DefProcPerMinAgiContrib = 0.075;
+
+	public static final float AvgDefProcsPerMinute = 2;
 	
 	public static int GetLocalSayRange(String worldName)
 	{
