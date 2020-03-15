@@ -1,11 +1,16 @@
 package com.solinia.solinia.Commands;
 
+import java.net.URL;
 import java.util.UUID;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
 import org.bukkit.entity.Player;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
@@ -28,7 +33,28 @@ public class CommandSolPlayerInfo implements CommandExecutor {
 		if (args.length < 1)
 			return false;
 		
-		UUID playerUUID = UUID.fromString(args[0]);
+		UUID playerUUID = null;
+		try
+		{
+			playerUUID = UUID.fromString(args[0]);
+		} catch (Exception e)
+		{
+			try
+			{
+			 String url = "https://api.mojang.com/users/profiles/minecraft/" + args[0];
+	         String UUIDJson = IOUtils.toString(new URL(url));
+	         JSONObject UUIDObject = (JSONObject) JSONValue.parseWithException(UUIDJson);
+	         String uuid = UUIDObject.get("id").toString();
+	         playerUUID = UUID.fromString(uuid.replaceFirst( 
+	        	        "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5" 
+	        		    ));
+			} catch (Exception e2)
+			{
+				sender.sendMessage(e2.getMessage());
+				return true;
+			}
+		}
+		
 		sender.sendMessage("Fetching information about player");
 		
 		try
@@ -77,5 +103,7 @@ public class CommandSolPlayerInfo implements CommandExecutor {
 
 		return true;
 	}
+	
+	
 
 }
