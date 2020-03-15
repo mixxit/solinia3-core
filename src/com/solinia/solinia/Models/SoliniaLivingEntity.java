@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+
+import javax.naming.InterruptedNamingException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -352,9 +355,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
+		//if (AutoFireEnabled()) {
 		if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 		{
-
 			if (!this.hasSufficientArrowReagents(1)) {
 				getBukkitLivingEntity().sendMessage(
 						"* You do not have sufficient arrows in your /reagents to auto fire your bow!");
@@ -362,15 +365,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 			// if (AutoFireEnabled()) {
-			net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
-			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
-					Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
-
-			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-				if (listening instanceof Player)
-					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
-			}
+			RangedAttack(defender, false);
 			
 		} else {
 			//check if change
@@ -386,19 +381,206 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			}	
 			
-			net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
 			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 					Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
 			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
 				if (listening instanceof Player)
+				{
+					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(
+							((CraftPlayer) getBukkitLivingEntity()).getHandle(), 3);
 					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+				}
+			}
+			
+			if (getBukkitLivingEntity() instanceof Player)
+			{
+				PacketPlayOutAnimation animationPacket = new PacketPlayOutAnimation(((CraftEntity)getBukkitLivingEntity()).getHandle(), 0);
+				((CraftPlayer)getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(animationPacket);
 			}
 			
 			tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Primary);
 			//triggerDefensiveProcs(auto_attack_target, InventorySlot.Primary, false);
 			
 			doAttackRounds(defender, InventorySlot.Primary, false);
+		}
+	}
+
+	private void RangedAttack(ISoliniaLivingEntity other, boolean canDoubleAttack) {
+		//conditions to use an attack checked before we are called
+		if (other == null)
+			return;
+		//make sure the attack and ranged timers are up
+		//if the ranged timer is disabled, then they have no ranged weapon and shouldent be attacking anyhow
+		
+		ItemStack rangedItemStack = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+		try
+		{
+			ISoliniaItem RangeWeapon = null;
+			try
+			{
+				RangeWeapon = SoliniaItemAdapter.Adapt(rangedItemStack);
+			} catch (SoliniaItemException e) {
+				
+			}
+	
+			//locate ammo
+	
+			if (RangeWeapon == null) {
+				//Log(Logs::Detail, Logs::Combat, "Ranged attack canceled. Missing or invalid ranged weapon (%d) in slot %d", GetItemIDAt(EQEmu::invslot::slotRange), EQEmu::invslot::slotRange);
+				//Message(0, "Error: Rangeweapon: GetItem(%i)==0, you have no bow!", GetItemIDAt(EQEmu::invslot::slotRange));
+				return;
+			}
+			if (!this.hasSufficientArrowReagents(1)) {
+				getBukkitLivingEntity().sendMessage(
+						"* You do not have sufficient arrows in your /reagents to auto fire your bow!");
+				return;
+			}	
+	
+			if (RangeWeapon.getItemType() != ItemType.BowArchery) {
+				//Log(Logs::Detail, Logs::Combat, "Ranged attack canceled. Ranged item is not a bow. type %d.", RangeItem->ItemType);
+				//Message(0, "Error: Rangeweapon: Item %d is not a bow.", RangeWeapon->GetID());
+				return;
+			}
+
+			//Log(Logs::Detail, Logs::Combat, "Shooting %s with bow %s (%d) and arrow %s (%d)", other->GetName(), RangeItem->Name, RangeItem->ID, AmmoItem->Name, AmmoItem->ID);
+	
+			// todo get range of item
+			double range = Utils.MAX_ENTITY_AGGRORANGE;
+			//Log(Logs::Detail, Logs::Combat, "Calculated bow range to be %.1f", range);
+			//range *= range;
+			double dist = other.getLocation().distance(this.getBukkitLivingEntity().getLocation());
+			if(dist > range) {
+				//Log(Logs::Detail, Logs::Combat, "Ranged attack out of range... client should catch this. (%f > %f).\n", dist, range);
+				//Message_StringID(13,TARGET_OUT_OF_RANGE);//Client enforces range and sends the message, this is a backup just incase.
+				this.getBukkitLivingEntity().sendMessage("Target out of range");
+				return;
+			}
+			else if(dist < Utils.MinRangedAttackDist){
+				this.getBukkitLivingEntity().sendMessage("Target too close");
+				return;
+			}
+	
+			if(!isAttackAllowed(other, false) ||
+				isCasting() ||
+				//isSitting() ||
+				(DivineAura() /*&& !GetGM()*/) ||
+				isStunned() ||
+				//isFeared() ||
+				isMezzed() //||
+				//(GetAppearance() == eaDead)
+				){
+				return;
+			}
+	
+			//Shoots projectile and/or applies the archery damage
+			doArcheryAttackDmg(other, rangedItemStack,RangeWeapon,0,0,0,0,0, 4.0F);
+	
+			//EndlessQuiver AA base1 = 100% Chance to avoid consumption arrow.
+			int ChanceAvoidConsume = /*aabonuses.ConsumeProjectile +*/getItemBonuses(SpellEffectType.ConsumeProjectile) + getSpellBonuses(SpellEffectType.ConsumeProjectile);
+	
+			if (isPlayer())
+			if (/*RangeItem->ExpendableArrow || */ChanceAvoidConsume < 0 || (ChanceAvoidConsume < 100 && Utils.RandomBetween(0,99) > ChanceAvoidConsume)){
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+				if (solPlayer != null)
+				{
+					int itemid = solPlayer.getArrowReagents().get(0);
+					solPlayer.reduceReagents(itemid, 1);
+				}
+				//Log(Logs::Detail, Logs::Combat, "Consumed one arrow from slot %d", ammo_slot);
+			} else {
+				//Log(Logs::Detail, Logs::Combat, "Endless Quiver prevented ammo consumption.");
+			}
+	
+			tryIncreaseSkill(SkillType.Archery.name().toUpperCase(),1);
+			//commonBreakInvisibleFromCombat();
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+
+	private void doArcheryAttackDmg(ISoliniaLivingEntity other, ItemStack rangeWeaponItemStack, ISoliniaItem rangedWeapon, int weapon_damage, int chance_mod, int focus, int ReuseTime, int range_id, float speed) {
+		if ((other == null ||
+			     ((isPlayer() && this.getBukkitLivingEntity().isDead()) || (other.isPlayer() && other.getBukkitLivingEntity().isDead())) ||
+			     (!isAttackAllowed(other, false)) || (other.getInvul() || other.getSpecialAbility(SpecialAbility.IMMUNE_MELEE) > 0))) {
+				return;
+			}
+		
+		
+		sendItemAnimation(other, SkillType.Archery);
+		//Log(Logs::Detail, Logs::Combat, "Ranged attack hit %s.", other->GetName());
+		
+		int hate = 0;
+		int TotalDmg = 0;
+		int WDmg = 0;
+		//int ADmg = 0;
+		if (weapon_damage < 1) {
+			WDmg = getWeaponDamage(other, rangeWeaponItemStack, 0);
+			//ADmg = getWeaponDamage(other, Ammo);
+		} else {
+			WDmg = weapon_damage;
+		}
+		
+		if (focus > 0) // From FcBaseEffects
+			WDmg += WDmg * focus / 100;
+		
+		if (WDmg > 0) {
+			if (WDmg < 0)
+				WDmg = 0;
+			int MaxDmg = WDmg;
+			hate = WDmg;
+			
+			if (MaxDmg == 0)
+				MaxDmg = 1;
+			
+			DamageHitInfo my_hit = new DamageHitInfo();
+			my_hit.base_damage = MaxDmg;
+			my_hit.min_damage = 0;
+			my_hit.damage_done = 1;
+
+			my_hit.skill = SkillType.Archery.name().toUpperCase();
+			my_hit.offense = offense(my_hit.skill);
+			my_hit.tohit = getTotalToHit(my_hit.skill, chance_mod);
+			my_hit.hand = InventorySlot.Range;
+
+			doAttack(other, my_hit);
+			TotalDmg = my_hit.damage_done;
+		} else {
+			TotalDmg = Utils.DMG_INVULNERABLE;
+		}
+		
+		if (isPlayer() && !isFeigned())
+			other.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate, false);
+		
+		other.Damage(this, TotalDmg, Utils.SPELL_UNKNOWN, SkillType.Archery.name().toUpperCase(),true,-1,false);
+		
+		// TODO Skill Proc Success
+		
+		// Weapon Proc
+		if (rangedWeapon != null && other.getBukkitLivingEntity() != null && !other.getBukkitLivingEntity().isDead())
+			tryWeaponProc(rangeWeaponItemStack, other, InventorySlot.Range);
+		
+		
+	}
+
+	private void sendItemAnimation(ISoliniaLivingEntity other, SkillType skillType) {
+		if (skillType.equals(SkillType.Archery))
+		{
+			net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
+					Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
+
+			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+				if (listening instanceof Player)
+					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+			}
+			
+			if (getBukkitLivingEntity() instanceof Player)
+			{
+			PacketPlayOutAnimation animationPacket = new PacketPlayOutAnimation(((CraftEntity)getBukkitLivingEntity()).getHandle(), 0);
+			((CraftPlayer)getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(animationPacket);
+			}
 		}
 	}
 

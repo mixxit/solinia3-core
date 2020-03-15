@@ -132,6 +132,8 @@ public class Utils {
 	public static final float ProcDexDivideBy = 11000;
 
 	public static final int MinHastedDelay = 400;
+
+	public static final double MinRangedAttackDist = 4;
 	
 	public static int GetLocalSayRange(String worldName)
 	{
