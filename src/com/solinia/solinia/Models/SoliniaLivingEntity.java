@@ -364,6 +364,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			}
 			
+			if (!this.getBukkitLivingEntity().hasLineOfSight(defender.getBukkitLivingEntity())) {
+				getBukkitLivingEntity().sendMessage(
+						"* You do not have line of sight to your target!");
+				return;
+			}
+			
 			// if (AutoFireEnabled()) {
 			RangedAttack(defender, false);
 			
@@ -387,7 +393,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (listening instanceof Player)
 				{
 					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(
-							((CraftPlayer) getBukkitLivingEntity()).getHandle(), 3);
+							((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) getBukkitLivingEntity()).getHandle(), 3);
 					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
 				}
 			}
@@ -402,7 +408,39 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			//triggerDefensiveProcs(auto_attack_target, InventorySlot.Primary, false);
 			
 			doAttackRounds(defender, InventorySlot.Primary, false);
+			
+			// AE Attack Rampage
+			
+			// BERSERK
+			
+			if (this.getClassObj() != null && this.getClassObj().canDualWield())
+			{
+				// Range check
+				if (!defender.combatRange(this)) {
+					// this is a duplicate message don't use it.
+					//Message_StringID(MT_TooFarAway,TARGET_TOO_FAR);
+				}
+				
+				tryIncreaseSkill(SkillType.DualWield.name().toUpperCase(), 1);
+				if (checkDualWield()) {
+					tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Secondary);
+					this.getBukkitLivingEntity().sendMessage("You dual wield!");
+					doAttackRounds(defender, InventorySlot.Secondary, false);
+				}
+			}
+			
 		}
+	}
+
+	private boolean checkDualWield() {
+		int chance = getSkill(SkillType.DualWield.name().toUpperCase()) + getLevel();
+
+		chance += /*aabonuses.Ambidexterity +*/ getSpellBonuses(SpellEffectType.Ambidexterity) + getItemBonuses(SpellEffectType.Ambidexterity);
+		int per_inc = /*spellbonuses.DualWieldChance*/ + getSpellBonuses(SpellEffectType.DualWieldChance) + getItemBonuses(SpellEffectType.DualWieldChance);
+		if (per_inc > 0)
+			chance += chance * per_inc / 100;
+
+		return Utils.RandomBetween(1, 375) <= chance;
 	}
 
 	private void RangedAttack(ISoliniaLivingEntity other, boolean canDoubleAttack) {

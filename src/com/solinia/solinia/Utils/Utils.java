@@ -133,7 +133,7 @@ public class Utils {
 
 	public static final int MinHastedDelay = 400;
 
-	public static final double MinRangedAttackDist = 4;
+	public static final double MinRangedAttackDist = 2;
 	
 	public static int GetLocalSayRange(String worldName)
 	{
