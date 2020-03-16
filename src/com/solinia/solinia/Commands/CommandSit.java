@@ -21,6 +21,13 @@ public class CommandSit implements CommandExecutor {
 		if (sender instanceof Player) {
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+				
+				if (!solPlayer.getBukkitPlayer().isOnGround())
+				{
+					solPlayer.getBukkitPlayer().sendMessage("You need to be on the ground to use this command");
+					return true;
+				}
+				
 				EntityUtils.sit(solPlayer.getBukkitPlayer());
 				
 			} catch (CoreStateInitException e) {

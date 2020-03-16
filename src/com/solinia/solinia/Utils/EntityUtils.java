@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
@@ -3503,15 +3504,42 @@ public class EntityUtils {
             ex.printStackTrace();
         }
 	}
+	
+	public static Location getGroundLocationAt(Location location){
+		final World world = location.getWorld();
+
+        // Get the highest block in this world or null if no world
+        final Block highest = world != null ? world.getHighestBlockAt(location).getRelative(BlockFace.DOWN) : null; // Get the highest block in this world or null if no world
+
+        // If the highest block is not null and under the given location keep it if not get the block at given location
+        Block block = highest != null && highest.getY() < location.getY() ? highest : location.getBlock();
+
+        // Iterate all block under location until we find a solid block or reach Y == 0
+        while(!block.getType().isSolid() && block.getLocation().getY() >= 0)
+        {
+            // Get the block under the current block
+            block = block.getRelative(BlockFace.DOWN);
+        }
+
+        // Create a new Location instance with de Y of the block found or Y of given location if no block found
+        return new Location(location.getWorld(), location.getX(), block.getY() >= 0 ? block.getY() + 1 : location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+    }
 
 
 	public static void sit(Player bukkitPlayer) {
+		if (bukkitPlayer == null)
+			return;
+		
 		if (bukkitPlayer.getVehicle() != null)
 			return;
+		
+		// Slam player to the floor
+		bukkitPlayer.teleport(getGroundLocationAt(bukkitPlayer.getLocation()));
 		
 		Entity entity = bukkitPlayer.getWorld().spawnEntity(bukkitPlayer.getLocation().subtract(0, 0.5, 0),EntityType.ARROW);
 		entity.setSilent(true);
 		entity.setInvulnerable(true);
 		entity.addPassenger(bukkitPlayer);
+		bukkitPlayer.sendMessage("* You are no longer standing - Use /stand to get back up");
 	}
 }
