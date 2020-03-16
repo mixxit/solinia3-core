@@ -1567,6 +1567,10 @@ public class SoliniaNPC implements ISoliniaNPC {
 			return FactionStandingType.FACTION_INDIFFERENT;
 		}
 	}
-	
-	
+
+	@Override
+	public int getNPCDefaultAtk() {
+		// TODO Auto-generated method stub
+		return (int) Math.ceil((getLevel()/7)*10);
+	}
 }

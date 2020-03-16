@@ -459,4 +459,6 @@ public interface ISoliniaLivingEntity {
 	public void tryDefensiveProc(SoliniaLivingEntity soliniaLivingEntity, int hand);
 
 	SoliniaActiveSpell getFirstActiveSpellWithSpellEffectType(SpellEffectType type);
+
+	int getAABonuses(SpellEffectType atk);
 }

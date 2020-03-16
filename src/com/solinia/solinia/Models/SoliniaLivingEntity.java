@@ -3072,8 +3072,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (frequency < 0.1F)
 			frequency = 0.10F;
 		
+		frequency = (float)(Math.round(frequency*100.0)/100.0);
 		Utils.DebugLog("SoliniaLivingEntity","getAutoAttackTimerFrequencySeconds",getBukkitLivingEntity().getName(),"WeaponDelayInSeconds: " + weaponDelayInSeconds + " onePercentWeaponDelay: " + onePercentWeaponDelay + " hastedWeaponDelay: " + hastedWeaponDelay + " hastedWeaponDelayMinusDelay: " + hastedWeaponDelayMinusDelay + " frequency: " + frequency);
-
 		return frequency;
 	}
 
@@ -4200,8 +4200,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	{
 		int attackRating = 0;
 		
-		int itemBonusesAtk = 0; // todo
-		int aabonusesAtk = 0; // todo
+		int itemBonusesAtk = getItemBonuses(SpellEffectType.ATK); // todo
+		int aabonusesAtk = getAABonuses(SpellEffectType.ATK); // todo
 		int spellbonusesAtk = getSpellBonuses(SpellEffectType.ATK);
 		
 		int WornCap = itemBonusesAtk;
@@ -4226,6 +4226,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return attackRating;
 	}
 	
+	@Override
+	public int getAABonuses(SpellEffectType atk) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	public int getPrimarySkillValue()
 	{
 		if (this.getBukkitLivingEntity() == null)
@@ -4246,6 +4252,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// TODO, find a place for this base value, possibly on race?
 		int ATK = 0;
+		if (this.isNPC() && this.getNPC() != null)
+		{
+			ATK = this.getNPC().getNPCDefaultAtk();
+		}
 		// this is from the bot code..
 		return ATK + attackItemBonuses + attackSpellBonsues; // todo AA bonuses;
 	}
@@ -9504,20 +9514,29 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void sendStats(LivingEntity targetMessage) {
-		targetMessage.sendMessage("Level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET);
+		targetMessage.sendMessage("STATS:");
+		targetMessage.sendMessage("----------------------------");
+		String strlevel = "Level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET;
 
+		String strclass = "";
 		if (getClassObj() != null)
 		{
-			targetMessage.sendMessage("Class: " + ChatColor.GOLD + getClassObj().getName() + ChatColor.RESET);
+			strclass = "Class: " + ChatColor.GOLD + getClassObj().getName() + ChatColor.RESET;
 		} else {
-			targetMessage.sendMessage("Class: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET);
+			strclass = "Class: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET;
 		}
+		
+		String strrace = "";
 		if (getRace() != null)
 		{
-			targetMessage.sendMessage("Race: " + ChatColor.GOLD + getRace().getName() + ChatColor.RESET);
+			strrace = "Race: " + ChatColor.GOLD + getRace().getName() + ChatColor.RESET;
 		} else {
-			targetMessage.sendMessage("Race: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET);
+			strrace = "Race: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET;
 		}
+
+		targetMessage.sendMessage(strlevel + " " + strclass + " " + strrace);
+
+		
 		
 		targetMessage.sendMessage(
 				"STR: " + ChatColor.GOLD + getStrength() + ChatColor.RESET + 
@@ -9528,29 +9547,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				" WIS: " + ChatColor.GOLD + getWisdom() + ChatColor.RESET + 
 				" CHA: " + ChatColor.GOLD + getCharisma() + ChatColor.RESET 
 				);
-		targetMessage.sendMessage("Maximum HP of: " + ChatColor.RED + getBukkitLivingEntity().getHealth() + "/" + getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + ChatColor.RESET);
-		targetMessage.sendMessage("Maximum MP of: " + ChatColor.AQUA +getMana() + "/" + getMaxMP() + " (" + getItemMana() + " of this is from items)" + ChatColor.RESET);
-		targetMessage.sendMessage("Armour Class Mitigation of: " + ChatColor.GOLD + getMitigationAC() + ChatColor.RESET);
-		targetMessage.sendMessage("Attack Value of: " + ChatColor.GOLD+ getTotalAtk() + ChatColor.RESET);
-		targetMessage.sendMessage("Attack Speed of: " + ChatColor.GOLD+ getAttackSpeed() + "%" + ChatColor.RESET);
-        targetMessage.sendMessage("MainWeapon Attack Rate (Seconds) of: " + ChatColor.GOLD+ getAutoAttackTimerFrequencySeconds() + ChatColor.RESET);
-        targetMessage.sendMessage("Total Rune of: " + ChatColor.GOLD + getRune() + ChatColor.RESET);
-        targetMessage.sendMessage(
-        		"FR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_FIRE) + ChatColor.RESET + 
-        		" CR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_COLD) + ChatColor.RESET + 
-        		" MR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_MAGIC) + ChatColor.RESET + 
-        		" PR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_POISON) + ChatColor.RESET + 
-        		" DR: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_DISEASE) + ChatColor.RESET
-        		);
-        
+		String strmaxhp = "MaxHP: " + ChatColor.RED + getBukkitLivingEntity().getHealth() + "/" + getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + ChatColor.RESET;
+		String strmaxmp = "MaxMP: " + ChatColor.AQUA +getMana() + "/" + getMaxMP() + " (Items:" + getItemMana()+")" + ChatColor.RESET;
+		targetMessage.sendMessage(strmaxhp + " " + strmaxmp);
+        String resistsstr = "RESISTS: Fire: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_FIRE) + ChatColor.RESET + 
+        		" Cold: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_COLD) + ChatColor.RESET + 
+        		" Magic: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_MAGIC) + ChatColor.RESET + 
+        		" Poison: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_POISON) + ChatColor.RESET + 
+        		" Disease: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_DISEASE) + ChatColor.RESET
+        		;
+        targetMessage.sendMessage(resistsstr);
+		String strmitigationac = "MitigationAC: " + ChatColor.GOLD + getMitigationAC() + ChatColor.RESET;
+		String strtotalatk = "TotalATK: " + ChatColor.GOLD+ getTotalAtk() + ChatColor.RESET;
+        String runestr = "Rune: " + ChatColor.GOLD + getRune() + ChatColor.RESET;
         ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
         String skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillname();
-        targetMessage.sendMessage("Skill of Held Item: " + skill);
-        targetMessage.sendMessage("DEBUG: tohit: " + this.computeToHit(skill) + " / " + this.getTotalToHit(skill, 0));
-        targetMessage.sendMessage("DEBUG: Offense: " + this.offense(skill) + " | Item: " + 0 /*todo itembonuses for atk*/ + " ~Used: " + (0 /*todo itembonuses for atk*/ * 1.342) + " | Spell: " + getSpellBonuses(SpellEffectType.ATK));
-        targetMessage.sendMessage("DEBUG: ATK: " + this.getAtk());
-        targetMessage.sendMessage("DEBUG: mitigation AC: " + this.getMitigationAC());
-        targetMessage.sendMessage("DEBUG: defense: " + this.computeDefense() + "/" + this.getTotalDefense() + " Spell: " + getSpellBonuses(SpellEffectType.ArmorClass) );
+        String strmainweaponskill = "MainWeapSkill: " + skill;
+		targetMessage.sendMessage(runestr + " " + strmitigationac + " " + strtotalatk + " " + strmainweaponskill);
+		String strattackspeed = "AttackSpeedPct: " + ChatColor.GOLD+ getAttackSpeed() + "%" + ChatColor.RESET;
+        
+		String strmainweaponattackratesec = "MainWeapAttkRate: " + ChatColor.GOLD+ getAutoAttackTimerFrequencySeconds() +"s"+ ChatColor.RESET;
+		targetMessage.sendMessage(strattackspeed + " " + strmainweaponattackratesec);
+        //targetMessage.sendMessage("DEBUG: tohit: " + this.computeToHit(skill) + " / " + this.getTotalToHit(skill, 0));
+        //targetMessage.sendMessage("DEBUG: Offense: " + this.offense(skill) + " | Item: " + 0 /*todo itembonuses for atk*/ + " ~Used: " + (0 /*todo itembonuses for atk*/ * 1.342) + " | Spell: " + getSpellBonuses(SpellEffectType.ATK));
+        //targetMessage.sendMessage("DEBUG: ATK: " + this.getAtk());
+        //targetMessage.sendMessage("DEBUG: mitigation AC: " + this.getMitigationAC());
+        //targetMessage.sendMessage("DEBUG: defense: " + this.computeDefense() + "/" + this.getTotalDefense() + " Spell: " + getSpellBonuses(SpellEffectType.ArmorClass) );
+		targetMessage.sendMessage("----------------------------");
 	}
 
 	@Override

@@ -281,4 +281,6 @@ public interface ISoliniaNPC {
 
 	boolean canDisarm();
 
+	int getNPCDefaultAtk();
+
 }
