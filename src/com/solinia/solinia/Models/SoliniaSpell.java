@@ -3172,7 +3172,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages, String requiredWeaponSkillType) {
-		// Entity was targeted for this spell but is that the final location?
+		// Entity was targeted for this spell but is that the final location? 
+		
 		try {
 			switch (Utils.getSpellTargetType(getTargettype())) {
 			case Self:
@@ -3284,8 +3285,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case GroupClientAndPet:
 				boolean successGroupClient = false;
 
+				// if npc, group spell should apply to self
 				if (!(sourceEntity instanceof Player))
-					return false;
+				{
+					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity, this,
+							sourceEntity, sendMessages, requiredWeaponSkillType);
+				}
 
 				ISoliniaPlayer playerGroupClient = SoliniaPlayerAdapter.Adapt((Player) sourceEntity);
 				ISoliniaGroup groupClient = playerGroupClient.getGroup();
@@ -3314,8 +3319,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case Group:
 				boolean successGroup = false;
 
+				// if npc, group spell should apply to self
 				if (!(sourceEntity instanceof Player))
-					return false;
+				{
+					return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity, this,
+							sourceEntity, sendMessages, requiredWeaponSkillType);
+				}
 
 				ISoliniaPlayer playerGroupTeleport = SoliniaPlayerAdapter.Adapt((Player) sourceEntity);
 				ISoliniaGroup groupTeleport = playerGroupTeleport.getGroup();

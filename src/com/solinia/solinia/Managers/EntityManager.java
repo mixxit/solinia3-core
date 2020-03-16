@@ -453,7 +453,7 @@ public class EntityManager implements IEntityManager {
 			}
 			
 			boolean addSpellResult = entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages, requiredWeaponSkillType);
-			
+
 			if (targetEntity instanceof Player)
 				SoliniaPlayerAdapter.Adapt((Player)targetEntity).sendEffects();
 			return addSpellResult;
@@ -1792,11 +1792,11 @@ public class EntityManager implements IEntityManager {
 		
 		if (!autoAttackState == false)
 		{
-			player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+			player.spigot().sendMessage(ChatMessageType.CHAT,
 					new TextComponent(ChatColor.GRAY + "* You stop auto attacking"));
 		} else {
 			
-			player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+			player.spigot().sendMessage(ChatMessageType.CHAT,
 					new TextComponent(ChatColor.GRAY + "* You start auto attacking"));
 		}
 		

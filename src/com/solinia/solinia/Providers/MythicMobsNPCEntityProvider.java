@@ -340,10 +340,11 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "  - 0 clear\r" + System.lineSeparator();
 		mob = mob + "  - 1 skeletonbowattack\r" + System.lineSeparator();
 		mob = mob + "  - 2 meleeattack\r" + System.lineSeparator();
-		mob = mob + "  - 3 gotoowner\r" + System.lineSeparator();
-		mob = mob + "  - 4 lookatplayers\r" + System.lineSeparator();
+		
+		mob = mob + "  - 4 gotoowner\r" + System.lineSeparator();
+		mob = mob + "  - 5 lookatplayers\r" + System.lineSeparator();
 		if (npc.isRoamer())
-		mob = mob + "  - 5 randomstroll\r" + System.lineSeparator();
+		mob = mob + "  - 6 randomstroll\r" + System.lineSeparator();
 		
 		mob = mob + "  AITargetSelectors:\r" + System.lineSeparator();
 		mob = mob + "  - 0 clear\r" + System.lineSeparator();

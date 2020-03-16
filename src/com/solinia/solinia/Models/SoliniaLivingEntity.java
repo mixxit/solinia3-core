@@ -1,5 +1,6 @@
 package com.solinia.solinia.Models;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.naming.InterruptedNamingException;
 
@@ -35,7 +37,10 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
 import com.rit.sucy.player.TargetHelper;
+import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -281,6 +286,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (invulnerable)");
 				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
+				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
+					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
 				return;
 			} catch (CoreStateInitException e) {
 
@@ -292,6 +299,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (dead)");
 				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
+				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
+					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
 				return;
 			} catch (CoreStateInitException e) {
 
@@ -303,6 +312,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (dead)");
 				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
+				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
+					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
 				return;
 			} catch (CoreStateInitException e) {
 
@@ -333,6 +344,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				((Player) this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 						new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
 			}
+			return;
+		}
+		
+		// MEZZED
+		if (defender.isMezzed()) {
 			return;
 		}
 
@@ -389,22 +405,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			}	
 			
+			// this is where we need to validate
+			
 			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 					Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
+			// Send packet to nearby players
 			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
 				if (listening instanceof Player)
-				{
-					PacketPlayOutAnimation packet = new PacketPlayOutAnimation(
-							((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) getBukkitLivingEntity()).getHandle(), 3);
-					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
-				}
+			        EntityUtils.sendArmSwingPacket(getBukkitLivingEntity(),(Player)listening);
 			}
 			
+			// Send packet to self
 			if (getBukkitLivingEntity() instanceof Player)
-			{
-				PacketPlayOutAnimation animationPacket = new PacketPlayOutAnimation(((CraftEntity)getBukkitLivingEntity()).getHandle(), 0);
-				((CraftPlayer)getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(animationPacket);
-			}
+		        EntityUtils.sendArmSwingPacket(getBukkitLivingEntity(),(Player)getBukkitLivingEntity());
 			
 			tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Primary);
 			triggerDefensiveProcs(defender, InventorySlot.Primary, false, 0);
@@ -649,20 +662,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (skillType.equals(SkillType.Archery))
 		{
 			net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
-			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(ep, 0);
+			
+			
 			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
 					Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
 
+			// Send shoot arrow to nearby people
 			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
 				if (listening instanceof Player)
-					((CraftPlayer) listening).getHandle().playerConnection.sendPacket(packet);
+			        EntityUtils.sendArmSwingPacket(getBukkitLivingEntity(),(Player)listening);
 			}
 			
+			// Self send shoot arrow
 			if (getBukkitLivingEntity() instanceof Player)
-			{
-			PacketPlayOutAnimation animationPacket = new PacketPlayOutAnimation(((CraftEntity)getBukkitLivingEntity()).getHandle(), 0);
-			((CraftPlayer)getBukkitLivingEntity()).getHandle().playerConnection.sendPacket(animationPacket);
-			}
+		        EntityUtils.sendArmSwingPacket(getBukkitLivingEntity(),(Player)getBukkitLivingEntity());
 			
 			Arrow arrow = getBukkitLivingEntity().launchProjectile(Arrow.class);
 			arrow.setPickupStatus(org.bukkit.entity.AbstractArrow.PickupStatus.DISALLOWED);
@@ -5170,6 +5183,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity)
 			throws CoreStateInitException {
+		if (this.getClassObj() == null)
+			return;
+		
 		int beneficialSelfSpells = SpellType.Heal | SpellType.InCombatBuff | SpellType.Buff;
 		int beneficialOtherSpells = SpellType.Heal;
 		int detrimentalSpells = SpellType.Nuke | SpellType.Lifetap | SpellType.DOT | SpellType.Dispel | SpellType.Mez
@@ -5188,21 +5204,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			engagedDetrimentalOtherChance = 90;
 		}
 
+
 		// Try self buff, then nearby then target detrimental
-		Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-				+ " attempting to cast self buff");
-		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(), engagedBeneficialSelfChance,
-				beneficialSelfSpells)) {
-			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-					+ " attempting to cast others buff");
-			if (!aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance,
-					StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),
-					beneficialOtherSpells)) {
-				Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-						+ " attempting to cast detrimental");
+		Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast self buff");
+		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(), engagedBeneficialSelfChance,beneficialSelfSpells)) {
+			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast others buff");
+			if (!aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance, StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(), 					beneficialOtherSpells)) {
+				Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast detrimental");
 				if (!aiCastSpell(plugin, npc, castingAtEntity, engagedDetrimentalOtherChance, detrimentalSpells)) {
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-							+ " cannot cast at all");
+					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " cannot cast at all");
 				}
 			}
 		}
@@ -5290,7 +5300,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes)
 			throws CoreStateInitException {
 		if (this.getClassObj() == null) {
-			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+			Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a spell as I have no class");
 			return false;
 		}
@@ -5300,6 +5310,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (npc.getNpcSpellList() < 1 && this.getClassObj().getNpcspelllist() < 1)
 			return false;
 
+		ISoliniaLivingEntity tar = SoliniaLivingEntityAdapter.Adapt(target);
+		if (tar == null)
+			return false;
+		
 		if (getClassObj().getNpcspelllist() > 0) {
 			npcSpellList = StateManager.getInstance().getConfigurationManager()
 					.getNPCSpellList(getClassObj().getNpcspelllist());
@@ -5308,12 +5322,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (npc.getNpcSpellList() > 0) {
 			npcSpellList = StateManager.getInstance().getConfigurationManager().getNPCSpellList(npc.getNpcSpellList());
 		}
+		
+		boolean cast_only_option = (isRooted() && !combatRange(tar));
 
-		if (iChance < 100) {
+		if (!cast_only_option && iChance < 100) {
 			int roll = Utils.RandomBetween(0, 100);
 			if (roll >= iChance) {
-				Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-						+ " cannot cast a spell as i rolled badly roll: " + roll + " vs chance: " + iChance);
 				return false;
 			}
 		}
@@ -5332,6 +5346,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				spells.add(entry);
 			}
 		}
+		
+		List<Integer> activeSpellIds = tar.getActiveSpells().stream().map(e -> e.getSpellId()).collect(Collectors.toList());
+	
+		spells = spells.stream().filter(e -> !activeSpellIds.contains(e.getSpellid())).collect(Collectors.toList());
 
 		Collections.sort(spells, new Comparator<NPCSpellListEntry>() {
 			public int compare(NPCSpellListEntry o1, NPCSpellListEntry o2) {
@@ -5344,7 +5362,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// AI has spells?
 		if (spells.size() == 0) {
-			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+			Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a spell as I have no spells");
 			return false;
 		}
@@ -5367,7 +5385,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				switch (spelllistentry.getType()) {
 				case SpellType.Heal:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast heal " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
 							&& !Utils.hasSpellActive(soltarget, spell)
@@ -5387,7 +5405,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Root:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast root " + spell.getName());
 					// TODO - Pick at random
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
@@ -5398,7 +5416,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
-								Utils.DebugMessage(
+								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -5413,8 +5431,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					break;
 				case SpellType.InCombatBuff:
 				case SpellType.Buff:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-							+ " attempting to cast buff " + spell.getName());
 					if (((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
 							&& !Utils.hasSpellActive(soltarget, spell)
 							&& Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Target)
@@ -5426,31 +5442,23 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO Spell stacking
 					// TODO NPC Pets
 					) {
-
 						if (!checked_los) {
 							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
-								Utils.DebugMessage(
-										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-												+ " could not cast as i could not see the arget");
+								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"Could not cast as i could not see the arget");
 								return false;
 							}
 							checked_los = true;
 						} else {
-							Utils.DebugMessage(
-									"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-											+ " could not cast as i could not see the target (already)");
+							Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+									" could not cast as i could not see the target (already)");
 						}
-						aiDoSpellCast(plugin, spell, soltarget, mana_cost);
+						boolean success = aiDoSpellCast(plugin, spell, soltarget, mana_cost);
 						StateManager.getInstance().getEntityManager().setDontSpellTypeMeBefore(target, SpellType.Buff,
 								expiretimestamp);
-						Utils.DebugMessage(
-								"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-										+ " buff appears to be successful");
+						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"Buff success: " + success);
 						return true;
 					} else {
-						Utils.DebugMessage("NPC: " + npc.getName()
-								+ this.getBukkitLivingEntity().getUniqueId().toString()
-								+ " could not cast as either the spell target was wrong, the target was not me or i have already buffed myself recently");
+						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName()," could not cast as either the spell target was wrong, the target was not me or i have already buffed myself recently");
 					}
 					break;
 				case SpellType.Escape:
@@ -5458,7 +5466,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return false;
 				case SpellType.Slow:
 				case SpellType.Debuff:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast debuff " + spell.getName());
 					// TODO debuff at random
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
@@ -5467,7 +5475,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
-								Utils.DebugMessage(
+								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -5479,7 +5487,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Nuke:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast nuke " + spell.getName());
 					boolean nukeRoll = Utils.RandomRoll(70);
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
@@ -5488,7 +5496,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
-								Utils.DebugMessage(
+								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -5499,20 +5507,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 									"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 											+ " could not cast as i could not see the target (previously checked)");
 						}
-						Utils.DebugMessage(
+						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 								"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 										+ " nuke appears to be successful");
 						aiDoSpellCast(plugin, spell, soltarget, mana_cost);
 						return true;
 					} else {
-						Utils.DebugMessage(
+						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 								"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 										+ " could not cast nuke as either my mana ratio was too high (" + (manaR >= 10)
 										+ ") or i rolled badly roll failure: (" + nukeRoll + ")");
 					}
 					break;
 				case SpellType.Dispel:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast dispell " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
 							&& !Utils.hasSpellActive(soltarget, spell) && Utils.RandomRoll(15)) {
@@ -5532,7 +5540,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Mez:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast mez " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
 							&& !Utils.hasSpellActive(soltarget, spell) && Utils.RandomRoll(20)) {
@@ -5546,7 +5554,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO Pets
 					break;
 				case SpellType.Lifetap:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast lifetap " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
 							&& !Utils.hasSpellActive(soltarget, spell) && getHPRatio() <= 95 && Utils.RandomRoll(50)
@@ -5554,7 +5562,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
-								Utils.DebugMessage(
+								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -5567,7 +5575,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Snare:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast snare " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
 							&& !Utils.hasSpellActive(soltarget, spell) && !soltarget.isRooted() && Utils.RandomRoll(50)
@@ -5577,7 +5585,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
-								Utils.DebugMessage(
+								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -5593,7 +5601,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 					break;
 				case SpellType.DOT:
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast dot " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell))
 							&& !Utils.hasSpellActive(soltarget, spell) && (Utils.RandomRoll(60))
@@ -5604,7 +5612,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 						if (!checked_los) {
 							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
-								Utils.DebugMessage(
+								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;

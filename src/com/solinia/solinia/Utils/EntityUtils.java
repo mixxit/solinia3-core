@@ -1,5 +1,6 @@
 package com.solinia.solinia.Utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -3406,7 +3410,6 @@ public class EntityUtils {
 			cur_hp = hp;
 
 		((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle()).setHealth(cur_hp);
-		
 		float soundVolume = 1.0F;
 		if (hpchange < 0)
 		{
@@ -3464,5 +3467,18 @@ public class EntityUtils {
 		}
 		
 		return false;
+	}
+
+
+	public static void sendArmSwingPacket(LivingEntity entityForAnimation, Player packetReceiverPlayer) {
+		try {
+			PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.ANIMATION);
+			packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
+			packet.getIntegers().write(1, 0);
+			packet.setMeta("sol", 1);
+        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 	}
 }

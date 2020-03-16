@@ -11,6 +11,10 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketAdapter;
 import com.palmergames.bukkit.towny.Towny;
 import com.solinia.solinia.Commands.*;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -132,6 +136,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private MarkerSet soliniaZonesSet;
 	private MarkerSet regionExtentsSet;
 	private NPCYellForAssistTimer npcYellForAssistTimer;
+	private static ProtocolManager protocolManager;
 	
 	@Override
 	public void onEnable() {
@@ -206,11 +211,22 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		System.out.println("Registered outgoing plugin channel: " + Solinia3UIChannelNames.Outgoing);		
 		getServer().getMessenger().registerOutgoingPluginChannel(this, Solinia3UIChannelNames.Outgoing); // we register the outgoing channel
 		
+		startProtocolListeners();
+		
 		
 		startHttpListener();
-	    
+
 	}
 	
+	public static ProtocolManager getProtocolManager() {
+        return protocolManager;
+    }
+	
+	private void startProtocolListeners() {
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		protocolManager.addPacketListener(new ParticlePacketAdapter(PacketAdapter.params(this, new PacketType[] {PacketType.Play.Server.ANIMATION})));
+	}
+
 	private void unloadDynmap()
 	{
 		dynmap = getServer().getPluginManager().getPlugin("dynmap");
