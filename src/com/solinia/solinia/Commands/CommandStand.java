@@ -19,15 +19,9 @@ public class CommandStand implements CommandExecutor {
 		if (sender instanceof Player) {
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-				solPlayer.getBukkitPlayer().teleport(solPlayer.getBukkitPlayer().getLocation().add(0, 0.5, 0));
-
-				for (Entity listening : solPlayer.getBukkitPlayer().getNearbyEntities(20, 20, 20)) {
-					if (listening instanceof Player)
-					{
-						EntityUtils.sendAnimationPacket(solPlayer.getBukkitPlayer(), (Player)listening,SolAnimationType.Stand);
-					}
-				}
-				EntityUtils.sendAnimationPacket(solPlayer.getBukkitPlayer(), (Player)solPlayer.getBukkitPlayer(), SolAnimationType.Stand);
+				if (solPlayer.getBukkitPlayer().getVehicle() != null)
+					solPlayer.getBukkitPlayer().getVehicle().eject();
+				
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				sender.sendMessage(e.getMessage());

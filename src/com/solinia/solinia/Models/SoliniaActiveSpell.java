@@ -1547,13 +1547,7 @@ public class SoliniaActiveSpell {
 			if (solPlayer != null) {
 				solPlayer.setFeigned(true);
 				solPlayer.getBukkitPlayer().teleport(solPlayer.getBukkitPlayer().getLocation().subtract(0, 0.5, 0));
-				for (Entity listening : solPlayer.getBukkitPlayer().getNearbyEntities(20, 20, 20)) {
-					if (listening instanceof Player)
-					{
-						EntityUtils.sendAnimationPacket(solPlayer.getBukkitPlayer(), (Player)listening,SolAnimationType.Sleep);
-					}
-				}
-				EntityUtils.sendAnimationPacket(solPlayer.getBukkitPlayer(), (Player)solPlayer.getBukkitPlayer(), SolAnimationType.Sleep);
+				EntityUtils.sit(solPlayer.getBukkitPlayer());
 			}
 
 		} catch (CoreStateInitException e) {

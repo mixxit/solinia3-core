@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -19,15 +21,8 @@ public class CommandSit implements CommandExecutor {
 		if (sender instanceof Player) {
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-				solPlayer.getBukkitPlayer().teleport(solPlayer.getBukkitPlayer().getLocation().subtract(0, 0.5, 0));
-
-				for (Entity listening : solPlayer.getBukkitPlayer().getNearbyEntities(20, 20, 20)) {
-					if (listening instanceof Player)
-					{
-						EntityUtils.sendAnimationPacket(solPlayer.getBukkitPlayer(), (Player)listening,SolAnimationType.Sit);
-					}
-				}
-				EntityUtils.sendAnimationPacket(solPlayer.getBukkitPlayer(), (Player)solPlayer.getBukkitPlayer(), SolAnimationType.Sit);
+				EntityUtils.sit(solPlayer.getBukkitPlayer());
+				
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				sender.sendMessage(e.getMessage());

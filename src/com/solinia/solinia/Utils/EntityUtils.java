@@ -12,9 +12,11 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -3497,40 +3499,19 @@ public class EntityUtils {
 				packet.setMeta("sol", 1);
 	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
 			}
-			
-			if (animationType == SolAnimationType.Sit)
-			{
-				PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.MOUNT);
-				packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
-				int[] ar = new int[1];
-				ar[0] = entityForAnimation.getEntityId();
-				packet.getIntegerArrays().write(0, ar);
-				packet.setMeta("sol", 1);
-	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
-			}
-			
-			if (animationType == SolAnimationType.Stand)
-			{
-				PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.MOUNT);
-				packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
-				int[] ar = new int[0];
-				packet.getIntegerArrays().write(0, ar);
-				packet.setMeta("sol", 1);
-	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
-			}
-			
-			if (animationType == SolAnimationType.Sleep)
-			{
-				PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.MOUNT);
-				packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
-				int[] ar = new int[1];
-				ar[0] = entityForAnimation.getEntityId();
-				packet.getIntegerArrays().write(0, ar);
-				packet.setMeta("sol", 1);
-	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
-			}
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+	}
+
+
+	public static void sit(Player bukkitPlayer) {
+		if (bukkitPlayer.getVehicle() != null)
+			return;
+		
+		Entity entity = bukkitPlayer.getWorld().spawnEntity(bukkitPlayer.getLocation().subtract(0, 0.5, 0),EntityType.ARROW);
+		entity.setSilent(true);
+		entity.setInvulnerable(true);
+		entity.addPassenger(bukkitPlayer);
 	}
 }
