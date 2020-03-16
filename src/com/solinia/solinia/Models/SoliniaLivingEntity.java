@@ -412,12 +412,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// Send packet to nearby players
 			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
 				if (listening instanceof Player)
-			        EntityUtils.sendArmSwingPacket(getBukkitLivingEntity(),(Player)listening);
+			        EntityUtils.sendAnimationPacket(getBukkitLivingEntity(),(Player)listening,SolAnimationType.SwingArm);
 			}
 			
 			// Send packet to self
 			if (getBukkitLivingEntity() instanceof Player)
-		        EntityUtils.sendArmSwingPacket(getBukkitLivingEntity(),(Player)getBukkitLivingEntity());
+		        EntityUtils.sendAnimationPacket(getBukkitLivingEntity(),(Player)getBukkitLivingEntity(),SolAnimationType.SwingArm);
 			
 			tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Primary);
 			triggerDefensiveProcs(defender, InventorySlot.Primary, false, 0);
@@ -670,12 +670,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// Send shoot arrow to nearby people
 			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
 				if (listening instanceof Player)
-			        EntityUtils.sendArmSwingPacket(getBukkitLivingEntity(),(Player)listening);
+					EntityUtils.sendAnimationPacket(getBukkitLivingEntity(),(Player)listening, SolAnimationType.SwingArm);
 			}
 			
 			// Self send shoot arrow
 			if (getBukkitLivingEntity() instanceof Player)
-		        EntityUtils.sendArmSwingPacket(getBukkitLivingEntity(),(Player)getBukkitLivingEntity());
+				EntityUtils.sendAnimationPacket(getBukkitLivingEntity(),(Player)getBukkitLivingEntity(), SolAnimationType.SwingArm);
 			
 			Arrow arrow = getBukkitLivingEntity().launchProjectile(Arrow.class);
 			arrow.setPickupStatus(org.bukkit.entity.AbstractArrow.PickupStatus.DISALLOWED);
@@ -6930,7 +6930,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean checkHateTargets() {
-
 		if (this.getBukkitLivingEntity().isDead())
 		{
 			return false;
@@ -8075,7 +8074,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (((Creature) getBukkitLivingEntity()).getTarget() != null && ((Creature) getBukkitLivingEntity()).getTarget()
 				.getLocation().distance(this.getBukkitLivingEntity().getLocation()) < 150)
+		{
+			if (!this.hasHate())
+			{
+				this.say("Hmm, he must have gone...");
+				this.setAttackTarget(null);
+				this.resetPosition(true);
+			}
+			
 			return;
+		}
 
 		// Go for hate list first
 		if (checkHateTargets() == true)
@@ -8659,6 +8667,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.hasHate())
 		{
 			return;
+		}
+		
+		try
+		{
+			// Always clear all active spells when resetting
+			StateManager.getInstance().getEntityManager().removeSpellEffects(this.getBukkitLivingEntity().getUniqueId(), true, true);
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 
 		ActiveMob activeMob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(this.getBukkitLivingEntity());

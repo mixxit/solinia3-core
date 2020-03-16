@@ -22,6 +22,9 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.BlockPosition;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -29,12 +32,18 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SolAnimationType;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.DamageSource;
+import net.minecraft.server.v1_14_R1.DataWatcher.Item;
+import net.minecraft.server.v1_14_R1.DataWatcherObject;
+import net.minecraft.server.v1_14_R1.EntityHuman;
 import net.minecraft.server.v1_14_R1.EntityLiving;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.EntityPose;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
 
 public class EntityUtils {
@@ -3469,14 +3478,57 @@ public class EntityUtils {
 		return false;
 	}
 
-
-	public static void sendArmSwingPacket(LivingEntity entityForAnimation, Player packetReceiverPlayer) {
+	public static void sendAnimationPacket(LivingEntity entityForAnimation, Player packetReceiverPlayer, SolAnimationType animationType) {
 		try {
-			PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.ANIMATION);
-			packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
-			packet.getIntegers().write(1, 0);
-			packet.setMeta("sol", 1);
-        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
+			if (animationType == SolAnimationType.SwingArm)
+			{
+				PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.ANIMATION);
+				packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
+				packet.getIntegers().write(1, 0);
+				packet.setMeta("sol", 1);
+	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
+			}
+			
+			if (animationType == SolAnimationType.SwingOffArm)
+			{
+				PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.ANIMATION);
+				packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
+				packet.getIntegers().write(1, 3);
+				packet.setMeta("sol", 1);
+	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
+			}
+			
+			if (animationType == SolAnimationType.Sit)
+			{
+				PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.MOUNT);
+				packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
+				int[] ar = new int[1];
+				ar[0] = entityForAnimation.getEntityId();
+				packet.getIntegerArrays().write(0, ar);
+				packet.setMeta("sol", 1);
+	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
+			}
+			
+			if (animationType == SolAnimationType.Stand)
+			{
+				PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.MOUNT);
+				packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
+				int[] ar = new int[0];
+				packet.getIntegerArrays().write(0, ar);
+				packet.setMeta("sol", 1);
+	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
+			}
+			
+			if (animationType == SolAnimationType.Sleep)
+			{
+				PacketContainer packet = Solinia3CorePlugin.getProtocolManager().createPacket(PacketType.Play.Server.MOUNT);
+				packet.getEntityModifier(entityForAnimation.getWorld()).write(0, entityForAnimation);
+				int[] ar = new int[1];
+				ar[0] = entityForAnimation.getEntityId();
+				packet.getIntegerArrays().write(0, ar);
+				packet.setMeta("sol", 1);
+	        	Solinia3CorePlugin.getProtocolManager().sendServerPacket((Player)packetReceiverPlayer, packet);
+			}
         } catch (Exception ex) {
             ex.printStackTrace();
         }

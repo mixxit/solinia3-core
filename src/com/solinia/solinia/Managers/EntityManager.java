@@ -1887,7 +1887,9 @@ public class EntityManager implements IEntityManager {
 			hateList.get(entity).put(provoker, new Tuple<Integer,Boolean>(hate,isYellForHelp));
 			
 			if (reverseHateList.get(provoker).get(entity) == null)
+			{
 				reverseHateList.get(provoker).put(entity, new Tuple<Integer,Boolean>(hate,isYellForHelp));
+			}
 			return;
 		}
 		
@@ -2161,17 +2163,27 @@ public class EntityManager implements IEntityManager {
 	public void resetReverseAggro(UUID uniqueId) {
 		if (reverseHateList.get(uniqueId) != null)
 		{
-			if (reverseHateList.get(uniqueId).size() == 0)
+			Entity entity = Bukkit.getEntity(uniqueId);
+			if (entity == null)
 				return;
+			
+			if (reverseHateList.get(uniqueId).size() == 0)
+			{
+				return;
+			}
 			
 			// clear reverse hate list in advance
 			for(Entry<UUID, Tuple<Integer, Boolean>> entitesReverseHateList : reverseHateList.get(uniqueId).entrySet())
 			{
 				if (hateList.get(entitesReverseHateList.getKey()) == null)
+				{
 					continue;
+				}
 				
 				if (hateList.get(entitesReverseHateList.getKey()).get(uniqueId) != null)
+				{
 					hateList.get(entitesReverseHateList.getKey()).remove(uniqueId);
+				}
 			}
 		}
 		

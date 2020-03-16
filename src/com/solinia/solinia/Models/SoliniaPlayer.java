@@ -4759,7 +4759,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			solentity.resetReverseAggro();
 		} catch (CoreStateInitException e) {
 			// do nothing
-		}	}
+		}	
+	}
 
 	@Override
 	public void fellowshipchat(String message) {

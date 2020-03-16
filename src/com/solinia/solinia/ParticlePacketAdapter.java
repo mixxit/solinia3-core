@@ -46,15 +46,6 @@ public class ParticlePacketAdapter extends PacketAdapter {
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }*/
-//        Bukkit.broadcastMessage(String.valueOf(packet.getIntegers().read(0))); //2002;
-//      
-//        Bukkit.broadcastMessage(String.valueOf(packet.getIntegers().read(1))); //16421
-//      
-//        Bukkit.broadcastMessage(String.valueOf(packet.getIntegers().read(2))); //-5
-//        Bukkit.broadcastMessage(String.valueOf(packet.getIntegers().read(3))); //51
-//        Bukkit.broadcastMessage(String.valueOf(packet.getIntegers().read(4))); //11
-//      
-//        Bukkit.broadcastMessage(String.valueOf(packet.getBooleans().read(0))); //false
     }
 
 }

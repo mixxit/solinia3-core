@@ -15,6 +15,14 @@ commands:
     description: Displays additional information about Solinia3Core
     usage: /solinia
     aliases: []
+  sit:
+    description: Sit
+    usage: /sit
+    aliases: []
+  stand:
+    description: Stand
+    usage: /stand
+    aliases: []
   track:
     description: Tracking tool
     usage: /track
