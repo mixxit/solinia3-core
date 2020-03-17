@@ -1048,6 +1048,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (skill.getSkillName().toUpperCase().equals(skillType.name().toUpperCase())) {
 				skill.setValue(value);
 				updated = true;
+				if (skill.getValue() > 0)
 				getBukkitPlayer()
 						.sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toUpperCase() + " (" + value + ")");
 				return;
@@ -1059,6 +1060,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			skills.add(skill);
 		}
 
+		if (value > 0)
 		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toLowerCase() + " (" + value + ")");
 	}
 

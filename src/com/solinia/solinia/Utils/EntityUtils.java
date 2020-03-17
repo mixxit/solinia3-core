@@ -247,18 +247,14 @@ public class EntityUtils {
 
 		return cap;
 	}
-	
-	private static int maxSkill(SkillType skillType, String upperCase, int level, int currentskillamount) {
-		return maxSkill(skillType.name().toUpperCase(),upperCase,level,currentskillamount);
-	}
 
-	private static int maxSkillClass(String skillid, String classname, int level) {
+	private static int maxSkillClass(SkillType skillType, String classname, int level) {
 	    int r_value = 0;
-	    switch (skillid) {
+	    switch (skillType) {
 	        // Rogue
-	        case "MAKEPOISON":
-	        case "PICK_POCKETS":
-	        case "BACKSTAB":
+	        case MakePoison:
+	        case PickPockets:
+	        case Backstab:
 	            {
 	                switch (classname) {
 	                    // Melee
@@ -266,8 +262,8 @@ public class EntityUtils {
 	                    case "ROGUEGM":
 	                        {
 	                            r_value = ((level * 5) + 5);
-	                            switch (skillid) {
-	                                case "MAKEPOISON":
+	                            switch (skillType) {
+	                                case MakePoison:
 	                                    {
 	                                        // 18 200 200
 	                                        if (level < 18) {
@@ -292,7 +288,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }*/
-	                                case "PICK_POCKETS":
+	                                case PickPockets:
 	                                    {
 	                                        // 7 200 210
 	                                        if (level < 7) {
@@ -306,7 +302,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }
-	                                case "BACKSTAB":
+	                                case Backstab:
 	                                    {
 	                                        // 10 200 225
 	                                        if (level < 10) {
@@ -333,7 +329,7 @@ public class EntityUtils {
 	                break;
 	            }
 	            // Monk
-	        case "BLOCKSKILL":
+	        case Block:
 	            {
 	                switch (classname) {
 	                    case "BEASTLORD":
@@ -371,21 +367,21 @@ public class EntityUtils {
 	                }
 	                break;
 	            }
-	        case "FEIGN_DEATH":
-	        case "MEND":
-	        case "DRAGON_PUNCH":
-	        case "EAGLE_STRIKE":
-	        case "FLYING_KICK":
-	        case "ROUND_KICK":
-	        case "TIGER_CLAW":
+	        case FeignDeath:
+	        case Mend:
+	        case DragonPunch:
+	        case EagleStrike:
+	        case FlyingKick:
+	        case RoundKick:
+	        case TigerClaw:
 	            {
 	                switch (classname) {
 	                    case "MONK":
 	                    case "MONKGM":
 	                        {
 	                            r_value = ((level * 5) + 5);
-	                            switch (skillid) {
-	                                case "MEND":
+	                            switch (skillType) {
+	                                case Mend:
 	                                    {
 	                                        // 1 200 200
 	                                        if (r_value > 200) {
@@ -393,7 +389,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }
-	                                case "ROUND_KICK":
+	                                case RoundKick:
 	                                    {
 	                                        // 5 200 225
 	                                        if (level < 5) {
@@ -407,7 +403,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }
-	                                case "TIGER_CLAW":
+	                                case TigerClaw:
 	                                    {
 	                                        // 10 200 225
 	                                        if (level < 10) {
@@ -421,7 +417,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }
-	                                case "FEIGN_DEATH":
+	                                case FeignDeath:
 	                                    {
 	                                        // 17 200 200
 	                                        if (level < 17) {
@@ -432,7 +428,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }
-	                                case "EAGLE_STRIKE":
+	                                case EagleStrike:
 	                                    {
 	                                        // 20 200 225
 	                                        if (level < 20) {
@@ -446,7 +442,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }
-	                                case "DRAGON_PUNCH":
+	                                case DragonPunch:
 	                                    {
 	                                        // 25 200 225
 	                                        if (level < 25) {
@@ -460,7 +456,7 @@ public class EntityUtils {
 	                                        }
 	                                        break;
 	                                    }
-	                                case "FLYING_KICK":
+	                                case FlyingKick:
 	                                    {
 	                                        // 30 200 225
 	                                        if (level < 30) {
@@ -487,7 +483,7 @@ public class EntityUtils {
 	                break;
 	            }
 	            //Berzerkers
-	        case "BERSERKING":
+	        case Berserking:
 	            {
 	                switch (classname) {
 	                    case "BERSERKER":
@@ -505,7 +501,7 @@ public class EntityUtils {
 	                break;
 	            }
 	            // Shaman
-	        case "ALCHEMY":
+	        case Alchemy:
 	            {
 	                switch (classname) {
 	                    case "SHAMAN":
@@ -534,7 +530,7 @@ public class EntityUtils {
 	            //////////////////////////////////////////
 	            // Shared skill
 	            // Shared Rogue
-	        case "HIDE":
+	        case Hide:
 	            {
 	                switch (classname) {
 	                    // True class
@@ -578,7 +574,7 @@ public class EntityUtils {
 	                } // Class Switch
 	                break;
 	            }
-	        case "SNEAK":
+	        case Sneak:
 	            {
 	                switch (classname) {
 	                    // True class
@@ -642,9 +638,9 @@ public class EntityUtils {
 	                } // Class Switch
 	                break;
 	            }
-	        case "SENSE_TRAPS":
-	        case "PICK_LOCK":
-	        case "DISARM_TRAPS":
+	        case SenseTraps:
+	        case PickLock:
+	        case DisarmTraps:
 	            {
 	                switch (classname) {
 	                    // True class
@@ -675,7 +671,7 @@ public class EntityUtils {
 	                } // Class Switch
 	                break;
 	            }
-	        case "SAFE_FALL":
+	        case SafeFall:
 	            {
 	                switch (classname) {
 	                    // Hybrids
@@ -719,7 +715,7 @@ public class EntityUtils {
 	                } // Class Switch
 	                break;
 	            }
-	        case "INTIMIDATION":
+	        case Intimidation:
 	            {
 	                switch (classname) {
 	                    case "BARD":
@@ -774,7 +770,7 @@ public class EntityUtils {
 	                break;
 	            }
 	            // Druid/Ranger/Bard
-	        case "FORAGE":
+	        case Forage:
 	            {
 	                switch (classname) {
 	                    case "RANGER":
@@ -809,7 +805,7 @@ public class EntityUtils {
 	                } // Class Switch
 	                break;
 	            }
-	        case "TRACKING":
+	        case Tracking:
 	            {
 	                switch (classname) {
 	                    case "RANGER":
@@ -836,61 +832,57 @@ public class EntityUtils {
 	    }
 	    return r_value;
 	}		
-	public static int maxSkill(String skillid, String classname, int level, int currentskillamount)
+	public static int maxSkill(SkillType skillType, String classname, int level, int currentskillamount)
 	{
 		int r_value = 0;
-		switch (skillid) {
-			case "_1H_BLUNT":
-			case "_2H_BLUNT":
-			case "PIERCING":
-			case "HAND_TO_HAND":
-			case "_1H_SLASHING":
-			case "CRUSHING":
-			case "_2H_SLASHING":
-			case "SLASHING": {
-					r_value = EntityUtils.maxSkillWeapon(skillid, classname, level);
+		switch (skillType) {
+			case TwoHandBlunt:
+			case Piercing:
+			case HandtoHand:
+			case Crushing:
+			case TwoHandSlashing:
+			case Slashing: {
+					r_value = EntityUtils.maxSkillWeapon(skillType, classname, level);
 					break;
 				}
-			case "OFFENSE":
-			case "THROWING":
-			case "ARCHERY":
-			case "DOUBLEATTACK":
-			case "DOUBLE_ATTACK":
-			case "DUALWIELD":
-			case "DUAL_WIELD":
-			case "KICK":
-			case "BASH": {
-					r_value = EntityUtils.maxSkillOffensive(skillid, classname, level);
+			case Offense:
+			case Throwing:
+			case Archery:
+			case DoubleAttack:
+			case DualWield:
+			case Kick:
+			case Bash: {
+					r_value = EntityUtils.maxSkillOffensive(skillType, classname, level);
 					break;
 				}
-			case "DEFENSE":
-			case "PARRY":
-			case "RIPOSTE":
-			case "DODGE":
-			case "TAUNT":
-			case "DISARM": {
-					r_value = EntityUtils.maxSkillDefensive(skillid, classname, level);
+			case Defense:
+			case Parry:
+			case Riposte:
+			case Dodge:
+			case Taunt:
+			case Disarm: {
+					r_value = EntityUtils.maxSkillDefensive(skillType, classname, level);
 					break;
 				}
-			case "MEDITATION":
-			case "ABJURE":
-			case "ALTERATION":
-			case "CHANNELING":
-			case "CONJURATION":
-			case "DIVINATION":
-			case "EVOCATION":
-			case "SPECIALISEABJURATION":
-			case "SPECIALISEALTERATION":
-			case "SPECIALISECONJURATION":
-			case "SPECIALISEDIVINATION":
-			case "SPECIALISEEVOCATION":
-			case "RESEARCH":
-			case "BRASSINSTRUMENTS":
-			case "SINGING":
-			case "STRINGEDINSTRUMENTS":
-			case "WINDINSTRUMENTS":
-			case "PERCUSSIONINSTRUMENTS": {
-					r_value = maxSkillArcane(skillid, classname, level,currentskillamount);
+			case Meditation:
+			case Abjuration:
+			case Alteration:
+			case Channeling:
+			case Conjuration:
+			case Divination:
+			case Evocation:
+			case SpecialiseAbjuration:
+			case SpecialiseAlteration:
+			case SpecialiseConjuration:
+			case SpecialiseDivination:
+			case SpecialiseEvocation:
+			case Research:
+			case BrassInstruments:
+			case Singing:
+			case StringedInstruments:
+			case WindInstruments:
+			case PercussionInstruments: {
+					r_value = maxSkillArcane(skillType, classname, level,currentskillamount);
 					break;
 				}
 	///////////////////////////////////////////
@@ -898,44 +890,43 @@ public class EntityUtils {
 	// Class skills
 			// Rogue
 			//case "MAKEPOISON":
-			case "MAKEPOISON":
-			case "PICK_POCKETS":
-			case "BACKSTAB":
+			case MakePoison:
+			case PickPockets:
+			case Backstab:
 			// Monk
-			case "FEIGN_DEATH":
-			case "MEND":
-			case "DRAGON_PUNCH":
-			case "EAGLE_STRIKE":
-			case "FLYING_KICK":
-			case "ROUND_KICK":
-			case "TIGER_CLAW":
-			case "BLOCKSKILL":
-			case "ALCHEMY":
-			case "HIDE":
-			case "SNEAK":
-			case "SENSE_TRAPS":
-			case "PICK_LOCK":
-			case "DISARM_TRAPS":
-			case "SAFE_FALL":
-			case "INTIMIDATION":
+			case FeignDeath:
+			case Mend:
+			case DragonPunch:
+			case EagleStrike:
+			case FlyingKick:
+			case RoundKick:
+			case TigerClaw:
+			case Block:
+			case Alchemy:
+			case Hide:
+			case Sneak:
+			case SenseTraps:
+			case PickLock:
+			case DisarmTraps:
+			case SafeFall:
+			case Intimidation:
 			// Druid/Ranger/Bard
-			case "FORAGE":
-			case "TRACKING": {
-					r_value = maxSkillClass(skillid, classname, level);
+			case Forage:
+			case Tracking: {
+					r_value = maxSkillClass(skillType, classname, level);
 					break;
 				}
 	///////////////////////////////////////////
 	///////////////////////////////////////////
 	// Tradeskills
-			case "BAKING":
-			case "TAILORING":
-			case "BLACKSMITHING":
-			case "FLETCHING":
-			case "BREWING":
-			case "JEWELRYMAKING":
-			case "JEWELRY_MAKING":
-			case "POTTERY":
-			case "FISHING": {
+			case Baking:
+			case Tailoring:
+			case Blacksmithing:
+			case Fletching:
+			case Brewing:
+			case JewelryMaking:
+			case Pottery:
+			case Fishing: {
 					// Check for Any Trade above 200, check for X (aa skill) Trades above 200
 					r_value = 250;
 					break;
@@ -943,15 +934,15 @@ public class EntityUtils {
 	/////////////////////////////////////
 	/////////////////////////////////////
 			// Gnome
-			case "TINKERING": {
+			case Tinkering: {
 					r_value = ((level * 5) + 5);
 					break;
 				}
 	/////////////////////////////////////////
 	// Common
 	/////////////////////////////////////////
-			case "BINDWOUND":
-			case "BIND_WOUND": {
+			case BindWound:
+			{
 					switch (classname) {
 						case "BARD":
 						case "BARDGM": {
@@ -1105,10 +1096,10 @@ public class EntityUtils {
 					}
 					break;
 				}
-			case "SENSE_HEADING":
-			case "SWIMMING":
-			case "ALCOHOL_TOLERANCE":
-			case "BEGGING": {
+			case SenseHeading:
+			case Swimming:
+			case AlcoholTolerance:
+			case Begging: {
 					r_value = 5 + (level * 5);
 					if (r_value > 200) {
 						r_value = 200;
@@ -1128,17 +1119,17 @@ public class EntityUtils {
 		return  r_value;
 	}
 	
-	public static int maxSkillArcane(String skillid, String classname, int level, int currentskillamount)
+	public static int maxSkillArcane(SkillType skillType, String classname, int level, int currentskillamount)
 	{
 		int r_value = 0;
-		switch (skillid) {
-			case "MEDITATION":
-			case "ABJURE":
-			case "ALTERATION":
-			case "CHANNELING":
-			case "CONJURATION":
-			case "DIVINATION":
-			case "EVOCATION": {
+		switch (skillType) {
+			case Meditation:
+			case Abjuration:
+			case Alteration:
+			case Channeling:
+			case Conjuration:
+			case Divination:
+			case Evocation: {
 					r_value = ((level * 5) + 5);
 					switch (classname) {
 						// Hybrid
@@ -1150,10 +1141,10 @@ public class EntityUtils {
 								if (level < 9) {
 									r_value = 0;
 								}
-								if (level < 12 && skillid == "MEDITATION") {
+								if (level < 12 && skillType.equals(SkillType.Meditation)) {
 									r_value = 0;
 								}
-								if (r_value > 0 && skillid == "CHANNELING") {
+								if (r_value > 0 && skillType.equals(SkillType.Channeling)) {
 									if ( level < 51 && r_value > 200) {
 										r_value = 200;
 									}
@@ -1161,7 +1152,7 @@ public class EntityUtils {
 										r_value = 215;
 									}
 								}
-								if (r_value > 0 && skillid == "MEDITATION") {
+								if (r_value > 0 && skillType.equals(SkillType.Meditation)) {
 									if ( level < 51 && r_value > 185) {
 										r_value = 185;
 									}
@@ -1184,10 +1175,10 @@ public class EntityUtils {
 								if (level < 9) {
 									r_value = 0;
 								}
-								if (level < 12 && skillid == "MEDITATION") {
+								if (level < 12 && skillType.equals(SkillType.Meditation)) {
 									r_value = 0;
 								}
-								if (r_value > 0 && skillid == "CHANNELING") {
+								if (r_value > 0 && skillType.equals(SkillType.Channeling)) {
 									if ( level < 51 && r_value > 185) {
 										r_value = 185;
 									}
@@ -1195,7 +1186,7 @@ public class EntityUtils {
 										r_value = 220;
 									}
 								}
-								if (r_value > 0 && skillid == "MEDITATION") {
+								if (r_value > 0 && skillType.equals(SkillType.Meditation)) {
 									if ( level < 51 && r_value > 185) {
 										r_value = 185;
 									}
@@ -1215,13 +1206,13 @@ public class EntityUtils {
 								// 1 235 235
 								// Channel 4 200 220
 								// Med 8 235 252
-								if (level < 4 && skillid == "CHANNELING") {
+								if (level < 4 && skillType.equals(SkillType.Channeling)) {
 									r_value = 0;
 								}
-								if (level < 8 && skillid == "MEDITATION") {
+								if (level < 8 && skillType.equals(SkillType.Meditation)) {
 									r_value = 0;
 								}
-								if (r_value > 0 && skillid == "CHANNELING") {
+								if (r_value > 0 && skillType.equals(SkillType.Channeling)) {
 									if ( level < 51 && r_value > 200) {
 										r_value = 200;
 									}
@@ -1229,7 +1220,7 @@ public class EntityUtils {
 										r_value = 220;
 									}
 								}
-								if (r_value > 0 && skillid == "MEDITATION") {
+								if (r_value > 0 && skillType.equals(SkillType.Meditation)) {
 									if ( level < 51 && r_value > 235) {
 										r_value = 235;
 									}
@@ -1251,10 +1242,10 @@ public class EntityUtils {
 								// 1 235 235
 								// Channel 1 200 220
 								// Med 4 235 252
-								if (level < 4 && skillid == "MEDITATION") {
+								if (level < 4 && skillType.equals(SkillType.Meditation)) {
 									r_value = 0;
 								}
-								if (r_value > 0 && skillid == "CHANNELING") {
+								if (r_value > 0 && skillType.equals(SkillType.Channeling)) {
 									if ( level < 51 && r_value > 200) {
 										r_value = 200;
 									}
@@ -1262,7 +1253,7 @@ public class EntityUtils {
 										r_value = 220;
 									}
 								}
-								if (r_value > 0 && skillid == "MEDITATION") {
+								if (r_value > 0 && skillType.equals(SkillType.Meditation)) {
 									if ( level < 51 && r_value > 235) {
 										r_value = 235;
 									}
@@ -1275,7 +1266,7 @@ public class EntityUtils {
 						/*case "BARD":
 						case "BARDGM": {
 								r_value = 0;
-								if (level > 9 && skillid == "MEDITATION") {
+								if (level > 9 && skillType.equals(SkillType.Meditation)) {
 									r_value = 1;
 								}
 								break;
@@ -1289,10 +1280,10 @@ public class EntityUtils {
 							if (level < 9) {
 								r_value = 0;
 							}
-							if (level < 12 && skillid == "MEDITATION") {
+							if (level < 12 && skillType.equals(SkillType.Meditation)) {
 								r_value = 0;
 							}
-							if (r_value > 0 && skillid == "CHANNELING") {
+							if (r_value > 0 && skillType.equals(SkillType.Channeling)) {
 								if ( level < 51 && r_value > 185) {
 									r_value = 185;
 								}
@@ -1300,7 +1291,7 @@ public class EntityUtils {
 									r_value = 220;
 								}
 							}
-							if (r_value > 0 && skillid == "MEDITATION") {
+							if (r_value > 0 && skillType.equals(SkillType.Meditation)) {
 								if ( level < 51 && r_value > 185) {
 									r_value = 185;
 								}
@@ -1314,11 +1305,11 @@ public class EntityUtils {
 					}// Class Switch
 					break;
 				}
-			case "SPECIALISEABJURATION":
-			case "SPECIALISEALTERATION":
-			case "SPECIALISECONJURATION":
-			case "SPECIALISEDIVINATION":
-			case "SPECIALISEEVOCATION":
+			case SpecialiseAbjuration:
+			case SpecialiseAlteration:
+			case SpecialiseConjuration:
+			case SpecialiseDivination:
+			case SpecialiseEvocation:
 			{
 					r_value = ((level * 5) + 5);
 					switch (classname) {
@@ -1347,35 +1338,35 @@ public class EntityUtils {
 									break;
 								}
 								//make sure only 1 skill can be over 50
-								String hskill = "";
+								SkillType hskillType = SkillType.None;
 								int high = 0;
 								int cur;
 								cur = currentskillamount;
 								if (cur > high) {
-									hskill = "SPECIALISEABJURATION";
+									hskillType = SkillType.SpecialiseAbjuration;
 									high = cur;
 								}
 								cur = currentskillamount;
 								if (cur > high) {
-									hskill = "SPECIALISEALTERATION";
+									hskillType = SkillType.SpecialiseAlteration;
 									high = cur;
 								}
 								cur = currentskillamount;
 								if (cur > high) {
-									hskill = "SPECIALISECONJURATION";
+									hskillType = SkillType.SpecialiseConjuration;
 									high = cur;
 								}
 								cur = currentskillamount;
 								if (cur > high) {
-									hskill = "SPECIALISEDIVINATION";
+									hskillType = SkillType.SpecialiseDivination;
 									high = cur;
 								}
 								cur = currentskillamount;
 								if (cur > high) {
-									hskill = "SPECIALISEEVOCATION";
+									hskillType = SkillType.SpecialiseEvocation;
 									high = cur;
 								}
-								if (high > 50 && hskill != skillid) {
+								if (high > 50 && hskillType.equals(skillType)) {
 									r_value = 50;
 									break;
 								}
@@ -1391,7 +1382,7 @@ public class EntityUtils {
 					}// Class Switch
 					break;
 				}
-			case "RESEARCH": {
+			case Research: {
 					r_value = ((level * 5) + 5);
 					switch (classname) {
 						// Int caster
@@ -1420,25 +1411,25 @@ public class EntityUtils {
 					}// Class Switch
 					break;
 				}
-			case "BRASSINSTRUMENTS":
-			case "SINGING":
-			case "STRINGEDINSTRUMENTS":
-			case "WINDINSTRUMENTS":
-			case "PERCUSSIONINSTRUMENTS": {
+			case BrassInstruments:
+			case Singing:
+			case StringedInstruments:
+			case WindInstruments:
+			case PercussionInstruments: {
 					switch (classname) {
 						case "BARD":
 						case "BARDGM": {
 								r_value = ((level * 5) + 5);
-								if (level < 5 && skillid == "PERCUSSIONINSTRUMENTS") {
+								if (level < 5 && skillType.equals(SkillType.PercussionInstruments)) {
 									r_value = 0;
 								}
-								if (level < 8 && skillid == "STRINGEDINSTRUMENTS") {
+								if (level < 8 && skillType.equals(SkillType.StringedInstruments)) {
 									r_value = 0;
 								}
-								if (level < 11 && skillid == "BRASSINSTRUMENTS") {
+								if (level < 11 && skillType.equals(SkillType.BrassInstruments)) {
 									r_value = 0;
 								}
-								if (level < 14 && skillid == "WINDINSTRUMENTS") {
+								if (level < 14 && skillType.equals(SkillType.WindInstruments)) {
 									r_value = 0;
 								}
 								if (r_value > 235) {
@@ -1463,16 +1454,16 @@ public class EntityUtils {
 		return r_value;
 	}
 	
-	public static int maxSkillWeapon(String skillid, String classname, int level) 
+	public static int maxSkillWeapon(SkillType skillType, String classname, int level) 
 	{
 		int r_value = 0;
-		switch (skillid) {
-			case "_2H_BLUNT":
-			case "PIERCING":
-			case "HAND_TO_HAND":
-			case "CRUSHING":
-			case "SLASHING":
-			case "_2H_SLASHING": {
+		switch (skillType) {
+			case TwoHandBlunt:
+			case Piercing:
+			case HandtoHand:
+			case Crushing:
+			case Slashing:
+			case TwoHandSlashing: {
 					switch (classname) {
 						// Pure melee classes
 						case "WARRIOR":
@@ -1484,14 +1475,14 @@ public class EntityUtils {
 								if ( level > 50 && r_value > 250 ) {
 									r_value = 250;
 								}
-								switch (skillid) {
-									case "PIERCING": {
+								switch (skillType) {
+									case Piercing: {
 											if ( r_value > 240 ) {
 												r_value = 240;
 											}
 											break;
 										}
-									case "HAND_TO_HAND": {
+									case HandtoHand: {
 											if ( r_value > 100 ) {
 												r_value = 100;
 											}
@@ -1509,17 +1500,17 @@ public class EntityUtils {
 									if ( r_value > 240 ) {
 										r_value = 240;
 									}
-								switch (skillid) {
-									case "CRUSHING":
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case Crushing:
+									case HandtoHand: {
 											if ( r_value > 225 && level < 51 ) {
 												r_value = 225;
 											}
 											break;
 										}
-									case "PIERCING":
-									case "SLASHING":
-									case "_2H_SLASHING": {
+									case Piercing:
+									case Slashing:
+									case TwoHandSlashing: {
 											r_value = 0;
 											break;
 										}
@@ -1535,14 +1526,14 @@ public class EntityUtils {
 									r_value = 250;
 								}
 								if ( level < 51 ) {
-									if ( r_value > 200 && skillid != "PIERCING" ) {
+									if ( r_value > 200 && !skillType.equals(SkillType.Piercing)) {
 										r_value = 200;
 									}
-									if ( r_value > 210 && skillid == "PIERCING" ) {
+									if ( r_value > 210 && skillType.equals(SkillType.Piercing) ) {
 										r_value = 210;
 									}
 								}
-								if (skillid == "HAND_TO_HAND" && r_value > 100) {
+								if (skillType.equals(SkillType.HandtoHand) && r_value > 100) {
 									r_value = 100;
 								}
 								break;
@@ -1553,23 +1544,23 @@ public class EntityUtils {
 								if ( level < 51 && r_value > 240) {
 									r_value = 240;
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											if ( r_value > 198) {
 												r_value = 198;
 											}
 											break;
 										}
-									case "PIERCING": {
+									case Piercing: {
 											if ( r_value > 240) {
 												r_value = 240;
 											}
 											break;
 										}
-									case "SLASHING":
-									case "CRUSHING":
-									case "_2H_BLUNT":
-									case "_2H_SLASHING": {
+									case Slashing:
+									case Crushing:
+									case TwoHandBlunt:
+									case TwoHandSlashing: {
 											if ( r_value > 252 ) {
 												r_value = 252;
 											}
@@ -1588,16 +1579,16 @@ public class EntityUtils {
 								if ( r_value > 175 ) {
 									r_value = 175;
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											if ( r_value > 75 ) {
 												r_value = 75;
 											}
 											break;
 										}
-									case "PIERCING":
-									case "SLASHING":
-									case "_2H_SLASHING": {
+									case Piercing:
+									case Slashing:
+									case TwoHandSlashing: {
 											r_value = 0;
 											break;
 										}
@@ -1612,15 +1603,15 @@ public class EntityUtils {
 								if ( r_value > 175 ) {
 									r_value = 175;
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											if ( r_value > 75 ) {
 												r_value = 75;
 											}
 										}
-									case "PIERCING":
-									case "SLASHING":
-									case "_2H_SLASHING": {
+									case Piercing:
+									case Slashing:
+									case TwoHandSlashing: {
 											r_value = 0;
 											break;
 										}
@@ -1635,14 +1626,14 @@ public class EntityUtils {
 								if ( r_value > 200 ) {
 									r_value = 200;
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											if ( r_value > 75 ) {
 												r_value = 75;
 											}
 										}
-									case "SLASHING":
-									case "_2H_SLASHING": {
+									case Slashing:
+									case TwoHandSlashing: {
 											r_value = 0;
 											break;
 										}
@@ -1659,8 +1650,8 @@ public class EntityUtils {
 									if ( r_value > 250 ) {
 										r_value = 250;
 									}
-									switch (skillid) {
-										case "PIERCING": {
+									switch (skillType) {
+										case Piercing: {
 												if ( r_value > 240 ) {
 													r_value = 240;
 												}
@@ -1674,8 +1665,8 @@ public class EntityUtils {
 										r_value = 200;
 									}
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											if ( r_value > 100 ) {
 												r_value = 100;
 											}
@@ -1697,8 +1688,8 @@ public class EntityUtils {
 								if ( level < 51 && r_value > 200 ) {
 									r_value = 200;
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											if ( r_value > 100 ) {
 												r_value = 100;
 											}
@@ -1718,15 +1709,15 @@ public class EntityUtils {
 								if ( level < 51 && r_value > 200 ) {
 									r_value = 200;
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											if ( r_value > 100 ) {
 												r_value = 100;
 											}
 											break;
 										}
-									case "_2H_BLUNT":
-									case "_2H_SLASHING": {
+									case TwoHandBlunt:
+									case TwoHandSlashing: {
 											r_value = 0;
 										}
 									default:
@@ -1745,16 +1736,16 @@ public class EntityUtils {
 								if ( level < 51 && r_value > 200 ) {
 									r_value = 200;
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											r_value = 5 + (level * 5); // Beastlords use different max skill formula only for h2h 200/250
 											if ( level < 51 ) {
 												r_value = 200;
 											}
 											break;
 										}
-									case "SLASHING":
-									case "_2H_SLASHING": {
+									case Slashing:
+									case TwoHandSlashing: {
 											r_value = 0;
 											break;
 										}
@@ -1779,14 +1770,14 @@ public class EntityUtils {
 								if ( r_value > 110 ) {
 									r_value = 110;
 								}
-								switch (skillid) {
-									case "HAND_TO_HAND": {
+								switch (skillType) {
+									case HandtoHand: {
 											if ( r_value > 75 ) {
 												r_value = 75;
 											}
 										}
-									case "SLASHING":
-									case "_2H_SLASHING": {
+									case Slashing:
+									case TwoHandSlashing: {
 											r_value = 0;
 											break;
 										}
@@ -1809,11 +1800,11 @@ public class EntityUtils {
 		return r_value;
 	}
 
-	public static int maxSkillOffensive(String skillid, String classname, int level)
+	public static int maxSkillOffensive(SkillType skillType, String classname, int level)
 	{
 		int r_value = 0;
-		switch (skillid) {
-			case "OFFENSE": {
+		switch (skillType) {
+			case Offense: {
 					switch (classname) {
 						// Melee
 						case "WARRIOR":
@@ -1930,7 +1921,7 @@ public class EntityUtils {
 					}
 					break;
 				}
-			case "THROWING": {
+			case Throwing: {
 					switch (classname) {
 						// Melee
 						case "BERSERKER":
@@ -2013,7 +2004,7 @@ public class EntityUtils {
 					break;
 				}
 	/////////////////////////////////////////////////
-			case "ARCHERY": {
+			case Archery: {
 					switch (classname) {
 						// Melee
 						case "ROGUE":
@@ -2084,7 +2075,7 @@ public class EntityUtils {
 					break;
 				}
 	/////////////////////////////////////////////////
-			case "DOUBLEATTACK": {
+			case DoubleAttack: {
 					switch (classname) {
 						// Melee
 						case "ROGUE":
@@ -2208,7 +2199,7 @@ public class EntityUtils {
 					break;
 				}
 	/////////////////////////////////////////////////
-			case "DUALWIELD": {
+			case DualWield: {
 					switch (classname) {
 						// Melee
 						case "MONK":
@@ -2301,7 +2292,7 @@ public class EntityUtils {
 					break;
 				} // end case "DUALWIELD":
 	////////////////////////////////////////////////////////
-			case "KICK": {
+			case Kick: {
 					switch (classname) {
 						// Melee
 						case "BERSERKER":
@@ -2404,7 +2395,7 @@ public class EntityUtils {
 					break;
 				}
 	////////////////////////////////////////////////////////
-			case "BASH": {
+			case Bash: {
 					r_value = ((level * 5) + 5);
 					switch (classname) {
 						// Melee
@@ -2507,11 +2498,11 @@ public class EntityUtils {
 		return r_value;
 	}
 
-	public static int maxSkillDefensive(String skillid, String classname, int level)
+	public static int maxSkillDefensive(SkillType skillType, String classname, int level)
 	{
 		int r_value = 0;
-		switch (skillid) {
-			case "DEFENSE": {
+		switch (skillType) {
+			case Defense: {
 					switch (classname) {
 						// Melee
 						case "WARRIOR":
@@ -2659,7 +2650,7 @@ public class EntityUtils {
 					}
 					break;
 				}
-			case "PARRY": {
+			case Parry: {
 					switch (classname) {
 						// Melee
 						case "ROGUE":
@@ -2778,7 +2769,7 @@ public class EntityUtils {
 					}
 					break;
 				}
-			case "RIPOSTE": {
+			case Riposte: {
 					switch (classname) {
 						// Melee
 						case "BERSERKER":
@@ -2911,7 +2902,7 @@ public class EntityUtils {
 					}
 					break;
 				}
-			case "DODGE": {
+			case Dodge: {
 					switch (classname) {
 						// Melee
 						case "BERSERKER":
@@ -3042,7 +3033,7 @@ public class EntityUtils {
 					break;
 				}
 			// Other
-			case "TAUNT": {
+			case Taunt: {
 					switch (classname) {
 						// Melee
 						case "WARRIOR":
@@ -3109,7 +3100,7 @@ public class EntityUtils {
 					}
 					break;
 				}
-			case "DISARM": {
+			case Disarm: {
 					switch (classname) {
 						// Melee
 						case "WARRIOR":
