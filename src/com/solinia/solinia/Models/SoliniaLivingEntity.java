@@ -428,7 +428,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			// BERSERK
 			
-			if (this.getClassObj() != null && this.getClassObj().canDualWield())
+			if (this.getClassObj() != null && this.canDualWield())
 			{
 				// Range check
 				if (!defender.combatRange(this)) {
@@ -445,6 +445,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 		}
+	}
+
+	@Override
+	public boolean canDualWield() {
+		if (getClassObj() == null)
+			return false;
+
+		if (getClassObj().canDualWield() == false)
+			return false;
+
+		if (getClassObj().getDualwieldlevel() > getLevel())
+			return false;
+
+		return true;
 	}
 
 	private boolean checkDualWield() {
@@ -1110,7 +1124,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		Attack(target, hand, false, false, isFromSpell);
 		
-		boolean candouble = canThisClassDoubleAttack();
+		boolean candouble = canThisClassDoubleAttack() && canDoubleAttack();
 		// extra off hand non-sense, can only double with skill of 150 or above
 		// or you have any amount of GiveDoubleAttack
 		if (candouble && hand == InventorySlot.Secondary)
@@ -1153,6 +1167,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				*/
 			}
 		}
+	}
+
+	@Override
+	public boolean canDoubleAttack() {
+		if (getClassObj() == null)
+			return false;
+
+		if (getClassObj().canDoubleAttack() == false)
+			return false;
+
+		if (getClassObj().getDoubleattacklevel() > getLevel())
+			return false;
+
+		return true;
 	}
 
 	private boolean hasTwoHanderEquipped() {
@@ -5897,54 +5925,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return totalHp;
 	}
 
-	@Override
-	public boolean getDualWieldCheck() {
-		if (getNpcid() < 1 && !isPlayer())
-			return false;
-		
-		if (holdingTwoHander())
-			return false;
-
-		// If dual wield less than 3 second ago return false
-		// Ugly hack to work around looping dual wields (cant get source of offhand on
-		// damage event)
-		Timestamp expiretimestamp = getLastDualWield();
-		if (expiretimestamp != null) {
-			LocalDateTime datetime = LocalDateTime.now();
-			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-			Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus(3, ChronoUnit.SECONDS));
-
-			if (nowtimestamp.before(mintimestamp))
-				return false;
-		}
-
-		try {
-			if (getNpcid() > 0) {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
-				if (npc == null)
-					return false;
-
-				boolean result = npc.getDualWieldCheck(this);
-
-				return result;
-			}
-
-			if (isPlayer()) {
-				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				if (solplayer == null)
-					return false;
-
-				boolean result = solplayer.getDualWieldCheck(this);
-
-				return result;
-			}
-		} catch (CoreStateInitException e) {
-			return false;
-		}
-
-		return false;
-	}
-
 	private boolean holdingTwoHander() {
 		if (this.getSoliniaItemInMainHand() != null)
 		{
@@ -5970,28 +5950,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		
 		return false;
-	}
-
-	@Override
-	public Timestamp getLastDualWield() {
-		try {
-			return StateManager.getInstance().getEntityManager().getLastDualWield()
-					.get(this.getBukkitLivingEntity().getUniqueId());
-		} catch (CoreStateInitException e) {
-		}
-		return null;
-	}
-
-	@Override
-	public void setLastDualWield() {
-		try {
-			LocalDateTime datetime = LocalDateTime.now();
-			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-			StateManager.getInstance().getEntityManager().setLastDualWield(this.getBukkitLivingEntity().getUniqueId(),
-					nowtimestamp);
-		} catch (CoreStateInitException e) {
-
-		}
 	}
 	
 	@Override

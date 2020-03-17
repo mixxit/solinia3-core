@@ -2478,20 +2478,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean canDualWield() {
-		if (getClassObj() == null)
-			return false;
-
-		if (getClassObj().canDualWield() == false)
-			return false;
-
-		if (getClassObj().getDualwieldlevel() > getLevel())
-			return false;
-
-		return true;
-	}
-
-	@Override
 	public boolean canDodge() {
 		if (getClassObj() == null)
 			return false;
@@ -2545,36 +2531,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return false;
 
 		return true;
-	}
-
-	@Override
-	public boolean getDualWieldCheck(ISoliniaLivingEntity solEntity) {
-		if (canDualWield() == false)
-			return false;
-
-		int chance = getSkill("DUALWIELD").getValue();
-		chance += 50;
-
-		try {
-			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
-			if (solLivingEntity != null) {
-				int spellAmbidexterity = solLivingEntity.getSpellBonuses(SpellEffectType.Ambidexterity);
-				int aaAmbidexterity = Utils.getTotalAAEffectEffectType(getBukkitPlayer(),
-						SpellEffectType.Ambidexterity);
-				int spellDualWieldChance = solLivingEntity.getSpellBonuses(SpellEffectType.DualWieldChance);
-				int aaDualWieldChance = Utils.getTotalAAEffectEffectType(getBukkitPlayer(),
-						SpellEffectType.DualWieldChance);
-
-				chance += aaAmbidexterity + spellAmbidexterity;
-				int per_inc = spellDualWieldChance + aaDualWieldChance;
-				if (per_inc > 0)
-					chance += chance * per_inc / 100;
-			}
-		} catch (CoreStateInitException e) {
-
-		}
-
-		return Utils.RandomBetween(1, 375) <= chance;
 	}
 
 	@Override

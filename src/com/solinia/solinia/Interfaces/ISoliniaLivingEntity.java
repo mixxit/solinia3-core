@@ -209,8 +209,6 @@ public interface ISoliniaLivingEntity {
 
 	void setFeigned(boolean feigned);
 
-	boolean getDualWieldCheck();
-
 	boolean isPlant();
 
 	int getMaxBindWound_SE();
@@ -252,10 +250,6 @@ public interface ISoliniaLivingEntity {
 	boolean canUseItem(ItemStack itemInMainHand);
 
 	int getMaxItemAttackSpeedPct();
-
-	Timestamp getLastDualWield();
-
-	void setLastDualWield();
 
 	Timestamp getLastDoubleAttack();
 
@@ -461,4 +455,8 @@ public interface ISoliniaLivingEntity {
 	SoliniaActiveSpell getFirstActiveSpellWithSpellEffectType(SpellEffectType type);
 
 	int getAABonuses(SpellEffectType atk);
+
+	boolean canDualWield();
+
+	boolean canDoubleAttack();
 }

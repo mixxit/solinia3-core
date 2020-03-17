@@ -1199,26 +1199,6 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public boolean getDualWieldCheck(ISoliniaLivingEntity solLivingEntity) {
-		if (canDualWield() == false)
-			return false;
-
-		int chance = getLevel();
-
-		if (solLivingEntity != null) {
-			int spellAmbidexterity = solLivingEntity.getSpellBonuses(SpellEffectType.Ambidexterity);
-			int spellDualWieldChance = solLivingEntity.getSpellBonuses(SpellEffectType.DualWieldChance);
-
-			chance += spellAmbidexterity;
-			int per_inc = spellDualWieldChance;
-			if (per_inc > 0)
-				chance += chance * per_inc / 100;
-		}
-
-		return Utils.RandomBetween(1, 375) <= chance;
-	}
-
-	@Override
 	public boolean isUndead() {
 		return isUndead;
 	}

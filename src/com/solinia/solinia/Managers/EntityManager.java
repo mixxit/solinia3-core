@@ -1804,16 +1804,6 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public ConcurrentHashMap<UUID, Timestamp> getLastDualWield() {
-		return lastDualWield;
-	}
-
-	@Override
-	public void setLastDualWield(UUID uuid, Timestamp lasttimestamp) {
-		this.lastDualWield.put(uuid, lasttimestamp);
-	}
-	
-	@Override
 	public ConcurrentHashMap<UUID, Timestamp> getLastCallForAssist() {
 		return lastCallForAssist;
 	}

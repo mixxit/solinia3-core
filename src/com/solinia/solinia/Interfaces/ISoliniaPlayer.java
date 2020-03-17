@@ -340,10 +340,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void toggleAutoAttack();
 
-	boolean canDualWield();
-
-	boolean getDualWieldCheck(ISoliniaLivingEntity soliniaLivingEntity);
-
 	public boolean hasSufficientBandageReagents(int count);
 	
 	public boolean hasSufficientArrowReagents(int count);

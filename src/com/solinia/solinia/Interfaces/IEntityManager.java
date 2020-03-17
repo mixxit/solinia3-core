@@ -129,10 +129,6 @@ public interface IEntityManager {
 
 	void setEntityAutoAttack(LivingEntity livingEntity, boolean autoAttacking);
 
-	ConcurrentHashMap<UUID, Timestamp> getLastDualWield();
-
-	void setLastDualWield(UUID uuid, Timestamp timestamp);
-
 	ConcurrentHashMap<UUID, Timestamp> getLastDoubleAttack();
 
 	void setLastDoubleAttack(UUID uuid, Timestamp lasttimestamp);
