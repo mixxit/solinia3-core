@@ -1834,9 +1834,9 @@ public class Solinia3CorePlayerListener implements Listener {
 					
 					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)playerEntity);
 
-					if (solplayer.getLanguage() == null || solplayer.getLanguage().equals("UNKNOWN")) {
+					if (solplayer.getLanguageSkillType() == null || !Utils.IsValidLanguage(solplayer.getLanguageSkillType())) {
 						if (solplayer.getRace() != null) {
-							solplayer.setLanguage(solplayer.getRace().getLanguage().name().toUpperCase());
+							solplayer.setLanguageSkillType(solplayer.getRace().getLanguage());
 						}
 					}
 

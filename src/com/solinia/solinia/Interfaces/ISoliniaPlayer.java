@@ -111,10 +111,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public List<SoliniaPlayerSkill> getSkills();
 
-	String getLanguage();
-
-	void setLanguage(String language);
-
 	String getGender();
 
 	void setGender(String gender);

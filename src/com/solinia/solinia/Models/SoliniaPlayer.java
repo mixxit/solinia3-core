@@ -83,7 +83,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean haschosenrace = false;
 	private boolean haschosenclass = false;
 	private int classid = 0;
-	private String language;
 	private String gender = "MALE";
 	private String base64InventoryContents = "";
 	private String base64ArmorContents = "";
@@ -346,7 +345,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setRaceId(int raceid) {
 		// TODO Auto-generated method stub
 		this.raceid = raceid;
-		this.language = getRace().getName().toUpperCase();
+		this.languageSkillType = getRace().getLanguage();
 		updateMaxHp();
 	}
 
@@ -830,19 +829,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public String getLanguage() {
-		if (language == null || language.equals("UNKNOWN"))
-			if (getRace() != null)
-				language = getRace().getName();
-		return language;
-	}
-
-	@Override
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	@Override
 	public String getGender() {
 		return gender;
 	}
@@ -876,9 +862,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void ooc(String string) {
-		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
+		if (getLanguageSkillType() == null || !Utils.IsValidLanguage(getLanguageSkillType())) {
 			if (getRace() != null)
-				setLanguage(getRace().getLanguage().name().toUpperCase());
+				setLanguageSkillType(getRace().getLanguage());
 		}
 		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this, string,
 				getBukkitPlayer().getInventory().getItemInMainHand());
@@ -886,13 +872,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void say(String message) {
-		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
+		if (getLanguageSkillType() == null || !Utils.IsValidLanguage(getLanguageSkillType())) {
 			if (getRace() == null) {
 				getBukkitPlayer().sendMessage(
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
-				setLanguage(getRace().getLanguage().name().toUpperCase());
+				setLanguageSkillType(getRace().getLanguage());
 			}
 		}
 
@@ -928,13 +914,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void whisper(String string) {
-		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
+		if (getLanguageSkillType() == null || !Utils.IsValidLanguage(getLanguageSkillType())) {
 			if (getRace() == null) {
 				getBukkitPlayer().sendMessage(
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
-				setLanguage(getRace().getLanguage().name().toUpperCase());
+				setLanguageSkillType(getRace().getLanguage());
 			}
 		}
 		int numberReached = StateManager.getInstance().getChannelManager().sendToWhisperChannelDecorated(this, string,
@@ -946,13 +932,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void shout(String string) {
-		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
+		if (getLanguageSkillType() == null || !Utils.IsValidLanguage(getLanguageSkillType())) {
 			if (getRace() == null) {
 				getBukkitPlayer().sendMessage(
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
-				setLanguage(getRace().getLanguage().name().toUpperCase());
+				setLanguageSkillType(getRace().getLanguage());
 			}
 		}
 		int numberReached = StateManager.getInstance().getChannelManager().sendToShoutChannelDecorated(this, string,

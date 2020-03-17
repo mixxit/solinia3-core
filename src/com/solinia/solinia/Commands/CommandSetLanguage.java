@@ -41,42 +41,40 @@ public class CommandSetLanguage implements CommandExecutor {
 	            }
 	            
 	            String language = args[0].toUpperCase();
-	            
-	            if (soliniaplayer.getLanguage().equals(language))
+	            SkillType targetLanguage = Utils.getSkillType2(language);
+	            if (!Utils.IsValidLanguage(targetLanguage))
 	            {
-	            	player.sendMessage("That is already your current tongue.");
+	            	player.sendMessage("That is not a valid tongue.");
 	            	return false;
 	            }
-	            
-	            if (language.equals(soliniaplayer.getRace().getLanguage().name().toUpperCase()))
-	            {
-	            	soliniaplayer.setLanguage(language);
-	                player.sendMessage("* You will now speak in " + language);
-	                return true;
-	            }
-	            
-	            SkillType targetLanguage = Utils.getSkillType2(language);
 	            if (targetLanguage.equals(SkillType.None))
 	            {
 	            	player.sendMessage("That is not a valid tongue.");
 	            	return false;
 	            }
 	            
-	            if (!Utils.IsValidLanguage(targetLanguage))
+	            if (soliniaplayer.getLanguageSkillType().equals(targetLanguage))
 	            {
-	            	player.sendMessage("That is not a valid tongue.");
+	            	player.sendMessage("That is already your current tongue.");
 	            	return false;
+	            }
+	            
+	            if (targetLanguage.equals(soliniaplayer.getRace().getLanguage()))
+	            {
+	            	soliniaplayer.setLanguageSkillType(targetLanguage);
+	                player.sendMessage("* You will now speak in " + targetLanguage.name().toUpperCase());
+	                return true;
 	            }
 	            
 	            SoliniaPlayerSkill soliniaskill = soliniaplayer.getSkill(targetLanguage);
 	            if (soliniaskill != null && soliniaskill.getValue() >= 100)
 	            {
-	            	soliniaplayer.setLanguage(targetLanguage.name().toUpperCase());
+	            	soliniaplayer.setLanguageSkillType(targetLanguage);
 	            	player.sendMessage("* You will now speak in " + targetLanguage.name().toUpperCase());
 	                return true;
 	            }
 	                        
-	            player.sendMessage("Language change failed. Default for you is /language " + soliniaplayer.getRace().getLanguage() + " or any other language you have mastered to 100 in /skills");
+	            player.sendMessage("Language change failed. Default for you is /language " + soliniaplayer.getRace().getLanguage().name().toUpperCase() + " or any other language you have mastered to 100 in /skills");
 	        	return false;
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

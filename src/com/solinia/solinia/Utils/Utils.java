@@ -2706,19 +2706,7 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getCharacters())
-			{
-				if (player.getRace() == null)
-					player.setLanguageSkillType(SkillType.UnknownTongue);
-				else
-					player.setLanguageSkillType(player.getRace().getLanguage());
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 
 	public static void disableLootOverLevel110() {
