@@ -2710,7 +2710,10 @@ public class Utils {
 		{
 			for(ISoliniaPlayer player : StateManager.getInstance().getPlayerManager().getCharacters())
 			{
-				player.setLanguageSkillType(Utils.getSkillType2(player.getLanguage()));
+				if (player.getRace() == null)
+					player.setLanguageSkillType(SkillType.UnknownTongue);
+				else
+					player.setLanguageSkillType(player.getRace().getLanguage());
 			}
 		} catch (CoreStateInitException e)
 		{
