@@ -18,13 +18,13 @@ public interface IPlayerManager {
 	Integer getApplyingAugmentation(UUID playerUuid);
 	Integer getPlayerActiveBardSong(UUID playerUuid);
 	void setPlayerActiveBardSong(UUID playerUuid, Integer spellId);
-	public List<ISoliniaPlayer> getArchivedCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
+	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
 	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit);
 	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, UUID characterUUID);
 	Timestamp getPlayerLastChangeChar(UUID playerUUID);
 	Timestamp getPlayerLastUnstuck(UUID playerUUID);
 	void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp);
-	public List<ISoliniaPlayer> getArchivedCharacters() throws CoreStateInitException;
+	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException;
 	ISoliniaPlayer getPlayerAndDoNotCreate(UUID playerUUID);
 	Timestamp getPlayerLastSteed(UUID playerUUID);
 	void setPlayerLastSteed(UUID playerUUID, Timestamp timestamp);
@@ -40,7 +40,7 @@ public interface IPlayerManager {
 	void setPlayerLastUnstuck(UUID playerUUID, Timestamp timestamp);
 	int getPlayerLastZone(Player player);
 	void setPlayerLastZone(Player player, int zoneId);
-	public ISoliniaPlayer getArchivedCharacterByCharacterUUID(UUID characterUuid) throws CoreStateInitException;
+	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUuid) throws CoreStateInitException;
 	public ISoliniaPlayer getArchivedCharacterOrActivePlayerByCharacterUUID(UUID newownerCharacterId) throws CoreStateInitException, PlayerDoesNotExistException;
 	void setActiveCharacter(UUID playerUuid, UUID characterId);
 	ISoliniaPlayer getActivePlayer(Player player);

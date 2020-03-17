@@ -619,6 +619,10 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void tryImproveLanguage(SkillType languageSkillType);
 
+	SkillType getLanguageSkillType();
+
+	void setLanguageSkillType(SkillType languageSkillType);
+
 
 
 }

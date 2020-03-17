@@ -59,7 +59,7 @@ public class CommandSolPlayerInfo implements CommandExecutor {
 		
 		try
 		{
-			for (ISoliniaPlayer character : StateManager.getInstance().getPlayerManager().getArchivedCharactersByPlayerUUID(playerUUID))
+			for (ISoliniaPlayer character : StateManager.getInstance().getPlayerManager().getCharactersByPlayerUUID(playerUUID))
 			{
 				String locked  = "";
 				

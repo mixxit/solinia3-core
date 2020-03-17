@@ -124,6 +124,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int memorisedSpellSlot6 = 0;
 	private int memorisedSpellSlot7 = 0;
 	private int memorisedSpellSlot8 = 0;
+	
+	private SkillType languageSkillType = SkillType.UnknownTongue;
 
 	private int lastX = 0;
 	private int lastY = 0;
@@ -3247,14 +3249,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (spouseId != null) {
 
 				ISoliniaPlayer spousePlayer = StateManager.getInstance().getConfigurationManager()
-						.getArchivedCharacterByCharacterUUID(spouseId);
+						.getCharacterByCharacterUUID(spouseId);
 				spouse = spousePlayer.getFullName();
 
 			}
 
 			this.getBukkitPlayer().sendMessage(self + " -> " + spouse);
 
-			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getArchivedCharacters()) {
+			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters()) {
 				if (player.getMotherId() == null)
 					continue;
 
@@ -4788,6 +4790,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		{
 			
 		}
+	}
+
+	@Override
+	public SkillType getLanguageSkillType() {
+		return languageSkillType;
+	}
+
+	@Override
+	public void setLanguageSkillType(SkillType languageSkillType) {
+		this.languageSkillType = languageSkillType;
 	}
 
 }

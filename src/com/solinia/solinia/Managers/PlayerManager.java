@@ -88,13 +88,13 @@ public class PlayerManager implements IPlayerManager {
 				state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid);
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(state.getActiveCharacterId()) == null)
+			if (StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(state.getActiveCharacterId()) == null)
 			{
 				SoliniaPlayerFactory.CreatePlayer(playerUuid);
 				state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid);
 			}
 			
-			return StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(state.getActiveCharacterId());
+			return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(state.getActiveCharacterId());
 		} catch (CoreStateInitException e)
 		{
 			return null;
@@ -108,7 +108,7 @@ public class PlayerManager implements IPlayerManager {
 			PlayerState state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUUID);
 			if (state == null)
 				return null;
-			return StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(state.getActiveCharacterId());
+			return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(state.getActiveCharacterId());
 		} catch (CoreStateInitException e)
 		{
 			return null;
@@ -206,19 +206,19 @@ public class PlayerManager implements IPlayerManager {
 
 
 	@Override
-	public List<ISoliniaPlayer> getArchivedCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException {
-		return StateManager.getInstance().getConfigurationManager().getArchivedCharactersByPlayerUUID(playerUUID);
+	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(playerUUID);
 	}
 	
 	@Override
-	public ISoliniaPlayer getArchivedCharacterByCharacterUUID(UUID characterUUID) throws CoreStateInitException {
-		return StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
+	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID) throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
 	}
 
 	@Override
 	public ISoliniaPlayer getArchivedCharacterOrActivePlayerByCharacterUUID(UUID characterUUID) throws CoreStateInitException, PlayerDoesNotExistException {
 		
-		return StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
+		return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
 	}
 	
 	@Override
@@ -287,7 +287,7 @@ public class PlayerManager implements IPlayerManager {
 				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup(), true, true);
 			}
 			
-			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
+			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
 			if (altSolPlayer == null)
 				return null;
 			
@@ -350,8 +350,8 @@ public class PlayerManager implements IPlayerManager {
 	}
 	
 	@Override
-	public List<ISoliniaPlayer> getArchivedCharacters() throws CoreStateInitException {
-		return StateManager.getInstance().getConfigurationManager().getArchivedCharacters();
+	public List<ISoliniaPlayer> getCharacters() throws CoreStateInitException {
+		return StateManager.getInstance().getConfigurationManager().getCharacters();
 	}
 
 	@Override

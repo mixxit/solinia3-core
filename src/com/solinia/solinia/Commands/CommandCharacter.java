@@ -50,7 +50,7 @@ public class CommandCharacter implements CommandExecutor {
 	
 				player.sendMessage("- " + ChatColor.LIGHT_PURPLE + solplayer.getFullName() + ChatColor.RESET + " - " + ChatColor.GREEN + "ACTIVE" + ChatColor.RESET);
 				
-				for (ISoliniaPlayer character : StateManager.getInstance().getPlayerManager().getArchivedCharactersByPlayerUUID(player.getUniqueId()))
+				for (ISoliniaPlayer character : StateManager.getInstance().getPlayerManager().getCharactersByPlayerUUID(player.getUniqueId()))
 				{
 					
 					if (character.getCharacterId().equals(solplayer.getCharacterId()))
@@ -174,7 +174,7 @@ public class CommandCharacter implements CommandExecutor {
 						
 						UUID characterUUID = UUID.fromString(args[1]);
 						
-						ISoliniaPlayer targetCharacter = StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
+						ISoliniaPlayer targetCharacter = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
 			        	if (!(targetCharacter.getUUID().equals(player.getUniqueId())))
 			        	{
 			        		player.sendMessage("This is not your character to load");

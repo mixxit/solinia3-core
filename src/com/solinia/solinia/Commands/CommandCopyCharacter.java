@@ -48,7 +48,7 @@ public class CommandCopyCharacter implements CommandExecutor {
         
         try
         {
-        	SoliniaPlayer solPlayerToCopy = (SoliniaPlayer)StateManager.getInstance().getConfigurationManager().getArchivedCharacterByCharacterUUID(characterUUID);
+        	SoliniaPlayer solPlayerToCopy = (SoliniaPlayer)StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
         	ISoliniaPlayer solPlayerNew = SoliniaPlayerFactory.CreatePlayerCopy(solPlayerToCopy,targetPlayer.getUniqueId());
         	
         	player.sendMessage("* You have copied character [" + solPlayerToCopy.getFullName() + "] to " + targetPlayer.getCustomName());
