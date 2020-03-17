@@ -13,6 +13,7 @@ import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaNPCEventHandler;
 
@@ -193,9 +194,9 @@ public interface ISoliniaNPC {
 
 	int getAccuracyRating();
 
-	int getSkill(String upperCase);
+	int getSkill(SkillType skillType);
 
-	int getSkillCap(String skillName);
+	int getSkillCap(SkillType skillType);
 
 	int getAvoidanceRating();
 
@@ -280,5 +281,6 @@ public interface ISoliniaNPC {
 	boolean canDisarm();
 
 	int getNPCDefaultAtk();
+
 
 }

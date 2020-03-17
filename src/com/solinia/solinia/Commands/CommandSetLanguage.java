@@ -11,6 +11,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandSetLanguage implements CommandExecutor {
 
@@ -53,7 +54,7 @@ public class CommandSetLanguage implements CommandExecutor {
 	                return true;
 	            }
 	            
-	            SoliniaPlayerSkill soliniaskill = soliniaplayer.getSkill(language);
+	            SoliniaPlayerSkill soliniaskill = soliniaplayer.getSkill(Utils.getSkillType(language));
 	            if (soliniaskill != null && soliniaskill.getValue() >= 100)
 	            {
 	            	soliniaplayer.setLanguage(language);

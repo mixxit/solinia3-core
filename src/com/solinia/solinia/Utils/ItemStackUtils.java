@@ -28,6 +28,8 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SkillReward;
+import com.solinia.solinia.Models.SkillType;
+
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_14_R1.AttributeModifier;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
@@ -88,46 +90,46 @@ public class ItemStackUtils {
 		}
 
 		int xp = 0;
-		String skill = "";
+		SkillType skillType = SkillType.HandtoHand;
 
 		switch (type) {
 			case OneHandSlashing:
 				xp = 1;
-				skill = "SLASHING";
+				skillType = SkillType.Slashing;
 				break;
 			case TwoHandSlashing:
 				xp = 1;
-				skill = "SLASHING";
+				skillType = SkillType.TwoHandSlashing;
 				break;
 			case OneHandBlunt:
 				xp = 1;
-				skill = "CRUSHING";
+				skillType = SkillType.Crushing;
 				break;
 			case TwoHandBlunt:
 				xp = 1;
-				skill = "CRUSHING";
+				skillType = SkillType.TwoHandBlunt;
 				break;
 			case OneHandPiercing:
 				xp = 1;
-				skill = "PIERCING";
+				skillType = SkillType.Piercing;
 				break;
 			case TwoHandPiercing:
 				xp = 1;
-				skill = "PIERCING";
+				skillType = SkillType.TwoHandPiercing;
 				break;
 			case BowArchery:
 				xp = 1;
-				skill = "ARCHERY";
+				skillType = SkillType.Archery;
 				break;
 			default:
 				xp = 1;
-				skill = "CRUSHING";
+				skillType = SkillType.HandtoHand;
 			break;
 		
 		}
 
-		if (xp > 0 && !skill.equals("")) {
-			reward = new SkillReward(skill, xp);
+		if (xp > 0 && !skillType.equals(SkillType.None)) {
+			reward = new SkillReward(skillType, xp);
 		}
 
 		return reward;

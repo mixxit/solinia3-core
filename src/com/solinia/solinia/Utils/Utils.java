@@ -161,6 +161,17 @@ public class Utils {
 		}
 	}
 	
+	public static SkillType getSkillType(String skillName)
+	{
+		SkillType result = SkillType.None;
+		for(SkillType type : SkillType.values())
+		{
+			if (type.name().toUpperCase().equals(skillName.toUpperCase()))
+				return type;
+		}
+		return result;
+	}
+	
 	public static int GetLocalWhisperRange(String worldName)
 	{
 		try
@@ -4540,7 +4551,7 @@ public class Utils {
 		}
 	}
 
-	public static int getCriticalChanceBonus(ISoliniaLivingEntity entity, String skillname) {
+	public static int getCriticalChanceBonus(ISoliniaLivingEntity entity, SkillType skillType) {
 		int critical_chance = 0;
 
 		// All skills + Skill specific
@@ -4553,7 +4564,7 @@ public class Utils {
 		return critical_chance;
 	}
 
-	public static int getCritDmgMod(String skillname) {
+	public static int getCritDmgMod(SkillType skillType) {
 		int critDmg_mod = 0;
 		// TODO take aa and item bonuses into affect
 		return critDmg_mod;

@@ -26,6 +26,7 @@ import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Utils.DropUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandCraft implements CommandExecutor {
 
@@ -122,7 +123,7 @@ public class CommandCraft implements CommandExecutor {
     				
     				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
     				{
-    					if (solPlayer.getSkillCap(craftEntry.getSkill().toUpperCase()) < 1)
+    					if (solPlayer.getSkillCap(Utils.getSkillType(craftEntry.getSkill().toUpperCase())) < 1)
     					{
 				        	player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
     						continue;
@@ -130,7 +131,7 @@ public class CommandCraft implements CommandExecutor {
     					
     					if (craftEntry.getMinSkill() > 0)
     					{
-    						SoliniaPlayerSkill skill = solPlayer.getSkill(craftEntry.getSkill().toUpperCase());
+    						SoliniaPlayerSkill skill = solPlayer.getSkill(Utils.getSkillType(craftEntry.getSkill().toUpperCase()));
     						if (skill == null)
     						{
     				        	player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
@@ -208,9 +209,9 @@ public class CommandCraft implements CommandExecutor {
     					
 	    				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
 						{
-							solPlayer.tryIncreaseSkill(craftEntry.getSkill().toUpperCase(), 1);
+							solPlayer.tryIncreaseSkill(Utils.getSkillType(craftEntry.getSkill().toUpperCase()), 1);
 	
-							if (!solPlayer.getSkillCheck(craftEntry.getSkill().toUpperCase(),craftEntry.getMinSkill()+50))
+							if (!solPlayer.getSkillCheck(Utils.getSkillType(craftEntry.getSkill().toUpperCase()),craftEntry.getMinSkill()+50))
 							{
 								player.sendMessage("Your lack of skill resulted in failure!");
 								// remove components

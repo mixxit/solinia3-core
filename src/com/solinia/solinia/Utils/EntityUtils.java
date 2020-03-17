@@ -35,6 +35,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SolAnimationType;
 
 import net.md_5.bungee.api.ChatColor;
@@ -198,10 +199,9 @@ public class EntityUtils {
 	    return safe;
 	  }
 
-	public static int getSkillCap(String skillname, ISoliniaClass profession, int level, String specialisation, int currentskillamount) {
-		skillname = skillname.toUpperCase();
+	public static int getSkillCap(SkillType skillType, ISoliniaClass profession, int level, String specialisation, int currentskillamount) {
 
-		if (!Utils.isValidSkill(skillname.toUpperCase()))
+		if (!Utils.isValidSkill(skillType.name().toUpperCase()))
 			return 0;
 
 		// If the skill being queried happens to be a race name, the cap for
@@ -209,7 +209,7 @@ public class EntityUtils {
 		try {
 			List<ISoliniaRace> races = StateManager.getInstance().getConfigurationManager().getRaces();
 			for (ISoliniaRace race : races) {
-				if (race.getName().toUpperCase().equals(skillname.toUpperCase())) {
+				if (race.getName().toUpperCase().equals(skillType.name().toUpperCase())) {
 					return 100;
 				}
 			}
@@ -221,79 +221,8 @@ public class EntityUtils {
 
 		// TODO - Move all these skill cap bonuses to the race configuration
 		// classes
-
-		if (skillname.toUpperCase().equals("SLASHING")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("SLASHING", profession.getName().toUpperCase(),level, currentskillamount);
-		}
 		
-		if (skillname.toUpperCase().equals("PIERCING")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("PIERCING", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-		
-		if (skillname.toUpperCase().equals("TRACKING")) {
-			if (profession != null)
-				return EntityUtils.maxSkillClass("TRACKING", profession.getName().toUpperCase(),level);
-		}
-
-		if (skillname.toUpperCase().equals("BACKSTAB")) {
-			if (profession != null)
-				return EntityUtils.maxSkillClass("BACKSTAB", profession.getName().toUpperCase(),level);
-		}
-
-		if (skillname.toUpperCase().equals("TAUNT")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("TAUNT", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("BINDWOUND")) {
-			if (profession != null)
-			return EntityUtils.maxSkill("BINDWOUND", profession.getName().toUpperCase(),level, currentskillamount);
-
-		}
-
-		if (skillname.toUpperCase().equals("CRUSHING")) {
-			if (profession != null)
-			return EntityUtils.maxSkill("CRUSHING", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("DODGE")) {
-			if (profession != null)
-			return EntityUtils.maxSkill("DODGE", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("RIPOSTE")) {
-			if (profession != null)
-			return EntityUtils.maxSkill("RIPOSTE", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("DOUBLEATTACK")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("DOUBLEATTACK", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("ARCHERY")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("ARCHERY", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("MEDITATION")) {
-			if (profession != null)
-				return EntityUtils.maxSkillArcane("MEDITATION", profession.getName().toUpperCase(),level,currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("OFFENSE")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("OFFENSE", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("DEFENSE")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("DEFENSE", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("SPECIALISEABJURATION")) {
+		if (skillType.name().toUpperCase().startsWith("SPECIALISE")) {
 			if (profession != null) {
 				if (profession.getSpecialiselevel() < 1)
 					return 0;
@@ -302,102 +231,15 @@ public class EntityUtils {
 					return 0;
 
 				if (level >= profession.getSpecialiselevel()) {
-				return EntityUtils.maxSkill("SPECIALISEABJURATION", profession.getName().toUpperCase(),level, currentskillamount);
+				return EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
 				} else {
 					return 0;
 				}
 			}
 		}
 
-		if (skillname.toUpperCase().equals("SPECIALISEALTERATION")) {
-			if (profession != null) {
-				if (profession.getSpecialiselevel() < 1)
-					return 0;
-
-				if (specialisation == null || specialisation.equals(""))
-					return 0;
-
-				if (level >= profession.getSpecialiselevel()) {
-				return EntityUtils.maxSkill("SPECIALISEALTERATION", profession.getName().toUpperCase(),level, currentskillamount);
-				} else {
-					return 0;
-				}
-			}
-		}
-
-		if (skillname.toUpperCase().equals("SPECIALISECONJURATION")) {
-			if (profession != null) {
-				if (profession.getSpecialiselevel() < 1)
-					return 0;
-
-				if (specialisation == null || specialisation.equals(""))
-					return 0;
-
-				if (level >= profession.getSpecialiselevel()) {
-				return EntityUtils.maxSkill("SPECIALISECONJURATION", profession.getName().toUpperCase(),level, currentskillamount);
-				} else {
-					return 0;
-				}
-			}
-		}
-
-		if (skillname.toUpperCase().toUpperCase().equals("SPECIALISEDIVINATION")) {
-			if (profession != null) {
-				if (profession.getSpecialiselevel() < 1)
-					return 0;
-
-				if (specialisation == null || specialisation.equals(""))
-					return 0;
-
-				if (level >= profession.getSpecialiselevel()) {
-				return EntityUtils.maxSkill("SPECIALISEDIVINATION", profession.getName().toUpperCase(),level, currentskillamount);
-				} else {
-					return 0;
-				}
-			}
-		}
-		
-		if (skillname.toUpperCase().equals("SPECIALISEEVOCATION")) {
-			if (profession != null) {
-				return EntityUtils.maxSkill("SPECIALISEEVOCATION", profession.getName().toUpperCase(),level, currentskillamount);
-			}
-		}
-
-		if (skillname.toUpperCase().equals("ALCHEMY")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("ALCHEMY", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.equals("JEWELRYMAKING")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("JEWELRYMAKING", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("TAILORING")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("TAILORING", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("FLETCHING")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("FLETCHING", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.equals("BLACKSMITHING")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("BLACKSMITHING", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("TINKERING")) {
-			if (profession != null)
-				return EntityUtils.maxSkill("TINKERING", profession.getName().toUpperCase(),level, currentskillamount);
-		}
-
-		if (skillname.toUpperCase().equals("MAKEPOISON")) {
-			if (profession != null)
-				return EntityUtils.maxSkillClass("MAKEPOISON", profession.getName().toUpperCase(),level);
-		}
-
+		if (profession != null)
+			return EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
 
 		int cap = (int) ((2 * level) + 2);
 		if (cap > Utils.HIGHESTSKILL)
@@ -406,7 +248,11 @@ public class EntityUtils {
 		return cap;
 	}
 	
-	public static int maxSkillClass(String skillid, String classname, int level) {
+	private static int maxSkill(SkillType skillType, String upperCase, int level, int currentskillamount) {
+		return maxSkill(skillType.name().toUpperCase(),upperCase,level,currentskillamount);
+	}
+
+	private static int maxSkillClass(String skillid, String classname, int level) {
 	    int r_value = 0;
 	    switch (skillid) {
 	        // Rogue

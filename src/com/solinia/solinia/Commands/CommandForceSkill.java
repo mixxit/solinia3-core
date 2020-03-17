@@ -10,6 +10,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandForceSkill implements CommandExecutor {
 	@Override
@@ -63,7 +64,7 @@ public class CommandForceSkill implements CommandExecutor {
 	    				return true;
 	    			}
 	    			
-	    			solplayer.setSkill(skill.toUpperCase(), level);
+	    			solplayer.setSkill(Utils.getSkillType(skill.toUpperCase()), level);
 	    			sender.sendMessage("* Player "+name+" set skill "+skill.toUpperCase()+" to " + level);
 	            	return true;
 	            } else {

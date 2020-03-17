@@ -552,7 +552,7 @@ public class SoliniaItem implements ISoliniaItem {
 		
 		if (isConsumable == true && !getLanguagePrimer().equals(""))
 		{
-			SoliniaPlayerAdapter.Adapt(player).setSkill(getLanguagePrimer(), 100);
+			SoliniaPlayerAdapter.Adapt(player).setSkill(Utils.getSkillType(getLanguagePrimer()), 100);
 			System.out.println("Granted " + player.getName() + " language skill from item [" + getLanguagePrimer() + "]");
 			return true;
 		}

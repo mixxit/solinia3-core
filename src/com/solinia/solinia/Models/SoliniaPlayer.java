@@ -851,9 +851,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public int getSkillCap(String skillName) {
-		return EntityUtils.getSkillCap(skillName, getClassObj(), getLevel(), getSpecialisation(),
-				this.getSkill(skillName).getValue());
+	public int getSkillCap(SkillType skillType) {
+		return EntityUtils.getSkillCap(skillType, getClassObj(), getLevel(), getSpecialisation(),
+				this.getSkill(skillType).getValue());
 	}
 
 	@Override
@@ -961,42 +961,42 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public SoliniaPlayerSkill getSkill(String skillname) {
-		if (!Utils.isValidSkill(skillname)) {
+	public SoliniaPlayerSkill getSkill(SkillType skillType) {
+		if (!Utils.isValidSkill(skillType.name().toUpperCase())) {
 			getBukkitPlayer().sendMessage(
 					"ADMIN ALERT, Please inform Moderators that you have called getSkill for an unknown skill: '"
-							+ skillname + "'");
+							+ skillType.name().toUpperCase() + "'");
 			System.out.println("ADMIN ALERT, " + getBukkitPlayer().getName() + " getSkill for an unknown skill: '"
-					+ skillname + "'");
+					+ skillType.name().toUpperCase() + "'");
 			return null;
 		}
 
 		for (SoliniaPlayerSkill skill : this.skills) {
-			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase()))
+			if (skill.getSkillName().toUpperCase().equals(skillType.name().toUpperCase().toUpperCase()))
 				return skill;
 		}
 
 		// If we got this far the skill doesn't exist, create it with 0
-		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillname.toUpperCase(), 0);
+		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType.name().toUpperCase().toUpperCase(), 0);
 		skills.add(skill);
 		return skill;
 	}
 
 	@Override
-	public void tryIncreaseSkill(String skillname, int skillupamount) {
-		SoliniaPlayerSkill skill = getSkill(skillname);
+	public void tryIncreaseSkill(SkillType skillType, int skillupamount) {
+		SoliniaPlayerSkill skill = getSkill(skillType);
 		int currentskill = 0;
 		if (skill != null) {
 			currentskill = skill.getValue();
 
 			// Fix any higher than it should be
-			if (currentskill > this.getSkillCap(skillname)) {
-				setSkill(skillname, this.getSkillCap(skillname));
+			if (currentskill > this.getSkillCap(skillType)) {
+				setSkill(skillType, this.getSkillCap(skillType));
 				currentskill = skill.getValue();
 			}
 		}
 
-		int skillcap = getSkillCap(skillname);
+		int skillcap = getSkillCap(skillType);
 		if ((currentskill + skillupamount) > skillcap) {
 			return;
 		}
@@ -1009,21 +1009,21 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		Random r = new Random();
 		int randomInt = r.nextInt(100) + 1;
 		if (randomInt < chance) {
-			setSkill(skillname, currentskill + skillupamount);
+			setSkill(skillType, currentskill + skillupamount);
 		}
 
 		if (getSpecialisation() != null && !getSpecialisation().equals("")) {
-			if (!skillname.toUpperCase().equals(getSpecialisation().toUpperCase()))
+			if (!skillType.name().toUpperCase().equals(getSpecialisation().toUpperCase()))
 				return;
 
-			skill = getSkill("SPECIALISE" + skillname.toUpperCase());
+			skill = getSkill(Utils.getSkillType("SPECIALISE" + skillType.name().toUpperCase()));
 
 			currentskill = 0;
 			if (skill != null) {
 				currentskill = skill.getValue();
 			}
 
-			skillcap = getSkillCap("SPECIALISE" + skillname.toUpperCase());
+			skillcap = getSkillCap(Utils.getSkillType("SPECIALISE" + skillType.name().toUpperCase()));
 			if ((currentskill + skillupamount) > skillcap) {
 				return;
 			}
@@ -1036,14 +1036,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			randomInt = r.nextInt(100) + 1;
 			if (randomInt < chance) {
 
-				setSkill("SPECIALISE" + skillname.toUpperCase(), currentskill + skillupamount);
+				setSkill(Utils.getSkillType("SPECIALISE" + skillType.name().toUpperCase()), currentskill + skillupamount);
 			}
 		}
 
 	}
 
 	@Override
-	public void setSkill(String skillname, int value) {
+	public void setSkill(SkillType skillType, int value) {
 		if (value > Integer.MAX_VALUE)
 			return;
 
@@ -1051,29 +1051,27 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (value > Utils.HIGHESTSKILL)
 			return;
 
-		skillname = skillname.toUpperCase();
-
 		if (this.skills == null)
 			this.skills = new ArrayList<SoliniaPlayerSkill>();
 
 		boolean updated = false;
 
 		for (SoliniaPlayerSkill skill : this.skills) {
-			if (skill.getSkillName().toUpperCase().equals(skillname.toUpperCase())) {
+			if (skill.getSkillName().toUpperCase().equals(skillType.name().toUpperCase())) {
 				skill.setValue(value);
 				updated = true;
 				getBukkitPlayer()
-						.sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
+						.sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toUpperCase() + " (" + value + ")");
 				return;
 			}
 		}
 
 		if (updated == false) {
-			SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillname.toUpperCase(), value);
+			SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType.name().toUpperCase(), value);
 			skills.add(skill);
 		}
 
-		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillname + " (" + value + ")");
+		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toLowerCase() + " (" + value + ")");
 	}
 
 	@Override
@@ -1861,13 +1859,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (targetmob != null && !targetmob.isDead()) {
 				boolean success = spell.tryCast(player, targetmob, useMana, useReagents, requiredWeaponSkillType);
 				if (success == true) {
-					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
+					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()), 1);
 				}
 				return;
 			} else {
 				boolean success = spell.tryCast(player, player, useMana, useReagents, requiredWeaponSkillType);
 				if (success == true) {
-					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase(), 1);
+					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()), 1);
 				}
 				return;
 			}
@@ -2072,7 +2070,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			par_skill += minLevel;
 
-			SoliniaPlayerSkill playerSkill = getSkill(Utils.getSkillType(spell.getSkill()).name().toUpperCase());
+			SoliniaPlayerSkill playerSkill = getSkill(Utils.getSkillType(spell.getSkill()));
 
 			if (playerSkill != null)
 				act_skill = playerSkill.getValue();
@@ -2119,7 +2117,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (getRace().getName().toUpperCase().equals(language.toUpperCase()))
 				return true;
 
-		SoliniaPlayerSkill soliniaskill = getSkill(language);
+		SoliniaPlayerSkill soliniaskill = getSkill(Utils.getSkillType(language));
 		if (soliniaskill != null && soliniaskill.getValue() >= 100) {
 			return true;
 		}
@@ -2133,7 +2131,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (getRace().getName().toUpperCase().equals(language.toUpperCase()))
 				return 100;
 
-		SoliniaPlayerSkill soliniaskill = getSkill(language);
+		SoliniaPlayerSkill soliniaskill = getSkill(Utils.getSkillType(language));
 		if (soliniaskill != null && soliniaskill.getValue() >= 0) {
 			return soliniaskill.getValue();
 		}
@@ -2146,10 +2144,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (getRace().getName().toUpperCase().equals(language))
 				return;
 
-		if (getSkill(language).getValue() >= 100)
+		if (getSkill(Utils.getSkillType(language)).getValue() >= 100)
 			return;
 
-		tryIncreaseSkill(language, 1);
+		tryIncreaseSkill(Utils.getSkillType(language), 1);
 	}
 
 	@Override
@@ -2538,7 +2536,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (canDodge() == false)
 			return false;
 
-		int chance = getSkill("DODGE").getValue();
+		int chance = getSkill(SkillType.Dodge).getValue();
 		chance += 100;
 		chance /= 40;
 
@@ -2550,7 +2548,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (canRiposte() == false)
 			return false;
 
-		int chance = getSkill("RIPOSTE").getValue();
+		int chance = getSkill(SkillType.Riposte).getValue();
 		chance += 100;
 		chance /= 50;
 
@@ -2562,7 +2560,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (canDoubleAttack() == false)
 			return false;
 
-		int chance = getSkill("DOUBLEATTACK").getValue();
+		int chance = getSkill(SkillType.DoubleAttack).getValue();
 		chance += 20;
 		if (getLevel() > 35) {
 			chance += getLevel();
@@ -2577,7 +2575,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (canSafefall() == false)
 			return false;
 
-		int chance = getSkill("SAFEFALL").getValue();
+		int chance = getSkill(SkillType.SafeFall).getValue();
 		chance += 10;
 		chance += getLevel();
 
@@ -3174,8 +3172,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean getSkillCheck(String skillname, int trivial) {
-		SoliniaPlayerSkill skill = this.getSkill(skillname);
+	public boolean getSkillCheck(SkillType skillType, int trivial) {
+		SoliniaPlayerSkill skill = this.getSkill(skillType);
 
 		if (skill == null)
 			return false;
@@ -3461,20 +3459,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// give some chance to try to bind wound early on in life
 			// later on only do this after success
 			boolean triedSkillIncrease = false;
-			if (this.getSkill("BINDWOUND").getValue() < 30) {
-				tryIncreaseSkill("BINDWOUND", 1);
+			if (this.getSkill(SkillType.BindWound).getValue() < 30) {
+				tryIncreaseSkill(SkillType.BindWound, 1);
 				triedSkillIncrease = true;
 			}
 
 			int percent_base = 50;
 
-			this.getSkill("BINDWOUND");
+			this.getSkill(SkillType.BindWound);
 
 			String className = "UNKNOWN";
 			if (getClassObj() != null)
 				className = getClassObj().getName().toUpperCase();
 
-			if (getSkill("BINDWOUND").getValue() > 200) {
+			if (getSkill(SkillType.BindWound).getValue() > 200) {
 				if (className.equals("MONK") || className.equals("BEASTLORD"))
 					percent_base = 70;
 				else if ((getLevel() > 50)
@@ -3509,9 +3507,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					&& solLivingEntity.getBukkitLivingEntity().getHealth() < max_hp) {
 				int bindhps = 3; // base bind hp
 				if (percent_base >= 70)
-					bindhps = (getSkill("BINDWOUND").getValue() * 4) / 10; // 8:5 skill-to-hp ratio
-				else if (getSkill("BINDWOUND").getValue() >= 12)
-					bindhps = getSkill("BINDWOUND").getValue() / 4; // 4:1 skill-to-hp ratio
+					bindhps = (getSkill(SkillType.BindWound).getValue() * 4) / 10; // 8:5 skill-to-hp ratio
+				else if (getSkill(SkillType.BindWound).getValue() >= 12)
+					bindhps = getSkill(SkillType.BindWound).getValue() / 4; // 4:1 skill-to-hp ratio
 
 				int bonus_hp_percent = 0;
 				// if (percent_base >= 70)
@@ -3533,7 +3531,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					bindhps = 3;
 
 				if (triedSkillIncrease == false) {
-					tryIncreaseSkill("BINDWOUND", 1);
+					tryIncreaseSkill(SkillType.BindWound, 1);
 					triedSkillIncrease = true;
 				}
 
@@ -4024,7 +4022,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int getPlayerMeditatingManaBonus() {
 		int manaregen = 0;
 		if (isMeditating()) {
-			SoliniaPlayerSkill meditationskill = getSkill("MEDITATION");
+			SoliniaPlayerSkill meditationskill = getSkill(SkillType.Meditation);
 			int bonusmana = 3 + (meditationskill.getValue() / 15);
 
 			manaregen += bonusmana;
@@ -4034,13 +4032,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			int randomInt = r.nextInt(100) + 1;
 			if (randomInt > 90) {
 				int currentvalue = 0;
-				SoliniaPlayerSkill skill = getSkill("MEDITATION");
+				SoliniaPlayerSkill skill = getSkill(SkillType.Meditation);
 				if (skill != null) {
 					currentvalue = skill.getValue();
 				}
 
-				if ((currentvalue + 1) <= getSkillCap("MEDITATION")) {
-					setSkill("MEDITATION", currentvalue + 1);
+				if ((currentvalue + 1) <= getSkillCap(SkillType.Meditation)) {
+					setSkill(SkillType.Meditation, currentvalue + 1);
 				}
 
 			}
@@ -4657,11 +4655,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return new ArrayList<TrackingChoice>();
 		
 		if (this.getClassObj().getName().equals("DRUID"))
-			distance = ((getSkill("TRACKING").getValue() + 1) * 10);
+			distance = ((getSkill(SkillType.Tracking).getValue() + 1) * 10);
 		else if (this.getClassObj().getName().equals("RANGER"))
-			distance = ((getSkill("TRACKING").getValue() + 1) * 12);
+			distance = ((getSkill(SkillType.Tracking).getValue() + 1) * 12);
 		else if (this.getClassObj().getName().equals("BARD"))
-			distance = ((getSkill("TRACKING").getValue() + 1) * 7);
+			distance = ((getSkill(SkillType.Tracking).getValue() + 1) * 7);
 		if (distance <= 0)
 			return new ArrayList<TrackingChoice>();
 		

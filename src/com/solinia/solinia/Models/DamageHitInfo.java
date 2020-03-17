@@ -2,7 +2,7 @@ package com.solinia.solinia.Models;
 
 public class DamageHitInfo {
 
-	public String skill = "CRUSHING";
+	public SkillType skill = SkillType.HandtoHand;
 	public int damage_done = 0;
 	public int min_damage = 0;
 	public int base_damage = 0;

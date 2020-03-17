@@ -2438,7 +2438,7 @@ public class SoliniaActiveSpell {
 			if (solSourceEntity == null)
 				return;
 
-			int backstabSkill = solSourceEntity.getSkill("BACKSTAB");
+			int backstabSkill = solSourceEntity.getSkill(SkillType.Backstab);
 			if (backstabSkill < 1)
 				backstabSkill = 1;
 
@@ -2472,7 +2472,7 @@ public class SoliniaActiveSpell {
 			if (targetOfSpell != null)
 				targetOfSpell.addToHateList(getSourceUuid(), hpToRemove, false);
 			targetOfSpell.setHPChange(hpToRemove*-1, sourceLivingEntity);
-			solSourceEntity.tryIncreaseSkill("BACKSTAB", 1);
+			solSourceEntity.tryIncreaseSkill(SkillType.Backstab, 1);
 
 		} catch (CoreStateInitException e) {
 

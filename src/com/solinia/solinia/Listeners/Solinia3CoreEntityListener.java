@@ -46,6 +46,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.FactionStandingEntry;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.EntityUtils;
@@ -489,7 +490,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					solplayer.emote(
 							ChatColor.AQUA + "* " + solplayer.getFullName() + " lands softly, breaking their fall",
 							false, false);
-					solplayer.tryIncreaseSkill("SAFEFALL", 1);
+					solplayer.tryIncreaseSkill(SkillType.SafeFall, 1);
 					return;
 				}
 			} catch (CoreStateInitException e) {

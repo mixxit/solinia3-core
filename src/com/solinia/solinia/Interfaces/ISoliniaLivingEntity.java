@@ -97,8 +97,6 @@ public interface ISoliniaLivingEntity {
 
 	boolean isNPC();
 
-	int getSkill(String skillname);
-
 	int getTotalDefense();
 
 	int computeDefense();
@@ -107,15 +105,11 @@ public interface ISoliniaLivingEntity {
 
 	int getDamageCaps(int base_damage);
 
-	void tryIncreaseSkill(String skillName, int amount);
+	void tryIncreaseSkill(SkillType skillType, int amount);
 
 	int getWeaponDamageBonus(ItemStack itemStack);
 
 	public void addToHateList(UUID uniqueId, int hate, boolean isYellForHelp);
-
-	int getTotalToHit(String skillname, int hitChanceBonus);
-
-	int computeToHit(String skillname);
 
 	public DamageHitInfo avoidDamage(ISoliniaLivingEntity soliniaLivingEntity, DamageHitInfo hit);
 
@@ -125,9 +119,9 @@ public interface ISoliniaLivingEntity {
 
 	public int getMitigationAC();
 
-	public int getSkillDmgTaken(String skill);
+	public int getSkillDmgTaken(SkillType skillType);
 
-	public int getFcDamageAmtIncoming(ISoliniaLivingEntity soliniaLivingEntity, int i, boolean b, String skill);
+	public int getFcDamageAmtIncoming(ISoliniaLivingEntity soliniaLivingEntity, int i, boolean b, SkillType skillType);
 
 	int getActSpellDamage(ISoliniaSpell soliniaSpell, int value, SpellEffect spellEffect, ISoliniaLivingEntity target);
 
@@ -412,7 +406,7 @@ public interface ISoliniaLivingEntity {
 
 	int getSkill(SkillType skilltype);
 
-	int offense(String skillname);
+	int offense(SkillType skillType);
 
 	int getWeaponDamage(ISoliniaLivingEntity against, ItemStack weaponItemStack, int hate);
 
@@ -423,7 +417,7 @@ public interface ISoliniaLivingEntity {
 
 	boolean isCasting();
 
-	void Damage(ISoliniaLivingEntity mob, int damage, int spell_id, String attack_skill, boolean avoidable,
+	void Damage(ISoliniaLivingEntity mob, int damage, int spell_id, SkillType attack_skill, boolean avoidable,
 			int buffslot, boolean iBuffTic);
 
 	boolean DivineAura();
@@ -459,4 +453,9 @@ public interface ISoliniaLivingEntity {
 	boolean canDualWield();
 
 	boolean canDoubleAttack();
+
+	int computeToHit(SkillType skillType);
+
+	int getTotalToHit(SkillType skillType, int hitChanceBonus);
+
 }

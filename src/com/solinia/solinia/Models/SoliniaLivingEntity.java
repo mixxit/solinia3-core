@@ -436,7 +436,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					//Message_StringID(MT_TooFarAway,TARGET_TOO_FAR);
 				}
 				
-				tryIncreaseSkill(SkillType.DualWield.name().toUpperCase(), 1);
+				tryIncreaseSkill(SkillType.DualWield, 1);
 				if (checkDualWield()) {
 					tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Secondary);
 					this.getBukkitLivingEntity().sendMessage("You dual wield!");
@@ -462,7 +462,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private boolean checkDualWield() {
-		int chance = getSkill(SkillType.DualWield.name().toUpperCase()) + getLevel();
+		int chance = getSkill(SkillType.DualWield) + getLevel();
 
 		chance += /*aabonuses.Ambidexterity +*/ getSpellBonuses(SpellEffectType.Ambidexterity) + getItemBonuses(SpellEffectType.Ambidexterity);
 		int per_inc = /*spellbonuses.DualWieldChance*/ + getSpellBonuses(SpellEffectType.DualWieldChance) + getItemBonuses(SpellEffectType.DualWieldChance);
@@ -558,7 +558,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				//Log(Logs::Detail, Logs::Combat, "Endless Quiver prevented ammo consumption.");
 			}
 	
-			tryIncreaseSkill(SkillType.Archery.name().toUpperCase(),1);
+			tryIncreaseSkill(SkillType.Archery,1);
 			commonBreakInvisibleFromCombat();
 		} catch (CoreStateInitException e)
 		{
@@ -647,7 +647,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			my_hit.min_damage = 0;
 			my_hit.damage_done = 1;
 
-			my_hit.skill = SkillType.Archery.name().toUpperCase();
+			my_hit.skill = SkillType.Archery;
 			my_hit.offense = offense(my_hit.skill);
 			my_hit.tohit = getTotalToHit(my_hit.skill, chance_mod);
 			my_hit.hand = InventorySlot.Range;
@@ -661,7 +661,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isPlayer() && !isFeigned())
 			other.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate, false);
 		
-		other.Damage(this, TotalDmg, Utils.SPELL_UNKNOWN, SkillType.Archery.name().toUpperCase(),true,-1,false);
+		other.Damage(this, TotalDmg, Utils.SPELL_UNKNOWN, SkillType.Archery,true,-1,false);
 		
 		// TODO Skill Proc Success
 		
@@ -1129,11 +1129,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// or you have any amount of GiveDoubleAttack
 		if (candouble && hand == InventorySlot.Secondary)
 			candouble =
-			    getSkill(SkillType.DoubleAttack.name().toUpperCase()) > 149 ||
+			    getSkill(SkillType.DoubleAttack) > 149 ||
 			    (/*aabonuses.GiveDoubleAttack +*/ getSpellBonuses(SpellEffectType.GiveDoubleAttack) + getItemBonuses(SpellEffectType.GiveDoubleAttack)) > 0;
 
 		if (candouble) {
-			tryIncreaseSkill(SkillType.DoubleAttack.name().toUpperCase(), 1);
+			tryIncreaseSkill(SkillType.DoubleAttack, 1);
 			if (checkDoubleAttack()) {
 				this.sendMessage(ChatColor.GRAY + "* You double attack!");
 				Attack(target, hand, false, false, isFromSpell);
@@ -1290,7 +1290,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 	
 			DamageHitInfo my_hit = new DamageHitInfo();
-			my_hit.skill = AttackAnimation(Hand, weapon, SkillType.Crushing).name().toUpperCase();
+			my_hit.skill = AttackAnimation(Hand, weapon, SkillType.HandtoHand);
 	
 			// Now figure out damage
 			my_hit.damage_done = 1;
@@ -1320,7 +1320,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 				
 				tryIncreaseSkill(my_hit.skill, 1);
-				tryIncreaseSkill("OFFENSE", 1);
+				tryIncreaseSkill(SkillType.Offense, 1);
 	
 				int ucDamageBonus = 0;
 	
@@ -1416,7 +1416,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void Damage(ISoliniaLivingEntity other, int damage, int spell_id, String attack_skill, boolean avoidable, int buffslot, boolean iBuffTic)
+	public void Damage(ISoliniaLivingEntity other, int damage, int spell_id, SkillType attack_skill, boolean avoidable, int buffslot, boolean iBuffTic)
 	{
 		if (this.getBukkitLivingEntity() != null && this.getBukkitLivingEntity().isDead())
 			return;
@@ -1437,7 +1437,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		//patch notes on PVP reductions only mention archery/throwing ... not normal dmg
 		if (other != null && other.isPlayer() && (!other.getBukkitLivingEntity().getUniqueId().equals(this.getBukkitLivingEntity().getUniqueId())) && damage > 0) {
 			int PvPMitigation = 100;
-			if (attack_skill.toUpperCase().equals("ARCHERY") || attack_skill.toUpperCase().equals("THROWING"))
+			if (attack_skill.equals(SkillType.Archery) || attack_skill.equals(SkillType.Throwing))
 				PvPMitigation = 80;
 			else
 				PvPMitigation = 67;
@@ -1452,7 +1452,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (damage > 0) {
 			if (spell_id == Utils.SPELL_UNKNOWN)
-				this.tryIncreaseSkill("DEFENSE", 1);
+				this.tryIncreaseSkill(SkillType.Defense, 1);
 		}
 	}
 	
@@ -1476,10 +1476,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 
-	private void CommonDamage(ISoliniaLivingEntity attacker, int damage, int spell_id, String skill_used,
+	private void CommonDamage(ISoliniaLivingEntity attacker, int damage, int spell_id, SkillType skillType,
 			boolean avoidable, int buffslot, boolean iBuffTic) {
 		// This method is called with skill_used=ABJURE for Damage Shield damage.
-		boolean FromDamageShield = (skill_used.equals("ABJURATION"));
+		boolean FromDamageShield = (skillType.equals(SkillType.Abjuration));
 		boolean ignore_invul = false;
 		if (IsValidSpell(spell_id))
 			ignore_invul = spell_id == 982 /* TODO || spells[spell_id].cast_not_standing*/; // cazic touch
@@ -1489,7 +1489,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		
 		// this should actually happen MUCH sooner, need to investigate though -- good enough for now
-		if ((skill_used.toUpperCase().equals("ARCHERY") || skill_used.toUpperCase().equals("THROWING")) && getSpecialAbility(SpecialAbility.IMMUNE_RANGED_ATTACKS) > 0) {
+		if ((skillType.equals(SkillType.Archery) || skillType.equals(SkillType.Throwing)) && getSpecialAbility(SpecialAbility.IMMUNE_RANGED_ATTACKS) > 0) {
 			damage = Utils.DMG_INVULNERABLE;
 		}
 
@@ -1498,11 +1498,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		// only apply DS if physical damage (no spell damage)
 		// damage shield calls this function with spell_id set, so its unavoidable
-		if (attacker != null && attacker.getBukkitLivingEntity() != null && damage > 0 && spell_id == Utils.SPELL_UNKNOWN && !skill_used.equals(SkillType.Archery.name().toUpperCase()) && !skill_used.equals(SkillType.Throwing.name().toUpperCase())) {
+		if (attacker != null && attacker.getBukkitLivingEntity() != null && damage > 0 && spell_id == Utils.SPELL_UNKNOWN && !skillType.equals(SkillType.Archery) && !skillType.equals(SkillType.Throwing)) {
 			damageShield(attacker, false);
 		}
 		
-		if (spell_id == Utils.SPELL_UNKNOWN && skill_used != null) {
+		if (spell_id == Utils.SPELL_UNKNOWN && !skillType.equals(SkillType.None)) {
 			checkNumHitsRemaining(NumHit.IncomingHitAttempts);
 
 			if (attacker != null)
@@ -1718,7 +1718,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				//Note: if players can become pets, they will not receive damage messages of their own
 				//this was done to simplify the code here (since we can only effectively skip one mob on queue)
 				
-				this.filteredMessageClose(this.getBukkitLivingEntity(),getName() + " was hit for " + damage + " points of " + skill_used + " damage by " + attacker.getName(), true);
+				this.filteredMessageClose(this.getBukkitLivingEntity(),getName() + " was hit for " + damage + " points of " + skillType.name().toUpperCase() + " damage by " + attacker.getName(), true);
 				
 				ISoliniaLivingEntity skip = attacker;
 				if (attacker != null && attacker.getOwnerEntity() != null) {
@@ -1824,7 +1824,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 //				}
 //				DS -= DS * attacker.getItemBonuses(SpellEffectType.DSMitigation) / 100;
 //			}
-			attacker.Damage(this, -DS, spellid, SkillType.Abjuration.name().toUpperCase()/*hackish*/, false, -1, false);
+			attacker.Damage(this, -DS, spellid, SkillType.Abjuration, false, -1, false);
 			//we can assume there is a spell now
 			// TOODO Send DS Message
 			/*auto outapp = new EQApplicationPacket(OP_Damage, sizeof(CombatDamage_Struct));
@@ -1854,7 +1854,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (rev_ds < 0) {
 			//Log(Logs::Detail, Logs::Combat, "Applying Reverse Damage Shield of value %d to %s", rev_ds, attacker->GetName());
-			attacker.Damage(this, -rev_ds, rev_ds_spell_id, SkillType.Abjuration.name().toUpperCase()/*hackish*/, false, -1, false); //"this" (us) will get the hate, etc. not sure how this works on Live, but it'll works for now, and tanks will love us for this
+			attacker.Damage(this, -rev_ds, rev_ds_spell_id, SkillType.Abjuration, false, -1, false); //"this" (us) will get the hate, etc. not sure how this works on Live, but it'll works for now, and tanks will love us for this
 																												//do we need to send a damage packet here also?
 		}
 	}
@@ -3317,7 +3317,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		my_hit.damage_done = 1; // min 1 dmg
 		my_hit.base_damage = base_damage;
 		my_hit.min_damage = min_damage;
-		my_hit.skill = skill.name().toUpperCase();
+		my_hit.skill = skill;
 
 		if (my_hit.base_damage == 0)
 			my_hit.base_damage = getBaseSkillDamage(skill,who.getBukkitLivingEntity());
@@ -3372,7 +3372,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		*/
 
-		who.Damage(this, my_hit.damage_done, Utils.SPELL_UNKNOWN, skill.name().toUpperCase(), false, hate, false);
+		who.Damage(this, my_hit.damage_done, Utils.SPELL_UNKNOWN, skill, false, hate, false);
 
 		// We do procs above so no need to do the below
 		/*
@@ -3482,7 +3482,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					((Player) (other.getBukkitLivingEntity())).spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You dodge the attack!"));
 
-					other.tryIncreaseSkill("DODGE", 1);
+					other.tryIncreaseSkill(SkillType.Dodge, 1);
 				}
 
 				if (isPlayer()) {
@@ -3515,7 +3515,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					try {
 						ISoliniaPlayer solplayer = SoliniaPlayerAdapter
 								.Adapt((Player) other.getBukkitLivingEntity());
-						solplayer.tryIncreaseSkill("DEFENSE", 1);
+						solplayer.tryIncreaseSkill(SkillType.Defense, 1);
 					} catch (CoreStateInitException e) {
 						// skip
 					}
@@ -3682,9 +3682,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
-	private int tryHeadShot(ISoliniaLivingEntity defender, String skill) {
+	private int tryHeadShot(ISoliniaLivingEntity defender, SkillType skillType) {
 		// Only works on YOUR target.
-		if (skill.equals("ARCHERY")
+		if (skillType.equals(SkillType.Archery)
 				&& !getBukkitLivingEntity().getUniqueId().equals(defender.getBukkitLivingEntity().getUniqueId())) {
 			int HeadShot_Dmg = 0;
 			int spellHeadShotModifier = getSpellBonuses(SpellEffectType.HeadShot);
@@ -3720,14 +3720,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return 0;
 	}
 
-	private int getMeleeMinDamageMod_SE(String skill) {
+	private int getMeleeMinDamageMod_SE(SkillType skillType) {
 		int dmg_mod = 0;
-
-		// dmg_mod = itembonuses.MinDamageModifier[skill] +
-		// spellbonuses.MinDamageModifier[skill] +
+		
+		/*
+		// Needs to pass skill as parameter
+		dmg_mod = getItemBonuses(SpellEffectType.MinDamageModifier, skillType) +
+		getSpellBonuses(SpellEffectType.MinDamageModifier, skillType) //+
 		// itembonuses.MinDamageModifier[EQEmu::skills::HIGHEST_SKILL + 1] +
-		// spellbonuses.MinDamageModifier[EQEmu::skills::HIGHEST_SKILL + 1];
-
+		// spellbonuses.MinDamageModifier[EQEmu::skills::HIGHEST_SKILL + 1]
+				;
+		 */
 		if (dmg_mod < -100)
 			dmg_mod = -100;
 
@@ -3761,7 +3764,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return bindmod;
 	}
 
-	private int getMeleeDamageMod_SE(String skill) {
+	private int getMeleeDamageMod_SE(SkillType skillType) {
 		int dmg_mod = 0;
 
 		int spellDamageModifier = getSpellBonuses(SpellEffectType.DamageModifier);
@@ -3777,10 +3780,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return dmg_mod;
 	}
 
-	private int applyMeleeDamageMods(String skill, int damage_done, ISoliniaLivingEntity defender) {
+	private int applyMeleeDamageMods(SkillType skillType, int damage_done, ISoliniaLivingEntity defender) {
 		int dmgbonusmod = 0;
 
-		dmgbonusmod += getMeleeDamageMod_SE(skill);
+		dmgbonusmod += getMeleeDamageMod_SE(skillType);
 
 		if (defender != null) {
 			if (defender.isPlayer() && defender.getClassObj() != null
@@ -3796,7 +3799,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return damage_done;
 	}
 
-	private int getSkillDmgAmt(String skill) {
+	private int getSkillDmgAmt(SkillType skillType) {
 		int skill_dmg = 0;
 		return skill_dmg;
 	}
@@ -4198,12 +4201,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int offense(String skillname) {
-		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getOffense starts for " + skillname);
-		int offense = getSkill(skillname);
+	public int offense(SkillType skillType) {
+		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getOffense starts for " + skillType.name());
+		int offense = getSkill(skillType);
 		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getSkill value found " + offense);
 		int stat_bonus = getStrength();
-		if (skillname.equals("ARCHERY") || skillname.equals("THROWING"))
+		if (skillType.equals(SkillType.Archery) || skillType.equals(SkillType.Throwing))
 		{
 			stat_bonus = getDexterity();
 			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"Using dexterity value for stat bonus " + stat_bonus);
@@ -4236,7 +4239,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if(this.isPlayer()) {
 			
-			double attackRatingDbl = Math.floor(((WornCap * 1.342) + (getSkill("OFFENSE") * 1.345) + ((getStrength() - 66) * 0.9) + (getPrimarySkillValue() * 2.69)));
+			double attackRatingDbl = Math.floor(((WornCap * 1.342) + (getSkill(SkillType.Offense) * 1.345) + ((getStrength() - 66) * 0.9) + (getPrimarySkillValue() * 2.69)));
 			if (attackRatingDbl > Integer.MAX_VALUE)
 				attackRatingDbl = Integer.MAX_VALUE;
 			
@@ -4265,8 +4268,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity() == null)
 			return 0;
 		
-		String skill = ItemStackUtils.getMeleeSkillForItemStack(this.getBukkitLivingEntity().getEquipment().getItemInMainHand()).getSkillname().toUpperCase();
-		return getSkill(skill);
+		SkillReward skill = ItemStackUtils.getMeleeSkillForItemStack(this.getBukkitLivingEntity().getEquipment().getItemInMainHand());
+		return getSkill(skill.getSkillType());
 	}
 
 	public int getAtk() {
@@ -4289,13 +4292,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 	
 	@Override
-	public void tryIncreaseSkill(String skillName, int amount) {
+	public void tryIncreaseSkill(SkillType skillType, int amount) {
 		if (!isPlayer())
 			return;
 
 		try {
 			ISoliniaPlayer solplayerReward = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
-			solplayerReward.tryIncreaseSkill(skillName, amount);
+			solplayerReward.tryIncreaseSkill(skillType, amount);
 		} catch (CoreStateInitException e) {
 			// dont increase skill
 		}
@@ -4726,25 +4729,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 	@Override
 	public int getSkill(SkillType skilltype) {
+		int defaultskill = 0;
+		
 		if (!Utils.isValidSkill(skilltype.name().toUpperCase()))
 			return 0;
-
-		return getSkill(skilltype.name().toUpperCase());
-	}
-
-	@Override
-	public int getSkill(String skillname) {
-		int defaultskill = 0;
 
 		try {
 			if (isPlayer()) {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				return player.getSkill(skillname.toUpperCase()).getValue();
+				return player.getSkill(skilltype).getValue();
 			}
 
 			if (isNPC()) {
 				ISoliniaNPC npc = getNPC();
-				return npc.getSkill(skillname.toUpperCase());
+				return npc.getSkill(skilltype);
 			}
 		} catch (CoreStateInitException e) {
 			return defaultskill;
@@ -4754,9 +4752,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int computeToHit(String skillname) {
-		double tohit = getSkill("OFFENSE") + 7;
-		tohit += getSkill(skillname.toUpperCase());
+	public int computeToHit(SkillType skillType){
+		double tohit = getSkill(SkillType.Offense) + 7;
+		tohit += getSkill(skillType);
 		if (isNPC()) {
 			ISoliniaNPC npc = getNPC();
 			if (npc != null)
@@ -4795,20 +4793,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int getTotalToHit(String skillname, int hitChanceBonus) {
+	public int getTotalToHit(SkillType skillType, int hitChanceBonus) {
 		if (hitChanceBonus >= 10000) // override for stuff like SE_SkillAttack
 			return -1;
 
-		skillname = skillname.toUpperCase();
-
 		// calculate attacker's accuracy
-		double accuracy = computeToHit(skillname) + 10;
+		double accuracy = computeToHit(skillType) + 10;
 		if (hitChanceBonus > 0) // multiplier
 			accuracy *= hitChanceBonus;
 
 		accuracy = (accuracy * 121) / 100;
 
-		if (!skillname.equals("ARCHERY") && !skillname.equals("THROWING")) 
+		if (!skillType.equals(SkillType.Archery) && !skillType.equals(SkillType.Throwing)) 
 		{ 
 			accuracy += getItemBonuses(SpellEffectType.HitChance); 
 		}
@@ -4827,7 +4823,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int computeDefense() {
-		double defense = getSkill("DEFENSE") * 400 / 225;
+		double defense = getSkill(SkillType.Defense) * 400 / 225;
 		defense += (8000 * (getAgility() - 40)) / 36000;
 
 		// TODO Item bonsues
@@ -6634,7 +6630,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	{
 		// Not 100% certain pets follow this or if it's just from pets not always
 		// having the same skills as most mobs
-		int chance = getSkill(SkillType.DoubleAttack.name().toUpperCase());
+		int chance = getSkill(SkillType.DoubleAttack);
 		if (getLevel() > 35)
 			chance += getLevel();
 
@@ -7125,7 +7121,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			// TODO Pet avoidance
-			ac += getSkill("DEFENSE") / 5;
+			ac += getSkill(SkillType.Defense) / 5;
 
 			double spell_aa_ac = 0;
 			// TODO AC AA and Spell bonuses
@@ -7153,12 +7149,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (getClassObj() != null) {
 				if (getClassObj().getName().equals("ENCHANTER") || getClassObj().getName().equals("ENCHANTER")) {
-					ac += getSkill("DEFENSE") / 2 + spell_aa_ac / 3;
+					ac += getSkill(SkillType.Defense) / 2 + spell_aa_ac / 3;
 				} else {
-					ac += getSkill("DEFENSE") / 3 + spell_aa_ac / 4;
+					ac += getSkill(SkillType.Defense) / 3 + spell_aa_ac / 4;
 				}
 			} else {
-				ac += getSkill("DEFENSE") / 3 + spell_aa_ac / 4;
+				ac += getSkill(SkillType.Defense) / 3 + spell_aa_ac / 4;
 			}
 
 			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after defense & spellbonus " + ac);
@@ -7457,7 +7453,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int getSkillDmgTaken(String skill) {
+	public int getSkillDmgTaken(SkillType skillType) {
 		int skilldmg_mod = 0;
 
 		if (skilldmg_mod < -100)
@@ -7467,7 +7463,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int getFcDamageAmtIncoming(ISoliniaLivingEntity caster, int spell_id, boolean use_skill, String skill) {
+	public int getFcDamageAmtIncoming(ISoliniaLivingEntity caster, int spell_id, boolean use_skill, SkillType skillType) {
 		// Used to check focus derived from SE_FcDamageAmtIncoming which adds direct
 		// damage to Spells or Skill based attacks.
 		int dmg = 0;
@@ -7766,7 +7762,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				my_hit.min_damage = 0;
 				my_hit.damage_done = 1;
 
-				my_hit.skill = skillinuse.name().toUpperCase();
+				my_hit.skill = skillinuse;
 				my_hit.offense = offense(my_hit.skill);
 				my_hit.tohit = getTotalToHit(my_hit.skill, chance_mod);
 				// slot range exclude ripe etc ...
@@ -7907,7 +7903,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		case PercussionInstruments:
 			if (getTotalItemSkillMod(SkillType.PercussionInstruments) == 0)
 				effectmod = 10;
-			else if (getSkill("PERCUSSIONINSTRUMENTS") == 0)
+			else if (getSkill(SkillType.PercussionInstruments) == 0)
 				effectmod = 10;
 			else
 				effectmod = getTotalItemSkillMod(SkillType.PercussionInstruments);
@@ -7915,7 +7911,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		case StringedInstruments:
 			if (getTotalItemSkillMod(SkillType.StringedInstruments) == 0)
 				effectmod = 10;
-			else if (getSkill("STRINGEDINSTRUMENTS") == 0)
+			else if (getSkill(SkillType.StringedInstruments) == 0)
 				effectmod = 10;
 			else
 				effectmod = getTotalItemSkillMod(SkillType.StringedInstruments);
@@ -7923,7 +7919,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		case WindInstruments:
 			if (getTotalItemSkillMod(SkillType.WindInstruments) == 0)
 				effectmod = 10;
-			else if (getSkill("WINDINSTRUMENTS") == 0)
+			else if (getSkill(SkillType.WindInstruments) == 0)
 				effectmod = 10;
 			else
 				effectmod = getTotalItemSkillMod(SkillType.WindInstruments);
@@ -7931,7 +7927,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		case BrassInstruments:
 			if (getTotalItemSkillMod(SkillType.BrassInstruments) == 0)
 				effectmod = 10;
-			else if (getSkill("BRASSINSTRUMENTS") == 0)
+			else if (getSkill(SkillType.BrassInstruments) == 0)
 				effectmod = 10;
 			else
 				effectmod = getTotalItemSkillMod(SkillType.BrassInstruments);
@@ -9262,7 +9258,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 			
-			int chance = getSkill("DISARM"); // (1% @ 0 skill) (11% @ 200 skill) - against even con
+			int chance = getSkill(SkillType.Disarm); // (1% @ 0 skill) (11% @ 200 skill) - against even con
 			chance /= 2;
 			chance += 10;
 			// Modify chance based on level difference
@@ -9417,7 +9413,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				((Player) getBukkitLivingEntity()).sendMessage(ChatColor.GRAY + "* "
 						+ this.getBukkitLivingEntity().getCustomName() + " is disarmed!");
 				
-				disarmer.tryIncreaseSkill("DISARM",1);
+				disarmer.tryIncreaseSkill(SkillType.Disarm,1);
 			}
 		} else {
 			if (disarmer.isPlayer()) {
@@ -9536,7 +9532,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		String strtotalatk = "TotalATK: " + ChatColor.GOLD+ getTotalAtk() + ChatColor.RESET;
         String runestr = "Rune: " + ChatColor.GOLD + getRune() + ChatColor.RESET;
         ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
-        String skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillname();
+        String skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillType().name();
         String strmainweaponskill = "MainWeapSkill: " + skill;
 		targetMessage.sendMessage(runestr + " " + strmitigationac + " " + strtotalatk + " " + strmainweaponskill);
 		String strattackspeed = "AttackSpeedPct: " + ChatColor.GOLD+ getAttackSpeed() + "%" + ChatColor.RESET;

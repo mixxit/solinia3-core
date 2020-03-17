@@ -1,20 +1,20 @@
 package com.solinia.solinia.Models;
 
 public class SkillReward {
-	private String skillname;
+	private SkillType skillType;
 	private int xp;
 	
-	public SkillReward(String skillname, int xp)
+	public SkillReward(SkillType skillType, int xp)
 	{
-		this.skillname = skillname;
+		this.skillType = skillType;
 		this.xp = xp;
 	}
 	
-	public String getSkillname() {
-		return skillname;
+	public SkillType getSkillType() {
+		return skillType;
 	}
-	public void setSkillname(String skillname) {
-		this.skillname = skillname;
+	public void setSkillType(SkillType skillType) {
+		this.skillType = skillType;
 	}
 	public int getXp() {
 		return xp;

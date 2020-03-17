@@ -11,6 +11,7 @@ import com.solinia.solinia.Events.PlayerTrackEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SkillType;
 
 public class PlayerTrackListener implements Listener {
 
@@ -58,7 +59,7 @@ public class PlayerTrackListener implements Listener {
 		
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) player);
-			solplayer.tryIncreaseSkill("TRACKING", 1);
+			solplayer.tryIncreaseSkill(SkillType.Tracking, 1);
 			
 			if (player.getLocation().distance(event.getTrackingLocation()) < 4)
 				StateManager.getInstance().getEntityManager().stopTracking(player.getUniqueId());

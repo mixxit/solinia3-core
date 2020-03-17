@@ -24,6 +24,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Utils.ItemStackUtils;
@@ -209,19 +210,19 @@ public class CommandPet implements CommandExecutor {
 	            {
 	            	if (petLivingEntity.getClassObj().getDodgelevel() > 0)
 		            	if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getDodgelevel())
-		            		player.sendMessage(ChatColor.GRAY + "Dodge Skill: " + petLivingEntity.getSkill("DODGE"));	            	
+		            		player.sendMessage(ChatColor.GRAY + "Dodge Skill: " + petLivingEntity.getSkill(SkillType.Dodge));	            	
 	            	if (petLivingEntity.getClassObj().getRipostelevel() > 0)
 		            	if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getRipostelevel())
-		            		player.sendMessage(ChatColor.GRAY + "Riposte Skill: " + petLivingEntity.getSkill("RIPOSTE"));	            	
+		            		player.sendMessage(ChatColor.GRAY + "Riposte Skill: " + petLivingEntity.getSkill(SkillType.Riposte));	            	
 	            	if (petLivingEntity.getClassObj().getDoubleattacklevel() > 0)
 	            		if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getDoubleattacklevel())
-	            			player.sendMessage(ChatColor.GRAY + "Double Attack Skill: " + petLivingEntity.getSkill("DOUBLEATTACK"));	            	
+	            			player.sendMessage(ChatColor.GRAY + "Double Attack Skill: " + petLivingEntity.getSkill(SkillType.DoubleAttack));	            	
 	            	if (petLivingEntity.getClassObj().getSafefalllevel() > 0)
 	            		if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getSafefalllevel())
-	            			player.sendMessage(ChatColor.GRAY + "Safefall Skill: " + petLivingEntity.getSkill("SAFEFALL"));	            	
+	            			player.sendMessage(ChatColor.GRAY + "Safefall Skill: " + petLivingEntity.getSkill(SkillType.SafeFall));	            	
 	            	if (petLivingEntity.getClassObj().getDualwieldlevel() > 0)
 	            		if (petLivingEntity.getLevel() >= petLivingEntity.getClassObj().getDualwieldlevel())
-	            			player.sendMessage(ChatColor.GRAY + "Dual Wield: " + petLivingEntity.getSkill("DUALWIELD"));	            	
+	            			player.sendMessage(ChatColor.GRAY + "Dual Wield: " + petLivingEntity.getSkill(SkillType.DualWield));	            	
 	            }
 	            
 				player.sendMessage("Active Effects:");

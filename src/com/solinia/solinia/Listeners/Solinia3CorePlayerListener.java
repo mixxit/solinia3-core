@@ -62,6 +62,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaWorld;
@@ -434,7 +435,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 
 			SoliniaZone zone = solplayer.getFirstZone();
-			solplayer.tryIncreaseSkill("LOGGING", 1);
+			solplayer.tryIncreaseSkill(SkillType.Logging, 1);
 
 			if (zone != null) {
 				int minskill = 0;
@@ -442,7 +443,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForestryMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck("LOGGING", minskill + 50)) {
+				if (!solplayer.getSkillCheck(SkillType.Logging, minskill + 50)) {
 					return;
 				}
 
@@ -458,7 +459,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForestryMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck("LOGGING", minskill + 50)) {
+				if (!solplayer.getSkillCheck(SkillType.Logging, minskill + 50)) {
 					return;
 				}
 
@@ -480,7 +481,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 
 			SoliniaZone zone = solplayer.getFirstZone();
-			solplayer.tryIncreaseSkill("FORAGE", 1);
+			solplayer.tryIncreaseSkill(SkillType.Forage, 1);
 
 			if (zone != null) {
 				int minskill = 0;
@@ -488,7 +489,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForagingMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck("FORAGE", minskill + 50)) {
+				if (!solplayer.getSkillCheck(SkillType.Forage, minskill + 50)) {
 					return;
 				}
 
@@ -504,7 +505,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForagingMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck("FORAGE", minskill + 50)) {
+				if (!solplayer.getSkillCheck(SkillType.Forage, minskill + 50)) {
 					return;
 				}
 
@@ -526,7 +527,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 
 			SoliniaZone zone = solplayer.getFirstZone();
-			solplayer.tryIncreaseSkill("MINING", 1);
+			solplayer.tryIncreaseSkill(SkillType.Mining, 1);
 
 			if (zone != null) {
 				int minskill = 0;
@@ -534,7 +535,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getMiningMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck("MINING", minskill + 50)) {
+				if (!solplayer.getSkillCheck(SkillType.Mining, minskill + 50)) {
 					return;
 				}
 
@@ -550,7 +551,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getMiningMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck("MINING", minskill + 50)) {
+				if (!solplayer.getSkillCheck(SkillType.Mining, minskill + 50)) {
 					return;
 				}
 
@@ -576,7 +577,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 
 			SoliniaZone zone = solplayer.getFirstZone();
-			solplayer.tryIncreaseSkill("FISHING", 1);
+			solplayer.tryIncreaseSkill(SkillType.Fishing, 1);
 
 			if (zone != null) {
 				int minskill = 0;
@@ -584,7 +585,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getFishingMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck("FISHING", minskill + 50)) {
+				if (!solplayer.getSkillCheck(SkillType.Fishing, minskill + 50)) {
 					return;
 				}
 
@@ -600,7 +601,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getFishingMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck("FISHING", minskill + 50)) {
+				if (!solplayer.getSkillCheck(SkillType.Fishing, minskill + 50)) {
 					return;
 				}
 

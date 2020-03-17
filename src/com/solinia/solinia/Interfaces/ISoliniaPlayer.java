@@ -25,6 +25,7 @@ import com.solinia.solinia.Models.PacketCastingPercent;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Models.PlayerQuest;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
@@ -106,7 +107,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setAAPoints(int aapoints);
 
-	public int getSkillCap(String skillName);
+	public int getSkillCap(SkillType skillType);
 
 	public List<SoliniaPlayerSkill> getSkills();
 
@@ -120,11 +121,11 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void say(String string);
 
-	public SoliniaPlayerSkill getSkill(String skillname);
+	public SoliniaPlayerSkill getSkill(SkillType skillType);
 
-	public void tryIncreaseSkill(String skillname, int xp);
+	public void tryIncreaseSkill(SkillType skillType, int xp);
 	
-	public void setSkill(String skillname, int value);
+	public void setSkill(SkillType skillType, int value);
 
 	void reducePlayerMana(int mana);
 
@@ -299,8 +300,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	boolean isInZone(SoliniaZone zone);
 	
-	boolean getSkillCheck(String skillname, int trivial);
-
 	SoliniaWorld getSoliniaWorld();
 
 	ConcurrentHashMap<Integer, SoliniaReagent> getReagents();
@@ -617,4 +616,9 @@ public interface ISoliniaPlayer extends Serializable {
 	public void grantFellowshipXPBonusToFellowship(Double experience);
 
 	boolean hasReagents(ISoliniaSpell spell, Player player);
+
+	boolean getSkillCheck(SkillType skillType, int trivial);
+
+
+
 }
