@@ -208,16 +208,24 @@ public class SoliniaRace implements ISoliniaRace {
 			setBodyType(Integer.parseInt(value));
 			break;
 		case "language":
+			String types = "";
+			for(SkillType type: SkillType.values())
+			{
+				if (Utils.IsValidLanguage(type))
+					types += type+",";
+			}
+
 			try
 			{
+				
+				if (!Utils.IsValidLanguage(SkillType.valueOf(value)))
+				{
+					throw new InvalidRaceSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
+				}
+				
 				setLanguage(SkillType.valueOf(value));
 			} catch (IllegalArgumentException e)
 			{
-				String types = "";
-				for(SkillType type: SkillType.values())
-				{
-					types += type+",";
-				}
 				throw new InvalidRaceSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
 			}
 			break;

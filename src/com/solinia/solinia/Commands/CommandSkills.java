@@ -56,10 +56,10 @@ public class CommandSkills implements CommandExecutor
 	            	if (skill.getValue() == 0)
 	            		continue;
 	            	
-	            	if (soliniaplayer.getSkillCap(Utils.getSkillType(skill.getSkillName())) == 0)
+	            	if (soliniaplayer.getSkillCap(Utils.getSkillType2(skill.getSkillName())) == 0)
 	            		continue;
 	            	
-	            	player.sendMessage(ChatColor.BLUE + skill.getSkillName() + ": " + skill.getValue() + "/" + soliniaplayer.getSkillCap(Utils.getSkillType(skill.getSkillName())));
+	            	player.sendMessage(ChatColor.BLUE + skill.getSkillName() + ": " + skill.getValue() + "/" + soliniaplayer.getSkillCap(Utils.getSkillType2(skill.getSkillName())));
 	            }
 	            
 	            

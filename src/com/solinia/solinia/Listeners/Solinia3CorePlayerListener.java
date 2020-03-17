@@ -1836,7 +1836,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 					if (solplayer.getLanguage() == null || solplayer.getLanguage().equals("UNKNOWN")) {
 						if (solplayer.getRace() != null) {
-							solplayer.setLanguage(solplayer.getRace().getName().toUpperCase());
+							solplayer.setLanguage(solplayer.getRace().getLanguage().name().toUpperCase());
 						}
 					}
 

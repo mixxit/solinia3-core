@@ -106,7 +106,7 @@ public class CommandNPCGive implements CommandExecutor {
 							if (npc.getRaceid() > 0)
 							{
 								ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(npc.getRaceid());
-								if (!solplayer.understandsLanguage(race.getName().toUpperCase()))
+								if (!solplayer.understandsLanguage(race.getLanguage()))
 								{
 									player.sendMessage(ChatColor.AQUA + " * " + npc.getName() + " does not want this item as you do not speak their tongue and may wish to speak to you about it" + ChatColor.RESET);
 									continue;

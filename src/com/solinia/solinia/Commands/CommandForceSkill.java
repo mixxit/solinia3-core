@@ -64,7 +64,7 @@ public class CommandForceSkill implements CommandExecutor {
 	    				return true;
 	    			}
 	    			
-	    			solplayer.setSkill(Utils.getSkillType(skill.toUpperCase()), level);
+	    			solplayer.setSkill(Utils.getSkillType2(skill.toUpperCase()), level);
 	    			sender.sendMessage("* Player "+name+" set skill "+skill.toUpperCase()+" to " + level);
 	            	return true;
 	            } else {

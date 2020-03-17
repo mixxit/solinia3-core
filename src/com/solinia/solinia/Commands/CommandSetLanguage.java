@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Utils.Utils;
 
@@ -32,7 +33,7 @@ public class CommandSetLanguage implements CommandExecutor {
 	            {
 	                // always has 100% skill on own race
 	                player.sendMessage(ChatColor.GRAY + "Native Languages: ");
-	                player.sendMessage(ChatColor.BLUE + soliniaplayer.getRace().getName() + ": " + 100);
+	                player.sendMessage(ChatColor.BLUE + soliniaplayer.getRace().getLanguage().name().toUpperCase() + ": " + 100);
 	                player.sendMessage(ChatColor.GRAY + "See /skills for other languages you have learned");
 	                player.sendMessage(ChatColor.GRAY + "To set your language use /language languagename");
 	                
@@ -47,22 +48,35 @@ public class CommandSetLanguage implements CommandExecutor {
 	            	return false;
 	            }
 	            
-	            if (language.equals(soliniaplayer.getRace().getName()))
+	            if (language.equals(soliniaplayer.getRace().getLanguage().name().toUpperCase()))
 	            {
 	            	soliniaplayer.setLanguage(language);
 	                player.sendMessage("* You will now speak in " + language);
 	                return true;
 	            }
 	            
-	            SoliniaPlayerSkill soliniaskill = soliniaplayer.getSkill(Utils.getSkillType(language));
+	            SkillType targetLanguage = Utils.getSkillType2(language);
+	            if (targetLanguage.equals(SkillType.None))
+	            {
+	            	player.sendMessage("That is not a valid tongue.");
+	            	return false;
+	            }
+	            
+	            if (!Utils.IsValidLanguage(targetLanguage))
+	            {
+	            	player.sendMessage("That is not a valid tongue.");
+	            	return false;
+	            }
+	            
+	            SoliniaPlayerSkill soliniaskill = soliniaplayer.getSkill(targetLanguage);
 	            if (soliniaskill != null && soliniaskill.getValue() >= 100)
 	            {
-	            	soliniaplayer.setLanguage(language);
-	            	player.sendMessage("* You will now speak in " + language);
+	            	soliniaplayer.setLanguage(targetLanguage.name().toUpperCase());
+	            	player.sendMessage("* You will now speak in " + targetLanguage.name().toUpperCase());
 	                return true;
 	            }
 	                        
-	            player.sendMessage("Language change failed. Default for you is /language " + soliniaplayer.getRace().getName() + " or any other language you have mastered to 100 in /skills");
+	            player.sendMessage("Language change failed. Default for you is /language " + soliniaplayer.getRace().getLanguage() + " or any other language you have mastered to 100 in /skills");
 	        	return false;
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

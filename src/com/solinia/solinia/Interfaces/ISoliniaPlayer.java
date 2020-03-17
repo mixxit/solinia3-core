@@ -133,10 +133,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void ooc(String message);
 
-	public boolean understandsLanguage(String language);
-
-	public void tryImproveLanguage(String language);
-
 	public ISoliniaGroup getGroup();
 
 	public int getResist(SpellResistType type);
@@ -561,8 +557,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void setExperienceOn(boolean experienceOn);
 
-	int getLanguageLearnedPercent(String language);
-
 	public void unMemoriseSpell(int abilityid);
 
 	public boolean isForceNewAlt();
@@ -618,6 +612,12 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean hasReagents(ISoliniaSpell spell, Player player);
 
 	boolean getSkillCheck(SkillType skillType, int trivial);
+
+	boolean understandsLanguage(SkillType languageSkillType);
+
+	int getLanguageLearnedPercent(SkillType languageSkillType);
+
+	void tryImproveLanguage(SkillType languageSkillType);
 
 
 

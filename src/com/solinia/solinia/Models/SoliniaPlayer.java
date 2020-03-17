@@ -876,7 +876,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void ooc(String string) {
 		if (getLanguage() == null || getLanguage().equals("UNKNOWN")) {
 			if (getRace() != null)
-				setLanguage(getRace().getName().toUpperCase());
+				setLanguage(getRace().getLanguage().name().toUpperCase());
 		}
 		StateManager.getInstance().getChannelManager().sendToGlobalChannelDecorated(this, string,
 				getBukkitPlayer().getInventory().getItemInMainHand());
@@ -890,7 +890,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
-				setLanguage(getRace().getName().toUpperCase());
+				setLanguage(getRace().getLanguage().name().toUpperCase());
 			}
 		}
 
@@ -932,7 +932,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
-				setLanguage(getRace().getName().toUpperCase());
+				setLanguage(getRace().getLanguage().name().toUpperCase());
 			}
 		}
 		int numberReached = StateManager.getInstance().getChannelManager().sendToWhisperChannelDecorated(this, string,
@@ -950,7 +950,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
 				return;
 			} else {
-				setLanguage(getRace().getName().toUpperCase());
+				setLanguage(getRace().getLanguage().name().toUpperCase());
 			}
 		}
 		int numberReached = StateManager.getInstance().getChannelManager().sendToShoutChannelDecorated(this, string,
@@ -1016,14 +1016,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!skillType.name().toUpperCase().equals(getSpecialisation().toUpperCase()))
 				return;
 
-			skill = getSkill(Utils.getSkillType("SPECIALISE" + skillType.name().toUpperCase()));
+			skill = getSkill(Utils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()));
 
 			currentskill = 0;
 			if (skill != null) {
 				currentskill = skill.getValue();
 			}
 
-			skillcap = getSkillCap(Utils.getSkillType("SPECIALISE" + skillType.name().toUpperCase()));
+			skillcap = getSkillCap(Utils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()));
 			if ((currentskill + skillupamount) > skillcap) {
 				return;
 			}
@@ -1036,7 +1036,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			randomInt = r.nextInt(100) + 1;
 			if (randomInt < chance) {
 
-				setSkill(Utils.getSkillType("SPECIALISE" + skillType.name().toUpperCase()), currentskill + skillupamount);
+				setSkill(Utils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()), currentskill + skillupamount);
 			}
 		}
 
@@ -2111,13 +2111,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean understandsLanguage(String language) {
+	public boolean understandsLanguage(SkillType languageSkillType) {
 
 		if (getRace() != null)
-			if (getRace().getName().toUpperCase().equals(language.toUpperCase()))
+			if (getRace().getLanguage().equals(languageSkillType))
 				return true;
 
-		SoliniaPlayerSkill soliniaskill = getSkill(Utils.getSkillType(language));
+		SoliniaPlayerSkill soliniaskill = getSkill(languageSkillType);
 		if (soliniaskill != null && soliniaskill.getValue() >= 100) {
 			return true;
 		}
@@ -2125,13 +2125,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public int getLanguageLearnedPercent(String language) {
+	public int getLanguageLearnedPercent(SkillType languageSkillType) {
 
 		if (getRace() != null)
-			if (getRace().getName().toUpperCase().equals(language.toUpperCase()))
+			if (getRace().getLanguage().equals(languageSkillType))
 				return 100;
 
-		SoliniaPlayerSkill soliniaskill = getSkill(Utils.getSkillType(language));
+		SoliniaPlayerSkill soliniaskill = getSkill(languageSkillType);
 		if (soliniaskill != null && soliniaskill.getValue() >= 0) {
 			return soliniaskill.getValue();
 		}
@@ -2139,15 +2139,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void tryImproveLanguage(String language) {
+	public void tryImproveLanguage(SkillType languageSkillType) {
 		if (getRace() != null)
-			if (getRace().getName().toUpperCase().equals(language))
+			if (getRace().getLanguage().equals(languageSkillType))
 				return;
 
-		if (getSkill(Utils.getSkillType(language)).getValue() >= 100)
+		if (getSkill(languageSkillType).getValue() >= 100)
 			return;
 
-		tryIncreaseSkill(Utils.getSkillType(language), 1);
+		tryIncreaseSkill(languageSkillType, 1);
 	}
 
 	@Override

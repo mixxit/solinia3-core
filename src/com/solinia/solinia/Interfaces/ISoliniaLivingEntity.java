@@ -163,7 +163,7 @@ public interface ISoliniaLivingEntity {
 
 	int getSpellBonuses(SpellEffectType spellEffectType);
 
-	public String getLanguage();
+	public SkillType getLanguage();
 
 	public String getName();
 

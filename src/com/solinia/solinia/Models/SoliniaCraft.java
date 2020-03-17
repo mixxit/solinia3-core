@@ -18,7 +18,6 @@ public class SoliniaCraft {
 	private String recipeName = "";
 	private int item1 = 0;
 	private int item2 = 0;
-	private String skill = "";
 	private SkillType skillType = SkillType.None;
 	private int minSkill = 0;
 	private boolean nearForge = false;
@@ -38,12 +37,6 @@ public class SoliniaCraft {
 	}
 	public void setItem2(int item2) {
 		this.item2 = item2;
-	}
-	public String getSkill() {
-		return skill;
-	}
-	public void setSkill(String skill) {
-		this.skill = skill;
 	}
 	public int getMinSkill() {
 		return minSkill;
@@ -107,12 +100,6 @@ public class SoliniaCraft {
 			if (classObj == null)
 				throw new InvalidCraftSettingException("Class does not exist");
 			setClassId(Integer.parseInt(value));
-			break;
-		case "skill":
-			if (!Utils.isValidSkill(value))
-				throw new InvalidCraftSettingException("Invalid skill");
-
-			setSkill(value.toUpperCase());
 			break;
 		case "minskill":
 			if (Integer.parseInt(value) < 0)

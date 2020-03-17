@@ -162,7 +162,7 @@ public class Utils {
 		}
 	}
 	
-	public static SkillType getSkillType(String skillName)
+	public static SkillType getSkillType2(String skillName)
 	{
 		SkillType result = SkillType.None;
 		for(SkillType type : SkillType.values())
@@ -5887,6 +5887,25 @@ public class Utils {
 		}
 
 		return conlevel;
+	}
+
+	public static boolean IsValidLanguage(SkillType targetLanguage) {
+		if (targetLanguage == null || targetLanguage.equals(SkillType.None) || targetLanguage.equals(SkillType.UnknownTongue))
+			return false;
+		
+		try
+		{
+			for (ISoliniaRace race: StateManager.getInstance().getConfigurationManager().getRaces())
+			{
+				if (race.getLanguage().equals(targetLanguage))
+					return true;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return false;
 	}
 
 }

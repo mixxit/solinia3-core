@@ -21,6 +21,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Utils.DropUtils;
@@ -121,9 +122,9 @@ public class CommandCraft implements CommandExecutor {
     					}
     				}
     				
-    				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
+    				if (!craftEntry.getSkillType().equals(SkillType.None))
     				{
-    					if (solPlayer.getSkillCap(Utils.getSkillType(craftEntry.getSkill().toUpperCase())) < 1)
+    					if (solPlayer.getSkillCap(craftEntry.getSkillType()) < 1)
     					{
 				        	player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
     						continue;
@@ -131,7 +132,7 @@ public class CommandCraft implements CommandExecutor {
     					
     					if (craftEntry.getMinSkill() > 0)
     					{
-    						SoliniaPlayerSkill skill = solPlayer.getSkill(Utils.getSkillType(craftEntry.getSkill().toUpperCase()));
+    						SoliniaPlayerSkill skill = solPlayer.getSkill(craftEntry.getSkillType());
     						if (skill == null)
     						{
     				        	player.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
@@ -207,11 +208,11 @@ public class CommandCraft implements CommandExecutor {
     						}
     					}
     					
-	    				if (craftEntry.getSkill() != null && !craftEntry.getSkill().equals(""))
+	    				if (!craftEntry.getSkillType().equals(SkillType.None))
 						{
-							solPlayer.tryIncreaseSkill(Utils.getSkillType(craftEntry.getSkill().toUpperCase()), 1);
+							solPlayer.tryIncreaseSkill(craftEntry.getSkillType(), 1);
 	
-							if (!solPlayer.getSkillCheck(Utils.getSkillType(craftEntry.getSkill().toUpperCase()),craftEntry.getMinSkill()+50))
+							if (!solPlayer.getSkillCheck(craftEntry.getSkillType(),craftEntry.getMinSkill()+50))
 							{
 								player.sendMessage("Your lack of skill resulted in failure!");
 								// remove components

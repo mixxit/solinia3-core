@@ -5098,7 +5098,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc == null)
 				return;
 			
-			if (player.isOp() || (getLanguage() == null || isSpeaksAllLanguages()
+			if (player.isOp() || (getLanguage() == null || getLanguage().equals(SkillType.UnknownTongue) || getLanguage().equals(SkillType.None) || isSpeaksAllLanguages()
 					|| SoliniaPlayerAdapter.Adapt(player).understandsLanguage(getLanguage()))) {
 				String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + player.getDisplayName() + " '" + message
 						+ "'"  + " [" + getLanguage() + "]" + ChatColor.RESET;
@@ -5133,7 +5133,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc == null)
 				return;
 
-			if (player.isOp() || (getLanguage() == null || isSpeaksAllLanguages()
+			if (player.isOp() || (getLanguage() == null || getLanguage().equals(SkillType.UnknownTongue) ||getLanguage().equals(SkillType.None) || isSpeaksAllLanguages()
 					|| SoliniaPlayerAdapter.Adapt(player).understandsLanguage(getLanguage()))) {
 				String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'"  + " [" + getLanguage() + "]" + ChatColor.RESET;
 				player.sendMessage(decoratedMessage);
@@ -8212,20 +8212,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public String getLanguage() {
+	public SkillType getLanguage() {
 		if (isNPC()) {
 			try {
 				ISoliniaNPC npc = getNPC();
 				if (npc.getRaceid() > 0) {
 					ISoliniaRace race = StateManager.getInstance().getConfigurationManager().getRace(npc.getRaceid());
-					return race.getName().toUpperCase();
+					return race.getLanguage();
 				}
 			} catch (CoreStateInitException e) {
 				//
 			}
 		}
 
-		return null;
+		return SkillType.UnknownTongue;
 	}
 
 	@Override

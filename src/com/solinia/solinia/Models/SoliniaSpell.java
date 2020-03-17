@@ -4843,7 +4843,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					if (Utils.getSpecialisationSkills().contains(skillName.toUpperCase()))
 						if (player.getSpecialisation() != null
 								&& player.getSpecialisation().equals(skillName.toUpperCase()))
-							spec = (float) solEntity.getSkill(Utils.getSkillType("SPECIALISE" + skillName.toUpperCase()));
+							spec = (float) solEntity.getSkill(Utils.getSkillType2("SPECIALISE" + skillName.toUpperCase()));
 			} catch (CoreStateInitException e) {
 				// skip
 			}

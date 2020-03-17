@@ -10,6 +10,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IChannelManager;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -41,19 +42,19 @@ public class ChannelManager implements IChannelManager {
 					if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
 						continue;
 					
-					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
+					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(Utils.getSkillType2(source.getLanguage())))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 						numberReached++;
 					} else {
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You do not fully understand this language) [" + source.getLanguage() + "]"));
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(Utils.getSkillType2(source.getLanguage())))) + " (You do not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 						numberReached++;
 
-						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(Utils.getSkillType2(source.getLanguage()));
 					}
 				} catch (CoreStateInitException e)
 				{
@@ -85,18 +86,18 @@ public class ChannelManager implements IChannelManager {
 					if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
 						continue;
 					
-					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
+					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(Utils.getSkillType2(source.getLanguage())))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 						numberReached++;
 					} else {
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You dot not fully understand this language) [" + source.getLanguage() + "]"));
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(Utils.getSkillType2(source.getLanguage())))) + " (You dot not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 						numberReached++;
-						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(Utils.getSkillType2(source.getLanguage()));
 					}
 				} catch (CoreStateInitException e)
 				{
@@ -127,19 +128,19 @@ public class ChannelManager implements IChannelManager {
 					if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
 						continue;
 					
-					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage()))
+					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(Utils.getSkillType2(source.getLanguage())))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 						numberReached++;
 					} else {
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage()))) + " (You do not fully understand this language) [" + source.getLanguage() + "]"));
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(Utils.getSkillType2(source.getLanguage())))) + " (You do not fully understand this language) [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
 						player.spigot().sendMessage(tc);
 						numberReached++;
 
-						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
+						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(Utils.getSkillType2(source.getLanguage()));
 					}
 				} catch (CoreStateInitException e)
 				{
@@ -488,7 +489,7 @@ public class ChannelManager implements IChannelManager {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= Utils.GetLocalSayRange(source.getBukkitLivingEntity().getLocation().getWorld().getName()))
 				{
-					if (player.isOp() || (source.getLanguage() == null || source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
+					if (player.isOp() || (source.getLanguage() == null || source.getLanguage().equals(SkillType.UnknownTongue) || source.getLanguage().equals(SkillType.None) ||  source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = decorateTextComponentsWithHovers(tc, itemStack);
