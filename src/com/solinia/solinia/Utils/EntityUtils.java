@@ -919,6 +919,8 @@ public class EntityUtils {
 	///////////////////////////////////////////
 	///////////////////////////////////////////
 	// Tradeskills
+			case Logging:
+			case Mining:
 			case Baking:
 			case Tailoring:
 			case Blacksmithing:
