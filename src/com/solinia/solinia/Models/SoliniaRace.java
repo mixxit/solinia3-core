@@ -3,6 +3,7 @@ package com.solinia.solinia.Models;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidItemSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
@@ -32,6 +33,8 @@ public class SoliniaRace implements ISoliniaRace {
 	private String alignment = "NEUTRAL";
 	private String shortName = "";
 	private boolean vampire = false;
+	
+	private SkillType language = SkillType.UnknownTongue;
 
 	private int passiveAbilityId = 0;
 	private int raceLootTableId = 0;
@@ -153,6 +156,7 @@ public class SoliniaRace implements ISoliniaRace {
 		sender.sendMessage("- bodytype: " + ChatColor.GOLD + getBodyType() + ChatColor.RESET);
 		sender.sendMessage("- vampire: " + ChatColor.GOLD + isVampire() + ChatColor.RESET);
 		sender.sendMessage("- admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
+		sender.sendMessage("- language: " + ChatColor.GOLD + getLanguage() + ChatColor.RESET);
 		if (getPassiveAbilityId() != 0) {
 			sender.sendMessage("- passiveabilityid: " + ChatColor.GOLD + getPassiveAbilityId() + " ("
 					+ StateManager.getInstance().getConfigurationManager().getSpell(getPassiveAbilityId()).getName()
@@ -202,6 +206,20 @@ public class SoliniaRace implements ISoliniaRace {
 			break;
 		case "bodytype":
 			setBodyType(Integer.parseInt(value));
+			break;
+		case "language":
+			try
+			{
+				setLanguage(SkillType.valueOf(value));
+			} catch (IllegalArgumentException e)
+			{
+				String types = "";
+				for(SkillType type: SkillType.values())
+				{
+					types += type+",";
+				}
+				throw new InvalidRaceSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
+			}
 			break;
 		case "alignment":
 			if (!value.toUpperCase().equals("EVIL") && !value.toUpperCase().equals("NEUTRAL") && !value.toUpperCase().equals("GOOD"))
@@ -306,6 +324,16 @@ public class SoliniaRace implements ISoliniaRace {
 	@Override
 	public void setBodyType(int bodyType) {
 		this.bodyType = bodyType;
+	}
+
+	@Override
+	public SkillType getLanguage() {
+		return language;
+	}
+
+	@Override
+	public void setLanguage(SkillType language) {
+		this.language = language;
 	}
 
 }

@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
+import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
@@ -18,6 +19,7 @@ public class SoliniaCraft {
 	private int item1 = 0;
 	private int item2 = 0;
 	private String skill = "";
+	private SkillType skillType = SkillType.None;
 	private int minSkill = 0;
 	private boolean nearForge = false;
 	private int classId = 0;
@@ -173,6 +175,21 @@ public class SoliniaCraft {
 
 			setOutputLootTableId(outputloottableid);
 			break;
+		case "skilltype":
+			try
+			{
+				setSkillType(SkillType.valueOf(value));
+			} catch (IllegalArgumentException e)
+			{
+				String types = "";
+				for(SkillType type: SkillType.values())
+				{
+					types += type+",";
+				}
+				throw new InvalidCraftSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
+			}
+			break;
+		
 		default:
 			throw new InvalidCraftSettingException(
 					"Invalid craft setting. Valid Options are: recipename,item1,item2,outputitem,outputloottableid,skill,classid,minskill");
@@ -195,5 +212,11 @@ public class SoliniaCraft {
 	}
 	public void setMinLevel(int minLevel) {
 		this.minLevel = minLevel;
+	}
+	public SkillType getSkillType() {
+		return skillType;
+	}
+	public void setSkillType(SkillType skillType) {
+		this.skillType = skillType;
 	}
 }

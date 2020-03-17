@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
+import com.solinia.solinia.Models.SkillType;
 
 public interface ISoliniaRace {
 
@@ -79,4 +80,8 @@ public interface ISoliniaRace {
 	int getBodyType();
 
 	void setBodyType(int bodyType);
+
+	SkillType getLanguage();
+
+	void setLanguage(SkillType language);
 }
