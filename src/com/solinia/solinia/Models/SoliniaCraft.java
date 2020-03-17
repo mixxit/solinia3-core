@@ -86,7 +86,7 @@ public class SoliniaCraft {
 		sender.sendMessage("- outputitem: " + ChatColor.GOLD + getOutputItem() + ChatColor.RESET);
 		sender.sendMessage("- outputloottableid: " + ChatColor.GOLD + getOutputLootTableId() + ChatColor.RESET);
 		sender.sendMessage("- classid: " + ChatColor.GOLD + getClassId() + ChatColor.RESET);
-		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + ChatColor.RESET);
+		sender.sendMessage("- skilltype: " + ChatColor.GOLD + getSkillType() + ChatColor.RESET);
 		sender.sendMessage("- minskill: " + ChatColor.GOLD + getMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 	}

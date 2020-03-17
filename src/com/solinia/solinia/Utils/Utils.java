@@ -2706,23 +2706,7 @@ public class Utils {
 
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for(ISoliniaRace race : StateManager.getInstance().getConfigurationManager().getRaces())
-			{
-				race.setLanguage(Utils.getSkillType(race.getName().toUpperCase()));
-				System.out.println("Assigned race skill");
-			}
-			
-			for(SoliniaCraft craft : StateManager.getInstance().getConfigurationManager().getCrafts())
-			{
-				craft.setSkillType(Utils.getSkillType(craft.getSkill().toUpperCase()));
-				System.out.println("Assigned craft skill");
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 
 	public static void disableLootOverLevel110() {
