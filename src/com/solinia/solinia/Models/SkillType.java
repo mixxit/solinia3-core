@@ -22,7 +22,7 @@ public enum SkillType {
 	RemoveTraps,TripleAttack, TwoHandPiercing,
 	None, Count, Logging, Mining, Piercing, //onehandpiercing
 	// Races
-	Barbarian,Caerthian,Keladun,Highhuman,Eusebian,Vishim,Meroei,Lidkim,Aerindal,Ophidian,Valderain,Mysmaal,Chunel,Tailless,Asuran,Tinai,Capriped,Taxicost,Orc,Anushi,Undead,Gialon,Giant,Lizardman,Clockwork,Siren,Arachnid,Animal,Oshira,Dragon,Minotaur,Gobel,Myconid,Troll,Shadowman,Fairy,Oichri,Garuda,Bullywug,Darkelf,Treant,Djinn,Feebleworshipper,Silent_Tongue,Whistler,Kenku, UnknownTongue
-	
+	Barbarian,Caerthian,Keladun,Highhuman,Eusebian,Vishim,Meroei,Lidkim,Aerindal,Ophidian,Valderain,Mysmaal,Chunel,Tailless,Asuran,Tinai,Capriped,Taxicost,Orc,Anushi,Undead,Gialon,Giant,Lizardman,Clockwork,Siren,Arachnid,Animal,Oshira,Dragon,Minotaur,Gobel,Myconid,Troll,Shadowman,Fairy,Oichri,Garuda,Bullywug,Darkelf,Treant,Djinn,Feebleworshipper,Silent_Tongue,Whistler,Kenku, UnknownTongue,
+	ZZSpecialTypeMinusOne
 };
 

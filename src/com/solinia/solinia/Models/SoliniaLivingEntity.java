@@ -3196,7 +3196,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void doClassAttacks(ISoliniaLivingEntity ca_target, String skill, boolean isRiposte)
+	public void doClassAttacks(ISoliniaLivingEntity ca_target, SkillType skillType, boolean isRiposte)
 	{
 		if (ca_target == null)
 			return;
@@ -3220,7 +3220,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		SkillType skill_to_use = SkillType.None;
 		
-		if (skill.equals("-1") && getClassObj() != null) {
+		if (skillType.equals(SkillType.ZZSpecialTypeMinusOne) && getClassObj() != null) {
 			switch(getClassObj().getName()){
 			case "WARRIOR":
 			case "RANGER":
@@ -3265,17 +3265,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				break;
 			}
 		} else {
-			if (Utils.isValidSkill(skill))
-			{
-				for (SkillType skillType : SkillType.values()) {
-					if (!skillType.name().toUpperCase().equals(skill.toUpperCase()))
-						continue;
-					
-					skill_to_use = skillType;
-				}
-				
-				
-			}
+			if (Utils.isValidSkill(skillType.name().toUpperCase()))
+				skill_to_use = skillType;
 		}
 
 		if(skill_to_use.equals(SkillType.None))

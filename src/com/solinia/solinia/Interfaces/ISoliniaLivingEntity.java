@@ -389,8 +389,6 @@ public interface ISoliniaLivingEntity {
 
 	public void sendStats(LivingEntity player);
 
-	void doClassAttacks(ISoliniaLivingEntity ca_target, String skill, boolean isRiposte);
-
 	int getSpecialAbility(int specialAbilityId);
 
 	int getItemBonuses(SpellEffectType spellEffectType);
@@ -458,5 +456,7 @@ public interface ISoliniaLivingEntity {
 	int getTotalToHit(SkillType skillType, int hitChanceBonus);
 
 	int getTotalItemStat(StatType stat);
+
+	void doClassAttacks(ISoliniaLivingEntity ca_target, SkillType skillType, boolean isRiposte);
 
 }

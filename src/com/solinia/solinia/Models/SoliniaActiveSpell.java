@@ -1343,7 +1343,7 @@ public class SoliniaActiveSpell {
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
 			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
 			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
-				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.Kick.name().toUpperCase(), false);
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.Kick, false);
 			}
 		} catch (CoreStateInitException e) {
 			// just skip it
