@@ -22,6 +22,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -63,6 +64,16 @@ public class Solinia3CoreEntityListener implements Listener {
 	public Solinia3CoreEntityListener(Solinia3CorePlugin solinia3CorePlugin) {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
+	}
+	
+	@EventHandler()
+	public void onBlockDispenseArmorEvent(BlockDispenseArmorEvent  event)
+	{
+		if (event.isCancelled())
+			return;
+		
+		// No
+		Utils.CancelEvent(event);
 	}
 	
 	// Needs to occur before anything else
