@@ -13,6 +13,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.EquipmentSlot;
+import com.solinia.solinia.Models.ItemGenBonusStatType;
 import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Utils.ItemStackUtils;
@@ -342,15 +343,15 @@ public class SoliniaItemFactory {
 				
 				setMinLevel(item, armourtier);
 				
-				int classStrBonus = classtype.getItemGenerationBonus("strength");
-				int classStaBonus = classtype.getItemGenerationBonus("stamina");
-				int classAgiBonus = classtype.getItemGenerationBonus("agility");
-				int classDexBonus = classtype.getItemGenerationBonus("dexterity");
-				int classIntBonus = classtype.getItemGenerationBonus("intelligence");
-				int classWisBonus = classtype.getItemGenerationBonus("wisdom");
-				int classChaBonus = classtype.getItemGenerationBonus("charisma");
-				int classAcBonus = classtype.getItemGenerationBonus("ac");
-				int classDelayBonus = classtype.getItemGenerationBonus("weapondelay");
+				int classStrBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.Strength);
+				int classStaBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.Stamina);
+				int classAgiBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.Agility);
+				int classDexBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.Dexterity);
+				int classIntBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.Intelligence);
+				int classWisBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.Wisdom);
+				int classChaBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.Charisma);
+				int classAcBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.AC);
+				int classDelayBonus = classtype.getItemGenerationBonus(ItemGenBonusStatType.WeaponDelay);
 				
 
 				// Unless there is a bonus defined, the class doesnt seem to use that statistic

@@ -647,26 +647,26 @@ public class SoliniaClass implements ISoliniaClass {
 	}
 
 	@Override
-	public int getItemGenerationBonus(String string) {
-		switch(string.toLowerCase())
+	public int getItemGenerationBonus(ItemGenBonusStatType statType) {
+		switch(statType)
 		{
-			case "strength":
+			case Strength:
 				return this.getStrengthitembonus();
-			case "stamina":
+			case Stamina:
 				return this.getStaminaitembonus();
-			case "dexterity":
+			case Dexterity:
 				return this.getDexterityitembonus();
-			case "agility":
+			case Agility:
 				return this.getAgilityitembonus();
-			case "intelligence":
+			case Intelligence:
 				return this.getIntelligenceitembonus();
-			case "wisdom":
+			case Wisdom:
 				return this.getWisdomitembonus();
-			case "charisma":
+			case Charisma:
 				return this.getCharismaitembonus();
-			case "ac":
+			case AC:
 				return this.getACItemBonus();
-			case "weapondelay":
+			case WeaponDelay:
 				return this.getWeaponDelayItemBonus();
 			default:
 				return 0;

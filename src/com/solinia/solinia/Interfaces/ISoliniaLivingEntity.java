@@ -25,6 +25,7 @@ import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Models.StatType;
 
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 
@@ -68,8 +69,6 @@ public interface ISoliniaLivingEntity {
 	int getMaxDamage();
 
 	int getStrength();
-
-	int getTotalItemStat(String stat);
 
 	int getStamina();
 
@@ -127,7 +126,7 @@ public interface ISoliniaLivingEntity {
 
 	int getActSpellHealing(ISoliniaSpell soliniaSpell, int value);
 
-	int getMaxStat(String skillname);
+	int getMaxStat(StatType statType);
 
 	int getRune();
 
@@ -457,5 +456,7 @@ public interface ISoliniaLivingEntity {
 	int computeToHit(SkillType skillType);
 
 	int getTotalToHit(SkillType skillType, int hitChanceBonus);
+
+	int getTotalItemStat(StatType stat);
 
 }

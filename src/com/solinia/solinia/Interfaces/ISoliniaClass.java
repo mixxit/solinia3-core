@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
+import com.solinia.solinia.Models.ItemGenBonusStatType;
 import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.RaceClass;
 
@@ -51,7 +52,7 @@ public interface ISoliniaClass {
 
 	public String getItemArmorTypeName(String basename);
 
-	public int getItemGenerationBonus(String string);
+	public int getItemGenerationBonus(ItemGenBonusStatType statType);
 
 	String getDefaulthandMaterial();
 

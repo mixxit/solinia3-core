@@ -96,6 +96,7 @@ import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellEffectIndex;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
+import com.solinia.solinia.Models.StatType;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
@@ -3798,7 +3799,7 @@ public class Utils {
 		return totalRemaining;
 	}
 
-	public static int getTotalEffectStat(LivingEntity livingEntity, String stat) {
+	public static int getTotalEffectStat(LivingEntity livingEntity, StatType stat) {
 		int statTotal = 0;
 
 		try {
@@ -3817,37 +3818,37 @@ public class Utils {
 						continue;
 
 					switch (stat) {
-					case "STRENGTH":
+					case Strength:
 						if (!(effect.getSpellEffectType().equals(SpellEffectType.STR)))
 							break;
 						statTotal += effect.getCalculatedValue();
 						break;
-					case "STAMINA":
+					case Stamina:
 						if (!(effect.getSpellEffectType().equals(SpellEffectType.STA)))
 							break;
 						statTotal += effect.getCalculatedValue();
 						break;
-					case "AGILITY":
+					case Agility:
 						if (!(effect.getSpellEffectType().equals(SpellEffectType.AGI)))
 							break;
 						statTotal += effect.getCalculatedValue();
 						break;
-					case "DEXTERITY":
+					case Dexterity:
 						if (!(effect.getSpellEffectType().equals(SpellEffectType.DEX)))
 							break;
 						statTotal += effect.getCalculatedValue();
 						break;
-					case "INTELLIGENCE":
+					case Intelligence:
 						if (!(effect.getSpellEffectType().equals(SpellEffectType.INT)))
 							break;
 						statTotal += effect.getCalculatedValue();
 						break;
-					case "WISDOM":
+					case Wisdom:
 						if (!(effect.getSpellEffectType().equals(SpellEffectType.WIS)))
 							break;
 						statTotal += effect.getCalculatedValue();
 						break;
-					case "CHARISMA":
+					case Charisma:
 						if (!(effect.getSpellEffectType().equals(SpellEffectType.CHA)))
 							break;
 						statTotal += effect.getCalculatedValue();
@@ -4463,7 +4464,7 @@ public class Utils {
 		return position;
 	}
 
-	public static int getTotalAAEffectStat(LivingEntity bukkitLivingEntity, String stat) {
+	public static int getTotalAAEffectStat(LivingEntity bukkitLivingEntity, StatType stat) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;
 
@@ -4474,25 +4475,25 @@ public class Utils {
 			int effectIdLookup = 0;
 
 			switch (stat) {
-			case "STRENGTH":
+			case Strength:
 				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.STR);
 				break;
-			case "STAMINA":
+			case Stamina:
 				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.STA);
 				break;
-			case "AGILITY":
+			case Agility:
 				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.AGI);
 				break;
-			case "DEXTERITY":
+			case Dexterity:
 				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.DEX);
 				break;
-			case "INTELLIGENCE":
+			case Intelligence:
 				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.INT);
 				break;
-			case "WISDOM":
+			case Wisdom:
 				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.WIS);
 				break;
-			case "CHARISMA":
+			case Charisma:
 				effectIdLookup = Utils.getEffectIdFromEffectType(SpellEffectType.CHA);
 				break;
 			default:
