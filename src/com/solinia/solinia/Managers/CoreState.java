@@ -189,6 +189,12 @@ public class CoreState {
 		{
 			xpdaybonus += 200;
 		}
+		
+		// Belara Day
+		if (simpleDateformat.format(now).equals("18.03") || simpleDateformat.format(now).equals("19.03") || simpleDateformat.format(now).equals("20.03") || simpleDateformat.format(now).equals("21.03") || simpleDateformat.format(now).equals("22.03"))
+		{
+			xpdaybonus = 400;
+		}
 
 		// Xmas and New Year
 		if (simpleDateformat.format(now).equals("24.12") || simpleDateformat.format(now).equals("25.12") || simpleDateformat.format(now).equals("26.12") || simpleDateformat.format(now).equals("27.12") || simpleDateformat.format(now).equals("28.12") || simpleDateformat.format(now).equals("29.12") || simpleDateformat.format(now).equals("30.12") || simpleDateformat.format(now).equals("31.12") || simpleDateformat.format(now).equals("01.01") || simpleDateformat.format(now).equals("02.01"))
