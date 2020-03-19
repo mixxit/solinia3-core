@@ -5747,10 +5747,6 @@ public class Utils {
 		}
 	}
 
-	public static boolean isLocationInZone(Location location, SoliniaZone zone) {
-		return zone.isLocationInside(location);
-	}
-
 	public static org.bukkit.ChatColor getLevelCon(int myLevel, ISoliniaLivingEntity solEntity) {
 		// TODO Auto-generated method stub
 		return getLevelCon(myLevel, solEntity.getLevel());
@@ -5907,5 +5903,27 @@ public class Utils {
 		}
 		
 		return false;
+	}
+
+	public static boolean isLocationInZone(Location location, SoliniaZone zone) {
+		return zone.isLocationInside(location);
+	}
+
+	public static boolean isLocationInZone(Location location, int zoneId) {
+		if (zoneId < 1)
+			return false;
+		
+		try
+		{
+			SoliniaZone zone = StateManager.getInstance().getConfigurationManager().getZone(zoneId);
+			if (zone == null)
+				return false;
+			return isLocationInZone(location,zone);
+		} catch (CoreStateInitException e)
+		{
+		}
+		
+		return false;
+		
 	}
 }

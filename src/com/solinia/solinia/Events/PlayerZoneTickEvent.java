@@ -13,7 +13,7 @@ public class PlayerZoneTickEvent extends Event implements Cancellable {
 	private ISoliniaPlayer player;
 	private SoliniaZone zone;
 
-	public PlayerZoneTickEvent(ISoliniaPlayer player, SoliniaZone zone) 
+	public PlayerZoneTickEvent(ISoliniaPlayer player, SoliniaZone zoneId) 
     {
 		this.player = player;
 		this.cancelled = false;

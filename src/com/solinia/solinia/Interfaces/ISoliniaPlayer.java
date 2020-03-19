@@ -290,7 +290,7 @@ public interface ISoliniaPlayer extends Serializable {
 
 	void clearAAs();
 
-	boolean isInZone(SoliniaZone zone);
+	boolean isInZone(int zoneId);
 	
 	SoliniaWorld getSoliniaWorld();
 
@@ -618,6 +618,8 @@ public interface ISoliniaPlayer extends Serializable {
 	SkillType getLanguageSkillType();
 
 	void setLanguageSkillType(SkillType languageSkillType);
+
+	boolean isInZone(SoliniaZone zone);
 
 
 

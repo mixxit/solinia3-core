@@ -9,11 +9,11 @@ import com.solinia.solinia.Models.SoliniaZone;
 public class ZoneTickEvent extends Event implements Cancellable {
 	private boolean cancelled;
 	private static final HandlerList handlers = new HandlerList();
-	private SoliniaZone zone;
+	private int zoneId;
 
-	public ZoneTickEvent(SoliniaZone zone) 
+	public ZoneTickEvent(int zoneId) 
     {
-		this.zone = zone;
+		this.zoneId = zoneId;
 		this.cancelled = false;
     }
 	
@@ -33,8 +33,8 @@ public class ZoneTickEvent extends Event implements Cancellable {
         return handlers;
     }
     
-    public SoliniaZone getZone()
+    public int getZoneId()
     {
-    	return this.zone;
+    	return this.zoneId;
     }
 }

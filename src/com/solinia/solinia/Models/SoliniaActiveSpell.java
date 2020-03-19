@@ -1331,9 +1331,6 @@ public class SoliniaActiveSpell {
 		if (!(sourceEntity instanceof LivingEntity))
 			return;
 
-		if (!(getLivingEntity() instanceof Creature))
-			return;
-		
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
 		
 		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))

@@ -545,6 +545,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return false;
 	}
+	
+	@Override
+	public boolean isInZone(int zoneId) {
+		if (zoneId < 1)
+			return false;
+		
+		return Utils.isLocationInZone(this.getBukkitPlayer().getLocation(), zoneId);
+	}
 
 	@Override
 	public boolean isInZone(SoliniaZone zone) {
