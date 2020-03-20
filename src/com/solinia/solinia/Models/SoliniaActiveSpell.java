@@ -1315,9 +1315,36 @@ public class SoliniaActiveSpell {
 			applyBindWound(spellEffect, soliniaSpell, casterLevel);
 		case Kick:
 			applyKick(spellEffect,soliniaSpell,casterLevel);
+		case Mend:
+			applyMend(spellEffect,soliniaSpell,casterLevel);
 		default:
 			return;
 		}
+	}
+	
+	private void applyMend(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			sourceSoliniaLivingEntity.doMend();
+			return;
+			
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+		
+		
 	}
 	
 	private void applyKick(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

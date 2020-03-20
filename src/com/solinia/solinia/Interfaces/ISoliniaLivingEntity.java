@@ -459,4 +459,6 @@ public interface ISoliniaLivingEntity {
 
 	void doClassAttacks(ISoliniaLivingEntity ca_target, SkillType skillType, boolean isRiposte);
 
+	void doMend();
+
 }

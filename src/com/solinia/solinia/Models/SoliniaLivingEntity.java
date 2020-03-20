@@ -9711,4 +9711,44 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private boolean hasDefensiveProcs() {
 		return this.hasSpellEffectType(SpellEffectType.DefensiveProc);
 	}
+
+	@Override
+	public void doMend() {
+
+		int mendhp = (int)getMaxHP() / 4;
+		int currenthp = (int)getHP();
+		if (Utils.RandomBetween(0, 199) < (int)getSkill(SkillType.Mend)) {
+
+			int criticalchance = getSpellBonuses(SpellEffectType.CriticalMend) + getItemBonuses(SpellEffectType.CriticalMend) + getAABonuses(SpellEffectType.CriticalMend);
+
+			if (Utils.RandomBetween(0, 99) < criticalchance) {
+				mendhp *= 2;
+				this.getBukkitLivingEntity().sendMessage("You magically mend your wounds and heal considerable damage");
+			}
+			
+			setHPChange(mendhp, this.getBukkitLivingEntity());
+			this.getBukkitLivingEntity().sendMessage("You mend your wounds and heal some damage");
+		}
+		else {
+			/* the purpose of the following is to make the chance to worsen wounds much less common,
+			which is more consistent with the way eq live works.
+			according to my math, this should result in the following probability:
+			0 skill - 25% chance to worsen
+			20 skill - 23% chance to worsen
+			50 skill - 16% chance to worsen */
+			if ((getSkill(SkillType.Mend) <= 75) && (Utils.RandomBetween(getSkill(SkillType.Mend), 100) < 75) && (Utils.RandomBetween(1, 3) == 1))
+			{
+				if (currenthp > mendhp)
+					setHPChange(mendhp*-1, this.getBukkitLivingEntity());
+				else
+					setHPChange(-1, this.getBukkitLivingEntity());
+				
+				this.getBukkitLivingEntity().sendMessage("You have worsened your wounds!");
+			}
+			else
+				this.getBukkitLivingEntity().sendMessage("You have failed to mend your wounds");
+		}
+
+		tryIncreaseSkill(SkillType.Mend, 1);
+	}
 }
