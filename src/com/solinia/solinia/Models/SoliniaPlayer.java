@@ -1150,6 +1150,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 			
+			if (!spell.isBardSong())
 			if (!this.hasReagents(spell,getBukkitPlayer()))
 			{
 				Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
@@ -1842,7 +1843,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			if (!spell.isBardSong() && useReagents) {
+			if (!spell.isBardSong()) {
 				if (!hasReagents(spell,player))
 				{
 					Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "No reagents");
