@@ -1313,15 +1313,201 @@ public class SoliniaActiveSpell {
 			return;
 		case BindWound:
 			applyBindWound(spellEffect, soliniaSpell, casterLevel);
+			return;
 		case Kick:
 			applyKick(spellEffect,soliniaSpell,casterLevel);
+			return;
 		case Mend:
 			applyMend(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case RoundKick:
+			applyRoundKick(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case TigerClaw:
+			applyTigerClaw(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case Intimidation:
+			applyIntimidation(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case EagleStrike:
+			applyEagleStrike(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case DragonPunch:
+			applyDragonPunch(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case TailRake:
+			applyTailRake(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case FlyingKick:
+			applyFlyingKick(spellEffect,soliniaSpell,casterLevel);
+			return;
 		default:
 			return;
 		}
 	}
 	
+	private void applyRoundKick(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.RoundKick, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+	
+	private void applyDragonPunch(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.DragonPunch, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+	
+	private void applyEagleStrike(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.EagleStrike, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+	
+	private void applyFlyingKick(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.FlyingKick, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+	
+	private void applyTigerClaw(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.TigerClaw, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+	
+	private void applyTailRake(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.TailRake, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+
 	private void applyMend(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!this.isSourcePlayer())
 			return;
@@ -2056,6 +2242,21 @@ public class SoliniaActiveSpell {
 			
 		} catch (CoreStateInitException e) {
 			// just skip it
+		}
+	}
+	
+	private void applyIntimidation(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!(getLivingEntity() instanceof Creature))
+			return;
+
+		Entity source = Bukkit.getEntity(getSourceUuid());
+		if (getLivingEntity() instanceof Creature) {
+			try {
+				ISoliniaLivingEntity solLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+				solLivingEntityTarget.addToHateList(source.getUniqueId(), spellEffect.getBase(), true);
+			} catch (CoreStateInitException e) {
+
+			}
 		}
 	}
 	
