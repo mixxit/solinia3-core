@@ -9714,19 +9714,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void doMend() {
-
+		Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "start of doMend spell");
 		int mendhp = (int)getMaxHP() / 4;
 		int currenthp = (int)getHP();
 		if (Utils.RandomBetween(0, 199) < (int)getSkill(SkillType.Mend)) {
 
 			int criticalchance = getSpellBonuses(SpellEffectType.CriticalMend) + getItemBonuses(SpellEffectType.CriticalMend) + getAABonuses(SpellEffectType.CriticalMend);
+			Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "crit chance: " + criticalchance);
 
 			if (Utils.RandomBetween(0, 99) < criticalchance) {
+				Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "yay crit!");
 				mendhp *= 2;
 				this.getBukkitLivingEntity().sendMessage("You magically mend your wounds and heal considerable damage");
+			} else {
+				Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "failed crit roll");
 			}
 			
 			setHPChange(mendhp, this.getBukkitLivingEntity());
+			Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "healing damage: " + mendhp);
 			this.getBukkitLivingEntity().sendMessage("You mend your wounds and heal some damage");
 		}
 		else {
@@ -9736,17 +9741,23 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			0 skill - 25% chance to worsen
 			20 skill - 23% chance to worsen
 			50 skill - 16% chance to worsen */
+			Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "i had a chance of failure");
 			if ((getSkill(SkillType.Mend) <= 75) && (Utils.RandomBetween(getSkill(SkillType.Mend), 100) < 75) && (Utils.RandomBetween(1, 3) == 1))
 			{
+				int change = -1;
 				if (currenthp > mendhp)
-					setHPChange(mendhp*-1, this.getBukkitLivingEntity());
-				else
-					setHPChange(-1, this.getBukkitLivingEntity());
+					change = mendhp*-1;
+
+				setHPChange(change, this.getBukkitLivingEntity());
 				
+				Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "hurt myself by hp: ["+change+"]");
 				this.getBukkitLivingEntity().sendMessage("You have worsened your wounds!");
 			}
 			else
+			{
+				Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "failed but didnt hurt myself");
 				this.getBukkitLivingEntity().sendMessage("You have failed to mend your wounds");
+			}
 		}
 
 		tryIncreaseSkill(SkillType.Mend, 1);
