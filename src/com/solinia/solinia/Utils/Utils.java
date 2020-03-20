@@ -4139,6 +4139,8 @@ public class Utils {
 			return SkillType.None;
 		case 79:
 			return SkillType.Count;
+		case 80:
+			return SkillType.TailRake;
 		default:
 			return SkillType.None;
 		}
