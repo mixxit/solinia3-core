@@ -14,6 +14,9 @@ public class ZoneTickTimer extends BukkitRunnable {
 		try
 		{
 			for (SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones()) {
+				if (!zone.isPlayersInZone())
+					continue;
+				
 				ZoneTickEvent soliniaevent = new ZoneTickEvent(zone.getId());
 				Bukkit.getPluginManager().callEvent(soliniaevent);
 			}

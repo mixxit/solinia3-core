@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
@@ -528,6 +529,13 @@ public class SoliniaZone {
 		return loc.getX() > minX && loc.getX() < maxX
                 && loc.getY() > minY && loc.getY() < maxY
                 && loc.getZ() > minZ && loc.getZ() < maxZ;
+	}
+	public boolean isPlayersInZone() {
+		for(Player player : Bukkit.getOnlinePlayers())
+			if (isLocationInside(player.getLocation()))
+				return true;
+		
+		return false;
 	}
 	
 }
