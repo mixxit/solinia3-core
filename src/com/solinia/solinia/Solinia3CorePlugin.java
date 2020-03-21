@@ -215,6 +215,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		
 		
 		startHttpListener();
+		
+		StateManager.getInstance().charChange = true;
 
 	}
 	
@@ -321,6 +323,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	@Override
 	public void onDisable() {
 		try {
+			StateManager.getInstance().charChange = false;
 			StateManager.getInstance().getEntityManager().removeAllPets();
 			StateManager.getInstance().Commit();
 			
