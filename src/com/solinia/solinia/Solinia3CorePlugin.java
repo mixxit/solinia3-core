@@ -212,8 +212,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		getServer().getMessenger().registerOutgoingPluginChannel(this, Solinia3UIChannelNames.Outgoing); // we register the outgoing channel
 		
 		startProtocolListeners();
-		
-		
 		startHttpListener();
 		
 		StateManager.getInstance().charChange = true;

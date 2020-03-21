@@ -10,6 +10,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import com.solinia.solinia.Models.ActiveSongs;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
@@ -78,10 +79,6 @@ public interface IEntityManager {
 	Timestamp getDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType);
 
 	void setDontSpellTypeMeBefore(LivingEntity bukkitLivingEntity, int spellType, Timestamp timestamp);
-
-	Integer getEntitySinging(UUID entityUUID);
-
-	void setEntitySinging(UUID entityUUID, Integer spellId);
 
 	void removeSpellEffectsOfSpellId(UUID uuid, int spellId, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects);
 
@@ -220,5 +217,9 @@ public interface IEntityManager {
 	void resetReverseAggro(UUID uniqueId);
 
 	SoliniaActiveSpell getFirstActiveSpellOfSpellEffectType(LivingEntity livingEntity, SpellEffectType type);
+
+	ActiveSongs getEntitySinging(UUID uniqueId);
+
+	void setEntitySinging(UUID uniqueId, Integer spellId);
 
 }

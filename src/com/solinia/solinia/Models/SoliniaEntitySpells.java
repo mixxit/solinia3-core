@@ -492,8 +492,8 @@ public class SoliniaEntitySpells {
 			{
 				if (StateManager.getInstance().getEntityManager().getEntitySinging(activeSpell.getSourceUuid()) != null) 
 				{
-					Integer singingId = StateManager.getInstance().getEntityManager().getEntitySinging(activeSpell.getSourceUuid());
-					if (singingId != activeSpell.getSpellId() || activeSpell.getSpell().getRecastTime() > 0 && Bukkit.getEntity(activeSpell.getSourceUuid()) != null && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity) {
+					boolean isLastSongSinging = StateManager.getInstance().getEntityManager().getEntitySinging(activeSpell.getSourceUuid()).isLastSongSinging(activeSpell.getSpellId());
+					if (!isLastSongSinging || activeSpell.getSpell().getRecastTime() > 0 && Bukkit.getEntity(activeSpell.getSourceUuid()) != null && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity) {
 						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()));
 						solEntity.emote(solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
 						
@@ -502,6 +502,8 @@ public class SoliniaEntitySpells {
 						
 						if (solEntity.getBukkitLivingEntity().isOp())
 							System.out.println("Debug: " + solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]");
+						
+						StateManager.getInstance().getEntityManager().getEntitySinging(activeSpell.getSourceUuid()).stopSinging(activeSpell.getSpellId());
 					} else {
 						// Continue singing!
 						if (Bukkit.getEntity(activeSpell.getOwnerUuid()) instanceof LivingEntity && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity && !Bukkit.getEntity(activeSpell.getOwnerUuid()).isDead() && !Bukkit.getEntity(activeSpell.getSourceUuid()).isDead()) {

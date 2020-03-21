@@ -43,6 +43,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
 import com.solinia.solinia.Interfaces.ISoliniaNPCMerchantEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
+import com.solinia.solinia.Models.ActiveSongs;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
@@ -72,7 +73,7 @@ import net.minecraft.server.v1_14_R1.Tuple;
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
-	private ConcurrentHashMap<UUID, Integer> entitySinging = new ConcurrentHashMap<UUID, Integer>();
+	private ConcurrentHashMap<UUID, ActiveSongs> entitySinging = new ConcurrentHashMap<UUID, ActiveSongs>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastCallForAssist = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1375,18 +1376,6 @@ public class EntityManager implements IEntityManager {
 
 	}
 
-	@Override
-	public Integer getEntitySinging(UUID entityUUID) {
-		return entitySinging.get(entityUUID);
-	}
-
-	@Override
-	public void setEntitySinging(UUID entityUUID, Integer spellId) {
-		if (spellId == null || spellId == 0)
-			this.entitySinging.remove(entityUUID);
-		else
-		this.entitySinging.put(entityUUID,spellId);
-	}
 
 	@Override
 	public UniversalMerchant getUniversalMerchant(UUID universalMerchant) {
@@ -2178,5 +2167,19 @@ public class EntityManager implements IEntityManager {
 		}
 		
 		reverseHateList.put(uniqueId,  new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
+	}
+
+	@Override
+	public ActiveSongs getEntitySinging(UUID uniqueId) {
+		if (this.entitySinging.get(uniqueId) == null)
+			this.entitySinging.put(uniqueId, new ActiveSongs());
+		
+		return this.entitySinging.get(uniqueId);
+			
+	}
+
+	@Override
+	public void setEntitySinging(UUID uniqueId, Integer spellId) {
+		this.getEntitySinging(uniqueId).startSinging(spellId);
 	}
 }
