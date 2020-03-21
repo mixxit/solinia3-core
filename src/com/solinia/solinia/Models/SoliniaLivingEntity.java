@@ -5637,7 +5637,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return false;
 			}
 		}
-
 		// TODO escape distance
 
 		boolean checked_los = false;
@@ -5646,9 +5645,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		List<NPCSpellListEntry> spells = new ArrayList<NPCSpellListEntry>();
 		for (NPCSpellListEntry entry : npcSpellList.getSpellListEntry()) {
-			if (npc.isCorePet())
-				spells.add(entry);
-			else if (npc.getLevel() >= entry.getMinlevel() && npc.getLevel() <= entry.getMaxlevel()) {
+			if (npc.getLevel() >= entry.getMinlevel() && npc.getLevel() <= entry.getMaxlevel()) {
 				spells.add(entry);
 			}
 		}

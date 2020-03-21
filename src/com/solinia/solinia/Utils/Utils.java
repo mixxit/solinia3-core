@@ -5588,6 +5588,7 @@ public class Utils {
 		coreclass = coreclass.toUpperCase();
 		method = method.toUpperCase();
 		focusid = focusid.toUpperCase();
+		//System.out.println(coreclass + ":" + method + ":" + focusid + ":" + message);
 		try {
 			for (UUID debuggerUuid : StateManager.getInstance().getPlayerManager().getDebugger().keySet()) {
 				Entity entity = Bukkit.getEntity(debuggerUuid);
