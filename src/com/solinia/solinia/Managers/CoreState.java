@@ -101,6 +101,32 @@ public class CoreState {
 		
 		return zones;
 	}
+	
+	public void forceHotzone(int hotzone, boolean clear) throws Exception
+	{
+		try {
+			for(SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
+			{
+				if (!zone.isHotzone())
+					continue;
+				
+				if (zone.getId() == hotzone)
+				{
+					if (clear == true)
+					this.currentHotZones.clear();
+					
+					this.currentHotZones.add(zone.getId());
+					System.out.println("Hotzone set to: " + zone.getName());
+					return;
+				}
+				
+			}
+			throw new Exception("Could not set hotzone");
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void setRandomHotzones()
 	{
