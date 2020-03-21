@@ -191,7 +191,7 @@ public class CoreState {
 		}
 		
 		// Belara Day
-		if (simpleDateformat.format(now).equals("18.03") || simpleDateformat.format(now).equals("19.03") || simpleDateformat.format(now).equals("20.03") || simpleDateformat.format(now).equals("21.03") || simpleDateformat.format(now).equals("22.03"))
+		if (simpleDateformat.format(now).equals("18.03") || simpleDateformat.format(now).equals("19.03") || simpleDateformat.format(now).equals("20.03") || simpleDateformat.format(now).equals("21.03") || simpleDateformat.format(now).equals("22.03") || simpleDateformat.format(now).equals("23.03"))
 		{
 			xpdaybonus = 400;
 		}

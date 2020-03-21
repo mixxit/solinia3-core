@@ -41,7 +41,7 @@ public class Solinia3CoreZoneTickListener implements Listener {
 				if (zone == null)
 					continue;
 				
-				PlayerZoneTickEvent soliniaevent = new PlayerZoneTickEvent(solPlayer,zone);
+				PlayerZoneTickEvent soliniaevent = new PlayerZoneTickEvent(player.getUniqueId(),event.getZoneId());
 				Bukkit.getPluginManager().callEvent(soliniaevent);
 			}
 		} catch (CoreStateInitException e)
