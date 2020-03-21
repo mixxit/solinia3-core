@@ -117,7 +117,7 @@ commands:
     - togglediscord
   togglehint:
     description: Toggles hint type on or off
-    usage: /togglehint type
+    usage: /togglehint <type>
     aliases: []
   cast:
     description: Casts a spell from memory slot 1 to 0
