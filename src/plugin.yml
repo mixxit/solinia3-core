@@ -115,6 +115,10 @@ commands:
     usage: /showdiscord
     aliases:
     - togglediscord
+  togglehint:
+    description: Toggles hint type on or off
+    usage: /togglehint type
+    aliases: []
   cast:
     description: Casts a spell from memory slot 1 to 0
     usage: /cast <memoryslot>
