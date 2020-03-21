@@ -74,7 +74,6 @@ public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, ActiveSongs> entitySinging = new ConcurrentHashMap<UUID, ActiveSongs>();
-	private ConcurrentHashMap<UUID, Timestamp> lastDualWield = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastCallForAssist = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDisarm = new ConcurrentHashMap<UUID, Timestamp>();
@@ -2181,5 +2180,11 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void setEntitySinging(UUID uniqueId, Integer spellId) {
 		this.getEntitySinging(uniqueId).startSinging(spellId);
+	}
+
+	@Override
+	public List<UUID> getReverseEntityTarget(UUID uniqueId) {
+		return this.getEntityTargets().entrySet().stream().
+				filter(entry -> entry.getValue().equals(uniqueId)).map(Map.Entry::getKey).collect(Collectors.toList());
 	}
 }

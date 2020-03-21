@@ -1659,9 +1659,6 @@ public class SoliniaActiveSpell {
 			} catch (CoreStateInitException e) {
 
 			}
-			
-			LocalDateTime datetime = LocalDateTime.now();
-			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
 
 			StateManager.getInstance().getEntityManager().setPet(source.getUniqueId(), getLivingEntity());
 

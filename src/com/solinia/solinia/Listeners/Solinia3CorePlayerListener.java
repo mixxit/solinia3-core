@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -217,6 +216,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				return;
 
 			solPlayer.doHPRegenTick();
+			
 			
 		} catch (CoreStateInitException e)
 		{

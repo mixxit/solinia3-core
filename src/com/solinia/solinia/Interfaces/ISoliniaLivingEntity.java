@@ -461,4 +461,6 @@ public interface ISoliniaLivingEntity {
 
 	void doMend();
 
+	void sendVitalsPacketsToAnyoneTargettingMe();
+
 }

@@ -222,4 +222,6 @@ public interface IEntityManager {
 
 	void setEntitySinging(UUID uniqueId, Integer spellId);
 
+	List<UUID> getReverseEntityTarget(UUID uniqueId);
+
 }

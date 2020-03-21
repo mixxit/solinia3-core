@@ -1,6 +1,5 @@
 package com.solinia.solinia.Models;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -14,8 +13,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.naming.InterruptedNamingException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -25,7 +22,6 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -37,11 +33,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
 import com.rit.sucy.player.TargetHelper;
-import com.solinia.solinia.Solinia3CorePlugin;
-import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -61,6 +53,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.DropUtils;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.MythicMobsUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
@@ -72,7 +65,6 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -1005,10 +997,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO check to see if target is a caster mob before performing a mana tap
 			// TODO range check our target, if we have one and it is not us
 			
-			if(spell_target == null) {
+			/*if(spell_target == null) {
 				//Log(Logs::Detail, Logs::Spells, "Spell %d: Targeted spell, but we have no target", spell_id);
 				return(false);
-			}
+			}*/
 			if (isproc) {
 				spellOnTarget(spell_id, spell_target, false, true, resist_adjust, true, level_override);
 			}/* else {
@@ -1212,10 +1204,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return false; // Only bards can attack while casting
 			}
 
-			if (other == null)
+			/*if (other == null)
 			{
 				return false; // Only bards can attack while casting
-			}
+			}*/
 
 			if ((isPlayer() && this.getBukkitLivingEntity() != null && this.getBukkitLivingEntity().isDead()) || (other.isPlayer() && other.getBukkitLivingEntity() != null && other.getBukkitLivingEntity().isDead()))
 			{
@@ -10042,5 +10034,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		tryIncreaseSkill(SkillType.Mend, 1);
+	}
+
+	@Override
+	public void sendVitalsPacketsToAnyoneTargettingMe() {
+		try {
+			for (UUID uuid : StateManager.getInstance().getEntityManager().getReverseEntityTarget(this.getBukkitLivingEntity().getUniqueId()))
+				if (Bukkit.getEntity(uuid) instanceof Player)
+					ForgeUtils.QueueSendForgeMessage((Player)Bukkit.getEntity(uuid),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,this.toPacketMobVitals(-1, false).toPacketData(),-1);
+		} catch (CoreStateInitException e) {
+			
+		}
 	}
 }

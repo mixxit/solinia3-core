@@ -84,6 +84,7 @@ import com.solinia.solinia.Timers.PlayerTickTimer;
 import com.solinia.solinia.Timers.PlayerTrackingTimer;
 import com.solinia.solinia.Timers.RegionExtentsDynmapTimer;
 import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
+import com.solinia.solinia.Timers.SoliniaLivingEntityUpdateTargetWindowTimer;
 import com.solinia.solinia.Timers.SoliniaZonesDynmapTimer;
 import com.solinia.solinia.Timers.SpellTickTimer;
 import com.solinia.solinia.Timers.StateCommitTimer;
@@ -108,6 +109,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private PlayerEquipmentTickTimer playerEquipmentTickTimer;
 	private ZoneTickTimer zoneTickTimer;
 	private SpellTickTimer spellTickTimer;
+	private SoliniaLivingEntityUpdateTargetWindowTimer soliniaLivingEntityUpdateTargetWindowTimer;
 	private NPCSpellCastTimer npcSpellCastTimer;
 	private NPCSummonAndTeleportCastTimer npcSummonCastTimer;
 	private PlayerInventoryValidatorTimer playerInventoryValidatorTimer;
@@ -476,6 +478,10 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		zoneTickTimer = new ZoneTickTimer();
 		zoneTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+		
+		
+		soliniaLivingEntityUpdateTargetWindowTimer = new SoliniaLivingEntityUpdateTargetWindowTimer();
+		soliniaLivingEntityUpdateTargetWindowTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
 		
 		spellTickTimer = new SpellTickTimer(this);
 		spellTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
