@@ -107,7 +107,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	{
 	            		if (latestitem.isSpellscroll())
 	            		{
-	            			Utils.SendHint(e.getPlayer(), HINT.PICKEDUP_SPELL, "PickedUpSpell");
+	            			Utils.SendHint(e.getPlayer(), HINT.PICKEDUP_SPELL, "PickedUpSpell", false, false);
 	            		}
 	            		
 	            		ItemStack latestitemstack = latestitem.asItemStack();

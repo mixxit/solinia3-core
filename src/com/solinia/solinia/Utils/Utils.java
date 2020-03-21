@@ -100,6 +100,7 @@ import com.solinia.solinia.Models.StatType;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -140,6 +141,8 @@ public class Utils {
 	public static final double DefProcPerMinAgiContrib = 0.075;
 
 	public static final float AvgDefProcsPerMinute = 2;
+
+	public static final boolean ClassicMasterWu = false;
 	
 	public static int GetLocalSayRange(String worldName)
 	{
@@ -4146,6 +4149,174 @@ public class Utils {
 		}
 	}
 
+	public static int getSkillTypeId(SkillType skillType) {
+		switch (skillType) {
+		case Slashing:
+			return 0;
+		case Crushing:
+			return 1;
+		case TwoHandBlunt:
+			return 2;
+		case TwoHandSlashing:
+			return 3;
+		case Abjuration:
+			return 4;
+		case Alteration:
+			return 5;
+		case ApplyPoison:
+			return 6;
+		case Archery:
+			return 7;
+		case Backstab:
+			return 8;
+		case BindWound:
+			return 9;
+		case Bash:
+			return 10;
+		case Block:
+			return 11;
+		case BrassInstruments:
+			return 12;
+		case Channeling:
+			return 13;
+		case Conjuration:
+			return 14;
+		case Defense:
+			return 15;
+		case Disarm:
+			return 16;
+		case DisarmTraps:
+			return 17;
+		case Divination:
+			return 18;
+		case Dodge:
+			return 19;
+		case DoubleAttack:
+			return 20;
+		case DragonPunch:
+			return 21;
+		case DualWield:
+			return 22;
+		case EagleStrike:
+			return 23;
+		case Evocation:
+			return 24;
+		case FeignDeath:
+			return 25;
+		case FlyingKick:
+			return 26;
+		case Forage:
+			return 27;
+		case HandtoHand:
+			return 28;
+		case Hide:
+			return 29;
+		case Kick:
+			return 30;
+		case Meditation:
+			return 31;
+		case Mend:
+			return 32;
+		case Offense:
+			return 33;
+		case Parry:
+			return 34;
+		case PickLock:
+			return 35;
+		case OneHandPiercing:
+			return 36;
+		case Riposte:
+			return 37;
+		case RoundKick:
+			return 38;
+		case SafeFall:
+			return 39;
+		case SenseHeading:
+			return 40;
+		case Singing:
+			return 41;
+		case Sneak:
+			return 42;
+		case SpecialiseAbjuration:
+			return 43;
+		case SpecialiseAlteration:
+			return 44;
+		case SpecialiseConjuration:
+			return 45;
+		case SpecialiseDivination:
+			return 46;
+		case SpecialiseEvocation:
+			return 47;
+		case PickPockets:
+			return 48;
+		case StringedInstruments:
+			return 49;
+		case Swimming:
+			return 50;
+		case Throwing:
+			return 51;
+		case TigerClaw:
+			return 52;
+		case Tracking:
+			return 53;
+		case WindInstruments:
+			return 54;
+		case Fishing:
+			return 55;
+		case MakePoison:
+			return 56;
+		case Tinkering:
+			return 57;
+		case Research:
+			return 58;
+		case Alchemy:
+			return 59;
+		case Baking:
+			return 60;
+		case Tailoring:
+			return 61;
+		case SenseTraps:
+			return 62;
+		case Blacksmithing:
+			return 63;
+		case Fletching:
+			return 64;
+		case Brewing:
+			return 65;
+		case AlcoholTolerance:
+			return 66;
+		case Begging:
+			return 67;
+		case JewelryMaking:
+			return 68;
+		case Pottery:
+			return 69;
+		case PercussionInstruments:
+			return 70;
+		case Intimidation:
+			return 71;
+		case Berserking:
+			return 72;
+		case Taunt:
+			return 73;
+		case Frenzy:
+			return 74;
+		case RemoveTraps:
+			return 75;
+		case TripleAttack:
+			return 76;
+		case TwoHandPiercing:
+			return 77;
+		case None:
+			return 78;
+		case Count:
+			return 79;
+		case TailRake:
+			return 80;
+		default:
+			return -1;
+		}
+	}
 	public static boolean isInvalidNpcSpell(ISoliniaSpell spell) {
 		if (spell.getSpellEffectTypes().contains(SpellEffectType.Gate)
 				|| spell.getSpellEffectTypes().contains(SpellEffectType.Teleport)
@@ -5687,10 +5858,31 @@ public class Utils {
 		return Boolean.parseBoolean(isMerchant);
 	}
 
-	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode) {
+	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby, boolean actionBar) {
+		ChatMessageType type = ChatMessageType.CHAT;
+		if(actionBar == true)
+			type = ChatMessageType.ACTION_BAR;
+		
 		String message = "";
 		switch (hint)
 		{
+		case MASTERWUFULL:
+			message = "The spirit of The Master fills you!  You gain " +referenceCode+ " additional attack(s).";
+			break;
+		case HITFORDMGBY:
+			String[] referenceCodes = referenceCode.split(",");
+			String defender = referenceCodes[0];
+			String damage = referenceCodes[1];
+			String skilltype = referenceCodes[2];
+			String attacker = referenceCodes[3];
+			message = defender + " was hit for " + damage + " points of " + skilltype + " damage by " + attacker;
+			break;
+		case HITTHEMBUTMISSED:
+			message = "You tried to hit " + referenceCode + ", but missed!";
+			break;
+		case HITYOUBUTMISSED:
+			message = referenceCode + " tried to hit you but missed!";
+			break;
 		case NEED_TARGET:
 			message = "You must select a target (See SoliniaMOD Keybinds)";
 			break;
@@ -5701,7 +5893,15 @@ public class Utils {
 			break;
 		}
 		
-		entity.sendMessage(ChatColor.GRAY + message + ChatColor.RESET);
+		if (entity instanceof Player)
+			((Player)entity).spigot().sendMessage(type, new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
+		
+		if(sendNearby)
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.getLocation().distance(entity.getLocation()) <= Utils.GetLocalSayRange(entity.getLocation().getWorld().getName()))
+				player.spigot().sendMessage(type,new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
+		}
+		
 	}
 	
 	public static List<String> pickNRandom(List<String> lst, int n) {

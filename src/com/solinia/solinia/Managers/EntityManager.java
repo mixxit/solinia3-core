@@ -1554,7 +1554,7 @@ public class EntityManager implements IEntityManager {
 					return;
 				}
 				
-				livingEntity.sendMessage("You begin casting " + castingSpell.getSpell().getName());
+				livingEntity.sendMessage("You begin your ability " + castingSpell.getSpell().getName());
 				
 				playSpellCastingSoundEffect(livingEntity,castingSpell.getSpell());
 				
@@ -1707,7 +1707,7 @@ public class EntityManager implements IEntityManager {
 			if (entity instanceof Player && (!((Player)entity).isDead()))
 			{
 				Player player = (Player)entity;
-				player.sendMessage("You finish casting");
+				player.sendMessage("You finish your ability");
 				try {
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					solPlayer.castingComplete(entitySpellCasting.get(entityUUID));

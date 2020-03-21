@@ -41,6 +41,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.rit.sucy.player.TargetHelper;
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -1635,7 +1636,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (attacker) {
 				if (skill_used == EQEmu::skills::SkillBash) {
 					can_stun = true;
-					if (attacker->IsClient())
+					if (attacker->isPlayer())
 						stunbash_chance = attacker->spellbonuses.StunBashChance +
 						attacker->itembonuses.StunBashChance +
 						attacker->aabonuses.StunBashChance;
@@ -1670,13 +1671,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						}
 						else {
 							// stun resist passed!
-							if (IsClient())
+							if (isPlayer())
 								Message_StringID(MT_Stun, SHAKE_OFF_STUN);
 						}
 					}
 					else {
 						// stun resist 2 passed!
-						if (IsClient())
+						if (isPlayer())
 							Message_StringID(MT_Stun, AVOID_STUNNING_BLOW);
 					}
 				}
@@ -1718,7 +1719,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				//Note: if players can become pets, they will not receive damage messages of their own
 				//this was done to simplify the code here (since we can only effectively skip one mob on queue)
 				
-				this.filteredMessageClose(this.getBukkitLivingEntity(),getName() + " was hit for " + damage + " points of " + skillType.name().toUpperCase() + " damage by " + attacker.getName(), true);
+				Utils.SendHint(getBukkitLivingEntity(), HINT.HITFORDMGBY,getBukkitLivingEntity().getCustomName()+","+damage+","+skillType.name().toUpperCase()+","+attacker.getName(),true, true);
 				
 				ISoliniaLivingEntity skip = attacker;
 				if (attacker != null && attacker.getOwnerEntity() != null) {
@@ -3274,6 +3275,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		int dmg = getBaseSkillDamage(skill_to_use, getEntityTarget());	
 		
+		if (skill_to_use == SkillType.Bash) {
+			if (ca_target!=this) {
+				//DoAnim(animTailRake, 0, false);
+
+				if (getWeaponDamage(ca_target, getBukkitLivingEntity().getEquipment().getItemInOffHand(), 0) <= 0 
+						//&& getWeaponDamage(ca_target, GetInv().GetItem(EQEmu::invslot::slotShoulders)) <= 0
+						)
+					dmg = Utils.DMG_INVULNERABLE;
+
+				//ReuseTime = (BashReuseTime - 1) / HasteMod;
+
+				doSpecialAttackDamage(ca_target, SkillType.Bash, dmg, 0, -1, ReuseTime);
+
+				/*if(ReuseTime > 0 && !isRiposte) {
+					p_timers.Start(pTimerCombatAbility, ReuseTime);
+				}*/
+			}
+			return;
+		}
+		
 		if (skill_to_use.equals(SkillType.Kick))
 		{
 			if(!ca_target.getBukkitLivingEntity().getUniqueId().equals(this.getBukkitLivingEntity().getUniqueId()) 
@@ -3289,8 +3310,171 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				doSpecialAttackDamage(ca_target, SkillType.Kick, dmg, 0, -1, ReuseTime);
 			}
 		}
+		
+		if (skill_to_use == SkillType.FlyingKick || skill_to_use == SkillType.DragonPunch || skill_to_use ==SkillType.EagleStrike || skill_to_use == SkillType.TigerClaw || skill_to_use == SkillType.RoundKick) {
+			//ReuseTime = monkSpecialAttack(ca_target, skill_to_use) - 1;
+			monkSpecialAttack(ca_target, skill_to_use);
+
+			if (isRiposte)
+				return;
+
+			//Live AA - Technique of Master Wu
+			int wuchance = getItemBonuses(SpellEffectType.DoubleSpecialAttack) + getSpellBonuses(SpellEffectType.DoubleSpecialAttack) + getAABonuses(SpellEffectType.DoubleSpecialAttack);
+			if (wuchance > 0) {
+				int[] MonkSPA = {Utils.getSkillTypeId(SkillType.FlyingKick), Utils.getSkillTypeId(SkillType.DragonPunch),
+						Utils.getSkillTypeId(SkillType.EagleStrike), Utils.getSkillTypeId(SkillType.TigerClaw),
+						Utils.getSkillTypeId(SkillType.RoundKick)};
+				int extra = 0;
+				// always 1/4 of the double attack chance, 25% at rank 5 (100/4)
+				while (wuchance > 0) {
+					if (Utils.Roll(wuchance))
+						extra++;
+					else
+						break;
+					wuchance /= 4;
+				}
+				// They didn't add a string ID for this.
+				Utils.SendHint(this.getBukkitLivingEntity(), HINT.MASTERWUFULL, Integer.toString(extra), false,false);
+				//std::string msg = StringFormat("The spirit of Master Wu fills you!  You gain %d additional attack(s).", extra);
+				// live uses 400 here -- not sure if it's the best for all clients though
+				//SendColoredText(400, msg);
+				boolean classic = Utils.ClassicMasterWu;
+				while (extra > 0) {
+					monkSpecialAttack(ca_target,
+							  classic ? Utils.getSkillType(MonkSPA[Utils.RandomBetween(0, 4)]) : skill_to_use);
+					extra--;
+				}
+			}
+		}
 	}
 	
+	private int monkSpecialAttack(ISoliniaLivingEntity other, SkillType unchecked_type) {
+		if (other == null)
+			return 0;
+
+		int ndamage = 0;
+		int max_dmg = 0;
+		int min_dmg = 0;
+		int reuse = 0;
+		SkillType skill_type; // to avoid casting... even though it "would work"
+		int itemslot = InventorySlot.Feet;
+		/*if (IsNPC()) {
+			this.getNPC().dama
+			min_dmg = npc->GetMinDamage();
+		}*/
+
+		switch (unchecked_type) {
+		case FlyingKick:
+			skill_type = SkillType.FlyingKick;
+			max_dmg = getBaseSkillDamage(skill_type,null);
+			min_dmg = 0; // revamped FK formula is missing the min mod?
+			//DoAnim(animFlyingKick, 0, false);
+			//reuse = FlyingKickReuseTime;
+			break;
+		case DragonPunch:
+			skill_type = SkillType.DragonPunch;
+			max_dmg = getBaseSkillDamage(skill_type,null);
+			itemslot = InventorySlot.Hands;
+			//DoAnim(animTailRake, 0, false);
+			//reuse = TailRakeReuseTime;
+			break;
+		case EagleStrike:
+			skill_type = SkillType.EagleStrike;
+			max_dmg = getBaseSkillDamage(skill_type,null);
+			itemslot = InventorySlot.Hands;
+			//DoAnim(animEagleStrike, 0, false);
+			//reuse = EagleStrikeReuseTime;
+			break;
+		case TigerClaw:
+			skill_type = SkillType.TigerClaw;
+			max_dmg = getBaseSkillDamage(skill_type,null);
+			itemslot = InventorySlot.Hands;
+			//DoAnim(animTigerClaw, 0, false);
+			//reuse = TigerClawReuseTime;
+			break;
+		case RoundKick:
+			skill_type = SkillType.RoundKick;
+			max_dmg = getBaseSkillDamage(skill_type,null);
+			//DoAnim(animRoundKick, 0, false);
+			//reuse = RoundKickReuseTime;
+			break;
+		case Kick:
+			skill_type = SkillType.Kick;
+			max_dmg = getBaseSkillDamage(skill_type,null);
+			//DoAnim(animKick, 0, false);
+			//reuse = KickReuseTime;
+			break;
+		default:
+			//Log(Logs::Detail, Logs::Attack, "Invalid special attack type %d attempted", unchecked_type);
+			return (1000); /* nice long delay for them, the caller depends on this! */
+		}
+
+		if (isPlayer()) {
+			if (getWeaponDamage(other, getItemStackBySlot(itemslot),0) <= 0) {
+				max_dmg = Utils.DMG_INVULNERABLE;
+			}
+		} else {
+			if (getWeaponDamage(other, getItemStackBySlot(itemslot),0) <= 0) {
+				max_dmg = Utils.DMG_INVULNERABLE;
+			}
+		}
+
+		int ht = 0;
+		if (max_dmg > 0)
+			ht = max_dmg;
+
+		// This can potentially stack with changes to kick damage
+		//ht = ndamage = mod_monk_special_damage(ndamage, skill_type);
+		ht = ndamage;
+		doSpecialAttackDamage(other, skill_type, max_dmg, min_dmg, ht, reuse);
+
+		return reuse;
+	}
+
+	private int mod_monk_special_damage(int ndamage, SkillType skill_type) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private ItemStack getItemStackBySlot(int itemslot) {
+		switch (itemslot)
+		{
+		case InventorySlot.Charm: return null;
+		case InventorySlot.Ear1: return null;
+		case InventorySlot.Head: return this.getBukkitLivingEntity().getEquipment().getHelmet();
+		case InventorySlot.Face: return null;
+		case InventorySlot.Ear2: return null;
+		case InventorySlot.Neck: return null;
+		case InventorySlot.Shoulders: return null;
+		case InventorySlot.Arms: return null;
+		case InventorySlot.Back: return null;
+		case InventorySlot.Wrist1: return null;
+		case InventorySlot.Wrist2: return null;
+		case InventorySlot.Range: return this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+		case InventorySlot.Hands: return null;
+		case InventorySlot.Primary: return this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+		case InventorySlot.Secondary: return this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+		case InventorySlot.Finger1: return null;
+		case InventorySlot.Finger2: return null;
+		case InventorySlot.Chest: return this.getBukkitLivingEntity().getEquipment().getChestplate();
+		case InventorySlot.Legs: return this.getBukkitLivingEntity().getEquipment().getLeggings();
+		case InventorySlot.Feet: return this.getBukkitLivingEntity().getEquipment().getBoots();
+		case InventorySlot.Waist: return null;
+		case InventorySlot.Ammo: return null;
+		case InventorySlot.General1: return null;
+		case InventorySlot.General2: return null;
+		case InventorySlot.General3: return null;
+		case InventorySlot.General4: return null;
+		case InventorySlot.General5: return null;
+		case InventorySlot.General6: return null;
+		case InventorySlot.General7: return null;
+		case InventorySlot.General8: return null;
+		case InventorySlot.Cursor: return null;
+		default:
+			return null;
+		}
+	}
+
 	private void doSpecialAttackDamage(ISoliniaLivingEntity who, SkillType skill, int base_damage, int min_damage, int hate_override,
 			int ReuseTime) {
 		// this really should go through the same code as normal melee damage to
@@ -3325,7 +3509,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		/* TODO BASH
 		if (skill == SkillTypeBash) {
-			if (IsClient()) {
+			if (isPlayer()) {
 				EQEmu::ItemInstance *item = CastToClient()->GetInv().GetItem(EQEmu::invslot::slotSecondary);
 				if (item) {
 					if (item->GetItem()->ItemType == EQEmu::item::ItemTypeShield) {
@@ -3383,35 +3567,135 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getBaseSkillDamage(SkillType skill, LivingEntity entityTarget) {
-		int base = getBaseDamage(skill);
-		int skill_level = getSkill(skill);
-		switch (skill) {
-		case Kick: {
-			// there is some base *= 4 case in here?
-			float skill_bonus = skill_level / 10.0f;
-			float ac_bonus = 0.0f;
-			if (isPlayer()) {
-				
-				if (getBukkitLivingEntity().getEquipment().getBoots() != null)
+		try
+		{
+			int base = getBaseDamage(skill);
+			int skill_level = getSkill(skill);
+			switch (skill) {
+			case Frenzy:
+				if (isPlayer() && this.getBukkitLivingEntity().getEquipment().getItemInMainHand() != null) {
+					if (getLevel() > 15)
+						base += getLevel() - 15;
+					if (base > 23)
+						base = 23;
+					if (getLevel() > 50)
+						base += 2;
+					if (getLevel() > 54)
+						base++;
+					if (getLevel() > 59)
+						base++;
+				}
+				return base;
+			case FlyingKick: {
+				float skill_bonus = skill_level / 9.0f;
+				float ac_bonus = 0.0f;
+				if (isPlayer()) {
+					ItemStack inst = this.getBukkitLivingEntity().getEquipment().getBoots();
+					if (inst != null)
+					{
+						try
+						{
+							ISoliniaItem solItem = SoliniaItemAdapter.Adapt(inst);
+							ac_bonus = solItem.getAC() / 25.0f;
+						} catch (SoliniaItemException e)
+						{
+							
+						}
+						
+					}
+				}
+				if (ac_bonus > skill_bonus)
+					ac_bonus = skill_bonus;
+				return (int)(ac_bonus + skill_bonus);
+			}
+			case Kick: {
+				// there is some base *= 4 case in here?
+				float skill_bonus = skill_level / 10.0f;
+				float ac_bonus = 0.0f;
+				if (isPlayer()) {
+					
+					if (getBukkitLivingEntity().getEquipment().getBoots() != null)
+					{
+						try
+						{
+							ISoliniaItem item = SoliniaItemAdapter.Adapt(getBukkitLivingEntity().getEquipment().getBoots());
+							if (item != null)
+								ac_bonus = item.getAC() / 25.0f;
+						} catch (CoreStateInitException e)
+						{
+							
+						} catch (SoliniaItemException e) {
+							// not a valid sol item
+						}
+					}
+				}
+				if (ac_bonus > skill_bonus)
+					ac_bonus = skill_bonus;
+				return (int)(ac_bonus + skill_bonus);
+			}
+			case Bash: {
+				float skill_bonus = skill_level / 10.0f;
+				float ac_bonus = 0.0f;
+				ItemStack inst = null;
+				if (isPlayer()) {
+					if (hasShieldEquiped())
+					{
+						inst = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+					}
+					else if (hasTwoHanderEquipped())
+					{
+						inst = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+					}
+				}
+				if (inst != null)
 				{
 					try
 					{
-						ISoliniaItem item = SoliniaItemAdapter.Adapt(getBukkitLivingEntity().getEquipment().getBoots());
-						if (item != null)
-							ac_bonus = item.getAC() / 25.0f;
-					} catch (CoreStateInitException e)
+						ISoliniaItem solItem = SoliniaItemAdapter.Adapt(inst);
+						ac_bonus = solItem.getAC() / 25.0f;
+					} catch (SoliniaItemException e)
 					{
 						
-					} catch (SoliniaItemException e) {
-						// not a valid sol item
 					}
 				}
+				else
+					return 0; // return 0 in cases where we don't have an item
+				if (ac_bonus > skill_bonus)
+					ac_bonus = skill_bonus;
+				return (int)(ac_bonus + skill_bonus);
 			}
-			if (ac_bonus > skill_bonus)
-				ac_bonus = skill_bonus;
-			return (int)(ac_bonus + skill_bonus);
-		}
-		default:
+			/*case SkillType.Backstab: {
+				float skill_bonus = (float)(skill_level) * 0.02f;
+				base = 3; // There seems to be a base 3 for NPCs or some how BS w/o weapon?
+				// until we get a better inv system for NPCs they get nerfed!
+				if (isPlayer()) {
+					auto *inst = CastToClient()->GetInv().GetItem(EQEmu::invslot::slotPrimary);
+					if (inst && inst->GetItem() && inst->GetItem()->ItemType == EQEmu::item::ItemType1HPiercing) {
+						base = inst->GetItemBackstabDamage(true);
+						if (!inst->GetItemBackstabDamage())
+							base += inst->GetItemWeaponDamage(true);
+						if (target) {
+							if (inst->GetItemElementalFlag(true) && inst->GetItemElementalDamage(true))
+								base += target->ResistElementalWeaponDmg(inst);
+							if (inst->GetItemBaneDamageBody(true) || inst->GetItemBaneDamageRace(true))
+								base += target->CheckBaneDamage(inst);
+						}
+					}
+				} else if (isNPC()) {
+					auto *npc = CastToNPC();
+					base = std::max(base, npc->GetBaseDamage());
+					// parses show relatively low BS mods from lots of NPCs, so either their BS skill is super low
+					// or their mod is divided again, this is probably not the right mod, but it's better
+					skill_bonus /= 3.0f;
+				}
+				// ahh lets make sure everything is casted right :P ugly but w/e
+				return static_cast<int>(static_cast<float>(base) * (skill_bonus + 2.0f));
+			}*/
+			default:
+				return 0;
+			}
+		} catch (CoreStateInitException e)
+		{
 			return 0;
 		}
 	}
@@ -3495,14 +3779,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			} else {
 				if (getBukkitLivingEntity() instanceof Player) {
-					((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent("You tried to hit " + other.getBukkitLivingEntity().getCustomName()
-									+ ", but missed!"));
+
+					Utils.SendHint(getBukkitLivingEntity(), HINT.HITTHEMBUTMISSED, other.getBukkitLivingEntity().getCustomName(),false, true);
 				}
 				if (other.getBukkitLivingEntity() instanceof Player) {
-					((Player) other.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(
-									getBukkitLivingEntity().getCustomName() + " tried to hit you, but missed!"));
+					Utils.SendHint(other.getBukkitLivingEntity(), HINT.HITYOUBUTMISSED, getBukkitLivingEntity().getCustomName(), false, true);
 					try {
 						ISoliniaPlayer solplayer = SoliniaPlayerAdapter
 								.Adapt((Player) other.getBukkitLivingEntity());
@@ -3562,7 +3843,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (defender->GetClass() == MONK)
 				defender->MonkSpecialAttack(this, defender->aabonuses.GiveDoubleRiposte[2]);
-			else if (defender->IsClient()) // so yeah, even if you don't have the skill you can still do the attack :P (and we don't crash anymore)
+			else if (defender->isPlayer()) // so yeah, even if you don't have the skill you can still do the attack :P (and we don't crash anymore)
 				defender->CastToClient()->DoClassAttacks(this, defender->aabonuses.GiveDoubleRiposte[2], true);
 		}
 		*/
@@ -3780,9 +4061,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (defender.isPlayer() && defender.getClassObj() != null
 					&& defender.getClassObj().getName().equals("WARRIOR"))
 				dmgbonusmod -= 5;
-			// 168 defensive
-			// dmgbonusmod += (defender->spellbonuses.MeleeMitigationEffect +
-			// itembonuses.MeleeMitigationEffect + aabonuses.MeleeMitigationEffect);
+			// 168 defensive MeleeMitigation
+			dmgbonusmod += (defender.getSpellBonuses(SpellEffectType.MeleeMitigation) +
+			getItemBonuses(SpellEffectType.MeleeMitigation) + getAABonuses(SpellEffectType.MeleeMitigation));
 		}
 
 		damage_done += damage_done * dmgbonusmod / 100;
@@ -4332,7 +4613,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (MagicWeapon) {
 					/*TODO RECOmmended Levels
 					 * int rec_level = weapon_item->GetItemRecommendedLevel(true);
-					if (IsClient() && GetLevel() < rec_level)
+					if (isPlayer() && GetLevel() < rec_level)
 						dmg = CastToClient()->CalcRecommendedLevelBonus(
 							GetLevel(), rec_level, weapon_item->GetItemWeaponDamage(true));
 					else*/
@@ -4386,7 +4667,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		else {
 			if (weapon_item != null) {
 				/*auto rec_level = weapon_item->GetItemRecommendedLevel(true);
-				if (IsClient() && GetLevel() < rec_level) {
+				if (isPlayer() && GetLevel() < rec_level) {
 					dmg = calcRecommendedLevelBonus(
 						getLevel(), rec_level, weapon_item.getItemWeaponDamage(true));
 				}

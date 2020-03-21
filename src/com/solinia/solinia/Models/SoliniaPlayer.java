@@ -1117,13 +1117,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 			if (this.isMezzed())
 			{
-				getBukkitPlayer().sendMessage("* You cannot cast while mezzed!");
+				getBukkitPlayer().sendMessage("* You cannot use an ability while mezzed!");
 				return;
 			}
 			
 			if (this.isStunned())
 			{
-				getBukkitPlayer().sendMessage("* You cannot cast while stunned!");
+				getBukkitPlayer().sendMessage("* You cannot use an ability while stunned!");
 				return;
 			}
 
@@ -1271,13 +1271,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 			if (this.isMezzed())
 			{
-				getBukkitPlayer().sendMessage("* You cannot cast while mezzed!");
+				getBukkitPlayer().sendMessage("* You cannot use an ability while mezzed!");
 				return;
 			}
 			
 			if (this.isStunned())
 			{
-				getBukkitPlayer().sendMessage("* You cannot cast while stunned!");
+				getBukkitPlayer().sendMessage("* You cannot use an ability while stunned!");
 				return;
 			}
 
@@ -1628,13 +1628,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 			if (this.isMezzed())
 			{
-				getBukkitPlayer().sendMessage("* You cannot cast while mezzed!");
+				getBukkitPlayer().sendMessage("* You cannot use an ability while mezzed!");
 				return;
 			}
 			
 			if (this.isStunned())
 			{
-				getBukkitPlayer().sendMessage("* You cannot cast while stunned!");
+				getBukkitPlayer().sendMessage("* You cannot use an ability while stunned!");
 				return;
 			}
 
@@ -1668,11 +1668,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					this.setEntityTarget(pet);
 					return true;
 				} else {
-					Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetI");
+					Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetI", false, false);
 					return false;
 				}
 			} else {
-				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetII");
+				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetII", false, false);
 				return false;
 			}
 		} catch (CoreStateInitException e) {
@@ -1778,7 +1778,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			} else {
 				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Not target");
-				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "spellitem");
+				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "spellitem", false, false);
 				return;
 			}
 		}
