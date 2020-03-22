@@ -4226,14 +4226,14 @@ public class SoliniaSpell implements ISoliniaSpell {
 					if (npc.isBoss() || npc.isRaidboss())
 						if (!soliniaSpell.isBossApplyable()) {
 							source.sendMessage(
-									ChatColor.RED + "This NPC is immune to runspeed and mezmersization changes");
+									ChatColor.RED + "This NPC is immune to runspeed, gravity and mezmersization changes");
 							return false;
 						}
 
 					if (npc.isRaidheroic())
 						if (!soliniaSpell.isRaidApplyable()) {
 							source.sendMessage(
-									ChatColor.RED + "This NPC is immune to runspeed and mezmersization changes");
+									ChatColor.RED + "This NPC is immune to runspeed, gravity and mezmersization changes");
 							return false;
 						}
 				}
@@ -5473,6 +5473,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public boolean isBossApplyable() {
 		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed)
+				|| getSpellEffectTypes().contains(SpellEffectType.GravityEffect)
 				|| getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed)
 				|| getSpellEffectTypes().contains(SpellEffectType.Mez) || isCharmSpell()
 				|| getSpellEffectTypes().contains(SpellEffectType.Root)
@@ -5485,6 +5486,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public boolean isRaidApplyable() {
 		if (getSpellEffectTypes().contains(SpellEffectType.MovementSpeed)
+				|| getSpellEffectTypes().contains(SpellEffectType.GravityEffect)
 				|| getSpellEffectTypes().contains(SpellEffectType.BaseMovementSpeed)
 				|| getSpellEffectTypes().contains(SpellEffectType.Mez) || isCharmSpell()
 				|| getSpellEffectTypes().contains(SpellEffectType.Root)
