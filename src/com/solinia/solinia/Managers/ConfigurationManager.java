@@ -576,13 +576,6 @@ public class ConfigurationManager implements IConfigurationManager {
 		{
 			soliniaid = Long.toString(ItemStackUtils.getSoliniaItemId(itemStack));
 		}
-		else 
-		{
-			// Classic method, to be removed
-			net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-			NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-			soliniaid = compound.getString("soliniaid");
-		}
 		
 		if (soliniaid == null || soliniaid.equals(""))
 			return null;

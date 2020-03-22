@@ -1369,30 +1369,23 @@ public class SoliniaNPC implements ISoliniaNPC {
 			for (ItemStack itemstack : itemStacks) {
 				if (itemstack == null)
 					continue;
+
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+				if (item == null)
+					continue;
 				
-				if (itemstack.getItemMeta() != null && itemstack.getItemMeta().getDisplayName() != null)
-				{
-					Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Checking if itemStack is SoliniaItem: " + itemstack.getItemMeta().getDisplayName());
-				}
+				Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Found SoliniaItem: " + item.getId());
 
-				if (ItemStackUtils.IsSoliniaItem(itemstack)) {
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-					if (item == null)
-						continue;
-					
-					Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Found SoliniaItem: " + item.getId());
+				if (item.isSpellscroll())
+					continue;
 
-					if (item.isSpellscroll())
-						continue;
+				items.add(item);
 
-					items.add(item);
-
-					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
-					ISoliniaItem augItem = null;
-					if (augmentationId != null && augmentationId != 0) {
-						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-						items.add(augItem);
-					}
+				Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+				ISoliniaItem augItem = null;
+				if (augmentationId != null && augmentationId != 0) {
+					augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					items.add(augItem);
 				}
 			}
 		} catch (CoreStateInitException e) {

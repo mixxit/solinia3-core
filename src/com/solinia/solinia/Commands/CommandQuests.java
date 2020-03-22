@@ -56,7 +56,7 @@ public class CommandQuests implements CommandExecutor {
 				if (questFlags.contains(playerQuest.getQuest().getQuestFlagCompletion().toUpperCase()))
 					continue;
 				
-				player.sendMessage(ChatColor.LIGHT_PURPLE + playerQuest.getQuest().getName() + ChatColor.RESET + " Complete: " + playerQuest.isComplete());
+				player.sendMessage(playerQuest.getQuest().getId() + " " + ChatColor.LIGHT_PURPLE + playerQuest.getQuest().getName() + ChatColor.RESET + " Complete: " + playerQuest.isComplete());
 				sendQuestSteps(player,playerQuest,questFlags);
 			}
 		} catch (CoreStateInitException e)

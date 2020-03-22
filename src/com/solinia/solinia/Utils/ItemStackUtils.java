@@ -147,6 +147,10 @@ public class ItemStackUtils {
 		if(itemMeta.getCustomTagContainer().hasCustomTag(soliniaIdKey , ItemTagType.INTEGER)) {
 		    return itemMeta.getCustomTagContainer().getCustomTag(soliniaIdKey, ItemTagType.INTEGER);
 		}
+		// NPCS store it as a string
+		if(itemMeta.getCustomTagContainer().hasCustomTag(soliniaIdKey , ItemTagType.STRING)) {
+		    return Integer.parseInt(itemMeta.getCustomTagContainer().getCustomTag(soliniaIdKey, ItemTagType.STRING));
+		}
 		
 		return null;
 	}
