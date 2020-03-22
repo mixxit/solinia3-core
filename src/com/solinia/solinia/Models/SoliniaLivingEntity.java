@@ -1419,6 +1419,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		if (other.isInvulnerable())
 			return;
+		
+		Utils.DebugLog("SoliniaLivingEntity", "Damage", this.getBukkitLivingEntity().getName(), "Incoming call to Damage with damage: " + damage + " avoidable: " + avoidable);
 
 		if (spell_id == 0)
 			spell_id = Utils.SPELL_UNKNOWN;
@@ -1472,6 +1474,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private void CommonDamage(ISoliniaLivingEntity attacker, int damage, int spell_id, SkillType skillType,
 			boolean avoidable, int buffslot, boolean iBuffTic) {
 		// This method is called with skill_used=ABJURE for Damage Shield damage.
+		Utils.DebugLog("SoliniaLivingEntity", "CommonDamage", this.getBukkitLivingEntity().getCustomName(), "Incoming CommonDamage: " + damage + " from attacker: " + attacker.getBukkitLivingEntity().getName());
 		boolean FromDamageShield = (skillType.equals(SkillType.Abjuration));
 		boolean ignore_invul = false;
 		if (IsValidSpell(spell_id))
@@ -1711,7 +1714,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				//Note: if players can become pets, they will not receive damage messages of their own
 				//this was done to simplify the code here (since we can only effectively skip one mob on queue)
 				
-				Utils.SendHint(getBukkitLivingEntity(), HINT.HITFORDMGBY,getBukkitLivingEntity().getCustomName()+","+damage+","+skillType.name().toUpperCase()+","+attacker.getName(),true, true);
+				Utils.SendHint(getBukkitLivingEntity(), HINT.HITFORDMGBY,getBukkitLivingEntity().getCustomName()+","+damage+","+skillType.name().toUpperCase()+","+attacker.getName(),true, false);
 				
 				ISoliniaLivingEntity skip = attacker;
 				if (attacker != null && attacker.getOwnerEntity() != null) {
@@ -3266,7 +3269,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		
 		int dmg = getBaseSkillDamage(skill_to_use, getEntityTarget());	
-		
+		Utils.DebugLog("SoliniaLivingEntity", "doClassAttacks", this.getBukkitLivingEntity().getName(), "BaseSkillDamage: " + dmg);
 		if (skill_to_use == SkillType.Bash) {
 			if (ca_target!=this) {
 				//DoAnim(animTailRake, 0, false);
@@ -3480,6 +3483,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!Utils.isValidSkill(skill.name().toUpperCase()))
 			return;
 
+		Utils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity().getName(),"doSpecialAttackDamage basedmg: " + base_damage + " with min_damage: " + min_damage);
 		DamageHitInfo my_hit = new DamageHitInfo();
 		my_hit.damage_done = 1; // min 1 dmg
 		my_hit.base_damage = base_damage;
@@ -3517,8 +3521,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		*/
 
+		Utils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity().getName(),"damage_done before offense() check: " + my_hit.damage_done);
 		my_hit.offense = offense(my_hit.skill);
+		Utils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity().getName(),"damage_done before gettotaltohit() check: " + my_hit.damage_done);
 		my_hit.tohit = getTotalToHit(my_hit.skill, 0);
+		Utils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity().getName(),"damage_done after gettotaltohit() check: " + my_hit.damage_done);
 
 		my_hit.hand = InventorySlot.Primary; // Avoid checks hand for throwing/archery exclusion, primary should
 							  // work for most
@@ -3564,6 +3571,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			int base = getBaseDamage(skill);
 			int skill_level = getSkill(skill);
 			switch (skill) {
+			case DragonPunch:
+			case EagleStrike:
+			case TigerClaw:
+			case RoundKick:
+				if (skill_level >= 25)
+					base++;
+				if (skill_level >= 75)
+					base++;
+				if (skill_level >= 125)
+					base++;
+				if (skill_level >= 175)
+					base++;
+				return base;
 			case Frenzy:
 				if (isPlayer() && this.getBukkitLivingEntity().getEquipment().getItemInMainHand() != null) {
 					if (getLevel() > 15)
@@ -3732,6 +3752,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return hit;
 		
 		// for riposte
+		Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "Start of doAttack damage done: " + hit.damage_done);
 		int originalDamage = hit.damage_done;
 		hit = other.avoidDamage(this, hit);
 
@@ -3759,6 +3780,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
+		Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "Damage done: " + hit.damage_done);
 		if (hit.damage_done >= 0) {
 			if (other.checkHitChance(this, hit)) {
 				hit = other.meleeMitigation(this, hit);
