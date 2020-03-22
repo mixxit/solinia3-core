@@ -3076,23 +3076,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (itemstack == null)
 					continue;
 
-				if (ItemStackUtils.IsSoliniaItem(itemstack)) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
+				if (item == null)
+					continue;
 
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-					if (item == null)
-						continue;
+				if (item.isSpellscroll())
+					continue;
 
-					if (item.isSpellscroll())
-						continue;
+				items.add(item);
 
-					items.add(item);
-
-					Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
-					ISoliniaItem augItem = null;
-					if (augmentationId != null && augmentationId != 0) {
-						augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-						items.add(augItem);
-					}
+				Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
+				ISoliniaItem augItem = null;
+				if (augmentationId != null && augmentationId != 0) {
+					augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					items.add(augItem);
 				}
 			}
 

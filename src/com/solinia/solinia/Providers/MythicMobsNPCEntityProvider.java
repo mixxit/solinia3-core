@@ -252,6 +252,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		customitem += "  NBT:\r" + System.lineSeparator();
 		customitem += "    PublicBukkitValues:\r" + System.lineSeparator();
 		customitem += "      solinia3core:appearanceid: "+item.getAppearanceId()+"\r" + System.lineSeparator();
+		customitem += "      solinia3core:soliniaid: "+item.getId()+"\r" + System.lineSeparator();
+		customitem += "      solinia3core:sollastupdated: "+item.getLastUpdatedTime()+"\r" + System.lineSeparator();
 		
 		customitem += "  Enchantments:\r" + System.lineSeparator();
 		customitem += "    DURABILITY: " + (1000 + item.getId()) + "\r" + System.lineSeparator();

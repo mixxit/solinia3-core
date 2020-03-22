@@ -139,22 +139,13 @@ public class ItemStackUtils {
 	{
 		if (itemStack == null)
 			return null;
-
-		if (itemStack.getItemMeta() == null)
-		{
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		if (itemMeta == null)
 			return null;
-		}
 		
 		NamespacedKey soliniaIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaid");
-		ItemMeta itemMeta = itemStack.getItemMeta();
-		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
-		// old system
-		if(tagContainer.hasCustomTag(soliniaIdKey , ItemTagType.STRING)) {
-			itemMeta.getCustomTagContainer().setCustomTag(soliniaIdKey, ItemTagType.INTEGER, Integer.parseInt(tagContainer.getCustomTag(soliniaIdKey, ItemTagType.STRING)));
-			itemStack.setItemMeta(itemMeta);
-		}
-		if(tagContainer.hasCustomTag(soliniaIdKey , ItemTagType.INTEGER)) {
-		    return tagContainer.getCustomTag(soliniaIdKey, ItemTagType.INTEGER);
+		if(itemMeta.getCustomTagContainer().hasCustomTag(soliniaIdKey , ItemTagType.INTEGER)) {
+		    return itemMeta.getCustomTagContainer().getCustomTag(soliniaIdKey, ItemTagType.INTEGER);
 		}
 		
 		return null;
@@ -197,22 +188,12 @@ public class ItemStackUtils {
 		if (itemStack == null)
 			return false;
 
-		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
-			if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
-				return true;
-
 		// New method
 		if (ItemStackUtils.getSoliniaItemId(itemStack) != null) {
 			return true;
 		}
-
-		// Classic method
-		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-
-		String soliniaid = compound.getString("soliniaid");
-
-		return soliniaid.matches("-?\\d+");
+		
+		return false;
 	}
 	
 	public static Integer getAugmentationItemId(ItemStack itemStack)
@@ -228,35 +209,7 @@ public class ItemStackUtils {
 			return itemMeta.getCustomTagContainer().getCustomTag(soliniaAugIdKey, ItemTagType.INTEGER);
 		}
 		
-		// if we got this far then its likely it is storing in the old format
-		Integer nbtTag = getOldNBTAugmentationItemId(itemStack);
-		if (nbtTag != null)
-		{
-			itemMeta.getCustomTagContainer().setCustomTag(soliniaAugIdKey, ItemTagType.INTEGER, nbtTag);
-			itemStack.setItemMeta(itemMeta);
-			// try again
-			if(tagContainer.hasCustomTag(soliniaAugIdKey , ItemTagType.INTEGER)) {
-				return itemMeta.getCustomTagContainer().getCustomTag(soliniaAugIdKey, ItemTagType.INTEGER);
-			}
-		}
-		
 		return null;
-	}
-	
-	public static Integer getOldNBTAugmentationItemId(ItemStack itemStack)
-	{
-		if (!ItemStackUtils.IsSoliniaItem(itemStack))
-			return null;
-		
-		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-		
-		String soliniaaug1id = compound.getString("soliniaaug1id");
-		
-		if (soliniaaug1id == null || soliniaaug1id.equals(""))
-			return null;
-		
-		return Integer.parseInt(soliniaaug1id);
 	}
 	
 	public static boolean isSkullItem(ItemStack itemStack) {
@@ -558,9 +511,6 @@ public class ItemStackUtils {
 	}
 	
 	public static Timestamp GetSolLastUpdated(ItemStack itemStack) {
-		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null)
-			if (itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
-				return null;
 
 		Long solupdatedtime = ItemStackUtils.getSoliniaLastUpdated(itemStack);
 		if (solupdatedtime == null)

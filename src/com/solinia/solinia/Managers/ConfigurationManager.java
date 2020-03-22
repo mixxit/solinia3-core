@@ -572,11 +572,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		if (itemStack == null)
 			return null;
 		
-		if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null && itemStack.getItemMeta().getDisplayName().startsWith("CUSTOMITEMID_"))
-		{
-			soliniaid = itemStack.getItemMeta().getDisplayName().split("_")[1];
-		}
-		else if (ItemStackUtils.getSoliniaItemId(itemStack) != null)
+		if (ItemStackUtils.getSoliniaItemId(itemStack) != null)
 		{
 			soliniaid = Long.toString(ItemStackUtils.getSoliniaItemId(itemStack));
 		}
@@ -1315,11 +1311,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID) {
-		List<ISoliniaPlayer> results = characterlistsRepository.query(q -> q.getCharacterId() != null && q.getCharacterId().equals(characterUUID));
-		if (results.size() != 1)
-			return null;
-		
-		return results.get(0);
+		return characterlistsRepository.getByKey(characterUUID);
 	}
 
 	@Override
