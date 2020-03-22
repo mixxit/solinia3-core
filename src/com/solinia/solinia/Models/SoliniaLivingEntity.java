@@ -6136,9 +6136,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc == null)
 					return totalHp;
 
+				Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Preparing getMaxHp");
 				if (npc.getForcedMaxHp() > 0) {
-					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Forced getMaxHp to " + npc.getForcedMaxHp());
-					return npc.getForcedMaxHp();
+					if (npc.isCorePet())
+					{
+						// npc pets work differently
+						if (totalHp < npc.getForcedMaxHp())
+							totalHp = npc.getForcedMaxHp();
+					} else {
+						Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Forced getMaxHp to " + npc.getForcedMaxHp() + " if its lower");
+						return npc.getForcedMaxHp();
+					}
 				}
 				
 				totalHp += Utils.getTotalEffectTotalHP(this.getBukkitLivingEntity());

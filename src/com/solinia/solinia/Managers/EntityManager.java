@@ -939,7 +939,7 @@ public class EntityManager implements IEntityManager {
 			ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt((LivingEntity)spawnedMob);
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(owner);
 			StateManager.getInstance().getEntityManager().setPet(owner.getUniqueId(),spawnedMob);
-			spawnedMob.setCustomName(solplayer.getForename() + "'s Pet");
+			spawnedMob.setCustomName(solplayer.getForename() + "s_Pet");
 			spawnedMob.setCustomNameVisible(true);
 			spawnedMob.setCanPickupItems(false);
 			spawnedMob.setRemoveWhenFarAway(false);
