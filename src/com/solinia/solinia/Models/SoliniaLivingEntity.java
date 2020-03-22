@@ -1714,7 +1714,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				//Note: if players can become pets, they will not receive damage messages of their own
 				//this was done to simplify the code here (since we can only effectively skip one mob on queue)
 				
-				Utils.SendHint(getBukkitLivingEntity(), HINT.HITFORDMGBY,getBukkitLivingEntity().getCustomName()+","+damage+","+skillType.name().toUpperCase()+","+attacker.getName(),true, false);
+				Utils.SendHint(getBukkitLivingEntity(), HINT.HITFORDMGBY,getBukkitLivingEntity().getCustomName()+","+damage+","+skillType.name().toUpperCase()+","+attacker.getName(),true, true);
 				
 				ISoliniaLivingEntity skip = attacker;
 				if (attacker != null && attacker.getOwnerEntity() != null) {
