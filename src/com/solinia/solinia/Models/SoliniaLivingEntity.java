@@ -5331,6 +5331,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void emote(String message, boolean isBardSongFilterable) {
+		if (getBukkitLivingEntity() == null)
+			return;
+		
 		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message,
 				isBardSongFilterable, getBukkitLivingEntity().getEquipment().getItemInMainHand());
 	}
@@ -5356,6 +5359,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void say(String message) {
+		if (getBukkitLivingEntity() == null)
+			return;
+
 		if (isPlayer())
 			return;
 
