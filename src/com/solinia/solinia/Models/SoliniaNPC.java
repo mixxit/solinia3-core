@@ -447,9 +447,11 @@ public class SoliniaNPC implements ISoliniaNPC {
 	}
 
 	@Override
-	public void editSetting(String setting, String value)
+	public boolean editSetting(String setting, String value)
 			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, java.io.IOException {
 
+		boolean requiresreload = true;
+		
 		switch (setting.toLowerCase()) {
 		case "name":
 			if (value.equals(""))
@@ -487,6 +489,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "chancetorespawnondeath":
 			setChanceToRespawnOnDeath(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "factionid":
 			if (Integer.parseInt(value) == 0) {
@@ -505,6 +508,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "social":
 			setSocial(Boolean.parseBoolean(value));
+			requiresreload = false;
 			break;
 		case "usedisguise":
 			setUsedisguise(Boolean.parseBoolean(value));
@@ -514,12 +518,14 @@ public class SoliniaNPC implements ISoliniaNPC {
 			if (time < 0L || time > Utils.MAXDAYTICK)
 				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and " + Utils.MAXDAYTICK);
 			setTimefrom(time);
+			requiresreload = false;
 			break;
 		case "timeto":
 			long time2 = Long.parseLong(value);
 			if (time2 < 0L || time2 > Utils.MAXDAYTICK)
 				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and " + Utils.MAXDAYTICK);
 			setTimeto(time2);
+			requiresreload = false;
 			break;
 		case "disguisetype":
 			setDisguisetype(value);
@@ -637,12 +643,14 @@ public class SoliniaNPC implements ISoliniaNPC {
 			if (StateManager.getInstance().getConfigurationManager().getNPCMerchant(Integer.parseInt(value)) == null)
 				throw new InvalidNpcSettingException("MerchantID does not exist");
 			setMerchantid(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "upsidedown":
 			setUpsidedown(Boolean.parseBoolean(value));
 			break;
 		case "npcspelllist":
 			setNpcSpellList(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "loottableid":
 			if (Integer.parseInt(value) == 0) {
@@ -656,6 +664,7 @@ public class SoliniaNPC implements ISoliniaNPC {
 				throw new InvalidNpcSettingException("Loottable ID does not exist");
 
 			setLoottableid(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "raceid":
 			setRaceid(Integer.parseInt(value));
@@ -668,14 +677,18 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "killtriggertext":
 			setKillTriggerText(value);
+			requiresreload = false;
 			break;
 		case "ac":
 			setAC(Integer.parseInt(value));
+			break;
 		case "clearrandomchattriggertext":
 			setRandomchatTriggerText("");
+			requiresreload = false;
 			break;
 		case "randomchattriggertext":
 			setRandomchatTriggerText(value);
+			requiresreload = false;
 			break;
 		case "guard":
 			setGuard(Boolean.parseBoolean(value));
@@ -688,27 +701,34 @@ public class SoliniaNPC implements ISoliniaNPC {
 			break;
 		case "undead":
 			setUndead(Boolean.parseBoolean(value));
+			requiresreload = false;
 			break;
 		case "plant":
 			setPlant(Boolean.parseBoolean(value));
+			requiresreload = false;
 			break;
 		case "animal":
 			setAnimal(Boolean.parseBoolean(value));
+			requiresreload = false;
 			break;
 		case "summoner":
 			setSummoner(Boolean.parseBoolean(value));
+			requiresreload = false;
 			break;
 		case "disablespawners":
 			disableAllSpawners(Boolean.parseBoolean(value));
 			break;
 		case "accuracyrating":
 			setAccuracyRating(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "avoidancerating":
 			setAvoidanceRating(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "speaksalllanguages":
 			setSpeaksAllLanguages(Boolean.parseBoolean(value));
+			requiresreload = false;
 			break;
 		case "forcedmaxhp":
 			setForcedMaxHp(Integer.parseInt(value));
@@ -720,6 +740,8 @@ public class SoliniaNPC implements ISoliniaNPC {
 			throw new InvalidNpcSettingException(
 					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal,speaksalllanguages,mounted,clearrandomchattriggertext");
 		}
+		
+		return requiresreload;
 	}
 
 	@Override

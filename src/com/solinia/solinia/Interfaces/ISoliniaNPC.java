@@ -29,7 +29,7 @@ public interface ISoliniaNPC {
 
 	void sendNpcSettingsToSender(CommandSender sender) throws CoreStateInitException;
 
-	void editSetting(String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException;
+	boolean editSetting(String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException;
 
 	String getMctype();
 
