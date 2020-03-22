@@ -601,7 +601,7 @@ public class SoliniaItem implements ISoliniaItem {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET + " - minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET + " tier: " + ChatColor.GOLD + getTier() + ChatColor.RESET);
-		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET);
+		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET + " appearanceid: " + ChatColor.GOLD + this.getAppearanceId() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET + " placeable: " + ChatColor.GOLD + isPlaceable() + ChatColor.RESET);
 		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
 		String leathercolor = "NONE";
@@ -684,6 +684,9 @@ public class SoliniaItem implements ISoliniaItem {
 			if (value.length() > 36)
 				throw new InvalidItemSettingException("Name is longer than 36 characters");
 			setDisplayname(value);
+			break;
+		case "appearanceid":
+			setAppearanceId(Integer.parseInt(value));
 			break;
 		case "bookauthor":
 			setBookAuthor(value);
