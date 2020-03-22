@@ -8521,8 +8521,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public String getName() {
+		if (getBukkitLivingEntity() == null)
+			return "";
+		
 		if (getBukkitLivingEntity().getCustomName() != null)
 		return getBukkitLivingEntity().getCustomName();
+		
+		if (getBukkitLivingEntity().getName() == null)
+			return "";
 		
 		return getBukkitLivingEntity().getName();
 	}
