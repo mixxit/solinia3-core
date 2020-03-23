@@ -500,6 +500,7 @@ public class SoliniaEntitySpells {
 						if (removeNonCombatEffects == true)
 							tryRemoveNonCombatEffects(activeSpell);
 						
+						if (solEntity.getBukkitLivingEntity() != null)
 						if (solEntity.getBukkitLivingEntity().isOp())
 							System.out.println("Debug: " + solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]");
 						

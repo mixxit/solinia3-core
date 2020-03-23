@@ -65,7 +65,7 @@ public class CommandWho implements CommandExecutor {
 		        	String zone = "UNKNOWN";
 		        	
 		        	SoliniaZone solZone = solplayer.getZone();
-					if (zone != null)
+					if (solZone != null)
 						zone = solZone.getName();
 		        	
 		        	if (solplayer.getRace() != null)
@@ -179,7 +179,12 @@ public class CommandWho implements CommandExecutor {
 		        	
 		        	String racename = "UNKNOWN";
 		        	String classname = "UNKNOWN";
+		        	String zone = "UNKNOWN";
 		        	
+		        	SoliniaZone solZone = solplayer.getZone();
+					if (solZone != null)
+						zone = solZone.getName();
+					
 		        	if (solplayer.getRace() != null)
 		        		racename = solplayer.getRace().getName();
 		        	if (solplayer.getClassObj() != null)
@@ -187,12 +192,12 @@ public class CommandWho implements CommandExecutor {
 		        	
 		        	if (!(sender instanceof Player))
 		        	{
-		        		sender.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+		        		sender.sendMessage("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET);
 		        		continue;
 		        	}
 		        	
 		        	TextComponent tc = new TextComponent();
-					tc.setText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+					tc.setText("["+currentplayer.getName()+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET);
 					
 					String ideal = "Ideal: I have no ideal" + System.lineSeparator();
 					String trait1 = "Trait: I have no primary trait" + System.lineSeparator();
