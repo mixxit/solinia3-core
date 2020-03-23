@@ -64,11 +64,9 @@ public class CommandWho implements CommandExecutor {
 		        	String godname = "UNKNOWN";
 		        	String zone = "UNKNOWN";
 		        	
-		        	SoliniaZone solZone = this.getFirstZone();
+		        	SoliniaZone solZone = solplayer.getZone();
 					if (zone != null)
-					{
 						zone = solZone.getName();
-					}
 		        	
 		        	if (solplayer.getRace() != null)
 		        		racename = solplayer.getRace().getShortName();
