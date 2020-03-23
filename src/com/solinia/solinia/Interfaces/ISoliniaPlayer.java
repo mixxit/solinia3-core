@@ -621,6 +621,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	boolean isInZone(SoliniaZone zone);
 
+	SoliniaZone getZone();
+
 
 
 }

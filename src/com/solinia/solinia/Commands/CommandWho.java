@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Models.SoliniaZone;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -60,19 +62,27 @@ public class CommandWho implements CommandExecutor {
 		        	String racename = "UNKNOWN";
 		        	String classname = "UNKNOWN";
 		        	String godname = "UNKNOWN";
+		        	String zone = "UNKNOWN";
+		        	
+		        	SoliniaZone solZone = this.getFirstZone();
+					if (zone != null)
+					{
+						zone = solZone.getName();
+					}
 		        	
 		        	if (solplayer.getRace() != null)
-		        		racename = solplayer.getRace().getName();
+		        		racename = solplayer.getRace().getShortName();
 		        	if (solplayer.getClassObj() != null)
-			        	classname = solplayer.getClassObj().getName();
+			        	classname = solplayer.getClassObj().getShortName();
 		        	
 		        	if (!(sender instanceof Player))
 		        	{
-		        		sender.sendMessage("["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET);
+		        		sender.sendMessage("["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET);
+		        		
 		        		continue;
 		        	}
 		        	
-		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText(hidden+"["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET));
+		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText(hidden+"["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET));
 					
 		        	String worship = "I worship: " + godname + System.lineSeparator();
 		        	

@@ -49,6 +49,7 @@ public class SoliniaZone {
 	private int topRightCornerX = 0;
 	private int topRightCornerY = 0;
 	private int topRightCornerZ = 0;
+	private int zoneExperienceModifier = 0;
 	
 
 	public int getId() {
@@ -78,6 +79,7 @@ public class SoliniaZone {
 		sender.sendMessage("- name: " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("- music: " + ChatColor.GOLD + getMusic() + ChatColor.RESET);
 		sender.sendMessage("- world: " + ChatColor.GOLD + getWorld() + ChatColor.RESET);
+		sender.sendMessage("- zoneexperiencemodifier: " + ChatColor.GOLD + this.getZoneExperienceModifier() + ChatColor.RESET);
 		sender.sendMessage("- bottomleftcornerx: " + ChatColor.GOLD + this.getBottomLeftCornerX() + ChatColor.RESET);
 		sender.sendMessage("- bottomleftcornery: " + ChatColor.GOLD + this.getBottomLeftCornerY() + ChatColor.RESET);
 		sender.sendMessage("- bottomleftcornerz: " + ChatColor.GOLD + this.getBottomLeftCornerZ() + ChatColor.RESET);
@@ -152,6 +154,9 @@ public class SoliniaZone {
 			if (value.equals(""))
 				throw new InvalidZoneSettingException("Name is empty");
 			setName(value);
+			break;
+		case "zoneexperiencemodifier":
+			setZoneExperienceModifier(Integer.parseInt(value));
 			break;
 		case "requiresraceid":
 			int raceid = Integer.parseInt(value);
@@ -536,6 +541,12 @@ public class SoliniaZone {
 				return true;
 		
 		return false;
+	}
+	public int getZoneExperienceModifier() {
+		return zoneExperienceModifier;
+	}
+	public void setZoneExperienceModifier(int zoneExperienceModifier) {
+		this.zoneExperienceModifier = zoneExperienceModifier;
 	}
 	
 }

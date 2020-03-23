@@ -468,8 +468,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 
-			if (isInHotzone() == true) {
-				modifier += 100;
+			SoliniaZone zone = this.getFirstZone();
+			if (zone != null)
+			{
+				if (zone.isHotzone() == true) {
+					modifier += 100;
+				}
+
+				if (zone.getZoneExperienceModifier() > 0)
+					modifier += zone.getZoneExperienceModifier();
 			}
 
 			if (modifier > 100) {
@@ -544,6 +551,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return false;
+	}
+	
+	@Override
+	public SoliniaZone getZone() {
+		return getFirstZone();
 	}
 	
 	@Override
