@@ -59,6 +59,7 @@ import com.solinia.solinia.Utils.Utils;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.spawning.spawners.MythicSpawner;
+import net.md_5.bungee.api.ChatMessageType;
 import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaPlayer implements ISoliniaPlayer {
@@ -141,6 +142,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean deleted = false;
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
+	private ConcurrentHashMap<String, ChatMessageType> hintSetting = new ConcurrentHashMap<String, ChatMessageType>();
 	private ConcurrentHashMap<String, Integer> monthlyVote = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, SoliniaReagent> reagentsPouch = new ConcurrentHashMap<Integer, SoliniaReagent>();
 	private Double pendingXp = 0d;
@@ -1680,11 +1682,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					this.setEntityTarget(pet);
 					return true;
 				} else {
-					Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetI", false, false);
+					Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetI", false);
 					return false;
 				}
 			} else {
-				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetII", false, false);
+				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetII", false);
 				return false;
 			}
 		} catch (CoreStateInitException e) {
@@ -1790,7 +1792,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			} else {
 				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Not target");
-				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "spellitem", false, false);
+				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "spellitem", false);
 				return;
 			}
 		}
@@ -4808,4 +4810,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.languageSkillType = languageSkillType;
 	}
 
+	@Override
+	public ChatMessageType getHintSetting(HINT hint) {
+		if (hint == null)
+			return null;
+		
+		if (this.hintSetting.get(hint.name()) == null)
+			this.hintSetting.put(hint.name(), Utils.getDefaultHintLocation(hint));
+		
+		return this.hintSetting.get(hint.name());
+	}
+
+	@Override
+	public void setHintSetting(HINT hint, ChatMessageType newType) {
+		if (hint == null)
+			return;
+		
+		this.hintSetting.put(hint.name(), newType);
+	}
 }

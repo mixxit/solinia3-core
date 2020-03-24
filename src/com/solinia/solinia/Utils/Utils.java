@@ -5857,11 +5857,7 @@ public class Utils {
 		return Boolean.parseBoolean(isMerchant);
 	}
 
-	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby, boolean actionBar) {
-		ChatMessageType type = ChatMessageType.CHAT;
-		if(actionBar == true)
-			type = ChatMessageType.ACTION_BAR;
-		
+	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby) {
 		String message = "";
 		switch (hint)
 		{
@@ -5895,17 +5891,56 @@ public class Utils {
 			break;
 		}
 		
-		if (entity instanceof Player)
-			((Player)entity).spigot().sendMessage(type, new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
-		
-		if(sendNearby)
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getLocation().distance(entity.getLocation()) <= Utils.GetLocalSayRange(entity.getLocation().getWorld().getName()))
-				player.spigot().sendMessage(type,new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
+		try
+		{
+			if (entity instanceof Player)
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
+				if (solPlayer != null)
+				((Player)entity).spigot().sendMessage(solPlayer.getHintSetting(hint), new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
+			}
+			
+			if(sendNearby)
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (player.getLocation().distance(entity.getLocation()) <= Utils.GetLocalSayRange(entity.getLocation().getWorld().getName()))
+				{
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					if (solPlayer != null)
+					player.spigot().sendMessage(solPlayer.getHintSetting(hint),new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 		
 	}
 	
+	public static ChatMessageType getDefaultHintLocation(HINT hint) {
+		
+		// WARNING
+		// THIS SHOULD ABSOLUTELY NEVER RETURN NULL
+		switch (hint)
+		{
+		case HITFORDMGBY:
+				return ChatMessageType.ACTION_BAR;
+		case MASTERWUFULL: 
+				return ChatMessageType.CHAT;
+		case HITTHEMBUTMISSED: 
+				return ChatMessageType.ACTION_BAR;
+		case HITYOUBUTMISSED: 
+				return ChatMessageType.ACTION_BAR;
+		case PETHITTHEMBUTMISSED: 
+				return ChatMessageType.ACTION_BAR;
+		case PICKEDUP_SPELL: 
+				return ChatMessageType.CHAT;
+		case NEED_TARGET: 
+				return ChatMessageType.CHAT;
+		}
+		
+		return ChatMessageType.CHAT;
+	}
+
 	public static List<String> pickNRandom(List<String> lst, int n) {
 	    List<String> copy = new LinkedList<String>(lst);
 	    Collections.shuffle(copy);

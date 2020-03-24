@@ -110,15 +110,16 @@ commands:
     usage: /castspelladmin <spellid>
     aliases:
     - castspell
+  togglehint:
+    description: Toggles HINT messages between OFF,CHAT or ACTIONBAR
+    usage: /togglehint <HINT type>
+    aliases:
+    - showhint
   showdiscord:
     description: Toggles discord chat on and off
     usage: /showdiscord
     aliases:
     - togglediscord
-  togglehint:
-    description: Toggles hint type on or off
-    usage: /togglehint <type>
-    aliases: []
   cast:
     description: Casts a spell from memory slot 1 to 0
     usage: /cast <memoryslot>

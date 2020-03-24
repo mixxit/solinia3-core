@@ -19,6 +19,7 @@ import com.solinia.solinia.Models.Effects;
 import com.solinia.solinia.Models.EquipSlots;
 import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.Fellowship;
+import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.MemorisedSpells;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.PacketCastingPercent;
@@ -35,6 +36,8 @@ import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.SpellbookPage;
 import com.solinia.solinia.Models.TrackingChoice;
+
+import net.md_5.bungee.api.ChatMessageType;
 
 public interface ISoliniaPlayer extends Serializable {
 	public UUID getUUID();
@@ -622,6 +625,10 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isInZone(SoliniaZone zone);
 
 	SoliniaZone getZone();
+
+	public ChatMessageType getHintSetting(HINT hint);
+
+	public void setHintSetting(HINT hint, ChatMessageType newType);
 
 
 

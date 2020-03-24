@@ -1714,7 +1714,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				//Note: if players can become pets, they will not receive damage messages of their own
 				//this was done to simplify the code here (since we can only effectively skip one mob on queue)
 				
-				Utils.SendHint(getBukkitLivingEntity(), HINT.HITFORDMGBY,getBukkitLivingEntity().getCustomName()+","+damage+","+skillType.name().toUpperCase()+","+attacker.getName(),true, true);
+				Utils.SendHint(getBukkitLivingEntity(), HINT.HITFORDMGBY,getBukkitLivingEntity().getCustomName()+","+damage+","+skillType.name().toUpperCase()+","+attacker.getName(),true);
 				
 				ISoliniaLivingEntity skip = attacker;
 				if (attacker != null && attacker.getOwnerEntity() != null) {
@@ -3329,7 +3329,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					wuchance /= 4;
 				}
 				// They didn't add a string ID for this.
-				Utils.SendHint(this.getBukkitLivingEntity(), HINT.MASTERWUFULL, Integer.toString(extra), false,false);
+				Utils.SendHint(this.getBukkitLivingEntity(), HINT.MASTERWUFULL, Integer.toString(extra), false);
 				//std::string msg = StringFormat("The spirit of Master Wu fills you!  You gain %d additional attack(s).", extra);
 				// live uses 400 here -- not sure if it's the best for all clients though
 				//SendColoredText(400, msg);
@@ -3794,15 +3794,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			} else {
 				if (getBukkitLivingEntity() instanceof Player) {
 
-					Utils.SendHint(getBukkitLivingEntity(), HINT.HITTHEMBUTMISSED, other.getBukkitLivingEntity().getCustomName(),false, true);
+					Utils.SendHint(getBukkitLivingEntity(), HINT.HITTHEMBUTMISSED, other.getBukkitLivingEntity().getCustomName(),false);
 				}
 				if (this.isCurrentlyNPCPet() && this.getOwnerEntity() instanceof Player)
 				{
-					Utils.SendHint((Player)this.getOwnerEntity(), HINT.PETHITTHEMBUTMISSED, other.getBukkitLivingEntity().getCustomName(),false, true);
+					Utils.SendHint((Player)this.getOwnerEntity(), HINT.PETHITTHEMBUTMISSED, other.getBukkitLivingEntity().getCustomName(),false);
 				}
 				
 				if (other.getBukkitLivingEntity() instanceof Player) {
-					Utils.SendHint(other.getBukkitLivingEntity(), HINT.HITYOUBUTMISSED, getBukkitLivingEntity().getCustomName(), false, true);
+					Utils.SendHint(other.getBukkitLivingEntity(), HINT.HITYOUBUTMISSED, getBukkitLivingEntity().getCustomName(), false);
 					try {
 						ISoliniaPlayer solplayer = SoliniaPlayerAdapter
 								.Adapt((Player) other.getBukkitLivingEntity());
