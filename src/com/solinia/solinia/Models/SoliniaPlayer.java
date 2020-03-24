@@ -4815,9 +4815,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (hint == null)
 			return null;
 		
-		if (this.hintSetting.get(hint.name()) == null)
-			this.hintSetting.put(hint.name(), Utils.getDefaultHintLocation(hint));
-		
 		return this.hintSetting.get(hint.name());
 	}
 
@@ -4826,6 +4823,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (hint == null)
 			return;
 		
-		this.hintSetting.put(hint.name(), newType);
+		if (newType == null)
+			this.hintSetting.remove(hint.name());
+		else
+			this.hintSetting.put(hint.name(), newType);
 	}
 }

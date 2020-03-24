@@ -10,9 +10,11 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.HINT;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 
 public class CommandToggleHint implements CommandExecutor {
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
@@ -54,25 +56,31 @@ public class CommandToggleHint implements CommandExecutor {
 		            
 		            ChatMessageType currentType = solplayer.getHintSetting(hint);
 		            ChatMessageType newType = null;
+		            String currentTypeName = "OFF";
 		            
-		            switch(currentType)
+		            if (currentType != null)
 		            {
-					case ACTION_BAR:
-						newType = ChatMessageType.CHAT;
-						break;
-					case CHAT:
-						newType = null;
-						break;
-					default:
-						newType = ChatMessageType.ACTION_BAR;
-						break;
+			            switch(currentType)
+			            {
+						case ACTION_BAR:
+							currentTypeName = "ACTION_BAR";
+							newType = ChatMessageType.CHAT;
+							break;
+						case CHAT:
+							currentTypeName = "CHAT";
+							newType = null;
+							break;
+			            }
+		            } else {
+		            	currentTypeName = "OFF";
+		            	newType = ChatMessageType.ACTION_BAR;
 		            }
 		            
 		            String newTypeName = "OFF";
 		            if (newType != null)
 		            	newTypeName = newType.name();
 		            
-		            player.sendMessage("Toggling HINT: " + currentType.name() + " " + " " + newTypeName);
+		            player.sendMessage("Toggling HINT " + ChatColor.AQUA + hint.name() + ChatColor.RESET + " from " + ChatColor.AQUA + currentTypeName + ChatColor.RESET + " to " + ChatColor.AQUA + newTypeName + ChatColor.RESET);
 		            solplayer.setHintSetting(hint, newType);
 		            
             } catch (CoreStateInitException e)
