@@ -5896,7 +5896,7 @@ public class Utils {
 			if (entity instanceof Player)
 			{
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
-				if (solPlayer != null)
+				if (solPlayer != null && solPlayer.getHintSetting(hint) != null)
 				((Player)entity).spigot().sendMessage(solPlayer.getHintSetting(hint), new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
 			}
 			
@@ -5905,7 +5905,7 @@ public class Utils {
 				if (player.getLocation().distance(entity.getLocation()) <= Utils.GetLocalSayRange(entity.getLocation().getWorld().getName()))
 				{
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					if (solPlayer != null)
+					if (solPlayer != null && solPlayer.getHintSetting(hint) != null)
 					player.spigot().sendMessage(solPlayer.getHintSetting(hint),new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
 				}
 			}
