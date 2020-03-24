@@ -3796,6 +3796,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 					Utils.SendHint(getBukkitLivingEntity(), HINT.HITTHEMBUTMISSED, other.getBukkitLivingEntity().getCustomName(),false, true);
 				}
+				if (this.isCurrentlyNPCPet() && this.getOwnerEntity() instanceof Player)
+				{
+					Utils.SendHint((Player)this.getOwnerEntity(), HINT.PETHITTHEMBUTMISSED, other.getBukkitLivingEntity().getCustomName(),false, true);
+				}
+				
 				if (other.getBukkitLivingEntity() instanceof Player) {
 					Utils.SendHint(other.getBukkitLivingEntity(), HINT.HITYOUBUTMISSED, getBukkitLivingEntity().getCustomName(), false, true);
 					try {

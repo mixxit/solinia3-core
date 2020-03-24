@@ -5879,6 +5879,9 @@ public class Utils {
 		case HITTHEMBUTMISSED:
 			message = "You tried to hit " + referenceCode + ", but missed!";
 			break;
+		case PETHITTHEMBUTMISSED:
+			message = "Your pet tried to hit " + referenceCode + ", but missed!";
+			break;
 		case HITYOUBUTMISSED:
 			message = referenceCode + " tried to hit you but missed!";
 			break;
