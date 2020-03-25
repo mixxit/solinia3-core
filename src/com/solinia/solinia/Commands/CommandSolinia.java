@@ -7,6 +7,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Utils.Utils;
@@ -68,6 +69,20 @@ public class CommandSolinia implements CommandExecutor {
 			if (args[0].equals("patch")) {
 				System.out.println("Patching");
 				Utils.Patcher();
+			}
+			
+			if (args[0].equals("resethints")) {
+				System.out.println("Resetting all hints");
+				try
+				{
+					for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters())
+					{
+						player.resetHintSetting();
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
 			}
 		}
 		

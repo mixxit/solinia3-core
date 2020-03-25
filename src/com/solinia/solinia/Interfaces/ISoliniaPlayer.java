@@ -622,6 +622,8 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public void setHintSetting(HINT hint, ChatMessageType newType);
 
+	public void resetHintSetting();
+
 
 
 }

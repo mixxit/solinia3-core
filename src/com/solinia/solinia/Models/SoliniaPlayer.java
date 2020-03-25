@@ -4806,4 +4806,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		else
 			this.hintSetting.put(hint.name(), newType);
 	}
+
+	@Override
+	public void resetHintSetting() {
+		this.hintSetting.clear();
+	}
 }
