@@ -20,6 +20,7 @@ import com.solinia.solinia.Models.EquipSlots;
 import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Models.Fellowship;
 import com.solinia.solinia.Models.HINT;
+import com.solinia.solinia.Models.HintSetting;
 import com.solinia.solinia.Models.MemorisedSpells;
 import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.PacketCastingPercent;
@@ -618,11 +619,13 @@ public interface ISoliniaPlayer extends Serializable {
 
 	SoliniaZone getZone();
 
-	public ChatMessageType getHintSetting(HINT hint);
+	public HintSetting getHintSetting(HINT hint);
 
-	public void setHintSetting(HINT hint, ChatMessageType newType);
+	public void setHintSetting(HINT hint, HintSetting newType);
 
 	public void resetHintSetting();
+
+	public ChatMessageType getHintSettingAsChatMessageType(HINT hint);
 
 
 

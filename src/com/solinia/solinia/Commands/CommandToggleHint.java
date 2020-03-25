@@ -9,6 +9,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.HINT;
+import com.solinia.solinia.Models.HintSetting;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -54,30 +55,30 @@ public class CommandToggleHint implements CommandExecutor {
 		            	return true;
 		            }
 		            
-		            ChatMessageType currentType = solplayer.getHintSetting(hint);
-		            ChatMessageType newType = null;
+		            HintSetting currentType = solplayer.getHintSetting(hint);
+		            HintSetting newType = HintSetting.Off;
 		            String currentTypeName = "OFF";
 		            
-		            if (currentType != null)
+		            if (currentType != HintSetting.Off)
 		            {
 			            switch(currentType)
 			            {
-						case ACTION_BAR:
+						case ActionBar:
 							currentTypeName = "ACTION_BAR";
-							newType = ChatMessageType.CHAT;
+							newType = HintSetting.Chat;
 							break;
-						case CHAT:
+						case Chat:
 							currentTypeName = "CHAT";
-							newType = null;
+							newType = HintSetting.Off;
 							break;
 			            }
 		            } else {
 		            	currentTypeName = "OFF";
-		            	newType = ChatMessageType.ACTION_BAR;
+		            	newType = HintSetting.ActionBar;
 		            }
 		            
 		            String newTypeName = "OFF";
-		            if (newType != null)
+		            if (newType != HintSetting.Off)
 		            	newTypeName = newType.name();
 		            
 		            player.sendMessage("Toggling HINT " + ChatColor.AQUA + hint.name() + ChatColor.RESET + " from " + ChatColor.AQUA + currentTypeName + ChatColor.RESET + " to " + ChatColor.AQUA + newTypeName + ChatColor.RESET);

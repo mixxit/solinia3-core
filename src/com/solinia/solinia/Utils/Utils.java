@@ -83,6 +83,7 @@ import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.HINT;
+import com.solinia.solinia.Models.HintSetting;
 import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
@@ -5907,12 +5908,10 @@ public class Utils {
 
 			if (entity instanceof Player)
 			{
-
-				
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
-				if (solPlayer != null && solPlayer.getHintSetting(hint) != null)
+				if (solPlayer != null && solPlayer.getHintSetting(hint) != HintSetting.Off)
 				{
-					((Player)entity).spigot().sendMessage(solPlayer.getHintSetting(hint), tc);
+					((Player)entity).spigot().sendMessage(solPlayer.getHintSettingAsChatMessageType(hint), tc);
 				}
 			}
 			
@@ -5921,8 +5920,8 @@ public class Utils {
 				if (player.getLocation().distance(entity.getLocation()) <= Utils.GetLocalSayRange(entity.getLocation().getWorld().getName()))
 				{
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					if (solPlayer != null && solPlayer.getHintSetting(hint) != null)
-					player.spigot().sendMessage(solPlayer.getHintSetting(hint),tc);
+					if (solPlayer != null && solPlayer.getHintSetting(hint) != HintSetting.Off)
+					player.spigot().sendMessage(solPlayer.getHintSettingAsChatMessageType(hint),tc);
 				}
 			}
 		} catch (CoreStateInitException e)
@@ -5951,33 +5950,33 @@ public class Utils {
 		return tc;
 	}
 
-	public static ChatMessageType getDefaultHintLocation(HINT hint) {
+	public static HintSetting getDefaultHintLocation(HINT hint) {
 		
 		// WARNING
 		// THIS SHOULD ABSOLUTELY NEVER RETURN NULL
 		switch (hint)
 		{
 		case OOC_MESSAGE:
-			return ChatMessageType.CHAT;
+			return HintSetting.Chat;
 		case DISCORD_MESSAGE:
-			return ChatMessageType.CHAT;
+			return HintSetting.Chat;
 		case HITFORDMGBY:
-				return ChatMessageType.ACTION_BAR;
+				return HintSetting.ActionBar;
 		case MASTERWUFULL: 
-				return ChatMessageType.CHAT;
+				return HintSetting.Chat;
 		case HITTHEMBUTMISSED: 
-				return ChatMessageType.ACTION_BAR;
+				return HintSetting.ActionBar;
 		case HITYOUBUTMISSED: 
-				return ChatMessageType.ACTION_BAR;
+				return HintSetting.ActionBar;
 		case PETHITTHEMBUTMISSED: 
-				return ChatMessageType.ACTION_BAR;
+				return HintSetting.ActionBar;
 		case PICKEDUP_SPELL: 
-				return ChatMessageType.CHAT;
+				return HintSetting.Chat;
 		case NEED_TARGET: 
-				return ChatMessageType.CHAT;
+				return HintSetting.Chat;
 		}
 		
-		return ChatMessageType.CHAT;
+		return HintSetting.Chat;
 	}
 
 	public static List<String> pickNRandom(List<String> lst, int n) {

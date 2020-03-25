@@ -140,7 +140,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean deleted = false;
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
-	private ConcurrentHashMap<String, ChatMessageType> hintSetting = new ConcurrentHashMap<String, ChatMessageType>();
+	private ConcurrentHashMap<String, HintSetting> hintSettings = new ConcurrentHashMap<String, HintSetting>();
 	private ConcurrentHashMap<String, Integer> monthlyVote = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, SoliniaReagent> reagentsPouch = new ConcurrentHashMap<Integer, SoliniaReagent>();
 	private Double pendingXp = 0d;
@@ -4789,26 +4789,45 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public ChatMessageType getHintSetting(HINT hint) {
+	public HintSetting getHintSetting(HINT hint) {
 		if (hint == null)
-			return null;
+			return HintSetting.Off;
 		
-		return this.hintSetting.get(hint.name());
+		if (this.hintSettings.get(hint.name()) == null)
+			this.hintSettings.put(hint.name(), Utils.getDefaultHintLocation(hint));
+		
+		return this.hintSettings.get(hint.name());
+	}
+	
+	@Override
+	public ChatMessageType getHintSettingAsChatMessageType(HINT hint)
+	{
+		switch (getHintSetting(hint))
+		{
+			case Off:
+				return null;
+			case ActionBar:
+				return ChatMessageType.ACTION_BAR;
+			case Chat:
+				return ChatMessageType.CHAT;
+			default:
+				return null;
+		}
 	}
 
 	@Override
-	public void setHintSetting(HINT hint, ChatMessageType newType) {
+	public void setHintSetting(HINT hint, HintSetting newType) {
 		if (hint == null)
 			return;
 		
 		if (newType == null)
-			this.hintSetting.remove(hint.name());
+			newType = HintSetting.Off;
 		else
-			this.hintSetting.put(hint.name(), newType);
+			this.hintSettings.put(hint.name(), newType);
 	}
 
 	@Override
 	public void resetHintSetting() {
-		this.hintSetting.clear();
+		this.hintSettings.clear();
 	}
 }
