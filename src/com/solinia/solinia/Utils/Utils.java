@@ -5870,6 +5870,9 @@ public class Utils {
 		case OOC_MESSAGE:
 			message = referenceCode;
 			break;
+		case DISCORD_MESSAGE:
+			message = referenceCode;
+			break;
 		case MASTERWUFULL:
 			message = "The spirit of The Master fills you!  You gain " +referenceCode+ " additional attack(s).";
 			break;
