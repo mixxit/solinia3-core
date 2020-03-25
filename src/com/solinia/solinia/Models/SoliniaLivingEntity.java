@@ -7142,18 +7142,48 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
-		Entity entity = Bukkit.getEntity(uniqueId);
-		if (EntityUtils.IsInvulnerable(entity) || entity.isDead())
+		Entity other = Bukkit.getEntity(uniqueId);
+		if (!(other instanceof LivingEntity))
 			return;
 		
-		if (entity instanceof Player)
-			if (((Player)entity).getGameMode() != GameMode.SURVIVAL)
+		if (EntityUtils.IsInvulnerable(other) || other.isDead())
+			return;
+		
+		if (other instanceof Player)
+			if (((Player)other).getGameMode() != GameMode.SURVIVAL)
 				return;
 
 		try {
 			StateManager.getInstance().getEntityManager().addToHateList(this.getBukkitLivingEntity().getUniqueId(),
 					uniqueId, hate, true);
 			checkHateTargets();
+			
+			ISoliniaLivingEntity solOther = SoliniaLivingEntityAdapter.Adapt((LivingEntity)other);
+			if (solOther != null && solOther.getBukkitLivingEntity() != null && !solOther.getBukkitLivingEntity().isDead())
+			{
+				// then add pet owner if there's one
+				if (solOther.isCurrentlyNPCPet()) { // Other is a pet, add him and it
+					ISoliniaLivingEntity owner = solOther.getOwnerSoliniaLivingEntity();
+							 // EverHood 6/12/06
+							 // Can't add a feigned owner to hate list
+					if (owner != null)
+					if (owner.isPlayer() && owner.isFeignedDeath()) {
+						//they avoid hate due to feign death...
+					}
+					else {
+						// cb:2007-08-17
+						// owner must get on list, but he's not actually gained any hate yet
+						if (owner.getSpecialAbility(SpecialAbility.IMMUNE_AGGRO) < 1)
+						{
+							if (owner.isPlayer() && !checkAggro(owner))
+							{
+								//owner->CastToClient()->AddAutoXTarget(this);
+								this.addToHateList(owner.getBukkitLivingEntity().getUniqueId(), 1, false);
+							}
+						}
+					}
+				}
+			}
 		} catch (CoreStateInitException e) {
 		}
 	}
