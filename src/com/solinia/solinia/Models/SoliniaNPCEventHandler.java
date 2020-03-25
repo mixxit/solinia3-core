@@ -12,11 +12,15 @@ import org.bukkit.inventory.ItemStack;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -24,6 +28,8 @@ import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.PlayerUtils;
+import com.solinia.solinia.Utils.Utils;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
@@ -34,13 +40,16 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int awardsQuest = 0;
 	private String requiresQuestFlag = null;
 	private String awardsQuestFlag = null;
+	private int awardClassLootdropId = 0;
 	private int requiresRaceId = 0;
 	private int requiresClassId = 0;
 	private int npcId = 0;
 	private int summonsNpcId = 0;
 	private int awardsItem = 0;
 	private String teleportResponse = "";
+	@Deprecated
 	private boolean awardsRandomisedGear = false;
+	@Deprecated
 	private String randomisedGearSuffix = "";
 	private boolean awardsTitle = false;
 	private String title = "";
@@ -133,6 +142,21 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- awardsbind: " + ChatColor.GOLD + isAwardsBind() + ChatColor.RESET);
 		sender.sendMessage("- interactiontype: " + ChatColor.GOLD + getInteractiontype() + ChatColor.RESET);
 		sender.sendMessage("- requiresquest: " + ChatColor.GOLD + getRequiresQuest() + ChatColor.RESET);
+		try
+		{
+			if (getAwardClassLootdropId() != 0) {
+				sender.sendMessage("- awardclasslootdropid: " + ChatColor.GOLD + getAwardClassLootdropId() + " ("
+						+ StateManager.getInstance().getConfigurationManager().getLootDrop(getAwardClassLootdropId()).getName()
+						+ ")" + ChatColor.RESET);
+			} else {
+				sender.sendMessage(
+						"- awardclasslootdropid: " + ChatColor.GOLD + getAwardClassLootdropId() + " (No Loot Table)" + ChatColor.RESET);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
 		sender.sendMessage("- awardsquest: " + ChatColor.GOLD + getAwardsQuest() + ChatColor.RESET);
 		sender.sendMessage("- requiresquestflag: " + ChatColor.GOLD + getRequiresQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- awardsquestflag: " + ChatColor.GOLD + getAwardsQuestFlag() + ChatColor.RESET);
@@ -140,9 +164,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- requiresclassid: " + ChatColor.GOLD + getRequiresClassId() + ChatColor.RESET);
 		sender.sendMessage("- requiresalignment: " + ChatColor.GOLD + getRequiresAlignment() + ChatColor.RESET);
 		sender.sendMessage("- awardsitem: " + ChatColor.GOLD + getAwardsItem() + ChatColor.RESET);
-		sender.sendMessage("- awardsrandomisedgear: " + ChatColor.GOLD + isAwardsRandomisedGear() + ChatColor.RESET);
+		sender.sendMessage("- [DEPRECATED] awardsrandomisedgear: " + ChatColor.GOLD + isAwardsRandomisedGear() + ChatColor.RESET);
 		sender.sendMessage(
-				"- randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
+				"- [DEPRECATED] randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
 		sender.sendMessage("- title: " + ChatColor.GOLD + this.getTitle() + ChatColor.RESET);
 		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
 		sender.sendMessage("- summonsnpcid: " + ChatColor.GOLD + this.getSummonsNpcId() + ChatColor.RESET);
@@ -160,8 +184,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	public void editTriggerEventSetting(String setting, String value) throws InvalidNPCEventSettingException {
 		switch (setting.toLowerCase()) {
 		case "randomisedgearsuffix":
-			setRandomisedGearSuffix(value);
-			break;
+			throw new InvalidNPCEventSettingException("This functionality is now disabled due to the item counting reaching > 250000. Please instead use awardclassloottableid");
 		case "responsetype":
 			if (!value.toUpperCase().equals("SAY") && !value.toUpperCase().equals("EMOTE")) {
 				throw new InvalidNPCEventSettingException("responsetype can either be EMOTE or SAY");
@@ -170,6 +193,25 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			break;
 		case "title":
 			setTitle(value);
+			break;
+		case "awardclasslootdropid":
+			if (Integer.parseInt(value) == 0) {
+				setAwardClassLootdropId(0);
+				break;
+			}
+
+			try
+			{
+				ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager()
+						.getLootDrop(Integer.parseInt(value));
+				if (lootdrop == null)
+					throw new InvalidNPCEventSettingException("Lootdrop ID does not exist");
+	
+				setAwardClassLootdropId(Integer.parseInt(value));
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 			break;
 		case "awardstitle":
 			setAwardsTitle(Boolean.parseBoolean(value));
@@ -375,8 +417,8 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				throw new InvalidNPCEventSettingException("Teleport zone value must be in format: world,x,y,z");
 			}
 		case "awardsrandomisedgear":
-			setAwardsRandomisedGear(Boolean.parseBoolean(value));
-			break;
+			/*setAwardsRandomisedGear(Boolean.parseBoolean(value));*/
+			throw new InvalidNPCEventSettingException("This functionality is now disabled due to the item counting reaching > 250000. Please instead use awardclassloottableid");
 		case "summonsnpcid":
 			int npcId = Integer.parseInt(value);
 			try {
@@ -538,6 +580,45 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				if (foundQuest == false)
 					player.addPlayerQuest(getAwardsQuest());
 			}
+			
+			// We can support item hand in rewards multiple times without
+			// a quest flag
+			if (getInteractiontype().equals(InteractionType.ITEM))
+			{
+				if (player != null && player.getClassObj() != null && this.getAwardClassLootdropId() > 0)
+				{
+					ISoliniaLootDrop soliniaLootDrop = StateManager.getInstance().getConfigurationManager().getLootDrop(this.getAwardClassLootdropId());
+					if (soliniaLootDrop != null)
+					{
+						List<ISoliniaLootDropEntry> entries = soliniaLootDrop.getEntriesForClass(player.getClassObj());
+						if (entries.size() > 0)
+						{
+							List<ISoliniaLootDropEntry> pickedEntry = Utils.pickNRandom(entries, 1);
+						
+							final int awardclassitemid = pickedEntry.get(0).getItemid();
+							final UUID awardclassplayeruuid = player.getBukkitPlayer().getUniqueId();
+							
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+										public void run() {
+											try {
+												ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+														.getItem(awardclassitemid);
+												if (item == null)
+													return;
+	
+												PlayerUtils.addToPlayersInventory(Bukkit.getPlayer(awardclassplayeruuid), item.asItemStack());
+												System.out.println("Awarded item: " + item.getDisplayname());
+											} catch (CoreStateInitException e) {
+												// skip
+											}
+										}
+									});
+							}
+						
+					}
+				}
+			}
 
 			if (getAwardsQuestFlag() != null && !getAwardsQuestFlag().equals("")) {
 				boolean foundQuestFlag = false;
@@ -566,11 +647,10 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
 										public void run() {
 											try {
-												ItemStack itemStack = item.asItemStack();
 												ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 														.getItem(awarditemid);
 
-												PlayerUtils.addToPlayersInventory(Bukkit.getPlayer(uuid), itemStack);
+												PlayerUtils.addToPlayersInventory(Bukkit.getPlayer(uuid), item.asItemStack());
 												System.out.println("Awarded item: " + item.getDisplayname());
 											} catch (CoreStateInitException e) {
 												// skip
@@ -605,9 +685,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 						}
 					}
 
-					if (isAwardsRandomisedGear() == true) {
+					/*if (isAwardsRandomisedGear() == true) {
 						awardRandomisedGear(player);
-					}
+					}*/
 				}
 			}
 		} catch (CoreStateInitException e) {
@@ -616,6 +696,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		}
 	}
 
+	@Deprecated
 	private void awardRandomisedGear(ISoliniaPlayer player) {
 		try {
 			String suffix = "of Randomisation";
@@ -715,21 +796,25 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		this.teleportResponse = teleportResponse;
 	}
 
+	@Deprecated
 	@Override
 	public boolean isAwardsRandomisedGear() {
 		return awardsRandomisedGear;
 	}
 
+	@Deprecated
 	@Override
 	public void setAwardsRandomisedGear(boolean awardsRandomisedGear) {
 		this.awardsRandomisedGear = awardsRandomisedGear;
 	}
 
+	@Deprecated
 	@Override
 	public String getRandomisedGearSuffix() {
 		return randomisedGearSuffix;
 	}
 
+	@Deprecated
 	@Override
 	public void setRandomisedGearSuffix(String randomisedGearSuffix) {
 		this.randomisedGearSuffix = randomisedGearSuffix;
@@ -841,6 +926,14 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 
 	public void setRequiresAlignment(String requiresAlignment) {
 		this.requiresAlignment = requiresAlignment;
+	}
+
+	public int getAwardClassLootdropId() {
+		return awardClassLootdropId;
+	}
+
+	public void setAwardClassLootdropId(int awardClassLootdropId) {
+		this.awardClassLootdropId = awardClassLootdropId;
 	}
 
 }

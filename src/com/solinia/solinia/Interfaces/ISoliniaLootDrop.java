@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
+import com.solinia.solinia.Models.SoliniaLootDropEntry;
 
 public interface ISoliniaLootDrop {
 
@@ -24,5 +25,7 @@ public interface ISoliniaLootDrop {
 	void sendLootDropSettingsToSender(CommandSender sender);
 
 	void editSetting(String setting, String value) throws InvalidLootDropSettingException, NumberFormatException, CoreStateInitException;
+
+	List<ISoliniaLootDropEntry> getEntriesForClass(ISoliniaClass classObj);
 
 }

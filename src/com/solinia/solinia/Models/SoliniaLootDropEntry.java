@@ -1,7 +1,10 @@
 package com.solinia.solinia.Models;
 
 
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Managers.StateManager;
 
 public class SoliniaLootDropEntry implements ISoliniaLootDropEntry {
 	private int id;
@@ -69,6 +72,21 @@ public class SoliniaLootDropEntry implements ISoliniaLootDropEntry {
 	@Override
 	public void setLootdropid(int lootdropid) {
 		this.lootdropid = lootdropid;
+	}
+
+	@Override
+	public ISoliniaItem getItem() {
+		if (this.itemid < 1)
+			return null;
+		
+		try
+		{
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.itemid);
+			return item;
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
 	}
 	
 }

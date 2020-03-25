@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
@@ -201,6 +202,27 @@ public class SoliniaLootDrop implements ISoliniaLootDrop {
 			throw new InvalidLootDropSettingException(
 					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemchance,setallcount,setallitemminlevel,setallitemfireresist,setallitemcoldresist,setallitemmagicresist,setallitempoisonresist,setallitemdiseaseresist");
 		}
+	}
+
+	@Override
+	public List<ISoliniaLootDropEntry> getEntriesForClass(ISoliniaClass classObj) {
+		if (classObj == null)
+			return new ArrayList<ISoliniaLootDropEntry>();
+		
+		List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();
+		
+		for (ISoliniaLootDropEntry entry : this.getEntries())
+		{
+			if (entry.getItem() == null)
+				continue;
+			
+			if (!entry.getItem().getAllowedClassNames().contains(classObj.getName().toUpperCase()))
+				continue;
+			
+			entries.add(entry);
+		}
+		
+		return entries;
 	}
 	
 }

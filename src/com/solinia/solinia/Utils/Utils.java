@@ -5982,8 +5982,8 @@ public class Utils {
 		return HintSetting.Chat;
 	}
 
-	public static List<String> pickNRandom(List<String> lst, int n) {
-	    List<String> copy = new LinkedList<String>(lst);
+	public static <T> List<T> pickNRandom(List<T> lst, int n) {
+	    List<T> copy = new LinkedList<T>(lst);
 	    Collections.shuffle(copy);
 	    return copy.subList(0, n);
 	}
