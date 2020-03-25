@@ -115,11 +115,6 @@ commands:
     usage: /togglehint <HINT type>
     aliases:
     - showhint
-  showdiscord:
-    description: Toggles discord chat on and off
-    usage: /showdiscord
-    aliases:
-    - togglediscord
   cast:
     description: Casts a spell from memory slot 1 to 0
     usage: /cast <memoryslot>
@@ -633,11 +628,6 @@ commands:
     description: Create full character
     usage: /createcharacterfull racename classname gender ideal firsttrait secondtrait flaw bond firstname lastname
     aliases: []
-  hideooc:
-    description: Toggles hiding of the OOC channel
-    usage: /hideooc
-    aliases:
-    - toggleooc
   ignoremodmessage:
     description: Toggles hiding of the mod message channel
     usage: /ignoremodmessage
