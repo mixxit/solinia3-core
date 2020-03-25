@@ -5856,11 +5856,19 @@ public class Utils {
 		String isMerchant = compound.getString("merchant");
 		return Boolean.parseBoolean(isMerchant);
 	}
+	
+	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby)
+	{
+		SendHint(entity, hint, referenceCode, sendNearby, null);
+	}
 
-	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby) {
+	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby, ItemStack itemStack) {
 		String message = "";
 		switch (hint)
 		{
+		case OOC_MESSAGE:
+			message = referenceCode;
+			break;
 		case MASTERWUFULL:
 			message = "The spirit of The Master fills you!  You gain " +referenceCode+ " additional attack(s).";
 			break;
@@ -5893,11 +5901,19 @@ public class Utils {
 		
 		try
 		{
+			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
+			if (itemStack != null);
+				tc = decorateTextComponentsWithHovers(tc, itemStack);
+
 			if (entity instanceof Player)
 			{
+
+				
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
 				if (solPlayer != null && solPlayer.getHintSetting(hint) != null)
-				((Player)entity).spigot().sendMessage(solPlayer.getHintSetting(hint), new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
+				{
+					((Player)entity).spigot().sendMessage(solPlayer.getHintSetting(hint), tc);
+				}
 			}
 			
 			if(sendNearby)
@@ -5906,7 +5922,7 @@ public class Utils {
 				{
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					if (solPlayer != null && solPlayer.getHintSetting(hint) != null)
-					player.spigot().sendMessage(solPlayer.getHintSetting(hint),new TextComponent(ChatColor.GRAY + message + ChatColor.RESET));
+					player.spigot().sendMessage(solPlayer.getHintSetting(hint),tc);
 				}
 			}
 		} catch (CoreStateInitException e)
@@ -5916,12 +5932,35 @@ public class Utils {
 		
 	}
 	
+	public static TextComponent decorateTextComponentsWithHovers(TextComponent tc, ItemStack itemStack) {
+		if (itemStack != null && tc.toLegacyText().contains("itemlink"))
+		{
+			try
+			{
+				TextComponent itemLinkComponent = new TextComponent();
+				String title = " <" + itemStack.getItemMeta().getDisplayName() + ">";
+				itemLinkComponent.setText(title);
+				itemLinkComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(itemStack)).create()));
+				tc.addExtra(itemLinkComponent);
+			} catch (Exception e)
+			{
+				System.out.println("Could not create itemlink for message: " + tc.getText() + " with itemStack");
+			}
+		}
+		
+		return tc;
+	}
+
 	public static ChatMessageType getDefaultHintLocation(HINT hint) {
 		
 		// WARNING
 		// THIS SHOULD ABSOLUTELY NEVER RETURN NULL
 		switch (hint)
 		{
+		case OOC_MESSAGE:
+			return ChatMessageType.CHAT;
+		case DISCORD_MESSAGE:
+			return ChatMessageType.CHAT;
 		case HITFORDMGBY:
 				return ChatMessageType.ACTION_BAR;
 		case MASTERWUFULL: 

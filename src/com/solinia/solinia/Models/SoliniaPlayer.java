@@ -70,7 +70,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID motherId;
 	private int characterFellowshipId = 0;
 	private UUID spouseId;
-	private boolean showDiscord = true;
 	private String forename = "";
 	private String lastname = "";
 	private int mana = 0;
@@ -104,7 +103,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean modMessageEnabled = true;
 	private int inspiration = 0;
 	private Timestamp experienceBonusExpires;
-	private boolean oocEnabled = true;
 	private boolean songsEnabled = true;
 	private String bindPoint;
 	private int fingersItem = 0;
@@ -2925,16 +2923,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean isOocEnabled() {
-		return oocEnabled;
-	}
-
-	@Override
-	public void setOocEnabled(boolean oocEnabled) {
-		this.oocEnabled = oocEnabled;
-	}
-
-	@Override
 	public boolean isModMessageEnabled() {
 		return modMessageEnabled;
 	}
@@ -4644,16 +4632,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
-	}
-
-	@Override
-	public boolean isShowDiscord() {
-		return showDiscord;
-	}
-
-	@Override
-	public void setShowDiscord(boolean showDiscord) {
-		this.showDiscord = showDiscord;
 	}
 
 	@Override

@@ -608,7 +608,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("solinia").setExecutor(new CommandSolinia());
 		this.getCommand("castspelladmin").setExecutor(new CommandCastSpellAdmin());
 		this.getCommand("commit").setExecutor(new CommandCommit());
-		this.getCommand("showdiscord").setExecutor(new CommandShowDiscord());
 		this.getCommand("toggleexperience").setExecutor(new CommandToggleExperience());
 		this.getCommand("forename").setExecutor(new CommandForename());
 		this.getCommand("copycharacter").setExecutor(new CommandCopyCharacter());
@@ -703,7 +702,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("listnpcspells").setExecutor(new CommandListNpcSpells());
 		this.getCommand("editnpcspelllist").setExecutor(new CommandEditNpcSpellList());
 		this.getCommand("claim").setExecutor(new CommandClaim());
-		this.getCommand("hideooc").setExecutor(new CommandHideOoc());
 		this.getCommand("ignoremodmessage").setExecutor(new CommandIgnoreModMessage(this));
 		this.getCommand("skillcheck").setExecutor(new CommandSkillCheck());
 		this.getCommand("createzone").setExecutor(new CommandCreateZone());

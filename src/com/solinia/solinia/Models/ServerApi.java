@@ -3,6 +3,7 @@ package com.solinia.solinia.Models;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.Utils;
 
 import io.javalin.http.Context;
 import net.md_5.bungee.api.ChatColor;
@@ -37,10 +38,7 @@ public class ServerApi {
 								if (solPlayer == null)
 									continue;
 								
-								if (!solPlayer.isShowDiscord())
-									continue;
-								
-								player.sendMessage(ChatColor.GRAY + "[Discord]~" + message + ChatColor.RESET);
+								Utils.SendHint(player, HINT.DISCORD_MESSAGE, ChatColor.GRAY + "[Discord]~" + message + ChatColor.RESET, false);
 							}
 						}
 			        } catch (CoreStateInitException e)

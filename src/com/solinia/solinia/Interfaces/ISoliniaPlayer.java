@@ -258,10 +258,6 @@ public interface ISoliniaPlayer extends Serializable {
 
 	public List<SoliniaAccountClaim> getAccountClaims();
 
-	boolean isOocEnabled();
-
-	void setOocEnabled(boolean oocEnabled);
-
 	public void setBindPoint(String teleportlocation);
 	public String getBindPoint();
 
@@ -571,10 +567,6 @@ public interface ISoliniaPlayer extends Serializable {
 	boolean isDeleted();
 
 	void setDeleted(boolean deleted);
-
-	boolean isShowDiscord();
-
-	void setShowDiscord(boolean showDiscord);
 
 	List<SoliniaZone> getZones();
 
