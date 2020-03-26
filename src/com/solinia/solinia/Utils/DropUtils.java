@@ -117,7 +117,7 @@ public class DropUtils {
 
 						if (item.isArtifact() == true) {
 							PlayerUtils.BroadcastPlayers(
-									"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+									"A unique artifact [" + item.getDisplayname() + "] has been discovered!",item.asItemStack());
 						}
 						
 						world.dropItemNaturally(location, item.asItemStack());

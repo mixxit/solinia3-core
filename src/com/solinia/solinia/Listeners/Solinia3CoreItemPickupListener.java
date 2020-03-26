@@ -125,7 +125,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(e.getPlayer());
 	            	latestitem.setDiscoverer(solPlayer.getFullName());
 					StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
-	            	PlayerUtils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
+	            	PlayerUtils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!",latestitem.asItemStack());
 	            }
 		    }
 	        if (ItemStackUtils.IsSoliniaItem(pickedUpItemStack) && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
