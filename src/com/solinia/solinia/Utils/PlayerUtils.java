@@ -186,7 +186,7 @@ public class PlayerUtils {
 
 	public static Double getMaxAAXP() {
 		// TODO Auto-generated method stub
-		return 578360000d;
+		return getExperienceRequirementForLevel(51) - getExperienceRequirementForLevel(50);
 	}
 
 	public static double getExperienceRequirementForLevel(int level) {
