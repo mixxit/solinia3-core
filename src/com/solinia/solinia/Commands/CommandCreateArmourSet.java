@@ -46,7 +46,7 @@ public class CommandCreateArmourSet implements CommandExecutor {
 				return true;
 			}
 
-			boolean isprefix = Boolean.parseBoolean(args[3]);
+			boolean isprefix = Boolean.parseBoolean(args[2]);
 			
 			String partialname = "";
 			int count = 0;
