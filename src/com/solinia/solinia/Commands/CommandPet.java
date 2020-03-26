@@ -87,7 +87,8 @@ public class CommandPet implements CommandExecutor {
 							
 							player.setLastDamageCause(null);
 							solLivingEntity.clearHateList();
-							player.sendMessage("* As you wish my master");
+							Utils.SendHint(player,HINT.PET_BACKINGOFFTGT,"",false);
+
 							pet.teleport(player.getLocation());
 						}
 						
@@ -153,7 +154,7 @@ public class CommandPet implements CommandExecutor {
 								return true;
 							}
 							
-							player.sendMessage("* Attacking target master");
+							Utils.SendHint(player,HINT.PET_ATTACKINGTGT,targetentity.getCustomName(),false);
 							
 						}
 						

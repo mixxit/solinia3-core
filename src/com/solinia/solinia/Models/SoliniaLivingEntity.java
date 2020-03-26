@@ -1549,7 +1549,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					//Log(Logs::Detail, Logs::Aggro, "Sending pet %s into battle due to attack.", pet->GetName());
 					pet.addToHateList(attacker.getBukkitLivingEntity().getUniqueId(), 1,true);
 					pet.setAttackTarget(attacker.getBukkitLivingEntity());
-					pet.getOwnerEntity().sendMessage(pet.getName() + " tells you 'Attacking " + attacker.getName() + " master'");
+					//Utils.SendHint((LivingEntity)pet.getOwnerEntity(),HINT.PET_ATTACKINGTGT,attacker.getName(),false);
 					//Message_StringID(10, PET_ATTACKING, pet->GetCleanName(), attacker->GetCleanName());
 				//}
 			}

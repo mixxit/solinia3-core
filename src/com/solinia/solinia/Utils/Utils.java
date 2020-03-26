@@ -5867,6 +5867,12 @@ public class Utils {
 		String message = "";
 		switch (hint)
 		{
+		case PET_BACKINGOFFTGT:
+			message = "As you wish master";
+			break;
+		case PET_ATTACKINGTGT:
+			message = "Attacking "+referenceCode+" master";
+			break;
 		case OOC_MESSAGE:
 			message = referenceCode;
 			break;
