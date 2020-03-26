@@ -28,7 +28,7 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 				return false;
 			}
 			
-			if (args.length < 3) {
+			if (args.length < 4) {
 				return false;
 			}
 
@@ -53,10 +53,12 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 				return true;
 			}
 			
+			boolean isprefix = Boolean.parseBoolean(args[3]);
+			
 			String partialname = "";
 			int count = 0;
 			for (String entry : args) {
-				if (count < 3) {
+				if (count < 4) {
 					count++;
 					continue;
 				}
@@ -68,14 +70,14 @@ public class CommandCreateAllArmourSets implements CommandExecutor {
 			partialname = partialname.trim();
 
 			if (partialname.equals("")) {
-				sender.sendMessage("Blank suffix name not allowed when creating armour set");
+				sender.sendMessage("Blank prefix/suffix name not allowed when creating armour set");
 				return false;
 			}
 			
 			int itemscreated = 0;
 			for(ISoliniaClass classEntry : StateManager.getInstance().getConfigurationManager().getClasses())
 			{
-				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true,"");
+				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classEntry, armourtier, partialname, true,"", isprefix);
 				for (Integer item : items) {
 					SoliniaLootFactory.CreateLootDropItem(lootdropid, item, 1, false, chance);
 					itemscreated++;

@@ -739,7 +739,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				// this ability is for special seasonal rewards only
 				playertier += 1;
 				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix,
-						false, player.getBukkitPlayer().getName());
+						false, player.getBukkitPlayer().getName(), false);
 
 				for (int itemid : items) {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);

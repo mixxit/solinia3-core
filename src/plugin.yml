@@ -501,12 +501,12 @@ commands:
     aliases: []
   createarmorset:
     description: Creates a new set of armour for a class
-    usage: /createarmorset classid tier suffixname
+    usage: /createarmorset classid tier isprefix prefixname
     aliases: 
     - createarmourset
   createallarmoursets:
     description: Creates a new set of armour for all class with a chance of 10% on a lootdrop
-    usage: /createallarmoursets lootdropid tier chance suffixname
+    usage: /createallarmoursets lootdropid tier chance isprefix suffixname
     aliases: 
     - createallarmorsets
   listspells:

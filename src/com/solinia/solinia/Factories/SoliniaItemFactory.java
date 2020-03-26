@@ -134,7 +134,7 @@ public class SoliniaItemFactory {
 		return item;
 	}
 
-	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname, boolean prefixClassName, String discoverer) throws SoliniaItemException {
+	public static List<Integer> CreateClassItemSet(ISoliniaClass classtype, int armourtier, String partialname, boolean prefixClassName, String discoverer, boolean partialNameIsPrefix) throws SoliniaItemException {
 		if (classtype == null)
 			return new ArrayList<Integer>();
 		
@@ -294,7 +294,10 @@ public class SoliniaItemFactory {
 				
 				if (!item.isJewelry() && !item.isAdditionalArmour())
 				{
-					item.setDisplayname(rarityName + className + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
+					if (partialNameIsPrefix)
+						item.setDisplayname(partialname + " " + rarityName + className + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()));
+					else
+						item.setDisplayname(rarityName + className + classtype.getItemArmorTypeName(item.getBasename().toUpperCase()) + " " + partialname);
 				} else {
 					if (item.isJewelry())
 					{
@@ -312,8 +315,10 @@ public class SoliniaItemFactory {
 						if (item.getEquipmentSlot().equals(EquipmentSlot.Shoulders))
 							jewelryTypeName = "Cloak";
 						
-						
-						item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
+						if (partialNameIsPrefix)
+							item.setDisplayname(partialname + " " + rarityName + className + jewelryTypeName);
+						else
+							item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
 					}
 					
 					if (item.isAdditionalArmour())
@@ -332,6 +337,9 @@ public class SoliniaItemFactory {
 						if (item.getEquipmentSlot().equals(EquipmentSlot.Waist))
 							jewelryTypeName = "Belt";
 						
+						if (partialNameIsPrefix)
+							item.setDisplayname(partialname + " " + rarityName + className + jewelryTypeName);
+						else
 						item.setDisplayname(rarityName + className + jewelryTypeName + " " + partialname);
 					}
 				}

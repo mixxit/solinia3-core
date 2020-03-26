@@ -29,7 +29,7 @@ public class CommandCreateArmourSet implements CommandExecutor {
 				}
 			}
 
-			if (args.length < 2) {
+			if (args.length < 3) {
 				return false;
 			}
 
@@ -46,10 +46,12 @@ public class CommandCreateArmourSet implements CommandExecutor {
 				return true;
 			}
 
+			boolean isprefix = Boolean.parseBoolean(args[3]);
+			
 			String partialname = "";
 			int count = 0;
 			for (String entry : args) {
-				if (count < 2) {
+				if (count < 3) {
 					count++;
 					continue;
 				}
@@ -61,11 +63,11 @@ public class CommandCreateArmourSet implements CommandExecutor {
 			partialname = partialname.trim();
 
 			if (partialname.equals("")) {
-				sender.sendMessage("Blank suffix name not allowed when creating armour set");
+				sender.sendMessage("Blank prefix/suffix name not allowed when creating armour set");
 				return false;
 			}
 
-			List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classtype, armourtier, partialname, false,"");
+			List<Integer> items = SoliniaItemFactory.CreateClassItemSet(classtype, armourtier, partialname, false,"", isprefix);
 			String itemscreated = "";
 			for (Integer item : items) {
 				itemscreated += item + " ";
