@@ -24,6 +24,9 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class PlayerUtils {
 
@@ -33,9 +36,25 @@ public class PlayerUtils {
 		return (double) loss;
 	}
 	public static void BroadcastPlayers(String message) {
+		BroadcastPlayers(message, null);
+	}
+	
+	public static void BroadcastPlayers(String message, ItemStack itemStack) {
+		message = ChatColor.YELLOW + "[Announcement] " + message + " "+ ChatColor.RESET;
+		TextComponent tc = new TextComponent(message);
+
+		if (itemStack != null && itemStack.getItemMeta() != null)
+		{
+			TextComponent itemLinkComponent = new TextComponent();
+			String title = " <" + itemStack.getItemMeta().getDisplayName() + ">";
+			itemLinkComponent.setText(title);
+			itemLinkComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(itemStack)).create()));
+			tc.addExtra(itemLinkComponent);
+		}
+
 		for (World world : Bukkit.getWorlds()) {
 			for (Player player : world.getPlayers()) {
-				player.sendMessage(ChatColor.YELLOW + "[Announcement] " + message + ChatColor.RESET);
+				player.spigot().sendMessage(tc);
 			}
 		}
 	}

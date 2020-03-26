@@ -122,7 +122,8 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            
 	            if (latestitem.getDiscoverer() == null || latestitem.getDiscoverer().equals(""))
 	            {
-	            	latestitem.setDiscoverer(e.getPlayer().getCustomName());
+	            	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(e.getPlayer());
+	            	latestitem.setDiscoverer(solPlayer.getFullName());
 					StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 	            	PlayerUtils.BroadcastPlayers("* " + latestitem.getDisplayname() + " was discovered by " + e.getPlayer().getCustomName() + "!");
 	            }
