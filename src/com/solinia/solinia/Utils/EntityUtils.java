@@ -3238,6 +3238,7 @@ public class EntityUtils {
 		if (hpchange == 0)
 			return;
 		
+		//This will check both their invulnerability from minecraft and godmode from essentials
 		if (hpchange < 0 && EntityUtils.IsInvulnerable(targetToDamage))
 			return;
 		

@@ -93,7 +93,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 		}
 		
-		if (event.getTarget() != null && (EntityUtils.IsInvulnerable(event.getTarget()) || event.getTarget().isDead()))
+		if (event.getTarget() != null && event.getTarget().isInvulnerable() || event.getTarget().isDead())
 		{
 			Utils.CancelEvent(event);
 			return;

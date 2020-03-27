@@ -463,4 +463,6 @@ public interface ISoliniaLivingEntity {
 
 	void sendVitalsPacketsToAnyoneTargettingMe();
 
+	public boolean checkLosFN(ISoliniaLivingEntity soliniaLivingEntity);
+
 }

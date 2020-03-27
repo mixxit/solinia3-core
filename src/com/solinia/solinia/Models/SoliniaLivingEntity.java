@@ -21,7 +21,9 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -65,6 +67,8 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.EntityLiving;
+import net.minecraft.server.v1_14_R1.Vec3D;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -274,7 +278,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void autoAttackEnemy(ISoliniaLivingEntity defender) {
-		if (EntityUtils.IsInvulnerable(getBukkitLivingEntity()) || EntityUtils.IsInvulnerable(defender.getBukkitLivingEntity()))
+		if (getBukkitLivingEntity().isInvulnerable() || defender.getBukkitLivingEntity().isInvulnerable())
 		{
 			try {
 				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (invulnerable)");
@@ -1237,7 +1241,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return false;
 			}
 			
-			if (other.isInvulnerable() || EntityUtils.IsInvulnerable(other.getBukkitLivingEntity())) {
+			if (other.isInvulnerable()) {
 				if (isPlayer())
 					getBukkitLivingEntity()
 							.sendMessage("* Your attack was prevented as the target is Invulnerable!");
@@ -7146,7 +7150,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!(other instanceof LivingEntity))
 			return;
 		
-		if (EntityUtils.IsInvulnerable(other) || other.isDead())
+		// just check bukkit ivnulnerbality here, we want to still get aggro
+		// if they are only in /godmode but not creative
+		if (other.isInvulnerable() || other.isDead())
 			return;
 		
 		if (other instanceof Player)
@@ -7259,7 +7265,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				continue;
 			}
 
-			if (entity.isDead() || EntityUtils.IsInvulnerable(entity)) {
+			if (entity.isDead() || entity.isInvulnerable()) {
 				removeUuids.add(uuid);
 				continue;
 			}
@@ -8159,7 +8165,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (other.isDead())
 			return false;
 		
-		if (EntityUtils.IsInvulnerable(other))
+		if (other.isInvulnerable())
 			return false;
 		
 		// TODO check things like divine aura
@@ -8316,7 +8322,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (((Player)entity).getGameMode() != GameMode.SURVIVAL)
 				return;
 
-		if (entity != null && (entity.isDead() || EntityUtils.IsInvulnerable(entity))) {
+		if (entity != null && (entity.isDead() || entity.isInvulnerable())) {
 			if (this.getBukkitLivingEntity() instanceof Creature) {
 				this.getBukkitLivingEntity().setLastDamageCause(null);
 				
@@ -9247,11 +9253,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						)
 						)
 				{
+
 					//nearbySolEntity.getBukkitLivingEntity().face
 					//if (!Utils.isEntityInLineOfSight(nearbySolEntity.getBukkitLivingEntity(), this.getBukkitLivingEntity()))
 					//	continue;
-					
-					nearbySolEntity.addToHateList(attacker.getBukkitLivingEntity().getUniqueId(), 25,false);
+					if (nearbySolEntity.checkLosFN(this))
+					{
+						nearbySolEntity.addToHateList(attacker.getBukkitLivingEntity().getUniqueId(), 25,false);
+					}
 				}
 				
 			}
@@ -10125,5 +10134,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e) {
 			
 		}
+	}
+	
+	@Override
+	public boolean checkLosFN(ISoliniaLivingEntity soliniaLivingEntity) {
+
+		if(soliniaLivingEntity == null || soliniaLivingEntity.getBukkitLivingEntity() == null || soliniaLivingEntity.getBukkitLivingEntity().isDead())
+			return false;
+
+		if (this.getBukkitLivingEntity() == null || this.getBukkitLivingEntity().isDead())
+			return false;
+		
+		return this.getBukkitLivingEntity().hasLineOfSight(soliniaLivingEntity.getBukkitLivingEntity());
 	}
 }
