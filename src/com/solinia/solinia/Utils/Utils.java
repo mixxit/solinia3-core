@@ -5910,6 +5910,9 @@ public class Utils {
 		case INSUFFICIENT_REAGENTS:
 			message = "Insufficient Reagents ["+referenceCode+"] (Check spell and see /reagents)";
 			break;
+		case RUNE_ABSORBED:
+			message = "Your Rune absorbed " + referenceCode + " points of damage";
+			break;
 		}
 		
 		try
@@ -5991,6 +5994,8 @@ public class Utils {
 		case PET_ATTACKINGTGT:
 			return HintSetting.Chat;
 		case PET_BACKINGOFFTGT:
+			return HintSetting.Chat;
+		case RUNE_ABSORBED:
 			return HintSetting.Chat;
 		}
 		

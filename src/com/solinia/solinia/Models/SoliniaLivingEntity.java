@@ -35,6 +35,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import com.comphenix.protocol.utility.Util;
 import com.rit.sucy.player.TargetHelper;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
@@ -1825,7 +1826,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return Utils.DMG_RUNE;
 
 		if (this.getSpellBonuses(SpellEffectType.Rune) > 0/* && spellbonuses.MeleeRune[1] >= 0*/)
+		{
+			int original = damage;
 			damage = runeAbsorb(damage, SpellEffectType.Rune);
+			Utils.SendHint(this.getBukkitLivingEntity(), HINT.RUNE_ABSORBED, Integer.toString(original - damage), false);
+		}
 
 		if (damage < 1)
 			return Utils.DMG_RUNE;
