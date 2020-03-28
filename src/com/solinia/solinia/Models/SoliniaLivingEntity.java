@@ -1559,18 +1559,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 
 			//see if any runes want to reduce this damage
-			/* TODO Runes and such
 			if (spell_id == Utils.SPELL_UNKNOWN) {
 				damage = reduceDamage(damage);
 				//Log(Logs::Detail, Logs::Combat, "Melee Damage reduced to %d", damage);
-				damage = reduceAllDamage(damage);
-				tryTriggerThreshHold(damage, SpellEffectType.TriggerMeleeThreshold, attacker);
+				//damage = reduceAllDamage(damage);
+				//tryTriggerThreshHold(damage, SpellEffectType.TriggerMeleeThreshold, attacker);
 
-				if (skill_used != null)
+				if (!skillType.equals(SkillType.None))
 					checkNumHitsRemaining(NumHit.IncomingHitSuccess);
 			}
+			// TODO OTHER RUNE STUFF
 			else {
 				int origdmg = damage;
+				damage = affectMagicalDamage(damage, spell_id, iBuffTic, attacker);
+				/*
 				damage = affectMagicalDamage(damage, spell_id, iBuffTic, attacker);
 				if (origdmg != damage && attacker != null && attacker.isPlayer()) {
 					//if (attacker->CastToClient()->GetFilter(FilterDamageShields) != FilterHide)
@@ -1581,8 +1583,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 				damage = reduceAllDamage(damage);
 				tryTriggerThreshHold(damage, SpellEffectType.TriggerSpellThreshold, attacker);
+				*/
 			}
-			*/
 
 			if (isPlayer() && isSneaking()) {
 				((Player)this.getBukkitLivingEntity()).setSneaking(false);
@@ -1768,6 +1770,73 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			} //end packet sending
 		}
+	}
+
+	private int affectMagicalDamage(int damage, int spell_id, boolean iBuffTic, ISoliniaLivingEntity attacker) {
+		if (damage <= 0)
+			return damage;
+
+		boolean DisableSpellRune = false;
+		int slot = -1;
+		
+		// TODO NegateAttacks
+		
+		// TODO Dot Shielding
+		if (iBuffTic) {
+			
+		} else {
+			// TODO SPELL SHIELDING
+			
+			// TODO MITIGATE SPELL RUNE
+			// Do runes now.
+			
+			if (damage < 1)
+				return 0;
+
+			/*//Regular runes absorb spell damage (except dots) - Confirmed on live.
+			if (spellbonuses.MeleeRune[0] && spellbonuses.MeleeRune[1] >= 0)
+				damage = RuneAbsorb(damage, SE_Rune);
+
+			if (spellbonuses.AbsorbMagicAtt[0] && spellbonuses.AbsorbMagicAtt[1] >= 0)
+				damage = RuneAbsorb(damage, SE_AbsorbMagicAtt);
+			*/
+			if (this.getSpellBonuses(SpellEffectType.Rune) > 0)
+				damage = runeAbsorb(damage, SpellEffectType.Rune);
+
+			if (damage < 1)
+				return 0;
+		}
+		
+		return damage;
+	}
+
+	private int reduceDamage(int damage) {
+		if (damage <= 0)
+			return damage;
+
+		int slot = -1;
+		boolean DisableMeleeRune = false;
+
+		// TODO MELEE THRESHOLD
+		
+		// TODO MITIGATE MELLEE DAMAGE
+		
+		if (damage < 1)
+			return Utils.DMG_RUNE;
+
+		if (this.getSpellBonuses(SpellEffectType.Rune) > 0/* && spellbonuses.MeleeRune[1] >= 0*/)
+			damage = runeAbsorb(damage, SpellEffectType.Rune);
+
+		if (damage < 1)
+			return Utils.DMG_RUNE;
+
+		return(damage);
+	}
+	
+
+	private int runeAbsorb(int damage, SpellEffectType spellEffectType) {
+		// TODO Auto-generated method stub
+		return reduceAndRemoveRunesAndReturnLeftover(damage);
 	}
 
 	// this is called from Damage() when 'this' is attacked by 'other.

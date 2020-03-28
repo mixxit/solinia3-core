@@ -1897,7 +1897,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return false;
 				}
 				if (!solPlayer.hasSufficientReagents(spell.getComponents1(), spell.getComponentCounts1())) {
-					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					Utils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
@@ -1912,7 +1912,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return false;
 				}
 				if (!solPlayer.hasSufficientReagents(spell.getComponents2(), spell.getComponentCounts2())) {
-					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					Utils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
@@ -1927,7 +1927,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return false;
 				}
 				if (!solPlayer.hasSufficientReagents(spell.getComponents3(), spell.getComponentCounts3())) {
-					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					Utils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
@@ -1942,7 +1942,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return false;
 				}
 				if (!solPlayer.hasSufficientReagents(spell.getComponents4(), spell.getComponentCounts4())) {
-					player.sendMessage(ChatColor.GRAY + "Insufficient Reagents (Check spell and see /reagents)");
+					Utils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}

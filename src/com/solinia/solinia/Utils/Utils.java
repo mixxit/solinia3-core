@@ -142,6 +142,8 @@ public class Utils {
 	public static final float AvgDefProcsPerMinute = 2;
 
 	public static final boolean ClassicMasterWu = false;
+
+	public static final int DMG_RUNE = -6;
 	
 	public static int GetLocalSayRange(String worldName)
 	{
@@ -5905,7 +5907,8 @@ public class Utils {
 		case PICKEDUP_SPELL:
 			message = "You have picked up a spell. You can add this to your spellbook with /spellbook add. Up to 8 spells can be memorised and cast from the memorisation bar at the top of the screen  (See SoliniaMOD Keybinds)";
 			break;
-		default:
+		case INSUFFICIENT_REAGENTS:
+			message = "Insufficient Reagents ["+referenceCode+"] (Check spell and see /reagents)";
 			break;
 		}
 		
@@ -5983,6 +5986,12 @@ public class Utils {
 				return HintSetting.Chat;
 		case NEED_TARGET: 
 				return HintSetting.Chat;
+		case INSUFFICIENT_REAGENTS:
+			return HintSetting.Chat;
+		case PET_ATTACKINGTGT:
+			return HintSetting.Chat;
+		case PET_BACKINGOFFTGT:
+			return HintSetting.Chat;
 		}
 		
 		return HintSetting.Chat;
