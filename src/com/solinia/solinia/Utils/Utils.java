@@ -669,16 +669,6 @@ public class Utils {
 		}
 	}
 
-	public static boolean isEntityInLineOfSightCone(LivingEntity entity, Entity target, int arc, int range) {
-		if (!TargetHelper.getConeTargets(entity, arc, range).contains(target))
-			return false;
-
-		if (entity.hasLineOfSight(target))
-			return true;
-
-		return false;
-	}
-
 	/*
 	public static LivingEntity getTargettedLivingEntity(LivingEntity observer, int reach) {
 		Location observerPos = observer.getEyeLocation();
@@ -736,30 +726,6 @@ public class Utils {
 			return false;
 
 		return true;
-	}
-
-	public static boolean isEntityInLineOfSight(LivingEntity entityfrom, Entity entityto) {
-		if (entityfrom == null || entityfrom.isDead())
-			return false;
-		if (entityto == null || entityto.isDead())
-			return false;
-
-		if (entityto instanceof LivingEntity) {
-			if (((LivingEntity)entityto).hasPotionEffect(PotionEffectType.INVISIBILITY))
-				return false;
-			
-			entityto = (LivingEntity) entityto;
-			double x = entityfrom.getLocation().toVector().distance(entityto.getLocation().toVector());
-			Vector direction = entityfrom.getLocation().getDirection().multiply(x);
-			Vector answer = direction.add(entityfrom.getLocation().toVector());
-			if (answer.distance(entityto.getLocation().toVector()) < 1.37) {
-				if (entityfrom.hasLineOfSight(entityto)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	public static int getEffectIdFromEffectType(SpellEffectType spellEffectType) {
@@ -5937,6 +5903,9 @@ public class Utils {
 		case SERVER_SAVE_FINISH:
 			message = "RPG State backup complete";
 			break;
+		case SPELL_INVALIDEFFECT:
+			message = "This is not a valid effect for this entity: " + referenceCode;
+			break;
 		}
 		
 		try
@@ -6024,6 +5993,8 @@ public class Utils {
 		case SERVER_SAVE_BEGIN:
 			return HintSetting.Chat;
 		case SERVER_SAVE_FINISH:
+			return HintSetting.Chat;
+		case SPELL_INVALIDEFFECT:
 			return HintSetting.Chat;
 		}
 		

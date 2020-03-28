@@ -51,6 +51,7 @@ import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
+import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.minecraft.server.v1_14_R1.Tuple;
@@ -125,7 +126,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
 				if (!solentity.isCurrentlyNPCPet())
 				if (StateManager.getInstance().getEntityManager().getHateListEntry(event.getEntity().getUniqueId(),event.getTarget().getUniqueId()).a() < 1)
-					if (!Utils.isEntityInLineOfSightCone((LivingEntity) event.getEntity(), event.getTarget(), 90,
+					if (!RaycastUtils.isEntityInLineOfSightCone((LivingEntity) event.getEntity(), event.getTarget(), 90,
 							Utils.MAX_ENTITY_AGGRORANGE)) {
 						Utils.CancelEvent(event);
 						return;

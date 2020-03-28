@@ -18,6 +18,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -74,7 +75,7 @@ public class CommandTarget implements CommandExecutor {
 					if (!(entity instanceof LivingEntity))
 						continue;
 
-					if (!Utils.isEntityInLineOfSightCone(player, entity, 90, Utils.MAX_ENTITY_AGGRORANGE))
+					if (!RaycastUtils.isEntityInLineOfSightCone(player, entity, 90, Utils.MAX_ENTITY_AGGRORANGE))
 						continue;
 					
 					// Skip over existing target

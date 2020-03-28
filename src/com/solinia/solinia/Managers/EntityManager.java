@@ -55,6 +55,7 @@ import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
 import com.solinia.solinia.Utils.PartyWindowUtils;
+import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -438,12 +439,18 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public boolean addActiveEntitySpell(LivingEntity targetEntity, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType) {
 		try {
+			Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "Beginning adding spell to entity on behalf of caster");
 			if (soliniaSpell.isCharmSpell() && getPet(sourceEntity.getUniqueId()) != null && !getPet(sourceEntity.getUniqueId()).getUniqueId().equals(targetEntity.getUniqueId()))
+			{
+				Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "Source aborting spell cast, was either charm with a pet or related to pet status");
 				return false;
+			}
+			
 		
 			if (entitySpells.get(targetEntity.getUniqueId()) == null)
+			{
 				entitySpells.put(targetEntity.getUniqueId(), new SoliniaEntitySpells(targetEntity));
-		
+			}
 		
 			ISoliniaLivingEntity solLivingSourceEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
 			int duration = Utils.getDurationFromSpell(solLivingSourceEntity, soliniaSpell);
@@ -453,6 +460,7 @@ public class EntityManager implements IEntityManager {
 			}
 			
 			boolean addSpellResult = entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages, requiredWeaponSkillType);
+			Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "addSpell result was: " + addSpellResult);
 
 			if (targetEntity instanceof Player)
 				SoliniaPlayerAdapter.Adapt((Player)targetEntity).sendEffects();
@@ -697,7 +705,7 @@ public class EntityManager implements IEntityManager {
 					
 					completedNpcsIds.add(solLivingEntityThatWillCast.getNpcid());
 					
-					if (Utils.isEntityInLineOfSight(livingEntityThatWillCast, creatureThatWillCast.getTarget()))
+					if (RaycastUtils.isEntityInLineOfSight(livingEntityThatWillCast, creatureThatWillCast.getTarget(), true))
 						solLivingEntityThatWillCast.doSpellCast(plugin, creatureThatWillCast.getTarget());
 					
 				} catch (CoreStateInitException e) {
@@ -1527,30 +1535,35 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public void startCasting(LivingEntity livingEntity, CastingSpell castingSpell)
-	{
+	public void startCasting(LivingEntity livingEntity, CastingSpell castingSpell) {
 		interruptCasting(livingEntity);
-		if (livingEntity instanceof Player)
-		{
-			try
-			{
+		try {
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(livingEntity);
+			if (solLivingEntity == null)
+				return;
+
+			solLivingEntity.BreakInvis();
+
+			if (livingEntity instanceof Player) {
+
 				// Move fizzle check to before casting
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)livingEntity);
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) livingEntity);
 				if (solPlayer != null && !solPlayer.checkDoesntFizzle(castingSpell.getSpell())) {
 					solPlayer.emote("* " + solPlayer.getFullName() + "'s spell fizzles", false, false);
-					solPlayer.reducePlayerMana(castingSpell.getSpell().getActSpellCost(solPlayer.getSoliniaLivingEntity()));
+					solPlayer.reducePlayerMana(
+							castingSpell.getSpell().getActSpellCost(solPlayer.getSoliniaLivingEntity()));
 					return;
 				}
-				
+
 				livingEntity.sendMessage("You begin your ability " + castingSpell.getSpell().getName());
-				
-				playSpellCastingSoundEffect(livingEntity,castingSpell.getSpell());
-				
+
+				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
+
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
-			} catch (CoreStateInitException e)
-			{
-				
+
 			}
+		} catch (CoreStateInitException e) {
+
 		}
 	}
 

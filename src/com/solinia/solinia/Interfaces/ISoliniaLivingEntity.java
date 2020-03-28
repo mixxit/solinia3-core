@@ -465,4 +465,8 @@ public interface ISoliniaLivingEntity {
 
 	public boolean checkLosFN(ISoliniaLivingEntity soliniaLivingEntity);
 
+	void BreakInvis();
+
+	public boolean checkLosFN(ISoliniaLivingEntity solTarget, boolean checkDirection);
+
 }

@@ -1811,6 +1811,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Allowed classes over 0 and not ignoring profession and level");
 
 			if (getClassObj() == null) {
+				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Had no class");
 				player.sendMessage(ChatColor.GRAY + " * This effect cannot be used by your profession");
 				return;
 			}
@@ -1832,6 +1833,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				player.sendMessage(ChatColor.GRAY + " * This effect can only be used by " + professions);
 				return;
 			} else {
+				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Found profession");
 				if (foundlevel > 0) {
 					Double level = (double) getLevel();
 					if (level < foundlevel) {
@@ -1847,7 +1849,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) player);
 			if (solentity == null)
+			{
+				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Player had no solinialivingentity object");
 				return;
+			}
 
 			if (useMana && spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
 				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "No mana");
@@ -1862,20 +1867,32 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return;
 				}
 			}
+			
+			if (targetmob != null && player != null && spell != null)
+			{
+				Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(targetmob, player, spell);
+				if (!result.a())
+				{
+					Utils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
+					return;
+				}
+			}
 		} catch (CoreStateInitException e) {
 			return;
 		}
-
 		if (player != null && !player.isDead())
 			if (targetmob != null && !targetmob.isDead()) {
 				boolean success = spell.tryCast(player, targetmob, useMana, useReagents, requiredWeaponSkillType);
+				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Cast success for spell id ["+spell.getId()+"] state: " + success);
 				if (success == true) {
+					Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Trying to increase skill");
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()), 1);
 				}
 				return;
 			} else {
 				boolean success = spell.tryCast(player, player, useMana, useReagents, requiredWeaponSkillType);
 				if (success == true) {
+					Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Trying to increase skill non dead/null mob");
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()), 1);
 				}
 				return;

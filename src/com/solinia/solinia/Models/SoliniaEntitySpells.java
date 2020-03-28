@@ -25,6 +25,7 @@ import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaEntitySpells {
 
@@ -100,26 +101,38 @@ public class SoliniaEntitySpells {
 	}
 
 	public boolean addSpell(Plugin plugin, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages, String requiredWeaponSkillType) {
+		if (sourceEntity == null)
+			return false;
+
+		Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Beginning addSpell on behalf of caster");
 		// This spell ID is already active
 		// TODO We should allow overwriting of higher level 
 		if (containsSpellId(soliniaSpell.getId()) && !soliniaSpell.isStackableDot())
+		{
+			Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Abort, had spell already and it wasnt a stackable dot");
 			return false;
-		
+		}
+
 		if ((slots.size() + 1) > getMaxTotalSlots())
+		{
+			Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Abort, had no more spell slots");
 			return false;
+		}
 
 		if (this.getLivingEntity() == null)
+		{
+			Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Target didnt exist");
 			return false;
-
-		if (sourceEntity == null)
-			return false;
+		}
 
 		// System.out.println("Adding spell: " + soliniaSpell.getName() + " to " +
 		// this.getLivingEntity().getName() + " from " + sourceEntity.getName());
 
 		try {
-			if (!SoliniaSpell.isValidEffectForEntity(getLivingEntity(), sourceEntity, soliniaSpell)) {
+			Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(getLivingEntity(), sourceEntity, soliniaSpell);
+			if (!result.a()) {
 				//System.out.println("Spell: " + soliniaSpell.getName() + "[" + soliniaSpell.getId() + "] found to have invalid target (" + getLivingEntity().getName() + ")");
+				Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Failed to apply: " + result.b());
 				return false;
 			}
 		} catch (CoreStateInitException e) {

@@ -32,6 +32,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.*;
 
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaItem implements ISoliniaItem {
 
@@ -579,7 +580,18 @@ public class SoliniaItem implements ISoliniaItem {
 		if (spell == null) {
 			return false;
 		}
+		
+		if (targetentity != null && player != null && spell != null)
+		{
+			Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(targetentity, player, spell);
 
+			if (!result.a())
+			{
+				Utils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
+				return false;
+			}
+		}
+		
 		return spell.tryCast(player,targetentity,!isConsumable,!isConsumable,this.getRequiredWeaponSkillType());
 	}
 	
