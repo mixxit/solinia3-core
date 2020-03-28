@@ -32,6 +32,8 @@ import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -176,7 +178,9 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),
 						SpellEffectType.Invisibility)
 						|| StateManager.getInstance().getEntityManager()
-								.hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.Invisibility2)) {
+								.hasEntityEffectType((LivingEntity) event.getTarget(), SpellEffectType.Invisibility2)
+						|| ((LivingEntity) event.getTarget()).hasPotionEffect(PotionEffectType.INVISIBILITY)
+						) {
 					solEntity.setAttackTarget(null);
 					Utils.CancelEvent(event);
 					return;

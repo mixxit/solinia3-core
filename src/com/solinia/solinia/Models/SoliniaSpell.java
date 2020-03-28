@@ -4295,7 +4295,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 
 		if (!source.getUniqueId().equals(target.getUniqueId()))
-			if (!source.hasLineOfSight(target))
+			if (!solSource.checkLosFN(solTarget))
 				return false;
 
 		// Try not to kill potentially friendly player tameables with hostile spells

@@ -739,7 +739,15 @@ public class Utils {
 	}
 
 	public static boolean isEntityInLineOfSight(LivingEntity entityfrom, Entity entityto) {
+		if (entityfrom == null || entityfrom.isDead())
+			return false;
+		if (entityto == null || entityto.isDead())
+			return false;
+
 		if (entityto instanceof LivingEntity) {
+			if (((LivingEntity)entityto).hasPotionEffect(PotionEffectType.INVISIBILITY))
+				return false;
+			
 			entityto = (LivingEntity) entityto;
 			double x = entityfrom.getLocation().toVector().distance(entityto.getLocation().toVector());
 			Vector direction = entityfrom.getLocation().getDirection().multiply(x);
@@ -5860,6 +5868,16 @@ public class Utils {
 		return Boolean.parseBoolean(isMerchant);
 	}
 	
+	public static void SendHintToServer(HINT hint, String referenceCode) {
+		for(World world : Bukkit.getWorlds())
+		{
+			for (Player player : world.getPlayers())
+			{
+				Utils.SendHint(player, hint, referenceCode, false);
+			}
+		}
+	}
+	
 	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby)
 	{
 		SendHint(entity, hint, referenceCode, sendNearby, null);
@@ -5912,6 +5930,12 @@ public class Utils {
 			break;
 		case RUNE_ABSORBED:
 			message = "Your Rune absorbed " + referenceCode + " points of damage";
+			break;
+		case SERVER_SAVE_BEGIN:
+			message = "RPG State is backing up, this may take some time";
+			break;
+		case SERVER_SAVE_FINISH:
+			message = "RPG State backup complete";
 			break;
 		}
 		
@@ -5976,19 +6000,19 @@ public class Utils {
 		case DISCORD_MESSAGE:
 			return HintSetting.Chat;
 		case HITFORDMGBY:
-				return HintSetting.ActionBar;
+			return HintSetting.ActionBar;
 		case MASTERWUFULL: 
-				return HintSetting.Chat;
+			return HintSetting.Chat;
 		case HITTHEMBUTMISSED: 
-				return HintSetting.ActionBar;
+			return HintSetting.ActionBar;
 		case HITYOUBUTMISSED: 
-				return HintSetting.ActionBar;
+			return HintSetting.ActionBar;
 		case PETHITTHEMBUTMISSED: 
-				return HintSetting.ActionBar;
+			return HintSetting.ActionBar;
 		case PICKEDUP_SPELL: 
-				return HintSetting.Chat;
+			return HintSetting.Chat;
 		case NEED_TARGET: 
-				return HintSetting.Chat;
+			return HintSetting.Chat;
 		case INSUFFICIENT_REAGENTS:
 			return HintSetting.Chat;
 		case PET_ATTACKINGTGT:
@@ -5996,6 +6020,10 @@ public class Utils {
 		case PET_BACKINGOFFTGT:
 			return HintSetting.Chat;
 		case RUNE_ABSORBED:
+			return HintSetting.Chat;
+		case SERVER_SAVE_BEGIN:
+			return HintSetting.Chat;
+		case SERVER_SAVE_FINISH:
 			return HintSetting.Chat;
 		}
 		

@@ -33,6 +33,7 @@ import org.bukkit.entity.Sittable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.comphenix.protocol.utility.Util;
@@ -380,7 +381,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			}
 			
-			if (!this.getBukkitLivingEntity().hasLineOfSight(defender.getBukkitLivingEntity())) {
+			if (!this.checkLosFN(defender)) {
 				getBukkitLivingEntity().sendMessage(
 						"* You do not have line of sight to your target!");
 				return;
@@ -592,6 +593,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private void cancelSneakHide() {
 		if (this.getBukkitLivingEntity() instanceof Player)
 			((Player)this.getBukkitLivingEntity()).setSneaking(false);
+		if (this.getBukkitLivingEntity().hasPotionEffect(PotionEffectType.INVISIBILITY))
+			this.getBukkitLivingEntity().removePotionEffect(PotionEffectType.INVISIBILITY);
 	}
 
 	private boolean isInvisibleToAnimals() {
@@ -5824,7 +5827,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO buff stacking
 					) {
 						if (!checked_los) {
-							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
+							if (!this.checkLosFN(tar)) {
 								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
@@ -5852,7 +5855,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO NPC Pets
 					) {
 						if (!checked_los) {
-							if (!this.getBukkitLivingEntity().hasLineOfSight(target)) {
+							if (!this.checkLosFN(tar)) {
 								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"Could not cast as i could not see the arget");
 								return false;
 							}
@@ -9003,6 +9006,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						StateManager.getInstance().getEntityManager()
 								.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), spellId, false, true);
 					}
+		
+		if (this.getBukkitLivingEntity().hasPotionEffect(PotionEffectType.INVISIBILITY))
+			this.getBukkitLivingEntity().removePotionEffect(PotionEffectType.INVISIBILITY);
 		} catch (CoreStateInitException e) {
 
 		}
@@ -10216,9 +10222,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if(soliniaLivingEntity == null || soliniaLivingEntity.getBukkitLivingEntity() == null || soliniaLivingEntity.getBukkitLivingEntity().isDead())
 			return false;
 
-		if (this.getBukkitLivingEntity() == null || this.getBukkitLivingEntity().isDead())
-			return false;
-		
-		return this.getBukkitLivingEntity().hasLineOfSight(soliniaLivingEntity.getBukkitLivingEntity());
+		return Utils.isEntityInLineOfSight(this.getBukkitLivingEntity(), soliniaLivingEntity.getBukkitLivingEntity());
 	}
 }

@@ -30,7 +30,7 @@ public class CommandSetTitle implements CommandExecutor {
 	            		TextComponent tc = new TextComponent();
 						tc.setText("- " + title);
 						TextComponent tc2 = new TextComponent();
-						tc2.setText(ChatColor.GRAY + "Click here to set this title" + ChatColor.RESET);
+						tc2.setText(ChatColor.GRAY + " - Click here to set this title" + ChatColor.RESET);
 						tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/settitle " + title));
 						tc.addExtra(tc2);
 						sender.spigot().sendMessage(tc);

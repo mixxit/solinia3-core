@@ -275,6 +275,20 @@ public class Solinia3CorePlayerListener implements Listener {
 			// update last location
 			solPlayer.setLastLocation(player.getLocation());
 			
+			if (player.isSneaking())
+			if (solPlayer.getClassObj() != null) {
+				if (solPlayer.getClassObj().isSneakFromCrouch()) {
+					if (!solPlayer.getSoliniaLivingEntity().isInCombat())
+					{
+						if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY))
+							player.sendMessage("You fade into the shadows...");
+						Utils.AddPotionEffect(player, PotionEffectType.INVISIBILITY, 1);
+					} else {
+						player.sendMessage("You try to step into the shadows but your enemy notices you...");
+					}
+				}
+			}
+			
 		} catch (CoreStateInitException e)
 		{
 			

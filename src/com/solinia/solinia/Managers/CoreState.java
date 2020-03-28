@@ -40,6 +40,7 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.Fellowship;
+import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
@@ -669,7 +670,9 @@ public class CoreState {
 			throw new CoreStateInitException("State not initialised");
 		System.out.println("Commit");
 		try {
+			Utils.SendHintToServer(HINT.SERVER_SAVE_BEGIN, "");
 			configurationManager.commit();
+			Utils.SendHintToServer(HINT.SERVER_SAVE_FINISH,"");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
