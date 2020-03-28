@@ -11,6 +11,8 @@ import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandListCrafts implements CommandExecutor {
 
@@ -33,7 +35,12 @@ public class CommandListCrafts implements CommandExecutor {
 			// Return all
 			for(SoliniaCraft entity : StateManager.getInstance().getConfigurationManager().getCrafts())
 			{
-				sender.sendMessage("CraftID: " + ChatColor.GOLD + entity.getId() + ChatColor.RESET + " - " + entity.getRecipeName() + " outputId: " + entity.getOutputItem());
+				TextComponent textComponent = new TextComponent();
+				String title = "CraftID: " + ChatColor.GOLD + entity.getId() + ChatColor.RESET + " - " + entity.getRecipeName() + " outputId: " + entity.getOutputItem();
+				textComponent.setText(title);
+				String transfertext = "/editcraft " + entity.getId()  + "";
+				textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, transfertext));
+				sender.spigot().sendMessage(textComponent);
 			}
 			
 			return true;
@@ -56,7 +63,12 @@ public class CommandListCrafts implements CommandExecutor {
 		{
 			if (entity.getRecipeName().toUpperCase().contains(args[0].toUpperCase()))
 			{
-				sender.sendMessage("CraftID: " + ChatColor.GOLD + entity.getId() + ChatColor.RESET + " - " + entity.getRecipeName() + " outputId: " + entity.getOutputItem());
+				TextComponent textComponent = new TextComponent();
+				String title = "CraftID: " + ChatColor.GOLD + entity.getId() + ChatColor.RESET + " - " + entity.getRecipeName() + " outputId: " + entity.getOutputItem();
+				textComponent.setText(title);
+				String transfertext = "/editcraft " + entity.getId()  + "";
+				textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, transfertext));
+				sender.spigot().sendMessage(textComponent);
 			}
 		}
 		} catch (CoreStateInitException e)

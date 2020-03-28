@@ -36,6 +36,8 @@ import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class SoliniaNPC implements ISoliniaNPC {
@@ -347,8 +349,20 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " " + "name: " + ChatColor.GOLD
 				+ getName() + ChatColor.RESET);
-		sender.sendMessage("- raceid: " + ChatColor.GOLD + getRaceid() + ChatColor.RESET + " " + "classid: "
-				+ ChatColor.GOLD + getClassid() + ChatColor.RESET);
+		if (getRaceid() != 0) {
+			sender.sendMessage("- raceid: " + ChatColor.GOLD + getRaceid() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getRace(getRaceid()).getName() + ")"
+					+ ChatColor.RESET);
+		} else {
+			sender.sendMessage("- raceid: " + ChatColor.GOLD + getRaceid() + " (No Race)" + ChatColor.RESET);
+		}
+		if (getClassid() != 0) {
+			sender.sendMessage("- classid: " + ChatColor.GOLD + getClassid() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getClassObj(getClassid()).getName() + ")"
+					+ ChatColor.RESET);
+		} else {
+			sender.sendMessage("- classid: " + ChatColor.GOLD + getClassid() + " (No Class)" + ChatColor.RESET);
+		}
 		sender.sendMessage(ChatColor.RED + "STATS" + ChatColor.RESET);
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET + " " + "ac: " + ChatColor.GOLD
 				+ getAC() + ChatColor.RESET + " " + "forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
@@ -372,12 +386,12 @@ public class SoliniaNPC implements ISoliniaNPC {
 				+ ChatColor.RESET);
 		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic() + " " + ChatColor.RESET + "- boss: " + ChatColor.GOLD + isBoss() + ChatColor.RESET + " - raidheroic: " + ChatColor.GOLD + isRaidheroic() + " " + ChatColor.RESET +  "raidboss: " + ChatColor.GOLD
 				+ isRaidboss());
-		sender.sendMessage("- speaksalllangauges: " + ChatColor.GOLD + isSpeaksAllLanguages());
+		sender.sendMessage("- speaksalllanguages: " + ChatColor.GOLD + isSpeaksAllLanguages());
 		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
 		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
-		sender.sendMessage("- teleportattack: " + ChatColor.GOLD + isTeleportAttack() + " " + ChatColor.GOLD
-				+ " teleportattacklocation: " + getTeleportAttackLocation() + ChatColor.RESET);
+		sender.sendMessage("- teleportattack: " + ChatColor.GOLD + isTeleportAttack() + " " + ChatColor.RESET
+				+ " teleportattacklocation: " + ChatColor.GOLD + getTeleportAttackLocation() + ChatColor.RESET);
 		if (getFactionid() != 0) {
 			sender.sendMessage("- factionid: " + ChatColor.GOLD + getFactionid() + " ("
 					+ StateManager.getInstance().getConfigurationManager().getFaction(getFactionid()).getName() + ")"
@@ -398,8 +412,9 @@ public class SoliniaNPC implements ISoliniaNPC {
 		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET + " - usedisguise: "
 				+ ChatColor.GOLD + isUsedisguise() + ChatColor.RESET + " " + "disguisetype: " + ChatColor.GOLD
 				+ getDisguisetype() + ChatColor.RESET);
-		sender.sendMessage("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET + " "
-				+ "customheaddata: " + ChatColor.GOLD + getCustomheaddata() + ChatColor.RESET);
+		TextComponent tc = new TextComponent("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET + " - customheaddata: " + ChatColor.GOLD + "<hover to see>" + ChatColor.RESET);
+		tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.getCustomheaddata()).create()));
+		sender.spigot().sendMessage(tc);
 		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET + " " + "burning: "
 				+ ChatColor.GOLD + isBurning() + ChatColor.RESET + " " + "invisible: " + ChatColor.GOLD + isInvisible()
 				+ ChatColor.RESET);

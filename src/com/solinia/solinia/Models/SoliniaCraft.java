@@ -71,11 +71,47 @@ public class SoliniaCraft {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET);
 		sender.sendMessage("- recipename: " + ChatColor.GOLD + getRecipeName() + ChatColor.RESET);
-		sender.sendMessage("- item1: " + ChatColor.GOLD + getItem1() + ChatColor.RESET);
-		sender.sendMessage("- item2: " + ChatColor.GOLD + getItem2() + ChatColor.RESET);
-		sender.sendMessage("- outputitem: " + ChatColor.GOLD + getOutputItem() + ChatColor.RESET);
-		sender.sendMessage("- outputloottableid: " + ChatColor.GOLD + getOutputLootTableId() + ChatColor.RESET);
-		sender.sendMessage("- classid: " + ChatColor.GOLD + getClassId() + ChatColor.RESET);
+		if (getItem1() != 0) {
+			sender.sendMessage("- item1: " + ChatColor.GOLD + getItem1() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getItem(getItem1()).getDisplayname() + ")"
+					+ ChatColor.RESET);
+		} else {
+			sender.sendMessage("- item1: " + ChatColor.GOLD + getItem1() + " (No Item)" + ChatColor.RESET);
+		}
+
+		if (getItem2() != 0) {
+			sender.sendMessage("- item2: " + ChatColor.GOLD + getItem2() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getItem(getItem2()).getDisplayname() + ")"
+					+ ChatColor.RESET);
+		} else {
+			sender.sendMessage("- item2: " + ChatColor.GOLD + getItem2() + " (No Item)" + ChatColor.RESET);
+		}
+		
+		if (getOutputItem() != 0) {
+			sender.sendMessage("- outputitem: " + ChatColor.GOLD + getOutputItem() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getItem(getOutputItem()).getDisplayname() + ")"
+					+ ChatColor.RESET);
+		} else {
+			sender.sendMessage("- outputitem: " + ChatColor.GOLD + getOutputItem() + " (No Item)" + ChatColor.RESET);
+		}
+		
+		if (getOutputLootTableId() != 0) {
+			sender.sendMessage("- outputloottableid: " + ChatColor.GOLD + getOutputLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getOutputLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- outputloottableid: " + ChatColor.GOLD + getOutputLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
+		
+		if (getClassId() != 0) {
+			sender.sendMessage("- classid: " + ChatColor.GOLD + getClassId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getClassObj(getClassId()).getName() + ")"
+					+ ChatColor.RESET);
+		} else {
+			sender.sendMessage("- classid: " + ChatColor.GOLD + getClassId() + " (No Class)" + ChatColor.RESET);
+		}
+		
 		sender.sendMessage("- skilltype: " + ChatColor.GOLD + getSkillType() + ChatColor.RESET);
 		sender.sendMessage("- minskill: " + ChatColor.GOLD + getMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);

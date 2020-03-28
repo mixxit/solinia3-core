@@ -10,9 +10,14 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaItem;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandListItems implements CommandExecutor {
 	@Override
@@ -53,8 +58,14 @@ public class CommandListItems implements CommandExecutor {
 					found++;
 					if (item.getDisplayname().toUpperCase().contains(StringUtils.join(args, " ").toUpperCase()))
 					{
-						String itemmessage = "" + ChatColor.GOLD + item.getId() + ChatColor.RESET + " - " + item.getDisplayname();
-						sender.sendMessage(itemmessage);
+						TextComponent textComponent = new TextComponent();
+						String title = "" + ChatColor.GOLD + item.getId() + ChatColor.RESET + " - " + item.getDisplayname();
+						textComponent.setText(title);
+						textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack())).create()));
+						String transfertext = "/spawnitem " + item.getId()  + " 1";
+						textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, transfertext));
+
+						sender.spigot().sendMessage(textComponent);
 					}
 				}
 			
