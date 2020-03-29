@@ -630,5 +630,5 @@ public interface IConfigurationManager {
 
 	int getNextPlayerId();
 
-	ISoliniaPlayer getCharacterById(int characterId);
+	ISoliniaPlayer getCharacterById(Integer characterId);
 }

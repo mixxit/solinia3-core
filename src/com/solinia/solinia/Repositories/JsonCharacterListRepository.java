@@ -22,7 +22,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaPlayer;
 
 public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer>  {
-	private ConcurrentHashMap<UUID, ISoliniaPlayer> CharacterLists = new ConcurrentHashMap<UUID, ISoliniaPlayer>();
+	private ConcurrentHashMap<Integer, ISoliniaPlayer> CharacterLists = new ConcurrentHashMap<Integer, ISoliniaPlayer>();
 	private String filePath;
 	
 	@Override
@@ -40,7 +40,7 @@ public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer> 
 		CharacterLists.clear();
 		for(ISoliniaPlayer CharacterList : fileCharacterLists)
 		{
-			CharacterLists.put(CharacterList.getCharacterUUID(), CharacterList);
+			CharacterLists.put(CharacterList.getId(), CharacterList);
 		}
 		
 		System.out.println("Reloaded " + CharacterLists.size() + " CharacterLists");
@@ -78,7 +78,7 @@ public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer> 
 
 	@Override
 	public void add(ISoliniaPlayer item) {
-		CharacterLists.put(item.getCharacterUUID(), item);
+		CharacterLists.put(item.getId(), item);
 		
 	}
 
@@ -86,25 +86,25 @@ public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer> 
 	public void add(Iterable<ISoliniaPlayer> items) {
 		for(ISoliniaPlayer CharacterList : items)
 		{
-			this.CharacterLists.put(CharacterList.getCharacterUUID(), CharacterList);
+			this.CharacterLists.put(CharacterList.getId(), CharacterList);
 		}
 	}
 
 	@Override
 	public void update(ISoliniaPlayer item) {
-		this.CharacterLists.put(item.getCharacterUUID(), item);
+		this.CharacterLists.put(item.getId(), item);
 	}
 
 	@Override
 	public void remove(ISoliniaPlayer item) {
-		this.CharacterLists.remove(item.getCharacterUUID());		
+		this.CharacterLists.remove(item.getId());		
 	}
 
 	@Override
 	public void remove(Predicate<ISoliniaPlayer> filter) {
 		for(ISoliniaPlayer CharacterList : CharacterLists.values().stream().filter(filter).collect(Collectors.toList()))
 		{
-			CharacterLists.remove(CharacterList.getCharacterUUID());
+			CharacterLists.remove(CharacterList.getId());
 		}
 	}
 
