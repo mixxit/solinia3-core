@@ -382,7 +382,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			}
 			
-			if (!this.checkLosFN(defender)) {
+			if (!this.checkLosFN(defender,false)) {
 				getBukkitLivingEntity().sendMessage(
 						"* You do not have line of sight to your target!");
 				return;
