@@ -66,6 +66,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	private static final long serialVersionUID = 9075039437399478391L;
 	private int id = 0;
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
+
 	private UUID uuid;
 	private UUID characterId = UUID.randomUUID();
 	private UUID motherId;
@@ -4857,5 +4860,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
 	}
 }

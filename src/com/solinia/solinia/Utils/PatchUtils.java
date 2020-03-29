@@ -11,10 +11,11 @@ public class PatchUtils {
 		{
 			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters())
 			{
-				if (player.getId() < 1)
-					player.setId(StateManager.getInstance().getConfigurationManager().getNextPlayerId());
+
+				player.setPrimaryUUID(player.getCharacterId());
+				player.setSecondaryUUID(player.getUUID());
 				
-				System.out.println("Set new player ID to : " + player.getId());
+				System.out.println("Set new primary/secondary ID to : " + player.getPrimaryUUID() + ":" + player.getSecondaryUUID());
 			}
 		} catch (CoreStateInitException e)
 		{

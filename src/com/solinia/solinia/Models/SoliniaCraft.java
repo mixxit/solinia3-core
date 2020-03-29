@@ -1,5 +1,7 @@
 package com.solinia.solinia.Models;
 
+import java.util.UUID;
+
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -13,6 +15,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaCraft implements IPersistable {
 	private int id = 0;
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
+
 	private String recipeName = "";
 	private int item1 = 0;
 	private int item2 = 0;
@@ -65,6 +70,27 @@ public class SoliniaCraft implements IPersistable {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
 	}
 	
 	public void sendCraftSettingsToSender(CommandSender sender) throws CoreStateInitException {

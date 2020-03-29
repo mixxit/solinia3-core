@@ -3,6 +3,7 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Color;
@@ -24,6 +25,9 @@ import net.md_5.bungee.api.ChatColor;
 public class SoliniaClass implements ISoliniaClass,IPersistable {
 
 	private int id;
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
+
 	private boolean isadmin = true;
 	private String name = "";
 	private int leatherRgbDecimal = -1;
@@ -97,6 +101,27 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 		this.id = id;
 	}
 
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
+	}
+	
 	@Override
 	public void setName(String name) {
 		this.name = name;

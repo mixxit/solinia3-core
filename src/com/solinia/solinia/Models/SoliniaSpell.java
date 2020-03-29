@@ -42,6 +42,8 @@ import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaSpell implements ISoliniaSpell {
 	private List<SoliniaSpellClass> allowedClasses = new ArrayList<SoliniaSpellClass>();
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
 
 	@SerializedName("id")
 	@Expose
@@ -763,6 +765,27 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
 	}
 
 	public String getName() {

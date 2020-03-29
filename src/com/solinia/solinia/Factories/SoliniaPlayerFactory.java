@@ -24,7 +24,10 @@ public class SoliniaPlayerFactory {
 		// A player is different to a players entity
 		ISoliniaPlayer soliniaPlayer = new SoliniaPlayer();
 		soliniaPlayer.setUUID(playerUuid);
-		soliniaPlayer.setCharacterId(UUID.randomUUID());
+		soliniaPlayer.setSecondaryUUID(playerUuid);
+		UUID characterUUID = UUID.randomUUID();
+		soliniaPlayer.setCharacterId(characterUUID);
+		soliniaPlayer.setPrimaryUUID(characterUUID);
 		soliniaPlayer.setId(StateManager.getInstance().getConfigurationManager().getNextPlayerId());
 
 		String forename = getRandomNames(5, 1)[0];
@@ -103,7 +106,10 @@ public class SoliniaPlayerFactory {
 			String tmp = gson.toJson(solPlayerToCopy);
 			SoliniaPlayer obj = gson.fromJson(tmp,SoliniaPlayer.class);
 			obj.setUUID(uniqueId);
-			obj.setCharacterId(UUID.randomUUID());
+			obj.setSecondaryUUID(uniqueId);
+			UUID characterUUID = UUID.randomUUID();
+			obj.setCharacterId(characterUUID);
+			obj.setPrimaryUUID(characterUUID);
 			obj.setCharacterFellowshipId(0);
 			obj.setId(StateManager.getInstance().getConfigurationManager().getNextPlayerId());
 			

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -38,6 +39,9 @@ import net.minecraft.server.v1_14_R1.Tuple;
 public class SoliniaItem implements ISoliniaItem,IPersistable {
 
 	private int id;
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
+
 	private String displayname;
 	private String basename;
 	private int abilityid = 0;
@@ -146,6 +150,27 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
 	}
 
 	@Override

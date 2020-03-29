@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
 
@@ -18,6 +19,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaAAAbility implements ISoliniaAAAbility, IPersistable {
 	private int id;
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
+
 	private String sysname;
 	private String name;
 	private List<String> classes;
@@ -33,6 +37,27 @@ public class SoliniaAAAbility implements ISoliniaAAAbility, IPersistable {
 	@Override
 	public void setSysname(String sysname) {
 		this.sysname = sysname;
+	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
 	}
 	
 	@Override

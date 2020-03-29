@@ -22,6 +22,8 @@ public class Fellowship implements IPersistable {
 	private int Id = 0;
 	private List<UUID> members = new ArrayList<UUID>();
 	private UUID ownerUuid = null;
+	private UUID primaryUUID;
+	private UUID secondaryUUID;
 	public int getId() {
 		return Id;
 	}
@@ -352,5 +354,26 @@ public class Fellowship implements IPersistable {
 		}
 		
 		return membersOnline;
+	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
 	}
 }

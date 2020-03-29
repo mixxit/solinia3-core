@@ -2,6 +2,7 @@ package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,6 +15,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaQuest implements ISoliniaQuest,IPersistable {
 	private int Id;
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
+
 	private String name = "";
 	private String questFlagCompletion = "";
 	private ConcurrentHashMap<Integer, QuestStep> questSteps = new ConcurrentHashMap<Integer, QuestStep>();
@@ -26,6 +30,27 @@ public class SoliniaQuest implements ISoliniaQuest,IPersistable {
 	@Override
 	public void setId(int id) {
 		Id = id;
+	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
 	}
 	
 	@Override

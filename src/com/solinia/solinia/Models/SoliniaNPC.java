@@ -3,6 +3,8 @@ package com.solinia.solinia.Models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -43,6 +45,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private int id;
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
 	private String name;
 	private String mctype = "SKELETON"; // do not use zombie, it ignores assist rules
 	private int level = 1;
@@ -104,6 +108,28 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
+	}
+	
 
 	@Override
 	public String getName() {

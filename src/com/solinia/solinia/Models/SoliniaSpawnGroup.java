@@ -1,5 +1,7 @@
 package com.solinia.solinia.Models;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -14,6 +16,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class SoliniaSpawnGroup implements ISoliniaSpawnGroup,IPersistable {
 	private int id;
+	private UUID primaryUUID = UUID.randomUUID();
+	private UUID secondaryUUID = UUID.randomUUID();
+
 	private String name;
 	private String world;
 	private double x;
@@ -33,6 +38,28 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup,IPersistable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	@Override
+	public UUID getPrimaryUUID() {
+		// TODO Auto-generated method stub
+		return this.primaryUUID;
+	}
+	@Override
+	public void setPrimaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.primaryUUID = uuid;
+	}
+	@Override
+	public UUID getSecondaryUUID() {
+		// TODO Auto-generated method stub
+		return this.secondaryUUID;
+	}
+	@Override
+	public void setSecondaryUUID(UUID uuid) {
+		// TODO Auto-generated method stub
+		this.secondaryUUID = uuid;
+	}
+	
 	@Override
 	public String getName() {
 		return name;
