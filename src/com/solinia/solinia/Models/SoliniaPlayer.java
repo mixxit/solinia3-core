@@ -69,9 +69,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
 
-	private UUID motherId;
+	private int motherCharacterId;
 	private int characterFellowshipId = 0;
-	private UUID spouseId;
+	private int spouseCharacterId;
 	private String forename = "";
 	private String lastname = "";
 	private int mana = 0;
@@ -3215,23 +3215,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public UUID getMotherId() {
-		return motherId;
+	public int getMotherCharacterId() {
+		return motherCharacterId;
 	}
 
 	@Override
-	public void setMotherId(UUID motherId) {
-		this.motherId = motherId;
+	public void setMotherCharacterId(int motherCharacterId) {
+		this.motherCharacterId = motherCharacterId;
 	}
 
 	@Override
-	public UUID getSpouseId() {
-		return spouseId;
+	public int getSpouseCharacterId() {
+		return spouseCharacterId;
 	}
 
 	@Override
-	public void setSpouseId(UUID spouseId) {
-		this.spouseId = spouseId;
+	public void setSpouseCharacterId(int spouseCharacterId) {
+		this.spouseCharacterId = spouseCharacterId;
 	}
 
 	@Override
@@ -3241,10 +3241,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		String self = this.getFullName();
 		String spouse = "";
 		try {
-			if (spouseId != null) {
+			if (spouseCharacterId > 0) {
 
 				ISoliniaPlayer spousePlayer = StateManager.getInstance().getConfigurationManager()
-						.getCharacterByCharacterUUID(spouseId);
+						.getCharacterById(spouseCharacterId);
 				spouse = spousePlayer.getFullName();
 
 			}
@@ -3252,14 +3252,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			this.getBukkitPlayer().sendMessage(self + " -> " + spouse);
 
 			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters()) {
-				if (player.getMotherId() == null)
+				if (player.getMotherCharacterId() < 1)
 					continue;
 
-				if (player.getMotherId().toString().equals(getCharacterUUID().toString())) {
+				if (player.getMotherCharacterId() == getId()) {
 					this.getBukkitPlayer().sendMessage("Child: " + player.getFullName());
 				} else {
-					if (spouseId != null) {
-						if (player.getMotherId().toString().equals(spouseId.toString())) {
+					if (spouseCharacterId > 0) {
+						if (player.getMotherCharacterId() == spouseCharacterId) {
 							this.getBukkitPlayer().sendMessage("Child: " + player.getFullName());
 						}
 					}

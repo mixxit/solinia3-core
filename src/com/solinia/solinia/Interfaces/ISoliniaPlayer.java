@@ -292,14 +292,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	void setReagents(ConcurrentHashMap<Integer, SoliniaReagent> reagents);
 
-	UUID getMotherId();
-
-	void setMotherId(UUID motherId);
-
-	UUID getSpouseId();
-
-	void setSpouseId(UUID spouseId);
-
 	public void sendFamilyTree();
 
 	public boolean hasSufficientReagents(Integer components1, Integer componentCounts1);
@@ -623,6 +615,10 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void setOwnerUUID(UUID uniqueId);
 	public UUID getOwnerUUID();
 	UUID getCharacterUUID();
+	void setMotherCharacterId(int motherCharacterId);
+	int getSpouseCharacterId();
+	void setSpouseCharacterId(int spouseCharacterId);
+	int getMotherCharacterId();
 
 
 

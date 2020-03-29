@@ -36,7 +36,7 @@ public class CommandSetMother implements CommandExecutor {
 			Player targetTo = Bukkit.getPlayer(args[0]);
 			ISoliniaPlayer targetPlayer = SoliniaPlayerAdapter.Adapt(targetTo);
 			
-			sourcePlayer.setMotherId(targetPlayer.getCharacterUUID());
+			sourcePlayer.setMotherCharacterId(targetPlayer.getId());
 			sender.sendMessage("Your mother has been set to: " + targetPlayer.getFullNameWithTitle());
 			return true;
 		} catch (CoreStateInitException e) {

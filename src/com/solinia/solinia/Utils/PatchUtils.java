@@ -10,7 +10,7 @@ public class PatchUtils {
 	public static void Patcher() {
 		try
 		{
-			for (PlayerState state : StateManager.getInstance().getConfigurationManager().getPlayerStates())
+			for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters())
 			{
 				System.out.println("Updated active character");
 			}
