@@ -626,7 +626,9 @@ public interface IConfigurationManager {
 
 	List<ISoliniaPlayer> getActiveCharacters();
 
-	List<UUID> getActiveCharacterCharacterIds();
+	List<Integer> getActiveCharacterCharacterIds();
 
 	int getNextPlayerId();
+
+	ISoliniaPlayer getCharacterById(int characterId);
 }

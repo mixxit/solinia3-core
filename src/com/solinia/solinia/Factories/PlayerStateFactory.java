@@ -8,7 +8,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.PlayerState;
 
 public class PlayerStateFactory {
-	public static PlayerState Create(UUID playerId, UUID characterId) throws CoreStateInitException, PlayerStateCreationException {
+	public static PlayerState Create(UUID playerId, int characterId) throws CoreStateInitException, PlayerStateCreationException {
 		//Player bukkitPlayer = Bukkit.getPlayer(playerId);
 		//if (bukkitPlayer == null)
 		//	throw new PlayerStateCreationException("Player entity does not exist");
@@ -18,7 +18,7 @@ public class PlayerStateFactory {
 		
 		PlayerState entry = new PlayerState();
 		entry.setId(playerId);
-		entry.setActiveCharacterId(characterId);
+		entry.setCharacterId(characterId);
 		return StateManager.getInstance().getConfigurationManager().addPlayerState(entry);
 	}
 }

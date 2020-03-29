@@ -4,14 +4,15 @@ import java.util.UUID;
 
 public class PlayerState {
 	private UUID id;
-	private UUID activeCharacterId;
+	private int characterId;
 		
-	public UUID getActiveCharacterId() {
-		return activeCharacterId;
+	public int getCharacterId() {
+		return characterId;
 	}
-	public void setActiveCharacterId(UUID activeCharacterId) {
-		this.activeCharacterId = activeCharacterId;
+	public void setCharacterId(int characterId) {
+		this.characterId = characterId;
 	}
+	
 	public UUID getId() {
 		return id;
 	}

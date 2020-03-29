@@ -43,7 +43,7 @@ public class SoliniaPlayerFactory {
 		}
 		
 		StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(soliniaPlayer);
-		StateManager.getInstance().getPlayerManager().setActiveCharacter(playerUuid,soliniaPlayer.getCharacterUUID());
+		StateManager.getInstance().getPlayerManager().setActiveCharacter(playerUuid,soliniaPlayer.getId());
 		soliniaPlayer = SoliniaPlayerAdapter.Adapt(playerUuid);
 		soliniaPlayer.setExperience(0d);
 		soliniaPlayer.setAAExperience(0d);

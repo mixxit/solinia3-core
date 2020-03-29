@@ -40,7 +40,7 @@ public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, Integer> playerLastZoneId = new ConcurrentHashMap<UUID, Integer>();
 	
 	@Override
-	public void setActiveCharacter(UUID playerUuid, UUID characterId) {
+	public void setActiveCharacter(UUID playerUuid, int characterId) {
 		try {
 		
 			try
@@ -53,7 +53,7 @@ public class PlayerManager implements IPlayerManager {
 				
 			}
 		
-			StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid).setActiveCharacterId(characterId);
+			StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid).setCharacterId(characterId);
 		
 			SoliniaPlayerAdapter.Adapt(playerUuid).updateDisplayName();
 			SoliniaPlayerAdapter.Adapt(playerUuid).updateMaxHp();
@@ -75,26 +75,26 @@ public class PlayerManager implements IPlayerManager {
 			try
 			{
 				if (StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid) == null)
-					PlayerStateFactory.Create(playerUuid, null);
+					PlayerStateFactory.Create(playerUuid, 0);
 			} catch (PlayerStateCreationException e)
 			{
 				
 			}
 			
 			PlayerState state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid);
-			if (state.getActiveCharacterId() == null)
+			if (state.getCharacterId() < 1)
 			{
 				SoliniaPlayerFactory.CreatePlayer(playerUuid);
 				state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid);
 			}
 			
-			if (StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(state.getActiveCharacterId()) == null)
+			if (StateManager.getInstance().getConfigurationManager().getCharacterById(state.getCharacterId()) == null)
 			{
 				SoliniaPlayerFactory.CreatePlayer(playerUuid);
 				state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUuid);
 			}
 			
-			return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(state.getActiveCharacterId());
+			return StateManager.getInstance().getConfigurationManager().getCharacterById(state.getCharacterId());
 		} catch (CoreStateInitException e)
 		{
 			return null;
@@ -108,7 +108,7 @@ public class PlayerManager implements IPlayerManager {
 			PlayerState state = StateManager.getInstance().getConfigurationManager().getPlayerState(playerUUID);
 			if (state == null)
 				return null;
-			return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(state.getActiveCharacterId());
+			return StateManager.getInstance().getConfigurationManager().getCharacterById(state.getCharacterId());
 		} catch (CoreStateInitException e)
 		{
 			return null;
@@ -298,7 +298,7 @@ public class PlayerManager implements IPlayerManager {
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
 			
 			// Now clear the player and load the old one
-			setActiveCharacter(player.getUniqueId(), altSolPlayer.getCharacterUUID());
+			setActiveCharacter(player.getUniqueId(), altSolPlayer.getId());
 
 			player.getInventory().clear();
             player.getInventory().setArmorContents(null);

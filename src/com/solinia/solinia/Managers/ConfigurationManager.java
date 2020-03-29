@@ -370,18 +370,18 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
-	public List<UUID> getActiveCharacterCharacterIds() {
-		List<UUID> characterIds = new ArrayList<UUID>();
+	public List<Integer> getActiveCharacterCharacterIds() {
+		List<Integer> characterIds = new ArrayList<Integer>();
 		for(PlayerState state : getPlayerStates())
-			characterIds.add(state.getActiveCharacterId());
+			characterIds.add(state.getCharacterId());
 		
 		return characterIds;
 	}
 	
 	@Override
 	public List<ISoliniaPlayer> getActiveCharacters() {
-		List<UUID> characterIds = getActiveCharacterCharacterIds();
-		return characterlistsRepository.query(q -> characterIds.contains(q.getCharacterUUID()));
+		List<Integer> characterIds = getActiveCharacterCharacterIds();
+		return characterlistsRepository.query(q -> characterIds.contains(q.getId()));
 	}
 	
 	@Override
@@ -433,6 +433,16 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		return results.get(0);
 	}
+	
+	@Override
+	public ISoliniaPlayer getCharacterById(int characterId) {
+		List<ISoliniaPlayer> results = characterlistsRepository.query(q -> q.getId() == characterId);
+		if (results.size() != 1)
+			return null;
+		
+		return results.get(0);
+	}
+
 	
 	@Override
 	public List<ISoliniaRace> getRaces() {
@@ -2254,4 +2264,5 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		this.fellowshipRepository.remove(fellowship);
 	}
+
 }
