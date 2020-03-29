@@ -2243,23 +2243,17 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		try
 		{
-			for (int i = 0; i < fellowship.getMembers().size(); i++) {
-				UUID newownerCharacterId = fellowship.getMembers().get(i);
-				try
-				{
-					ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(newownerCharacterId);
-					member.setCharacterFellowshipId(0);
-				} catch (PlayerDoesNotExistException e)
-				{
-					
-				}
+			for (int i = 0; i < fellowship.getMemberCharacterIds().size(); i++) {
+				int newownerCharacterId = fellowship.getMemberCharacterIds().get(i);
+				ISoliniaPlayer member = StateManager.getInstance().getConfigurationManager().getCharacterById(newownerCharacterId);
+				member.setCharacterFellowshipId(0);
 			}
 		} catch (CoreStateInitException e)
 		{
 			
 		}
-		fellowship.getMembers().clear();
-		fellowship.setOwnerUuid(null);
+		fellowship.getMemberCharacterIds().clear();
+		fellowship.setOwnerCharacterId(0);
 		
 		this.fellowshipRepository.remove(fellowship);
 	}

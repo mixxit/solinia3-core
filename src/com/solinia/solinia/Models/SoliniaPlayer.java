@@ -4711,7 +4711,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		}
 		
-		if (getFellowship().getMembers().size() < 2)
+		if (getFellowship().getMemberCharacterIds().size() < 2)
 		{
 			this.getBukkitPlayer().sendMessage("There is only 1 person in the fellowship");
 			return;
@@ -4744,18 +4744,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try
 		{
 			List<Integer> levelRanges = new ArrayList<Integer>();
-			for(UUID memberUUID : this.getFellowship().getMembers())
+			for(int memberId : this.getFellowship().getMemberCharacterIds())
 			{
-				try
-				{
-					ISoliniaPlayer memberPlayer = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberUUID);
-					if (memberPlayer == null)
-						continue;
-					levelRanges.add(memberPlayer.getLevel());
-				} catch (PlayerDoesNotExistException e)
-				{
+				ISoliniaPlayer memberPlayer = StateManager.getInstance().getConfigurationManager().getCharacterById(memberId);
+				if (memberPlayer == null)
 					continue;
-				}
+				levelRanges.add(memberPlayer.getLevel());
 			}
 			
 			Tuple<Integer,Integer> lowhighlvl = Utils.GetGroupExpMinAndMaxLevel(levelRanges);

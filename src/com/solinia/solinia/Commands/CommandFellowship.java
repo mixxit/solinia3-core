@@ -53,7 +53,7 @@ public class CommandFellowship implements CommandExecutor {
 								return true;
 							}
 							
-							if (solOwner.getFellowship() != null && !solOwner.getFellowship().getOwnerUuid().equals(solOwner.getCharacterUUID()))
+							if (solOwner.getFellowship() != null && solOwner.getFellowship().getOwnerCharacterId() != solOwner.getId())
 							{
 								player.sendMessage("You are not the leader of this fellowship to invite someone");
 								return true;

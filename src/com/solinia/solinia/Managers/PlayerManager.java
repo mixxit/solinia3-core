@@ -214,12 +214,6 @@ public class PlayerManager implements IPlayerManager {
 	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID) throws CoreStateInitException {
 		return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
 	}
-
-	@Override
-	public ISoliniaPlayer getArchivedCharacterOrActivePlayerByCharacterUUID(UUID characterUUID) throws CoreStateInitException, PlayerDoesNotExistException {
-		
-		return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
-	}
 	
 	@Override
 	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit) {

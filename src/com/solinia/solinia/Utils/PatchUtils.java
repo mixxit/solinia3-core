@@ -17,30 +17,7 @@ public class PatchUtils {
 		{
 			for (Fellowship entry : StateManager.getInstance().getConfigurationManager().getFellowships())
 			{
-				if (entry.getOwnerUuid() == null)
-					continue;
 				
-				ISoliniaPlayer player = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(entry.getOwnerUuid());
-				if (player == null)
-					continue;
-				
-				entry.setOwnerCharacterId(player.getId());
-				
-				List<Integer> members = new ArrayList<Integer>();
-				
-				for(UUID memberUuid : entry.getMembers())
-				{
-					ISoliniaPlayer member = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(memberUuid);
-					if (player == null)
-						continue;
-					
-					if (!members.contains(member.getId()))
-						members.add(member.getId());
-				}
-					
-				entry.setMemberCharacterIds(members);
-				
-				System.out.println("Updated");
 			}
 			
 			

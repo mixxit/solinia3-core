@@ -741,7 +741,7 @@ public class CoreState {
 	
 	public Fellowship createNewFellowship(ISoliniaPlayer leader) {
 		try {
-			Fellowship fellowship = FellowshipFactory.CreateFellowship(leader.getCharacterUUID());
+			Fellowship fellowship = FellowshipFactory.CreateFellowship(leader.getId());
 			leader.setCharacterFellowshipId(fellowship.getId());
 			return fellowship;
 		} catch (CoreStateInitException e) {
@@ -982,7 +982,7 @@ public class CoreState {
 	
 			try
 			{
-				Player owner = fellowship.getMemberPlayerIfOnline(fellowship.getOwnerUuid());
+				Player owner = fellowship.getMemberPlayerIfOnline(fellowship.getOwnerCharacterId());
 				if (owner != null) {
 					System.out.println("fellowship: " + fellowship.getId() + " got a membership decline: " + solplayer.getFullName());
 					owner.sendMessage(solplayer.getFullName() + " declined your fellowship invite");
@@ -1059,12 +1059,12 @@ public class CoreState {
 			return;
 		}
 
-		if (!inviterfellowship.getOwnerUuid().equals(leader.getCharacterUUID())) {
+		if (inviterfellowship.getOwnerCharacterId() != leader.getId()) {
 			leader.getBukkitPlayer().sendMessage("You cannot invite that player, you are not the fellowship leader");
 			return;
 		}
 
-		if (inviterfellowship.getMembers().size() > 5) {
+		if (inviterfellowship.getMemberCharacterIds().size() > 5) {
 			leader.getBukkitPlayer().sendMessage("You cannot invite that player, your fellowship is already full");
 			return;
 		}
