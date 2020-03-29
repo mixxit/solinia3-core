@@ -69,9 +69,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
 
-	private int motherCharacterId;
+	private int motherCharacterId = 0;
 	private int characterFellowshipId = 0;
-	private int spouseCharacterId;
+	private int spouseCharacterId = 0;
 	private String forename = "";
 	private String lastname = "";
 	private int mana = 0;
