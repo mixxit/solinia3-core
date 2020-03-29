@@ -94,9 +94,9 @@
 			</releases>
 		</repository>
 		<repository>
-        <id>ess-repo</id>
-        <url>https://ci.ender.zone/plugin/repository/everything/</url>
-    </repository>
+			<id>ess-repo</id>
+			<url>https://ci.ender.zone/plugin/repository/everything/</url>
+		</repository>
 		<repository>
 			<id>bintray-repo</id>
 			<url>https://dl.bintray.com/nuvotifier/maven/</url>
@@ -146,16 +146,16 @@
 		</repository>
 	</distributionManagement>
 	<dependencies>
-        <dependency>
-            <groupId>io.javalin</groupId>
-            <artifactId>javalin</artifactId>
-            <version>3.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>fluent-hc</artifactId>
-            <version>4.5.10</version>
-        </dependency>
+		<dependency>
+			<groupId>io.javalin</groupId>
+			<artifactId>javalin</artifactId>
+			<version>3.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>fluent-hc</artifactId>
+			<version>4.5.10</version>
+		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -192,11 +192,11 @@
 			<version>1.7</version>
 		</dependency>
 		<dependency>
-        <groupId>net.ess3</groupId>
-        <artifactId>EssentialsX</artifactId>
-        <version>2.16.1</version>
-        <scope>provided</scope>
-    </dependency>
+			<groupId>net.ess3</groupId>
+			<artifactId>EssentialsX</artifactId>
+			<version>2.16.1</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.vexsoftware</groupId>
 			<artifactId>nuvotifier-universal</artifactId>
@@ -230,19 +230,19 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-simple</artifactId>
-		    <version>1.7.28</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.28</version>
 		</dependency>
 		<dependency>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-api</artifactId>
-	    <version>1.8.0-beta4</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.8.0-beta4</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-simple</artifactId>
-		    <version>1.8.0-beta4</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.8.0-beta4</version>
 		</dependency>
 	</dependencies>
 </project>
