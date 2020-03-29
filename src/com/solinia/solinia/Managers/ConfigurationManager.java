@@ -381,7 +381,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<ISoliniaPlayer> getActiveCharacters() {
 		List<UUID> characterIds = getActiveCharacterCharacterIds();
-		return characterlistsRepository.query(q -> characterIds.contains(q.getCharacterId()));
+		return characterlistsRepository.query(q -> characterIds.contains(q.getCharacterUUID()));
 	}
 	
 	@Override
@@ -1307,13 +1307,13 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<ISoliniaPlayer> getCharacters() {
 		// TODO Auto-generated method stub
-		return characterlistsRepository.query(q -> q.getCharacterId() != null);
+		return characterlistsRepository.query(q -> q.getCharacterUUID() != null);
 	}
 	
 	@Override
 	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) {
 		// TODO Auto-generated method stub
-		return characterlistsRepository.query(q -> q.getCharacterId() != null && q.getUUID().equals(playerUUID));
+		return characterlistsRepository.query(q -> q.getCharacterUUID() != null && q.getOwnerUUID().equals(playerUUID));
 	}
 	
 	@Override

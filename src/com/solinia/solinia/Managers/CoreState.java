@@ -741,7 +741,7 @@ public class CoreState {
 	
 	public Fellowship createNewFellowship(ISoliniaPlayer leader) {
 		try {
-			Fellowship fellowship = FellowshipFactory.CreateFellowship(leader.getCharacterId());
+			Fellowship fellowship = FellowshipFactory.CreateFellowship(leader.getCharacterUUID());
 			leader.setCharacterFellowshipId(fellowship.getId());
 			return fellowship;
 		} catch (CoreStateInitException e) {
@@ -766,11 +766,11 @@ public class CoreState {
 	}
 	
 	public Integer getCharacterInviteFellowshipID(ISoliniaPlayer solplayer) {
-		return fellowshipinvites.get(solplayer.getCharacterId());
+		return fellowshipinvites.get(solplayer.getCharacterUUID());
 	}
 	
 	public Integer removeFellowshipInvite(ISoliniaPlayer solplayer) {
-		return fellowshipinvites.remove(solplayer.getCharacterId());
+		return fellowshipinvites.remove(solplayer.getCharacterUUID());
 	}
 
 	public UUID removePlayerGroupInvite(Player player) {
@@ -1059,7 +1059,7 @@ public class CoreState {
 			return;
 		}
 
-		if (!inviterfellowship.getOwnerUuid().equals(leader.getCharacterId())) {
+		if (!inviterfellowship.getOwnerUuid().equals(leader.getCharacterUUID())) {
 			leader.getBukkitPlayer().sendMessage("You cannot invite that player, you are not the fellowship leader");
 			return;
 		}
@@ -1069,7 +1069,7 @@ public class CoreState {
 			return;
 		}
 
-		fellowshipinvites.put(member.getCharacterId(), inviterfellowship.getId());
+		fellowshipinvites.put(member.getCharacterUUID(), inviterfellowship.getId());
 		leader.getBukkitPlayer().sendMessage("Invited " + member.getFullName() + " to join your fellowship");
 		member.getBukkitPlayer().sendMessage(
 				"You have been invited to join " + leader.getFullName() + "'s fellowship - /fellowship accept | /fellowship decline");

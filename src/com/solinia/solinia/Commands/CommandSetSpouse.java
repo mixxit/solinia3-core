@@ -35,7 +35,7 @@ public class CommandSetSpouse implements CommandExecutor {
 			Player targetTo = Bukkit.getPlayer(args[0]);
 			ISoliniaPlayer targetPlayer = SoliniaPlayerAdapter.Adapt(targetTo);
 			
-			sourcePlayer.setSpouseId(targetPlayer.getCharacterId());
+			sourcePlayer.setSpouseId(targetPlayer.getCharacterUUID());
 			sender.sendMessage("Your spouse has been set to: " + targetPlayer.getFullNameWithTitle());
 			return true;
 		} catch (CoreStateInitException e) {

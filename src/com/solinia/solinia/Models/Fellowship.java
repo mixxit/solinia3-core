@@ -55,7 +55,7 @@ public class Fellowship implements IPersistable {
 		}
 		
 		String type = "";
-		if (getOwnerUuid().equals(player.getCharacterId()))
+		if (getOwnerUuid().equals(player.getCharacterUUID()))
 		{
 			type = "[" + ChatColor.LIGHT_PURPLE + "L" + ChatColor.RESET + "]";
 		} else {
@@ -103,7 +103,7 @@ public class Fellowship implements IPersistable {
 				
 				if (character.getPendingXp() >= PlayerUtils.getMaxAAXP())
 				{
-					Player player = Bukkit.getPlayer(character.getUUID());
+					Player player = Bukkit.getPlayer(character.getOwnerUUID());
 					if (player != null)
 					player.sendMessage("You have exceeded your maximum pending XP for fellowship rewards! Please /claimxp your additional XP before more can be gained (max: " + character.getPendingXp().longValue() + ")");
 				} else {
@@ -136,7 +136,7 @@ public class Fellowship implements IPersistable {
 					if (character == null)
 						continue;
 					
-					if (character.getUUID().equals(player.getUniqueId()))
+					if (character.getOwnerUUID().equals(player.getUniqueId()))
 						return true;
 					} catch (PlayerDoesNotExistException e)
 					{
@@ -164,7 +164,7 @@ public class Fellowship implements IPersistable {
 				if (character == null)
 					return null;
 				
-				Player player = Bukkit.getPlayer(character.getUUID());
+				Player player = Bukkit.getPlayer(character.getOwnerUUID());
 				
 				if (player == null)
 					return null;
@@ -173,7 +173,7 @@ public class Fellowship implements IPersistable {
 				if (solPlayer == null)
 					return null;
 				
-				if (!solPlayer.getCharacterId().equals(character.getCharacterId()))
+				if (!solPlayer.getCharacterUUID().equals(character.getCharacterUUID()))
 					return null;
 				
 				return player;
@@ -189,7 +189,7 @@ public class Fellowship implements IPersistable {
 	}
 	
 	public void sendGroupList(ISoliniaPlayer player) throws FellowshipMemberNotFoundException {
-		if (!this.members.contains(player.getCharacterId()))
+		if (!this.members.contains(player.getCharacterUUID()))
 			throw new FellowshipMemberNotFoundException();
 
 		try
@@ -202,7 +202,7 @@ public class Fellowship implements IPersistable {
 						ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(memberCharacterId);
 						if (member != null) {
 							String leader = " - Member - Online: " + online;
-							if (member.getCharacterId().equals(this.getOwnerUuid())) {
+							if (member.getCharacterUUID().equals(this.getOwnerUuid())) {
 								leader = " - Leader - Online: " + online;
 							}
 							
@@ -223,7 +223,7 @@ public class Fellowship implements IPersistable {
 	}
 	
 	public void removePlayer(ISoliniaPlayer memberPlayer) {
-		if (!this.members.contains(memberPlayer.getCharacterId()))
+		if (!this.members.contains(memberPlayer.getCharacterUUID()))
 		{
 			System.out.println("Could not remove member htat was not in fellowship");
 			return;
@@ -234,22 +234,22 @@ public class Fellowship implements IPersistable {
 		System.out.println("fellowship: " + getId() + " lost a member: " + memberPlayer.getFullName());
 		sendMessage(memberPlayer, "has left the fellowship!");
 		
-		this.members.remove(memberPlayer.getCharacterId());
+		this.members.remove(memberPlayer.getCharacterUUID());
 		memberPlayer.setCharacterFellowshipId(0);
 
-		if (getOwnerUuid().equals(memberPlayer.getCharacterId())) 
+		if (getOwnerUuid().equals(memberPlayer.getCharacterUUID())) 
 			trySetNextLeader();
 
 		destroyIfEmpty();
 	}
 	
 	public void addPlayer(ISoliniaPlayer player) {
-		if (this.members.contains(player.getCharacterId()))
+		if (this.members.contains(player.getCharacterUUID()))
 			return;
 		
 		StateManager.getInstance().removeFellowshipInvite(player);
 		
-		this.members.add(player.getCharacterId());
+		this.members.add(player.getCharacterUUID());
 		player.setCharacterFellowshipId(this.getId());
 		System.out.println("fellowship: " + getId() + " gained a member: " + player.getFullName());
 		sendMessage(player, "has joined the fellowship!");
@@ -268,7 +268,7 @@ public class Fellowship implements IPersistable {
 					UUID newownerCharacterId = this.members.get(i);
 					ISoliniaPlayer member = StateManager.getInstance().getPlayerManager().getArchivedCharacterOrActivePlayerByCharacterUUID(newownerCharacterId);
 					
-					Player player = Bukkit.getPlayer(member.getUUID());
+					Player player = Bukkit.getPlayer(member.getOwnerUUID());
 					
 					if (player == null)
 						continue;
@@ -277,7 +277,7 @@ public class Fellowship implements IPersistable {
 					if (solPlayer == null)
 						continue;
 					
-					if (!solPlayer.getCharacterId().equals(member.getCharacterId()))
+					if (!solPlayer.getCharacterUUID().equals(member.getCharacterUUID()))
 						continue;
 					
 					if (member != null) {
@@ -313,7 +313,7 @@ public class Fellowship implements IPersistable {
 				
 				member.setCharacterFellowshipId(0);
 				
-				Player player = Bukkit.getPlayer(member.getUUID());
+				Player player = Bukkit.getPlayer(member.getOwnerUUID());
 				if (player == null)
 					continue;
 				

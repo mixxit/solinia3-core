@@ -274,7 +274,7 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer.storeArmorContents();
 			
 			// if its the same, why bother?
-			if (solPlayer.getCharacterId().equals(characterUUID))
+			if (solPlayer.getCharacterUUID().equals(characterUUID))
 				return solPlayer;
 			
 			solPlayer.removeAllEntityEffects(plugin);
@@ -291,14 +291,14 @@ public class PlayerManager implements IPlayerManager {
 			if (altSolPlayer == null)
 				return null;
 			
-			if (!altSolPlayer.getUUID().equals(player.getUniqueId()))
+			if (!altSolPlayer.getOwnerUUID().equals(player.getUniqueId()))
 				return null;
 			
 			// commit current player
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
 			
 			// Now clear the player and load the old one
-			setActiveCharacter(player.getUniqueId(), altSolPlayer.getCharacterId());
+			setActiveCharacter(player.getUniqueId(), altSolPlayer.getCharacterUUID());
 
 			player.getInventory().clear();
             player.getInventory().setArmorContents(null);

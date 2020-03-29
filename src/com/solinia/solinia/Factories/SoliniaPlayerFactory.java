@@ -23,10 +23,8 @@ public class SoliniaPlayerFactory {
 	public static ISoliniaPlayer CreatePlayer(UUID playerUuid) throws CoreStateInitException {
 		// A player is different to a players entity
 		ISoliniaPlayer soliniaPlayer = new SoliniaPlayer();
-		soliniaPlayer.setUUID(playerUuid);
 		soliniaPlayer.setSecondaryUUID(playerUuid);
 		UUID characterUUID = UUID.randomUUID();
-		soliniaPlayer.setCharacterId(characterUUID);
 		soliniaPlayer.setPrimaryUUID(characterUUID);
 		soliniaPlayer.setId(StateManager.getInstance().getConfigurationManager().getNextPlayerId());
 
@@ -45,7 +43,7 @@ public class SoliniaPlayerFactory {
 		}
 		
 		StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(soliniaPlayer);
-		StateManager.getInstance().getPlayerManager().setActiveCharacter(playerUuid,soliniaPlayer.getCharacterId());
+		StateManager.getInstance().getPlayerManager().setActiveCharacter(playerUuid,soliniaPlayer.getCharacterUUID());
 		soliniaPlayer = SoliniaPlayerAdapter.Adapt(playerUuid);
 		soliniaPlayer.setExperience(0d);
 		soliniaPlayer.setAAExperience(0d);
@@ -105,10 +103,8 @@ public class SoliniaPlayerFactory {
 			Gson gson= new Gson();
 			String tmp = gson.toJson(solPlayerToCopy);
 			SoliniaPlayer obj = gson.fromJson(tmp,SoliniaPlayer.class);
-			obj.setUUID(uniqueId);
 			obj.setSecondaryUUID(uniqueId);
 			UUID characterUUID = UUID.randomUUID();
-			obj.setCharacterId(characterUUID);
 			obj.setPrimaryUUID(characterUUID);
 			obj.setCharacterFellowshipId(0);
 			obj.setId(StateManager.getInstance().getConfigurationManager().getNextPlayerId());
@@ -129,7 +125,7 @@ public class SoliniaPlayerFactory {
 
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(obj);
 
-			System.out.println("New Character Copied: " + obj.getCharacterId() + " - " + obj.getFullName());
+			System.out.println("New Character Copied: " + obj.getId() + " - " + obj.getFullName());
 			return obj;
 
 		} catch (CoreStateInitException e)

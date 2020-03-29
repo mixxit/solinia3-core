@@ -23,7 +23,7 @@ public class SoliniaResurrectionItem {
 	
 	public SoliniaResurrectionItem(ISoliniaPlayer solplayer, int experience, Timestamp timestamp)
 	{
-		this.playeruuidb64 = uuidToBase64(solplayer.getUUID().toString());
+		this.playeruuidb64 = uuidToBase64(solplayer.getOwnerUUID().toString());
 		this.playername = solplayer.getFullName();
 		this.experience = experience;
 		this.timestamp = timestamp;

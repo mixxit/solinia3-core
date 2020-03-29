@@ -69,8 +69,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
 
-	private UUID uuid;
-	private UUID characterId = UUID.randomUUID();
 	private UUID motherId;
 	private int characterFellowshipId = 0;
 	private UUID spouseId;
@@ -202,12 +200,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return null;
 		}
 	}
-
-	@Override
-	public UUID getUUID() {
-		return uuid;
-	}
-
+	
 	@Override
 	public boolean grantTitle(String title) {
 		if (getAvailableTitles().contains(title))
@@ -221,12 +214,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public Timestamp getLastLogin() {
-		return new Timestamp(Bukkit.getOfflinePlayer(this.getUUID()).getLastPlayed());
-	}
-
-	@Override
-	public void setUUID(UUID uuid) {
-		this.uuid = uuid;
+		return new Timestamp(Bukkit.getOfflinePlayer(this.getOwnerUUID()).getLastPlayed());
 	}
 
 	@Override
@@ -266,7 +254,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public Player getBukkitPlayer() {
-		Player player = Bukkit.getPlayer(uuid);
+		Player player = Bukkit.getPlayer(getOwnerUUID());
 		return player;
 	}
 
@@ -2884,16 +2872,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public UUID getCharacterId() {
-		return characterId;
-	}
-
-	@Override
-	public void setCharacterId(UUID characterId) {
-		this.characterId = characterId;
-	}
-
-	@Override
 	public int getInspiration() {
 		return inspiration;
 	}
@@ -3277,7 +3255,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (player.getMotherId() == null)
 					continue;
 
-				if (player.getMotherId().toString().equals(getCharacterId().toString())) {
+				if (player.getMotherId().toString().equals(getCharacterUUID().toString())) {
 					this.getBukkitPlayer().sendMessage("Child: " + player.getFullName());
 				} else {
 					if (spouseId != null) {
@@ -4881,5 +4859,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setSecondaryUUID(UUID uuid) {
 		// TODO Auto-generated method stub
 		this.secondaryUUID = uuid;
+	}
+
+	@Override
+	public void setOwnerUUID(UUID uniqueId) {
+		this.setSecondaryUUID(uniqueId);
+	}
+	
+	@Override
+	public UUID getOwnerUUID()
+	{
+		return this.getSecondaryUUID();
+	}
+	
+	@Override
+	public UUID getCharacterUUID()
+	{
+		return this.getPrimaryUUID();
 	}
 }

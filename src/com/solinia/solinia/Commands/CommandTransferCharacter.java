@@ -42,14 +42,14 @@ public class CommandTransferCharacter implements CommandExecutor {
         try
         {
         	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			if (solPlayer.getCharacterId().equals(characterUUID))
+			if (solPlayer.getCharacterUUID().equals(characterUUID))
 			{
 				player.sendMessage("You cannot transfer a character that you are currently active on, please change character first with the /character command");
 				return true;
 			}
 			
         	ISoliniaPlayer solPlayerToSell = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
-        	if (!(solPlayerToSell.getUUID().equals(player.getUniqueId())))
+        	if (!(solPlayerToSell.getOwnerUUID().equals(player.getUniqueId())))
         	{
         		player.sendMessage("This is not your character to transfer");
         		return true;
@@ -61,7 +61,7 @@ public class CommandTransferCharacter implements CommandExecutor {
 				return true;
 			}
         	
-        	solPlayerToSell.setUUID(targetPlayer.getUniqueId());
+        	solPlayerToSell.setOwnerUUID(targetPlayer.getUniqueId());
         	player.sendMessage("* You have sent character [" + solPlayerToSell.getFullName() + "] to " + targetPlayer.getCustomName());
         	targetPlayer.sendMessage("* You have received a new character [" + solPlayerToSell.getFullName() + "] from " + player.getCustomName());
         } catch (Exception e)

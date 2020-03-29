@@ -43,10 +43,6 @@ import net.md_5.bungee.api.ChatMessageType;
 public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public int getId();
 	public void setId(int id);
-	public UUID getUUID();
-
-	void setUUID(UUID uuid);
-
 	public String getForename();
 
 	public ISoliniaLivingEntity getSoliniaLivingEntity();
@@ -244,10 +240,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	void setVampire(boolean vampire);
 
 	List<ISoliniaAARank> getAARanks();
-
-	UUID getCharacterId();
-
-	void setCharacterId(UUID characterId);
 
 	int getInspiration();
 
@@ -628,6 +620,9 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void resetHintSetting();
 
 	public ChatMessageType getHintSettingAsChatMessageType(HINT hint);
+	public void setOwnerUUID(UUID uniqueId);
+	public UUID getOwnerUUID();
+	UUID getCharacterUUID();
 
 
 

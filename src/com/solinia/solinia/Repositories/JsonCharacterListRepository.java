@@ -40,7 +40,7 @@ public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer> 
 		CharacterLists.clear();
 		for(ISoliniaPlayer CharacterList : fileCharacterLists)
 		{
-			CharacterLists.put(CharacterList.getCharacterId(), CharacterList);
+			CharacterLists.put(CharacterList.getCharacterUUID(), CharacterList);
 		}
 		
 		System.out.println("Reloaded " + CharacterLists.size() + " CharacterLists");
@@ -78,7 +78,7 @@ public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer> 
 
 	@Override
 	public void add(ISoliniaPlayer item) {
-		CharacterLists.put(item.getCharacterId(), item);
+		CharacterLists.put(item.getCharacterUUID(), item);
 		
 	}
 
@@ -86,25 +86,25 @@ public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer> 
 	public void add(Iterable<ISoliniaPlayer> items) {
 		for(ISoliniaPlayer CharacterList : items)
 		{
-			this.CharacterLists.put(CharacterList.getCharacterId(), CharacterList);
+			this.CharacterLists.put(CharacterList.getCharacterUUID(), CharacterList);
 		}
 	}
 
 	@Override
 	public void update(ISoliniaPlayer item) {
-		this.CharacterLists.put(item.getCharacterId(), item);
+		this.CharacterLists.put(item.getCharacterUUID(), item);
 	}
 
 	@Override
 	public void remove(ISoliniaPlayer item) {
-		this.CharacterLists.remove(item.getCharacterId());		
+		this.CharacterLists.remove(item.getCharacterUUID());		
 	}
 
 	@Override
 	public void remove(Predicate<ISoliniaPlayer> filter) {
 		for(ISoliniaPlayer CharacterList : CharacterLists.values().stream().filter(filter).collect(Collectors.toList()))
 		{
-			CharacterLists.remove(CharacterList.getCharacterId());
+			CharacterLists.remove(CharacterList.getCharacterUUID());
 		}
 	}
 

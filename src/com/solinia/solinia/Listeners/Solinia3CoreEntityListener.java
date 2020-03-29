@@ -651,7 +651,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getLevel());
 
 			// try to share with group
-			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(player.getUUID());
+			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(player.getOwnerUUID());
 			if (group != null) {
 
 				List<Integer> levelRanges = new ArrayList<Integer>();
