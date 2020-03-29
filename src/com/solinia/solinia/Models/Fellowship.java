@@ -21,7 +21,9 @@ import net.md_5.bungee.api.ChatColor;
 public class Fellowship implements IPersistable {
 	private int Id = 0;
 	private List<UUID> members = new ArrayList<UUID>();
+	private List<Integer> memberCharacterIds = new ArrayList<Integer>();
 	private UUID ownerUuid = null;
+	private int ownerCharacterId = 0;
 	private UUID primaryUUID;
 	private UUID secondaryUUID;
 	public int getId() {
@@ -375,5 +377,17 @@ public class Fellowship implements IPersistable {
 	public void setSecondaryUUID(UUID uuid) {
 		// TODO Auto-generated method stub
 		this.secondaryUUID = uuid;
+	}
+	public int getOwnerCharacterId() {
+		return ownerCharacterId;
+	}
+	public void setOwnerCharacterId(int ownerCharacterId) {
+		this.ownerCharacterId = ownerCharacterId;
+	}
+	public List<Integer> getMemberCharacterIds() {
+		return memberCharacterIds;
+	}
+	public void setMemberCharacterIds(List<Integer> memberCharacterIds) {
+		this.memberCharacterIds = memberCharacterIds;
 	}
 }
