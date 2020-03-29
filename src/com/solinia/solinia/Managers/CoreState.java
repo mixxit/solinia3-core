@@ -62,7 +62,7 @@ public class CoreState {
 	//private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
-	private ConcurrentHashMap<UUID, Integer> fellowshipinvites = new ConcurrentHashMap<UUID, Integer>();
+	private ConcurrentHashMap<Integer, Integer> fellowshipinvites = new ConcurrentHashMap<Integer, Integer>();
 	//private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
 	private String instanceGuid;
 	private EffectManager effectManager;
@@ -766,11 +766,11 @@ public class CoreState {
 	}
 	
 	public Integer getCharacterInviteFellowshipID(ISoliniaPlayer solplayer) {
-		return fellowshipinvites.get(solplayer.getCharacterUUID());
+		return fellowshipinvites.get(solplayer.getId());
 	}
 	
 	public Integer removeFellowshipInvite(ISoliniaPlayer solplayer) {
-		return fellowshipinvites.remove(solplayer.getCharacterUUID());
+		return fellowshipinvites.remove(solplayer.getId());
 	}
 
 	public UUID removePlayerGroupInvite(Player player) {
@@ -1069,7 +1069,7 @@ public class CoreState {
 			return;
 		}
 
-		fellowshipinvites.put(member.getCharacterUUID(), inviterfellowship.getId());
+		fellowshipinvites.put(member.getId(), inviterfellowship.getId());
 		leader.getBukkitPlayer().sendMessage("Invited " + member.getFullName() + " to join your fellowship");
 		member.getBukkitPlayer().sendMessage(
 				"You have been invited to join " + leader.getFullName() + "'s fellowship - /fellowship accept | /fellowship decline");

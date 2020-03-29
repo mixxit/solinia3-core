@@ -25,11 +25,11 @@ public class CommandTransferCharacter implements CommandExecutor {
 
 		if (args.length < 2)
 		{
-			player.sendMessage("You must provide the character UUID and the target playername");
+			player.sendMessage("You must provide the character ID and the target playername");
 			return true;
 		}
 		
-        UUID characterUUID = UUID.fromString(args[0]);
+        int characterId = Integer.parseInt(args[0]);
         String targetPlayerName = args[1];
         Player targetPlayer = Bukkit.getPlayer(targetPlayerName);
         
@@ -42,13 +42,13 @@ public class CommandTransferCharacter implements CommandExecutor {
         try
         {
         	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			if (solPlayer.getCharacterUUID().equals(characterUUID))
+			if (solPlayer.getId() == characterId)
 			{
 				player.sendMessage("You cannot transfer a character that you are currently active on, please change character first with the /character command");
 				return true;
 			}
 			
-        	ISoliniaPlayer solPlayerToSell = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+        	ISoliniaPlayer solPlayerToSell = StateManager.getInstance().getConfigurationManager().getCharacterById(characterId);
         	if (!(solPlayerToSell.getOwnerUUID().equals(player.getUniqueId())))
         	{
         		player.sendMessage("This is not your character to transfer");

@@ -614,7 +614,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public ChatMessageType getHintSettingAsChatMessageType(HINT hint);
 	public void setOwnerUUID(UUID uniqueId);
 	public UUID getOwnerUUID();
-	UUID getCharacterUUID();
 	void setMotherCharacterId(int motherCharacterId);
 	int getSpouseCharacterId();
 	void setSpouseCharacterId(int spouseCharacterId);

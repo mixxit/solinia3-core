@@ -151,7 +151,7 @@ public class Fellowship implements IPersistable {
 			if (solPlayer == null)
 				return null;
 			
-			if (!solPlayer.getCharacterUUID().equals(character.getCharacterUUID()))
+			if (solPlayer.getId() != character.getId())
 				return null;
 			
 			return player;
@@ -243,7 +243,7 @@ public class Fellowship implements IPersistable {
 				if (solPlayer == null)
 					continue;
 				
-				if (!solPlayer.getCharacterUUID().equals(member.getCharacterUUID()))
+				if (solPlayer.getId() != member.getId())
 					continue;
 				
 				if (member != null) {

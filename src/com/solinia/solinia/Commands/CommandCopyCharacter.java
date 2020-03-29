@@ -32,11 +32,11 @@ public class CommandCopyCharacter implements CommandExecutor {
 
 		if (args.length < 2)
 		{
-			player.sendMessage("You must provide the character UUID and the target playername");
+			player.sendMessage("You must provide the character ID and the target playername");
 			return true;
 		}
 		
-        UUID characterUUID = UUID.fromString(args[0]);
+        int characterId = Integer.parseInt(args[0]);
         String targetPlayerName = args[1];
         Player targetPlayer = Bukkit.getPlayer(targetPlayerName);
         
@@ -48,7 +48,7 @@ public class CommandCopyCharacter implements CommandExecutor {
         
         try
         {
-        	SoliniaPlayer solPlayerToCopy = (SoliniaPlayer)StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+        	SoliniaPlayer solPlayerToCopy = (SoliniaPlayer)StateManager.getInstance().getConfigurationManager().getCharacterById(characterId);
         	ISoliniaPlayer solPlayerNew = SoliniaPlayerFactory.CreatePlayerCopy(solPlayerToCopy,targetPlayer.getUniqueId());
         	
         	player.sendMessage("* You have copied character [" + solPlayerToCopy.getFullName() + "] to " + targetPlayer.getCustomName());

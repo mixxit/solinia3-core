@@ -209,12 +209,7 @@ public class PlayerManager implements IPlayerManager {
 	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException {
 		return StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(playerUUID);
 	}
-	
-	@Override
-	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID) throws CoreStateInitException {
-		return StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
-	}
-	
+		
 	@Override
 	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit) {
 		LocalDateTime datetime = LocalDateTime.now();
@@ -257,7 +252,7 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	@Override
-	public ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, UUID characterUUID) {
+	public ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, int characterId) {
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		
@@ -268,7 +263,7 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer.storeArmorContents();
 			
 			// if its the same, why bother?
-			if (solPlayer.getCharacterUUID().equals(characterUUID))
+			if (solPlayer.getId() == characterId)
 				return solPlayer;
 			
 			solPlayer.removeAllEntityEffects(plugin);
@@ -281,7 +276,7 @@ public class PlayerManager implements IPlayerManager {
 				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup(), true, true);
 			}
 			
-			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+			ISoliniaPlayer altSolPlayer = StateManager.getInstance().getConfigurationManager().getCharacterById(characterId);
 			if (altSolPlayer == null)
 				return null;
 			

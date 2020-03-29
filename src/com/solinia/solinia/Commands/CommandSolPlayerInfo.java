@@ -79,7 +79,7 @@ public class CommandSolPlayerInfo implements CommandExecutor {
 				String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + " " + locked + ChatColor.RESET;
 				
 				TextComponent tc2 = new TextComponent();
-				String changetext = "/copycharacter " + character.getCharacterUUID().toString() + " " + sender.getName();
+				String changetext = "/copycharacter " + character.getId() + " " + sender.getName();
 				
 		        if (!sender.isOp() && !sender.hasPermission("solinia.copycharacter"))
 				{

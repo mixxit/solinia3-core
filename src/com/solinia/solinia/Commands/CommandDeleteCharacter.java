@@ -24,22 +24,22 @@ public class CommandDeleteCharacter implements CommandExecutor {
 
 		if (args.length < 1)
 		{
-			player.sendMessage("You must provide the character UUID");
+			player.sendMessage("You must provide the character ID");
 			return true;
 		}
 		
-        UUID characterUUID = UUID.fromString(args[0]);
+        int characterId = Integer.parseInt(args[0]);
         
         try
         {
         	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-			if (solPlayer.getCharacterUUID().equals(characterUUID))
+			if (solPlayer.getId() == characterId)
 			{
 				player.sendMessage("You cannot delete a character that you are currently active on, please change character first with the /character command");
 				return true;
 			}
 			
-        	ISoliniaPlayer solPlayerToDelete = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+        	ISoliniaPlayer solPlayerToDelete = StateManager.getInstance().getConfigurationManager().getCharacterById(characterId);
         	if (!(solPlayerToDelete.getOwnerUUID().equals(player.getUniqueId())))
         	{
         		player.sendMessage("This is not your character to delete");

@@ -82,7 +82,7 @@ public class CommandCharacter implements CommandExecutor {
 					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + " " + locked + ChatColor.RESET;
 					
 					TextComponent tc2 = new TextComponent();
-					String changetext = "/character load " + character.getCharacterUUID().toString();
+					String changetext = "/character load " + character.getId();
 					
 					if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
 					{
@@ -95,13 +95,13 @@ public class CommandCharacter implements CommandExecutor {
 					tc.addExtra(tc2);
 					
 					TextComponent tc3 = new TextComponent();
-					String transfertext = "/transfercharacter " + character.getCharacterUUID().toString() + " playername";
+					String transfertext = "/transfercharacter " + character.getId() + " playername";
 					tc3.setText(ChatColor.LIGHT_PURPLE + " [Transfer]" + ChatColor.RESET);
 					tc3.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, transfertext));
 					tc.addExtra(tc3);
 					
 					TextComponent tc4 = new TextComponent();
-					String deletetext = "/deletecharacter " + character.getCharacterUUID().toString() + " playername";
+					String deletetext = "/deletecharacter " + character.getId() + " playername";
 					tc4.setText(ChatColor.RED + " [Delete]" + ChatColor.RESET);
 					tc4.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, deletetext));
 					tc.addExtra(tc4);
@@ -147,7 +147,7 @@ public class CommandCharacter implements CommandExecutor {
 					case "LOAD":
 						if (args.length < 2)
 						{
-							player.sendMessage("You must provide the character UUID");
+							player.sendMessage("You must provide the character id");
 							return true;
 						}
 						
@@ -172,9 +172,9 @@ public class CommandCharacter implements CommandExecutor {
 							return true;
 						}
 						
-						UUID characterUUID = UUID.fromString(args[1]);
+						int characterId = Integer.parseInt(args[1]);
 						
-						ISoliniaPlayer targetCharacter = StateManager.getInstance().getConfigurationManager().getCharacterByCharacterUUID(characterUUID);
+						ISoliniaPlayer targetCharacter = StateManager.getInstance().getConfigurationManager().getCharacterById(characterId);
 			        	if (!(targetCharacter.getOwnerUUID().equals(player.getUniqueId())))
 			        	{
 			        		player.sendMessage("This is not your character to load");
@@ -192,7 +192,7 @@ public class CommandCharacter implements CommandExecutor {
 							}
 						}
 
-						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(plugin, player,characterUUID);
+						ISoliniaPlayer loadedPlayer = StateManager.getInstance().getPlayerManager().loadPlayerAlt(plugin, player,characterId);
 						if (loadedPlayer != null)
 						{
 							// Remove force new alt since we are now logged in

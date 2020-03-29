@@ -20,7 +20,6 @@ public interface IPlayerManager {
 	void setPlayerActiveBardSong(UUID playerUuid, Integer spellId);
 	public List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID) throws CoreStateInitException;
 	public ISoliniaPlayer createNewPlayerAlt(Plugin plugin, Player player, boolean includeChangeTimerLimit);
-	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, UUID characterUUID);
 	Timestamp getPlayerLastChangeChar(UUID playerUUID);
 	Timestamp getPlayerLastUnstuck(UUID playerUUID);
 	void setPlayerLastChangeChar(UUID playerUUID, Timestamp timestamp);
@@ -40,8 +39,8 @@ public interface IPlayerManager {
 	void setPlayerLastUnstuck(UUID playerUUID, Timestamp timestamp);
 	int getPlayerLastZone(Player player);
 	void setPlayerLastZone(Player player, int zoneId);
-	public ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUuid) throws CoreStateInitException;
 	void setActiveCharacter(UUID playerUuid, int characterId);
 	ISoliniaPlayer getActivePlayer(Player player);
 	ISoliniaPlayer getActivePlayer(UUID playerUUID);
+	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, int characterid);
 }

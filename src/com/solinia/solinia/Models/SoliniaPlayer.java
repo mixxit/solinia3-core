@@ -4865,10 +4865,4 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	{
 		return this.getSecondaryUUID();
 	}
-	
-	@Override
-	public UUID getCharacterUUID()
-	{
-		return this.getPrimaryUUID();
-	}
 }

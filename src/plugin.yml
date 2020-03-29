@@ -49,7 +49,7 @@ commands:
     aliases: []
   deletecharacter:
     description: Deletes a character
-    usage: /deletecharacter charuuid
+    usage: /deletecharacter characterId
     aliases: []
   follow:
     description: Follows target
@@ -79,11 +79,11 @@ commands:
     aliases: []
   transfercharacter:
     description: Transfers a character to another player
-    usage: /transfercharacter <characteruuid> <playername>
+    usage: /transfercharacter <characterId> <playername>
     aliases: []
   copycharacter:
     description: Copy a players character to another player
-    usage: /copycharacter <characteruuid> <playername>
+    usage: /copycharacter <characterId> <playername>
     aliases: []
   solplayerinfo:
     description: Lists info about a player

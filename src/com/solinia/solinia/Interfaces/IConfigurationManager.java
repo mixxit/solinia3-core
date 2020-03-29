@@ -420,8 +420,6 @@ public interface IConfigurationManager {
 
 	List<ISoliniaPlayer> getCharactersByPlayerUUID(UUID playerUUID);
 
-	ISoliniaPlayer getCharacterByCharacterUUID(UUID characterUUID);
-
 	void commitPlayerToCharacterLists(ISoliniaPlayer player);
 
 	IRepository<ISoliniaPlayer> getCharactersRepository();
