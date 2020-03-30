@@ -18,6 +18,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scoreboard.Scoreboard;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.Marker;
@@ -63,7 +64,6 @@ public class CoreState {
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<Integer, Integer> fellowshipinvites = new ConcurrentHashMap<Integer, Integer>();
-	//private ConcurrentHashMap<UUID, Scoreboard> scoreboards = new ConcurrentHashMap<UUID, Scoreboard>();
 	private String instanceGuid;
 	private EffectManager effectManager;
 	
@@ -248,28 +248,6 @@ public class CoreState {
 		}
 
 	}
-	/*
-	public Scoreboard getScoreboard(Player player)
-	{
-		if (scoreboards.get(player.getUniqueId()) == null)
-		{
-			scoreboards.put(player.getUniqueId(),Bukkit.getScoreboardManager().getNewScoreboard());
-			player.setScoreboard(scoreboards.get(player.getUniqueId()));
-		}
-		
-		return scoreboards.get(player.getUniqueId());
-	}
-	*/
-	/*
-	public BossBar getBossBar(UUID uuid) {
-		return this.bossbars.get(uuid);
-	}
-
-	public void setBossBar(UUID uuid, BossBar bossbar) {
-		// TODO Auto-generated method stub
-		this.bossbars.put(uuid, bossbar);
-	}
-	*/
 	
 	public void setEconomy(Economy economy) {
 		// TODO Auto-generated method stub
