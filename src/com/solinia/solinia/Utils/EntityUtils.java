@@ -12,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -38,7 +39,9 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.DamageSource;
 import net.minecraft.server.v1_14_R1.EntityLiving;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
 
 public class EntityUtils {
 	private static final List<Material> SAFE_TO_SHARE;
@@ -3309,6 +3312,20 @@ public class EntityUtils {
 		}
 		
 		return false;
+	}
+	
+	public static void sendEntityDataPacket(LivingEntity entity, Player packetReceiverPlayer) {
+		if (entity == null)
+			return;
+		
+		if (packetReceiverPlayer == null)
+			return;
+		
+		try {
+			((EntityPlayer)((CraftPlayer)packetReceiverPlayer).getHandle()).playerConnection.sendPacket(new PacketPlayOutEntityMetadata(((net.minecraft.server.v1_14_R1.Entity)((CraftEntity)entity).getHandle()).getId(), ((net.minecraft.server.v1_14_R1.Entity)((CraftEntity)entity).getHandle()).getDataWatcher(), true));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 	}
 
 	public static void sendAnimationPacket(LivingEntity entityForAnimation, Player packetReceiverPlayer, SolAnimationType animationType) {

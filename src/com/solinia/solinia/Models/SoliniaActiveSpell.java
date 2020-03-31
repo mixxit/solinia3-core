@@ -290,6 +290,7 @@ public class SoliniaActiveSpell {
 			applyInvisibility(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case SeeInvis:
+			applySeeInvis(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case WaterBreathing:
 			applyWaterBreathing(spellEffect, soliniaSpell, casterLevel);
@@ -1345,7 +1346,7 @@ public class SoliniaActiveSpell {
 			return;
 		}
 	}
-	
+
 	private void applyRoundKick(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!this.isSourcePlayer())
 			return;
@@ -2771,6 +2772,24 @@ public class SoliniaActiveSpell {
 
 		}
 	}
+	
+	private void applySeeInvis(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+
+		if (!(getLivingEntity() instanceof Player))
+			return;
+			
+		// Resend packet for everyone in range
+		for(Entity entity : getLivingEntity().getNearbyEntities(200, 200, 200))
+		{
+			if (!(entity instanceof LivingEntity))
+				continue;
+			
+			if (!((LivingEntity)entity).hasPotionEffect(PotionEffectType.INVISIBILITY))
+				continue;
+			
+			EntityUtils.sendEntityDataPacket((LivingEntity)entity, (Player)getLivingEntity());
+		}
+	}
 
 	private void applyManaBurn(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int caster_level) {
 		if (getLivingEntity().isDead())
@@ -2874,7 +2893,7 @@ public class SoliniaActiveSpell {
 
 		}
 	}
-
+	
 	public void buffTick() {
 		for(ActiveSpellEffect spellEffect : this.getActiveSpellEffects())
 		{
