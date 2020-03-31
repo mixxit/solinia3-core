@@ -21,6 +21,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -452,9 +453,13 @@ public class SoliniaEntitySpells {
 		// Possibly related to issue #290 ?
 		boolean removeCharm = false;
 
+		boolean resendInvisPackets = false;
+		
 		// Handle any effect removals needed
 		for (ActiveSpellEffect effect : activeSpell.getActiveSpellEffects()) {
 			switch (effect.getSpellEffectType()) {
+			case SeeInvis:
+				resendInvisPackets = true;
 			case TotalHP:
 				updateMaxHp = true;
 				break;
@@ -548,6 +553,21 @@ public class SoliniaEntitySpells {
 		} else {
 			if (removeNonCombatEffects == true)
 				tryRemoveNonCombatEffects(activeSpell);
+		}
+		
+		if (resendInvisPackets)
+		{
+			// Resend packet for everyone in range
+			for(Entity entity : getLivingEntity().getNearbyEntities(200, 200, 200))
+			{
+				if (!(entity instanceof LivingEntity))
+					continue;
+				
+				if (!((LivingEntity)entity).hasPotionEffect(PotionEffectType.INVISIBILITY))
+					continue;
+				
+				EntityUtils.sendEntityDataPacket((LivingEntity)entity, (Player)getLivingEntity());
+			}
 		}
 		
 		if (removeCharm == true)
