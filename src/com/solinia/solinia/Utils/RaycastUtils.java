@@ -17,7 +17,7 @@ public class RaycastUtils {
 		if (entityto == null || entityto.getBukkitLivingEntity() == null || entityto.getBukkitLivingEntity().isDead())
 			return false;
 
-		if (entityto instanceof LivingEntity) {
+		if (entityto.getBukkitLivingEntity() instanceof LivingEntity) {
 			
 			if (!entityfrom.hasSpellEffectType(SpellEffectType.SeeInvis))
 			if (((LivingEntity)entityto).hasPotionEffect(PotionEffectType.INVISIBILITY))
