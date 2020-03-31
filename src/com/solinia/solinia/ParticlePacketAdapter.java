@@ -43,7 +43,11 @@ public class ParticlePacketAdapter extends PacketAdapter {
 								boolean invis = ((entityindex0bitmask & (1<<5)) != 0);
 								if (invis)
 								{
-							    	e.setCancelled(true);
+									// We just change hte bit to off again (position 6 counter from 0 is 5)
+									entityindex0bitmask = (byte) (entityindex0bitmask & ~(1 << 5));        
+							    	//e.setCancelled(true);
+									// send instead of cancel
+									packet.get(0).setValue(entityindex0bitmask);
 							    	return;
 								}
 							}
