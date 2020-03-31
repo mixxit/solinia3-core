@@ -6,31 +6,35 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.rit.sucy.player.TargetHelper;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Models.SoliniaLivingEntity;
+import com.solinia.solinia.Models.SpellEffectType;
 
 public class RaycastUtils {
-	public static boolean isEntityInLineOfSight(LivingEntity entityfrom, Entity entityto, boolean checkDirection) {
-		if (entityfrom == null || entityfrom.isDead())
+	public static boolean isEntityInLineOfSight(ISoliniaLivingEntity entityfrom, ISoliniaLivingEntity entityto, boolean checkDirection) {
+		if (entityfrom == null || entityfrom.getBukkitLivingEntity() == null || entityfrom.getBukkitLivingEntity().isDead())
 			return false;
-		if (entityto == null || entityto.isDead())
+		if (entityto == null || entityto.getBukkitLivingEntity() == null || entityto.getBukkitLivingEntity().isDead())
 			return false;
 
 		if (entityto instanceof LivingEntity) {
+			
+			if (!entityfrom.hasSpellEffectType(SpellEffectType.SeeInvis))
 			if (((LivingEntity)entityto).hasPotionEffect(PotionEffectType.INVISIBILITY))
 				return false;
 			
-			entityto = (LivingEntity) entityto;
 			if (checkDirection)
 			{
 				double x = entityfrom.getLocation().toVector().distance(entityto.getLocation().toVector());
 				Vector direction = entityfrom.getLocation().getDirection().multiply(x);
 				Vector answer = direction.add(entityfrom.getLocation().toVector());
 				if (answer.distance(entityto.getLocation().toVector()) < 1.37) {
-					if (entityfrom.hasLineOfSight(entityto)) {
+					if (entityfrom.getBukkitLivingEntity().hasLineOfSight(entityto.getBukkitLivingEntity())) {
 						return true;
 					}
 				}
 			} else {
-				if (entityfrom.hasLineOfSight(entityto)) {
+				if (entityfrom.getBukkitLivingEntity().hasLineOfSight(entityto.getBukkitLivingEntity())) {
 					return true;
 				}
 			}

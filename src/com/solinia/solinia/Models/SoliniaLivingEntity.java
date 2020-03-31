@@ -5887,7 +5887,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO buff stacking
 					) {
 						if (!checked_los) {
-							if (!RaycastUtils.isEntityInLineOfSight(getBukkitLivingEntity(),target, true)) {
+							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
 								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
@@ -5908,7 +5908,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO Buff Stacking check
 					) {
 						if (!checked_los) {
-							if (!RaycastUtils.isEntityInLineOfSight(this.getBukkitLivingEntity(),target, true)) {
+							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
 								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
@@ -5938,7 +5938,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
 							&& !Utils.hasSpellActive(soltarget, spell) && Utils.RandomRoll(15)) {
 						if (!checked_los) {
-							if (!RaycastUtils.isEntityInLineOfSight(this.getBukkitLivingEntity(),target, true)) {
+							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
 								Utils.DebugMessage(
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
@@ -5974,7 +5974,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO Buff stacking
 					) {
 						if (!checked_los) {
-							if (!RaycastUtils.isEntityInLineOfSight(this.getBukkitLivingEntity(),target, true)) {
+							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
 								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
@@ -5997,7 +5997,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO Buff stacking
 					) {
 						if (!checked_los) {
-							if (!RaycastUtils.isEntityInLineOfSight(this.getBukkitLivingEntity(),target, true)) {
+							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
 								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
@@ -6024,7 +6024,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 
 						if (!checked_los) {
-							if (!RaycastUtils.isEntityInLineOfSight(this.getBukkitLivingEntity(),target, true)) {
+							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
 								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
@@ -8528,7 +8528,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						}
 
 						if (hatedFactions.contains((Integer) targetNpc.getFactionid())) {
-							if (RaycastUtils.isEntityInLineOfSight(getBukkitLivingEntity(),le, true)) {
+							if (RaycastUtils.isEntityInLineOfSight(this,solEntity, true)) {
 								addToHateList(le.getUniqueId(), 1, true);
 								return;
 							}
@@ -8542,24 +8542,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				} else {
 					// NPC VS PLAYER
 					Player player = (Player) entity;
-					if (faction.getName().equals("KOS")) {
-						if (RaycastUtils.isEntityInLineOfSight(getBukkitLivingEntity(),player, true)) {
+					Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Checking for hate against player: " + player.getName() + ":" + player.getUniqueId());
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+
+					if (faction.getName().equals("KOS") && solPlayer != null) {
+						if (RaycastUtils.isEntityInLineOfSight(this,solPlayer.getSoliniaLivingEntity(), true)) {
 							addToHateList(player.getUniqueId(), 1, true);
 							return;
 						}
 					}
 					
-					Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Checking for hate against player: " + player.getName() + ":" + player.getUniqueId());
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
-					if (factionEntry != null) {
+					if (factionEntry != null && solPlayer != null) {
 						Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Found faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId() + " with standing: " + Utils.getFactionStandingType(factionEntry.getFactionId(),factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player)).name());
 						
 						switch (Utils.getFactionStandingType(factionEntry.getFactionId(),
 								factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player))) {
 						case FACTION_THREATENLY:
 						case FACTION_SCOWLS:
-							if (RaycastUtils.isEntityInLineOfSight(getBukkitLivingEntity(),player, true)) {
+							if (RaycastUtils.isEntityInLineOfSight(this,solPlayer.getSoliniaLivingEntity(), true)) {
 								addToHateList(player.getUniqueId(), 1, true);
 								return;
 							} else {
@@ -10229,6 +10230,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if(soliniaLivingEntity == null || soliniaLivingEntity.getBukkitLivingEntity() == null || soliniaLivingEntity.getBukkitLivingEntity().isDead())
 			return false;
 
-		return RaycastUtils.isEntityInLineOfSight(this.getBukkitLivingEntity(), soliniaLivingEntity.getBukkitLivingEntity(),checkDirection);
+		return RaycastUtils.isEntityInLineOfSight(this, soliniaLivingEntity,checkDirection);
 	}
 }

@@ -698,6 +698,9 @@ public class EntityManager implements IEntityManager {
 				if (!Utils.isLivingEntityNPC(livingEntityThatWillCast))
 					continue;
 				
+				if (!Utils.isLivingEntityNPC(creatureThatWillCast.getTarget()))
+					continue;
+				
 				try {
 					ISoliniaLivingEntity solLivingEntityThatWillCast = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillCast);
 					if (completedNpcsIds.contains(solLivingEntityThatWillCast.getNpcid()))
@@ -705,7 +708,8 @@ public class EntityManager implements IEntityManager {
 					
 					completedNpcsIds.add(solLivingEntityThatWillCast.getNpcid());
 					
-					if (RaycastUtils.isEntityInLineOfSight(livingEntityThatWillCast, creatureThatWillCast.getTarget(), true))
+					ISoliniaLivingEntity solCreatureThatWillCastsTarget = SoliniaLivingEntityAdapter.Adapt(creatureThatWillCast.getTarget());
+					if (RaycastUtils.isEntityInLineOfSight(solLivingEntityThatWillCast, solCreatureThatWillCastsTarget, true))
 						solLivingEntityThatWillCast.doSpellCast(plugin, creatureThatWillCast.getTarget());
 					
 				} catch (CoreStateInitException e) {
