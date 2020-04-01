@@ -1813,6 +1813,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		
 		// this should be the same as getBaseDamage()
 		int base_damage = (int) Math.round((minmaxdmg.b() - minmaxdmg.a()) / 1.9);
-		return (int)(minmaxdmg.b() - Math.round(base_damage / 10.0));
+		return (int)(minmaxdmg.a() - Math.round(base_damage / 10.0));
 	}
 }

@@ -969,9 +969,9 @@ public class EntityManager implements IEntityManager {
 				spawnedMob.setHealth(maxHp);
 			
 			net.minecraft.server.v1_14_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_14_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) spawnedMob).getHandle();
-			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)solPet.getMaxDamage());
+			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)npc.getBaseDamage());
 			entityhandle.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double)0.4D);
-			owner.sendMessage("New Pet spawned with HP: " + spawnedMob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " and " + solPet.getMaxDamage() + " dmg");
+			owner.sendMessage("New Pet spawned with HP: " + spawnedMob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " and " + npc.getBaseDamage() + " dmg");
 			
 
 			TargetedDisguise mob = new MobDisguise(DisguiseType.WOLF);
@@ -1779,7 +1779,6 @@ public class EntityManager implements IEntityManager {
 	public EntityAutoAttack getEntityAutoAttack(LivingEntity livingEntity) {
 		if (entityAutoAttack.get(livingEntity.getUniqueId()) == null)
 		{
-			
 			entityAutoAttack.put(livingEntity.getUniqueId(), new EntityAutoAttack(livingEntity));
 		} 
 		
@@ -1788,6 +1787,9 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void setEntityAutoAttack(LivingEntity livingEntity, boolean autoAttacking) {
+		if (autoAttacking == false && livingEntity instanceof Creature)
+			((Creature)livingEntity).setTarget(null);
+		
 		getEntityAutoAttack(livingEntity).setAutoAttacking(autoAttacking);
 	}
 	

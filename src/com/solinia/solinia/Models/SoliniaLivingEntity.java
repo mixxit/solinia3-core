@@ -281,6 +281,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void autoAttackEnemy(ISoliniaLivingEntity defender) {
+
 		if (getBukkitLivingEntity().isInvulnerable() || defender.getBukkitLivingEntity().isInvulnerable())
 		{
 			try {
@@ -366,15 +367,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 
-		if (!this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+		if (!this.isNPC() && !this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
 			if (getBukkitLivingEntity() instanceof Player) {
 				getBukkitLivingEntity().sendMessage("You cannot use this item (level or class)");
 			}
 			return;
 		}
 
+
 		//if (AutoFireEnabled()) {
-		if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+		if (!this.isNPC() && ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 		{
 			if (!this.hasSufficientArrowReagents(1)) {
 				getBukkitLivingEntity().sendMessage(
@@ -418,6 +420,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// Send packet to self
 			if (getBukkitLivingEntity() instanceof Player)
 		        EntityUtils.sendAnimationPacket(getBukkitLivingEntity(),(Player)getBukkitLivingEntity(),SolAnimationType.SwingArm);
+			
 			
 			tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Primary);
 			triggerDefensiveProcs(defender, InventorySlot.Primary, false, 0);
@@ -1214,6 +1217,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean Attack(ISoliniaLivingEntity other, int Hand, boolean bRiposte, boolean IsStrikethrough, boolean IsFromSpell) {
 		try
 		{
+
 			if (other == null)
 			{
 				setAttackTarget(null);
@@ -1391,9 +1395,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// Sets last melee attack so we can check if a user has melee attacked previously
 		setLastMeleeAttack();
 		if (other.getBukkitLivingEntity() != null || !other.getBukkitLivingEntity().isDead())
+		{
 			other.Damage(this, my_hit.damage_done, Utils.SPELL_UNKNOWN, my_hit.skill, true, -1, false); // Not avoidable client already had thier chance to Avoid
+		}
 		else
+		{
 			return false;
+		}
 		
 		if (other.getBukkitLivingEntity() != null || !other.getBukkitLivingEntity().isDead()) //killed by damage shield ect
 			return false;
@@ -2274,12 +2282,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean canUseItem(ItemStack itemStack) {
+		
 		try {
 			ISoliniaItem item = SoliniaItemAdapter.Adapt(itemStack);
 			if (item == null)
 				return true;
-
-			if (item.getAllowedClassNames().size() > 0) {
+			
+			if (!this.isNPC() && item.getAllowedClassNames().size() > 0) {
 				if (getClassObj() == null) {
 					return false;
 				}
@@ -2289,7 +2298,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 			
-			if (item.getAllowedRaceNames().size() > 0) {
+			if (!this.isNPC() && item.getAllowedRaceNames().size() > 0) {
 				if (getRace() == null) {
 					return false;
 				}
@@ -2299,7 +2308,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 
-			if (item.getMinLevel() > 0) {
+			// npc can use level item :-)
+			if (!this.isNPC() && item.getMinLevel() > 0) {
 				if (item.getMinLevel() > getLevel()) {
 					return false;
 				}
@@ -4004,6 +4014,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "Damage done: " + hit.damage_done);
 		if (hit.damage_done >= 0) {
 			if (other.checkHitChance(this, hit)) {
+				// npc chance to stun
+				
 				hit = other.meleeMitigation(this, hit);
 				Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "After meleeMitigation hit.damage_done: " + hit.damage_done);
 				if (hit.damage_done > 0) {
@@ -4839,7 +4851,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// check for items being illegally attained
 		if (weapon_item != null) {
-			if (weapon_item.getMinLevel() > getLevel())
+			if (!this.isNPC() && weapon_item.getMinLevel() > getLevel())
 				return 0;
 
 			if (!weapon_item.isEquipable(this.getRace(),this.getClassObj()))
@@ -6350,11 +6362,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int getMaxDamage() {
-		return Utils.getMaxDamage(getLevel(), getStrength());
-	}
-
-	@Override
 	public double getMaxHP() {
 
 		if (getNpcid() < 1 && !isPlayer())
@@ -7596,6 +7603,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public DamageHitInfo meleeMitigation(ISoliniaLivingEntity attacker, DamageHitInfo hit) {
 		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "-------------");
 		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "Melee Mitigation starts with hit: offense " + hit.offense + " damagedone " + hit.damage_done + " base_damage " + hit.base_damage);
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity().getName(), "-------------");
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity().getName(), "Melee Mitigation on enemy starts with hit: offense " + hit.offense + " damagedone " + hit.damage_done + " base_damage " + hit.base_damage);
 
 		if (hit.damage_done < 0 || hit.base_damage == 0)
 			return hit;
@@ -7617,6 +7626,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// +0.5 for rounding, min to 1 dmg
 		hit.damage_done = Math.max((int) (roll * (double) (hit.base_damage) + 0.5), 1);
 		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "new damage done is: " + hit.damage_done + " (this was: roll("+roll+")*basedamage("+hit.base_damage+")+0.5");
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "mitigation" + mitigation + " vs offense " + hit.offense + " base " + hit.base_damage + " rolled " + roll + " damage " + hit.damage_done);
+		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity().getName(), "mitigation" + mitigation + " vs offense " + hit.offense + " base " + hit.base_damage + " rolled " + roll + " damage " + hit.damage_done);
 
 		return hit;
 	}
@@ -7654,9 +7665,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public int ACSum() {
 		double ac = 0;
+		// nm everything gets it
 		// players and core pets get AC from Items they are wearing
-		if (this.isPlayer() || IsCorePet())
-			ac += getTotalItemAC();
+		//if (this.isPlayer() || IsCorePet())
+		ac += getTotalItemAC();
 		
 		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "Start ACSum with totalItemAC " + ac);
 		double shield_ac = 0;

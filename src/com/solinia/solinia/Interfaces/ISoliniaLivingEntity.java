@@ -66,8 +66,6 @@ public interface ISoliniaLivingEntity  {
 
 	boolean getRiposteCheck();
 
-	int getMaxDamage();
-
 	int getStrength();
 
 	int getStamina();

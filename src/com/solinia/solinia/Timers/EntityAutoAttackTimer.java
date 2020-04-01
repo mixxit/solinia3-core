@@ -2,6 +2,7 @@ package com.solinia.solinia.Timers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -84,7 +85,7 @@ List<String> completedEntities = new ArrayList<String>();
 		try
 		{
 			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(entityForAutoAttack);
-	
+
 			if (!autoAttack.isAutoAttacking())
 				return;
 				
@@ -135,7 +136,7 @@ List<String> completedEntities = new ArrayList<String>();
 				// TODO
 				
 				// nm
-				
+
 				if (solLivingEntityTarget != null && solLivingEntityAttacker != null)
 				{
 					// reset timer
@@ -160,5 +161,6 @@ List<String> completedEntities = new ArrayList<String>();
 		{
 			e.printStackTrace();
 		}
+
 	}
 }
