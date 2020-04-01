@@ -20,7 +20,7 @@ public class RaycastUtils {
 		if (entityto.getBukkitLivingEntity() instanceof LivingEntity) {
 			
 			if (!entityfrom.hasSpellEffectType(SpellEffectType.SeeInvis))
-			if (((LivingEntity)entityto).hasPotionEffect(PotionEffectType.INVISIBILITY))
+			if (((LivingEntity)entityto.getBukkitLivingEntity()).hasPotionEffect(PotionEffectType.INVISIBILITY))
 				return false;
 			
 			if (checkDirection)
