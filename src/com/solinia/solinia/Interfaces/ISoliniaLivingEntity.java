@@ -469,4 +469,6 @@ public interface ISoliniaLivingEntity  {
 
 	public boolean checkLosFN(ISoliniaLivingEntity solTarget, boolean checkDirection);
 
+	boolean IsCorePet();
+
 }

@@ -853,6 +853,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	{
 		return isCurrentlyNPCPet();
 	}
+	
+	@Override
+	public boolean IsCorePet()
+	{
+		if (!this.isNPC())
+			return false;
+		
+		if (!isCurrentlyNPCPet())
+			return false;
+		
+		if (this.getNPC() == null)
+			return false;
+		
+		return this.getNPC().isCorePet();
+	}
 
 	@Override
 	public void tryWeaponProc(ItemStack inst, ISoliniaItem weapon, ISoliniaLivingEntity on, int hand) {
@@ -7515,7 +7530,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public int ACSum() {
 		double ac = 0;
-		ac += getTotalItemAC();
+		// players and core pets get AC from Items they are wearing
+		if (this.isPlayer() || IsCorePet())
+			ac += getTotalItemAC();
+		
 		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "Start ACSum with totalItemAC " + ac);
 		double shield_ac = 0;
 
