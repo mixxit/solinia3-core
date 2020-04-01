@@ -1306,92 +1306,216 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return false;
 			}
 	
-			DamageHitInfo my_hit = new DamageHitInfo();
-			my_hit.skill = AttackAnimation(Hand, weapon, SkillType.HandtoHand);
-	
-			// Now figure out damage
-			my_hit.damage_done = 1;
-			my_hit.min_damage = 0;
-			// getLevel();
-			int hate = 0;
-			if (weapon != null)
-				hate = (weapon.getDefinedItemDamage() + weapon.getElementalDamageAmount());
-	
-			my_hit.base_damage = getWeaponDamage(other, weaponItemStack, hate);
-	
-			// amount of hate is based on the damage done
-			if (hate == 0 && my_hit.base_damage > 1) {
-				hate = my_hit.base_damage;
-				Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(),
-						"GetHitInfo hate set to: " + my_hit.base_damage);
-			}
-	
-			if (my_hit.base_damage > 0) {
-				if (Hand == InventorySlot.Primary || Hand == InventorySlot.Secondary)
-					my_hit.base_damage = getDamageCaps(my_hit.base_damage);
-	
-				int shield_inc = this.getSpellBonuses(SpellEffectType.ShieldEquipDmgMod) + this.getItemBonuses(SpellEffectType.ShieldEquipDmgMod) /*+ aabonuses.ShieldEquipDmgMod*/;
-				if (shield_inc > 0 && hasShieldEquiped() && Hand == InventorySlot.Primary) {
-					my_hit.base_damage = my_hit.base_damage * (100 + shield_inc) / 100;
-					hate = hate * (100 + shield_inc) / 100;
-				}
-				
-				tryIncreaseSkill(my_hit.skill, 1);
-				tryIncreaseSkill(SkillType.Offense, 1);
-	
-				int ucDamageBonus = 0;
-	
-				if (Hand == InventorySlot.Primary && getClassObj() != null && getClassObj().isWarriorClass() && getLevel() >= 28) {
-					ucDamageBonus = getWeaponDamageBonus(weaponItemStack);
-					Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo ucDamageBonus from weapon is: " + ucDamageBonus);
-					my_hit.min_damage = ucDamageBonus;
-					hate += ucDamageBonus;
-				}
-	
-				// TODO Sinister Strikes
-	
-				int hit_chance_bonus = 0;
-				my_hit.offense = offense(my_hit.skill); // we need this a few times
-				my_hit.hand = Hand;
-	
-				my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
-				doAttack(other, my_hit);
-			} else {
-				my_hit.damage_done = Utils.DMG_INVULNERABLE;
-			}
+			// Since there was two pieces of logc in eq, lets do the same
+			if (this.isPlayer())
+				return CalcPlayerAttack(Hand, weapon, other, weaponItemStack,bRiposte);
 			
-			other.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate, true);
-			
-			///////////////////////////////////////////////////////////
-			////// Send Attack Damage
-			///////////////////////////////////////////////////////////
-			
-			// TODO Skill Procs
-	
-			if (getBukkitLivingEntity().isDead()) {
-				return false;
-			}
-			
-			// Sets last melee attack so we can check if a user has melee attacked previously
-			setLastMeleeAttack();
-			
-			other.Damage(this, my_hit.damage_done, Utils.SPELL_UNKNOWN, my_hit.skill, true, -1, false);
-			
-			commonBreakInvisibleFromCombat();
-			if (!other.getBukkitLivingEntity().isDead())
-			{
-				triggerDefensiveProcs(other, Hand, true, my_hit.damage_done);
-			}
-			
-			if (my_hit.damage_done > 0)
-				return true;
-	
-			else
-				return false;
+			return CalcNPCAttack(Hand, weapon, other, weaponItemStack, bRiposte);
 		} catch (CoreStateInitException e)
 		{
 			return false;
 		}
+	}
+	
+	private boolean CalcNPCAttack(int Hand, ISoliniaItem weapon, ISoliniaLivingEntity other,
+			ItemStack weaponItemStack, boolean bRiposte) {
+		// This is really just the rest of the Attack() method, it should be moved into its relevant class really
+
+		DamageHitInfo my_hit = new DamageHitInfo();
+		my_hit.skill = AttackAnimation(Hand, weapon, SkillType.HandtoHand);
+		
+		// Now figure out damage
+		my_hit.damage_done = 1;
+		my_hit.min_damage = 0;
+		// getLevel();
+		
+		/*if (weapon != null)
+			hate = (weapon.getDefinedItemDamage() + weapon.getElementalDamageAmount());*/
+
+		int weapon_damage = getWeaponDamage(other, weaponItemStack, 0);
+
+		if (weapon_damage > 0) {
+			// bane damage for body type
+			// bane damage for race
+			// elemental damage
+			int eleBane = 0;
+			
+			int otherlevel = other.getLevel();
+			int mylevel = this.getLevel();
+
+			if (otherlevel < 1)
+				otherlevel = 1;
+			if (mylevel < 1)
+				otherlevel = 1;
+
+			//damage = mod_npc_damage(damage, skillinuse, Hand, weapon, other);
+
+			my_hit.base_damage = this.getNPC().getBaseDamage() + eleBane;
+			my_hit.min_damage = this.getNPC().getMinDamage();
+			int hate = my_hit.base_damage + my_hit.min_damage;
+
+			int hit_chance_bonus = 0;
+
+			/*if (opts) {
+				my_hit.base_damage *= opts->damage_percent;
+				my_hit.base_damage += opts->damage_flat;
+				hate *= opts->hate_percent;
+				hate += opts->hate_flat;
+				hit_chance_bonus += opts->hit_chance;
+			}*/
+			
+			my_hit.offense = offense(my_hit.skill);
+			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
+
+			doAttack(other, my_hit);
+			
+			other.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate, false);
+			
+			if (other.isPlayer() && IsPet() && other.getOwnerEntity() instanceof Player) {
+				//pets do half damage to clients in pvp
+				my_hit.damage_done /= 2;
+				if (my_hit.damage_done < 1)
+					my_hit.damage_done = 1;
+			}
+			
+		} else {
+			my_hit.damage_done = Utils.DMG_INVULNERABLE;
+		}
+		
+		// TODO Skill Procs
+
+		if (getBukkitLivingEntity().isDead()) {
+			return false;
+		}
+		
+		// Sets last melee attack so we can check if a user has melee attacked previously
+		setLastMeleeAttack();
+		if (other.getBukkitLivingEntity() != null || !other.getBukkitLivingEntity().isDead())
+			other.Damage(this, my_hit.damage_done, Utils.SPELL_UNKNOWN, my_hit.skill, true, -1, false); // Not avoidable client already had thier chance to Avoid
+		else
+			return false;
+		
+		if (other.getBukkitLivingEntity() != null || !other.getBukkitLivingEntity().isDead()) //killed by damage shield ect
+			return false;
+		
+		// melee life tap goes here
+		
+		commonBreakInvisibleFromCombat();
+		
+		if (other.getBukkitLivingEntity() == null || other.getBukkitLivingEntity().isDead())
+			return true; //We killed them
+		
+		// TODO riposte here
+		if (!bRiposte && !other.getBukkitLivingEntity().isDead()) {
+			tryWeaponProc(null, weapon, other, Hand);	//no weapon
+
+			/* TODO skill procs and spell procs
+			 * if (!other.getBukkitLivingEntity().isDead())
+				TrySpellProc(null, weapon, other, Hand);
+
+			if (my_hit.damage_done > 0 && HasSkillProcSuccess() && !other->HasDied())
+				TrySkillProc(other, my_hit.skill, 0, true, Hand);
+				*/
+		}
+		
+		if (!other.getBukkitLivingEntity().isDead())
+		{
+			triggerDefensiveProcs(other, Hand, true, my_hit.damage_done);
+		}
+		
+		if (my_hit.damage_done > 0)
+			return true;
+
+		else
+			return false;
+	}
+
+	private boolean CalcPlayerAttack(int Hand, ISoliniaItem weapon, ISoliniaLivingEntity other, ItemStack weaponItemStack, boolean bRiposte)
+	{
+		// This is really just the rest of the Attack() method, it should be moved into its relevant class really
+		
+		DamageHitInfo my_hit = new DamageHitInfo();
+		my_hit.skill = AttackAnimation(Hand, weapon, SkillType.HandtoHand);
+		
+		// Now figure out damage
+		my_hit.damage_done = 1;
+		my_hit.min_damage = 0;
+		// getLevel();
+		int hate = 0;
+		if (weapon != null)
+			hate = (weapon.getDefinedItemDamage() + weapon.getElementalDamageAmount());
+
+		my_hit.base_damage = getWeaponDamage(other, weaponItemStack, hate);
+
+		// amount of hate is based on the damage done
+		if (hate == 0 && my_hit.base_damage > 1) {
+			hate = my_hit.base_damage;
+			Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(),
+					"GetHitInfo hate set to: " + my_hit.base_damage);
+		}
+
+		if (my_hit.base_damage > 0) {
+			if (Hand == InventorySlot.Primary || Hand == InventorySlot.Secondary)
+				my_hit.base_damage = getDamageCaps(my_hit.base_damage);
+
+			int shield_inc = this.getSpellBonuses(SpellEffectType.ShieldEquipDmgMod) + this.getItemBonuses(SpellEffectType.ShieldEquipDmgMod) /*+ aabonuses.ShieldEquipDmgMod*/;
+			if (shield_inc > 0 && hasShieldEquiped() && Hand == InventorySlot.Primary) {
+				my_hit.base_damage = my_hit.base_damage * (100 + shield_inc) / 100;
+				hate = hate * (100 + shield_inc) / 100;
+			}
+			
+			tryIncreaseSkill(my_hit.skill, 1);
+			tryIncreaseSkill(SkillType.Offense, 1);
+
+			int ucDamageBonus = 0;
+
+			if (Hand == InventorySlot.Primary && getClassObj() != null && getClassObj().isWarriorClass() && getLevel() >= 28) {
+				ucDamageBonus = getWeaponDamageBonus(weaponItemStack);
+				Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo ucDamageBonus from weapon is: " + ucDamageBonus);
+				my_hit.min_damage = ucDamageBonus;
+				hate += ucDamageBonus;
+			}
+
+			// TODO Sinister Strikes
+
+			int hit_chance_bonus = 0;
+			my_hit.offense = offense(my_hit.skill); // we need this a few times
+			my_hit.hand = Hand;
+
+			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
+			doAttack(other, my_hit);
+		} else {
+			my_hit.damage_done = Utils.DMG_INVULNERABLE;
+		}
+		
+		other.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate, true);
+		
+		///////////////////////////////////////////////////////////
+		////// Send Attack Damage
+		///////////////////////////////////////////////////////////
+		
+		// TODO Skill Procs
+
+		if (getBukkitLivingEntity().isDead()) {
+			return false;
+		}
+		
+		// Sets last melee attack so we can check if a user has melee attacked previously
+		setLastMeleeAttack();
+		
+		other.Damage(this, my_hit.damage_done, Utils.SPELL_UNKNOWN, my_hit.skill, true, -1, false);
+		
+		commonBreakInvisibleFromCombat();
+		if (!other.getBukkitLivingEntity().isDead())
+		{
+			triggerDefensiveProcs(other, Hand, true, my_hit.damage_done);
+		}
+		
+		if (my_hit.damage_done > 0)
+			return true;
+
+		else
+			return false;
 	}
 	
 	private void triggerDefensiveProcs(ISoliniaLivingEntity on, int hand, boolean fromSkillProc, int damage) {
@@ -4691,7 +4815,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// dont increase skill
 		}
 	}
-
+	
 	@Override
 	public int getWeaponDamage(ISoliniaLivingEntity against, ItemStack weaponItemStack, int hate)
 	{

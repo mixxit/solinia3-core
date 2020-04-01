@@ -42,6 +42,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private int id;
@@ -1608,5 +1609,210 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	public int getNPCDefaultAtk() {
 		// TODO Auto-generated method stub
 		return (int) Math.ceil((getLevel()/7)*10);
+	}
+
+	private Tuple<Integer, Integer> calcNPCDamage() {
+		int AC_adjust=12;
+		int min_dmg = 0;
+		int max_dmg = 0;
+
+		if (getLevel() >= 66) {
+			if (min_dmg==0)
+				min_dmg = 220;
+			if (max_dmg==0)
+				max_dmg = ((((99000)*(getLevel()-64))/400)*AC_adjust/10);
+		}
+		else if (getLevel() >= 60 && getLevel() <= 65){
+			if(min_dmg==0)
+				min_dmg = (getLevel()+(getLevel()/3));
+			if(max_dmg==0)
+				max_dmg = (getLevel()*3)*AC_adjust/10;
+		}
+		else if (getLevel() >= 51 && getLevel() <= 59){
+			if(min_dmg==0)
+				min_dmg = (getLevel()+(getLevel()/3));
+			if(max_dmg==0)
+				max_dmg = (getLevel()*3)*AC_adjust/10;
+		}
+		else if (getLevel() >= 40 && getLevel() <= 50) {
+			if (min_dmg==0)
+				min_dmg = getLevel();
+			if(max_dmg==0)
+				max_dmg = (getLevel()*3)*AC_adjust/10;
+		}
+		else if (getLevel() >= 28 && getLevel() <= 39) {
+			if (min_dmg==0)
+				min_dmg = getLevel() / 2;
+			if (max_dmg==0)
+				max_dmg = ((getLevel()*2)+2)*AC_adjust/10;
+		}
+		else if (getLevel() <= 27) {
+			if (min_dmg==0)
+				min_dmg=1;
+			if (max_dmg==0)
+				max_dmg = (getLevel()*2)*AC_adjust/10;
+		}
+
+		int clfact = getClassLevelFactor();
+		min_dmg = (min_dmg * clfact) / 220;
+		max_dmg = (max_dmg * clfact) / 220;
+
+		return new Tuple<Integer,Integer>(min_dmg,max_dmg);
+	}
+	
+	private int getClassLevelFactor() {
+		int multiplier = 0;
+		int mlevel = getLevel();
+		
+		String className = "";
+		if (getClassObj() != null)
+			className = getClassObj().getName();
+		
+		switch (className) {
+			case "WARRIOR": {
+					if (mlevel < 20) {
+						multiplier = 220;
+					}
+					else if (mlevel < 30) {
+						multiplier = 230;
+					}
+					else if (mlevel < 40) {
+						multiplier = 250;
+					}
+					else if (mlevel < 53) {
+						multiplier = 270;
+					}
+					else if (mlevel < 57) {
+						multiplier = 280;
+					}
+					else if (mlevel < 60) {
+						multiplier = 290;
+					}
+					else if (mlevel < 70) {
+						multiplier = 300;
+					}
+					else {
+						multiplier = 311;
+					}
+					break;
+				}
+			case "DRUID":
+			case "CLERIC":
+			case "SHAMAN": {
+					if (mlevel < 70) {
+						multiplier = 150;
+					}
+					else {
+						multiplier = 157;
+					}
+					break;
+				}
+			case "BERSERKER":
+			case "PALADIN":
+			case "SHADOWKNIGHT": {
+					if (mlevel < 35) {
+						multiplier = 210;
+					}
+					else if (mlevel < 45) {
+						multiplier = 220;
+					}
+					else if (mlevel < 51) {
+						multiplier = 230;
+					}
+					else if (mlevel < 56) {
+						multiplier = 240;
+					}
+					else if (mlevel < 60) {
+						multiplier = 250;
+					}
+					else if (mlevel < 68) {
+						multiplier = 260;
+					}
+					else {
+						multiplier = 270;
+					}
+					break;
+				}
+			case "MONK":
+			case "BARD":
+			case "ROGUE":
+			case "BEASTLORD": {
+					if (mlevel < 51) {
+						multiplier = 180;
+					}
+					else if (mlevel < 58) {
+						multiplier = 190;
+					}
+					else if (mlevel < 70) {
+						multiplier = 200;
+					}
+					else {
+						multiplier = 210;
+					}
+					break;
+				}
+			case "RANGER": {
+					if (mlevel < 58) {
+						multiplier = 200;
+					}
+					else if (mlevel < 70) {
+						multiplier = 210;
+					}
+					else {
+						multiplier = 220;
+					}
+					break;
+				}
+			case "MAGICIAN":
+			case "WIZARD":
+			case "NECROMANCER":
+			case "ENCHANTER": {
+					if (mlevel < 70) {
+						multiplier = 120;
+					}
+					else {
+						multiplier = 127;
+					}
+					break;
+				}
+			default: {
+					if (mlevel < 35) {
+						multiplier = 210;
+					}
+					else if (mlevel < 45) {
+						multiplier = 220;
+					}
+					else if (mlevel < 51) {
+						multiplier = 230;
+					}
+					else if (mlevel < 56) {
+						multiplier = 240;
+					}
+					else if (mlevel < 60) {
+						multiplier = 250;
+					}
+					else {
+						multiplier = 260;
+					}
+					break;
+				}
+		}
+		return multiplier;
+	}
+
+	@Override
+	public int getBaseDamage() {
+		Tuple<Integer,Integer> minmaxdmg = calcNPCDamage();
+		// This is also in getMinDamage()
+		return (int) Math.round((minmaxdmg.b() - minmaxdmg.a()) / 1.9);
+	}
+
+	@Override
+	public int getMinDamage() {
+		Tuple<Integer,Integer> minmaxdmg = calcNPCDamage();
+		
+		// this should be the same as getBaseDamage()
+		int base_damage = (int) Math.round((minmaxdmg.b() - minmaxdmg.a()) / 1.9);
+		return (int)(minmaxdmg.b() - Math.round(base_damage / 10.0));
 	}
 }

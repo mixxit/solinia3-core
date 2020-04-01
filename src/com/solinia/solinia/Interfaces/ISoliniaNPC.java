@@ -282,5 +282,8 @@ public interface ISoliniaNPC extends IPersistable {
 
 	int getNPCDefaultAtk();
 
+	int getBaseDamage();
+	int getMinDamage();
+
 
 }
