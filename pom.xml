@@ -221,7 +221,7 @@
 		<dependency>
 			<groupId>com.palmergames.bukkit.towny</groupId>
 			<artifactId>Towny</artifactId>
-			<version>0.95.2.10</version>
+			<version>0.95.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.lumine.xikage</groupId>
