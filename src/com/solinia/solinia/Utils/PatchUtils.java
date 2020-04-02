@@ -22,77 +22,13 @@ public class PatchUtils {
 					continue;
 				if (item.getTexturebase64() == null)
 					continue;
-
-				boolean changed = false;
-
-				// neck
-				if (item.getEquipmentSlot().equals(EquipmentSlot.Neck) && item.getTexturebase64().equals(
-						"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==")) {
-					ISoliniaItem newItem = StateManager.getInstance().getConfigurationManager().getItem(226497);
-					item.setTexturebase64(newItem.getTexturebase64());
-					changed = true;
-				}
-
-				// shoulders
-				if (item.getEquipmentSlot().equals(EquipmentSlot.Shoulders) && item.getTexturebase64().equals(
-						"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==")) {
-					ISoliniaItem newItem = StateManager.getInstance().getConfigurationManager().getItem(226500);
-					item.setTexturebase64(newItem.getTexturebase64());
-					changed = true;
-				}
-
-				// fingers
-				if (item.getEquipmentSlot().equals(EquipmentSlot.Fingers) && item.getTexturebase64().equals(
-						"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19")) {
-					ISoliniaItem newItem = StateManager.getInstance().getConfigurationManager().getItem(226498);
-					item.setTexturebase64(newItem.getTexturebase64());
-					changed = true;
-				}
-
-				// ears
-				if (item.getEquipmentSlot().equals(EquipmentSlot.Ears) && item.getTexturebase64().equals(
-						"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19")) {
-					ISoliniaItem newItem = StateManager.getInstance().getConfigurationManager().getItem(226499);
-					item.setTexturebase64(newItem.getTexturebase64());
-					changed = true;
-				}
-
-				// forearms
-				if (item.getEquipmentSlot().equals(EquipmentSlot.Forearms) && item.getTexturebase64().equals(
-						"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=")) {
-					ISoliniaItem newItem = StateManager.getInstance().getConfigurationManager().getItem(226503
-
-					);
-					item.setTexturebase64(newItem.getTexturebase64());
-					changed = true;
-				}
-
-				// arms
-				if (item.getEquipmentSlot().equals(EquipmentSlot.Arms) && item.getTexturebase64().equals(
-						"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=")) {
-					ISoliniaItem newItem = StateManager.getInstance().getConfigurationManager().getItem(226504
-
-					);
-					item.setTexturebase64(newItem.getTexturebase64());
-					changed = true;
-				}
-
-				// hands
-				if (item.getEquipmentSlot().equals(EquipmentSlot.Hands) && item.getTexturebase64().equals(
-						"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=")) {
-					ISoliniaItem newItem = StateManager.getInstance().getConfigurationManager().getItem(226502);
-					item.setTexturebase64(newItem.getTexturebase64());
-					changed = true;
-				}
-
-				// waist
-				if (item.getEquipmentSlot().equals(EquipmentSlot.Waist) && item.getTexturebase64().equals(
-						"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=")) {
-					ISoliniaItem newItem = StateManager.getInstance().getConfigurationManager().getItem(226501);
-					item.setTexturebase64(newItem.getTexturebase64());
-					changed = true;
-				}
 				
+				if (item.getBasename().equals("LEGACY_SKULL_ITEM"))
+					item.setBasename("PLAYER_HEAD");
+
+				boolean changed = true;
+
+
 				if (changed == true)
 				{
 					item.setLastUpdatedTimeNow();
