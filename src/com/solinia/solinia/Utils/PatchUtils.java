@@ -15,32 +15,15 @@ import com.solinia.solinia.Models.PlayerState;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try {
+		/*try {
 
 			for (ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems()) {
-				if (!item.isAdditionalArmour() && !item.isJewelry())
-					continue;
-				if (item.getTexturebase64() == null)
-					continue;
 				
-				if (!item.getBasename().equals("LEGACY_SKULL_ITEM"))
-					continue;
-
-				item.setBasename("PLAYER_HEAD");
-
-				boolean changed = true;
-
-
-				if (changed == true)
-				{
-					item.setLastUpdatedTimeNow();
-					System.out.println("updated " + item.getDisplayname());
-				}
 			}
 
 		} catch (CoreStateInitException e) {
 
-		}
+		}*/
 
 	}
 }
