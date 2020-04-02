@@ -83,6 +83,14 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 	private int meditationLevel = 0;
 	private int makePoisonLevel = 0;
 	private int dropSpellsLootTableId = 0;
+	private int neckItemIconItemId = 226497;
+	private int shouldersItemIconItemId = 226500;
+	private int fingersItemIconItemId = 226498;
+	private int earsItemIconItemId = 226499;
+	private int forearmsItemIconItemId = 226503;
+	private int armsItemIconItemId = 226504;
+	private int handsItemIconItemId = 226502;
+	private int waistItemIconItemId = 226501;
 	
 	@Override
 	public String getName() {
@@ -1184,5 +1192,85 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 	@Override
 	public void setAppearanceId(int appearanceId) {
 		this.appearanceId = appearanceId;
+	}
+
+	@Override
+	public int getNeckItemIconItemId() {
+		return neckItemIconItemId;
+	}
+
+	@Override
+	public void setNeckItemIconItemId(int neckItemIconItemId) {
+		this.neckItemIconItemId = neckItemIconItemId;
+	}
+
+	@Override
+	public int getShouldersItemIconItemId() {
+		return shouldersItemIconItemId;
+	}
+
+	@Override
+	public void setShouldersItemIconItemId(int shouldersItemIconItemId) {
+		this.shouldersItemIconItemId = shouldersItemIconItemId;
+	}
+
+	@Override
+	public int getFingersItemIconItemId() {
+		return fingersItemIconItemId;
+	}
+
+	@Override
+	public void setFingersItemIconItemId(int fingersItemIconItemId) {
+		this.fingersItemIconItemId = fingersItemIconItemId;
+	}
+
+	@Override
+	public int getEarsItemIconItemId() {
+		return earsItemIconItemId;
+	}
+
+	@Override
+	public void setEarsItemIconItemId(int earsItemIconItemId) {
+		this.earsItemIconItemId = earsItemIconItemId;
+	}
+
+	@Override
+	public int getForearmsItemIconItemId() {
+		return forearmsItemIconItemId;
+	}
+
+	@Override
+	public void setForearmsItemIconItemId(int forearmsItemIconItemId) {
+		this.forearmsItemIconItemId = forearmsItemIconItemId;
+	}
+
+	@Override
+	public int getArmsItemIconItemId() {
+		return armsItemIconItemId;
+	}
+
+	@Override
+	public void setArmsItemIconItemId(int armsItemIconItemId) {
+		this.armsItemIconItemId = armsItemIconItemId;
+	}
+
+	@Override
+	public int getHandsItemIconItemId() {
+		return handsItemIconItemId;
+	}
+
+	@Override
+	public void setHandsItemIconItemId(int handsItemIconItemId) {
+		this.handsItemIconItemId = handsItemIconItemId;
+	}
+
+	@Override
+	public int getWaistItemIconItemId() {
+		return waistItemIconItemId;
+	}
+
+	@Override
+	public void setWaistItemIconItemId(int waistItemIconItemId) {
+		this.waistItemIconItemId = waistItemIconItemId;
 	}
 }

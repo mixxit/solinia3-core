@@ -218,4 +218,36 @@ public interface ISoliniaClass extends IPersistable {
 
 	void setAppearanceId(int appearanceId);
 
+	int getNeckItemIconItemId();
+
+	void setNeckItemIconItemId(int neckItemIconItemId);
+
+	int getShouldersItemIconItemId();
+
+	void setShouldersItemIconItemId(int shouldersItemIconItemId);
+
+	int getFingersItemIconItemId();
+
+	void setFingersItemIconItemId(int fingersItemIconItemId);
+
+	int getEarsItemIconItemId();
+
+	void setEarsItemIconItemId(int earsItemIconItemId);
+
+	int getForearmsItemIconItemId();
+
+	void setForearmsItemIconItemId(int forearmsItemIconItemId);
+
+	int getArmsItemIconItemId();
+
+	void setArmsItemIconItemId(int armsItemIconItemId);
+
+	int getHandsItemIconItemId();
+
+	void setHandsItemIconItemId(int handsItemIconItemId);
+
+	int getWaistItemIconItemId();
+
+	void setWaistItemIconItemId(int waistItemIconItemId);
+
 }

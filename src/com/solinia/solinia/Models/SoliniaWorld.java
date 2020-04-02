@@ -31,6 +31,7 @@ public class SoliniaWorld {
 	private int whisperchatrange = 5;
 	private int localchatrange = 32;
 	private int shoutchatrange = 64;
+	
 	private ConcurrentHashMap<String, ArrayList<String>> playerIpNameMappings = new ConcurrentHashMap<String, ArrayList<String>>(); 
 	
 	public Integer getId() {

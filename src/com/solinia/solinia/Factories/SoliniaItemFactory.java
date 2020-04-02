@@ -186,45 +186,104 @@ public class SoliniaItemFactory {
 				alternateHandItem.setAppearanceId(classtype.getAppearanceId());
 			}
 
+			ISoliniaItem neckItemTemplate = null;
+			if (classtype.getNeckItemIconItemId() > 0)
+				neckItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getNeckItemIconItemId());
+			
+			ISoliniaItem shouldersItemTemplate = null;
+			if (classtype.getShouldersItemIconItemId() > 0)
+				shouldersItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getShouldersItemIconItemId());
+			
+			ISoliniaItem fingersItemTemplate = null;
+			if (classtype.getFingersItemIconItemId() > 0)
+				fingersItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getFingersItemIconItemId());
+			
+			ISoliniaItem earsItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getEarsItemIconItemId());
+			if (classtype.getEarsItemIconItemId() > 0)
+				earsItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getEarsItemIconItemId());
+			
+			ISoliniaItem forearmsItemTemplate = null;
+			if (classtype.getForearmsItemIconItemId() > 0)
+				forearmsItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getForearmsItemIconItemId());
+			
+			ISoliniaItem armsItemTemplate = null;
+			if (classtype.getArmsItemIconItemId() > 0)
+				armsItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getArmsItemIconItemId());
+			
+			ISoliniaItem handsItemTemplate = null;
+			if (classtype.getHandsItemIconItemId() > 0)
+				handsItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getHandsItemIconItemId());
+
+			ISoliniaItem waistItemTemplate = null;
+			if (classtype.getWaistItemIconItemId() > 0)
+				waistItemTemplate = StateManager.getInstance().getConfigurationManager().getItem(classtype.getWaistItemIconItemId());
+			
 			
 			// Jewelry!
-			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			ISoliniaItem neckItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.PLAYER_HEAD));
 			neckItem.setEquipmentSlot(EquipmentSlot.Neck);
 			neckItem.setDiscoverer(discoverer);
-			neckItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
-			ISoliniaItem shouldersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			if (neckItemTemplate != null)
+				neckItem.setTexturebase64(neckItemTemplate.getTexturebase64());
+			else
+				neckItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRhYjc3ZWVmYWQwYjBjZGJkZjMyNjFhN2E0NzI5ZDU1MDRkNmY5NmQzYzE2MjgzMjE5NzQ0M2ViZTM0NmU2In19fQ==");
+			
+			ISoliniaItem shouldersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.PLAYER_HEAD));
 			shouldersItem.setEquipmentSlot(EquipmentSlot.Shoulders);
 			shouldersItem.setDiscoverer(discoverer);
-			shouldersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
-			ISoliniaItem fingersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			if (shouldersItemTemplate != null)
+				shouldersItem.setTexturebase64(shouldersItemTemplate.getTexturebase64());
+			else
+				shouldersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYTdjZWY3YmMyOTI3ZWI5NGQ0YTY5MGE0MTQ4YTIxNDk4MjJlM2E2MGMwNjExYWEyYTNhNjUzM2I3NzE1In19fQ==");
+			
+			ISoliniaItem fingersItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.PLAYER_HEAD));
 			fingersItem.setEquipmentSlot(EquipmentSlot.Fingers);
 			fingersItem.setDiscoverer(discoverer);
-			fingersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
-			ISoliniaItem earsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			if (fingersItemTemplate != null)
+				fingersItem.setTexturebase64(fingersItemTemplate.getTexturebase64());
+			else
+				fingersItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE4M2M4OGRiOTg0MjZjNjRjMzdlNmQ3ODlkNGVjMWUzZGU0M2VmYWFmZTRiZTE2MTk2MWVmOTQzZGJlODMifX19");
+			
+			ISoliniaItem earsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.PLAYER_HEAD));
 			earsItem.setEquipmentSlot(EquipmentSlot.Ears);
 			earsItem.setDiscoverer(discoverer);
-			earsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
+			if (earsItemTemplate != null)
+				earsItem.setTexturebase64(earsItemTemplate.getTexturebase64());
+			else
+				earsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFiYTc0ZDgxMmYzYzVlOTdhZDBmMWU2Y2IxZDI0ZmM5ZTEzNzg4MTk2Y2YxYmM0NzMyMTFmZjE0MmJlYWIifX19");
 
 			// Additional Armour!
-			ISoliniaItem forearmsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			ISoliniaItem forearmsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.PLAYER_HEAD));
 			forearmsItem.setEquipmentSlot(EquipmentSlot.Forearms);
 			forearmsItem.setDiscoverer(discoverer);
-			forearmsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
+			if (forearmsItemTemplate != null)
+				forearmsItem.setTexturebase64(forearmsItemTemplate.getTexturebase64());
+			else
+				forearmsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
-			ISoliniaItem armsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			ISoliniaItem armsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.PLAYER_HEAD));
 			armsItem.setEquipmentSlot(EquipmentSlot.Arms);
 			armsItem.setDiscoverer(discoverer);
-			armsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
+			if (armsItemTemplate != null)
+				armsItem.setTexturebase64(armsItemTemplate.getTexturebase64());
+			else
+				armsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
-			ISoliniaItem handsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			ISoliniaItem handsItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.PLAYER_HEAD));
 			handsItem.setEquipmentSlot(EquipmentSlot.Hands);
 			handsItem.setDiscoverer(discoverer);
-			handsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
+			if (handsItemTemplate != null)
+				handsItem.setTexturebase64(handsItemTemplate.getTexturebase64());
+			else
+				handsItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 
-			ISoliniaItem waistItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.LEGACY_SKULL_ITEM));
+			ISoliniaItem waistItem = SoliniaItemFactory.CreateItem(new ItemStack(Material.PLAYER_HEAD));
 			waistItem.setEquipmentSlot(EquipmentSlot.Waist);
 			waistItem.setDiscoverer(discoverer);
-			waistItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
+			if (waistItemTemplate != null)
+				waistItem.setTexturebase64(waistItemTemplate.getTexturebase64());
+			else
+				waistItem.setTexturebase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDk2NDk2ODVjM2FkZmJkN2U2NWY5OTA1ZjcwNWZjNTY3NGJlNGM4ZWE1YTVkNmY1ZjcyZThlYmFkMTkyOSJ9fX0=");
 			
 			items.add(headItem.getId());
 			items.add(chestItem.getId());

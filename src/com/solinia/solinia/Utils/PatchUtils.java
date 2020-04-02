@@ -17,6 +17,9 @@ public class PatchUtils {
 		try {
 
 			for (ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems()) {
+				if (!item.isAdditionalArmour() && !item.isJewelry())
+					continue;
+
 				boolean changed = false;
 
 				// neck

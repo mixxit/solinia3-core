@@ -24,7 +24,7 @@ public class JsonClassRepository implements IRepository<ISoliniaClass> {
 
 	private String filePath;
 	private ConcurrentHashMap<Integer, ISoliniaClass> classes = new ConcurrentHashMap<Integer, ISoliniaClass>();
-
+	
 	@Override
 	public void add(ISoliniaClass item) {
 		this.classes.put(item.getId(), item);
