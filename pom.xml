@@ -84,8 +84,8 @@
 			<url>http://maven.elmakers.com/repository/ </url>
 		</repository>
 		<repository>
-			<id>dmulloy2</id>
-			<url>https://repo.dmulloy2.net/nexus/repository/public</url>
+			<id>mvnrepository</id>
+			<url>http://repo1.maven.org/maven2</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -174,7 +174,7 @@
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
-			<version>4.5.1</version>
+			<version>4.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>LibsDisguises</groupId>
