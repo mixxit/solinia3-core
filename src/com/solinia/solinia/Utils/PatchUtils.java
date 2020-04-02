@@ -23,8 +23,10 @@ public class PatchUtils {
 				if (item.getTexturebase64() == null)
 					continue;
 				
-				if (item.getBasename().equals("LEGACY_SKULL_ITEM"))
-					item.setBasename("PLAYER_HEAD");
+				if (!item.getBasename().equals("LEGACY_SKULL_ITEM"))
+					continue;
+
+				item.setBasename("PLAYER_HEAD");
 
 				boolean changed = true;
 
