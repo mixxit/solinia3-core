@@ -174,12 +174,12 @@
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
-			<version>4.4.0</version>
+			<version>4.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>LibsDisguises</groupId>
 			<artifactId>LibsDisguises</artifactId>
-			<version>9.8.5</version>
+			<version>9.9.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jsoup</groupId>
@@ -221,12 +221,12 @@
 		<dependency>
 			<groupId>com.palmergames.bukkit.towny</groupId>
 			<artifactId>Towny</artifactId>
-			<version>0.95.1.0</version>
+			<version>0.95.2.10</version>
 		</dependency>
 		<dependency>
 			<groupId>io.lumine.xikage</groupId>
 			<artifactId>MythicMobs</artifactId>
-			<version>4.9.0-SNAPSHOT</version>
+			<version>4.9.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
