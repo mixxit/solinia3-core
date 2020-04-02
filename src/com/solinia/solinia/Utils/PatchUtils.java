@@ -19,6 +19,8 @@ public class PatchUtils {
 			for (ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems()) {
 				if (!item.isAdditionalArmour() && !item.isJewelry())
 					continue;
+				if (item.getTexturebase64() == null)
+					continue;
 
 				boolean changed = false;
 
