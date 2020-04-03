@@ -20,13 +20,13 @@ jobs:
         wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
         java -jar BuildTools.jar | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$":
 
-   - name: Prep
+    - name: Prep
       run: |
-      export NOW=$(date +%s)
-      echo $NOW
-      cp .travis.settings.xml $HOME/.m2/settings.xml
-
+        export NOW=$(date +%s)
+        echo $NOW
+        cp .travis.settings.xml $HOME/.m2/settings.xml
+        
     - name: Build with Maven
       run: 
-      cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -Drevision=1.14.4-R0.1-$NOW deploy
+        cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -Drevision=1.14.4-R0.1-$NOW deploy
 
