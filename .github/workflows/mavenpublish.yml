@@ -18,7 +18,7 @@ jobs:
     - name: BuildTools
       run: |
         wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-        java -jar BuildTools.jar | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$":
+        java -jar BuildTools.jar --rev 1.14.4 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$":
 
     - name: Build with Maven
       run: 
