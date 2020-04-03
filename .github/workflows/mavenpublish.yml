@@ -25,7 +25,6 @@ jobs:
         mvn -version
         export NOW=$(date +%s)
         echo $NOW
-        cp .travis.settings.xml ~/.m2/settings.xml
-        cp .travis.settings.xml /home/runner/work/solinia3-core/solinia3-core/settings.xml
+        echo "<settings><servers><server><id>github</id><username>mixxit</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
         mvn -Drevision=1.14.4-R0.1-$NOW deploy
 
