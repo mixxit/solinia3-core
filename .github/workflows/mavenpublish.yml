@@ -26,7 +26,6 @@ jobs:
         export NOW=$(date +%s)
         echo "::set-env name=NOW::$NOW"
         echo $NOW
-        mkdir ~/.m2
         cp .travis.settings.xml ~/.m2/settings.xml
         cp .travis.settings.xml /home/runner/work/solinia3-core/solinia3-core/settings.xml
         mvn -Drevision=1.14.4-R0.1-${{ env.NOW }} deploy
