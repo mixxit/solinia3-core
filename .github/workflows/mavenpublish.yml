@@ -21,10 +21,13 @@ jobs:
         java -jar BuildTools.jar --rev 1.14.4 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$":
 
     - name: Build with Maven
+      env:
+        GITHUB_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}  
+        GITHUB_TOKEN: ${{ secrets.CI_DEPLOY_PASSWORD }}  
       run: |
         mvn -version
         export NOW=$(date +%s)
         echo $NOW
-        echo "<settings><servers><server><id>github</id><username>mixxit</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
+        echo "<settings><servers><server><id>github</id><username>${GITHUB_USERNAME}</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
         mvn -Drevision=1.14.4-R0.1-$NOW deploy
 
