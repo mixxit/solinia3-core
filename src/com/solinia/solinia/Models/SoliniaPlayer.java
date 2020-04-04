@@ -4875,4 +4875,44 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return false;
 	}
+
+	@Override
+	public void destroySpellbookSpellId(Integer spellId) {
+		List<Integer> spellBookItemIdsToRemove = new ArrayList<Integer>();
+
+		try {
+			for (int itemId : getSpellBookItems()) {
+				ISoliniaItem spellbookItem = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+				if (spellbookItem == null)
+				{
+					System.out.println("Found an item in someones spell book that doesnt exist");
+					spellBookItemIdsToRemove.add(itemId);
+					continue;
+				}
+
+				if (!spellbookItem.isSpellscroll())
+				{
+					System.out.println("Found an item in someones spell book that wasnt a spell");
+					spellBookItemIdsToRemove.add(itemId);
+					continue;
+				}
+
+				if (itemId != spellId)
+					continue;
+
+				spellBookItemIdsToRemove.add(spellbookItem.getId());
+			}
+			
+			for(Integer itemId : spellBookItemIdsToRemove)
+			{
+				if (!this.spellBookItems.contains(itemId))
+					continue;
+					
+				this.spellBookItems.remove(itemId);
+				System.out.println("Destroyed spell from players spellbook");
+			}
+		} catch (CoreStateInitException e) {
+			e.printStackTrace();
+		}
+	}
 }
