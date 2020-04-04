@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Utils.EntityUtils;
 
 public class CommandZoneTp implements CommandExecutor {
 	@Override
@@ -63,7 +64,7 @@ public class CommandZoneTp implements CommandExecutor {
 			double y = (zone.getSuccory());
 			double z = (zone.getSuccorz());
 			Location loc = new Location(Bukkit.getWorld("world"), x, y, z);
-			player.teleport(loc);
+			EntityUtils.teleportSafely(player,loc);
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandUnstuck implements CommandExecutor {
@@ -43,7 +44,7 @@ public class CommandUnstuck implements CommandExecutor {
 				break;
 			}
 			
-			player.teleport(new Location(player.getWorld(), player.getLocation().getBlockX(), targety, player.getLocation().getBlockZ()));
+			EntityUtils.teleportSafely(player,new Location(player.getWorld(), player.getLocation().getBlockX(), targety, player.getLocation().getBlockZ()));
 			
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

@@ -12,6 +12,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -117,33 +118,6 @@ public class CommandCharacter implements CommandExecutor {
 			} else {
 				switch(args[0].toUpperCase())
 				{
-					/*case "NEW":
-						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
-						{
-							player.sendMessage("You can only change your character every 10 minutes");
-							return true;
-						}
-						
-						boolean resetLocation = true;
-						if (args.length > 1 && (player.isOp() || player.hasPermission("solinia.characterdonochangelocation")))
-						{
-							if (args[1].toUpperCase().equals("false"))
-								resetLocation = false;
-						}
-						
-						ISoliniaPlayer newPlayer = StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, player, true);
-						if (newPlayer != null)
-						{
-							if (resetLocation == true)
-								player.teleport(player.getWorld().getSpawnLocation());
-							newPlayer.setBindPoint(player.getWorld().getSpawnLocation().getWorld().getName() + "," + player.getWorld().getSpawnLocation().getX() + ","
-									+ player.getWorld().getSpawnLocation().getY() + "," + player.getWorld().getSpawnLocation().getZ());
-							
-							player.sendMessage("Your character has been stored and a new character created");
-						} else {
-							player.sendMessage("Problem creating your new character");
-						}
-						break;*/
 					case "LOAD":
 						if (args.length < 2)
 						{
@@ -199,7 +173,7 @@ public class CommandCharacter implements CommandExecutor {
 							loadedPlayer.setForceNewAlt(false);
 							if (loadedPlayer.getLastLocation() != null)
 								if (resetLocation2 == true)
-									player.teleport(loadedPlayer.getLastLocation());
+									EntityUtils.teleportSafely(player,loadedPlayer.getLastLocation());
 							
 							player.sendMessage("Your character has been stored and your new character loaded");
 						} else {

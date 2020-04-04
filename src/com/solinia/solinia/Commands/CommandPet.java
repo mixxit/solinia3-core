@@ -28,6 +28,7 @@ import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -89,7 +90,7 @@ public class CommandPet implements CommandExecutor {
 							solLivingEntity.clearHateList();
 							Utils.SendHint(player,HINT.PET_BACKINGOFFTGT,"",false);
 
-							pet.teleport(player.getLocation());
+							EntityUtils.teleportSafely(pet,player.getLocation());
 						}
 						
 					}
@@ -113,7 +114,7 @@ public class CommandPet implements CommandExecutor {
 								}
 							}
 							
-							pet.teleport(player.getLocation());
+							EntityUtils.teleportSafely(pet,player.getLocation());
 							solLivingEntity.setAttackTarget(null);
 
 							// Mez cancel target

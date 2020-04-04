@@ -16,6 +16,7 @@ import com.solinia.solinia.Models.Bond;
 import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.Trait;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandCreateCharacterFull implements CommandExecutor {
@@ -133,7 +134,7 @@ Solinia3CorePlugin plugin;
 		newPlayer.updateMaxHp();
 		SoliniaPlayerAdapter.Adapt(player).updateDisplayName();
 
-		player.teleport(solClass.getRaceClass(solRace.getId()).getStartLocation());
+		EntityUtils.teleportSafely(player,solClass.getRaceClass(solRace.getId()).getStartLocation());
 		newPlayer.setBindPoint(solClass.getRaceClass(solRace.getId()).getStartWorld() + "," + solClass.getRaceClass(solRace.getId()).getStartX() + "," + solClass.getRaceClass(solRace.getId()).getStartY() + "," + solClass.getRaceClass(solRace.getId()).getStartZ());
 		
 		player.sendMessage("Your character has been stored and a new character created");

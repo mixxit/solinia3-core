@@ -15,6 +15,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreVehicleListener implements Listener {
@@ -42,7 +43,7 @@ public class Solinia3CoreVehicleListener implements Listener {
 					});
 					
 		}
-		event.getDismounted().teleport(event.getDismounted().getLocation().add(0,0.5,0));
+		EntityUtils.teleportSafely(event.getDismounted(),event.getDismounted().getLocation().add(0,0.5,0));
 	}
 	
 	@EventHandler

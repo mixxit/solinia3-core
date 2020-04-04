@@ -7334,7 +7334,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					this.say("You will not evade me " + summoningEntity.getCustomName() + "!");
 
 				}
-				summoningEntity.teleport(getBukkitLivingEntity().getLocation());
+				EntityUtils.teleportSafely(summoningEntity,getBukkitLivingEntity().getLocation());
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -7370,7 +7370,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			int chanceToSummon = Utils.RandomBetween(1, 10);
 
 			if (chanceToSummon > 8) {
-				teleportedEntity.teleport(getBukkitLivingEntity().getLocation());
+				EntityUtils.teleportSafely(teleportedEntity,getBukkitLivingEntity().getLocation());
 				teleportedEntity.sendMessage("You have been taken!");
 			}
 		} catch (CoreStateInitException e) {
@@ -9273,7 +9273,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (!this.isRoamer())
 		{
-			this.getBukkitLivingEntity().teleport(BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
+			EntityUtils.teleportSafely(this.getBukkitLivingEntity(),BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
 		}
 		else
 		{
@@ -9284,7 +9284,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	        // Move to that path at 'speed' speed.
 	        nmsEntity.getHandle().getNavigation().a(path, nmsEntity.getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 	        */
-			this.getBukkitLivingEntity().teleport(BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
+			EntityUtils.teleportSafely(this.getBukkitLivingEntity(),BukkitAdapter.adapt(activeMob.getSpawner().getLocation()));
 		}
 		
 	}

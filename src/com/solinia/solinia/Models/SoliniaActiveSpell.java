@@ -1785,7 +1785,7 @@ public class SoliniaActiveSpell {
 
 			if (solPlayer != null) {
 				solPlayer.setFeigned(true);
-				solPlayer.getBukkitPlayer().teleport(solPlayer.getBukkitPlayer().getLocation().subtract(0, 0.5, 0));
+				EntityUtils.teleportSafely(solPlayer.getBukkitPlayer(),solPlayer.getBukkitPlayer().getLocation().subtract(0, 0.5, 0));
 				EntityUtils.sit(solPlayer.getBukkitPlayer());
 			}
 
@@ -1819,7 +1819,7 @@ public class SoliniaActiveSpell {
 			double y = (zone.getSuccory());
 			double z = (zone.getSuccorz());
 			Location loc = new Location(Bukkit.getWorld("world"), x, y, z);
-			getLivingEntity().teleport(loc);
+			EntityUtils.teleportSafely(getLivingEntity(),loc);
 
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -1893,7 +1893,7 @@ public class SoliniaActiveSpell {
 		Vector dir = new Location(getLivingEntity().getWorld(), 0, 64, -5000000)
 				.subtract(getLivingEntity().getEyeLocation()).toVector();
 		Location loc = getLivingEntity().getLocation().setDirection(dir);
-		getLivingEntity().teleport(loc);
+		EntityUtils.teleportSafely(getLivingEntity(),loc);
 		return;
 	}
 
@@ -1911,7 +1911,7 @@ public class SoliniaActiveSpell {
 				Vector dir = ((LivingEntity) e).getLocation().clone().subtract(getLivingEntity().getEyeLocation())
 						.toVector();
 				Location loc = getLivingEntity().getLocation().setDirection(dir);
-				getLivingEntity().teleport(loc);
+				EntityUtils.teleportSafely(getLivingEntity(),loc);
 				return;
 			}
 		} catch (CoreStateInitException e) {
@@ -1933,7 +1933,7 @@ public class SoliniaActiveSpell {
 				Vector dir = ((LivingEntity) e).getLocation().clone().subtract(getLivingEntity().getEyeLocation())
 						.toVector();
 				Location loc = getLivingEntity().getLocation().setDirection(dir);
-				getLivingEntity().teleport(loc);
+				EntityUtils.teleportSafely(getLivingEntity(),loc);
 				return;
 			}
 		} catch (CoreStateInitException e) {
@@ -1958,7 +1958,7 @@ public class SoliniaActiveSpell {
 				Vector dir = ((LivingEntity) e).getLocation().clone().subtract(getLivingEntity().getEyeLocation())
 						.toVector();
 				Location loc = getLivingEntity().getLocation().setDirection(dir);
-				getLivingEntity().teleport(loc);
+				EntityUtils.teleportSafely(getLivingEntity(),loc);
 			}
 		} catch (CoreStateInitException e) {
 
@@ -2041,7 +2041,7 @@ public class SoliniaActiveSpell {
 			double finalexperience = (experience / 100) * multiplier;
 			SoliniaPlayerAdapter.Adapt(targetplayer).increasePlayerNormalExperience(finalexperience, false, false);
 			targetplayer.sendMessage("You have been resurrected by " + sourcePlayer.getCustomName() + "!");
-			targetplayer.teleport(sourcePlayer.getLocation());
+			EntityUtils.teleportSafely(targetplayer,sourcePlayer.getLocation());
 			sourcePlayer.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
 		} catch (CoreStateInitException e) {
 			return;
@@ -2308,7 +2308,7 @@ public class SoliniaActiveSpell {
 		Entity source = Bukkit.getEntity(getSourceUuid());
 		if (source != null && source instanceof Player && getLivingEntity() instanceof Player) {
 			if (!source.getUniqueId().equals(getLivingEntity().getUniqueId()))
-				getLivingEntity().teleport(source);
+				EntityUtils.teleportSafely(getLivingEntity(),source.getLocation());
 		}
 	}
 
@@ -2328,7 +2328,7 @@ public class SoliniaActiveSpell {
 		double y = Double.parseDouble(zonedata[2]);
 		double z = Double.parseDouble(zonedata[3]);
 		Location loc = new Location(Bukkit.getWorld(world), x, y, z);
-		getLivingEntity().teleport(loc);
+		EntityUtils.teleportSafely(getLivingEntity(),loc);
 	}
 
 	private void applyShadowStep(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -2339,7 +2339,7 @@ public class SoliniaActiveSpell {
 			Block block = getLivingEntity().getTargetBlock(null, soliniaSpell.getRange());
 			if (block != null) {
 				Utils.dismountEntity(getLivingEntity());
-				getLivingEntity().teleport(block.getLocation());
+				EntityUtils.teleportSafely(getLivingEntity(),block.getLocation());
 			}
 		} catch (Exception e) {
 			// out of world block
@@ -2503,7 +2503,7 @@ public class SoliniaActiveSpell {
 				return;
 			}
 				
-			player.teleport(location);
+			EntityUtils.teleportSafely(player,location);
 		} catch (CoreStateInitException e) {
 
 		}
@@ -2530,7 +2530,7 @@ public class SoliniaActiveSpell {
 					Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
 
 			player.setBedSpawnLocation(location, true);
-			player.teleport(location);
+			EntityUtils.teleportSafely(player,location);
 		} catch (CoreStateInitException e) {
 
 		}

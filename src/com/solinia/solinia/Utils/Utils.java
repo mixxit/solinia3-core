@@ -5333,7 +5333,7 @@ public class Utils {
 		Location newLocation = livingEntity.getLocation();
 		// todo
 		newLocation.setYaw(0.0f);
-		livingEntity.teleport(newLocation);
+		EntityUtils.teleportSafely(livingEntity,newLocation);
 	}
 
 	public static Location getLocationAroundCircle(Location center, double radius, double angleInRadian, double y) {

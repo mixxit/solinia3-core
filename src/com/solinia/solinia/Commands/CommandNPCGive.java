@@ -20,6 +20,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -135,7 +136,7 @@ public class CommandNPCGive implements CommandExecutor {
 						double y = Double.parseDouble(zonedata[2]);
 						double z = Double.parseDouble(zonedata[3]);
 						Location loc = new Location(Bukkit.getWorld(world), x, y, z);
-						player.teleport(loc);
+						EntityUtils.teleportSafely(player,loc);
 					}
 				}
 			}

@@ -22,6 +22,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
@@ -174,7 +175,7 @@ public class EntityUtils {
 	    stalkerLocation.setYaw((float)Utils.calculateYaw(deltax, deltaz));
 	    stalkerLocation.setPitch((float)Utils.calculatePitch(deltax, deltay, deltaz));
 	    
-	    source.teleport(stalkerLocation);
+	    EntityUtils.teleportSafely(source,stalkerLocation);
     }
 	
 	public static boolean safeFollow(World w, int x, int y, int z)
@@ -3385,12 +3386,44 @@ public class EntityUtils {
 			return;
 		
 		// Slam player to the floor
-		bukkitPlayer.teleport(getGroundLocationAt(bukkitPlayer.getLocation()));
+		EntityUtils.teleportSafely(bukkitPlayer,getGroundLocationAt(bukkitPlayer.getLocation()));
 		
 		Entity entity = bukkitPlayer.getWorld().spawnEntity(bukkitPlayer.getLocation().subtract(0, 0.5, 0),EntityType.ARROW);
 		entity.setSilent(true);
 		entity.setInvulnerable(true);
 		entity.addPassenger(bukkitPlayer);
 		bukkitPlayer.sendMessage("* You are no longer standing - Use /stand to get back up");
+	}
+
+
+	public static void teleportSafely(Entity entity, Location loc) {
+		if (entity == null)
+			return;
+		
+		if (loc == null)
+			return;
+		
+		if (entity instanceof Player)
+		{
+			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+			if (ess != null)
+			{
+				User user = ess.getUser((Player)entity);
+				if (user == null)
+					entity.teleport(loc);
+				else
+					try {
+						user.getTeleport().now(loc, false, TeleportCause.PLUGIN);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						entity.teleport(loc);
+					}
+			} else {
+				entity.teleport(loc);
+			}
+		} else {
+			entity.teleport(loc);
+		}
 	}
 }

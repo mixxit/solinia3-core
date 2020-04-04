@@ -10,6 +10,7 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
 
 public class PetFastCheckTimer extends BukkitRunnable {
 	@Override
@@ -31,7 +32,7 @@ public class PetFastCheckTimer extends BukkitRunnable {
 							{
 								if (((Creature)pet).getTarget() == null)
 								{
-									pet.teleport(player);
+									EntityUtils.teleportSafely(pet,player.getLocation());
 								}
 							} else {
 								ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);

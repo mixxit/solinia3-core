@@ -1056,7 +1056,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 						double y = Double.parseDouble(zonedata[2]);
 						double z = Double.parseDouble(zonedata[3]);
 						Location loc = new Location(Bukkit.getWorld(world), x, y, z);
-						((Player) triggerentity).teleport(loc);
+						EntityUtils.teleportSafely(((Player) triggerentity),loc);
 					}
 
 				}

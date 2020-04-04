@@ -106,7 +106,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				return;
 			
 			System.out.println("Moving pet with player");
-			pet.teleport(event.getPlayer().getLocation());
+			EntityUtils.teleportSafely(pet,event.getPlayer().getLocation());
 		} catch (CoreStateInitException e)
 		{
 			
@@ -1607,7 +1607,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
 
 					event.setRespawnLocation(location);
-					event.getPlayer().teleport(location);
+					EntityUtils.teleportSafely(event.getPlayer(),location);
 				}
 				
 				solplayer.sendSlotsAsPacket();
@@ -1658,7 +1658,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (solplayer.isForceNewAlt() || (!solplayer.isPlayable() && !event.getPlayer().isOp() && !event.getPlayer().hasPermission("solinia.characterdonochangelocation")))
 			{
 				event.getPlayer().sendMessage("You have been forced to create a new character");
-				event.getPlayer().teleport(Bukkit.getWorld("world").getSpawnLocation());
+				EntityUtils.teleportSafely(event.getPlayer(),Bukkit.getWorld("world").getSpawnLocation());
 				StateManager.getInstance().getPlayerManager().createNewPlayerAlt(plugin, event.getPlayer(), false);
 			}
 
