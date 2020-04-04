@@ -16,30 +16,15 @@ import com.solinia.solinia.Models.PlayerState;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try {
+		/*try {
 
 			for (ISoliniaPlayer entity : StateManager.getInstance().getConfigurationManager().getCharacters()) {
-				List<Integer> spellsToRemove = new ArrayList<Integer>();
-				for (Integer spellId : entity.getSpellBookSpellIds())
-				{
-					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
-					if (spell == null && !spellsToRemove.contains(spellId))
-						spellsToRemove.add(spellId);
-				}
 				
-				if (spellsToRemove.size() < 1)
-					continue;
-				
-				System.out.println("Found spells in spell book to remove...");
-				for(Integer spellId : spellsToRemove)
-				{
-					entity.destroySpellbookSpellId(spellId);
-				}
 			}
 
 		} catch (CoreStateInitException e) {
 
-		}
+		}*/
 
 	}
 }
