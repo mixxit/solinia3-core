@@ -1696,6 +1696,14 @@ public class Utils {
 			return 481;
 		case FlyingKick:
 			return 482;
+		case ERROR:
+			return -1;
+		case TailRake:
+			return 484;
+		case Block:
+			return 485;
+		case SummonNPCID:
+			return 486;
 		default:
 			return -1;
 		}
@@ -2669,6 +2677,14 @@ public class Utils {
 			return SpellEffectType.DragonPunch;
 		case 482:
 			return SpellEffectType.FlyingKick;
+		case 483:
+			return SpellEffectType.ERROR;
+		case 484:
+			return SpellEffectType.TailRake;
+		case 485:
+			return SpellEffectType.Block;
+		case 486:
+			return SpellEffectType.SummonNPCID;
 		default:
 			return SpellEffectType.ERROR;
 		}

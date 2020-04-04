@@ -34,6 +34,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
@@ -1342,8 +1343,38 @@ public class SoliniaActiveSpell {
 		case FlyingKick:
 			applyFlyingKick(spellEffect,soliniaSpell,casterLevel);
 			return;
+		case SummonNPCID:
+			applySummonNPCID(spellEffect,soliniaSpell,casterLevel);
+			return;
 		default:
 			return;
+		}
+	}
+
+	private void applySummonNPCID(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+		
+		try {
+			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(spellEffect.getBase());
+			
+			if (npc != null) {
+				
+				npc.Spawn(sourceEntity.getLocation(), 1);
+			} else {
+				sourceEntity.sendMessage("Cannot find NPC by ID");
+				return;
+			}
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
