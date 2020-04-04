@@ -80,6 +80,13 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
+		if (event.getEntity() instanceof ArmorStand || event.getTarget() instanceof ArmorStand)
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+
+		
 		if (event.getTarget() != null && event.getEntity() != null && event.getEntity() instanceof Creature && event.getEntity() instanceof LivingEntity)
 		{
 			try

@@ -18,6 +18,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -117,6 +118,13 @@ public class EntityManager implements IEntityManager {
 	{
 		try
 		{
+			// no..
+			if (target instanceof ArmorStand)
+			{
+				me.sendMessage("You cannot target ArmorStands");
+				return;
+			}
+			
 			// When changing target always clear auto attack
 			if (me instanceof Player)
 			{

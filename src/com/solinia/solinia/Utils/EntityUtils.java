@@ -15,6 +15,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -3238,6 +3239,9 @@ public class EntityUtils {
 	}
 
 	public static void PSetHPChange(LivingEntity targetToDamage, Double hpchange, LivingEntity sourceEntityOfChange) {
+		if (targetToDamage instanceof ArmorStand || sourceEntityOfChange instanceof ArmorStand)
+			return;
+		
 		if (hpchange == 0)
 			return;
 		

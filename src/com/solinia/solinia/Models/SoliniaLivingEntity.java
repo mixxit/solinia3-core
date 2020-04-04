@@ -24,6 +24,7 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -8565,6 +8566,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void setAttackTarget(LivingEntity entity) {
+		if (this.getBukkitLivingEntity() instanceof ArmorStand || entity instanceof ArmorStand)
+			return;
+		
 		if (this.getBukkitLivingEntity() == null)
 			return;
 
