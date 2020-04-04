@@ -4897,7 +4897,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					continue;
 				}
 
-				if (itemId != spellId)
+				if (spellbookItem.getAbilityid() != spellId)
 					continue;
 
 				spellBookItemIdsToRemove.add(spellbookItem.getId());

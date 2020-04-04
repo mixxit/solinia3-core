@@ -30,6 +30,7 @@ public class PatchUtils {
 				if (spellsToRemove.size() < 1)
 					continue;
 				
+				System.out.println("Found spells in spell book to remove...");
 				for(Integer spellId : spellsToRemove)
 				{
 					entity.destroySpellbookSpellId(spellId);
