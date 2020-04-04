@@ -543,6 +543,21 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			return false;
 		}
 		
+		if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(player,
+				this.getAbilityid()) != null) {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+					.getEntitySpellCooldown(player, this.getAbilityid());
+
+			if (expiretimestamp != null)
+				if (!nowtimestamp.after(expiretimestamp)) {
+					player.sendMessage("You do not have enough willpower to use this item " + getDisplayname()
+							+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+					return false;
+				}
+		}
+		
 		if (isThrowing())
 		{
 			if (targetentity instanceof Player)

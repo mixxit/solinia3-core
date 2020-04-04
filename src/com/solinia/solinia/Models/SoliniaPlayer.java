@@ -1527,10 +1527,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (item.isConsumable()) {
 					// To prevent a trap you must cancel event here
 					Utils.CancelEvent(cancellableEvent);
+					// cant be stacked so no need to test stacking
 					getBukkitPlayer().getInventory().setItemInMainHand(null);
 					getBukkitPlayer().updateInventory();
 				}
 				return;
+			}
+			
+			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(this.getBukkitPlayer(),
+					item.getAbilityid()) != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+						.getEntitySpellCooldown(this.getBukkitPlayer(), item.getAbilityid());
+
+				if (expiretimestamp != null)
+					if (!nowtimestamp.after(expiretimestamp)) {
+						this.getBukkitPlayer().sendMessage("You do not have enough willpower to use this item " + item.getDisplayname()
+								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+						return;
+					}
 			}
 			
 			if (item.isConsumable() == true && !item.getConsumableRequireQuestFlag().equals(""))
@@ -1599,7 +1615,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					// To prevent a trap you must cancel event here
 					Utils.CancelEvent(cancellableEvent);
 					itemstack.setAmount(newAmount);
-					getBukkitPlayer().getInventory().setItem(getBukkitPlayer().getInventory().getHeldItemSlot(), null);
+					getBukkitPlayer().getInventory().setItem(getBukkitPlayer().getInventory().getHeldItemSlot(), itemstack);
 					getBukkitPlayer().updateInventory();
 					return;
 				}

@@ -5606,21 +5606,21 @@ public class SoliniaSpell implements ISoliniaSpell {
 					}
 				}
 			}
-			// only if it consumes mana
-			if (consumeMana)
-				if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(sourcemob, getId()) != null) {
-					LocalDateTime datetime = LocalDateTime.now();
-					Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-					Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
-							.getEntitySpellCooldown(sourcemob, getId());
+			
+			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(sourcemob, getId()) != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+						.getEntitySpellCooldown(sourcemob, getId());
 
-					if (expiretimestamp != null)
-						if (!nowtimestamp.after(expiretimestamp)) {
-							sourcemob.sendMessage("You do not have enough willpower to cast " + getName() + " (Wait: "
-									+ ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
-							return false;
-						}
-				}
+				if (expiretimestamp != null)
+					if (!nowtimestamp.after(expiretimestamp)) {
+						sourcemob.sendMessage("You do not have enough willpower to cast " + getName() + " (Wait: "
+								+ ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+						return false;
+					}
+			}
+				
 
 			boolean itemUseSuccess = tryApplyOnEntity(sourcemob, targetmob, true, requiredWeaponSkillType);
 			Utils.DebugLog("SoliniaSpell", "tryCast", sourcemob.getName(), "Item use success: " + itemUseSuccess);
