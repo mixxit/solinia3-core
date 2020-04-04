@@ -528,14 +528,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			}
 
 			if (getRequiresQuestFlag() != null && !getRequiresQuestFlag().equals("")) {
-				boolean foundQuestFlag = false;
-				for (String playerQuestFlag : player.getPlayerQuestFlags()) {
-					if (playerQuestFlag.equals(getRequiresQuestFlag())) {
-						foundQuestFlag = true;
-					}
-				}
-
-				if (foundQuestFlag == false)
+				if (!player.hasQuestFlag(getRequiresQuestFlag()))
 					return false;
 			}
 

@@ -87,6 +87,8 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private int dye;
 	private boolean isTemporary;
 	private boolean isConsumable;
+	private String consumableRequireQuestFlag = "";
+	private String consumableRequireNotQuestFlag = "";
 	private int baneUndead = 0;
 	private boolean isAugmentation = false;
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
@@ -570,6 +572,24 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			return false;
 		}
 		
+		if (isConsumable == true && !getConsumableRequireQuestFlag().equals(""))
+		{
+			if (!SoliniaPlayerAdapter.Adapt(player).hasQuestFlag(getConsumableRequireQuestFlag()))
+			{
+				player.sendMessage("* This item does not appear to work [missing queststep]");
+				return false;
+			}
+		}
+
+		if (isConsumable == true && !this.getConsumableRequireNotQuestFlag().equals(""))
+		{
+			if (SoliniaPlayerAdapter.Adapt(player).hasQuestFlag(getConsumableRequireNotQuestFlag()))
+			{
+				player.sendMessage("* This item appears to no longer work [questitem no longer needed]");
+				return false;
+			}
+		}
+		
 		if (isConsumable == true && isExperienceBonus())
 		{
 			SoliniaPlayerAdapter.Adapt(player).grantExperienceBonusFromItem();
@@ -652,6 +672,8 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("- leatherrgbdecimal: " + ChatColor.GOLD + getLeatherRgbDecimal() + ChatColor.RESET + leathercolor + " See: https://bit.ly/2i02I8k");
 		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
+		sender.sendMessage("- consumablerequirenotquestflag: " + ChatColor.GOLD + getConsumableRequireNotQuestFlag() + ChatColor.RESET);
+		sender.sendMessage("- consumablerequirequestflag: " + ChatColor.GOLD + getConsumableRequireQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- bandage: " + ChatColor.GOLD + isBandage() + ChatColor.RESET + " languageprimer: " + ChatColor.GOLD + getLanguagePrimer() + ChatColor.RESET);
 		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET + " - artifact: " + ChatColor.GOLD + isArtifact() + ChatColor.RESET + " Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
@@ -849,6 +871,16 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		case "questid":
 			ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(Integer.parseInt(value));
 			setQuestId(quest.getId());
+			break;
+		case "consumablerequirenotquestflag":
+			if (this.getQuestId() < 1)
+				throw new InvalidItemSettingException("You must first mark the questid on this item before assigning this flag");
+			setConsumableRequireNotQuestFlag(value);
+			break;
+		case "consumablerequirequestflag":
+			if (this.getQuestId() < 1)
+				throw new InvalidItemSettingException("You must first mark the questid on this item before assigning this flag");
+			setConsumableRequireQuestFlag(value);
 			break;
 		case "basename":
 			Material material = Material.valueOf(value.toUpperCase());
@@ -1844,5 +1876,25 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setProcRate(int procRate) {
 		this.procRate = procRate;
+	}
+
+	@Override
+	public String getConsumableRequireQuestFlag() {
+		return consumableRequireQuestFlag;
+	}
+
+	@Override
+	public void setConsumableRequireQuestFlag(String consumableRequireQuestFlag) {
+		this.consumableRequireQuestFlag = consumableRequireQuestFlag;
+	}
+
+	@Override
+	public String getConsumableRequireNotQuestFlag() {
+		return consumableRequireNotQuestFlag;
+	}
+
+	@Override
+	public void setConsumableRequireNotQuestFlag(String consumableRequireNotQuestFlag) {
+		this.consumableRequireNotQuestFlag = consumableRequireNotQuestFlag;
 	}
 }

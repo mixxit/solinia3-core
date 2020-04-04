@@ -410,4 +410,12 @@ public interface ISoliniaItem extends IPersistable {
 	void setProcRate(int procRate);
 
 	int getProcRate();
+
+	String getConsumableRequireQuestFlag();
+
+	void setConsumableRequireQuestFlag(String consumableRequireQuestFlag);
+
+	String getConsumableRequireNotQuestFlag();
+
+	void setConsumableRequireNotQuestFlag(String consumableRequireNotQuestFlag);
 }

@@ -618,6 +618,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	int getSpouseCharacterId();
 	void setSpouseCharacterId(int spouseCharacterId);
 	int getMotherCharacterId();
+	public boolean hasQuestFlag(String questFlag);
 
 
 

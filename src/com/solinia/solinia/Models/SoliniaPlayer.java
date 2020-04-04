@@ -4865,4 +4865,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	{
 		return this.getSecondaryUUID();
 	}
+
+	@Override
+	public boolean hasQuestFlag(String questFlag) {
+		for (String playerQuestFlag : getPlayerQuestFlags()) {
+			if (playerQuestFlag.toUpperCase().equals(questFlag.toUpperCase())) 
+				return true;
+		}
+
+		return false;
+	}
 }
