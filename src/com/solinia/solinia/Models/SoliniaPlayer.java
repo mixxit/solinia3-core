@@ -1532,6 +1532,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 				return;
 			}
+			
+			if (item.isConsumable() == true && !item.getConsumableRequireQuestFlag().equals(""))
+			{
+				if (!SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).hasQuestFlag(item.getConsumableRequireQuestFlag()))
+				{
+					getBukkitPlayer().sendMessage("* This item does not appear to work [missing queststep]");
+					return;
+				}
+			}
+
+			if (item.isConsumable() == true && !item.getConsumableRequireNotQuestFlag().equals(""))
+			{
+				if (SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).hasQuestFlag(item.getConsumableRequireNotQuestFlag()))
+				{
+					getBukkitPlayer().sendMessage("* This item appears to no longer work [questitem no longer needed]");
+					return;
+				}
+			}
 
 			// Spell scrolls no longer support right click
 			if (item.getAbilityid() < 1) {
