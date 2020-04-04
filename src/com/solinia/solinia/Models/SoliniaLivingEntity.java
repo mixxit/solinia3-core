@@ -1324,6 +1324,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private boolean CalcNPCAttack(int Hand, ISoliniaItem weapon, ISoliniaLivingEntity other,
 			ItemStack weaponItemStack, boolean bRiposte) {
 		// This is really just the rest of the Attack() method, it should be moved into its relevant class really
+		Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "Begin CalcNPCAttack");
 
 		DamageHitInfo my_hit = new DamageHitInfo();
 		my_hit.skill = AttackAnimation(Hand, weapon, SkillType.HandtoHand);
@@ -1337,6 +1338,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			hate = (weapon.getDefinedItemDamage() + weapon.getElementalDamageAmount());*/
 
 		int weapon_damage = getWeaponDamage(other, weaponItemStack, 0);
+		Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "Weapon damage (before modification) will be: " + weapon_damage);
 
 		if (weapon_damage > 0) {
 			// bane damage for body type
@@ -1355,7 +1357,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			//damage = mod_npc_damage(damage, skillinuse, Hand, weapon, other);
 
 			my_hit.base_damage = this.getNPC().getBaseDamage() + eleBane;
+			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "NPC Base Dmg: " + my_hit.base_damage);
 			my_hit.min_damage = this.getNPC().getMinDamage();
+			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "NPC Base Dmg: " + my_hit.min_damage);
 			int hate = my_hit.base_damage + my_hit.min_damage;
 
 			int hit_chance_bonus = 0;
@@ -1368,10 +1372,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				hit_chance_bonus += opts->hit_chance;
 			}*/
 			
+			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "Before offense calculation basedmg: " + my_hit.base_damage);
 			my_hit.offense = offense(my_hit.skill);
+			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "After offense calculation basedmg: " + my_hit.base_damage);
 			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
+			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "After tohit calculation basedmg: " + my_hit.base_damage);
 
 			doAttack(other, my_hit);
+			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "After doattack dmgdone: " + my_hit.damage_done);
 			
 			other.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate, false);
 			
