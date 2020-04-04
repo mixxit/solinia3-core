@@ -4113,14 +4113,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (defender == null)
 			return hit;
 
-		if (hit.skill.equals("ARCHERY"))
+		if (hit.skill.equals(SkillType.Archery))
 			hit.damage_done /= 2;
 
 		if (hit.damage_done < 1)
 			hit.damage_done = 1;
 
 		// TODO Archery head shots
-		if (hit.skill.equals("ARCHERY")) {
+		if (hit.skill.equals(SkillType.Archery)) {
 
 			int bonus = 0;
 			int spellArcheryDamageModifier = getSpellBonuses(SpellEffectType.ArcheryDamageModifier);
@@ -4154,13 +4154,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// TODO shielding mod2
 		// TODO item melee mitigation
+		
+		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "Before applyMeleeDamageMods damagedone: "+ hit.damage_done);
 
 		hit.damage_done = applyMeleeDamageMods(hit.skill, hit.damage_done, defender);
+		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "After applyMeleeDamageMods damagedone: "+ hit.damage_done);
 		min_mod = Math.max(min_mod, extra_mincap);
 
+		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "Before tryCrit damagedone: "+ hit.damage_done);
 		hit = tryCriticalHit(defender, hit);
+		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "After tryCrit damagedone: "+ hit.damage_done);
 
+		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "Before tryCrit mindmg bonus damagedone: "+ hit.damage_done);
 		hit.damage_done += hit.min_damage;
+		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "After mindmg bonus damagedone: "+ hit.damage_done);
 
 		// this appears where they do special attack dmg mods
 		int spec_mod = 0;
@@ -4170,8 +4177,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (spec_mod > 0)
 			hit.damage_done = (hit.damage_done * spec_mod) / 100;
 
+		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "Before defender.getSkillDmgTaken damagedone: "+ hit.damage_done);
 		hit.damage_done += (hit.damage_done * defender.getSkillDmgTaken(hit.skill) / 100)
 				+ (defender.getFcDamageAmtIncoming(this, 0, true, hit.skill));
+
+		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "After defender.getSkillDmgTaken damagedone: "+ hit.damage_done);
 
 		checkNumHitsRemaining(NumHit.OutgoingHitSuccess);
 		return hit;
@@ -4453,6 +4463,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	private DamageHitInfo applyDamageTable(DamageHitInfo hit) {
 		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "Starting applyDamageTable (hit.offense: " + hit.offense + " + hit.damage_done: " + hit.damage_done + ")");
+		
+		// someone may want to add this to custom servers, can remove this if that's the case
+		if (!this.isPlayer())
+			return hit;
 		
 		if (hit.offense < 115)
 			return hit;
