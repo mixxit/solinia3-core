@@ -489,7 +489,7 @@ public class SoliniaEntitySpells {
 		try
 		{
 			// notify caster (or their master) of buff that it's worn off
-			if (activeSpell.getSourceUuid() != null && !activeSpell.getOwnerUuid().equals(activeSpell.getSourceUuid()) && !activeSpell.getSpell().isBardSong())
+			if (getSoliniaLivingEntity() != null && activeSpell.getSourceUuid() != null && !activeSpell.getOwnerUuid().equals(activeSpell.getSourceUuid()) && !activeSpell.getSpell().isBardSong())
 			{
 				Entity p = Bukkit.getEntity(activeSpell.getSourceUuid());
 				if (p != null && p instanceof LivingEntity)
