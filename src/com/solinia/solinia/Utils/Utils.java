@@ -5928,10 +5928,13 @@ public class Utils {
 		
 		try
 		{
-			TextComponent tc = new TextComponent();
-			String title = ChatColor.GRAY + "<*>" + ChatColor.RESET;
-			tc.setText(title);
-			tc.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
+			TextComponent tc = new TextComponent("");
+			if (!hint.equals(HINT.OOC_MESSAGE))
+			{
+				String title = ChatColor.GRAY + "<*>" + ChatColor.RESET;
+				tc.setText(title);
+				tc.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
+			}
 
 			TextComponent fullTextComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
 			if (itemStack != null);
