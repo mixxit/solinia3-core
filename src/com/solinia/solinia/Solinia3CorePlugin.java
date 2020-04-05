@@ -2,10 +2,6 @@ package com.solinia.solinia;
 
 import org.dynmap.markers.MarkerSet;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Locale;
 import java.util.logging.Logger;
 

@@ -12,7 +12,6 @@ import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.HintSetting;
 
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
 
 public class CommandToggleHint implements CommandExecutor {
 	@SuppressWarnings("incomplete-switch")

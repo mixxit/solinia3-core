@@ -1,7 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

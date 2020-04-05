@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Factories.ISoliniaLootTableEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Interfaces.IRepository;
-import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Models.SoliniaLootTable;
 import com.solinia.solinia.Models.SoliniaLootTableEntry;
 

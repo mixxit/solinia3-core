@@ -7,7 +7,6 @@ import org.bukkit.util.Vector;
 
 import com.rit.sucy.player.TargetHelper;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
-import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SpellEffectType;
 
 public class RaycastUtils {

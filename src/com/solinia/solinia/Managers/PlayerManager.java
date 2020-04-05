@@ -16,7 +16,6 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerValidatedModEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.PlayerDoesNotExistException;
 import com.solinia.solinia.Exceptions.PlayerStateCreationException;
 import com.solinia.solinia.Factories.PlayerStateFactory;
 import com.solinia.solinia.Factories.SoliniaPlayerFactory;

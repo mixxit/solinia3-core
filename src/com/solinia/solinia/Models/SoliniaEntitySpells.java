@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
+import com.comphenix.protocol.utility.Util;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -483,6 +484,32 @@ public class SoliniaEntitySpells {
 		{
 			if (slot.getValue().getSpellId() == spellId)
 				slots.remove(slot.getKey());
+		}
+		
+		try
+		{
+			// notify caster (or their master) of buff that it's worn off
+			if (activeSpell.getSourceUuid() != null && !activeSpell.getOwnerUuid().equals(activeSpell.getSourceUuid()) && !activeSpell.getSpell().isBardSong())
+			{
+				Entity p = Bukkit.getEntity(activeSpell.getSourceUuid());
+				if (p != null && p instanceof LivingEntity)
+				{
+					ISoliniaLivingEntity notify = SoliniaLivingEntityAdapter.Adapt((LivingEntity)p);
+					if (notify != null && notify.getBukkitLivingEntity() != null)
+					{
+						if (notify.isCurrentlyNPCPet())
+						{
+							notify = this.getSoliniaLivingEntity().getOwnerSoliniaLivingEntity();
+						}
+						
+						if (notify != null)
+							Utils.SendHint(notify.getBukkitLivingEntity(), HINT.SPELL_WORN_OFF_OF, activeSpell.getSpell().getName() + "^" + this.getSoliniaLivingEntity().getName(), false);
+					}
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 
 		if (updateMaxHp == true) {

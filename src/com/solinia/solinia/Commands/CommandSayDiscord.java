@@ -14,8 +14,6 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Utils.Utils;
 
-import net.md_5.bungee.api.ChatColor;
-
 public class CommandSayDiscord implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

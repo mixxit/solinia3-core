@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.PlayerDoesNotExistException;
 import com.solinia.solinia.Models.DebuggerSettings;
 
 public interface IPlayerManager {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Managers.StateManager;
 
 public class Personality {

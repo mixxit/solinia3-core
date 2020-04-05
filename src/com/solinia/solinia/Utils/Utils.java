@@ -56,7 +56,6 @@ import org.bukkit.util.Vector;
 import com.comphenix.example.Vector3D;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.rit.sucy.player.TargetHelper;
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -99,7 +98,6 @@ import com.solinia.solinia.Models.StatType;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -5922,6 +5920,10 @@ public class Utils {
 			String[] referenceCodesFocus = referenceCode.split("^");
 			message = "Your " + referenceCodesFocus[0] + " " + referenceCodesFocus[1];
 			break;
+		case SPELL_WORN_OFF_OF:
+			String[] referenceCodesWornOffOf = referenceCode.split("^");
+			message = "Your " + referenceCodesWornOffOf[0] + " spell has worn off of " + referenceCodesWornOffOf[1];
+			break;
 		}
 		
 		try
@@ -6022,6 +6024,8 @@ public class Utils {
 		case SPELL_INVALIDEFFECT:
 			return HintSetting.Chat;
 		case FOCUSEFFECTFLICKER:
+			return HintSetting.Chat;
+		case SPELL_WORN_OFF_OF:
 			return HintSetting.Chat;
 		}
 		

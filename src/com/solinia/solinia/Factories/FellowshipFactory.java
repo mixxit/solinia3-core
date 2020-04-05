@@ -1,7 +1,5 @@
 package com.solinia.solinia.Factories;
 
-import java.util.UUID;
-
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.Fellowship;
