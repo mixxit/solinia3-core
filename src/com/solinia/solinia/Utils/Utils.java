@@ -5917,11 +5917,11 @@ public class Utils {
 			message = "This is not a valid effect for this entity: " + referenceCode;
 			break;
 		case FOCUSEFFECTFLICKER:
-			String[] referenceCodesFocus = referenceCode.split("^");
+			String[] referenceCodesFocus = referenceCode.split("\\^");
 			message = "Your " + referenceCodesFocus[0] + " " + referenceCodesFocus[1];
 			break;
 		case SPELL_WORN_OFF_OF:
-			String[] referenceCodesWornOffOf = referenceCode.split("^");
+			String[] referenceCodesWornOffOf = referenceCode.split("\\^");
 			message = "Your " + referenceCodesWornOffOf[0] + " spell has worn off of " + referenceCodesWornOffOf[1];
 			break;
 		}
@@ -5931,7 +5931,7 @@ public class Utils {
 			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
 
 			TextComponent clickyComponent = new TextComponent();
-			String title = "<*>";
+			String title = " <*>";
 			clickyComponent.setText(title);
 			clickyComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
 			tc.addExtra(clickyComponent);

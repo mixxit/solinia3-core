@@ -503,7 +503,11 @@ public class SoliniaEntitySpells {
 						}
 						
 						if (notify != null)
-							Utils.SendHint(notify.getBukkitLivingEntity(), HINT.SPELL_WORN_OFF_OF, activeSpell.getSpell().getName() + "^" + this.getSoliniaLivingEntity().getName(), false);
+						{
+							String spellname =activeSpell.getSpell().getName();
+							String entityName = this.getSoliniaLivingEntity().getName();
+							Utils.SendHint(notify.getBukkitLivingEntity(), HINT.SPELL_WORN_OFF_OF,  spellname+ "^" +entityName, false);
+						}
 					}
 				}
 			}
