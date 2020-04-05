@@ -282,7 +282,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void autoAttackEnemy(ISoliniaLivingEntity defender) {
-
 		if (getBukkitLivingEntity().isInvulnerable() || defender.getBukkitLivingEntity().isInvulnerable())
 		{
 			try {
@@ -323,6 +322,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 
+		if (defender.isFeignedDeath())
+		{
+			try {
+				// Clear aggro
+				defender.resetReverseAggro();
+				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
+				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
+					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
+			} catch (CoreStateInitException e) {
+
+			}
+			return;
+		}
+		
 		if (defender.getBukkitLivingEntity().getUniqueId().toString()
 				.equals(getBukkitLivingEntity().getUniqueId().toString())) {
 			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack yourself!");
@@ -336,7 +349,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			}
 		}
-
+		
 		// Remove buffs on attacker (invis should drop)
 		// and check they are not mezzed
 
@@ -7532,6 +7545,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (!(entity instanceof LivingEntity)) {
 				removeUuids.add(uuid);
 				continue;
+			}
+			
+			try
+			{
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+				if (solLivingEntity != null && solLivingEntity.isFeignedDeath())
+				{
+					removeUuids.add(uuid);
+					continue;
+				}
+				
+			} catch (CoreStateInitException e)
+			{
+				
 			}
 
 			if (hate > maxHate) {

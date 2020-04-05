@@ -2188,6 +2188,25 @@ public class EntityManager implements IEntityManager {
 				if (hateList.get(entitesReverseHateList.getKey()).get(uniqueId) != null)
 				{
 					hateList.get(entitesReverseHateList.getKey()).remove(uniqueId);
+					Entity bukkitEntity = Bukkit.getEntity(entitesReverseHateList.getKey());
+					if (bukkitEntity != null && bukkitEntity instanceof LivingEntity)
+					{
+						try
+						{
+							ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)bukkitEntity);
+							if (solLivingEntity != null && solLivingEntity.getAttackTarget().getUniqueId().equals(uniqueId))
+							{
+								if (solLivingEntity.isInHateList(uniqueId))
+									solLivingEntity.removeFromHateList(uniqueId);
+								solLivingEntity.checkHateTargets();
+							}
+						} catch (CoreStateInitException e)
+						{
+							
+						}
+					}
+					
+
 				}
 			}
 		}
