@@ -9520,7 +9520,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					//nearbySolEntity.getBukkitLivingEntity().face
 					//if (!RaycastUtils.isEntityInLineOfSight(nearbySolEntity.getBukkitLivingEntity(), this.getBukkitLivingEntity()))
 					//	continue;
-					if (nearbySolEntity.checkLosFN(this))
+					if (nearbySolEntity.checkLosFN(this, false))
 					{
 						nearbySolEntity.addToHateList(attacker.getBukkitLivingEntity().getUniqueId(), 25,false);
 					}
