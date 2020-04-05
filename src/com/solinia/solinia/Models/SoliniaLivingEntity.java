@@ -2544,9 +2544,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 
 				if (getBukkitLivingEntity() instanceof Player) {
-					TextComponent tc = new TextComponent(TextComponent
-							.fromLegacyText(ChatColor.GRAY + "* Your " + UsedItem.getDisplayname() + " " + string_id));
-					((Player) getBukkitLivingEntity()).spigot().sendMessage(tc);
+					Utils.SendHint(getBukkitLivingEntity(), HINT.FOCUSEFFECTFLICKER, UsedItem.getDisplayname()+"^"+string_id, false);
 				}
 			}
 		}

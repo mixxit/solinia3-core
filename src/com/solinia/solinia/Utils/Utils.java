@@ -100,6 +100,7 @@ import com.solinia.solinia.Models.StatType;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -5917,14 +5918,27 @@ public class Utils {
 		case SPELL_INVALIDEFFECT:
 			message = "This is not a valid effect for this entity: " + referenceCode;
 			break;
+		case FOCUSEFFECTFLICKER:
+			String[] referenceCodesFocus = referenceCode.split("^");
+			message = "Your " + referenceCodesFocus[0] + " " + referenceCodesFocus[1];
+			break;
 		}
 		
 		try
 		{
 			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
+
+			TextComponent clickyComponent = new TextComponent();
+			String title = "<*>";
+			clickyComponent.setText(title);
+			clickyComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
+			tc.addExtra(clickyComponent);
+			
 			if (itemStack != null);
 				tc = decorateTextComponentsWithHovers(tc, itemStack);
 
+				
+				
 			if (entity instanceof Player)
 			{
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)entity);
@@ -6006,6 +6020,8 @@ public class Utils {
 		case SERVER_SAVE_FINISH:
 			return HintSetting.Chat;
 		case SPELL_INVALIDEFFECT:
+			return HintSetting.Chat;
+		case FOCUSEFFECTFLICKER:
 			return HintSetting.Chat;
 		}
 		
