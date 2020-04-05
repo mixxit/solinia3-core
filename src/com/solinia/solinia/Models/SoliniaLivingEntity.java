@@ -377,9 +377,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 
 		//if (AutoFireEnabled()) {
-		if (!this.isNPC() && ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+		if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 		{
-			if (!this.hasSufficientArrowReagents(1)) {
+			if (!this.isNPC() && !this.hasSufficientArrowReagents(1)) {
 				getBukkitLivingEntity().sendMessage(
 						"* You do not have sufficient arrows in your /reagents to auto fire your bow!");
 				return;
@@ -526,7 +526,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				this.getBukkitLivingEntity().sendMessage("Target out of range");
 				return;
 			}
-			else if(dist < Utils.MinRangedAttackDist){
+			else if(!this.isNPC() && dist < Utils.MinRangedAttackDist){
 				this.getBukkitLivingEntity().sendMessage("Target too close");
 				return;
 			}
