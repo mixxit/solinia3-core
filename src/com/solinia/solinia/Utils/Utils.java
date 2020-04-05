@@ -5928,18 +5928,16 @@ public class Utils {
 		
 		try
 		{
-			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
+			TextComponent tc = new TextComponent();
+			String title = ChatColor.GRAY + "<*>" + ChatColor.RESET;
+			tc.setText(title);
+			tc.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
 
-			TextComponent clickyComponent = new TextComponent();
-			String title = " <*>";
-			clickyComponent.setText(title);
-			clickyComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
-			tc.addExtra(clickyComponent);
-			
+			TextComponent fullTextComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
 			if (itemStack != null);
-				tc = decorateTextComponentsWithHovers(tc, itemStack);
-
-				
+				fullTextComponent = decorateTextComponentsWithHovers(fullTextComponent, itemStack);
+			
+			tc.addExtra(fullTextComponent);
 				
 			if (entity instanceof Player)
 			{
