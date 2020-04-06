@@ -360,7 +360,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			classrepo.reload();
 
 			JsonItemRepository itemrepo = new JsonItemRepository();
-			itemrepo.setJsonFile(getDataFolder() + "/" + "items.json");
+			itemrepo.setJsonFile(getDataFolder() + "/" + "items");
 			itemrepo.reload();
 
 			JsonSpellRepository spellrepo = new JsonSpellRepository();

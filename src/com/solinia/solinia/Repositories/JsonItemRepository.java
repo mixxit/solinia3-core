@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,6 +26,7 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 
 	private String filePath;
 	private ConcurrentHashMap<Integer, ISoliniaItem> items = new ConcurrentHashMap<Integer, ISoliniaItem>();
+	private Timestamp lastCommitedTimestamp = Timestamp.valueOf(LocalDateTime.now());
 
 	
 	@Override
@@ -64,18 +67,29 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 
 	@Override
 	public void reload() {
-		List<ISoliniaItem> file = new ArrayList<ISoliniaItem>();
+		List<ISoliniaItem> readItems = new ArrayList<ISoliniaItem>();
 		
-		try {
-			Gson gson = new Gson();
-			BufferedReader br = new BufferedReader(new FileReader(filePath));
-			file = gson.fromJson(br, new TypeToken<List<SoliniaItem>>(){}.getType());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		Gson gson = new Gson();
+
+		File folder = new File(filePath);
+		File[] listOfFiles = folder.listFiles();
+		
+		for (File file : listOfFiles) {
+			try
+			{
+			    if (file.isFile() && file.getName().endsWith(".json")) {
+			        BufferedReader br = new BufferedReader(new FileReader(filePath+"/"+file.getName()));
+					readItems.add(gson.fromJson(br, new TypeToken<SoliniaItem>(){}.getType()));
+					br.close();
+			    }
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		items.clear();
-		for(ISoliniaItem i : file)
+		for(ISoliniaItem i : readItems)
 		{
 			items.put(i.getId(), i);
 		}
@@ -85,31 +99,47 @@ public class JsonItemRepository implements IRepository<ISoliniaItem> {
 	
 	@Override
 	public void commit() {
+		// uses new method of storing each file seperately, reducing cost of saving item data
+		// to each file only
+		// jq -cr '.[] | .id, .' items.json | awk 'NR%2{f=$0".json";next} {print >f;close(f)}'
+		
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
 		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
-		String jsonOutput = gson.toJson(items.values(), new TypeToken<List<SoliniaItem>>(){}.getType());
-		try {
+		
+		int commitCount = 0;
+		for(Integer itemId : items.keySet())
+		{
 			
-			File file = new File(filePath);
-			if (!file.exists())
-				file.createNewFile();
-	        
-			FileOutputStream fileOut = new FileOutputStream(file);
-			OutputStreamWriter outWriter = new OutputStreamWriter(fileOut);
-	        outWriter.append(jsonOutput);
-	        outWriter.close();
-	        fileOut.close();
-	        
-	        System.out.println("Commited " + items.size() + " items");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if (items.get(itemId).getLastUpdatedTime() == null
+					||
+				items.get(itemId).getLastUpdatedTime().after(this.lastCommitedTimestamp)
+					)
+			{
+				try
+				{
+					String jsonOutput = gson.toJson(items.get(itemId), new TypeToken<SoliniaItem>(){}.getType());
+					File file = new File(filePath+"/"+itemId+".json");
+					if (!file.exists())
+						file.createNewFile();
+			        
+					FileOutputStream fileOut = new FileOutputStream(file);
+					OutputStreamWriter outWriter = new OutputStreamWriter(fileOut);
+			        outWriter.append(jsonOutput);
+			        outWriter.close();
+			        fileOut.close();
+			        commitCount++;
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
 		}
+		
+		System.out.println("Commited " + commitCount + " changed items out of " + items.size());
+		
+		this.lastCommitedTimestamp = Timestamp.valueOf(LocalDateTime.now());
 	}
 
 	public void setJsonFile(String filePath) {
