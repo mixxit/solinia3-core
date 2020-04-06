@@ -199,51 +199,50 @@ public class CoreState {
 		simpleDateformat = new SimpleDateFormat("dd.MM");
 
 		// Easter Holidays
+		if (simpleDateformat.format(now).equals("10.04") || simpleDateformat.format(now).equals("11.04") || simpleDateformat.format(now).equals("12.04") || simpleDateformat.format(now).equals("13.04"))
+		{
+			xpdaybonus += 200;
+		}
+		
 		if (simpleDateformat.format(now).equals("19.04") || simpleDateformat.format(now).equals("20.04") || simpleDateformat.format(now).equals("21.04") || simpleDateformat.format(now).equals("22.04"))
 		{
-			xpdaybonus += 400;
+			xpdaybonus += 200;
 		}
 		
 		// Rogue mourning holiday
 		if (simpleDateformat.format(now).equals("15.01") || simpleDateformat.format(now).equals("16.01") || simpleDateformat.format(now).equals("19.01"))
 		{
-			xpdaybonus += 400;
-		}
-		
-		// downtime
-		if (simpleDateformat.format(now).equals("17.01") || simpleDateformat.format(now).equals("18.01"))
-		{
 			xpdaybonus += 200;
 		}
-		
+				
 		// Belara Day
 		if (simpleDateformat.format(now).equals("18.03") || simpleDateformat.format(now).equals("19.03") || simpleDateformat.format(now).equals("20.03") || simpleDateformat.format(now).equals("21.03") || simpleDateformat.format(now).equals("22.03") || simpleDateformat.format(now).equals("23.03"))
 		{
-			xpdaybonus = 400;
+			xpdaybonus = 200;
 		}
 
 		// Xmas and New Year
 		if (simpleDateformat.format(now).equals("24.12") || simpleDateformat.format(now).equals("25.12") || simpleDateformat.format(now).equals("26.12") || simpleDateformat.format(now).equals("27.12") || simpleDateformat.format(now).equals("28.12") || simpleDateformat.format(now).equals("29.12") || simpleDateformat.format(now).equals("30.12") || simpleDateformat.format(now).equals("31.12") || simpleDateformat.format(now).equals("01.01") || simpleDateformat.format(now).equals("02.01"))
 		{
-			xpdaybonus = 400;
+			xpdaybonus = 200;
 		}
 
 		// 4th of July
 		if (simpleDateformat.format(now).equals("04.07") || simpleDateformat.format(now).equals("05.07") || simpleDateformat.format(now).equals("06.07") || simpleDateformat.format(now).equals("07.07"))
 		{
-			xpdaybonus = 400;
+			xpdaybonus = 200;
 		}
 
 		// 14th of Feb - Valentines
 		if (simpleDateformat.format(now).equals("14.02") || simpleDateformat.format(now).equals("15.02"))
 		{
-			xpdaybonus = 400;
+			xpdaybonus = 200;
 		}
 		
 		// Halloween
 		if (simpleDateformat.format(now).equals("30.10") || simpleDateformat.format(now).equals("31.10") || simpleDateformat.format(now).equals("01.11"))
 		{
-			xpdaybonus = 400;
+			xpdaybonus = 200;
 		}
 
 	}
