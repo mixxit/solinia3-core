@@ -24,6 +24,7 @@ public class DropUtils {
 			List<ISoliniaLootDropEntry> absoluteitems = new ArrayList<ISoliniaLootDropEntry>();
 			List<ISoliniaLootDropEntry> rollitems = new ArrayList<ISoliniaLootDropEntry>();
 			List<ISoliniaLootDropEntry> alwaysrollitems = new ArrayList<ISoliniaLootDropEntry>();
+			List<ISoliniaLootDropEntry> alwaysrollspells = new ArrayList<ISoliniaLootDropEntry>();
 
 			for (ISoliniaLootTableEntry entry : StateManager.getInstance().getConfigurationManager()
 					.getLootTable(table.getId()).getEntries()) {
@@ -36,11 +37,11 @@ public class DropUtils {
 					if (className != null && !className.equals("") && levelLimit > 0)
 					{
 						// validate item
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(dropentry.getLootdropid());
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(dropentry.getItemid());
 						if (item == null)
 							continue;
 						
-						if (item.getAbilityid() < 1)
+						if (!item.isSpellscroll())
 							continue;
 
 						if (item.getAbilityid() < 1)
@@ -52,6 +53,8 @@ public class DropUtils {
 						
 						if (spell.getMinLevelClass(className) > levelLimit)
 							continue;
+						
+						alwaysrollspells.add(dropentry);
 					}
 					
 					if (dropentry.isAlways() == true) {
@@ -126,21 +129,25 @@ public class DropUtils {
 				}
 			}
 			
-			// always roll items
-			if (alwaysrollitems.size() > 0) {
-				for (int i = 0; i < alwaysrollitems.size(); i++) {
+			// always roll spell items
+			if (alwaysrollspells.size() > 0) {
+				for (int i = 0; i < alwaysrollspells.size(); i++) {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-							.getItem(alwaysrollitems.get(i).getItemid());
-					for (int c = 0; c < alwaysrollitems.get(i).getCount(); c++) {
+							.getItem(alwaysrollspells.get(i).getItemid());
+					
+					boolean dropped = false;
+					for (int c = 0; c < alwaysrollspells.get(i).getCount(); c++) {
 
 						if (item.isNeverDrop())
 							continue;
+						
+						randomInt = r.nextInt(100) + 1;
 
 						// Handle unique item checking also
 						if (item.isArtifact() == true && item.isArtifactFound() == true)
 							continue;
 
-						if (randomInt <= alwaysrollitems.get(i).getChance()) {
+						if (randomInt <= alwaysrollspells.get(i).getChance()) {
 							if (item.isArtifact() == true) {
 								PlayerUtils.BroadcastPlayers(
 										"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
@@ -153,11 +160,17 @@ public class DropUtils {
 								StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 								item.setArtifactFound(true);
 							}
+							
+							dropped = true;
 						}
 
 					}
+					
+					// Only ever drop one spell
+					if (dropped)
+						break;
 				}
-			}		
+			}
 
 			// Always drop these items
 			if (absoluteitems.size() > 0) {

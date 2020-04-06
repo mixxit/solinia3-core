@@ -5542,7 +5542,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(getNpcid());
 				if (npc.getLoottableid() == 0)
 					return;
-
+				
 				DropUtils.DropLoot(npc.getLoottableid(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation(),"",0);
 				if (npc.getRace() != null)
 					if (npc.getRace().getRaceLootTableId() > 0)
