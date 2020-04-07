@@ -221,6 +221,13 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			solPlayer.storeInventoryContents();
 			solPlayer.storeArmorContents();
+			try
+			{
+				StateManager.getInstance().getConfigurationManager().getPlayerState(player.getUniqueId()).storeEnderChestContents();
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 			
 			solPlayer.removeAllEntityEffects(plugin);
 			solPlayer.killAllPets();
@@ -242,6 +249,7 @@ public class PlayerManager implements IPlayerManager {
             solPlayer.sendMemorisedSpellSlots();
 
 			setPlayerLastChangeChar(player.getUniqueId(), nowtimestamp);
+			
 			if (!player.isDead())
 				solPlayer.getSoliniaLivingEntity().setHPChange((int)Math.floor(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()),player);
 			return solPlayer;
@@ -260,6 +268,13 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer = SoliniaPlayerAdapter.Adapt(player);
 			solPlayer.storeInventoryContents();
 			solPlayer.storeArmorContents();
+			try
+			{
+				StateManager.getInstance().getConfigurationManager().getPlayerState(player.getUniqueId()).storeEnderChestContents();
+			} catch (CoreStateInitException e)
+			{
+				
+			}
 			
 			// if its the same, why bother?
 			if (solPlayer.getId() == characterId)

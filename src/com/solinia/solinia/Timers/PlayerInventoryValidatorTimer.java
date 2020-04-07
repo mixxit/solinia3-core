@@ -261,7 +261,13 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 	private void backupInventory(ISoliniaPlayer solplayer) {
 		solplayer.storeArmorContents();
 		solplayer.storeInventoryContents();
-		//solplayer.getBukkitPlayer().sendMessage("Commited your inventory to cache");
+		try
+		{
+			StateManager.getInstance().getConfigurationManager().getPlayerState(solplayer.getOwnerUUID()).storeEnderChestContents();
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 
 	private void validateEquipSlot(ISoliniaPlayer solPlayer, int itemId, String itemInstance, EquipmentSlot slot) {

@@ -922,6 +922,13 @@ public class Solinia3CorePlayerListener implements Listener {
 				{
 					solPlayer.storeArmorContents();
 					solPlayer.storeInventoryContents();
+					try
+					{
+						StateManager.getInstance().getConfigurationManager().getPlayerState(event.getPlayer().getUniqueId()).storeEnderChestContents();
+					} catch (CoreStateInitException e)
+					{
+						
+					}
 				}
 			} catch (CoreStateInitException e)
 			{
