@@ -1110,6 +1110,13 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 								+ "] available if you are interested in buying or selling something",
 						true);
 			}
+			
+			if (isBanker()) {
+				myEntity.sayto((Player) triggerentity,
+						"i have a [" + ChatColor.LIGHT_PURPLE + "BANK" + ChatColor.AQUA
+								+ "] available if you are interested in storing goods",
+						true);
+			}
 
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) triggerentity);
 			for (ISoliniaNPCEventHandler eventHandler : getEventHandlers()) {

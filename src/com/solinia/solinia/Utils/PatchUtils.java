@@ -34,36 +34,17 @@ import net.minecraft.server.v1_14_R1.TileEntityChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
+		/*try
 		{
 			for(ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters())
 			{
-				player.setBase64BankContents("");
+				
 			}
-			
-			for (String entity : StateManager.getInstance().getConfigurationManager().getPatchesRepo().getByKey(1).getPlayerRestoreInventory().keySet()) {
-				// First try to find the player we are going to give this to
-				//System.out.println("Finding first player with UUID: " + entity);
-				if (entity.startsWith("b7f0"))
-					System.out.println("We doing methaebth");
-				for(ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharactersByPlayerUUID(UUID.fromString(entity)))
-				{
-					if (!player.isPlayable())
-						continue;
-						
-					String base64inventory = StateManager.getInstance().getConfigurationManager().getPatchesRepo().getByKey(1).getPlayerRestoreInventory().get(entity);
-					player.setBase64BankContents(base64inventory);
-						if (entity.startsWith("b7f0"))
-							System.out.println("Restored bank for player " + player.getFullName());
-					break;
-				}
-			}
-			
 			System.out.println("Done");
 		} catch (CoreStateInitException e)
 		{
 			
-		}
+		}*/
 	}
 	
 	public Inventory listToInventory(NBTTagList nbttaglist) {
