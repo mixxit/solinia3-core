@@ -285,5 +285,9 @@ public interface ISoliniaNPC extends IPersistable {
 	int getBaseDamage();
 	int getMinDamage();
 
+	boolean isBanker();
+
+	void setBanker(boolean isBanker);
+
 
 }

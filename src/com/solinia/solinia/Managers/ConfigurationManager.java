@@ -352,6 +352,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public IRepository<ISoliniaPatch> getPatchesRepo() {
+		// TODO Auto-generated method stub
+		return patchesRepository;
+	}
+	
+	@Override
 	public List<ISoliniaAlignment> getAlignments() {
 		return alignmentsRepository.query(q -> q.getId() > 0);
 	}

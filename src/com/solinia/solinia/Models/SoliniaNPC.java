@@ -99,6 +99,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private long timefrom = 0L;
 	private long timeto = Utils.MAXDAYTICK;
 	private boolean isSocial = true;
+	private boolean isBanker = false;
 
 	@Override
 	public int getId() {
@@ -414,7 +415,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				+ ChatColor.RESET);
 		sender.sendMessage("- heroic: " + ChatColor.GOLD + isHeroic() + " " + ChatColor.RESET + "- boss: " + ChatColor.GOLD + isBoss() + ChatColor.RESET + " - raidheroic: " + ChatColor.GOLD + isRaidheroic() + " " + ChatColor.RESET +  "raidboss: " + ChatColor.GOLD
 				+ isRaidboss());
-		sender.sendMessage("- speaksalllanguages: " + ChatColor.GOLD + isSpeaksAllLanguages());
+		sender.sendMessage("- speaksalllanguages: " + ChatColor.GOLD + isSpeaksAllLanguages() + ChatColor.RESET + " banker: " + ChatColor.GOLD + isBanker() + ChatColor.RESET);
 		sender.sendMessage("- randomchattriggertext: " + ChatColor.GOLD + getRandomchatTriggerText());
 		sender.sendMessage("- deathgrantstitle: " + ChatColor.GOLD + getDeathGrantsTitle() + ChatColor.RESET);
 		sender.sendMessage("- killtriggertext: " + ChatColor.GOLD + getKillTriggerText());
@@ -739,6 +740,9 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		case "pet":
 			setCorePet(Boolean.parseBoolean(value));
 			break;
+		case "banker":
+			setBanker(Boolean.parseBoolean(value));
+			break;
 		case "roamer":
 			setRoamer(Boolean.parseBoolean(value));
 			break;
@@ -936,6 +940,20 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			case "HAIL":
 				listenToHail(solentity,triggerentity);
 				break;
+			case "BANK":
+				if (triggerentity instanceof Player)
+					if (isBanker()) {
+						ISoliniaPlayer solPlayer;
+						try {
+							solPlayer = SoliniaPlayerAdapter.Adapt((Player) triggerentity);
+							solPlayer.openBank();
+						} catch (CoreStateInitException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				return;
 			case "SHOP":
 				if (triggerentity instanceof Player)
 					if (getMerchantid() > 0) {
@@ -1814,5 +1832,15 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		// this should be the same as getBaseDamage()
 		int base_damage = (int) Math.round((minmaxdmg.b() - minmaxdmg.a()) / 1.9);
 		return (int)(minmaxdmg.a() - Math.round(base_damage / 10.0));
+	}
+
+	@Override
+	public boolean isBanker() {
+		return isBanker;
+	}
+
+	@Override
+	public void setBanker(boolean isBanker) {
+		this.isBanker = isBanker;
 	}
 }

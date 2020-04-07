@@ -629,4 +629,6 @@ public interface IConfigurationManager {
 	int getNextPlayerId();
 
 	ISoliniaPlayer getCharacterById(Integer characterId);
+
+	IRepository<ISoliniaPatch> getPatchesRepo();
 }

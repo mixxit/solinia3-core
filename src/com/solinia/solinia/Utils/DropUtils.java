@@ -135,7 +135,6 @@ public class DropUtils {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 							.getItem(alwaysrollitems.get(i).getItemid());
 					
-					boolean dropped = false;
 					for (int c = 0; c < alwaysrollitems.get(i).getCount(); c++) {
 
 						if (item.isNeverDrop())
@@ -160,8 +159,6 @@ public class DropUtils {
 								StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 								item.setArtifactFound(true);
 							}
-							
-							dropped = true;
 						}
 
 					}
@@ -186,6 +183,9 @@ public class DropUtils {
 
 						// Handle unique item checking also
 						if (item.isArtifact() == true && item.isArtifactFound() == true)
+							continue;
+						
+						if (!item.isSpellscroll())
 							continue;
 
 						if (randomInt <= alwaysrollspells.get(i).getChance()) {

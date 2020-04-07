@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public interface ISoliniaPatch extends IPersistable {
 
@@ -11,5 +12,9 @@ public interface ISoliniaPatch extends IPersistable {
 	List<String> getClasses();
 
 	void setClasses(List<String> classes);
+
+	ConcurrentHashMap<String, String> getPlayerRestoreInventory();
+
+	void setPlayerRestoreInventory(ConcurrentHashMap<String, String> playerRestoreInventory);
 
 }
