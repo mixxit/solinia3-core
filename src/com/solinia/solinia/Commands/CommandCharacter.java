@@ -158,6 +158,12 @@ public class CommandCharacter implements CommandExecutor {
 			        		return true;
 			        	}
 			        	
+			        	if (targetCharacter.getId() == SoliniaPlayerAdapter.Adapt(player).getId())
+			        	{
+			        		player.sendMessage("You are already on this character");
+			        		return true;
+			        	}
+			        	
 						if (!targetCharacter.isPlayable())
 						{
 							player.sendMessage("This character is higher level than the character level limit");
