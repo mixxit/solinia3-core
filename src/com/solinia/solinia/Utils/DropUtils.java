@@ -129,6 +129,47 @@ public class DropUtils {
 				}
 			}
 			
+			// always roll items
+			if (alwaysrollitems.size() > 0) {
+				for (int i = 0; i < alwaysrollitems.size(); i++) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+							.getItem(alwaysrollitems.get(i).getItemid());
+					
+					boolean dropped = false;
+					for (int c = 0; c < alwaysrollitems.get(i).getCount(); c++) {
+
+						if (item.isNeverDrop())
+							continue;
+						
+						randomInt = r.nextInt(100) + 1;
+
+						// Handle unique item checking also
+						if (item.isArtifact() == true && item.isArtifactFound() == true)
+							continue;
+
+						if (randomInt <= alwaysrollitems.get(i).getChance()) {
+							if (item.isArtifact() == true) {
+								PlayerUtils.BroadcastPlayers(
+										"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+							}
+							
+							world.dropItemNaturally(location, item.asItemStack());
+	
+							// Handle unique item setting also
+							if (item.isArtifact() == true && item.isArtifactFound() == false) {
+								StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
+								item.setArtifactFound(true);
+							}
+							
+							dropped = true;
+						}
+
+					}
+
+				}
+			}
+
+			
 			// always roll spell items
 			if (alwaysrollspells.size() > 0) {
 				for (int i = 0; i < alwaysrollspells.size(); i++) {
