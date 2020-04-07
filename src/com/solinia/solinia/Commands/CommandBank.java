@@ -18,8 +18,9 @@ public class CommandBank implements CommandExecutor {
 			return false;
 		}
 		
-		if (sender.isOp())
+		if (!sender.isOp())
 		{
+			sender.sendMessage("This is an OP only command. Please visit a banker..");
 			return false;
 		}
 		

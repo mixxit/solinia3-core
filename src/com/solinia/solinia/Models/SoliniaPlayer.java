@@ -4985,7 +4985,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void openBank() {
-		Inventory inventory = Bukkit.createInventory(new SoliniaBankHolder(), 9, "Solinia International Bank");
+		Inventory inventory = Bukkit.createInventory(new SoliniaBankHolder(), 45, "Solinia International Bank");
 		inventory.setContents(getStoredBankContents());
 		this.getBukkitPlayer().openInventory(inventory);
 	}
