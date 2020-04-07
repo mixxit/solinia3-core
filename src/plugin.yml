@@ -11,6 +11,10 @@ commands:
     description: Displays char creation
     usage: /opencharcreation
     aliases: []
+  topplayers:
+    description: Top players
+    usage: /topplayers
+    aliases: []
   solinia:
     description: Displays additional information about Solinia3Core
     usage: /solinia

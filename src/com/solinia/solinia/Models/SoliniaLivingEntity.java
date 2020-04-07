@@ -322,6 +322,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				// Clear aggro
 				defender.resetReverseAggro();
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (dead)");
 				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
 				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
 					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
