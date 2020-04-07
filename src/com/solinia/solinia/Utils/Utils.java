@@ -5929,11 +5929,15 @@ public class Utils {
 		try
 		{
 			TextComponent tc = new TextComponent("");
+			
 			if (!hint.equals(HINT.OOC_MESSAGE))
 			{
+				TextComponent clickTextComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
 				String title = ChatColor.GRAY + "<*>" + ChatColor.RESET;
-				tc.setText(title);
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
+				clickTextComponent.setText(title);
+				clickTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
+				clickTextComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to toggle off").create()));
+				tc.addExtra(clickTextComponent);
 			}
 
 			TextComponent fullTextComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));

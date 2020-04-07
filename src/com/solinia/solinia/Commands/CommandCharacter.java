@@ -66,7 +66,7 @@ public class CommandCharacter implements CommandExecutor {
 						{
 							continue;
 						} else {
-							locked = "[LOCKED]";
+							locked = "[LOCK]";
 						}
 					
 					TextComponent tc = new TextComponent();
@@ -79,7 +79,11 @@ public class CommandCharacter implements CommandExecutor {
 						charclass = character.getClassObj().getName();
 					}
 					
-					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + " " + locked + ChatColor.RESET;
+					String bank = "";
+					if (character.getBase64BankContents() != null && character.getBase64BankContents().length() > 0)
+						bank = "[BANK]";
+					
+					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " LVL: " + character.getLevel() + " " + locked + " " + bank + ChatColor.RESET;
 					
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getId();

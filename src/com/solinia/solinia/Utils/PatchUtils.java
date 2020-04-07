@@ -34,7 +34,7 @@ import net.minecraft.server.v1_14_R1.TileEntityChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
+		/*try
 		{
 			for (String entity : StateManager.getInstance().getConfigurationManager().getPatchesRepo().getByKey(1).getPlayerRestoreInventory().keySet()) {
 				// First try to find the player we are going to give this to
@@ -49,7 +49,7 @@ public class PatchUtils {
 		} catch (CoreStateInitException e)
 		{
 			
-		}
+		}*/
 	}
 	
 	public Inventory listToInventory(NBTTagList nbttaglist) {
