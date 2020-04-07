@@ -15,8 +15,14 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.Utils;
+
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandSetClass implements CommandExecutor {
 
@@ -50,14 +56,14 @@ public class CommandSetClass implements CommandExecutor {
 				ISoliniaPlayer soliniaplayer = SoliniaPlayerAdapter.Adapt(player);
 				if (soliniaplayer.hasChosenRace() == false)
 		        {
-					SendProfessionFull(sender,rawpros);
+					sendClassInfo(sender);
 		        	sender.sendMessage("You cannot pick a profession until you set your race with /setrace"); 
 		        	return true;
 		        }
 		        
 		        if (soliniaplayer.hasChosenClass() == true)
 		        {
-		        	SendProfessionFull(sender,rawpros);
+		        	sendClassInfo(sender);
 		        	sender.sendMessage("You cannot pick a profession as you have already chosen one");
 		        	return true;
 		        }
@@ -74,7 +80,7 @@ public class CommandSetClass implements CommandExecutor {
 		    	
 		    	if (args.length == 0)
 		        {
-		    		SendProfessionList(sender,rawpros,prolistunformatted);
+		    		sendClassInfo(sender);
 		    		sender.sendMessage("Insufficient arguments Valid Professions are: ["+prolist+"]");
 		        	if (soliniaplayer != null)
 		        	{
@@ -105,13 +111,13 @@ public class CommandSetClass implements CommandExecutor {
 		        
 		        if (found == false)
 		        {
-		        	SendProfessionList(sender,rawpros,prolistunformatted);
+		    		sendClassInfo(sender);
 		        	return false;
 		        }
 		        
 		        if (!StateManager.getInstance().getConfigurationManager().isValidRaceClass(soliniaplayer.getRaceId(), solprofession.getId()))
 		        {
-		        	SendProfessionList(sender,rawpros,prolistunformatted);
+		    		sendClassInfo(sender);
 		        	sender.sendMessage("That is not a valid Race / Profession");
 		        	return true;
 		        }
@@ -145,21 +151,31 @@ public class CommandSetClass implements CommandExecutor {
 	
 	public void SendProfessionFull(CommandSender sender, List<ISoliniaClass> allprofessions)
 	{
-		for(ISoliniaClass pro : allprofessions)
-    	{
-   			sender.sendMessage(ChatColor.AQUA + pro.getName() + ChatColor.RESET + " - " + ChatColor.GRAY + pro.getDescription());
-    	}	
+		
 	}
-	
-	public void SendProfessionList(CommandSender sender, List<ISoliniaClass> allprofessions,String allowedpronames_spacedelim)
-	{
-		List<String> allowedprofessions = (Arrays.asList(allowedpronames_spacedelim.split(" ")));
-		for(ISoliniaClass pro : allprofessions)
-    	{
-    		if (allowedprofessions.contains(pro.getName()))
-    		{
-    			sender.sendMessage(ChatColor.AQUA + pro.getName() + ChatColor.RESET + " - " + ChatColor.GRAY + pro.getDescription());
-    		}
-    	}	
+	public static void sendClassInfo(CommandSender sender) throws CoreStateInitException {
+		List<ISoliniaRace> races = StateManager.getInstance().getConfigurationManager().getRaces();
+
+		for (ISoliniaClass classObj : StateManager.getInstance().getConfigurationManager().getClasses()) {
+			if (classObj.isAdmin())
+				continue;
+
+			String classBuilder = "";
+			for (ISoliniaRace solrace : races) {
+				if (classObj.getValidRaceClasses().containsKey(solrace.getId()))
+					classBuilder += solrace.getName() + " ";
+			}
+
+			TextComponent tc = new TextComponent();
+			tc.setText(ChatColor.RED + "~ CLASS: " + ChatColor.GOLD + classObj.getName().toUpperCase() + ChatColor.GRAY
+					+ " [" + classObj.getId() + "] - " + ChatColor.RESET);
+			TextComponent tc2 = new TextComponent();
+			tc2.setText("Hover for more details");
+			String details = ChatColor.GOLD + classObj.getName() + ChatColor.RESET + System.lineSeparator() + ChatColor.RESET + System.lineSeparator() + classObj.getDescription() + System.lineSeparator() + 
+					 System.lineSeparator() + ChatColor.GOLD + "Races: " + ChatColor.RESET + classBuilder;
+			tc2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+			tc.addExtra(tc2);
+			sender.spigot().sendMessage(tc);
+		}
 	}
 }

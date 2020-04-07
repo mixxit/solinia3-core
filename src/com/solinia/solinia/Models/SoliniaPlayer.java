@@ -4666,6 +4666,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public boolean isPlayable() {
 		try {
+			if (this.isDeleted())
+				return false;
+			
 			if (getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
 				return false;
 
