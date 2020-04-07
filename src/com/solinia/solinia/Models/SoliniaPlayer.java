@@ -3948,7 +3948,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	
 	@Override
 	public void storeBankContents(Inventory inventory) {
-		this.setBase64ArmorContents(new String(Base64.encodeBase64(ItemStackUtils
+		this.setBase64BankContents(new String(Base64.encodeBase64(ItemStackUtils
 				.itemStackArrayToYamlString(inventory.getContents()).getBytes())));
 	}
 
