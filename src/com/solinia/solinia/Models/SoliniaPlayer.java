@@ -29,6 +29,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -85,6 +86,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean haschosenclass = false;
 	private int classid = 0;
 	private String gender = "MALE";
+	private String base64BankContents = "";
 	private String base64InventoryContents = "";
 	private String base64ArmorContents = "";
 	private boolean experienceOn = true;
@@ -3894,7 +3896,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return ItemStackUtils.itemStackArrayFromYamlString(yaml);
 		} catch (Exception e) {
 			System.out.println("Exception converting base64 to itemstack array [armorcontents] for player "
-					+ getBukkitPlayer().getName() + ": " + getBase64InventoryContents());
+					+ getBukkitPlayer().getName() + ": " + getBase64ArmorContents());
+			e.printStackTrace();
+			return new ItemStack[0];
+		}
+	}
+	
+	@Override
+	public ItemStack[] getStoredBankContents() {
+		if (getBase64BankContents() == null || getBase64BankContents().equals(""))
+			return new ItemStack[0];
+
+		try {
+			String yaml = new String(Base64.decodeBase64(getBase64BankContents().getBytes()));
+			return ItemStackUtils.itemStackArrayFromYamlString(yaml);
+		} catch (Exception e) {
+			System.out.println("Exception converting base64 to itemstack array [bankcontents] for player "
+					+ getBukkitPlayer().getName() + ": " + getBase64BankContents());
 			e.printStackTrace();
 			return new ItemStack[0];
 		}
@@ -3926,6 +3944,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void storeArmorContents() {
 		this.setBase64ArmorContents(new String(Base64.encodeBase64(ItemStackUtils
 				.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getArmorContents()).getBytes())));
+	}
+	
+	@Override
+	public void storeBankContents(Inventory inventory) {
+		this.setBase64ArmorContents(new String(Base64.encodeBase64(ItemStackUtils
+				.itemStackArrayToYamlString(inventory.getContents()).getBytes())));
 	}
 
 	@Override
@@ -4947,5 +4971,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String getBase64BankContents() {
+		return base64BankContents;
+	}
+
+	@Override
+	public void setBase64BankContents(String base64BankContents) {
+		this.base64BankContents = base64BankContents;
+	}
+
+	@Override
+	public void openBank() {
+		Inventory inventory = Bukkit.createInventory(new SoliniaBankHolder(), 9, "Solinia International Bank");
+		inventory.setContents(getStoredBankContents());
+		this.getBukkitPlayer().openInventory(inventory);
 	}
 }

@@ -11,6 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -620,6 +621,11 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	int getMotherCharacterId();
 	public boolean hasQuestFlag(String questFlag);
 	public void destroySpellbookSpellId(Integer spellId);
+	String getBase64BankContents();
+	void setBase64BankContents(String base64BankContents);
+	void storeBankContents(Inventory inventory);
+	public void openBank();
+	ItemStack[] getStoredBankContents();
 
 
 

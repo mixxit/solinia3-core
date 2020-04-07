@@ -38,6 +38,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
@@ -64,6 +65,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
+import com.solinia.solinia.Models.SoliniaBankHolder;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.UniversalMerchant;
@@ -917,6 +919,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		} else {
 			try
 			{
+				// Backup normal inventories
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer().getUniqueId());
 				if (solPlayer != null)
 				{
@@ -929,6 +932,12 @@ public class Solinia3CorePlayerListener implements Listener {
 					{
 						
 					}
+				}
+
+				// Save bank inventory
+				if (event.getInventory().getHolder() instanceof SoliniaBankHolder)
+				{
+					solPlayer.storeBankContents(event.getInventory());
 				}
 			} catch (CoreStateInitException e)
 			{

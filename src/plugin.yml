@@ -19,6 +19,10 @@ commands:
     description: Displays additional information about Solinia3Core
     usage: /solinia
     aliases: []
+  bank:
+    description: Opens your custom bank (Admin only)
+    usage: /bank
+    aliases: []
   sit:
     description: Sit
     usage: /sit
