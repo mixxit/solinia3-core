@@ -50,6 +50,7 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -478,6 +479,16 @@ public class Solinia3CoreEntityListener implements Listener {
 		double drowningdamage = Math.round(le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/8D);
 		event.setDamage(drowningdamage);
 		le.sendMessage(ChatColor.GRAY + "* You have been hit for " + drowningdamage + " points of DROWNING damage!");
+		
+		if (le instanceof Player) {
+			try {
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) le);
+				PartyWindowUtils.UpdateGroupWindowForEveryone(le.getUniqueId(),
+						solPlayer.getGroup(), false);
+			} catch (CoreStateInitException e) {
+
+			}
+		}
 	}
 
 	private void onEntityFallDamageEvent(EntityDamageEvent event) {
@@ -516,6 +527,15 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 			
 			le.sendMessage(ChatColor.GRAY + "* You have been hit for " + finalDamage + " points of FALL damage!");
+			if (le instanceof Player) {
+				try {
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) le);
+					PartyWindowUtils.UpdateGroupWindowForEveryone(le.getUniqueId(),
+							solPlayer.getGroup(), false);
+				} catch (CoreStateInitException e) {
+
+				}
+			}
 		}
 	}
 	
