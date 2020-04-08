@@ -10431,6 +10431,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if(soliniaLivingEntity == null || soliniaLivingEntity.getBukkitLivingEntity() == null || soliniaLivingEntity.getBukkitLivingEntity().isDead())
 			return false;
 
+		if (this.hasSpellEffectType(SpellEffectType.Blind))
+			return false;
+		
 		return RaycastUtils.isEntityInLineOfSight(this, soliniaLivingEntity,checkDirection);
 	}
 }
