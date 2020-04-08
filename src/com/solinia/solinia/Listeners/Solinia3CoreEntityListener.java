@@ -464,6 +464,16 @@ public class Solinia3CoreEntityListener implements Listener {
 			int finalDamage = (int)Math.round(damage);
 			event.setDamage(finalDamage);
 			le.sendMessage(ChatColor.GRAY + "* You have been hit for " + finalDamage + " points of LAVA damage!");
+			
+			if (le instanceof Player) {
+				try {
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) le);
+					PartyWindowUtils.UpdateGroupWindowForEveryone(le.getUniqueId(),
+							solPlayer.getGroup(), false);
+				} catch (CoreStateInitException e) {
+
+				}
+			}
 		}
 		
 	}
