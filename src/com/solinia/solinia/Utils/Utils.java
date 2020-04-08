@@ -5932,7 +5932,7 @@ public class Utils {
 			
 			if (!hint.equals(HINT.OOC_MESSAGE))
 			{
-				TextComponent clickTextComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
+				TextComponent clickTextComponent = new TextComponent("");
 				String title = ChatColor.GRAY + "<*>" + ChatColor.RESET;
 				clickTextComponent.setText(title);
 				clickTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
