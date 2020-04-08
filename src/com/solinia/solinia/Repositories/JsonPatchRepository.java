@@ -16,8 +16,10 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.solinia.solinia.Factories.ISoliniaLootTableEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
+import com.solinia.solinia.Models.SoliniaLootTableEntry;
 import com.solinia.solinia.Models.SoliniaPatch;
 
 public class JsonPatchRepository implements IRepository<ISoliniaPatch> {
@@ -85,7 +87,6 @@ public class JsonPatchRepository implements IRepository<ISoliniaPatch> {
 	public void commit() {
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		//gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
 		String jsonOutput = gson.toJson(patches.values(), new TypeToken<List<SoliniaPatch>>(){}.getType());
 		try {
