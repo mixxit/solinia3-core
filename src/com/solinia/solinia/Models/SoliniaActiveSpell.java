@@ -571,6 +571,8 @@ public class SoliniaActiveSpell {
 		case ChangeAggro:
 			return;
 		case Hunger:
+			if (getLivingEntity() instanceof Player)
+				applyFoodDrink(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case CurseCounter:
 			return;
@@ -2480,6 +2482,14 @@ public class SoliniaActiveSpell {
 			// skip
 		}
 
+	}
+	
+	private void applyFoodDrink(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!isOwnerPlayer())
+			return;
+
+		Player player = (Player) getLivingEntity();
+		player.setFoodLevel(20);
 	}
 	
 	private void applyGateHome(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
