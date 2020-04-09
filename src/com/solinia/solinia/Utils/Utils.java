@@ -98,6 +98,7 @@ import com.solinia.solinia.Models.StatType;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -5978,7 +5979,16 @@ public class Utils {
 			{
 				if (ItemStackUtils.IsSoliniaItem(itemStack))
 				{
-					tc.setText(tc.getText().replace("itemlink", "itemlink:"+ItemStackUtils.getSoliniaItemId(itemStack)));
+					int extraIndex = -1;
+					for(int i = 0; i < tc.getExtra().size(); i++)
+						if (tc.getExtra().get(i) instanceof TextComponent && ((TextComponent)tc.getExtra().get(i)).getText().contains("itemlink"))
+							extraIndex = i;
+					
+					if (extraIndex > -1)
+					{
+						String text = ((TextComponent)tc.getExtra().get(extraIndex)).getText();
+						((TextComponent)tc.getExtra().get(extraIndex)).setText(text.replace("itemlink", ""));
+					}
 				}
 				TextComponent itemLinkComponent = new TextComponent();
 				String title = " <" + itemStack.getItemMeta().getDisplayName() + ">";

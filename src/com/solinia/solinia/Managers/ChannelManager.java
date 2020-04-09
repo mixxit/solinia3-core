@@ -12,6 +12,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.SkillType;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.chat.TextComponent;
@@ -173,7 +174,8 @@ public class ChannelManager implements IChannelManager {
 				
 			Utils.SendHint(player, HINT.OOC_MESSAGE, message, false, itemStack);
 		}
-		
+		if (message.contains("itemlink") && itemStack != null && ItemStackUtils.IsSoliniaItem(itemStack))
+			message = message.replace("itemlink", "itemlink:"+ItemStackUtils.getSoliniaItemId(itemStack));
 		System.out.println(message);
 	}
 	
@@ -429,6 +431,8 @@ public class ChannelManager implements IChannelManager {
 			player.spigot().sendMessage(tc);
 		}
 		
+		if (message.contains("itemlink") && itemStack != null && ItemStackUtils.IsSoliniaItem(itemStack))
+			message = message.replace("itemlink", "itemlink:"+ItemStackUtils.getSoliniaItemId(itemStack));
 		System.out.println(message);
 	}
 	
