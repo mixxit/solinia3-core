@@ -67,12 +67,10 @@ public class CommandSolinia implements CommandExecutor {
 				
 			
 			if (args[0].equals("patch")) {
-				System.out.println("Patching");
 				PatchUtils.Patcher();
 			}
 			
 			if (args[0].equals("resethints")) {
-				System.out.println("Resetting all hints");
 				try
 				{
 					for (ISoliniaPlayer player : StateManager.getInstance().getConfigurationManager().getCharacters())

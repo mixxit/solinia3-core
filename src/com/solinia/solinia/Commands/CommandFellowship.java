@@ -77,7 +77,6 @@ public class CommandFellowship implements CommandExecutor {
 			{
 				if (solplayer.getFellowship() == null)
 				{
-					System.out.println("Player was not in fellowship to leave");
 					return true;
 				}
 				

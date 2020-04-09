@@ -61,7 +61,6 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			player.sendMessage("EQUIPMENT");
 			for(ISoliniaItem solItem : solLivingEntity.getEquippedSoliniaItems())
 			{
-				System.out.println("SolItemId: " + solItem.getId() + " " + solItem.getDisplayname());
 				player.sendMessage("SolItemId: " + solItem.getId() + " " + solItem.getDisplayname());
 			}
 			

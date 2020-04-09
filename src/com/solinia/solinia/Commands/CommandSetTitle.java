@@ -76,7 +76,6 @@ public class CommandSetTitle implements CommandExecutor {
 		            solplayer.setTitle("");
 	            }
 	            
-	            System.out.println("* [" + player.getName() + "] Title set to: " + "'" + solplayer.getTitle() + "'");
 	            player.sendMessage("* Title set to: '" + solplayer.getTitle() + "'");
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

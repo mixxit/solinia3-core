@@ -93,7 +93,6 @@ public class CommandClaim implements CommandExecutor {
 					}
 				} else {
 					int seekClaimId = Integer.parseInt(args[1].toUpperCase());
-					System.out.println("Looking up claims for player name: " + claimPlayer.getName() + " for claim ID: " + seekClaimId);
 					getClaim(claimPlayer,seekClaimId);
 				}
 

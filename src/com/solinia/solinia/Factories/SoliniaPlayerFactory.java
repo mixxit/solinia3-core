@@ -124,8 +124,6 @@ public class SoliniaPlayerFactory {
 			}			
 
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(obj);
-
-			System.out.println("New Character Copied: " + obj.getId() + " - " + obj.getFullName());
 			return obj;
 
 		} catch (CoreStateInitException e)

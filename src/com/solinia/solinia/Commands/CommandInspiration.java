@@ -371,7 +371,6 @@ public class CommandInspiration implements CommandExecutor {
 													claimPlayer.sendMessage(ChatColor.GOLD + "You have been awarded with a claim item! See /claim");
 												}
 												StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
-												System.out.println("Awarded Claim: " + item.getDisplayname() + " to " + playerName);
 											} catch (CoreStateInitException e)
 											{
 												// skip
@@ -483,7 +482,6 @@ public class CommandInspiration implements CommandExecutor {
 													claimPlayer.sendMessage(ChatColor.GOLD + "You have been awarded with a claim item! See /claim");
 												}
 												StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
-												System.out.println("Awarded Claim: " + item.getDisplayname() + " to " + playerName);
 											} catch (CoreStateInitException e)
 											{
 												// skip

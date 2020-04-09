@@ -40,10 +40,6 @@ public class PlayerTrackListener implements Listener {
 		double angleLook = (Math.atan2(lookVec.getZ(),lookVec.getX()) / 2 / Math.PI * 360 + 360) % 360;
 
 		double angle = (angleDir - angleLook + 360) % 360;
-		
-		
-		System.out.println(angle);
-
 		if (angle > 315)
 			playerEntity.sendMessage("Your tracking target appears to be straight ahead");
 		else if (angle > 225 && angle <= 315)

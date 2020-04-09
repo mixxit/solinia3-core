@@ -107,7 +107,6 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (pet == null)
 				return;
 			
-			System.out.println("Moving pet with player");
 			EntityUtils.teleportSafely(pet,event.getPlayer().getLocation());
 		} catch (CoreStateInitException e)
 		{
@@ -1011,7 +1010,6 @@ public class Solinia3CorePlayerListener implements Listener {
 							"You cannot apply an augmentation to multiple items at once, please seperate the target item");
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
-					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
 					Utils.CancelEvent(event);
 					return;
@@ -1024,7 +1022,6 @@ public class Solinia3CorePlayerListener implements Listener {
 					event.getView().getPlayer().sendMessage("This item already has an augmentation applied");
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
-					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
 					Utils.CancelEvent(event);
 					return;
@@ -1037,7 +1034,6 @@ public class Solinia3CorePlayerListener implements Listener {
 					event.getView().getPlayer().sendMessage("This augmentation does not fit in this items slot type");
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
-					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
 					Utils.CancelEvent(event);
 					return;
@@ -1049,7 +1045,6 @@ public class Solinia3CorePlayerListener implements Listener {
 							"You do not have enough of this augmentation in your inventory to apply it to an item");
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
-					System.out.println("Ended applying augmentation");
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
 					Utils.CancelEvent(event);
 					return;
@@ -1065,7 +1060,6 @@ public class Solinia3CorePlayerListener implements Listener {
 				event.getView().getPlayer().sendMessage("Augmentation Applied to Item Successfully");
 				StateManager.getInstance().getPlayerManager()
 						.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
-				System.out.println("Ended applying augmentation");
 				event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
 				Utils.CancelEvent(event);
 
@@ -1294,7 +1288,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		if (universalmerchant == null) {
 			event.getView().getPlayer().sendMessage("Could not find universal mercahnt or page " + page);
-			System.out.println("Could not find universal mercahnt or page " + page);
+			System.out.println("Could not find universal merchant or page " + page);
 			Utils.CancelEvent(event);
 			;
 			return;

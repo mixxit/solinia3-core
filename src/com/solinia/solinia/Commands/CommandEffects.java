@@ -48,28 +48,16 @@ public class CommandEffects implements CommandExecutor {
 		            
 		            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 		            
-		            /*if (StateManager.getInstance().getEntityManager().getEntitySinging(solplayer.getBukkitPlayer().getUniqueId()) != null)
-		            {
-		            	System.out.println("Singing Spell ID: " + StateManager.getInstance().getEntityManager().getEntitySinging(solplayer.getBukkitPlayer().getUniqueId()));
-		            } else {
-		            	System.out.println("Singing Spell ID: None");
-		            }*/
-
 	            	if (solplayer.getExperienceBonusExpires() != null)
 	            	{
-			    		//System.out.println("Experience Bonus was not null: " + solplayer.getExperienceBonusExpires().toString());
-
 			    		LocalDateTime datetime = LocalDateTime.now();
 			    		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 	        			Timestamp expiretimestamp = solplayer.getExperienceBonusExpires();
 
 	        			if (expiretimestamp != null)
 	        			{
-		        			System.out.println("Experience Bonus expire timestamp " + solplayer.getExperienceBonusExpires() +  " vs Now: "  + nowtimestamp.toString());
-
 	        				if (!nowtimestamp.after(expiretimestamp))
 	        				{
-			        			//System.out.println("Experience bonus was after, displaying in effects");
 	        					int secondsleft = (int)Math.floor(Utils.compareTwoTimeStamps(expiretimestamp,nowtimestamp));
 	        					TextComponent tc = new TextComponent();
 	        					tc.setText("- " + ChatColor.GREEN + "100% Experience Potion" + ChatColor.RESET + " " + secondsleft + " seconds");
@@ -77,7 +65,6 @@ public class CommandEffects implements CommandExecutor {
 	        				}
 	        			}
 	            	} else {
-			    		//System.out.println("Experience Bonus was null");
 	            	}
 		            
 		            for(SoliniaActiveSpell activeSpell : spells.getActiveSpells())

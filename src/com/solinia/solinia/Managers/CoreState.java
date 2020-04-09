@@ -786,8 +786,6 @@ public class CoreState {
 					Player newownerplayer = Bukkit.getPlayer(newowner);
 					if (newownerplayer != null) {
 						group.setOwner(newowner);
-						System.out.println(
-								"group: " + group.getId() + " has a new leader: " + newownerplayer.getDisplayName());
 						sendGroupMessage(newownerplayer, "is now the group leader!");
 						foundnewowner = true;
 						break;
@@ -925,8 +923,6 @@ public class CoreState {
 				for (UUID memberid : group.getMembers()) {
 					Player groupplayer = Bukkit.getPlayer(memberid);
 					if (groupplayer != null) {
-						System.out.println(
-								"group: " + group.getId() + ":" + player.getDisplayName() + ": " + ChatColor.AQUA + message);
 						groupplayer.sendMessage(type + " " + ChatColor.WHITE + solplayer.getFullName() + ChatColor.RESET + " ["+ChatColor.RED + (int)player.getHealth()+ ChatColor.RESET + "/" +ChatColor.BLUE + solplayer.getMana() + ChatColor.RESET+ "]: " + ChatColor.AQUA + message);
 					}
 				}
