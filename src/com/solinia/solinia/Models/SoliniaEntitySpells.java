@@ -589,6 +589,7 @@ public class SoliniaEntitySpells {
 		if (resendInvisPackets)
 		{
 			// Resend packet for everyone in range
+			if (getLivingEntity() != null)
 			for(Entity entity : getLivingEntity().getNearbyEntities(200, 200, 200))
 			{
 				if (!(entity instanceof LivingEntity))
