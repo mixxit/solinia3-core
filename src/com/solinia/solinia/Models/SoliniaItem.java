@@ -884,8 +884,15 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			setWisdom(Integer.parseInt(value));
 			break;
 		case "questid":
-			ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(Integer.parseInt(value));
-			setQuestId(quest.getId());
+			if (Integer.parseInt(value) == 0)
+			{
+				setQuestId(0);
+			}
+			else
+			{
+				ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(Integer.parseInt(value));
+				setQuestId(quest.getId());
+			}
 			break;
 		case "consumablerequirenotquestflag":
 			if (this.getQuestId() < 1)

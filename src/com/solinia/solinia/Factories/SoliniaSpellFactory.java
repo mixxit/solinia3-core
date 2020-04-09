@@ -20,6 +20,7 @@ public class SoliniaSpellFactory {
 			SoliniaSpell obj = gson.fromJson(tmp,SoliniaSpell.class);
 			obj.setId(StateManager.getInstance().getConfigurationManager().getNextSpellId());
 			obj.setName(name);
+			obj.setLastUpdatedTimeNow();
 			StateManager.getInstance().getConfigurationManager().addSpell(obj);
 			
 			System.out.println("New Spell Added: " + obj.getId() + " - " + obj.getName());

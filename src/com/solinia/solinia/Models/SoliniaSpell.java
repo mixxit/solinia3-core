@@ -756,6 +756,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@SerializedName("field236")
 	@Expose
 	private Integer field236;
+	private Timestamp lastUpdatedTime;
 
 	private String requiresPermissionNode = "";
 
@@ -3185,6 +3186,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			throw new InvalidSpellSettingException(
 					"Invalid Spell setting. Valid Options are: name, teleportzone, effect, castonyou, castonother, spelleffectindex, duration, mana, componentsX, componentscountX, addspellclass, clearspellclass");
 		}
+		
+		this.setLastUpdatedTimeNow();
 
 		StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
 	}
@@ -5752,5 +5755,38 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (this.getDotStackingExempt() > 0 || this.getBuffdurationformula() < 1)
 			return false;
 		return isEffectInSpell(SpellEffectType.CurrentHP) || isEffectInSpell(SpellEffectType.GravityEffect);
+	}
+	
+	@Override
+	public Timestamp getLastUpdatedTime() {
+		if (lastUpdatedTime == null)
+			setLastUpdatedTimeNow();
+		
+		return lastUpdatedTime;
+	}
+
+	@Override
+	public void setLastUpdatedTime(Timestamp lastUpdatedTime) {
+		this.lastUpdatedTime = lastUpdatedTime;
+		hookGlobalSpellsChanged();
+	}
+	
+	@Override
+	public void setLastUpdatedTimeNow() {
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		//System.out.println("Set LastUpdatedTime on " + getId());
+		this.setLastUpdatedTime(nowtimestamp);
+	}
+	
+	public void hookGlobalSpellsChanged()
+	{
+		try
+		{
+			StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 }

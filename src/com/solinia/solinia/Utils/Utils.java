@@ -5976,6 +5976,10 @@ public class Utils {
 		{
 			try
 			{
+				if (ItemStackUtils.IsSoliniaItem(itemStack))
+				{
+					tc.setText(tc.getText().replace("itemlink", "itemlink:"+ItemStackUtils.getSoliniaItemId(itemStack)));
+				}
 				TextComponent itemLinkComponent = new TextComponent();
 				String title = " <" + itemStack.getItemMeta().getDisplayName() + ">";
 				itemLinkComponent.setText(title);

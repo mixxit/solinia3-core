@@ -30,6 +30,7 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPatch;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.PlayerState;
 import com.solinia.solinia.Models.SoliniaPatch;
@@ -46,13 +47,16 @@ import net.minecraft.server.v1_14_R1.TileEntityEnderChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		/*try
+		try
 		{
-			
+			for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
+			{
+				spell.setLastUpdatedTimeNow();
+			}
 		} catch (CoreStateInitException e)
 		{
 			
-		}*/
+		}
 	}
 	
 	public Inventory listToInventory(NBTTagList nbttaglist) {

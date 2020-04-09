@@ -1,5 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.bukkit.block.Block;
@@ -1080,4 +1081,10 @@ public interface ISoliniaSpell extends IPersistable {
 	boolean isStackableDot();
 
 	int calcBuffDuration(ISoliniaLivingEntity solEntity, int level);
+
+	Timestamp getLastUpdatedTime();
+
+	void setLastUpdatedTime(Timestamp lastUpdatedTime);
+
+	void setLastUpdatedTimeNow();
 }
