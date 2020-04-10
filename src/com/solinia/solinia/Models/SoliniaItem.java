@@ -1341,6 +1341,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setArtifactFound(boolean artifactFound) {
 		this.artifactFound = artifactFound;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
