@@ -1191,6 +1191,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setDiscoverer(String discoverer) {
 		this.discoverer = discoverer;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
