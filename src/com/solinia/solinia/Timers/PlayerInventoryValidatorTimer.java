@@ -175,7 +175,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						continue;
 		    		}
 					
-					if (i.getAllowedClassNames().size() < 1)
+					if (i.getAllowedClassNamesUpper().size() < 1)
 						continue;
 					
 					// Check class armour and offhand items for wrong class (where the player has no class)
@@ -206,7 +206,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					}
 					
 					// Check class armour and offhand items for wrong class (where the player has a class)
-					if (slotId > 35 && !i.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase()) && !i.isSpellscroll())
+					if (slotId > 35 && !i.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase()) && !i.isSpellscroll())
 					{
 						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{

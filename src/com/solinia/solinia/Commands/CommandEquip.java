@@ -85,14 +85,14 @@ public class CommandEquip implements CommandExecutor {
 						return true;
 					}
 
-					if (item.getAllowedClassNames() != null && item.getAllowedClassNames().size() > 0)
-						if (!item.getAllowedClassNames().contains(solPlayer.getClassObj().getName().toUpperCase())) {
+					if (item.getAllowedClassNamesUpper() != null && item.getAllowedClassNamesUpper().size() > 0)
+						if (!item.getAllowedClassNamesUpper().contains(solPlayer.getClassObj().getName().toUpperCase())) {
 							player.sendMessage(ChatColor.GRAY + "Your class cannot wear this equipment");
 							return true;
 						}
 
-					if (item.getAllowedRaceNames() != null && item.getAllowedRaceNames().size() > 0)
-						if (!item.getAllowedRaceNames().contains(solPlayer.getRace().getName().toUpperCase())) {
+					if (item.getAllowedRaceNamesUpper() != null && item.getAllowedRaceNamesUpper().size() > 0)
+						if (!item.getAllowedRaceNamesUpper().contains(solPlayer.getRace().getName().toUpperCase())) {
 							player.sendMessage(ChatColor.GRAY + "Your race cannot wear this equipment");
 							return true;
 						}

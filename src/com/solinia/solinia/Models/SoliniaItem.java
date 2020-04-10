@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -291,9 +292,20 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	}
 
 	@Override
+	public List<String> getAllowedClassNamesUpper() {
+		return getAllowedClassNames().stream().map(String::toUpperCase).collect(Collectors.toList());
+	}
+	
+	@Override
 	public void setAllowedClassNames(List<String> allowedClassesNames) {
 		this.allowedClassNames = allowedClassesNames;
 	}
+	
+	@Override
+	public List<String> getAllowedRaceNamesUpper() {
+		return getAllowedRaceNames().stream().map(String::toUpperCase).collect(Collectors.toList());
+	}
+	
 
 	@Override
 	public List<String> getAllowedRaceNames() {
@@ -619,14 +631,14 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			return true;
 		}
 		
-		if (getAllowedClassNames() != null && getAllowedClassNames().size() > 0)
-			if (!getAllowedClassNames().contains(SoliniaPlayerAdapter.Adapt(player).getClassObj().getName().toUpperCase())) {
+		if (getAllowedClassNamesUpper() != null && getAllowedClassNamesUpper().size() > 0)
+			if (!getAllowedClassNamesUpper().contains(SoliniaPlayerAdapter.Adapt(player).getClassObj().getName().toUpperCase())) {
 				player.sendMessage(ChatColor.GRAY + "Your class cannot consume this item");
 				return false;
 			}
 		
-		if (getAllowedRaceNames() != null && getAllowedRaceNames().size() > 0)
-			if (!getAllowedRaceNames().contains(SoliniaPlayerAdapter.Adapt(player).getRace().getName().toUpperCase())) {
+		if (getAllowedRaceNamesUpper() != null &&getAllowedRaceNamesUpper().size() > 0)
+			if (!getAllowedRaceNamesUpper().contains(SoliniaPlayerAdapter.Adapt(player).getRace().getName().toUpperCase())) {
 				player.sendMessage(ChatColor.GRAY + "Your race cannot consume this item");
 				return false;
 			}
@@ -721,14 +733,14 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
 		sender.sendMessage("- bookauthor: " + ChatColor.GOLD + getBookAuthor() + ChatColor.RESET);
 		String allowedClassNames = "";
-		for(String classname : this.getAllowedClassNames())
+		for(String classname : this.getAllowedClassNamesUpper())
 		{
 			allowedClassNames += classname + ",";
 		}
 		sender.sendMessage("- allowedclassnames: " + allowedClassNames.trim());
 
 		String allowedRaceNames = "";
-		for(String racename : this.getAllowedRaceNames())
+		for(String racename : this.getAllowedRaceNamesUpper())
 		{
 			allowedRaceNames += racename + ",";
 		}
@@ -1662,13 +1674,13 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 
 	@Override
 	public boolean isEquipable(ISoliniaRace race, ISoliniaClass classObj) {
-		if (getAllowedClassNames() != null && getAllowedClassNames().size() > 0)
-			if (!getAllowedClassNames().contains(classObj.getName().toUpperCase())) {
+		if (getAllowedClassNamesUpper() != null && getAllowedClassNamesUpper().size() > 0)
+			if (!getAllowedClassNamesUpper().contains(classObj.getName().toUpperCase())) {
 				return false;
 			}
 
-		if (getAllowedRaceNames() != null && getAllowedRaceNames().size() > 0)
-			if (!getAllowedRaceNames().contains(race.getName().toUpperCase())) {
+		if (getAllowedRaceNamesUpper() != null && getAllowedRaceNamesUpper().size() > 0)
+			if (!getAllowedRaceNamesUpper().contains(race.getName().toUpperCase())) {
 				return false;
 			}
 		

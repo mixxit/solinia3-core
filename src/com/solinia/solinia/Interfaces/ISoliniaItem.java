@@ -418,4 +418,8 @@ public interface ISoliniaItem extends IPersistable {
 	String getConsumableRequireNotQuestFlag();
 
 	void setConsumableRequireNotQuestFlag(String consumableRequireNotQuestFlag);
+
+	List<String> getAllowedClassNamesUpper();
+
+	List<String> getAllowedRaceNamesUpper();
 }

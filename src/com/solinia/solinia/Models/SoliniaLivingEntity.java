@@ -2306,22 +2306,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (item == null)
 				return true;
 			
-			if (!this.isNPC() && item.getAllowedClassNames().size() > 0) {
+			if (!this.isNPC() && item.getAllowedClassNamesUpper().size() > 0) {
 				if (getClassObj() == null) {
 					return false;
 				}
 
-				if (!item.getAllowedClassNames().contains(getClassObj().getName())) {
+				if (!item.getAllowedClassNamesUpper().contains(getClassObj().getName())) {
 					return false;
 				}
 			}
 			
-			if (!this.isNPC() && item.getAllowedRaceNames().size() > 0) {
+			if (!this.isNPC() && item.getAllowedRaceNamesUpper().size() > 0) {
 				if (getRace() == null) {
 					return false;
 				}
 
-				if (!item.getAllowedRaceNames().contains(getRace().getName())) {
+				if (!item.getAllowedRaceNamesUpper().contains(getRace().getName())) {
 					return false;
 				}
 			}
@@ -3249,25 +3249,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								ChatColor.GRAY + "This is a throwing weapon! (you must right click to throw it)");
 					}
 
-					if (soliniaitem.getAllowedClassNames().size() > 0) {
+					if (soliniaitem.getAllowedClassNamesUpper().size() > 0) {
 						if (getClassObj() == null) {
 							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your class cannot use this item");
 							return false;
 						}
 
-						if (!soliniaitem.getAllowedClassNames().contains(getClassObj().getName())) {
+						if (!soliniaitem.getAllowedClassNamesUpper().contains(getClassObj().getName())) {
 							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your class cannot use this item");
 							return false;
 						}
 					}
 					
-					if (soliniaitem.getAllowedRaceNames().size() > 0) {
+					if (soliniaitem.getAllowedRaceNamesUpper().size() > 0) {
 						if (getRace() == null) {
 							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your race cannot use this item");
 							return false;
 						}
 
-						if (!soliniaitem.getAllowedRaceNames().contains(getRace().getName())) {
+						if (!soliniaitem.getAllowedRaceNamesUpper().contains(getRace().getName())) {
 							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Your race cannot use this item");
 							return false;
 						}

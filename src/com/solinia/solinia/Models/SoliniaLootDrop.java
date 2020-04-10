@@ -242,7 +242,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 			if (entry.getItem() == null)
 				continue;
 			
-			if (!entry.getItem().getAllowedClassNames().contains(classObj.getName().toUpperCase()))
+			if (!entry.getItem().getAllowedClassNamesUpper().contains(classObj.getName().toUpperCase()))
 				continue;
 			
 			entries.add(entry);

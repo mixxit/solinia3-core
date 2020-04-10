@@ -374,7 +374,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 									.getItem(lootdropentry.getItemid());
 							if (ConfigurationManager.ArmourMaterials.contains(item.getBasename().toUpperCase())) {
-								if (item.getAllowedClassNames().size() == 0) {
+								if (item.getAllowedClassNamesUpper().size() == 0) {
 									if (item.getBasename().contains("CHESTPLATE"))
 										potentialChestArmour.add(item);
 									if (item.getBasename().contains("LEGGINGS"))
@@ -386,7 +386,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 								// TODO We should check race here also
 								if (npc.getClassObj() != null) {
-									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
+									if (item.getAllowedClassNamesUpper().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("CHESTPLATE"))
 											potentialChestArmour.add(item);
 										if (item.getBasename().contains("LEGGINGS"))
@@ -400,7 +400,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							}
 
 							if (ConfigurationManager.WeaponMaterials.contains(item.getBasename().toUpperCase())) {
-								if (item.getAllowedClassNames().size() == 0) {
+								if (item.getAllowedClassNamesUpper().size() == 0) {
 									if (item.getBasename().contains("SHIELD"))
 										potentialShields.add(item);
 									else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
@@ -412,7 +412,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 								// We should check race here too
 								if (npc.getClassObj() != null) {
-									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
+									if (item.getAllowedClassNamesUpper().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))
 											potentialShields.add(item);
 										else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
@@ -425,7 +425,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							}
 
 							if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase())) {
-								if (item.getAllowedClassNames().size() == 0) {
+								if (item.getAllowedClassNamesUpper().size() == 0) {
 									if (item.getBasename().contains("SHIELD"))
 										potentialShields.add(item);
 									else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
@@ -437,7 +437,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 								// We should check race here too
 								if (npc.getClassObj() != null) {
-									if (item.getAllowedClassNames().contains(npc.getClassObj().getName())) {
+									if (item.getAllowedClassNamesUpper().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))
 											potentialShields.add(item);
 										else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))

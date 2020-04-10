@@ -102,8 +102,8 @@ public class SoliniaItemFactory {
 		item.setWeaponDelay(originalItem.getWeaponDelay());
 		item.setAugmentation(originalItem.isAugmentation());
 		item.setAugmentationFitsSlotType(originalItem.getAugmentationFitsSlotType());
-		item.setAllowedClassNames(originalItem.getAllowedClassNames());
-		item.setAllowedRaceNames(originalItem.getAllowedRaceNames());
+		item.setAllowedClassNames(originalItem.getAllowedClassNamesUpper());
+		item.setAllowedRaceNames(originalItem.getAllowedRaceNamesUpper());
 		
 		if (itemStack.getData() != null)
 		{

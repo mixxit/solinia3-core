@@ -825,7 +825,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
-				if (soliniaitem.getAllowedClassNames().size() > 0)
+				if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 				{
 					if (solplayer.getClassObj() == null) {
 						Utils.CancelEvent(event);
@@ -834,7 +834,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						return;
 					}
 	
-					if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
+					if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase())) {
 						Utils.CancelEvent(event);
 						;
 						event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
@@ -842,7 +842,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					}
 				}
 				
-				if (soliniaitem.getAllowedRaceNames().size() > 0)
+				if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 				{
 					if (solplayer.getRace() == null) {
 						Utils.CancelEvent(event);
@@ -851,7 +851,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						return;
 					}
 	
-					if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName().toUpperCase())) {
+					if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName().toUpperCase())) {
 						Utils.CancelEvent(event);
 						;
 						event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
@@ -1100,7 +1100,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						return;
 					}
 					
-					if (soliniaitem.getAllowedClassNames().size() > 0)
+					if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 					{
 						if (solplayer.getClassObj() == null) {
 							Utils.CancelEvent(event);
@@ -1108,14 +1108,14 @@ public class Solinia3CorePlayerListener implements Listener {
 							return;
 						}
 	
-						if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
+						if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase())) {
 							Utils.CancelEvent(event);
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 							return;
 						}
 					}
 					
-					if (soliniaitem.getAllowedRaceNames().size() > 0)
+					if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 					{
 						if (solplayer.getRace() == null) {
 							Utils.CancelEvent(event);
@@ -1123,7 +1123,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							return;
 						}
 	
-						if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName().toUpperCase())) {
+						if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName().toUpperCase())) {
 							Utils.CancelEvent(event);
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 							return;
@@ -1151,7 +1151,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						return;
 					}
 
-					if (soliniaitem.getAllowedClassNames().size() > 0)
+					if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 					{
 						if (solplayer.getClassObj() == null) {
 							Utils.CancelEvent(event);
@@ -1160,7 +1160,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							return;
 						}
 	
-						if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
+						if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase())) {
 							Utils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
@@ -1168,7 +1168,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						}
 					}
 					
-					if (soliniaitem.getAllowedRaceNames().size() > 0)
+					if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 					{
 						if (solplayer.getRace() == null) {
 							Utils.CancelEvent(event);
@@ -1177,7 +1177,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							return;
 						}
 	
-						if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName().toUpperCase())) {
+						if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName().toUpperCase())) {
 							Utils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
@@ -1206,7 +1206,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						return;
 					}
 					
-					if (soliniaitem.getAllowedClassNames().size() > 0)
+					if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 					{
 						if (solplayer.getClassObj() == null) {
 							Utils.CancelEvent(event);
@@ -1215,7 +1215,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							return;
 						}
 	
-						if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName().toUpperCase())) {
+						if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase())) {
 							Utils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
@@ -1223,7 +1223,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						}
 					}
 					
-					if (soliniaitem.getAllowedRaceNames().size() > 0)
+					if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 					{
 						if (solplayer.getRace() == null) {
 							Utils.CancelEvent(event);
@@ -1232,7 +1232,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							return;
 						}
 	
-						if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName().toUpperCase())) {
+						if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName().toUpperCase())) {
 							Utils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");

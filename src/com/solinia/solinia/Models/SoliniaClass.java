@@ -548,10 +548,10 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 						)
 					continue;
 				
-				if (item.getAllowedClassNames().size() != 1)
+				if (item.getAllowedClassNamesUpper().size() != 1)
 					continue;
 				
-				if (!item.getAllowedClassNames().contains(this.getName().toUpperCase()))
+				if (!item.getAllowedClassNamesUpper().contains(this.getName().toUpperCase()))
 					continue;
 				
 				item.setLeatherRgbDecimal(this.getLeatherRgbDecimal());

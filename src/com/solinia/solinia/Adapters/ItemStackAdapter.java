@@ -265,9 +265,9 @@ public class ItemStackAdapter {
 		}
 
 		String classtxt = "";
-		if (soliniaItem.getAllowedClassNames().size() > 0) {
+		if (soliniaItem.getAllowedClassNamesUpper().size() > 0) {
 			classtxt = "Classes: ";
-			for (String classname : soliniaItem.getAllowedClassNames()) {
+			for (String classname : soliniaItem.getAllowedClassNamesUpper()) {
 				classtxt += ChatColor.YELLOW + classname + ChatColor.RESET + " ";
 			}
 		}
@@ -277,9 +277,9 @@ public class ItemStackAdapter {
 		}
 		
 		String racetxt = "";
-		if (soliniaItem.getAllowedRaceNames().size() > 0) {
+		if (soliniaItem.getAllowedRaceNamesUpper().size() > 0) {
 			racetxt = "Races: ";
-			for (String racename : soliniaItem.getAllowedRaceNames()) {
+			for (String racename : soliniaItem.getAllowedRaceNamesUpper()) {
 				racetxt += ChatColor.YELLOW + racename + ChatColor.RESET + " ";
 			}
 		}

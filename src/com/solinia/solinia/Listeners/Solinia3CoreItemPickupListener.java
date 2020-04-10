@@ -185,7 +185,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	        	ISoliniaItem item;
 				try {
 					item = SoliniaItemAdapter.Adapt(pickedUpItemStack);
-					if (item.getAllowedClassNames().size() > 0)
+					if (item.getAllowedClassNamesUpper().size() > 0)
 		        	{
 		        		ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(e.getPlayer());
 		        		if (solPlayer.getGroup() != null && solPlayer.getGroup().getMembers() != null)
@@ -200,7 +200,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 		        				if (groupSolPlayer != null)
 		        				{
 		        					if (groupSolPlayer.getClassObj() != null)
-		        					if (item.getAllowedClassNames().contains(groupSolPlayer.getClassObj().getName().toUpperCase()))
+		        					if (item.getAllowedClassNamesUpper().contains(groupSolPlayer.getClassObj().getName().toUpperCase()))
 		        					{
 		        						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.RED + "* " + solPlayer.getFullName() + " picked up an item of interest to your class: [" + ChatColor.AQUA + item.getDisplayname() + ChatColor.RESET + "]"));
 		        						

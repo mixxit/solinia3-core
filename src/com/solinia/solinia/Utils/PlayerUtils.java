@@ -245,7 +245,7 @@ public class PlayerUtils {
 			try {
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
-				if (soliniaitem.getAllowedClassNames().size() > 0)
+				if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 				{
 					if (solplayer.getClassObj() == null) {
 						Utils.CancelEvent(event);
@@ -255,7 +255,7 @@ public class PlayerUtils {
 						return;
 					}
 	
-					if (!soliniaitem.getAllowedClassNames().contains(solplayer.getClassObj().getName())) {
+					if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName())) {
 						Utils.CancelEvent(event);
 						event.getPlayer().updateInventory();
 						event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
@@ -263,7 +263,7 @@ public class PlayerUtils {
 					}
 				}
 				
-				if (soliniaitem.getAllowedRaceNames().size() > 0)
+				if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 				{
 					if (solplayer.getRace() == null) {
 						Utils.CancelEvent(event);
@@ -273,7 +273,7 @@ public class PlayerUtils {
 						return;
 					}
 	
-					if (!soliniaitem.getAllowedRaceNames().contains(solplayer.getRace().getName())) {
+					if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName())) {
 						Utils.CancelEvent(event);
 						event.getPlayer().updateInventory();
 						event.getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
