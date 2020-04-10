@@ -1,6 +1,7 @@
 package com.solinia.solinia.Models;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,12 +18,16 @@ import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.DropUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -36,6 +41,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int awardsQuest = 0;
 	private String requiresQuestFlag = null;
 	private String awardsQuestFlag = null;
+	private boolean awardsClassSpell = false;
 	private int awardClassLootdropId = 0;
 	private int requiresRaceId = 0;
 	private int requiresClassId = 0;
@@ -153,6 +159,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			
 		}
 		
+		sender.sendMessage("- awardsclassspell: " + ChatColor.GOLD + isAwardsClassSpell() + ChatColor.RESET);
 		sender.sendMessage("- awardsquest: " + ChatColor.GOLD + getAwardsQuest() + ChatColor.RESET);
 		sender.sendMessage("- requiresquestflag: " + ChatColor.GOLD + getRequiresQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- awardsquestflag: " + ChatColor.GOLD + getAwardsQuestFlag() + ChatColor.RESET);
@@ -208,6 +215,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			{
 				
 			}
+			break;
+		case "awardsclassspell":
+			setAwardsClassSpell(Boolean.parseBoolean(value));
 			break;
 		case "awardstitle":
 			setAwardsTitle(Boolean.parseBoolean(value));
@@ -607,6 +617,68 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 						
 					}
 				}
+				
+				// We can also awards spells
+				if (player != null && player.getClassObj() != null && this.isAwardsClassSpell() && player.getLevel() > 0)
+				{
+					ISoliniaLootTable table = StateManager.getInstance().getConfigurationManager().getLootTable(player.getClassObj().getDropSpellsLootTableId());
+					List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();
+					
+					for (ISoliniaLootTableEntry entry : StateManager.getInstance().getConfigurationManager()
+							.getLootTable(table.getId()).getEntries()) {
+						ISoliniaLootDrop droptable = StateManager.getInstance().getConfigurationManager()
+								.getLootDrop(entry.getLootdropid());
+						for (ISoliniaLootDropEntry dropentry : StateManager.getInstance().getConfigurationManager()
+								.getLootDrop(droptable.getId()).getEntries()) {
+							
+							// this is only used for spells
+							// validate item
+							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(dropentry.getItemid());
+							if (item == null)
+								continue;
+							
+							if (!item.isSpellscroll())
+								continue;
+
+							if (item.getAbilityid() < 1)
+								continue;
+							
+							ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getAbilityid());
+							if (spell == null)
+								continue;
+							
+							if (spell.getMinLevelClass(player.getClassObj().getName().toUpperCase()) > player.getLevel())
+								continue;
+							
+							entries.add(dropentry);
+						}
+					}
+					
+					if (entries.size() > 0)
+					{
+						List<ISoliniaLootDropEntry> pickedEntry = Utils.pickNRandom(entries, 1);
+						final int awardclassitemid = pickedEntry.get(0).getItemid();
+						final UUID awardclassplayeruuid = player.getBukkitPlayer().getUniqueId();
+						
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									public void run() {
+										try {
+											ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+													.getItem(awardclassitemid);
+											if (item == null)
+												return;
+
+											PlayerUtils.addToPlayersInventory(Bukkit.getPlayer(awardclassplayeruuid), item.asItemStack());
+											System.out.println("Awarded item: " + item.getDisplayname());
+										} catch (CoreStateInitException e) {
+											// skip
+										}
+									}
+								});
+						
+					}
+				}
 			}
 
 			if (getAwardsQuestFlag() != null && !getAwardsQuestFlag().equals("")) {
@@ -925,4 +997,11 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		this.awardClassLootdropId = awardClassLootdropId;
 	}
 
+	public boolean isAwardsClassSpell() {
+		return awardsClassSpell;
+	}
+
+	public void setAwardsClassSpell(boolean awardsClassSpell) {
+		this.awardsClassSpell = awardsClassSpell;
+	}
 }

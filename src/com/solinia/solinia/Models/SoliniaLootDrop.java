@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -119,6 +120,26 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 					getEntries().remove(i);
 			}
 			break;
+		case "setitemchance":
+			String dataChance[] = value.split(" ");
+			if (dataChance.length < 2)
+				throw new InvalidLootDropSettingException("Missing itemid and chance");
+			
+			int itemIdChance = Integer.parseInt(dataChance[0]);
+			if (itemIdChance < 1)
+				throw new InvalidLootDropSettingException("Invalid item id to set chance of");
+			int itemChance = Integer.parseInt(dataChance[1]);
+			if (itemChance < 1 || itemChance > 100)
+				throw new InvalidLootDropSettingException("Invalid chance");
+			
+			for(ISoliniaLootDropEntry entry : getEntries())
+			{
+				if (entry.getItemid() != itemIdChance)
+					continue;
+				
+				entry.setChance(itemChance);
+			}
+			break;
 		case "removeall":
 			getEntries().clear();
 			break;
@@ -226,7 +247,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 			
 			break;		default:
 			throw new InvalidLootDropSettingException(
-					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemchance,setallcount,setallitemminlevel,setallitemfireresist,setallitemcoldresist,setallitemmagicresist,setallitempoisonresist,setallitemdiseaseresist");
+					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemchance,setallcount,setallitemminlevel,setallitemfireresist,setallitemcoldresist,setallitemmagicresist,setallitempoisonresist,setallitemdiseaseresist,setitemchance");
 		}
 	}
 
