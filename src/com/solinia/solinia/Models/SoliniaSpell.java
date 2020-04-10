@@ -2691,6 +2691,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public void setAllowedClasses(List<SoliniaSpellClass> allowedClasses) {
 		this.allowedClasses = allowedClasses;
 		try {
+			setLastUpdatedTimeNow();
 			StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
 		} catch (CoreStateInitException e) {
 			// do nothing
@@ -2800,6 +2801,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			throws InvalidSpellSettingException, NumberFormatException, CoreStateInitException {
 
 		StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
+		setLastUpdatedTimeNow();
 
 		String name = getName();
 

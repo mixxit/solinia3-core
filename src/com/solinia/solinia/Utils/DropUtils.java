@@ -166,8 +166,9 @@ public class DropUtils {
 				}
 			}
 
-			
-			// always roll spell items
+			// we should try to roll spells one in every 8 mobs
+			randomInt = r.nextInt(100) + 1;
+			if (randomInt <= 13) 
 			if (alwaysrollspells.size() > 0) {
 				for (int i = 0; i < alwaysrollspells.size(); i++) {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
@@ -188,6 +189,8 @@ public class DropUtils {
 						if (!item.isSpellscroll())
 							continue;
 
+						System.out.println("Spell drop chance: " + randomInt + " vs " + alwaysrollspells.get(i).getChance());
+						
 						if (randomInt <= alwaysrollspells.get(i).getChance()) {
 							if (item.isArtifact() == true) {
 								PlayerUtils.BroadcastPlayers(

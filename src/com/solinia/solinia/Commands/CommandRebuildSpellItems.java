@@ -141,6 +141,7 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 					updated++;
 				}
 				
+				spell.setLastUpdatedTimeNow();
 				StateManager.getInstance().getConfigurationManager().setSpellsChanged(true);
 				StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
 			}
