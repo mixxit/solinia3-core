@@ -68,6 +68,22 @@ public class CommandEditLootDrop implements CommandExecutor {
 		String setting = args[1];
 		
 		String value = args[2];
+		if (args.length > 3)
+		{
+			value = "";
+			int current = 0;
+			for(String entry : args)
+			{
+				current++;
+				if (current <= 2)
+					continue;
+				
+				value = value + entry + " ";
+			}
+			
+			value = value.trim();
+		}
+		
 		
 		if (LootDropid < 1)
 		{
