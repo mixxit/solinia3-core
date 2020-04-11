@@ -2718,10 +2718,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				+ getResisttype() + "]" + ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name()
 				+ ")" + ChatColor.RESET);
-		sender.sendMessage("- icon: " + ChatColor.GOLD + getIcon() + ChatColor.RESET);
-		sender.sendMessage("- memicon: " + ChatColor.GOLD + getMemicon() + ChatColor.RESET);
-		sender.sendMessage("- new_icon: " + ChatColor.GOLD + getNewIcon() + ChatColor.RESET);
-		sender.sendMessage("- recourselink: " + ChatColor.GOLD + getRecourseLink() + ChatColor.RESET);
+		sender.sendMessage("- icon: " + ChatColor.GOLD + getIcon() + ChatColor.RESET + " " + " memicon: " + ChatColor.GOLD + getMemicon() + ChatColor.RESET);
+		sender.sendMessage("- new_icon: " + ChatColor.GOLD + getNewIcon() + ChatColor.RESET + " " + "- recourselink: " + ChatColor.GOLD + getRecourseLink() + ChatColor.RESET);
+		sender.sendMessage("- numbuseffect: " + ChatColor.GOLD + this.getNimbuseffect() + ChatColor.RESET);
 		sender.sendMessage(
 				"- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 		SpellEffectIndex sei = Utils.getSpellEffectIndex(getSpellAffectIndex());

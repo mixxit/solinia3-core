@@ -30,8 +30,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -5044,16 +5046,16 @@ public class Utils {
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
 			break;
 		case Direct_Damage:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.ORANGE);
 			break;
 		case Heal_Cure:
 			SpecialEffectUtils.playLoveEffect(entity, activeSpell);
 			break;
 		case AC_Buff:
-			SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+			SpecialEffectUtils.playCustomShieldEffect(entity, activeSpell, Particle.VILLAGER_HAPPY, Color.YELLOW);
 			break;
 		case AE_Damage:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.FUCHSIA);
 			break;
 		case Summon:
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
@@ -5086,34 +5088,37 @@ public class Utils {
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
 			break;
 		case Stun:
-			SpecialEffectUtils.playStunEffect(entity, activeSpell);
+			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.YELLOW);
 			break;
 		case Haste_Runspeed:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playCustomVortexEffect(entity, activeSpell, Particle.ENCHANTMENT_TABLE, Color.BLUE);
 			break;
 		case Combat_Slow:
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
 			break;
 		case Damage_Shield:
-			SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+			SpecialEffectUtils.playCustomVortexEffect(entity, activeSpell, Particle.ENCHANTMENT_TABLE, Color.ORANGE);
 			break;
 		case Cannibalize_Weapon_Proc:
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
 			break;
 		case Weaken:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playCustomConeEffect(entity, activeSpell, Particle.SPELL_MOB, Color.RED);
 			break;
 		case Banish:
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
 			break;
 		case Blind_Poison:
-			SpecialEffectUtils.playBleedEffect(entity, activeSpell);
+			if (activeSpell.getSpell() != null && activeSpell.getSpell().isEffectInSpell(SpellEffectType.Blind))
+				SpecialEffectUtils.playCustomShieldEffect(entity, activeSpell, Particle.FLASH, Color.AQUA);
+			else
+				SpecialEffectUtils.playCustomFlameEffect(entity, activeSpell, Particle.NAUTILUS,null);
 			break;
 		case Cold_DD:
-			SpecialEffectUtils.playColdEffect(entity, activeSpell);
+			SpecialEffectUtils.playCustomBallEffect(entity, activeSpell, Particle.BARRIER, Color.ORANGE);
 			break;
 		case Poison_Disease_DD:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playPoisonEffect(entity, activeSpell);
 			break;
 		case Fire_DD:
 			SpecialEffectUtils.playFlameEffect(entity, activeSpell);
@@ -5134,7 +5139,7 @@ public class Utils {
 			SpecialEffectUtils.playFlameEffect(entity, activeSpell);
 			break;
 		case Cold_AE:
-			SpecialEffectUtils.playColdEffect(entity, activeSpell);
+			SpecialEffectUtils.playCustomBallEffect(entity, activeSpell, Particle.BARRIER, Color.ORANGE);
 			break;
 		case Poison_Disease_AE:
 			SpecialEffectUtils.playPoisonEffect(entity, activeSpell);
@@ -5143,13 +5148,13 @@ public class Utils {
 			SpecialEffectUtils.playPortalEffect(entity, activeSpell);
 			break;
 		case Direct_Damage_Song:
-			SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+			SpecialEffectUtils.playCustomMusicEffect(entity, activeSpell, Color.RED);
 			break;
 		case Combat_Buff_Song:
-			SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+			SpecialEffectUtils.playCustomMusicEffect(entity, activeSpell, Color.LIME);
 			break;
 		case Calm_Song:
-			SpecialEffectUtils.playMusicEffect(entity, activeSpell);
+			SpecialEffectUtils.playCustomMusicEffect(entity, activeSpell, Color.BLUE);
 			break;
 		case Firework:
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
