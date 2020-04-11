@@ -5791,4 +5791,14 @@ public class SoliniaSpell implements ISoliniaSpell {
 			
 		}
 	}
+
+	@Override
+	public String getShortDescription() {
+		String description = "";
+		for(SpellEffect effect : this.getBaseSpellEffects())
+		{
+			description += effect.getSpellEffectType().name().toUpperCase() + " ";
+		}
+		return description.trim();
+	}
 }

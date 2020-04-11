@@ -1087,4 +1087,6 @@ public interface ISoliniaSpell extends IPersistable {
 	void setLastUpdatedTime(Timestamp lastUpdatedTime);
 
 	void setLastUpdatedTimeNow();
+
+	String getShortDescription();
 }

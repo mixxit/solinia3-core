@@ -106,6 +106,22 @@ public class SpellbookPage {
 	public int SpellSlot14Level;
 	public int SpellSlot15Level;
 	public int SpellSlot16Level;
+	public String SpellSlot1Description;
+	public String SpellSlot2Description;
+	public String SpellSlot3Description;
+	public String SpellSlot4Description;
+	public String SpellSlot5Description;
+	public String SpellSlot6Description;
+	public String SpellSlot7Description;
+	public String SpellSlot8Description;
+	public String SpellSlot9Description;
+	public String SpellSlot10Description;
+	public String SpellSlot11Description;
+	public String SpellSlot12Description;
+	public String SpellSlot13Description;
+	public String SpellSlot14Description;
+	public String SpellSlot15Description;
+	public String SpellSlot16Description;
 	
 	public SpellbookPage()
 	{
@@ -151,6 +167,62 @@ public class SpellbookPage {
 		setSlot(16,itemIdsOnPage.get(15),className);
 	}
 	
+	public String getSlotDescription(int slot) {
+		switch(slot)
+		{
+			case 1:
+				return SpellSlot1Description;
+
+			case 2:
+				return SpellSlot2Description;
+
+			case 3:
+				return SpellSlot3Description;
+
+			case 4:
+				return SpellSlot4Description;
+
+			case 5:
+				return SpellSlot5Description;
+
+			case 6:
+				return SpellSlot6Description;
+
+			case 7:
+				return SpellSlot7Description;
+
+			case 8:
+				return SpellSlot8Description;
+
+			case 9:
+				return SpellSlot9Description;
+
+			case 10:
+				return SpellSlot10Description;
+
+			case 11:
+				return SpellSlot11Description;
+
+			case 12:
+				return SpellSlot12Description;
+
+			case 13:
+				return SpellSlot13Description;
+
+			case 14:
+				return SpellSlot14Description;
+
+			case 15:
+				return SpellSlot15Description;
+
+			case 16:
+				return SpellSlot16Description;
+
+			default:
+				return null;
+		}
+	}
+	
 	private void setSlot(int slot, int itemId, String className) {
 		if (itemId < 1)
 			return;
@@ -169,7 +241,7 @@ public class SpellbookPage {
 				return;
 			
 			// escape symbols we use for data transfer
-			setSpellSlot(slot, spell.getId(), spell.getIcon(), spell.getNewIcon(), spell.getMemicon(), spell.getName().replaceAll("\\|", "").replaceAll("\\^", ""), spell.getMinLevelClass(className));
+			setSpellSlot(slot, spell.getId(), spell.getIcon(), spell.getNewIcon(), spell.getMemicon(), spell.getName().replaceAll("\\|", "").replaceAll("\\^", ""), spell.getMinLevelClass(className), spell.getShortDescription());
 		} catch (CoreStateInitException e)
 		{
 			
@@ -550,7 +622,7 @@ public class SpellbookPage {
 		}
 	}
 
-	public void setSpellSlot(int spellSlot, int id, int icon, int newIcon, int memIcon, String name, int level) {
+	public void setSpellSlot(int spellSlot, int id, int icon, int newIcon, int memIcon, String name, int level, String description) {
 		switch(spellSlot)
 		{
 			case 1:
@@ -560,6 +632,7 @@ public class SpellbookPage {
 				SpellSlot1MemIcon = memIcon;
 				SpellSlot1NewIcon = newIcon;
 				SpellSlot1Level = level;
+				SpellSlot1Description = description;
 			break;
 			case 2:
 				SpellSlot2Id = id;
@@ -568,6 +641,7 @@ public class SpellbookPage {
 				SpellSlot2MemIcon = memIcon;
 				SpellSlot2NewIcon = newIcon;
 				SpellSlot2Level = level;
+				SpellSlot2Description = description;
 			break;
 			case 3:
 				SpellSlot3Id = id;
@@ -576,6 +650,7 @@ public class SpellbookPage {
 				SpellSlot3MemIcon = memIcon;
 				SpellSlot3NewIcon = newIcon;
 				SpellSlot3Level = level;
+				SpellSlot3Description = description;
 			break;
 			case 4:
 				SpellSlot4Id = id;
@@ -584,6 +659,7 @@ public class SpellbookPage {
 				SpellSlot4MemIcon = memIcon;
 				SpellSlot4NewIcon = newIcon;
 				SpellSlot4Level = level;
+				SpellSlot4Description = description;
 			break;
 			case 5:
 				SpellSlot5Id = id;
@@ -592,6 +668,7 @@ public class SpellbookPage {
 				SpellSlot5MemIcon = memIcon;
 				SpellSlot5NewIcon = newIcon;
 				SpellSlot5Level = level;
+				SpellSlot5Description = description;
 			break;
 			case 6:
 				SpellSlot6Id = id;
@@ -600,6 +677,7 @@ public class SpellbookPage {
 				SpellSlot6MemIcon = memIcon;
 				SpellSlot6NewIcon = newIcon;
 				SpellSlot6Level = level;
+				SpellSlot6Description = description;
 			break;
 			case 7:
 				SpellSlot7Id = id;
@@ -607,7 +685,8 @@ public class SpellbookPage {
 				SpellSlot7Icon = icon;
 				SpellSlot7MemIcon = memIcon;
 				SpellSlot7NewIcon = newIcon;
-				SpellSlot8Level = level;
+				SpellSlot7Level = level;
+				SpellSlot7Description = description;
 			break;
 			case 8:
 				SpellSlot8Id = id;
@@ -616,6 +695,7 @@ public class SpellbookPage {
 				SpellSlot8MemIcon = memIcon;
 				SpellSlot8NewIcon = newIcon;
 				SpellSlot8Level = level;
+				SpellSlot8Description = description;
 			break;
 			case 9:
 				SpellSlot9Id = id;
@@ -624,6 +704,7 @@ public class SpellbookPage {
 				SpellSlot9MemIcon = memIcon;
 				SpellSlot9NewIcon = newIcon;
 				SpellSlot9Level = level;
+				SpellSlot9Description = description;
 				break;
 			case 10:
 				SpellSlot10Id = id;
@@ -632,6 +713,7 @@ public class SpellbookPage {
 				SpellSlot10MemIcon = memIcon;
 				SpellSlot10NewIcon = newIcon;
 				SpellSlot10Level = level;
+				SpellSlot10Description = description;
 				break;
 			case 11:
 				SpellSlot11Id = id;
@@ -640,6 +722,7 @@ public class SpellbookPage {
 				SpellSlot11MemIcon = memIcon;
 				SpellSlot11NewIcon = newIcon;
 				SpellSlot11Level = level;
+				SpellSlot11Description = description;
 				break;
 			case 12:
 				SpellSlot12Id = id;
@@ -648,6 +731,7 @@ public class SpellbookPage {
 				SpellSlot12MemIcon = memIcon;
 				SpellSlot12NewIcon = newIcon;
 				SpellSlot12Level = level;
+				SpellSlot12Description = description;
 				break;
 			case 13:
 				SpellSlot13Id = id;
@@ -656,6 +740,7 @@ public class SpellbookPage {
 				SpellSlot13MemIcon = memIcon;
 				SpellSlot13NewIcon = newIcon;
 				SpellSlot13Level = level;
+				SpellSlot13Description = description;
 				break;
 			case 14:
 				SpellSlot14Id = id;
@@ -664,6 +749,7 @@ public class SpellbookPage {
 				SpellSlot14MemIcon = memIcon;
 				SpellSlot14NewIcon = newIcon;
 				SpellSlot14Level = level;
+				SpellSlot14Description = description;
 				break;
 			case 15:
 				SpellSlot15Id = id;
@@ -672,6 +758,7 @@ public class SpellbookPage {
 				SpellSlot15MemIcon = memIcon;
 				SpellSlot15NewIcon = newIcon;
 				SpellSlot15Level = level;
+				SpellSlot15Description = description;
 				break;
 			case 16:
 				SpellSlot16Id = id;
@@ -680,6 +767,7 @@ public class SpellbookPage {
 				SpellSlot16MemIcon = memIcon;
 				SpellSlot16NewIcon = newIcon;
 				SpellSlot16Level = level;
+				SpellSlot16Description = description;
 				break;
 			default:
 				return;
