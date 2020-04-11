@@ -29,7 +29,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -4753,7 +4752,7 @@ public class Utils {
 	}
 
 	public static String uuidFromBase64(String str) {
-		byte[] bytes = Base64.decodeBase64(str);
+		byte[] bytes = TextUtils.FromBase64UTF8(str).getBytes();
 		ByteBuffer bb = ByteBuffer.wrap(bytes);
 		UUID uuid = new UUID(bb.getLong(), bb.getLong());
 		return uuid.toString();

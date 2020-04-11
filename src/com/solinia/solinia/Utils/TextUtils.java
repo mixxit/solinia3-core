@@ -1,7 +1,9 @@
 package com.solinia.solinia.Utils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 import org.apache.commons.lang.WordUtils;
@@ -25,6 +27,27 @@ public class TextUtils {
 
 	public static String CapitaliseFirstLetter(String word) {
 		return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
+	}
+	
+	public static String ToBase64UTF8(String text)
+	{
+		try {
+			return Base64.getEncoder().encodeToString(text.getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Base64.getEncoder().encodeToString(text.getBytes());
+		}
+	}
+	
+	public static String FromBase64UTF8(String base64)
+	{
+		try {
+			return new String(Base64.getDecoder().decode(base64),"utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return new String(Base64.getDecoder().decode(base64));
+		}
 	}
 
 

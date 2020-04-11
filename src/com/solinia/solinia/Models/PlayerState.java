@@ -2,11 +2,11 @@ package com.solinia.solinia.Models;
 
 import java.util.UUID;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.TextUtils;
 
 public class PlayerState {
 	private UUID id;
@@ -36,7 +36,7 @@ public class PlayerState {
 	public void storeEnderChestContents() {
 		Player player = Bukkit.getPlayer(id);
 		
-		this.setBase64EnderChestContents(new String(Base64.encodeBase64(ItemStackUtils
-				.itemStackArrayToYamlString(player.getEnderChest().getContents()).getBytes())));
+		this.setBase64EnderChestContents(TextUtils.ToBase64UTF8(ItemStackUtils
+				.itemStackArrayToYamlString(player.getEnderChest().getContents())));
 	}
 }

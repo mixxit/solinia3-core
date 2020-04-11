@@ -14,7 +14,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -54,6 +53,7 @@ import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Utils.TextUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -3892,7 +3892,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return new ItemStack[0];
 
 		try {
-			String yaml = new String(Base64.decodeBase64(getBase64ArmorContents().getBytes()));
+			String yaml = TextUtils.FromBase64UTF8(getBase64ArmorContents());
 			return ItemStackUtils.itemStackArrayFromYamlString(yaml);
 		} catch (Exception e) {
 			System.out.println("Exception converting base64 to itemstack array [armorcontents] for player "
@@ -3908,7 +3908,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return new ItemStack[0];
 
 		try {
-			String yaml = new String(Base64.decodeBase64(getBase64BankContents().getBytes()));
+			String yaml = TextUtils.FromBase64UTF8(getBase64BankContents());
 			return ItemStackUtils.itemStackArrayFromYamlString(yaml);
 		} catch (Exception e) {
 			System.out.println("Exception converting base64 to itemstack array [bankcontents] for player "
@@ -3924,7 +3924,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return new ItemStack[0];
 
 		try {
-			String yaml = new String(Base64.decodeBase64(getBase64InventoryContents().getBytes()));
+			String yaml = TextUtils.FromBase64UTF8(getBase64InventoryContents());
 			return ItemStackUtils.itemStackArrayFromYamlString(yaml);
 		} catch (Exception e) {
 			System.out.println("Exception converting base64 to itemstack array [inventorycontents] for player "
@@ -3936,20 +3936,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void storeInventoryContents() {
-		this.setBase64InventoryContents(new String(Base64.encodeBase64(ItemStackUtils
-				.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getContents()).getBytes())));
+		this.setBase64InventoryContents(TextUtils.ToBase64UTF8(ItemStackUtils
+				.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getContents())));
 	}
 
 	@Override
 	public void storeArmorContents() {
-		this.setBase64ArmorContents(new String(Base64.encodeBase64(ItemStackUtils
-				.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getArmorContents()).getBytes())));
+		this.setBase64ArmorContents(TextUtils.ToBase64UTF8(ItemStackUtils
+				.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getArmorContents())));
 	}
 	
 	@Override
 	public void storeBankContents(Inventory inventory) {
-		this.setBase64BankContents(new String(Base64.encodeBase64(ItemStackUtils
-				.itemStackArrayToYamlString(inventory.getContents()).getBytes())));
+		this.setBase64BankContents(TextUtils.ToBase64UTF8(ItemStackUtils
+				.itemStackArrayToYamlString(inventory.getContents())));
 	}
 
 	@Override
@@ -4558,57 +4558,57 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (getArmsItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getArmsItem());
 				if (item != null)
-					equipSlots.ArmsItemBase64 = Base64.encodeBase64String(
-							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+					equipSlots.ArmsItemBase64 = TextUtils.ToBase64UTF8(
+							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()));
 			}
 
 			if (getEarsItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getEarsItem());
 				if (item != null)
-					equipSlots.EarsItemBase64 = Base64.encodeBase64String(
-							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+					equipSlots.EarsItemBase64 = TextUtils.ToBase64UTF8(
+							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()));
 			}
 
 			if (getFingersItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getFingersItem());
 				if (item != null)
-					equipSlots.FingersItemBase64 = Base64.encodeBase64String(
-							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+					equipSlots.FingersItemBase64 = TextUtils.ToBase64UTF8(
+							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()));
 			}
 
 			if (getForearmsItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getForearmsItem());
 				if (item != null)
-					equipSlots.ForearmsItemBase64 = Base64.encodeBase64String(
-							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+					equipSlots.ForearmsItemBase64 = TextUtils.ToBase64UTF8(
+							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()));
 			}
 
 			if (getHandsItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getHandsItem());
 				if (item != null)
-					equipSlots.HandsItemBase64 = Base64.encodeBase64String(
-							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+					equipSlots.HandsItemBase64 = TextUtils.ToBase64UTF8(
+							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()));
 			}
 
 			if (getNeckItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getNeckItem());
 				if (item != null)
-					equipSlots.NeckItemBase64 = Base64.encodeBase64String(
-							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+					equipSlots.NeckItemBase64 = TextUtils.ToBase64UTF8(
+							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()));
 			}
 
 			if (getShouldersItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getShouldersItem());
 				if (item != null)
-					equipSlots.ShouldersItemBase64 = Base64.encodeBase64String(
-							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+					equipSlots.ShouldersItemBase64 = TextUtils.ToBase64UTF8(
+							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()));
 			}
 
 			if (getWaistItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(getWaistItem());
 				if (item != null)
-					equipSlots.WaistItemBase64 = Base64.encodeBase64String(
-							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()).getBytes());
+					equipSlots.WaistItemBase64 = TextUtils.ToBase64UTF8(
+							ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack()));
 			}
 		} catch (CoreStateInitException e) {
 
