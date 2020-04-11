@@ -9628,7 +9628,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
-		vitals.fromData(partyMember, ((float)getHPRatio())/100F, manaPercent, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""));
+		vitals.fromData(partyMember, ((float)getHPRatio())/100F, manaPercent, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""),this.getLevel());
 		return vitals;
 	}
 
