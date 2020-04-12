@@ -408,7 +408,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			alignmentsrepo.reload();
 
 			JsonCharacterListRepository characterlistrepo = new JsonCharacterListRepository();
-			characterlistrepo.setJsonFile(getDataFolder() + "/" + "characterlists.json");
+			characterlistrepo.setJsonFile(getDataFolder() + "/" + "characters");
 			characterlistrepo.reload();
 
 			JsonNPCSpellListRepository npcspelllistrepo = new JsonNPCSpellListRepository();
