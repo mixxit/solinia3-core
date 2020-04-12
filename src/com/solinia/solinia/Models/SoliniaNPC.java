@@ -442,7 +442,8 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				+ ChatColor.GOLD + isUsedisguise() + ChatColor.RESET + " " + "disguisetype: " + ChatColor.GOLD
 				+ getDisguisetype() + ChatColor.RESET);
 		TextComponent tc = new TextComponent("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET + " - customheaddata: " + ChatColor.GOLD + "<hover to see>" + ChatColor.RESET);
-		tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.getCustomheaddata()).create()));
+		if (this.customheaddata != null && this.customheaddata.length() > 0)
+			tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.getCustomheaddata()).create()));
 		sender.spigot().sendMessage(tc);
 		sender.sendMessage("- upsidedown: " + ChatColor.GOLD + isUpsidedown() + ChatColor.RESET + " " + "burning: "
 				+ ChatColor.GOLD + isBurning() + ChatColor.RESET + " " + "invisible: " + ChatColor.GOLD + isInvisible()
