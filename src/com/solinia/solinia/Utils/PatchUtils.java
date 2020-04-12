@@ -48,9 +48,9 @@ public class PatchUtils {
 	public static void Patcher() {
 		try
 		{
-			for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
+			for(ISoliniaPlayer ent : StateManager.getInstance().getConfigurationManager().getCharacters())
 			{
-				spell.setLastUpdatedTimeNow();
+				ent.setLastUpdatedTimeNow();
 			}
 		} catch (CoreStateInitException e)
 		{

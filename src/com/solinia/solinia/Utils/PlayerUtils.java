@@ -68,9 +68,16 @@ public class PlayerUtils {
 		return (int) java.lang.Math.floor(level);
 	}
 	public static String getUUIDFromPlayerName(String playerName) throws IOException {
-		URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
-		InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
-		String uuid = new JsonParser().parse(reader_0).getAsJsonObject().get("id").getAsString();
+		String uuid = null;
+		try
+		{
+			URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
+			InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
+			uuid = new JsonParser().parse(reader_0).getAsJsonObject().get("id").getAsString();
+		} catch (Exception e)
+		{
+			System.out.println("Could not find UUID for player name: " + playerName);
+		}
 		return uuid;
 	}
 

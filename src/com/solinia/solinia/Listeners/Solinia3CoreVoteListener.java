@@ -40,6 +40,11 @@ public class Solinia3CoreVoteListener implements Listener {
 		else
 			try {
 				uuid = PlayerUtils.getUUIDFromPlayerName(vote.getUsername());
+				if (uuid == null)
+				{
+					System.out.println("Could not grant inspiration for unknown uuid of playername: " + vote.getUsername());
+					return;
+				}
 				uuid = java.util.UUID.fromString(
 						uuid
 					    .replaceFirst( 

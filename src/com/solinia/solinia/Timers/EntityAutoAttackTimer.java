@@ -36,11 +36,14 @@ List<String> completedEntities = new ArrayList<String>();
 		
 		// Check each player and check entities near player
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-			// Player first
-			processLivingEntityAutoAttack(player);
-			
 			try
 			{
+				// Player first
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
+				if (solLivingEntity != null)
+					solLivingEntity.processAutoAttack(false);
+
+				
 				// Then nearby npcs
 				for(Entity entityThatWillAutoAttack : player.getNearbyEntities(25, 25, 25))
 				{
@@ -69,7 +72,11 @@ List<String> completedEntities = new ArrayList<String>();
 						continue;
 					
 					completedEntities.add(livingEntityThatWillAutoAttack.getUniqueId().toString());
-					processLivingEntityAutoAttack(creatureThatWillAttack);
+					ISoliniaLivingEntity solLe = SoliniaLivingEntityAdapter.Adapt(creatureThatWillAttack);
+					if (solLe == null)
+						continue;
+					
+					solLe.processAutoAttack(false);
 				}
 			
 			} catch (Exception e)
@@ -77,88 +84,5 @@ List<String> completedEntities = new ArrayList<String>();
 				e.printStackTrace();
 			}
 		}		
-	}
-
-	private void processLivingEntityAutoAttack(LivingEntity entityForAutoAttack) {
-		try
-		{
-			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(entityForAutoAttack);
-
-			if (!autoAttack.isAutoAttacking())
-				return;
-				
-			if (entityForAutoAttack.isDead())
-			{
-				StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-				return;
-			}
-			
-			if (autoAttack.getTimer() > 0)
-			{
-				autoAttack.setTimer(autoAttack.getTimer() - 1);
-				return;
-			}
-			
-			ISoliniaLivingEntity solLivingEntityForAttack = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entityForAutoAttack);
-			
-			if (solLivingEntityForAttack == null)
-				return;
-			
-			LivingEntity target = solLivingEntityForAttack.getEntityTarget();
-			if (target != null)
-			{
-				if (target instanceof Player)
-				{
-					if (((Player)target).getGameMode() != GameMode.SURVIVAL)
-					{
-						if (entityForAutoAttack instanceof Player)
-							entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
-						
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-					}
-				}
-				
-				if (target.isDead())
-				{
-					if (entityForAutoAttack instanceof Player)
-					entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Your target is dead!");
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-					return;
-				}
-				
-				ISoliniaLivingEntity solLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(target);
-				ISoliniaLivingEntity solLivingEntityAttacker = SoliniaLivingEntityAdapter.Adapt(entityForAutoAttack);
-				
-				// Patch to fix mobs keeping aggro despite not being in hate list
-				// Mythicmobs bug? 
-				// TODO
-				
-				// nm
-
-				if (solLivingEntityTarget != null && solLivingEntityAttacker != null)
-				{
-					// reset timer
-					autoAttack.setTimerFromSoliniaLivingEntity(solLivingEntityAttacker);
-					solLivingEntityAttacker.autoAttackEnemy(solLivingEntityTarget);
-				} else {
-					if (entityForAutoAttack instanceof Player)
-					entityForAutoAttack.sendMessage(ChatColor.GRAY + "* Could not find target to attack!");
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-					return;
-				}
-			} else {
-				if (entityForAutoAttack instanceof Player)
-				entityForAutoAttack.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
-				StateManager.getInstance().getEntityManager().setEntityAutoAttack(entityForAutoAttack, false);
-				return;
-			}
-		} catch (CoreStateInitException e)
-		{
-			e.printStackTrace();
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
 	}
 }

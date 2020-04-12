@@ -395,9 +395,32 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		if (event instanceof EntityDamageByEntityEvent) {
 			Utils.CancelEvent(event);
-			return;
 		}
+		
+		if (!(entityDamageByEntityEvent.getDamager() instanceof Player))
+			return;
 
+		if (!(event.getEntity() instanceof LivingEntity))
+			return;
+
+		// HOWEVER, PLAYER STILL LIKE MANUALLY ATTACKING SO WE WILL TRIGGER
+		// AUTO ATTACK
+
+		// If they have no target, target the entity
+		try {
+			ISoliniaLivingEntity defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+			if (defender.getBukkitLivingEntity() == null || defender.getBukkitLivingEntity().isDead())
+				return;
+			
+			ISoliniaLivingEntity damager = SoliniaLivingEntityAdapter.Adapt((Player)(entityDamageByEntityEvent.getDamager()));
+			if (damager == null || damager.getBukkitLivingEntity().isDead())
+				return;
+			
+			damager.setEntityTarget(defender.getBukkitLivingEntity());
+			damager.processAutoAttack(true);
+			
+		} catch (CoreStateInitException e) {
+		}
 		
 	}
 

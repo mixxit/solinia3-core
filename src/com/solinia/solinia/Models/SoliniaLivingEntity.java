@@ -93,6 +93,84 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (!metaid.equals(""))
 				installNpcByMetaName(metaid);
 	}
+	
+	@Override
+	public void processAutoAttack(boolean wasTriggeredManually) {
+		try
+		{
+			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
+
+			if (!wasTriggeredManually && !autoAttack.isAutoAttacking())
+				return;
+				
+			if (!wasTriggeredManually && this.getBukkitLivingEntity() == null || this.getBukkitLivingEntity().isDead())
+			{
+				StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+				return;
+			}
+			
+			// For normal auto attack
+			if (!autoAttack.canAutoAttack())
+			{
+				return;
+			}
+			
+			LivingEntity target = getEntityTarget();
+			if (target != null)
+			{
+				if (target instanceof Player)
+				{
+					if (((Player)target).getGameMode() != GameMode.SURVIVAL)
+					{
+						if (this.getBukkitLivingEntity() instanceof Player)
+							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
+						
+						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+					}
+				}
+				
+				if (target.isDead())
+				{
+					if (this.getBukkitLivingEntity() instanceof Player)
+					this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is dead!");
+					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+					return;
+				}
+				
+				ISoliniaLivingEntity solLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(target);
+				
+				// Patch to fix mobs keeping aggro despite not being in hate list
+				// Mythicmobs bug? 
+				// TODO
+				
+				// nm
+
+				if (solLivingEntityTarget != null)
+				{
+					// reset timer
+					autoAttack.setLastUpdatedTimeNow(solLivingEntityTarget);
+					this.autoAttackEnemy(solLivingEntityTarget);
+				} else {
+					if (this.getBukkitLivingEntity() instanceof Player)
+					this.sendMessage(ChatColor.GRAY + "* Could not find target to attack!");
+					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+					return;
+				}
+			} else {
+				if (this.getBukkitLivingEntity() instanceof Player)
+				this.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
+				StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
 
 	@Override
 	public boolean passCharismaCheck(LivingEntity caster, ISoliniaSpell spell) throws CoreStateInitException {

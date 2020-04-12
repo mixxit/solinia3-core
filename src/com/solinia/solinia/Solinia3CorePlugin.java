@@ -522,6 +522,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		castingTimer.runTaskTimer(this, 0L, 1 * 2L);
 
 		entityAutoAttackTimer = new EntityAutoAttackTimer();
+		// if 20L is a second, then 1L is 50ms
 		entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
 
 		entityPassiveEffectTimer = new SoliniaLivingEntityPassiveEffectTimer();

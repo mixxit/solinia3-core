@@ -385,6 +385,8 @@ public class Utils {
 		String texture = "";
 		try {
 			String uuid = PlayerUtils.getUUIDFromPlayerName(name);
+			if (uuid == null)
+				return null;
 
 			URL url_1 = new URL(
 					"https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");

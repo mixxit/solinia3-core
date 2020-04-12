@@ -68,7 +68,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int id = 0;
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
-
+	private Timestamp lastUpdatedTime;
 	private int motherCharacterId = 0;
 	private int characterFellowshipId = 0;
 	private int spouseCharacterId = 0;
@@ -180,6 +180,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.lastX = location.getBlockX();
 		this.lastY = location.getBlockY();
 		this.lastZ = location.getBlockZ();
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -190,6 +191,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setIgnoredPlayers(List<UUID> ignoredPlayers) {
 		this.ignoredPlayers = ignoredPlayers;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -210,6 +212,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		getAvailableTitles().add(title);
 		getBukkitPlayer().sendMessage(
 				ChatColor.YELLOW + "* You have earned the title: " + title + ChatColor.RESET + " See /settitle");
+		this.setLastUpdatedTimeNow();
 		return true;
 	}
 
@@ -226,6 +229,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setForename(String forename) {
 		this.forename = forename;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -236,6 +240,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -250,6 +255,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			} else {
 				PartyWindowUtils.UpdateGroupWindow(getBukkitPlayer().getUniqueId(), this.getGroup(), false, false);
 			}
+			this.setLastUpdatedTimeNow();
 		}
 	}
 
@@ -291,6 +297,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		this.mana = mana;
 		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer(), true, false);
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -301,6 +308,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setAAExperience(Double aaexperience) {
 		this.aaexperience = aaexperience;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -311,6 +319,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setExperience(Double experience) {
 		this.experience = experience;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -332,6 +341,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setChosenRace(boolean chosen) {
 		this.haschosenrace = chosen;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -340,6 +350,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.raceid = raceid;
 		this.languageSkillType = getRace().getLanguage();
 		updateMaxHp();
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -368,6 +379,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setClassId(int classid) {
 		this.classid = classid;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -378,6 +390,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setChosenClass(boolean haschosenclass) {
 		this.haschosenclass = haschosenclass;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -416,6 +429,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (!isAAOn()) {
 			increasePlayerNormalExperience(experience, applyModifiers, ignoreIfExperienceOff);
+			
 		} else {
 			int normalpct = 100 - getAapct();
 			if (normalpct > 0) {
@@ -426,6 +440,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			Double aaexperience = (experience / 100) * getAapct();
 			increasePlayerAAExperience(aaexperience, applyModifiers);
 		}
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -515,6 +530,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		setExperience(currentexperience, experience, modified);
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -615,6 +631,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		setExperience(newexperience, experiencechange, false);
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -739,6 +756,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You lost a level (" + newlevel + ")!");
 			updateMaxHp();
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -782,6 +801,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		currentaaexperience = currentaaexperience + experience;
 
 		setAAExperience(currentaaexperience, modified, experience);
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	private void setAAExperience(Double aaexperience, Boolean modified, Double amountincreased) {
@@ -820,6 +841,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (givenaapoint) {
 			getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You gained an Alternate Experience Point!");
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -829,6 +852,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	@Override
@@ -839,6 +863,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setAAPoints(int aapoints) {
 		this.aapoints = aapoints;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -849,6 +875,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setGender(String gender) {
 		this.gender = gender;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -1012,6 +1040,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (randomInt < chance) {
 			setSkill(skillType, currentskill + skillupamount);
 		}
+		this.setLastUpdatedTimeNow();
 
 		if (getSpecialisation() != null && !getSpecialisation().equals("")) {
 			if (!skillType.name().toUpperCase().equals(getSpecialisation().toUpperCase()))
@@ -1039,6 +1068,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 				setSkill(Utils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()), currentskill + skillupamount);
 			}
+			this.setLastUpdatedTimeNow();
+
 		}
 
 	}
@@ -1075,6 +1106,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (value > 0)
 		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toLowerCase() + " (" + value + ")");
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -1087,6 +1120,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			currentmana = currentmana - mana;
 		}
 		setMana(currentmana);
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -1108,6 +1143,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		setMana(currentmana);
+		this.setLastUpdatedTimeNow();
+
 	}
 	
 	@Override
@@ -1427,6 +1464,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 
 		}
+		this.setLastUpdatedTimeNow();
 
 		return;
 	}
@@ -2203,6 +2241,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		tryIncreaseSkill(languageSkillType, 1);
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2329,6 +2369,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setAapct(int aapct) {
 		this.aapct = aapct;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2409,6 +2451,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void clearAAs() {
 		this.aas.clear();
 		this.ranks.clear();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2528,6 +2572,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			aas.add(rank.getAbilityid());
 		getBukkitPlayer()
 				.sendMessage("You have gained the AA " + ability.getName() + " (rank " + rank.getPosition() + ")");
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2658,6 +2704,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setFactionEntries(List<PlayerFactionEntry> factionEntries) {
 		this.factionEntries = factionEntries;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2677,6 +2725,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		entry.setFactionId(factionId);
 		entry.setValue(0);
 		getFactionEntries().add(entry);
+		this.setLastUpdatedTimeNow();
+
 		return getFactionEntry(factionId);
 	}
 
@@ -2719,6 +2769,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		playerFactionEntry.setValue(newValue);
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2760,6 +2812,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		playerFactionEntry.setValue(newValue);
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2769,6 +2823,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} else {
 			ignoredPlayers.add(player.getUniqueId());
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2779,6 +2835,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setAvailableTitles(List<String> availableTitles) {
 		this.availableTitles = availableTitles;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2789,6 +2847,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setTitle(String title) {
 		this.title = title;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2831,6 +2891,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setPlayerQuests(List<PlayerQuest> playerQuests) {
 		this.playerQuests = playerQuests;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2842,6 +2904,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.getPlayerQuests().add(quest);
 		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + " * You have received a new Quest ["
 				+ quest.getQuest().getName() + "]! See /quests for more info");
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2853,6 +2917,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setPlayerQuestFlags(List<String> playerQuestFlags) {
 		this.playerQuestFlags = playerQuestFlags;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2860,6 +2926,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		playerQuestFlags.add(questFlag);
 		this.getBukkitPlayer()
 				.sendMessage(ChatColor.YELLOW + " * You have received a new Quest Flag! See /quests for more info");
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2877,6 +2945,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSkills(List<SoliniaPlayerSkill> skills) {
 		this.skills = skills;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2887,6 +2957,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSpecialisation(String specialisation) {
 		this.specialisation = specialisation;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2904,6 +2976,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setVampire(boolean vampire) {
 		this.vampire = vampire;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2914,6 +2988,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setInspiration(int inspiration) {
 		this.inspiration = inspiration;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2924,6 +3000,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setExperienceBonusExpires(Timestamp experienceBonusExpires) {
 		this.experienceBonusExpires = experienceBonusExpires;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2944,6 +3022,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				"Granted Experience Bonus From Item [Current expiry was not null]: " + expiretimestamp.toString());
 		setExperienceBonusExpires(expiretimestamp);
 		this.getBukkitPlayer().sendMessage(ChatColor.YELLOW + "You have gained 100% experience for 1 additional hour");
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2964,11 +3044,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setModMessageEnabled(boolean oocEnabled) {
 		this.modMessageEnabled = oocEnabled;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
 	public void setBindPoint(String teleportlocation) {
 		this.bindPoint = teleportlocation;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -2984,6 +3068,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3000,6 +3086,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3011,6 +3099,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setFingersItem(int fingersItem) {
 		this.fingersItem = fingersItem;
 		sendSlotsAsPacket();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3022,6 +3112,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setShouldersItem(int shouldersItem) {
 		this.shouldersItem = shouldersItem;
 		sendSlotsAsPacket();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3033,6 +3125,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setEarsItem(int earsItem) {
 		this.earsItem = earsItem;
 		sendSlotsAsPacket();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3044,6 +3138,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setNeckItem(int neckItem) {
 		this.neckItem = neckItem;
 		sendSlotsAsPacket();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3087,6 +3183,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3247,6 +3345,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setReagents(ConcurrentHashMap<Integer, SoliniaReagent> reagents) {
 		this.reagentsPouch = reagents;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3257,6 +3357,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMotherCharacterId(int motherCharacterId) {
 		this.motherCharacterId = motherCharacterId;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3267,6 +3369,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSpouseCharacterId(int spouseCharacterId) {
 		this.spouseCharacterId = spouseCharacterId;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3411,6 +3515,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		getReagents().get(itemId).reduceQty(reduceAmount);
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	// Used to schedule a HP update after an event
@@ -3444,6 +3550,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSpellBookItems(List<Integer> spellBookItems) {
 		this.spellBookItems = spellBookItems;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3583,6 +3691,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (!solLivingEntity.getBukkitLivingEntity().isDead()) {
 					solLivingEntity.setHPChange(bindhps,getBukkitPlayer());
 				}
+				this.setLastUpdatedTimeNow();
+
 				return true;
 			} else {
 				getBukkitPlayer().sendMessage("You cannot bind wounds above " + max_percent + "% hitpoints");
@@ -3592,11 +3702,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					solLivingEntity.getBukkitLivingEntity()
 							.sendMessage("You cannot have your wounds bound above " + max_percent + "% hitpoints");
 
+				this.setLastUpdatedTimeNow();
+
 				return false;
 			}
 
 		} catch (CoreStateInitException e) {
 		}
+		this.setLastUpdatedTimeNow();
 
 		return false;
 	}
@@ -3633,6 +3746,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (pendingXp < 0)
 			pendingXp = 0d;
 		this.pendingXp = pendingXp;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3640,6 +3755,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (experience < 0)
 			experience = 0d;
 		this.pendingXp += experience;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3651,6 +3768,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setForearmsItem(int forearmsItem) {
 		this.forearmsItem = forearmsItem;
 		sendSlotsAsPacket();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3662,6 +3781,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setArmsItem(int armsItem) {
 		this.armsItem = armsItem;
 		sendSlotsAsPacket();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3673,6 +3794,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setHandsItem(int handsItem) {
 		this.handsItem = handsItem;
 		sendSlotsAsPacket();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3684,6 +3807,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setWaistItem(int waistItem) {
 		this.waistItem = waistItem;
 		sendSlotsAsPacket();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3694,6 +3819,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setFingersItemInstance(String fingersItemInstance) {
 		this.fingersItemInstance = fingersItemInstance;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3704,6 +3831,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setShouldersItemInstance(String shouldersItemInstance) {
 		this.shouldersItemInstance = shouldersItemInstance;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3714,6 +3843,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setNeckItemInstance(String neckItemInstance) {
 		this.neckItemInstance = neckItemInstance;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3724,6 +3855,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setEarsItemInstance(String earsItemInstance) {
 		this.earsItemInstance = earsItemInstance;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3734,6 +3867,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setForearmsItemInstance(String forearmsItemInstance) {
 		this.forearmsItemInstance = forearmsItemInstance;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3744,6 +3879,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setArmsItemInstance(String armsItemInstance) {
 		this.armsItemInstance = armsItemInstance;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3754,6 +3891,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setHandsItemInstance(String handsItemInstance) {
 		this.handsItemInstance = handsItemInstance;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3764,6 +3903,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setWaistItemInstance(String waistItemInstance) {
 		this.waistItemInstance = waistItemInstance;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3783,6 +3924,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setOathId(int oathId) {
 		this.oathId = oathId;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3793,6 +3936,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setPersonality(Personality personality) {
 		this.personality = personality;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3810,6 +3955,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSongsEnabled(boolean songsEnabled) {
 		this.songsEnabled = songsEnabled;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3820,6 +3967,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			this.monthlyVote.put(month, 0);
 		}
 		this.monthlyVote.put(month, this.monthlyVote.get(month) + amount);
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3864,6 +4013,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		default:
 			break;
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3874,6 +4025,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setBase64InventoryContents(String base64InventoryContents) {
 		this.base64InventoryContents = base64InventoryContents;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3884,6 +4037,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setBase64ArmorContents(String base64ArmorContents) {
 		this.base64ArmorContents = base64ArmorContents;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3938,18 +4093,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void storeInventoryContents() {
 		this.setBase64InventoryContents(TextUtils.ToBase64UTF8(ItemStackUtils
 				.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getContents())));
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
 	public void storeArmorContents() {
 		this.setBase64ArmorContents(TextUtils.ToBase64UTF8(ItemStackUtils
 				.itemStackArrayToYamlString(this.getBukkitPlayer().getInventory().getArmorContents())));
+		this.setLastUpdatedTimeNow();
+
 	}
 	
 	@Override
 	public void storeBankContents(Inventory inventory) {
 		this.setBase64BankContents(TextUtils.ToBase64UTF8(ItemStackUtils
 				.itemStackArrayToYamlString(inventory.getContents())));
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -3998,6 +4159,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!getBukkitPlayer().isDead())
 				getSoliniaLivingEntity().setHPChange(hpregen, this.getBukkitPlayer());
 		}
+		this.setLastUpdatedTimeNow();
+
 
 	}
 
@@ -4071,6 +4234,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// System.out.println(player.getName() + " was found to have " + manaregen + "
 		// mana regen");
 		increasePlayerMana(manaregen);
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	private int getPlayerMeditatingManaBonus() {
@@ -4138,6 +4303,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			increasePlayerMana(mpAmount);
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4176,6 +4343,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setGodId(int godId) {
 		this.godId = godId;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4186,6 +4355,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setHasChosenGod(boolean hasChosenGod) {
 		this.hasChosenGod = hasChosenGod;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4238,6 +4409,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMemorisedSpellSlot1(int memorisedSpellSlot1) {
 		this.memorisedSpellSlot1 = memorisedSpellSlot1;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4248,6 +4421,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMemorisedSpellSlot2(int memorisedSpellSlot2) {
 		this.memorisedSpellSlot2 = memorisedSpellSlot2;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4258,6 +4433,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMemorisedSpellSlot3(int memorisedSpellSlot3) {
 		this.memorisedSpellSlot3 = memorisedSpellSlot3;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4268,6 +4445,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMemorisedSpellSlot4(int memorisedSpellSlot4) {
 		this.memorisedSpellSlot4 = memorisedSpellSlot4;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4278,6 +4457,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMemorisedSpellSlot5(int memorisedSpellSlot5) {
 		this.memorisedSpellSlot5 = memorisedSpellSlot5;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4288,6 +4469,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMemorisedSpellSlot6(int memorisedSpellSlot6) {
 		this.memorisedSpellSlot6 = memorisedSpellSlot6;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4298,6 +4481,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMemorisedSpellSlot7(int memorisedSpellSlot7) {
 		this.memorisedSpellSlot7 = memorisedSpellSlot7;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4308,6 +4493,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setMemorisedSpellSlot8(int memorisedSpellSlot8) {
 		this.memorisedSpellSlot8 = memorisedSpellSlot8;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4372,6 +4559,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!getSpellBookSpellIds().contains(spellId))
 				return false;
 		}
+
+		this.setLastUpdatedTimeNow();
 
 		return this.setMemorisedSpellSlot(spellSlot, spellId);
 	}
@@ -4537,6 +4726,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			}
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4548,6 +4739,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			} catch (CoreStateInitException e) {
 			}
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4621,6 +4814,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setForenameAndLastName(String forename, String lastname) {
 		this.forename = forename;
 		this.lastname = lastname;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4631,6 +4826,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setExperienceOn(boolean experienceOn) {
 		this.experienceOn = experienceOn;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4651,6 +4848,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (foundSpell)
 			this.sendMemorisedSpellSlots();
+		
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4661,6 +4861,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setForceNewAlt(boolean forceNewAlt) {
 		this.forceNewAlt = forceNewAlt;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4691,6 +4893,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4761,6 +4965,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 			// do nothing
 		}	
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4794,6 +5000,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setCharacterFellowshipId(int characterFellowshipId) {
 		this.characterFellowshipId = characterFellowshipId;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4839,6 +5047,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setLanguageSkillType(SkillType languageSkillType) {
 		this.languageSkillType = languageSkillType;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4877,11 +5087,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			newType = HintSetting.Off;
 		else
 			this.hintSettings.put(hint.name(), newType);
+		
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
 	public void resetHintSetting() {
 		this.hintSettings.clear();
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4892,6 +5107,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setId(int id) {
 		this.id = id;
+		this.setLastUpdatedTimeNow();
+
 	}
 	
 	@Override
@@ -4903,6 +5120,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setPrimaryUUID(UUID uuid) {
 		// TODO Auto-generated method stub
 		this.primaryUUID = uuid;
+		this.setLastUpdatedTimeNow();
+
 	}
 	@Override
 	public UUID getSecondaryUUID() {
@@ -4913,11 +5132,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setSecondaryUUID(UUID uuid) {
 		// TODO Auto-generated method stub
 		this.secondaryUUID = uuid;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
 	public void setOwnerUUID(UUID uniqueId) {
 		this.setSecondaryUUID(uniqueId);
+		this.setLastUpdatedTimeNow();
+
 	}
 	
 	@Override
@@ -4974,6 +5197,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4984,6 +5209,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setBase64BankContents(String base64BankContents) {
 		this.base64BankContents = base64BankContents;
+		this.setLastUpdatedTimeNow();
+
 	}
 
 	@Override
@@ -4991,5 +5218,26 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		Inventory inventory = Bukkit.createInventory(new SoliniaBankHolder(), 45, "Solinia International Bank");
 		inventory.setContents(getStoredBankContents());
 		this.getBukkitPlayer().openInventory(inventory);
+	}
+	
+	@Override
+	public Timestamp getLastUpdatedTime() {
+		if (lastUpdatedTime == null)
+			setLastUpdatedTimeNow();
+		
+		return lastUpdatedTime;
+	}
+
+	@Override
+	public void setLastUpdatedTime(Timestamp lastUpdatedTime) {
+		this.lastUpdatedTime = lastUpdatedTime;
+	}
+	
+	@Override
+	public void setLastUpdatedTimeNow() {
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		//System.out.println("Set LastUpdatedTime on " + getId());
+		this.setLastUpdatedTime(nowtimestamp);
 	}
 }

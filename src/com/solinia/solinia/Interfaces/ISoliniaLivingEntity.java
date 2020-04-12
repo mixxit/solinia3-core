@@ -469,4 +469,6 @@ public interface ISoliniaLivingEntity  {
 
 	boolean IsCorePet();
 
+	void processAutoAttack(boolean wasTriggeredManually);
+
 }
