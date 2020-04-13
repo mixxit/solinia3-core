@@ -471,4 +471,6 @@ public interface ISoliniaLivingEntity  {
 
 	void processAutoAttack(boolean wasTriggeredManually);
 
+	ISoliniaPlayer getPlayer();
+
 }

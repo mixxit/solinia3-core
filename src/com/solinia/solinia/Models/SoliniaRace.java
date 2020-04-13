@@ -23,6 +23,9 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 	private UUID secondaryUUID = UUID.randomUUID();
 
 	private boolean isadmin = true;
+	private boolean undead = false;
+	private boolean plant = false;
+	private boolean animal = false;
 	private String name = "";
 	
 	private int strength = 1;
@@ -181,6 +184,9 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 		sender.sendMessage("- alignment: " + ChatColor.GOLD + getAlignment() + ChatColor.RESET);
 		sender.sendMessage("- bodytype: " + ChatColor.GOLD + getBodyType() + ChatColor.RESET);
 		sender.sendMessage("- vampire: " + ChatColor.GOLD + isVampire() + ChatColor.RESET);
+		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET);
+		sender.sendMessage("- plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET);
+		sender.sendMessage("- animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
 		sender.sendMessage("- admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
 		sender.sendMessage("- language: " + ChatColor.GOLD + getLanguage() + ChatColor.RESET);
 		if (getPassiveAbilityId() != 0) {
@@ -226,6 +232,15 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 			break;
 		case "vampire":
 			setVampire(Boolean.parseBoolean(value));
+			break;
+		case "undead":
+			setUndead(Boolean.parseBoolean(value));
+			break;
+		case "plant":
+			setPlant(Boolean.parseBoolean(value));
+			break;
+		case "animal":
+			setAnimal(Boolean.parseBoolean(value));
 			break;
 		case "admin":
 			setAdmin(Boolean.parseBoolean(value));
@@ -368,6 +383,36 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 	@Override
 	public void setLanguage(SkillType language) {
 		this.language = language;
+	}
+
+	@Override
+	public boolean isUndead() {
+		return undead;
+	}
+
+	@Override
+	public void setUndead(boolean undead) {
+		this.undead = undead;
+	}
+
+	@Override
+	public boolean isPlant() {
+		return plant;
+	}
+
+	@Override
+	public void setPlant(boolean plant) {
+		this.plant = plant;
+	}
+
+	@Override
+	public boolean isAnimal() {
+		return animal;
+	}
+
+	@Override
+	public void setAnimal(boolean animal) {
+		this.animal = animal;
 	}
 
 }

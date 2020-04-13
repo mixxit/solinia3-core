@@ -629,6 +629,9 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	Timestamp getLastUpdatedTime();
 	void setLastUpdatedTime(Timestamp lastUpdatedTime);
 	void setLastUpdatedTimeNow();
+	public boolean isUndead();
+	public boolean isPlant();
+	public boolean isAnimal();
 
 
 

@@ -84,4 +84,16 @@ public interface ISoliniaRace extends IPersistable {
 	SkillType getLanguage();
 
 	void setLanguage(SkillType language);
+
+	boolean isUndead();
+
+	void setUndead(boolean undead);
+
+	void setPlant(boolean plant);
+
+	boolean isPlant();
+
+	boolean isAnimal();
+
+	void setAnimal(boolean animal);
 }

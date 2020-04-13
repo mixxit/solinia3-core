@@ -2960,6 +2960,33 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.setLastUpdatedTimeNow();
 
 	}
+	
+	@Override
+	public boolean isUndead() {
+		if (getRace() != null)
+			if (getRace().isUndead())
+				return true;
+
+		return false;
+	}
+	
+	@Override
+	public boolean isPlant() {
+		if (getRace() != null)
+			if (getRace().isPlant())
+				return true;
+
+		return false;
+	}
+	
+	@Override
+	public boolean isAnimal() {
+		if (getRace() != null)
+			if (getRace().isUndead())
+				return true;
+
+		return false;
+	}
 
 	@Override
 	public boolean isVampire() {

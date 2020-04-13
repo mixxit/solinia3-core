@@ -1290,6 +1290,10 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	@Override
 	public boolean isUndead() {
+		if (this.getRace() != null)
+			if (this.getRace().isUndead())
+				return true;
+
 		return isUndead;
 	}
 
@@ -1300,6 +1304,10 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	@Override
 	public boolean isAnimal() {
+		if (this.getRace() != null)
+			if (this.getRace().isAnimal())
+				return true;
+
 		return isAnimal;
 	}
 
@@ -1528,6 +1536,10 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	@Override
 	public boolean isPlant() {
+		if (this.getRace() != null)
+			if (this.getRace().isPlant())
+				return true;
+
 		return isPlant;
 	}
 

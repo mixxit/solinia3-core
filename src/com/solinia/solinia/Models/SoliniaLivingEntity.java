@@ -5546,47 +5546,65 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean isUndead() {
+		if (this.getRace() != null)
+			if (this.getRace().isUndead())
+				return true;
+
 		if (isPlayer())
+		{
+			ISoliniaPlayer solPlayer = this.getPlayer();
+			if (solPlayer != null)
+				return solPlayer.isUndead();
 			return false;
+		}
 
 		if (this.getNpcid() < 1)
 			return false;
 
 		ISoliniaNPC npc = getNPC();
-		if (npc.isUndead())
-			return true;
-
-		return false;
+		return npc.isUndead();
 	}
 
 	@Override
 	public boolean isPlant() {
+		if (this.getRace() != null)
+			if (this.getRace().isPlant())
+				return true;
+		
 		if (isPlayer())
+		{
+			ISoliniaPlayer solPlayer = this.getPlayer();
+			if (solPlayer != null)
+				return solPlayer.isPlant();
 			return false;
+		}
 
 		if (this.getNpcid() < 1)
 			return false;
 
 		ISoliniaNPC npc = getNPC();
-		if (npc.isPlant())
-			return true;
-
-		return false;
+		return npc.isPlant();
 	}
 
 	@Override
 	public boolean isAnimal() {
+		if (this.getRace() != null)
+			if (this.getRace().isAnimal())
+				return true;
+
 		if (isPlayer())
+		{
+			ISoliniaPlayer solPlayer = this.getPlayer();
+			if (solPlayer != null)
+				return solPlayer.isAnimal();
 			return false;
+		}
 
 		if (this.getNpcid() < 1)
 			return false;
 
 		ISoliniaNPC npc = getNPC();
-		if (npc.isAnimal())
-			return true;
-
-		return false;
+		return npc.isAnimal();
 	}
 
 	@Override
@@ -5653,6 +5671,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try
 		{
 			return StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+		} catch (CoreStateInitException e)
+		{
+			return null;
+		}
+	}
+	
+	@Override
+	public ISoliniaPlayer getPlayer()
+	{
+		if (this.getBukkitLivingEntity() == null)
+			return null;
+		
+		if (!(this.getBukkitLivingEntity() instanceof Player))
+			return null;
+		
+		try
+		{
+			return SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
 		} catch (CoreStateInitException e)
 		{
 			return null;
