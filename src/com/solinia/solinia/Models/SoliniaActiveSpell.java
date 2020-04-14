@@ -1348,6 +1348,9 @@ public class SoliniaActiveSpell {
 		case SummonNPCID:
 			applySummonNPCID(spellEffect,soliniaSpell,casterLevel);
 			return;
+		case FeatherFall:
+			applyFeatherFallSpellEffect(spellEffect, soliniaSpell, casterLevel);
+			return;
 		default:
 			return;
 		}
@@ -2362,6 +2365,12 @@ public class SoliniaActiveSpell {
 
 	private void applyConfusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
+	}
+	
+	private void applyFeatherFallSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (this.getLivingEntity() instanceof Player)
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW_FALLING, 255);
+		
 	}
 
 	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

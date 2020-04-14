@@ -1707,6 +1707,8 @@ public class Utils {
 			return 485;
 		case SummonNPCID:
 			return 486;
+		case FeatherFall:
+			return 487;
 		default:
 			return -1;
 		}
@@ -2688,6 +2690,8 @@ public class Utils {
 			return SpellEffectType.Block;
 		case 486:
 			return SpellEffectType.SummonNPCID;
+		case 487:
+			return SpellEffectType.FeatherFall;
 		default:
 			return SpellEffectType.ERROR;
 		}
