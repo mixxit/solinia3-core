@@ -5793,7 +5793,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public String getShortDescription() {
-		String description = "";
+		String description = "Mana: "  + this.getMana() + " Tgt: " + Utils.getSpellTargetType(getTargettype());
+		description += " Eff: ";
 		for(SpellEffect effect : this.getBaseSpellEffects())
 		{
 			description += effect.getSpellEffectType().name().toUpperCase() + " ";
