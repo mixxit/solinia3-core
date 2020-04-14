@@ -273,13 +273,13 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.isCancelled())
 			return;
 		
-		if (event.getSoliniaLivingEntity() == null)
+		if (event.getSoliniaLivingEntity() == null || event.getSoliniaLivingEntity().getBukkitLivingEntity() == null)
 			return;
 		
 		if (event.getSoliniaLivingEntity().getBukkitLivingEntity().isDead())
 			return;
 
-		if (!(event.getSoliniaLivingEntity() instanceof Player))
+		if (!(event.getSoliniaLivingEntity().getBukkitLivingEntity() instanceof Player))
 			return;
 		
 		if (event.getSoliniaLivingEntity().getRace() != null)
