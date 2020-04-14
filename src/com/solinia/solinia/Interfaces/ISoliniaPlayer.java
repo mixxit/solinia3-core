@@ -35,6 +35,7 @@ import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SoliniaReagent;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.SpellbookPage;
 import com.solinia.solinia.Models.TrackingChoice;
@@ -632,6 +633,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public boolean isUndead();
 	public boolean isPlant();
 	public boolean isAnimal();
+	int getSpellBonuses(SpellEffectType spellEffectType);
 
 
 

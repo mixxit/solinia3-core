@@ -1709,6 +1709,8 @@ public class Utils {
 			return 486;
 		case FeatherFall:
 			return 487;
+		case MiningHaste:
+			return 488;
 		default:
 			return -1;
 		}
@@ -2692,6 +2694,8 @@ public class Utils {
 			return SpellEffectType.SummonNPCID;
 		case 487:
 			return SpellEffectType.FeatherFall;
+		case 488:
+			return SpellEffectType.MiningHaste;
 		default:
 			return SpellEffectType.ERROR;
 		}

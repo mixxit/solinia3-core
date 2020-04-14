@@ -1351,6 +1351,9 @@ public class SoliniaActiveSpell {
 		case FeatherFall:
 			applyFeatherFallSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
+		case MiningHaste:
+			applyMiningHasteSpellEffect(spellEffect, soliniaSpell, casterLevel);
+			return;
 		default:
 			return;
 		}
@@ -2367,12 +2370,7 @@ public class SoliniaActiveSpell {
 		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
 	}
 	
-	private void applyFeatherFallSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (this.getLivingEntity() instanceof Player)
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW_FALLING, 255);
-		
-	}
-
+	
 	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (this.getLivingEntity() instanceof Player)
 			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.LEVITATION, 255);
@@ -2614,7 +2612,16 @@ public class SoliniaActiveSpell {
 		} else {
 			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, (normalize * -1));
 		}
+	}
+	
+	private void applyMiningHasteSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (this.getLivingEntity() instanceof Player)
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.FAST_DIGGING, spellEffect.getBase());
+	}
 
+	private void applyFeatherFallSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (this.getLivingEntity() instanceof Player)
+			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW_FALLING, spellEffect.getBase());
 	}
 
 	private void applyCurrentHpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

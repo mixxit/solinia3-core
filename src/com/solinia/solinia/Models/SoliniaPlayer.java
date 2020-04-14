@@ -475,6 +475,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 				}
 			}
+			
+			if (this.hasSpellEffectType(SpellEffectType.PercentXPIncrease))
+				modifier += getSpellBonuses(SpellEffectType.PercentXPIncrease);
 
 			SoliniaZone zone = this.getFirstZone();
 			if (zone != null)
@@ -531,6 +534,90 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		setExperience(currentexperience, experience, modified);
 		this.setLastUpdatedTimeNow();
+	}
+	
+	@Override
+	public void increasePlayerAAExperience(Double experience, boolean applyModifiers) {
+
+		boolean modified = false;
+
+		if (applyModifiers) {
+			double modifier = StateManager.getInstance().getXPDayModifier();
+			if (getExperienceBonusExpires() != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = getExperienceBonusExpires();
+
+				if (expiretimestamp != null) {
+					if (!nowtimestamp.after(expiretimestamp)) {
+						modifier += 100;
+					}
+				}
+			}
+			
+			if (this.hasSpellEffectType(SpellEffectType.PercentXPIncrease))
+				modifier += getSpellBonuses(SpellEffectType.PercentXPIncrease);
+
+			if (isInHotzone() == true) {
+				modifier += 100;
+			}
+			
+			SoliniaZone zone = this.getFirstZone();
+			if (zone != null)
+			{
+				if (zone.isHotzone() == true) {
+					modifier += 100;
+				}
+
+				if (zone.getZoneExperienceModifier() > 0)
+					modifier += zone.getZoneExperienceModifier();
+			}
+
+			if (modifier > 100) {
+				modified = true;
+			}
+			experience = experience * (modifier / 100);
+		}
+
+		// Cap at max just under a quarter of an AA experience point
+		if (experience > PlayerUtils.getMaxAAXP()) {
+			experience = PlayerUtils.getMaxAAXP();
+		}
+
+		// System.out.println("AA XP: " + experience);
+
+		Double currentaaexperience = getAAExperience();
+
+		currentaaexperience = currentaaexperience + experience;
+
+		setAAExperience(currentaaexperience, modified, experience);
+		this.setLastUpdatedTimeNow();
+
+	}
+
+	
+	@Override
+	public int getSpellBonuses(SpellEffectType spellEffectType) {
+		int bonus = 0;
+		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitPlayer(), spellEffectType)) {
+			bonus += effect.getRemainingValue();
+		}
+
+		return bonus;
+	}
+
+	private boolean hasSpellEffectType(SpellEffectType type) {
+		if (this.getBukkitPlayer() == null)
+			return false;
+		
+		try
+		{
+		return StateManager.getInstance().getEntityManager().hasEntityEffectType(this.getBukkitPlayer(),
+				type);
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
 	}
 
 	@Override
@@ -756,51 +843,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You lost a level (" + newlevel + ")!");
 			updateMaxHp();
 		}
-		this.setLastUpdatedTimeNow();
-
-	}
-
-	@Override
-	public void increasePlayerAAExperience(Double experience, boolean applyModifiers) {
-
-		boolean modified = false;
-
-		if (applyModifiers) {
-			double modifier = StateManager.getInstance().getXPDayModifier();
-			if (getExperienceBonusExpires() != null) {
-				LocalDateTime datetime = LocalDateTime.now();
-				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
-				Timestamp expiretimestamp = getExperienceBonusExpires();
-
-				if (expiretimestamp != null) {
-					if (!nowtimestamp.after(expiretimestamp)) {
-						modifier += 100;
-					}
-				}
-			}
-
-			if (isInHotzone() == true) {
-				modifier += 100;
-			}
-
-			if (modifier > 100) {
-				modified = true;
-			}
-			experience = experience * (modifier / 100);
-		}
-
-		// Cap at max just under a quarter of an AA experience point
-		if (experience > PlayerUtils.getMaxAAXP()) {
-			experience = PlayerUtils.getMaxAAXP();
-		}
-
-		// System.out.println("AA XP: " + experience);
-
-		Double currentaaexperience = getAAExperience();
-
-		currentaaexperience = currentaaexperience + experience;
-
-		setAAExperience(currentaaexperience, modified, experience);
 		this.setLastUpdatedTimeNow();
 
 	}

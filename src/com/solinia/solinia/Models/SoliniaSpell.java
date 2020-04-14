@@ -2926,6 +2926,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 			int recasttime = Integer.parseInt(value);
 			setRecastTime(recasttime);
 			break;
+		case "resisttype":
+			if (value.equals(""))
+				throw new InvalidSpellSettingException("resisttype is empty");
+
+			int resisttype = Integer.parseInt(value);
+			setResisttype(resisttype);
+			break;
 		case "casttime":
 			if (value.equals(""))
 				throw new InvalidSpellSettingException("casttime is empty");
