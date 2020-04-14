@@ -20,7 +20,7 @@ public class CommandEditGod implements CommandExecutor {
 
 			Player player = (Player) sender;
 
-			if (!player.isOp()) {
+			if (!sender.isOp() && !sender.hasPermission("solinia.editgod")) {
 				player.sendMessage("This is an operator only command");
 				return false;
 			}

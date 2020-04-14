@@ -1726,6 +1726,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private void CommonDamage(ISoliniaLivingEntity attacker, int damage, int spell_id, SkillType skillType,
 			boolean avoidable, int buffslot, boolean iBuffTic) {
 		// This method is called with skill_used=ABJURE for Damage Shield damage.
+		if (this.getBukkitLivingEntity() == null || attacker.getBukkitLivingEntity() == null)
+			return;
+		
 		Utils.DebugLog("SoliniaLivingEntity", "CommonDamage", this.getBukkitLivingEntity().getCustomName(), "Incoming CommonDamage: " + damage + " from attacker: " + attacker.getBukkitLivingEntity().getName());
 		boolean FromDamageShield = (skillType.equals(SkillType.Abjuration));
 		boolean ignore_invul = false;

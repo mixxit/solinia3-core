@@ -278,6 +278,9 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		if (event.getSoliniaLivingEntity().getBukkitLivingEntity().isDead())
 			return;
+
+		if (!(event.getSoliniaLivingEntity() instanceof Player))
+			return;
 		
 		if (event.getSoliniaLivingEntity().getRace() != null)
 			if (event.getSoliniaLivingEntity().getRace().getPassiveAbilityId() > 0)
