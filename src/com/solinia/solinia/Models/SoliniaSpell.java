@@ -3207,6 +3207,11 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages, String requiredWeaponSkillType) {
+		return tryApplyOnEntity(sourceEntity, targetentity, sendMessages, requiredWeaponSkillType, false);
+	}
+
+	@Override
+	public boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages, String requiredWeaponSkillType, boolean racialPassive) {
 		// Entity was targeted for this spell but is that the final location? 
 		
 		try {

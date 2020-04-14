@@ -473,4 +473,6 @@ public interface ISoliniaLivingEntity  {
 
 	ISoliniaPlayer getPlayer();
 
+	void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType, boolean racialPassive);
+
 }

@@ -443,9 +443,17 @@ public class EntityManager implements IEntityManager {
 		
 		return false;
 	}
-	
+
 	@Override
 	public boolean addActiveEntitySpell(LivingEntity targetEntity, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType) {
+		{
+			return addActiveEntitySpell(targetEntity, soliniaSpell, sourceEntity, sendMessages, requiredWeaponSkillType, false);
+		}
+	}
+
+	
+	@Override
+	public boolean addActiveEntitySpell(LivingEntity targetEntity, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType, boolean racialPassive) {
 		try {
 			Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "Beginning adding spell to entity on behalf of caster");
 			if (soliniaSpell.isCharmSpell() && getPet(sourceEntity.getUniqueId()) != null && !getPet(sourceEntity.getUniqueId()).getUniqueId().equals(targetEntity.getUniqueId()))
@@ -467,7 +475,7 @@ public class EntityManager implements IEntityManager {
 				duration = 18;
 			}
 			
-			boolean addSpellResult = entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages, requiredWeaponSkillType);
+			boolean addSpellResult = entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages, requiredWeaponSkillType, racialPassive);
 			Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "addSpell result was: " + addSpellResult);
 
 			if (targetEntity instanceof Player)

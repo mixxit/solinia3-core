@@ -102,7 +102,7 @@ public class SoliniaEntitySpells {
 		return false;
 	}
 
-	public boolean addSpell(Plugin plugin, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages, String requiredWeaponSkillType) {
+	public boolean addSpell(Plugin plugin, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages, String requiredWeaponSkillType, boolean racialPassive) {
 		if (sourceEntity == null)
 			return false;
 
@@ -212,7 +212,7 @@ public class SoliniaEntitySpells {
 		}
 		
 		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer,
-				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits(), requiredWeaponSkillType);
+				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits(), requiredWeaponSkillType, racialPassive);
 		
 		Short slot = getNextAvailableSlot();
 		if (slot == null)

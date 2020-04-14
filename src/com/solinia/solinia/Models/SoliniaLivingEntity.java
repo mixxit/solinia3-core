@@ -9670,16 +9670,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 		}
 	}
-
+	
 	@Override
 	public void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType) {
+		this.tryApplySpellOnSelf(spellId, requiredWeaponSkillType, false);
+	}
+
+	@Override
+	public void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType, boolean racialPassive) {
 		try
 		{
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
 			if (spell == null)
 				return;
 			
-			spell.tryApplyOnEntity(getBukkitLivingEntity(), getBukkitLivingEntity(), false, requiredWeaponSkillType);
+			spell.tryApplyOnEntity(getBukkitLivingEntity(), getBukkitLivingEntity(), false, requiredWeaponSkillType, racialPassive);
 		} catch (CoreStateInitException e)
 		{
 			

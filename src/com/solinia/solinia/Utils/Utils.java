@@ -5043,6 +5043,9 @@ public class Utils {
 	}
 
 	public static void playSpecialEffect(Entity entity, SoliniaActiveSpell activeSpell) {
+		if (!activeSpell.isRacialPassive())
+			return;
+		
 		int sai = activeSpell.getSpell().getSpellAffectIndex();
 
 		SpellEffectIndex effectType = Utils.getSpellEffectIndex(sai);
@@ -5065,7 +5068,7 @@ public class Utils {
 			SpecialEffectUtils.playCustomShieldEffect(entity, activeSpell, Particle.VILLAGER_HAPPY, Color.YELLOW);
 			break;
 		case AE_Damage:
-			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.FUCHSIA);
+			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.LIME);
 			break;
 		case Summon:
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
@@ -5098,7 +5101,7 @@ public class Utils {
 			SpecialEffectUtils.playLegacy(entity, activeSpell);
 			break;
 		case Stun:
-			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.YELLOW);
+			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.FUCHSIA);
 			break;
 		case Haste_Runspeed:
 			SpecialEffectUtils.playCustomVortexEffect(entity, activeSpell, Particle.ENCHANTMENT_TABLE, Color.BLUE);

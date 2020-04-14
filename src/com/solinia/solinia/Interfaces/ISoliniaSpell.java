@@ -1089,4 +1089,7 @@ public interface ISoliniaSpell extends IPersistable {
 	void setLastUpdatedTimeNow();
 
 	String getShortDescription();
+
+	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages,
+			String requiredWeaponSkillType, boolean racialPassive);
 }

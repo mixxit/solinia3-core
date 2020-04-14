@@ -61,9 +61,10 @@ public class SoliniaActiveSpell {
 	private List<ActiveSpellEffect> activeSpellEffects = new ArrayList<ActiveSpellEffect>();
 	private int numHits = 0;
 	private String requiredWeaponSkillType = "";
+	private boolean isRacialPassive = false;
 
 	public SoliniaActiveSpell(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid,
-			boolean sourceIsPlayer, int ticksLeft, int numHits, String requiredWeaponSkillType) {
+			boolean sourceIsPlayer, int ticksLeft, int numHits, String requiredWeaponSkillType, boolean racialPassive) {
 		setOwnerUuid(owneruuid);
 		setOwnerPlayer(isOwnerPlayer);
 		setSourceUuid(sourceuuid);
@@ -73,6 +74,7 @@ public class SoliniaActiveSpell {
 		setActiveSpellEffects();
 		setNumHits(numHits);
 		setRequiredWeaponSkillType(requiredWeaponSkillType);
+		setRacialPassive(racialPassive);
 	}
 
 	private void setActiveSpellEffects() {
@@ -3004,5 +3006,14 @@ public class SoliniaActiveSpell {
 
 	public void setRequiredWeaponSkillType(String requiredWeaponSkillType) {
 		this.requiredWeaponSkillType = requiredWeaponSkillType;
+	}
+
+	public boolean isRacialPassive() {
+		// TODO Auto-generated method stub
+		return isRacialPassive;
+	}
+
+	public void setRacialPassive(boolean isRacialPassive) {
+		this.isRacialPassive = isRacialPassive;
 	}
 }
