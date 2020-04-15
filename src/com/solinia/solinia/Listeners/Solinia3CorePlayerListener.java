@@ -1266,8 +1266,11 @@ public class Solinia3CorePlayerListener implements Listener {
 	private void onMerchantInventoryClick(InventoryClickEvent event) {
 		if (event.getCurrentItem() == null)
 		{
-			event.getView().getPlayer().sendMessage("You appeared to not click on a merchant item correctly");
-			Utils.CancelEvent(event);
+			if (event.getRawSlot() < 27) {
+				event.getView().getPlayer().sendMessage("You appeared to not click on a merchant item correctly");
+				Utils.CancelEvent(event);
+				return;
+			}
 		}
 		
 		UniversalMerchant universalmerchant = null;
@@ -1504,6 +1507,14 @@ public class Solinia3CorePlayerListener implements Listener {
 					}
 				} else {
 					// Dropping own item
+					// If trying to drop own item onto none solinia item complain
+					ItemStack item = event.getClickedInventory().getItem(event.getSlot());
+					if (item != null && !ItemStackUtils.IsSoliniaItem(item))
+					{
+						Utils.CancelEvent(event);
+						event.getView().getPlayer().sendMessage("You are trying to place an item on something a merchant is not interested in");
+						return;
+					}
 					return;
 				}
 
@@ -1530,6 +1541,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					try {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(event.getCursor());
+						
 						long individualprice = item.getWorth();
 
 						// Total price
