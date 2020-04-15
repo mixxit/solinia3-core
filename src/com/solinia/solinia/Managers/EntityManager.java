@@ -481,7 +481,8 @@ public class EntityManager implements IEntityManager {
 			if (targetEntity instanceof Player)
 				SoliniaPlayerAdapter.Adapt((Player)targetEntity).sendEffects();
 			return addSpellResult;
-		} catch (CoreStateInitException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return false;
@@ -518,13 +519,13 @@ public class EntityManager implements IEntityManager {
 		
 		for(SoliniaEntitySpells entityEffects : entitySpells.values())
 		{
-			entityEffects.run(plugin, true);
-			
 			try
 			{
+				entityEffects.run(plugin, true);
+				
 				if (entityEffects.getLivingEntity() != null && entityEffects.getLivingEntity() instanceof Player)
 					SoliniaPlayerAdapter.Adapt((Player)entityEffects.getLivingEntity()).sendEffects();
-			} catch (CoreStateInitException e)
+			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -1057,7 +1058,7 @@ public class EntityManager implements IEntityManager {
 			}
 			
 			ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(entity);
-			if (solEntity != null)
+			if (solEntity != null && solEntity.getActiveMob() != null)
 			{
 				solEntity.getActiveMob().setOwner(petOwnerUuid);
 				solEntity.clearHateList();
