@@ -13,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Utils.Utils;
 
@@ -52,13 +53,12 @@ public class EntityAutoAttack {
 		return false;
 	}
 	
-	public void setLastUpdatedTimeNow(ISoliniaLivingEntity solLivingEntityTarget) {
+	public void setLastUpdatedTimeNow(ISoliniaLivingEntity me) {
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		
 		// NB - The auto attack runs every 50MS (1 tick), there are 20 ticks in a second (1000ms)
-		
-		int numberOfTicks = (int) (solLivingEntityTarget.getAutoAttackTimerFrequencySeconds() * Utils.TICKS_PER_SECOND);
+		int numberOfTicks = (int) (me.getAutoAttackTimerFrequencySeconds() * Utils.TICKS_PER_SECOND);
     	// Our lowest attack cap is two ticks
     	if (numberOfTicks < 2)
     		numberOfTicks = 2;

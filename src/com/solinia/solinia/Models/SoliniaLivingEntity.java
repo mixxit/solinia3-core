@@ -148,7 +148,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (solLivingEntityTarget != null)
 				{
 					// reset timer
-					autoAttack.setLastUpdatedTimeNow(solLivingEntityTarget);
+					autoAttack.setLastUpdatedTimeNow(this);
 					this.autoAttackEnemy(solLivingEntityTarget);
 				} else {
 					if (this.getBukkitLivingEntity() instanceof Player)
