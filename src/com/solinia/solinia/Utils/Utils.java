@@ -5941,7 +5941,7 @@ public class Utils {
 			break;
 		case SPELL_WORN_OFF_OF:
 			String[] referenceCodesWornOffOf = referenceCode.split("\\^");
-			message = "Your " + referenceCodesWornOffOf[0] + " spell has worn off of " + referenceCodesWornOffOf[1];
+			message = ChatColor.DARK_AQUA + "Your " + referenceCodesWornOffOf[0] + " spell has worn off of " + referenceCodesWornOffOf[1]  + ChatColor.RESET;
 			break;
 		}
 		
