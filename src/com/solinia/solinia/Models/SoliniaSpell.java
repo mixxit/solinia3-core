@@ -3213,7 +3213,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages, String requiredWeaponSkillType, boolean racialPassive) {
 		// Entity was targeted for this spell but is that the final location? 
-		
+
 		try {
 			switch (Utils.getSpellTargetType(getTargettype())) {
 			case Self:
@@ -4201,431 +4201,448 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	public static Tuple<Boolean,String> isValidEffectForEntity(LivingEntity target, LivingEntity source, ISoliniaSpell soliniaSpell)
 			throws CoreStateInitException {
-		if (source == null) {
-			System.out.println("Source was null for isValidEffectForEntity: " + soliniaSpell.getName() + " on target: "
-					+ target.getCustomName());
-			return new Tuple<Boolean,String>(false,"Source was null for spell");
-		}
-
-		if (target == null) {
-			System.out.println("Target was null for isValidEffectForEntity: " + soliniaSpell.getName()
-					+ " from source: " + source.getCustomName());
-			return new Tuple<Boolean,String>(false,"Target was null for spell");
-		}
-
-		if (source.isDead() || target.isDead())
-			return new Tuple<Boolean,String>(false,"Source or target is dead");
-
-		ISoliniaLivingEntity solTarget = SoliniaLivingEntityAdapter.Adapt(target);
-		if (solTarget != null) {
-			switch (Utils.getSpellTargetType(soliniaSpell.getTargettype())) {
-			case SummonedAE:
-				if (!solTarget.isUndead()) {
-					return new Tuple<Boolean,String>(false,"Only affects undead");
-				}
-				break;
-			case UndeadAE:
-				if (!solTarget.isUndead()) {
-					return new Tuple<Boolean,String>(false,"Only affects undead");
-				}
-				break;
-			case Undead:
-				if (!solTarget.isUndead()) {
-					source.sendMessage("This spell is only effective on Undead");
-					return new Tuple<Boolean,String>(false,"Only affects undead");
-				}
-				break;
-			case Summoned:
-				if (!solTarget.isCurrentlyNPCPet() && !solTarget.isCharmed()) {
-					source.sendMessage("This spell is only effective on Summoned");
-					return new Tuple<Boolean,String>(false,"Only affects summoned");
-				}
-				break;
-			case Animal:
-				if (!solTarget.isAnimal()) {
-					source.sendMessage("This spell is only effective on Animals");
-					return new Tuple<Boolean,String>(false,"Only affects animals");
-				}
-				break;
-			case Plant:
-				if (!solTarget.isPlant()) {
-					source.sendMessage("This spell is only effective on Plants");
-					return new Tuple<Boolean,String>(false,"Only affects plants");
-				}
-				break;
-			default:
-				break;
+		try
+		{
+			if (source == null) {
+				System.out.println("Source was null for isValidEffectForEntity: " + soliniaSpell.getName() + " on target: "
+						+ target.getCustomName());
+				return new Tuple<Boolean,String>(false,"Source was null for spell");
 			}
-		}
-
-		ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter.Adapt(source);
-		if (solTarget.isNPC()) {
-			if (source instanceof Player || solSource.isCurrentlyNPCPet()) {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solTarget.getNpcid());
-				if (npc != null) {
-					if (npc.isBoss() || npc.isRaidboss())
-						if (!soliniaSpell.isBossApplyable()) {
-							source.sendMessage(
-									ChatColor.RED + "This NPC is immune to runspeed, gravity and mezmersization changes");
-							return new Tuple<Boolean,String>(false,"Immune to runspeed/gravity/mez");
-						}
-
-					if (npc.isRaidheroic())
-						if (!soliniaSpell.isRaidApplyable()) {
-							source.sendMessage(
-									ChatColor.RED + "This NPC is immune to runspeed, gravity and mezmersization changes");
-							return new Tuple<Boolean,String>(false,"Immune to runspeed/gravity/mez");
-						}
+	
+			if (target == null) {
+				System.out.println("Target was null for isValidEffectForEntity: " + soliniaSpell.getName()
+						+ " from source: " + source.getCustomName());
+				return new Tuple<Boolean,String>(false,"Target was null for spell");
+			}
+	
+			if (source.isDead() || target.isDead())
+				return new Tuple<Boolean,String>(false,"Source or target is dead");
+	
+			ISoliniaLivingEntity solTarget = SoliniaLivingEntityAdapter.Adapt(target);
+			if (solTarget != null) {
+				switch (Utils.getSpellTargetType(soliniaSpell.getTargettype())) {
+				case SummonedAE:
+					if (!solTarget.isUndead()) {
+						return new Tuple<Boolean,String>(false,"Only affects undead");
+					}
+					break;
+				case UndeadAE:
+					if (!solTarget.isUndead()) {
+						return new Tuple<Boolean,String>(false,"Only affects undead");
+					}
+					break;
+				case Undead:
+					if (!solTarget.isUndead()) {
+						source.sendMessage("This spell is only effective on Undead");
+						return new Tuple<Boolean,String>(false,"Only affects undead");
+					}
+					break;
+				case Summoned:
+					if (!solTarget.isCurrentlyNPCPet() && !solTarget.isCharmed()) {
+						source.sendMessage("This spell is only effective on Summoned");
+						return new Tuple<Boolean,String>(false,"Only affects summoned");
+					}
+					break;
+				case Animal:
+					if (!solTarget.isAnimal()) {
+						source.sendMessage("This spell is only effective on Animals");
+						return new Tuple<Boolean,String>(false,"Only affects animals");
+					}
+					break;
+				case Plant:
+					if (!solTarget.isPlant()) {
+						source.sendMessage("This spell is only effective on Plants");
+						return new Tuple<Boolean,String>(false,"Only affects plants");
+					}
+					break;
+				default:
+					break;
 				}
 			}
-		}
-
-		if (!solSource.isNPC() && solTarget.isImmuneToSpell(soliniaSpell)) {
-			source.sendMessage(ChatColor.RED + "Your target cannot be affected (with this spell) [Spell has maxlevel or effect already]");
-			return new Tuple<Boolean,String>(false,"Target is (currently) immune to spell - Spell maxlevel limit,haseffect etc..");
-		}
-
-		// Always allow self only spells if the target and source is the self
-		if (source.getUniqueId().equals(target.getUniqueId())
-				&& Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
-			// just be sure to check the item its giving if its an item spell
-			for (SpellEffect effect : soliniaSpell.getBaseSpellEffects()) {
-				if (effect.getSpellEffectType().equals(SpellEffectType.SummonHorse)) {
-					if (source instanceof Player) {
-						if (source.getUniqueId().equals(target.getUniqueId())) {
-							if (StateManager.getInstance().getPlayerManager()
-									.getPlayerLastChangeChar(source.getUniqueId()) != null) {
+	
+			ISoliniaLivingEntity solSource = SoliniaLivingEntityAdapter.Adapt(source);
+			if (solTarget.isNPC()) {
+				if (source instanceof Player || solSource.isCurrentlyNPCPet()) {
+					ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solTarget.getNpcid());
+					if (npc != null) {
+						if (npc.isBoss() || npc.isRaidboss())
+							if (!soliniaSpell.isBossApplyable()) {
 								source.sendMessage(
-										"You can only summon a mount once per server session. Please wait for the next 4 hourly restart");
-								return new Tuple<Boolean,String>(false,"Cannot summon mount this soon");
+										ChatColor.RED + "This NPC is immune to runspeed, gravity and mezmersization changes");
+								return new Tuple<Boolean,String>(false,"Immune to runspeed/gravity/mez");
 							}
-						} else {
-							return new Tuple<Boolean,String>(false,"Source was not target");
-						}
-					} else {
-						return new Tuple<Boolean,String>(false,"Source wasnt player");
+	
+						if (npc.isRaidheroic())
+							if (!soliniaSpell.isRaidApplyable()) {
+								source.sendMessage(
+										ChatColor.RED + "This NPC is immune to runspeed, gravity and mezmersization changes");
+								return new Tuple<Boolean,String>(false,"Immune to runspeed/gravity/mez");
+							}
 					}
 				}
+			}
+	
+			if (!solSource.isNPC() && solTarget.isImmuneToSpell(soliniaSpell)) {
+				source.sendMessage(ChatColor.RED + "Your target cannot be affected (with this spell) [Spell has maxlevel or effect already]");
+				return new Tuple<Boolean,String>(false,"Target is (currently) immune to spell - Spell maxlevel limit,haseffect etc..");
+			}
+	
+			// Always allow self only spells if the target and source is the self
+			if (source.getUniqueId().equals(target.getUniqueId())
+					&& Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
+				// just be sure to check the item its giving if its an item spell
+				for (SpellEffect effect : soliniaSpell.getBaseSpellEffects()) {
+					if (effect.getSpellEffectType().equals(SpellEffectType.SummonHorse)) {
+						if (source instanceof Player) {
+							if (source.getUniqueId().equals(target.getUniqueId())) {
+								if (StateManager.getInstance().getPlayerManager()
+										.getPlayerLastChangeChar(source.getUniqueId()) != null) {
+									source.sendMessage(
+											"You can only summon a mount once per server session. Please wait for the next 4 hourly restart");
+									return new Tuple<Boolean,String>(false,"Cannot summon mount this soon");
+								}
+							} else {
+								return new Tuple<Boolean,String>(false,"Source was not target");
+							}
+						} else {
+							return new Tuple<Boolean,String>(false,"Source wasnt player");
+						}
+					}
+	
+					if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem)) {
+						int itemId = effect.getBase();
+						try {
+							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
+	
+							if (item == null) {
+								return new Tuple<Boolean,String>(false,"Item was null");
+							}
+	
+							if (!item.isTemporary()) {
+								return new Tuple<Boolean,String>(false,"Item wasnt temporary");
+							}
+	
+							if (!(target instanceof LivingEntity)) {
+								return new Tuple<Boolean,String>(false,"Targert wasnt living");
+							}
+						} catch (CoreStateInitException e) {
+							return new Tuple<Boolean,String>(false,"Plugin wasnt initialised");
+						}
+					}
+				}
+	
+				// System.out.println("Detected a self only spell (" + soliniaSpell.getName() +
+				// "), returning as valid, always");
+				return new Tuple<Boolean,String>(true,"Self only spell");
+			}
+	
+			if (!source.getUniqueId().equals(target.getUniqueId()))
+				if (!solSource.isPlayer())
+				{
+					if (!solSource.checkLosFN(solTarget, true))
+						return new Tuple<Boolean,String>(false,"Target not in line of sight of source");
+				} else {
+					// we dont care about directional for players
+					if (!solSource.checkLosFN(solTarget, false))
+						return new Tuple<Boolean,String>(false,"Target not in line of sight of source");
+				}
+	
+			// Try not to kill potentially friendly player tameables with hostile spells
+			if (solTarget.isCurrentlyNPCPet() && target instanceof Creature && !soliniaSpell.isBeneficial()) {
+				if (soliniaSpell.isCharmSpell() && source.getUniqueId().equals(solTarget.getOwnerEntity().getUniqueId())) {
+					// Our owner wants to renew his charm
+					return new Tuple<Boolean,String>(true,"Charm spell and source is target");
+				} else {
+					Creature cr = (Creature) target;
+					if (cr.getTarget() == null)
+						return new Tuple<Boolean,String>(false,"Target is null");
+	
+					if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
+						return new Tuple<Boolean,String>(false,"Target is not the source");
+				}
+			}
+	
+			for (SpellEffect effect : soliniaSpell.getBaseSpellEffects()) {
+				// Return false if the target is in the same group as the player
+				// and the spell is a detrimental
+				if (source instanceof Player && target instanceof Player && soliniaSpell.isDetrimental()) {
+					ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt((Player) source);
+					if (solsourceplayer.getGroup() != null) {
+						if (solsourceplayer.getGroup().getMembers().contains(target.getUniqueId())) {
+							return new Tuple<Boolean,String>(false,"Group contains target");
+						}
+					}
+				}
+	
+				// Return false if the target is in the same faction as the npc and not self
+				if (!(source instanceof Player) && !(target instanceof Player) && soliniaSpell.isDetrimental()
+						&& !source.getUniqueId().equals(target.getUniqueId())) {
+					if (source instanceof LivingEntity && target instanceof LivingEntity) {
+						ISoliniaLivingEntity solsourceEntity = SoliniaLivingEntityAdapter.Adapt(source);
+						ISoliniaLivingEntity soltargetEntity = SoliniaLivingEntityAdapter.Adapt(target);
+	
+						if (solsourceEntity.isNPC() && soltargetEntity.isNPC()) {
+							ISoliniaNPC sourceNpc = StateManager.getInstance().getConfigurationManager()
+									.getNPC(solsourceEntity.getNpcid());
+							ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager()
+									.getNPC(solsourceEntity.getNpcid());
+	
+							if (sourceNpc.getFactionid() > 0 && targetNpc.getFactionid() > 0) {
+								if (sourceNpc.getFactionid() == targetNpc.getFactionid())
+									return new Tuple<Boolean,String>(false,"Faction is same");
+							}
+	
+						}
+	
+					}
+				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.Revive)) {
+					if (!(target instanceof Player)) {
+						return new Tuple<Boolean,String>(false,"Target is not player");
+					}
+	
+					if (!(source instanceof Player))
+						return new Tuple<Boolean,String>(false,"Source is not player");
+	
+					Player sourcePlayer = (Player) source;
+	
+					if (!sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG)) {
+						sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC): "
+								+ sourcePlayer.getInventory().getItemInOffHand().getType().name());
+						return new Tuple<Boolean,String>(false,"Not holding item in offhand");
+					}
+	
+					ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
+					if (item.getEnchantmentLevel(Enchantment.DURABILITY) != 1) {
+						sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (EC)");
+						return new Tuple<Boolean,String>(false,"Not holding item in offhand");
+					}
+	
+					if (!item.getItemMeta().getDisplayName().equals("Signaculum")) {
+						sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (NC)");
+						return new Tuple<Boolean,String>(false,"Not holding item in offhand");
+					}
+	
+					if (item.getItemMeta().getLore().size() < 5) {
+						sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (LC)");
+						return new Tuple<Boolean,String>(false,"Not holding item in offhand");
+					}
+	
+					String sigdataholder = item.getItemMeta().getLore().get(3);
+					String[] sigdata = sigdataholder.split("\\|");
+	
+					if (sigdata.length != 2) {
+						sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (SD)");
+						return new Tuple<Boolean,String>(false,"Not holding item in offhand");
+					}
+	
+					String str_experience = sigdata[0];
+					String str_stimetsamp = sigdata[1];
+	
+					int experience = Integer.parseInt(str_experience);
+					Timestamp timestamp = Timestamp.valueOf(str_stimetsamp);
+					LocalDateTime datetime = LocalDateTime.now();
+					Timestamp currenttimestamp = Timestamp.valueOf(datetime);
+	
+					long maxminutes = 60 * 7;
+					if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes * 60 * 1000) {
+						sourcePlayer.sendMessage("This Signaculum has lost its binding to the soul");
+						return new Tuple<Boolean,String>(false,"Expired signaculum");
+					}
 
+					String characterId = item.getItemMeta().getLore().get(4);
+					try
+					{
+						ISoliniaPlayer soliniaPlayer = StateManager.getInstance().getConfigurationManager().getCharacterById(Integer.parseInt(characterId));
+						if (soliniaPlayer == null)
+						{
+							sourcePlayer.sendMessage("You cannot resurrect that player as this character no longer exists");
+							return new Tuple<Boolean,String>(false,"Character no longer exists");
+						}
+						Player targetplayer = Bukkit.getPlayer(soliniaPlayer.getOwnerUUID());
+						if (targetplayer == null || !targetplayer.isOnline()) {
+							sourcePlayer.sendMessage("You cannot resurrect that player as they are offline");
+							return new Tuple<Boolean,String>(false,"Offline player");
+						}
+					} catch (NumberFormatException e)
+					{
+						sourcePlayer.sendMessage("This signaculum has been corrupted by the void");
+						return new Tuple<Boolean,String>(false,"Character identifier is corrupted");
+					}
+				}
+	
+				// Validate spelleffecttype rules
+				if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP)
+						|| effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)) {
+					// Ignore this rule if the spell is self
+					if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
+						// If the effect is negative standard nuke and on self, cancel out
+						if (effect.getBase() < 0 && target.equals(source))
+							return new Tuple<Boolean,String>(false,"Target was self");
+					}
+	
+					// if the source is a player
+					// and the target is an AI
+					// and it isnt a pet
+					// and it is a heal
+					// cancel
+					if (source instanceof Player) {
+						if (!(target instanceof Player)) {
+							ISoliniaLivingEntity soltargetentity = SoliniaLivingEntityAdapter.Adapt(target);
+							if (!soltargetentity.isCurrentlyNPCPet()) {
+								if (effect.getBase() > 0)
+									return new Tuple<Boolean,String>(false,"Target was pet");
+							}
+						}
+					}
+				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.Illusion)
+						|| effect.getSpellEffectType().equals(SpellEffectType.IllusionaryTarget)
+						|| effect.getSpellEffectType().equals(SpellEffectType.IllusionCopy)
+						|| effect.getSpellEffectType().equals(SpellEffectType.IllusionOther)
+						|| effect.getSpellEffectType().equals(SpellEffectType.IllusionPersistence)) {
+					// if target has spell effect of above already then we cant apply another
+					for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager()
+							.getActiveEntitySpells(target).getActiveSpells()) {
+						if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Illusion))
+							return new Tuple<Boolean,String>(false,"Contained illusion");
+						if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionaryTarget))
+							return new Tuple<Boolean,String>(false,"Contained illusion target");
+						if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionCopy))
+							return new Tuple<Boolean,String>(false,"Contained illusion copy");
+						if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionOther))
+							return new Tuple<Boolean,String>(false,"Contained illusion other");
+						if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionPersistence))
+							return new Tuple<Boolean,String>(false,"Contained illusion persistence");
+					}
+				}
+	
 				if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem)) {
+					System.out.println("Validating SummonItem for source: " + source.getCustomName());
 					int itemId = effect.getBase();
 					try {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-
+	
+						System.out.println("Validating SummonItem for source: " + source.getCustomName());
+	
 						if (item == null) {
-							return new Tuple<Boolean,String>(false,"Item was null");
+							System.out.println("Validating SummonItem said item was null");
+							return new Tuple<Boolean,String>(false,"Item didnt exist");
 						}
-
+	
 						if (!item.isTemporary()) {
-							return new Tuple<Boolean,String>(false,"Item wasnt temporary");
+							System.out.println("Validating SummonItem said item was not temporary");
+							return new Tuple<Boolean,String>(false,"Item was not temporary");
 						}
-
+	
 						if (!(target instanceof LivingEntity)) {
-							return new Tuple<Boolean,String>(false,"Targert wasnt living");
-						}
-					} catch (CoreStateInitException e) {
-						return new Tuple<Boolean,String>(false,"Plugin wasnt initialised");
-					}
-				}
-			}
-
-			// System.out.println("Detected a self only spell (" + soliniaSpell.getName() +
-			// "), returning as valid, always");
-			return new Tuple<Boolean,String>(true,"Self only spell");
-		}
-
-		if (!source.getUniqueId().equals(target.getUniqueId()))
-			if (!solSource.isPlayer())
-			{
-				if (!solSource.checkLosFN(solTarget, true))
-					return new Tuple<Boolean,String>(false,"Target not in line of sight of source");
-			} else {
-				// we dont care about directional for players
-				if (!solSource.checkLosFN(solTarget, false))
-					return new Tuple<Boolean,String>(false,"Target not in line of sight of source");
-			}
-
-		// Try not to kill potentially friendly player tameables with hostile spells
-		if (solTarget.isCurrentlyNPCPet() && target instanceof Creature && !soliniaSpell.isBeneficial()) {
-			if (soliniaSpell.isCharmSpell() && source.getUniqueId().equals(solTarget.getOwnerEntity().getUniqueId())) {
-				// Our owner wants to renew his charm
-				return new Tuple<Boolean,String>(true,"Charm spell and source is target");
-			} else {
-				Creature cr = (Creature) target;
-				if (cr.getTarget() == null)
-					return new Tuple<Boolean,String>(false,"Target is null");
-
-				if (!cr.getTarget().getUniqueId().equals(source.getUniqueId()))
-					return new Tuple<Boolean,String>(false,"Target is not the source");
-			}
-		}
-
-		for (SpellEffect effect : soliniaSpell.getBaseSpellEffects()) {
-			// Return false if the target is in the same group as the player
-			// and the spell is a detrimental
-			if (source instanceof Player && target instanceof Player && soliniaSpell.isDetrimental()) {
-				ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt((Player) source);
-				if (solsourceplayer.getGroup() != null) {
-					if (solsourceplayer.getGroup().getMembers().contains(target.getUniqueId())) {
-						return new Tuple<Boolean,String>(false,"Group contains target");
-					}
-				}
-			}
-
-			// Return false if the target is in the same faction as the npc and not self
-			if (!(source instanceof Player) && !(target instanceof Player) && soliniaSpell.isDetrimental()
-					&& !source.getUniqueId().equals(target.getUniqueId())) {
-				if (source instanceof LivingEntity && target instanceof LivingEntity) {
-					ISoliniaLivingEntity solsourceEntity = SoliniaLivingEntityAdapter.Adapt(source);
-					ISoliniaLivingEntity soltargetEntity = SoliniaLivingEntityAdapter.Adapt(target);
-
-					if (solsourceEntity.isNPC() && soltargetEntity.isNPC()) {
-						ISoliniaNPC sourceNpc = StateManager.getInstance().getConfigurationManager()
-								.getNPC(solsourceEntity.getNpcid());
-						ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager()
-								.getNPC(solsourceEntity.getNpcid());
-
-						if (sourceNpc.getFactionid() > 0 && targetNpc.getFactionid() > 0) {
-							if (sourceNpc.getFactionid() == targetNpc.getFactionid())
-								return new Tuple<Boolean,String>(false,"Faction is same");
-						}
-
-					}
-
-				}
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.Revive)) {
-				if (!(target instanceof Player)) {
-					return new Tuple<Boolean,String>(false,"Target is not player");
-				}
-
-				if (!(source instanceof Player))
-					return new Tuple<Boolean,String>(false,"Source is not player");
-
-				Player sourcePlayer = (Player) source;
-
-				if (!sourcePlayer.getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG)) {
-					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (MC): "
-							+ sourcePlayer.getInventory().getItemInOffHand().getType().name());
-					return new Tuple<Boolean,String>(false,"Not holding item in offhand");
-				}
-
-				ItemStack item = sourcePlayer.getInventory().getItemInOffHand();
-				if (item.getEnchantmentLevel(Enchantment.DURABILITY) != 1) {
-					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (EC)");
-					return new Tuple<Boolean,String>(false,"Not holding item in offhand");
-				}
-
-				if (!item.getItemMeta().getDisplayName().equals("Signaculum")) {
-					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (NC)");
-					return new Tuple<Boolean,String>(false,"Not holding item in offhand");
-				}
-
-				if (item.getItemMeta().getLore().size() < 5) {
-					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (LC)");
-					return new Tuple<Boolean,String>(false,"Not holding item in offhand");
-				}
-
-				String sigdataholder = item.getItemMeta().getLore().get(3);
-				String[] sigdata = sigdataholder.split("\\|");
-
-				if (sigdata.length != 2) {
-					sourcePlayer.sendMessage("You are not holding a Signaculum in your offhand (SD)");
-					return new Tuple<Boolean,String>(false,"Not holding item in offhand");
-				}
-
-				String str_experience = sigdata[0];
-				String str_stimetsamp = sigdata[1];
-
-				int experience = Integer.parseInt(str_experience);
-				Timestamp timestamp = Timestamp.valueOf(str_stimetsamp);
-				LocalDateTime datetime = LocalDateTime.now();
-				Timestamp currenttimestamp = Timestamp.valueOf(datetime);
-
-				long maxminutes = 60 * 7;
-				if ((currenttimestamp.getTime() - timestamp.getTime()) >= maxminutes * 60 * 1000) {
-					sourcePlayer.sendMessage("This Signaculum has lost its binding to the soul");
-					return new Tuple<Boolean,String>(false,"Expired signaculum");
-				}
-
-				String playeruuidb64 = item.getItemMeta().getLore().get(4);
-				String uuid = Utils.uuidFromBase64(playeruuidb64);
-
-				Player targetplayer = Bukkit.getPlayer(UUID.fromString(uuid));
-				if (targetplayer == null || !targetplayer.isOnline()) {
-					sourcePlayer.sendMessage("You cannot resurrect that player as they are offline");
-					return new Tuple<Boolean,String>(false,"Offline player");
-				}
-			}
-
-			// Validate spelleffecttype rules
-			if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP)
-					|| effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)) {
-				// Ignore this rule if the spell is self
-				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
-					// If the effect is negative standard nuke and on self, cancel out
-					if (effect.getBase() < 0 && target.equals(source))
-						return new Tuple<Boolean,String>(false,"Target was self");
-				}
-
-				// if the source is a player
-				// and the target is an AI
-				// and it isnt a pet
-				// and it is a heal
-				// cancel
-				if (source instanceof Player) {
-					if (!(target instanceof Player)) {
-						ISoliniaLivingEntity soltargetentity = SoliniaLivingEntityAdapter.Adapt(target);
-						if (!soltargetentity.isCurrentlyNPCPet()) {
-							if (effect.getBase() > 0)
-								return new Tuple<Boolean,String>(false,"Target was pet");
-						}
-					}
-				}
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.Illusion)
-					|| effect.getSpellEffectType().equals(SpellEffectType.IllusionaryTarget)
-					|| effect.getSpellEffectType().equals(SpellEffectType.IllusionCopy)
-					|| effect.getSpellEffectType().equals(SpellEffectType.IllusionOther)
-					|| effect.getSpellEffectType().equals(SpellEffectType.IllusionPersistence)) {
-				// if target has spell effect of above already then we cant apply another
-				for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager()
-						.getActiveEntitySpells(target).getActiveSpells()) {
-					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.Illusion))
-						return new Tuple<Boolean,String>(false,"Contained illusion");
-					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionaryTarget))
-						return new Tuple<Boolean,String>(false,"Contained illusion target");
-					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionCopy))
-						return new Tuple<Boolean,String>(false,"Contained illusion copy");
-					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionOther))
-						return new Tuple<Boolean,String>(false,"Contained illusion other");
-					if (activeSpell.getSpell().getSpellEffectTypes().contains(SpellEffectType.IllusionPersistence))
-						return new Tuple<Boolean,String>(false,"Contained illusion persistence");
-				}
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.SummonItem)) {
-				System.out.println("Validating SummonItem for source: " + source.getCustomName());
-				int itemId = effect.getBase();
-				try {
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-
-					System.out.println("Validating SummonItem for source: " + source.getCustomName());
-
-					if (item == null) {
-						System.out.println("Validating SummonItem said item was null");
-						return new Tuple<Boolean,String>(false,"Item didnt exist");
-					}
-
-					if (!item.isTemporary()) {
-						System.out.println("Validating SummonItem said item was not temporary");
-						return new Tuple<Boolean,String>(false,"Item was not temporary");
-					}
-
-					if (!(target instanceof LivingEntity)) {
-						System.out.println("Validating SummonItem said target was not a living entity");
-						return new Tuple<Boolean,String>(false,"Target not living");
-					}
-				} catch (CoreStateInitException e) {
-					return new Tuple<Boolean,String>(false,"Plugin not initialised");
-				}
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll)
-					|| effect.getSpellEffectType().equals(SpellEffectType.ResistCold)
-					|| effect.getSpellEffectType().equals(SpellEffectType.ResistFire)
-					|| effect.getSpellEffectType().equals(SpellEffectType.ResistMagic)
-					|| effect.getSpellEffectType().equals(SpellEffectType.ResistPoison)
-					|| effect.getSpellEffectType().equals(SpellEffectType.ResistDisease)
-					|| effect.getSpellEffectType().equals(SpellEffectType.ResistCorruption)) {
-				// If the effect is negative standard resist debuffer and on self, cancel out
-				if (effect.getBase() < 0 && target.equals(source))
-					return new Tuple<Boolean,String>(false,"Target of spell is source");
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.Mez)) {
-				// If the effect is a mez, cancel out
-				if (target.equals(source))
-					return new Tuple<Boolean,String>(false,"Target of spell is source");
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.Stun)) {
-				// If the effect is a stun, cancel out
-				if (target.equals(source))
-					return new Tuple<Boolean,String>(false,"Target of spell is source");
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.Root)) {
-				// If the effect is a root, cancel out
-				if (target.equals(source))
-					return new Tuple<Boolean,String>(false,"Target of spell is source");
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.Blind)) {
-				// If the effect is a blindness, cancel out
-				if (target.equals(source))
-					return new Tuple<Boolean,String>(false,"Target of spell is source");
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.DamageShield) && !(target instanceof Player)
-					&& !SoliniaLivingEntityAdapter.Adapt(target).isCurrentlyNPCPet()) {
-				// If the effect is a mez, cancel out
-				if (target.equals(source))
-					return new Tuple<Boolean,String>(false,"Target of spell is source");
-			}
-
-			if (effect.getSpellEffectType().equals(SpellEffectType.NecPet)
-					|| effect.getSpellEffectType().equals(SpellEffectType.SummonPet)
-					|| effect.getSpellEffectType().equals(SpellEffectType.Teleport)
-					|| effect.getSpellEffectType().equals(SpellEffectType.Teleport2)
-					|| effect.getSpellEffectType().equals(SpellEffectType.Translocate)
-					|| effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor)) {
-				// If the effect is teleport and the target is not a player then fail
-				if (!(target instanceof Player))
-					return new Tuple<Boolean,String>(false,"Target of spell not a player");
-
-				if (!(source instanceof Player))
-					return new Tuple<Boolean,String>(false,"Source of spell not a player");
-
-				// If the effect is a teleport and the target is not in a group or self then
-				// fail
-				if (effect.getSpellEffectType().equals(SpellEffectType.Teleport)
-						|| effect.getSpellEffectType().equals(SpellEffectType.Teleport2)
-						|| effect.getSpellEffectType().equals(SpellEffectType.Translocate)
-						|| effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor)) {
-					// if target is not the player casting
-					if (!target.getUniqueId().equals(source.getUniqueId())) {
-						ISoliniaPlayer solplayertarget = SoliniaPlayerAdapter.Adapt((Player) target);
-						if (solplayertarget == null)
-							return new Tuple<Boolean,String>(false,"Target not found");
-
-						if (solplayertarget.getGroup() == null)
-							return new Tuple<Boolean,String>(false,"Group not found");
-
-						if (!(solplayertarget.getGroup().getMembers().contains(source.getUniqueId())))
-							return new Tuple<Boolean,String>(false,"Group member not found");
-					}
-				}
-
-				if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet)
-						|| effect.getSpellEffectType().equals(SpellEffectType.NecPet)) {
-					try {
-						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
-								.getPetNPCByName(soliniaSpell.getTeleportZone());
-						if (npc == null) {
-							return new Tuple<Boolean,String>(false,"NPC not found for pet");
-						}
-						if (npc.isCorePet() == false) {
-							System.out.print("NPC " + soliniaSpell.getTeleportZone() + " is not defined as a pet");
-							return new Tuple<Boolean,String>(false,"Pet is not defined on spell");
+							System.out.println("Validating SummonItem said target was not a living entity");
+							return new Tuple<Boolean,String>(false,"Target not living");
 						}
 					} catch (CoreStateInitException e) {
 						return new Tuple<Boolean,String>(false,"Plugin not initialised");
 					}
 				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll)
+						|| effect.getSpellEffectType().equals(SpellEffectType.ResistCold)
+						|| effect.getSpellEffectType().equals(SpellEffectType.ResistFire)
+						|| effect.getSpellEffectType().equals(SpellEffectType.ResistMagic)
+						|| effect.getSpellEffectType().equals(SpellEffectType.ResistPoison)
+						|| effect.getSpellEffectType().equals(SpellEffectType.ResistDisease)
+						|| effect.getSpellEffectType().equals(SpellEffectType.ResistCorruption)) {
+					// If the effect is negative standard resist debuffer and on self, cancel out
+					if (effect.getBase() < 0 && target.equals(source))
+						return new Tuple<Boolean,String>(false,"Target of spell is source");
+				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.Mez)) {
+					// If the effect is a mez, cancel out
+					if (target.equals(source))
+						return new Tuple<Boolean,String>(false,"Target of spell is source");
+				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.Stun)) {
+					// If the effect is a stun, cancel out
+					if (target.equals(source))
+						return new Tuple<Boolean,String>(false,"Target of spell is source");
+				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.Root)) {
+					// If the effect is a root, cancel out
+					if (target.equals(source))
+						return new Tuple<Boolean,String>(false,"Target of spell is source");
+				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.Blind)) {
+					// If the effect is a blindness, cancel out
+					if (target.equals(source))
+						return new Tuple<Boolean,String>(false,"Target of spell is source");
+				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.DamageShield) && !(target instanceof Player)
+						&& !SoliniaLivingEntityAdapter.Adapt(target).isCurrentlyNPCPet()) {
+					// If the effect is a mez, cancel out
+					if (target.equals(source))
+						return new Tuple<Boolean,String>(false,"Target of spell is source");
+				}
+	
+				if (effect.getSpellEffectType().equals(SpellEffectType.NecPet)
+						|| effect.getSpellEffectType().equals(SpellEffectType.SummonPet)
+						|| effect.getSpellEffectType().equals(SpellEffectType.Teleport)
+						|| effect.getSpellEffectType().equals(SpellEffectType.Teleport2)
+						|| effect.getSpellEffectType().equals(SpellEffectType.Translocate)
+						|| effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor)) {
+					// If the effect is teleport and the target is not a player then fail
+					if (!(target instanceof Player))
+						return new Tuple<Boolean,String>(false,"Target of spell not a player");
+	
+					if (!(source instanceof Player))
+						return new Tuple<Boolean,String>(false,"Source of spell not a player");
+	
+					// If the effect is a teleport and the target is not in a group or self then
+					// fail
+					if (effect.getSpellEffectType().equals(SpellEffectType.Teleport)
+							|| effect.getSpellEffectType().equals(SpellEffectType.Teleport2)
+							|| effect.getSpellEffectType().equals(SpellEffectType.Translocate)
+							|| effect.getSpellEffectType().equals(SpellEffectType.TranslocatetoAnchor)) {
+						// if target is not the player casting
+						if (!target.getUniqueId().equals(source.getUniqueId())) {
+							ISoliniaPlayer solplayertarget = SoliniaPlayerAdapter.Adapt((Player) target);
+							if (solplayertarget == null)
+								return new Tuple<Boolean,String>(false,"Target not found");
+	
+							if (solplayertarget.getGroup() == null)
+								return new Tuple<Boolean,String>(false,"Group not found");
+	
+							if (!(solplayertarget.getGroup().getMembers().contains(source.getUniqueId())))
+								return new Tuple<Boolean,String>(false,"Group member not found");
+						}
+					}
+	
+					if (effect.getSpellEffectType().equals(SpellEffectType.SummonPet)
+							|| effect.getSpellEffectType().equals(SpellEffectType.NecPet)) {
+						try {
+							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+									.getPetNPCByName(soliniaSpell.getTeleportZone());
+							if (npc == null) {
+								return new Tuple<Boolean,String>(false,"NPC not found for pet");
+							}
+							if (npc.isCorePet() == false) {
+								System.out.print("NPC " + soliniaSpell.getTeleportZone() + " is not defined as a pet");
+								return new Tuple<Boolean,String>(false,"Pet is not defined on spell");
+							}
+						} catch (CoreStateInitException e) {
+							return new Tuple<Boolean,String>(false,"Plugin not initialised");
+						}
+					}
+				}
 			}
+		} catch (Exception e)
+		{
+			return new Tuple<Boolean,String>(false, e.getMessage());
 		}
 
 		return new Tuple<Boolean,String>(true, "");
@@ -5557,7 +5574,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public boolean tryCast(LivingEntity sourcemob, LivingEntity targetmob, boolean consumeMana,
 			boolean consumeReagents, String requiredWeaponSkillType) {
 		try {
-
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(sourcemob);
 			if (solentity == null)
 				return false;

@@ -1,12 +1,8 @@
 package com.solinia.solinia.Models;
 
-import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,16 +10,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.TextUtils;
 
 public class SoliniaResurrectionItem {
-	String playeruuidb64;
+	String playeruuidb64; // actualy character id now
 	int experience;
 	String playername;
 	java.sql.Timestamp timestamp;
 	
 	public SoliniaResurrectionItem(ISoliniaPlayer solplayer, int experience, Timestamp timestamp)
 	{
-		this.playeruuidb64 = uuidToBase64(solplayer.getOwnerUUID().toString());
+		this.playeruuidb64 = Integer.toString(solplayer.getId()); // actualy character id now
 		this.playername = solplayer.getFullName();
 		this.experience = experience;
 		this.timestamp = timestamp;
@@ -40,7 +37,8 @@ public class SoliniaResurrectionItem {
 		loretxt.add("to "+ ChatColor.YELLOW+playername+ChatColor.RESET+". It may be");
 		loretxt.add("possible to restore them to life.");
 		loretxt.add(experience+"|"+timestamp);
-		loretxt.add(playeruuidb64);
+		loretxt.add(playeruuidb64); // actualy character id now
+		System.out.println("Signaculum has been set to " +playeruuidb64 ); // actualy character id now
 	    i.setLore(loretxt);
 	    stack.setItemMeta(i);
 	    stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
@@ -48,10 +46,6 @@ public class SoliniaResurrectionItem {
 	}
 	
 	private String uuidToBase64(String str) {
-	    UUID uuid = UUID.fromString(str);
-	    ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
-	    bb.putLong(uuid.getMostSignificantBits());
-	    bb.putLong(uuid.getLeastSignificantBits());
-	    return Base64.encodeBase64URLSafeString(bb.array());
+		return TextUtils.ToBase64UTF8(str);
 	}
 }

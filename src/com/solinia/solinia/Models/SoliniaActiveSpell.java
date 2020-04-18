@@ -2034,26 +2034,39 @@ public class SoliniaActiveSpell {
 			return;
 		}
 
-		String playeruuidb64 = item.getItemMeta().getLore().get(4);
-		String uuid = Utils.uuidFromBase64(playeruuidb64);
+		String characterId = item.getItemMeta().getLore().get(4);
 
-		Player targetplayer = Bukkit.getPlayer(UUID.fromString(uuid));
-		if (targetplayer == null || !targetplayer.isOnline()) {
-			sourcePlayer.sendMessage("You cannot resurrect that player as they are offline");
-			return;
-		}
+		try
+		{
+			ISoliniaPlayer soliniaCharacter = StateManager.getInstance().getConfigurationManager().getCharacterById(Integer.parseInt(characterId));
+			if (soliniaCharacter == null)
+			{
+				sourcePlayer.sendMessage("You cannot resurrect that player that no longer exists");
+				return;
+			}
+			
+			Player targetplayer = Bukkit.getPlayer(soliniaCharacter.getOwnerUUID());
+			if (targetplayer == null || !targetplayer.isOnline()) {
+				sourcePlayer.sendMessage("You cannot resurrect that player as they are offline");
+				return;
+			}
+			
+			int multiplier = 1;
+			if (spellEffect.getBase() > 0 && spellEffect.getBase() < 100)
+				multiplier = spellEffect.getBase();
 
-		int multiplier = 1;
-		if (spellEffect.getBase() > 0 && spellEffect.getBase() < 100)
-			multiplier = spellEffect.getBase();
-
-		try {
-			double finalexperience = (experience / 100) * multiplier;
-			SoliniaPlayerAdapter.Adapt(targetplayer).increasePlayerNormalExperience(finalexperience, false, false);
-			targetplayer.sendMessage("You have been resurrected by " + sourcePlayer.getCustomName() + "!");
-			EntityUtils.teleportSafely(targetplayer,sourcePlayer.getLocation());
-			sourcePlayer.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
-		} catch (CoreStateInitException e) {
+			try {
+				double finalexperience = (experience / 100) * multiplier;
+				SoliniaPlayerAdapter.Adapt(targetplayer).increasePlayerNormalExperience(finalexperience, false, false);
+				targetplayer.sendMessage("You have been resurrected by " + sourcePlayer.getCustomName() + "!");
+				EntityUtils.teleportSafely(targetplayer,sourcePlayer.getLocation());
+				sourcePlayer.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
+			} catch (CoreStateInitException e) {
+				return;
+			}
+		} catch (CoreStateInitException e)
+		{
+			sourcePlayer.sendMessage("The server is not initialised");
 			return;
 		}
 

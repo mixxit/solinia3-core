@@ -1727,6 +1727,7 @@ public class EntityManager implements IEntityManager {
 			if (entity instanceof Player && (!((Player)entity).isDead()))
 			{
 				Player player = (Player)entity;
+				// Do casting animation
 				player.sendMessage("You finish your ability");
 				try {
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
@@ -1735,7 +1736,7 @@ public class EntityManager implements IEntityManager {
 				}
 				
 			}
-			
+
 			entitySpellCasting.remove(entityUUID);
 		}
 	}

@@ -1134,8 +1134,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}*/
 			
-			// Do casting animation
-			
+
 			switch (Utils.getSpellTargetType(spell.getTargettype())) {
 			case Self:
 				spell.tryApplyOnEntity(getBukkitLivingEntity(),
