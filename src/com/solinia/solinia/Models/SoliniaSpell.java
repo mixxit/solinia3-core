@@ -4495,7 +4495,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 							ISoliniaLivingEntity soltargetentity = SoliniaLivingEntityAdapter.Adapt(target);
 							if (!soltargetentity.isCurrentlyNPCPet()) {
 								if (effect.getBase() > 0)
-									return new Tuple<Boolean,String>(false,"Target was pet");
+									return new Tuple<Boolean,String>(false,"Target wasnt a pet npc");
 							}
 						}
 					}

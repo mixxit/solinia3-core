@@ -5044,7 +5044,7 @@ public class Utils {
 	}
 
 	public static void playSpecialEffect(Entity entity, SoliniaActiveSpell activeSpell) {
-		if (!activeSpell.isRacialPassive())
+		if (activeSpell.isRacialPassive())
 			return;
 		
 		int sai = activeSpell.getSpell().getSpellAffectIndex();
