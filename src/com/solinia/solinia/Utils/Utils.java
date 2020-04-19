@@ -6006,8 +6006,8 @@ public class Utils {
 			}
 
 			TextComponent fullTextComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
-			if (itemStack != null && showItemLinks == true)
-				fullTextComponent = decorateTextComponentsWithHovers(fullTextComponent, itemStack);
+			if (itemStack != null)
+				fullTextComponent = decorateTextComponentsWithHovers(fullTextComponent, itemStack, showItemLinks);
 			
 			tc.addExtra(fullTextComponent);
 				
@@ -6036,8 +6036,8 @@ public class Utils {
 		
 	}
 	
-	public static TextComponent decorateTextComponentsWithHovers(TextComponent tc, ItemStack itemStack) {
-		if (itemStack != null)
+	public static TextComponent decorateTextComponentsWithHovers(TextComponent tc, ItemStack itemStack, boolean showItemLinks) {
+		if (itemStack != null && showItemLinks)
 		{
 			try
 			{

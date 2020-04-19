@@ -44,12 +44,12 @@ public class ChannelManager implements IChannelManager {
 					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguageSkillType()))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguageSkillType().name().toUpperCase() + "]"));
-						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 						numberReached++;
 					} else {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguageSkillType()))) + " (You do not fully understand this language) [" + source.getLanguageSkillType().name().toUpperCase() + "]"));
-						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 						numberReached++;
 
@@ -58,7 +58,7 @@ public class ChannelManager implements IChannelManager {
 				} catch (CoreStateInitException e)
 				{
 					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised"));
-					tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+					tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 					player.spigot().sendMessage(tc);
 					numberReached++;
 					e.printStackTrace();
@@ -88,12 +88,12 @@ public class ChannelManager implements IChannelManager {
 					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguageSkillType()))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguageSkillType().name().toUpperCase() + "]"));
-						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 						numberReached++;
 					} else {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguageSkillType()))) + " (You dot not fully understand this language) [" + source.getLanguageSkillType().name().toUpperCase() + "]"));
-						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 						numberReached++;
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguageSkillType());
@@ -101,7 +101,7 @@ public class ChannelManager implements IChannelManager {
 				} catch (CoreStateInitException e)
 				{
 					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised"));
-					tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+					tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 					player.spigot().sendMessage(tc);
 					numberReached++;
 					e.printStackTrace();
@@ -130,12 +130,12 @@ public class ChannelManager implements IChannelManager {
 					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguageSkillType()))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguageSkillType().name().toUpperCase() + "]"));
-						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 						numberReached++;
 					} else {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(decorateLocalPlayerMessage(source, Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguageSkillType()))) + " (You do not fully understand this language) [" + source.getLanguageSkillType().name().toUpperCase() + "]"));
-						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 						numberReached++;
 
@@ -144,7 +144,7 @@ public class ChannelManager implements IChannelManager {
 				} catch (CoreStateInitException e)
 				{
 					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("You could not understand what " + source.getFullNameWithTitle() + " was saying as your character is currently uninitialised"));
-					tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+					tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 					player.spigot().sendMessage(tc);
 					numberReached++;
 					e.printStackTrace();
@@ -413,7 +413,7 @@ public class ChannelManager implements IChannelManager {
 				}
 
 				TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
-				tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+				tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 				player.spigot().sendMessage(tc);
 				numberReached++;
 			}
@@ -427,7 +427,7 @@ public class ChannelManager implements IChannelManager {
 	public void sendToGlobalChannel(ISoliniaPlayer source, String message, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
-			tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+			tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 			player.spigot().sendMessage(tc);
 		}
 		
@@ -452,7 +452,7 @@ public class ChannelManager implements IChannelManager {
 				}
 				
 				TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
-				tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+				tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 				player.spigot().sendMessage(tc);
 			}
 		}
@@ -469,11 +469,11 @@ public class ChannelManager implements IChannelManager {
 					if (player.isOp() || (source.getLanguage() == null || source.getLanguage().equals(SkillType.UnknownTongue) || source.getLanguage().equals(SkillType.None) ||  source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
-						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 					} else {
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.AQUA + source.getName() + " says '" + Utils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage())) + "' (You do not fully understand this language) [" + source.getLanguage() + "]" + ChatColor.RESET));
-						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+						tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 						
 						if (allowlanguagelearn == true)
@@ -494,7 +494,7 @@ public class ChannelManager implements IChannelManager {
 	public void sendToGlobalChannel(String name, String message, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(name + ": " + message));
-			tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+			tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 			player.spigot().sendMessage(tc);
 		}
 	}
@@ -506,7 +506,7 @@ public class ChannelManager implements IChannelManager {
 				continue;
 			
 			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(name + ": " + message));
-			tc = Utils.decorateTextComponentsWithHovers(tc, itemStack);
+			tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 			player.spigot().sendMessage(tc);
 
 		}
