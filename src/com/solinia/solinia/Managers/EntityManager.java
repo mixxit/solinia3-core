@@ -463,6 +463,7 @@ public class EntityManager implements IEntityManager {
 			Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "Beginning adding spell to entity on behalf of caster");
 			if (soliniaSpell.isCharmSpell() && getPet(sourceEntity.getUniqueId()) != null && !getPet(sourceEntity.getUniqueId()).getUniqueId().equals(targetEntity.getUniqueId()))
 			{
+				sourceEntity.sendMessage("This is already a pet");
 				Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "Source aborting spell cast, was either charm with a pet or related to pet status");
 				return false;
 			}
@@ -891,8 +892,19 @@ public class EntityManager implements IEntityManager {
 				try
 				{
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+				// Remove charm first else it will just reapply
+				if (solLivingEntity.hasSpellEffectType(SpellEffectType.Charm))
+				{
+					this.clearEntityEffectsOfType((LivingEntity)entity, SpellEffectType.Charm, true, false);
+				}
+				
 				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null)
+				{
+					// effectively remove owner
+					//solLivingEntity.getActiveMob().setOwner(UUID.randomUUID());
 					solLivingEntity.getActiveMob().removeOwner();
+					solLivingEntity.getActiveMob().resetTarget();
+				}
 				} catch (CoreStateInitException e)
 				{
 					
@@ -1125,6 +1137,24 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
+	public void clearEntityEffectsOfType(LivingEntity livingEntity, SpellEffectType type, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {
+		if (entitySpells.get(livingEntity.getUniqueId()) == null)
+			return;
+		
+		entitySpells.get(livingEntity.getUniqueId()).removeSpellsOfEffectType(plugin, type, forceDoNotLoopBardSpell, removeNonCombatEffects);
+		
+		try
+		{
+			if (livingEntity != null && livingEntity instanceof Player)
+				SoliniaPlayerAdapter.Adapt((Player)livingEntity).sendEffects();
+		} catch (CoreStateInitException e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+	
+	@Override
 	public void clearEntityFirstEffect(LivingEntity livingEntity) {
 		if (entitySpells.get(livingEntity.getUniqueId()) == null)
 			return;
@@ -1141,40 +1171,7 @@ public class EntityManager implements IEntityManager {
 		}
 
 	}
-	/*
-	@Override
-	public void addTemporaryMerchantItem(int npcid, int itemid, int amount) {
-		if (temporaryMerchantItems.get(npcid) == null)
-			temporaryMerchantItems.put(npcid, new ConcurrentHashMap<Integer, Integer>());
-		
-		if (temporaryMerchantItems.get(npcid).get(itemid) == null)
-			temporaryMerchantItems.get(npcid).put(itemid, 0);
-		
-		int currentCount = temporaryMerchantItems.get(npcid).get(itemid);
-		temporaryMerchantItems.get(npcid).put(itemid, currentCount + amount);
-	}
 	
-	@Override
-	public List<ISoliniaNPCMerchantEntry> getTemporaryMerchantItems(ISoliniaNPC npc) {
-		if (temporaryMerchantItems.get(npc.getId()) == null)
-			temporaryMerchantItems.put(npc.getId(), new ConcurrentHashMap<Integer, Integer>());
-		
-		List<ISoliniaNPCMerchantEntry> entries = new ArrayList<ISoliniaNPCMerchantEntry>();
-		for(Integer key : temporaryMerchantItems.get(npc.getId()).keySet())
-		{
-			if (temporaryMerchantItems.get(npc.getId()).get(key) < 1)
-				continue;
-			
-			ISoliniaNPCMerchantEntry entry = new SoliniaNPCMerchantEntry();
-			entry.setId(0);
-			entry.setItemid(key);
-			entry.setMerchantid(npc.getMerchantid());
-			entry.setTemporaryquantitylimit(temporaryMerchantItems.get(npc.getId()).get(key));
-			entries.add(entry);
-		}
-		return entries;
-	}
-	*/
 	@Override
 	public List<ISoliniaNPCMerchantEntry> getNPCMerchantCombinedEntries(ISoliniaNPCMerchant merchant) {
 		List<ISoliniaNPCMerchantEntry> combinedEntries = new ArrayList<ISoliniaNPCMerchantEntry>();
@@ -1210,27 +1207,7 @@ public class EntityManager implements IEntityManager {
 		return combinedEntries;
 		
 	}
-	/*
-	@Override
-	public void removeTemporaryMerchantItem(int npcid, int itemid, int amount) throws InsufficientTemporaryMerchantItemException {
-		if (temporaryMerchantItems.get(npcid) == null)
-			temporaryMerchantItems.put(npcid, new ConcurrentHashMap<Integer, Integer>());
-		
-		if (temporaryMerchantItems.get(npcid).get(itemid) == null)
-			temporaryMerchantItems.get(npcid).put(itemid, 0);
-		
-		int currentCount = temporaryMerchantItems.get(npcid).get(itemid);
-		
-		if (currentCount < amount)
-			throw new InsufficientTemporaryMerchantItemException("Vendor does not have sufficient items");
-		
-		int newCount = currentCount - amount;
-		if (newCount < 0)
-			newCount = 0;
-		
-		temporaryMerchantItems.get(npcid).put(itemid, newCount);
-	}
-	*/
+	
 	@Override
 	public void doNPCSummon() {
 		List<Integer> completedNpcsIds = new ArrayList<Integer>();

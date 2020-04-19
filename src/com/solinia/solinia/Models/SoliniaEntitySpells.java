@@ -109,6 +109,15 @@ public class SoliniaEntitySpells {
 		Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Beginning addSpell on behalf of caster");
 		// This spell ID is already active
 		// TODO We should allow overwriting of higher level 
+		
+		// lets extend the duration if its out spell
+		if (containsSpellId(soliniaSpell.getId()))
+		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+			if (activeSpell.getSpellId() == soliniaSpell.getId() && activeSpell.getSourceUuid().equals(sourceEntity.getUniqueId()))
+				activeSpell.setTicksLeft(duration);
+				return true;
+		}
+		
 		if (containsSpellId(soliniaSpell.getId()) && !soliniaSpell.isStackableDot())
 		{
 			Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Abort, had spell already and it wasnt a stackable dot");
@@ -752,6 +761,30 @@ public class SoliniaEntitySpells {
 			if (foundToRemove == false && activeSpellSlot.getValue().getSpell().isEffectInSpell(type)) {
 				removeSpells.add(activeSpellSlot.getValue().getSpellId());
 				foundToRemove = true;
+			} else {
+				updateSpells.put(activeSpellSlot.getKey(), activeSpellSlot.getValue());
+			}
+		}
+
+		for (Integer spellId : removeSpells) {
+			removeSpell(plugin, spellId, forceDoNotLoopBardSpell, removeNonCombatEffects);
+		}
+
+		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : updateSpells.entrySet()) {
+			putSlot(activeSpellSlot.getKey(), activeSpellSlot.getValue(), false);
+		}
+
+	}
+	
+	// Mainly used for cures
+	public void removeSpellsOfEffectType(Plugin plugin, SpellEffectType type, boolean forceDoNotLoopBardSpell,
+			boolean removeNonCombatEffects) {
+		List<Integer> removeSpells = new ArrayList<Integer>();
+		HashMap<Short, SoliniaActiveSpell> updateSpells = new HashMap<Short, SoliniaActiveSpell>();
+
+		for (Entry<Short, SoliniaActiveSpell> activeSpellSlot : slots.entrySet()) {
+			if (activeSpellSlot.getValue().getSpell().isEffectInSpell(type)) {
+				removeSpells.add(activeSpellSlot.getValue().getSpellId());
 			} else {
 				updateSpells.put(activeSpellSlot.getKey(), activeSpellSlot.getValue());
 			}

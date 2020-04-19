@@ -3,8 +3,11 @@ package com.solinia.solinia.Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.metadata.MetadataValue;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
@@ -16,6 +19,9 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
+
+import net.minecraft.server.v1_14_R1.EntityInsentient;
+import net.minecraft.server.v1_14_R1.PathfinderGoalSelector;
 
 public class CommandSolNPCInfo implements CommandExecutor {
 
@@ -102,7 +108,7 @@ public class CommandSolNPCInfo implements CommandExecutor {
 				player.sendMessage("Faction: " + metadata);
 			}
 			
-			player.sendMessage("LISTEFFECTS");
+			player.sendMessage("Active Effects");
 			try {
 				for (SoliniaActiveSpell spell : StateManager.getInstance().getEntityManager()
 						.getActiveEntitySpells(solLivingEntity.getBukkitLivingEntity()).getActiveSpells()) {
@@ -115,13 +121,31 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			} catch (CoreStateInitException e) {
 				//
 			}
+			if (solLivingEntity.getBukkitLivingEntity() instanceof Creature)
+			{
+				player.sendMessage("Owner entity: " + solLivingEntity.getActiveMob().getOwner());
+				player.sendMessage("Parent entity: " + solLivingEntity.getActiveMob().getParent());
+			}
 			
-			player.sendMessage("HATELIST");
+			if (solLivingEntity.getBukkitLivingEntity() instanceof Tameable)
+			{
+				player.sendMessage("Tame Owner entity: " + ((Tameable)(solLivingEntity.getBukkitLivingEntity())).getOwner());
+			}
 			solLivingEntity.sendHateList(player);
-			player.sendMessage("MINECRAFT AGGRO");
 			player.sendMessage("Minecraft attack target: " + solLivingEntity.getAttackTarget());
 			if(player.isOp())
 			player.sendMessage("Can i see you: "+ solLivingEntity.checkLosFN(SoliniaLivingEntityAdapter.Adapt(player)));
+			
+			try
+			{
+				EntityInsentient nmsEntity = (EntityInsentient) ((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle();
+		        player.sendMessage("goalSelector: " + nmsEntity.goalSelector.getClass().getName());
+		        player.sendMessage("targetSelector: " + nmsEntity.targetSelector.getClass().getName());
+		        
+			} catch (Exception e)
+			{
+				
+			}
 			
 		} catch (CoreStateInitException e)
 		{

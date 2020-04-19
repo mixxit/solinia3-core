@@ -227,4 +227,7 @@ public interface IEntityManager {
 
 	List<UUID> getReverseEntityTarget(UUID uniqueId);
 
+	void clearEntityEffectsOfType(LivingEntity livingEntity, SpellEffectType type, boolean forceDoNotLoopBardSpell,
+			boolean removeNonCombatEffects);
+
 }

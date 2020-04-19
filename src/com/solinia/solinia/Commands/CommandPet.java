@@ -74,6 +74,26 @@ public class CommandPet implements CommandExecutor {
 				if (args.length > 0)
 				{
 					String petcommand = args[0];
+					if (petcommand.equals("leave"))
+					{
+						if (solLivingEntity != null)
+						{
+							solLivingEntity.clearHateList();
+							if (solLivingEntity.IsCorePet())
+							{
+								solPlayer.killAllPets();
+							}
+							else
+							{
+								StateManager.getInstance().getEntityManager().removePet(player.getUniqueId(),
+										!solLivingEntity.isCharmed());
+								solLivingEntity.clearHateList();
+							}
+							
+							player.setLastDamageCause(null);
+						}
+					}
+					
 					if (petcommand.equals("back"))
 					{
 						if (solLivingEntity != null)
@@ -254,7 +274,7 @@ public class CommandPet implements CommandExecutor {
 	            	
 	            }
 				
-				player.sendMessage("Pet subcommands: /pet back | /pet equip | /pet attack");
+				player.sendMessage("Pet subcommands: /pet back | /pet equip | /pet attack | /pet leave");
 				return true;
 			} catch (CoreStateInitException e)
 			{

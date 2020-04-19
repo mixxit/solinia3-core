@@ -9466,7 +9466,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return false;
 
 			if (ownerEntity.isDead()) {
+				// effectively remove owner
+				//this.getActiveMob().setOwner(UUID.randomUUID());
 				this.getActiveMob().removeOwner();
+				this.getActiveMob().resetTarget();
 				return false;
 			}
 
