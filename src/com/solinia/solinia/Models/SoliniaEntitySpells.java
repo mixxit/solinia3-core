@@ -704,7 +704,7 @@ public class SoliniaEntitySpells {
 				} else {
 					activeSpell.buffTick();
 					activeSpell.apply(plugin,sendMessages);
-					if (activeSpell.getTicksLeft() > 1)
+					if (activeSpell.getTicksLeft() >= 1)
 					{
 						activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
 					}
