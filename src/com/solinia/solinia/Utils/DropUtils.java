@@ -79,7 +79,7 @@ public class DropUtils {
 			// System.out.println("Prepared a Loot List of ABS: " + absoluteitems.size() + "
 			// and ROLL: " + rollitems.size());
 
-			if (absoluteitems.size() == 0 && rollitems.size() == 0)
+			if (absoluteitems.size() == 0 && rollitems.size() == 0 && alwaysrollitems.size() == 0)
 				return;
 
 			int dropcount = 1;

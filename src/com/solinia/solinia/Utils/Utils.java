@@ -5962,6 +5962,7 @@ public class Utils {
 				ISoliniaItem discoveredSolItem = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(itemDiscoveryData[0]));
 				if (discoveredSolItem == null)
 					return;
+				itemStack = discoveredSolItem.asItemStack();
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -5975,6 +5976,7 @@ public class Utils {
 				ISoliniaItem discoveredSolItem = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(referenceCode));
 				if (discoveredSolItem == null)
 					return;
+				itemStack = discoveredSolItem.asItemStack();
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -6030,7 +6032,7 @@ public class Utils {
 	}
 	
 	public static TextComponent decorateTextComponentsWithHovers(TextComponent tc, ItemStack itemStack) {
-		if (itemStack != null && tc.toLegacyText().contains("itemlink"))
+		if (itemStack != null)
 		{
 			try
 			{
