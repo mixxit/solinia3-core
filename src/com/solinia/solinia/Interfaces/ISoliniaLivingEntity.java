@@ -475,4 +475,6 @@ public interface ISoliniaLivingEntity  {
 
 	void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType, boolean racialPassive);
 
+	void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange, boolean playHurtSound);
+
 }

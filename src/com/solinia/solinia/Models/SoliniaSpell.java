@@ -5832,4 +5832,43 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 		return description.trim();
 	}
+
+	@Override
+	public boolean isLichSpell() {
+		// TODO Auto-generated method stub
+		return isSelfConversionSpell();
+	}
+	
+	@Override
+	public SpellTargetType getSpellTargetType()
+	{
+		return Utils.getSpellTargetType(getTargettype());
+	}
+	
+	@Override
+	public boolean isSelfConversionSpell()
+	{
+		if (
+				getSpellTargetType() == SpellTargetType.Self && 
+				isEffectInSpell(SpellEffectType.CurrentMana) &&
+				isEffectInSpell(SpellEffectType.CurrentHP))
+		{
+			boolean posMana = false;
+			boolean negHp = false;
+			for(SpellEffect effect : this.getBaseSpellEffects())
+			{
+				if (effect.getSpellEffectType() == SpellEffectType.CurrentHP)
+					if (effect.getBase() < 0)
+						negHp = true;
+
+				if (effect.getSpellEffectType() == SpellEffectType.CurrentMana)
+					if (effect.getBase() > 0)
+						posMana = true;
+			}
+			
+			if (posMana && negHp)
+				return true;
+		}
+		return false;
+	}
 }

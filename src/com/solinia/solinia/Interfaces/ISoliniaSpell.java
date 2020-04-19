@@ -11,6 +11,7 @@ import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Utils.SpellTargetType;
 
 public interface ISoliniaSpell extends IPersistable {
 
@@ -1092,4 +1093,10 @@ public interface ISoliniaSpell extends IPersistable {
 
 	boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages,
 			String requiredWeaponSkillType, boolean racialPassive);
+
+	boolean isLichSpell();
+
+	boolean isSelfConversionSpell();
+
+	SpellTargetType getSpellTargetType();
 }

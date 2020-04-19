@@ -706,7 +706,6 @@ public class SoliniaEntitySpells {
 					activeSpell.apply(plugin,sendMessages);
 					if (activeSpell.getTicksLeft() > 1)
 					{
-						Bukkit.broadcastMessage("Ticks left: " + activeSpell.getTicksLeft());
 						activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
 					}
 					updateSpellsSlots.put(slot.getKey(), activeSpell);

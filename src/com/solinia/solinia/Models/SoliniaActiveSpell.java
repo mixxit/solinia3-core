@@ -2820,7 +2820,8 @@ public class SoliniaActiveSpell {
 				}
 
 				targetSoliniaLivingEntity.addToHateList(getSourceUuid(), hpToAdd*-1, false);
-				targetSoliniaLivingEntity.setHPChange(hpToAdd, sourceLivingEntity);
+				boolean isLichSpell = soliniaSpell.isLichSpell();
+				targetSoliniaLivingEntity.setHPChange(hpToAdd, sourceLivingEntity, !isLichSpell);
 				// getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 				if (soliniaSpell.isLifetapSpell()) {
 

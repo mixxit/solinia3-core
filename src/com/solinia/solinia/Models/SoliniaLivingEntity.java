@@ -2200,6 +2200,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange) {
+		this.setHPChange(hpchange, causeOfEntityHpChange, true);
+	}
+	
+	@Override
+	public void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange, boolean playHurtSound) {
 		if (hpchange == 0)
 			return;
 

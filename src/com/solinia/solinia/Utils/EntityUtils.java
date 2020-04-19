@@ -3236,10 +3236,14 @@ public class EntityUtils {
 	}
 
 	public static void PSetHPChange(LivingEntity targetToDamage, int hpchange, LivingEntity sourceEntityOfChange) {
-		PSetHPChange(targetToDamage, (double)hpchange, sourceEntityOfChange);
+		PSetHPChange(targetToDamage, (double)hpchange, sourceEntityOfChange, true);
+	}
+	
+	public static void PSetHPChange(LivingEntity targetToDamage, int hpchange, LivingEntity sourceEntityOfChange, boolean playHurtSound) {
+		PSetHPChange(targetToDamage, (double)hpchange, sourceEntityOfChange, playHurtSound);
 	}
 
-	public static void PSetHPChange(LivingEntity targetToDamage, Double hpchange, LivingEntity sourceEntityOfChange) {
+	public static void PSetHPChange(LivingEntity targetToDamage, Double hpchange, LivingEntity sourceEntityOfChange, boolean playHurtSound) {
 		if (targetToDamage instanceof ArmorStand || sourceEntityOfChange instanceof ArmorStand)
 			return;
 		
@@ -3286,6 +3290,7 @@ public class EntityUtils {
 		        	PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer)targetToDamage).getHandle(), 1);
 		        	((CraftPlayer)targetToDamage).getHandle().playerConnection.sendPacket(packet);
 	        	}
+	        	if (playHurtSound)
 	        	targetToDamage.getWorld().playSound(targetToDamage.getLocation(), Sound.ENTITY_GENERIC_HURT, soundVolume, GetSoundPitch(((EntityLiving)((CraftLivingEntity) targetToDamage).getHandle())));
 	        }
 		}
