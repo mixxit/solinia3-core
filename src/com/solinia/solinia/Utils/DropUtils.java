@@ -15,6 +15,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.HINT;
 
 public class DropUtils {
 	public static void DropLoot(int lootTableId, World world, Location location, String className, int levelLimit) {
@@ -119,8 +120,7 @@ public class DropUtils {
 						}
 
 						if (item.isArtifact() == true) {
-							PlayerUtils.BroadcastPlayers(
-									"A unique artifact [" + item.getDisplayname() + "] has been discovered!",item.asItemStack());
+							Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
 						}
 						
 						world.dropItemNaturally(location, item.asItemStack());
@@ -148,8 +148,7 @@ public class DropUtils {
 
 						if (randomInt <= alwaysrollitems.get(i).getChance()) {
 							if (item.isArtifact() == true) {
-								PlayerUtils.BroadcastPlayers(
-										"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+								Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
 							}
 							
 							world.dropItemNaturally(location, item.asItemStack());
@@ -193,8 +192,7 @@ public class DropUtils {
 						
 						if (randomInt <= alwaysrollspells.get(i).getChance()) {
 							if (item.isArtifact() == true) {
-								PlayerUtils.BroadcastPlayers(
-										"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+								Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
 							}
 							
 							world.dropItemNaturally(location, item.asItemStack());
@@ -231,8 +229,7 @@ public class DropUtils {
 							continue;
 
 						if (item.isArtifact() == true) {
-							PlayerUtils.BroadcastPlayers(
-									"A unique artifact [" + item.getDisplayname() + "] has been discovered!");
+							Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
 						}
 						
 						world.dropItemNaturally(location, item.asItemStack());

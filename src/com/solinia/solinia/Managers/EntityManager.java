@@ -12,8 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.enchantments.Enchantment;
@@ -31,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.plugin.Plugin;
+
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -48,6 +51,7 @@ import com.solinia.solinia.Models.ActiveSongs;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
+import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
@@ -57,6 +61,7 @@ import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
+import com.solinia.solinia.Utils.SpecialEffectUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -1576,9 +1581,10 @@ public class EntityManager implements IEntityManager {
 					return;
 				}
 
-				livingEntity.sendMessage("You begin your ability " + castingSpell.getSpell().getName());
+				Utils.SendHint(livingEntity, HINT.BEGIN_ABILITY, castingSpell.getSpell().getName(), false);
 
 				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
+				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
 
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 
@@ -1586,6 +1592,21 @@ public class EntityManager implements IEntityManager {
 		} catch (CoreStateInitException e) {
 
 		}
+	}
+	
+	private void playSpellCastingSpellEffect(LivingEntity livingEntity, ISoliniaSpell spell) {
+		if (livingEntity == null)
+			return;
+		if (!(livingEntity instanceof Player))
+			return;
+		
+		if (spell == null)
+			return;
+
+		if (spell.isCombatSkill())
+			return;
+			
+		SpecialEffectUtils.playCustomBallEffect(livingEntity, Particle.CRIT_MAGIC, Color.AQUA);
 	}
 
 	private void playSpellCastingSoundEffect(LivingEntity livingEntity, ISoliniaSpell spell) {
@@ -1728,7 +1749,7 @@ public class EntityManager implements IEntityManager {
 			{
 				Player player = (Player)entity;
 				// Do casting animation
-				player.sendMessage("You finish your ability");
+				Utils.SendHint(player, HINT.FINISH_ABILITY, "", false);
 				try {
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					solPlayer.castingComplete(entitySpellCasting.get(entityUUID));

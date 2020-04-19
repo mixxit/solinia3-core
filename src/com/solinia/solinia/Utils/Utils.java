@@ -5051,163 +5051,163 @@ public class Utils {
 
 		SpellEffectIndex effectType = Utils.getSpellEffectIndex(sai);
 		if (effectType == null) {
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			return;
 		}
 
 		switch (effectType) {
 		case Summon_Mount_Unclass:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Direct_Damage:
-			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.ORANGE);
+			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.ORANGE);
 			break;
 		case Heal_Cure:
-			SpecialEffectUtils.playLoveEffect(entity, activeSpell);
+			SpecialEffectUtils.playLoveEffect(entity);
 			break;
 		case AC_Buff:
-			SpecialEffectUtils.playCustomShieldEffect(entity, activeSpell, Particle.VILLAGER_HAPPY, Color.YELLOW);
+			SpecialEffectUtils.playCustomShieldEffect(entity, Particle.VILLAGER_HAPPY, Color.YELLOW);
 			break;
 		case AE_Damage:
-			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.LIME);
+			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.LIME);
 			break;
 		case Summon:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Sight:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Mana_Regen_Resist_Song:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Stat_Buff:
-			SpecialEffectUtils.playShieldEffect(entity, activeSpell);
+			SpecialEffectUtils.playShieldEffect(entity);
 			break;
 		case Vanish:
-			SpecialEffectUtils.playPortalEffect(entity, activeSpell);
+			SpecialEffectUtils.playPortalEffect(entity);
 			break;
 		case Appearance:
-			SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+			SpecialEffectUtils.playSmokeEffect(entity);
 			break;
 		case Enchanter_Pet:
-			SpecialEffectUtils.playSmokeEffect(entity, activeSpell);
+			SpecialEffectUtils.playSmokeEffect(entity);
 			break;
 		case Calm:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Fear:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Dispell_Sight:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Stun:
-			SpecialEffectUtils.playCustomStarEffect(entity, activeSpell, Particle.SPELL_MOB, Color.FUCHSIA);
+			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.FUCHSIA);
 			break;
 		case Haste_Runspeed:
-			SpecialEffectUtils.playCustomVortexEffect(entity, activeSpell, Particle.ENCHANTMENT_TABLE, Color.BLUE);
+			SpecialEffectUtils.playCustomVortexEffect(entity, Particle.ENCHANTMENT_TABLE, Color.BLUE);
 			break;
 		case Combat_Slow:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Damage_Shield:
-			SpecialEffectUtils.playCustomVortexEffect(entity, activeSpell, Particle.ENCHANTMENT_TABLE, Color.ORANGE);
+			SpecialEffectUtils.playCustomVortexEffect(entity, Particle.ENCHANTMENT_TABLE, Color.ORANGE);
 			break;
 		case Cannibalize_Weapon_Proc:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Weaken:
-			SpecialEffectUtils.playCustomConeEffect(entity, activeSpell, Particle.SPELL_MOB, Color.RED);
+			SpecialEffectUtils.playCustomConeEffect(entity, Particle.SPELL_MOB, Color.RED);
 			break;
 		case Banish:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Blind_Poison:
 			if (activeSpell.getSpell() != null && activeSpell.getSpell().isEffectInSpell(SpellEffectType.Blind))
-				SpecialEffectUtils.playCustomShieldEffect(entity, activeSpell, Particle.FLASH, Color.AQUA);
+				SpecialEffectUtils.playCustomShieldEffect(entity, Particle.FLASH, Color.AQUA);
 			else
-				SpecialEffectUtils.playCustomFlameEffect(entity, activeSpell, Particle.NAUTILUS,null);
+				SpecialEffectUtils.playCustomFlameEffect(entity, Particle.NAUTILUS,null);
 			break;
 		case Cold_DD:
-			SpecialEffectUtils.playCustomBallEffect(entity, activeSpell, Particle.BARRIER, Color.ORANGE);
+			SpecialEffectUtils.playCustomBallEffect(entity, Particle.BARRIER, Color.ORANGE);
 			break;
 		case Poison_Disease_DD:
-			SpecialEffectUtils.playPoisonEffect(entity, activeSpell);
+			SpecialEffectUtils.playPoisonEffect(entity);
 			break;
 		case Fire_DD:
-			SpecialEffectUtils.playFlameEffect(entity, activeSpell);
+			SpecialEffectUtils.playFlameEffect(entity);
 			break;
 		case Memory_Blur:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Gravity_Fling:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Suffocate:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Lifetap_Over_Time:
-			SpecialEffectUtils.playBleedEffect(entity, activeSpell);
+			SpecialEffectUtils.playBleedEffect(entity);
 			break;
 		case Fire_AE:
-			SpecialEffectUtils.playFlameEffect(entity, activeSpell);
+			SpecialEffectUtils.playFlameEffect(entity);
 			break;
 		case Cold_AE:
-			SpecialEffectUtils.playCustomBallEffect(entity, activeSpell, Particle.BARRIER, Color.ORANGE);
+			SpecialEffectUtils.playCustomBallEffect(entity, Particle.BARRIER, Color.ORANGE);
 			break;
 		case Poison_Disease_AE:
-			SpecialEffectUtils.playPoisonEffect(entity, activeSpell);
+			SpecialEffectUtils.playPoisonEffect(entity);
 			break;
 		case Teleport:
-			SpecialEffectUtils.playPortalEffect(entity, activeSpell);
+			SpecialEffectUtils.playPortalEffect(entity);
 			break;
 		case Direct_Damage_Song:
-			SpecialEffectUtils.playCustomMusicEffect(entity, activeSpell, Color.RED);
+			SpecialEffectUtils.playCustomMusicEffect(entity, Color.RED);
 			break;
 		case Combat_Buff_Song:
-			SpecialEffectUtils.playCustomMusicEffect(entity, activeSpell, Color.LIME);
+			SpecialEffectUtils.playCustomMusicEffect(entity, Color.LIME);
 			break;
 		case Calm_Song:
-			SpecialEffectUtils.playCustomMusicEffect(entity, activeSpell, Color.BLUE);
+			SpecialEffectUtils.playCustomMusicEffect(entity, Color.BLUE);
 			break;
 		case Firework:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Firework_AE:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Weather_Rocket:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Convert_Vitals:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case NPC_Special_60:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case NPC_Special_61:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case NPC_Special_62:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case NPC_Special_63:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case NPC_Special_70:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case NPC_Special_71:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case NPC_Special_80:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Trap_Lock:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 			break;
 		default:
-			SpecialEffectUtils.playLegacy(entity, activeSpell);
+			SpecialEffectUtils.playLegacy(entity);
 		}
 	}
 
@@ -5882,6 +5882,12 @@ public class Utils {
 		String message = "";
 		switch (hint)
 		{
+		case BEGIN_ABILITY:
+			message = "You begin your ability " + referenceCode;
+			break;
+		case FINISH_ABILITY:
+			message = "You finish your ability";
+			break;
 		case PET_BACKINGOFFTGT:
 			message = "As you wish master";
 			break;
@@ -5945,6 +5951,33 @@ public class Utils {
 		case SPELL_WORN_OFF_OF:
 			String[] referenceCodesWornOffOf = referenceCode.split("\\^");
 			message = ChatColor.DARK_AQUA + "Your " + referenceCodesWornOffOf[0] + " spell has worn off of " + referenceCodesWornOffOf[1]  + ChatColor.RESET;
+			break;
+		case ITEM_DISCOVERED:
+			String[] itemDiscoveryData = referenceCode.split("\\^");
+			try
+			{
+				ISoliniaItem discoveredSolItem = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(itemDiscoveryData[0]));
+				if (discoveredSolItem == null)
+					return;
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				return;
+			}
+			message = "An item has been discovered by " + itemDiscoveryData[1];
+			break;
+		case ARTIFACT_DISCOVERED:
+			try
+			{
+				ISoliniaItem discoveredSolItem = StateManager.getInstance().getConfigurationManager().getItem(Integer.parseInt(referenceCode));
+				if (discoveredSolItem == null)
+					return;
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				return;
+			}
+			message = "A unique artifact has been discovered";
 			break;
 		}
 		
@@ -6068,6 +6101,14 @@ public class Utils {
 		case SPELL_WORN_OFF_OF:
 			return HintSetting.Chat;
 		case INSUFFICIENT_LEVEL_GEAR:
+			return HintSetting.Chat;
+		case BEGIN_ABILITY:
+			return HintSetting.Chat;
+		case FINISH_ABILITY:
+			return HintSetting.Chat;
+		case ITEM_DISCOVERED:
+			return HintSetting.Chat;
+		case ARTIFACT_DISCOVERED:
 			return HintSetting.Chat;
 		}
 		
