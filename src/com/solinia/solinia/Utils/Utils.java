@@ -6006,7 +6006,7 @@ public class Utils {
 			}
 
 			TextComponent fullTextComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
-			if (itemStack != null && showItemLinks);
+			if (itemStack != null && showItemLinks == true)
 				fullTextComponent = decorateTextComponentsWithHovers(fullTextComponent, itemStack);
 			
 			tc.addExtra(fullTextComponent);
