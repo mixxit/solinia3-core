@@ -2360,9 +2360,11 @@ public class SoliniaActiveSpell {
 
 		try {
 			Block block = getLivingEntity().getTargetBlock(null, soliniaSpell.getRange());
+			Location targetLocation = block.getLocation();
+			targetLocation.setDirection(getLivingEntity().getLocation().getDirection());
 			if (block != null) {
 				Utils.dismountEntity(getLivingEntity());
-				EntityUtils.teleportSafely(getLivingEntity(),block.getLocation());
+				EntityUtils.teleportSafely(getLivingEntity(),targetLocation);
 			}
 		} catch (Exception e) {
 			// out of world block
