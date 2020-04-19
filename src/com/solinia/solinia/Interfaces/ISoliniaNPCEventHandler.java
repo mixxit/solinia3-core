@@ -1,6 +1,7 @@
 package com.solinia.solinia.Interfaces;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.InvalidNPCEventSettingException;
@@ -46,8 +47,6 @@ public interface ISoliniaNPCEventHandler  {
 
 	boolean playerMeetsRequirements(Player triggerentity);
 
-	void awardPlayer(Player triggerentity);
-
 	String getTeleportResponse();
 
 	void setTeleportResponse(String teleportResponse);
@@ -83,5 +82,7 @@ public interface ISoliniaNPCEventHandler  {
 	boolean isAwardsBind();
 
 	void setAwardsBind(boolean awardsBind);
+
+	void awardPlayer(Player triggerentity, LivingEntity npcLivingEntity);
 	
 }

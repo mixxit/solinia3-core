@@ -125,7 +125,7 @@ public class CommandNPCGive implements CommandExecutor {
 					if (eventHandler.getResponseType().equals("EMOTE"))
 						solentity.emote(solnpc.replaceChatWordsWithHints(response), false);
 						
-					eventHandler.awardPlayer((Player)player);
+					eventHandler.awardPlayer((Player)player, solentity.getBukkitLivingEntity());
 					PlayerUtils.removeItemsFromInventory(player, itemid, 1);
 					
 					if (eventHandler.getTeleportResponse() != null && !eventHandler.getTeleportResponse().equals("")) {

@@ -1051,7 +1051,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				}
 
 				if (triggerentity instanceof Player)
-					handler.awardPlayer((Player) triggerentity);
+					handler.awardPlayer((Player) triggerentity, solentity.getBukkitLivingEntity());
 
 				if (handler.getNpcId() > 0 && handler.getInteractiontype().equals(InteractionType.ITEM)) {
 					try {

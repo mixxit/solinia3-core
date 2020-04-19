@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -48,6 +49,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int npcId = 0;
 	private int summonsNpcId = 0;
 	private int awardsItem = 0;
+	private boolean awardsDespawn = false;
 	private String teleportResponse = "";
 	@Deprecated
 	private boolean awardsRandomisedGear = false;
@@ -177,6 +179,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				"- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 		sender.sendMessage("- awardsfactionid: " + ChatColor.GOLD + this.getAwardsFactionId() + ChatColor.RESET);
 		sender.sendMessage("- awardsfactionvalue: " + ChatColor.GOLD + this.getAwardsFactionValue() + ChatColor.RESET);
+		sender.sendMessage("- awardsdespawn: " + ChatColor.GOLD + this.isAwardsDespawn() + ChatColor.RESET);
 
 		DecimalFormat df = new DecimalFormat("#");
 		df.setMaximumFractionDigits(8);
@@ -276,6 +279,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			}
 
 			setAwardsFactionId(Integer.parseInt(value));
+			break;
+		case "awardsdespawn":
+			setAwardsDespawn(Boolean.parseBoolean(value));
 			break;
 		case "awardsfactionvalue":
 			if (value.equals(""))
@@ -564,10 +570,13 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	}
 
 	@Override
-	public void awardPlayer(Player triggerentity) {
+	public void awardPlayer(Player triggerentity, LivingEntity npcLivingEntity) {
 		try {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(triggerentity);
 
+			boolean hasAwardedXp = false;
+			boolean hasAwardedFaction = false;
+			
 			if (getAwardsQuest() > 0) {
 				boolean foundQuest = false;
 				for (PlayerQuest playerQuest : player.getPlayerQuests()) {
@@ -579,6 +588,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				if (foundQuest == false)
 					player.addPlayerQuest(getAwardsQuest());
 			}
+			
+			if (this.isAwardsDespawn() == true)
+				npcLivingEntity.remove();
 			
 			// We can support item hand in rewards multiple times without
 			// a quest flag
@@ -679,7 +691,29 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 						
 					}
 				}
+				
+				// xp 
+				if (getAwardsExperience() > 0) {
+					System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
+					player.increasePlayerExperience(getAwardsExperience(), false, true);
+					hasAwardedXp = true;
+				}
+
+				// faction
+				if (getAwardsFactionId() > 0) {
+					if (getAwardsFactionValue() > 0)
+					{
+						player.increaseFactionStanding(getAwardsFactionId(), getAwardsFactionValue());
+						hasAwardedFaction = true;
+					}
+					if (getAwardsFactionValue() < 0)
+					{
+						player.decreaseFactionStanding(getAwardsFactionId(), -1 * getAwardsFactionValue());
+						hasAwardedFaction = true;
+					}
+				}
 			}
+			
 
 			if (getAwardsQuestFlag() != null && !getAwardsQuestFlag().equals("")) {
 				boolean foundQuestFlag = false;
@@ -722,27 +756,34 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 						}
 					}
 
-					// All xp awards must be accompanied with a quest flag else they will repeat the
-					// xp over and over
-					if (getAwardsExperience() > 0) {
-						System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
-						player.increasePlayerExperience(getAwardsExperience(), false, true);
-					}
-					
-					// All factions awards must be accompanied with a quest flag else they will repeat the
-					// faction over and over
-					if (getAwardsFactionId() > 0) {
-						if (getAwardsFactionValue() > 0)
-							player.increaseFactionStanding(getAwardsFactionId(), getAwardsFactionValue());
-						if (getAwardsFactionValue() < 0)
-							player.decreaseFactionStanding(getAwardsFactionId(), -1 * getAwardsFactionValue());
-					}
-
 					if (this.isAwardsTitle() == true) {
 						if (this.getTitle() != null) {
 							if (!this.getTitle().equals("")) {
 								player.grantTitle(this.getTitle());
 							}
+						}
+					}
+					
+					// xp 
+					if (!hasAwardedXp)
+					if (getAwardsExperience() > 0) {
+						System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
+						player.increasePlayerExperience(getAwardsExperience(), false, true);
+						hasAwardedXp = true;
+					}
+
+					// faction
+					if (!hasAwardedFaction)
+					if (getAwardsFactionId() > 0) {
+						if (getAwardsFactionValue() > 0)
+						{
+							player.increaseFactionStanding(getAwardsFactionId(), getAwardsFactionValue());
+							hasAwardedFaction = true;
+						}
+						if (getAwardsFactionValue() < 0)
+						{
+							player.decreaseFactionStanding(getAwardsFactionId(), -1 * getAwardsFactionValue());
+							hasAwardedFaction = true;
 						}
 					}
 
@@ -1003,5 +1044,13 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 
 	public void setAwardsClassSpell(boolean awardsClassSpell) {
 		this.awardsClassSpell = awardsClassSpell;
+	}
+
+	public boolean isAwardsDespawn() {
+		return awardsDespawn;
+	}
+
+	public void setAwardsDespawn(boolean awardsDespawn) {
+		this.awardsDespawn = awardsDespawn;
 	}
 }
