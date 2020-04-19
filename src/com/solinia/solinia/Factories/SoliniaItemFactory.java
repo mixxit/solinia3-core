@@ -309,7 +309,7 @@ public class SoliniaItemFactory {
 				item.setAllowedClassNames(classNames);
 				item.setAllowedRaceNames(raceNames);
 				
-				item.setWorth(armourtier*25);
+				item.setWorth(armourtier*15);
 				// Randomise the stats of the class armour so we get more unique content in each dungeon
 				int rarityChance = Utils.RandomBetween(1, 100);
 				int rarityBonus = 0;

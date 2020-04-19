@@ -5049,6 +5049,7 @@ public class Utils {
 		
 		int sai = activeSpell.getSpell().getSpellAffectIndex();
 
+		SpellResistType resistType = Utils.getSpellResistType(activeSpell.getSpell().getResisttype());
 		SpellEffectIndex effectType = Utils.getSpellEffectIndex(sai);
 		if (effectType == null) {
 			SpecialEffectUtils.playLegacy(entity);
@@ -5060,7 +5061,27 @@ public class Utils {
 			SpecialEffectUtils.playLegacy(entity);
 			break;
 		case Direct_Damage:
+			switch(resistType)
+			{
+			case RESIST_FIRE:
 			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.ORANGE);
+			break;
+			case RESIST_COLD:
+			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.AQUA);
+			break;
+			case RESIST_DISEASE:
+			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.BLACK);
+			break;
+			case RESIST_MAGIC:
+			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.BLUE);
+			break;
+			case RESIST_POISON:
+			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.LIME);
+			break;
+			default:
+				SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.RED);
+				break;	
+			}
 			break;
 		case Heal_Cure:
 			SpecialEffectUtils.playLoveEffect(entity);

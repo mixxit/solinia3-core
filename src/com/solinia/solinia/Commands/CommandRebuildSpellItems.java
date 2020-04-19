@@ -40,7 +40,7 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 		{
 			for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
 			{
-				int worth = 10;
+				int worth = 1;
 				int minLevel = 1;
 				int lowestLevel = 1000;
 				

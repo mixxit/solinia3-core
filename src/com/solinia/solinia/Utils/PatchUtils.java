@@ -33,6 +33,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.PlayerState;
 import com.solinia.solinia.Models.SoliniaPatch;
+import com.solinia.solinia.Models.SoliniaSpellClass;
 
 import net.minecraft.server.v1_14_R1.InventoryEnderChest;
 import net.minecraft.server.v1_14_R1.MojangsonParser;
@@ -48,10 +49,44 @@ public class PatchUtils {
 	public static void Patcher() {
 		try
 		{
-			for(ISoliniaPlayer ent : StateManager.getInstance().getConfigurationManager().getCharacters())
+			for(ISoliniaItem ent : StateManager.getInstance().getConfigurationManager().getItems())
 			{
-				ent.setLastUpdatedTimeNow();
+				if (ent.getWorth()  <2)
+					continue;
+				
+				if (ent.isSpellscroll())
+				{
+					int worth = 1;
+					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(ent.getAbilityid());
+					if (spell == null)
+						continue;
+					
+					int lowestLevel = 1000;
+					
+					for(SoliniaSpellClass spellClass : spell.getAllowedClasses())
+					{
+						if (spellClass.getMinlevel() < lowestLevel)
+							lowestLevel = spellClass.getMinlevel();
+					}
+					int minLevel = 1;
+					
+					if (lowestLevel > minLevel && lowestLevel < 100)
+						minLevel = lowestLevel;
+					
+					ent.setWorth(worth * minLevel);
+					ent.setLastUpdatedTimeNow();
+					continue;
+				}
+				
+				if (ent.isArmour() || ent.isAdditionalArmour() || ent.isJewelry() || ent.isWeaponOrBowOrShield())
+				{
+					ent.setWorth(ent.getTier()*15);
+					ent.setLastUpdatedTimeNow();
+					continue;
+				}
 			}
+			
+			System.out.println("Finished");
 		} catch (CoreStateInitException e)
 		{
 			
