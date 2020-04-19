@@ -5880,6 +5880,7 @@ public class Utils {
 
 	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby, ItemStack itemStack) {
 		String message = "";
+		boolean showItemLinks = false;
 		switch (hint)
 		{
 		case BEGIN_ABILITY:
@@ -5896,6 +5897,8 @@ public class Utils {
 			break;
 		case OOC_MESSAGE:
 			message = referenceCode;
+			if (message.contains("itemlink"))
+				showItemLinks = true;
 			break;
 		case DISCORD_MESSAGE:
 			message = referenceCode;
@@ -5963,6 +5966,7 @@ public class Utils {
 				if (discoveredSolItem == null)
 					return;
 				itemStack = discoveredSolItem.asItemStack();
+				showItemLinks = true;
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -5977,6 +5981,7 @@ public class Utils {
 				if (discoveredSolItem == null)
 					return;
 				itemStack = discoveredSolItem.asItemStack();
+				showItemLinks = true;
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -6001,7 +6006,7 @@ public class Utils {
 			}
 
 			TextComponent fullTextComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + message + ChatColor.RESET));
-			if (itemStack != null);
+			if (itemStack != null && showItemLinks);
 				fullTextComponent = decorateTextComponentsWithHovers(fullTextComponent, itemStack);
 			
 			tc.addExtra(fullTextComponent);
