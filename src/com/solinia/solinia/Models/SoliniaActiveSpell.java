@@ -2994,6 +2994,7 @@ public class SoliniaActiveSpell {
 					
 					if (!solLivingEntity.passCharismaCheck(this.getLivingEntity(), this.getSpell()))
 					{
+						Utils.SendHint((LivingEntity)source, HINT.CHARM_CHA_FAIL, "", false);
 						removeActiveSpellNextTick();
 						return;
 					}

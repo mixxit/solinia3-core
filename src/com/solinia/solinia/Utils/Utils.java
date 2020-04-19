@@ -5948,6 +5948,9 @@ public class Utils {
 		case INSUFFICIENT_LEVEL_GEAR:
 			message = "You are not sufficient level to use this equipment";
 			break;
+		case CHARM_CHA_FAIL:
+			message = ChatColor.DARK_AQUA + "Your pet has freed themselves of your control! (Charisma)" + ChatColor.RESET;
+			break;
 		case SPELL_WORN_OFF_OF:
 			String[] referenceCodesWornOffOf = referenceCode.split("\\^");
 			message = ChatColor.DARK_AQUA + "Your " + referenceCodesWornOffOf[0] + " spell has worn off of " + referenceCodesWornOffOf[1]  + ChatColor.RESET;
@@ -6109,6 +6112,8 @@ public class Utils {
 		case ITEM_DISCOVERED:
 			return HintSetting.Chat;
 		case ARTIFACT_DISCOVERED:
+			return HintSetting.Chat;
+		case CHARM_CHA_FAIL:
 			return HintSetting.Chat;
 		}
 		

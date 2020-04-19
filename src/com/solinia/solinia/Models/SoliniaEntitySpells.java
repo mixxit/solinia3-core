@@ -704,7 +704,11 @@ public class SoliniaEntitySpells {
 				} else {
 					activeSpell.buffTick();
 					activeSpell.apply(plugin,sendMessages);
-					activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
+					if (activeSpell.getTicksLeft() > 1)
+					{
+						Bukkit.broadcastMessage("Ticks left: " + activeSpell.getTicksLeft());
+						activeSpell.setTicksLeft(activeSpell.getTicksLeft() - 1);
+					}
 					updateSpellsSlots.put(slot.getKey(), activeSpell);
 				}
 			}
