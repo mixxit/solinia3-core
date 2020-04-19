@@ -5939,6 +5939,9 @@ public class Utils {
 			String[] referenceCodesFocus = referenceCode.split("\\^");
 			message = "Your " + referenceCodesFocus[0] + " " + referenceCodesFocus[1];
 			break;
+		case INSUFFICIENT_LEVEL_GEAR:
+			message = "You are not sufficient level to use this equipment";
+			break;
 		case SPELL_WORN_OFF_OF:
 			String[] referenceCodesWornOffOf = referenceCode.split("\\^");
 			message = ChatColor.DARK_AQUA + "Your " + referenceCodesWornOffOf[0] + " spell has worn off of " + referenceCodesWornOffOf[1]  + ChatColor.RESET;
@@ -6063,6 +6066,8 @@ public class Utils {
 		case FOCUSEFFECTFLICKER:
 			return HintSetting.Chat;
 		case SPELL_WORN_OFF_OF:
+			return HintSetting.Chat;
+		case INSUFFICIENT_LEVEL_GEAR:
 			return HintSetting.Chat;
 		}
 		

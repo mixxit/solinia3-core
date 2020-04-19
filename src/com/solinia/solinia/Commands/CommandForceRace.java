@@ -28,7 +28,7 @@ public class CommandForceRace implements CommandExecutor {
 		
 		if (args.length < 2)
         {
-        	sender.sendMessage("Insufficient arguments (<mcname> <race>)");
+        	sender.sendMessage("Insufficient arguments (<mcname> <raceid>)");
         	return false;
         }
     	

@@ -23,6 +23,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -62,6 +63,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
@@ -861,9 +863,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				
 				if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
 					Utils.CancelEvent(event);
-					;
-					event.getPlayer().getPlayer()
-							.sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+					Utils.SendHint(event.getPlayer().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 					return;
 				}
 
@@ -1095,8 +1095,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					
 					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
 						Utils.CancelEvent(event);
-						event.getView().getPlayer()
-								.sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
 					}
 					
@@ -1145,9 +1144,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
 						Utils.CancelEvent(event);
-						;
-						event.getView().getPlayer()
-								.sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
 					}
 
@@ -1191,7 +1188,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			}
 
 			// shield changes to slotid 40
-			if (event.getSlot() == 40) {
+			if (event.getSlot() == 40 && event.getView().getType().name().equals(InventoryType.CRAFTING.name())) {
 				ItemStack itemstack = event.getCursor();
 				if (itemstack == null)
 					return;
@@ -1200,9 +1197,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					
 					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
 						Utils.CancelEvent(event);
-						;
-						event.getView().getPlayer()
-								.sendMessage(ChatColor.GRAY + "Your are not sufficient level wear this armour");
+						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
 					}
 					

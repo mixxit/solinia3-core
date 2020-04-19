@@ -3151,6 +3151,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 		case "skill":
 			this.setSkill(Integer.parseInt(value));
 			break;
+		case "buffduration":
+			this.setBuffduration(Integer.parseInt(value));
+			break;
 		case "clearspellclass":
 			this.allowedClasses = new ArrayList<SoliniaSpellClass>();
 			break;
