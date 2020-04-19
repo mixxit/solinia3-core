@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.potion.PotionEffect;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -185,6 +186,7 @@ public class CommandCharacter implements CommandExecutor {
 									EntityUtils.teleportSafely(player,loadedPlayer.getLastLocation());
 							
 							player.sendMessage("Your character has been stored and your new character loaded");
+							
 						} else {
 							player.sendMessage("Problem loading requested character");
 						}

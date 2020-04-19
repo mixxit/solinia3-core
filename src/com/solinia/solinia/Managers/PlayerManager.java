@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerValidatedModEvent;
@@ -245,6 +246,9 @@ public class PlayerManager implements IPlayerManager {
             player.getInventory().setArmorContents(null);
             player.updateInventory();
             
+            for (PotionEffect effect : player.getActivePotionEffects())
+				player.removePotionEffect(effect.getType());
+            
             solPlayer.sendSlotsAsPacket();
             solPlayer.sendMemorisedSpellSlots();
 
@@ -309,6 +313,9 @@ public class PlayerManager implements IPlayerManager {
             player.getInventory().setContents(altSolPlayer.getStoredInventoryContents());
 			player.getInventory().setArmorContents(altSolPlayer.getStoredArmorContents());
             player.updateInventory();
+            
+            for (PotionEffect effect : player.getActivePotionEffects())
+				player.removePotionEffect(effect.getType());
 			
             altSolPlayer.sendSlotsAsPacket();
             altSolPlayer.sendMemorisedSpellSlots();

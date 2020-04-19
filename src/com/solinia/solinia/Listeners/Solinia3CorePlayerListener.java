@@ -41,6 +41,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.solinia.solinia.Solinia3CorePlugin;
@@ -878,6 +879,9 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		event.setDeathMessage("");
 
+		for (PotionEffect effect : event.getEntity().getActivePotionEffects())
+			event.getEntity().removePotionEffect(effect.getType());
+		
 		try
 	    {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getEntity().getUniqueId());
@@ -1642,6 +1646,8 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		for (PotionEffect effect : event.getPlayer().getActivePotionEffects())
+	        event.getPlayer().removePotionEffect(effect.getType());
 		
 		// disable knockback effects, try to remove mounted arrows
 		try
