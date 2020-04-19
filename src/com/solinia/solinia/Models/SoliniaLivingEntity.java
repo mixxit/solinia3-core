@@ -4969,7 +4969,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (!this.isNPC() && weapon_item.getMinLevel() > getLevel())
 				return 0;
 
-			if (!weapon_item.isEquipable(this.getRace(),this.getClassObj()))
+			if (!this.isNPC() && !weapon_item.isEquipable(this.getRace(),this.getClassObj()))
 				return 0;
 		}
 
