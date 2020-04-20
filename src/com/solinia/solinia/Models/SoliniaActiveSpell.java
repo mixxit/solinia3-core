@@ -2350,6 +2350,7 @@ public class SoliniaActiveSpell {
 		double x = Double.parseDouble(zonedata[1]);
 		double y = Double.parseDouble(zonedata[2]);
 		double z = Double.parseDouble(zonedata[3]);
+		
 		Location loc = new Location(Bukkit.getWorld(world), x, y, z);
 		EntityUtils.teleportSafely(getLivingEntity(),loc);
 	}

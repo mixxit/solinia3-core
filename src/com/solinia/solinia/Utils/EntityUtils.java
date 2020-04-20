@@ -30,10 +30,12 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaSyncPlayerChatEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
@@ -3412,6 +3414,7 @@ public class EntityUtils {
 		if (targetLoc == null)
 			return;
 		
+		
 		final UUID entityUuid = targetEntity.getUniqueId();
 		final Location loc = targetLoc.clone();
 		
@@ -3421,6 +3424,16 @@ public class EntityUtils {
 		    	Entity entity = Bukkit.getEntity(entityUuid);
 		    	if (entity == null)
 		    		return;
+		    	
+		    	// if over 3 chunks, remove any pets
+	    		if (entity.getLocation().distance(loc) > 48)
+	    		{
+	    			if (EntityUtils.HasPet(entityUuid))
+	    			{
+	    				EntityUtils.KillAllPets(entityUuid);
+	    				entity.sendMessage(ChatColor.GRAY + "* Your pets have been removed due to teleportation" + ChatColor.RESET);
+	    			}
+	    		}
 		    	
 		    	if (entity instanceof Player)
 				{
@@ -3446,5 +3459,36 @@ public class EntityUtils {
 				}
 		    }
 		});
+	}
+
+	public static boolean HasPet(UUID uuid)
+	{
+		try {
+		LivingEntity pet = StateManager.getInstance().getEntityManager()
+				.getPet(uuid);
+		
+		if (pet != null)
+			return true;
+		} catch (CoreStateInitException e) {
+
+		}
+		
+		
+		return false;
+	}
+
+	public static void KillAllPets(UUID uuid) {
+		try {
+			LivingEntity pet = StateManager.getInstance().getEntityManager()
+					.getPet(uuid);
+			if (pet == null)
+				return;
+
+			ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+			StateManager.getInstance().getEntityManager().removePet(uuid,
+					!petsolEntity.isCharmed());
+		} catch (CoreStateInitException e) {
+
+		}
 	}
 }

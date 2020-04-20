@@ -3143,18 +3143,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void killAllPets() {
-		try {
-			LivingEntity pet = StateManager.getInstance().getEntityManager()
-					.getPet(this.getBukkitPlayer().getUniqueId());
-			if (pet == null)
-				return;
-
-			ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);
-			StateManager.getInstance().getEntityManager().removePet(this.getBukkitPlayer().getUniqueId(),
-					!petsolEntity.isCharmed());
-		} catch (CoreStateInitException e) {
-
-		}
+		EntityUtils.KillAllPets(this.getBukkitPlayer().getUniqueId());
 		this.setLastUpdatedTimeNow();
 
 	}
