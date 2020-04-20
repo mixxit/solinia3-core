@@ -4515,7 +4515,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP)
 						|| effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)) {
 					// Ignore this rule if the spell is self
-					if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
+					if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1)) {
 						// If the effect is negative standard nuke and on self, cancel out
 						if (effect.getBase() < 0 && target.equals(source))
 							return new Tuple<Boolean,String>(false,"Target was self");
