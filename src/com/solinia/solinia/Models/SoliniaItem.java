@@ -52,7 +52,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private int agility = 0;
 	private int dexterity = 0;
 	private int procRate = 0;
-	private boolean placeable = true;
+	private boolean placeable = false;
 	private int intelligence = 0;
 	private int wisdom = 0;
 	private int charisma = 0;

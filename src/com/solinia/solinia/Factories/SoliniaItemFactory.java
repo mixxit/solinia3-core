@@ -28,6 +28,7 @@ public class SoliniaItemFactory {
 		item.setBasename(itemStack.getType().name());
 		item.setDisplayname(itemStack.getType().name());
 		item.setLastUpdatedTimeNow();
+		item.setPlaceable(false);
 		
 		item.setItemType(ItemType.None);
 		
@@ -98,6 +99,7 @@ public class SoliniaItemFactory {
 		item.setDefinedItemDamage(originalItem.getDefinedItemDamage());
 		item.setAC(originalItem.getAC());
 		item.setLastUpdatedTimeNow();
+		item.setPlaceable(false);
 		item.setItemType(originalItem.getItemType());
 		item.setWeaponDelay(originalItem.getWeaponDelay());
 		item.setAugmentation(originalItem.isAugmentation());
@@ -303,6 +305,7 @@ public class SoliniaItemFactory {
 			for(Integer i : items)
 			{
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(i);
+				item.setPlaceable(false);
 				List<String> classNames = new ArrayList<String>();
 				List<String> raceNames = new ArrayList<String>();
 				classNames.add(classtype.getName().toUpperCase());

@@ -49,40 +49,12 @@ public class PatchUtils {
 	public static void Patcher() {
 		try
 		{
-			for(ISoliniaItem ent : StateManager.getInstance().getConfigurationManager().getItems())
+			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
 			{
-				if (ent.getWorth()  <2)
-					continue;
-				
-				if (ent.isSpellscroll())
+				if (item.isWeaponOrBowOrShield() || item.isArmour() || item.isAdditionalArmour() || item.isJewelry() || item.getQuestId() > 0)
 				{
-					int worth = 1;
-					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(ent.getAbilityid());
-					if (spell == null)
-						continue;
-					
-					int lowestLevel = 1000;
-					
-					for(SoliniaSpellClass spellClass : spell.getAllowedClasses())
-					{
-						if (spellClass.getMinlevel() < lowestLevel)
-							lowestLevel = spellClass.getMinlevel();
-					}
-					int minLevel = 1;
-					
-					if (lowestLevel > minLevel && lowestLevel < 100)
-						minLevel = lowestLevel;
-					
-					ent.setWorth(worth * minLevel);
-					ent.setLastUpdatedTimeNow();
-					continue;
-				}
-				
-				if (ent.isArmour() || ent.isAdditionalArmour() || ent.isJewelry() || ent.isWeaponOrBowOrShield())
-				{
-					ent.setWorth(ent.getTier()*15);
-					ent.setLastUpdatedTimeNow();
-					continue;
+					item.setPlaceable(false);
+					item.setLastUpdatedTimeNow();
 				}
 			}
 			

@@ -3,6 +3,7 @@ package com.solinia.solinia.Utils;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -29,8 +30,11 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.SoliniaSyncPlayerChatEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SkillType;
@@ -3401,34 +3405,46 @@ public class EntityUtils {
 	}
 
 
-	public static void teleportSafely(Entity entity, Location loc) {
-		if (entity == null)
+	public static void teleportSafely(Entity targetEntity, Location targetLoc) {
+		if (targetEntity == null)
 			return;
 		
-		if (loc == null)
+		if (targetLoc == null)
 			return;
 		
-		if (entity instanceof Player)
-		{
-			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-			if (ess != null)
-			{
-				User user = ess.getUser((Player)entity);
-				if (user == null)
-					entity.teleport(loc);
-				else
-					try {
-						user.getTeleport().now(loc, false, TeleportCause.PLUGIN);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+		final UUID entityUuid = targetEntity.getUniqueId();
+		final Location loc = targetLoc.clone();
+		
+		Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+		    @Override
+		    public void run() {
+		    	Entity entity = Bukkit.getEntity(entityUuid);
+		    	if (entity == null)
+		    		return;
+		    	
+		    	if (entity instanceof Player)
+				{
+					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+					if (ess != null)
+					{
+						User user = ess.getUser((Player)entity);
+						if (user == null)
+							entity.teleport(loc);
+						else
+							try {
+								user.getTeleport().now(loc, false, TeleportCause.PLUGIN);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+								entity.teleport(loc);
+							}
+					} else {
 						entity.teleport(loc);
 					}
-			} else {
-				entity.teleport(loc);
-			}
-		} else {
-			entity.teleport(loc);
-		}
+				} else {
+					entity.teleport(loc);
+				}
+		    }
+		});
 	}
 }
