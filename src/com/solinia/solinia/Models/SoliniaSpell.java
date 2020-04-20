@@ -2985,6 +2985,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula1(effectValue);
 				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax1(effectValue);
+				}
 				break;
 			case 2:
 				if (effectSettingType.toUpperCase().equals("BASE")) {
@@ -2997,6 +3000,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				}
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula2(effectValue);
+				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax2(effectValue);
 				}
 				break;
 			case 3:
@@ -3011,6 +3017,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula3(effectValue);
 				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax3(effectValue);
+				}
 				break;
 			case 4:
 				if (effectSettingType.toUpperCase().equals("BASE")) {
@@ -3023,6 +3032,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				}
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula4(effectValue);
+				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax4(effectValue);
 				}
 				break;
 			case 5:
@@ -3037,6 +3049,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula5(effectValue);
 				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax5(effectValue);
+				}
 				break;
 			case 6:
 				if (effectSettingType.toUpperCase().equals("BASE")) {
@@ -3049,6 +3064,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				}
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula6(effectValue);
+				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax6(effectValue);
 				}
 				break;
 			case 7:
@@ -3063,6 +3081,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula7(effectValue);
 				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax7(effectValue);
+				}
 				break;
 			case 8:
 				if (effectSettingType.toUpperCase().equals("BASE")) {
@@ -3075,6 +3096,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				}
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula8(effectValue);
+				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax8(effectValue);
 				}
 				break;
 			case 9:
@@ -3089,6 +3113,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula9(effectValue);
 				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax9(effectValue);
+				}
 				break;
 			case 10:
 				if (effectSettingType.toUpperCase().equals("BASE")) {
@@ -3101,6 +3128,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				}
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula10(effectValue);
+				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax10(effectValue);
 				}
 				break;
 			case 11:
@@ -3115,6 +3145,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula11(effectValue);
 				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax11(effectValue);
+				}
 				break;
 			case 12:
 				if (effectSettingType.toUpperCase().equals("BASE")) {
@@ -3127,6 +3160,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 				}
 				if (effectSettingType.toUpperCase().equals("FORMULA")) {
 					this.setFormula12(effectValue);
+				}
+				if (effectSettingType.toUpperCase().equals("MAX")) {
+					this.setMax12(effectValue);
 				}
 				break;
 			default:
