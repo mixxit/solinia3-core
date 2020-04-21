@@ -16,14 +16,10 @@ public class CommandEditAA implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof CommandSender))
 			return false;
 
-		if (sender instanceof Player) {
-
-			Player player = (Player) sender;
-
-			if (!player.isOp()) {
-				player.sendMessage("This is an operator only command");
-				return false;
-			}
+		if (!sender.isOp() && !sender.hasPermission("solinia.editaa"))
+		{
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
 		}
 
 		// Args
