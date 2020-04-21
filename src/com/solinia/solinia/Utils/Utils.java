@@ -5610,26 +5610,32 @@ public class Utils {
 	}
 
 	public static void DebugLog(String coreclass, String method, String focusid, String message) {
-		coreclass = coreclass.toUpperCase();
-		method = method.toUpperCase();
-		focusid = focusid.toUpperCase();
-		//System.out.println(coreclass + ":" + method + ":" + focusid + ":" + message);
-		try {
-			for (UUID debuggerUuid : StateManager.getInstance().getPlayerManager().getDebugger().keySet()) {
-				Entity entity = Bukkit.getEntity(debuggerUuid);
-				if (entity == null)
-					continue;
-
-				DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger()
-						.get(debuggerUuid);
-				if (!settings.isDebugging(coreclass, method, focusid))
-					continue;
-
-				entity.sendMessage(coreclass + ":" + method + ":" + focusid + ":" + message);
-
+		try
+		{
+			coreclass = coreclass.toUpperCase();
+			method = method.toUpperCase();
+			focusid = focusid.toUpperCase();
+			//System.out.println(coreclass + ":" + method + ":" + focusid + ":" + message);
+			try {
+				for (UUID debuggerUuid : StateManager.getInstance().getPlayerManager().getDebugger().keySet()) {
+					Entity entity = Bukkit.getEntity(debuggerUuid);
+					if (entity == null)
+						continue;
+	
+					DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger()
+							.get(debuggerUuid);
+					if (!settings.isDebugging(coreclass, method, focusid))
+						continue;
+	
+					entity.sendMessage(coreclass + ":" + method + ":" + focusid + ":" + message);
+	
+				}
+			} catch (CoreStateInitException e) {
+	
 			}
-		} catch (CoreStateInitException e) {
-
+		} catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 
 	}
