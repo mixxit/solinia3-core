@@ -1660,9 +1660,57 @@ public class EntityManager implements IEntityManager {
 				return "solinia3ui:spell5"; // done
 			case Teleport:
 				return "solinia3ui:spell4"; // done
+			case Haste_Runspeed:
+				return "solinia3ui:spelhit2";// done
+			case Fire_DD:
+				return "solinia3ui:spelhit4";// done
+			case Mana_Regen_Resist_Song:
+				return "solinia3ui:spelgdht";// done
+			case Appearance:
+				return "solinia3ui:spelhit2";// done
+			case Memory_Blur:
+				return "solinia3ui:spelgdht";// done
+			case AE_Damage:
+				return "solinia3ui:spelhit1";// done
+			case Banish:
+				break; // no sound
+			case Calm_Song:
+				break; // no sound
+			case Cannibalize_Weapon_Proc:
+				return "solinia3ui:spelhit2";// done
+			case Cold_AE:
+				return "solinia3ui:spelhit4";// done
+			case Cold_DD:
+				return "solinia3ui:spell2";// done
+			case Combat_Buff_Song:
+				break;// no sound
+			case Convert_Vitals:
+				break;
+			case Damage_Shield:
+				return "solinia3ui:spelcast";// done
+			case Direct_Damage_Song:
+				break; // no sound
+			case Enchanter_Pet:
+				break; // no sound
+			case Fear:
+				return "solinia3ui:spelhit3";// should really be lightning
+			case Fire_AE:
+				return "solinia3ui:spelhit4";// done
+			case Lifetap_Over_Time:
+				break;
+			case Poison_Disease_AE:
+				return "solinia3ui:spelhit3";// should really be lightning
+			case Poison_Disease_DD:
+				return "solinia3ui:spell3";// should really be lightning
+			case Stun:
+				return "solinia3ui:spelhit1";// should really be lightning
+			case Suffocate:
+				break;
 			default:
-				return null;
+				break;
 		}
+		
+		return null;
 	}
 
 	public String getSpellEffectIndexCastingSound(int spellAffectIndex) {
@@ -1702,9 +1750,47 @@ public class EntityManager implements IEntityManager {
 				return "solinia3ui:spelhit3";// done
 			case Teleport:
 				return "solinia3ui:spelhit3";// done
+			case Haste_Runspeed:
+				return "solinia3ui:spell4";// done
+			case Fire_DD:
+				return "solinia3ui:spell3";// done
+			case Enchanter_Pet:
+				return "solinia3ui:spell1";// done
+			case Mana_Regen_Resist_Song:
+				return "solinia3ui:spell4";// done
+			case Appearance:
+				return "solinia3ui:spelhit3";// done
+			case Memory_Blur:
+				return "solinia3ui:spell4";// done
+			case AE_Damage:
+				return "solinia3ui:spell3";// done
+			case Fire_AE:
+				return "solinia3ui:spell2";// supposed to actually be lightning
+			case Cold_AE:
+				return "solinia3ui:spell3";// done
+			case Cold_DD:
+				return "solinia3ui:spell3";// done
+			case Damage_Shield:
+				return "solinia3ui:spell4";// done
+			case Stun:
+				return "solinia3ui:spell3";// done
+			case Poison_Disease_AE:
+				return "solinia3ui:spell5";// done
+			case Poison_Disease_DD:
+				return "solinia3ui:spell4";// done
+			case Fear:
+				return "solinia3ui:spell5";// done
+			case Banish:
+				return "solinia3ui:spelcast";// done
+			case Cannibalize_Weapon_Proc:
+				return "solinia3ui:spelhit3";// done
+			case Direct_Damage_Song:
+				break; // no sound
 			default:
-				return null;
+				return null;// done
 		}
+		
+		return null;
 	}
 	
 	@Override

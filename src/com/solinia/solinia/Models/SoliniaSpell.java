@@ -4585,6 +4585,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					}
 				}
 	
+				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll)
 						|| effect.getSpellEffectType().equals(SpellEffectType.ResistCold)
 						|| effect.getSpellEffectType().equals(SpellEffectType.ResistFire)
@@ -4596,25 +4597,29 @@ public class SoliniaSpell implements ISoliniaSpell {
 					if (effect.getBase() < 0 && target.equals(source))
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
-	
+
+				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Mez)) {
 					// If the effect is a mez, cancel out
 					if (target.equals(source))
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
 	
+				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Stun)) {
 					// If the effect is a stun, cancel out
 					if (target.equals(source))
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
 	
+				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Root)) {
 					// If the effect is a root, cancel out
 					if (target.equals(source))
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
 	
+				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Blind)) {
 					// If the effect is a blindness, cancel out
 					if (target.equals(source))
