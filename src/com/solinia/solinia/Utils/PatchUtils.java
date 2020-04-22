@@ -47,22 +47,7 @@ import net.minecraft.server.v1_14_R1.TileEntityEnderChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for(ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
-			{
-				if (item.isWeaponOrBowOrShield() || item.isArmour() || item.isAdditionalArmour() || item.isJewelry() || item.getQuestId() > 0)
-				{
-					item.setPlaceable(false);
-					item.setLastUpdatedTimeNow();
-				}
-			}
-			
-			System.out.println("Finished");
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 	
 	public Inventory listToInventory(NBTTagList nbttaglist) {

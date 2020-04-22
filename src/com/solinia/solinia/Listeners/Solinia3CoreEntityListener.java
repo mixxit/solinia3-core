@@ -400,29 +400,58 @@ public class Solinia3CoreEntityListener implements Listener {
 			Utils.CancelEvent(event);
 		}
 		
-		if (!(entityDamageByEntityEvent.getDamager() instanceof Player))
-			return;
-
-		if (!(event.getEntity() instanceof LivingEntity))
+		if (!(entityDamageByEntityEvent.getDamager() instanceof Player) && !(entityDamageByEntityEvent.getDamager() instanceof Projectile))
 			return;
 
 		// HOWEVER, PLAYER STILL LIKE MANUALLY ATTACKING SO WE WILL TRIGGER
 		// AUTO ATTACK
 
-		// If they have no target, target the entity
-		try {
-			ISoliniaLivingEntity defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
-			if (defender.getBukkitLivingEntity() == null || defender.getBukkitLivingEntity().isDead())
+		// Manual Melee Attack
+		if ((entityDamageByEntityEvent.getDamager() instanceof Player))
+		{
+			if (!(event.getEntity() instanceof LivingEntity))
+				return;
+	
+	
+			// If they have no target, target the entity
+			try {
+				ISoliniaLivingEntity defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+				if (defender.getBukkitLivingEntity() == null || defender.getBukkitLivingEntity().isDead())
+					return;
+				
+				ISoliniaLivingEntity damager = SoliniaLivingEntityAdapter.Adapt((Player)(entityDamageByEntityEvent.getDamager()));
+				if (damager == null || damager.getBukkitLivingEntity().isDead())
+					return;
+				
+				damager.setEntityTarget(defender.getBukkitLivingEntity());
+				damager.processAutoAttack(true);
+				
+			} catch (CoreStateInitException e) {
+			}
+		}
+		
+		// Ranged Attack
+		if (entityDamageByEntityEvent.getDamager() instanceof Projectile)
+		{
+			Projectile projectile = (Projectile)entityDamageByEntityEvent.getDamager();
+			if (!(projectile.getShooter() instanceof LivingEntity))
 				return;
 			
-			ISoliniaLivingEntity damager = SoliniaLivingEntityAdapter.Adapt((Player)(entityDamageByEntityEvent.getDamager()));
-			if (damager == null || damager.getBukkitLivingEntity().isDead())
-				return;
-			
-			damager.setEntityTarget(defender.getBukkitLivingEntity());
-			damager.processAutoAttack(true);
-			
-		} catch (CoreStateInitException e) {
+			// If they have no target, target the entity
+			try {
+				ISoliniaLivingEntity defender = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getEntity());
+				if (defender.getBukkitLivingEntity() == null || defender.getBukkitLivingEntity().isDead())
+					return;
+				
+				ISoliniaLivingEntity damager = SoliniaLivingEntityAdapter.Adapt((Player)(projectile.getShooter()));
+				if (damager == null || damager.getBukkitLivingEntity().isDead())
+					return;
+				
+				damager.setEntityTarget(defender.getBukkitLivingEntity());
+				damager.processAutoAttack(true);
+				
+			} catch (CoreStateInitException e) {
+			}
 		}
 		
 	}
@@ -632,12 +661,32 @@ public class Solinia3CoreEntityListener implements Listener {
 					}
 				}
 			}
+			
+			// TODO Try Auto Attack here if timer is ok (see EntityDamageByEntityEvent)
+			try
+			{
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(shooter);
+				if (solLivingEntity == null)
+				{
+					Utils.CancelEvent(event);
+					return;
+				}
+					
+				if (!solLivingEntity.hasSufficientArrowReagents(1)) {
+					shooter.sendMessage(
+							"* You do not have sufficient arrows in your /reagents to fire your bow!");
+					Utils.CancelEvent(event);
+					return;
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		} else {
+			// NPCs dont use manual attacks, they use our auto attack code
+			Utils.CancelEvent(event);
+			return;
 		}
-		
-		// This is done from auto attack now
-		Utils.CancelEvent(event);
-		
-		// TODO Try Auto Attack here if timer is ok
 		return;
 	}
 
