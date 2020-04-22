@@ -45,6 +45,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.EntityAutoAttack;
 import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SpellEffectType;
@@ -103,15 +104,15 @@ public class Solinia3CoreEntityListener implements Listener {
 				
 			}
 		}
-		
-		if (event.getTarget() != null && event.getTarget().isInvulnerable() || event.getTarget().isDead())
+
+		if (event.getEntity() == null || event.getTarget() == null)
+			return;
+
+		if (event != null && event.getTarget() != null && event.getTarget().isInvulnerable() || event.getTarget().isDead())
 		{
 			Utils.CancelEvent(event);
 			return;
 		}
-
-		if (event.getEntity() == null || event.getTarget() == null)
-			return;
 
 		if (event.getEntity().isDead() || event.getTarget().isDead())
 			return;
@@ -672,12 +673,17 @@ public class Solinia3CoreEntityListener implements Listener {
 					return;
 				}
 					
-				if (!solLivingEntity.hasSufficientArrowReagents(1)) {
+				if (!solLivingEntity.hasArrowsInInventory()) {
 					shooter.sendMessage(
-							"* You do not have sufficient arrows in your /reagents to fire your bow!");
+							"* You do not have sufficient arrows in your inventory to fire your bow!");
 					Utils.CancelEvent(event);
 					return;
 				}
+				
+				// For normal auto attack
+				EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(shooter);
+				if (!autoAttack.canAutoAttack())
+					return;
 			} catch (CoreStateInitException e)
 			{
 				

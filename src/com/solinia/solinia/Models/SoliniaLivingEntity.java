@@ -466,9 +466,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		//if (AutoFireEnabled()) {
 		if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 		{
-			if (!this.isNPC() && !this.hasSufficientArrowReagents(1)) {
+			if (!this.isNPC() && !this.hasArrowsInInventory()) {
 				getBukkitLivingEntity().sendMessage(
-						"* You do not have sufficient arrows in your /reagents to auto fire your bow!");
+						"* You do not have sufficient arrows in your inventory to auto fire your bow!");
 				return;
 			}
 			
@@ -588,9 +588,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				//Message(0, "Error: Rangeweapon: GetItem(%i)==0, you have no bow!", GetItemIDAt(EQEmu::invslot::slotRange));
 				return;
 			}
-			if (!this.hasSufficientArrowReagents(1)) {
+			if (!this.hasArrowsInInventory()) {
 				getBukkitLivingEntity().sendMessage(
-						"* You do not have sufficient arrows in your /reagents to auto fire your bow!");
+						"* You do not have sufficient arrows in your inventory to auto fire your bow!");
 				return;
 			}	
 	
@@ -641,8 +641,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
 				if (solPlayer != null)
 				{
-					int itemid = solPlayer.getArrowReagents().get(0);
-					solPlayer.reduceReagents(itemid, 1);
+					// last minute double check
+					if (this.hasArrowsInInventory())
+					{
+						ItemStack is = ((Player)this.getBukkitLivingEntity()).getInventory().getItem(((Player)this.getBukkitLivingEntity()).getInventory().first(Material.ARROW));
+				        is.setAmount(is.getAmount()-1);
+				        ((Player)this.getBukkitLivingEntity()).updateInventory();
+					}
 				}
 				//Log(Logs::Detail, Logs::Combat, "Consumed one arrow from slot %d", ammo_slot);
 			} else {
@@ -715,9 +720,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int hate = 0;
 		int TotalDmg = 0;
 		int WDmg = 0;
+		int ADmg = 0;
 		//int ADmg = 0;
 		if (weapon_damage < 1) {
 			WDmg = getWeaponDamage(other, rangeWeaponItemStack, 0);
+			ADmg = 4;
 			//ADmg = getWeaponDamage(other, Ammo);
 		} else {
 			WDmg = weapon_damage;
@@ -726,17 +733,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (focus > 0) // From FcBaseEffects
 			WDmg += WDmg * focus / 100;
 		
-		if (WDmg > 0) {
+		if (WDmg > 0 || ADmg > 0) {
 			if (WDmg < 0)
 				WDmg = 0;
-			int MaxDmg = WDmg;
-			hate = WDmg;
+			if (ADmg < 0)
+				ADmg = 0;
+			int MaxDmg = WDmg + ADmg;
+			hate = ((WDmg + ADmg));
 			
 			if (MaxDmg == 0)
 				MaxDmg = 1;
 			
 			DamageHitInfo my_hit = new DamageHitInfo();
 			my_hit.base_damage = MaxDmg;
+
 			my_hit.min_damage = 0;
 			my_hit.damage_done = 1;
 
@@ -744,7 +754,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			my_hit.offense = offense(my_hit.skill);
 			my_hit.tohit = getTotalToHit(my_hit.skill, chance_mod);
 			my_hit.hand = InventorySlot.Range;
-
+			
 			doAttack(other, my_hit);
 			TotalDmg = my_hit.damage_done;
 		} else {
@@ -793,14 +803,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public boolean hasSufficientArrowReagents(int count) {
+	public boolean hasArrowsInInventory() {
 		if (!this.isPlayer())
 			return true;
 		
 		try
 		{
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-			return solPlayer.hasSufficientArrowReagents(count);
+			return solPlayer.hasArrowsInInventory();
 		} catch (CoreStateInitException e)
 		{
 			
@@ -4206,7 +4216,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (defender == null)
 			return hit;
 
-		if (hit.skill.equals(SkillType.Archery))
+		if (hit.skill.equals(SkillType.Archery)
+				||
+				(hit.skill.equals(SkillType.Throwing) && getClassObj() != null && getClassObj().getName().equals("BERSERKER"))
+				)
 			hit.damage_done /= 2;
 
 		if (hit.damage_done < 1)
@@ -4215,13 +4228,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO Archery head shots
 		if (hit.skill.equals(SkillType.Archery)) {
 
-			int bonus = 0;
-			int spellArcheryDamageModifier = getSpellBonuses(SpellEffectType.ArcheryDamageModifier);
-			int aaArcheryDamageModifier = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-					SpellEffectType.ArcheryDamageModifier);
-			bonus = spellArcheryDamageModifier + aaArcheryDamageModifier;
-
+			int bonus = getItemBonuses(SpellEffectType.ArcheryDamageModifier) + getSpellBonuses(SpellEffectType.ArcheryDamageModifier) + getAABonuses(SpellEffectType.ArcheryDamageModifier);
 			hit.damage_done += hit.damage_done * bonus / 100;
+			
 			int headshot = tryHeadShot(defender, hit.skill);
 
 			if (headshot > 0) {
@@ -4234,6 +4243,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 																														// on
 																														// headshot
 				if (defender.isNPC() && !defender.isRooted()) {
+					this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your bow shot did double dmg!" + ChatColor.RESET);
 					hit.damage_done *= 2;
 				}
 			}
@@ -4459,17 +4469,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int critChance = Utils.getCriticalChanceBonus(this, hit.skill);
 		if ((className.equals("WARRIOR") || className.equals("BERSERKER")) && getLevel() >= 12)
 			innateCritical = true;
-		else if (className.equals("RANGER") && getLevel() >= 12 && hit.skill.equals("ARCHERY"))
+		else if (className.equals("RANGER") && getLevel() >= 12 && hit.skill.equals(SkillType.Archery))
 			innateCritical = true;
-		else if (className.equals("ROGUE") && getLevel() >= 12 && hit.skill.equals("THROWING"))
+		else if (className.equals("ROGUE") && getLevel() >= 12 && hit.skill.equals(SkillType.Throwing))
 			innateCritical = true;
 
 		// we have a chance to crit!
 		if (innateCritical || critChance > 0) {
 			int difficulty = 0;
-			if (hit.skill.equals("ARCHERY"))
+			if (hit.skill.equals(SkillType.Archery))
 				difficulty = 3400;
-			else if (hit.skill.equals("THROWING"))
+			else if (hit.skill.equals(SkillType.Throwing))
 				difficulty = 1100;
 			else
 				difficulty = 8900;
@@ -4486,7 +4496,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// attacker.sendMessage("Critical dex bonus was: " + dex_bonus);
 
 			// so if we have an innate crit we have a better chance, except for ber throwing
-			if (!innateCritical || (className.equals("BERSERKER") && hit.skill.equals("THROWING")))
+			if (!innateCritical || (className.equals("BERSERKER") && hit.skill.equals(SkillType.Throwing)))
 				dex_bonus = dex_bonus * 3 / 5;
 
 			if (critChance > 0)

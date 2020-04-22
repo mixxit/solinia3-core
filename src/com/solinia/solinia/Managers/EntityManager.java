@@ -1624,7 +1624,7 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	public String getSpellEffectIndexFinishedSound(int spellAffectIndex) {
-		if (spellAffectIndex < 1)
+		if (spellAffectIndex < 0)
 			return null;
 		
 		if (Utils.getSpellEffectIndex(spellAffectIndex) == null)
@@ -1714,7 +1714,7 @@ public class EntityManager implements IEntityManager {
 	}
 
 	public String getSpellEffectIndexCastingSound(int spellAffectIndex) {
-		if (spellAffectIndex < 1)
+		if (spellAffectIndex < 0)
 			return null;
 		
 		if (Utils.getSpellEffectIndex(spellAffectIndex) == null)

@@ -3480,26 +3480,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean hasSufficientArrowReagents(int countNeeded) {
-		int totalCount = 0;
-
-		for (Entry<Integer, SoliniaReagent> entry : getReagents().entrySet()) {
-			try {
-				int itemId = entry.getKey();
-				int count = entry.getValue().getQty();
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
-				if (item != null)
-					if (item.isArrow()) {
-						totalCount += count;
-					}
-			} catch (CoreStateInitException e) {
-
-			}
-		}
-
-		if (totalCount >= countNeeded)
+	public boolean hasArrowsInInventory() {
+		if (this.getBukkitPlayer().getInventory().first(Material.ARROW) != -1)
 			return true;
-
+		
 		return false;
 	}
 

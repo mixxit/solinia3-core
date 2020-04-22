@@ -321,7 +321,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	public boolean hasSufficientBandageReagents(int count);
 	
-	public boolean hasSufficientArrowReagents(int count);
+	public boolean hasArrowsInInventory();
 
 	List<Integer> getArrowReagents();
 	
@@ -634,7 +634,4 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public boolean isPlant();
 	public boolean isAnimal();
 	int getSpellBonuses(SpellEffectType spellEffectType);
-
-
-
 }

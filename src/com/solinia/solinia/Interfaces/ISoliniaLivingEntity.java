@@ -435,8 +435,6 @@ public interface ISoliniaLivingEntity  {
 
 	boolean IsPet();
 
-	boolean hasSufficientArrowReagents(int count);
-
 	boolean checkDoubleAttack();
 
 	public void tryDefensiveProc(SoliniaLivingEntity soliniaLivingEntity, int hand);
@@ -476,5 +474,7 @@ public interface ISoliniaLivingEntity  {
 	void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType, boolean racialPassive);
 
 	void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange, boolean playHurtSound);
+
+	boolean hasArrowsInInventory();
 
 }
