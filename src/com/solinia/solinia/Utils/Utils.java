@@ -4379,6 +4379,12 @@ public class Utils {
 			return AugmentationSlotType.NONE;
 
 		switch (basename.toUpperCase()) {
+		case "TRIDENT":
+			return AugmentationSlotType.WEAPON;
+		case "BOW":
+			return AugmentationSlotType.WEAPON;
+		case "CROSSBOW":
+			return AugmentationSlotType.WEAPON;
 		case "WOODEN_SWORD":
 			return AugmentationSlotType.WEAPON;
 		case "WOOD_SWORD":
