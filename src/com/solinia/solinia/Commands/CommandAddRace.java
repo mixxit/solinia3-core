@@ -20,14 +20,10 @@ public class CommandAddRace implements CommandExecutor {
 			return false;
 		}
 		
-		if (sender instanceof Player)
+		if (!sender.isOp() && !sender.hasPermission("solinia.addrace"))
 		{
-			Player player = (Player)sender;
-			if (!player.isOp())
-			{
-				player.sendMessage("This is an operator only command");
-				return true;
-			}
+			sender.sendMessage("You do not have permission to access this command");
+			return false;
 		}
 		
 		if (args.length < 9)
