@@ -25,6 +25,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -254,6 +255,12 @@ public class Solinia3CorePlayerListener implements Listener {
 		{
 			
 		}
+	}
+	
+	@EventHandler
+	public void onPrepareItemCraft(PrepareItemCraftEvent event)
+	{
+		
 	}
 	
 	@EventHandler
