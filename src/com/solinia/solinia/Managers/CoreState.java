@@ -1156,10 +1156,11 @@ public class CoreState {
 	}
 
 	public void reloadRecipes() {
-		try
+		Bukkit.resetRecipes();
+		/*try
 		{
-			Bukkit.resetRecipes();
-			/*
+			
+			
 			for(SoliniaCraft craft : this.getConfigurationManager().getCrafts())
 			{
 				if (!craft.isCraftingStationUsable())
@@ -1179,10 +1180,10 @@ public class CoreState {
 				recipe.addIngredient(ingredient2);
 				Bukkit.addRecipe(recipe);
 			}
-			*/
+			
 		} catch (CoreStateInitException e)
 		{
 			
-		}
+		}*/
 	}
 }
