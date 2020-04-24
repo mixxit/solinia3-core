@@ -2,6 +2,7 @@ package com.solinia.solinia.Adapters;
 
 import java.util.UUID;
 
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -16,6 +17,10 @@ public class SoliniaPlayerAdapter {
 	
 	public static ISoliniaPlayer Adapt(UUID playerUUID) throws CoreStateInitException {
 		return StateManager.getInstance().getPlayerManager().getActivePlayer(playerUUID);
+	}
+
+	public static ISoliniaPlayer Adapt(HumanEntity humanEntity) throws CoreStateInitException {
+		return StateManager.getInstance().getPlayerManager().getActivePlayer(humanEntity.getUniqueId());
 	}
 	
 }

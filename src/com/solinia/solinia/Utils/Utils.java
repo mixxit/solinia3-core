@@ -5984,6 +5984,9 @@ public class Utils {
 		case INSUFFICIENT_LEVEL_GEAR:
 			message = "You are not sufficient level to use this equipment";
 			break;
+		case EXCEEDED_CLAIMXP:
+			message = "You have exceeded your maximum pending XP! Please /claimxp your additional XP before more can be gained (max: " + referenceCode + ")";
+			break;
 		case CHARM_CHA_FAIL:
 			message = ChatColor.DARK_AQUA + "Your pet has freed themselves of your control! (Charisma)" + ChatColor.RESET;
 			break;
@@ -6154,6 +6157,8 @@ public class Utils {
 		case ARTIFACT_DISCOVERED:
 			return HintSetting.Chat;
 		case CHARM_CHA_FAIL:
+			return HintSetting.Chat;
+		case EXCEEDED_CLAIMXP:
 			return HintSetting.Chat;
 		}
 		

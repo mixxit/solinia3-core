@@ -2,6 +2,7 @@ package com.solinia.solinia.Listeners;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,6 +51,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -65,6 +68,10 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
@@ -74,6 +81,8 @@ import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaBankHolder;
 import com.solinia.solinia.Models.SoliniaCraft;
+import com.solinia.solinia.Models.SoliniaCraftHolder;
+import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.UniversalMerchant;
@@ -937,33 +946,42 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (Utils.isInventoryMerchant(event.getInventory())) {
 			onMerchantInventoryClose(event);
 			return;
-		} else {
-			try
+		}
+		
+		if (event.getInventory().getHolder() instanceof SoliniaCraftHolder)
+		{
+			if (event.getInventory().getItem(0) != null && !event.getInventory().getItem(0).getType().equals(Material.AIR))
+				event.getView().getPlayer().getWorld().dropItemNaturally(event.getView().getPlayer().getLocation(), event.getInventory().getItem(0));
+			if (event.getInventory().getItem(1) != null && !event.getInventory().getItem(1).getType().equals(Material.AIR))
+				event.getView().getPlayer().getWorld().dropItemNaturally(event.getView().getPlayer().getLocation(), event.getInventory().getItem(1));
+			return;
+		}
+		
+		try
+		{
+			// Backup normal inventories
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer().getUniqueId());
+			if (solPlayer != null)
 			{
-				// Backup normal inventories
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer().getUniqueId());
-				if (solPlayer != null)
+				solPlayer.storeArmorContents();
+				solPlayer.storeInventoryContents();
+				try
 				{
-					solPlayer.storeArmorContents();
-					solPlayer.storeInventoryContents();
-					try
-					{
-						StateManager.getInstance().getConfigurationManager().getPlayerState(event.getPlayer().getUniqueId()).storeEnderChestContents();
-					} catch (CoreStateInitException e)
-					{
-						
-					}
-				}
-
-				// Save bank inventory
-				if (event.getInventory().getHolder() instanceof SoliniaBankHolder)
+					StateManager.getInstance().getConfigurationManager().getPlayerState(event.getPlayer().getUniqueId()).storeEnderChestContents();
+				} catch (CoreStateInitException e)
 				{
-					solPlayer.storeBankContents(event.getInventory());
+					
 				}
-			} catch (CoreStateInitException e)
-			{
-				
 			}
+
+			// Save bank inventory
+			if (event.getInventory().getHolder() instanceof SoliniaBankHolder)
+			{
+				solPlayer.storeBankContents(event.getInventory());
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 
@@ -972,7 +990,12 @@ public class Solinia3CorePlayerListener implements Listener {
 		// More hassle than it is worth, cancel it always
 		if (Utils.isInventoryMerchant(event.getInventory())) {
 			Utils.CancelEvent(event);
-			;
+			return;
+		}
+		
+		if (event.getInventory().getHolder() instanceof SoliniaCraftHolder)
+		{
+			Utils.CancelEvent(event);
 			return;
 		}
 		
@@ -990,6 +1013,12 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		if (Utils.isInventoryMerchant(event.getInventory())) {
 			onMerchantInventoryClick(event);
+			return;
+		}
+		
+		if (event.getInventory().getHolder() instanceof SoliniaCraftHolder)
+		{
+			onCraftInventoryClick(event);
 			return;
 		}
 
@@ -1266,6 +1295,8 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	}
 
+	
+
 	private void onMerchantInventoryClose(InventoryCloseEvent event) {
 
 	}
@@ -1278,6 +1309,267 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (event.getItemDrop().getItemStack().getType() != null && Utils.IsDisplayItem(event.getItemDrop().getItemStack())) {
 				event.getItemDrop().getItemStack().setAmount(0);
 			}
+	}
+	
+	private void onCraftInventoryClick(InventoryClickEvent event) {
+		if (event.getCursor() == null || event.getCursor().getType().equals(Material.AIR))
+		{
+			if (event.getRawSlot() == 8)
+			{
+				tryCraftInventory(event);
+				Utils.CancelEvent(event);
+				return;
+			}
+		}
+		
+		// We are picking something up
+		// Check its a solinia item
+		if ((event.getCursor() == null || event.getCursor().getType().equals(Material.AIR)) && (event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)))
+		{
+			if (!ItemStackUtils.IsSoliniaItem(event.getCurrentItem()))
+			{
+				event.getView().getPlayer().sendMessage("This is not a solinia item (pickup)");
+				Utils.CancelEvent(event);
+				return;
+			}
+		}
+		// We are placing something on top of something else
+		// Check its a solinia item
+		if ((event.getCursor() != null && !event.getCursor().getType().equals(Material.AIR))
+				&& (event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR))) {
+			if (!ItemStackUtils.IsSoliniaItem(event.getCurrentItem())) {
+				event.getView().getPlayer().sendMessage("This is not a solinia item (swap)");
+				Utils.CancelEvent(event);
+				return;
+			}
+		}
+		
+		// If we are not placing in slot 1 or 2, just continue on as normal
+		if (event.getRawSlot() != 0 && event.getRawSlot() != 1)
+		{
+			return;
+		}
+	}
+
+	private void tryCraftInventory(InventoryClickEvent event) {
+		ItemStack item1 = event.getInventory().getContents()[0];
+		ItemStack item2 = event.getInventory().getContents()[1];
+		if (item1 == null || item2 == null)
+			return;
+		
+		if (!ItemStackUtils.IsSoliniaItem(item1) || !ItemStackUtils.IsSoliniaItem(item2))
+			return;
+		
+		int minAmount = item1.getAmount();
+		if (item1.getAmount() > item2.getAmount())
+			minAmount = item2.getAmount();
+		
+		try
+		{
+			ISoliniaItem solItem1 = SoliniaItemAdapter.Adapt(item1);
+			ISoliniaItem solItem2 = SoliniaItemAdapter.Adapt(item2);
+			// Broken items
+			if (solItem1 == null || solItem2 == null)
+				return;
+			
+			List<SoliniaCraft> recipe = StateManager.getInstance().getConfigurationManager().getCrafts(solItem1.getId(), solItem2.getId());
+			// There was no recipe
+			if (recipe == null)
+				return;
+			
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getView().getPlayer());
+			if (solPlayer == null)
+				return;
+			
+			// Try first recipe
+			for(SoliniaCraft craft : recipe)
+			{
+				ISoliniaItem output = StateManager.getInstance().getConfigurationManager().getItem(craft.getOutputItem());
+				
+				// Output item doesn't exist, skip
+				if (output == null)
+					continue;
+				
+				if (!canCraft(event.getView().getPlayer(),craft))
+				{
+					continue;
+				}
+				
+				// here we do a skill check
+				if (!craft.getSkillType().equals(SkillType.None))
+				{
+					solPlayer.tryIncreaseSkill(craft.getSkillType(), 1);
+
+					if (!solPlayer.getSkillCheck(craft.getSkillType(),craft.getMinSkill()+50))
+					{
+						event.getView().getPlayer().sendMessage("Your lack of skill resulted in failure!");
+						item1.setAmount(item1.getAmount()-minAmount);
+						item2.setAmount(item2.getAmount()-minAmount);
+
+						event.getInventory().setItem(0,item1);
+						event.getInventory().setItem(1,item2);
+						return;
+					}
+				}
+				
+				
+				if (craft.getOutputItem() > 0)
+				{
+					ItemStack outputItemStack = output.asItemStack();
+					outputItemStack.setAmount(minAmount);
+					
+					item1.setAmount(item1.getAmount()-minAmount);
+					item2.setAmount(item2.getAmount()-minAmount);
+
+					event.getInventory().setItem(0,item1);
+					event.getInventory().setItem(1,item2);
+					event.getView().setCursor(outputItemStack);
+					event.getView().getPlayer().sendMessage("You fashion the items together to make something new!");
+				} else {
+					if (craft.getOutputLootTableId() > 0)
+					{
+						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craft.getOutputLootTableId());
+						if (loottable != null)
+						{
+							item1.setAmount(item1.getAmount()-minAmount);
+							item2.setAmount(item2.getAmount()-minAmount);
+
+							event.getInventory().setItem(0,item1);
+							event.getInventory().setItem(1,item2);
+							for (int i = 0; i < minAmount; i++)
+							{
+								DropUtils.DropLoot(loottable.getId(), event.getView().getPlayer().getWorld(), event.getView().getPlayer().getLocation(),"",0);
+								event.getView().getPlayer().sendMessage("You fashion the items together to attempt to make something random!");
+							}
+						}
+					}
+				}
+				return;
+			}
+			
+			// if we get here there is no recipe
+			return;
+		} catch (CoreStateInitException | SoliniaItemException e)
+		{
+			// if we get here there is a missing item
+			return;
+		}	
+	}
+
+	private boolean canCraft(HumanEntity humanEntity, SoliniaCraft craftEntry) {
+		try
+		{
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(humanEntity);
+			if (solPlayer == null)
+				return false;
+			
+			if (craftEntry.getClassId() > 0)
+			{
+				if (solPlayer.getClassObj() == null)
+				{
+					humanEntity.sendMessage("You are not the correct class to produce " + craftEntry.getRecipeName());
+					return false;
+				}
+				
+				if (solPlayer.getClassObj().getId() != craftEntry.getClassId())
+				{
+					humanEntity.sendMessage("You are not the correct class to produce " + craftEntry.getRecipeName());
+					return false;
+				}
+			}
+			
+			if (!craftEntry.getSkillType().equals(SkillType.None))
+			{
+				if (solPlayer.getSkillCap(craftEntry.getSkillType()) < 1)
+				{
+		        	humanEntity.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
+					return false;
+				}
+				
+				if (craftEntry.getMinSkill() > 0)
+				{
+					SoliniaPlayerSkill skill = solPlayer.getSkill(craftEntry.getSkillType());
+					if (skill == null)
+					{
+			        	humanEntity.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
+						return false;
+					}
+					
+					if (skill.getValue() < craftEntry.getMinSkill())
+					{
+						humanEntity.sendMessage("You have insufficient skill to produce " + craftEntry.getRecipeName());
+						return false;
+					}
+				}
+				
+				if (craftEntry.getMinLevel() > solPlayer.getLevel())
+				{
+					humanEntity.sendMessage("You have insufficient level to produce " + craftEntry.getRecipeName() + " Required Level: " + craftEntry.getMinLevel() + " Your Level: " + solPlayer.getLevel());
+					return false;
+				}
+			}
+			
+			if (craftEntry.getOutputItem() > 0 || craftEntry.getOutputLootTableId() > 0)
+			{
+				if (craftEntry.getOutputItem() > 0)
+				{
+					ISoliniaItem outputItem = StateManager.getInstance().getConfigurationManager().getItem(craftEntry.getOutputItem());
+					if (outputItem == null)
+					{
+						humanEntity.sendMessage("That craft is not possible as the recipe is for an item that no longer is possible");
+						return false;
+					}
+				}
+				
+				if (craftEntry.getOutputLootTableId() > 0)
+				{
+					ISoliniaLootTable outputLootTable = StateManager.getInstance().getConfigurationManager().getLootTable(craftEntry.getOutputLootTableId());
+					if (outputLootTable == null)
+					{
+						humanEntity.sendMessage("That craft is not possible as the recipe is for a random loot list that no longer exists");
+						return false;
+					}
+					
+					if (outputLootTable.getEntries().size() < 1)
+					{
+						humanEntity.sendMessage("That craft is not possible as the recipe is for a random loot list that is empty");
+						return false;
+	
+					}
+					
+					int lootdropcount = 0;
+					
+					for(ISoliniaLootTableEntry entry : outputLootTable.getEntries())
+					{
+						ISoliniaLootDrop lootdrop = StateManager.getInstance().getConfigurationManager().getLootDrop(entry.getLootdropid());
+						if (lootdrop == null)
+							continue;
+						
+						if (lootdrop.getEntries().size() < 1)
+							continue;
+						
+						for (ISoliniaLootDropEntry lentry : lootdrop.getEntries())
+						{
+							ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(lentry.getItemid());
+							if (item == null)
+								continue;
+							
+							lootdropcount++;
+						}
+					}
+					
+					if (lootdropcount < 1)
+					{
+						humanEntity.sendMessage("That craft is not possible as the recipe is for a random loot list with loot drops that are empty");
+						return false;
+					}
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	private void onMerchantInventoryClick(InventoryClickEvent event) {

@@ -5264,8 +5264,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void openCraft() {
-		Inventory inventory = Bukkit.createInventory(new SoliniaCraftHolder(), 4, "Craft");
-		
+		Inventory inventory = Bukkit.createInventory(new SoliniaCraftHolder(), 9, "Craft");
+		ItemStack[] defaultItems = new ItemStack[9];
+		defaultItems[2] = new ItemStack(Material.BARRIER);
+		defaultItems[3] = new ItemStack(Material.BARRIER);
+		defaultItems[4] = new ItemStack(Material.BARRIER);
+		defaultItems[5] = new ItemStack(Material.BARRIER);
+		defaultItems[6] = new ItemStack(Material.BARRIER);
+		defaultItems[7] = new ItemStack(Material.BARRIER);
+		defaultItems[8] = new ItemStack(Material.CHEST);
+		inventory.setContents(defaultItems);
 		this.getBukkitPlayer().openInventory(inventory);
 	}
 	

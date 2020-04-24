@@ -14,6 +14,7 @@ import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.PlayerUtils;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -93,7 +94,7 @@ public class Fellowship implements IPersistable {
 				{
 					Player player = Bukkit.getPlayer(character.getOwnerUUID());
 					if (player != null)
-					player.sendMessage("You have exceeded your maximum pending XP for fellowship rewards! Please /claimxp your additional XP before more can be gained (max: " + character.getPendingXp().longValue() + ")");
+						Utils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(character.getPendingXp().longValue()), false);
 				} else {
 					if (experience < 0)
 						experience = 1d;
