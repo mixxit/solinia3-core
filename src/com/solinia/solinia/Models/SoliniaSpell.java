@@ -3256,8 +3256,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 		try {
 			switch (Utils.getSpellTargetType(getTargettype())) {
 			case Self:
+				// racial passives are self only
 				return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity, this,
-						sourceEntity, sendMessages, requiredWeaponSkillType);
+						sourceEntity, sendMessages, requiredWeaponSkillType,racialPassive);
 			// Casts on self as holding signaculum
 			case Corpse:
 				return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity, this,
