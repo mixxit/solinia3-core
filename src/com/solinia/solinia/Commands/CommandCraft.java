@@ -39,6 +39,17 @@ public class CommandCraft implements CommandExecutor {
 		}
 		
 		Player player = (Player)sender;
+		try {
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			solPlayer.openCraft();
+			
+			
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		/*
 		ItemStack primaryItem = player.getInventory().getItemInMainHand();
         if (primaryItem.getType() == null || primaryItem.getType().equals(Material.AIR))
         {
@@ -270,6 +281,7 @@ public class CommandCraft implements CommandExecutor {
     			player.sendMessage("Item no longer exists");
     		}
         }
+        */
 		
         
 		return true;

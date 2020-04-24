@@ -626,6 +626,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	void setBase64BankContents(String base64BankContents);
 	void storeBankContents(Inventory inventory);
 	public void openBank();
+	public void openCraft();
 	ItemStack[] getStoredBankContents();
 	Timestamp getLastUpdatedTime();
 	void setLastUpdatedTime(Timestamp lastUpdatedTime);

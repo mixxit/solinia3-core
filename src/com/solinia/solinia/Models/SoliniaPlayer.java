@@ -5261,6 +5261,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		inventory.setContents(getStoredBankContents());
 		this.getBukkitPlayer().openInventory(inventory);
 	}
+
+	@Override
+	public void openCraft() {
+		Inventory inventory = Bukkit.createInventory(new SoliniaCraftHolder(), 4, "Craft");
+		
+		this.getBukkitPlayer().openInventory(inventory);
+	}
 	
 	@Override
 	public Timestamp getLastUpdatedTime() {

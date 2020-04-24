@@ -89,7 +89,7 @@ public class Fellowship implements IPersistable {
 				if (character.getLevel() < ilowlvl)
 					continue;
 				
-				if (character.getPendingXp() >= PlayerUtils.getMaxAAXP())
+				if (character.getPendingXp() >= PlayerUtils.getMaxFellowshipXP())
 				{
 					Player player = Bukkit.getPlayer(character.getOwnerUUID());
 					if (player != null)

@@ -214,6 +214,16 @@ public class PlayerUtils {
 		// TODO Auto-generated method stub
 		return getExperienceRequirementForLevel(51) - getExperienceRequirementForLevel(50);
 	}
+	
+	public static Double getMaxClaimXP() {
+		// TODO Auto-generated method stub
+		return getMaxAAXP()/10;
+	}
+	
+	public static Double getMaxFellowshipXP() {
+		// TODO Auto-generated method stub
+		return getMaxAAXP()/4;
+	}
 
 	public static double getExperienceRequirementForLevel(int level) {
 		Double classmodifier = 10d;

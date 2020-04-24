@@ -376,7 +376,7 @@ public class PlayerManager implements IPlayerManager {
 				if (solPlayer.getExperience() >= StateManager.getInstance().getConfigurationManager().getMaxExperience())
 					continue;
 				
-				if (solPlayer.getPendingXp() >= PlayerUtils.getMaxAAXP())
+				if (solPlayer.getPendingXp() >= PlayerUtils.getMaxClaimXP())
 				{
 					player.sendMessage("You have exceeded your maximum pending XP! Please /claimxp your additional XP before more can be gained (max: " + solPlayer.getPendingXp().longValue() + ")");
 				} else {
