@@ -28,7 +28,7 @@ public class SoliniaCraft implements IPersistable {
 	private int outputItem = 0;
 	private int outputLootTableId = 0;
 	private int minLevel = 0;
-	private boolean CraftingStationUsable = false;
+	private boolean CraftingStationUsable = true;
 	
 	public int getItem1() {
 		return item1;
@@ -143,6 +143,7 @@ public class SoliniaCraft implements IPersistable {
 		sender.sendMessage("- skilltype: " + ChatColor.GOLD + getSkillType() + ChatColor.RESET);
 		sender.sendMessage("- minskill: " + ChatColor.GOLD + getMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
+		sender.sendMessage("- craftingstationusable: " + ChatColor.GOLD + this.isCraftingStationUsable() + ChatColor.RESET);
 	}
 
 	public void editSetting(String setting, String value)
@@ -161,6 +162,9 @@ public class SoliniaCraft implements IPersistable {
 			if (classObj == null)
 				throw new InvalidCraftSettingException("Class does not exist");
 			setClassId(Integer.parseInt(value));
+			break;
+		case "craftingstationusable":
+			this.setCraftingStationUsable(Boolean.parseBoolean(value));
 			break;
 		case "minskill":
 			if (Integer.parseInt(value) < 0)
