@@ -2,6 +2,8 @@ package com.solinia.solinia.Listeners;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -20,6 +22,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -70,6 +73,7 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaBankHolder;
+import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.UniversalMerchant;
@@ -258,9 +262,16 @@ public class Solinia3CorePlayerListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onItemCraft(CraftItemEvent event)
+	{
+		//
+	}
+	
+	@EventHandler
 	public void onPrepareItemCraft(PrepareItemCraftEvent event)
 	{
-		
+		if (!(event.getInventory().getType().equals(InventoryType.CRAFTING)))
+			return;
 	}
 	
 	@EventHandler
@@ -1385,7 +1396,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				final UUID uuid = event.getView().getPlayer().getUniqueId();
 				final ItemStack cursorstack = buyStack;
 				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-						Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+						StateManager.getInstance().getPlugin(), new Runnable() {
 							public void run() {
 								Bukkit.getPlayer(uuid).setItemOnCursor(cursorstack);
 								}
@@ -1413,7 +1424,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							// Cursor events are deprecated, must be done next tick before a cancel
 							final UUID uuid = event.getView().getPlayer().getUniqueId();
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									StateManager.getInstance().getPlugin(), new Runnable() {
 										public void run() {
 											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
 											}
@@ -1447,7 +1458,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							// Cursor events are deprecated, must be done next tick before a cancel
 							final UUID uuid = event.getView().getPlayer().getUniqueId();
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									StateManager.getInstance().getPlugin(), new Runnable() {
 										public void run() {
 											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
 											}
@@ -1465,7 +1476,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							// Cursor events are deprecated, must be done next tick before a cancel
 							final UUID uuid = event.getView().getPlayer().getUniqueId();
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									StateManager.getInstance().getPlugin(), new Runnable() {
 										public void run() {
 											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
 											}
@@ -1488,7 +1499,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							// Cursor events are deprecated, must be done next tick before a cancel
 							final UUID uuid = event.getView().getPlayer().getUniqueId();
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									StateManager.getInstance().getPlugin(), new Runnable() {
 										public void run() {
 											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
 											}
@@ -1502,7 +1513,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						// Cursor events are deprecated, must be done next tick before a cancel
 						final UUID uuid = event.getView().getPlayer().getUniqueId();
 						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+								StateManager.getInstance().getPlugin(), new Runnable() {
 									public void run() {
 										Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
 										}
@@ -1531,7 +1542,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					// Cursor events are deprecated, must be done next tick before a cancel
 					final UUID uuid = event.getView().getPlayer().getUniqueId();
 					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-							Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+							StateManager.getInstance().getPlugin(), new Runnable() {
 								public void run() {
 									Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
 									}
@@ -1556,7 +1567,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						final UUID finaluuid = event.getView().getPlayer().getUniqueId();
 						final long finalprice = price;
 						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+								StateManager.getInstance().getPlugin(), new Runnable() {
 									public void run() {
 											if (Bukkit.getPlayer(finaluuid).getItemOnCursor() == null)
 											{

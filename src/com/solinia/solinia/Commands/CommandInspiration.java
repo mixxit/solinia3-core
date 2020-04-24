@@ -353,7 +353,7 @@ public class CommandInspiration implements CommandExecutor {
 						{
 							
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									StateManager.getInstance().getPlugin(), new Runnable() {
 										public void run() {
 											try
 											{
@@ -464,7 +464,7 @@ public class CommandInspiration implements CommandExecutor {
 						{
 							
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									StateManager.getInstance().getPlugin(), new Runnable() {
 										public void run() {
 											try
 											{

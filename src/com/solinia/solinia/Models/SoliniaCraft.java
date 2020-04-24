@@ -28,6 +28,7 @@ public class SoliniaCraft implements IPersistable {
 	private int outputItem = 0;
 	private int outputLootTableId = 0;
 	private int minLevel = 0;
+	private boolean CraftingStationUsable = false;
 	
 	public int getItem1() {
 		return item1;
@@ -241,6 +242,8 @@ public class SoliniaCraft implements IPersistable {
 			throw new InvalidCraftSettingException(
 					"Invalid craft setting. Valid Options are: recipename,item1,item2,outputitem,outputloottableid,skill,classid,minskill");
 		}
+		
+		StateManager.getInstance().reloadRecipes();
 	}
 	public String getRecipeName() {
 		return recipeName;
@@ -265,5 +268,11 @@ public class SoliniaCraft implements IPersistable {
 	}
 	public void setSkillType(SkillType skillType) {
 		this.skillType = skillType;
+	}
+	public boolean isCraftingStationUsable() {
+		return CraftingStationUsable;
+	}
+	public void setCraftingStationUsable(boolean craftingStationUsable) {
+		CraftingStationUsable = craftingStationUsable;
 	}
 }

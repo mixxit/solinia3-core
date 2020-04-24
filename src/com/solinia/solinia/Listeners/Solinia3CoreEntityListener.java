@@ -302,7 +302,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		final UUID entityUUID = event.getEntity().getUniqueId();
 
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
 				new Runnable() {
 					public void run() {
 						Entity entity = Bukkit.getEntity(entityUUID);

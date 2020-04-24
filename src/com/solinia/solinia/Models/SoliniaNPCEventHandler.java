@@ -610,7 +610,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 							final UUID awardclassplayeruuid = player.getBukkitPlayer().getUniqueId();
 							
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									StateManager.getInstance().getPlugin(), new Runnable() {
 										public void run() {
 											try {
 												ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
@@ -673,7 +673,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 						final UUID awardclassplayeruuid = player.getBukkitPlayer().getUniqueId();
 						
 						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+								StateManager.getInstance().getPlugin(), new Runnable() {
 									public void run() {
 										try {
 											ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
@@ -739,7 +739,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 						if (item != null) {
 
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-									Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+									StateManager.getInstance().getPlugin(), new Runnable() {
 										public void run() {
 											try {
 												ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
@@ -851,7 +851,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					if (item != null) {
 
 						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-								Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+								StateManager.getInstance().getPlugin(), new Runnable() {
 									public void run() {
 										try {
 											ISoliniaItem item = StateManager.getInstance().getConfigurationManager()

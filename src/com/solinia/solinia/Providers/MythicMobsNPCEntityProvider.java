@@ -37,7 +37,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	@Override
 	public void updateSpawnGroup(ISoliniaSpawnGroup spawngroup) {
-		updateSpawngroupLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"), spawngroup);
+		updateSpawngroupLater(StateManager.getInstance().getPlugin(), spawngroup);
 	}
 	
 	public static void updateSpawngroupLater(Plugin plugin, ISoliniaSpawnGroup spawngroup) {
@@ -75,7 +75,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 	
 	@Override
 	public void reloadProvider() {
-		Utils.dispatchCommandLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "mm reload");
+		Utils.dispatchCommandLater(StateManager.getInstance().getPlugin(), "mm reload");
 	}
 
 	private void writeNpcDefinition(String fileName, ISoliniaNPC npc) {
@@ -648,14 +648,14 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	@Override
 	public void removeSpawnGroup(ISoliniaSpawnGroup spawngroup) {
-		Utils.dispatchCommandLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+		Utils.dispatchCommandLater(StateManager.getInstance().getPlugin(),
 				"mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 	}
 
 	@Override
 	public void spawnNPC(ISoliniaNPC npc, int amount, String world, int x, int y, int z) {
-		Utils.dispatchCommandLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+		Utils.dispatchCommandLater(StateManager.getInstance().getPlugin(),
 				"mm mobs spawn NPCID_" + npc.getId() + " " + amount + " " + world + "," + x + "," + y + "," + z);
 	}
 

@@ -143,7 +143,7 @@ public class ItemStackUtils {
 		if (itemMeta == null)
 			return null;
 		
-		NamespacedKey soliniaIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaid");
+		NamespacedKey soliniaIdKey = new NamespacedKey(StateManager.getInstance().getPlugin(), "soliniaid");
 		if(itemMeta.getCustomTagContainer().hasCustomTag(soliniaIdKey , ItemTagType.INTEGER)) {
 		    return itemMeta.getCustomTagContainer().getCustomTag(soliniaIdKey, ItemTagType.INTEGER);
 		}
@@ -163,7 +163,7 @@ public class ItemStackUtils {
 		if (itemStack.getItemMeta() == null)
 			return null;
 		
-		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "sollastupdated");
+		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(StateManager.getInstance().getPlugin(), "sollastupdated");
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
 		// old system
@@ -205,7 +205,7 @@ public class ItemStackUtils {
 		if (!ItemStackUtils.IsSoliniaItem(itemStack))
 			return null;
 		
-		NamespacedKey soliniaAugIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaaug1id");
+		NamespacedKey soliniaAugIdKey = new NamespacedKey(StateManager.getInstance().getPlugin(), "soliniaaug1id");
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		CustomItemTagContainer tagContainer = itemMeta.getCustomTagContainer();
 		
@@ -454,7 +454,7 @@ public class ItemStackUtils {
 		itemStack.setItemMeta(ItemStackUtils.applyAugmentationTextToItemStack(itemStack,augmentationItemId));
 		
 		ItemMeta itemMeta = itemStack.getItemMeta();
-		NamespacedKey soliniaAugIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaaug1id");
+		NamespacedKey soliniaAugIdKey = new NamespacedKey(StateManager.getInstance().getPlugin(), "soliniaaug1id");
 		itemMeta.getCustomTagContainer().setCustomTag(soliniaAugIdKey, ItemTagType.INTEGER, augmentationItemId);
 		itemStack.setItemMeta(itemMeta);
 		return itemStack;

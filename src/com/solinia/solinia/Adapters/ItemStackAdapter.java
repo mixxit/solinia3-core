@@ -57,10 +57,10 @@ public class ItemStackAdapter {
 		Timestamp lastItemTimestamp = soliniaItem.getLastUpdatedTime();
 		
 		// New Item ID storage system
-		NamespacedKey soliniaIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "soliniaid");
-		NamespacedKey merchantKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "merchant");
-		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "sollastupdated");
-		NamespacedKey soliniaAppearanceIdKey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Solinia3Core"), "appearanceid");
+		NamespacedKey soliniaIdKey = new NamespacedKey(StateManager.getInstance().getPlugin(), "soliniaid");
+		NamespacedKey merchantKey = new NamespacedKey(StateManager.getInstance().getPlugin(), "merchant");
+		NamespacedKey soliniaLastUpdatedKey = new NamespacedKey(StateManager.getInstance().getPlugin(), "sollastupdated");
+		NamespacedKey soliniaAppearanceIdKey = new NamespacedKey(StateManager.getInstance().getPlugin(), "appearanceid");
 		
 		ItemMeta itemMeta = stack.getItemMeta();
 		itemMeta.getCustomTagContainer().setCustomTag(merchantKey, ItemTagType.STRING, Boolean.toString(merchanttag));

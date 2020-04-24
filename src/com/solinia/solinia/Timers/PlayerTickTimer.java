@@ -6,13 +6,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Events.PlayerTickEvent;
+import com.solinia.solinia.Managers.StateManager;
 
 public class PlayerTickTimer extends BukkitRunnable {
 
 	@Override
 	public void run() {
 
-		Plugin plugin = Bukkit.getPluginManager().getPlugin("Solinia3Core");
+		Plugin plugin = StateManager.getInstance().getPlugin();
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			try
 			{

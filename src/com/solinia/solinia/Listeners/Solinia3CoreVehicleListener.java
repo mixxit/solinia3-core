@@ -15,6 +15,7 @@ import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -32,7 +33,7 @@ public class Solinia3CoreVehicleListener implements Listener {
 		{
 			final UUID entityUuid = event.getDismounted().getUniqueId();
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-					Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+					StateManager.getInstance().getPlugin(), new Runnable() {
 						public void run() {
 							org.bukkit.entity.Entity entity = Bukkit.getEntity(entityUuid);
 							if (entity == null)

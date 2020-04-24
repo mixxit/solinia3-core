@@ -3,6 +3,7 @@ package com.solinia.solinia.Models;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.Utils;
 
 import io.javalin.http.Context;
@@ -22,7 +23,7 @@ public class ServerApi {
 		
 		try
 		{
-			if (!Bukkit.getPluginManager().getPlugin("Solinia3Core").isEnabled())
+			if (!StateManager.getInstance().getPlugin().isEnabled())
 				return;
 			
 			final String message = ctx.body();
@@ -47,7 +48,7 @@ public class ServerApi {
 			        }
 				}
 
-			}.runTaskLater(Bukkit.getPluginManager().getPlugin("Solinia3Core"), 1);
+			}.runTaskLater(StateManager.getInstance().getPlugin(), 1);
 		} catch (Exception e)
 		{
 			e.printStackTrace();

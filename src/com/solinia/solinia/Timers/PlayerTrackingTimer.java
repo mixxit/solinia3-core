@@ -8,13 +8,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerTrackEvent;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Managers.StateManager;
 
 public class PlayerTrackingTimer extends BukkitRunnable {
 
 	@Override
 	public void run() {
 
-		Plugin plugin = Bukkit.getPluginManager().getPlugin("Solinia3Core");
+		Plugin plugin = StateManager.getInstance().getPlugin();
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			try
 			{

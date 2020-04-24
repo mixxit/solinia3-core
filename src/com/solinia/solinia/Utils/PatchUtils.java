@@ -32,6 +32,8 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.PlayerState;
+import com.solinia.solinia.Models.SkillType;
+import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaPatch;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 
@@ -47,6 +49,28 @@ import net.minecraft.server.v1_14_R1.TileEntityEnderChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
+		System.out.println("Patching items...");
+		int count = 0;
+		try
+		{
+			for(SoliniaCraft craft : StateManager.getInstance().getConfigurationManager().getCrafts())
+			{
+			if (!craft.getSkillType().equals(SkillType.Alchemy) &&
+					!craft.getSkillType().equals(SkillType.MakePoison) 
+					)
+			{
+				craft.setCraftingStationUsable(false);
+				continue;
+			}
+			craft.setCraftingStationUsable(true);
+			count++;
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		System.out.println("Made crafting recipes possible: " + count);
 		
 	}
 	

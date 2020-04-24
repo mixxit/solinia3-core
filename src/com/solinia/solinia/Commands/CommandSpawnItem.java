@@ -28,6 +28,11 @@ public class CommandSpawnItem implements CommandExecutor {
 		if (args.length == 2)
 		{
 			count = Integer.parseInt(args[1]);
+			if (count > 64)
+			{
+				player.sendMessage("You cannot spawn that many items at once");
+				return false;
+			}
 		}
 
 		if (player.isOp() || player.hasPermission("solinia.spawnitem")) {

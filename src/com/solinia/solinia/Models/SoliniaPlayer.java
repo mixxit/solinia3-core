@@ -3570,7 +3570,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		final UUID playerUUID = this.getBukkitPlayer().getUniqueId();
 
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"),
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
 				new Runnable() {
 					public void run() {
 						try {

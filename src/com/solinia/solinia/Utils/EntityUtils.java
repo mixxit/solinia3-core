@@ -3418,7 +3418,7 @@ public class EntityUtils {
 		final UUID entityUuid = targetEntity.getUniqueId();
 		final Location loc = targetLoc.clone();
 		
-		Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("Solinia3Core"), new Runnable() {
+		Bukkit.getScheduler().runTask(StateManager.getInstance().getPlugin(), new Runnable() {
 		    @Override
 		    public void run() {
 		    	Entity entity = Bukkit.getEntity(entityUuid);
