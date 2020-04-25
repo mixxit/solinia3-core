@@ -9628,7 +9628,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (nearbySolEntity.isCurrentlyNPCPet())
 					continue;
 	
-				Bukkit.broadcastMessage(nearbySolEntity.getName() + " Checking aggro for social - " + nearbySolEntity.checkAggro(attacker));
 				if (nearbySolEntity.checkAggro(attacker))
 					continue;
 				
