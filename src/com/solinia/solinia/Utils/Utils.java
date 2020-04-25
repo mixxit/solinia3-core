@@ -5987,6 +5987,12 @@ public class Utils {
 		case EXCEEDED_CLAIMXP:
 			message = "You have exceeded your maximum pending XP! Please /claimxp your additional XP before more can be gained (max: " + referenceCode + ")";
 			break;
+		case BER_CRITICAL_DMG:
+			message = "Your berserker status causes additional critical blow damage! " + referenceCode;
+			break;
+		case CRITICAL_DMG:
+			message = "You scored additional critical damage! " + referenceCode;
+			break;
 		case CHARM_CHA_FAIL:
 			message = ChatColor.DARK_AQUA + "Your pet has freed themselves of your control! (Charisma)" + ChatColor.RESET;
 			break;
@@ -6159,6 +6165,10 @@ public class Utils {
 		case CHARM_CHA_FAIL:
 			return HintSetting.Chat;
 		case EXCEEDED_CLAIMXP:
+			return HintSetting.Chat;
+		case CRITICAL_DMG:
+			return HintSetting.Chat;
+		case BER_CRITICAL_DMG:
 			return HintSetting.Chat;
 		}
 		

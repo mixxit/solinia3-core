@@ -4541,18 +4541,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					totalCritBonus = (hit.damage_done - hit.base_damage);
 
 					if (getBukkitLivingEntity() instanceof Player) {
-						((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-								new TextComponent("* Your berserker status causes additional critical blow damage ["
-										+ df.format(totalCritBonus) + "]!"));
+						Utils.SendHint(getBukkitLivingEntity(), HINT.BER_CRITICAL_DMG, ""+df.format(totalCritBonus), false);
 					}
 
 					return hit;
 				}
 
 				if (getBukkitLivingEntity() instanceof Player) {
-					((Player) getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-							new TextComponent(
-									"You scored additional critical damage! [" + df.format(totalCritBonus) + "]"));
+					Utils.SendHint(getBukkitLivingEntity(), HINT.CRITICAL_DMG, ""+df.format(totalCritBonus), false);
 				}
 
 				// attacker.sendMessage("* Your score a critical hit (" + damageDone + ")!");
