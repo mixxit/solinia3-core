@@ -3241,10 +3241,6 @@ public class EntityUtils {
 		return newy.doubleValue();
 	}
 
-	public static void PSetHPChange(LivingEntity targetToDamage, int hpchange, LivingEntity sourceEntityOfChange) {
-		PSetHPChange(targetToDamage, (double)hpchange, sourceEntityOfChange, true);
-	}
-	
 	public static void PSetHPChange(LivingEntity targetToDamage, int hpchange, LivingEntity sourceEntityOfChange, boolean playHurtSound) {
 		PSetHPChange(targetToDamage, (double)hpchange, sourceEntityOfChange, playHurtSound);
 	}

@@ -2223,7 +2223,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (hpchange == 0)
 			return;
 
-		EntityUtils.PSetHPChange(this.getBukkitLivingEntity(), hpchange, causeOfEntityHpChange);
+		EntityUtils.PSetHPChange(this.getBukkitLivingEntity(), hpchange, causeOfEntityHpChange, playHurtSound);
 
 		// SEND ENTITY HP CHANGES
 		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
