@@ -9609,6 +9609,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (!(nearbySolEntity.getBukkitLivingEntity() instanceof Creature))
 					continue;
 				
+				if (nearbySolEntity.getBukkitLivingEntity().getUniqueId().equals(this.getBukkitLivingEntity().getUniqueId()))
+					continue;
+				
 				if ((((Creature)nearbySolEntity.getBukkitLivingEntity()).getTarget()) != null)
 					continue;
 	
@@ -9627,6 +9630,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (nearbySolEntity.isCurrentlyNPCPet())
 					continue;
 	
+				Bukkit.broadcastMessage(nearbySolEntity.getName() + " Checking aggro for social - " + nearbySolEntity.checkAggro(attacker));
 				if (nearbySolEntity.checkAggro(attacker))
 					continue;
 				
@@ -9715,11 +9719,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (!(entity instanceof LivingEntity))
 					continue;
 				
-				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-				if (!solEntity.isNPC())
+				if (entity.getUniqueId() == this.getBukkitLivingEntity().getUniqueId())
 					continue;
 				
-				if (solEntity.getNpcid() != npcid)
+				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+				if (!solEntity.isNPC())
 					continue;
 				
 				entities.add(solEntity);

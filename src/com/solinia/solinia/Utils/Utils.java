@@ -110,7 +110,7 @@ import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.Tuple;
 
 public class Utils {
-	public static final int CALL_FOR_ASSIST_RANGE = 10;
+	public static final int CALL_FOR_ASSIST_RANGE = 4;
 
 	public static final int HP_REGEN_CAP = 48;
 	public static final int MP_REGEN_CAP = 48;

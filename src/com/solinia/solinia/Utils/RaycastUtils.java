@@ -22,6 +22,10 @@ public class RaycastUtils {
 			if (((LivingEntity)entityto.getBukkitLivingEntity()).hasPotionEffect(PotionEffectType.INVISIBILITY))
 				return false;
 			
+			// if they are 1 block away they are in line of sight
+			if (entityfrom.getBukkitLivingEntity().getLocation().distance(entityto.getBukkitLivingEntity().getLocation()) < 2)
+				return true;
+			
 			if (checkDirection)
 			{
 				double x = entityfrom.getLocation().toVector().distance(entityto.getLocation().toVector());
