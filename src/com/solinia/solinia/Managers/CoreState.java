@@ -304,8 +304,6 @@ public class CoreState {
 		StateManager.getInstance().setRandomHotzones();
 		
 		StateManager.getInstance().patchVersion();
-		
-		StateManager.getInstance().reloadRecipes();
 	}
 	
 	private void patchVersion() {
@@ -1155,35 +1153,4 @@ public class CoreState {
 		this.showSpawns = !this.showSpawns;
 	}
 
-	public void reloadRecipes() {
-		Bukkit.resetRecipes();
-		/*try
-		{
-			
-			
-			for(SoliniaCraft craft : this.getConfigurationManager().getCrafts())
-			{
-				if (!craft.isCraftingStationUsable())
-					continue;
-				
-				ISoliniaItem item1 = this.getConfigurationManager().getItem(craft.getItem1());
-				ISoliniaItem item2 = this.getConfigurationManager().getItem(craft.getItem2());
-				ISoliniaItem outItem = this.getConfigurationManager().getItem(craft.getOutputItem());
-				if (item1 == null || item2 == null || outItem == null)
-					continue;
-				
-				NamespacedKey key = new NamespacedKey(this.getPlugin(),craft.getRecipeName());
-				ShapelessRecipe recipe = new ShapelessRecipe(key, outItem.asItemStack());
-				RecipeChoice ingredient1 = new RecipeChoice.ExactChoice(item1.asItemStack());
-				RecipeChoice ingredient2 = new RecipeChoice.ExactChoice(item2.asItemStack());
-				recipe.addIngredient(ingredient1);
-				recipe.addIngredient(ingredient2);
-				Bukkit.addRecipe(recipe);
-			}
-			
-		} catch (CoreStateInitException e)
-		{
-			
-		}*/
-	}
 }
