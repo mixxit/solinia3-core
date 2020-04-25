@@ -6852,11 +6852,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public List<ISoliniaItem> getEquippedSoliniaItems() {
+		// This includes augs as seperate items
 		return getEquippedSoliniaItems(false);
 	}
 
 	@Override
 	public List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand) {
+		// This includes augs as seperate items
 		if (isPlayer()) {
 			try {
 				Utils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity().getName(), "Found Player, seeking equipped soliniaitems");
@@ -10576,8 +10578,45 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 	@Override
 	public int getItemBonuses(SpellEffectType spellEffectType) {
-		// TODO TODO
-		return 0;
+		// This includes augs as seperate items
+		List<ISoliniaItem> equippedItems = this.getEquippedSoliniaItems();
+		
+		int highest = 0;
+
+		// Check if item focus effect exists for the client.
+		if (equippedItems.size() > 0) {
+
+			ISoliniaItem TempItem = null;
+			// item focus
+			for (ISoliniaItem item : equippedItems) {
+				TempItem = item;
+
+				if (TempItem == null)
+					continue;
+
+				if (TempItem.getFocusEffectId() < 1) {
+					continue;
+				}
+				
+				ISoliniaSpell spell = null;
+
+				try {
+					spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getFocusEffectId());
+					if (spell == null)
+						continue;
+					
+					if (!spell.isEffectInSpell(spellEffectType))
+						continue;
+					
+					if (spell.getSpellEffectBase(spellEffectType) > highest)
+						highest = spell.getSpellEffectBase(spellEffectType);
+				} catch (CoreStateInitException e) {
+					
+				}
+			}
+		}
+		
+		return highest;
 	}
 	
 	@Override

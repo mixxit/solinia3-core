@@ -1099,4 +1099,8 @@ public interface ISoliniaSpell extends IPersistable {
 	boolean isSelfConversionSpell();
 
 	SpellTargetType getSpellTargetType();
+
+	int getSpellEffectBase(SpellEffectType spellEffectType);
+
+	SpellEffect getSpellEffect(SpellEffectType spellEffectType);
 }
