@@ -375,10 +375,6 @@ public class PlayerManager implements IPlayerManager {
 			try {
 				solPlayer = SoliniaPlayerAdapter.Adapt(player);
 				
-				// No longer grant xp if they are max
-				if (solPlayer.getExperience() >= StateManager.getInstance().getConfigurationManager().getMaxExperience())
-					continue;
-				
 				if (solPlayer.getPendingXp() >= PlayerUtils.getMaxClaimXP())
 				{
 					Utils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(solPlayer.getPendingXp().longValue()), false);
