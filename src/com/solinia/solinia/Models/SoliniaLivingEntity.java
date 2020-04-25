@@ -436,8 +436,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
-		// MEZZED
-		if (defender.isMezzed()) {
+		// MEZZED - only players can break mez
+		if (!this.isPlayer() && defender.isMezzed()) {
 			return;
 		}
 
