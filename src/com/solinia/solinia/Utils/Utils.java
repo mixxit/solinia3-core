@@ -2703,7 +2703,7 @@ public class Utils {
 	}
 
 	public static int getDurationFromSpell(ISoliniaLivingEntity solEntity, ISoliniaSpell soliniaSpell) {
-		int duration = soliniaSpell.calcBuffDuration(solEntity, solEntity.getLevel());
+		int duration = soliniaSpell.calcBuffDuration(solEntity, solEntity.getEffectiveLevel());
 		if (duration > 0) {
 			duration = soliniaSpell.getActSpellDuration(solEntity, duration);
 		}
@@ -6222,7 +6222,7 @@ public class Utils {
 
 	public static org.bukkit.ChatColor getLevelCon(int myLevel, ISoliniaLivingEntity solEntity) {
 		// TODO Auto-generated method stub
-		return getLevelCon(myLevel, solEntity.getLevel());
+		return getLevelCon(myLevel, solEntity.getEffectiveLevel());
 	}
 	
 	public static org.bukkit.ChatColor getLevelCon(int mylevel, int iOtherLevel) {

@@ -38,6 +38,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
+import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
@@ -5296,5 +5297,197 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		//System.out.println("Set LastUpdatedTime on " + getId());
 		this.setLastUpdatedTime(nowtimestamp);
+	}
+
+	@Override
+	public void grantExperienceAndLoot(ISoliniaLivingEntity livingEntity) {
+		try {
+			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getEffectiveLevel());
+
+			// try to share with group
+			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(getOwnerUUID());
+			if (group != null) {
+
+				List<Integer> levelRanges = new ArrayList<Integer>();
+				for (UUID member : group.getMembers()) {
+					ISoliniaPlayer playerchecked = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(member));
+					int checkedlevel = playerchecked.getLevel();
+					levelRanges.add(checkedlevel);
+				}
+				
+				Tuple<Integer,Integer> lowhighlvl = Utils.GetGroupExpMinAndMaxLevel(levelRanges);
+				int ilowlvl = lowhighlvl.a();
+				int ihighlvl = lowhighlvl.b();
+
+				if (getLevel() < ilowlvl || getLevel() > ihighlvl) {
+					// Only award player the experience
+					// as they are out of range of the group
+					if (livingEntity.getEffectiveLevel() >= Utils.getMinLevelFromLevel(getLevel())) {
+						// Due to being out of range they get the full xp
+						increasePlayerExperience(experience, true, true);
+						if (getFellowship() != null)
+							grantFellowshipXPBonusToFellowship(experience);
+
+						// Grant title for killing mob
+						if (livingEntity.getNpcid() > 0) {
+							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+									.getNPC(livingEntity.getNpcid());
+							if (npc != null && !npc.getDeathGrantsTitle().equals("")) {
+								grantTitle(npc.getDeathGrantsTitle());
+							}
+
+							if (npc.isBoss() || npc.isRaidboss()) {
+								grantTitle("the Vanquisher");
+							}
+						}
+
+					} 
+
+				} else {
+					double experienceReward = experience / group.getMembers().size();
+					double groupBonus = (experienceReward/100)*(group.getMembers().size()*10);
+					
+					List<Integer> awardsFellowshipIds = new ArrayList<Integer>();
+					
+					for (UUID member : group.getMembers()) {
+						Player tgtplayer = Bukkit.getPlayer(member);
+						if (tgtplayer != null) {
+							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);
+							int tgtlevel = tgtsolplayer.getLevel();
+
+							if (tgtlevel < ilowlvl || tgtlevel > ihighlvl) {
+								tgtplayer.sendMessage(ChatColor.GRAY
+										+ "You were out of level range to gain experience in this group (Min: "
+										+ ilowlvl + " Max: " + ihighlvl + ")");
+								continue;
+							}
+
+							if (!tgtplayer.getWorld().equals(getBukkitPlayer().getWorld())) {
+								// tgtplayer.sendMessage("You were out of range for shared group xp (world)");
+								continue;
+							}
+
+							if (tgtplayer.getLocation().distance(getBukkitPlayer().getLocation()) <= Utils.MaxRangeForExperience) {
+								if (livingEntity.getEffectiveLevel() >= (Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()))) {
+									// they split the overall experience across the group size
+									
+									// add 10% bonus per player
+									
+									tgtsolplayer.increasePlayerExperience(experienceReward+groupBonus, true, true);
+									
+									if (getFellowship() != null)
+									if (!awardsFellowshipIds.contains(getFellowship().getId()))
+									{
+										awardsFellowshipIds.add(getFellowship().getId());
+										grantFellowshipXPBonusToFellowship(experience);
+									}
+
+									// Grant title for killing mob
+									if (livingEntity.getNpcid() > 0) {
+										ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+												.getNPC(livingEntity.getNpcid());
+										if (npc != null && !npc.getDeathGrantsTitle().equals("")) {
+											tgtsolplayer.grantTitle(npc.getDeathGrantsTitle());
+										}
+
+										if (npc.isBoss() || npc.isRaidboss()) {
+											tgtsolplayer.grantTitle("the Vanquisher");
+										}
+									}
+
+								} else {
+									// The npc was too low level to gain
+									// experience from - Was: " + livingEntity.getLevel() + " Min: " +
+									// Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()));
+								}
+
+							} else {
+								// tgtplayer.sendMessage(ChatColor.GRAY + "You were out of range for shared
+								// group xp (distance)");
+								continue;
+							}
+						}
+					}
+				}
+			} else {
+				if (livingEntity.getEffectiveLevel() >= (Utils.getMinLevelFromLevel(getLevel()))) {
+					// they are on their own so get the full amount of xp
+					increasePlayerExperience(experience, true, true);
+					
+					if (getFellowship() != null)
+					grantFellowshipXPBonusToFellowship(experience);
+
+					// Grant title for killing mob
+					if (livingEntity.getNpcid() > 0) {
+						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+								.getNPC(livingEntity.getNpcid());
+						if (npc != null && !npc.getDeathGrantsTitle().equals("")) {
+							grantTitle(npc.getDeathGrantsTitle());
+						}
+
+						if (npc.isBoss() || npc.isRaidboss()) {
+							grantTitle("the Vanquisher");
+						}
+					}
+
+				} else {
+					// player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* The npc was too low
+					// level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " +
+					// Utils.getMinLevelFromLevel(player.getLevel()));
+				}
+			}
+
+			if (livingEntity.getNpcid() > 0) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+				if (npc.getFactionid() > 0) {
+					ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
+							.getFaction(npc.getFactionid());
+					decreaseFactionStanding(npc.getFactionid(), 50);
+					for (FactionStandingEntry factionEntry : faction.getFactionEntries()) {
+						if (factionEntry.getValue() >= 1500) {
+							// If this is an ally of the faction, grant negative faction
+							decreaseFactionStanding(factionEntry.getFactionId(), 10);
+						}
+
+						if (factionEntry.getValue() <= -1500) {
+							// If this is an enemy of the faction, grant positive faction
+							increaseFactionStanding(factionEntry.getFactionId(), 1);
+						}
+					}
+				}
+			}
+
+			if (livingEntity.getNpcid() > 0) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+
+				if (npc != null) {
+					if (npc.getChanceToRespawnOnDeath() > 0)
+						if (Utils.RandomBetween(1, 100) <= npc.getChanceToRespawnOnDeath()) {
+							npc.Spawn(getBukkitPlayer().getLocation(), 1);
+						}
+
+					if (!npc.getDeathGrantsTitle().equals("")) {
+						grantTitle(npc.getDeathGrantsTitle());
+					}
+
+					if (npc.isBoss() || npc.isRaidboss()) {
+						grantTitle("the Vanquisher");
+					}
+
+					// Dern wants this back
+					 if (
+							 //npc.isBoss() || 
+							 npc.isRaidboss()) { PlayerUtils.BroadcastPlayers("[VICTORY] The foundations of the earth shake following the destruction of " + npc.getName() + " at the hands of " + getFullNameWithTitle() + "!");
+					 }
+					 
+				}
+			}
+
+			giveMoney(1);
+			livingEntity.dropLoot();
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

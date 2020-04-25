@@ -38,7 +38,7 @@ public class CommandConsider implements CommandExecutor {
 
 			
 			ISoliniaLivingEntity solPlayerEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sender);
-			ChatColor difficultyColor = Utils.getLevelCon(solPlayerEntity.getLevel(),solEntity);
+			ChatColor difficultyColor = Utils.getLevelCon(solPlayerEntity.getEffectiveLevel(),solEntity);
 			
 			String difficultyMessage = "Looks like an even fight.";
 			switch (difficultyColor)

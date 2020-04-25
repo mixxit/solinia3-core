@@ -33,9 +33,7 @@ import net.minecraft.server.v1_14_R1.Tuple;
 public interface ISoliniaLivingEntity  {
 	public LivingEntity getBukkitLivingEntity();
 
-	int getLevel();
-
-	void setLevel(int level);
+	int getEffectiveLevel();
 
 	public void dropLoot();
 
@@ -139,15 +137,7 @@ public interface ISoliniaLivingEntity  {
 
 	double getManaRatio();
 
-	boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes)
-			throws CoreStateInitException;
-
 	boolean aiDoSpellCast(Plugin plugin, ISoliniaSpell spell, ISoliniaLivingEntity target, int manaCost);
-
-	void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity) throws CoreStateInitException;
-
-	boolean aiCheckCloseBeneficialSpells(Plugin plugin, ISoliniaNPC npc, int iChance, int iRange, int iSpellTypes)
-			throws CoreStateInitException;
 
 	public boolean isRooted();
 
@@ -477,5 +467,20 @@ public interface ISoliniaLivingEntity  {
 	void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange, boolean playHurtSound);
 
 	boolean hasArrowsInInventory();
+
+	void setEffectiveLevel(int level);
+
+	int getActualLevel();
+
+	void setActualLevel(int actualLevel);
+
+	boolean aiCheckCloseBeneficialSpells(Plugin plugin, ISoliniaNPC npc, int iChance, int iRange, int iSpellTypes,
+			int npcEffectiveLevel) throws CoreStateInitException;
+
+	boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes,
+			int npcEffectiveLevel) throws CoreStateInitException;
+
+	void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity, int npcEffectiveLevel)
+			throws CoreStateInitException;
 
 }

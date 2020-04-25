@@ -73,6 +73,7 @@ import net.minecraft.server.v1_14_R1.Tuple;
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
 	private int level = 1;
+	private int actualLevel = 1;
 	private int npcid;
 
 	public SoliniaLivingEntity(LivingEntity livingentity) {
@@ -236,9 +237,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} else {
 			if (Utils.isLivingEntityNPC(caster)) {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) caster);
-				ISoliniaNPC casternpc = StateManager.getInstance().getConfigurationManager()
-						.getNPC(solentity.getNpcid());
-				casterlevel = casternpc.getLevel();
+				casterlevel = solentity.getEffectiveLevel();
 				isnpccaster = true;
 			}
 		}
@@ -254,10 +253,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (this.isNPC()) {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter
 						.Adapt((LivingEntity) getBukkitLivingEntity());
-				ISoliniaNPC victimnpc = StateManager.getInstance().getConfigurationManager()
-						.getNPC(solentity.getNpcid());
 				targetresist = solentity.getResists(Utils.getSpellResistType(spell.getResisttype()));
-				victimlevel = victimnpc.getLevel();
+				victimlevel = solentity.getEffectiveLevel();
 				isnpcvictim = true;
 			}
 		}
@@ -547,14 +544,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getClassObj().canDualWield() == false)
 			return false;
 
-		if (getClassObj().getDualwieldlevel() > getLevel())
+		if (getClassObj().getDualwieldlevel() > getEffectiveLevel())
 			return false;
 
 		return true;
 	}
 
 	private boolean checkDualWield() {
-		int chance = getSkill(SkillType.DualWield) + getLevel();
+		int chance = getSkill(SkillType.DualWield) + getEffectiveLevel();
 
 		chance += getSpellBonuses(SpellEffectType.Ambidexterity) + getItemBonuses(SpellEffectType.Ambidexterity) + getAABonuses(SpellEffectType.Ambidexterity);
 		int per_inc = getSpellBonuses(SpellEffectType.DualWieldChance) + getItemBonuses(SpellEffectType.DualWieldChance) + getAABonuses(SpellEffectType.DualWieldChance);
@@ -977,7 +974,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		SkillType skillinuse = SkillType.HandtoHand;
-		int ourlevel = getLevel();
+		int ourlevel = getEffectiveLevel();
 		/*float ProcBonus = static_cast<float>(aabonuses.ProcChanceSPA +
 			spellbonuses.ProcChanceSPA + itembonuses.ProcChanceSPA);*/
 		
@@ -1009,7 +1006,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					boolean roll = Utils.Roll(WPC);
 					if (roll) {	// 255 dex = 0.084 chance of proc. No idea what this number should be really.
 						//if (weapon->Proc.Level2 > ourlevel) { TODO - Specific proc level
-						if (weapon.getMinLevel() > getLevel())
+						if (weapon.getMinLevel() > getEffectiveLevel())
 						{
 							//Log(Logs::Detail, Logs::Combat, "Tried to proc (%s), but our level (%d) is lower than required (%d)",weapon->Name, ourlevel, weapon->Proc.Level2);
 							/*if (isPet()) {
@@ -1302,7 +1299,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getClassObj().canDoubleAttack() == false)
 			return false;
 
-		if (getClassObj().getDoubleattacklevel() > getLevel())
+		if (getClassObj().getDoubleattacklevel() > getEffectiveLevel())
 			return false;
 
 		return true;
@@ -1451,8 +1448,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// elemental damage
 			int eleBane = 0;
 			
-			int otherlevel = other.getLevel();
-			int mylevel = this.getLevel();
+			int otherlevel = other.getEffectiveLevel();
+			int mylevel = this.getEffectiveLevel();
 
 			if (otherlevel < 1)
 				otherlevel = 1;
@@ -1590,7 +1587,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			int ucDamageBonus = 0;
 
-			if (Hand == InventorySlot.Primary && getClassObj() != null && getClassObj().isWarriorClass() && getLevel() >= 28) {
+			if (Hand == InventorySlot.Primary && getClassObj() != null && getClassObj().isWarriorClass() && getEffectiveLevel() >= 28) {
 				ucDamageBonus = getWeaponDamageBonus(weaponItemStack);
 				Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo ucDamageBonus from weapon is: " + ucDamageBonus);
 				my_hit.min_damage = ucDamageBonus;
@@ -2431,7 +2428,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			// npc can use level item :-)
 			if (!this.isNPC() && item.getMinLevel() > 0) {
-				if (item.getMinLevel() > getLevel()) {
+				if (item.getMinLevel() > getEffectiveLevel()) {
 					return new Tuple<Boolean,String>(false,"Wrong level");
 				}
 			}
@@ -2493,7 +2490,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc == null)
 				return;
 
-			setLevel(npc.getLevel());
+			setEffectiveLevel(npc.getLevel());
+			setActualLevel(npc.getLevel());
 			setNpcid(npc.getId());
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
@@ -2788,7 +2786,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				break;
 
 			case LimitMinDur:
-				if (focusSpellEffect.getBase() > spell.calcBuffDurationFormula(getLevel(),
+				if (focusSpellEffect.getBase() > spell.calcBuffDurationFormula(getEffectiveLevel(),
 						spell.getBuffdurationformula(), spell.getBuffduration()))
 					return (0);
 				break;
@@ -3223,7 +3221,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try
 		{
 			// this is based on a client function that caps melee base_damage
-			int level = getLevel();
+			int level = getEffectiveLevel();
 
 			int stop_level = StateManager.getInstance().getConfigurationManager().getMaxLevel() + 1;
 			if (stop_level <= level)
@@ -3386,7 +3384,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 
 					if (soliniaitem.getMinLevel() > 0) {
-						if (soliniaitem.getMinLevel() > getLevel()) {
+						if (soliniaitem.getMinLevel() > getEffectiveLevel()) {
 							getBukkitLivingEntity()
 									.sendMessage(ChatColor.GRAY + "You are not sufficient level to use this item");
 							return false;
@@ -3590,23 +3588,23 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				skill_to_use = SkillType.Bash;
 				break;
 			case "MONK":
-				if(getLevel() >= 30)
+				if(getEffectiveLevel() >= 30)
 				{
 					skill_to_use = SkillType.FlyingKick;
 				}
-				else if(getLevel() >= 25)
+				else if(getEffectiveLevel() >= 25)
 				{
 					skill_to_use = SkillType.DragonPunch;
 				}
-				else if(getLevel() >= 20)
+				else if(getEffectiveLevel() >= 20)
 				{
 					skill_to_use = SkillType.EagleStrike;
 				}
-				else if(getLevel() >= 10)
+				else if(getEffectiveLevel() >= 10)
 				{
 					skill_to_use = SkillType.TigerClaw;
 				}
-				else if(getLevel() >= 5)
+				else if(getEffectiveLevel() >= 5)
 				{
 					skill_to_use = SkillType.RoundKick;
 				}
@@ -3945,15 +3943,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return base;
 			case Frenzy:
 				if (isPlayer() && this.getBukkitLivingEntity().getEquipment().getItemInMainHand() != null) {
-					if (getLevel() > 15)
-						base += getLevel() - 15;
+					if (getEffectiveLevel() > 15)
+						base += getEffectiveLevel() - 15;
 					if (base > 23)
 						base = 23;
-					if (getLevel() > 50)
+					if (getEffectiveLevel() > 50)
 						base += 2;
-					if (getLevel() > 54)
+					if (getEffectiveLevel() > 54)
 						base++;
-					if (getLevel() > 59)
+					if (getEffectiveLevel() > 59)
 						base++;
 				}
 				return base;
@@ -4254,7 +4252,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				hit.damage_done = headshot;
 			}
 
-			else if (getClassObj() != null && getClassObj().getClass().getName().equals("RANGER") && getLevel() > 50) { // no
+			else if (getClassObj() != null && getClassObj().getClass().getName().equals("RANGER") && getEffectiveLevel() > 50) { // no
 																														// double
 																														// dmg
 																														// on
@@ -4360,7 +4358,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			HeadShot_Level = Math.max(spellHeadShotLevelModifier, aaHeadShotLevelModifier);
 
-			if (HeadShot_Dmg > 0 && HeadShot_Level > 0 && (defender.getLevel() <= HeadShot_Level)) {
+			if (HeadShot_Dmg > 0 && HeadShot_Level > 0 && (defender.getEffectiveLevel() <= HeadShot_Level)) {
 				int chance = getDexterity();
 				chance = 100 * chance / (chance + 3500);
 
@@ -4480,11 +4478,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		boolean innateCritical = false;
 		int critChance = Utils.getCriticalChanceBonus(this, hit.skill);
-		if ((className.equals("WARRIOR") || className.equals("BERSERKER")) && getLevel() >= 12)
+		if ((className.equals("WARRIOR") || className.equals("BERSERKER")) && getEffectiveLevel() >= 12)
 			innateCritical = true;
-		else if (className.equals("RANGER") && getLevel() >= 12 && hit.skill.equals(SkillType.Archery))
+		else if (className.equals("RANGER") && getEffectiveLevel() >= 12 && hit.skill.equals(SkillType.Archery))
 			innateCritical = true;
-		else if (className.equals("ROGUE") && getLevel() >= 12 && hit.skill.equals(SkillType.Throwing))
+		else if (className.equals("ROGUE") && getEffectiveLevel() >= 12 && hit.skill.equals(SkillType.Throwing))
 			innateCritical = true;
 
 		// we have a chance to crit!
@@ -4616,7 +4614,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "damage_done: " + hit.damage_done);
 
 		if (getClassObj() != null) {
-			if (getClassObj().isWarriorClass() && getLevel() > 54)
+			if (getClassObj().isWarriorClass() && getEffectiveLevel() > 54)
 				hit.damage_done++;
 		}
 
@@ -4760,7 +4758,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 		}
 		
-		int level = Math.min(getLevel(), maxLevel);
+		int level = Math.min(getEffectiveLevel(), maxLevel);
 
 		if (!melee || (!monk && level < 51))
 			return dmg_table[0];
@@ -4979,7 +4977,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// check for items being illegally attained
 		if (weapon_item != null) {
-			if (!this.isNPC() && weapon_item.getMinLevel() > getLevel())
+			if (!this.isNPC() && weapon_item.getMinLevel() > getEffectiveLevel())
 				return 0;
 
 			if (!this.isNPC() && !weapon_item.isEquipable(this.getRace(),this.getClassObj()))
@@ -5026,14 +5024,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 
 				if (getClassObj() != null && getClassObj().getName().equals("MONK") || getClassObj().getName().equals("BEASTLORD")) {
-					if (MagicGloves || getLevel() >= 30) {
+					if (MagicGloves || getEffectiveLevel() >= 30) {
 						dmg = getHandToHandDamage();
 						if (hate > 0)
 							hate += dmg;
 					}
 				}
 				else if (getOwnerEntity() != null &&
-					getLevel() >=
+						getEffectiveLevel() >=
 					Utils.PetAttackMagicLevel) { // pets wouldn't actually use this but...
 					dmg = 1; // it gives us an idea if we can hit
 				}
@@ -5328,7 +5326,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getWeaponDamageBonus(ItemStack itemStack) {
-		int level = getLevel();
+		int level = getEffectiveLevel();
 		if (itemStack == null)
 			return 1 + ((level - 28) / 3);
 
@@ -5412,7 +5410,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				reduction = Math.min((110 - reduction) / 100.0, 1.0);
 				tohit = reduction * (double) (tohit);
 			} else if (isBerserk()) {
-				tohit += (getLevel() * 2) / 5;
+				tohit += (getEffectiveLevel() * 2) / 5;
 			}
 		}
 
@@ -5622,7 +5620,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int getLevel() {
+	public int getEffectiveLevel() {
 		if (isPlayer()) {
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
@@ -5636,7 +5634,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void setLevel(int level) {
+	public void setEffectiveLevel(int level) {
 		if (isPlayer())
 			return;
 
@@ -5660,7 +5658,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						DropUtils.DropLoot(npc.getRace().getRaceLootTableId(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation(),"",0);
 				if (npc.getClassObj() != null)
 					if (npc.getClassObj().getDropSpellsLootTableId() > 0)
-						DropUtils.DropLoot(npc.getClassObj().getDropSpellsLootTableId(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation(),npc.getClassObj().getName().toUpperCase(),npc.getLevel());
+						DropUtils.DropLoot(npc.getClassObj().getDropSpellsLootTableId(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation(),npc.getClassObj().getName().toUpperCase(),getEffectiveLevel());
 				
 				SoliniaWorld world = StateManager.getInstance().getConfigurationManager().getWorld(this.getBukkitLivingEntity().getWorld().getName());
 				if (world != null)
@@ -5906,7 +5904,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity)
+	public void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity, int npcEffectiveLevel)
 			throws CoreStateInitException {
 		if (this.getClassObj() == null)
 			return;
@@ -5932,11 +5930,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// Try self buff, then nearby then target detrimental
 		Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast self buff");
-		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(), engagedBeneficialSelfChance,beneficialSelfSpells)) {
+		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(), engagedBeneficialSelfChance,beneficialSelfSpells, npcEffectiveLevel)) {
 			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast others buff");
-			if (!aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance, StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(), 					beneficialOtherSpells)) {
+			if (!aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance, StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),beneficialOtherSpells, npcEffectiveLevel)) {
 				Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast detrimental");
-				if (!aiCastSpell(plugin, npc, castingAtEntity, engagedDetrimentalOtherChance, detrimentalSpells)) {
+				if (!aiCastSpell(plugin, npc, castingAtEntity, engagedDetrimentalOtherChance, detrimentalSpells, npcEffectiveLevel)) {
 					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " cannot cast at all");
 				}
 			}
@@ -5945,7 +5943,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean aiCheckCloseBeneficialSpells(Plugin plugin, ISoliniaNPC npc, int iChance, int iRange,
-			int iSpellTypes) throws CoreStateInitException {
+			int iSpellTypes, int npcEffectiveLevel) throws CoreStateInitException {
 		if (((iSpellTypes & SpellType.Detrimental)) == SpellType.Detrimental) {
 			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a close beneficial spell as I have a detrimental in my list");
@@ -5996,7 +5994,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				iSpellTypes = SpellType.Heal;
 			}
 
-			if (aiCastSpell(plugin, npc, mob.getBukkitLivingEntity(), 100, iSpellTypes))
+			if (aiCastSpell(plugin, npc, mob.getBukkitLivingEntity(), 100, iSpellTypes, npcEffectiveLevel))
 				return true;
 		}
 		return false;
@@ -6022,7 +6020,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes)
+	public boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes, int npcEffectiveLevel)
 			throws CoreStateInitException {
 		if (this.getClassObj() == null) {
 			Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
@@ -6064,7 +6062,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		List<NPCSpellListEntry> spells = new ArrayList<NPCSpellListEntry>();
 		for (NPCSpellListEntry entry : npcSpellList.getSpellListEntry()) {
-			if (npc.getLevel() >= entry.getMinlevel() && npc.getLevel() <= entry.getMaxlevel()) {
+			if (npcEffectiveLevel >= entry.getMinlevel() && npcEffectiveLevel <= entry.getMaxlevel()) {
 				spells.add(entry);
 			}
 		}
@@ -6407,7 +6405,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			this.setMana(this.getMana() + Utils.getDefaultNPCManaRegen(npc));
 
-			aiEngagedCastCheck(plugin, npc, castingAtEntity);
+			aiEngagedCastCheck(plugin, npc, castingAtEntity, this.getEffectiveLevel());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -6525,7 +6523,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getNpcid() < 1 && !isPlayer())
 			return 1;
 
-		double statHp = Utils.getStatMaxHP(getClassObj(), getLevel(), getStamina());
+		double statHp = Utils.getStatMaxHP(getClassObj(), getEffectiveLevel(), getStamina());
 		double itemHp = getItemHp();
 		double totalHp = statHp + itemHp;
 		Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "getMaxHP called with statHp: " + statHp + " itemHp " + itemHp + " totalHp:" + totalHp);
@@ -6921,7 +6919,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc == null)
 					return 1;
 
-				int stat = npc.getLevel() * 5;
+				int stat = getEffectiveLevel() * 5;
 				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "base: " + stat);
 
 				int totalItemStat = getTotalItemStat(StatType.Stamina);
@@ -7324,8 +7322,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// Not 100% certain pets follow this or if it's just from pets not always
 		// having the same skills as most mobs
 		int chance = getSkill(SkillType.DoubleAttack);
-		if (getLevel() > 35)
-			chance += getLevel();
+		if (getEffectiveLevel() > 35)
+			chance += getEffectiveLevel();
 
 		int per_inc = getAABonuses(SpellEffectType.DoubleAttackChance) + getSpellBonuses(SpellEffectType.DoubleAttackChance) + getItemBonuses(SpellEffectType.DoubleAttackChance);
 		if (per_inc > 0)
@@ -7349,11 +7347,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (Utils.getCasterClass(profession).equals("N"))
 			wisintagi = getAgility();
 
-		double maxmana = ((850 * getLevel()) + (85 * wisintagi * getLevel())) / 425;
+		double maxmana = ((850 * getEffectiveLevel()) + (85 * wisintagi * getEffectiveLevel())) / 425;
 		double itemMana = getItemMana();
 		maxmana += itemMana;
 		if (this.getNpcid() > 0) {
-			maxmana = maxmana + (50 * getLevel());
+			maxmana = maxmana + (50 * getEffectiveLevel());
 
 			ISoliniaNPC npc = getNPC();
 			if (npc != null) {
@@ -7851,8 +7849,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		ac = (ac * 4) / 3;
 		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after eq math " + ac);
 		// anti-twink
-		if (isPlayer() && getLevel() < 50)
-			ac = Math.min(ac, 25 + 6 * getLevel());
+		if (isPlayer() && getEffectiveLevel() < 50)
+			ac = Math.min(ac, 25 + 6 * getEffectiveLevel());
 
 		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after antitwink" + ac);
 
@@ -8033,7 +8031,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				376, 376, 378, 380, 382, 384, 384, 386, 388, 390, 392, 392, 394, 396, 398, 400, 400, 402, 404, 406, 408,
 				408, 410, 412, 414, 416 };
 
-		int level = Math.min(105, getLevel()) - 1;
+		int level = Math.min(105, getEffectiveLevel()) - 1;
 
 		switch (getClassObj().getName().toUpperCase()) {
 		case "WARRIOR":
@@ -8066,7 +8064,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	private int getClassRaceACBonus() {
 		int ac_bonus = 0;
-		int level = getLevel();
+		int level = getEffectiveLevel();
 		
 		if (this.getClassObj() == null)
 			return 0;
@@ -8234,8 +8232,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		value_BaseEffect = value + (value * getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell) / 100);
 
 		// TODO Harm Touch Scaling
-		if ((soliniaSpell.getName().startsWith("Harm Touch")) && getLevel() > 40) {
-			value_BaseEffect += (getLevel() - 40) * 20;
+		if ((soliniaSpell.getName().startsWith("Harm Touch")) && getEffectiveLevel() > 40) {
+			value_BaseEffect += (getEffectiveLevel() - 40) * 20;
 		}
 
 		chance = 0;
@@ -8246,7 +8244,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// TODO Items/aabonuses
-		if (chance > 0 || (getClassObj().getName().equals("WIZARD") && getLevel() >= 12)) {
+		if (chance > 0 || (getClassObj().getName().equals("WIZARD") && getEffectiveLevel() >= 12)) {
 
 			int ratio = 100;
 
@@ -8261,7 +8259,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 				// TODO add ratio bonuses from spells, aas
 			} else if (getClassObj().getName().equals("WIZARD")) {
-				if ((getLevel() >= 12) && Utils.RandomBetween(0, 100) < 7) {
+				if ((getEffectiveLevel() >= 12) && Utils.RandomBetween(0, 100) < 7) {
 					ratio += Utils.RandomBetween(20, 70);
 					critical = true;
 				}
@@ -8319,11 +8317,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// could easily be consolidated.
 
 		if (getClassObj() != null)
-			if (getLevel() >= 51 && casttime >= 3000 && !spell.isBeneficial()
+			if (getEffectiveLevel() >= 51 && casttime >= 3000 && !spell.isBeneficial()
 					&& (getClassObj().getName().equals("SHADOWKNIGHT") || getClassObj().getName().equals("RANGER")
 							|| getClassObj().getName().equals("PALADIN")
 							|| getClassObj().getName().equals("BEASTLORD")))
-				cast_reducer += (getLevel() - 50) * 3;
+				cast_reducer += (getEffectiveLevel() - 50) * 3;
 
 		// LIVE AA SpellCastingDeftness, QuickBuff, QuickSummoning, QuickEvacuation,
 		// QuickDamage
@@ -9127,7 +9125,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public org.bukkit.ChatColor getLevelCon(int mylevel) {
-		int iOtherLevel = getLevel();
+		int iOtherLevel = getEffectiveLevel();
 		return Utils.getLevelCon(mylevel,iOtherLevel);
 	}
 
@@ -9537,7 +9535,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					effect.getSpellEffectType().equals(SpellEffectType.Fear)
 					)
 			{
-				if (getLevel() > effect.getMax())
+				if (getEffectiveLevel() > effect.getMax())
 					return true;
 			}
 		}
@@ -9644,7 +9642,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					
 				//if they are in range, make sure we are not green...
 				//then jump in if they are our friend
-				if (attacker.getLevelCon(nearbySolEntity.getLevel()).equals(ChatColor.GRAY) && nearbySolEntity.getLevel() < 50)
+				if (attacker.getLevelCon(nearbySolEntity.getEffectiveLevel()).equals(ChatColor.GRAY) && nearbySolEntity.getEffectiveLevel() < 50)
 					continue;
 				
 				if (nearbySolEntity.getNPC() == null)
@@ -9767,7 +9765,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
-		vitals.fromData(partyMember, ((float)getHPRatio())/100F, manaPercent, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""),this.getLevel());
+		vitals.fromData(partyMember, ((float)getHPRatio())/100F, manaPercent, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""),this.getEffectiveLevel());
 		return vitals;
 	}
 
@@ -10015,10 +10013,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (isAttackAllowed(tmob, false)) {
-			int p_level = pmob.getLevel();
+			int p_level = pmob.getEffectiveLevel();
 			if (p_level < 1)
 				p_level = 1;
-			int t_level = tmob.getLevel();
+			int t_level = tmob.getEffectiveLevel();
 			if (t_level < 1)
 				t_level = 1;
 
@@ -10263,7 +10261,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void sendStats(LivingEntity targetMessage) {
 		targetMessage.sendMessage("STATS:");
 		targetMessage.sendMessage("----------------------------");
-		String strlevel = "Level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET;
+		String strlevel = "Level: " + ChatColor.GOLD + getEffectiveLevel() + " / " + getActualLevel() + ChatColor.RESET;
 
 		String strclass = "";
 		if (getClassObj() != null)
@@ -10401,7 +10399,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ProcChance /= 2;
 
 			int level_penalty = 0;
-			int level_diff = getLevel() - on.getLevel();
+			int level_diff = getEffectiveLevel() - on.getEffectiveLevel();
 			if (level_diff > 6)//10% penalty per level if > 6 levels over target.
 				level_penalty = (level_diff - 6) * 10;
 
@@ -10623,5 +10621,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public int getAABonuses(SpellEffectType effect) {
 		return Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
 				effect);
+	}
+
+	@Override
+	public int getActualLevel() {
+		return actualLevel;
+	}
+
+	@Override
+	public void setActualLevel(int actualLevel) {
+		this.actualLevel = actualLevel;
 	}
 }

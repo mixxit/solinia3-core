@@ -5571,7 +5571,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public int calcBuffDuration(ISoliniaLivingEntity solEntity, int level) {
 		// TODO do caster level overide
 
-		int res = calcBuffDurationFormula(solEntity.getLevel(), getBuffdurationformula(), getBuffduration());
+		int res = calcBuffDurationFormula(solEntity.getEffectiveLevel(), getBuffdurationformula(), getBuffduration());
 
 		// TODO illusion spells
 		// TODO mod

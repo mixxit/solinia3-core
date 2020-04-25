@@ -101,7 +101,7 @@ public class SoliniaActiveSpell {
 
 			for (SpellEffect spellEffect : getSpell().getBaseSpellEffects()) {
 				ActiveSpellEffect activeSpellEffect = new ActiveSpellEffect(getSpell(), spellEffect,
-						solSource.getBukkitLivingEntity(), solOwner.getBukkitLivingEntity(), solSource.getLevel(),
+						solSource.getBukkitLivingEntity(), solOwner.getBukkitLivingEntity(), solSource.getEffectiveLevel(),
 						getTicksLeft());
 				activeSpellEffects.add(activeSpellEffect);
 			}
@@ -170,7 +170,7 @@ public class SoliniaActiveSpell {
 			if (solsource == null)
 				return 1;
 			
-			return solsource.getLevel();
+			return solsource.getEffectiveLevel();
 		} catch (CoreStateInitException e)
 		{
 			
@@ -217,7 +217,7 @@ public class SoliniaActiveSpell {
 			}
 
 			for (ActiveSpellEffect spellEffect : getActiveSpellEffects()) {
-				applySpellEffect(plugin, spellEffect, soliniaSpell, isFirstRun, solsource.getLevel(), sendMessages);
+				applySpellEffect(plugin, spellEffect, soliniaSpell, isFirstRun, solsource.getEffectiveLevel(), sendMessages);
 			}
 			
 			if (soliniaSpell.getRecourseLink() > 0)
@@ -1682,7 +1682,7 @@ public class SoliniaActiveSpell {
 			if (targetsolLivingEntity.isCurrentlyNPCPet())
 				return;
 			
-			if (targetsolLivingEntity.getLevel() > spellEffect.getMax())
+			if (targetsolLivingEntity.getEffectiveLevel() > spellEffect.getMax())
 			{			
 				source.sendMessage("This is too high for this spell");
 				return;
