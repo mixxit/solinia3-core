@@ -114,8 +114,10 @@ public class SoliniaEntitySpells {
 		if (containsSpellId(soliniaSpell.getId()))
 		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
 			if (activeSpell.getSpellId() == soliniaSpell.getId() && activeSpell.getSourceUuid().equals(sourceEntity.getUniqueId()))
+			{
 				activeSpell.setTicksLeft(duration);
 				return true;
+			}
 		}
 		
 		if (containsSpellId(soliniaSpell.getId()) && !soliniaSpell.isStackableDot())
