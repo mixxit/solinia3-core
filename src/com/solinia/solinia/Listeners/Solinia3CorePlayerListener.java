@@ -1395,55 +1395,60 @@ public class Solinia3CorePlayerListener implements Listener {
 					continue;
 				}
 				
-				// here we do a skill check
-				if (!craft.getSkillType().equals(SkillType.None))
+				// Now we are going to do this many times, once for each stack item
+				for (int i = 0; i < minAmount; i++)
 				{
-					solPlayer.tryIncreaseSkill(craft.getSkillType(), 1);
-
-					if (!solPlayer.getSkillCheck(craft.getSkillType(),craft.getMinSkill()+50))
+					// here we do a skill check
+					if (!craft.getSkillType().equals(SkillType.None))
 					{
-						event.getView().getPlayer().sendMessage("Your lack of skill resulted in failure!");
-						item1.setAmount(item1.getAmount()-minAmount);
-						item2.setAmount(item2.getAmount()-minAmount);
+						solPlayer.tryIncreaseSkill(craft.getSkillType(), 1);
 
-						event.getInventory().setItem(0,item1);
-						event.getInventory().setItem(1,item2);
-						return;
-					}
-				}
-				
-				
-				if (craft.getOutputItem() > 0)
-				{
-					ItemStack outputItemStack = output.asItemStack();
-					outputItemStack.setAmount(minAmount);
-					
-					item1.setAmount(item1.getAmount()-minAmount);
-					item2.setAmount(item2.getAmount()-minAmount);
-
-					event.getInventory().setItem(0,item1);
-					event.getInventory().setItem(1,item2);
-					event.getView().setCursor(outputItemStack);
-					event.getView().getPlayer().sendMessage("You fashion the items together to make something new!");
-				} else {
-					if (craft.getOutputLootTableId() > 0)
-					{
-						ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craft.getOutputLootTableId());
-						if (loottable != null)
+						if (!solPlayer.getSkillCheck(craft.getSkillType(),craft.getMinSkill()+50))
 						{
-							item1.setAmount(item1.getAmount()-minAmount);
-							item2.setAmount(item2.getAmount()-minAmount);
+							event.getView().getPlayer().sendMessage("Your lack of skill resulted in failure!");
+							item1.setAmount(item1.getAmount()-1);
+							item2.setAmount(item2.getAmount()-1);
 
 							event.getInventory().setItem(0,item1);
 							event.getInventory().setItem(1,item2);
-							for (int i = 0; i < minAmount; i++)
+							
+							// try next one
+							continue;
+						}
+					}
+					
+					if (craft.getOutputItem() > 0)
+					{
+						ItemStack outputItemStack = output.asItemStack();
+						outputItemStack.setAmount(1);
+						
+						item1.setAmount(item1.getAmount()-1);
+						item2.setAmount(item2.getAmount()-1);
+
+						event.getInventory().setItem(0,item1);
+						event.getInventory().setItem(1,item2);
+						
+						event.getView().getPlayer().getWorld().dropItemNaturally(event.getView().getPlayer().getLocation(), outputItemStack);
+						event.getView().getPlayer().sendMessage("You fashion the items together to make something new!");
+					} else {
+						if (craft.getOutputLootTableId() > 0)
+						{
+							ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager().getLootTable(craft.getOutputLootTableId());
+							if (loottable != null)
 							{
+								item1.setAmount(item1.getAmount()-1);
+								item2.setAmount(item2.getAmount()-1);
+
+								event.getInventory().setItem(0,item1);
+								event.getInventory().setItem(1,item2);
+								
 								DropUtils.DropLoot(loottable.getId(), event.getView().getPlayer().getWorld(), event.getView().getPlayer().getLocation(),"",0);
-								event.getView().getPlayer().sendMessage("You fashion the items together to attempt to make something random!");
 							}
 						}
 					}
 				}
+				
+				
 				return;
 			}
 			
