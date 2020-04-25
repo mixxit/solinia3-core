@@ -68,6 +68,7 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -455,9 +456,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 
-		if (!this.isNPC() && !this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+		Tuple<Boolean, String> canUseItem = this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
+		if (!this.isNPC() && !canUseItem.a()) {
 			if (getBukkitLivingEntity() instanceof Player) {
-				getBukkitLivingEntity().sendMessage("You cannot use this item (level or class)");
+				getBukkitLivingEntity().sendMessage("You cannot use this item ["+canUseItem.b()+"]");
 			}
 			return;
 		}
@@ -2394,45 +2396,52 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public boolean canUseItem(ItemStack itemStack) {
+	public Tuple<Boolean,String> canUseItem(ItemStack itemStack) {
 		
 		try {
 			ISoliniaItem item = SoliniaItemAdapter.Adapt(itemStack);
 			if (item == null)
-				return true;
+				return new Tuple<Boolean,String>(true,"Not solinia item");
 			
 			if (!this.isNPC() && item.getAllowedClassNamesUpper().size() > 0) {
 				if (getClassObj() == null) {
-					return false;
+					return new Tuple<Boolean,String>(false,"Wrong class");
 				}
 
 				if (!item.getAllowedClassNamesUpper().contains(getClassObj().getName())) {
-					return false;
+					return new Tuple<Boolean,String>(false,"Wrong class");
 				}
 			}
 			
 			if (!this.isNPC() && item.getAllowedRaceNamesUpper().size() > 0) {
 				if (getRace() == null) {
-					return false;
+					return new Tuple<Boolean,String>(false,"Wrong race");
 				}
 
 				if (!item.getAllowedRaceNamesUpper().contains(getRace().getName())) {
-					return false;
+					return new Tuple<Boolean,String>(false,"Wrong race");
 				}
 			}
 
 			// npc can use level item :-)
 			if (!this.isNPC() && item.getMinLevel() > 0) {
 				if (item.getMinLevel() > getLevel()) {
-					return false;
+					return new Tuple<Boolean,String>(false,"Wrong level");
 				}
 			}
+			
+			// Is trying to  use a two hand but has item in offhand
+			if (!this.isNPC() && item.getItemType().equals(ItemType.TwoHandBlunt) || item.getItemType().equals(ItemType.TwoHandPiercing) || item.getItemType().equals(ItemType.TwoHandSlashing) )
+			{
+				if (this.getBukkitLivingEntity().getEquipment().getItemInOffHand() != null && !this.getBukkitLivingEntity().getEquipment().getItemInOffHand().getType().equals(Material.AIR))
+					return new Tuple<Boolean,String>(false,"Two hander with offhand");
+			}
 
-			return true;
+			return new Tuple<Boolean,String>(true,"");
 		} catch (CoreStateInitException e) {
-			return false;
+			return new Tuple<Boolean,String>(false,"Plugin not loaded");
 		} catch (SoliniaItemException e) {
-			return true;
+			return new Tuple<Boolean,String>(true,"Not solinia item");
 		}
 	}
 
