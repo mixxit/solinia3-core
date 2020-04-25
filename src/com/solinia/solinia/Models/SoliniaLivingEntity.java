@@ -206,8 +206,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int totalDominationBonus = 0;
 
 					totalDominationBonus += getSpellBonuses(SpellEffectType.CharmBreakChance);
-					totalDominationBonus += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-							SpellEffectType.CharmBreakChance);
+					totalDominationBonus += getAABonuses(SpellEffectType.CharmBreakChance);
 
 					if (Utils.RandomBetween(0, 99) < totalDominationBonus)
 						return true;
@@ -557,8 +556,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private boolean checkDualWield() {
 		int chance = getSkill(SkillType.DualWield) + getLevel();
 
-		chance += /*aabonuses.Ambidexterity +*/ getSpellBonuses(SpellEffectType.Ambidexterity) + getItemBonuses(SpellEffectType.Ambidexterity);
-		int per_inc = /*spellbonuses.DualWieldChance*/ + getSpellBonuses(SpellEffectType.DualWieldChance) + getItemBonuses(SpellEffectType.DualWieldChance);
+		chance += getSpellBonuses(SpellEffectType.Ambidexterity) + getItemBonuses(SpellEffectType.Ambidexterity) + getAABonuses(SpellEffectType.Ambidexterity);
+		int per_inc = getSpellBonuses(SpellEffectType.DualWieldChance) + getItemBonuses(SpellEffectType.DualWieldChance) + getAABonuses(SpellEffectType.DualWieldChance);
 		if (per_inc > 0)
 			chance += chance * per_inc / 100;
 
@@ -636,7 +635,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			doArcheryAttackDmg(other, rangedItemStack,RangeWeapon,0,0,0,0,0, 4.0F);
 	
 			//EndlessQuiver AA base1 = 100% Chance to avoid consumption arrow.
-			int ChanceAvoidConsume = /*aabonuses.ConsumeProjectile +*/getItemBonuses(SpellEffectType.ConsumeProjectile) + getSpellBonuses(SpellEffectType.ConsumeProjectile);
+			int ChanceAvoidConsume = getItemBonuses(SpellEffectType.ConsumeProjectile) + getSpellBonuses(SpellEffectType.ConsumeProjectile) + getSpellBonuses(SpellEffectType.ConsumeProjectile);
 	
 			if (isPlayer())
 			if (/*RangeItem->ExpendableArrow || */ChanceAvoidConsume < 0 || (ChanceAvoidConsume < 100 && Utils.RandomBetween(0,99) > ChanceAvoidConsume)){
@@ -868,7 +867,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	private void trySpellProc(ItemStack inst, ISoliniaItem weapon, ISoliniaLivingEntity on, int hand) {
 		float ProcBonus = (float) (this.getSpellBonuses(SpellEffectType.SpellProcChance)
-				+ getItemBonuses(SpellEffectType.SpellProcChance) /* + aabonuses.SpellProcChance */);
+				+ getItemBonuses(SpellEffectType.SpellProcChance) + getAABonuses(SpellEffectType.SpellProcChance) );
 
 		float ProcChance = 0.0f;
 		ProcChance = getProcChances(ProcBonus, hand);
@@ -981,7 +980,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int ourlevel = getLevel();
 		/*float ProcBonus = static_cast<float>(aabonuses.ProcChanceSPA +
 			spellbonuses.ProcChanceSPA + itembonuses.ProcChanceSPA);*/
-		float ProcBonus = 0;
+		
+		float ProcBonus = (float)this.getAABonuses(SpellEffectType.ProcChance);
+		// We only use the highest proc
+		if ((float)this.getSpellBonuses(SpellEffectType.ProcChance) > (float)this.getSpellBonuses(SpellEffectType.ProcChance))
+		{
+			ProcBonus = (float)this.getSpellBonuses(SpellEffectType.ProcChance);
+		}
+		// Items are additive proc chance
 		ProcBonus += (float)this.getItemBonuses(SpellEffectType.ProcChance) / 10.0f; // Combat Effects
 		float ProcChance = getProcChances(ProcBonus, hand);
 
@@ -1249,7 +1255,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (candouble && hand == InventorySlot.Secondary)
 			candouble =
 			    getSkill(SkillType.DoubleAttack) > 149 ||
-			    (/*aabonuses.GiveDoubleAttack +*/ getSpellBonuses(SpellEffectType.GiveDoubleAttack) + getItemBonuses(SpellEffectType.GiveDoubleAttack)) > 0;
+			    (getAABonuses(SpellEffectType.GiveDoubleAttack) + getSpellBonuses(SpellEffectType.GiveDoubleAttack) + getItemBonuses(SpellEffectType.GiveDoubleAttack)) > 0;
 
 		if (candouble) {
 			tryIncreaseSkill(SkillType.DoubleAttack, 1);
@@ -1259,7 +1265,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				// Modern AA description: Increases your chance of ... performing one additional hit with a 2-handed weapon when double attacking by 2%.
 				if (hand == InventorySlot.Primary) {
-					int extraattackchance = /*abonuses.ExtraAttackChance +*/ getSpellBonuses(SpellEffectType.ExtraAttackChance) + getItemBonuses(SpellEffectType.ExtraAttackChance);
+					int extraattackchance = getAABonuses(SpellEffectType.ExtraAttackChance) + getSpellBonuses(SpellEffectType.ExtraAttackChance) + getItemBonuses(SpellEffectType.ExtraAttackChance);
 					if (extraattackchance > 0 && hasTwoHanderEquipped() && Utils.Roll(extraattackchance))
 					{
 						this.sendMessage(ChatColor.GRAY + "* You double attack!");
@@ -1573,7 +1579,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (Hand == InventorySlot.Primary || Hand == InventorySlot.Secondary)
 				my_hit.base_damage = getDamageCaps(my_hit.base_damage);
 
-			int shield_inc = this.getSpellBonuses(SpellEffectType.ShieldEquipDmgMod) + this.getItemBonuses(SpellEffectType.ShieldEquipDmgMod) /*+ aabonuses.ShieldEquipDmgMod*/;
+			int shield_inc = this.getSpellBonuses(SpellEffectType.ShieldEquipDmgMod) + this.getItemBonuses(SpellEffectType.ShieldEquipDmgMod) + getAABonuses(SpellEffectType.ShieldEquipDmgMod);
 			if (shield_inc > 0 && hasShieldEquiped() && Hand == InventorySlot.Primary) {
 				my_hit.base_damage = my_hit.base_damage * (100 + shield_inc) / 100;
 				hate = hate * (100 + shield_inc) / 100;
@@ -2436,6 +2442,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (this.getBukkitLivingEntity().getEquipment().getItemInOffHand() != null && !this.getBukkitLivingEntity().getEquipment().getItemInOffHand().getType().equals(Material.AIR))
 					return new Tuple<Boolean,String>(false,"Two hander with offhand");
 			}
+			
+			//TODO Check reverse - offhand vs primary for 2hander
 
 			return new Tuple<Boolean,String>(true,"");
 		} catch (CoreStateInitException e) {
@@ -4186,7 +4194,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		// this effect isn't used on live? See no AAs or spells
-		int DoubleRipChance = /* TODO AA types */this.getSpellBonuses(SpellEffectType.DoubleRiposte) + this.getItemBonuses(SpellEffectType.DoubleRiposte);
+		int DoubleRipChance = getAABonuses(SpellEffectType.DoubleRiposte) + this.getSpellBonuses(SpellEffectType.DoubleRiposte) + this.getItemBonuses(SpellEffectType.DoubleRiposte);
 
 		if (DoubleRipChance > 0 && Utils.Roll(DoubleRipChance)) {
 			defender.Attack(this, InventorySlot.Primary, true,false,false);
@@ -4194,7 +4202,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 		}
 
-		DoubleRipChance = /* TODO AA types */defender.getSpellBonuses(SpellEffectType.GiveDoubleRiposte) + defender.getItemBonuses(SpellEffectType.GiveDoubleRiposte);
+		DoubleRipChance = defender.getAABonuses(SpellEffectType.GiveDoubleRiposte) + defender.getSpellBonuses(SpellEffectType.GiveDoubleRiposte) + defender.getItemBonuses(SpellEffectType.GiveDoubleRiposte);
 
 		// Live AA - Double Riposte
 		if (DoubleRipChance > 0 && Utils.Roll(DoubleRipChance)) {
@@ -4342,15 +4350,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				&& !getBukkitLivingEntity().getUniqueId().equals(defender.getBukkitLivingEntity().getUniqueId())) {
 			int HeadShot_Dmg = 0;
 			int spellHeadShotModifier = getSpellBonuses(SpellEffectType.HeadShot);
-			int aaHeadShotModifier = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-					SpellEffectType.HeadShot);
+			int aaHeadShotModifier = getAABonuses(SpellEffectType.HeadShot);
 			HeadShot_Dmg = spellHeadShotModifier + aaHeadShotModifier;
 
 			int HeadShot_Level = 0; // Get Highest Headshot Level
 
 			int spellHeadShotLevelModifier = getSpellBonuses(SpellEffectType.HeadShotLevel);
-			int aaHeadShotLevelModifier = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-					SpellEffectType.HeadShotLevel);
+			int aaHeadShotLevelModifier = getAABonuses(SpellEffectType.HeadShotLevel);
 
 			HeadShot_Level = Math.max(spellHeadShotLevelModifier, aaHeadShotLevelModifier);
 
@@ -4396,7 +4402,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int bindmod = 0;
 
 		int spellMaxBindWound = getSpellBonuses(SpellEffectType.MaxBindWound);
-		int aaMaxBindWound = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.MaxBindWound);
+		int aaMaxBindWound = getAABonuses(SpellEffectType.MaxBindWound);
 
 		bindmod += spellMaxBindWound;
 		bindmod += aaMaxBindWound;
@@ -4409,8 +4415,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int bindmod = 0;
 
 		int spellMaxBindWound = getSpellBonuses(SpellEffectType.ImprovedBindWound);
-		int aaMaxBindWound = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-				SpellEffectType.ImprovedBindWound);
+		int aaMaxBindWound = getAABonuses(SpellEffectType.ImprovedBindWound);
 
 		bindmod += spellMaxBindWound;
 		bindmod += aaMaxBindWound;
@@ -4422,8 +4427,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int dmg_mod = 0;
 
 		int spellDamageModifier = getSpellBonuses(SpellEffectType.DamageModifier);
-		int aaDamageModifier = Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-				SpellEffectType.DamageModifier);
+		int aaDamageModifier = getAABonuses(SpellEffectType.DamageModifier);
 
 		dmg_mod += spellDamageModifier;
 		dmg_mod += aaDamageModifier;
@@ -4910,12 +4914,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return attackRating;
 	}
-	
-	@Override
-	public int getAABonuses(SpellEffectType atk) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	public int getPrimarySkillValue()
 	{
@@ -4991,7 +4989,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (against.getSpecialAbility(SpecialAbility.IMMUNE_MELEE_NONMAGICAL) > 0) {
 			if (weapon_item != null) {
 				// check to see if the weapon is magic
-				boolean MagicWeapon = weapon_item.isItemMagical(weaponItemStack) || getSpellBonuses(SpellEffectType.MagicWeapon) > 0 || getItemBonuses(SpellEffectType.MagicWeapon) > 0;
+				boolean MagicWeapon = weapon_item.isItemMagical(weaponItemStack) || getAABonuses(SpellEffectType.MagicWeapon) > 0 || getSpellBonuses(SpellEffectType.MagicWeapon) > 0 || getItemBonuses(SpellEffectType.MagicWeapon) > 0;
 				if (MagicWeapon) {
 					/*TODO RECOmmended Levels
 					 * int rec_level = weapon_item->GetItemRecommendedLevel(true);
@@ -5326,12 +5324,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean getInvul() {
 		return this.isInvulnerable();
-	}
-
-	@Override
-	public int getItemBonuses(SpellEffectType spellEffectType) {
-		// TODO TODO
-		return 0;
 	}
 
 	@Override
@@ -7333,7 +7325,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getLevel() > 35)
 			chance += getLevel();
 
-		int per_inc = /*aabonuses.DoubleAttackChance +*/ getSpellBonuses(SpellEffectType.DoubleAttackChance) + getItemBonuses(SpellEffectType.DoubleAttackChance);
+		int per_inc = getAABonuses(SpellEffectType.DoubleAttackChance) + getSpellBonuses(SpellEffectType.DoubleAttackChance) + getItemBonuses(SpellEffectType.DoubleAttackChance);
 		if (per_inc > 0)
 			chance += chance * per_inc / 100;
 
@@ -7881,7 +7873,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			spell_aa_ac += getSpellBonuses(SpellEffectType.ArmorClass);
 
-			spell_aa_ac += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
+			spell_aa_ac += getAABonuses(SpellEffectType.ArmorClass);
 
 			if (getClassObj() != null) {
 				if (getClassObj().getName().equals("ENCHANTER") || getClassObj().getName().equals("ENCHANTER")) {
@@ -7898,7 +7890,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// TODO AC AA and Spell bonuses
 			spell_aa_ac += getSpellBonuses(SpellEffectType.ArmorClass);
 
-			spell_aa_ac += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.ArmorClass);
+			spell_aa_ac += getAABonuses(SpellEffectType.ArmorClass);
 
 			if (getClassObj() != null) {
 				if (getClassObj().getName().equals("ENCHANTER") || getClassObj().getName().equals("ENCHANTER")) {
@@ -7934,8 +7926,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			total_aclimitmod += getSpellBonuses(SpellEffectType.CombatStability);
 
-			total_aclimitmod += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-					SpellEffectType.CombatStability);
+			total_aclimitmod += getAABonuses(SpellEffectType.CombatStability);
 
 			if (total_aclimitmod > 0)
 				softcap = (softcap * (100 + total_aclimitmod)) / 100;
@@ -8249,7 +8240,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// TODO take into account item,spell,aa bonuses
 		if (isPlayer()) {
-			chance += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(), SpellEffectType.CriticalSpellChance);
+			chance += getAABonuses(SpellEffectType.CriticalSpellChance);
 		}
 
 		// TODO Items/aabonuses
@@ -8264,8 +8255,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (Utils.RandomBetween(0, 100) < ratio) {
 				critical = true;
 				if (isPlayer()) {
-					ratio += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-							SpellEffectType.SpellCritDmgIncrease);
+					ratio += getAABonuses(SpellEffectType.SpellCritDmgIncrease);
 				}
 				// TODO add ratio bonuses from spells, aas
 			} else if (getClassObj().getName().equals("WIZARD")) {
@@ -8370,8 +8360,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			// TODO Items/aabonuses
 			if (isPlayer()) {
-				chance += Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
-						SpellEffectType.CriticalHealChance);
+				chance += getAABonuses(SpellEffectType.CriticalHealChance);
 			}
 
 			// TODO FOcuses
@@ -10583,5 +10572,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return false;
 		
 		return RaycastUtils.isEntityInLineOfSight(this, soliniaLivingEntity,checkDirection);
+	}
+	
+	@Override
+	public int getItemBonuses(SpellEffectType spellEffectType) {
+		// TODO TODO
+		return 0;
+	}
+	
+	@Override
+	public int getAABonuses(SpellEffectType effect) {
+		return Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
+				effect);
 	}
 }
