@@ -1729,6 +1729,25 @@ public class Solinia3CorePlayerListener implements Listener {
 
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(event.getCursor());
+						
+						// Check if buying stack of none-stackable
+						if (event.getCursor().getAmount() > item.asItemStack().getMaxStackSize()) {
+							event.getView().getPlayer().sendMessage(
+									"This item is not stackable in the amount you have requested.");
+							
+							// Cursor events are deprecated, must be done next tick before a cancel
+							final UUID uuid = event.getView().getPlayer().getUniqueId();
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+									StateManager.getInstance().getPlugin(), new Runnable() {
+										public void run() {
+											Bukkit.getPlayer(uuid).setItemOnCursor(new ItemStack(Material.AIR));
+											}
+									}
+							);
+							Utils.CancelEvent(event);
+							return;
+						}
+						
 						long individualprice = item.getWorth();
 
 						// Try to read from the itemstack worth
