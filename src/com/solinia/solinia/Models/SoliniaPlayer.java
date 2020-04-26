@@ -262,8 +262,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public Player getBukkitPlayer() {
-		Player player = Bukkit.getPlayer(getOwnerUUID());
-		return player;
+		try
+		{
+			Player player = Bukkit.getPlayer(getOwnerUUID());
+			return player;
+		} catch (NullPointerException e)
+		{
+			return null;
+		}
+		
 	}
 
 	@Override
@@ -1035,10 +1042,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public SoliniaPlayerSkill getSkill(SkillType skillType) {
 		if (!Utils.isValidSkill(skillType.name().toUpperCase())) {
-			getBukkitPlayer().sendMessage(
+			sendMessage(
 					"ADMIN ALERT, Please inform Moderators that you have called getSkill for an unknown skill: '"
 							+ skillType.name().toUpperCase() + "'");
-			System.out.println("ADMIN ALERT, " + getBukkitPlayer().getName() + " getSkill for an unknown skill: '"
+			if (getBukkitPlayerName() != null)
+			System.out.println("ADMIN ALERT, " + getBukkitPlayerName() + " getSkill for an unknown skill: '"
 					+ skillType.name().toUpperCase() + "'");
 			return null;
 		}
@@ -1049,9 +1057,22 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		// If we got this far the skill doesn't exist, create it with 0
-		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType.name().toUpperCase().toUpperCase(), 0);
+		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType.name().toUpperCase().toUpperCase(),skillType, 0);
 		skills.add(skill);
 		return skill;
+	}
+	
+	private String getBukkitPlayerName()
+	{
+		if (getBukkitPlayer() == null)
+			return null;
+		
+		return getBukkitPlayer().getName();
+	}
+
+	private void sendMessage(String string) {
+		if (this.getBukkitPlayer() != null)
+			this.getBukkitPlayer().sendMessage(string);
 	}
 
 	@Override
@@ -1136,19 +1157,18 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				skill.setValue(value);
 				updated = true;
 				if (skill.getValue() > 0)
-				getBukkitPlayer()
-						.sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toUpperCase() + " (" + value + ")");
+					sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toUpperCase() + " (" + value + ")");
 				return;
 			}
 		}
 
 		if (updated == false) {
-			SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType.name().toUpperCase(), value);
+			SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType.name().toUpperCase(), skillType, value);
 			skills.add(skill);
 		}
 
 		if (value > 0)
-		getBukkitPlayer().sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toLowerCase() + " (" + value + ")");
+			sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toLowerCase() + " (" + value + ")");
 		this.setLastUpdatedTimeNow();
 
 	}

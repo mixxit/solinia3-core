@@ -35,6 +35,7 @@ import com.solinia.solinia.Models.PlayerState;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaPatch;
+import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 
 import net.minecraft.server.v1_14_R1.InventoryEnderChest;
@@ -49,7 +50,21 @@ import net.minecraft.server.v1_14_R1.TileEntityEnderChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		
+		try
+		{
+			for(ISoliniaPlayer solPlayer : StateManager.getInstance().getConfigurationManager().getCharacters())
+			{
+				for (SoliniaPlayerSkill skill : solPlayer.getSkills())
+				{
+					skill.setSkillType(Utils.getSkillType2(skill.getSkillName()));
+				}
+				
+				System.out.println("Updated solPlayer: " + solPlayer.getFullName());
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	public Inventory listToInventory(NBTTagList nbttaglist) {
