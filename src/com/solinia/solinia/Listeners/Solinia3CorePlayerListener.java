@@ -484,7 +484,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForestryMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck(SkillType.Logging, minskill + 50)) {
+				if (!solplayer.getTradeskillSkillCheck(SkillType.Logging, minskill + 50)) {
 					return;
 				}
 
@@ -500,7 +500,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForestryMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck(SkillType.Logging, minskill + 50)) {
+				if (!solplayer.getTradeskillSkillCheck(SkillType.Logging, minskill + 50)) {
 					return;
 				}
 
@@ -530,7 +530,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForagingMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck(SkillType.Forage, minskill + 50)) {
+				if (!solplayer.getTradeskillSkillCheck(SkillType.Forage, minskill + 50)) {
 					return;
 				}
 
@@ -546,7 +546,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getForagingMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck(SkillType.Forage, minskill + 50)) {
+				if (!solplayer.getTradeskillSkillCheck(SkillType.Forage, minskill + 50)) {
 					return;
 				}
 
@@ -576,7 +576,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getMiningMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck(SkillType.Mining, minskill + 50)) {
+				if (!solplayer.getTradeskillSkillCheck(SkillType.Mining, minskill + 50)) {
 					return;
 				}
 
@@ -592,7 +592,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getMiningMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck(SkillType.Mining, minskill + 50)) {
+				if (!solplayer.getTradeskillSkillCheck(SkillType.Mining, minskill + 50)) {
 					return;
 				}
 
@@ -626,7 +626,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getFishingMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck(SkillType.Fishing, minskill + 50)) {
+				if (!solplayer.getTradeskillSkillCheck(SkillType.Fishing, minskill + 50)) {
 					return;
 				}
 
@@ -642,7 +642,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					minskill = zone.getFishingMinSkill();
 				}
 
-				if (!solplayer.getSkillCheck(SkillType.Fishing, minskill + 50)) {
+				if (!solplayer.getTradeskillSkillCheck(SkillType.Fishing, minskill + 50)) {
 					return;
 				}
 
@@ -1399,7 +1399,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					{
 						solPlayer.tryIncreaseSkill(craft.getSkillType(), 1);
 
-						if (!solPlayer.getSkillCheck(craft.getSkillType(),craft.getMinSkill()+50))
+						if (!solPlayer.getTradeskillSkillCheck(craft.getSkillType(),craft.getMinSkill()+50))
 						{
 							event.getView().getPlayer().sendMessage("Your lack of skill resulted in failure!");
 							item1.setAmount(item1.getAmount()-1);

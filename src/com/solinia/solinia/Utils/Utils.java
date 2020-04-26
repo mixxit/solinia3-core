@@ -516,6 +516,11 @@ public class Utils {
 		return r.nextInt((maxnumber - minnumber) + 1) + minnumber;
 	}
 	
+	public static float RandomBetween(float minnumber, float maxnumber) {
+		Random r = new Random();
+		return minnumber + r.nextFloat() * (minnumber - maxnumber);
+	}
+	
 	public static String getDefaultSkillForMaterial(Material material) {
 		String materialstring = material.name().toUpperCase();
 		

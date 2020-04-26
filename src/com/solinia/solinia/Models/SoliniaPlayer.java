@@ -3381,11 +3381,27 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public boolean getSkillCheck(SkillType skillType, int trivial) {
+	public boolean getTradeskillSkillCheck(SkillType skillType, int trivial) {
 		SoliniaPlayerSkill skill = this.getSkill(skillType);
 
 		if (skill == null)
 			return false;
+		
+		int min = 0;
+		int max = 99;
+		
+		// Always up the min trivial for resource based gathering
+		if (
+				skillType.equals(SkillType.Mining) ||
+				skillType.equals(SkillType.Fishing) ||
+				skillType.equals(SkillType.Forage) ||
+				skillType.equals(SkillType.Logging)
+			)
+		{
+			// Works out about 1 in every 500 block mines at trivial level
+			int blocks = 500;
+			max = (int) (blocks * (blocks / 4.34));
+		}
 
 		float chance = (skill.getValue() - trivial) + 66;
 		int over_trivial = skill.getValue() - trivial;
@@ -3398,7 +3414,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			chance = 95;
 		}
 
-		float res = Utils.RandomBetween(0, 99);
+		float res = Utils.RandomBetween(min, max);
 		if (chance > res) {
 			return true;
 		}

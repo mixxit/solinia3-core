@@ -16,21 +16,7 @@ import net.minecraft.server.v1_14_R1.TileEntityChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for(ISoliniaPlayer solPlayer : StateManager.getInstance().getConfigurationManager().getCharacters())
-			{
-				for (SoliniaPlayerSkill skill : solPlayer.getSkills())
-				{
-					skill.setSkillType(skill.getSkillType());
-				}
-				
-				System.out.println("Updated solPlayer: " + solPlayer.getFullName());
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 	
 	public Inventory listToInventory(NBTTagList nbttaglist) {

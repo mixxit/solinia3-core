@@ -591,8 +591,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	boolean hasReagents(ISoliniaSpell spell, Player player);
 
-	boolean getSkillCheck(SkillType skillType, int trivial);
-
 	boolean understandsLanguage(SkillType languageSkillType);
 
 	int getLanguageLearnedPercent(SkillType languageSkillType);
@@ -636,4 +634,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public boolean isAnimal();
 	int getSpellBonuses(SpellEffectType spellEffectType);
 	public void grantExperienceAndLoot(ISoliniaLivingEntity livingEntity);
+	boolean getTradeskillSkillCheck(SkillType skillType, int trivial);
 }
