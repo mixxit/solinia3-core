@@ -5798,7 +5798,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				player.sendMessage(decoratedMessage);
 
 				if (allowlanguagelearn == true) {
-					if (getLanguage() != null && !getLanguage().equals(""))
+					if (getLanguage() != null && !getLanguage().equals(SkillType.None))
 						SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(getLanguage());
 				}
 			}
@@ -5830,7 +5830,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + Utils.garbleText(message,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(getLanguage())) + "' (You do not fully understand this language)" + ChatColor.RESET;
 				player.sendMessage(decoratedMessage);
 
-				if (getLanguage() != null && !getLanguage().equals(""))
+				if (getLanguage() != null && !getLanguage().equals(SkillType.None))
 					SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(getLanguage());
 			}
 		} catch (CoreStateInitException e) {

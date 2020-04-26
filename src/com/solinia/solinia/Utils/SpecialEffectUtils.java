@@ -5,8 +5,6 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaActiveSpell;
-
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.effect.AnimatedBallEffect;
 import de.slikey.effectlib.effect.ArcEffect;

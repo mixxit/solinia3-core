@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaPlayer;
-import com.solinia.solinia.Utils.ForgeUtils;
-import org.json.JSONException;
 
 public class MiningSkillCheckTest {
 	@Test

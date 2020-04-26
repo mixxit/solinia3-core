@@ -8,8 +8,6 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandSkills implements CommandExecutor 
@@ -56,10 +54,10 @@ public class CommandSkills implements CommandExecutor
 	            	if (skill.getValue() == 0)
 	            		continue;
 	            	
-	            	if (soliniaplayer.getSkillCap(Utils.getSkillType2(skill.getSkillName())) == 0)
+	            	if (soliniaplayer.getSkillCap(skill.getSkillType()) == 0)
 	            		continue;
 	            	
-	            	player.sendMessage(ChatColor.BLUE + skill.getSkillName() + ": " + skill.getValue() + "/" + soliniaplayer.getSkillCap(Utils.getSkillType2(skill.getSkillName())));
+	            	player.sendMessage(ChatColor.BLUE + skill.getSkillType().name() + ": " + skill.getValue() + "/" + soliniaplayer.getSkillCap(skill.getSkillType()));
 	            }
 	            
 	            

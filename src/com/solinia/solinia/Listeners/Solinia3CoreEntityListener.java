@@ -1,8 +1,6 @@
 package com.solinia.solinia.Listeners;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -39,24 +37,17 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Interfaces.ISoliniaFaction;
-import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.EntityAutoAttack;
-import com.solinia.solinia.Models.FactionStandingEntry;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
-import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.Utils;
-
-import net.minecraft.server.v1_14_R1.Tuple;
 
 public class Solinia3CoreEntityListener implements Listener {
 	Solinia3CorePlugin plugin;

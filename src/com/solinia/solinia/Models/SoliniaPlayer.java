@@ -1052,12 +1052,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		for (SoliniaPlayerSkill skill : this.skills) {
-			if (skill.getSkillName().toUpperCase().equals(skillType.name().toUpperCase().toUpperCase()))
+			if (skill.getSkillType().equals(skillType))
 				return skill;
 		}
 
 		// If we got this far the skill doesn't exist, create it with 0
-		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType.name().toUpperCase().toUpperCase(),skillType, 0);
+		SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType,0);
 		skills.add(skill);
 		return skill;
 	}
@@ -1153,7 +1153,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		boolean updated = false;
 
 		for (SoliniaPlayerSkill skill : this.skills) {
-			if (skill.getSkillName().toUpperCase().equals(skillType.name().toUpperCase())) {
+			if (skill.getSkillType().equals(skillType)) {
 				skill.setValue(value);
 				updated = true;
 				if (skill.getValue() > 0)
@@ -1163,7 +1163,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		if (updated == false) {
-			SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType.name().toUpperCase(), skillType, value);
+			SoliniaPlayerSkill skill = new SoliniaPlayerSkill(skillType, value);
 			skills.add(skill);
 		}
 

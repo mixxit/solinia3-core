@@ -2,10 +2,8 @@ package com.solinia.solinia.Repositories;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -20,9 +18,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Models.SoliniaPlayer;
-import com.solinia.solinia.Models.SoliniaSpell;
 
 public class JsonCharacterListRepository implements IRepository<ISoliniaPlayer>  {
 	private ConcurrentHashMap<Integer, ISoliniaPlayer> CharacterLists = new ConcurrentHashMap<Integer, ISoliniaPlayer>();

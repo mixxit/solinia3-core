@@ -11,8 +11,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaPlayerSkill;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandForceRace implements CommandExecutor {
 	@Override

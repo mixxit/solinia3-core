@@ -478,7 +478,7 @@ public class ChannelManager implements IChannelManager {
 						
 						if (allowlanguagelearn == true)
 						{
-							if (source.getLanguage() != null && !source.getLanguage().equals(""))
+							if (source.getLanguage() != null && !source.getLanguage().equals(SkillType.None))
 							SoliniaPlayerAdapter.Adapt(player).tryImproveLanguage(source.getLanguage());
 						}
 					} 

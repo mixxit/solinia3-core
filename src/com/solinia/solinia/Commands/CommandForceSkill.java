@@ -54,7 +54,7 @@ public class CommandForceSkill implements CommandExecutor {
 	    			boolean foundSkill = false;
 	    			for(SoliniaPlayerSkill skillEntry : solplayer.getSkills())
 	    			{
-	    				if (skillEntry.getSkillName().toUpperCase().equals(skill.toUpperCase()))
+	    				if (skillEntry.getSkillType().equals(Utils.getSkillType2(skill.toUpperCase())))
 	    					foundSkill = true;
 	    			}
 	    			

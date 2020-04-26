@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
 import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Interfaces.ISoliniaClass;

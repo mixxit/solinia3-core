@@ -21,7 +21,6 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 
 import net.minecraft.server.v1_14_R1.EntityInsentient;
-import net.minecraft.server.v1_14_R1.PathfinderGoalSelector;
 
 public class CommandSolNPCInfo implements CommandExecutor {
 
