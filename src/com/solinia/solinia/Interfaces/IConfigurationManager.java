@@ -41,6 +41,7 @@ import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaGod;
+import com.solinia.solinia.Models.SoliniaMetrics;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -631,4 +632,6 @@ public interface IConfigurationManager {
 	ISoliniaPlayer getCharacterById(Integer characterId);
 
 	IRepository<ISoliniaPatch> getPatchesRepo();
+
+	SoliniaMetrics getSoliniaMetrics();
 }

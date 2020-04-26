@@ -289,6 +289,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			path(API_V1, () -> {
 				// Communication
 				post("discord", ServerApi::discordPost);
+				get("metrics", ServerApi::metricsGet);
 			});
 		});
 

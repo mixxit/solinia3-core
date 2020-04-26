@@ -1,6 +1,7 @@
 package com.solinia.solinia.Managers;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -11,8 +12,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
 import com.solinia.solinia.Events.SoliniaNPCUpdatedEvent;
 import com.solinia.solinia.Events.SoliniaSpawnGroupUpdatedEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -74,6 +78,7 @@ import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaCraft;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaGod;
+import com.solinia.solinia.Models.SoliniaMetrics;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Models.SoliniaNPC;
@@ -2250,6 +2255,30 @@ public class ConfigurationManager implements IConfigurationManager {
 		fellowship.setOwnerCharacterId(0);
 		
 		this.fellowshipRepository.remove(fellowship);
+	}
+
+	@Override
+	public SoliniaMetrics getSoliniaMetrics() {
+		SoliniaMetrics metrics = new SoliniaMetrics();
+		metrics.playersOnline = Bukkit.getServer().getOnlinePlayers().size();
+		metrics.playersAfk = 0;
+		BigDecimal economy = BigDecimal.ZERO;
+		Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+		if (ess != null)
+		{
+			for (UUID userUUID : ess.getUserMap().getAllUniqueUsers())
+			{
+				User user = ess.getUserMap().getUser(userUUID);
+				if (user == null)
+					continue;
+				if (Bukkit.getPlayer(userUUID) != null && user.isAfk())
+					metrics.playersAfk++;
+				
+				economy = economy.add(user.getMoney());
+			}
+		}
+		metrics.economySize = economy;
+		return metrics;
 	}
 
 }

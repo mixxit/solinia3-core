@@ -1,5 +1,7 @@
 package com.solinia.solinia.Models;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
@@ -18,6 +20,25 @@ import java.util.logging.Logger;
 
 public class ServerApi {
 	private static final Logger log = Bukkit.getLogger();
+	
+	public static void metricsGet(Context ctx) {
+		try
+		{
+			SoliniaMetrics metrics = new SoliniaMetrics();
+
+			if (!StateManager.getInstance().getPlugin().isEnabled())
+				metrics = new SoliniaMetrics();
+			else
+				metrics = StateManager.getInstance().getConfigurationManager().getSoliniaMetrics();
+
+			GsonBuilder gsonbuilder = new GsonBuilder();
+			Gson gson = gsonbuilder.create();
+			ctx.result(gson.toJson(metrics));
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+    }
 
 	public static void discordPost(Context ctx) {
 		
@@ -54,4 +75,6 @@ public class ServerApi {
 			e.printStackTrace();
 		}
     }
+	
+	
 }
