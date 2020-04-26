@@ -18,33 +18,7 @@ import net.minecraft.server.v1_14_R1.TileEntityChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		try
-		{
-			for(ISoliniaPlayer solPlayer : StateManager.getInstance().getConfigurationManager().getCharacters())
-			{
-				boolean brokenSkills = false;
-				for (SoliniaPlayerSkill skill : solPlayer.getSkills())
-				{
-					if (skill.getSkillName() != null && skill.getSkillType() == null)
-						skill.setSkillType(Utils.getSkillType2(skill.getSkillName()));
-					
-					if (skill.getSkillName() == null)
-						brokenSkills = true;
-					
-				}
-				
-				if (brokenSkills == true)
-				{
-					System.out.println(solPlayer.getFullName() + " had totally broken skills");
-					solPlayer.setSkills(new ArrayList<SoliniaPlayerSkill>());
-				}
-				
-				solPlayer.setLastUpdatedTimeNow();
-			}
-		} catch (CoreStateInitException e)
-		{
-			
-		}
+		
 	}
 	
 	public Inventory listToInventory(NBTTagList nbttaglist) {
