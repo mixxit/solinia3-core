@@ -249,10 +249,13 @@ public class SoliniaEntitySpells {
 
 		// Initial run
 		activeSpell.apply(plugin, sendMessages);
-		Utils.playSpecialEffect(getLivingEntity(), activeSpell);
+		if (!activeSpell.isRacialPassive())
+			Utils.playSpecialEffect(getLivingEntity(), activeSpell);
+		
 		try
 		{
-		StateManager.getInstance().getEntityManager().playSpellFinishedSoundEffect(getLivingEntity(),soliniaSpell);
+			if (!activeSpell.isRacialPassive())
+				StateManager.getInstance().getEntityManager().playSpellFinishedSoundEffect(getLivingEntity(),soliniaSpell);
 		//getLivingEntity().getWorld().playSound(getLivingEntity().getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1, 0);
 		} catch (CoreStateInitException e)
 		{

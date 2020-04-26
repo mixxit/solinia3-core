@@ -1612,7 +1612,7 @@ public class EntityManager implements IEntityManager {
 		
 		if (spell == null)
 			return;
-			
+		
 		if (spell.isCombatSkill())
 			return;
 		
