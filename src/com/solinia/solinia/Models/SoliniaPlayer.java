@@ -151,6 +151,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int oathId = 0;
 
 	@Override
+	public int getTier() {
+		int tier = (int) Math.floor((this.getLevel() / 10)+1);
+		if (tier < 1)
+			tier = 1;
+		return tier;
+	}
+	
+	@Override
 	public List<UUID> getIgnoredPlayers() {
 		return ignoredPlayers;
 	}

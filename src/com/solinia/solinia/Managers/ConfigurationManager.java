@@ -2310,6 +2310,18 @@ public class ConfigurationManager implements IConfigurationManager {
 				metrics.levelDistribution.put(solChar.getLevel(),0);
 			
 			metrics.levelDistribution.put(solChar.getLevel(), metrics.levelDistribution.get(solChar.getLevel())+1);
+
+			if (metrics.tierDistribution.get(solChar.getTier()) == null)
+				metrics.tierDistribution.put(solChar.getTier(),0);
+			
+			metrics.tierDistribution.put(solChar.getTier(), metrics.tierDistribution.get(solChar.getTier())+1);
+			
+			if (metrics.classTierDistribution.get(solChar.getClassObj().getName().toUpperCase()) == null)
+				metrics.classTierDistribution.put(solChar.getClassObj().getName().toUpperCase(),new HashMap<Integer,Integer>());
+			if (metrics.classTierDistribution.get(solChar.getClassObj().getName().toUpperCase()).get(solChar.getTier()) == null)
+				metrics.classTierDistribution.get(solChar.getClassObj().getName().toUpperCase()).put(solChar.getTier(),0);
+			metrics.classTierDistribution.get(solChar.getClassObj().getName().toUpperCase()).put(solChar.getTier(),metrics.classTierDistribution.get(solChar.getClassObj().getName().toUpperCase()).get(solChar.getTier())+1);
+
 		}
 		
 		metrics.economySize = economy;
