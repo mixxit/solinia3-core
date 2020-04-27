@@ -90,6 +90,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private boolean isConsumable;
 	private String consumableRequireQuestFlag = "";
 	private String consumableRequireNotQuestFlag = "";
+	private int consumableRequireInZone = 0;
 	private int baneUndead = 0;
 	private boolean isAugmentation = false;
 	private AugmentationSlotType augmentationFitsSlotType = AugmentationSlotType.NONE;
@@ -607,6 +608,15 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 				return false;
 			}
 		}
+		
+		if (isConsumable == true && this.getConsumableRequireInZone() > 0)
+		{
+			if (!SoliniaPlayerAdapter.Adapt(player).isInZone(this.getConsumableRequireInZone()))
+			{
+				player.sendMessage("* This item does not appear to work [in this place]");
+				return false;
+			}
+		}
 
 		if (isConsumable == true && !this.getConsumableRequireNotQuestFlag().equals(""))
 		{
@@ -701,6 +711,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
 		sender.sendMessage("- consumablerequirenotquestflag: " + ChatColor.GOLD + getConsumableRequireNotQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- consumablerequirequestflag: " + ChatColor.GOLD + getConsumableRequireQuestFlag() + ChatColor.RESET);
+		sender.sendMessage("- consumablerequireinzone: " + ChatColor.GOLD + this.getConsumableRequireInZone() + ChatColor.RESET);
 		sender.sendMessage("- bandage: " + ChatColor.GOLD + isBandage() + ChatColor.RESET + " languageprimer: " + ChatColor.GOLD + getLanguagePrimer() + ChatColor.RESET);
 		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET + " - artifact: " + ChatColor.GOLD + isArtifact() + ChatColor.RESET + " Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
@@ -905,6 +916,10 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 				ISoliniaQuest quest = StateManager.getInstance().getConfigurationManager().getQuest(Integer.parseInt(value));
 				setQuestId(quest.getId());
 			}
+			break;
+			
+		case "consumablerequireinzone":
+			setConsumableRequireInZone(Integer.parseInt(value));
 			break;
 		case "consumablerequirenotquestflag":
 			if (this.getQuestId() < 1)
@@ -1932,5 +1947,13 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setConsumableRequireNotQuestFlag(String consumableRequireNotQuestFlag) {
 		this.consumableRequireNotQuestFlag = consumableRequireNotQuestFlag;
+	}
+
+	public int getConsumableRequireInZone() {
+		return consumableRequireInZone;
+	}
+
+	public void setConsumableRequireInZone(int consumableRequireInZone) {
+		this.consumableRequireInZone = consumableRequireInZone;
 	}
 }
