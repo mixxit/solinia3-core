@@ -3,6 +3,7 @@ package com.solinia.solinia.Managers;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -2264,6 +2265,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		metrics.playersAfk = 0;
 		BigDecimal economy = BigDecimal.ZERO;
 		Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+		List<UUID> recentUsers = new ArrayList<UUID>();
 		if (ess != null)
 		{
 			for (UUID userUUID : ess.getUserMap().getAllUniqueUsers())
@@ -2271,12 +2273,45 @@ public class ConfigurationManager implements IConfigurationManager {
 				User user = ess.getUserMap().getUser(userUUID);
 				if (user == null)
 					continue;
+				
+				if (!recentUsers.contains(userUUID))
+					recentUsers.add(userUUID);
+				
 				if (Bukkit.getPlayer(userUUID) != null && user.isAfk())
 					metrics.playersAfk++;
 				
 				economy = economy.add(user.getMoney());
 			}
 		}
+		
+		for (ISoliniaPlayer solChar : this.getCharacters())
+		{
+			if (solChar.isDeleted())
+				continue;
+
+			// Skip none recent
+			if (!recentUsers.contains(solChar.getOwnerUUID()))
+				continue;
+			
+			if (solChar.getClassObj() == null)
+				continue;
+			
+			if (metrics.classDistribution.get(solChar.getClassObj().getName().toUpperCase()) == null)
+				metrics.classDistribution.put(solChar.getClassObj().getName().toUpperCase(),0);
+			metrics.classDistribution.put(solChar.getClassObj().getName().toUpperCase(), metrics.classDistribution.get(solChar.getClassObj().getName().toUpperCase())+1);
+			
+			if (metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()) == null)
+				metrics.classLevelDistribution.put(solChar.getClassObj().getName().toUpperCase(),new HashMap<Integer,Integer>());
+			if (metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).get(solChar.getLevel()) == null)
+				metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).put(solChar.getLevel(),0);
+			metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).put(solChar.getLevel(),metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).get(solChar.getLevel())+1);
+			
+			if (metrics.levelDistribution.get(solChar.getLevel()) == null)
+				metrics.levelDistribution.put(solChar.getLevel(),0);
+			
+			metrics.levelDistribution.put(solChar.getLevel(), metrics.levelDistribution.get(solChar.getLevel())+1);
+		}
+		
 		metrics.economySize = economy;
 		return metrics;
 	}
