@@ -4787,9 +4787,9 @@ public class Utils {
 	public static boolean hasSpellActive(ISoliniaLivingEntity target, ISoliniaSpell spell) {
 		for (SoliniaActiveSpell activeSpell : target.getActiveSpells()) {
 			if (activeSpell.getSpell().getId() == spell.getId())
-				continue;
-
-			return true;
+				return true;
+			
+			continue;
 		}
 
 		return false;

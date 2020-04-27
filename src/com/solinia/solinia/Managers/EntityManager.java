@@ -707,22 +707,32 @@ public class EntityManager implements IEntityManager {
 					continue;
 				
 				LivingEntity livingEntityThatWillCast = (LivingEntity)entityThatWillCast;
+				Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "Start doNPCSpellCast");
 				
 				if (!(entityThatWillCast instanceof Creature))
+				{
+					Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "Not a creature");
 					continue;
+				}
 				
 				if(entityThatWillCast.isDead())
+				{
+					Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "Im dead");
 					continue;
+				}
 				
 				Creature creatureThatWillCast = (Creature)entityThatWillCast;
 				if (creatureThatWillCast.getTarget() == null)
+				{
+					Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "I have no target");
 					continue;
+				}
 				
 				if (!Utils.isLivingEntityNPC(livingEntityThatWillCast))
+				{
+					Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "I am not an NPC");
 					continue;
-				
-				if (!Utils.isLivingEntityNPC(creatureThatWillCast.getTarget()))
-					continue;
+				}
 				
 				try {
 					ISoliniaLivingEntity solLivingEntityThatWillCast = SoliniaLivingEntityAdapter.Adapt(livingEntityThatWillCast);

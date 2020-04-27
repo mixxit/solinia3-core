@@ -5906,6 +5906,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity, int npcEffectiveLevel)
 			throws CoreStateInitException {
+
+		Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "Start aiEngagedCastCheck");
+
 		if (this.getClassObj() == null)
 			return;
 		
@@ -5929,13 +5932,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 
 		// Try self buff, then nearby then target detrimental
-		Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast self buff");
+		Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "attempting to cast self buff");
 		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(), engagedBeneficialSelfChance,beneficialSelfSpells, npcEffectiveLevel)) {
-			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast others buff");
+			Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "attempting to cast other buff");
 			if (!aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance, StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),beneficialOtherSpells, npcEffectiveLevel)) {
-				Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " attempting to cast detrimental");
+				Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "attempting to cast detrimental");
 				if (!aiCastSpell(plugin, npc, castingAtEntity, engagedDetrimentalOtherChance, detrimentalSpells, npcEffectiveLevel)) {
-					Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString() + " cannot cast at all");
+					Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "Cannot cast at all");
 				}
 			}
 		}
@@ -6022,6 +6025,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes, int npcEffectiveLevel)
 			throws CoreStateInitException {
+		Utils.DebugLog("SoliniaLivingEntity", "aiCastSpell", this.getBukkitLivingEntity().getName(), "attempting to cast detrimental");
+
 		if (this.getClassObj() == null) {
 			Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a spell as I have no class");
@@ -6210,8 +6215,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast nuke " + spell.getName());
 					boolean nukeRoll = Utils.RandomRoll(70);
-					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
-							&& !Utils.hasSpellActive(soltarget, spell) && manaR >= 10 && nukeRoll
+					Tuple<Boolean, String> valid = SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell);
+					boolean hasSpellTargetActive = Utils.hasSpellActive(soltarget, spell);
+					if (valid.a()
+							&& !hasSpellTargetActive && manaR >= 10 && nukeRoll
 					// TODO Buff Stacking check
 					) {
 						if (!checked_los) {
@@ -6235,8 +6242,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					} else {
 						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
 								"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
-										+ " could not cast nuke as either my mana ratio was too high (" + (manaR >= 10)
-										+ ") or i rolled badly roll failure: (" + nukeRoll + ")");
+										+ " could not cast nuke as either my mana ratio was too low (" + !(manaR >= 10)
+										+ ") or i rolled badly roll failure: (" + nukeRoll + ")"
+												+ " or was not valid - valid: " + valid.a()
+												+ " or has spell already " + hasSpellTargetActive);
 					}
 					break;
 				case SpellType.Dispel:
@@ -6394,6 +6403,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!isNPC())
 			return;
 
+		Utils.DebugLog("SoliniaLivingEntity", "doSpellCast", this.getBukkitLivingEntity().getName(), "Start doSpellCast");
+		
 		if (castingAtEntity == null || this.livingentity == null)
 			return;
 
