@@ -4704,7 +4704,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isResistable() {
-		if (isDetrimental() && !isResistDebuffSpell()
+		if (isDetrimental() 
+				//&& !isResistDebuffSpell() -- this doesnt work as some mezzes have resist debuffers, dont worry as they are marked as RESIST_NONE anyway
 				&& !Utils.getSpellResistType(this.getResisttype()).name().equals("RESIST_NONE"))
 			return true;
 
