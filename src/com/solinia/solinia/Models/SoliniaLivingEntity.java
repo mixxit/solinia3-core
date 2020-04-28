@@ -229,6 +229,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int resistmodifier = spell.getResistDiff();
 		int casterlevel = 1;
 		int targetresist = 0;
+		
+		Utils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity().getName(), "Resist check for " + spell.getName() + " ResistModifier:" + resistmodifier);
 
 		boolean isnpccaster = false;
 
@@ -301,6 +303,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		int roll = Utils.RandomBetween(0, 200);
 
+		Utils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity().getName(), "Checking if " + roll + " is greater than " + resist_chance);
+
 		if (roll > resist_chance) {
 			return 100;
 		} else {
@@ -308,7 +312,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				resist_chance = 1;
 			}
 
+
 			int partial_modifier = ((150 * (resist_chance - roll)) / resist_chance);
+
+			Utils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity().getName(), "Partial modifier calculated at: " + partial_modifier + "((150 * (resist_chance - roll)) / resist_chance)");
 
 			if (isnpcvictim == true) {
 				if (victimlevel > casterlevel && victimlevel >= 17 && casterlevel <= 50) {
@@ -330,6 +337,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 
+			Utils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity().getName(), "Final Partial modifier: " + partial_modifier + " checking if 100-"+partial_modifier + " is equal to 100 (resist)");
+			
 			if (partial_modifier <= 0) {
 				return 100F;
 			} else if (partial_modifier >= 100) {
