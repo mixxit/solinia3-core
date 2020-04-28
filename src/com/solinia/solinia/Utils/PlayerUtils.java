@@ -193,15 +193,15 @@ public class PlayerUtils {
 			}
 	
 			if (level < 30) {
-				return experience * 4d;
+				return experience * 5d;
 			}
 	
 			if (level < 40) {
-				return experience * 3d;
+				return experience * 4d;
 			}
 	
 			if (level < 50) {
-				return experience * 2d;
+				return experience * 3d;
 			}
 			return experience;
 		} catch (CoreStateInitException e)
