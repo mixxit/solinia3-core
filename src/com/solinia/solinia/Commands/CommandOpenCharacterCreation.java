@@ -10,6 +10,7 @@ import com.solinia.solinia.Models.PacketOpenCharacterCreation;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Utils.ForgeUtils;
+import com.solinia.solinia.Utils.Utils;
 
 public class CommandOpenCharacterCreation implements CommandExecutor {
 	@Override
@@ -18,13 +19,7 @@ public class CommandOpenCharacterCreation implements CommandExecutor {
 		if (!(sender instanceof Player))
 			return false;
 		
-	    try {
-	    	PacketOpenCharacterCreation packet = new PacketOpenCharacterCreation();
-	    	packet.fromData(StateManager.getInstance().getConfigurationManager().getCharacterCreationChoices());
-			ForgeUtils.QueueSendForgeMessage(((Player)sender),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,packet.toPacketData(), 0);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	    Utils.sendCharCreation((Player)sender);
 		return true;
 	}
 

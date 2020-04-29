@@ -429,9 +429,18 @@ public class PlayerManager implements IPlayerManager {
 	}
 	
 	@Override
-	public void checkPlayerModVersion(Player player)
+	public boolean hasValidMod(Player player)
 	{
 		if (!playerModVersion(player).equals(StateManager.getInstance().getRequiredModVersion()))
+			return false;
+		
+		return true;
+	}
+	
+	@Override
+	public void checkPlayerModVersion(Player player)
+	{
+		/*if (!hasValidMod(player))
 		{
 			try
 			{
@@ -452,7 +461,7 @@ public class PlayerManager implements IPlayerManager {
 			}
 		} else {
 			onPlayerValidMod(player);
-		}
+		}*/
 	}
 
 	@Override

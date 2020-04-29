@@ -640,6 +640,10 @@ commands:
     description: Create full character
     usage: /createcharacterfull racename classname gender ideal firsttrait secondtrait flaw bond firstname lastname
     aliases: []
+  createcharactershort:
+    description: Create Short character
+    usage: /createcharactershort raceid classid
+    aliases: []
   ignoremodmessage:
     description: Toggles hiding of the mod message channel
     usage: /ignoremodmessage

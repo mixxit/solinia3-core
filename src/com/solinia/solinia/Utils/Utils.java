@@ -1,5 +1,6 @@
 package com.solinia.solinia.Utils;
 
+import java.awt.Event;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +46,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.MetadataValue;
@@ -79,13 +81,18 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.AugmentationSlotType;
+import com.solinia.solinia.Models.CharacterCreation;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.HintSetting;
 import com.solinia.solinia.Models.NumHit;
+import com.solinia.solinia.Models.PacketOpenCharacterCreation;
+import com.solinia.solinia.Models.RaceChoice;
 import com.solinia.solinia.Models.SkillType;
+import com.solinia.solinia.Models.Solinia3UIChannelNames;
+import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
@@ -99,6 +106,7 @@ import com.solinia.solinia.Models.StatType;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -6400,6 +6408,101 @@ public class Utils {
 		}
 		
 		return false;
+		
+	}
+
+	public static void sendCharCreation(Player sender) {
+		try {
+			if (StateManager.getInstance().getPlayerManager().hasValidMod(sender))
+			{
+		    	PacketOpenCharacterCreation packet = new PacketOpenCharacterCreation();
+		    	packet.fromData(StateManager.getInstance().getConfigurationManager().getCharacterCreationChoices());
+			ForgeUtils.QueueSendForgeMessage(((Player)sender),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,packet.toPacketData(), 0);
+			} else {
+				sendCharCreationNoMod(sender);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void sendCharCreationNoMod(Player sender) {
+		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+		BookMeta bookMeta = (BookMeta) book.getItemMeta();
+		bookMeta.setTitle("Character Creation");
+		bookMeta.setAuthor("");
+		
+		try
+		{
+			CharacterCreation choices = StateManager.getInstance().getConfigurationManager().getCharacterCreationChoices();
+			
+			String pageText = "";
+			BaseComponent[] introPage = new ComponentBuilder(
+							ChatColor.RED + "Race/Class Selection\n" + ChatColor.RESET +
+							"---------------\n" +
+							"\n" +
+							"Please cycle through\n" +
+							"our choice of races\n" +
+							"and classes\n" +
+							"\n" +
+							"When you are ready \n" +
+							"click "+ChatColor.BLUE+"SELECT"+ChatColor.RESET+" on the page\n"
+					
+					).create();
+			bookMeta.spigot().addPage(introPage);
+			for(String choiceKey : choices.raceChoices.keySet())
+			{
+				RaceChoice choice = choices.raceChoices.get(choiceKey);
+				int passiveId = StateManager.getInstance().getConfigurationManager().getRace(choice.RaceId).getPassiveAbilityId();
+				ISoliniaSpell passiveSpell = StateManager.getInstance().getConfigurationManager().getSpell(passiveId);
+				String header = ChatColor.RED + "" +choice.RaceName + " " + choice.ClassName + ChatColor.RESET+"\n";
+				String hover = "["+ChatColor.RED+"Hover for More Info"+ChatColor.RESET+"]\n";
+				String text = "";
+				text += "\n";
+				text += "STR "+ChatColor.BLUE+choice.STR+ChatColor.RESET+" STA "+ChatColor.BLUE+choice.STA+ChatColor.RESET+" AGI " + ChatColor.BLUE+choice.AGI+ChatColor.RESET + "\n";
+				text += "DEX "+ChatColor.BLUE+choice.DEX+ChatColor.RESET+" INT "+ChatColor.BLUE+choice.INT+ChatColor.RESET+" WIS " + ChatColor.BLUE+choice.WIS+ChatColor.RESET + "\n";
+				text += "CHA "+ChatColor.BLUE+choice.CHA+ChatColor.RESET+"\n";
+				text += "\n";
+				text += "Racial Benefit: " + ChatColor.RED+passiveSpell.getName()+ChatColor.RESET +  "\n";
+				text += "\n";
+
+				
+				
+				String details = 
+						ChatColor.GOLD + choice.RaceName + ChatColor.RESET + System.lineSeparator() 
+						+ "Recommended Alignment: " + ChatColor.GOLD + choice.Alignment + ChatColor.RESET + System.lineSeparator() 
+						+ choice.RaceDescription + System.lineSeparator()
+				+ ChatColor.GOLD + choice.ClassName + ChatColor.RESET + System.lineSeparator() + 
+				choice.ClassDescription;
+				
+				String click = "\n["+ChatColor.BLUE+"SELECT"+ChatColor.RESET+"]\n";
+				
+				BaseComponent[] racePage = new ComponentBuilder(header)
+						.append(new ComponentBuilder(hover).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create())).create())
+						.append(new ComponentBuilder(text).create())
+						.append(new ComponentBuilder(click).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/createcharactershort "+choice.RaceId + " "+ choice.ClassId)).create())
+						.create();
+
+				//						
+				//)
+
+				
+				bookMeta.spigot().addPage(racePage);
+			}
+			
+			/*			        .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://spigotmc.org"))
+			        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Go to the spigot website!").create()))
+			        .create();*/
+
+			
+			book.setItemMeta(bookMeta);
+			sender.openBook(book);
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
 		
 	}
 }

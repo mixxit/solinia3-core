@@ -42,4 +42,5 @@ public interface IPlayerManager {
 	ISoliniaPlayer getActivePlayer(Player player);
 	ISoliniaPlayer getActivePlayer(UUID playerUUID);
 	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, int characterid);
+	boolean hasValidMod(Player player);
 }

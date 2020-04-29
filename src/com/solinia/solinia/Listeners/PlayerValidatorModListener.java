@@ -13,6 +13,8 @@ import com.solinia.solinia.Models.PacketOpenCharacterCreation;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Utils.ForgeUtils;
+import com.solinia.solinia.Utils.Utils;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -44,7 +46,7 @@ public class PlayerValidatorModListener implements Listener {
 		
 		try
 		{
-			if (StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()) == null ||
+			/*if (StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()) == null ||
 					StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()).equals(""))
 			{
 				if (event.getTo().getY() < event.getFrom().getY()) {
@@ -62,7 +64,7 @@ public class PlayerValidatorModListener implements Listener {
 				}
 				event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "* Please wait while the server waits for your client to declare its mod version before moving. For help please ask in /ooc <msg>"));
 				return;
-			}
+			}*/
 			
 			ISoliniaPlayer soliniaPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (soliniaPlayer.getClassObj() == null)
@@ -104,9 +106,7 @@ public class PlayerValidatorModListener implements Listener {
 			if (solPlayer.getClassObj() == null)
 			{
 			    try {
-			    	PacketOpenCharacterCreation packet = new PacketOpenCharacterCreation();
-			    	packet.fromData(StateManager.getInstance().getConfigurationManager().getCharacterCreationChoices());
-					ForgeUtils.QueueSendForgeMessage(event.getPlayer(),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,packet.toPacketData(),0);
+			    	Utils.sendCharCreation(event.getPlayer());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
