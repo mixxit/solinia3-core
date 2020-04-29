@@ -1219,6 +1219,114 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 	
 	@Override
+	public void tryCastFromItemInHand(ISoliniaItem item)
+	{
+		try {
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+					"Trying to cast from item in hand: " + item.getId());
+			
+			if (!item.isSpellscroll())
+				return;
+			
+			int spellId = item.getAbilityid();
+			if (spellId < 1) {
+				return;
+			}
+			
+			if (this.isMezzed())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while mezzed!");
+				return;
+			}
+			
+			if (this.isStunned())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while stunned!");
+				return;
+			}
+
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+					"SoliniaSpell in hand: " + spellId + " target status: " + (getEntityTarget() == null));
+
+			// Some spells auto target self, if they don't have a target try to do that
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+			if (spell != null) {
+				this.tryForceTargetIfNeededForSpell(spell);
+
+				if (getEntityTarget() == null) {
+					if (!tryFixSpellTarget(spell)) {
+						getBukkitPlayer().sendMessage("* You must select a target [See keybinds]");
+						return;
+					}
+				}
+			}
+			
+			if (!spell.isBardSong())
+			if (!this.hasReagents(spell,getBukkitPlayer()))
+			{
+				Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+						"SoliniaSpell in slot: " + spellId + " Missing reagents");
+				return;
+			}
+			
+			// Special check for ability Bind Wound
+			if (spell.getSpellEffectTypes().contains(SpellEffectType.BindWound)) {
+				if (!hasSufficientBandageReagents(1))
+				{
+					Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+							"SoliniaSpell in slot: " + spellId + " Missing reagents for Bind Wound");
+					this.getBukkitPlayer().sendMessage("You do not have enough bandages in your /reagent pouch");
+					return;
+				}
+			}
+
+			if (getEntityTarget() == null) {
+				getBukkitPlayer().sendMessage("* You must select a target [See keybinds]");
+				return;
+			}
+
+			// Reroute action depending on target
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) getBukkitPlayer());
+			if (spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(getBukkitPlayer()).getMana()) {
+				getBukkitPlayer().sendMessage(ChatColor.GRAY + "Insufficient Mana  [E]");
+				return;
+			}
+
+			if (!spell.getRequiresPermissionNode().equals("")) {
+				if (!getBukkitPlayer().hasPermission(spell.getRequiresPermissionNode())) {
+					getBukkitPlayer().sendMessage("This requires a permission node you do not have");
+					return;
+				}
+			}
+
+			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(getBukkitPlayer(),
+					spell.getId()) != null) {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+				Timestamp expiretimestamp = StateManager.getInstance().getEntityManager()
+						.getEntitySpellCooldown(getBukkitPlayer(), spell.getId());
+
+				if (expiretimestamp != null)
+					if (!nowtimestamp.after(expiretimestamp)) {
+						Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+								"SoliniaSpell in slot: " + spellId + " Lack of willpower");
+
+						getBukkitPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName()
+								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
+						return;
+					}
+			}
+
+			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+					"SoliniaSpell in slot: " + spellId + " Starting casting");
+
+			startCasting(spell, getBukkitPlayer(), true, true, false, "");
+		} catch (CoreStateInitException e) {
+
+		}
+	}
+	
+	@Override
 	public void tryCastFromMemorySlot(int slotId) {
 		try {
 			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
@@ -1683,8 +1791,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			if (item.isSpellscroll()) {
-				getBukkitPlayer().sendMessage(
-						"* To use this spell you must first pick up the spell and drop it into the spells button in the top right corner of your inventory screen. You can then memorise it from your spellbook (By default K button)");
+				this.tryCastFromItemInHand(item);
 				return;
 			}
 

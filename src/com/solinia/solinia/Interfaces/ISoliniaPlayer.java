@@ -636,4 +636,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void grantExperienceAndLoot(ISoliniaLivingEntity livingEntity);
 	boolean getTradeskillSkillCheck(SkillType skillType, int trivial);
 	int getTier();
+	void tryCastFromItemInHand(ISoliniaItem item);
 }
