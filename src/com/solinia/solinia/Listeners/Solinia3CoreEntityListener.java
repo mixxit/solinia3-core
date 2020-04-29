@@ -632,6 +632,35 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		if (!(event.getRightClicked() instanceof Creature))
 			return;
+		
+		// Here we use the non-mod right click
+		try
+		{
+			if (!StateManager.getInstance().getPlayerManager().playerModVersion(event.getPlayer()).equals(StateManager.getInstance().getRequiredModVersion()))
+			{
+				try
+				{
+					LivingEntity targetmob = (LivingEntity)event.getRightClicked();
+					
+					if (targetmob == null)
+						return;
+					
+					ISoliniaLivingEntity solLivingEntityPlayer = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getPlayer());
+					if (solLivingEntityPlayer != null)
+					{
+						solLivingEntityPlayer.setEntityTarget(targetmob);
+						event.getPlayer().sendMessage("You have targetted: " + targetmob.getCustomName());
+						return;
+					}
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	@EventHandler
