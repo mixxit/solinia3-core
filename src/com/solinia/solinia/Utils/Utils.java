@@ -6429,8 +6429,8 @@ public class Utils {
 	private static void sendCharCreationNoMod(Player sender) {
 		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
 		BookMeta bookMeta = (BookMeta) book.getItemMeta();
-		bookMeta.setTitle("Character Creation");
-		bookMeta.setAuthor("");
+		bookMeta.setTitle("Creation");
+		bookMeta.setAuthor("Server");
 		
 		try
 		{
