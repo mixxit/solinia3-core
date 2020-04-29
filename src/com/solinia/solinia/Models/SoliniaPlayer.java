@@ -1251,6 +1251,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// Some spells auto target self, if they don't have a target try to do that
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
 			if (spell != null) {
+				if (!this.canUseSpell(spell))
+				{
+					getBukkitPlayer().sendMessage("* You cannot use this spell");
+					return;
+				}
+				
 				this.tryForceTargetIfNeededForSpell(spell);
 
 				if (getEntityTarget() == null) {
