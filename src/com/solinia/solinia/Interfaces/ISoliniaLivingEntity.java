@@ -33,7 +33,7 @@ import net.minecraft.server.v1_14_R1.Tuple;
 public interface ISoliniaLivingEntity  {
 	public LivingEntity getBukkitLivingEntity();
 
-	int getEffectiveLevel();
+	int getEffectiveLevel(boolean forSpells);
 
 	public void dropLoot();
 

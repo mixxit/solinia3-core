@@ -378,7 +378,7 @@ public class SoliniaEntitySpells {
 						}
 						
 						sp1_value = activeSpell.calcSpellEffectValue(activeEffect, sourceSoliniaLivingEntity.getBukkitLivingEntity(), getLivingEntity(),
-								sourceSoliniaLivingEntity.getEffectiveLevel(), activeSpell.getNumhits(), instrument_mod);
+								sourceSoliniaLivingEntity.getEffectiveLevel(true), activeSpell.getNumhits(), instrument_mod);
 					}
 					if (sourceEntity != null)
 					{
@@ -389,7 +389,7 @@ public class SoliniaEntitySpells {
 							instrument_mod = sourceSoliniaLivingEntity.getInstrumentMod(newSpell);
 						}
 						sp2_value = newSpell.calcSpellEffectValue(newEffect, sourceEntity, getLivingEntity(),
-								sourceSoliniaLivingEntity.getEffectiveLevel(), newSpell.getNumhits(), instrument_mod);
+								sourceSoliniaLivingEntity.getEffectiveLevel(true), newSpell.getNumhits(), instrument_mod);
 					}
 				} catch (CoreStateInitException e)
 				{
