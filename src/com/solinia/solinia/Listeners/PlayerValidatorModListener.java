@@ -26,7 +26,7 @@ public class PlayerValidatorModListener implements Listener {
 		// TODO Auto-generated constructor stub
 		plugin = solinia3CorePlugin;
 	}
-		
+	3	
 	@EventHandler
 	public void onPlayerValidatedModEvent(PlayerValidatedModEvent event) {
 		try {

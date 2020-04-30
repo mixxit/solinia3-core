@@ -202,7 +202,8 @@ public class Fellowship implements IPersistable {
 		System.out.println("fellowship: " + getId() + " lost a member: " + memberPlayer.getFullName());
 		sendMessage(memberPlayer, "has left the fellowship!");
 		
-		this.getMemberCharacterIds().remove(memberPlayer.getId());
+		this.getMemberCharacterIds().removeIf(s -> s == memberPlayer.getId()); 
+		
 		memberPlayer.setCharacterFellowshipId(0);
 
 		if (getOwnerCharacterId() == memberPlayer.getId()) 
