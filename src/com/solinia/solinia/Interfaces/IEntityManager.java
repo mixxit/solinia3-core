@@ -231,5 +231,9 @@ public interface IEntityManager {
 	void clearEntityEffectsOfType(LivingEntity livingEntity, SpellEffectType type, boolean forceDoNotLoopBardSpell,
 			boolean removeNonCombatEffects);
 
+	void setPetFocus(UUID uniqueId, int petFocus);
+
+	int getPetFocus(UUID uniqueId);
+
 
 }

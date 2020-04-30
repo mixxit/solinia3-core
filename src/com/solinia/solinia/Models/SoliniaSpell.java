@@ -5919,7 +5919,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public SpellEffect getSpellEffect(SpellEffectType spellEffectType) {
 		for(SpellEffect effect : getBaseSpellEffects())
 		{
-			if (effect.getSpellEffectType().equals(spellEffectType))
+			if (!effect.getSpellEffectType().equals(spellEffectType))
 				continue;
 			
 			return effect;

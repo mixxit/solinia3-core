@@ -16,6 +16,7 @@ import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaNPCEventHandler;
+import com.solinia.solinia.Models.SpellResistType;
 
 public interface ISoliniaNPC extends IPersistable {
 
@@ -289,5 +290,5 @@ public interface ISoliniaNPC extends IPersistable {
 
 	void setBanker(boolean isBanker);
 
-
+	SpellResistType getPetElementalTypeId();
 }

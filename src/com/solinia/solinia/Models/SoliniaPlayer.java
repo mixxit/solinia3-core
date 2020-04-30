@@ -3429,7 +3429,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand) {
+	public List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand) {
+		return getEquippedSoliniaItems(ignoreMainhand, false);
+	}
+	
+	@Override
+	public List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand, boolean excludeUnwearable) {
 		List<ISoliniaItem> items = new ArrayList<ISoliniaItem>();
 
 		try {
@@ -3440,7 +3445,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				private static final long serialVersionUID = 2958027330481470950L;
 
 				{
-					if (excludeMainHand == false) {
+					if (ignoreMainhand == false) {
 						add(getBukkitPlayer().getInventory().getItemInMainHand());
 					}
 					add(getBukkitPlayer().getInventory().getItemInOffHand());
@@ -3457,7 +3462,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 				if (item.isSpellscroll())
 					continue;
-
+				
 				items.add(item);
 
 				Integer augmentationId = ItemStackUtils.getAugmentationItemId(itemstack);
@@ -3538,8 +3543,36 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 
 		}
-
+		
+		if (excludeUnwearable)
+		{
+			List<ISoliniaItem> finalItems = new ArrayList<ISoliniaItem>();
+			
+			for (ISoliniaItem item : items)
+			{
+				if (!this.canUseItem(item).a())
+					continue;
+				
+				finalItems.add(item);
+			}
+			return finalItems;
+		}
+		
 		return items;
+	}
+	
+	@Override
+	public Tuple<Boolean,String> canUseItem(ISoliniaItem itemStack) {
+		return this.canUseItem(itemStack.asItemStack());
+	}
+	
+	@Override
+	public Tuple<Boolean,String> canUseItem(ItemStack itemStack) {
+		ISoliniaLivingEntity soliniaLivingEntity = this.getSoliniaLivingEntity();
+		if (soliniaLivingEntity == null)
+			return new Tuple<Boolean,String>(false,"Not an entity");
+		
+		return soliniaLivingEntity.canUseItem(itemStack);
 	}
 
 	@Override
@@ -5687,5 +5720,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public int getPetFocus(ISoliniaNPC npc) {
+		if (this.getBukkitPlayer() == null)
+			return 0;
+		try {
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)this.getBukkitPlayer());
+			SpellResistType type = npc.getPetElementalTypeId();
+			int bonus = solLivingEntity.getItemBonuses(SpellEffectType.PetPowerIncrease,type);
+			return bonus;
+		} catch (CoreStateInitException e) {
+		}
+		return 0;
 	}
 }

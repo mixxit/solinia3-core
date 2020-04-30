@@ -41,6 +41,7 @@ import com.solinia.solinia.Models.SpellbookPage;
 import com.solinia.solinia.Models.TrackingChoice;
 
 import net.md_5.bungee.api.ChatMessageType;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public int getId();
@@ -264,7 +265,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	boolean isInHotzone();
 
-	List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand);
+	List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand);
 
 	List<ISoliniaItem> getEquippedSoliniaItems();
 
@@ -638,4 +639,8 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	int getTier();
 	void tryCastFromItemInHand(ISoliniaItem item);
 	boolean isFeared();
+	public int getPetFocus(ISoliniaNPC npc);
+	Tuple<Boolean, String> canUseItem(ItemStack itemStack);
+	Tuple<Boolean, String> canUseItem(ISoliniaItem itemStack);
+	List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand, boolean excludeUnwearable);
 }

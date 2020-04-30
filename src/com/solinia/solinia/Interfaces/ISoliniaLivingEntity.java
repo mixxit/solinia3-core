@@ -485,4 +485,10 @@ public interface ISoliniaLivingEntity  {
 
 	public boolean isFeared();
 
+	Tuple<Boolean, String> canUseItem(ISoliniaItem itemStack);
+
+	List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand, boolean excludeUnwearable);
+
+	int getItemBonuses(SpellEffectType spellEffectType, SpellResistType filterResistType);
+
 }

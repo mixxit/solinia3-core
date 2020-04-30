@@ -65,9 +65,10 @@ public class CommandPet implements CommandExecutor {
 					}
 				}
 				
-				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+				ISoliniaLivingEntity petLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				if (solLivingEntity == null || solPlayer == null)
+				if (petLivingEntity == null || solPlayer == null)
 					return false;
 				
 				
@@ -76,18 +77,18 @@ public class CommandPet implements CommandExecutor {
 					String petcommand = args[0];
 					if (petcommand.equals("leave"))
 					{
-						if (solLivingEntity != null)
+						if (petLivingEntity != null)
 						{
-							solLivingEntity.clearHateList();
-							if (solLivingEntity.IsCorePet())
+							petLivingEntity.clearHateList();
+							if (petLivingEntity.IsCorePet())
 							{
 								solPlayer.killAllPets();
 							}
 							else
 							{
 								StateManager.getInstance().getEntityManager().removePet(player.getUniqueId(),
-										!solLivingEntity.isCharmed());
-								solLivingEntity.clearHateList();
+										!petLivingEntity.isCharmed());
+								petLivingEntity.clearHateList();
 							}
 							
 							player.setLastDamageCause(null);
@@ -96,9 +97,9 @@ public class CommandPet implements CommandExecutor {
 					
 					if (petcommand.equals("back"))
 					{
-						if (solLivingEntity != null)
+						if (petLivingEntity != null)
 						{
-							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(petLivingEntity.getNpcid());
 							if (npc != null)
 							if (npc.isPetControllable() == false)
 							{
@@ -107,7 +108,7 @@ public class CommandPet implements CommandExecutor {
 							}
 							
 							player.setLastDamageCause(null);
-							solLivingEntity.clearHateList();
+							petLivingEntity.clearHateList();
 							Utils.SendHint(player,HINT.PET_BACKINGOFFTGT,"",false);
 
 							EntityUtils.teleportSafely(pet,player.getLocation());
@@ -123,9 +124,9 @@ public class CommandPet implements CommandExecutor {
 						
 						LivingEntity targetentity = solPlayer.getEntityTarget();
 						if (targetentity != null && !targetentity.getUniqueId().equals(player.getUniqueId())) {
-							if (solLivingEntity != null)
+							if (petLivingEntity != null)
 							{
-								ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+								ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(petLivingEntity.getNpcid());
 								if (npc != null)
 								if (npc.isPetControllable() == false)
 								{
@@ -135,27 +136,27 @@ public class CommandPet implements CommandExecutor {
 							}
 							
 							EntityUtils.teleportSafely(pet,player.getLocation());
-							solLivingEntity.setAttackTarget(null);
+							petLivingEntity.setAttackTarget(null);
 
 							// Mez cancel target
 							Timestamp mezExpiry = StateManager.getInstance().getEntityManager().getMezzed(targetentity);
 			
 							if (mezExpiry != null) {
-								solLivingEntity.setAttackTarget(null);
+								petLivingEntity.setAttackTarget(null);
 								player.sendMessage("You cannot send your pet to attack a mezzed player");
 								return false;
 							}
 							
 							if (pet.getUniqueId().equals(targetentity.getUniqueId()))
 							{
-								solLivingEntity.setAttackTarget(null);
+								petLivingEntity.setAttackTarget(null);
 								player.sendMessage("You cannot send your pet to attack itself");
 								return false;
 							}
 
-							if (solLivingEntity.getOwnerEntity().getUniqueId().equals(targetentity.getUniqueId()))
+							if (petLivingEntity.getOwnerEntity().getUniqueId().equals(targetentity.getUniqueId()))
 							{
-								solLivingEntity.setAttackTarget(null);
+								petLivingEntity.setAttackTarget(null);
 								player.sendMessage("You cannot send your pet to attack you!");
 								return false;
 							}
@@ -163,14 +164,14 @@ public class CommandPet implements CommandExecutor {
 							ISoliniaPlayer tmpPlayer = SoliniaPlayerAdapter.Adapt(player);
 							if (tmpPlayer != null && tmpPlayer.isInGroup(targetentity))
 							{
-								solLivingEntity.setAttackTarget(null);
+								petLivingEntity.setAttackTarget(null);
 								player.sendMessage("You cannot send your pet to attack your group!");
 								return false;
 							}
 							
 							if (!pet.getUniqueId().equals(targetentity.getUniqueId()))
 							{
-								solLivingEntity.setAttackTarget(targetentity);
+								petLivingEntity.setAttackTarget(targetentity);
 								player.sendMessage("You send your pet to attack!");
 								return true;
 							}
@@ -185,9 +186,9 @@ public class CommandPet implements CommandExecutor {
 					
 					if (petcommand.equals("equip"))
 					{
-						if (solLivingEntity != null)
+						if (petLivingEntity != null)
 						{
-							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(solLivingEntity.getNpcid());
+							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(petLivingEntity.getNpcid());
 							if (npc != null)
 							if (npc.isPetControllable() == false)
 							{
@@ -202,16 +203,15 @@ public class CommandPet implements CommandExecutor {
 					if (petcommand.equals("hatelist"))
 					{
 						player.sendMessage("Hate List: ");
-						if (solLivingEntity != null)
+						if (petLivingEntity != null)
 						{
-							solLivingEntity.sendHateList(player);							
+							petLivingEntity.sendHateList(player);							
 						}
 					}
 				}
 				
-				player.sendMessage("Pet Name: " + pet.getName());
+				player.sendMessage("Pet Name: " + pet.getName() + " Pet Level: " + petLivingEntity.getEffectiveLevel(false));
 				player.sendMessage("Pet HP: " + pet.getHealth() + "/" + pet.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-				ISoliniaLivingEntity petLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
 				EntityInsentient entityhandle = (EntityInsentient) ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) pet).getHandle();
 				double dmg = entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
 				player.sendMessage("Pet DMG: " + dmg + " (Hand to Hand)");

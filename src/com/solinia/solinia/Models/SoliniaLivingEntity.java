@@ -2415,6 +2415,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO Auto-generated method stub
 		return getSpellBonuses(SpellEffectType.DivineAura) > 0;
 	}
+	
+	@Override
+	public Tuple<Boolean,String> canUseItem(ISoliniaItem itemStack) {
+		return this.canUseItem(itemStack.asItemStack());
+	}
 
 	@Override
 	public Tuple<Boolean,String> canUseItem(ItemStack itemStack) {
@@ -5657,6 +5662,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
+		if (this.IsCorePet())
+		{
+			try {
+				int petFocus = StateManager.getInstance().getEntityManager().getPetFocus(this.getBukkitLivingEntity().getUniqueId());
+				int levelBonus = (int) Math.floor(petFocus / 2);
+				return level+levelBonus;
+			} catch (CoreStateInitException e) {
+				return level;
+			}
+		}
+		
 		return level;
 	}
 
@@ -6564,6 +6580,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		double statHp = Utils.getStatMaxHP(getClassObj(), getEffectiveLevel(false), getStamina());
 		double itemHp = getItemHp();
 		double totalHp = statHp + itemHp;
+		
+		if (this.IsCorePet())
+		{
+			try {
+				int petFocus = StateManager.getInstance().getEntityManager().getPetFocus(this.getBukkitLivingEntity().getUniqueId());
+				int hpBonus = (int) Math.floor(petFocus / 2)*50;
+				totalHp += hpBonus;
+			} catch (CoreStateInitException e) {
+			}
+		}
+		
 		Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "getMaxHP called with statHp: " + statHp + " itemHp " + itemHp + " totalHp:" + totalHp);
 		try {
 			if (getNpcid() > 0) 
@@ -6894,12 +6921,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand) {
+		return getEquippedSoliniaItems(ignoreMainhand, false);
+	}
+	
+	
+	@Override
+	public List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand, boolean excludeUnwearable) {
 		// This includes augs as seperate items
 		if (isPlayer()) {
 			try {
 				Utils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity().getName(), "Found Player, seeking equipped soliniaitems");
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
-				return solplayer.getEquippedSoliniaItems(ignoreMainhand);
+				return solplayer.getEquippedSoliniaItems(ignoreMainhand, excludeUnwearable);
 			} catch (CoreStateInitException e) {
 
 			}
@@ -10630,6 +10663,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 	@Override
 	public int getItemBonuses(SpellEffectType spellEffectType) {
+		return getItemBonuses(spellEffectType,SpellResistType.RESIST_NONE);
+	}
+	
+	@Override
+	public int getItemBonuses(SpellEffectType spellEffectType, SpellResistType filterResistType) {
 		// This includes augs as seperate items
 		List<ISoliniaItem> equippedItems = this.getEquippedSoliniaItems();
 		
@@ -10645,7 +10683,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				if (TempItem == null)
 					continue;
-
+				
 				if (TempItem.getFocusEffectId() < 1) {
 					continue;
 				}
@@ -10656,6 +10694,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					spell = StateManager.getInstance().getConfigurationManager().getSpell(item.getFocusEffectId());
 					if (spell == null)
 						continue;
+					
+					if (!filterResistType.equals(SpellResistType.RESIST_NONE))
+					if (spell.isEffectInSpell(SpellEffectType.LimitResist))
+					{
+						try
+						{
+							// For spells like Pet Focus where the spell type has type limits (ie fire resist = fire pet)
+							int resistTypeId = spell.getSpellEffectBase(SpellEffectType.LimitResist);
+							if (Utils.getSpellResistType(resistTypeId) != filterResistType)
+								continue;
+						} catch (Exception e)
+						{
+							e.printStackTrace();							
+						}
+					}
 					
 					if (!spell.isEffectInSpell(spellEffectType))
 						continue;

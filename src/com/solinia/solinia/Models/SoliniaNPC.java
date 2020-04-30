@@ -1863,4 +1863,20 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	public void setBanker(boolean isBanker) {
 		this.isBanker = isBanker;
 	}
+
+	@Override
+	public SpellResistType getPetElementalTypeId() {
+		if (!this.isCorePet())
+			return SpellResistType.RESIST_NONE;
+		
+		if (this.name.startsWith("SumAir"))
+			return SpellResistType.RESIST_MAGIC;
+		if (this.name.startsWith("SumFire"))
+			return SpellResistType.RESIST_FIRE;
+		if (this.name.startsWith("SumWater"))
+			return SpellResistType.RESIST_COLD;
+		if (this.name.startsWith("SumEarth"))
+			return SpellResistType.RESIST_DISEASE;
+		return SpellResistType.RESIST_NONE;
+	}
 }

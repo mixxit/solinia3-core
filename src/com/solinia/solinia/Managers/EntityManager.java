@@ -82,6 +82,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, SoliniaEntitySpells> entitySpells = new ConcurrentHashMap<UUID, SoliniaEntitySpells>();
 	private ConcurrentHashMap<UUID, ActiveSongs> entitySinging = new ConcurrentHashMap<UUID, ActiveSongs>();
 	private ConcurrentHashMap<UUID, Timestamp> lastCallForAssist = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Integer> petFocus = new ConcurrentHashMap<UUID, Integer>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDoubleAttack = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastDisarm = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>> hateList = new ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>>();
@@ -999,10 +1000,24 @@ public class EntityManager implements IEntityManager {
 
 			if (npc.isCorePet() == false)
 				return null;
+
+			//
+			// PET FOCUS ITEM
+			// If owner is wearing a focus item at this point, and it is valid then we should record the mob is now
+			// part of this focus
 			
 			LivingEntity spawnedMob = (LivingEntity)MythicMobs.inst().getAPIHelper().spawnMythicMob("NPCID_" + npc.getId(), owner.getLocation());
-			ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt((LivingEntity)spawnedMob);
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(owner);
+
+			int petFocus = solplayer.getPetFocus(npc);
+			if (petFocus > 0)
+			{
+				StateManager.getInstance().getEntityManager().setPetFocus(spawnedMob.getUniqueId(),petFocus);
+				solplayer.getBukkitPlayer().sendMessage("Your pet focus shimmers with a bright light");
+				
+			}
+			
+			ISoliniaLivingEntity solPet = SoliniaLivingEntityAdapter.Adapt((LivingEntity)spawnedMob);
 			StateManager.getInstance().getEntityManager().setPet(owner.getUniqueId(),spawnedMob);
 			spawnedMob.setCustomName(solplayer.getForename() + "s_Pet");
 			spawnedMob.setCustomNameVisible(true);
@@ -2343,6 +2358,17 @@ public class EntityManager implements IEntityManager {
 	public List<UUID> getReverseEntityTarget(UUID uniqueId) {
 		return this.getEntityTargets().entrySet().stream().
 				filter(entry -> entry.getValue().equals(uniqueId)).map(Map.Entry::getKey).collect(Collectors.toList());
+	}
+
+	public int getPetFocus(UUID uuid) {
+		if (petFocus.get(uuid) == null)
+			return 0;
+		
+		return petFocus.get(uuid);
+	}
+
+	public void setPetFocus(UUID uuid, int petFocus) {
+		this.petFocus.put(uuid, petFocus);
 	}
 
 }
