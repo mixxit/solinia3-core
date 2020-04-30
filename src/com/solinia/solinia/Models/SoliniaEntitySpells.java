@@ -230,7 +230,9 @@ public class SoliniaEntitySpells {
 			return false;
 		
 		if (duration > 0)
+		{
 			putSlot(slot, activeSpell, true);
+		}
 
 		// System.out.println("Successfully queued spell: "+ soliniaSpell.getName());
 
@@ -497,7 +499,9 @@ public class SoliniaEntitySpells {
 		for (Entry<Short, SoliniaActiveSpell> slot : slots.entrySet())
 		{
 			if (slot.getValue().getSpellId() == spellId)
+			{
 				slots.remove(slot.getKey());
+			}
 		}
 		
 		try
@@ -678,9 +682,25 @@ public class SoliniaEntitySpells {
 	}
 
 	public void removeAllSpells(Plugin plugin, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {
+		removeAllSpellsExcept(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects, new ArrayList<SpellEffectType>());
+	}
+	
+	public void removeAllSpellsExcept(Plugin plugin, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects, List<SpellEffectType> exclude) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
-			removeSpells.add(activeSpell.getSpellId());
+			boolean isExcluded = false;
+			
+			for(SpellEffectType typeToExclude : exclude)
+			{
+				if (activeSpell.getSpell().getSpellEffectTypes().contains(typeToExclude))
+				{
+					isExcluded = true;
+					break;
+				}
+			}
+			
+			if (!isExcluded)
+				removeSpells.add(activeSpell.getSpellId());
 		}
 
 		for (Integer spellId : removeSpells) {
@@ -733,7 +753,6 @@ public class SoliniaEntitySpells {
 			System.out.println("Error: tried to put a spell [" + activeSpell.getSpellId() + "] in a slot [" + slot + "] that we already have! Cancelling...");
 			return;
 		}
-		
 		slots.put(slot, activeSpell);
 	}
 

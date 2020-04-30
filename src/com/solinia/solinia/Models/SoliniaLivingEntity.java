@@ -9414,7 +9414,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try
 		{
 			// Always clear all active spells when resetting
-			StateManager.getInstance().getEntityManager().removeSpellEffects(this.getBukkitLivingEntity().getUniqueId(), true, true);
+			// EXCEPT SOOTHE/LULL/PACIFY
+			List<SpellEffectType> typesToExclude = new ArrayList<SpellEffectType>();
+			typesToExclude.add(SpellEffectType.Lull);
+			typesToExclude.add(SpellEffectType.Harmony);
+			typesToExclude.add(SpellEffectType.ChangeFrenzyRad);
+			typesToExclude.add(SpellEffectType.ChangeAggro);
+			StateManager.getInstance().getEntityManager().removeSpellEffectsExcept(this.getBukkitLivingEntity().getUniqueId(), true, true, typesToExclude);
 		} catch (CoreStateInitException e)
 		{
 			

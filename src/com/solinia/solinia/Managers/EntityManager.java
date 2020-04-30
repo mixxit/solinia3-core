@@ -543,11 +543,20 @@ public class EntityManager implements IEntityManager {
 	@Override 
 	public void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects)
 	{
+		removeSpellEffectsExcept(uuid,forceDoNotLoopBardSpell,removeNonCombatEffects,new ArrayList<SpellEffectType>());
+	}
+	
+	@Override
+	public void removeSpellEffectsExcept(UUID uuid, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects,
+			List<SpellEffectType> exclude) {
+
+		// We should never do this again
+		// as we want to handle it in the removeAllSpells section of the entity spells
+		// - entitySpells.remove(uuid);
+
 		if (entitySpells.get(uuid) != null)
-			entitySpells.get(uuid).removeAllSpells(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects);
-		
-		entitySpells.remove(uuid);
-		
+			entitySpells.get(uuid).removeAllSpellsExcept(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects, exclude);
+h this 		
 		try
 		{
 			if (Bukkit.getEntity(uuid) != null && Bukkit.getEntity(uuid) instanceof Player)
@@ -556,8 +565,8 @@ public class EntityManager implements IEntityManager {
 		{
 			e.printStackTrace();
 		}
-
 	}
+
 	
 	@Override 
 	public void removeSpellEffectsOfSpellId(UUID uuid, int spellId, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects)
@@ -2335,4 +2344,5 @@ public class EntityManager implements IEntityManager {
 		return this.getEntityTargets().entrySet().stream().
 				filter(entry -> entry.getValue().equals(uniqueId)).map(Map.Entry::getKey).collect(Collectors.toList());
 	}
+
 }
