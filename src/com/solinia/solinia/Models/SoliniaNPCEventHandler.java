@@ -40,6 +40,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int requiresQuest = 0;
 	private int awardsQuest = 0;
 	private String requiresQuestFlag = null;
+	private boolean requiresMod = true;
 	private String awardsQuestFlag = null;
 	private boolean awardsClassSpell = false;
 	private int awardClassLootdropId = 0;
@@ -145,6 +146,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- awardsbind: " + ChatColor.GOLD + isAwardsBind() + ChatColor.RESET);
 		sender.sendMessage("- interactiontype: " + ChatColor.GOLD + getInteractiontype() + ChatColor.RESET);
 		sender.sendMessage("- requiresquest: " + ChatColor.GOLD + getRequiresQuest() + ChatColor.RESET);
+		sender.sendMessage("- requiresmod: " + ChatColor.GOLD + isRequiresMod() + ChatColor.RESET);
 		try
 		{
 			if (getAwardClassLootdropId() != 0) {
@@ -311,6 +313,9 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			if (!value.equals("GOOD") && !value.equals("NEUTRAL") && !value.equals("EVIL") && !value.equals("NONE"))
 				throw new InvalidNPCEventSettingException("Invalid alignment - must be GOOD NEUTRAL EVIL or NONE");
 			setRequiresAlignment(value);
+			break;
+		case "requiresmod":
+			setRequiresMod(Boolean.parseBoolean(value));
 			break;
 		case "requiresraceid":
 			int raceid = Integer.parseInt(value);
@@ -516,6 +521,15 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					return false;
 				}
 			}
+			
+			if (isRequiresMod()) {
+				if (!StateManager.getInstance().getPlayerManager().hasValidMod(triggerentity))
+				{
+					triggerentity.sendMessage("This requires the Solinia3-UI Mod and you do not have the correct version");
+					return false;
+				}
+			}
+			
 			if (getRequiresQuest() > 0) {
 				boolean foundQuest = false;
 				for (PlayerQuest playerQuest : player.getPlayerQuests()) {
@@ -1051,5 +1065,13 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 
 	public void setAwardsDespawn(boolean awardsDespawn) {
 		this.awardsDespawn = awardsDespawn;
+	}
+
+	public boolean isRequiresMod() {
+		return requiresMod;
+	}
+
+	public void setRequiresMod(boolean requiresMod) {
+		this.requiresMod = requiresMod;
 	}
 }
