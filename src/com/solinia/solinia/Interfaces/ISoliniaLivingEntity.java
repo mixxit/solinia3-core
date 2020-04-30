@@ -483,4 +483,6 @@ public interface ISoliniaLivingEntity  {
 	void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity, int npcEffectiveLevel)
 			throws CoreStateInitException;
 
+	public boolean isFeared();
+
 }

@@ -122,6 +122,18 @@ public class EntityUtils {
 		return false;
 	}
 
+	public static boolean isFeared(LivingEntity livingEntity)
+	{
+		try {
+			ISoliniaLivingEntity solLiv = SoliniaLivingEntityAdapter.Adapt(livingEntity);
+			return solLiv.isFeared();
+
+		} catch (CoreStateInitException e) {
+
+		}
+		
+		return false;
+	}
 	
 	public static boolean isMezzed(LivingEntity livingEntity)
 	{

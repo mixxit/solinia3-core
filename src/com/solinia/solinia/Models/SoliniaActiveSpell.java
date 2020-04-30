@@ -2104,14 +2104,13 @@ public class SoliniaActiveSpell {
 	private void applyFear(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		// run to a nearby mob
 		try {
+			StateManager.getInstance().getEntityManager().clearHateList(this.getLivingEntity().getUniqueId());
+			
 			if (!SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).isPlayer())
-				for (Entity nearbyEntity : getLivingEntity().getNearbyEntities(25, 25, 25)) {
-					StateManager.getInstance().getEntityManager().clearHateList(this.getLivingEntity().getUniqueId());
-
-					((CraftCreature) getLivingEntity()).getHandle().getNavigation().a(nearbyEntity.getLocation().getX(),
-							nearbyEntity.getLocation().getY(), nearbyEntity.getLocation().getZ(), 1.5);
-					return;
-				}
+			{
+				((CraftCreature) getLivingEntity()).getHandle().getNavigation().a(0,0,0, 1.5);
+				return;
+			}
 		} catch (CoreStateInitException e) {
 			//
 		}

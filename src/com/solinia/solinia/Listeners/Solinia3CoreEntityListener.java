@@ -152,6 +152,13 @@ public class Solinia3CoreEntityListener implements Listener {
 			Utils.CancelEvent(event);
 			return;
 		}
+		
+		if (EntityUtils.isFeared((LivingEntity)event.getEntity()))
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+
 
 		if (EntityUtils.isStunned((LivingEntity)event.getEntity()))
 		{
@@ -613,6 +620,12 @@ public class Solinia3CoreEntityListener implements Listener {
 		}
 
 		if (EntityUtils.isStunned(event.getPlayer()))
+		{
+			Utils.CancelEvent(event);
+			return;
+		}
+		
+		if (EntityUtils.isFeared(event.getPlayer()))
 		{
 			Utils.CancelEvent(event);
 			return;

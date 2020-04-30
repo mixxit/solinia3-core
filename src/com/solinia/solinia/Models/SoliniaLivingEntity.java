@@ -442,6 +442,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
+		// FEAR
+				if (this.isFeared()) {
+					if (this instanceof Player) {
+						((Player) this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
+								new TextComponent(ChatColor.GRAY + "* You are feared!"));
+					}
+					return;
+				}
+		
 		// MEZZED - only players can break mez
 		if (!this.isPlayer() && defender.isMezzed()) {
 			return;
@@ -3566,7 +3575,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (ca_target.getBukkitLivingEntity() == null || ca_target.getBukkitLivingEntity().isDead())
 			return;
 		
-		if (this.isFeigned() || /*this.isFeared() ||*/ this.isStunned() || this.isMezzed())
+		if (this.isFeigned() || this.isFeared() || this.isStunned() || this.isMezzed())
 			return;
 		
 		if(!this.isAttackAllowed(ca_target, false))
@@ -7566,6 +7575,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (other.isInvulnerable() || other.isDead())
 			return;
 		
+		if (this.isMezzed() || this.isFeared() || this.isFeigned() || this.hasSpellEffectType(SpellEffectType.Fear) || this.isStunned())
+			return;
+		
 		if (other instanceof Player)
 			if (((Player)other).getGameMode() != GameMode.SURVIVAL)
 				return;
@@ -7656,7 +7668,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
-		if (this.isMezzed() || this.isStunned())
+		if (this.isMezzed() || this.isFeared() || this.isStunned())
 			return false;
 		
 		List<UUID> removeUuids = new ArrayList<UUID>();
@@ -8788,7 +8800,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getNpcid() < 1)
 			return;
 		
-		if (this.isMezzed() || this.isStunned())
+		if (this.isMezzed() || this.isFeared() || this.isStunned())
 			return;
 
 		if (getBukkitLivingEntity().isDead())
@@ -9227,6 +9239,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isMezzed())
 			return false;
 
+		if (isFeared())
+			return false;
+		
 		// This seems to stop players from attacking players pets
 		// unless the pet is set to attack the player
 		if (isPlayer() && defender.getBukkitLivingEntity() instanceof Creature && defender.isCurrentlyNPCPet()) {
@@ -9298,6 +9313,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		return false;
+	}
+	
+	@Override
+	public boolean isFeared() {
+		return this.hasSpellEffectType(SpellEffectType.Fear);
 	}
 
 	@Override

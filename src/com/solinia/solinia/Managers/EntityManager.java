@@ -556,7 +556,7 @@ public class EntityManager implements IEntityManager {
 
 		if (entitySpells.get(uuid) != null)
 			entitySpells.get(uuid).removeAllSpellsExcept(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects, exclude);
-h this 		
+		
 		try
 		{
 			if (Bukkit.getEntity(uuid) != null && Bukkit.getEntity(uuid) instanceof Player)

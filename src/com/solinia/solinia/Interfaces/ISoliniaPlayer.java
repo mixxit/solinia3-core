@@ -637,4 +637,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	boolean getTradeskillSkillCheck(SkillType skillType, int trivial);
 	int getTier();
 	void tryCastFromItemInHand(ISoliniaItem item);
+	boolean isFeared();
 }

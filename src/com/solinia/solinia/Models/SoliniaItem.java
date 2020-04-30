@@ -541,6 +541,12 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			return false;
 		}
 		
+		if (EntityUtils.isFeared(player))
+		{
+			player.sendMessage("* You cannot do this while feared!");
+			return false;
+		}
+		
 		if (EntityUtils.isStunned(player))
 		{
 			player.sendMessage("* You cannot do this while stunned!");

@@ -1244,6 +1244,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				getBukkitPlayer().sendMessage("* You cannot use an ability while stunned!");
 				return;
 			}
+			
+			if (this.isFeared())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while feared!");
+				return;
+			}
 
 			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
 					"SoliniaSpell in hand: " + spellId + " target status: " + (getEntityTarget() == null));
@@ -1351,6 +1357,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (this.isStunned())
 			{
 				getBukkitPlayer().sendMessage("* You cannot use an ability while stunned!");
+				return;
+			}
+			
+			if (this.isFeared())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while feared!");
 				return;
 			}
 
@@ -1507,6 +1519,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				getBukkitPlayer().sendMessage("* You cannot use an ability while stunned!");
 				return;
 			}
+			
+			if (this.isFeared())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while feared!");
+				return;
+			}
 
 			startCasting(spell, getBukkitPlayer(), useMana, useReagents, ignoreProfessionAndLevel,
 					requiredWeaponSkillType);
@@ -1585,6 +1603,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (this.isStunned())
 			{
 				getBukkitPlayer().sendMessage("* You cannot do this while stunned!");
+				return;
+			}
+			
+			if (this.isFeared())
+			{
+				getBukkitPlayer().sendMessage("* You cannot do this while feared!");
 				return;
 			}
 			
@@ -1690,6 +1714,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (this.isStunned())
 			{
 				getBukkitPlayer().sendMessage("* You cannot do this while stunned!");
+				return;
+			}
+			
+			if (this.isFeared())
+			{
+				getBukkitPlayer().sendMessage("* You cannot do this while feared!");
 				return;
 			}
 
@@ -1896,6 +1926,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (this.isStunned())
 			{
 				getBukkitPlayer().sendMessage("* You cannot use an ability while stunned!");
+				return;
+			}
+			
+			if (this.isFeared())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while feared!");
 				return;
 			}
 
@@ -3049,6 +3085,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		return false;
+	}
+	
+	@Override
+	public boolean isFeared() {
+		return this.hasSpellEffectType(SpellEffectType.Fear);
 	}
 
 	@Override
