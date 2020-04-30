@@ -442,7 +442,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (defender.getBukkitLivingEntity() == null || defender.getBukkitLivingEntity().isDead())
 					return;
 				
-				ISoliniaLivingEntity damager = SoliniaLivingEntityAdapter.Adapt((Player)(projectile.getShooter()));
+				ISoliniaLivingEntity damager = SoliniaLivingEntityAdapter.Adapt((LivingEntity)projectile.getShooter());
 				if (damager == null || damager.getBukkitLivingEntity().isDead())
 					return;
 				
