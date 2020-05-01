@@ -5597,8 +5597,19 @@ public class Utils {
 		Utils.DebugLog("Utils", "RemoveEntity", entity.getName(), "Removing entity via caller: " + caller + " " +entity.getName());
 		if (entity instanceof Player)
 			return;
-
-		entity.remove();
+		
+		final UUID entityUUID = entity.getUniqueId();
+		
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
+				new Runnable() {
+					public void run() {
+						Entity entity = Bukkit.getEntity(entityUUID);
+						if (entity == null)
+							return;
+						
+						entity.remove();
+					}
+		});
 	}
 
 	public static String getHttpUrlAsString(String urlLink) {

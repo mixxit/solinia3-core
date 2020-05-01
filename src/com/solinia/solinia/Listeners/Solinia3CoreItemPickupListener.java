@@ -57,7 +57,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            		// this is an item that is broken       
 	            		e.getPlayer().sendMessage("This item is no longer implemented");
 	            		Utils.CancelEvent(e);
-	            		e.getItem().remove();
+	            		Utils.RemoveEntity(e.getItem(),"item no longer exists");
 	            	}
 	            }
         	} catch (CoreStateInitException eOxy)

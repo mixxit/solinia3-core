@@ -39,7 +39,7 @@ public class Solinia3CoreVehicleListener implements Listener {
 							if (entity == null)
 								return;
 							
-							entity.remove();
+							Utils.RemoveEntity(entity,"on vehicle enter event");
 						}
 					});
 					

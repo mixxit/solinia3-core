@@ -603,7 +603,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			}
 			
 			if (this.isAwardsDespawn() == true)
-				npcLivingEntity.remove();
+				Utils.RemoveEntity(npcLivingEntity,"awardsdespawn");
 			
 			// We can support item hand in rewards multiple times without
 			// a quest flag

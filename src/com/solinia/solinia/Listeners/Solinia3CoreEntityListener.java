@@ -389,7 +389,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (entityDamageByEntityEvent.getDamager() instanceof Projectile)
 		{
 			Projectile entity = (Projectile)entityDamageByEntityEvent.getDamager();
-			entity.remove();
+			Utils.RemoveEntity(entity,"cancel arrow ede");
 		}
 		
 		
