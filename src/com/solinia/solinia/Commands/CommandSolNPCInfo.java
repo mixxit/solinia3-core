@@ -135,17 +135,6 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			if(player.isOp())
 			player.sendMessage("Can i see you: "+ solLivingEntity.checkLosFN(SoliniaLivingEntityAdapter.Adapt(player)));
 			
-			try
-			{
-				EntityInsentient nmsEntity = (EntityInsentient) ((CraftEntity) solLivingEntity.getBukkitLivingEntity()).getHandle();
-		        player.sendMessage("goalSelector: " + nmsEntity.goalSelector.getClass().getName());
-		        player.sendMessage("targetSelector: " + nmsEntity.targetSelector.getClass().getName());
-		        
-			} catch (Exception e)
-			{
-				
-			}
-			
 		} catch (CoreStateInitException e)
 		{
 			player.sendMessage("SoliniaNPCInfo: " + "Could not fetch information");

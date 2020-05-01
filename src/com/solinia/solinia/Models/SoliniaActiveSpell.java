@@ -2106,11 +2106,13 @@ public class SoliniaActiveSpell {
 		try {
 			StateManager.getInstance().getEntityManager().clearHateList(this.getLivingEntity().getUniqueId());
 			
+			/* disable potentially non-thread safe
 			if (!SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).isPlayer())
 			{
 				((CraftCreature) getLivingEntity()).getHandle().getNavigation().a(0,0,0, 1.5);
 				return;
 			}
+			*/
 		} catch (CoreStateInitException e) {
 			//
 		}
