@@ -83,7 +83,6 @@ import com.solinia.solinia.Timers.PlayerMoveCheckTimer;
 import com.solinia.solinia.Timers.PlayerRegenTickTimer;
 import com.solinia.solinia.Timers.PlayerTickTimer;
 import com.solinia.solinia.Timers.PlayerTrackingTimer;
-import com.solinia.solinia.Timers.RegionExtentsDynmapTimer;
 import com.solinia.solinia.Timers.SoliniaLivingEntityPassiveEffectTimer;
 import com.solinia.solinia.Timers.SoliniaLivingEntityUpdateTargetWindowTimer;
 import com.solinia.solinia.Timers.SoliniaZonesDynmapTimer;
@@ -125,7 +124,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private EffectManager effectManager;
 	private AttendenceXpBonusTimer attendenceXpBonusTimer;
 	private ClientVersionTimer clientVersionTimer;
-	private RegionExtentsDynmapTimer regionExtentsDynmapTimer;
 	private SoliniaZonesDynmapTimer soliniaZonesDynmapTimer;
 	private PlayerMoveCheckTimer playerMoveCheckTimer;
 	private PlayerTrackingTimer playerTrackingTimer;
@@ -534,10 +532,6 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		clientVersionTimer.runTaskTimer(this, 30 * 20L, 30 * 20L);
 
 		if (dynmap != null) {
-			regionExtentsDynmapTimer = new RegionExtentsDynmapTimer();
-			// every 30 minutes
-			regionExtentsDynmapTimer.runTaskTimer(this, 5 * 20L, (60 * 30) * 20L);
-
 			soliniaZonesDynmapTimer = new SoliniaZonesDynmapTimer();
 			// every 5 seconds
 			soliniaZonesDynmapTimer.runTaskTimer(this, 5 * 20L, 5 * 20L);
