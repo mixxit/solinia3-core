@@ -82,7 +82,7 @@ public class CommandCharacter implements CommandExecutor {
 					if (character.getBase64BankContents() != null && character.getBase64BankContents().length() > 0)
 						bank = "[BANK]";
 					
-					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " LVL: " + character.getLevel() + " " + locked + " " + bank + ChatColor.RESET;
+					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " LVL: " + character.getActualLevel() + " " + locked + " " + bank + ChatColor.RESET;
 					
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getId();

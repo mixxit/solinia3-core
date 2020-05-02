@@ -13,7 +13,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.earth2me.essentials.Essentials;
@@ -2302,14 +2301,14 @@ public class ConfigurationManager implements IConfigurationManager {
 			
 			if (metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()) == null)
 				metrics.classLevelDistribution.put(solChar.getClassObj().getName().toUpperCase(),new HashMap<Integer,Integer>());
-			if (metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).get(solChar.getLevel()) == null)
-				metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).put(solChar.getLevel(),0);
-			metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).put(solChar.getLevel(),metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).get(solChar.getLevel())+1);
+			if (metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).get(solChar.getActualLevel()) == null)
+				metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).put(solChar.getActualLevel(),0);
+			metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).put(solChar.getActualLevel(),metrics.classLevelDistribution.get(solChar.getClassObj().getName().toUpperCase()).get(solChar.getActualLevel())+1);
 			
-			if (metrics.levelDistribution.get(solChar.getLevel()) == null)
-				metrics.levelDistribution.put(solChar.getLevel(),0);
+			if (metrics.levelDistribution.get(solChar.getActualLevel()) == null)
+				metrics.levelDistribution.put(solChar.getActualLevel(),0);
 			
-			metrics.levelDistribution.put(solChar.getLevel(), metrics.levelDistribution.get(solChar.getLevel())+1);
+			metrics.levelDistribution.put(solChar.getActualLevel(), metrics.levelDistribution.get(solChar.getActualLevel())+1);
 
 			if (metrics.tierDistribution.get(solChar.getTier()) == null)
 				metrics.tierDistribution.put(solChar.getTier(),0);

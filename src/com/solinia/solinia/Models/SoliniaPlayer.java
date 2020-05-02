@@ -152,7 +152,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public int getTier() {
-		int tier = (int) Math.floor((this.getLevel() / 10)+1);
+		int tier = (int) Math.floor((this.getActualLevel() / 10)+1);
 		if (tier < 1)
 			tier = 1;
 		return tier;
@@ -339,7 +339,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public int getLevel() {
+	public int getActualLevel() {
 		return PlayerUtils.getLevelFromExperience(this.experience);
 	}
 
@@ -758,11 +758,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		}
 
-		Double level = (double) getLevel();
+		Double level = (double) getActualLevel();
 
 		this.experience = experience;
 
-		Double newlevel = (double) getLevel();
+		Double newlevel = (double) getActualLevel();
 
 		Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));
 		Double xpneededfornextlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 1));
@@ -939,7 +939,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public int getSkillCap(SkillType skillType) {
-		return EntityUtils.getSkillCap(skillType, getClassObj(), getLevel(), getSpecialisation(),
+		return EntityUtils.getSkillCap(skillType, getClassObj(), getActualLevel(), getSpecialisation(),
 				this.getSkill(skillType).getValue());
 	}
 
@@ -1739,7 +1739,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			if (item.getMinLevel() > getLevel()) {
+			if (item.getMinLevel() > getActualLevel()) {
 				getBukkitPlayer().sendMessage("This item requires minimum level: " + item.getMinLevel());
 				return;
 			}
@@ -2120,7 +2120,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			} else {
 				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Found profession");
 				if (foundlevel > 0) {
-					Double level = (double) getLevel();
+					Double level = (double) getActualLevel();
 					if (level < foundlevel) {
 						Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Missing needed level");
 						player.sendMessage(ChatColor.GRAY + " * This effect requires level " + foundlevel);
@@ -2388,7 +2388,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (playerSkill != null)
 				act_skill = playerSkill.getValue();
 
-			act_skill += getLevel();
+			act_skill += getActualLevel();
 
 			// todo: spell specialisation
 			int specialisation = 0;
@@ -2596,7 +2596,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public List<ISoliniaAARank> getBuyableAARanks() {
 		List<ISoliniaAARank> buyableRanks = new ArrayList<ISoliniaAARank>();
-		if (getLevel() < 50)
+		if (getActualLevel() < 50)
 			return buyableRanks;
 
 		try {
@@ -2636,7 +2636,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return false;
 		}
 
-		if (rank.getLevel_req() > getLevel()) {
+		if (rank.getLevel_req() > getActualLevel()) {
 			return false;
 		}
 
@@ -2804,7 +2804,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getClassObj().canDodge() == false)
 			return false;
 
-		if (getClassObj().getDodgelevel() > getLevel())
+		if (getClassObj().getDodgelevel() > getActualLevel())
 			return false;
 
 		return true;
@@ -2818,7 +2818,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getClassObj().canRiposte() == false)
 			return false;
 
-		if (getClassObj().getRipostelevel() > getLevel())
+		if (getClassObj().getRipostelevel() > getActualLevel())
 			return false;
 
 		return true;
@@ -2832,7 +2832,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getClassObj().canDoubleAttack() == false)
 			return false;
 
-		if (getClassObj().getDoubleattacklevel() > getLevel())
+		if (getClassObj().getDoubleattacklevel() > getActualLevel())
 			return false;
 
 		return true;
@@ -2846,7 +2846,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getClassObj().canDisarm() == false)
 			return false;
 
-		if (getClassObj().getDisarmLevel() > getLevel())
+		if (getClassObj().getDisarmLevel() > getActualLevel())
 			return false;
 
 		return true;
@@ -2883,8 +2883,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		int chance = getSkill(SkillType.DoubleAttack).getValue();
 		chance += 20;
-		if (getLevel() > 35) {
-			chance += getLevel();
+		if (getActualLevel() > 35) {
+			chance += getActualLevel();
 		}
 		chance /= 5;
 
@@ -2898,7 +2898,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		int chance = getSkill(SkillType.SafeFall).getValue();
 		chance += 10;
-		chance += getLevel();
+		chance += getActualLevel();
 
 		return Utils.RandomBetween(1, 500) <= chance;
 	}
@@ -2910,7 +2910,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (getClassObj().canSafeFall() == false)
 			return false;
 
-		if (getClassObj().getSafefalllevel() > getLevel())
+		if (getClassObj().getSafefalllevel() > getActualLevel())
 			return false;
 
 		return true;
@@ -3889,7 +3889,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (getSkill(SkillType.BindWound).getValue() > 200) {
 				if (className.equals("MONK") || className.equals("BEASTLORD"))
 					percent_base = 70;
-				else if ((getLevel() > 50)
+				else if ((getActualLevel() > 50)
 						&& (className.equals("WARRIOR") || (className.equals("ROGUE") || (className.equals("CLERIC")))))
 					percent_base = 70;
 			}
@@ -4779,7 +4779,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		for (SoliniaSpellClass spellClass : spell.getAllowedClasses()) {
 			if (spellClass.getClassname().toUpperCase().equals(this.getClassObj().getName().toUpperCase())
-					&& getLevel() >= spellClass.getMinlevel()) {
+					&& getActualLevel() >= spellClass.getMinlevel()) {
 				return true;
 			}
 		}
@@ -5145,10 +5145,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (this.isDeleted())
 				return false;
 			
-			if (getLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
+			if (getActualLevel() > StateManager.getInstance().getConfigurationManager().getMaxLevel())
 				return false;
 
-			if (getLevel() < 50)
+			if (getActualLevel() < 50)
 				if (hasAaRanks())
 					return false;
 
@@ -5211,7 +5211,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				trackingChoice.Name = npc.getName();
 				// cast to int as its never more than skill limit of tracking
 				trackingChoice.Distance = (int) msl.getLocation().distance(BukkitAdapter.adapt(this.getBukkitPlayer().getLocation()));
-				trackingChoice.Color = Utils.getLevelCon(this.getLevel(), npc.getLevel()).name();
+				trackingChoice.Color = Utils.getLevelCon(this.getActualLevel(), npc.getLevel()).name();
 				trackingChoice.Id = msl.getName();
 				
 				tracking_list.add(trackingChoice);
@@ -5291,14 +5291,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaPlayer memberPlayer = StateManager.getInstance().getConfigurationManager().getCharacterById(memberId);
 				if (memberPlayer == null)
 					continue;
-				levelRanges.add(memberPlayer.getLevel());
+				levelRanges.add(memberPlayer.getActualLevel());
 			}
 			
 			Tuple<Integer,Integer> lowhighlvl = Utils.GetGroupExpMinAndMaxLevel(levelRanges);
 			int ilowlvl = lowhighlvl.a();
 			int ihighlvl = lowhighlvl.b();
 			
-			if (getLevel() < ilowlvl || getLevel() > ihighlvl) {
+			if (getActualLevel() < ilowlvl || getActualLevel() > ihighlvl) {
 				// Only award player the experience
 				// as they are out of range of the group
 				return;
@@ -5542,7 +5542,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				List<Integer> levelRanges = new ArrayList<Integer>();
 				for (UUID member : group.getMembers()) {
 					ISoliniaPlayer playerchecked = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(member));
-					int checkedlevel = playerchecked.getLevel();
+					int checkedlevel = playerchecked.getActualLevel();
 					levelRanges.add(checkedlevel);
 				}
 				
@@ -5550,10 +5550,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				int ilowlvl = lowhighlvl.a();
 				int ihighlvl = lowhighlvl.b();
 
-				if (getLevel() < ilowlvl || getLevel() > ihighlvl) {
+				if (getActualLevel() < ilowlvl || getActualLevel() > ihighlvl) {
 					// Only award player the experience
 					// as they are out of range of the group
-					if (livingEntity.getEffectiveLevel(false) >= Utils.getMinLevelFromLevel(getLevel())) {
+					if (livingEntity.getEffectiveLevel(false) >= Utils.getMinLevelFromLevel(getActualLevel())) {
 						// Due to being out of range they get the full xp
 						increasePlayerExperience(experience, true, true);
 						if (getFellowship() != null)
@@ -5584,7 +5584,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						Player tgtplayer = Bukkit.getPlayer(member);
 						if (tgtplayer != null) {
 							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);
-							int tgtlevel = tgtsolplayer.getLevel();
+							int tgtlevel = tgtsolplayer.getActualLevel();
 
 							if (tgtlevel < ilowlvl || tgtlevel > ihighlvl) {
 								tgtplayer.sendMessage(ChatColor.GRAY
@@ -5599,7 +5599,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							}
 
 							if (tgtplayer.getLocation().distance(getBukkitPlayer().getLocation()) <= Utils.MaxRangeForExperience) {
-								if (livingEntity.getEffectiveLevel(false) >= (Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()))) {
+								if (livingEntity.getEffectiveLevel(false) >= (Utils.getMinLevelFromLevel(tgtsolplayer.getActualLevel()))) {
 									// they split the overall experience across the group size
 									
 									// add 10% bonus per player
@@ -5641,7 +5641,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 				}
 			} else {
-				if (livingEntity.getEffectiveLevel(false) >= (Utils.getMinLevelFromLevel(getLevel()))) {
+				if (livingEntity.getEffectiveLevel(false) >= (Utils.getMinLevelFromLevel(getActualLevel()))) {
 					// they are on their own so get the full amount of xp
 					increasePlayerExperience(experience, true, true);
 					

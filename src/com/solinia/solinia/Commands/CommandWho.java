@@ -57,7 +57,7 @@ public class CommandWho implements CommandExecutor {
 	        	
 	        	try {
 		            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(currentplayer);
-		        	int lvl = (int) Math.floor(solplayer.getLevel());
+		        	int lvl = (int) Math.floor(solplayer.getActualLevel());
 		        	
 		        	String racename = "UNKNOWN";
 		        	String classname = "UNKNOWN";
@@ -175,7 +175,7 @@ public class CommandWho implements CommandExecutor {
 				try {
 					solplayer = SoliniaPlayerAdapter.Adapt(currentplayer);
 				
-		        	int lvl = (int) Math.floor(solplayer.getLevel());
+		        	int lvl = (int) Math.floor(solplayer.getActualLevel());
 		        	
 		        	String racename = "UNKNOWN";
 		        	String classname = "UNKNOWN";

@@ -58,9 +58,9 @@ public class CommandSpecialise implements CommandExecutor {
             	return false;
             }
 
-            if (solplayer.getClassObj().getSpecialiselevel() > solplayer.getLevel())
+            if (solplayer.getClassObj().getSpecialiselevel() > solplayer.getActualLevel())
             {
-            	player.sendMessage("You cannot specialise until level: " + solplayer.getLevel());
+            	player.sendMessage("You cannot specialise until level: " + solplayer.getActualLevel());
             	return false;
             }
             

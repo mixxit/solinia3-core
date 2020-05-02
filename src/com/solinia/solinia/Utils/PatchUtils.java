@@ -3,14 +3,8 @@ package com.solinia.solinia.Utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
-import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Interfaces.ISoliniaPlayer;
-import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.NBTTagList;
 import net.minecraft.server.v1_14_R1.TileEntityChest;

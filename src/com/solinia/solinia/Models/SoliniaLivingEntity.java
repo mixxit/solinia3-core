@@ -72,7 +72,6 @@ import net.minecraft.server.v1_14_R1.Tuple;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
-	private int level = 1;
 	private int actualLevel = 1;
 	private int npcid;
 
@@ -235,7 +234,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		boolean isnpccaster = false;
 
 		if (caster instanceof Player) {
-			casterlevel = SoliniaPlayerAdapter.Adapt((Player) caster).getLevel();
+			casterlevel = SoliniaPlayerAdapter.Adapt((Player) caster).getActualLevel();
 		} else {
 			if (Utils.isLivingEntityNPC(caster)) {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) caster);
@@ -248,7 +247,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int victimlevel = 1;
 
 		if (getBukkitLivingEntity() instanceof Player) {
-			victimlevel = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).getLevel();
+			victimlevel = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity()).getActualLevel();
 			targetresist = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity())
 					.getResist(Utils.getSpellResistType(spell.getResisttype()));
 		} else {
@@ -2517,7 +2516,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc == null)
 				return;
 
-			setEffectiveLevel(npc.getLevel());
 			setActualLevel(npc.getLevel());
 			setNpcid(npc.getId());
 		} catch (CoreStateInitException e) {
@@ -2525,6 +2523,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 	
+	@Override
+	public void setActualLevel(int level) {
+		this.actualLevel = level;
+	}
+
 	@Override
 	public FactionStandingType getNPCvsNPCReverseFactionCon(ISoliniaLivingEntity iOther)
 	{
@@ -5139,14 +5142,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			9, 9, 9, 9, 9, 10, 10, 10, 10, 10,   // 31-40
 			10, 11, 11, 11, 11, 11, 11, 12, 12 }; // 41-49
 		if (getClassObj() != null && getClassObj().getName().equals("MONK")) {
-			if (level > 62)
+			if (this.getActualLevel() > 62)
 				return 15;
-			return mnk_dmg[level];
+			return mnk_dmg[this.getActualLevel()];
 		}
 		else if (getClassObj() != null && getClassObj().getName().equals("BEASTLORD")) {
-			if (level > 49)
+			if (this.getActualLevel() > 49)
 				return 13;
-			return bst_dmg[level];
+			return bst_dmg[this.getActualLevel()];
 		}
 		return 2;
 	}
@@ -5654,9 +5657,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 				if (!forSpells)
 				{
-					return solPlayer.getLevel();
+					return solPlayer.getActualLevel();
 				} else {
-					int level = solPlayer.getLevel();
+					int level = solPlayer.getActualLevel();
 					level += this.getAABonuses(SpellEffectType.CastingLevel) + this.getSpellBonuses(SpellEffectType.CastingLevel) + this.getItemBonuses(SpellEffectType.CastingLevel);
 					return level;
 					
@@ -5671,21 +5674,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			try {
 				int petFocus = StateManager.getInstance().getEntityManager().getPetFocus(this.getBukkitLivingEntity().getUniqueId());
 				int levelBonus = (int) Math.floor(petFocus / 2);
-				return level+levelBonus;
+				return this.getActualLevel()+levelBonus;
 			} catch (CoreStateInitException e) {
-				return level;
+				return this.getActualLevel();
 			}
 		}
 		
-		return level;
+		return this.getActualLevel();
 	}
 
+	
 	@Override
-	public void setEffectiveLevel(int level) {
-		if (isPlayer())
-			return;
-
-		this.level = level;
+	public int getActualLevel() {
+		if (this.isPlayer() && this.getPlayer() != null)
+			return this.getPlayer().getActualLevel();
+		
+		return this.actualLevel;
 	}
 
 	@Override
@@ -10738,17 +10742,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public int getActualLevel() {
-		return actualLevel;
-	}
-
-	@Override
-	public void setActualLevel(int actualLevel) {
-		this.actualLevel = actualLevel;
-	}
-
-	@Override
 	public void removeAggro(UUID uniqueId) {
 		removeFromHateList(uniqueId);
 	}
+
 }

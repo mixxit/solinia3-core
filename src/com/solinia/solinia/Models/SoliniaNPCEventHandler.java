@@ -644,7 +644,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				}
 				
 				// We can also awards spells
-				if (player != null && player.getClassObj() != null && this.isAwardsClassSpell() && player.getLevel() > 0)
+				if (player != null && player.getClassObj() != null && this.isAwardsClassSpell() && player.getActualLevel() > 0)
 				{
 					ISoliniaLootTable table = StateManager.getInstance().getConfigurationManager().getLootTable(player.getClassObj().getDropSpellsLootTableId());
 					List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();
@@ -672,7 +672,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 							if (spell == null)
 								continue;
 							
-							if (spell.getMinLevelClass(player.getClassObj().getName().toUpperCase()) > player.getLevel())
+							if (spell.getMinLevelClass(player.getClassObj().getName().toUpperCase()) > player.getActualLevel())
 								continue;
 							
 							entries.add(dropentry);
@@ -824,27 +824,27 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			System.out.println("Awarding randomisedgear with awardquestflag: " + getAwardsQuestFlag());
 
 			int playertier = 1;
-			if (player.getLevel() >= 1 && player.getLevel() < 11)
+			if (player.getActualLevel() >= 1 && player.getActualLevel() < 11)
 				playertier = 1;
-			if (player.getLevel() >= 11 && player.getLevel() < 21)
+			if (player.getActualLevel() >= 11 && player.getActualLevel() < 21)
 				playertier = 2;
-			if (player.getLevel() >= 21 && player.getLevel() < 31)
+			if (player.getActualLevel() >= 21 && player.getActualLevel() < 31)
 				playertier = 3;
-			if (player.getLevel() >= 31 && player.getLevel() < 41)
+			if (player.getActualLevel() >= 31 && player.getActualLevel() < 41)
 				playertier = 4;
-			if (player.getLevel() >= 41 && player.getLevel() < 51)
+			if (player.getActualLevel() >= 41 && player.getActualLevel() < 51)
 				playertier = 5;
-			if (player.getLevel() >= 51 && player.getLevel() < 61)
+			if (player.getActualLevel() >= 51 && player.getActualLevel() < 61)
 				playertier = 6;
-			if (player.getLevel() >= 61 && player.getLevel() < 71)
+			if (player.getActualLevel() >= 61 && player.getActualLevel() < 71)
 				playertier = 7;
-			if (player.getLevel() >= 71 && player.getLevel() < 81)
+			if (player.getActualLevel() >= 71 && player.getActualLevel() < 81)
 				playertier = 8;
-			if (player.getLevel() >= 81 && player.getLevel() < 91)
+			if (player.getActualLevel() >= 81 && player.getActualLevel() < 91)
 				playertier = 9;
-			if (player.getLevel() >= 91 && player.getLevel() < 101)
+			if (player.getActualLevel() >= 91 && player.getActualLevel() < 101)
 				playertier = 10;
-			if (player.getLevel() >= 101 && player.getLevel() < 111)
+			if (player.getActualLevel() >= 101 && player.getActualLevel() < 111)
 				playertier = 11;
 
 			try {
@@ -859,7 +859,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				for (int itemid : items) {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
 					final String playerName = player.getBukkitPlayer().getName();
-					final int minLevel = player.getLevel();
+					final int minLevel = player.getActualLevel();
 					final int finalitemid = itemid;
 					if (item != null) {
 

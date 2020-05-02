@@ -87,7 +87,7 @@ public class Fellowship implements IPersistable {
 					continue;
 				
 				// Out of range for xp
-				if (character.getLevel() < ilowlvl)
+				if (character.getActualLevel() < ilowlvl)
 					continue;
 				
 				if (character.getPendingXp() >= PlayerUtils.getMaxFellowshipXP())

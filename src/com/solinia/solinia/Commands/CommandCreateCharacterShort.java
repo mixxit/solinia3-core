@@ -13,10 +13,6 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.Bond;
-import com.solinia.solinia.Models.Flaw;
-import com.solinia.solinia.Models.Ideal;
-import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 

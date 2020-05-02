@@ -459,7 +459,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		try
 		{
 			// TODO Auto-generated method stub
-			int victimlevel = SoliniaPlayerAdapter.Adapt((Player) victim).getLevel();
+			int victimlevel = SoliniaPlayerAdapter.Adapt((Player) victim).getActualLevel();
 			int targetresist = SoliniaPlayerAdapter.Adapt((Player) victim).getResist(SpellResistType.RESIST_FIRE);
 	
 			int resist_chance = 0;

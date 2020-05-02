@@ -76,7 +76,7 @@ public class CommandSolPlayerInfo implements CommandExecutor {
 					charclass = character.getClassObj().getName();
 				}
 				
-				String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getLevel() + " " + locked + ChatColor.RESET;
+				String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getActualLevel() + " " + locked + ChatColor.RESET;
 				
 				TextComponent tc2 = new TextComponent();
 				String changetext = "/copycharacter " + character.getId() + " " + sender.getName();

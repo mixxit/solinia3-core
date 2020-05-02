@@ -26,7 +26,7 @@ public class CommandToggleAA implements CommandExecutor {
 	            	return false;	
 	            }
 	            
-	            if (solplayer.getLevel() >= 50)
+	            if (solplayer.getActualLevel() >= 50)
 	            {
 		            if (solplayer.getAapct() > 0)
 		            {

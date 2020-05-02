@@ -76,7 +76,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	void setExperience(Double experience);
 
-	public int getLevel();
+	public int getActualLevel();
 
 	public int getRaceId();
 

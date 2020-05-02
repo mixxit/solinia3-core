@@ -870,7 +870,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					}
 				}
 				
-				if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
+				if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
 					Utils.CancelEvent(event);
 					Utils.SendHint(event.getPlayer().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 					return;
@@ -1125,7 +1125,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (ItemStackUtils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					
-					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
+					if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
 						Utils.CancelEvent(event);
 						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
@@ -1174,7 +1174,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (ItemStackUtils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
-					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
+					if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
 						Utils.CancelEvent(event);
 						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
@@ -1227,7 +1227,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (ItemStackUtils.IsSoliniaItem(itemstack) && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					
-					if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
+					if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
 						Utils.CancelEvent(event);
 						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
@@ -1488,9 +1488,9 @@ public class Solinia3CorePlayerListener implements Listener {
 					}
 				}
 				
-				if (craftEntry.getMinLevel() > solPlayer.getLevel())
+				if (craftEntry.getMinLevel() > solPlayer.getActualLevel())
 				{
-					humanEntity.sendMessage("You have insufficient level to produce " + craftEntry.getRecipeName() + " Required Level: " + craftEntry.getMinLevel() + " Your Level: " + solPlayer.getLevel());
+					humanEntity.sendMessage("You have insufficient level to produce " + craftEntry.getRecipeName() + " Required Level: " + craftEntry.getMinLevel() + " Your Level: " + solPlayer.getActualLevel());
 					return false;
 				}
 			}
@@ -2154,7 +2154,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (player != null)
 			{
-				if (item.getMinLevel() > player.getLevel())
+				if (item.getMinLevel() > player.getActualLevel())
 				{
 					Utils.CancelEvent(event);
 					player.getBukkitPlayer().sendMessage("This item requires a level greater than you have");

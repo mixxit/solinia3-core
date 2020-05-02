@@ -660,7 +660,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 				return false;
 			}
 		
-		if (getMinLevel() > SoliniaPlayerAdapter.Adapt(player).getLevel())
+		if (getMinLevel() > SoliniaPlayerAdapter.Adapt(player).getActualLevel())
 		{
 			player.sendMessage("This item requires minimum level: " + getMinLevel());
 			return false;

@@ -1,7 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,12 +8,9 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.SoliniaItemException;
-import com.solinia.solinia.Factories.SoliniaItemFactory;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Utils.PlayerUtils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -32,7 +27,7 @@ public class CommandInspiration implements CommandExecutor {
 				if (sender instanceof Player)
 				{
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-					if (solPlayer.getLevel() >= 50)
+					if (solPlayer.getActualLevel() >= 50)
 					sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1 AA Point " + ChatColor.RESET + " - Cost: 5 inspiration : /inspiration buy aa");
 				}
 				
@@ -65,7 +60,7 @@ public class CommandInspiration implements CommandExecutor {
 								if (sender instanceof Player)
 								{
 									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-									if (solPlayer.getLevel() < 50)
+									if (solPlayer.getActualLevel() < 50)
 									{
 										sender.sendMessage("Only players level 50 and above can have AA points any lower and it would be useless");
 										return true;

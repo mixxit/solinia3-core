@@ -24,7 +24,7 @@ public class CommandStats implements CommandExecutor {
 	            ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
 	            solentity.sendStats((LivingEntity)player);
 
-	            Double newlevel = (double) solplayer.getLevel();
+	            Double newlevel = (double) solplayer.getActualLevel();
 	            Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));
 	    		Double xpneededfornextlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 1));
 	    		Double totalxpneeded = xpneededfornextlevel - xpneededforcurrentlevel;

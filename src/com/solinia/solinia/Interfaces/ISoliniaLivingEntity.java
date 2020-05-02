@@ -468,11 +468,7 @@ public interface ISoliniaLivingEntity  {
 
 	boolean hasArrowsInInventory();
 
-	void setEffectiveLevel(int level);
-
 	int getActualLevel();
-
-	void setActualLevel(int actualLevel);
 
 	boolean aiCheckCloseBeneficialSpells(Plugin plugin, ISoliniaNPC npc, int iChance, int iRange, int iSpellTypes,
 			int npcEffectiveLevel) throws CoreStateInitException;
@@ -492,5 +488,7 @@ public interface ISoliniaLivingEntity  {
 	int getItemBonuses(SpellEffectType spellEffectType, SpellResistType filterResistType);
 
 	public void removeAggro(UUID uniqueId);
+
+	void setActualLevel(int level);
 
 }

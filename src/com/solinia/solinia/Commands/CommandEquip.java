@@ -70,7 +70,7 @@ public class CommandEquip implements CommandExecutor {
 						return true;
 					}
 
-					if (item.getMinLevel() > solPlayer.getLevel()) {
+					if (item.getMinLevel() > solPlayer.getActualLevel()) {
 						player.sendMessage("You cannot equip this item (minlevel: " + item.getMinLevel() + ")");
 						return true;
 					}
@@ -98,7 +98,7 @@ public class CommandEquip implements CommandExecutor {
 						}
 
 					
-					if (item.getMinLevel() > solPlayer.getLevel()) {
+					if (item.getMinLevel() > solPlayer.getActualLevel()) {
 						player.sendMessage(ChatColor.GRAY + "Your are not sufficient level to wear this equipment");
 						return true;
 					}

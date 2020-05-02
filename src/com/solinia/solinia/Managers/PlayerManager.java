@@ -30,8 +30,6 @@ import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
-import net.md_5.bungee.api.ChatColor;
-
 public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, String> playerVersion = new ConcurrentHashMap<UUID, String>();
 	private ConcurrentHashMap<UUID, Integer> playerApplyAugmentation = new ConcurrentHashMap<UUID, Integer>();
@@ -379,7 +377,7 @@ public class PlayerManager implements IPlayerManager {
 				{
 					Utils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(solPlayer.getPendingXp().longValue()), false);
 				} else {
-					Double xpReward = PlayerUtils.getExperienceRewardAverageForLevel(solPlayer.getLevel()) / 30d;
+					Double xpReward = PlayerUtils.getExperienceRewardAverageForLevel(solPlayer.getActualLevel()) / 30d;
 					if (xpReward < 0)
 					{
 						xpReward = 1d;

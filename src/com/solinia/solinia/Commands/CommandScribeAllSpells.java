@@ -42,8 +42,8 @@ public class CommandScribeAllSpells implements CommandExecutor {
 				if (solPlayer == null || solPlayer.getClassObj() == null)
 					return true;
 				
-				if (solPlayer.getLevel() < level)
-					level = solPlayer.getLevel();
+				if (solPlayer.getActualLevel() < level)
+					level = solPlayer.getActualLevel();
 				
 				// Loop through each spell merchant and load spells up to the level
 				for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())

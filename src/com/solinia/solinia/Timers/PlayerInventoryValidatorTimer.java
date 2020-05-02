@@ -149,7 +149,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 		    		}
 					
 					// Check class armour and offhand items for wrong level
-					if (slotId > 35 && i.getMinLevel() > solplayer.getLevel() && !i.isSpellscroll())
+					if (slotId > 35 && i.getMinLevel() > solplayer.getActualLevel() && !i.isSpellscroll())
 		    		{
 						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
 						{
@@ -288,7 +288,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					}
 				}
 				
-				if (i.getMinLevel() > solPlayer.getLevel())
+				if (i.getMinLevel() > solPlayer.getActualLevel())
 	    		{
 					solPlayer.setEquipSlotItem(slot, 0);
 					Utils.AddAccountClaim(solPlayer.getBukkitPlayer().getName(),i.getId());

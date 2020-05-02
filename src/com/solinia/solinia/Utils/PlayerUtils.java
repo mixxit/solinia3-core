@@ -32,7 +32,7 @@ public class PlayerUtils {
 
 	public static double calculateExpLoss(ISoliniaPlayer player) {
 		double loss = 0;
-		loss = (double) (player.getLevel() * (player.getLevel() / 18.0) * 12000);
+		loss = (double) (player.getActualLevel() * (player.getActualLevel() / 18.0) * 12000);
 		return (double) loss;
 	}
 	public static void BroadcastPlayers(String message) {
@@ -298,7 +298,7 @@ public class PlayerUtils {
 					}
 				}
 
-				if (soliniaitem.getMinLevel() > solplayer.getLevel()) {
+				if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
 					Utils.CancelEvent(event);
 					;
 					event.getPlayer().updateInventory();
