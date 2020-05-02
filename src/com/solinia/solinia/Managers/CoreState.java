@@ -767,6 +767,24 @@ public class CoreState {
 	}
 	
 	public void removePlayerFromGroup(Player player) {
+		int playerCharacterId = 0;
+		try
+		{
+			if (player.isOnline() && player != null)
+			{
+				ISoliniaPlayer playerToRemove = SoliniaPlayerAdapter.Adapt(player);
+				if (playerToRemove != null && playerToRemove.isMentoring())
+					playerToRemove.setMentor(null);
+
+				playerCharacterId = playerToRemove.getId();
+				
+				
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
 		ISoliniaGroup group = getGroupByMember(player.getUniqueId());
 
 		if (group == null) {
@@ -781,6 +799,23 @@ public class CoreState {
 		
 		PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), null, false, true);
 		sendGroupPacketToAllPlayers(group);
+		
+		try
+		{
+			if (playerCharacterId > 0)
+			for (int i = 0; i < group.getMembers().size(); i++) {
+				UUID member = group.getMembers().get(i);
+				Player memberPlayer = Bukkit.getPlayer(member);
+				if (memberPlayer != null) {
+					ISoliniaPlayer playerMember = SoliniaPlayerAdapter.Adapt(memberPlayer);
+					if (playerMember != null && playerMember.isMentoring() && playerMember.getMentoringCharacterId() == playerCharacterId)
+						playerMember.setMentor(null);
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 
 		if (group.getOwner().equals(player.getUniqueId())) {
 			if (group.getMembers().size() > 0) {

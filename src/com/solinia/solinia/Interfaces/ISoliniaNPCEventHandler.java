@@ -59,14 +59,6 @@ public interface ISoliniaNPCEventHandler  {
 
 	boolean isAwardsTitle();
 
-	void setRandomisedGearSuffix(String randomisedGearSuffix);
-
-	String getRandomisedGearSuffix();
-
-	void setAwardsRandomisedGear(boolean awardsRandomisedGear);
-
-	boolean isAwardsRandomisedGear();
-
 	int getSummonsNpcId();
 
 	void setSummonsNpcId(int summonsNpcId);

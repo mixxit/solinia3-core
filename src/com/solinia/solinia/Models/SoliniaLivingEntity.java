@@ -234,7 +234,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		boolean isnpccaster = false;
 
 		if (caster instanceof Player) {
-			casterlevel = SoliniaPlayerAdapter.Adapt((Player) caster).getActualLevel();
+			casterlevel = SoliniaPlayerAdapter.Adapt((Player) caster).getMentorLevel();
 		} else {
 			if (Utils.isLivingEntityNPC(caster)) {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) caster);
@@ -5142,14 +5142,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			9, 9, 9, 9, 9, 10, 10, 10, 10, 10,   // 31-40
 			10, 11, 11, 11, 11, 11, 11, 12, 12 }; // 41-49
 		if (getClassObj() != null && getClassObj().getName().equals("MONK")) {
-			if (this.getActualLevel() > 62)
+			if (this.getMentorLevel() > 62)
 				return 15;
-			return mnk_dmg[this.getActualLevel()];
+			return mnk_dmg[this.getMentorLevel()];
 		}
 		else if (getClassObj() != null && getClassObj().getName().equals("BEASTLORD")) {
-			if (this.getActualLevel() > 49)
+			if (this.getMentorLevel() > 49)
 				return 13;
-			return bst_dmg[this.getActualLevel()];
+			return bst_dmg[this.getMentorLevel()];
 		}
 		return 2;
 	}
@@ -5657,9 +5657,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 				if (!forSpells)
 				{
-					return solPlayer.getActualLevel();
+					return solPlayer.getMentorLevel();
 				} else {
-					int level = solPlayer.getActualLevel();
+					int level = solPlayer.getMentorLevel();
 					level += this.getAABonuses(SpellEffectType.CastingLevel) + this.getSpellBonuses(SpellEffectType.CastingLevel) + this.getItemBonuses(SpellEffectType.CastingLevel);
 					return level;
 					
@@ -5688,6 +5688,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public int getActualLevel() {
 		if (this.isPlayer() && this.getPlayer() != null)
 			return this.getPlayer().getActualLevel();
+		
+		return this.actualLevel;
+	}
+	
+	@Override
+	public int getMentorLevel() 
+	{
+		if (this.isPlayer() && this.getPlayer() != null)
+			return this.getPlayer().getMentorLevel();
 		
 		return this.actualLevel;
 	}
@@ -10359,7 +10368,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void sendStats(LivingEntity targetMessage) {
 		targetMessage.sendMessage("STATS:");
 		targetMessage.sendMessage("----------------------------");
-		String strlevel = "Level: " + ChatColor.GOLD + getEffectiveLevel(false) + " / " + getActualLevel() + ChatColor.RESET;
+		String strlevel = "Level: " + ChatColor.GOLD + getMentorLevel() + " / " + getActualLevel() + " SpellCastingLvl: " + getEffectiveLevel(true)+ ChatColor.RESET;
 
 		String strclass = "";
 		if (getClassObj() != null)

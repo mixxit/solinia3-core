@@ -104,6 +104,23 @@ public class Solinia3CorePlayerListener implements Listener {
 		plugin = solinia3CorePlugin;
 	}
 	
+	@EventHandler()
+	public void onPlayerTickEvent(PlayerTickEvent event)
+	{
+		if (event.isCancelled())
+			return;
+		
+		Entity playerEntity = Bukkit.getEntity(event.getPlayerUuid());
+		if (playerEntity == null)
+			return;
+		
+		try {
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(playerEntity.getUniqueId());
+			solPlayer.checkMentor();
+		} catch (CoreStateInitException e) {
+		}
+	}
+	
 	// Needs to occur before anything else
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDespawn(PlayerTeleportEvent event) {
@@ -405,6 +422,12 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (solPlayer != null)
 				solPlayer.setLastLocation(event.getPlayer().getLocation());
+			
+			if (event.getPlayer() != null)
+			{
+				if (solPlayer != null && solPlayer.isMentoring())
+					solPlayer.setMentor(null);
+			}
 	    } catch (CoreStateInitException e)
 		{
 	    	
@@ -426,6 +449,8 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (group != null) {
 			StateManager.getInstance().removePlayerFromGroup(event.getPlayer());
 		}
+		
+		
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

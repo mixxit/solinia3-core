@@ -51,10 +51,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	private int awardsItem = 0;
 	private boolean awardsDespawn = false;
 	private String teleportResponse = "";
-	@Deprecated
-	private boolean awardsRandomisedGear = false;
-	@Deprecated
-	private String randomisedGearSuffix = "";
 	private boolean awardsTitle = false;
 	private String title = "";
 	private String responseType = "SAY";
@@ -170,9 +166,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		sender.sendMessage("- requiresclassid: " + ChatColor.GOLD + getRequiresClassId() + ChatColor.RESET);
 		sender.sendMessage("- requiresalignment: " + ChatColor.GOLD + getRequiresAlignment() + ChatColor.RESET);
 		sender.sendMessage("- awardsitem: " + ChatColor.GOLD + getAwardsItem() + ChatColor.RESET);
-		sender.sendMessage("- [DEPRECATED] awardsrandomisedgear: " + ChatColor.GOLD + isAwardsRandomisedGear() + ChatColor.RESET);
-		sender.sendMessage(
-				"- [DEPRECATED] randomisedgearsuffix: " + ChatColor.GOLD + this.getRandomisedGearSuffix() + ChatColor.RESET);
 		sender.sendMessage("- title: " + ChatColor.GOLD + this.getTitle() + ChatColor.RESET);
 		sender.sendMessage("- awardstitle: " + ChatColor.GOLD + this.isAwardsTitle() + ChatColor.RESET);
 		sender.sendMessage("- summonsnpcid: " + ChatColor.GOLD + this.getSummonsNpcId() + ChatColor.RESET);
@@ -644,7 +637,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				}
 				
 				// We can also awards spells
-				if (player != null && player.getClassObj() != null && this.isAwardsClassSpell() && player.getActualLevel() > 0)
+				if (player != null && player.getClassObj() != null && this.isAwardsClassSpell() && player.isMentoring())
 				{
 					ISoliniaLootTable table = StateManager.getInstance().getConfigurationManager().getLootTable(player.getClassObj().getDropSpellsLootTableId());
 					List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();
@@ -811,96 +804,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 		}
 	}
 
-	@Deprecated
-	private void awardRandomisedGear(ISoliniaPlayer player) {
-		try {
-			String suffix = "of Randomisation";
-			if (getRandomisedGearSuffix() != null) {
-				if (!getRandomisedGearSuffix().equals("")) {
-					suffix = getRandomisedGearSuffix();
-				}
-			}
-
-			System.out.println("Awarding randomisedgear with awardquestflag: " + getAwardsQuestFlag());
-
-			int playertier = 1;
-			if (player.getActualLevel() >= 1 && player.getActualLevel() < 11)
-				playertier = 1;
-			if (player.getActualLevel() >= 11 && player.getActualLevel() < 21)
-				playertier = 2;
-			if (player.getActualLevel() >= 21 && player.getActualLevel() < 31)
-				playertier = 3;
-			if (player.getActualLevel() >= 31 && player.getActualLevel() < 41)
-				playertier = 4;
-			if (player.getActualLevel() >= 41 && player.getActualLevel() < 51)
-				playertier = 5;
-			if (player.getActualLevel() >= 51 && player.getActualLevel() < 61)
-				playertier = 6;
-			if (player.getActualLevel() >= 61 && player.getActualLevel() < 71)
-				playertier = 7;
-			if (player.getActualLevel() >= 71 && player.getActualLevel() < 81)
-				playertier = 8;
-			if (player.getActualLevel() >= 81 && player.getActualLevel() < 91)
-				playertier = 9;
-			if (player.getActualLevel() >= 91 && player.getActualLevel() < 101)
-				playertier = 10;
-			if (player.getActualLevel() >= 101 && player.getActualLevel() < 111)
-				playertier = 11;
-
-			try {
-
-				// always give the next tier up and then we will reset the player requirements
-				// ot current level
-				// this ability is for special seasonal rewards only
-				playertier += 1;
-				List<Integer> items = SoliniaItemFactory.CreateClassItemSet(player.getClassObj(), playertier, suffix,
-						false, player.getBukkitPlayer().getName(), false);
-
-				for (int itemid : items) {
-					ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
-					final String playerName = player.getBukkitPlayer().getName();
-					final int minLevel = player.getActualLevel();
-					final int finalitemid = itemid;
-					if (item != null) {
-
-						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
-								StateManager.getInstance().getPlugin(), new Runnable() {
-									public void run() {
-										try {
-											ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-													.getItem(finalitemid);
-											item.setMinLevel(minLevel);
-											SoliniaAccountClaim claim = new SoliniaAccountClaim();
-											claim.setId(StateManager.getInstance().getConfigurationManager()
-													.getNextAccountClaimId());
-											claim.setMcname(playerName);
-											claim.setItemid(finalitemid);
-											claim.setClaimed(false);
-											Player claimPlayer = Bukkit.getPlayer(playerName);
-											if (claimPlayer != null) {
-												claimPlayer.sendMessage(ChatColor.GOLD
-														+ "You have been awarded with a claim item! See /claim");
-											}
-											StateManager.getInstance().getConfigurationManager().addAccountClaim(claim);
-											System.out.println(
-													"Awarded Claim: " + item.getDisplayname() + " to " + playerName);
-										} catch (CoreStateInitException e) {
-											// skip
-										}
-									}
-								});
-					}
-				}
-
-			} catch (SoliniaItemException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		} catch (CoreStateInitException e) {
-
-		}
-	}
-
 	@Override
 	public String getTeleportResponse() {
 		return teleportResponse;
@@ -909,30 +812,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 	@Override
 	public void setTeleportResponse(String teleportResponse) {
 		this.teleportResponse = teleportResponse;
-	}
-
-	@Deprecated
-	@Override
-	public boolean isAwardsRandomisedGear() {
-		return awardsRandomisedGear;
-	}
-
-	@Deprecated
-	@Override
-	public void setAwardsRandomisedGear(boolean awardsRandomisedGear) {
-		this.awardsRandomisedGear = awardsRandomisedGear;
-	}
-
-	@Deprecated
-	@Override
-	public String getRandomisedGearSuffix() {
-		return randomisedGearSuffix;
-	}
-
-	@Deprecated
-	@Override
-	public void setRandomisedGearSuffix(String randomisedGearSuffix) {
-		this.randomisedGearSuffix = randomisedGearSuffix;
 	}
 
 	@Override

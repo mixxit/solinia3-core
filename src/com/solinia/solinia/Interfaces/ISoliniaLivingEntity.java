@@ -37,6 +37,8 @@ public interface ISoliniaLivingEntity  {
 
 	public void dropLoot();
 
+	int getMentorLevel();
+	
 	int getNpcid();
 
 	void setNpcid(int npcid);

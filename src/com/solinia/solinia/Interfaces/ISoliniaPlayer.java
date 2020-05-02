@@ -643,4 +643,9 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	Tuple<Boolean, String> canUseItem(ItemStack itemStack);
 	Tuple<Boolean, String> canUseItem(ISoliniaItem itemStack);
 	List<ISoliniaItem> getEquippedSoliniaItems(boolean ignoreMainhand, boolean excludeUnwearable);
+	int getMentorLevel();
+	public void setMentor(ISoliniaPlayer solTarget);
+	public void checkMentor();
+	public boolean isMentoring();
+	public int getMentoringCharacterId();
 }

@@ -15,6 +15,14 @@ commands:
     description: Top players
     usage: /topplayers
     aliases: []
+  mentor:
+    description: Mentors a player target
+    usage: /mentor
+    aliases: []
+  unmentor:
+    description: Stops mentoring
+    usage: /unmentor
+    aliases: []
   solinia:
     description: Displays additional information about Solinia3Core
     usage: /solinia

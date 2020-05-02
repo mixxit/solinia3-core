@@ -3496,4 +3496,17 @@ public class EntityUtils {
 
 		}
 	}
+
+	public static boolean isCharacterOnline(int mentorCharacterId) {
+		try
+		{
+			if (StateManager.getInstance().getPlayerManager().getCharacterIdsOnline().contains(mentorCharacterId))
+				return true;
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		return false;
+	}
 }

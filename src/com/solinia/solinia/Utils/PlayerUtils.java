@@ -32,7 +32,7 @@ public class PlayerUtils {
 
 	public static double calculateExpLoss(ISoliniaPlayer player) {
 		double loss = 0;
-		loss = (double) (player.getActualLevel() * (player.getActualLevel() / 18.0) * 12000);
+		loss = (double) (player.getMentorLevel() * (player.getMentorLevel() / 18.0) * 12000);
 		return (double) loss;
 	}
 	public static void BroadcastPlayers(String message) {
@@ -302,7 +302,7 @@ public class PlayerUtils {
 					Utils.CancelEvent(event);
 					;
 					event.getPlayer().updateInventory();
-					event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
+					event.getPlayer().sendMessage(ChatColor.GRAY + "Your level cannot wear this armour");
 					return;
 				}
 

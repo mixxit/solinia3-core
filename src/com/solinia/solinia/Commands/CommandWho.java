@@ -58,6 +58,7 @@ public class CommandWho implements CommandExecutor {
 	        	try {
 		            ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(currentplayer);
 		        	int lvl = (int) Math.floor(solplayer.getActualLevel());
+		        	int mentorLevel = (int)Math.floor(solplayer.getMentorLevel());
 		        	
 		        	String racename = "UNKNOWN";
 		        	String classname = "UNKNOWN";
@@ -75,12 +76,12 @@ public class CommandWho implements CommandExecutor {
 		        	
 		        	if (!(sender instanceof Player))
 		        	{
-		        		sender.sendMessage("["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET);
+		        		sender.sendMessage("["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + mentorLevel + "/"+lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET);
 		        		
 		        		continue;
 		        	}
 		        	
-		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText(hidden+"["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET));
+		        	TextComponent tc = new TextComponent(TextComponent.fromLegacyText(hidden+"["+currentplayer.getName()+"] "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ currentplayer.getWorld().getName() +"] - LVL " + ChatColor.AQUA + mentorLevel + "/"+ lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET));
 					
 		        	String worship = "I worship: " + godname + System.lineSeparator();
 		        	

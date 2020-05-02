@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -43,4 +44,6 @@ public interface IPlayerManager {
 	ISoliniaPlayer getActivePlayer(UUID playerUUID);
 	ISoliniaPlayer loadPlayerAlt(Plugin plugin, Player player, int characterid);
 	boolean hasValidMod(Player player);
+	List<Integer> getCharacterIdsOnline();
+	List<ISoliniaPlayer> getSoliniaPlayersOnline();
 }

@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -241,6 +242,12 @@ public class PlayerManager implements IPlayerManager {
 				PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), solPlayer.getGroup(), false, true);
 			}
 			
+			if (player.isOnline() && player != null)
+			{
+				if (solPlayer != null && solPlayer.isMentoring())
+					solPlayer.setMentor(null);
+			}
+			
 			StateManager.getInstance().getConfigurationManager().commitPlayerToCharacterLists(solPlayer);
 			solPlayer = SoliniaPlayerFactory.CreatePlayer(player.getUniqueId());
 			player.getInventory().clear();
@@ -284,6 +291,12 @@ public class PlayerManager implements IPlayerManager {
 			// if its the same, why bother?
 			if (solPlayer.getId() == characterId)
 				return solPlayer;
+			
+			if (player.isOnline() && player != null)
+			{
+				if (solPlayer != null && solPlayer.isMentoring())
+					solPlayer.setMentor(null);
+			}
 			
 			solPlayer.removeAllEntityEffects(plugin);
 			solPlayer.killAllPets();
@@ -377,7 +390,7 @@ public class PlayerManager implements IPlayerManager {
 				{
 					Utils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(solPlayer.getPendingXp().longValue()), false);
 				} else {
-					Double xpReward = PlayerUtils.getExperienceRewardAverageForLevel(solPlayer.getActualLevel()) / 30d;
+					Double xpReward = PlayerUtils.getExperienceRewardAverageForLevel(solPlayer.getMentorLevel()) / 30d;
 					if (xpReward < 0)
 					{
 						xpReward = 1d;
@@ -492,5 +505,32 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public void setPlayerLastZone(Player player, int zoneId) {
 		this.playerLastZoneId.put(player.getUniqueId(), zoneId);
+	}
+	
+	@Override
+	public List<ISoliniaPlayer> getSoliniaPlayersOnline() {
+		List<ISoliniaPlayer> charactersOnline = new ArrayList<ISoliniaPlayer>();
+		for(Player player : Bukkit.getOnlinePlayers())
+		{
+			try
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+				if (solPlayer != null)
+					charactersOnline.add(solPlayer);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return charactersOnline;
+	}
+
+	@Override
+	public List<Integer> getCharacterIdsOnline() {
+		List<Integer> characterIdsOnline = new ArrayList<Integer>();
+		for(ISoliniaPlayer player : getSoliniaPlayersOnline())
+			characterIdsOnline.add(player.getId());
+		
+		return characterIdsOnline;
 	}
 }

@@ -38,7 +38,7 @@ public class CommandTrack implements CommandExecutor {
 				return true;
 			}
 
-			if (solPlayer.getActualLevel() < solPlayer.getClassObj().getTrackingLevel())
+			if (solPlayer.getMentorLevel() < solPlayer.getClassObj().getTrackingLevel())
 			{
 				player.sendMessage("You do not have the tracking ability");
 				return true;

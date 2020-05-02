@@ -2708,6 +2708,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				+ getMana() + ChatColor.RESET + " range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
 		sender.sendMessage("- castonyou: " + ChatColor.GOLD + this.getCastOnYou() + ChatColor.RESET + " castonother: "
 				+ ChatColor.GOLD + this.getCastOnOther() + ChatColor.RESET);
+		sender.sendMessage("- goodeffect: " + ChatColor.GOLD + this.getGoodEffect() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "("
 				+ Utils.getSpellTargetType(getTargettype()).name() + ")" + ChatColor.RESET + " teleport_zone: "
@@ -2945,6 +2946,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			break;
 		case "castonyou":
 			setCastOnYou(value);
+			break;
+		case "goodeffect":
+			setGoodEffect(Integer.parseInt(value));
 			break;
 		case "recourselink":
 			setRecourseLink(Integer.parseInt(value));
