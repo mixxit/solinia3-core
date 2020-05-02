@@ -1878,7 +1878,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			//final damage has been determined.
 
-			setHPChange(damage*-1, attacker.getBukkitLivingEntity());
+			double newHp = setHPChange(damage*-1, attacker.getBukkitLivingEntity());
+			if (newHp <= 0D)
+				attacker.removeAggro(this.getBukkitLivingEntity().getUniqueId());
 
 			/* TODO DEATH SAVE
 			if (this.getBukkitLivingEntity().isDead()) {
@@ -2232,14 +2234,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange) {
-		this.setHPChange(hpchange, causeOfEntityHpChange, true);
+	public double setHPChange(int hpchange, LivingEntity causeOfEntityHpChange) {
+		return this.setHPChange(hpchange, causeOfEntityHpChange, true);
 	}
 	
 	@Override
-	public void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange, boolean playHurtSound) {
+	public double setHPChange(int hpchange, LivingEntity causeOfEntityHpChange, boolean playHurtSound) {
 		if (hpchange == 0)
-			return;
+			return this.getHP();
 
 		EntityUtils.PSetHPChange(this.getBukkitLivingEntity(), hpchange, causeOfEntityHpChange, playHurtSound);
 
@@ -2260,6 +2262,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		if (hpchange < 0)
 		damageAlertHook(hpchange,causeOfEntityHpChange);
+		
+		return this.getHP();
 	}
 
 	private double getHP() {
@@ -8613,7 +8617,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			 * 0, -1, spells[aabonuses.SkillAttackProc[2]].ResistDiff); }
 			 */
 
-			solOther.setHPChange(damage * -1, this.getBukkitLivingEntity());
+			double newHp = solOther.setHPChange(damage * -1, this.getBukkitLivingEntity());
+			if (newHp <= 0D)
+				this.removeAggro(other.getUniqueId());
+
 
 			if (this.getBukkitLivingEntity().isDead())
 				return;
@@ -10738,5 +10745,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public void setActualLevel(int actualLevel) {
 		this.actualLevel = actualLevel;
+	}
+
+	@Override
+	public void removeAggro(UUID uniqueId) {
+		removeFromHateList(uniqueId);
 	}
 }

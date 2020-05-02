@@ -599,7 +599,8 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 					target.addToHateList(player.getUniqueId(), 1, false);
 				player.sendMessage("You throw a " + getDisplayname() + " for [" + getItemWeaponDamage(false, null) + "] damage");
 				
-				target.setHPChange(getItemWeaponDamage(false, null)*-1, player);
+				double newHp = target.setHPChange(getItemWeaponDamage(false, null)*-1, player);
+
 				return true;
 			}
 			

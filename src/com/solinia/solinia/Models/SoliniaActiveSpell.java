@@ -2770,7 +2770,9 @@ public class SoliniaActiveSpell {
 			ISoliniaLivingEntity targetOfSpell = SoliniaLivingEntityAdapter.Adapt(this.getLivingEntity());
 			if (targetOfSpell != null)
 				targetOfSpell.addToHateList(getSourceUuid(), hpToRemove, false);
-			targetOfSpell.setHPChange(hpToRemove*-1, sourceLivingEntity);
+			double newHp = targetOfSpell.setHPChange(hpToRemove*-1, sourceLivingEntity);
+			if (newHp <= 0D)
+				solSourceEntity.removeAggro(getLivingEntity().getUniqueId());
 			solSourceEntity.tryIncreaseSkill(SkillType.Backstab, 1);
 
 		} catch (CoreStateInitException e) {
@@ -2825,7 +2827,9 @@ public class SoliniaActiveSpell {
 
 				targetSoliniaLivingEntity.addToHateList(getSourceUuid(), hpToAdd*-1, false);
 				boolean isLichSpell = soliniaSpell.isLichSpell();
-				targetSoliniaLivingEntity.setHPChange(hpToAdd, sourceLivingEntity, !isLichSpell);
+				double newHp = targetSoliniaLivingEntity.setHPChange(hpToAdd, sourceLivingEntity, !isLichSpell);
+				if (newHp <= 0D)
+					sourceSoliniaLivingEntity.removeAggro(getLivingEntity().getUniqueId());
 				// getLivingEntity().damage(hpToRemove, Bukkit.getEntity(getSourceUuid()));
 				if (soliniaSpell.isLifetapSpell()) {
 
@@ -2833,7 +2837,11 @@ public class SoliniaActiveSpell {
 						return;
 
 					if (!sourceLivingEntity.isDead())
-						sourceSoliniaLivingEntity.setHPChange(hpToAdd*-1,targetSoliniaLivingEntity.getBukkitLivingEntity());
+					{
+						newHp = sourceSoliniaLivingEntity.setHPChange(hpToAdd*-1,targetSoliniaLivingEntity.getBukkitLivingEntity());
+						if (newHp <= 0D)
+							targetSoliniaLivingEntity.removeAggro(sourceLivingEntity.getUniqueId());
+					}
 				}
 			}
 			// Heal
@@ -2909,11 +2917,20 @@ public class SoliniaActiveSpell {
 
 			if (soliniaSpell.isDetrimental()) {
 				if (!getLivingEntity().isDead())
-					targetSoliniaLivingEntity.setHPChange(dmg*-1,sourceSolPlayer.getBukkitPlayer());
+				{
+					double newHp = targetSoliniaLivingEntity.setHPChange(dmg*-1,sourceSolPlayer.getBukkitPlayer());
+					if (newHp <= 0D)
+						sourceSoliniaLivingEntity.removeAggro(getLivingEntity().getUniqueId());
+				}
 			} else {
 				if (!getLivingEntity().isDead())
-					targetSoliniaLivingEntity.setHPChange(dmg,sourceSolPlayer.getBukkitPlayer());
+				{
+					double newHp = targetSoliniaLivingEntity.setHPChange(dmg,sourceSolPlayer.getBukkitPlayer());
+					if (newHp <= 0D)
+						sourceSoliniaLivingEntity.removeAggro(getLivingEntity().getUniqueId());
+				}
 			}
+			
 		} catch (CoreStateInitException e) {
 		}
 	}

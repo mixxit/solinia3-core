@@ -412,7 +412,7 @@ public interface ISoliniaLivingEntity  {
 
 	boolean isSneaking();
 
-	void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange);
+	double setHPChange(int hpchange, LivingEntity causeOfEntityHpChange);
 
 	public boolean isFacingMob(SoliniaLivingEntity soliniaLivingEntity);
 
@@ -464,7 +464,7 @@ public interface ISoliniaLivingEntity  {
 
 	void tryApplySpellOnSelf(int spellId, String requiredWeaponSkillType, boolean racialPassive);
 
-	void setHPChange(int hpchange, LivingEntity causeOfEntityHpChange, boolean playHurtSound);
+	double setHPChange(int hpchange, LivingEntity causeOfEntityHpChange, boolean playHurtSound);
 
 	boolean hasArrowsInInventory();
 
@@ -490,5 +490,7 @@ public interface ISoliniaLivingEntity  {
 	List<ISoliniaItem> getEquippedSoliniaItems(boolean excludeMainHand, boolean excludeUnwearable);
 
 	int getItemBonuses(SpellEffectType spellEffectType, SpellResistType filterResistType);
+
+	public void removeAggro(UUID uniqueId);
 
 }
