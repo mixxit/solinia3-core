@@ -2025,7 +2025,6 @@ public class Solinia3CorePlayerListener implements Listener {
 				
 				ArrayList<String> playerUuids = solplayer.getWorld().getPlayerIpNameMappings().get(event.getPlayer().getAddress().getAddress().toString());
 				
-				
 				for(String playerUuid : playerUuids)
 				{
 					try
@@ -2037,6 +2036,8 @@ public class Solinia3CorePlayerListener implements Listener {
 					}
 				}
 			
+				Utils.SendHintToServer(HINT.PLAYER_JOIN,event.getPlayer().getName() + " ("+solplayer.getFullName()+") has joined the game aka: " + players);
+				
 			} catch (Exception e)
 			{
 				// not vital if this fails

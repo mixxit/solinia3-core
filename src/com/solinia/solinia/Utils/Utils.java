@@ -5926,6 +5926,7 @@ public class Utils {
 				Utils.SendHint(player, hint, referenceCode, false);
 			}
 		}
+		System.out.println("ANNOUNCE:" + hint.name() + ":"+ referenceCode);
 	}
 	
 	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby)
@@ -6008,6 +6009,9 @@ public class Utils {
 			break;
 		case EXCEEDED_CLAIMXP:
 			message = "You have exceeded your maximum pending XP! Please /claimxp your additional XP before more can be gained (max: " + referenceCode + ")";
+			break;
+		case PLAYER_JOIN:
+			message = referenceCode;
 			break;
 		case BER_CRITICAL_DMG:
 			message = "Your berserker status causes additional critical blow damage! " + referenceCode;
@@ -6191,6 +6195,8 @@ public class Utils {
 		case CRITICAL_DMG:
 			return HintSetting.Chat;
 		case BER_CRITICAL_DMG:
+			return HintSetting.Chat;
+		case PLAYER_JOIN:
 			return HintSetting.Chat;
 		}
 		
