@@ -128,17 +128,22 @@ public class Solinia3CorePlayerListener implements Listener {
 			    	if (StateManager.getInstance().getPlayerManager().hasValidMod((Player)playerEntity))
 					{
 			    		Utils.sendCharCreation((Player)playerEntity);
+			    		solPlayer.setLastOpenedCharCreationNow();
 					} else {
 				    	if (solPlayer.getLastOpenedCharCreation() == null)
 				    	{
 				    		Utils.sendCharCreation((Player)playerEntity);
+				    		solPlayer.setLastOpenedCharCreationNow();
 				    	} else {
 					    	LocalDateTime datetime = LocalDateTime.now();
 							Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 							Timestamp mintimestamp = Timestamp.valueOf(solPlayer.getLastOpenedCharCreation().toLocalDateTime().plus(5, ChronoUnit.MINUTES));
 		
 							if (nowtimestamp.after(mintimestamp))
+							{
 								Utils.sendCharCreation((Player)playerEntity);
+					    		solPlayer.setLastOpenedCharCreationNow();
+							}
 				    	}
 					}
 				} catch (Exception e) {
