@@ -14,6 +14,10 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.PlayerUtils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandInspiration implements CommandExecutor {
 	@Override
@@ -198,14 +202,13 @@ public class CommandInspiration implements CommandExecutor {
 					}
 				case "sites":
 					sender.sendMessage(ChatColor.YELLOW + "Sites you can vote on:");
-					sender.sendMessage("https://www.planetminecraft.com/server/fall-of-an-empire-heavyrp/vote/");
-					sender.sendMessage("https://minecraft-mp.com/server/118059/vote/");
-					sender.sendMessage("https://minecraftlist.org/vote/5962");
-					sender.sendMessage("http://minecraftservers.org/vote/464284");
-					sender.sendMessage("https://minecraft-server.net/vote/fallofanempire");
-					sender.sendMessage("http://minecraft-server-list.com/server/345651/vote/");
-					sender.sendMessage("http://www.minecraft-servers-list.org/index.php?a=in&u=mixxit");
-					sender.sendMessage("https://minebrowse.com/server/364");
+					String urls = "https://www.fallofanempire.com/docs/guides/voting/";
+					
+					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("[ Click here to visit our voting site ]"));
+					tc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,urls));
+					
+					sender.spigot().sendMessage(tc);
+					
 					sender.sendMessage(ChatColor.YELLOW + "You will earn 1 inspiration point for each vote");
 					break;
 				case "send":

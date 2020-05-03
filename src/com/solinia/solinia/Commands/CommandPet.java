@@ -210,7 +210,7 @@ public class CommandPet implements CommandExecutor {
 					}
 				}
 				
-				player.sendMessage("Pet Name: " + pet.getName() + " Pet Level: " + petLivingEntity.getEffectiveLevel(false));
+				player.sendMessage("Pet Name: " + pet.getName() + " Pet Level: " + petLivingEntity.getMentorLevel());
 				player.sendMessage("Pet HP: " + pet.getHealth() + "/" + pet.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 				EntityInsentient entityhandle = (EntityInsentient) ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) pet).getHandle();
 				double dmg = entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
@@ -234,19 +234,19 @@ public class CommandPet implements CommandExecutor {
 	            if (petLivingEntity.getClassObj() != null)
 	            {
 	            	if (petLivingEntity.getClassObj().getDodgelevel() > 0)
-		            	if (petLivingEntity.getEffectiveLevel(false) >= petLivingEntity.getClassObj().getDodgelevel())
+		            	if (petLivingEntity.getMentorLevel() >= petLivingEntity.getClassObj().getDodgelevel())
 		            		player.sendMessage(ChatColor.GRAY + "Dodge Skill: " + petLivingEntity.getSkill(SkillType.Dodge));	            	
 	            	if (petLivingEntity.getClassObj().getRipostelevel() > 0)
-		            	if (petLivingEntity.getEffectiveLevel(false) >= petLivingEntity.getClassObj().getRipostelevel())
+		            	if (petLivingEntity.getMentorLevel() >= petLivingEntity.getClassObj().getRipostelevel())
 		            		player.sendMessage(ChatColor.GRAY + "Riposte Skill: " + petLivingEntity.getSkill(SkillType.Riposte));	            	
 	            	if (petLivingEntity.getClassObj().getDoubleattacklevel() > 0)
-	            		if (petLivingEntity.getEffectiveLevel(false) >= petLivingEntity.getClassObj().getDoubleattacklevel())
+	            		if (petLivingEntity.getMentorLevel() >= petLivingEntity.getClassObj().getDoubleattacklevel())
 	            			player.sendMessage(ChatColor.GRAY + "Double Attack Skill: " + petLivingEntity.getSkill(SkillType.DoubleAttack));	            	
 	            	if (petLivingEntity.getClassObj().getSafefalllevel() > 0)
-	            		if (petLivingEntity.getEffectiveLevel(false) >= petLivingEntity.getClassObj().getSafefalllevel())
+	            		if (petLivingEntity.getMentorLevel() >= petLivingEntity.getClassObj().getSafefalllevel())
 	            			player.sendMessage(ChatColor.GRAY + "Safefall Skill: " + petLivingEntity.getSkill(SkillType.SafeFall));	            	
 	            	if (petLivingEntity.getClassObj().getDualwieldlevel() > 0)
-	            		if (petLivingEntity.getEffectiveLevel(false) >= petLivingEntity.getClassObj().getDualwieldlevel())
+	            		if (petLivingEntity.getMentorLevel() >= petLivingEntity.getClassObj().getDualwieldlevel())
 	            			player.sendMessage(ChatColor.GRAY + "Dual Wield: " + petLivingEntity.getSkill(SkillType.DualWield));	            	
 	            }
 	            

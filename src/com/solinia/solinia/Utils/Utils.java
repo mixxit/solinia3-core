@@ -6157,7 +6157,7 @@ public class Utils {
 
 	public static org.bukkit.ChatColor getLevelCon(int myLevel, ISoliniaLivingEntity solEntity) {
 		// TODO Auto-generated method stub
-		return getLevelCon(myLevel, solEntity.getEffectiveLevel(false));
+		return getLevelCon(myLevel, solEntity.getMentorLevel());
 	}
 	
 	public static org.bukkit.ChatColor getLevelCon(int mylevel, int iOtherLevel) {

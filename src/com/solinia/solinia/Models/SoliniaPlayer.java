@@ -1743,7 +1743,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			if (item.getMinLevel() > getMentorLevel()) {
+			if (item.getMinLevel() > getActualLevel()) {
 				getBukkitPlayer().sendMessage("This item requires minimum level: " + item.getMinLevel());
 				return;
 			}
@@ -5538,7 +5538,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void grantExperienceAndLoot(ISoliniaLivingEntity livingEntity) {
 		try {
-			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getEffectiveLevel(false));
+			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getMentorLevel());
 
 			// try to share with group
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(getOwnerUUID());
@@ -5558,7 +5558,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (getActualLevel() < ilowlvl || getActualLevel() > ihighlvl) {
 					// Only award player the experience
 					// as they are out of range of the group
-					if (livingEntity.getEffectiveLevel(false) >= Utils.getMinLevelFromLevel(getActualLevel())) {
+					if (livingEntity.getMentorLevel() >= Utils.getMinLevelFromLevel(getActualLevel())) {
 						// Due to being out of range they get the full xp
 						increasePlayerExperience(experience, true, true);
 						if (getFellowship() != null)
@@ -5589,7 +5589,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						Player tgtplayer = Bukkit.getPlayer(member);
 						if (tgtplayer != null) {
 							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);
-							int tgtlevel = tgtsolplayer.getActualLevel();
+							int tgtlevel = tgtsolplayer.getMentorLevel();
 
 							if (tgtlevel < ilowlvl || tgtlevel > ihighlvl) {
 								tgtplayer.sendMessage(ChatColor.GRAY
@@ -5604,7 +5604,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							}
 
 							if (tgtplayer.getLocation().distance(getBukkitPlayer().getLocation()) <= Utils.MaxRangeForExperience) {
-								if (livingEntity.getEffectiveLevel(false) >= (Utils.getMinLevelFromLevel(tgtsolplayer.getActualLevel()))) {
+								if (livingEntity.getMentorLevel() >= (Utils.getMinLevelFromLevel(tgtsolplayer.getActualLevel()))) {
 									// they split the overall experience across the group size
 									
 									// add 10% bonus per player
@@ -5646,7 +5646,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 				}
 			} else {
-				if (livingEntity.getEffectiveLevel(false) >= (Utils.getMinLevelFromLevel(getActualLevel()))) {
+				if (livingEntity.getMentorLevel() >= (Utils.getMinLevelFromLevel(getActualLevel()))) {
 					// they are on their own so get the full amount of xp
 					increasePlayerExperience(experience, true, true);
 					

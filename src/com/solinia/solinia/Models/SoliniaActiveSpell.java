@@ -1681,7 +1681,7 @@ public class SoliniaActiveSpell {
 			if (targetsolLivingEntity.isCurrentlyNPCPet())
 				return;
 			
-			if (targetsolLivingEntity.getEffectiveLevel(false) > spellEffect.getMax())
+			if (targetsolLivingEntity.getMentorLevel() > spellEffect.getMax())
 			{			
 				source.sendMessage("This is too high for this spell");
 				return;
