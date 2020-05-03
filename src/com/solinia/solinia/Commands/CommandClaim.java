@@ -2,6 +2,7 @@ package com.solinia.solinia.Commands;
 
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -72,6 +73,13 @@ public class CommandClaim implements CommandExecutor {
 				
 				if (Utils.AddAccountClaim(mcaccountname,itemId))
 					sender.sendMessage("Account claim added!");
+				
+				Player targetplayer = Bukkit.getPlayer(mcaccountname);
+				if (targetplayer != null && targetplayer.isOnline())
+				{
+					targetplayer.sendMessage(ChatColor.YELLOW + "* You seem to have received an item in your /claims");
+				}
+				
 				return true;
 			case "claim":
 				if (!(sender instanceof Player))
