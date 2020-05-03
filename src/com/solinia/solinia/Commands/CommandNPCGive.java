@@ -20,6 +20,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.InteractionType;
+import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -86,13 +87,13 @@ public class CommandNPCGive implements CommandExecutor {
 				if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
 					continue;
 				
-				Utils.DebugLog("CommandNPCGive","onCommand",player.getName(),"Comparing item id: " + item.getId() + " to triggerdata " + eventHandler.getTriggerdata());
+				DebugUtils.DebugLog("CommandNPCGive","onCommand",player,"Comparing item id: " + item.getId() + " to triggerdata " + eventHandler.getTriggerdata());
 				if (Integer.parseInt(eventHandler.getTriggerdata()) != item.getId())
 					continue;
 				
 				if (eventHandler.getChatresponse() != null && !eventHandler.getChatresponse().equals(""))
 				{
-					Utils.DebugLog("CommandNPCGive","onCommand",player.getName(),"Checking if player meets requirements to hand in item");
+					DebugUtils.DebugLog("CommandNPCGive","onCommand",player,"Checking if player meets requirements to hand in item");
 					if (!eventHandler.playerMeetsRequirements(player))
 					{
 						player.sendMessage(ChatColor.GRAY + "[Hint] You do not meet the requirements to hand this quest item in. Either you are missing a quest step, have already completed this step");
@@ -116,7 +117,7 @@ public class CommandNPCGive implements CommandExecutor {
 						}
 					}
 					
-					Utils.DebugLog("CommandNPCGive","onCommand",player.getName(),"NPC wants the item");
+					DebugUtils.DebugLog("CommandNPCGive","onCommand",player,"NPC wants the item");
 					npcWantsItem = true;
 					
 					String response = eventHandler.getChatresponse();

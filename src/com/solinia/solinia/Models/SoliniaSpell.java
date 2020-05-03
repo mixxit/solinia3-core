@@ -34,6 +34,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -5705,7 +5706,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 
 			boolean itemUseSuccess = tryApplyOnEntity(sourcemob, targetmob, true, requiredWeaponSkillType);
-			Utils.DebugLog("SoliniaSpell", "tryCast", sourcemob.getName(), "Item use success: " + itemUseSuccess);
+			DebugUtils.DebugLog("SoliniaSpell", "tryCast", sourcemob, "Item use success: " + itemUseSuccess);
 
 			if (itemUseSuccess) {
 

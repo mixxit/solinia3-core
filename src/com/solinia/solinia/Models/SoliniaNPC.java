@@ -1464,7 +1464,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			itemStacks.add(livingEntity.getEquipment().getItemInOffHand());
 			itemStacks.addAll(Arrays.asList(livingEntity.getEquipment().getArmorContents()));
 			
-			Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Checking for soliniaItems in equipment stack of: " + itemStacks.size());
 			for (ItemStack itemstack : itemStacks) {
 				if (itemstack == null)
 					continue;
@@ -1473,8 +1472,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				if (item == null)
 					continue;
 				
-				Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "Found SoliniaItem: " + item.getId());
-
 				if (item.isSpellscroll())
 					continue;
 
@@ -1490,7 +1487,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		} catch (CoreStateInitException e) {
 
 		}
-		Utils.DebugLog("SoliniaNPC", "getEquippedSoliniaItems", String.valueOf(this.getId()), "getEquippedSoliniaItems finished with items count: " + items.size());
 		return items;
 	}
 

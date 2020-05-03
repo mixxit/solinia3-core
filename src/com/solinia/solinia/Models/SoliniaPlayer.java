@@ -48,6 +48,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
@@ -1224,7 +1225,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void tryCastFromItemInHand(ISoliniaItem item)
 	{
 		try {
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
 					"Trying to cast from item in hand: " + item.getId());
 			
 			if (!item.isSpellscroll())
@@ -1253,7 +1254,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
 					"SoliniaSpell in hand: " + spellId + " target status: " + (getEntityTarget() == null));
 
 			// Some spells auto target self, if they don't have a target try to do that
@@ -1278,7 +1279,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!spell.isBardSong())
 			if (!this.hasReagents(spell,getBukkitPlayer()))
 			{
-				Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+				DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
 						"SoliniaSpell in slot: " + spellId + " Missing reagents");
 				return;
 			}
@@ -1287,7 +1288,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (spell.getSpellEffectTypes().contains(SpellEffectType.BindWound)) {
 				if (!hasSufficientBandageReagents(1))
 				{
-					Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+					DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
 							"SoliniaSpell in slot: " + spellId + " Missing reagents for Bind Wound");
 					this.getBukkitPlayer().sendMessage("You do not have enough bandages in your /reagent pouch");
 					return;
@@ -1322,7 +1323,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 				if (expiretimestamp != null)
 					if (!nowtimestamp.after(expiretimestamp)) {
-						Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+						DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
 								"SoliniaSpell in slot: " + spellId + " Lack of willpower");
 
 						getBukkitPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName()
@@ -1331,7 +1332,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer().getName(),
+			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
 					"SoliniaSpell in slot: " + spellId + " Starting casting");
 
 			startCasting(spell, getBukkitPlayer(), true, true, false, "");
@@ -1343,7 +1344,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void tryCastFromMemorySlot(int slotId) {
 		try {
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
 					"Trying to cast from item in memory slot: " + slotId);
 			int spellId = this.getMemorisedSpellSlot(slotId);
 			if (spellId < 1) {
@@ -1369,13 +1370,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			if (!getMemorisedSpellSlots().getAllSpellIds().contains(spellId)) {
-				Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+				DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
 						"Spell not in spellbook");
 				getBukkitPlayer().sendMessage("* This spell is no longer in your spellbook");
 				return;
 			}
 
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
 					"SoliniaSpell in slot: " + spellId + " target status: " + (getEntityTarget() == null));
 
 			// Some spells auto target self, if they don't have a target try to do that
@@ -1394,7 +1395,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!spell.isBardSong())
 			if (!this.hasReagents(spell,getBukkitPlayer()))
 			{
-				Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+				DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
 						"SoliniaSpell in slot: " + spellId + " Missing reagents");
 				return;
 			}
@@ -1403,7 +1404,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (spell.getSpellEffectTypes().contains(SpellEffectType.BindWound)) {
 				if (!hasSufficientBandageReagents(1))
 				{
-					Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+					DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
 							"SoliniaSpell in slot: " + spellId + " Missing reagents for Bind Wound");
 					this.getBukkitPlayer().sendMessage("You do not have enough bandages in your /reagent pouch");
 					return;
@@ -1438,7 +1439,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 				if (expiretimestamp != null)
 					if (!nowtimestamp.after(expiretimestamp)) {
-						Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+						DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
 								"SoliniaSpell in slot: " + spellId + " Lack of willpower");
 
 						getBukkitPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName()
@@ -1447,7 +1448,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 			}
 
-			Utils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer().getName(),
+			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
 					"SoliniaSpell in slot: " + spellId + " Starting casting");
 
 			startCasting(spell, getBukkitPlayer(), true, true, false, "");
@@ -1851,14 +1852,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			Utils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer().getName(),
+			DebugUtils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer(),
 					"consumable status: " + item.isConsumable());
 
 			// Only applies to consumable items
 			if (item.isConsumable()) {
 
 				int newAmount = itemstack.getAmount() - 1;
-				Utils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer().getName(), "using consumable item");
+				DebugUtils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer(), "using consumable item");
 				item.useItemOnEntity(getBukkitPlayer(), getEntityTarget(), true);
 				if (newAmount < 1) {
 					// To prevent a trap you must cancel event here
@@ -1878,7 +1879,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			// Only applies to non-consumable items
 			if (!item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-				Utils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer().getName(),
+				DebugUtils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer(),
 						"using non consumable item");
 				item.useItemOnEntity(getBukkitPlayer(), getEntityTarget(), true);
 				return;
@@ -2051,7 +2052,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
 			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType) {
 		
-		Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Start doCastSpell");
+		DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Start doCastSpell");
 		
 		if (!ignoreProfessionAndLevel && spell.isAASpell() && !canUseAASpell(spell)) {
 			player.sendMessage("You require the correct AA to use this spell");
@@ -2073,10 +2074,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
 					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
 				setEntityTarget(getBukkitPlayer());
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Set target to self");
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Set target to self");
 
 			} else {
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Not target");
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Not target");
 				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "spellitem", false);
 				return;
 			}
@@ -2088,17 +2089,17 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) getBukkitPlayer(), targetmob);
 
 			if (distanceOverLimit > 0) {
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Too far to interact");
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Too far to interact");
 				getBukkitPlayer().sendMessage("You were too far to interact with that entity");
 				return;
 			}
 		}
 
 		if (!ignoreProfessionAndLevel && spell.getAllowedClasses().size() > 0) {
-			Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Allowed classes over 0 and not ignoring profession and level");
+			DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Allowed classes over 0 and not ignoring profession and level");
 
 			if (getClassObj() == null) {
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Had no class");
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Had no class");
 				player.sendMessage(ChatColor.GRAY + " * This effect cannot be used by your profession");
 				return;
 			}
@@ -2116,15 +2117,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			if (foundprofession == false) {
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "No profession found");
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "No profession found");
 				player.sendMessage(ChatColor.GRAY + " * This effect can only be used by " + professions);
 				return;
 			} else {
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Found profession");
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Found profession");
 				if (foundlevel > 0) {
 					Double level = (double) getMentorLevel();
 					if (level < foundlevel) {
-						Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Missing needed level");
+						DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Missing needed level");
 						player.sendMessage(ChatColor.GRAY + " * This effect requires level " + foundlevel);
 						return;
 					}
@@ -2137,12 +2138,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) player);
 			if (solentity == null)
 			{
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Player had no solinialivingentity object");
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Player had no solinialivingentity object");
 				return;
 			}
 
 			if (useMana && spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "No mana");
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "No mana");
 				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]");
 				return;
 			}
@@ -2150,7 +2151,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!spell.isBardSong()) {
 				if (!hasReagents(spell,player))
 				{
-					Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "No reagents");
+					DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "No reagents");
 					return;
 				}
 			}
@@ -2170,16 +2171,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (player != null && !player.isDead())
 			if (targetmob != null && !targetmob.isDead()) {
 				boolean success = spell.tryCast(player, targetmob, useMana, useReagents, requiredWeaponSkillType);
-				Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Cast success for spell id ["+spell.getId()+"] state: " + success);
+				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Cast success for spell id ["+spell.getId()+"] state: " + success);
 				if (success == true) {
-					Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Trying to increase skill");
+					DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Trying to increase skill");
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()), 1);
 				}
 				return;
 			} else {
 				boolean success = spell.tryCast(player, player, useMana, useReagents, requiredWeaponSkillType);
 				if (success == true) {
-					Utils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer().getName(), "Trying to increase skill non dead/null mob");
+					DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Trying to increase skill non dead/null mob");
 					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()), 1);
 				}
 				return;
@@ -2285,11 +2286,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean checkDoesntFizzle(ISoliniaSpell spell) {
-		Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(),
+		DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
 				"Starting checkDoesntFizzle for " + getBukkitPlayer().getName());
 
 		if (getBukkitPlayer().isOp()) {
-			Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(),
+			DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
 					"checkDoesntFizzle was never fizzle as player is an Op");
 			return true;
 		}
@@ -2316,7 +2317,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
 			if (AArank != null) {
 				for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
-					Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(),
+					DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
 							"FoundSpellCastingExpertise level: " + rankEffect.getBase1());
 
 					if (rankEffect.getBase1() > no_fizzle_level)
@@ -2332,7 +2333,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aaMasteryOfThePast);
 				if (AArank != null) {
 					for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
-						Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(),
+						DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
 								"FoundMasteryOfPast level: " + rankEffect.getBase1());
 
 						if (rankEffect.getBase1() > no_fizzle_level)
@@ -2344,7 +2345,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		}
 
-		Utils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer().getName(),
+		DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
 				"MinLevelClass check: " + spell.getMinLevelClass(getClassObj().getName())
 						+ " is less than no_fizzle_level " + no_fizzle_level + "?");
 		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level) {

@@ -535,7 +535,6 @@ public class ItemStackUtils {
 		Timestamp itemStackTimestamp = ItemStackUtils.GetSolLastUpdated(item);
 		if (itemStackTimestamp == null)
 		{
-			Utils.DebugLog("ItemStackUtils","isItemStackUptoDate",String.valueOf(solitem.getId()),"ItemStack was null so returning false");
 			return false;
 		}
 		
@@ -551,7 +550,6 @@ public class ItemStackUtils {
 				}
 				stackUp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(itemStackTimestamp);
 				
-				Utils.DebugLog("ItemStackUtils","isItemStackUptoDate",String.valueOf(solitem.getId()),"ItemStack [" + stackUp  + "] was before [" + solUp + "]");
 				return false;
 			}
 		}

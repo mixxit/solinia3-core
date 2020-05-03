@@ -21,6 +21,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -105,7 +106,7 @@ public class SoliniaEntitySpells {
 		if (sourceEntity == null)
 			return false;
 
-		Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Beginning addSpell on behalf of caster");
+		DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Beginning addSpell on behalf of caster");
 		// This spell ID is already active
 		// TODO We should allow overwriting of higher level 
 		
@@ -121,19 +122,19 @@ public class SoliniaEntitySpells {
 		
 		if (containsSpellId(soliniaSpell.getId()) && !soliniaSpell.isStackableDot())
 		{
-			Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Abort, had spell already and it wasnt a stackable dot");
+			DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Abort, had spell already and it wasnt a stackable dot");
 			return false;
 		}
 
 		if ((slots.size() + 1) > getMaxTotalSlots())
 		{
-			Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Abort, had no more spell slots");
+			DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Abort, had no more spell slots");
 			return false;
 		}
 
 		if (this.getLivingEntity() == null)
 		{
-			Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Target didnt exist");
+			DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Target didnt exist");
 			return false;
 		}
 
@@ -144,7 +145,7 @@ public class SoliniaEntitySpells {
 			Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(getLivingEntity(), sourceEntity, soliniaSpell);
 			if (!result.a()) {
 				//System.out.println("Spell: " + soliniaSpell.getName() + "[" + soliniaSpell.getId() + "] found to have invalid target (" + getLivingEntity().getName() + ")");
-				Utils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity.getName(), "Failed to apply: " + result.b());
+				DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Failed to apply: " + result.b());
 				return false;
 			}
 		} catch (CoreStateInitException e) {
@@ -289,18 +290,18 @@ public class SoliniaEntitySpells {
 				}
 			}
 		} else if (activeSpell.isEffectInSpell(SpellEffectType.ManaBurn)) {
-			Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " We have a Mana Burn spell that is the same, they won't stack");
+			DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " We have a Mana Burn spell that is the same, they won't stack");
 			return -1;
 		}
 		
-		Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " check begins");
+		DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " check begins");
 		/*
 		One of these is a bard song and one isn't and they're both beneficial so they should stack.
 		*/
 		if(newSpell.isBardSong() != activeSpell.isBardSong())
 			if(!newSpell.isDetrimental() && !activeSpell.isDetrimental())
 			{
-				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " are beneficial, and one is a bard song, no action needs to be taken");
+				DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " are beneficial, and one is a bard song, no action needs to be taken");
 				return 0;
 			}
 		
@@ -341,16 +342,16 @@ public class SoliniaEntitySpells {
 					}
 				}
 				
-				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " activespell detrimental: " + activeSpell.isDetrimental());;
-				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " activespell detrimental: " + activeSpell.isDetrimental());;
-				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " newspell detrimental: " + newSpell.isDetrimental());;
+				DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " activespell detrimental: " + activeSpell.isDetrimental());;
+				DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " activespell detrimental: " + activeSpell.isDetrimental());;
+				DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " newspell detrimental: " + newSpell.isDetrimental());;
 				
 				/*
 				If the spells aren't the same
 				and the effect is a dot we can go ahead and stack it
 				*/
 				if(activeEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP) && activeSpell.getId() != newSpell.getId() && (activeSpell.isDetrimental() || newSpell.isDetrimental())) {
-					Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + "The spells are not the same and it is a detrimental dot, passing");
+					DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + "The spells are not the same and it is a detrimental dot, passing");
 					continue;
 				}
 				
@@ -361,7 +362,7 @@ public class SoliniaEntitySpells {
 				// Does the SPA allow stacking
 				if (!newEffect.allowsStacking(activeEffect))
 				{
-					Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " SPA does not allow stacking");
+					DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " SPA does not allow stacking");
 					return 0;
 				}
 				
@@ -413,14 +414,14 @@ public class SoliniaEntitySpells {
 					sp2_value = 0 - sp2_value;
 				
 				if(sp2_value < sp1_value) {
-					Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " one spell was not as good as the other");
+					DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " one spell was not as good as the other");
 
 					return -1;	// can't stack
 				}
 				
 				if (sp2_value != sp1_value)
 				{
-					Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " buff values were not equal");
+					DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " buff values were not equal");
 					values_equal = false;
 				}
 				
@@ -433,14 +434,14 @@ public class SoliniaEntitySpells {
 		if(will_overwrite) {
 			if (values_equal && effect_match && !newSpell.isGroupSpell() && activeSpell.isGroupSpell()) {
 
-				Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " appears to be the single target version of spell");
+				DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " appears to be the single target version of spell");
 
 				return -1;
 			}
-			Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " stacking code decided that it should overwrite");
+			DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " stacking code decided that it should overwrite");
 			return 1;
 		}		
-		Utils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity().getName(), activeSpell.getName() + " and " + newSpell.getName() + " were found to stack ok");
+		DebugUtils.DebugLog("SoliniaEntitySpells", "checkStackConflictCanStack", this.getBukkitLivingEntity(), activeSpell.getName() + " and " + newSpell.getName() + " were found to stack ok");
 		return 0;
 	}
 

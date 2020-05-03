@@ -53,6 +53,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.DropUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ForgeUtils;
@@ -229,7 +230,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int casterlevel = 1;
 		int targetresist = 0;
 		
-		Utils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity().getName(), "Resist check for " + spell.getName() + " ResistModifier:" + resistmodifier);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity(), "Resist check for " + spell.getName() + " ResistModifier:" + resistmodifier);
 
 		boolean isnpccaster = false;
 
@@ -302,7 +303,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		int roll = Utils.RandomBetween(0, 200);
 
-		Utils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity().getName(), "Checking if " + roll + " is greater than " + resist_chance);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity(), "Checking if " + roll + " is greater than " + resist_chance);
 
 		if (roll > resist_chance) {
 			return 100;
@@ -314,7 +315,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			int partial_modifier = ((150 * (resist_chance - roll)) / resist_chance);
 
-			Utils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity().getName(), "Partial modifier calculated at: " + partial_modifier + "((150 * (resist_chance - roll)) / resist_chance)");
+			DebugUtils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity(), "Partial modifier calculated at: " + partial_modifier + "((150 * (resist_chance - roll)) / resist_chance)");
 
 			if (isnpcvictim == true) {
 				if (victimlevel > casterlevel && victimlevel >= 17 && casterlevel <= 50) {
@@ -336,7 +337,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			}
 
-			Utils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity().getName(), "Final Partial modifier: " + partial_modifier + " checking if 100-"+partial_modifier + " is equal to 100 (resist)");
+			DebugUtils.DebugLog("SoliniaLivingEntity", "getResistSpell", this.getBukkitLivingEntity(), "Final Partial modifier: " + partial_modifier + " checking if 100-"+partial_modifier + " is equal to 100 (resist)");
 			
 			if (partial_modifier <= 0) {
 				return 100F;
@@ -838,17 +839,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void tryWeaponProc(ItemStack weaponItemStack, ISoliniaLivingEntity on, int hand) {
 		if (on == null) {
 			setAttackTarget(null);
-			//Log(Logs::General, Logs::Error, "A null Mob object was passed to Mob::TryWeaponProc for evaluation!");
+			DebugUtils.DebugLog("SoliniaLivingEntity", "tryWeaponProc", this.getBukkitLivingEntity(), "A null Mob object was passed to tryWeaponProc for evaluation!");
 			return;
 		}
 
 		if (!isAttackAllowed(on, false)) {
-			//Log(Logs::Detail, Logs::Combat, "Preventing procing off of unattackable things.");
+			DebugUtils.DebugLog("SoliniaLivingEntity", "tryWeaponProc", this.getBukkitLivingEntity(), "Preventing procing off of unattackable things");
 			return;
 		}
 
 		if (DivineAura()) {
-			//Log(Logs::Detail, Logs::Combat, "Procs canceled, Divine Aura is in effect.");
+			DebugUtils.DebugLog("SoliniaLivingEntity", "tryWeaponProc", this.getBukkitLivingEntity(), "Procs canceled, Divine Aura is in effect");
 			return;
 		}
 
@@ -994,6 +995,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int ourlevel = getEffectiveLevel(false);
 		/*float ProcBonus = static_cast<float>(aabonuses.ProcChanceSPA +
 			spellbonuses.ProcChanceSPA + itembonuses.ProcChanceSPA);*/
+		DebugUtils.DebugLog("SoliniaLivingEntity", "tryWeaponProc", this.getBukkitLivingEntity(), "Try Weapon Proc Level: "+ ourlevel);
 		
 		float ProcBonus = (float)this.getAABonuses(SpellEffectType.ProcChance);
 		// We only use the highest proc
@@ -1012,7 +1014,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// We can proc once here, either weapon or one aug
 		boolean proced = false; // silly bool to prevent augs from going if weapon does
 		skillinuse = getSkillByItemType(weapon.getItemType());
+
 		if (weapon.getWeaponabilityid() > 0 && IsValidSpell(weapon.getWeaponabilityid())) {
+			DebugUtils.DebugLog("SoliniaLivingEntity", "tryWeaponProc", this.getBukkitLivingEntity(), "Skillinuse: "+ skillinuse.name() + " ProcChance " + ProcChance + " ProcBonus "+ ProcBonus);
 			try
 			{
 				ISoliniaSpell weaponSpell = StateManager.getInstance().getConfigurationManager().getSpell(weapon.getWeaponabilityid());
@@ -1021,10 +1025,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					float WPC = ProcChance * (100.0f + // Proc chance for this weapon
 						(float)(weapon.getProcRate())) / 100.0f;
 					boolean roll = Utils.Roll(WPC);
+
+					DebugUtils.DebugLog("SoliniaLivingEntity", "tryWeaponProc", this.getBukkitLivingEntity(), "Roll for " + WPC + " was result " + roll);
+
 					if (roll) {	// 255 dex = 0.084 chance of proc. No idea what this number should be really.
 						//if (weapon->Proc.Level2 > ourlevel) { TODO - Specific proc level
 						if (weapon.getMinLevel() > getEffectiveLevel(false))
 						{
+							DebugUtils.DebugLog("SoliniaLivingEntity", "tryWeaponProc", this.getBukkitLivingEntity(), "Didnt proc, as the level was too low");
 							//Log(Logs::Detail, Logs::Combat, "Tried to proc (%s), but our level (%d) is lower than required (%d)",weapon->Name, ourlevel, weapon->Proc.Level2);
 							/*if (isPet()) {
 								Entity own = this.getOwnerEntity();
@@ -1039,6 +1047,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							/*Log(Logs::Detail, Logs::Combat,
 								"Attacking weapon (%s) successfully procing spell %d (%.2f percent chance)",
 								weapon->Name, weapon->Proc.Effect, WPC * 100);*/
+							DebugUtils.DebugLog("SoliniaLivingEntity", "tryWeaponProc", this.getBukkitLivingEntity(), "Successfully proccing spell");
 							ExecWeaponProc(inst, weaponSpell, on, -1);
 							proced = true;
 						}
@@ -1443,7 +1452,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private boolean CalcNPCAttack(int Hand, ISoliniaItem weapon, ISoliniaLivingEntity other,
 			ItemStack weaponItemStack, boolean bRiposte) {
 		// This is really just the rest of the Attack() method, it should be moved into its relevant class really
-		Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "Begin CalcNPCAttack");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "Begin CalcNPCAttack");
 
 		DamageHitInfo my_hit = new DamageHitInfo();
 		my_hit.skill = AttackAnimation(Hand, weapon, SkillType.HandtoHand);
@@ -1457,7 +1466,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			hate = (weapon.getDefinedItemDamage() + weapon.getElementalDamageAmount());*/
 
 		int weapon_damage = getWeaponDamage(other, weaponItemStack, 0);
-		Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "Weapon damage (before modification) will be: " + weapon_damage);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "Weapon damage (before modification) will be: " + weapon_damage);
 
 		if (weapon_damage > 0) {
 			// bane damage for body type
@@ -1476,9 +1485,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			//damage = mod_npc_damage(damage, skillinuse, Hand, weapon, other);
 
 			my_hit.base_damage = this.getNPC().getBaseDamage() + eleBane;
-			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "NPC Base Dmg: " + my_hit.base_damage);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "NPC Base Dmg: " + my_hit.base_damage);
 			my_hit.min_damage = this.getNPC().getMinDamage();
-			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "NPC Base Dmg: " + my_hit.min_damage);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "NPC Base Dmg: " + my_hit.min_damage);
 			int hate = my_hit.base_damage + my_hit.min_damage;
 
 			int hit_chance_bonus = 0;
@@ -1491,14 +1500,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				hit_chance_bonus += opts->hit_chance;
 			}*/
 			
-			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "Before offense calculation basedmg: " + my_hit.base_damage);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "Before offense calculation basedmg: " + my_hit.base_damage);
 			my_hit.offense = offense(my_hit.skill);
-			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "After offense calculation basedmg: " + my_hit.base_damage);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "After offense calculation basedmg: " + my_hit.base_damage);
 			my_hit.tohit = getTotalToHit(my_hit.skill, hit_chance_bonus);
-			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "After tohit calculation basedmg: " + my_hit.base_damage);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "After tohit calculation basedmg: " + my_hit.base_damage);
 
 			doAttack(other, my_hit);
-			Utils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity().getName(), "After doattack dmgdone: " + my_hit.damage_done);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "After doattack dmgdone: " + my_hit.damage_done);
 			
 			other.addToHateList(this.getBukkitLivingEntity().getUniqueId(), hate, false);
 			
@@ -1585,7 +1594,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// amount of hate is based on the damage done
 		if (hate == 0 && my_hit.base_damage > 1) {
 			hate = my_hit.base_damage;
-			Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(),
+			DebugUtils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity(),
 					"GetHitInfo hate set to: " + my_hit.base_damage);
 		}
 
@@ -1606,7 +1615,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (Hand == InventorySlot.Primary && getClassObj() != null && getClassObj().isWarriorClass() && getEffectiveLevel(false) >= 28) {
 				ucDamageBonus = getWeaponDamageBonus(weaponItemStack);
-				Utils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity().getName(), "GetHitInfo ucDamageBonus from weapon is: " + ucDamageBonus);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "GetHitInfo", this.getBukkitLivingEntity(), "GetHitInfo ucDamageBonus from weapon is: " + ucDamageBonus);
 				my_hit.min_damage = ucDamageBonus;
 				hate += ucDamageBonus;
 			}
@@ -1703,7 +1712,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (other.isInvulnerable())
 			return;
 		
-		Utils.DebugLog("SoliniaLivingEntity", "Damage", this.getBukkitLivingEntity().getName(), "Incoming call to Damage with damage: " + damage + " avoidable: " + avoidable);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "Damage", this.getBukkitLivingEntity(), "Incoming call to Damage with damage: " + damage + " avoidable: " + avoidable);
 
 		if (spell_id == 0)
 			spell_id = Utils.SPELL_UNKNOWN;
@@ -1760,7 +1769,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity() == null || attacker.getBukkitLivingEntity() == null)
 			return;
 		
-		Utils.DebugLog("SoliniaLivingEntity", "CommonDamage", this.getBukkitLivingEntity().getCustomName(), "Incoming CommonDamage: " + damage + " from attacker: " + attacker.getBukkitLivingEntity().getName());
+		DebugUtils.DebugLog("SoliniaLivingEntity", "CommonDamage", this.getBukkitLivingEntity(), "Incoming CommonDamage: " + damage + " from attacker: " + attacker.getBukkitLivingEntity().getName());
 		boolean FromDamageShield = (skillType.equals(SkillType.Abjuration));
 		boolean ignore_invul = false;
 		if (IsValidSpell(spell_id))
@@ -3484,7 +3493,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			frequency = 0.10F;
 		
 		frequency = (float)(Math.round(frequency*100.0)/100.0);
-		Utils.DebugLog("SoliniaLivingEntity","getAutoAttackTimerFrequencySeconds",getBukkitLivingEntity().getName(),"WeaponDelayInSeconds: " + weaponDelayInSeconds + " onePercentWeaponDelay: " + onePercentWeaponDelay + " hastedWeaponDelay: " + hastedWeaponDelay + " hastedWeaponDelayMinusDelay: " + hastedWeaponDelayMinusDelay + " frequency: " + frequency);
+		DebugUtils.DebugLog("SoliniaLivingEntity","getAutoAttackTimerFrequencySeconds",getBukkitLivingEntity(),"WeaponDelayInSeconds: " + weaponDelayInSeconds + " onePercentWeaponDelay: " + onePercentWeaponDelay + " hastedWeaponDelay: " + hastedWeaponDelay + " hastedWeaponDelayMinusDelay: " + hastedWeaponDelayMinusDelay + " frequency: " + frequency);
 		return frequency;
 	}
 
@@ -3656,7 +3665,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		
 		int dmg = getBaseSkillDamage(skill_to_use, getEntityTarget());	
-		Utils.DebugLog("SoliniaLivingEntity", "doClassAttacks", this.getBukkitLivingEntity().getName(), "BaseSkillDamage: " + dmg);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doClassAttacks", this.getBukkitLivingEntity(), "BaseSkillDamage: " + dmg);
 		if (skill_to_use == SkillType.Bash) {
 			if (ca_target!=this) {
 				//DoAnim(animTailRake, 0, false);
@@ -3870,7 +3879,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!Utils.isValidSkill(skill.name().toUpperCase()))
 			return;
 
-		Utils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity().getName(),"doSpecialAttackDamage basedmg: " + base_damage + " with min_damage: " + min_damage);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity(),"doSpecialAttackDamage basedmg: " + base_damage + " with min_damage: " + min_damage);
 		DamageHitInfo my_hit = new DamageHitInfo();
 		my_hit.damage_done = 1; // min 1 dmg
 		my_hit.base_damage = base_damage;
@@ -3908,11 +3917,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		*/
 
-		Utils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity().getName(),"damage_done before offense() check: " + my_hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity(),"damage_done before offense() check: " + my_hit.damage_done);
 		my_hit.offense = offense(my_hit.skill);
-		Utils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity().getName(),"damage_done before gettotaltohit() check: " + my_hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity(),"damage_done before gettotaltohit() check: " + my_hit.damage_done);
 		my_hit.tohit = getTotalToHit(my_hit.skill, 0);
-		Utils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity().getName(),"damage_done after gettotaltohit() check: " + my_hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity(),"damage_done after gettotaltohit() check: " + my_hit.damage_done);
 
 		my_hit.hand = InventorySlot.Primary; // Avoid checks hand for throwing/archery exclusion, primary should
 							  // work for most
@@ -4139,7 +4148,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return hit;
 		
 		// for riposte
-		Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "Start of doAttack damage done: " + hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "Start of doAttack damage done: " + hit.damage_done);
 		int originalDamage = hit.damage_done;
 		hit = other.avoidDamage(this, hit);
 
@@ -4167,18 +4176,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 
-		Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "Damage done: " + hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "Damage done: " + hit.damage_done);
 		if (hit.damage_done >= 0) {
 			if (other.checkHitChance(this, hit)) {
 				// npc chance to stun
 				
 				hit = other.meleeMitigation(this, hit);
-				Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "After meleeMitigation hit.damage_done: " + hit.damage_done);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "After meleeMitigation hit.damage_done: " + hit.damage_done);
 				if (hit.damage_done > 0) {
 					hit = applyDamageTable(hit);
-					Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "After applyDamageTable hit.damage_done: " + hit.damage_done);
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "After applyDamageTable hit.damage_done: " + hit.damage_done);
 					hit = commonOutgoingHitSuccess(other, hit);
-					Utils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity().getName(), "After commonOutgoingSuccess hit.damage_done: " + hit.damage_done);
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "After commonOutgoingSuccess hit.damage_done: " + hit.damage_done);
 				}
 			} else {
 				if (getBukkitLivingEntity() instanceof Player) {
@@ -4303,19 +4312,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// TODO shielding mod2
 		// TODO item melee mitigation
 		
-		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "Before applyMeleeDamageMods damagedone: "+ hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "Before applyMeleeDamageMods damagedone: "+ hit.damage_done);
 
 		hit.damage_done = applyMeleeDamageMods(hit.skill, hit.damage_done, defender);
-		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "After applyMeleeDamageMods damagedone: "+ hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "After applyMeleeDamageMods damagedone: "+ hit.damage_done);
 		min_mod = Math.max(min_mod, extra_mincap);
 
-		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "Before tryCrit damagedone: "+ hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "Before tryCrit damagedone: "+ hit.damage_done);
 		hit = tryCriticalHit(defender, hit);
-		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "After tryCrit damagedone: "+ hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "After tryCrit damagedone: "+ hit.damage_done);
 
-		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "Before tryCrit mindmg bonus damagedone: "+ hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "Before tryCrit mindmg bonus damagedone: "+ hit.damage_done);
 		hit.damage_done += hit.min_damage;
-		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "After mindmg bonus damagedone: "+ hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "After mindmg bonus damagedone: "+ hit.damage_done);
 
 		// this appears where they do special attack dmg mods
 		int spec_mod = 0;
@@ -4325,11 +4334,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (spec_mod > 0)
 			hit.damage_done = (hit.damage_done * spec_mod) / 100;
 
-		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "Before defender.getSkillDmgTaken damagedone: "+ hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "Before defender.getSkillDmgTaken damagedone: "+ hit.damage_done);
 		hit.damage_done += (hit.damage_done * defender.getSkillDmgTaken(hit.skill) / 100)
 				+ (defender.getFcDamageAmtIncoming(this, 0, true, hit.skill));
 
-		Utils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity().getName(), "After defender.getSkillDmgTaken damagedone: "+ hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "After defender.getSkillDmgTaken damagedone: "+ hit.damage_done);
 
 		checkNumHitsRemaining(NumHit.OutgoingHitSuccess);
 		return hit;
@@ -4602,7 +4611,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private DamageHitInfo applyDamageTable(DamageHitInfo hit) {
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "Starting applyDamageTable (hit.offense: " + hit.offense + " + hit.damage_done: " + hit.damage_done + ")");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "Starting applyDamageTable (hit.offense: " + hit.offense + " + hit.damage_done: " + hit.damage_done + ")");
 		
 		// someone may want to add this to custom servers, can remove this if that's the case
 		if (!this.isPlayer())
@@ -4618,37 +4627,37 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// 1 = chance
 		// 2 = minusfactor
 		int[] damage_table = getDamageTable();
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "Damage table [" + damage_table[0] + "," + damage_table[1] + "," + damage_table[2] + "]");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "Damage table [" + damage_table[0] + "," + damage_table[1] + "," + damage_table[2] + "]");
 
 
 		if (Utils.Roll(damage_table[1]))
 			return hit;
 
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "Damage table rolled less than " + damage_table[1]);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "Damage table rolled less than " + damage_table[1]);
 
 		
 		int basebonus = hit.offense - damage_table[2];
 
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "basebonus: " + basebonus);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "basebonus: " + basebonus);
 
 		basebonus = Math.max(10, basebonus / 2);
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "basebonus2: " + basebonus);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "basebonus2: " + basebonus);
 
 		int extrapercent = Utils.RandomBetween(0, basebonus);
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "extrapercent: " + extrapercent);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "extrapercent: " + extrapercent);
 
 		int percent = Math.min(100 + extrapercent, damage_table[0]);
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "percent: " + percent);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "percent: " + percent);
 
 		hit.damage_done = (hit.damage_done * percent) / 100;
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "damage_done: " + hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "damage_done: " + hit.damage_done);
 
 		if (getClassObj() != null) {
 			if (getClassObj().isWarriorClass() && getEffectiveLevel(false) > 54)
 				hit.damage_done++;
 		}
 
-		Utils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity().getName(), "damage_done2: " + hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "applyDamageTable", this.getBukkitLivingEntity(), "damage_done2: " + hit.damage_done);
 		return hit;
 	}
 
@@ -4812,10 +4821,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			else
 				items = getEquippedSoliniaItems(true);
 
-			Utils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity().getName(), "Found Equipped Item Count: " + items.size());
+			DebugUtils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity(), "Found Equipped Item Count: " + items.size());
 			
 			for (ISoliniaItem item : items) {
-				Utils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity().getName(), "Found Equipped Item for TotalItemStat: " + item.getId());
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity(), "Found Equipped Item for TotalItemStat: " + item.getId());
 
 				switch (stat) {
 				case Strength:
@@ -4888,27 +4897,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int offense(SkillType skillType) {
-		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getOffense starts for " + skillType.name());
+		DebugUtils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity(),"getOffense starts for " + skillType.name());
 		int offense = getSkill(skillType);
-		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"getSkill value found " + offense);
+		DebugUtils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity(),"getSkill value found " + offense);
 		int stat_bonus = getStrength();
 		if (skillType.equals(SkillType.Archery) || skillType.equals(SkillType.Throwing))
 		{
 			stat_bonus = getDexterity();
-			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),"Using dexterity value for stat bonus " + stat_bonus);
+			DebugUtils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity(),"Using dexterity value for stat bonus " + stat_bonus);
 		}
 		
 		if (stat_bonus >= 75)
 		{
-			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " was found to be greater than 75 so capping");
+			DebugUtils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity(),stat_bonus + " was found to be greater than 75 so capping");
 			offense += (2 * stat_bonus - 150) / 3;
-			Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " offense now capped at " + offense);
+			DebugUtils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity(),stat_bonus + " offense now capped at " + offense);
 		}
 
 		// TODO do ATTK
 		int attk = getAtk();
 		offense += attk;
-		Utils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity().getName(),stat_bonus + " added attk (" +attk + ") to offense - final offense value is: " + offense);
+		DebugUtils.DebugLog("SoliniaLivingEntity","getOffense",this.getBukkitLivingEntity(),stat_bonus + " added attk (" +attk + ") to offense - final offense value is: " + offense);
 		return offense;
 	}
 	
@@ -5967,7 +5976,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity, int npcEffectiveLevel)
 			throws CoreStateInitException {
 
-		Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "Start aiEngagedCastCheck");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "Start aiEngagedCastCheck");
 
 		if (this.getClassObj() == null)
 			return;
@@ -5992,13 +6001,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 
 		// Try self buff, then nearby then target detrimental
-		Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "attempting to cast self buff");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast self buff");
 		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(), engagedBeneficialSelfChance,beneficialSelfSpells, npcEffectiveLevel)) {
-			Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "attempting to cast other buff");
+			DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast other buff");
 			if (!aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance, StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),beneficialOtherSpells, npcEffectiveLevel)) {
-				Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "attempting to cast detrimental");
+				DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast detrimental");
 				if (!aiCastSpell(plugin, npc, castingAtEntity, engagedDetrimentalOtherChance, detrimentalSpells, npcEffectiveLevel)) {
-					Utils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity().getName(), "Cannot cast at all");
+					DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "Cannot cast at all");
 				}
 			}
 		}
@@ -6008,27 +6017,28 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean aiCheckCloseBeneficialSpells(Plugin plugin, ISoliniaNPC npc, int iChance, int iRange,
 			int iSpellTypes, int npcEffectiveLevel) throws CoreStateInitException {
 		if (((iSpellTypes & SpellType.Detrimental)) == SpellType.Detrimental) {
-			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+			DebugUtils.DebugLog("SoliniaLivingEntity","aiCheckCloseBeneficialSpells",this.getBukkitLivingEntity(),
+					"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a close beneficial spell as I have a detrimental in my list");
 			return false;
 		}
 
 		if (this.getClassObj() == null) {
-			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+			DebugUtils.DebugLog("SoliniaLivingEntity","aiCheckCloseBeneficialSpells",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a close beneficial spell as I have no class");
 			return false;
 		}
 
 		if (iChance < 100) {
 			if (Utils.RandomBetween(0, 99) >= iChance) {
-				Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+				DebugUtils.DebugLog("SoliniaLivingEntity","aiCheckCloseBeneficialSpells",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 						+ " cannot cast a close beneficial spell as i rolled less than the chance");
 				return false;
 			}
 		}
 
 		if (npc.getFactionid() == 0) {
-			Utils.DebugMessage("NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+			DebugUtils.DebugLog("SoliniaLivingEntity","aiCheckCloseBeneficialSpells",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a close beneficial spell as I have no faction");
 			return false;
 		}
@@ -6085,10 +6095,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public boolean aiCastSpell(Plugin plugin, ISoliniaNPC npc, LivingEntity target, int iChance, int iSpellTypes, int npcEffectiveLevel)
 			throws CoreStateInitException {
-		Utils.DebugLog("SoliniaLivingEntity", "aiCastSpell", this.getBukkitLivingEntity().getName(), "attempting to cast detrimental");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "aiDoSpellCast", this.getBukkitLivingEntity(), "attempting to cast detrimental");
 
 		if (this.getClassObj() == null) {
-			Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+			DebugUtils.DebugLog("SoliniaLivingEntity","aiDoSpellCast",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a spell as I have no class");
 			return false;
 		}
@@ -6147,7 +6157,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// AI has spells?
 		if (spells.size() == 0) {
-			Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+			DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc + this.getBukkitLivingEntity().getUniqueId().toString()
 					+ " cannot cast a spell as I have no spells");
 			return false;
 		}
@@ -6170,7 +6180,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				switch (spelllistentry.getType()) {
 				case SpellType.Heal:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast heal " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
 							&& !Utils.hasSpellActive(soltarget, spell)
@@ -6190,7 +6200,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Root:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast root " + spell.getName());
 					// TODO - Pick at random
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
@@ -6201,7 +6211,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!this.checkLosFN(tar)) {
-								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+								DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -6229,21 +6239,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!this.checkLosFN(tar)) {
-								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"Could not cast as i could not see the arget");
+								DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Could not cast as i could not see the arget");
 								return false;
 							}
 							checked_los = true;
 						} else {
-							Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+							DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 									" could not cast as i could not see the target (already)");
 						}
 						boolean success = aiDoSpellCast(plugin, spell, soltarget, mana_cost);
 						StateManager.getInstance().getEntityManager().setDontSpellTypeMeBefore(target, SpellType.Buff,
 								expiretimestamp);
-						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"Buff success: " + success);
+						DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Buff success: " + success);
 						return true;
 					} else {
-						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName()," could not cast as either the spell target was wrong, the target was not me or i have already buffed myself recently");
+						DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity()," could not cast as either the spell target was wrong, the target was not me or i have already buffed myself recently");
 					}
 					break;
 				case SpellType.Escape:
@@ -6251,7 +6261,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return false;
 				case SpellType.Slow:
 				case SpellType.Debuff:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast debuff " + spell.getName());
 					// TODO debuff at random
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
@@ -6260,7 +6270,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
-								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+								DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -6272,7 +6282,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Nuke:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast nuke " + spell.getName());
 					boolean nukeRoll = Utils.RandomRoll(70);
 					Tuple<Boolean, String> valid = SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell);
@@ -6283,24 +6293,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
-								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+								DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
 							}
 							checked_los = true;
 						} else {
-							Utils.DebugMessage(
+							DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 									"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 											+ " could not cast as i could not see the target (previously checked)");
 						}
-						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+						DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 								"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 										+ " nuke appears to be successful");
 						aiDoSpellCast(plugin, spell, soltarget, mana_cost);
 						return true;
 					} else {
-						Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+						DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 								"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 										+ " could not cast nuke as either my mana ratio was too low (" + !(manaR >= 10)
 										+ ") or i rolled badly roll failure: (" + nukeRoll + ")"
@@ -6309,13 +6319,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Dispel:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast dispell " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
 							&& !Utils.hasSpellActive(soltarget, spell) && Utils.RandomRoll(15)) {
 						if (!checked_los) {
 							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
-								Utils.DebugMessage(
+								DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -6329,7 +6339,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Mez:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast mez " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
 							&& !Utils.hasSpellActive(soltarget, spell) && Utils.RandomRoll(20)) {
@@ -6343,7 +6353,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					// TODO Pets
 					break;
 				case SpellType.Lifetap:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast lifetap " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
 							&& !Utils.hasSpellActive(soltarget, spell) && getHPRatio() <= 95 && Utils.RandomRoll(50)
@@ -6351,7 +6361,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
-								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+								DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -6364,7 +6374,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Snare:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast snare " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
 							&& !Utils.hasSpellActive(soltarget, spell) && !soltarget.isRooted() && Utils.RandomRoll(50)
@@ -6374,7 +6384,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					) {
 						if (!checked_los) {
 							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
-								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+								DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -6390,7 +6400,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 					break;
 				case SpellType.DOT:
-					Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 							+ " attempting to cast dot " + spell.getName());
 					if ((SoliniaSpell.isValidEffectForEntity(target, this.getBukkitLivingEntity(), spell).a())
 							&& !Utils.hasSpellActive(soltarget, spell) && (Utils.RandomRoll(60))
@@ -6401,7 +6411,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 						if (!checked_los) {
 							if (!RaycastUtils.isEntityInLineOfSight(this,tar, true)) {
-								Utils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity().getName(),
+								DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),
 										"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 												+ " could not cast as i could not see the arget");
 								return false;
@@ -6463,7 +6473,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!isNPC())
 			return;
 
-		Utils.DebugLog("SoliniaLivingEntity", "doSpellCast", this.getBukkitLivingEntity().getName(), "Start doSpellCast");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpellCast", this.getBukkitLivingEntity(), "Start doSpellCast");
 		
 		if (castingAtEntity == null || this.livingentity == null)
 			return;
@@ -6585,7 +6595,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ProcChance += ProcChance * ProcBonus / 100.0f;
 
 		//Log(Logs::Detail, Logs::Combat, "Proc chance %.2f (%.2f from bonuses)", ProcChance, ProcBonus);
-		return ProcChance;
+		if (this.getBukkitLivingEntity() != null)
+		DebugUtils.DebugLog("SoliniaLivingEntity", "getProcChances", this.getBukkitLivingEntity(), "Proc chance "+ProcChance+" ("+ProcBonus+" from bonuses)");
+			return ProcChance;
 	}
 
 	@Override
@@ -6608,7 +6620,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
-		Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "getMaxHP called with statHp: " + statHp + " itemHp " + itemHp + " totalHp:" + totalHp);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity(), "getMaxHP called with statHp: " + statHp + " itemHp " + itemHp + " totalHp:" + totalHp);
 		try {
 			if (getNpcid() > 0) 
 			{
@@ -6616,7 +6628,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (npc == null)
 					return totalHp;
 
-				Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Preparing getMaxHp");
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity(), "Preparing getMaxHp");
 				if (npc.getForcedMaxHp() > 0) {
 					if (npc.isCorePet())
 					{
@@ -6624,7 +6636,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						if (totalHp < npc.getForcedMaxHp())
 							totalHp = npc.getForcedMaxHp();
 					} else {
-						Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Forced getMaxHp to " + npc.getForcedMaxHp() + " if its lower");
+						DebugUtils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity(), "Forced getMaxHp to " + npc.getForcedMaxHp() + " if its lower");
 						return npc.getForcedMaxHp();
 					}
 				}
@@ -6633,21 +6645,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				if (npc.isBoss()) {
 					totalHp += (Utils.getBossHPMultiplier(npc.isHeroic()) * npc.getLevel());
-					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Boss hp is now: " + totalHp);
+					DebugUtils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity(), "Boss hp is now: " + totalHp);
 				}
 
 				if (npc.isHeroic()) {
 					totalHp += (Utils.getHeroicHPMultiplier() * npc.getLevel());
-					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Heroic hp is now: " + totalHp);
+					DebugUtils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity(), "Heroic hp is now: " + totalHp);
 				}
 
 				if (npc.isRaidboss()) {
-					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Raidboss hp is now: " + totalHp);
+					DebugUtils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity(), "Raidboss hp is now: " + totalHp);
 					totalHp += (Utils.getRaidBossHPMultiplier() * npc.getLevel());
 				}
 
 				if (npc.isRaidheroic()) {
-					Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Raid heroic hp is now: " + totalHp);
+					DebugUtils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity(), "Raid heroic hp is now: " + totalHp);
 					totalHp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
 				}
 				
@@ -6670,7 +6682,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 				}
 
-				Utils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity().getName(), "Final Hp is now: " + (totalHp/100) * percentHP);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getMaxHp", this.getBukkitLivingEntity(), "Final Hp is now: " + (totalHp/100) * percentHP);
 				return (totalHp/100) * percentHP;
 			}
 
@@ -6947,7 +6959,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		// This includes augs as seperate items
 		if (isPlayer()) {
 			try {
-				Utils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity().getName(), "Found Player, seeking equipped soliniaitems");
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity(), "Found Player, seeking equipped soliniaitems");
 				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) this.getBukkitLivingEntity());
 				return solplayer.getEquippedSoliniaItems(ignoreMainhand, excludeUnwearable);
 			} catch (CoreStateInitException e) {
@@ -6956,7 +6968,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (isNPC()) {
-			Utils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity().getName(), "Found NPC, seeking equipped soliniaitems");
+			DebugUtils.DebugLog("SoliniaLivingEntity", "getEquippedSoliniaItems", getBukkitLivingEntity(), "Found NPC, seeking equipped soliniaitems");
 			ISoliniaNPC npc = getNPC();
 			return npc.getEquippedSoliniaItems(getBukkitLivingEntity(), ignoreMainhand);
 		}
@@ -7008,20 +7020,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					return 1;
 
 				int stat = getEffectiveLevel(false) * 5;
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "base: " + stat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "base: " + stat);
 
 				int totalItemStat = getTotalItemStat(StatType.Stamina);
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalItemStat: " + totalItemStat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "totalItemStat: " + totalItemStat);
 				int totalEffectStat = Utils.getTotalEffectStat(this.getBukkitLivingEntity(), StatType.Stamina);
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalEffectStat: " + totalEffectStat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "totalEffectStat: " + totalEffectStat);
 				int maxStat = getMaxStat(StatType.Stamina);
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "maxStamina allowed: " + maxStat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "maxStamina allowed: " + maxStat);
 				stat += totalItemStat;
 				stat += totalEffectStat;
 
 				if (stat > maxStat)
 					stat = maxStat;
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "final stat: " + stat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "final stat: " + stat);
 
 				return stat;
 			}
@@ -7037,26 +7049,26 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					stat += solplayer.getRace().getStamina();
 
 
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "base: " + stat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "base: " + stat);
 
 				int totalItemStat = getTotalItemStat(StatType.Stamina);
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalItemStat: " + totalItemStat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "totalItemStat: " + totalItemStat);
 				stat += totalItemStat;
 
 				int totalEffectStat = Utils.getTotalEffectStat(this.getBukkitLivingEntity(), StatType.Stamina);
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalEffectStat: " + totalEffectStat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "totalEffectStat: " + totalEffectStat);
 				stat += totalEffectStat;
 				
 				int totalAAEffectStat = Utils.getTotalAAEffectStat(this.getBukkitLivingEntity(), StatType.Stamina);
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "totalAAEffectStat: " + totalAAEffectStat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "totalAAEffectStat: " + totalAAEffectStat);
 				stat += totalAAEffectStat;
 				
 				int maxStat = getMaxStat(StatType.Stamina);
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "maxStamina allowed: " + maxStat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "maxStamina allowed: " + maxStat);
 
 				if (stat > maxStat)
 					stat = maxStat;
-				Utils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity().getName(), "final stat: " + stat);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "getStamina", this.getBukkitLivingEntity(), "final stat: " + stat);
 				return stat;
 			}
 		} catch (CoreStateInitException e) {
@@ -7864,10 +7876,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public DamageHitInfo meleeMitigation(ISoliniaLivingEntity attacker, DamageHitInfo hit) {
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "-------------");
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "Melee Mitigation starts with hit: offense " + hit.offense + " damagedone " + hit.damage_done + " base_damage " + hit.base_damage);
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity().getName(), "-------------");
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity().getName(), "Melee Mitigation on enemy starts with hit: offense " + hit.offense + " damagedone " + hit.damage_done + " base_damage " + hit.base_damage);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity(), "-------------");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity(), "Melee Mitigation starts with hit: offense " + hit.offense + " damagedone " + hit.damage_done + " base_damage " + hit.base_damage);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity(), "-------------");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity(), "Melee Mitigation on enemy starts with hit: offense " + hit.offense + " damagedone " + hit.damage_done + " base_damage " + hit.base_damage);
 
 		if (hit.damage_done < 0 || hit.base_damage == 0)
 			return hit;
@@ -7875,22 +7887,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		ISoliniaLivingEntity defender = this;
 		int mitigation = defender.getMitigationAC();
 
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "mitigationAC : " + mitigation);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity(), "mitigationAC : " + mitigation);
 
 		if (isPlayer() && attacker.isPlayer())
 		{
 			mitigation = mitigation * 80 / 100; // PvP
-			Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "PVP mitigationAC capped over to: " + mitigation);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity(), "PVP mitigationAC capped over to: " + mitigation);
 		}
 
 		int roll = (int) rollD20(hit.offense, mitigation);
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "mitigation dice d20 ( roll was: " + roll + " from offense: "+hit.offense + " and mitigation: " + mitigation);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity(), "mitigation dice d20 ( roll was: " + roll + " from offense: "+hit.offense + " and mitigation: " + mitigation);
 
 		// +0.5 for rounding, min to 1 dmg
 		hit.damage_done = Math.max((int) (roll * (double) (hit.base_damage) + 0.5), 1);
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "new damage done is: " + hit.damage_done + " (this was: roll("+roll+")*basedamage("+hit.base_damage+")+0.5");
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity().getName(), "mitigation" + mitigation + " vs offense " + hit.offense + " base " + hit.base_damage + " rolled " + roll + " damage " + hit.damage_done);
-		Utils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity().getName(), "mitigation" + mitigation + " vs offense " + hit.offense + " base " + hit.base_damage + " rolled " + roll + " damage " + hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity(), "new damage done is: " + hit.damage_done + " (this was: roll("+roll+")*basedamage("+hit.base_damage+")+0.5");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", this.getBukkitLivingEntity(), "mitigation" + mitigation + " vs offense " + hit.offense + " base " + hit.base_damage + " rolled " + roll + " damage " + hit.damage_done);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "meleeMitigation", attacker.getBukkitLivingEntity(), "mitigation" + mitigation + " vs offense " + hit.offense + " base " + hit.base_damage + " rolled " + roll + " damage " + hit.damage_done);
 
 		return hit;
 	}
@@ -7933,20 +7945,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		//if (this.isPlayer() || IsCorePet())
 		ac += getTotalItemAC();
 		
-		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "Start ACSum with totalItemAC " + ac);
+		if (this.getBukkitLivingEntity() != null)
+		DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "Start ACSum with totalItemAC " + ac);
 		double shield_ac = 0;
 
 		// EQ math
 		ac = (ac * 4) / 3;
-		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after eq math " + ac);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "ac after eq math " + ac);
 		// anti-twink
 		if (isPlayer() && getEffectiveLevel(false) < 50)
 			ac = Math.min(ac, 25 + 6 * getEffectiveLevel(false));
 
-		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after antitwink" + ac);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "ac after antitwink" + ac);
 
 		ac = Math.max(0, ac + getClassRaceACBonus());
-		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after raceacbonus" + ac);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "ac after raceacbonus" + ac);
 
 		if (isNPC()) {
 			try {
@@ -7993,13 +8006,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				ac += getSkill(SkillType.Defense) / 3 + spell_aa_ac / 4;
 			}
 
-			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after defense & spellbonus " + ac);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "ac after defense & spellbonus " + ac);
 
 		}
 
 		if (getAgility() > 70)
 			ac += getAgility() / 20;
-		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac after agility " + ac);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "ac after agility " + ac);
 
 		if (ac < 0)
 			ac = 0;
@@ -8008,8 +8021,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			double softcap = getACSoftcap();
 			double returns = getSoftcapReturns();
 
-			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac softcap " + softcap);
-			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac softcapreturns " + returns);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "ac softcap " + softcap);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "ac softcapreturns " + returns);
 
 			// TODO itembonuses
 
@@ -8023,16 +8036,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				softcap = (softcap * (100 + total_aclimitmod)) / 100;
 			softcap += shield_ac;
 
-			Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "softcap after aclimitmods and shieldac " + softcap);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "softcap after aclimitmods and shieldac " + softcap);
 
 			if (ac > softcap) {
 				double over_cap = ac - softcap;
 				ac = softcap + (over_cap * returns);
-				Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "ac was over softcap, ac now: " + ac);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "ac was over softcap, ac now: " + ac);
 			}
 		}
 
-		Utils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity().getName(), "final ac: " + ac);
+		DebugUtils.DebugLog("SoliniaLivingEntity", "ACSum", this.getBukkitLivingEntity(), "final ac: " + ac);
 		return (int) ac;
 	}
 
@@ -8824,10 +8837,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (this.getBukkitLivingEntity() instanceof Creature) {
 				this.getBukkitLivingEntity().setLastDamageCause(null);
 				
-				Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "i am being told to set my target to " + null);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity(), "i am being told to set my target to " + null);
 				((Creature) this.getBukkitLivingEntity()).setTarget(null);
 
-				Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "my new target is " + ((Creature) this.getBukkitLivingEntity()).getTarget());
+				DebugUtils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity(), "my new target is " + ((Creature) this.getBukkitLivingEntity()).getTarget());
 			}
 			return;
 		}
@@ -8837,11 +8850,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				this.addToHateList(entity.getUniqueId(), 1, true);
 			}
 			
-			Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "i am being told to set my target to " + entity);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity(), "i am being told to set my target to " + entity);
 			if (entity == null)
 				this.getBukkitLivingEntity().setLastDamageCause(null);
 			((Creature) this.getBukkitLivingEntity()).setTarget(entity);
-			Utils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity().getName(), "my new target is " + ((Creature) this.getBukkitLivingEntity()).getTarget());
+			DebugUtils.DebugLog("SoliniaLivingEntity", "setAttackTarget", this.getBukkitLivingEntity(), "my new target is " + ((Creature) this.getBukkitLivingEntity()).getTarget());
 		}
 	}
 
@@ -8962,7 +8975,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				} else {
 					// NPC VS PLAYER
 					Player player = (Player) entity;
-					Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Checking for hate against player: " + player.getName() + ":" + player.getUniqueId());
+					DebugUtils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",this.getBukkitLivingEntity(),"Checking for hate against player: " + player.getName() + ":" + player.getUniqueId());
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 
 					if (faction.getName().equals("KOS") && solPlayer != null) {
@@ -8974,7 +8987,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					
 					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 					if (factionEntry != null && solPlayer != null) {
-						Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Found faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId() + " with standing: " + Utils.getFactionStandingType(factionEntry.getFactionId(),factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player)).name());
+						DebugUtils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",this.getBukkitLivingEntity(),"Found faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId() + " with standing: " + Utils.getFactionStandingType(factionEntry.getFactionId(),factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player)).name());
 						
 						switch (Utils.getFactionStandingType(factionEntry.getFactionId(),
 								factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player))) {
@@ -8990,7 +9003,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							continue;
 						}
 					} else {
-						Utils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",Integer.toString(this.getNpcid()),"Failed to find faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId());
+						DebugUtils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",this.getBukkitLivingEntity(),"Failed to find faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId());
 						
 					}
 				}
@@ -10620,24 +10633,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public void doMend() {
-		Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "start of doMend spell");
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity(), "start of doMend spell");
 		int mendhp = (int)getMaxHP() / 4;
 		int currenthp = (int)getHP();
 		if (Utils.RandomBetween(0, 199) < (int)getSkill(SkillType.Mend)) {
 
 			int criticalchance = getSpellBonuses(SpellEffectType.CriticalMend) + getItemBonuses(SpellEffectType.CriticalMend) + getAABonuses(SpellEffectType.CriticalMend);
-			Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "crit chance: " + criticalchance);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity(), "crit chance: " + criticalchance);
 
 			if (Utils.RandomBetween(0, 99) < criticalchance) {
-				Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "yay crit!");
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity(), "yay crit!");
 				mendhp *= 2;
 				this.getBukkitLivingEntity().sendMessage("You magically mend your wounds and heal considerable damage");
 			} else {
-				Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "failed crit roll");
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity(), "failed crit roll");
 			}
 			
 			setHPChange(mendhp, this.getBukkitLivingEntity());
-			Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "healing damage: " + mendhp);
+			DebugUtils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity(), "healing damage: " + mendhp);
 			this.getBukkitLivingEntity().sendMessage("You mend your wounds and heal some damage");
 		}
 		else {
@@ -10647,7 +10660,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			0 skill - 25% chance to worsen
 			20 skill - 23% chance to worsen
 			50 skill - 16% chance to worsen */
-			Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "i had a chance of failure");
+			DebugUtils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity(), "i had a chance of failure");
 			if ((getSkill(SkillType.Mend) <= 75) && (Utils.RandomBetween(getSkill(SkillType.Mend), 100) < 75) && (Utils.RandomBetween(1, 3) == 1))
 			{
 				int change = -1;
@@ -10656,12 +10669,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 				setHPChange(change, this.getBukkitLivingEntity());
 				
-				Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "hurt myself by hp: ["+change+"]");
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity(), "hurt myself by hp: ["+change+"]");
 				this.getBukkitLivingEntity().sendMessage("You have worsened your wounds!");
 			}
 			else
 			{
-				Utils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity().getName(), "failed but didnt hurt myself");
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doMend", this.getBukkitLivingEntity(), "failed but didnt hurt myself");
 				this.getBukkitLivingEntity().sendMessage("You have failed to mend your wounds");
 			}
 		}

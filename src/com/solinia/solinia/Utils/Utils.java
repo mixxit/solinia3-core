@@ -4728,10 +4728,6 @@ public class Utils {
 		return uuid.toString();
 	}
 
-	public static void DebugMessage(String string) {
-		// System.out.println(string);
-	}
-
 	public static boolean hasSpellActive(ISoliniaLivingEntity target, ISoliniaSpell spell) {
 		for (SoliniaActiveSpell activeSpell : target.getActiveSpells()) {
 			if (activeSpell.getSpell().getId() == spell.getId())
@@ -5534,7 +5530,7 @@ public class Utils {
 	public static void RemoveEntity(Entity entity, String caller) {
 		// System.out.println("removing entity via caller: " + caller + " " +
 		// entity.getName());
-		Utils.DebugLog("Utils", "RemoveEntity", entity.getName(), "Removing entity via caller: " + caller + " " +entity.getName());
+		DebugUtils.DebugLog("Utils", "RemoveEntity", entity, "Removing entity via caller: " + caller + " " +entity.getName());
 		if (entity instanceof Player)
 			return;
 		
@@ -5577,37 +5573,6 @@ public class Utils {
 		} catch (Exception e) {
 			return "";
 		}
-	}
-
-	public static void DebugLog(String coreclass, String method, String focusid, String message) {
-		try
-		{
-			coreclass = coreclass.toUpperCase();
-			method = method.toUpperCase();
-			focusid = focusid.toUpperCase();
-			//System.out.println(coreclass + ":" + method + ":" + focusid + ":" + message);
-			try {
-				for (UUID debuggerUuid : StateManager.getInstance().getPlayerManager().getDebugger().keySet()) {
-					Entity entity = Bukkit.getEntity(debuggerUuid);
-					if (entity == null)
-						continue;
-	
-					DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger()
-							.get(debuggerUuid);
-					if (!settings.isDebugging(coreclass, method, focusid))
-						continue;
-	
-					entity.sendMessage(coreclass + ":" + method + ":" + focusid + ":" + message);
-	
-				}
-			} catch (CoreStateInitException e) {
-	
-			}
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
 	}
 
 	public static boolean ValidatePet(LivingEntity entity) {

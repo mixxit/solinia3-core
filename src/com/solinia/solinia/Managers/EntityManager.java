@@ -59,6 +59,7 @@ import com.solinia.solinia.Models.UniversalMerchant;
 import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
+import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.SpecialEffectUtils;
@@ -461,11 +462,11 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public boolean addActiveEntitySpell(LivingEntity targetEntity, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, boolean sendMessages, String requiredWeaponSkillType, boolean racialPassive) {
 		try {
-			Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "Beginning adding spell to entity on behalf of caster");
+			DebugUtils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity, "Beginning adding spell to entity on behalf of caster");
 			if (soliniaSpell.isCharmSpell() && getPet(sourceEntity.getUniqueId()) != null && !getPet(sourceEntity.getUniqueId()).getUniqueId().equals(targetEntity.getUniqueId()))
 			{
 				sourceEntity.sendMessage("This is already a pet");
-				Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "Source aborting spell cast, was either charm with a pet or related to pet status");
+				DebugUtils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity, "Source aborting spell cast, was either charm with a pet or related to pet status");
 				return false;
 			}
 			
@@ -483,7 +484,7 @@ public class EntityManager implements IEntityManager {
 			}
 			
 			boolean addSpellResult = entitySpells.get(targetEntity.getUniqueId()).addSpell(plugin, soliniaSpell, sourceEntity, duration, sendMessages, requiredWeaponSkillType, racialPassive);
-			Utils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity.getName(), "addSpell result was: " + addSpellResult);
+			DebugUtils.DebugLog("EntityManager", "addActiveEntitySpell", sourceEntity, "addSpell result was: " + addSpellResult);
 
 			if (targetEntity instanceof Player)
 				SoliniaPlayerAdapter.Adapt((Player)targetEntity).sendEffects();
@@ -717,30 +718,30 @@ public class EntityManager implements IEntityManager {
 					continue;
 				
 				LivingEntity livingEntityThatWillCast = (LivingEntity)entityThatWillCast;
-				Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "Start doNPCSpellCast");
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast, "Start doNPCSpellCast");
 				
 				if (!(entityThatWillCast instanceof Creature))
 				{
-					Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "Not a creature");
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast, "Not a creature");
 					continue;
 				}
 				
 				if(entityThatWillCast.isDead())
 				{
-					Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "Im dead");
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast, "Im dead");
 					continue;
 				}
 				
 				Creature creatureThatWillCast = (Creature)entityThatWillCast;
 				if (creatureThatWillCast.getTarget() == null)
 				{
-					Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "I have no target");
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast, "I have no target");
 					continue;
 				}
 				
 				if (!Utils.isLivingEntityNPC(livingEntityThatWillCast))
 				{
-					Utils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast.getName(), "I am not an NPC");
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast, "I am not an NPC");
 					continue;
 				}
 				
