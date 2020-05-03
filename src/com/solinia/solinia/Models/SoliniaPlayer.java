@@ -71,6 +71,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
 	private Timestamp lastUpdatedTime;
+	private Timestamp lastOpenedCharCreation;
 	private int motherCharacterId = 0;
 	private int characterFellowshipId = 0;
 	private int spouseCharacterId = 0;
@@ -5520,7 +5521,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		return lastUpdatedTime;
 	}
-
+	
 	@Override
 	public void setLastUpdatedTime(Timestamp lastUpdatedTime) {
 		this.lastUpdatedTime = lastUpdatedTime;
@@ -5817,4 +5818,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public int getMentoringCharacterId() {
 		return mentorCharacterId;
 	}
+
+	@Override
+	public Timestamp getLastOpenedCharCreation() {
+		return lastUpdatedTime;
+	}
+	
+	@Override
+	public void setLastOpenedCharCreation(Timestamp timestamp) {
+		lastUpdatedTime = timestamp;
+	}
+	
+	@Override
+	public void setLastOpenedCharCreationNow() {
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		//System.out.println("Set LastUpdatedTime on " + getId());
+		this.setLastOpenedCharCreation(nowtimestamp);
+	}
+
 }

@@ -648,4 +648,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void checkMentor();
 	public boolean isMentoring();
 	public int getMentoringCharacterId();
+	Timestamp getLastOpenedCharCreation();
+	void setLastOpenedCharCreation(Timestamp timestamp);
+	void setLastOpenedCharCreationNow();
 }

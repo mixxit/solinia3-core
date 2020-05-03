@@ -1,6 +1,8 @@
 package com.solinia.solinia.Listeners;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -123,7 +125,22 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (solPlayer.getClassObj() == null)
 			{
 			    try {
-			    	Utils.sendCharCreation((Player)playerEntity);
+			    	if (StateManager.getInstance().getPlayerManager().hasValidMod((Player)playerEntity))
+					{
+			    		Utils.sendCharCreation((Player)playerEntity);
+					} else {
+				    	if (solPlayer.getLastOpenedCharCreation() == null)
+				    	{
+				    		Utils.sendCharCreation((Player)playerEntity);
+				    	} else {
+					    	LocalDateTime datetime = LocalDateTime.now();
+							Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+							Timestamp mintimestamp = Timestamp.valueOf(solPlayer.getLastOpenedCharCreation().toLocalDateTime().plus(5, ChronoUnit.MINUTES));
+		
+							if (nowtimestamp.after(mintimestamp))
+								Utils.sendCharCreation((Player)playerEntity);
+				    	}
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
