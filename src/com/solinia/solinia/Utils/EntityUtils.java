@@ -3419,13 +3419,15 @@ public class EntityUtils {
 		if (targetLoc == null)
 			return;
 		
-		
 		final UUID entityUuid = targetEntity.getUniqueId();
 		final Location loc = targetLoc.clone();
 		
 		Bukkit.getScheduler().runTask(StateManager.getInstance().getPlugin(), new Runnable() {
 		    @Override
 		    public void run() {
+		    	if (StateManager.getInstance().isStopping())
+		    		return;
+		    	
 		    	Entity entity = Bukkit.getEntity(entityUuid);
 		    	if (entity == null)
 		    		return;
@@ -3484,6 +3486,9 @@ public class EntityUtils {
 
 	public static void KillAllPets(UUID uuid) {
 		try {
+	    	if (StateManager.getInstance().isStopping())
+	    		return;
+	    	
 			LivingEntity pet = StateManager.getInstance().getEntityManager()
 					.getPet(uuid);
 			if (pet == null)

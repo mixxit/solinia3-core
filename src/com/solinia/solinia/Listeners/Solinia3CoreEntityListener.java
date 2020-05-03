@@ -300,6 +300,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		final UUID entityUUID = event.getEntity().getUniqueId();
 
+		if (StateManager.getInstance().getPlugin().isEnabled())
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
 				new Runnable() {
 					public void run() {
@@ -344,7 +345,7 @@ public class Solinia3CoreEntityListener implements Listener {
 								.getAttributeInstance(net.minecraft.server.v1_14_R1.GenericAttributes.FOLLOW_RANGE)
 								.setValue(Utils.MAX_ENTITY_AGGRORANGE);
 					}
-				}, 100L);
+				}, 20L);
 	}
 	@EventHandler
     public void ArmAnimationEvent(PlayerAnimationEvent anim) {

@@ -76,8 +76,10 @@ public class CommandSkillCheck implements CommandExecutor {
 
 	            if (bonus != 0)
 	            {
+	            	int roll = Utils.RandomBetween(0, 20);
 	            	player.sendMessage(ChatColor.YELLOW+"[Silternius] Your roll has been assigned an appropriate class modifier ["+bonus+"]!");
-	            	message = ChatColor.AQUA + "[ROLL!] * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + Utils.RandomBetween(0, 20)+"+"+bonus+"("+Utils.RandomBetween(0, 20)+bonus+")" + "/20" + ChatColor.RESET;
+	            	int bonusroll = roll+bonus;
+	            	message = ChatColor.AQUA + "[ROLL!] * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + roll+"+"+bonus+"("+bonusroll+")" + "/20" + ChatColor.RESET;
 	            }
 	            solplayer.emote(message, false, false);
             } catch (CoreStateInitException e)

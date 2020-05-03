@@ -58,6 +58,7 @@ public class CoreState {
 	private IEntityManager entityManager;
 	private IConfigurationManager configurationManager;
 	private Economy economy;
+	private boolean isStopping = false;
 	private IChannelManager channelManager;
 	//private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
@@ -1181,6 +1182,14 @@ public class CoreState {
 
 	public void toggleShowSpawns() {
 		this.showSpawns = !this.showSpawns;
+	}
+	
+	public void setStopping() {
+		this.isStopping = true;
+	}
+
+	public boolean isStopping() {
+		return this.isStopping;
 	}
 
 }

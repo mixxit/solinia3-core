@@ -683,65 +683,6 @@ public class Utils {
 		}
 	}
 
-	/*
-	public static LivingEntity getTargettedLivingEntity(LivingEntity observer, int reach) {
-		Location observerPos = observer.getEyeLocation();
-		Vector3D observerDir = new Vector3D(observerPos.getDirection());
-
-		Vector3D observerStart = new Vector3D(observerPos);
-		Vector3D observerEnd = observerStart.add(observerDir.multiply(reach));
-
-		LivingEntity hit = null;
-
-		// Get nearby entities
-		for (Entity targetEntity : observer.getNearbyEntities(reach, reach, reach)) {
-			if (!(targetEntity instanceof LivingEntity))
-				continue;
-
-			LivingEntity target = (LivingEntity) targetEntity;
-			// Bounding box of the given player
-			Vector3D targetPos = new Vector3D(target.getLocation());
-			Vector3D minimum = targetPos.add(-0.5, 0, -0.5);
-			Vector3D maximum = targetPos.add(0.5, 1.67, 0.5);
-
-			if (target != observer && hasIntersection(observerStart, observerEnd, minimum, maximum)) {
-				if (hit == null || hit.getLocation().distanceSquared(observerPos) > target.getLocation()
-						.distanceSquared(observerPos)) {
-
-					hit = target;
-				}
-			}
-		}
-
-		return hit;
-	}
-	*/
-
-	private static boolean hasIntersection(Vector3D p1, Vector3D p2, Vector3D min, Vector3D max) {
-		final double epsilon = 0.0001f;
-
-		Vector3D d = p2.subtract(p1).multiply(0.5);
-		Vector3D e = max.subtract(min).multiply(0.5);
-		Vector3D c = p1.add(d).subtract(min.add(max).multiply(0.5));
-		Vector3D ad = d.abs();
-
-		if (Math.abs(c.x) > e.x + ad.x)
-			return false;
-		if (Math.abs(c.y) > e.y + ad.y)
-			return false;
-		if (Math.abs(c.z) > e.z + ad.z)
-			return false;
-
-		if (Math.abs(d.y * c.z - d.z * c.y) > e.y * ad.z + e.z * ad.y + epsilon)
-			return false;
-		if (Math.abs(d.z * c.x - d.x * c.z) > e.z * ad.x + e.x * ad.z + epsilon)
-			return false;
-		if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon)
-			return false;
-
-		return true;
-	}
-
 	public static int getEffectIdFromEffectType(SpellEffectType spellEffectType) {
 		switch (spellEffectType) {
 		case CurrentHP:
@@ -5599,6 +5540,7 @@ public class Utils {
 		
 		final UUID entityUUID = entity.getUniqueId();
 		
+		if (StateManager.getInstance().getPlugin().isEnabled())
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
 				new Runnable() {
 					public void run() {
@@ -5606,9 +5548,10 @@ public class Utils {
 						if (entity == null)
 							return;
 						
-						entity.remove();
+						if (!StateManager.getInstance().isStopping())
+							entity.remove();
 					}
-		});
+		}, 20L);
 	}
 
 	public static String getHttpUrlAsString(String urlLink) {
