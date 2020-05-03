@@ -9202,7 +9202,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (!isNPC() && !isPlayer())
 			return 0;
+		
+		boolean allowNpc = false;
+		// only allow hp from gear if heroic/raid
+		if (this.isNPC())
+		{
+			ISoliniaNPC npc = this.getNPC();
+			if (npc.isHeroic() || npc.isRaidboss() || npc.isRaidheroic())
+				allowNpc = true;
+		}
+		if  (this.IsCorePet())
+			allowNpc = true;
 
+		if (isPlayer() || allowNpc)
 		for (ISoliniaItem item : getEquippedSoliniaItems(true)) {
 			if (item.getHp() > 0) {
 				total += item.getHp();
