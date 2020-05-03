@@ -9027,6 +9027,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			try
 			{
+				if (this.getActiveMob().getOwner() != null && this.getActiveMob().getOwner().isPresent())
 				if (this.getOwnerEntity() == null || this.getOwnerEntity().isDead() || StateManager.getInstance().getEntityManager().getPet(this.getOwnerEntity().getUniqueId()) == null)
 				{
 					Utils.RemoveEntity(this.getBukkitLivingEntity(), "doCheckForDespawn");
