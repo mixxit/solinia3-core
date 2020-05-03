@@ -36,6 +36,7 @@ import com.solinia.solinia.Models.SoliniaReagent;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Models.SpellLoadout;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.SpellbookPage;
 import com.solinia.solinia.Models.TrackingChoice;
@@ -651,4 +652,8 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	Timestamp getLastOpenedCharCreation();
 	void setLastOpenedCharCreation(Timestamp timestamp);
 	void setLastOpenedCharCreationNow();
+	ConcurrentHashMap<String, SpellLoadout> getSpellLoadout();
+	void setSpellLoadout(ConcurrentHashMap<String, SpellLoadout> spellLoadout);
+	public void loadSpellLoadout(SpellLoadout loadout);
+	public SpellLoadout getActiveSpellLoadout();
 }

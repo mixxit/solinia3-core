@@ -55,6 +55,14 @@ commands:
     description: Commits Solinia3Core State Data
     usage: /commit
     aliases: []
+  loadspells:
+    description: Loads spells into memory
+    usage: /loadspells name
+    aliases: []
+  savespells:
+    description: Saves spells from memory
+    usage: /savespells name
+    aliases: []
   removevampirism:
     description: Removes vampirism from a player
     usage: /removevampirism mcname

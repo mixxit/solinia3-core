@@ -147,6 +147,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean deleted = false;
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
+	private ConcurrentHashMap<String, SpellLoadout> spellLoadout = new ConcurrentHashMap<String, SpellLoadout>();
 	private ConcurrentHashMap<String, HintSetting> hintSettings = new ConcurrentHashMap<String, HintSetting>();
 	private ConcurrentHashMap<String, Integer> monthlyVote = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, SoliniaReagent> reagentsPouch = new ConcurrentHashMap<Integer, SoliniaReagent>();
@@ -5821,12 +5822,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public Timestamp getLastOpenedCharCreation() {
-		return lastUpdatedTime;
+		return lastOpenedCharCreation;
 	}
 	
 	@Override
 	public void setLastOpenedCharCreation(Timestamp timestamp) {
-		lastUpdatedTime = timestamp;
+		lastOpenedCharCreation = timestamp;
 	}
 	
 	@Override
@@ -5835,6 +5836,56 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 		//System.out.println("Set LastUpdatedTime on " + getId());
 		this.setLastOpenedCharCreation(nowtimestamp);
+	}
+
+	@Override
+	public ConcurrentHashMap<String, SpellLoadout> getSpellLoadout() {
+		return spellLoadout;
+	}
+
+	@Override
+	public void setSpellLoadout(ConcurrentHashMap<String, SpellLoadout> spellLoadout) {
+		this.spellLoadout = spellLoadout;
+	}
+
+	@Override
+	public void loadSpellLoadout(SpellLoadout loadout) {
+		loadSpellLoadoutSlot(1,loadout.spell1);
+		loadSpellLoadoutSlot(2,loadout.spell2);
+		loadSpellLoadoutSlot(3,loadout.spell3);
+		loadSpellLoadoutSlot(4,loadout.spell4);
+		loadSpellLoadoutSlot(5,loadout.spell5);
+		loadSpellLoadoutSlot(6,loadout.spell6);
+		loadSpellLoadoutSlot(7,loadout.spell7);
+		loadSpellLoadoutSlot(8,loadout.spell8);
+		
+		sendMemorisedSpellSlots();
+	}
+
+	private void loadSpellLoadoutSlot(int spellSlot, int spellId) {
+		if (spellId < 1)
+			return;
+		
+		if (!memoriseSpell(spellSlot, spellId))
+		{
+			return;
+		} else {
+			//sendMemorisedSpellSlots();
+		}
+	}
+
+	@Override
+	public SpellLoadout getActiveSpellLoadout() {
+		SpellLoadout loadout = new SpellLoadout();
+		loadout.spell1 = this.getMemorisedSpellSlot(1);
+		loadout.spell2 = this.getMemorisedSpellSlot(2);
+		loadout.spell3 = this.getMemorisedSpellSlot(3);
+		loadout.spell4 = this.getMemorisedSpellSlot(4);
+		loadout.spell5 = this.getMemorisedSpellSlot(5);
+		loadout.spell6 = this.getMemorisedSpellSlot(6);
+		loadout.spell7 = this.getMemorisedSpellSlot(7);
+		loadout.spell8 = this.getMemorisedSpellSlot(8);
+		return loadout;
 	}
 
 }
