@@ -545,7 +545,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 				tryIncreaseSkill(SkillType.DualWield, 1);
 				if (checkDualWield()) {
-					tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Secondary);
+					tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInOffHand(), defender, InventorySlot.Secondary);
 					this.getBukkitLivingEntity().sendMessage("You dual wield!");
 					doAttackRounds(defender, InventorySlot.Secondary, false);
 				}
