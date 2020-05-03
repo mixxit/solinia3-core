@@ -9008,6 +9008,22 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public boolean doCheckForDespawn() {
 		if (despawnIfWrongTime())
 			return true;
+		
+		// Pet cleanup
+		if (this.getBukkitLivingEntity() != null && this.getBukkitLivingEntity() instanceof Creature)
+		{
+			try
+			{
+				if (this.getOwnerEntity() == null || this.getOwnerEntity().isDead() || StateManager.getInstance().getEntityManager().getPet(this.getOwnerEntity().getUniqueId()) == null)
+				{
+					Utils.RemoveEntity(this.getBukkitLivingEntity(), "doCheckForDespawn");
+					return true;
+				}
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
 
 		return false;
 	}
