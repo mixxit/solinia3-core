@@ -5555,10 +5555,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				int ilowlvl = lowhighlvl.a();
 				int ihighlvl = lowhighlvl.b();
 
-				if (getActualLevel() < ilowlvl || getActualLevel() > ihighlvl) {
+				if (getMentorLevel() < ilowlvl || getMentorLevel() > ihighlvl) {
 					// Only award player the experience
 					// as they are out of range of the group
-					if (livingEntity.getMentorLevel() >= Utils.getMinLevelFromLevel(getActualLevel())) {
+					if (livingEntity.getMentorLevel() >= Utils.getMinLevelFromLevel(getMentorLevel())) {
 						// Due to being out of range they get the full xp
 						increasePlayerExperience(experience, true, true);
 						if (getFellowship() != null)
@@ -5599,12 +5599,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							}
 
 							if (!tgtplayer.getWorld().equals(getBukkitPlayer().getWorld())) {
-								// tgtplayer.sendMessage("You were out of range for shared group xp (world)");
+								tgtplayer.sendMessage("You were out of range for shared group xp (world)");
 								continue;
 							}
 
 							if (tgtplayer.getLocation().distance(getBukkitPlayer().getLocation()) <= Utils.MaxRangeForExperience) {
-								if (livingEntity.getMentorLevel() >= (Utils.getMinLevelFromLevel(tgtsolplayer.getActualLevel()))) {
+								if (livingEntity.getMentorLevel() >= (Utils.getMinLevelFromLevel(tgtsolplayer.getMentorLevel()))) {
 									// they split the overall experience across the group size
 									
 									// add 10% bonus per player
@@ -5646,7 +5646,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 				}
 			} else {
-				if (livingEntity.getMentorLevel() >= (Utils.getMinLevelFromLevel(getActualLevel()))) {
+				if (livingEntity.getMentorLevel() >= (Utils.getMinLevelFromLevel(getMentorLevel()))) {
 					// they are on their own so get the full amount of xp
 					increasePlayerExperience(experience, true, true);
 					
