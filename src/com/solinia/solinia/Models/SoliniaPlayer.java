@@ -5863,9 +5863,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	private void loadSpellLoadoutSlot(int spellSlot, int spellId) {
-		if (spellId < 1)
-			return;
-		
 		if (!memoriseSpell(spellSlot, spellId))
 		{
 			return;
