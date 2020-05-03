@@ -2443,7 +2443,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			
 			if (!this.isNPC() && item.isWeaponOrBowOrShield() && this.isPlayer() && this.getPlayer() != null) {
 				if (this.getPlayer().getSkillCap(getSkillByItemType(item.getItemType())) < 1) {
-					return new Tuple<Boolean,String>(false,"Invalid skill for your class");
+					return new Tuple<Boolean,String>(false,item.getItemType() + " has wrong class");
 				}
 			}
 			
@@ -3402,6 +3402,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (soliniaitem.isThrowing()) {
 						getBukkitLivingEntity().sendMessage(
 								ChatColor.GRAY + "This is a throwing weapon! (you must right click to throw it)");
+					}
+					
+					if (!this.isNPC() && soliniaitem.isWeaponOrBowOrShield() && this.isPlayer() && this.getPlayer() != null) {
+						if (this.getPlayer().getSkillCap(getSkillByItemType(soliniaitem.getItemType())) < 1) {
+							getBukkitLivingEntity().sendMessage(
+									ChatColor.GRAY + "" + soliniaitem.getItemType() + " has wrong class");
+						}
 					}
 
 					if (soliniaitem.getAllowedClassNamesUpper().size() > 0) {
