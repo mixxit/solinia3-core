@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.Utils;
 
@@ -68,7 +69,16 @@ public class CommandSkillCheck implements CommandExecutor {
 	            	}
 	            }
 	            
+	            int bonus = getClassRollBonus(skill,solplayer.getClassObj());
+	            
+
 	            String message = ChatColor.AQUA + "[ROLL!] * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + Utils.RandomBetween(0, 20) + "/20" + ChatColor.RESET;
+
+	            if (bonus != 0)
+	            {
+	            	player.sendMessage(ChatColor.YELLOW+"[Silternius] Your roll has been assigned an appropriate class modifier ["+bonus+"]!");
+	            	message = ChatColor.AQUA + "[ROLL!] * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + Utils.RandomBetween(0, 20)+"+"+bonus+"("+Utils.RandomBetween(0, 20)+bonus+")" + "/20" + ChatColor.RESET;
+	            }
 	            solplayer.emote(message, false, false);
             } catch (CoreStateInitException e)
             {
@@ -77,5 +87,700 @@ public class CommandSkillCheck implements CommandExecutor {
         }
 
         return true;
+	}
+
+	private int getClassRollBonus(String skill, ISoliniaClass classObj) {
+		if (classObj == null)
+			return 0;
+		
+		switch (skill)
+		{
+		case "athletics":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 2;
+				case "CLERIC":
+				return 0;
+				case "RANGER":
+				return 1;
+				case "ROGUE":
+				return 1;
+				case "WIZARD":
+				return -1;
+				case "PALADIN":
+				return 1;
+				case "SHADOWKNIGHT":
+				return 1;
+				case "SHAMAN":
+				return 1;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return 1;
+				case "MAGICIAN":
+				return -1;
+				case "MONK":
+				return 2;
+				case "NECROMANCER":
+				return -1;
+				case "ENCHANTER":
+				return 0;
+				case "BEASTLORD":
+				return 2;
+				case "BERSERKER":
+				return 2;
+				default:
+					return 0;
+			}
+		case "acrobatics":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return -2;
+				case "CLERIC":
+				return 1;
+				case "RANGER":
+				return 1;
+				case "ROGUE":
+				return 2;
+				case "WIZARD":
+				return 1;
+				case "PALADIN":
+				return 1;
+				case "SHADOWKNIGHT":
+				return 1;
+				case "SHAMAN":
+				return 1;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return 2;
+				case "MAGICIAN":
+				return 1;
+				case "MONK":
+				return 2;
+				case "NECROMANCER":
+				return 1;
+				case "ENCHANTER":
+				return 1;
+				case "BEASTLORD":
+				return 1;
+				case "BERSERKER":
+				return 0;
+				default:
+					return 0;
+			}
+		case "sleightofhand":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 0;
+				case "CLERIC":
+				return 0;
+				case "RANGER":
+				return 0;
+				case "ROGUE":
+				return 2;
+				case "WIZARD":
+				return 1;
+				case "PALADIN":
+				return 0;
+				case "SHADOWKNIGHT":
+				return 0;
+				case "SHAMAN":
+				return 0;
+				case "DRUID":
+				return -1;
+				case "BARD":
+				return 1;
+				case "MAGICIAN":
+				return 2;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return 1;
+				case "ENCHANTER":
+				return 1;
+				case "BEASTLORD":
+				return 0;
+				case "BERSERKER":
+				return 0;
+				default:
+					return 0;
+			}
+		case "stealth":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return -1;
+				case "CLERIC":
+				return 0;
+				case "RANGER":
+				return 1;
+				case "ROGUE":
+				return 2;
+				case "WIZARD":
+				return 1;
+				case "PALADIN":
+				return -1;
+				case "SHADOWKNIGHT":
+				return 1;
+				case "SHAMAN":
+				return 0;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return 1;
+				case "MAGICIAN":
+				return 0;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return 1;
+				case "ENCHANTER":
+				return 2;
+				case "BEASTLORD":
+				return 1;
+				case "BERSERKER":
+				return -1;
+				default:
+					return 0;
+			}
+		case "arcana":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return -2;
+				case "CLERIC":
+				return 0;
+				case "RANGER":
+				return -1;
+				case "ROGUE":
+				return -2;
+				case "WIZARD":
+				return 2;
+				case "PALADIN":
+				return -1;
+				case "SHADOWKNIGHT":
+				return 1;
+				case "SHAMAN":
+				return 1;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return -1;
+				case "MAGICIAN":
+				return 2;
+				case "MONK":
+				return -2;
+				case "NECROMANCER":
+				return 2;
+				case "ENCHANTER":
+				return 2;
+				case "BEASTLORD":
+				return -1;
+				case "BERSERKER":
+				return -2;
+				default:
+					return 0;
+			}
+		case "history":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 1;
+				case "CLERIC":
+				return 1;
+				case "RANGER":
+				return -2;
+				case "ROGUE":
+				return -2;
+				case "WIZARD":
+				return 2;
+				case "PALADIN":
+				return 1;
+				case "SHADOWKNIGHT":
+				return 1;
+				case "SHAMAN":
+				return 0;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return 2;
+				case "MAGICIAN":
+				return 0;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return 1;
+				case "ENCHANTER":
+				return -1;
+				case "BEASTLORD":
+				return -1;
+				case "BERSERKER":
+				return 1;
+				default:
+					return 0;
+			}
+		case "investigation":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 1;
+				case "CLERIC":
+				return 1;
+				case "RANGER":
+				return 1;
+				case "ROGUE":
+				return 0;
+				case "WIZARD":
+				return 2;
+				case "PALADIN":
+				return 0;
+				case "SHADOWKNIGHT":
+				return 0;
+				case "SHAMAN":
+				return 0;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return 0;
+				case "MAGICIAN":
+				return 0;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return 1;
+				case "ENCHANTER":
+				return -1;
+				case "BEASTLORD":
+				return 2;
+				case "BERSERKER":
+				return -1;
+				default:
+					return 0;
+			}
+		case "nature":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 0;
+				case "CLERIC":
+				return -1;
+				case "RANGER":
+				return 2;
+				case "ROGUE":
+				return 0;
+				case "WIZARD":
+				return -2;
+				case "PALADIN":
+				return -1;
+				case "SHADOWKNIGHT":
+				return -2;
+				case "SHAMAN":
+				return 2;
+				case "DRUID":
+				return 2;
+				case "BARD":
+				return -1;
+				case "MAGICIAN":
+				return -1;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return -2;
+				case "ENCHANTER":
+				return -1;
+				case "BEASTLORD":
+				return 2;
+				case "BERSERKER":
+				return 0;
+				default:
+					return 0;
+			}
+		case "religion":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 0;
+				case "CLERIC":
+				return 2;
+				case "RANGER":
+				return -1;
+				case "ROGUE":
+				return -2;
+				case "WIZARD":
+				return -1;
+				case "PALADIN":
+				return 2;
+				case "SHADOWKNIGHT":
+				return 1;
+				case "SHAMAN":
+				return 0;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return -1;
+				case "MAGICIAN":
+				return -1;
+				case "MONK":
+				return 2;
+				case "NECROMANCER":
+				return 0;
+				case "ENCHANTER":
+				return -1;
+				case "BEASTLORD":
+				return -1;
+				case "BERSERKER":
+				return 0;
+				default:
+					return 0;
+			}
+		case "animalhandling":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 0;
+				case "CLERIC":
+				return 1;
+				case "RANGER":
+				return 1;
+				case "ROGUE":
+				return -1;
+				case "WIZARD":
+				return -1;
+				case "PALADIN":
+				return 0;
+				case "SHADOWKNIGHT":
+				return -1;
+				case "SHAMAN":
+				return 2;
+				case "DRUID":
+				return 0;
+				case "BARD":
+				return 0;
+				case "MAGICIAN":
+				return 1;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return 0;
+				case "ENCHANTER":
+				return 1;
+				case "BEASTLORD":
+				return 2;
+				case "BERSERKER":
+				return 1;
+				default:
+					return 0;
+			}
+		case "insight":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 0;
+				case "CLERIC":
+				return 2;
+				case "RANGER":
+				return 0;
+				case "ROGUE":
+				return 0;
+				case "WIZARD":
+				return 2;
+				case "PALADIN":
+				return 1;
+				case "SHADOWKNIGHT":
+				return 0;
+				case "SHAMAN":
+				return -1;
+				case "DRUID":
+				return 0;
+				case "BARD":
+				return -1;
+				case "MAGICIAN":
+				return 0;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return -1;
+				case "ENCHANTER":
+				return 1;
+				case "BEASTLORD":
+				return -1;
+				case "BERSERKER":
+				return 1;
+				default:
+					return 0;
+			}
+		case "medicine":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 0;
+				case "CLERIC":
+				return 2;
+				case "RANGER":
+				return 1;
+				case "ROGUE":
+				return -1;
+				case "WIZARD":
+				return -1;
+				case "PALADIN":
+				return 1;
+				case "SHADOWKNIGHT":
+				return -1;
+				case "SHAMAN":
+				return 2;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return 0;
+				case "MAGICIAN":
+				return 1;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return -1;
+				case "ENCHANTER":
+				return -1;
+				case "BEASTLORD":
+				return 1;
+				case "BERSERKER":
+				return 1;
+				default:
+					return 0;
+			}
+		case "perception":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 1;
+				case "CLERIC":
+				return 0;
+				case "RANGER":
+				return 2;
+				case "ROGUE":
+				return 1;
+				case "WIZARD":
+				return 0;
+				case "PALADIN":
+				return 1;
+				case "SHADOWKNIGHT":
+				return 0;
+				case "SHAMAN":
+				return 1;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return 0;
+				case "MAGICIAN":
+				return 0;
+				case "MONK":
+				return 1;
+				case "NECROMANCER":
+				return 0;
+				case "ENCHANTER":
+				return 1;
+				case "BEASTLORD":
+				return 1;
+				case "BERSERKER":
+				return -1;
+				default:
+					return 0;
+			}
+		case "survival":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 1;
+				case "CLERIC":
+				return 0;
+				case "RANGER":
+				return 2;
+				case "ROGUE":
+				return 1;
+				case "WIZARD":
+				return -1;
+				case "PALADIN":
+				return 0;
+				case "SHADOWKNIGHT":
+				return -1;
+				case "SHAMAN":
+				return 1;
+				case "DRUID":
+				return 1;
+				case "BARD":
+				return -1;
+				case "MAGICIAN":
+				return -2;
+				case "MONK":
+				return 1;
+				case "NECROMANCER":
+				return -1;
+				case "ENCHANTER":
+				return -1;
+				case "BEASTLORD":
+				return 2;
+				case "BERSERKER":
+				return 1;
+				default:
+					return 0;
+			}
+		case "deception":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 1;
+				case "CLERIC":
+				return -2;
+				case "RANGER":
+				return 0;
+				case "ROGUE":
+				return 2;
+				case "WIZARD":
+				return -1;
+				case "PALADIN":
+				return -2;
+				case "SHADOWKNIGHT":
+				return 2;
+				case "SHAMAN":
+				return -1;
+				case "DRUID":
+				return -2;
+				case "BARD":
+				return 1;
+				case "MAGICIAN":
+				return 0;
+				case "MONK":
+				return -1;
+				case "NECROMANCER":
+				return 2;
+				case "ENCHANTER":
+				return 2;
+				case "BEASTLORD":
+				return -1;
+				case "BERSERKER":
+				return 1;
+				default:
+					return 0;
+			}
+		case "intimidation":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 1;
+				case "CLERIC":
+				return -2;
+				case "RANGER":
+				return 0;
+				case "ROGUE":
+				return 1;
+				case "WIZARD":
+				return 2;
+				case "PALADIN":
+				return 1;
+				case "SHADOWKNIGHT":
+				return 2;
+				case "SHAMAN":
+				return -2;
+				case "DRUID":
+				return -2;
+				case "BARD":
+				return -1;
+				case "MAGICIAN":
+				return 1;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return 2;
+				case "ENCHANTER":
+				return -1;
+				case "BEASTLORD":
+				return 0;
+				case "BERSERKER":
+				return 2;
+				default:
+					return 0;
+			}
+		case "performance":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 1;
+				case "CLERIC":
+				return 0;
+				case "RANGER":
+				return -2;
+				case "ROGUE":
+				return 1;
+				case "WIZARD":
+				return 0;
+				case "PALADIN":
+				return 0;
+				case "SHADOWKNIGHT":
+				return 0;
+				case "SHAMAN":
+				return 0;
+				case "DRUID":
+				return -1;
+				case "BARD":
+				return 2;
+				case "MAGICIAN":
+				return 1;
+				case "MONK":
+				return 1;
+				case "NECROMANCER":
+				return 0;
+				case "ENCHANTER":
+				return 0;
+				case "BEASTLORD":
+				return -2;
+				case "BERSERKER":
+				return 1;
+				default:
+					return 0;
+			}
+		case "persuasion":
+			switch(classObj.getName().toUpperCase())
+			{
+				case "WARRIOR":
+				return 1;
+				case "CLERIC":
+				return 1;
+				case "RANGER":
+				return 0;
+				case "ROGUE":
+				return 1;
+				case "WIZARD":
+				return 1;
+				case "PALADIN":
+				return 1;
+				case "SHADOWKNIGHT":
+				return -1;
+				case "SHAMAN":
+				return -1;
+				case "DRUID":
+				return -1;
+				case "BARD":
+				return 1;
+				case "MAGICIAN":
+				return 0;
+				case "MONK":
+				return 0;
+				case "NECROMANCER":
+				return 0;
+				case "ENCHANTER":
+				return 2;
+				case "BEASTLORD":
+				return -1;
+				case "BERSERKER":
+				return 0;
+				default:
+					return 0;
+			}
+		default:
+			return 0;
+		}
 	}
 }
