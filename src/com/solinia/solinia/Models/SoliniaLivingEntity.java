@@ -4836,6 +4836,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			DebugUtils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity(), "Found Equipped Item Count: " + items.size());
 			
+			boolean allowNpc = false;
+			// only allow hp from gear if heroic/raid
+			if (this.isNPC())
+			{
+				ISoliniaNPC npc = this.getNPC();
+				if (npc.isHeroic() || npc.isRaidboss() || npc.isRaidheroic())
+					allowNpc = true;
+			}
+			if  (this.IsCorePet())
+				allowNpc = true;
+			
+			if (isPlayer() || allowNpc)
 			for (ISoliniaItem item : items) {
 				DebugUtils.DebugLog("SoliniaLivingEntity", "getTotalItemStat", this.getBukkitLivingEntity(), "Found Equipped Item for TotalItemStat: " + item.getId());
 
@@ -6944,6 +6956,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		try {
 			// does not use item in hand
+			boolean allowNpc = false;
+			// only allow hp from gear if heroic/raid
+			if (this.isNPC())
+			{
+				ISoliniaNPC npc = this.getNPC();
+				if (npc.isHeroic() || npc.isRaidboss() || npc.isRaidheroic())
+					allowNpc = true;
+			}
+			if  (this.IsCorePet())
+				allowNpc = true;
+			
+			if (this.isPlayer() || allowNpc)
 			for (ISoliniaItem item : getEquippedSoliniaItems(true)) {
 				if (item != null)
 					total += item.getAC();
@@ -9231,6 +9255,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!isNPC() && !isPlayer())
 			return 0;
 
+		boolean allowNpc = false;
+		// only allow hp from gear if heroic/raid
+		if (this.isNPC())
+		{
+			ISoliniaNPC npc = this.getNPC();
+			if (npc.isHeroic() || npc.isRaidboss() || npc.isRaidheroic())
+				allowNpc = true;
+		}
+		if  (this.IsCorePet())
+			allowNpc = true;
+
+		if (isPlayer() || allowNpc)
 		for (ISoliniaItem item : getEquippedSoliniaItems(true)) {
 			if (item.getMana() > 0) {
 				total += item.getMana();
