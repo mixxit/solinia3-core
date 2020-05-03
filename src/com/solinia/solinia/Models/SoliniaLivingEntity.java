@@ -469,11 +469,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!this.canAttackTarget(defender)) {
 			return;
 		}
-
+		
 		Tuple<Boolean, String> canUseItem = this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
 		if (!this.isNPC() && !canUseItem.a()) {
 			if (getBukkitLivingEntity() instanceof Player) {
-				getBukkitLivingEntity().sendMessage("You cannot use this item ["+canUseItem.b()+"]");
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "You cannot use this item ["+canUseItem.b()+"]");
 			}
 			return;
 		}
@@ -483,13 +483,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 		{
 			if (!this.isNPC() && !this.hasArrowsInInventory()) {
-				getBukkitLivingEntity().sendMessage(
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + 
 						"* You do not have sufficient arrows in your inventory to auto fire your bow!");
 				return;
 			}
 			
 			if (!this.checkLosFN(defender,false)) {
-				getBukkitLivingEntity().sendMessage(
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + 
 						"* You do not have line of sight to your target!");
 				return;
 			}
@@ -2440,6 +2440,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			ISoliniaItem item = SoliniaItemAdapter.Adapt(itemStack);
 			if (item == null)
 				return new Tuple<Boolean,String>(true,"Not solinia item");
+			
+			if (!this.isNPC() && item.isWeaponOrBowOrShield() && this.isPlayer() && this.getPlayer() != null) {
+				if (this.getPlayer().getSkillCap(getSkillByItemType(item.getItemType())) < 1) {
+					return new Tuple<Boolean,String>(false,"Invalid skill for your class");
+				}
+			}
 			
 			if (!this.isNPC() && item.getAllowedClassNamesUpper().size() > 0) {
 				if (getClassObj() == null) {

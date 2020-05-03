@@ -116,7 +116,19 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		try {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(playerEntity.getUniqueId());
+			if (solPlayer == null)
+				return;
 			solPlayer.checkMentor();
+			
+			if (solPlayer.getClassObj() == null)
+			{
+			    try {
+			    	Utils.sendCharCreation((Player)playerEntity);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
 		} catch (CoreStateInitException e) {
 		}
 	}
