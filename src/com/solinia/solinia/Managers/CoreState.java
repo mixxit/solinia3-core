@@ -195,12 +195,15 @@ public class CoreState {
 		final int SHORT_ID_LENGTH = 8;
 		this.instanceGuid = RandomStringUtils.random(SHORT_ID_LENGTH);
 		
+		// xp bonus every day now
+		xpdaybonus = 100;
+		
 		// If its tuesday or sunday you will get 100% bonus with XP
 		Date now = new Date();
 		SimpleDateFormat simpleDateformat = new SimpleDateFormat("E");
 		if (simpleDateformat.format(now).equals("Tue") || simpleDateformat.format(now).equals("Wed") || simpleDateformat.format(now).equals("Sun"))
 		{
-			xpdaybonus = 100;
+			xpdaybonus += 100;
 		}
 		simpleDateformat = new SimpleDateFormat("dd.MM");
 
