@@ -5493,7 +5493,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				.getHealth() < ((this.getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()
 						/ 100) * 36))
 			if (this.getClassObj() != null) {
-				if (this.getClassObj().getName().equals("WARRIOR"))
+				if (this.getClassObj().getName().equals("WARRIOR") || this.getClassObj().getName().equals("BERSERKER"))
 					return true;
 			}
 
