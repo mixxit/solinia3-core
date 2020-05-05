@@ -636,8 +636,16 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					}
 				}
 				
+				if (this.isAwardsTitle() == true) {
+					if (this.getTitle() != null) {
+						if (!this.getTitle().equals("")) {
+							player.grantTitle(this.getTitle());
+						}
+					}
+				}
+				
 				// We can also awards spells
-				if (player != null && player.getClassObj() != null && this.isAwardsClassSpell() && player.isMentoring())
+				if (player != null && player.getClassObj() != null && this.isAwardsClassSpell())
 				{
 					ISoliniaLootTable table = StateManager.getInstance().getConfigurationManager().getLootTable(player.getClassObj().getDropSpellsLootTableId());
 					List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();
