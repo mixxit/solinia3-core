@@ -5526,28 +5526,41 @@ public class Utils {
 
 		}
 	}
-
-	public static void RemoveEntity(Entity entity, String caller) {
+	
+	public static void RemoveEntity(Entity entity, String caller, boolean runImmediately) {
 		// System.out.println("removing entity via caller: " + caller + " " +
-		// entity.getName());
-		DebugUtils.DebugLog("Utils", "RemoveEntity", entity, "Removing entity via caller: " + caller + " " +entity.getName());
-		if (entity instanceof Player)
+				// entity.getName());
+		if (entity == null)
 			return;
 		
-		final UUID entityUUID = entity.getUniqueId();
-		
-		if (StateManager.getInstance().getPlugin().isEnabled())
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
-				new Runnable() {
-					public void run() {
-						Entity entity = Bukkit.getEntity(entityUUID);
-						if (entity == null)
-							return;
-						
-						if (!StateManager.getInstance().isStopping())
-							entity.remove();
-					}
-		}, 20L);
+				DebugUtils.DebugLog("Utils", "RemoveEntity", entity, "Removing entity via caller: " + caller + " " +entity.getName());
+				if (entity instanceof Player)
+					return;
+				
+				final UUID entityUUID = entity.getUniqueId();
+				
+				if (!runImmediately)
+				{
+					if (StateManager.getInstance().getPlugin().isEnabled())
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
+								new Runnable() {
+									public void run() {
+										Entity entity = Bukkit.getEntity(entityUUID);
+										if (entity == null)
+											return;
+										
+										if (!StateManager.getInstance().isStopping())
+											entity.remove();
+									}
+						}, 20L);
+				} else {
+					System.out.println("Removing entity immediately: " + entity.getName());
+					entity.remove();
+				}
+	}
+
+	public static void RemoveEntity(Entity entity, String caller) {
+		Utils.RemoveEntity(entity, caller, false);
 	}
 
 	public static String getHttpUrlAsString(String urlLink) {

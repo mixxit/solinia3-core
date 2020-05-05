@@ -947,7 +947,7 @@ public class EntityManager implements IEntityManager {
 								if (kill == true)
 								{
 									System.out.println("Killing pet " + entity.getName());
-									Utils.RemoveEntity(entity,"KILLPET");
+									Utils.RemoveEntity(entity,"KILLPET", true);
 								}
 							}
 								
@@ -1105,14 +1105,14 @@ public class EntityManager implements IEntityManager {
 	}
 
 	@Override
-	public void removeAllPets() {
+	public void removeAllPets(boolean runImmediately) {
 		for (Map.Entry<UUID, UUID> entry : petownerdata.entrySet()) {
 			UUID key = entry.getKey();
 			LivingEntity livingEntityPet = (LivingEntity)Bukkit.getEntity(entry.getValue());
 			if (livingEntityPet != null)
 			{
 				System.out.println("Cleaning Up pet: " + livingEntityPet.getName());
-				Utils.RemoveEntity(livingEntityPet,"removeAllPets");
+				Utils.RemoveEntity(livingEntityPet,"removeAllPets", runImmediately);
 			}
 			this.removePet(key, true);
 		}

@@ -39,7 +39,7 @@ public interface IEntityManager {
 	
 	Timestamp getStunned(LivingEntity livingEntity);
 
-	void removeAllPets();
+	void removeAllPets(boolean runImmediately);
 
 	LivingEntity setPet(UUID petOwnerUUID, LivingEntity entity);
 
