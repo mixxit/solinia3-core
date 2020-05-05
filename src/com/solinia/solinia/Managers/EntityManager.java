@@ -119,6 +119,11 @@ public class EntityManager implements IEntityManager {
 		this.npcEntityProvider = npcEntityProvider;
 		this.plugin = plugin;
 	}
+	@Override
+	public ConcurrentHashMap<UUID, UUID> getPetOwnerData()
+	{
+		return this.petownerdata;
+	}
 	
 	@Override
 	public void forceSetEntityTarget(LivingEntity me, LivingEntity target)
@@ -899,50 +904,66 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public void removePet(UUID petOwnerUUID, boolean kill) {
-		UUID entityuuid = this.petownerdata.get(petOwnerUUID);
-		if (this.petownerdata.get(petOwnerUUID) == null)
-			return;
+	public void removePet(final UUID petOwnerUUID, final boolean kill) {
+
+		if (StateManager.getInstance().getPlugin().isEnabled())
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
+				new Runnable() {
+					public void run() {
+						try
+						{
+							UUID entityuuid = StateManager.getInstance().getEntityManager().getPetOwnerData().get(petOwnerUUID);
+							if (StateManager.getInstance().getEntityManager().getPetOwnerData().get(petOwnerUUID) == null)
+								return;
+							
+							LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
+							if (entity != null)
+							{			
+								if (entity instanceof LivingEntity)
+								{
+									// Remove MM pet
+									try
+									{
+									ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+									// Remove charm first else it will just reapply
+									if (solLivingEntity.hasSpellEffectType(SpellEffectType.Charm))
+									{
+										StateManager.getInstance().getEntityManager().clearEntityEffectsOfType((LivingEntity)entity, SpellEffectType.Charm, true, false);
+									}
+									
+									if (solLivingEntity != null && solLivingEntity.getActiveMob() != null)
+									{
+										// effectively remove owner
+										//solLivingEntity.getActiveMob().setOwner(UUID.randomUUID());
+										solLivingEntity.getActiveMob().removeOwner();
+										solLivingEntity.getActiveMob().resetTarget();
+									}
+									} catch (CoreStateInitException e)
+									{
+										
+									}
+								}
+								
+								if (kill == true)
+								{
+									System.out.println("Killing pet " + entity.getName());
+									Utils.RemoveEntity(entity,"KILLPET");
+								}
+							}
+								
+							StateManager.getInstance().getEntityManager().getPetOwnerData().remove(petOwnerUUID);
+							Entity owner = Bukkit.getEntity(petOwnerUUID);
+							if (owner != null)
+								owner.sendMessage("You have lost your pet");
+						} catch (CoreStateInitException e)
+						{
+							
+						}
+					}
+		},20L);
 		
-		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
-		if (entity != null)
-		{			
-			if (entity instanceof LivingEntity)
-			{
-				// Remove MM pet
-				try
-				{
-				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
-				// Remove charm first else it will just reapply
-				if (solLivingEntity.hasSpellEffectType(SpellEffectType.Charm))
-				{
-					this.clearEntityEffectsOfType((LivingEntity)entity, SpellEffectType.Charm, true, false);
-				}
-				
-				if (solLivingEntity != null && solLivingEntity.getActiveMob() != null)
-				{
-					// effectively remove owner
-					//solLivingEntity.getActiveMob().setOwner(UUID.randomUUID());
-					solLivingEntity.getActiveMob().removeOwner();
-					solLivingEntity.getActiveMob().resetTarget();
-				}
-				} catch (CoreStateInitException e)
-				{
-					
-				}
-			}
-			
-			if (kill == true)
-			{
-				System.out.println("Killing pet " + entity.getName());
-				Utils.RemoveEntity(entity,"KILLPET");
-			}
-		}
-			
-		this.petownerdata.remove(petOwnerUUID);
-		Entity owner = Bukkit.getEntity(petOwnerUUID);
-		if (owner != null)
-			owner.sendMessage("You have lost your pet");
+		
+		
 	}
 
 	@Override

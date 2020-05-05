@@ -235,5 +235,7 @@ public interface IEntityManager {
 
 	int getPetFocus(UUID uniqueId);
 
+	ConcurrentHashMap<UUID, UUID> getPetOwnerData();
+
 
 }
