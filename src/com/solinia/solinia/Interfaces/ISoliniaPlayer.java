@@ -399,10 +399,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	public void StopSinging();
 
-	boolean isSongsEnabled();
-
-	void setSongsEnabled(boolean songsEnabled);
-
 	void increaseMonthlyVote(Integer amount);
 
 	Integer getMonthlyVote();
@@ -563,8 +559,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	boolean canDisarm();
 
-	void emote(String string, boolean isBardSongFilterable, boolean isManual);
-
 	public void setModMessageEnabled(boolean enabled);
 
 	public boolean isModMessageEnabled();
@@ -656,4 +650,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	void setSpellLoadout(ConcurrentHashMap<String, SpellLoadout> spellLoadout);
 	public void loadSpellLoadout(SpellLoadout loadout);
 	public SpellLoadout getActiveSpellLoadout();
+	void emote(String string, boolean isManual);
 }

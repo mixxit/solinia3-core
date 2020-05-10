@@ -74,6 +74,6 @@ public class CommandPlayerEmote implements CommandExecutor {
 
 	private void SendEmote(Player player, String emote) throws CoreStateInitException {
 		ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
-		solplayer.emote(emote, false, false);
+		solplayer.emote(emote, false);
 	}
 }

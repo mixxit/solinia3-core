@@ -5,9 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 public interface IChannelManager {
 
-	int sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable, ItemStack itemStack);
-
-	void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable, ItemStack itemStack);
+	int sendToLocalChannel(ISoliniaPlayer source, String message, ItemStack itemStack);
 
 	void sendToGlobalChannel(ISoliniaPlayer source, String message, ItemStack itemStack);
 
@@ -24,4 +22,6 @@ public interface IChannelManager {
 	int sendToWhisperChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack);
 
 	int sendToShoutChannelDecorated(ISoliniaPlayer source, String message, String coremessage, ItemStack itemStack);
+
+	void sendToLocalChannel(ISoliniaLivingEntity source, String message, ItemStack itemStack);
 }

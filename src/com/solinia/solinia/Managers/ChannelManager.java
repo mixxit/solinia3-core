@@ -397,7 +397,7 @@ public class ChannelManager implements IChannelManager {
 	}
 
 	@Override
-	public int sendToLocalChannel(ISoliniaPlayer source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
+	public int sendToLocalChannel(ISoliniaPlayer source, String message, ItemStack itemStack) {
 		int numberReached = 0;
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitPlayer().getLocation()) <= Utils.GetLocalSayRange(source.getBukkitPlayer().getLocation().getWorld().getName()))
@@ -437,20 +437,10 @@ public class ChannelManager implements IChannelManager {
 	}
 	
 	@Override
-	public void sendToLocalChannel(ISoliniaLivingEntity source, String message, boolean isBardSongFilterable, ItemStack itemStack) {
+	public void sendToLocalChannel(ISoliniaLivingEntity source, String message, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= Utils.GetLocalSayRange(source.getBukkitLivingEntity().getLocation().getWorld().getName()))
 			{
-				try
-				{
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					if (isBardSongFilterable && !solPlayer.isSongsEnabled())
-						continue;
-				} catch (CoreStateInitException e)
-				{
-					
-				}
-				
 				TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
 				tc = Utils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 				player.spigot().sendMessage(tc);

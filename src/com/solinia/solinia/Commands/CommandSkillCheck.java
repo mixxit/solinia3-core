@@ -81,7 +81,7 @@ public class CommandSkillCheck implements CommandExecutor {
 	            	int bonusroll = roll+bonus;
 	            	message = ChatColor.AQUA + "[ROLL!] * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + roll+"+"+bonus+"("+bonusroll+")" + "/20" + ChatColor.RESET;
 	            }
-	            solplayer.emote(message, false, false);
+	            solplayer.emote(message, false);
             } catch (CoreStateInitException e)
             {
             	player.sendMessage(e.getMessage());

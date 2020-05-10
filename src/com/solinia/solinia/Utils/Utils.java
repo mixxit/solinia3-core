@@ -5950,10 +5950,32 @@ public class Utils {
 		case CHARM_CHA_FAIL:
 			message = ChatColor.DARK_AQUA + "Your pet has freed themselves of your control! (Charisma)" + ChatColor.RESET;
 			break;
+		case STARTS_TO_SING:
+			String[] sings = referenceCode.split("\\^");
+			message = sings[0] + " starts to sing " + sings[1];
+			break;		
+		case STOPS_SINGING:
+			String[] stopsing = referenceCode.split("\\^");
+			message = stopsing[0] + " stops singing " + stopsing[1];
+			break;		
 		case SPELL_WORN_OFF_OF:
 			String[] referenceCodesWornOffOf = referenceCode.split("\\^");
 			message = ChatColor.DARK_AQUA + "Your " + referenceCodesWornOffOf[0] + " spell has worn off of " + referenceCodesWornOffOf[1]  + ChatColor.RESET;
 			break;
+		case CAST_ON_YOU_SONG:
+			message = referenceCode;
+			break;		
+		case CAST_ON_YOU:
+			message = referenceCode;
+			break;		
+		case CAST_ON_OTHER_SONG:
+			String[] castonothersong = referenceCode.split("\\^");
+			message = castonothersong[0] + " " + castonothersong[1];
+			break;		
+		case CAST_ON_OTHER:
+			String[] castonother = referenceCode.split("\\^");
+			message = castonother[0] + " " + castonother[1];
+			break;		
 		case ITEM_DISCOVERED:
 			String[] itemDiscoveryData = referenceCode.split("\\^");
 			try
@@ -6125,6 +6147,18 @@ public class Utils {
 		case BER_CRITICAL_DMG:
 			return HintSetting.Chat;
 		case PLAYER_JOIN:
+			return HintSetting.Chat;
+		case STARTS_TO_SING:
+			return HintSetting.Chat;
+		case STOPS_SINGING:
+			return HintSetting.Chat;
+		case CAST_ON_YOU_SONG:
+			return HintSetting.Chat;
+		case CAST_ON_YOU:
+			return HintSetting.Chat;
+		case CAST_ON_OTHER_SONG:
+			return HintSetting.Chat;
+		case CAST_ON_OTHER:
 			return HintSetting.Chat;
 		}
 		

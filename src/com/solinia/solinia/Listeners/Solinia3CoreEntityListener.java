@@ -583,7 +583,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					;
 					solplayer.emote(
 							ChatColor.AQUA + "* " + solplayer.getFullName() + " lands softly, breaking their fall",
-							false, false);
+							false);
 					solplayer.tryIncreaseSkill(SkillType.SafeFall, 1);
 					return;
 				}

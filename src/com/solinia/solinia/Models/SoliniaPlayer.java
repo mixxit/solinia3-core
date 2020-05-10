@@ -109,7 +109,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private boolean modMessageEnabled = true;
 	private int inspiration = 0;
 	private Timestamp experienceBonusExpires;
-	private boolean songsEnabled = true;
 	private String bindPoint;
 	private int fingersItem = 0;
 	private int shouldersItem = 0;
@@ -955,9 +954,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void emote(String string, boolean isBardSongFilterable, boolean isManual) {
+	public void emote(String string, boolean isManual) {
 		int numberReached = StateManager.getInstance().getChannelManager().sendToLocalChannel(this,
-				ChatColor.AQUA + "* " + string, isBardSongFilterable,
+				ChatColor.AQUA + "* " + string, 
 				getBukkitPlayer().getInventory().getItemInMainHand());
 
 		if (isManual && numberReached < 1)
@@ -4225,18 +4224,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		ISoliniaLivingEntity solLivingEntity = getSoliniaLivingEntity();
 		if (solLivingEntity != null)
 			solLivingEntity.StopSinging();
-	}
-
-	@Override
-	public boolean isSongsEnabled() {
-		return songsEnabled;
-	}
-
-	@Override
-	public void setSongsEnabled(boolean songsEnabled) {
-		this.songsEnabled = songsEnabled;
-		this.setLastUpdatedTimeNow();
-
 	}
 
 	@Override

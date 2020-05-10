@@ -4544,7 +4544,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				 */
 				chance += aaHeadShotLevelModifier + spellHeadShotLevelModifier;
 				if (Utils.RandomBetween(1, 1000) <= chance) {
-					emote(" is hit by a fatal blow", false);
+					emote(" is hit by a fatal blow");
 					return HeadShot_Dmg;
 				}
 			}
@@ -5941,12 +5941,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public void emote(String message, boolean isBardSongFilterable) {
+	public void emote(String message) {
 		if (getBukkitLivingEntity() == null)
 			return;
 		
 		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message,
-				isBardSongFilterable, getBukkitLivingEntity().getEquipment().getItemInMainHand());
+				getBukkitLivingEntity().getEquipment().getItemInMainHand());
 	}
 
 	@Override
@@ -6113,7 +6113,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc.getKillTriggerText() == null || npc.getKillTriggerText().equals(""))
 				return;
 
-			this.emote(npc.getName() + " says '" + npc.getKillTriggerText() + "'" + ChatColor.RESET, false);
+			this.emote(npc.getName() + " says '" + npc.getKillTriggerText() + "'" + ChatColor.RESET);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -9686,8 +9686,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(singingId);
 					StateManager.getInstance().getEntityManager()
 							.removeSpellEffectsOfSpellId(getBukkitLivingEntity().getUniqueId(), singingId, true, true);
-					emote(getBukkitLivingEntity().getCustomName() + "'s song comes to a close [" + spell.getName() + "]",
-							true);
+					Utils.SendHint(getBukkitLivingEntity(), HINT.STOPS_SINGING, getBukkitLivingEntity().getCustomName()+"^"+spell.getName(), true);
 					StateManager.getInstance().getEntityManager().getEntitySinging(getBukkitLivingEntity().getUniqueId()).stopSinging(singingId);
 				}
 			}

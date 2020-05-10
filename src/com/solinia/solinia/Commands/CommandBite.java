@@ -39,7 +39,7 @@ public class CommandBite implements CommandExecutor {
 			ISoliniaPlayer sourcePlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
 			ISoliniaPlayer bitenPlayer = SoliniaPlayerAdapter.Adapt(biten);
 			
-			sourcePlayer.emote(sourcePlayer.getFullNameWithTitle() + " sinks their teeth into " + bitenPlayer.getFullNameWithTitle(), false, false);
+			sourcePlayer.emote(sourcePlayer.getFullNameWithTitle() + " sinks their teeth into " + bitenPlayer.getFullNameWithTitle(), false);
 			if (sourcePlayer.isVampire())
 			{
 				bitenPlayer.setVampire(true);

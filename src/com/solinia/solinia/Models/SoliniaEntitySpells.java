@@ -241,8 +241,7 @@ public class SoliniaEntitySpells {
 				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
 				if (solEntity != null)
 				{
-					solEntity.emote(sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName() + " /hidesongs", true);
-					System.out.println(sourceEntity.getCustomName() + " starts to sing " + soliniaSpell.getName() + " /hidesongs");
+					Utils.SendHint(solEntity.getBukkitLivingEntity(), HINT.STARTS_TO_SING, sourceEntity.getCustomName()+"^"+soliniaSpell.getName(), true);
 					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(), soliniaSpell.getId());
 				}
 			} catch (CoreStateInitException e) {
@@ -562,8 +561,8 @@ public class SoliniaEntitySpells {
 					boolean isLastSongSinging = StateManager.getInstance().getEntityManager().getEntitySinging(activeSpell.getSourceUuid()).isLastSongSinging(activeSpell.getSpellId());
 					if (!isLastSongSinging || activeSpell.getSpell().getRecastTime() > 0 && Bukkit.getEntity(activeSpell.getSourceUuid()) != null && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity) {
 						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()));
-						solEntity.emote(solEntity.getName() + "'s song comes to a close [" + activeSpell.getSpell().getName() + "]", true);
-						
+						Utils.SendHint(solEntity.getBukkitLivingEntity(), HINT.STOPS_SINGING, solEntity.getName()+"^"+activeSpell.getSpell().getName(), true);
+
 						if (removeNonCombatEffects == true)
 							tryRemoveNonCombatEffects(activeSpell);
 						

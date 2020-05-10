@@ -198,20 +198,24 @@ public class SoliniaActiveSpell {
 				if (soliniaSpell.getCastOnYou() != null && !soliniaSpell.getCastOnYou().equals("") && isOwnerPlayer) {
 					Player player = Bukkit.getPlayer(getOwnerUuid());
 					if (soliniaSpell.isBardSong()) {
-						ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-						if (solPlayer.isSongsEnabled() && sendMessages)
-							player.sendMessage("[Y] * " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+						if (sendMessages)
+						{
+							Utils.SendHint(player, HINT.CAST_ON_YOU_SONG, soliniaSpell.getCastOnYou(), false);
+						}
 					} else {
 						if (sendMessages)
-						player.sendMessage("[Y] * " + ChatColor.GRAY + soliniaSpell.getCastOnYou());
+							Utils.SendHint(player, HINT.CAST_ON_YOU, soliniaSpell.getCastOnYou(), false);
 					}
 				}
 
 				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals("")) {
 					if (sendMessages)
-					SoliniaLivingEntityAdapter.Adapt((LivingEntity) Bukkit.getEntity(getOwnerUuid())).emote(
-							ChatColor.GRAY + "[O] * " + this.getLivingEntity().getName() + soliniaSpell.getCastOnOther(),
-							soliniaSpell.isBardSong());
+					{
+						if (soliniaSpell.isBardSong())
+						Utils.SendHint((LivingEntity) Bukkit.getEntity(getOwnerUuid()), HINT.CAST_ON_OTHER_SONG, this.getLivingEntity().getName() + "^" + soliniaSpell.getCastOnOther(), true);
+						else
+							Utils.SendHint((LivingEntity) Bukkit.getEntity(getOwnerUuid()), HINT.CAST_ON_OTHER, this.getLivingEntity().getName() + "^" + soliniaSpell.getCastOnOther(), true);
+					}
 				}
 			}
 

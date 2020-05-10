@@ -44,7 +44,7 @@ public class CommandRoll implements CommandExecutor {
             try
             {
                 String message = ChatColor.AQUA + "[ROLL!] * " + SoliniaPlayerAdapter.Adapt(player).getFullName() + " rolls 1d"+maxnumber+". It's a "+roll+"!";
-            	SoliniaPlayerAdapter.Adapt(player).emote(message, false, false);
+            	SoliniaPlayerAdapter.Adapt(player).emote(message, false);
             } catch (CoreStateInitException e)
             {
             	player.sendMessage(e.getMessage());
