@@ -1355,6 +1355,12 @@ public class SoliniaActiveSpell {
 		case MiningHaste:
 			applyMiningHasteSpellEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
+		case Bash:
+			applyBash(spellEffect,soliniaSpell,casterLevel);
+			return;
+		case Slam:
+			applySlam(spellEffect,soliniaSpell,casterLevel);
+			return;
 		default:
 			return;
 		}
@@ -1572,6 +1578,72 @@ public class SoliniaActiveSpell {
 		}
 		
 		
+	}
+	
+	private void applySlam(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (!sourceLivingEntity.getEquipment().getItemInOffHand().getType().equals(Material.SHIELD))
+		{
+			sourceLivingEntity.sendMessage("This ability requires a shield in your offhand");
+			return;
+		}
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.Bash, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+
+	private void applyBash(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (!sourceLivingEntity.getEquipment().getItemInOffHand().getType().equals(Material.SHIELD))
+		{
+			sourceLivingEntity.sendMessage("This ability requires a shield in your offhand");
+			return;
+		}
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.Bash, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
 	}
 	
 	private void applyKick(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

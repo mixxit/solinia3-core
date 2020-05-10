@@ -1663,6 +1663,10 @@ public class Utils {
 			return 487;
 		case MiningHaste:
 			return 488;
+		case Bash:
+			return 489;
+		case Slam:
+			return 490;
 		default:
 			return -1;
 		}
@@ -2648,6 +2652,10 @@ public class Utils {
 			return SpellEffectType.FeatherFall;
 		case 488:
 			return SpellEffectType.MiningHaste;
+		case 489:
+			return SpellEffectType.Bash;
+		case 490:
+			return SpellEffectType.Slam;
 		default:
 			return SpellEffectType.ERROR;
 		}
