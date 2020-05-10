@@ -1924,67 +1924,70 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// This is based on what the client is doing
 			// We had a bunch of stuff like BaseImmunityLevel checks, which I think is suppose to just be for spells
 			// This is missing some merc checks, but those mostly just skipped the spell bonuses I think ...
-			/* TODO STUNS
-			bool can_stun = false;
+			// TODO STUNS
+			boolean can_stun = false;
 			int stunbash_chance = 0; // bonus
-			if (attacker) {
-				if (skill_used == EQEmu::skills::SkillBash) {
+			if (attacker != null) {
+				if (skillType.equals(SkillType.Bash)) {
 					can_stun = true;
-					if (attacker->isPlayer())
-						stunbash_chance = attacker->spellbonuses.StunBashChance +
-						attacker->itembonuses.StunBashChance +
-						attacker->aabonuses.StunBashChance;
+					if (attacker.isPlayer())
+						stunbash_chance = attacker.getSpellBonuses(SpellEffectType.StunBashChance) +
+								attacker.getItemBonuses(SpellEffectType.StunBashChance) +
+								attacker.getAABonuses(SpellEffectType.StunBashChance);
 				}
-				else if (skill_used == EQEmu::skills::SkillKick &&
-					(attacker->GetLevel() > 55 || attacker->IsNPC()) && GetClass() == WARRIOR) {
+				else if (skillType.equals(SkillType.Kick) &&
+					(attacker.getMentorLevel() > 55 || attacker.isNPC()) && this.getClassObj() != null && this.getClassObj().getName().toUpperCase().equals("WARRIOR")) {
 					can_stun = true;
 				}
 
-				if ((GetBaseRace() == OGRE || GetBaseRace() == OGGOK_CITIZEN) &&
+				/*if ((GetBaseRace() == OGRE || GetBaseRace() == OGGOK_CITIZEN) &&
 					!attacker->BehindMob(this, attacker->GetX(), attacker->GetY()))
+					can_stun = false;*/
+				if (getSpecialAbility(SpecialAbility.UNSTUNABLE) > 0)
 					can_stun = false;
-				if (GetSpecialAbility(UNSTUNABLE))
-					can_stun = false;
+				
 			}
 			if (can_stun) {
-				int bashsave_roll = zone->random.Int(0, 100);
+				int bashsave_roll = Utils.RandomBetween(0, 100);
 				if (bashsave_roll > 98 || bashsave_roll > (55 - stunbash_chance)) {
 					// did stun -- roll other resists
 					// SE_FrontalStunResist description says any angle now a days
-					int stun_resist2 = spellbonuses.FrontalStunResist + itembonuses.FrontalStunResist +
-						aabonuses.FrontalStunResist;
-					if (zone->random.Int(1, 100) > stun_resist2) {
+					int stun_resist2 = getSpellBonuses(SpellEffectType.FrontalStunResist) + getItemBonuses(SpellEffectType.FrontalStunResist) +
+							getAABonuses(SpellEffectType.FrontalStunResist);
+					if (Utils.RandomBetween(1, 100) > stun_resist2) {
 						// stun resist 2 failed
 						// time to check SE_StunResist and mod2 stun resist
 						int stun_resist =
-							spellbonuses.StunResist + itembonuses.StunResist + aabonuses.StunResist;
-						if (zone->random.Int(0, 100) >= stun_resist) {
+								getSpellBonuses(SpellEffectType.StunResist) + getSpellBonuses(SpellEffectType.StunResist) + getSpellBonuses(SpellEffectType.StunResist);
+						if (Utils.RandomBetween(0, 100) >= stun_resist) {
 							// did stun
 							// nothing else to check!
-							Stun(2000); // straight 2 seconds every time
+							Stun(2); // straight 2 seconds every time
 						}
 						else {
 							// stun resist passed!
 							if (isPlayer())
-								Message_StringID(MT_Stun, SHAKE_OFF_STUN);
+								this.getBukkitLivingEntity().sendMessage("You shake off the stun");
+								//Message_StringID(MT_Stun, SHAKE_OFF_STUN);
 						}
 					}
 					else {
 						// stun resist 2 passed!
 						if (isPlayer())
-							Message_StringID(MT_Stun, AVOID_STUNNING_BLOW);
+							this.getBukkitLivingEntity().sendMessage("You avoid the stunning blow");
+							//Message_StringID(MT_Stun, AVOID_STUNNING_BLOW);
 					}
 				}
 				else {
 					// main stun failed -- extra interrupt roll
-					if (IsCasting() &&
-						!EQEmu::ValueWithin(casting_spell_id, 859, 1023)) // these spells are excluded
+					if (isCasting() &&
+						!Utils.ValueWithin(spell_id, 859, 1023)) // these spells are excluded
 																		  // 90% chance >< -- stun immune won't reach this branch though :(
-						if (zone->random.Int(0, 9) > 1)
+						if (Utils.RandomBetween(0, 9) > 1)
 							InterruptSpell();
 				}
 			}
-			*/
+			
 
 			/* TODO Root fading and spell interuption
 			if (spell_id != SPELL_UNKNOWN && !iBuffTic) {
@@ -2063,6 +2066,62 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			} //end packet sending
 		}
+	}
+
+	@Override
+	public void Stun(int seconds) {
+		try
+		{
+			if (getBukkitLivingEntity().isDead())
+				return;
+			
+			Utils.dismountEntity(getBukkitLivingEntity());
+	
+			if (!(getBukkitLivingEntity() instanceof LivingEntity))
+				return;
+	
+			try {
+				LocalDateTime datetime = LocalDateTime.now();
+				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(seconds, ChronoUnit.SECONDS));
+	
+				StateManager.getInstance().getEntityManager().addStunned(getBukkitLivingEntity(), expiretimestamp);
+	
+				InterruptSpell();
+				
+				if (getBukkitLivingEntity() instanceof Creature) {
+					setAttackTarget(null);
+				}
+	
+				Utils.dismountEntity(getBukkitLivingEntity());
+	
+				Entity vehicle = getBukkitLivingEntity().getVehicle();
+				if (vehicle != null) {
+					vehicle.eject();
+				}
+	
+				Utils.AddPotionEffect(getBukkitLivingEntity(), PotionEffectType.CONFUSION, 1);
+			} catch (CoreStateInitException e) {
+				return;
+			}
+		} catch (Exception e)
+		{
+			return;
+		}
+	}
+
+	@Override
+	public void InterruptSpell() {
+		// Interrupt casting
+					try {
+						CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(getBukkitLivingEntity());
+						if (castingSpell != null) {
+							if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0) {
+								StateManager.getInstance().getEntityManager().interruptCasting(getBukkitLivingEntity());
+							}
+						}
+					} catch (CoreStateInitException e) {
+
+					}
 	}
 
 	private int affectMagicalDamage(int damage, int spell_id, boolean iBuffTic, ISoliniaLivingEntity attacker) {
@@ -3912,23 +3971,47 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (hate_override > -1)
 			hate = hate_override;
 
-		/* TODO BASH
-		if (skill == SkillTypeBash) {
+		if (skill.equals(SkillType.Bash)) {
 			if (isPlayer()) {
-				EQEmu::ItemInstance *item = CastToClient()->GetInv().GetItem(EQEmu::invslot::slotSecondary);
-				if (item) {
-					if (item->GetItem()->ItemType == EQEmu::item::ItemTypeShield) {
-						hate += item->GetItem()->AC;
+				ItemStack item = null;
+				if (isPlayer()) {
+					if (hasShieldEquiped())
+					{
+						item = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
 					}
-					const EQEmu::ItemData *itm = item->GetItem();
-					auto fbash = GetFuriousBash(itm->Focus.Effect);
-					hate = hate * (100 + fbash) / 100;
-					if (fbash)
-						Message_StringID(MT_Spells, GLOWS_RED, itm->Name);
+					else if (hasTwoHanderEquipped())
+					{
+						item = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+					}
+				}
+				if (item != null)
+				{
+					try
+					{
+						ISoliniaItem solItem = SoliniaItemAdapter.Adapt(item);
+						
+						if (solItem != null) {
+							if (item.getType().equals(Material.SHIELD)) {
+								hate += solItem.getAC();
+							}
+							int fbash = GetFuriousBash(solItem.getFocusEffectId());
+							hate = hate * (100 + fbash) / 100;
+							if (fbash > 0)
+							{
+								this.getBukkitLivingEntity().sendMessage("Your offhand weapon glows red");
+								//Message_StringID(MT_Spells, GLOWS_RED, itm->Name);
+							}
+						}
+					} catch (SoliniaItemException e)
+					{
+						
+					} catch (CoreStateInitException e) {
+						
+					}
 				}
 			}
 		}
-		*/
+		
 
 		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity(),"damage_done before offense() check: " + my_hit.damage_done);
 		my_hit.offense = offense(my_hit.skill);
@@ -3971,6 +4054,29 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (my_hit.damage_done > 0 && hasSkillProcSuccess())
 			trySkillProc(who, skill, ReuseTime * 1000, true);*/
+	}
+
+	private int GetFuriousBash(int focusEffectId) {
+		// TODO Auto-generated method stub
+		if (focusEffectId < 1)
+			return 0;
+		
+		if (!IsValidSpell(focusEffectId))
+			return 0;
+
+		boolean found_effect_limit = false;
+		int mod = 0;
+
+		mod += this.getSpellBonuses(SpellEffectType.SpellHateMod);
+		
+		// TODO Limiter
+		//else if (spells[spell_id].effectid[i] == SE_LimitEffect && spells[spell_id].base[i] == 999)
+		//found_effect_limit = true;
+
+		if (found_effect_limit)
+			return mod;
+		else
+			return 0;
 	}
 
 	@Override
@@ -4193,6 +4299,23 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (hit.damage_done >= 0) {
 			if (other.checkHitChance(this, hit)) {
 				// npc chance to stun
+				
+				if (isNPC() && other.isPlayer() && /*other->animation > 0 && */getMentorLevel() >= 5 && isBehindEntity(other.getBukkitLivingEntity())) {
+					// ~ 12% chance
+					if (Utils.RandomRoll(12)) {
+						int stun_resist2 = other.getSpellBonuses(SpellEffectType.FrontalStunResist) + other.getItemBonuses(SpellEffectType.FrontalStunResist) + other.getAABonuses(SpellEffectType.FrontalStunResist);
+						int stun_resist = other.getSpellBonuses(SpellEffectType.StunResist) + other.getItemBonuses(SpellEffectType.StunResist) + other.getAABonuses(SpellEffectType.StunResist);
+						if (Utils.RandomRoll(stun_resist2)) {
+							other.sendMessage("You avoid a stunning blow");
+							//other->Message_StringID(MT_Stun, AVOID_STUNNING_BLOW);
+						} else if (Utils.RandomRoll(stun_resist)) {
+							other.sendMessage("You shake off the stun");
+							//other->Message_StringID(MT_Stun, SHAKE_OFF_STUN);
+						} else {
+							other.Stun(3000); // yuck -- 3 seconds
+						}
+					}
+				}
 				
 				hit = other.meleeMitigation(this, hit);
 				DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "After meleeMitigation hit.damage_done: " + hit.damage_done);
@@ -8628,18 +8751,32 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (focus > 0) // From FcBaseEffects
 					weapon_damage += weapon_damage * focus / 100;
 
-				/*
-				 * if (skillinuse == SkillType.Bash) { if (isPlayer()) { ItemStack item =
-				 * this.getBukkitLivingEntity().getEquipment().getItemInOffHand(); if (item !=
-				 * null) { try { ISoliniaItem solItem = SoliniaItemAdapter.Adapt(item); if
-				 * (solItem != null) { if (item.getType().equals(Material.SHIELD)) { hate +=
-				 * solItem.getAC(); } hate = hate * (100 +
-				 * getFuriousBash(solItem.getFocusEffectId())) / 100; } } catch
-				 * (SoliniaItemException si) {
-				 * 
-				 * } } } }
-				 */
-
+				if (skillinuse == SkillType.Bash) 
+					if (isPlayer()) 
+					{
+						ItemStack item = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+						if (item != null) 
+						{ 
+							try { 
+								ISoliniaItem solItem = SoliniaItemAdapter.Adapt(item); 
+								if (solItem != null) 
+								{ 
+									if (item.getType().equals(Material.SHIELD)) 
+									{ 
+										hate += solItem.getAC(); 
+									} 
+									
+									hate = hate * (100 + GetFuriousBash(solItem.getFocusEffectId())) / 100; 
+									
+								} 
+							} catch (SoliniaItemException si) 
+							{
+									
+							} 
+						} 
+					} 
+				
+				
 				DamageHitInfo my_hit = new DamageHitInfo();
 				my_hit.base_damage = weapon_damage;
 				my_hit.min_damage = 0;

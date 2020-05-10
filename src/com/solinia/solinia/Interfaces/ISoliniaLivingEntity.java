@@ -493,4 +493,8 @@ public interface ISoliniaLivingEntity  {
 
 	void setActualLevel(int level);
 
+	void InterruptSpell();
+
+	public void Stun(int effect_value);
+
 }

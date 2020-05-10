@@ -1359,7 +1359,7 @@ public class SoliniaActiveSpell {
 			applyBash(spellEffect,soliniaSpell,casterLevel);
 			return;
 		case Slam:
-			applySlam(spellEffect,soliniaSpell,casterLevel);
+			applyBash(spellEffect,soliniaSpell,casterLevel);
 			return;
 		default:
 			return;
@@ -1580,7 +1580,7 @@ public class SoliniaActiveSpell {
 		
 	}
 	
-	private void applySlam(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!this.isSourcePlayer())
 			return;
 		
@@ -1593,20 +1593,53 @@ public class SoliniaActiveSpell {
 
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
 		
-		if (!sourceLivingEntity.getEquipment().getItemInOffHand().getType().equals(Material.SHIELD))
-		{
-			sourceLivingEntity.sendMessage("This ability requires a shield in your offhand");
-			return;
-		}
-		
 		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
 			return;
 
 		try {
-			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
-			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
-				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.Bash, false);
+			if (getLivingEntity().isDead() || sourceLivingEntity.isDead())
+				return; 
+			
+			ISoliniaLivingEntity caster = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity target = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			
+			if (caster != null && target != null) {
+				int effect_value = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity,getLivingEntity(),caster.getEffectiveLevel(true),this.getTicksLeft(),0);
+				
+				//Typically we check for immunities else where but since stun immunities are different and only
+				//Block the stun part and not the whole spell, we do it here, also do the message here so we wont get the message on a resist
+				int max_level = spellEffect.getMax();
+				//max_level of 0 means we assume a default of 55.
+				if (max_level == 0)
+					max_level = 55;
+				// NPCs get to ignore max_level for their spells.
+				// Ignore if spell is beneficial (ex. Harvest)
+				if (soliniaSpell.isDetrimental() && (target.getSpecialAbility(SpecialAbility.UNSTUNABLE) > 0 ||
+						((target.getMentorLevel() > max_level) && caster != null && (!caster.isNPC() ||
+						(caster.isNPC())))))
+				{
+					if (caster != null)
+						caster.sendMessage("Target is immune to stun");
+				} else {
+					int stun_resist = target.getItemBonuses(SpellEffectType.StunResist)+target.getSpellBonuses(SpellEffectType.StunResist);
+					if (target.isPlayer())
+						stun_resist += target.getAABonuses(SpellEffectType.StunResist);
+
+					if (stun_resist <= 0 || Utils.RandomBetween(0,99) >= stun_resist) {
+						//Log(Logs::Detail, Logs::Combat, "Stunned. We had %d percent resist chance.", stun_resist);
+
+						if (caster != null && caster.isPlayer())
+							effect_value += effect_value*caster.getFocusEffect(FocusEffect.FcStunTimeMod, this.getSpell())/100;
+
+						target.Stun(effect_value);
+					} else {
+						if (target.isPlayer())
+							target.sendMessage("You shake off the stun");
+
+						//Log(Logs::Detail, Logs::Combat, "Stun Resisted. We had %d percent resist chance.", stun_resist);
+					}
+				}
+				return;
 			}
 		} catch (CoreStateInitException e) {
 			// just skip it
@@ -1625,12 +1658,6 @@ public class SoliniaActiveSpell {
 			return;
 
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
-		
-		if (!sourceLivingEntity.getEquipment().getItemInOffHand().getType().equals(Material.SHIELD))
-		{
-			sourceLivingEntity.sendMessage("This ability requires a shield in your offhand");
-			return;
-		}
 		
 		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
 			return;
@@ -1761,22 +1788,13 @@ public class SoliniaActiveSpell {
 			
 			Utils.dismountEntity(getLivingEntity());
 			
-			// Interrupt casting
-			try {
-				CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(getLivingEntity());
-				if (castingSpell != null) {
-					if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0) {
-						StateManager.getInstance().getEntityManager().interruptCasting(getLivingEntity());
-					}
-				}
-			} catch (CoreStateInitException e) {
-
-			}
+			ISoliniaLivingEntity sourceSolLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			sourceSolLivingEntity.InterruptSpell();
 
 			StateManager.getInstance().getEntityManager().setPet(source.getUniqueId(), getLivingEntity());
 
 			if (getLivingEntity() instanceof Creature) {
-				SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).setAttackTarget(null);
+				sourceSolLivingEntity.setAttackTarget(null);
 			}
 
 			Utils.dismountEntity(getLivingEntity());
@@ -2481,73 +2499,24 @@ public class SoliniaActiveSpell {
 		}
 	}
 
-	private void applyStunSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.dismountEntity(getLivingEntity());
-
-		if (!(getLivingEntity() instanceof LivingEntity))
-			return;
-
-		// Interupt casting
-		try {
-			CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(getLivingEntity());
-			if (castingSpell != null) {
-				if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0) {
-					StateManager.getInstance().getEntityManager().interruptCasting(getLivingEntity());
-				}
-			}
-		} catch (CoreStateInitException e) {
-
-		}
-
-		try {
-			LocalDateTime datetime = LocalDateTime.now();
-			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
-
-			StateManager.getInstance().getEntityManager().addStunned(getLivingEntity(), expiretimestamp);
-
-			if (getLivingEntity() instanceof Creature) {
-				SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).setAttackTarget(null);
-			}
-
-			Utils.dismountEntity(getLivingEntity());
-
-			Entity vehicle = getLivingEntity().getVehicle();
-			if (vehicle != null) {
-				vehicle.eject();
-			}
-
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
-		} catch (CoreStateInitException e) {
-			return;
-		}
-	}
-
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		Utils.dismountEntity(getLivingEntity());
 
 		if (!(getLivingEntity() instanceof LivingEntity))
 			return;
 
-		// Interupt casting
 		try {
-			CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(getLivingEntity());
-			if (castingSpell != null) {
-				if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0) {
-					StateManager.getInstance().getEntityManager().interruptCasting(getLivingEntity());
-				}
-			}
-		} catch (CoreStateInitException e) {
+			ISoliniaLivingEntity sourceSolLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			sourceSolLivingEntity.InterruptSpell();
 
-		}
-
-		try {
+			
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
 
 			StateManager.getInstance().getEntityManager().addMezzed(getLivingEntity(), expiretimestamp);
 
 			if (getLivingEntity() instanceof Creature) {
-				SoliniaLivingEntityAdapter.Adapt(getLivingEntity()).setAttackTarget(null);
+				sourceSolLivingEntity.setAttackTarget(null);
 
 			}
 

@@ -6450,4 +6450,12 @@ public class Utils {
 		
 		
 	}
+
+	public static boolean ValueWithin(int spell_id, int isequal1, int isequals2) {
+		if (spell_id == isequal1)
+			return true;
+		if (spell_id == isequals2)
+			return true;
+		return false;
+	}
 }
