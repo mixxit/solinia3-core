@@ -28,6 +28,7 @@ public class DebugUtils {
 	
 					DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger()
 							.get(debuggerUuid);
+
 					if (!settings.isDebugging(coreclass, method, focusid))
 						continue;
 	

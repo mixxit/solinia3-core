@@ -9711,9 +9711,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		if (this.hasHate())
-		{
 			return;
-		}
 		
 		try
 		{
@@ -9724,6 +9722,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			typesToExclude.add(SpellEffectType.Harmony);
 			typesToExclude.add(SpellEffectType.ChangeFrenzyRad);
 			typesToExclude.add(SpellEffectType.ChangeAggro);
+			typesToExclude.add(SpellEffectType.AddFaction);
 			StateManager.getInstance().getEntityManager().removeSpellEffectsExcept(this.getBukkitLivingEntity().getUniqueId(), true, true, typesToExclude);
 		} catch (CoreStateInitException e)
 		{

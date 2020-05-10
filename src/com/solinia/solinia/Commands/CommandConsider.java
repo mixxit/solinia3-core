@@ -86,38 +86,39 @@ public class CommandConsider implements CommandExecutor {
 			
 			PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 			
-			FactionStandingType standing = Utils.getFactionStandingType(factionEntry.getFactionId(),factionEntry.getValueWithEffectsOnEntity(le, (Player)sender));
+			int value = factionEntry.getValueWithEffectsOnEntity(le, (Player)sender);
+			FactionStandingType standing = Utils.getFactionStandingType(factionEntry.getFactionId(),value);
 			switch (standing)
 			{
 				case FACTION_ALLY:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " regards you as an ally. " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " regards you as an ally. " + "[" + value + "] " + difficultyMessage);
 					return true;
 				case FACTION_WARMLY:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " looks upon you warmly. " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " looks upon you warmly. " + "[" + value + "] " + difficultyMessage);
 					return true;
 				case FACTION_KINDLY:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " kindly considers you. " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " kindly considers you. " + "[" + value + "] " + difficultyMessage);
 					return true;
 				case FACTION_AMIABLE:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " judges you amiably. " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " judges you amiably. " + "[" + value + "] " + difficultyMessage);
 					return true;
 				case FACTION_INDIFFERENT:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " regards you indifferently. " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " regards you indifferently. " + "[" + value + "] " + difficultyMessage);
 					return true;
 				case FACTION_APPREHENSIVE:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " looks your way apprehensively. " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " looks your way apprehensively. " + "[" + value + "] " + difficultyMessage);
 					return true;
 				case FACTION_DUBIOUS:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " glowers at you dubiously. " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " glowers at you dubiously. " + "[" + value + "] " + difficultyMessage);
 					return true;
 				case FACTION_THREATENLY:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " glares are you threateningly! " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " glares are you threateningly! " + "[" + value + "] " + difficultyMessage);
 					return true;
 				case FACTION_SCOWLS:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " scowls at you ready to attack! " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " scowls at you ready to attack! " + "[" + value + "] " + difficultyMessage);
 					return true;
 				default:
-					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " regards you indifferently. " + difficultyMessage);
+					sender.sendMessage(difficultyColor + "* " + solEntity.getName() + " regards you indifferently. " + "[" + value + "] " + difficultyMessage);
 					return true;
 			}
 		

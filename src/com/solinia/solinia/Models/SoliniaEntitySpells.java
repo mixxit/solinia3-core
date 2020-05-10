@@ -107,6 +107,7 @@ public class SoliniaEntitySpells {
 			return false;
 
 		DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Beginning addSpell on behalf of caster");
+		DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", this.getBukkitLivingEntity(), "Beginning addSpell on behalf of source");
 		// This spell ID is already active
 		// TODO We should allow overwriting of higher level 
 		
@@ -123,12 +124,14 @@ public class SoliniaEntitySpells {
 		if (containsSpellId(soliniaSpell.getId()) && !soliniaSpell.isStackableDot())
 		{
 			DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Abort, had spell already and it wasnt a stackable dot");
+			DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", this.getBukkitLivingEntity(), "Source spell on me was already in existence and wasnt stackable");
 			return false;
 		}
 
 		if ((slots.size() + 1) > getMaxTotalSlots())
 		{
 			DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Abort, had no more spell slots");
+			DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", this.getBukkitLivingEntity(), "Source spell on me was aborted due to no more spell slots");
 			return false;
 		}
 
@@ -146,6 +149,7 @@ public class SoliniaEntitySpells {
 			if (!result.a()) {
 				//System.out.println("Spell: " + soliniaSpell.getName() + "[" + soliniaSpell.getId() + "] found to have invalid target (" + getLivingEntity().getName() + ")");
 				DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Failed to apply: " + result.b());
+				DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", this.getBukkitLivingEntity(), "Source spell Failed to apply: " + result.b());
 				return false;
 			}
 		} catch (CoreStateInitException e) {
@@ -268,6 +272,7 @@ public class SoliniaEntitySpells {
 			if (slots.get(slot) != null)
 				slots.get(slot).setFirstRun(false);
 		}
+		DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", this.getBukkitLivingEntity(), "Source spell was successful (duration: " + duration + ")");
 		return true;
 	}
 	

@@ -312,6 +312,7 @@ public class SoliniaActiveSpell {
 		case Lull:
 			return;
 		case AddFaction:
+			applyAddFaction(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case Blind:
 			applyBlind(spellEffect, soliniaSpell, casterLevel);
@@ -1374,6 +1375,10 @@ public class SoliniaActiveSpell {
 		}
 	}
 	
+	private void applyAddFaction(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		// done via effects
+	}
+
 	private void applyPicklock(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!this.isSourcePlayer())
 			return;

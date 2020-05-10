@@ -2714,8 +2714,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "("
 				+ Utils.getSpellTargetType(getTargettype()).name() + ")" + ChatColor.RESET + " teleport_zone: "
 				+ ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
-		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET + " - recasttime: "
-				+ ChatColor.GOLD + getRecastTime() + ChatColor.RESET);
+		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET + " - buffdurationformula: "
+				+ ChatColor.GOLD + getBuffdurationformula() + ChatColor.RESET);
+		sender.sendMessage("- recasttime: " + ChatColor.GOLD + getRecastTime() + ChatColor.RESET);
 		sender.sendMessage("- resisttype: " + ChatColor.GOLD + Utils.getSpellResistType(getResisttype()).name() + " ["
 				+ getResisttype() + "]" + ChatColor.RESET);
 		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name()
@@ -3194,6 +3195,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			break;
 		case "buffduration":
 			this.setBuffduration(Integer.parseInt(value));
+			break;
+		case "buffdurationformula":
+			this.setBuffdurationformula(Integer.parseInt(value));
 			break;
 		case "clearspellclass":
 			this.allowedClasses = new ArrayList<SoliniaSpellClass>();
@@ -5574,14 +5578,20 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	@Override
-	public int calcBuffDuration(ISoliniaLivingEntity solEntity, int level) {
+	public int calcBuffDuration(ISoliniaLivingEntity source, ISoliniaLivingEntity target) {
 		// TODO do caster level overide
 
-		int res = calcBuffDurationFormula(solEntity.getEffectiveLevel(true), getBuffdurationformula(), getBuffduration());
-
+		int res = calcBuffDurationFormula(source.getEffectiveLevel(true), getBuffdurationformula(), getBuffduration());
+		
 		// TODO illusion spells
 		// TODO mod
+		res = mod_buff_duration(res, source, target);
 
+		return res;
+	}
+
+	private int mod_buff_duration(int res, ISoliniaLivingEntity source, ISoliniaLivingEntity target) {
+		// TODO Auto-generated method stub
 		return res;
 	}
 

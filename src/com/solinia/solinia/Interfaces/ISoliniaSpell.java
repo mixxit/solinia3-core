@@ -1026,8 +1026,6 @@ public interface ISoliniaSpell extends IPersistable {
 	int calcSpellEffectValueFormula(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
 			int sourceLevel, int ticksLeft);
 
-	int calcBuffDurationFormula(int level, int formula, int duration);
-
 	int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
 			int sourceLevel, int ticksleft, int instrument_mod);
 
@@ -1081,7 +1079,7 @@ public interface ISoliniaSpell extends IPersistable {
 
 	boolean isStackableDot();
 
-	int calcBuffDuration(ISoliniaLivingEntity solEntity, int level);
+	int calcBuffDuration(ISoliniaLivingEntity source, ISoliniaLivingEntity target);
 
 	Timestamp getLastUpdatedTime();
 
@@ -1103,4 +1101,6 @@ public interface ISoliniaSpell extends IPersistable {
 	int getSpellEffectBase(SpellEffectType spellEffectType);
 
 	SpellEffect getSpellEffect(SpellEffectType spellEffectType);
+
+	int calcBuffDurationFormula(int level, int formula, int duration);
 }

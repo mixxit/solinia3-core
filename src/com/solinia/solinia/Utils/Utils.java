@@ -2665,10 +2665,10 @@ public class Utils {
 		}
 	}
 
-	public static int getDurationFromSpell(ISoliniaLivingEntity solEntity, ISoliniaSpell soliniaSpell) {
-		int duration = soliniaSpell.calcBuffDuration(solEntity, solEntity.getEffectiveLevel(true));
+	public static int getDurationFromSpell(ISoliniaLivingEntity source,ISoliniaLivingEntity target, ISoliniaSpell soliniaSpell) {
+		int duration = soliniaSpell.calcBuffDuration(source, target);
 		if (duration > 0) {
-			duration = soliniaSpell.getActSpellDuration(solEntity, duration);
+			duration = soliniaSpell.getActSpellDuration(source, duration);
 		}
 
 		return duration;
@@ -5981,11 +5981,11 @@ public class Utils {
 			break;		
 		case CAST_ON_OTHER_SONG:
 			String[] castonothersong = referenceCode.split("\\^");
-			message = castonothersong[0] + " " + castonothersong[1];
+			message = castonothersong[0] + castonothersong[1];
 			break;		
 		case CAST_ON_OTHER:
 			String[] castonother = referenceCode.split("\\^");
-			message = castonother[0] + " " + castonother[1];
+			message = castonother[0] + castonother[1];
 			break;		
 		case ITEM_DISCOVERED:
 			String[] itemDiscoveryData = referenceCode.split("\\^");

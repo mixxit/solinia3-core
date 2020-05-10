@@ -2,6 +2,8 @@ package com.solinia.solinia.Models;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
+
 public class DebuggerSettings {
 	private ConcurrentHashMap<String, String> debugValues = new ConcurrentHashMap<String, String>();
 	
@@ -32,8 +34,10 @@ public class DebuggerSettings {
 		if (this.debugValues.get(key).equals(""))
 			return false;
 		
-		if (!this.debugValues.get(key).equals(focusId))
+		if (!this.debugValues.get(key.toUpperCase()).equals(focusId.toUpperCase()))
+		{
 			return false;
+		}
 		
 		return true;
 	}
