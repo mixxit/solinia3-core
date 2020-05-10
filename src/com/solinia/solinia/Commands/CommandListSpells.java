@@ -10,6 +10,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaSpell;
+import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -36,6 +37,28 @@ public class CommandListSpells implements CommandExecutor {
 		{
 			try {
 				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getSpells(), sender, args,SoliniaSpell.class);
+			return true;
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				sender.sendMessage(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		
+		if (args.length > 0 && args[0].equals(".effectid"))
+		{
+			sender.sendMessage("Seeking spells by effect");
+			try {
+				SpellEffectType type = Utils.getSpellEffectType(Integer.parseInt(args[1]));
+				for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
+				{
+					if (spell.isEffectInSpell(type))
+					{
+						String spellmessage = "" + ChatColor.GOLD + spell.getId() + ChatColor.RESET + " - " + spell.getName();
+						sender.sendMessage(spellmessage);
+					}
+				}
+				sender.sendMessage("Done");
 			return true;
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

@@ -1949,7 +1949,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			if (can_stun) {
 				int bashsave_roll = Utils.RandomBetween(0, 100);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "CommonDamage", this.getBukkitLivingEntity(), "Can stun - bashsave roll was: " + bashsave_roll + " vs stunbash chance " + stunbash_chance);
 				if (bashsave_roll > 98 || bashsave_roll > (55 - stunbash_chance)) {
+					DebugUtils.DebugLog("SoliniaLivingEntity", "CommonDamage", this.getBukkitLivingEntity(), "Roll success for stun");
 					// did stun -- roll other resists
 					// SE_FrontalStunResist description says any angle now a days
 					int stun_resist2 = getSpellBonuses(SpellEffectType.FrontalStunResist) + getItemBonuses(SpellEffectType.FrontalStunResist) +
@@ -4297,8 +4299,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "Damage done: " + hit.damage_done);
 		if (hit.damage_done >= 0) {
+			DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "Checking hit chance");
 			if (other.checkHitChance(this, hit)) {
 				// npc chance to stun
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doAttack", this.getBukkitLivingEntity(), "hit");
 				
 				if (isNPC() && other.isPlayer() && /*other->animation > 0 && */getMentorLevel() >= 5 && isBehindEntity(other.getBukkitLivingEntity())) {
 					// ~ 12% chance

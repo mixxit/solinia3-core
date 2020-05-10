@@ -1609,7 +1609,6 @@ public class SoliniaActiveSpell {
 			
 			if (caster != null && target != null) {
 				int effect_value = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity,getLivingEntity(),caster.getEffectiveLevel(true),this.getTicksLeft(),0);
-				
 				//Typically we check for immunities else where but since stun immunities are different and only
 				//Block the stun part and not the whole spell, we do it here, also do the message here so we wont get the message on a resist
 				int max_level = spellEffect.getMax();
