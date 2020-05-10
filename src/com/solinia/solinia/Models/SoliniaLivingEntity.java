@@ -2084,7 +2084,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 			try {
 				LocalDateTime datetime = LocalDateTime.now();
-				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(seconds, ChronoUnit.SECONDS));
+				Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(seconds, ChronoUnit.MILLIS));
 	
 				StateManager.getInstance().getEntityManager().addStunned(getBukkitLivingEntity(), expiretimestamp);
 	
