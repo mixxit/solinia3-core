@@ -3183,7 +3183,7 @@ public class Utils {
 		case 127:
 			return new DisguisePackage(DisguiseType.PLAYER, "Invisible Man");
 		case 128:
-			return new DisguisePackage(DisguiseType.PLAYER, "Iksar");
+			return new DisguisePackage(DisguiseType.PLAYER, "lidkim", "CalangoMC"); // iksar
 		case 129:
 			return new DisguisePackage(DisguiseType.PLAYER, "Scorpion");
 		case 130:
@@ -3211,7 +3211,7 @@ public class Utils {
 		case 141:
 			return new DisguisePackage(DisguiseType.BOAT, "Boat");
 		case 142:
-			return new DisguisePackage(DisguiseType.PLAYER, "Unknown 142");
+			return new DisguisePackage(DisguiseType.THROWN_EXP_BOTTLE, "Minor Illusion"); // supposed to be random stuff like chairs etc
 		case 143:
 			return new DisguisePackage(DisguiseType.PLAYER, "tree", "zero_kage"); // tree
 		case 144:

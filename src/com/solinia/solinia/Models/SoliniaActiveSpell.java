@@ -45,6 +45,7 @@ import com.solinia.solinia.Utils.Utils;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.md_5.bungee.api.ChatColor;
@@ -2319,10 +2320,21 @@ public class SoliniaActiveSpell {
 			getLivingEntity().sendMessage(
 					ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
 		} else {
-			MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
-			DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
-			getLivingEntity().sendMessage(
-					ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
+			switch (disguise.getDisguisetype())
+			{
+				case THROWN_EXP_BOTTLE:
+					MiscDisguise bottle = new MiscDisguise(disguise.getDisguisetype(), 75);
+					DisguiseAPI.disguiseEntity(getLivingEntity(), bottle);
+					getLivingEntity().sendMessage(
+							ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
+				break;
+				default:
+				MobDisguise mob = new MobDisguise(disguise.getDisguisetype());
+				DisguiseAPI.disguiseEntity(getLivingEntity(), mob);
+				getLivingEntity().sendMessage(
+						ChatColor.GRAY + "* Illusion applied, use /disguiseviewself to toggle your illusion for you only");
+				break;
+			}
 		}
 
 	}
