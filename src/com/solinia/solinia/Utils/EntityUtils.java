@@ -190,7 +190,7 @@ public class EntityUtils {
 	    stalkerLocation.setYaw((float)Utils.calculateYaw(deltax, deltaz));
 	    stalkerLocation.setPitch((float)Utils.calculatePitch(deltax, deltay, deltaz));
 	    
-	    EntityUtils.teleportSafely(source,stalkerLocation);
+	    EntityUtils.teleportUnsafely(source,stalkerLocation);
     }
 	
 	public static boolean safeFollow(World w, int x, int y, int z)
@@ -3411,6 +3411,45 @@ public class EntityUtils {
 		bukkitPlayer.sendMessage("* You are no longer standing - Use /stand to get back up");
 	}
 
+	public static void teleportUnsafely(Entity targetEntity, Location targetLoc) {
+		if (targetEntity == null)
+			return;
+		
+		if (targetLoc == null)
+			return;
+		
+		final UUID entityUuid = targetEntity.getUniqueId();
+		final Location loc = targetLoc.clone();
+		
+		Bukkit.getScheduler().runTask(StateManager.getInstance().getPlugin(), new Runnable() {
+		    @Override
+		    public void run() {
+		    	if (StateManager.getInstance().isStopping())
+		    		return;
+		    	
+		    	Entity entity = Bukkit.getEntity(entityUuid);
+		    	if (entity == null)
+		    		return;
+		    	
+		    	// if over 3 chunks, remove any pets
+	    		if (entity.getLocation().distance(loc) > 48)
+	    		{
+	    			if (EntityUtils.HasPet(entityUuid))
+	    			{
+	    				EntityUtils.KillAllPets(entityUuid);
+	    				entity.sendMessage(ChatColor.GRAY + "* Your pets have been removed due to teleportation" + ChatColor.RESET);
+	    			}
+	    		}
+		    	
+		    	if (entity instanceof Player)
+				{
+		    		entity.teleport(loc);
+				} else {
+					entity.teleport(loc);
+				}
+		    }
+		});
+	}
 
 	public static void teleportSafely(Entity targetEntity, Location targetLoc) {
 		if (targetEntity == null)
