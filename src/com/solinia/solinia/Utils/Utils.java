@@ -1667,6 +1667,8 @@ public class Utils {
 			return 489;
 		case Slam:
 			return 490;
+		case Picklock:
+			return 491;
 		default:
 			return -1;
 		}
@@ -2656,6 +2658,8 @@ public class Utils {
 			return SpellEffectType.Bash;
 		case 490:
 			return SpellEffectType.Slam;
+		case 491:
+			return SpellEffectType.Picklock;
 		default:
 			return SpellEffectType.ERROR;
 		}

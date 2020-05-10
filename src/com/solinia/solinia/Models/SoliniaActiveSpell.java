@@ -1365,9 +1365,27 @@ public class SoliniaActiveSpell {
 		case Slam:
 			applyBash(spellEffect,soliniaSpell,casterLevel);
 			return;
+		case Picklock:
+			applyPicklock(spellEffect,soliniaSpell,casterLevel);
+			return;
 		default:
 			return;
 		}
+	}
+	
+	private void applyPicklock(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+		
+		// get targetted door
+		sourceEntity.sendMessage("This ability is not currently active");
 	}
 
 	private void applySummonNPCID(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
