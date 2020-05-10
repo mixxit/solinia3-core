@@ -5224,7 +5224,7 @@ public class Utils {
 	}
 
 	public static ItemStack getTargetingItemStack() {
-		ItemStack itemStack = new ItemStack(Material.LEGACY_SKULL_ITEM);
+		ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
 		itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(),
 				UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"),
 				"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFlNDI1YzViYTlmM2MyOTYyYjM4MTc4Y2JjMjMxNzJhNmM2MjE1YTExYWNjYjkyNzc0YTQ3MTZlOTZjYWRhIn19fQ==",
