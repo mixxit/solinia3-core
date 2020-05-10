@@ -2285,7 +2285,15 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyIllusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		DisguisePackage disguise = Utils.getDisguiseTypeFromDisguiseId(spellEffect.getBase());
+		int type = 0; // earth
+		if (soliniaSpell.getName().contains("Water Elemental"))
+			type = 1;
+		if (soliniaSpell.getName().contains("Air Elemental"))
+			type = 2;
+		if (soliniaSpell.getName().contains("Fire Elemental"))
+			type = 3;
+		
+		DisguisePackage disguise = Utils.getDisguiseTypeFromDisguiseId(spellEffect.getBase(), type);
 		if (disguise.getDisguisetype() == null || disguise.getDisguisetype() == null
 				|| disguise.getDisguisetype().equals(DisguiseType.UNKNOWN)) {
 			System.out.println("Could not find illusion: " + spellEffect.getBase());

@@ -2928,7 +2928,7 @@ public class Utils {
 		}
 	}
 
-	public static DisguisePackage getDisguiseTypeFromDisguiseId(int disguiseid) {
+	public static DisguisePackage getDisguiseTypeFromDisguiseId(int disguiseid, int parameter) {
 		switch (disguiseid) {
 		case 1:
 			return new DisguisePackage(DisguiseType.PLAYER, "human", "k0h"); // human
@@ -3077,7 +3077,14 @@ public class Utils {
 		case 74:
 			return new DisguisePackage(DisguiseType.PLAYER, "Piranha");
 		case 75:
-			return new DisguisePackage(DisguiseType.BLAZE, "Elemental");
+			if (parameter == 0) // (earth)
+			return new DisguisePackage(DisguiseType.IRON_GOLEM, "Earth Elemental");
+			if (parameter == 1) // 
+			return new DisguisePackage(DisguiseType.SQUID, "Water Elemental");
+			if (parameter == 2)
+			return new DisguisePackage(DisguiseType.PARROT, "Air Elemental");
+			if (parameter == 3) // fire
+			return new DisguisePackage(DisguiseType.BLAZE, "Fire Elemental");
 		case 76:
 			return new DisguisePackage(DisguiseType.OCELOT, "Puma");
 		case 77:
