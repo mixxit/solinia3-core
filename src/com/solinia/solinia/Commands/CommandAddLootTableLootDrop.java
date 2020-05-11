@@ -44,9 +44,14 @@ public class CommandAddLootTableLootDrop implements CommandExecutor {
 				return true;
 			}
 			
-			
-			SoliniaLootFactory.CreateLootTableDrop(loottableid, lootdropid);
-			sender.sendMessage("LootTable updated");
+			try
+			{
+				SoliniaLootFactory.CreateLootTableDrop(loottableid, lootdropid);
+				sender.sendMessage("LootTable updated");
+			} catch (Exception e)
+			{
+				sender.sendMessage(e.getMessage());
+			}
 		} catch (CoreStateInitException e)
 		{
 			sender.sendMessage(e.getMessage());

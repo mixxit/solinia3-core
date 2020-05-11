@@ -5874,6 +5874,9 @@ public class Utils {
 	}
 
 	public static void SendHint(LivingEntity entity, HINT hint, String referenceCode, boolean sendNearby, ItemStack itemStack) {
+		if (entity == null)
+			return;
+		
 		String message = "";
 		boolean showItemLinks = false;
 		switch (hint)
@@ -6049,7 +6052,7 @@ public class Utils {
 				}
 			}
 			
-			if(sendNearby)
+			if(sendNearby && entity != null)
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.getLocation().distance(entity.getLocation()) <= Utils.GetLocalSayRange(entity.getLocation().getWorld().getName()))
 				{

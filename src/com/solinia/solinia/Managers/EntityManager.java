@@ -1216,10 +1216,15 @@ public class EntityManager implements IEntityManager {
 	
 	@Override
 	public void clearEntityFirstEffect(LivingEntity livingEntity) {
+		clearEntityFirstEffect(livingEntity, false);
+	}
+	
+	@Override
+	public void clearEntityFirstEffect(LivingEntity livingEntity, boolean forceDoNotLoopBardSong) {
 		if (entitySpells.get(livingEntity.getUniqueId()) == null)
 			return;
 		
-		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpell(plugin, false);
+		entitySpells.get(livingEntity.getUniqueId()).removeFirstSpell(plugin, forceDoNotLoopBardSong);
 		
 		try
 		{

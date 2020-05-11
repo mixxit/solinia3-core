@@ -46,8 +46,15 @@ public class SoliniaLootFactory {
 		StateManager.getInstance().getConfigurationManager().addLootTable(loottable);
 	}
 
-	public static void CreateLootTableDrop(int loottableid, int lootdropid) throws CoreStateInitException {
+	public static void CreateLootTableDrop(int loottableid, int lootdropid) throws Exception {
 		ISoliniaLootTable loottabletable = StateManager.getInstance().getConfigurationManager().getLootTable(loottableid);
+		
+		for (ISoliniaLootTableEntry entry : loottabletable.getEntries())
+		{
+			if (entry.getLootdropid() == lootdropid)
+				throw new Exception("Lootdrop already exists in loot table");
+		}
+		
 		SoliniaLootTableEntry loottable = new SoliniaLootTableEntry();
 		int id = 1;
 		for(ISoliniaLootTableEntry entry : loottabletable.getEntries())

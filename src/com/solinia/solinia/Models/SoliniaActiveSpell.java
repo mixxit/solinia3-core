@@ -2745,7 +2745,11 @@ public class SoliniaActiveSpell {
 
 	private void applyCancelMagic(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		try {
-			StateManager.getInstance().getEntityManager().clearEntityFirstEffect(getLivingEntity());
+			// do not loop song (else cancel may cancel out cancel may cancel out cancel...)
+			if (this.getSourceUuid().equals(this.getOwnerUuid()))
+				StateManager.getInstance().getEntityManager().clearEntityFirstEffect(getLivingEntity(),true);
+			else
+				StateManager.getInstance().getEntityManager().clearEntityFirstEffect(getLivingEntity());
 		} catch (CoreStateInitException e) {
 			return;
 		}

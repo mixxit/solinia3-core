@@ -66,6 +66,7 @@ public interface IEntityManager {
 	void doNPCSummon();
 
 	void clearEntityFirstEffect(LivingEntity livingEntity);
+	void clearEntityFirstEffect(LivingEntity livingEntity, boolean forceDoNotLoopBardSong);
 
 	void addEntitySpellCooldown(LivingEntity livingEntity, int spellId, Timestamp expiretimestamp);
 
