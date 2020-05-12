@@ -257,6 +257,7 @@ public class EntityUtils {
 			{
 				int aaBonuses = solEntity.getSpellBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getItemBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getAABonuses(SpellEffectType.TradeSkillMastery); 
 				maxSkill += (aaBonuses * 50);
+				return maxSkill;
 			} else {
 				return maxSkill;
 			}
