@@ -256,6 +256,7 @@ public class EntityUtils {
 			if (solEntity != null && Utils.IsTradeskill(skillType))
 			{
 				int aaBonuses = solEntity.getSpellBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getItemBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getAABonuses(SpellEffectType.TradeSkillMastery); 
+				maxSkill += (aaBonuses * 50);
 			} else {
 				return maxSkill;
 			}
