@@ -950,6 +950,23 @@ public class EntityUtils {
 					r_value = ((level * 5) + 5);
 					break;
 				}
+			case Frenzy: {
+				switch (classname) {
+					case "BERSERKER":
+						if (level < 6)
+							r_value = 0;
+						if (level < 50)
+							r_value = level*4+4;
+						if (level >= 50 && level < 66)
+							r_value = 200;
+						if (level >= 66)
+							r_value = 203;
+					// this is not righ tbut we will just use a low one for now (usually its 6=28 30=124 70=215)
+					break;
+				default:
+					return 0;
+				}
+			}
 	/////////////////////////////////////////
 	// Common
 	/////////////////////////////////////////

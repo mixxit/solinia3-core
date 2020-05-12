@@ -21,6 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
@@ -3761,6 +3762,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		
 		if (skill_to_use.equals(SkillType.Frenzy)) {
+			DebugUtils.DebugLog("SoliniaLivingEntity", "doClassAttacks", this.getBukkitLivingEntity(), "Trying frenzy skill increase");
 			tryIncreaseSkill(SkillType.Frenzy, 10);
 			int AtkRounds = 1;
 			//DoAnim(anim2HSlashing, 0, false);
@@ -3777,6 +3779,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (Utils.RandomBetween(0,450) < chance)
 					AtkRounds++;
 			}
+			DebugUtils.DebugLog("SoliniaLivingEntity", "doClassAttacks", this.getBukkitLivingEntity(), "Frenzy Attack rounds are" + AtkRounds);
 
 			while(AtkRounds > 0) {
 				if (ca_target!=this)
@@ -3982,6 +3985,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		if (!Utils.isValidSkill(skill.name().toUpperCase()))
 			return;
+
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity(),"doSpecialAttackDamage skill: " + skill.name());
 
 		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpecialAttackDamage", getBukkitLivingEntity(),"doSpecialAttackDamage basedmg: " + base_damage + " with min_damage: " + min_damage);
 		DamageHitInfo my_hit = new DamageHitInfo();
@@ -4499,6 +4504,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		else if (hit.skill.equals(SkillType.Frenzy) && getClassObj() != null && getClassObj().getName().equals("BERSERKER") && getMentorLevel() > 50) {
 			extra_mincap = 4 * getMentorLevel() / 5;
+			DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "Frenzy min cap" + extra_mincap);
 		}
 
 		// this has some weird ordering
@@ -7843,7 +7849,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					this.say("You will not evade me " + summoningEntity.getCustomName() + "!");
 
 				}
-				EntityUtils.teleportSafely(summoningEntity,getBukkitLivingEntity().getLocation());
+				
+				Location targetLocation = getBukkitLivingEntity().getLocation();
+				
+				Vector dir = targetLocation.clone().subtract(summoningEntity.getEyeLocation()).toVector();
+				targetLocation.setDirection(dir);
+				
+				EntityUtils.teleportSafely(summoningEntity,targetLocation);
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
