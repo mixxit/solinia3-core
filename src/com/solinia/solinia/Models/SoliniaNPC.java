@@ -1365,7 +1365,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	@Override
 	public int getSkillCap(SkillType skillType) {
-		return EntityUtils.getSkillCap(skillType, getClassObj(), getLevel(), "", 0);
+		return EntityUtils.getSkillCap(skillType, getClassObj(), getLevel(), "", 0, null);
 	}
 
 	@Override

@@ -154,6 +154,27 @@ public class Utils {
 
 	public static final int FRENZY_REUSETIME = 10;
 	
+	public static boolean IsTradeskill(SkillType skill)
+	{
+		switch (skill) {
+		case Fishing:
+		case MakePoison:
+		case Tinkering:
+		case Research:
+		case Alchemy:
+		case Baking:
+		case Tailoring:
+		case Blacksmithing:
+		case Fletching:
+		case Brewing:
+		case Pottery:
+		case JewelryMaking:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
 	public static int GetLocalSayRange(String worldName)
 	{
 		try

@@ -422,4 +422,12 @@ public interface ISoliniaItem extends IPersistable {
 	List<String> getAllowedClassNamesUpper();
 
 	List<String> getAllowedRaceNamesUpper();
+
+	boolean isDistiller();
+
+	int getConsumableRequireInZone();
+
+	void setConsumableRequireInZone(int consumableRequireInZone);
+
+	void setDistiller(boolean distiller);
 }

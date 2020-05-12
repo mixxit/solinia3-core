@@ -32,9 +32,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -944,7 +946,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public int getSkillCap(SkillType skillType) {
 		return EntityUtils.getSkillCap(skillType, getClassObj(), getActualLevel(), getSpecialisation(),
-				this.getSkill(skillType).getValue());
+				this.getSkill(skillType).getValue(), this.getSoliniaLivingEntity());
 	}
 
 	@Override
@@ -1749,7 +1751,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			// Not a clicky!
-			if (!item.isThrowing() && item.getLanguagePrimer().equals("") && (item.getAbilityid() < 1))
+			if (!item.isThrowing() && !item.isDistiller() && item.getLanguagePrimer().equals("") && (item.getAbilityid() < 1))
 				return;
 
 			if (item.isThrowing()) {
@@ -1781,6 +1783,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			// try consume language primer
 			if (!item.getLanguagePrimer().equals("")) {
+				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
+				if (item.isConsumable()) {
+					// To prevent a trap you must cancel event here
+					Utils.CancelEvent(cancellableEvent);
+					// cant be stacked so no need to test stacking
+					getBukkitPlayer().getInventory().setItemInMainHand(null);
+					getBukkitPlayer().updateInventory();
+				}
+				return;
+			}
+			
+			if (item.isDistiller())
+			{
 				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
 				if (item.isConsumable()) {
 					// To prevent a trap you must cancel event here
@@ -5870,6 +5885,59 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		loadout.spell7 = this.getMemorisedSpellSlot(7);
 		loadout.spell8 = this.getMemorisedSpellSlot(8);
 		return loadout;
+	}
+
+	@Override
+	public void DistillOffhand() {
+		if (this.getBukkitPlayer() == null)
+			return;
+		
+		if (this.getBukkitPlayer().getEquipment().getItemInOffHand() == null || this.getBukkitPlayer().getEquipment().getItemInOffHand().getType().equals(Material.AIR))
+		{
+			this.getBukkitPlayer().sendMessage("You soak the liquid on your empty offhand but nothing seems to happen");
+			return;
+		}
+		
+		if (!ItemStackUtils.IsSoliniaItem(this.getBukkitPlayer().getEquipment().getItemInOffHand()))
+		{
+			this.getBukkitPlayer().sendMessage("You soak the liquid on the item in your offhand but nothing seems to happen");
+			return;
+		}
+		
+		if (ItemStackUtils.getAugmentationItemId(this.getBukkitPlayer().getInventory().getItemInOffHand()) != null)
+		{
+			try
+			{
+				ISoliniaItem i = SoliniaItemAdapter.Adapt(this.getBukkitPlayer().getInventory().getItemInOffHand());
+				
+				Integer augmentationId = ItemStackUtils.getAugmentationItemId(this.getBukkitPlayer().getInventory().getItemInOffHand());
+				ISoliniaItem augItem = null;
+				if (augmentationId != null && augmentationId != 0) {
+					augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
+					Utils.AddAccountClaim(this.getBukkitPlayer().getName(),augItem.getId());
+				}
+				
+				int count = this.getBukkitPlayer().getInventory().getItemInOffHand().getAmount();
+				if (count == 0)
+					count = 1;
+				for (int x = 0; x < count; x++)
+				{
+					Utils.AddAccountClaim(this.getBukkitPlayer().getName(),i.getId());
+				}
+				
+				this.getBukkitPlayer().getInventory().setItemInOffHand(null);
+				this.getBukkitPlayer().updateInventory();
+				this.getBukkitPlayer().sendMessage("You soak the liquid on the item in your offhand and it begins to bubble (see /claims)");
+			} catch (CoreStateInitException | SoliniaItemException e)
+			{
+				this.getBukkitPlayer().sendMessage("You soak the liquid on the item in your offhand but nothing seems to happen");
+			}
+
+		} else {
+			this.getBukkitPlayer().sendMessage("You soak the liquid on the item in your offhand but nothing seems to happen");
+			return;
+		}
+		
 	}
 
 }

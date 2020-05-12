@@ -651,4 +651,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void loadSpellLoadout(SpellLoadout loadout);
 	public SpellLoadout getActiveSpellLoadout();
 	void emote(String string, boolean isManual);
+	public void DistillOffhand();
 }

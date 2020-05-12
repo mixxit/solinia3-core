@@ -188,8 +188,6 @@ public class DropUtils {
 						if (!item.isSpellscroll())
 							continue;
 
-						System.out.println("Spell drop chance: " + randomInt + " vs " + alwaysrollspells.get(i).getChance());
-						
 						if (randomInt <= alwaysrollspells.get(i).getChance()) {
 							if (item.isArtifact() == true) {
 								Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));

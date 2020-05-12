@@ -34,10 +34,12 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SolAnimationType;
+import com.solinia.solinia.Models.SpellEffectType;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -209,7 +211,7 @@ public class EntityUtils {
 	    return safe;
 	  }
 
-	public static int getSkillCap(SkillType skillType, ISoliniaClass profession, int level, String specialisation, int currentskillamount) {
+	public static int getSkillCap(SkillType skillType, ISoliniaClass profession, int level, String specialisation, int currentskillamount, ISoliniaLivingEntity solEntity) {
 
 		if (!Utils.isValidSkill(skillType.name().toUpperCase()))
 			return 0;
@@ -249,7 +251,15 @@ public class EntityUtils {
 		}
 
 		if (profession != null)
-			return EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
+		{
+			int maxSkill = EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
+			if (solEntity != null && Utils.IsTradeskill(skillType))
+			{
+				int aaBonuses = solEntity.getSpellBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getItemBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getAABonuses(SpellEffectType.TradeSkillMastery); 
+			} else {
+				return maxSkill;
+			}
+		}
 
 		int cap = (int) ((2 * level) + 2);
 		if (cap > Utils.HIGHESTSKILL)

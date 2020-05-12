@@ -63,6 +63,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private int damage = 0;
 	private int weaponabilityid = 0;
 	private int attackspeed = 0;
+	private boolean distiller = false;
 	private String enchantment1;
 	private int enchantment1val;
 	private String enchantment2;
@@ -641,10 +642,15 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			return true;
 		}
 		
+		if (isConsumable == true && isDistiller())
+		{
+			SoliniaPlayerAdapter.Adapt(player).DistillOffhand();
+			return true;
+		}
+		
 		if (isConsumable == true && !getLanguagePrimer().equals(""))
 		{
 			SoliniaPlayerAdapter.Adapt(player).setSkill(Utils.getSkillType2(getLanguagePrimer()), 100);
-			System.out.println("Granted " + player.getName() + " language skill from item [" + getLanguagePrimer() + "]");
 			return true;
 		}
 		
@@ -720,7 +726,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("- consumablerequirequestflag: " + ChatColor.GOLD + getConsumableRequireQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- consumablerequireinzone: " + ChatColor.GOLD + this.getConsumableRequireInZone() + ChatColor.RESET);
 		sender.sendMessage("- bandage: " + ChatColor.GOLD + isBandage() + ChatColor.RESET + " languageprimer: " + ChatColor.GOLD + getLanguagePrimer() + ChatColor.RESET);
-		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET);
+		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET + "- distiller: " + ChatColor.GOLD + isDistiller() + ChatColor.RESET);
 		sender.sendMessage("- discoverer: " + ChatColor.GOLD + getDiscoverer() + ChatColor.RESET + " - artifact: " + ChatColor.GOLD + isArtifact() + ChatColor.RESET + " Found: (" + isArtifactFound() + ")"+ ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- acceptsaugmentationslottype: " + ChatColor.GOLD + getAcceptsAugmentationSlotType() + ChatColor.RESET);
@@ -824,6 +830,9 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			break;
 		case "dye":
 			setDye(Integer.parseInt(value));
+			break;
+		case "distiller":
+			setDistiller(Boolean.parseBoolean(value));
 			break;
 		case "allowedclassnames":
 			String[] allowedclasses = value.split(",");
@@ -1956,11 +1965,23 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		this.consumableRequireNotQuestFlag = consumableRequireNotQuestFlag;
 	}
 
+	@Override
 	public int getConsumableRequireInZone() {
 		return consumableRequireInZone;
 	}
 
+	@Override
 	public void setConsumableRequireInZone(int consumableRequireInZone) {
 		this.consumableRequireInZone = consumableRequireInZone;
+	}
+
+	@Override
+	public boolean isDistiller() {
+		return distiller;
+	}
+
+	@Override
+	public void setDistiller(boolean distiller) {
+		this.distiller = distiller;
 	}
 }

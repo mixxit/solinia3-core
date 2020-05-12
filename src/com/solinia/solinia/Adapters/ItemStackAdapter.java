@@ -454,6 +454,11 @@ public class ItemStackAdapter {
 			loretxt.add("Language Primer: " + soliniaItem.getLanguagePrimer());
 		}
 		
+		if (soliniaItem.isDistiller())
+		{
+			loretxt.add("This is an Augmentation Distiller");
+		}
+		
 		loretxt.add("Discovered By: " + soliniaItem.getDiscoverer());
 		
 		if ((soliniaItem.getWorth() * costmultiplier) > 0)
@@ -464,6 +469,10 @@ public class ItemStackAdapter {
 		if (soliniaItem.isTemporary())
 		{
 			loretxt.add("Temporary: " + StateManager.getInstance().getInstanceGuid());
+		}
+		if (soliniaItem.isConsumable())
+		{
+			loretxt.add("This item is consumed on use");
 		}
 
 		i.setLore(loretxt);
