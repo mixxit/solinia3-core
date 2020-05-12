@@ -3,8 +3,10 @@ package com.solinia.solinia.Listeners;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.SpectralArrow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -39,7 +41,7 @@ public class Solinia3CoreVehicleListener implements Listener {
 							if (entity == null)
 								return;
 							
-							Utils.RemoveEntity(entity,"on vehicle enter event");
+							Utils.RemoveEntity(entity,"on vehicle dismount event");
 						}
 					});
 					

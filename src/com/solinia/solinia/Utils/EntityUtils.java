@@ -3400,15 +3400,32 @@ public class EntityUtils {
 		
 		if (bukkitPlayer.getVehicle() != null)
 			return;
-		
-		// Slam player to the floor
-		EntityUtils.teleportSafely(bukkitPlayer,getGroundLocationAt(bukkitPlayer.getLocation()));
-		
-		Entity entity = bukkitPlayer.getWorld().spawnEntity(bukkitPlayer.getLocation().subtract(0, 0.5, 0),EntityType.ARROW);
-		entity.setSilent(true);
-		entity.setInvulnerable(true);
-		entity.addPassenger(bukkitPlayer);
-		bukkitPlayer.sendMessage("* You are no longer standing - Use /stand to get back up");
+		if (StateManager.getInstance().getPlugin().isEnabled())
+		{
+			// Slam player to the floor
+			EntityUtils.teleportUnsafely(bukkitPlayer,getGroundLocationAt(bukkitPlayer.getLocation()));
+			
+			Entity entity = bukkitPlayer.getWorld().spawnEntity(bukkitPlayer.getLocation().subtract(0, 0.5, 0),EntityType.ARROW);
+			entity.setSilent(true);
+			entity.setInvulnerable(true);
+			entity.setPersistent(true);
+			
+			final UUID vehicleUUID = entity.getUniqueId();
+			final UUID passengerUUID = bukkitPlayer.getUniqueId();
+			
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
+					new Runnable() {
+						public void run() {
+							Entity vehicle = Bukkit.getEntity(vehicleUUID);
+							Entity passenger = Bukkit.getEntity(passengerUUID);
+							if (vehicle != null && passenger != null)
+							{
+								vehicle.addPassenger(passenger);
+								passenger.sendMessage("* You are no longer standing - Use /stand to get back up");
+							}
+						}
+					}, 20L);
+		}
 	}
 
 	public static void teleportUnsafely(Entity targetEntity, Location targetLoc) {
