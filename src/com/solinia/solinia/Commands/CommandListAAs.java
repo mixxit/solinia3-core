@@ -8,9 +8,11 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
 import com.solinia.solinia.Interfaces.ISoliniaAAEffect;
+import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAAAbility;
+import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.Utils;
 
@@ -64,6 +66,21 @@ public class CommandListAAs implements CommandExecutor {
 						found = true;
 						break;
 					}
+					
+					if (!found)
+					for (ISoliniaAARank r : aa.getRanks())
+					{
+						if (!found)
+						for (SoliniaAARankEffect ra : r.getEffects())
+						{
+							if (ra.getEffectId() != effectId)
+								continue;
+						
+							found = true;
+							break;
+						}
+					}
+					
 					if (found)
 					sender.sendMessage("AAAbilityID: " + ChatColor.GOLD + aa.getId() + ChatColor.RESET + " - " + aa.getName() + " Sysname: " + aa.getSysname());
 				}

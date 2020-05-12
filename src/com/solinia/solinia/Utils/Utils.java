@@ -1671,6 +1671,8 @@ public class Utils {
 			return 490;
 		case Picklock:
 			return 491;
+		case Frenzy:
+			return 492;
 		default:
 			return -1;
 		}
@@ -2662,6 +2664,8 @@ public class Utils {
 			return SpellEffectType.Slam;
 		case 491:
 			return SpellEffectType.Picklock;
+		case 492:
+			return SpellEffectType.Frenzy;
 		default:
 			return SpellEffectType.ERROR;
 		}

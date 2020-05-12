@@ -1370,6 +1370,9 @@ public class SoliniaActiveSpell {
 		case Picklock:
 			applyPicklock(spellEffect,soliniaSpell,casterLevel);
 			return;
+		case Frenzy:
+			applyFrenzy(spellEffect,soliniaSpell,casterLevel);
+			return;
 		default:
 			return;
 		}
@@ -1694,6 +1697,33 @@ public class SoliniaActiveSpell {
 			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
 			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
 				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.Bash, false);
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+	
+	private void applyFrenzy(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		
+		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
+			return;
+
+		try {
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.doClassAttacks(targetSoliniaLivingEntity, SkillType.Frenzy, false);
 			}
 		} catch (CoreStateInitException e) {
 			// just skip it
