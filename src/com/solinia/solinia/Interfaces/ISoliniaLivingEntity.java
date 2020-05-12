@@ -497,4 +497,12 @@ public interface ISoliniaLivingEntity  {
 
 	void emote(String message);
 
+	int getBodyType();
+
+	Tuple<Integer, Integer> getAABonusesTuple(SpellEffectType effect);
+
+	Tuple<Integer, Integer> getItemBonusesTuple(SpellEffectType assassinate);
+
+	Tuple<Integer, Integer> getSpellBonusesTuple(SpellEffectType spellEffectType);
+
 }

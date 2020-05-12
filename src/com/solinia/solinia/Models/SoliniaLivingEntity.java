@@ -3760,6 +3760,36 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 		}
 		
+		if (skill_to_use.equals(SkillType.Frenzy)) {
+			tryIncreaseSkill(SkillType.Frenzy, 10);
+			int AtkRounds = 1;
+			//DoAnim(anim2HSlashing, 0, false);
+
+			//ReuseTime = (Utils.FRENZY_REUSETIME - 1) / HasteMod;
+
+			// bards can do riposte frenzy for some reason
+			if (getClassObj() != null)
+			if (!isRiposte && getClassObj().getName().equals("BERSERKER"))
+			{
+				int chance = getMentorLevel() * 2 + getSkill(SkillType.Frenzy);
+				if (Utils.RandomBetween(0,450) < chance)
+					AtkRounds++;
+				if (Utils.RandomBetween(0,450) < chance)
+					AtkRounds++;
+			}
+
+			while(AtkRounds > 0) {
+				if (ca_target!=this)
+					doSpecialAttackDamage(ca_target, SkillType.Frenzy, dmg, 0, dmg, ReuseTime);
+				AtkRounds--;
+			}
+
+			/*if(ReuseTime > 0 && !isRiposte) {
+				p_timers.Start(pTimerCombatAbility, ReuseTime);
+			}*/
+			return;
+		}
+		
 		if (skill_to_use.equals(SkillType.Kick))
 		{
 			if(!ca_target.getBukkitLivingEntity().getUniqueId().equals(this.getBukkitLivingEntity().getUniqueId()) 
@@ -4446,22 +4476,53 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int extra_mincap = 0;
 		int min_mod = hit.base_damage * getMeleeMinDamageMod_SE(hit.skill) / 100;
 		// TODO Backstab
+		if (hit.skill.equals(SkillType.Backstab)) {
+			extra_mincap = getMentorLevel() < 7 ? 7 : getMentorLevel();
+			if (getMentorLevel() >= 60)
+				extra_mincap = getMentorLevel() * 2;
+			else if (getMentorLevel() > 50)
+				extra_mincap = getMentorLevel() * 3 / 2;
+			// TODO Chaotic stab 
+			/*if (IsSpecialAttack(SpecialAttack.::ChaoticStab)) {
+				hit.damage_done = extra_mincap;
+			}
+			else {
+				int ass = TryAssassinate(defender, hit.skill);
+				if (ass > 0)
+					hit.damage_done = ass;
+			}
+			*/
+			
+			int ass = tryAssassinate(defender, hit.skill);
+			if (ass > 0)
+				hit.damage_done = ass;
+		}
+		else if (hit.skill.equals(SkillType.Frenzy) && getClassObj() != null && getClassObj().getName().equals("BERSERKER") && getMentorLevel() > 50) {
+			extra_mincap = 4 * getMentorLevel() / 5;
+		}
 
+		// this has some weird ordering
+		// Seems the crit message is generated before some of them :P
+		
+		// worn item +skill dmg, SPA 220, 418. Live has a normalized version that should be here too
 		hit.min_damage += getSkillDmgAmt(hit.skill);
 
 		// TODO shielding mod2
-		// TODO item melee mitigation
+		if (defender.getItemBonuses(SpellEffectType.MeleeMitigation) > 0)
+			hit.min_damage -= hit.min_damage * defender.getItemBonuses(SpellEffectType.MeleeMitigation) / 100;
 		
 		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "Before applyMeleeDamageMods damagedone: "+ hit.damage_done);
-
 		hit.damage_done = applyMeleeDamageMods(hit.skill, hit.damage_done, defender);
 		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "After applyMeleeDamageMods damagedone: "+ hit.damage_done);
 		min_mod = Math.max(min_mod, extra_mincap);
-
 		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "Before tryCrit damagedone: "+ hit.damage_done);
+		if (min_mod > 0 && hit.damage_done < min_mod) // SPA 186
+			hit.damage_done = min_mod;
+		
 		hit = tryCriticalHit(defender, hit);
 		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "After tryCrit damagedone: "+ hit.damage_done);
 
+		
 		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "Before tryCrit mindmg bonus damagedone: "+ hit.damage_done);
 		hit.damage_done += hit.min_damage;
 		DebugUtils.DebugLog("SoliniaLivingEntity", "commonOutgoingHitSuccess", this.getBukkitLivingEntity(), "After mindmg bonus damagedone: "+ hit.damage_done);
@@ -4482,6 +4543,47 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		checkNumHitsRemaining(NumHit.OutgoingHitSuccess);
 		return hit;
+	}
+
+	private int tryAssassinate(ISoliniaLivingEntity defender, SkillType skillInUse) {
+		if (defender != null && (defender.getBodyType() == BodyType.BT_Humanoid) && !defender.isPlayer() && getMentorLevel() >= 60 &&
+			    (skillInUse.equals(SkillType.Backstab) || skillInUse.equals(SkillType.Throwing))) {
+				int chance = getDexterity();
+				if (skillInUse.equals(SkillType.Backstab)) {
+					chance = 100 * chance / (chance + 3500);
+					chance *= 10;
+					int norm = getAABonusesTuple(SpellEffectType.AssassinateLevel).b();
+					if (norm > 0)
+						chance = chance * norm / 100;
+				} else if (skillInUse.equals(SkillType.Throwing)) {
+					if (chance > 255)
+						chance = 260;
+					else
+						chance += 5;
+				}
+
+				chance += getAABonuses(SpellEffectType.Assassinate) + getSpellBonuses(SpellEffectType.Assassinate) + getItemBonuses(SpellEffectType.Assassinate);
+
+				int Assassinate_Dmg = Collections.max(new ArrayList<Integer>(Arrays.asList(getAABonusesTuple(SpellEffectType.Assassinate).b(), getSpellBonusesTuple(SpellEffectType.Assassinate).b(), getItemBonusesTuple(SpellEffectType.Assassinate).b())));
+
+				int Assassinate_Level = 0; // Get Highest Headshot Level
+				Assassinate_Level = Collections.max(new ArrayList<Integer>(Arrays.asList(getAABonuses(SpellEffectType.AssassinateLevel), getSpellBonuses(SpellEffectType.AssassinateLevel), getItemBonuses(SpellEffectType.AssassinateLevel))));
+
+				// revamped AAs require AA line I believe?
+				if (Assassinate_Level < 1)
+					return 0;
+
+				if (Assassinate_Dmg > 0 && Assassinate_Level > 0 && (defender.getMentorLevel() <= Assassinate_Level)) {
+					if (Utils.RandomBetween(1, 1000) <= chance) {
+						Utils.SendHint(defender.getBukkitLivingEntity(), HINT.ASSASSINATES, this.getName(), true);
+						/*entity_list.MessageClose_StringID(this, false, 200, MT_CritMelee, ASSASSINATES,
+										  GetName());*/
+						return Assassinate_Dmg;
+					}
+				}
+			}
+
+			return 0;
 	}
 
 	@Override
@@ -5477,7 +5579,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return damage;
 	}
 
-	private int getBodyType() {
+	@Override
+	public int getBodyType() {
 		try {
 			if (isPlayer()) {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
@@ -5681,12 +5784,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public int getSpellBonuses(SpellEffectType spellEffectType) {
+		return getSpellBonusesTuple(spellEffectType).a();
+	}
+	
+	@Override
+	public Tuple<Integer,Integer> getSpellBonusesTuple(SpellEffectType spellEffectType) {
 		int bonus = 0;
+		int bonus2 = 0;
 		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), spellEffectType)) {
 			bonus += effect.getRemainingValue();
+			bonus2 += effect.getBase2();
 		}
 
-		return bonus;
+		return new Tuple<Integer,Integer>(bonus,bonus2);
 	}
 
 	@Override
@@ -8523,7 +8633,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (Utils.RandomBetween(0, 100) < ratio) {
 				critical = true;
 				if (isPlayer()) {
-					ratio += getAABonuses(SpellEffectType.SpellCritDmgIncrease);
+					ratio += getAABonusesTuple(SpellEffectType.SpellCritDmgIncrease).b();
 				}
 				// TODO add ratio bonuses from spells, aas
 			} else if (getClassObj().getName().equals("WIZARD")) {
@@ -10913,15 +11023,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 	@Override
 	public int getItemBonuses(SpellEffectType spellEffectType) {
-		return getItemBonuses(spellEffectType,SpellResistType.RESIST_NONE);
+		return getItemBonusesTuple(spellEffectType,SpellResistType.RESIST_NONE).a();
 	}
 	
 	@Override
-	public int getItemBonuses(SpellEffectType spellEffectType, SpellResistType filterResistType) {
-		// This includes augs as seperate items
+	public Tuple<Integer,Integer> getItemBonusesTuple(SpellEffectType spellEffectType) {
+		return getItemBonusesTuple(spellEffectType,SpellResistType.RESIST_NONE);
+	}
+	
+	public Tuple<Integer,Integer> getItemBonusesTuple(SpellEffectType spellEffectType, SpellResistType filterResistType)
+	{
 		List<ISoliniaItem> equippedItems = this.getEquippedSoliniaItems();
 		
 		int highest = 0;
+		int highest2 = 0;
 
 		// Check if item focus effect exists for the client.
 		if (equippedItems.size() > 0) {
@@ -10964,19 +11079,31 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						continue;
 					
 					if (spell.getSpellEffectBase(spellEffectType) > highest)
+					{
 						highest = spell.getSpellEffectBase(spellEffectType);
+						highest2 = spell.getSpellEffectBase2(spellEffectType);
+					}
 				} catch (CoreStateInitException e) {
 					
 				}
 			}
 		}
-		
-		return highest;
+		return new Tuple<Integer,Integer>(highest,highest2);
+	}
+	
+	@Override
+	public int getItemBonuses(SpellEffectType spellEffectType, SpellResistType filterResistType) {
+		return getItemBonusesTuple(spellEffectType,filterResistType).a();
 	}
 	
 	@Override
 	public int getAABonuses(SpellEffectType effect) {
-		return Utils.getHighestAAEffectEffectType(getBukkitLivingEntity(),
+		return getAABonusesTuple(effect).a();
+	}
+	
+	@Override
+	public Tuple<Integer,Integer> getAABonusesTuple(SpellEffectType effect) {
+		return Utils.getHighestAAEffectEffectTypeTuple(getBukkitLivingEntity(),
 				effect);
 	}
 

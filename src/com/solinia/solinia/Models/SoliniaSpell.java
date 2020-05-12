@@ -5951,4 +5951,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 		
 		return 0;
 	}
+	
+	@Override
+	public int getSpellEffectBase2(SpellEffectType spellEffectType) {
+		SpellEffect effect = getSpellEffect(spellEffectType);
+		if (effect != null)
+			return effect.getBase2();
+		
+		return 0;
+	}
 }

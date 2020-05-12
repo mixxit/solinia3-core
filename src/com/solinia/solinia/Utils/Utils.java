@@ -151,6 +151,8 @@ public class Utils {
 	public static final boolean ClassicMasterWu = false;
 
 	public static final int DMG_RUNE = -6;
+
+	public static final int FRENZY_REUSETIME = 10;
 	
 	public static int GetLocalSayRange(String worldName)
 	{
@@ -4503,8 +4505,53 @@ public class Utils {
 		}
 		return rankEffects;
 	}
+	
+	public static Tuple<Integer,Integer> getHighestAAEffectEffectTypeTuple(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
+		if (!(bukkitLivingEntity instanceof Player))
+			return new Tuple<Integer,Integer>(0,0);
 
-	public static int getHighestAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
+		// This is actually read from the CriticalSpellChance
+		boolean enforceSpellCritFormula = false;
+		if (effectType.equals(SpellEffectType.SpellCritDmgIncrease)) {
+			effectType = SpellEffectType.CriticalSpellChance;
+			enforceSpellCritFormula = true;
+		}		
+		
+		int highest = 0;
+		int highest2 = 0;
+
+		try {
+			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
+			for (SoliniaAARankEffect effect : player
+					.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType))) {
+
+				// Everything else
+				if (enforceSpellCritFormula) {
+					int base = 0;
+					if (effect.getBase2() > 100)
+						base = effect.getBase2() - 100;
+
+					if (base > highest2)
+					{
+						highest = effect.getBase1();
+						highest2 = base;
+					}
+				} else {
+					if (effect.getBase1() > highest) {
+						highest = effect.getBase1();
+						highest2 = effect.getBase2();
+					}
+				}
+			}
+			return new Tuple<Integer,Integer>(highest,highest2);
+
+		} catch (CoreStateInitException e) {
+			return new Tuple<Integer,Integer>(0,0);
+		}
+
+	}
+
+	/*public static int getHighestAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
 
 		// This is actually read from the CriticalSpellChance
 		boolean enforceSpellCritFormula = false;
@@ -4543,7 +4590,7 @@ public class Utils {
 			return 0;
 		}
 
-	}
+	}*/
 
 	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
 		if (!(bukkitLivingEntity instanceof Player))
@@ -5990,6 +6037,9 @@ public class Utils {
 			String[] castonother = referenceCode.split("\\^");
 			message = castonother[0] + castonother[1];
 			break;		
+		case ASSASSINATES:
+			message = referenceCode + " ASSASSINATES their victim!!";
+			break;		
 		case ITEM_DISCOVERED:
 			String[] itemDiscoveryData = referenceCode.split("\\^");
 			try
@@ -6173,6 +6223,8 @@ public class Utils {
 		case CAST_ON_OTHER_SONG:
 			return HintSetting.Chat;
 		case CAST_ON_OTHER:
+			return HintSetting.Chat;
+		case ASSASSINATES:
 			return HintSetting.Chat;
 		}
 		
