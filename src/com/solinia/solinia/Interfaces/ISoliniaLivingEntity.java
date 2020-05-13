@@ -507,4 +507,7 @@ public interface ISoliniaLivingEntity  {
 
 	ISoliniaPlayer getSoliniaPlayer();
 
+	void doSpecialAttackDamage(ISoliniaLivingEntity who, SkillType skill, int base_damage, int min_damage,
+			int hate_override, int ReuseTime);
+
 }

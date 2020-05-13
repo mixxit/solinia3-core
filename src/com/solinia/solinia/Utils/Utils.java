@@ -4675,13 +4675,16 @@ public class Utils {
 			enforceSpellCritFormula = true;
 		}		
 		
-		int highest = 0;
-		int highest2 = 0;
+		int highest = -1;
+		int highest2 = -1;
 
+		boolean firstRun = true;
+		
 		try {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
 			for (SoliniaAARankEffect effect : player
-					.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType))) {
+					.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType))) 
+			{
 
 				// Everything else
 				if (enforceSpellCritFormula) {
@@ -4689,18 +4692,21 @@ public class Utils {
 					if (effect.getBase2() > 100)
 						base = effect.getBase2() - 100;
 
-					if (base > highest2)
+					if (base > highest2 || firstRun)
 					{
 						highest = effect.getBase1();
 						highest2 = base;
+						firstRun = false;
 					}
 				} else {
-					if (effect.getBase1() > highest) {
+					if (effect.getBase1() > highest || firstRun) {
 						highest = effect.getBase1();
 						highest2 = effect.getBase2();
+						firstRun = false;
 					}
 				}
 			}
+			
 			return new Tuple<Integer,Integer>(highest,highest2);
 
 		} catch (CoreStateInitException e) {

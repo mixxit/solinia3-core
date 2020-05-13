@@ -4483,7 +4483,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
-	private void doSpecialAttackDamage(ISoliniaLivingEntity who, SkillType skill, int base_damage, int min_damage, int hate_override,
+	@Override
+	public void doSpecialAttackDamage(ISoliniaLivingEntity who, SkillType skill, int base_damage, int min_damage, int hate_override,
 			int ReuseTime) {
 		// this really should go through the same code as normal melee damage to
 		// pick up all the special behavior there

@@ -2880,19 +2880,19 @@ public class SoliniaActiveSpell {
 
 			if (weaponDamage < 1)
 				weaponDamage = 1;
-
-			int hpToRemove = weaponDamage;
-
-			// back stab formula
-			if (solSourceEntity.isBehindEntity(this.getLivingEntity()))
-				hpToRemove = (int) Math.floor((2 + backstabSkill / 50) * weaponDamage);
+			
+			if (!solSourceEntity.isBehindEntity(this.getLivingEntity()))
+			{
+				solSourceEntity.sendMessage("You are not behind the enemy");
+				return;
+			}
 
 			ISoliniaLivingEntity targetOfSpell = SoliniaLivingEntityAdapter.Adapt(this.getLivingEntity());
 			if (targetOfSpell != null)
-				targetOfSpell.addToHateList(getSourceUuid(), hpToRemove, false);
-			double newHp = targetOfSpell.setHPChange(hpToRemove*-1, sourceLivingEntity);
-			if (newHp <= 0D)
-				solSourceEntity.removeAggro(getLivingEntity().getUniqueId());
+				targetOfSpell.addToHateList(getSourceUuid(), weaponDamage, false);
+			
+			solSourceEntity.doSpecialAttackDamage(targetOfSpell, SkillType.Backstab, weaponDamage, 0, weaponDamage, 0);
+
 			solSourceEntity.tryIncreaseSkill(SkillType.Backstab, 1);
 
 		} catch (CoreStateInitException e) {
