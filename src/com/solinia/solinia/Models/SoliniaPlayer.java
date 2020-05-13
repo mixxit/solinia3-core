@@ -1626,12 +1626,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			if (!item.isThrowing())
 				return;
-
+			
 			int newAmount = itemstack.getAmount() - 1;
 
 			if (getEntityTarget() == null) {
 				getBukkitPlayer().sendMessage("* You must select a target [See keybinds]");
 			}
+			
+			if (this.getSoliniaLivingEntity() == null)
+				return;
+			
+			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitPlayer());
+			if (!autoAttack.canAutoAttack())
+				return;
+			
 			LivingEntity targetmob = getEntityTarget();
 			if (targetmob != null && !targetmob.getUniqueId().equals(getBukkitPlayer().getUniqueId())) {
 				if (item.useItemOnEntity(getBukkitPlayer(), targetmob, false) == true) {
@@ -1640,12 +1648,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						Utils.CancelEvent(cancellableEvent);
 						getBukkitPlayer().getEquipment().setItemInMainHand(null);
 						getBukkitPlayer().updateInventory();
+						autoAttack.setLastUpdatedTimeNow(this.getSoliniaLivingEntity());
+
 					} else {
 						// To prevent a trap you must cancel event here
 						Utils.CancelEvent(cancellableEvent);
 						itemstack.setAmount(newAmount);
 						getBukkitPlayer().getEquipment().setItemInMainHand(itemstack);
 						getBukkitPlayer().updateInventory();
+						autoAttack.setLastUpdatedTimeNow(this.getSoliniaLivingEntity());
+
 					}
 					return;
 				} else {
