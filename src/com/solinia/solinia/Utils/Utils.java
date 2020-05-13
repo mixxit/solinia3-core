@@ -84,6 +84,7 @@ import com.solinia.solinia.Models.CharacterCreation;
 import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.FactionStandingType;
+import com.solinia.solinia.Models.FocusEffect;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.HintSetting;
 import com.solinia.solinia.Models.NumHit;
@@ -92,6 +93,7 @@ import com.solinia.solinia.Models.RaceChoice;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
+import com.solinia.solinia.Models.SoliniaAARank;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
@@ -120,6 +122,7 @@ public class Utils {
 	public static final int HP_REGEN_CAP = 48;
 	public static final int MP_REGEN_CAP = 48;
 	public static final int MAX_ENTITY_AGGRORANGE = 100;
+	public static final int MAX_LIMIT_INCLUDE = 16;
 	public static final int DMG_INVULNERABLE = -5;
 
 	public static float clamp(float val, float min, float max) {
@@ -4506,6 +4509,136 @@ public class Utils {
 			return AugmentationSlotType.NONE;
 		}
 	}
+	
+	public static List<ISoliniaAARank> getHighestRanksForFocusEffect(ISoliniaPlayer soliniaPlayer,
+			FocusEffect focusEffect) {
+		List<ISoliniaAARank> ranks = new ArrayList<ISoliniaAARank>();
+
+		for (ISoliniaAAAbility aaAbility : soliniaPlayer.getAAAbilities()) {
+			int currentRank = 0;
+			ISoliniaAARank highestRank = null;
+			
+			for (ISoliniaAARank rank : aaAbility.getRanks()) {
+				if (soliniaPlayer.hasRank(rank))
+					if (rank.getPosition() > currentRank) {
+						currentRank = rank.getPosition();
+						for (SoliniaAARankEffect rankEffect : rank.getEffects())
+						{
+							// we default to 0 (SE_CurrentHP) for the effect, so if there aren't any base1/2 values, we'll just skip it
+							if (rankEffect.getEffectId() == 0 && rankEffect.getBase1() == 0 && rankEffect.getBase2() == 0)
+								continue;
+
+							SpellEffectType effect = Utils.getSpellEffectType(rankEffect.getEffectId());
+							
+							// IsBlankSpellEffect()
+							if (effect == SpellEffectType.Blank || (effect == SpellEffectType.CHA && rankEffect.getBase1() == 0) || effect == SpellEffectType.StackingCommand_Block ||
+							    effect == SpellEffectType.StackingCommand_Overwrite)
+								continue;
+
+							if (IsFocusEffect(null,0,true,effect) == FocusEffect.None)
+								continue;
+							
+							highestRank = rank;
+						}
+					}
+			}
+
+			if (highestRank != null) {
+				ranks.add(highestRank);
+			}
+		}
+		return ranks;
+	}
+
+	public static FocusEffect IsFocusEffect(ISoliniaSpell spell,int effect_index, boolean AA,SpellEffectType aa_effect) {
+		SpellEffectType effect = null;
+
+		if (!AA)
+			effect = spell.getEffect(effect_index);
+		else
+			effect = aa_effect;
+		
+		if (effect == null)
+			return FocusEffect.None;
+
+		switch (effect)
+		{
+		case ImprovedDamage:
+			return FocusEffect.ImprovedDamage;
+		case ImprovedDamage2:
+			return FocusEffect.ImprovedDamage2;
+		case ImprovedHeal:
+			return FocusEffect.ImprovedHeal;
+		case ReduceManaCost:
+			return FocusEffect.ManaCost;
+		case IncreaseSpellHaste:
+			return FocusEffect.SpellHaste;
+		case IncreaseSpellDuration:
+			return FocusEffect.SpellDuration;
+		case SpellDurationIncByTic:
+			return FocusEffect.SpellDurByTic;
+		case SwarmPetDuration:
+			return FocusEffect.SwarmPetDuration;
+		case IncreaseRange:
+			return FocusEffect.Range;
+		case ReduceReagentCost:
+			return FocusEffect.ReagentCost;
+		case PetPowerIncrease:
+			return FocusEffect.PetPower;
+		case SpellResistReduction:
+			return FocusEffect.ResistRate;
+		case SpellHateMod:
+			return FocusEffect.SpellHateMod;
+		case ReduceReuseTimer:
+			return FocusEffect.ReduceRecastTime;
+		case TriggerOnCast:
+			//return focusTriggerOnCast;
+			return FocusEffect.None; //This is calculated as an actual bonus
+		case FcSpellVulnerability:
+			return FocusEffect.SpellVulnerability;
+		case BlockNextSpellFocus:
+			//return focusBlockNextSpell;
+			return FocusEffect.None; //This is calculated as an actual bonus
+		case FcTwincast:
+			return FocusEffect.Twincast;
+		case SympatheticProc:
+			return FocusEffect.SympatheticProc;
+		case FcDamageAmt:
+			return FocusEffect.FcDamageAmt;
+		case FcDamageAmt2:
+			return FocusEffect.FcDamageAmt2;
+		case FcDamageAmtCrit:
+			return FocusEffect.FcDamageAmtCrit;
+		case FcDamagePctCrit:
+			return FocusEffect.FcDamagePctCrit;
+		case FcDamageAmtIncoming:
+			return FocusEffect.FcDamageAmtIncoming;
+		case FcHealAmtIncoming:
+			return FocusEffect.FcHealAmtIncoming;
+		case FcHealPctIncoming:
+			return FocusEffect.FcHealPctIncoming;
+		case FcBaseEffects:
+			return FocusEffect.FcBaseEffects;
+		case FcIncreaseNumHits:
+			return FocusEffect.IncreaseNumHits;
+		case FcLimitUse:
+			return FocusEffect.FcLimitUse;
+		case FcMute:
+			return FocusEffect.FcMute;
+		case FcTimerRefresh:
+			return FocusEffect.FcTimerRefresh;
+		case FcStunTimeMod:
+			return FocusEffect.FcStunTimeMod;
+		case FcHealPctCritIncoming:
+			return FocusEffect.FcHealPctCritIncoming;
+		case FcHealAmt:
+			return FocusEffect.FcHealAmt;
+		case FcHealAmtCrit:
+			return FocusEffect.FcHealAmtCrit;
+		default:
+			return FocusEffect.None;
+		}
+	}
 
 	public static List<SoliniaAARankEffect> getHighestRankEffectsForEffectId(ISoliniaPlayer soliniaPlayer,
 			int effectId) {
@@ -4575,47 +4708,6 @@ public class Utils {
 		}
 
 	}
-
-	/*public static int getHighestAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
-
-		// This is actually read from the CriticalSpellChance
-		boolean enforceSpellCritFormula = false;
-		if (effectType.equals(SpellEffectType.SpellCritDmgIncrease)) {
-			effectType = SpellEffectType.CriticalSpellChance;
-			enforceSpellCritFormula = true;
-		}
-
-		if (!(bukkitLivingEntity instanceof Player))
-			return 0;
-
-		int highest = 0;
-
-		try {
-			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
-			for (SoliniaAARankEffect effect : player
-					.getRanksEffectsOfEffectType(Utils.getEffectIdFromEffectType(effectType))) {
-
-				// Special formula for taking the spell crit damage from the spell crit chance
-				if (enforceSpellCritFormula) {
-					int base = 0;
-					if (effect.getBase2() > 100)
-						base = effect.getBase2() - 100;
-
-					if (base > highest)
-						highest = base;
-				} else {
-					// Everything else
-					if (effect.getBase1() > highest) {
-						highest = effect.getBase1();
-					}
-				}
-			}
-			return highest;
-		} catch (CoreStateInitException e) {
-			return 0;
-		}
-
-	}*/
 
 	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
 		if (!(bukkitLivingEntity instanceof Player))

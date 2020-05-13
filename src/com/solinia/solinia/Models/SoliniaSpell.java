@@ -4748,7 +4748,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	@Override
-	public boolean isCureSpell() {
+	public boolean isCure() {
 		boolean CureEffect = false;
 
 		if (isEffectInSpell(SpellEffectType.DiseaseCounter) || isEffectInSpell(SpellEffectType.PoisonCounter)
@@ -5959,5 +5959,105 @@ public class SoliniaSpell implements ISoliniaSpell {
 			return effect.getBase2();
 		
 		return 0;
+	}
+
+	@Override
+	public SpellEffectType getEffect(int effect_index) {
+		switch(effect_index)
+		{
+		case 1:
+			return this.getEffectType1();
+		case 2:
+			return this.getEffectType2();
+		case 3:
+			return this.getEffectType3();
+		case 4:
+			return this.getEffectType4();
+		case 5:
+			return this.getEffectType5();
+		case 6:
+			return this.getEffectType6();
+		case 7:
+			return this.getEffectType7();
+		case 8:
+			return this.getEffectType8();
+		case 9:
+			return this.getEffectType9();
+		case 10:
+			return this.getEffectType10();
+		case 11:
+			return this.getEffectType11();
+		case 12:
+			return this.getEffectType12();
+			default:
+				return null;
+		}
+	}
+
+	@Override
+	public boolean checkSpellCategory(int base1, SpellEffectType effectType) {
+		if (this.spellCategory < 1)
+			return false;
+
+		int effectid = 0;
+		int category = 0;
+
+		/*Category ID SE_LimitSpellClass [(+) Include (-) Exclude]
+		1 = UNK
+		2 = Cures
+		3 = Offensive Spells
+		4 = UNK
+		5 = UNK
+		6 = Lifetap
+		*/
+
+		/*Category ID SE_LimitSpellSubClass [(+) Include (-) Exclude]
+		5 = UNK
+		8 = UNK
+		*/
+
+		if (effectType.equals(SpellEffectType.LimitSpellClass)) {
+
+			switch(this.spellCategory)
+			{
+				case 2:
+				if (isCure())
+					return true;
+				break;
+
+				case 3:
+				if (isDetrimental())
+					return true;
+				break;
+
+				case 6:
+				if (Utils.getSpellTargetType(this.getTargettype()) == SpellTargetType.Tap || Utils.getSpellTargetType(this.getTargettype()) == SpellTargetType.TargetAETap)
+					return true;
+				break;
+			}
+		}
+
+		else if (effectType.equals(SpellEffectType.LimitSpellSubclass)) {
+			//Pending Implementation when category types are figured out.
+			return false;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isSummonPet() {
+		if (isEffectInSpell(SpellEffectType.SummonPet) ||
+				isEffectInSpell(SpellEffectType.SummonBSTPet))
+			return true;
+
+		return false;
+
+	}
+	
+	@Override
+	public boolean isSummonSkeleton()
+	{
+		return isEffectInSpell(SpellEffectType.NecPet);
 	}
 }

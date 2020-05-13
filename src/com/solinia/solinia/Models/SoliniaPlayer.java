@@ -2735,6 +2735,54 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		return effects;
 	}
+	
+	@Override
+	public List<SoliniaAARankEffect> getRanksEffects() {
+		List<SoliniaAARankEffect> effects = new ArrayList<SoliniaAARankEffect>();
+		if (ranks.size() == 0)
+			return effects;
+
+		try {
+			for (int rankId : ranks) {
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
+				if (rank == null)
+					continue;
+
+				for (SoliniaAARankEffect effect : rank.getEffects()) {
+					effects.add(effect);
+				}
+			}
+		} catch (CoreStateInitException e) {
+			//
+		}
+
+		return effects;
+	}
+	
+	@Override
+	public List<ISoliniaAAAbility> getAAAbilities() {
+		List<Integer> aaIds = new ArrayList<Integer>();
+		List<ISoliniaAAAbility> abilities = new ArrayList<ISoliniaAAAbility>();
+
+		try {
+			for (SoliniaAARankEffect rankEffect : getRanksEffects()) {
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager()
+						.getAARank(rankEffect.getRankId());
+				if (rank != null) {
+					if (!aaIds.contains(rank.getAbilityid())) {
+						aaIds.add(rank.getAbilityid());
+						ISoliniaAAAbility ability = StateManager.getInstance().getConfigurationManager()
+								.getAAAbility(rank.getAbilityid());
+						abilities.add(ability);
+					}
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+
+		return abilities;
+	}
 
 	@Override
 	public List<ISoliniaAAAbility> getAAAbilitiesWithEffectType(int effectId) {

@@ -505,4 +505,6 @@ public interface ISoliniaLivingEntity  {
 
 	Tuple<Integer, Integer> getSpellBonusesTuple(SpellEffectType spellEffectType);
 
+	ISoliniaPlayer getSoliniaPlayer();
+
 }

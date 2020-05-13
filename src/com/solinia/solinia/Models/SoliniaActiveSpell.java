@@ -2787,7 +2787,7 @@ public class SoliniaActiveSpell {
 
 	private void applyPoisonCounter(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell,
 			int casterLevel) {
-		if (!soliniaSpell.isCureSpell())
+		if (!soliniaSpell.isCure())
 			return;
 
 		try {
@@ -2815,7 +2815,7 @@ public class SoliniaActiveSpell {
 
 	private void applyDiseaseCounter(Plugin plugin, SpellEffect spellEffect, ISoliniaSpell soliniaSpell,
 			int casterLevel) {
-		if (!soliniaSpell.isCureSpell())
+		if (!soliniaSpell.isCure())
 			return;
 
 		try {

@@ -43,6 +43,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaAAAbility;
+import com.solinia.solinia.Interfaces.ISoliniaAARank;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaGod;
@@ -2763,9 +2764,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// TODO spell focuses
+		//
 
+		
+		
 		// TODO aa focuses
-
+		if (this.isPlayer())
+		{
+			int Total3 = 0;
+			for (ISoliniaAARank aaFocusEffect : Utils.getHighestRanksForFocusEffect(this.getSoliniaPlayer(), type))
+			{
+				Total3 = CalcAAFocus(type, aaFocusEffect, spell);
+				if (Total3 > 0 && realTotal3 >= 0 && Total3 > realTotal3) {
+					realTotal3 = Total3;
+				}
+				else if (Total3 < 0 && Total3 < realTotal3) {
+					realTotal3 = Total3;
+				}
+			}
+		}
 		if (type == FocusEffect.ReagentCost
 				&& (spell.isEffectInSpell(SpellEffectType.SummonItem) || spell.isSacrificeSpell()))
 			return 0;
@@ -2773,7 +2790,500 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return realTotal + realTotal2 + realTotal3;
 	}
 
-	private int CalcFocusEffect(FocusEffect type, int focusEffectId, ISoliniaSpell spell, boolean best_focus) {
+	private int CalcAAFocus(FocusEffect type, ISoliniaAARank aaRank, ISoliniaSpell spell) {
+		//const SPDat_Spell_Struct &spell = spells[spell_id];
+		
+		try
+		{
+
+		int value = 0;
+		int lvlModifier = 100;
+		int spell_level = 0;
+		int lvldiff = 0;
+		int effect = 0;
+		int base1 = 0;
+		int base2 = 0;
+		int slot = 0;
+
+		boolean LimitFailure = false;
+		//Todo LimitInclude
+		boolean[] LimitInclude = new boolean[Utils.MAX_LIMIT_INCLUDE];
+		Arrays.fill(LimitInclude, false);
+		
+		/* Certain limits require only one of several Include conditions to be true. Ie. Add damage to fire OR ice
+		spells.
+		0/1   SE_LimitResist
+		2/3   SE_LimitSpell
+		4/5   SE_LimitEffect
+		6/7   SE_LimitTarget
+		8/9   SE_LimitSpellGroup:
+		10/11 SE_LimitCastingSkill:
+		12/13 SE_LimitSpellClass:
+		14/15 SE_LimitSpellSubClass:
+		Remember: Update MaxLimitInclude in spdat.h if adding new limits that require Includes
+		*/
+		int FocusCount = 0;
+
+		for (SoliniaAARankEffect rankEffect : aaRank.getEffects()) 
+		{
+			effect = rankEffect.getEffectId();
+			base1 = rankEffect.getBase1();
+			base2 = rankEffect.getBase2();
+			slot = rankEffect.getSlotId();
+
+			/*
+			AA Foci's can contain multiple focus effects within the same AA.
+			To handle this we will not automatically return zero if a limit is found.
+			Instead if limit is found and multiple focus effects, we will reset the limit check
+			when the next valid focus effect is found.
+			*/
+
+			if (
+					Utils.IsFocusEffect(null, 0, true, Utils.getSpellEffectType(effect)) != FocusEffect.None 
+					|| Utils.getSpellEffectType(effect) == SpellEffectType.TriggerOnCast
+				) {
+				FocusCount++;
+				// If limit found on prior check next, else end loop.
+				if (FocusCount > 1) {
+
+					for (int e = 0; e < Utils.MAX_LIMIT_INCLUDE; e += 2) {
+						if (LimitInclude[e] && !LimitInclude[e + 1])
+							LimitFailure = true;
+					}
+
+					if (LimitFailure) {
+						value = 0;
+						LimitFailure = false;
+
+						for (int e = 0; e < Utils.MAX_LIMIT_INCLUDE; e++) {
+							LimitInclude[e] = false; // Reset array
+						}
+					}
+
+					else {
+						break;
+					}
+				}
+			}
+
+			switch (Utils.getSpellEffectType(effect)) 
+			{
+				case Blank:
+					break;
+	
+				// Handle Focus Limits
+	
+				case LimitResist:
+					if (base1 < 0) {
+						if (spell.getResisttype() == -base1) // Exclude
+							LimitFailure = true;
+					} else {
+						LimitInclude[0] = true;
+						if (spell.getResisttype() == base1) // Include
+							LimitInclude[1] = true;
+					}
+					break;
+	
+				case LimitInstant:
+					if (base1 == 1 && spell.getBuffduration() > 0) // Fail if not instant
+						LimitFailure = true;
+					if (base1 == 0 && (spell.getBuffduration() == 0)) // Fail if instant
+						LimitFailure = true;
+	
+					break;
+	
+				case LimitMaxLevel:
+					if (getClassObj() != null)
+					{
+						spell_level = spell.getMinLevelClass(getClassObj().getName().toUpperCase());
+						lvldiff = spell_level - base1;
+						// every level over cap reduces the effect by base2 percent unless from a clicky when
+						// ItemCastsUseFocus is true
+						if (lvldiff > 0 && (spell_level <= StateManager.getInstance().getConfigurationManager().getMaxLevel())) {
+							if (base2 > 0) {
+								lvlModifier -= base2 * lvldiff;
+								if (lvlModifier < 1)
+									LimitFailure = true;
+							} else
+								LimitFailure = true;
+						}
+					}
+					break;
+	
+				case LimitMinLevel:
+					/*TODO LIMIT MIN LEVEL*/
+					break;
+	
+				case LimitCastTimeMin:
+					if (spell.getCastTime() < base1)
+						LimitFailure = true;
+					break;
+	
+				case LimitCastTimeMax:
+					if (spell.getCastTime() > base1)
+						LimitFailure = true;
+					break;
+	
+				case LimitSpell:
+					if (base1 < 0) { // Exclude
+						if (spell.getId() == -base1)
+							LimitFailure = true;
+					} else {
+						LimitInclude[2] = true;
+						if (spell.getId() == base1) // Include
+							LimitInclude[3] = true;
+					}
+					break;
+	
+				case LimitMinDur:
+					if (base1 > spell.calcBuffDurationFormula(getMentorLevel(), spell.getBuffdurationformula(), spell.getAEDuration()))
+						LimitFailure = true;
+	
+					break;
+	
+				case LimitEffect:
+					if (base1 < 0) {
+						if (spell.isEffectInSpell(Utils.getSpellEffectType(-base1))) // Exclude
+							LimitFailure = true;
+					} else {
+						LimitInclude[4] = true;
+						// they use 33 here for all classes ... unsure if the type check is really needed
+						if (Utils.getSpellEffectType(base1) == SpellEffectType.SummonPet && type == FocusEffect.ReagentCost) {
+							if (spell.isSummonPet() || spell.isSummonSkeleton())
+								LimitInclude[5] = true;
+						} else {
+							if (spell.isEffectInSpell(Utils.getSpellEffectType(base1))) // Include
+								LimitInclude[5] = true;
+						}
+					}
+					break;
+	
+				case LimitSpellType:
+					switch (base1) {
+					case 0:
+						if (!spell.isDetrimental())
+							LimitFailure = true;
+						break;
+					case 1:
+						if (!spell.isBeneficial())
+							LimitFailure = true;
+						break;
+					}
+					break;
+	
+				case LimitManaMin:
+					if (spell.getMana() < base1)
+						LimitFailure = true;
+					break;
+	
+				case LimitManaMax:
+					if (spell.getMana() > base1)
+						LimitFailure = true;
+					break;
+	
+				case LimitTarget:
+					if (base1 < 0) {
+						if (-base1 == spell.getTargettype()) // Exclude
+							LimitFailure = true;
+					} else {
+						LimitInclude[6] = true;
+						if (base1 == spell.getTargettype()) // Include
+							LimitInclude[7] = true;
+					}
+					break;
+	
+				case LimitCombatSkills:
+					if (base1 == 0 && (spell.isCombatSkill() || isCombatProc(spell))) // Exclude Discs / Procs
+						LimitFailure = true;
+					else if (base1 == 1 && (!spell.isCombatSkill() || !isCombatProc(spell))) // Exclude Spells
+						LimitFailure = true;
+	
+					break;
+	
+				case LimitSpellGroup:
+					if (base1 < 0) {
+						if (-base1 == spell.getSpellgroup()) // Exclude
+							LimitFailure = true;
+					} else {
+						LimitInclude[8] = true;
+						if (base1 == spell.getSpellgroup()) // Include
+							LimitInclude[9] = true;
+					}
+					break;
+	
+				case LimitCastingSkill:
+					if (base1 < 0) {
+						if (-base1 == spell.getSkill())
+							LimitFailure = true;
+					} else {
+						LimitInclude[10] = true;
+						if (base1 == spell.getSkill())
+							LimitInclude[11] = true;
+					}
+					break;
+	
+				case LimitSpellClass:
+					if (base1 < 0) { // Exclude
+						if (spell.checkSpellCategory(base1, SpellEffectType.LimitSpellClass))
+							return (0);
+					} else {
+						LimitInclude[12] = true;
+						if (spell.checkSpellCategory(base1, SpellEffectType.LimitSpellClass)) // Include
+							LimitInclude[13] = true;
+					}
+					break;
+	
+				case LimitSpellSubclass:
+					/* TODO LimitSPellSubClass
+					if (base1 < 0) { // Exclude
+						if (spell.checkSpellCategory(base1, SpellEffectType.LimitSpellSubclass))
+							return (0);
+					} else {
+						LimitInclude[14] = true;
+						if (spell.checkSpellCategory(base1, SpellEffectType.LimitSpellSubclass)) // Include
+							LimitInclude[15] = true;
+					}
+					*/
+					break;
+	
+				case LimitClass:
+					/* TODO LimitClass
+					// Do not use this limit more then once per spell. If multiple class, treat value like items
+					// would.
+					if (!PassLimitClass(base1, GetClass()))
+						LimitFailure = true;
+						*/
+					break;
+	
+				case LimitRace:
+					// TODO LIMIT Race
+					/*
+					if (base1 != GetRace())
+						LimitFailure = true;
+						*/
+					break;
+	
+				case LimitUseMin:
+					if (base1 > spell.getNumhits())
+						LimitFailure = true;
+					break;
+	
+				case LimitUseType:
+					if (base1 != spell.getNumhitstype())
+						LimitFailure = true;
+					break;
+	
+				// Handle Focus Effects
+				case ImprovedDamage:
+					if (type == FocusEffect.ImprovedDamage && base1 > value)
+						value = base1;
+					break;
+	
+				case ImprovedDamage2:
+					if (type == FocusEffect.ImprovedDamage2 && base1 > value)
+						value = base1;
+					break;
+	
+				case ImprovedHeal:
+					if (type == FocusEffect.ImprovedHeal && base1 > value)
+						value = base1;
+					break;
+	
+				case ReduceManaCost:
+					if (type == FocusEffect.ManaCost)
+						value = base1;
+					break;
+	
+				case IncreaseSpellHaste:
+					if (type == FocusEffect.SpellHaste && base1 > value)
+						value = base1;
+					break;
+	
+				case IncreaseSpellDuration:
+					if (type == FocusEffect.SpellDuration && base1 > value)
+						value = base1;
+					break;
+	
+				case SpellDurationIncByTic:
+					if (type == FocusEffect.SpellDurByTic && base1 > value)
+						value = base1;
+					break;
+	
+				case SwarmPetDuration:
+					if (type == FocusEffect.SwarmPetDuration && base1 > value)
+						value = base1;
+					break;
+	
+				case IncreaseRange:
+					if (type == FocusEffect.Range && base1 > value)
+						value = base1;
+					break;
+	
+				case ReduceReagentCost:
+					if (type == FocusEffect.ReagentCost && base1 > value)
+						value = base1;
+					break;
+	
+				case PetPowerIncrease:
+					if (type == FocusEffect.PetPower && base1 > value)
+						value = base1;
+					break;
+	
+				case SpellResistReduction:
+					if (type == FocusEffect.ResistRate && base1 > value)
+						value = base1;
+					break;
+	
+				case SpellHateMod:
+					if (type == FocusEffect.SpellHateMod) {
+						if (value != 0) {
+							if (value > 0) {
+								if (base1 > value)
+									value = base1;
+							} else {
+								if (base1 < value)
+									value = base1;
+							}
+						} else
+							value = base1;
+					}
+					break;
+	
+				case ReduceReuseTimer:
+					if (type == FocusEffect.ReduceRecastTime)
+						value = base1 / 1000;
+					break;
+	
+				case TriggerOnCast:
+					if (type == FocusEffect.TriggerOnCast) {
+						if (Utils.Roll(base1)) {
+							value = base2;
+						} else {
+							value = 0;
+							LimitFailure = true;
+						}
+						break;
+					}
+	
+				case FcSpellVulnerability:
+					if (type == FocusEffect.SpellVulnerability)
+						value = base1;
+					break;
+	
+				case BlockNextSpellFocus:
+					if (type == FocusEffect.BlockNextSpell) {
+						if (Utils.Roll(base1))
+							value = 1;
+					}
+					break;
+	
+				case FcTwincast:
+					if (type == FocusEffect.Twincast)
+						value = base1;
+					break;
+	
+				// Note if using these as AA, make sure this is first focus used.
+				case SympatheticProc:
+					if (type == FocusEffect.SympatheticProc)
+						value = base2;
+					break;
+	
+				case FcDamageAmt:
+					if (type == FocusEffect.FcDamageAmt)
+						value = base1;
+					break;
+	
+				case FcDamageAmt2:
+					if (type == FocusEffect.FcDamageAmt2)
+						value = base1;
+					break;
+	
+				case FcDamageAmtCrit:
+					if (type == FocusEffect.FcDamageAmtCrit)
+						value = base1;
+					break;
+	
+				case FcDamageAmtIncoming:
+					if (type == FocusEffect.FcDamageAmtIncoming)
+						value = base1;
+					break;
+	
+				case FcHealAmtIncoming:
+					if (type == FocusEffect.FcHealAmtIncoming)
+						value = base1;
+					break;
+	
+				case FcHealPctCritIncoming:
+					if (type == FocusEffect.FcHealPctCritIncoming)
+						value = base1;
+					break;
+	
+				case FcHealAmtCrit:
+					if (type == FocusEffect.FcHealAmtCrit)
+						value = base1;
+					break;
+	
+				case FcHealAmt:
+					if (type == FocusEffect.FcHealAmt)
+						value = base1;
+					break;
+	
+				case FcHealPctIncoming:
+					if (type == FocusEffect.FcHealPctIncoming)
+						value = base1;
+					break;
+	
+				case FcBaseEffects:
+					if (type == FocusEffect.FcBaseEffects)
+						value = base1;
+					break;
+	
+				case FcDamagePctCrit:
+					if (type == FocusEffect.FcDamagePctCrit)
+						value = base1;
+					break;
+	
+				case FcIncreaseNumHits:
+					if (type == FocusEffect.IncreaseNumHits)
+						value = base1;
+					break;
+	
+				case FcLimitUse:
+					if (type == FocusEffect.FcLimitUse)
+						value = base1;
+					break;
+	
+				case FcMute:
+					if (type == FocusEffect.FcMute)
+						value = base1;
+					break;
+	
+				case FcStunTimeMod:
+					if (type == FocusEffect.FcStunTimeMod)
+						value = base1;
+					break;
+				}
+		}
+
+		for (int e = 0; e < Utils.MAX_LIMIT_INCLUDE; e += 2) {
+			if (LimitInclude[e] && !LimitInclude[e + 1])
+				return 0;
+		}
+
+		if (LimitFailure)
+			return 0;
+		
+		return (value * lvlModifier / 100);
+		
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+
+		return 0;
+	}
+
+	public int CalcFocusEffect(FocusEffect type, int focusEffectId, ISoliniaSpell spell, boolean best_focus) {
 		ISoliniaSpell focus_spell = null;
 
 		try {
@@ -11155,6 +11665,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public Tuple<Integer,Integer> getAABonusesTuple(SpellEffectType effect) {
 		return Utils.getHighestAAEffectEffectTypeTuple(getBukkitLivingEntity(),
 				effect);
+	}
+	
+	@Override
+	public ISoliniaPlayer getSoliniaPlayer()
+	{
+		try {
+			if (this.isPlayer() && this.getBukkitLivingEntity() != null)
+			return SoliniaPlayerAdapter.Adapt((Player)this.getBukkitLivingEntity());
+		} catch (CoreStateInitException e) {
+		}
+		
+		return null;
 	}
 
 	@Override

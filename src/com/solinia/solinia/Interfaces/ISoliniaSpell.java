@@ -1031,7 +1031,7 @@ public interface ISoliniaSpell extends IPersistable {
 
 	boolean isBardSong();
 	
-	boolean isCureSpell();
+	boolean isCure();
 
 	boolean isNuke();
 
@@ -1104,4 +1104,13 @@ public interface ISoliniaSpell extends IPersistable {
 	SpellEffect getSpellEffect(SpellEffectType spellEffectType);
 
 	int calcBuffDurationFormula(int level, int formula, int duration);
+
+	SpellEffectType getEffect(int effect_index);
+
+	boolean checkSpellCategory(int base1, SpellEffectType effectType);
+
+	boolean isSummonPet();
+
+	boolean isSummonSkeleton();
+
 }
