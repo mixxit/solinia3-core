@@ -4760,6 +4760,24 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// TODO Slay Undead AA
+		// 1: Try Slay Undead
+		if (defender.getBodyType() == BodyType.BT_Undead || defender.getBodyType() == BodyType.BT_SummonedUndead || defender.getBodyType() == BodyType.BT_Vampire) 
+		{
+			int SlayRateBonus = getAABonusesTuple(SpellEffectType.SlayUndead).a() + getItemBonusesTuple(SpellEffectType.SlayUndead).a() + getSpellBonusesTuple(SpellEffectType.SlayUndead).a();
+			if (SlayRateBonus > 0) {
+				float slayChance = (float)(SlayRateBonus) / 10000.0f;
+				if (Utils.Roll(slayChance)) {
+					
+					int SlayDmgBonus = Collections.max(new ArrayList<Integer>(Arrays.asList(getAABonusesTuple(SpellEffectType.SlayUndead).b(), getSpellBonusesTuple(SpellEffectType.SlayUndead).b(), getItemBonusesTuple(SpellEffectType.SlayUndead).b())));
+
+					hit.damage_done = Math.max(hit.damage_done, hit.base_damage) + 5;
+					hit.damage_done = (hit.damage_done * SlayDmgBonus) / 100;
+
+					Utils.SendHint(this.getBukkitLivingEntity(), HINT.SLAYUNDEAD, this.getBukkitLivingEntity().getName(), true);
+					return hit;
+				}
+			}
+		}
 
 		// 2: Try Melee Critical
 

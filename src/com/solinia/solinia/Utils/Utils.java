@@ -6065,6 +6065,8 @@ public class Utils {
 		case ASSASSINATES:
 			message = referenceCode + " ASSASSINATES their victim!!";
 			break;		
+		case SLAYUNDEAD:
+			message = referenceCode +"'s holy blade cleanses their target!";
 		case ITEM_DISCOVERED:
 			String[] itemDiscoveryData = referenceCode.split("\\^");
 			try
@@ -6250,6 +6252,8 @@ public class Utils {
 		case CAST_ON_OTHER:
 			return HintSetting.Chat;
 		case ASSASSINATES:
+			return HintSetting.Chat;
+		case SLAYUNDEAD:
 			return HintSetting.Chat;
 		}
 		
