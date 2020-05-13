@@ -5608,6 +5608,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		try {
 			if (isPlayer()) {
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
+				if (player.isUndead())
+					return BodyType.BT_Undead;
+				if (player.isPlant())
+					return BodyType.BT_Plant;
+				if (player.isAnimal())
+					return BodyType.BT_Animal;
 				if (player.getRace() == null)
 					return BodyType.BT_Humanoid;
 				return player.getRace().getBodyType();
@@ -5615,6 +5621,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			if (isNPC()) {
 				ISoliniaNPC npc = getNPC();
+				// summoned types
+				if (npc.isCorePet())
+				{
+					if (npc.isUndead())
+						return BodyType.BT_SummonedUndead;
+					else
+						return BodyType.BT_Summoned;
+				}
+				if (npc.isUndead())
+					return BodyType.BT_Undead;
+				if (npc.isPlant())
+					return BodyType.BT_Plant;
+				if (npc.isAnimal())
+					return BodyType.BT_Animal;
 				if (npc.getRace() == null)
 					return BodyType.BT_Humanoid;
 				return npc.getRace().getBodyType();
