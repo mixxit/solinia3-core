@@ -2233,7 +2233,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	public void setLastSentPlayerManaPercent(ConcurrentHashMap<UUID, Float> lastSentPlayerManaPercent) {
 		this.lastSentPlayerManaPercent = lastSentPlayerManaPercent;
 	}
-
+	
 	@Override
 	public void removeFellowship(int id) {
 		Fellowship fellowship = this.getFellowship(id);

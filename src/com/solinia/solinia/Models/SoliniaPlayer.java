@@ -73,6 +73,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
 	private Timestamp lastUpdatedTime;
+	private Timestamp lastChat;
 	private Timestamp lastOpenedCharCreation;
 	private int motherCharacterId = 0;
 	private int characterFellowshipId = 0;
@@ -162,6 +163,39 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (tier < 1)
 			tier = 1;
 		return tier;
+	}
+	
+	@Override
+	public boolean getLastChatCheck()
+	{
+		Timestamp expiretimestamp = getLastChat();
+		if (expiretimestamp != null) {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus((long)500, ChronoUnit.MILLIS));
+
+			if (nowtimestamp.before(mintimestamp))
+				return false;
+		}
+
+		return true;
+	}
+	
+	@Override
+	public Timestamp getLastChat() {
+		return lastChat;
+	}
+	
+	@Override
+	public void setLastChat(Timestamp timestamp) {
+		lastChat = timestamp;
+	}
+	
+	@Override
+	public void setLastChatNow() {
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		this.setLastChat(nowtimestamp);
 	}
 	
 	@Override
@@ -1015,6 +1049,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 		}
+		
+		this.setLastChatNow();
 	}
 
 	@Override

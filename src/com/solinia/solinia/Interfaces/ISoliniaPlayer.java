@@ -654,4 +654,8 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void DistillOffhand();
 	List<ISoliniaAAAbility> getAAAbilities();
 	List<SoliniaAARankEffect> getRanksEffects();
+	boolean getLastChatCheck();
+	Timestamp getLastChat();
+	void setLastChat(Timestamp timestamp);
+	void setLastChatNow();
 }

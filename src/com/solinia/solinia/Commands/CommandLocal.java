@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.PlayerUtils;
 
 public class CommandLocal implements CommandExecutor {
@@ -26,7 +28,11 @@ public class CommandLocal implements CommandExecutor {
             }
             
             try {
-				SoliniaPlayerAdapter.Adapt((Player)sender).say(message);
+            	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+            	if (!solPlayer.getLastChatCheck())
+            		sender.sendMessage(ChatColor.GRAY + "You are talking in roleplay-chat too fast");
+            	else
+            		solPlayer.say(message);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
