@@ -4874,7 +4874,9 @@ public class Utils {
 		int critical_chance = 0;
 
 		// All skills + Skill specific
-		critical_chance += entity.getSpellBonuses(SpellEffectType.CriticalHitChance);
+		critical_chance += entity.getSpellBonuses(SpellEffectType.CriticalHitChance)
+				+ entity.getAABonuses(SpellEffectType.CriticalHitChance) + entity.getItemBonuses(SpellEffectType.CriticalHitChance)
+				;
 
 		// TODO - take items, aa spells etc into account
 		if (critical_chance < -100)
