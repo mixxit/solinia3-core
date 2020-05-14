@@ -1623,13 +1623,18 @@ public class EntityManager implements IEntityManager {
 					return;
 				}
 
-				Utils.SendHint(livingEntity, HINT.BEGIN_ABILITY, castingSpell.getSpell().getName(), false);
+				Utils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, livingEntity.getCustomName()+"^"+castingSpell.getSpell().getName(),true);
 
 				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
 				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
 
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 
+			} else {
+				Utils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, livingEntity.getCustomName()+"^"+castingSpell.getSpell().getName(),true);
+
+				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
+				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
 			}
 		} catch (CoreStateInitException e) {
 
@@ -1862,8 +1867,7 @@ public class EntityManager implements IEntityManager {
 	public void interruptCasting(LivingEntity livingEntity) {
 		if (entitySpellCasting.get(livingEntity.getUniqueId()) != null)
 		{
-			if (livingEntity instanceof Player)
-				livingEntity.sendMessage("Your casting was interrupted");
+			Utils.SendHint(livingEntity, HINT.INTERRUPTED, livingEntity.getCustomName(), true);
 			entitySpellCasting.remove(livingEntity.getUniqueId());
 		}
 	}

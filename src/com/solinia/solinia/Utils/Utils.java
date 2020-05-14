@@ -6053,8 +6053,12 @@ public class Utils {
 		boolean showItemLinks = false;
 		switch (hint)
 		{
-		case BEGIN_ABILITY:
-			message = "You begin your ability " + referenceCode;
+		case INTERRUPTED:
+			message = referenceCode + "'s casting was interrupted";
+			break;
+		case OTHER_BEGIN_ABILITY:
+			String[] otherBeginAbility = referenceCode.split("^");
+			message = otherBeginAbility[0] + " begins their ability " + otherBeginAbility[1];
 			break;
 		case FINISH_ABILITY:
 			message = "You finish your ability";
@@ -6321,7 +6325,9 @@ public class Utils {
 			return HintSetting.Chat;
 		case INSUFFICIENT_LEVEL_GEAR:
 			return HintSetting.Chat;
-		case BEGIN_ABILITY:
+		case OTHER_BEGIN_ABILITY:
+			return HintSetting.Chat;
+		case INTERRUPTED:
 			return HintSetting.Chat;
 		case FINISH_ABILITY:
 			return HintSetting.Chat;
