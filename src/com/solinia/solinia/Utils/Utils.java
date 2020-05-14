@@ -6237,7 +6237,7 @@ public class Utils {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.getLocation().distance(entity.getLocation()) <= Utils.GetLocalSayRange(entity.getLocation().getWorld().getName()))
 				{
-					// already received message thanks
+					// already received message thankst
 					if (player.getUniqueId().equals(entity.getUniqueId()))
 						continue;
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
