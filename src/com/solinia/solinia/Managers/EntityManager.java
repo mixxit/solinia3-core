@@ -1623,7 +1623,7 @@ public class EntityManager implements IEntityManager {
 					return;
 				}
 
-				Utils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, livingEntity.getCustomName()+"^"+castingSpell.getSpell().getName(),true);
+				Utils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
 
 				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
 				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
@@ -1631,7 +1631,7 @@ public class EntityManager implements IEntityManager {
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 
 			} else {
-				Utils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, livingEntity.getCustomName()+"^"+castingSpell.getSpell().getName(),true);
+				Utils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
 
 				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
 				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
@@ -1867,7 +1867,10 @@ public class EntityManager implements IEntityManager {
 	public void interruptCasting(LivingEntity livingEntity) {
 		if (entitySpellCasting.get(livingEntity.getUniqueId()) != null)
 		{
-			Utils.SendHint(livingEntity, HINT.INTERRUPTED, livingEntity.getCustomName(), true);
+			String name = livingEntity.getName();
+			if (livingEntity.getCustomName() != null)
+				name = livingEntity.getName();
+			Utils.SendHint(livingEntity, HINT.INTERRUPTED, name, true); 
 			entitySpellCasting.remove(livingEntity.getUniqueId());
 		}
 	}

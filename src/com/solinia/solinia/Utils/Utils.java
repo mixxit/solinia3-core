@@ -6057,8 +6057,8 @@ public class Utils {
 			message = referenceCode + "'s casting was interrupted";
 			break;
 		case OTHER_BEGIN_ABILITY:
-			String[] otherBeginAbility = referenceCode.split("^");
-			message = otherBeginAbility[0] + " begins their ability " + otherBeginAbility[1];
+			String[] otherBeginAbility = referenceCode.split("\\^");
+			message = otherBeginAbility[0] + " begins their ability [" + otherBeginAbility[1] + "]";
 			break;
 		case FINISH_ABILITY:
 			message = "You finish your ability";
@@ -6237,6 +6237,9 @@ public class Utils {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.getLocation().distance(entity.getLocation()) <= Utils.GetLocalSayRange(entity.getLocation().getWorld().getName()))
 				{
+					// already received message thanks
+					if (player.getUniqueId().equals(entity.getUniqueId()))
+						continue;
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					if (solPlayer != null && solPlayer.getHintSetting(hint) != HintSetting.Off)
 					player.spigot().sendMessage(solPlayer.getHintSettingAsChatMessageType(hint),tc);
