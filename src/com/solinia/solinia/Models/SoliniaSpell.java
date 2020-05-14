@@ -5048,7 +5048,20 @@ public class SoliniaSpell implements ISoliniaSpell {
 		cost -= cost * PercentManaReduction / 100;
 
 		// TODO Gift of mana AA
+		// Gift of Mana - reduces spell cost to 1 mana
+		/*if(focus_redux >= 100) {
+			int buff_max = solEntity.getMaxTotalSlots();
+			for (int buffSlot = 0; buffSlot < buff_max; buffSlot++) {
+				if (buffs[buffSlot].spellid == 0 || buffs[buffSlot].spellid >= SPDAT_RECORDS)
+					continue;
 
+				if(IsEffectInSpell(buffs[buffSlot].spellid, SE_ReduceManaCost)) {
+					if(CalcFocusEffect(focusManaCost, buffs[buffSlot].spellid, spell_id) == 100)
+						cost = 1;
+				}
+			}
+		}*/
+		
 		if (cost < 0)
 			cost = 0;
 
