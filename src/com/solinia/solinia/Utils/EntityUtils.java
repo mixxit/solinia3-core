@@ -243,7 +243,7 @@ public class EntityUtils {
 					return 0;
 
 				if (level >= profession.getSpecialiselevel()) {
-				return EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
+					return EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
 				} else {
 					return 0;
 				}
