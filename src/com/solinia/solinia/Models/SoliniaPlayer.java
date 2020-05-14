@@ -97,7 +97,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String base64ArmorContents = "";
 	private boolean experienceOn = true;
 	private boolean forceNewAlt = false;
-
+	private boolean passiveEnabled = true;
 	private List<SoliniaPlayerSkill> skills = new ArrayList<SoliniaPlayerSkill>();
 	private List<Integer> ranks = new ArrayList<Integer>();
 	private List<Integer> aas = new ArrayList<Integer>();
@@ -6038,6 +6038,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		}
 		
+	}
+
+	@Override
+	public boolean isPassiveEnabled() {
+		return passiveEnabled;
+	}
+
+	@Override
+	public void setPassiveEnabled(boolean passiveEnabled) {
+		this.passiveEnabled = passiveEnabled;
 	}
 
 }

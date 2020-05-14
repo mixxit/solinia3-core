@@ -235,6 +235,7 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer.removeAllEntityEffects(plugin);
 			solPlayer.killAllPets();
 			solPlayer.resetReverseAggro();
+			solPlayer.setPassiveEnabled(true);
 			
 			if (solPlayer.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(player);
@@ -301,6 +302,7 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer.removeAllEntityEffects(plugin);
 			solPlayer.killAllPets();
 			solPlayer.resetReverseAggro();
+			solPlayer.setPassiveEnabled(true);
 			
 			if (solPlayer.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(player);

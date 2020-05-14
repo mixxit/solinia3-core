@@ -437,7 +437,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			event.getPlayer().increasePlayerMana(mpregen);
 		
 		// only players get this
-		if (event.getZone().getPassiveAbilityId() > 0)
+		if (event.getZone().getPassiveAbilityId() > 0 && event.getPlayer().isPassiveEnabled())
 			if (event.getPlayer().getSoliniaLivingEntity() != null)
 				event.getPlayer().getSoliniaLivingEntity().tryApplySpellOnSelf(event.getZone().getPassiveAbilityId(),"");
 	}
@@ -455,7 +455,10 @@ public class Solinia3CorePlayerListener implements Listener {
 			
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (solPlayer != null)
+			{
 				solPlayer.setLastLocation(event.getPlayer().getLocation());
+				solPlayer.setPassiveEnabled(true);
+			}
 			
 			if (event.getPlayer() != null)
 			{
@@ -946,7 +949,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		event.setDeathMessage("");
 
-		// REMOVE PET AND STORE LAST LOCATION
+		// REMOVE PET AND STORE LAST LOCATION AND ENABLE PASSIVES
 		
 		try
 	    {
@@ -960,7 +963,10 @@ public class Solinia3CorePlayerListener implements Listener {
 			{
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getEntity());
 				if (solPlayer != null)
+				{
 					solPlayer.setLastLocation(event.getEntity().getLocation());
+					solPlayer.setPassiveEnabled(true);
+				}
 			}
 	    } catch (CoreStateInitException e)
 		{
@@ -979,6 +985,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				double experienceLoss = PlayerUtils.calculateExpLoss(player);
 				player.reducePlayerNormalExperience(experienceLoss);
 				player.dropResurrectionItem((int) experienceLoss);
+				player.setPassiveEnabled(true);
 			}
 		} catch (CoreStateInitException e) {
 
@@ -2051,6 +2058,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			soliniaevent = new SoliniaPlayerJoinEvent(event, solplayer);
 			solplayer.updateDisplayName();
 			solplayer.updateMaxHp();
+			solplayer.setPassiveEnabled(true);
+
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			
 			// Reset users Zone Packet

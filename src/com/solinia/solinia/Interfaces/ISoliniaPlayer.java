@@ -658,4 +658,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	Timestamp getLastChat();
 	void setLastChat(Timestamp timestamp);
 	void setLastChatNow();
+	boolean isPassiveEnabled();
+	void setPassiveEnabled(boolean passiveEnabled);
 }

@@ -573,6 +573,10 @@ commands:
     description: Toggles experience into AA gain
     usage: /toggleaa
     aliases: []
+  togglepassive:
+    description: Toggles player passive abilities
+    usage: /togglepassive
+    aliases: []
   createnpcevent:
     description: Creates an NPC event
     usage: /createnpcevent npcid eventtype trigger responsetype response
