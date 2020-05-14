@@ -255,7 +255,9 @@ public class EntityUtils {
 			int maxSkill = EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
 			if (solEntity != null && Utils.IsTradeskill(skillType))
 			{
-				int aaBonuses = solEntity.getSpellBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getItemBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getAABonuses(SpellEffectType.TradeSkillMastery); 
+				System.out.println("We gonna get aa");
+				int aaBonus = solEntity.getAABonuses(SpellEffectType.TradeSkillMastery);
+				int aaBonuses = solEntity.getSpellBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getItemBonuses(SpellEffectType.TradeSkillMastery) + aaBonus; 
 				maxSkill += (aaBonuses * 50);
 				return maxSkill;
 			} else {

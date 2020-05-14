@@ -4675,8 +4675,8 @@ public class Utils {
 			enforceSpellCritFormula = true;
 		}		
 		
-		int highest = -1;
-		int highest2 = -1;
+		int highest = 0;
+		int highest2 = 0;
 
 		boolean firstRun = true;
 		

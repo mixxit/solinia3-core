@@ -2773,7 +2773,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 				if (rank == null)
 					continue;
-
+				
 				for (SoliniaAARankEffect effect : rank.getEffects()) {
 					if (effect.getEffectId() != effectId)
 						continue;
