@@ -1113,4 +1113,6 @@ public interface ISoliniaSpell extends IPersistable {
 
 	boolean isSummonSkeleton();
 
+	boolean isRoot();
+
 }

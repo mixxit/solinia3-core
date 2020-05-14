@@ -6060,4 +6060,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 	{
 		return isEffectInSpell(SpellEffectType.NecPet);
 	}
+
+	@Override
+	public boolean isRoot() {
+		return isEffectInSpell(SpellEffectType.Root);
+	}
 }

@@ -1993,21 +1993,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 
-			/* TODO Root fading and spell interuption
-			if (spell_id != SPELL_UNKNOWN && !iBuffTic) {
+			if (spell_id != Utils.SPELL_UNKNOWN && !iBuffTic) {
 				//see if root will break
-				if (IsRooted() && !FromDamageShield)  // neotoyko: only spells cancel root
+				if (isRooted() && !FromDamageShield)  // neotoyko: only spells cancel root
 					TryRootFadeByDamage(buffslot, attacker);
 			}
 			else if (spell_id == Utils.SPELL_UNKNOWN)
 			{
+				//TODO
 				//increment chances of interrupting
-				if (IsCasting()) { //shouldnt interrupt on regular spell damage
+				/*if (isCasting()) { //shouldnt interrupt on regular spell damage
 					attacked_count++;
-					Log(Logs::Detail, Logs::Combat, "Melee attack while casting. Attack count %d", attacked_count);
-				}
+					//Log(Logs::Detail, Logs::Combat, "Melee attack while casting. Attack count %d", attacked_count);
+				}*/
 			}
-			*/
 
 			/* TODO - Senmd HP UPdate
 			 * ACtually this is already done in changehp
@@ -2070,6 +2069,43 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 			} //end packet sending
 		}
+	}
+
+	private boolean TryRootFadeByDamage(int buffslot, ISoliniaLivingEntity attacker) {
+		SoliniaActiveSpell activeSpell = this.getFirstActiveSpellWithSpellEffectType(SpellEffectType.Root);
+		
+		if (attacker == null || activeSpell == null)
+			return false;
+
+		if (activeSpell.getSpell().isDetrimental()) {
+			int BreakChance = 55;//RuleI(Spells, RootBreakFromSpells);
+
+			BreakChance -= BreakChance*activeSpell.getRootBreakChance() / 100;
+			int level_diff = attacker.getMentorLevel() - getMentorLevel();
+
+			//Use baseline if level difference <= 1 (ie. If target is (1) level less than you, or equal or greater level)
+
+			if (level_diff == 2)
+				BreakChance = (BreakChance * 80) / 100; //Decrease by 20%;
+
+			else if (level_diff >= 3 && level_diff <= 20)
+				BreakChance = (BreakChance * 60) / 100; //Decrease by 40%;
+
+			else if (level_diff > 21)
+				BreakChance = (BreakChance * 20) / 100; //Decrease by 80%;
+
+			if (BreakChance < 1)
+				BreakChance = 1;
+
+			if (Utils.Roll(BreakChance)) {
+
+				activeSpell.tryFadeEffect();
+				return true;
+			}
+		}
+
+		//Log(Logs::Detail, Logs::Combat, "Spell did not break root. BreakChance percent chance");
+		return false;
 	}
 
 	@Override

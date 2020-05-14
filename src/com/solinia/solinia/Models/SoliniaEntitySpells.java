@@ -105,7 +105,16 @@ public class SoliniaEntitySpells {
 	public boolean addSpell(Plugin plugin, ISoliniaSpell soliniaSpell, LivingEntity sourceEntity, int duration, boolean sendMessages, String requiredWeaponSkillType, boolean racialPassive) {
 		if (sourceEntity == null)
 			return false;
+		
+		if (this.getBukkitLivingEntity() == null)
+			return false;
 
+		try
+		{
+		ISoliniaLivingEntity solSourceEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
+		if (solSourceEntity == null || solSourceEntity.getBukkitLivingEntity() == null || solSourceEntity.getBukkitLivingEntity().isDead() || this.getBukkitLivingEntity() == null || this.getBukkitLivingEntity().isDead())
+			return false;
+		
 		DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Beginning addSpell on behalf of caster");
 		DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", this.getBukkitLivingEntity(), "Beginning addSpell on behalf of source");
 		// This spell ID is already active
@@ -226,8 +235,14 @@ public class SoliniaEntitySpells {
 			}
 		}
 		
+		int rootBreakChance = 100;
+		if (soliniaSpell.isRoot())
+		{
+			rootBreakChance = solSourceEntity.getAABonuses(SpellEffectType.RootBreakChance) + solSourceEntity.getItemBonuses(SpellEffectType.RootBreakChance) + solSourceEntity.getSpellBonuses(SpellEffectType.RootBreakChance);
+		}
+		
 		SoliniaActiveSpell activeSpell = new SoliniaActiveSpell(getLivingEntityUUID(), soliniaSpell.getId(), isPlayer,
-				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits(), requiredWeaponSkillType, racialPassive);
+				sourceEntity.getUniqueId(), true, duration, soliniaSpell.getNumhits(), requiredWeaponSkillType, racialPassive, rootBreakChance);
 		
 		Short slot = getNextAvailableSlot();
 		if (slot == null)
@@ -242,10 +257,9 @@ public class SoliniaEntitySpells {
 
 		if (activeSpell.getSpell().isBardSong() && sourceEntity != null && !sourceEntity.isDead()) {
 			try {
-				ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
-				if (solEntity != null)
+				if (solSourceEntity != null)
 				{
-					Utils.SendHint(solEntity.getBukkitLivingEntity(), HINT.STARTS_TO_SING, sourceEntity.getCustomName()+"^"+soliniaSpell.getName(), true);
+					Utils.SendHint(solSourceEntity.getBukkitLivingEntity(), HINT.STARTS_TO_SING, sourceEntity.getCustomName()+"^"+soliniaSpell.getName(), true);
 					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(), soliniaSpell.getId());
 				}
 			} catch (CoreStateInitException e) {
@@ -274,6 +288,10 @@ public class SoliniaEntitySpells {
 		}
 		DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", this.getBukkitLivingEntity(), "Source spell was successful (duration: " + duration + ")");
 		return true;
+		} catch(CoreStateInitException e)
+		{
+			return false;
+		}
 	}
 	
 	private int checkStackConflict(ISoliniaSpell activeSpell, UUID activeSpellSourceUuid, ISoliniaSpell newSpell, LivingEntity targetEntity, LivingEntity sourceEntity)

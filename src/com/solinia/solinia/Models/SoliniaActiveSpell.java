@@ -62,9 +62,10 @@ public class SoliniaActiveSpell {
 	private int numHits = 0;
 	private String requiredWeaponSkillType = "";
 	private boolean isRacialPassive = false;
+	public int rootBreakChance = 100;
 
 	public SoliniaActiveSpell(UUID owneruuid, int spellId, boolean isOwnerPlayer, UUID sourceuuid,
-			boolean sourceIsPlayer, int ticksLeft, int numHits, String requiredWeaponSkillType, boolean racialPassive) {
+			boolean sourceIsPlayer, int ticksLeft, int numHits, String requiredWeaponSkillType, boolean racialPassive, int rootBreakChance) {
 		setOwnerUuid(owneruuid);
 		setOwnerPlayer(isOwnerPlayer);
 		setSourceUuid(sourceuuid);
@@ -75,6 +76,7 @@ public class SoliniaActiveSpell {
 		setNumHits(numHits);
 		setRequiredWeaponSkillType(requiredWeaponSkillType);
 		setRacialPassive(racialPassive);
+		setRootBreakChance(rootBreakChance);
 	}
 
 	private void setActiveSpellEffects() {
@@ -120,6 +122,14 @@ public class SoliniaActiveSpell {
 
 	public void setOwnerPlayer(boolean isOwnerPlayer) {
 		this.isOwnerPlayer = isOwnerPlayer;
+	}
+	
+	public void setRootBreakChance(int rootBreakChance) {
+		this.rootBreakChance = rootBreakChance;
+	}
+	
+	public int getRootBreakChance() {
+		return rootBreakChance;
 	}
 
 	public UUID getOwnerUuid() {
