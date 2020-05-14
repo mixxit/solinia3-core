@@ -1157,7 +1157,7 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void clearEntityEffects(UUID uniqueId) {
 		if (entitySpells.get(uniqueId) != null)
-			removeSpellEffects(uniqueId, false, false);
+			removeSpellEffects(uniqueId, true, true);
 		
 		try
 		{

@@ -946,8 +946,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		event.setDeathMessage("");
 
-		for (PotionEffect effect : event.getEntity().getActivePotionEffects())
-			event.getEntity().removePotionEffect(effect.getType());
+		// REMOVE PET AND STORE LAST LOCATION
 		
 		try
 	    {
@@ -967,6 +966,11 @@ public class Solinia3CorePlayerListener implements Listener {
 		{
 	    	
 		}
+		
+
+		// REMOVE ALL ACTIVE SPELLS
+		for (PotionEffect effect : event.getEntity().getActivePotionEffects())
+			event.getEntity().removePotionEffect(effect.getType());
 		
 		try {
 			StateManager.getInstance().getEntityManager().clearEntityEffects(event.getEntity().getUniqueId());
