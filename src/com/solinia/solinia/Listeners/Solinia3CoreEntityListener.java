@@ -282,11 +282,11 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 		
 		if (event.getSoliniaLivingEntity().getRace() != null)
-			if (event.getSoliniaLivingEntity().getRace().getPassiveAbilityId() > 0)
+			if (event.getSoliniaLivingEntity().getRace().getPassiveAbilityId() > 0 && event.getSoliniaLivingEntity().isPassiveEnabled())
 				event.getSoliniaLivingEntity().tryApplySpellOnSelf(event.getSoliniaLivingEntity().getRace().getPassiveAbilityId(), "", true);
 
 		if (event.getSoliniaLivingEntity().getGod() != null)
-			if (event.getSoliniaLivingEntity().getGod().getPassiveAbilityId() > 0)
+			if (event.getSoliniaLivingEntity().getGod().getPassiveAbilityId() > 0 && event.getSoliniaLivingEntity().isPassiveEnabled())
 				event.getSoliniaLivingEntity().tryApplySpellOnSelf(event.getSoliniaLivingEntity().getGod().getPassiveAbilityId(), "", true);
 	}
 

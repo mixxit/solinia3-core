@@ -11721,4 +11721,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		removeFromHateList(uniqueId);
 	}
 
+	@Override
+	public boolean isPassiveEnabled() {
+		if (!this.isPlayer())
+			return false;
+		
+		ISoliniaPlayer solPlayer = getSoliniaPlayer();
+		if (solPlayer != null)
+		{
+			return solPlayer.isPassiveEnabled();
+		}
+		
+		return true;
+	}
+
 }

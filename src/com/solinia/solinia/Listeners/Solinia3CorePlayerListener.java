@@ -437,7 +437,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			event.getPlayer().increasePlayerMana(mpregen);
 		
 		// only players get this
-		if (event.getZone().getPassiveAbilityId() > 0 && event.getPlayer().isPassiveEnabled())
+		if (event.getZone().getPassiveAbilityId() > 0)
 			if (event.getPlayer().getSoliniaLivingEntity() != null)
 				event.getPlayer().getSoliniaLivingEntity().tryApplySpellOnSelf(event.getZone().getPassiveAbilityId(),"");
 	}
