@@ -352,7 +352,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		this.mana = mana;
-		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer(), true, false);
+		
+		try
+		{
+			if (StateManager.getInstance().getPlayerManager().hasValidMod(this.getBukkitPlayer()))
+			{
+				PartyWindowUtils.UpdateWindowWithMod(this.getBukkitPlayer(), true, false);
+			} else {
+				PartyWindowUtils.UpdateWindowWithoutMod(this.getBukkitPlayer(), true, false);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 		this.setLastUpdatedTimeNow();
 	}
 

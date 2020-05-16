@@ -62,6 +62,7 @@ import com.solinia.solinia.Models.SpellType;
 import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
+import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.SpecialEffectUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -171,13 +172,19 @@ public class EntityManager implements IEntityManager {
 				
 		        if (me instanceof Player)
 				{
-					PartyWindowUtils.UpdateWindow((Player)me, false, true);
+		        	if (StateManager.getInstance().getPlayerManager().hasValidMod((Player)me))
+		        		PartyWindowUtils.UpdateWindowWithMod((Player)me, false, true);
+		        	else
+		        		PartyWindowUtils.UpdateWindowWithMod((Player)me, false, true);
 				}
 			} else {
 				StateManager.getInstance().getEntityManager().getEntityTargets().put(me.getUniqueId(), target.getUniqueId());
 				if (me instanceof Player)
 				{
-					PartyWindowUtils.UpdateWindow((Player)me,false,true);
+					if (StateManager.getInstance().getPlayerManager().hasValidMod((Player)me))
+						PartyWindowUtils.UpdateWindowWithoutMod((Player)me,false,true);
+					else
+		        		PartyWindowUtils.UpdateWindowWithoutMod((Player)me, false, true);
 				}
 			}
 		} catch (CoreStateInitException e)
@@ -1941,7 +1948,16 @@ public class EntityManager implements IEntityManager {
 			{
 				if (entity instanceof Player && (!((Player)entity).isDead()))
 				{
-					PartyWindowUtils.UpdateWindow((Player)entity,false,false);
+					try
+					{
+						if (StateManager.getInstance().getPlayerManager().hasValidMod((Player)entity))
+							PartyWindowUtils.UpdateWindowWithMod((Player)entity,false,false);
+						else
+							PartyWindowUtils.UpdateWindowWithoutMod((Player)entity,false,false);
+					} catch (CoreStateInitException e)
+					{
+						
+					}
 				}
 			}
 		}

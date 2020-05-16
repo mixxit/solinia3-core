@@ -438,7 +438,10 @@ public class PlayerManager implements IPlayerManager {
 	
 	public void setPlayerVersion(UUID uuid, String version)
 	{
-		this.playerVersion.put(uuid, version);
+		if (version == null)
+			this.playerVersion.remove(uuid);
+		else
+			this.playerVersion.put(uuid, version);
 	}
 	
 	@Override
@@ -453,28 +456,7 @@ public class PlayerManager implements IPlayerManager {
 	@Override
 	public void checkPlayerModVersion(Player player)
 	{
-		/*if (!hasValidMod(player))
-		{
-			try
-			{
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				if (solPlayer.isModMessageEnabled())
-				if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited"))
-				{
-					System.out.println(player.getName() + " was warned with message: Missing Mod Version '" + StateManager.getInstance().getRequiredModVersion() + "' - See https://www.fallofanempire.com/docs/guides/mod/ [You have : '" + playerModVersion(player) + "']");
-					player.sendMessage("Missing Mod Version '" + StateManager.getInstance().getRequiredModVersion() + "' - See https://www.fallofanempire.com/docs/guides/mod/ [You have : '" + playerModVersion(player) + "']");
-					//player.kickPlayer("Missing Mod Version '" + StateManager.getInstance().getRequiredModVersion() + "' - See https://www.fallofanempire.com/docs/guides/mod/ [You have : '" + playerModVersion(player) + "']");
-				} else {
-					System.out.println(player.getName() + " excluded from kick - Missing Mod Version '" + StateManager.getInstance().getRequiredModVersion() + "' - See https://www.fallofanempire.com/docs/guides/mod/ [You have : '" + playerModVersion(player) + "']");
-					player.sendMessage(ChatColor.GRAY + "Missing Mod Version '" + StateManager.getInstance().getRequiredModVersion() + "' - Due to your status you have been excluded from being kicked");
-				}
-			} catch (CoreStateInitException e)
-			{
-				
-			}
-		} else {
-			onPlayerValidMod(player);
-		}*/
+		
 	}
 
 	@Override
