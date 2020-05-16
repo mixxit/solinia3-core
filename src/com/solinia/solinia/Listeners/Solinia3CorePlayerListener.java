@@ -1,6 +1,5 @@
 package com.solinia.solinia.Listeners;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -1676,13 +1675,20 @@ public class Solinia3CorePlayerListener implements Listener {
 				try {
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 							.getItem(event.getCurrentItem());
-					if (item != null) {
-						if (item.isTemporary()) {
-							event.getView().getPlayer().sendMessage("Merchants are not interested in temporary items");
-							Utils.CancelEvent(event);
-							return;
-						}
+					if (item == null && !ItemStackUtils.getAllowedVanillaItemStacks().contains(event.getCurrentItem().getType())) {
+						event.getView().getPlayer().sendMessage("Merchants are not interested in this item");
+						Utils.CancelEvent(event);
+						return;
 					}
+
+					if (item != null && item.isTemporary()) {
+						event.getView().getPlayer().sendMessage("Merchants are not interested in temporary items");
+						Utils.CancelEvent(event);
+						return;
+					}
+
+					// Picked up sellable item
+
 				} catch (CoreStateInitException e) {
 					Utils.CancelEvent(event);
 					event.getView().getPlayer().sendMessage("Cannot sell/buy right now");
@@ -1776,33 +1782,12 @@ public class Solinia3CorePlayerListener implements Listener {
 							Utils.CancelEvent(event);
 							return;
 						}
-						
-						List<Material> allowedVanillaItems = new ArrayList<Material>();
-						
-						allowedVanillaItems.add(Material.COAL_ORE);
-						allowedVanillaItems.add(Material.GOLD_ORE);
-						allowedVanillaItems.add(Material.GOLD_INGOT);
-						allowedVanillaItems.add(Material.GOLD_BLOCK);
-						allowedVanillaItems.add(Material.IRON_INGOT);
-						allowedVanillaItems.add(Material.IRON_ORE);
-						allowedVanillaItems.add(Material.IRON_BLOCK);
-						allowedVanillaItems.add(Material.DIAMOND_ORE);
-						allowedVanillaItems.add(Material.DIAMOND);
-						allowedVanillaItems.add(Material.DIAMOND_BLOCK);
-						allowedVanillaItems.add(Material.LAPIS_ORE);
-						allowedVanillaItems.add(Material.LAPIS_BLOCK);
-						allowedVanillaItems.add(Material.REDSTONE_ORE);
-						allowedVanillaItems.add(Material.REDSTONE);
-						allowedVanillaItems.add(Material.REDSTONE_BLOCK);
-						
-						if (event.getCurrentItem().getType() != null && !allowedVanillaItems.contains(event.getCurrentItem().getType())) {
-							event.getView().getPlayer().sendMessage("Merchants are not interested in this item");
-							Utils.CancelEvent(event);
-							return;
-						}
 
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+								.getItem(event.getCursor());
+						
 						// Check if buying stack of none-stackable
-						if (event.getCursor().getAmount() > event.getCursor().getMaxStackSize()) {
+						if (event.getCursor().getAmount() > item.asItemStack().getMaxStackSize()) {
 							event.getView().getPlayer().sendMessage(
 									"This item is not stackable in the amount you have requested.");
 							
@@ -1819,13 +1804,10 @@ public class Solinia3CorePlayerListener implements Listener {
 							return;
 						}
 						
-						double individualprice = getWorthOfVanillaMaterial(event.getCurrentItem());
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager() .getItem(event.getCursor());
-						if (item != null)
-							individualprice = item.getWorth();
+						double individualprice = item.getWorth();
 
 						// Try to read from the itemstack worth
-						Integer merchantworth = ItemStackUtils.getMerchantItemWorth(event.getCursor());
+						Double merchantworth = ItemStackUtils.getMerchantItemWorth(event.getCursor());
 
 						if (event.getCursor().getItemMeta().getDisplayName().contains("Display Item"))
 							if (merchantworth != null && merchantworth != individualprice) {
@@ -1857,7 +1839,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						EconomyResponse responsewithdraw = StateManager.getInstance().getEconomy().withdrawPlayer(
 								Bukkit.getOfflinePlayer(((Player) event.getView().getPlayer()).getUniqueId()), price);
 						if (responsewithdraw.transactionSuccess()) {
-							ItemStack purchase = event.getCursor();
+							ItemStack purchase = item.asItemStack();
 							purchase.setAmount(event.getCursor().getAmount());
 							// Cursor events are deprecated, must be done next tick before a cancel
 							final UUID uuid = event.getView().getPlayer().getUniqueId();
@@ -1872,7 +1854,7 @@ public class Solinia3CorePlayerListener implements Listener {
 							;
 							event.getClickedInventory().setItem(event.getSlot(), purchase);
 							event.getView().getPlayer().sendMessage(ChatColor.YELLOW + "* You pay $" + price + " for "
-									+ event.getCursor().getAmount() + " " + event.getCursor().getItemMeta().getDisplayName());
+									+ event.getCursor().getAmount() + " " + item.getDisplayname());
 							return;
 
 						} else {
@@ -1944,9 +1926,12 @@ public class Solinia3CorePlayerListener implements Listener {
 					try {
 						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 								.getItem(event.getCursor());
-						double individualprice = getWorthOfVanillaMaterial(event.getCurrentItem());
+						double individualprice = 0L;
+
 						if (item != null)
 							individualprice = item.getWorth();
+						else
+							individualprice = getWorthOfVanillaMaterial(event.getCursor());
 
 						// Total price
 						double price = individualprice * event.getCursor().getAmount();
@@ -2006,15 +1991,15 @@ public class Solinia3CorePlayerListener implements Listener {
 		Utils.CancelEvent(event);
 		return;
 	}
-
+	
 	public double getWorthOfVanillaMaterial(ItemStack itemStack) {
 		if (itemStack == null || itemStack.getType() == null || itemStack.getType().equals(Material.AIR))
 			return 0D;
-		
+
 		Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 		if (ess != null)
-			return ess.getWorth().getPrice(ess, itemStack).doubleValue()/10D;
-		
+			return ess.getWorth().getPrice(ess, itemStack).doubleValue();
+
 		return 1D;
 	}
 

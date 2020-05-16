@@ -38,6 +38,27 @@ import net.minecraft.server.v1_14_R1.NBTTagCompound;
 
 public class ItemStackUtils {
 	
+	public static List<Material> getAllowedVanillaItemStacks()
+	{
+		List<Material> allowedVanillaItems = new ArrayList<Material>();
+		allowedVanillaItems.add(Material.COAL_ORE);
+		allowedVanillaItems.add(Material.GOLD_ORE);
+		allowedVanillaItems.add(Material.GOLD_INGOT);
+		allowedVanillaItems.add(Material.GOLD_BLOCK);
+		allowedVanillaItems.add(Material.IRON_INGOT);
+		allowedVanillaItems.add(Material.IRON_ORE);
+		allowedVanillaItems.add(Material.IRON_BLOCK);
+		allowedVanillaItems.add(Material.DIAMOND_ORE);
+		allowedVanillaItems.add(Material.DIAMOND);
+		allowedVanillaItems.add(Material.DIAMOND_BLOCK);
+		allowedVanillaItems.add(Material.LAPIS_ORE);
+		allowedVanillaItems.add(Material.LAPIS_BLOCK);
+		allowedVanillaItems.add(Material.REDSTONE_ORE);
+		allowedVanillaItems.add(Material.REDSTONE);
+		allowedVanillaItems.add(Material.REDSTONE_BLOCK);
+		return allowedVanillaItems;
+	}
+	
 	public static int getWeaponDamageFromItemStack(ItemStack itemStack, EnumItemSlot itemSlot) {
         double attackDamage = 1.0;
         UUID uuid = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
@@ -245,7 +266,7 @@ public class ItemStackUtils {
 		return textureValue;
 	}
 	
-	public static Integer getMerchantItemWorth(ItemStack itemStack)
+	public static Double getMerchantItemWorth(ItemStack itemStack)
 	{
 		if (!ItemStackUtils.IsSoliniaItem(itemStack))
 			return null;
@@ -257,7 +278,7 @@ public class ItemStackUtils {
 			
 			String[] temporaryData = loreLine.split(" ");
 			
-			return Integer.parseInt(temporaryData[1]);
+			return Double.parseDouble(temporaryData[1]);
 		}
 		
 		return null;
