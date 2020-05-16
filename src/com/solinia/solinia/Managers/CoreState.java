@@ -14,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -61,7 +60,7 @@ public class CoreState {
 	private Economy economy;
 	private boolean isStopping = false;
 	private IChannelManager channelManager;
-	private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
+	//private ConcurrentHashMap<UUID, BossBar> bossbars = new ConcurrentHashMap<UUID, BossBar>();
 	private ConcurrentHashMap<UUID, ISoliniaGroup> groups = new ConcurrentHashMap<UUID, ISoliniaGroup>();
 	private ConcurrentHashMap<UUID, UUID> groupinvites = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<Integer, Integer> fellowshipinvites = new ConcurrentHashMap<Integer, Integer>();
@@ -94,15 +93,6 @@ public class CoreState {
 	public Plugin getPlugin()
 	{
 		return Bukkit.getPluginManager().getPlugin("Solinia3Core");
-	}
-	
-	public BossBar getBossBar(UUID uuid) {
-		return this.bossbars.get(uuid);
-	}
-
-	public void setBossBar(UUID uuid, BossBar bossbar) {
-		// TODO Auto-generated method stub
-		this.bossbars.put(uuid, bossbar);
 	}
 		
 	public List<SoliniaZone> getCurrentHotzones() {
@@ -1203,16 +1193,6 @@ public class CoreState {
 
 	public boolean isStopping() {
 		return this.isStopping;
-	}
-
-	public void removeBossBar(UUID playerUUID) {
-		try
-		{
-			this.bossbars.remove(playerUUID);
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 }

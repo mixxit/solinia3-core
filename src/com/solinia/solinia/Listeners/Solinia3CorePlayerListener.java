@@ -89,7 +89,6 @@ import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.ScoreboardUtils;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -180,7 +179,7 @@ public class Solinia3CorePlayerListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onUpdatePlayerWindowEventWithoutMod(UpdatePlayerWindowEvent event)
+	public void onUpdatePlayerWindowEvent(UpdatePlayerWindowEvent event)
 	{
 		if (event.isCancelled())
 			return;
@@ -191,111 +190,6 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		try
 		{
-			if (StateManager.getInstance().getPlayerManager().hasValidMod(player))
-			{
-				return;
-			}
-			
-			if (StateManager.getInstance().getConfigurationManager().getQueuedCastingPercentPackets().get(event.getPlayerUuid()) != null)
-			{
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-				if (solPlayer == null)
-					return;
-				
-				ScoreboardUtils.UpdateScoreboard(player, solPlayer.getMana());
-				StateManager.getInstance().getConfigurationManager().getQueuedCastingPercentPackets().remove(event.getPlayerUuid());
-			}
-			
-			// WE DONT SUPPORT ANY OF THE BELOW ON VANILLA
-			
-			if (StateManager.getInstance().getConfigurationManager().getQueuedCharCreationPackets().get(event.getPlayerUuid()) != null)
-			{
-				//ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,StateManager.getInstance().getConfigurationManager().getQueuedCharCreationPackets().get(event.getPlayerUuid()));
-				StateManager.getInstance().getConfigurationManager().getQueuedCharCreationPackets().remove(event.getPlayerUuid());
-			}
-			
-			if (StateManager.getInstance().getConfigurationManager().getQueuedEffectsPackets().get(event.getPlayerUuid()) != null)
-			{
-				//ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.EFFECTS,StateManager.getInstance().getConfigurationManager().getQueuedEffectsPackets().get(event.getPlayerUuid()));
-				StateManager.getInstance().getConfigurationManager().getQueuedEffectsPackets().remove(event.getPlayerUuid());
-			}
-			if (StateManager.getInstance().getConfigurationManager().getQueuedEquipSlotsPackets().get(event.getPlayerUuid()) != null)
-			{
-				//ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.EQUIPSLOTS,StateManager.getInstance().getConfigurationManager().getQueuedEquipSlotsPackets().get(event.getPlayerUuid()));
-				StateManager.getInstance().getConfigurationManager().getQueuedEquipSlotsPackets().remove(event.getPlayerUuid());
-			}
-
-			if (StateManager.getInstance().getConfigurationManager().getQueuedMemorisedSpellsPackets().get(event.getPlayerUuid()) != null)
-			{
-				//ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.MEMORISEDSPELLS,StateManager.getInstance().getConfigurationManager().getQueuedMemorisedSpellsPackets().get(event.getPlayerUuid()));
-				StateManager.getInstance().getConfigurationManager().getQueuedMemorisedSpellsPackets().remove(event.getPlayerUuid());
-			}
-
-			if (StateManager.getInstance().getConfigurationManager().getQueueSpellbookPagePackets().get(event.getPlayerUuid()) != null)
-			{
-				//ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.SPELLBOOKPAGE,StateManager.getInstance().getConfigurationManager().getQueueSpellbookPagePackets().get(event.getPlayerUuid()));
-				StateManager.getInstance().getConfigurationManager().getQueueSpellbookPagePackets().remove(event.getPlayerUuid());
-			}
-			
-			trySendMobVitalNoMod(player,-2);
-			trySendMobVitalNoMod(player,-1);
-			trySendMobVitalNoMod(player,0);
-			trySendMobVitalNoMod(player,1);
-			trySendMobVitalNoMod(player,2);
-			trySendMobVitalNoMod(player,3);
-			trySendMobVitalNoMod(player,4);
-			trySendMobVitalNoMod(player,5);
-			
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-	}
-	
-	private void trySendMobVitalNoMod(Player player, int mobVitalQueueId) {
-		if (player == null)
-			return;
-		
-		try
-		{
-			if (StateManager.getInstance().getConfigurationManager().getQueueMobVitalsPackets(mobVitalQueueId).get(player.getUniqueId()) != null)
-			{
-				// target is -1 and self is 0
-				// nothing else is supported on vanilla
-				if (mobVitalQueueId == -1 || mobVitalQueueId == 0)
-				{
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					if (solPlayer == null)
-						return;
-					
-					ScoreboardUtils.UpdateScoreboard(player, solPlayer.getMana());
-				}
-				StateManager.getInstance().getConfigurationManager().getQueueMobVitalsPackets(mobVitalQueueId).remove(player.getUniqueId());
-			}
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-	}
-	
-	@EventHandler
-	public void onUpdatePlayerWindowEventWithMod(UpdatePlayerWindowEvent event)
-	{
-		if (event.isCancelled())
-			return;
-		
-		Player player = Bukkit.getPlayer(event.getPlayerUuid());
-		if (player == null)
-			return;
-		
-		try
-		{
-			if (!StateManager.getInstance().getPlayerManager().hasValidMod(player))
-			{
-				return;
-			}
-			
 			if (StateManager.getInstance().getConfigurationManager().getQueuedCastingPercentPackets().get(event.getPlayerUuid()) != null)
 			{
 				ForgeUtils.sendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CASTINGPERCENT,StateManager.getInstance().getConfigurationManager().getQueuedCastingPercentPackets().get(event.getPlayerUuid()));
@@ -331,14 +225,14 @@ public class Solinia3CorePlayerListener implements Listener {
 				StateManager.getInstance().getConfigurationManager().getQueueSpellbookPagePackets().remove(event.getPlayerUuid());
 			}
 
-			trySendMobVitalMod(player,-2);
-			trySendMobVitalMod(player,-1);
-			trySendMobVitalMod(player,0);
-			trySendMobVitalMod(player,1);
-			trySendMobVitalMod(player,2);
-			trySendMobVitalMod(player,3);
-			trySendMobVitalMod(player,4);
-			trySendMobVitalMod(player,5);
+			trySendMobVital(player,-2);
+			trySendMobVital(player,-1);
+			trySendMobVital(player,0);
+			trySendMobVital(player,1);
+			trySendMobVital(player,2);
+			trySendMobVital(player,3);
+			trySendMobVital(player,4);
+			trySendMobVital(player,5);
 		} catch (CoreStateInitException e)
 		{
 			
@@ -348,7 +242,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 	}
 	
-	private void trySendMobVitalMod(Player player, int mobVitalQueueId) {
+	private void trySendMobVital(Player player, int mobVitalQueueId) {
 		if (player == null)
 			return;
 		
@@ -553,8 +447,6 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		try
 	    {
-			StateManager.getInstance().getPlayerManager().setPlayerVersion(event.getPlayer().getUniqueId(), null);
-			
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(event.getPlayer().getUniqueId());
 			if (pet != null) {
 				ISoliniaLivingEntity petsolEntity = SoliniaLivingEntityAdapter.Adapt(pet);

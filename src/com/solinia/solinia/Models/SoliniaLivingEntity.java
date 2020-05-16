@@ -2352,20 +2352,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		EntityUtils.PSetHPChange(this.getBukkitLivingEntity(), hpchange, causeOfEntityHpChange, playHurtSound);
 
-		try
-		{
-			// SEND ENTITY HP CHANGES
-			if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
-				if (StateManager.getInstance().getPlayerManager().hasValidMod((Player) this.getOwnerEntity()))
-					PartyWindowUtils.UpdateWindowWithMod(((Player) this.getOwnerEntity()), false, false);
-				else
-					PartyWindowUtils.UpdateWindowWithoutMod(((Player) this.getOwnerEntity()), false, false);
-			}
-
-		} catch (CoreStateInitException e)
-		{
-			
+		// SEND ENTITY HP CHANGES
+		if (isCurrentlyNPCPet() && this.getActiveMob() != null && this.getOwnerEntity() instanceof Player) {
+			PartyWindowUtils.UpdateWindow(((Player) this.getOwnerEntity()), false, false);
 		}
+
 		if (getBukkitLivingEntity() instanceof Player) {
 			try {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());

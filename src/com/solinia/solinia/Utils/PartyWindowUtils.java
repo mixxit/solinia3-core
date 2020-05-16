@@ -18,23 +18,9 @@ import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 
 public class PartyWindowUtils {
-	public static void UpdateWindowWithoutMod(Player player,boolean withMana, boolean sendPacketImmediately) {
-		try
-		{
-			ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
-			if (soliniaLivingEntity != null)
-				ScoreboardUtils.UpdateScoreboard(player, soliniaLivingEntity.getMana());
-		} catch (CoreStateInitException e)
-		{
-			
-		}
-	}
 	
-	public static void UpdateWindowWithMod(Player player,boolean withMana, boolean sendPacketImmediately) {
+	public static void UpdateWindow(Player player,boolean withMana, boolean sendPacketImmediately) {
 		try {
-			// calls scoreboard to make sure boss bar is removed
-			ScoreboardUtils.UpdateScoreboard(player, 0);
-			
 			// myself (vital: 0)
 			ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
 			if (!sendPacketImmediately)
@@ -86,10 +72,9 @@ public class PartyWindowUtils {
 	
 	public static void SendGroupToMember(Player player, ISoliniaGroup group, boolean updatemana, boolean sendEmptyGroup)
 	{
+		UpdateWindow(player, updatemana,false);
+		
 		try {
-			if (StateManager.getInstance().getPlayerManager().hasValidMod(player))
-				UpdateWindowWithMod(player, updatemana,false);
-
 			if (sendEmptyGroup || group != null)
 			{
 				for (int i = 0; i < 5; i++) {
