@@ -664,6 +664,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					{
 						solLivingEntityPlayer.setEntityTarget(targetmob);
 						event.getPlayer().sendMessage("You have targetted: " + targetmob.getCustomName());
+						event.getPlayer().sendMessage(ChatColor.GRAY + "With an NPC targetted you can talk to them by typing to them things like HAIL or other things they highlight in purple (Also: SHOP for shops, BANK for bankers)");
 						return;
 					}
 				} catch (CoreStateInitException e)

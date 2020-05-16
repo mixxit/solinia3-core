@@ -937,9 +937,10 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				}
 
 			switch (words[0].toUpperCase()) {
-			case "HAIL":
-				listenToHail(solentity,triggerentity);
-				break;
+			// we will move this to the bottom
+			//case "HAIL":
+			//	listenToHail(solentity,triggerentity);
+			//	break;
 			case "BANK":
 				if (triggerentity instanceof Player)
 					if (isBanker()) {
@@ -1094,8 +1095,21 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 					}
 
 				}
+				
+				
+			
 			}
 		}
+		
+		if (words.length > 0) {
+			// Check player has sufficient faction
+			if (triggerentity instanceof Player)
+			{
+				if ((words[0].toUpperCase().equals("HAIL")))
+					listenToHail(solentity,triggerentity);
+			}
+		}
+		
 		return;
 	}
 
