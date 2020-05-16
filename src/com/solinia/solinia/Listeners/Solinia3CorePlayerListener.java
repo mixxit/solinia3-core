@@ -2013,7 +2013,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 		if (ess != null)
-			return ess.getWorth().getPrice(ess, itemStack).doubleValue();
+			return ess.getWorth().getPrice(ess, itemStack).doubleValue()/10D;
 		
 		return 1D;
 	}
