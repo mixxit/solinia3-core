@@ -11,6 +11,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -18,6 +19,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class CommandCharacter implements CommandExecutor {
 
@@ -71,18 +73,7 @@ public class CommandCharacter implements CommandExecutor {
 					TextComponent tc = new TextComponent();
 					tc.setText("- " + ChatColor.LIGHT_PURPLE + character.getFullNameWithTitle() + ChatColor.RESET + " - ");
 					
-					String charclass = "";
-					
-					if (character.getClassObj() != null)
-					{
-						charclass = character.getClassObj().getName();
-					}
-					
-					String bank = "";
-					if (character.getBase64BankContents() != null && character.getBase64BankContents().length() > 0)
-						bank = "[BANK]";
-					
-					String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " LVL: " + character.getActualLevel() + " " + locked + " " + bank + ChatColor.RESET;
+					Tuple<String,TextComponent> characterText = PlayerUtils.GetCharacterText(character, "", player.getName(), player.getWorld().getName(), "");
 					
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getId();
@@ -109,8 +100,7 @@ public class CommandCharacter implements CommandExecutor {
 					tc4.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, deletetext));
 					tc.addExtra(tc4);
 					
-					tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-							new ComponentBuilder(details).create()));
+					tc.setHoverEvent(characterText.b().getHoverEvent());
 					sender.spigot().sendMessage(tc);
 	
 				}

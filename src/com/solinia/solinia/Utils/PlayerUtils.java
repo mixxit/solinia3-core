@@ -7,6 +7,7 @@ import java.net.URL;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -23,10 +24,13 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Models.SoliniaZone;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.Tuple;
 
 public class PlayerUtils {
 
@@ -354,6 +358,82 @@ public class PlayerUtils {
 		}
 
 		
+	}
+	public static Tuple<String,TextComponent> GetCharacterText(ISoliniaPlayer solplayer, String optionalhidden, String optionalplayername, String optionalworldname, String optionalzone) {
+		int lvl = (int) Math.floor(solplayer.getActualLevel());
+		int mentorLevel = (int)Math.floor(solplayer.getMentorLevel());
+		
+		String racename = "UNKNOWN";
+		String classname = "UNKNOWN";
+		String godname = "UNKNOWN /setgod <name>";
+		String zone = "UNKNOWN";
+		if (optionalzone != null && !zone.equals(""))
+			zone = optionalzone;
+		String hidden = "";
+		if (optionalhidden != null && !optionalhidden.equals(""))
+			hidden = optionalhidden;
+		
+		if (solplayer.getRace() != null)
+			racename = solplayer.getRace().getShortName();
+		if (solplayer.getClassObj() != null)
+			classname = solplayer.getClassObj().getShortName();
+		
+		String message = hidden+"["+optionalplayername+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ optionalworldname +"] - LVL " + ChatColor.AQUA + mentorLevel + "/"+lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET;
+		
+		TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
+		
+		String worship = "I worship: " + godname + System.lineSeparator();
+		
+		String ideal = "Ideal: I have no ideal" + System.lineSeparator();
+		String trait1 = "Trait: I have no primary trait" + System.lineSeparator();
+		String trait2 = "Trait: I have no secondary trait" + System.lineSeparator();
+		String bond = "Bond: I have no bond" + System.lineSeparator();
+		String flaw = "Flaw: I have no flaw" + System.lineSeparator();
+		String oath = "Oath: I have no oath" + System.lineSeparator();
+		
+		if (solplayer.getGodId() > 0)
+			worship = "I worship: " + solplayer.getGod().getName() + System.lineSeparator();
+		
+		if (solplayer.getPersonality().getIdealId() > 0)
+		ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + System.lineSeparator();
+		if (solplayer.getPersonality().getFirstTraitId() > 0)
+		trait1 = "Trait:" + solplayer.getPersonality().getFirstTrait().description + System.lineSeparator();
+		if (solplayer.getPersonality().getSecondTraitId() > 0)
+		trait2 = "Trait:" + solplayer.getPersonality().getSecondTrait().description + System.lineSeparator();
+		if (solplayer.getPersonality().getBondId() > 0)
+		bond = "Bond:" + solplayer.getPersonality().getBond().description + System.lineSeparator();
+		if (solplayer.getPersonality().getFlawId() > 0)
+		flaw = "Flaw:" + solplayer.getPersonality().getFlaw().description + System.lineSeparator();
+		String custom = "";
+		for(String customTrait : solplayer.getPersonality().getCustomPersonalityTraits())
+		{
+			custom += "Custom:" + customTrait + System.lineSeparator();
+		}
+		if (solplayer.getClassObj() != null && solplayer.getClassObj().getOaths().size() > 0 && solplayer.getOathId() != 0)
+		{
+			oath = "Oath: " + solplayer.getOath().oathname + System.lineSeparator();
+			for(String tenet : solplayer.getOath().tenets)
+			{
+				oath += " " + tenet;
+			}
+		}
+		
+		String inspiration = "Inspiration Points: " + solplayer.getInspiration() + System.lineSeparator();
+		
+		String details = 
+				ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + System.lineSeparator() + 
+				inspiration + 
+		worship + 
+		ideal +
+		trait1 +
+		trait2 + 
+		bond +
+		flaw + 
+		custom +
+		oath;
+		
+		tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
+		return new Tuple<String,TextComponent>(message,tc);
 	}
 
 }
