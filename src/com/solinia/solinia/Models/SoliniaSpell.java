@@ -4330,8 +4330,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 			throws CoreStateInitException {
 		try
 		{
-			Bukkit.broadcastMessage(soliniaSpell.getName() + " " + " target type: " + soliniaSpell.getSpellTargetType().name() + " " + target.getName());
-
 			if (source == null) {
 				System.out.println("Source was null for isValidEffectForEntity: " + soliniaSpell.getName() + " on target: "
 						+ target.getCustomName());
