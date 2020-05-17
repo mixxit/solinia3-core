@@ -711,7 +711,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("- id: " + ChatColor.GOLD + getId() + ChatColor.RESET + " basename: " + ChatColor.GOLD + getBasename() + ChatColor.RESET + " - minlevel: " + ChatColor.GOLD + getMinLevel() + ChatColor.RESET);
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET + " tier: " + ChatColor.GOLD + getTier() + ChatColor.RESET);
 		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET + " appearanceid: " + ChatColor.GOLD + this.getAppearanceId() + ChatColor.RESET);
-		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET + " placeable: " + ChatColor.GOLD + isPlaceable() + ChatColor.RESET);
+		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET + " inspirationworth: " + ChatColor.GOLD + getInspirationWorth() + ChatColor.RESET + " placeable: " + ChatColor.GOLD + isPlaceable() + ChatColor.RESET);
 		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
 		String leathercolor = "NONE";
 		if (getLeatherRgbDecimal() > 0)

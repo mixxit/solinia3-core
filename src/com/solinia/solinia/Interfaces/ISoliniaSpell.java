@@ -1115,4 +1115,8 @@ public interface ISoliniaSpell extends IPersistable {
 
 	boolean isRoot();
 
+	boolean isIgnoreSummonItemTemporaryCheck();
+
+	void setIgnoreSummonItemTemporaryCheck(boolean ignoreSummonItemTemporaryCheck);
+
 }

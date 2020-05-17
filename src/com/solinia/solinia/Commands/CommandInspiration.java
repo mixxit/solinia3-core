@@ -258,7 +258,7 @@ public class CommandInspiration implements CommandExecutor {
 		tc.setText(ChatColor.LIGHT_PURPLE + "Buy 1 AA Point " + ChatColor.RESET + " - Cost: 5 inspiration");
 		
 		TextComponent tc2 = new TextComponent();
-		tc2.setText(ChatColor.AQUA + "[Click to Buy]" + ChatColor.RESET);
+		tc2.setText(ChatColor.AQUA + " [Click to Buy]" + ChatColor.RESET);
 		String changetext = "/inspiration buy aa";
 		tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
 
@@ -271,7 +271,7 @@ public class CommandInspiration implements CommandExecutor {
 		tc.setText(ChatColor.LIGHT_PURPLE + "Buy " + item.getDisplayname() + ChatColor.RESET + " - Cost: "+item.getInspirationWorth());
 		
 		TextComponent tc2 = new TextComponent();
-		tc2.setText(ChatColor.AQUA + "[Click to Buy]" + ChatColor.RESET);
+		tc2.setText(ChatColor.AQUA + " [Click to Buy]" + ChatColor.RESET);
 		String changetext = "/inspiration buy item " + item.getId();
 		tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
 		tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack())).create()));

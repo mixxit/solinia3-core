@@ -45,6 +45,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	private List<SoliniaSpellClass> allowedClasses = new ArrayList<SoliniaSpellClass>();
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
+	private boolean ignoreSummonItemTemporaryCheck = false;
 
 	@SerializedName("id")
 	@Expose
@@ -2709,7 +2710,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				+ getMana() + ChatColor.RESET + " range: " + ChatColor.GOLD + getRange() + ChatColor.RESET);
 		sender.sendMessage("- castonyou: " + ChatColor.GOLD + this.getCastOnYou() + ChatColor.RESET + " castonother: "
 				+ ChatColor.GOLD + this.getCastOnOther() + ChatColor.RESET);
-		sender.sendMessage("- goodeffect: " + ChatColor.GOLD + this.getGoodEffect() + ChatColor.RESET);
+		sender.sendMessage("- goodeffect: " + ChatColor.GOLD + this.getGoodEffect() + ChatColor.RESET + " ignoresummonitemtemporarycheck: " + ChatColor.GOLD + this.isIgnoreSummonItemTemporaryCheck() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "("
 				+ Utils.getSpellTargetType(getTargettype()).name() + ")" + ChatColor.RESET + " teleport_zone: "
@@ -2963,6 +2964,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			break;
 		case "memicon":
 			this.setMemicon(Integer.parseInt(value));
+			break;
+		case "ignoresummonitemtemporarycheck":
+			this.setIgnoreSummonItemTemporaryCheck(Boolean.parseBoolean(value));
 			break;
 		case "new_icon":
 			this.setNewIcon(Integer.parseInt(value));
@@ -3240,7 +3244,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		default:
 			throw new InvalidSpellSettingException(
-					"Invalid Spell setting. Valid Options are: name, teleportzone, effect, castonyou, castonother, spelleffectindex, duration, mana, componentsX, componentscountX, addspellclass, clearspellclass");
+					"Invalid Spell setting. Valid Options are: name, teleportzone, effect, castonyou, castonother, spelleffectindex, duration, mana, componentsX, componentscountX, addspellclass, clearspellclass,ignoresummonitemtemporarycheck");
 		}
 		
 		this.setLastUpdatedTimeNow();
@@ -4367,7 +4371,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 								return new Tuple<Boolean,String>(false,"Item was null");
 							}
 	
-							if (!item.isTemporary()) {
+							if (!item.isTemporary() && !soliniaSpell.isIgnoreSummonItemTemporaryCheck()) {
 								return new Tuple<Boolean,String>(false,"Item wasnt temporary");
 							}
 	
@@ -6077,5 +6081,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public boolean isRoot() {
 		return isEffectInSpell(SpellEffectType.Root);
+	}
+
+	@Override
+	public boolean isIgnoreSummonItemTemporaryCheck() {
+		return ignoreSummonItemTemporaryCheck;
+	}
+
+	@Override
+	public void setIgnoreSummonItemTemporaryCheck(boolean ignoreSummonItemTemporaryCheck) {
+		this.ignoreSummonItemTemporaryCheck = ignoreSummonItemTemporaryCheck;
 	}
 }

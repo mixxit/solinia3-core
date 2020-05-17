@@ -144,7 +144,7 @@ public class SoliniaWorld {
 				+ ")" + ChatColor.RESET);
 		} else {
 			sender.sendMessage(
-					"- playerstartloottableid: " + ChatColor.GOLD + getInspirationLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+					"- inspirationloottableid: " + ChatColor.GOLD + getInspirationLootTableId() + " (No Loot Table)" + ChatColor.RESET);
 		}
 	}
 
