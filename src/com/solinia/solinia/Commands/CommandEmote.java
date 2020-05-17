@@ -49,7 +49,6 @@ public class CommandEmote implements CommandExecutor
 	            message = message.replaceAll("(?i)fuck", "shelderhoof");
 	    		message = message.replaceAll("(?i)shit", "qaraf");
 	            
-	    		
 	    		solplayer.emote(solplayer.getFullName() + " " + message, true);
             } catch (CoreStateInitException e)
             {

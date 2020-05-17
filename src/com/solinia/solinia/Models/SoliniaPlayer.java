@@ -131,6 +131,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int memorisedSpellSlot6 = 0;
 	private int memorisedSpellSlot7 = 0;
 	private int memorisedSpellSlot8 = 0;
+	private String backStory = "";
 	
 	private SkillType languageSkillType = SkillType.UnknownTongue;
 
@@ -995,6 +996,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ChatColor.AQUA + "* " + string, 
 				getBukkitPlayer().getInventory().getItemInMainHand());
 
+		if (isManual)
+		System.out.println("PLAYEREMOTE|"+string);
+
+		
 		if (isManual && numberReached < 1)
 			getBukkitPlayer().sendMessage("You feel like nobody could see you");
 	}
@@ -2226,11 +2231,27 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 			if (targetmob != null && player != null && spell != null)
 			{
-				Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(targetmob, player, spell);
-				if (!result.a())
+				// dont check these ones this early
+				if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETarget)
+						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETargetHateList
+								)
+						)
 				{
-					Utils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
-					return;
+					// dont check
+				} else {
+					Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(targetmob, player, spell);
+					if (!result.a())
+					{
+						Utils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
+						return;
+					}
+					
 				}
 			}
 		} catch (CoreStateInitException e) {
@@ -6064,6 +6085,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		setVampire(false);
 		updateMaxHp();
+	}
+
+	@Override
+	public String getBackStory() {
+		return backStory;
+	}
+
+	@Override
+	public void setBackStory(String backStory) {
+		this.backStory = backStory;
 	}
 
 }

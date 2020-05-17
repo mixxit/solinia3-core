@@ -661,4 +661,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	boolean isPassiveEnabled();
 	void setPassiveEnabled(boolean passiveEnabled);
 	public void cureVampirism();
+	String getBackStory();
+	void setBackStory(String backStory);
 }

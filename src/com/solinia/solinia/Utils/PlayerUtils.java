@@ -393,7 +393,9 @@ public class PlayerUtils {
 		
 		if (solplayer.getGodId() > 0)
 			worship = "I worship: " + solplayer.getGod().getName() + System.lineSeparator();
-		
+		String backstory = "My back story is a mystery" + System.lineSeparator();
+		if (solplayer.getBackStory() != null && !solplayer.getBackStory().equals(""))
+		backstory = "Backstory:" + solplayer.getBackStory() + System.lineSeparator();
 		if (solplayer.getPersonality().getIdealId() > 0)
 		ideal = "Ideal:" + solplayer.getPersonality().getIdeal().description + System.lineSeparator();
 		if (solplayer.getPersonality().getFirstTraitId() > 0)
@@ -422,6 +424,7 @@ public class PlayerUtils {
 		
 		String details = 
 				ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + System.lineSeparator() + 
+				backstory +
 				inspiration + 
 		worship + 
 		ideal +

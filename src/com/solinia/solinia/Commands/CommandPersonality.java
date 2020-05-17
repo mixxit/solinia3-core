@@ -65,6 +65,24 @@ public class CommandPersonality implements CommandExecutor {
 					sendTraitChoices(sender);
 				else
 					setTraitChoice(sender,Integer.parseInt(args[1]));
+			case "backstory":
+				if (args.length == 1)
+				{
+					sendBackstory(sender);
+				}
+				else
+				{
+					String response = "";
+					int counter = 0;
+					for (String entry : args) {
+						counter++;
+						if (counter < 2)
+							continue;
+
+						response += entry + " ";
+					}
+					setBackstory(sender,response);
+				}
 			break;
 			default:
 				sendCurrentPersonality(sender);
@@ -72,6 +90,30 @@ public class CommandPersonality implements CommandExecutor {
 		}
 		
 		return true;
+	}
+	
+	private void sendBackstory(CommandSender sender) {
+		try {
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+			sender.sendMessage("Character Backstory:");
+			sender.sendMessage(solPlayer.getBackStory());
+			return;
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	private void setBackstory(CommandSender sender, String backstory) {
+		try {
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+			solPlayer.setBackStory(backstory);
+			sender.sendMessage("Character Backstory set");
+			return;
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	private void awardCustomTrait(CommandSender sender, String[] args) {
@@ -310,6 +352,14 @@ public class CommandPersonality implements CommandExecutor {
 			for(String customTrait : solPlayer.getPersonality().getCustomPersonalityTraits())
 			{
 				sender.sendMessage("- " + customTrait);
+			}
+			
+			sender.sendMessage(ChatColor.GOLD + "BACKSTORY:" + ChatColor.RESET);
+			if (solPlayer.getBackStory() != null && !solPlayer.getBackStory().equals(""))
+			{
+				sender.sendMessage("- " + solPlayer.getBackStory());
+			} else {
+				sender.sendMessage("- You have no backstory set - set with /personality backstory <backstory>");
 			}
 			
 		} catch (CoreStateInitException e) {

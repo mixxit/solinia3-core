@@ -3332,6 +3332,43 @@ public class SoliniaSpell implements ISoliniaSpell {
 				for (Entity e : targetentity.getNearbyEntities(10, 10, 10)) {
 					if (!(e instanceof LivingEntity))
 						continue;
+					
+					if (this.isDetrimental())
+					{
+						// skip ourselves and
+						if (e.getUniqueId().equals(sourceEntity.getUniqueId()))
+							continue;
+						
+						if (e instanceof Player)
+						{
+							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)e);
+							if (solPlayer == null)
+								continue;
+							
+							// Skip groupies
+							if (solPlayer.isInGroup(sourceEntity))
+								continue;
+						}
+						
+						// skip pets of groupies
+						if (e instanceof LivingEntity)
+						{
+							ISoliniaLivingEntity solLivingEntityPet = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+							if (solLivingEntityPet != null && solLivingEntityPet.isCurrentlyNPCPet())
+							{
+								if (solLivingEntityPet.getOwnerEntity() != null)
+								{
+									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)solLivingEntityPet.getOwnerEntity());
+									if (solPlayer == null)
+										continue;
+									
+									// Skip groupies
+									if (solPlayer.isInGroup(sourceEntity))
+										continue;
+								}
+							}
+						}
+					} 
 
 					boolean loopSuccess2 = StateManager.getInstance().getEntityManager()
 							.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages, requiredWeaponSkillType);
@@ -3451,7 +3488,44 @@ public class SoliniaSpell implements ISoliniaSpell {
 				for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10)) {
 					if (!(e instanceof LivingEntity))
 						continue;
-
+					
+					if (this.isDetrimental())
+					{
+						// skip ourselves and
+						if (e.getUniqueId().equals(sourceEntity.getUniqueId()))
+							continue;
+						
+						if (e instanceof Player)
+						{
+							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)e);
+							if (solPlayer == null)
+								continue;
+							
+							// Skip groupies
+							if (solPlayer.isInGroup(sourceEntity))
+								continue;
+						}
+						
+						// skip pets of groupies
+						if (e instanceof LivingEntity)
+						{
+							ISoliniaLivingEntity solLivingEntityPet = SoliniaLivingEntityAdapter.Adapt((LivingEntity)e);
+							if (solLivingEntityPet != null && solLivingEntityPet.isCurrentlyNPCPet())
+							{
+								if (solLivingEntityPet.getOwnerEntity() != null)
+								{
+									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)solLivingEntityPet.getOwnerEntity());
+									if (solPlayer == null)
+										continue;
+									
+									// Skip groupies
+									if (solPlayer.isInGroup(sourceEntity))
+										continue;
+								}
+							}
+						}
+					} 
+					
 					boolean loopSuccess4 = StateManager.getInstance().getEntityManager()
 							.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages, requiredWeaponSkillType);
 					if (loopSuccess4 == true)
@@ -4256,6 +4330,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 			throws CoreStateInitException {
 		try
 		{
+			Bukkit.broadcastMessage(soliniaSpell.getName() + " " + " target type: " + soliniaSpell.getSpellTargetType().name() + " " + target.getName());
+
 			if (source == null) {
 				System.out.println("Source was null for isValidEffectForEntity: " + soliniaSpell.getName() + " on target: "
 						+ target.getCustomName());
