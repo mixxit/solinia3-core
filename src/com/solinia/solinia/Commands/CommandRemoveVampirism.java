@@ -42,17 +42,7 @@ public class CommandRemoveVampirism implements CommandExecutor {
 	    		found = true;
 	    		if (found)
 	            {
-	    			if (solplayer.getRace() != null && solplayer.getRace().isVampire())
-	    			{
-		    			sender.sendMessage("Cannot remove vampirism from a character who has a vampiric race");
-	    				return true;
-	    			}
-	    			
-	    			solplayer.setVampire(false);
-	    			sender.sendMessage("* Player "+name+" vampirism removed");
-	            	
-	    			solplayer.updateMaxHp();
-	    			
+	    			solplayer.cureVampirism();
 	            	return true;
 	            } else {
 	            	sender.sendMessage("Removevampirism failed. Is that a valid online mcaccount?");

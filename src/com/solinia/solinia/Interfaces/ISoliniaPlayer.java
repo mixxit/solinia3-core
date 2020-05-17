@@ -660,4 +660,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	void setLastChatNow();
 	boolean isPassiveEnabled();
 	void setPassiveEnabled(boolean passiveEnabled);
+	public void cureVampirism();
 }

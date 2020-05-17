@@ -836,6 +836,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		return false;
 	}
+	
+	@Override
+	public void cureVampirism() {
+		if (!this.isPlayer())
+			return;
+		
+		try
+		{
+			if (getBukkitLivingEntity() != null)
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
+				if (solPlayer != null)
+					solPlayer.cureVampirism();
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
 
 	@Override
 	public void tryWeaponProc(ItemStack weaponItemStack, ISoliniaLivingEntity on, int hand) {

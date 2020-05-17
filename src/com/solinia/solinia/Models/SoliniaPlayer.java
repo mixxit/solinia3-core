@@ -6050,4 +6050,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.passiveEnabled = passiveEnabled;
 	}
 
+	@Override
+	public void cureVampirism() {
+		if (getRace() != null && getRace().isVampire())
+		{
+			if (this.getBukkitPlayer() != null)
+			this.getBukkitPlayer().sendMessage("Your vampirism cannot be removed due to your current race [Speak to an Admin]");
+			return;
+		}
+		
+		if (this.getBukkitPlayer() != null)
+			this.getBukkitPlayer().sendMessage("You no longer feel the need to feed on mortals");
+		
+		setVampire(false);
+		updateMaxHp();
+	}
+
 }

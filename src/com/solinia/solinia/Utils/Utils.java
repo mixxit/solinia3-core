@@ -1697,6 +1697,8 @@ public class Utils {
 			return 491;
 		case Frenzy:
 			return 492;
+		case CureVampirism:
+			return 493;
 		default:
 			return -1;
 		}
@@ -2690,6 +2692,8 @@ public class Utils {
 			return SpellEffectType.Picklock;
 		case 492:
 			return SpellEffectType.Frenzy;
+		case 493:
+			return SpellEffectType.CureVampirism;
 		default:
 			return SpellEffectType.ERROR;
 		}

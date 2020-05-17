@@ -2784,16 +2784,16 @@ public class SoliniaSpell implements ISoliniaSpell {
 				+ ChatColor.RESET + " componentcounts4: " + this.getComponentCounts4() + "NoExpend:("
 				+ getNoexpendReagent4() + ")");
 
-		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
+		sender.sendMessage(ChatColor.RED + "Allowed Classes for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		for (SoliniaSpellClass spellclass : this.getAllowedClasses()) {
 			sender.sendMessage("- " + spellclass.getClassname() + " " + spellclass.getMinlevel());
 		}
-		
+		sender.sendMessage(ChatColor.RED + "Effects for " + ChatColor.GOLD + getName() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		for (SpellEffect effect : this.getBaseSpellEffects()) {
-			sender.sendMessage("- [" + effect.getSpellEffectNo() + "] " + "ID: " + effect.getSpellEffectType().name() + ": BASE: "
-					+ ChatColor.GOLD + effect.getBase() + " FORMULA: " + ChatColor.GOLD + effect.getFormula() + " Max: "
+			sender.sendMessage("- [" + effect.getSpellEffectNo() + "] " + "ID: " + effect.getSpellEffectType().name() + "["+effect.getSpellEffectId()+"]: BASE1/2: "
+					+ ChatColor.GOLD + effect.getBase() + "/" + effect.getBase2() + " FORMULA: " + ChatColor.GOLD + effect.getFormula() + " Max: "
 					+ effect.getMax() + ChatColor.RESET);
 		}
 	}

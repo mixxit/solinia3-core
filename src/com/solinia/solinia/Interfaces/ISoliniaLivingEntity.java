@@ -512,4 +512,6 @@ public interface ISoliniaLivingEntity  {
 
 	public boolean isPassiveEnabled();
 
+	public void cureVampirism();
+
 }
