@@ -2319,7 +2319,7 @@ public class SoliniaActiveSpell {
 			if (item == null)
 				return;
 
-			if (!item.isTemporary())
+			if (!item.isTemporary() && !soliniaSpell.isIgnoreSummonItemTemporaryCheck())
 				return;
 
 			Entity ownerEntity = Bukkit.getEntity(this.getOwnerUuid());
@@ -2344,7 +2344,7 @@ public class SoliniaActiveSpell {
 						if (subItem == null)
 							continue;
 
-						if (!subItem.isTemporary())
+						if (!subItem.isTemporary() && !soliniaSpell.isIgnoreSummonItemTemporaryCheck())
 							continue;
 
 						PlayerUtils.addToPlayersInventory((Player) ownerEntity, subItem.asItemStack());
