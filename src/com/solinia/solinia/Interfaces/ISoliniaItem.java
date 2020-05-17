@@ -430,4 +430,8 @@ public interface ISoliniaItem extends IPersistable {
 	void setConsumableRequireInZone(int consumableRequireInZone);
 
 	void setDistiller(boolean distiller);
+
+	int getInspirationWorth();
+
+	void setInspirationWorth(int inspirationWorth);
 }

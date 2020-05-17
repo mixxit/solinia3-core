@@ -465,6 +465,11 @@ public class ItemStackAdapter {
 		{
 			loretxt.add("Worth: " + (soliniaItem.getWorth() * costmultiplier));
 		}
+
+		if ((soliniaItem.getWorth() * costmultiplier) > 0)
+		{
+			loretxt.add("Inspiration Worth: " + (soliniaItem.getInspirationWorth()));
+		}
 		
 		if (soliniaItem.isTemporary())
 		{

@@ -109,6 +109,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private int weaponDelay = 30;
 	private int leatherRgbDecimal = -1;
 	private String requiredWeaponSkillType = "";
+	private int inspirationWorth = 0;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -1983,5 +1984,15 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setDistiller(boolean distiller) {
 		this.distiller = distiller;
+	}
+
+	@Override
+	public int getInspirationWorth() {
+		return inspirationWorth;
+	}
+
+	@Override
+	public void setInspirationWorth(int inspirationWorth) {
+		this.inspirationWorth = inspirationWorth;
 	}
 }

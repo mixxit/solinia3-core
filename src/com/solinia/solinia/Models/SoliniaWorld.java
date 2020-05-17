@@ -28,6 +28,7 @@ public class SoliniaWorld {
 	private int foragingLootTableId = 0;
 	private int playerStartLootTableId = 0;
 	private int globalLootTableId = 0;
+	private int inspirationLootTableId = 0;
 	private int whisperchatrange = 5;
 	private int localchatrange = 32;
 	private int shoutchatrange = 64;
@@ -91,7 +92,6 @@ public class SoliniaWorld {
 		sender.sendMessage("- fishingminskill: " + ChatColor.GOLD + getFishingMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- miningminskill: " + ChatColor.GOLD + getMiningMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- foragingminskill: " + ChatColor.GOLD + getForagingMinSkill() + ChatColor.RESET);
-		
 		if (getForagingLootTableId() != 0) {
 			sender.sendMessage("- foragingloottableid: " + ChatColor.GOLD + getForagingLootTableId() + " ("
 					+ StateManager.getInstance().getConfigurationManager().getLootTable(getForagingLootTableId()).getName()
@@ -136,6 +136,15 @@ public class SoliniaWorld {
 		} else {
 			sender.sendMessage(
 					"- playerstartloottableid: " + ChatColor.GOLD + getPlayerStartLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
+		if (getInspirationLootTableId() > 0)
+		{
+		sender.sendMessage("- inspirationloottableid: " + ChatColor.GOLD + getInspirationLootTableId() + " ("
+				+ StateManager.getInstance().getConfigurationManager().getLootTable(getInspirationLootTableId()).getName()
+				+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- playerstartloottableid: " + ChatColor.GOLD + getInspirationLootTableId() + " (No Loot Table)" + ChatColor.RESET);
 		}
 	}
 
@@ -242,9 +251,22 @@ public class SoliniaWorld {
 				throw new InvalidWorldSettingException("Loottable ID does not exist");
 			setPlayerStartLootTableId(Integer.parseInt(value));
 			break;
+		case "inspirationloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setPlayerStartLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable6 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable6 == null)
+				throw new InvalidWorldSettingException("Loottable ID does not exist");
+			setInspirationLootTableId(Integer.parseInt(value));
+			break;
 		default:
 			throw new InvalidWorldSettingException(
-					"Invalid setting. Valid Options are: forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill,playerstartloottableid");
+					"Invalid setting. Valid Options are: forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill,playerstartloottableid,inspirationloottableid");
 		}
 	}
 	
@@ -360,5 +382,13 @@ public class SoliniaWorld {
 
 	public void setShoutchatrange(int shoutchatrange) {
 		this.shoutchatrange = shoutchatrange;
+	}
+
+	public int getInspirationLootTableId() {
+		return inspirationLootTableId;
+	}
+
+	public void setInspirationLootTableId(int inspirationLootTableId) {
+		this.inspirationLootTableId = inspirationLootTableId;
 	}
 }

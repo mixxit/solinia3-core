@@ -6,11 +6,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.comphenix.protocol.PacketType.Sender;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
+import com.solinia.solinia.Interfaces.ISoliniaLootDropEntry;
+import com.solinia.solinia.Interfaces.ISoliniaLootTable;
+import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaWorld;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -23,31 +30,9 @@ public class CommandInspiration implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		try {
-			
 			if (args.length == 0)
 			{
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Inspiration Shop");
-				sender.sendMessage("-----------------");
-				if (sender instanceof Player)
-				{
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-					if (solPlayer.getActualLevel() >= 50)
-					sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1 AA Point " + ChatColor.RESET + " - Cost: 5 inspiration : /inspiration buy aa");
-				}
-				
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Head) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manahead");
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Chest) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manachest");
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Legs) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manalegs");
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy Mana Regen Aug (Feet) " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy manafeet");
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "Buy 1x 100% Experience Potion " + ChatColor.RESET + " - Cost: 2 inspiration : /inspiration buy xpbottle");
-				sender.sendMessage("-----------------");
-				sender.sendMessage("Sub Commands: " + ChatColor.LIGHT_PURPLE + "sites, buy, send");
-				
-				if (sender instanceof Player)
-				{
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-					sender.sendMessage("Points Available: " + ChatColor.LIGHT_PURPLE + solPlayer.getInspiration());
-				}
+				sendInspirationShopList(sender);
 				return true;
 			}
 			
@@ -56,7 +41,7 @@ public class CommandInspiration implements CommandExecutor {
 				case "buy":
 					if (args.length > 1)
 					{
-						int cost = 0;
+						//int cost = 0;
 						
 						switch(args[1].toLowerCase())
 						{
@@ -69,7 +54,7 @@ public class CommandInspiration implements CommandExecutor {
 										sender.sendMessage("Only players level 50 and above can have AA points any lower and it would be useless");
 										return true;
 									} else {
-										cost = 5;
+										int cost = 5;
 										if (solPlayer.getInspiration() >= cost)
 										{
 											solPlayer.setInspiration(solPlayer.getInspiration() - cost);
@@ -87,98 +72,28 @@ public class CommandInspiration implements CommandExecutor {
 
 								}
 								
-							case "manahead":
+							case "item":
 								if (sender instanceof Player)
 								{
-									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-									cost = 2;
-									if (solPlayer.getInspiration() >= cost)
+									int id = Integer.parseInt(args[1].toLowerCase());
+									ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(id);
+									if (i == null)
 									{
-										solPlayer.setInspiration(solPlayer.getInspiration() - cost);
-										ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18019);
-										PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());										sender.sendMessage("You have purchased an item!");
-										return true;
-									} else {
-										sender.sendMessage("You require more inspiration points to purchase this");
+										sender.sendMessage("This item is no longer available");
 										return true;
 									}
-								} else {
-									sender.sendMessage("This is a player only subcommand");
-									return true;
-
-								}
-							case "manachest":
-								if (sender instanceof Player)
-								{
-									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-								cost = 2;
-								if (solPlayer.getInspiration() >= cost)
-								{
-									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
-									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18020);
-									PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());									sender.sendMessage("You have purchased an item!");
-									return true;
-								} else {
-									sender.sendMessage("You require more inspiration points to purchase this");
-									return true;
-								}
-								} else {
-									sender.sendMessage("This is a player only subcommand");
-									return true;
-
-								}
-							case "manalegs":
-								if (sender instanceof Player)
-								{
-									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-								cost = 2;
-								if (solPlayer.getInspiration() >= cost)
-								{
-									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
-									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18021);
-									PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());
-									sender.sendMessage("You have purchased an item!");
-									return true;
-								} else {
-									sender.sendMessage("You require more inspiration points to purchase this");
-									return true;
-								}
-								} else {
-									sender.sendMessage("This is a player only subcommand");
-									return true;
-
-								}
-							case "manafeet":
-								if (sender instanceof Player)
-								{
-									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-								cost = 2;
-								if (solPlayer.getInspiration() >= cost)
-								{
-									solPlayer.setInspiration(solPlayer.getInspiration() - cost);
-									ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18022);
-									PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());
-									sender.sendMessage("You have purchased an item!");
-									return true;
-								} else {
-									sender.sendMessage("You require more inspiration points to purchase this");
-									return true;
-								}
-								} else {
-									sender.sendMessage("This is a player only subcommand");
-									return true;
-
-								}
-							case "xpbottle":
-								if (sender instanceof Player)
-								{
-									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
-									cost = 2;
-									if (solPlayer.getInspiration() >= cost)
+									if (i.getInspirationWorth() < 1)
 									{
-										solPlayer.setInspiration(solPlayer.getInspiration() - cost);
-										ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(18024);
-										PlayerUtils.addToPlayersInventory((Player)sender, item.asItemStack());
+										sender.sendMessage("This item is no longer available for purchase");
+										return true;
+									}
+
+									ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+									
+									if (solPlayer.getInspiration() >= i.getInspirationWorth())
+									{
+										solPlayer.setInspiration(solPlayer.getInspiration() - i.getInspirationWorth());
+										PlayerUtils.addToPlayersInventory((Player)sender, i.asItemStack());
 										sender.sendMessage("You have purchased an item!");
 										return true;
 									} else {
@@ -190,8 +105,6 @@ public class CommandInspiration implements CommandExecutor {
 									return true;
 
 								}
-								
-								
 							default:
 								sender.sendMessage("This is not a known shop item to buy. See /inspiration for valid commands");
 								return true;
@@ -287,5 +200,82 @@ public class CommandInspiration implements CommandExecutor {
 			sender.sendMessage(e.getMessage());
 			return true;
 		}
+	}
+
+	private void sendInspirationShopList(CommandSender sender) {
+		sender.sendMessage(ChatColor.LIGHT_PURPLE + "Inspiration Shop");
+		sender.sendMessage("-----------------");
+		
+		String world = "world";
+		try
+		{
+			if (sender instanceof Player)
+			{
+				world = ((Player)sender).getWorld().getName();
+				
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+				if (solPlayer.getActualLevel() >= 50)
+					SendInspirationBuyAALine((Player)sender);
+			}
+			
+			SoliniaWorld solWorld = StateManager.getInstance().getConfigurationManager().getWorld(world);
+			if (solWorld != null)
+			{
+			ISoliniaLootTable loottable = StateManager.getInstance().getConfigurationManager()
+					.getLootTable(solWorld.getInspirationLootTableId());
+			if (loottable != null)
+			for (ISoliniaLootTableEntry le : StateManager.getInstance().getConfigurationManager()
+					.getLootTable(loottable.getId()).getEntries()) {
+				ISoliniaLootDrop ld = StateManager.getInstance().getConfigurationManager()
+						.getLootDrop(le.getLootdropid());
+				for(ISoliniaLootDropEntry lde : ld.getEntries())
+				{
+					ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(lde.getItemid());
+					if (i != null && i.getInspirationWorth() > 0)
+						SendInspirationBuyLine(sender,i);
+				}
+				
+				}
+			
+			
+			}
+			sender.sendMessage("-----------------");
+			sender.sendMessage("Sub Commands: " + ChatColor.LIGHT_PURPLE + "sites, buy, send");
+			
+			if (sender instanceof Player)
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+				sender.sendMessage("Points Available: " + ChatColor.LIGHT_PURPLE + solPlayer.getInspiration());
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	private void SendInspirationBuyAALine(Player sender) {
+		TextComponent tc = new TextComponent();
+		tc.setText(ChatColor.LIGHT_PURPLE + "Buy 1 AA Point " + ChatColor.RESET + " - Cost: 5 inspiration");
+		
+		TextComponent tc2 = new TextComponent();
+		tc2.setText(ChatColor.AQUA + "[Click to Buy]" + ChatColor.RESET);
+		String changetext = "/inspiration buy aa";
+		tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
+
+		tc.addExtra(tc2);
+		sender.spigot().sendMessage(tc);
+	}
+
+	private void SendInspirationBuyLine(CommandSender sender, ISoliniaItem item) {
+		TextComponent tc = new TextComponent();
+		tc.setText(ChatColor.LIGHT_PURPLE + "Buy " + item.getDisplayname() + ChatColor.RESET + " - Cost: "+item.getInspirationWorth());
+		
+		TextComponent tc2 = new TextComponent();
+		tc2.setText(ChatColor.AQUA + "[Click to Buy]" + ChatColor.RESET);
+		String changetext = "/inspiration buy item " + item.getId();
+		tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, changetext));	
+		tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(ItemStackUtils.ConvertItemStackToJsonRegular(item.asItemStack())).create()));
+		tc.addExtra(tc2);
+		sender.spigot().sendMessage(tc);
 	}
 }
