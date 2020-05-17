@@ -809,6 +809,9 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		case "worth":
 			setWorth(Integer.parseInt(value));
 			break;
+		case "inspirationworth":
+			setInspirationWorth(Integer.parseInt(value));
+			break;
 		case "texturebase64fromitem":
 			int itemid = Integer.parseInt(value);
 			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemid);
