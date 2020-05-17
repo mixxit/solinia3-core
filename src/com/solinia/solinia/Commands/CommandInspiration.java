@@ -75,7 +75,7 @@ public class CommandInspiration implements CommandExecutor {
 							case "item":
 								if (sender instanceof Player)
 								{
-									int id = Integer.parseInt(args[1].toLowerCase());
+									int id = Integer.parseInt(args[2].toLowerCase());
 									ISoliniaItem i = StateManager.getInstance().getConfigurationManager().getItem(id);
 									if (i == null)
 									{
