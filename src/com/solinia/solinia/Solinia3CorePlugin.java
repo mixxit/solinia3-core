@@ -416,7 +416,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			npcspelllistrepo.reload();
 
 			JsonAccountClaimRepository accountclaimsrepo = new JsonAccountClaimRepository();
-			accountclaimsrepo.setJsonFile(getDataFolder() + "/" + "accountclaimrepo.json");
+			accountclaimsrepo.setJsonFile(getDataFolder() + "/" + "accountclaims");
 			accountclaimsrepo.reload();
 
 			JsonZoneRepository zonesrepo = new JsonZoneRepository();

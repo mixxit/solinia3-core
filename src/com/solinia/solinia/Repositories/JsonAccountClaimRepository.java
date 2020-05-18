@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,11 +19,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Interfaces.IRepository;
+import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Models.SoliniaItem;
 
 public class JsonAccountClaimRepository implements IRepository<SoliniaAccountClaim> {
 	private String filePath;
 	private ConcurrentHashMap<Integer, SoliniaAccountClaim> AccountClaims = new ConcurrentHashMap<Integer, SoliniaAccountClaim>();
+	private Timestamp lastCommitedTimestamp = Timestamp.valueOf(LocalDateTime.now());
 
 	@Override
 	public void add(SoliniaAccountClaim item) {
@@ -61,18 +66,29 @@ public class JsonAccountClaimRepository implements IRepository<SoliniaAccountCla
 
 	@Override
 	public void reload() {
-		List<SoliniaAccountClaim> file = new ArrayList<SoliniaAccountClaim>();
+		List<SoliniaAccountClaim> readItems = new ArrayList<SoliniaAccountClaim>();
 		
-		try {
-			Gson gson = new Gson();
-			BufferedReader br = new BufferedReader(new FileReader(filePath));
-			file = gson.fromJson(br, new TypeToken<List<SoliniaAccountClaim>>(){}.getType());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		Gson gson = new Gson();
+
+		File folder = new File(filePath);
+		File[] listOfFiles = folder.listFiles();
+		
+		for (File file : listOfFiles) {
+			try
+			{
+			    if (file.isFile() && file.getName().endsWith(".json")) {
+			        BufferedReader br = new BufferedReader(new FileReader(filePath+"/"+file.getName()));
+					readItems.add(gson.fromJson(br, new TypeToken<SoliniaAccountClaim>(){}.getType()));
+					br.close();
+			    }
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		AccountClaims.clear();
-		for(SoliniaAccountClaim i : file)
+		for(SoliniaAccountClaim i : readItems)
 		{
 			AccountClaims.put(i.getId(), i);
 		}
@@ -82,31 +98,44 @@ public class JsonAccountClaimRepository implements IRepository<SoliniaAccountCla
 	
 	@Override
 	public void commit() {
+		// uses new method of storing each file seperately, reducing cost of saving item
+		// data
+		// to each file only
+		// jq -cr '.[] | .id, .' items.json | awk 'NR%2{f=$0".json";next} {print
+		// >f;close(f)}'
+
 		// TODO Auto-generated method stub
 		GsonBuilder gsonbuilder = new GsonBuilder();
-		//gsonbuilder.setPrettyPrinting();
+		// gsonbuilder.setPrettyPrinting();
 		Gson gson = gsonbuilder.create();
-		String jsonOutput = gson.toJson(AccountClaims.values(), new TypeToken<List<SoliniaAccountClaim>>(){}.getType());
-		try {
-			
-			File file = new File(filePath);
-			if (!file.exists())
-				file.createNewFile();
-	        
-			FileOutputStream fileOut = new FileOutputStream(file);
-			OutputStreamWriter outWriter = new OutputStreamWriter(fileOut);
-	        outWriter.append(jsonOutput);
-	        outWriter.close();
-	        fileOut.close();
-	        
-	        System.out.println("Commited " + AccountClaims.size() + " AccountClaims");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		int commitCount = 0;
+		for (Integer itemId : AccountClaims.keySet()) {
+
+			if (AccountClaims.get(itemId).getLastUpdatedTime() == null
+					|| AccountClaims.get(itemId).getLastUpdatedTime().after(this.lastCommitedTimestamp)) {
+				try {
+					String jsonOutput = gson.toJson(AccountClaims.get(itemId), new TypeToken<SoliniaAccountClaim>() {
+					}.getType());
+					File file = new File(filePath + "/" + itemId + ".json");
+					if (!file.exists())
+						file.createNewFile();
+
+					FileOutputStream fileOut = new FileOutputStream(file);
+					OutputStreamWriter outWriter = new OutputStreamWriter(fileOut);
+					outWriter.append(jsonOutput);
+					outWriter.close();
+					fileOut.close();
+					commitCount++;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
+
+		System.out.println("Commited " + commitCount + " changed items out of " + AccountClaims.size());
+
+		this.lastCommitedTimestamp = Timestamp.valueOf(LocalDateTime.now());
 	}
 
 	public void setJsonFile(String filePath) {
