@@ -27,7 +27,9 @@ public class CommandWho implements CommandExecutor {
 		if (args.length > 0)
 			filter = args[0];
 		
-		Player player = (Player) sender;
+		Player ply = null;
+		if (sender instanceof Player)
+			ply = (Player) sender;
         
         sender.sendMessage("Current Online Players:");
         sender.sendMessage("---------------------------------");
@@ -44,10 +46,12 @@ public class CommandWho implements CommandExecutor {
         		continue;
         	}
         	
-        	if (!player.canSee(currentplayer))
+        	if (ply != null)
+        	if (!ply.canSee(currentplayer))
         		hidden = "[HIDDEN]";
         	
-        	if (!player.canSee(currentplayer) && !sender.isOp())
+        	if (ply != null)
+        	if (!ply.canSee(currentplayer) && !sender.isOp())
         	{
         		continue;
         	}
@@ -67,7 +71,7 @@ public class CommandWho implements CommandExecutor {
 				if (solZone != null)
 					zone = solZone.getName();
 	        	
-	        	Tuple<String,TextComponent> characterText = PlayerUtils.GetCharacterText(solPlayer, hidden, currentplayer.getName(), player.getWorld().getName(), zone);
+	        	Tuple<String,TextComponent> characterText = PlayerUtils.GetCharacterText(solPlayer, hidden, currentplayer.getName(), currentplayer.getWorld().getName(), zone);
 	        	if (sender instanceof Player)
 	        	{
 	        		sender.spigot().sendMessage(characterText.b());
@@ -82,26 +86,28 @@ public class CommandWho implements CommandExecutor {
         
         try
         {
-	        ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+        	if (ply != null)
+        	{
+	        ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(ply);
 			if (solPlayer.getPersonality().getBondId() == 0 || 
 					solPlayer.getPersonality().getFirstTraitId() == 0 ||
 					solPlayer.getPersonality().getSecondTraitId() == 0 ||
 					solPlayer.getPersonality().getFlawId() == 0 ||
 					solPlayer.getPersonality().getIdealId() == 0
 					)
-			{
-				player.sendMessage(ChatColor.GRAY + "* You have not set your personality. Please see /personality" + ChatColor.RESET);
-			}
-			
-			if (solPlayer.getClassObj() != null && solPlayer.getClassObj().getOaths().size() > 0 && solPlayer.getOathId() == 0)
-			{
-				player.sendMessage(ChatColor.GRAY + "* You have not set your Oath. Please see /oath" + ChatColor.RESET);
-			}
-			
-			if (solPlayer.getBackStory() == null && solPlayer.getBackStory().equals(""))
-			{
-				sender.sendMessage("- You have no backstory set - set with /personality backstory <backstory>");
-			}
+				{
+					ply.sendMessage(ChatColor.GRAY + "* You have not set your personality. Please see /personality" + ChatColor.RESET);
+				}
+				if (solPlayer.getClassObj() != null && solPlayer.getClassObj().getOaths().size() > 0 && solPlayer.getOathId() == 0)
+				{
+					ply.sendMessage(ChatColor.GRAY + "* You have not set your Oath. Please see /oath" + ChatColor.RESET);
+				}
+				
+				if (solPlayer.getBackStory() == null && solPlayer.getBackStory().equals(""))
+				{
+					ply.sendMessage("- You have no backstory set - set with /personality backstory <backstory>");
+				}
+        	}
         } catch (CoreStateInitException e)
         {
         	
