@@ -2,6 +2,9 @@ package com.solinia.solinia.Managers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +70,7 @@ import com.solinia.solinia.Models.CharacterCreation;
 import com.solinia.solinia.Models.ConfigSettings;
 import com.solinia.solinia.Models.Fellowship;
 import com.solinia.solinia.Models.Flaw;
+import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.Oath;
@@ -96,7 +100,7 @@ import com.solinia.solinia.Repositories.JsonGodRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-
+import com.solinia.solinia.Utils.Utils;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
@@ -211,43 +215,72 @@ public class ConfigurationManager implements IConfigurationManager {
 	
 	@Override
 	public void commit() {
-		this.raceRepository.commit();
-		this.classRepository.commit();
+		long timeToComplete = TimedCommit(this.raceRepository);
+		System.out.println("Races Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.classRepository);
+		System.out.println("Classes Save: " + timeToComplete);
 		
 		if (isItemsChanged() == true)
 		{
-			this.itemRepository.commit();
+			timeToComplete = TimedCommit(this.itemRepository);
+			System.out.println("Items Save: " + timeToComplete);
 			this.itemsChanged = false;
 		}
-		this.factionRepository.commit();
-		this.npcRepository.commit();
-		this.npcmerchantRepository.commit();
-		this.loottableRepository.commit();
-		this.lootdropRepository.commit();
+		timeToComplete = TimedCommit(this.factionRepository);
+		System.out.println("Factions Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.npcRepository);
+		System.out.println("NPCs Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.npcmerchantRepository);
+		System.out.println("NPCMerchants Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.loottableRepository);
+		System.out.println("LootTables Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.lootdropRepository);
+		System.out.println("LootDrops Save: " + timeToComplete);
 		
 		// Only commit on change
 		if (isSpellsChanged() == true)
 		{
-			this.spellRepository.commit();
+			timeToComplete = TimedCommit(this.spellRepository);
+			System.out.println("Spells Save: " + timeToComplete);
 			this.spellsChanged = false;
 		}
 		
-		this.spawngroupRepository.commit();
-		this.aaabilitiesRepository.commit();
-		this.questRepository.commit();
-		this.alignmentsRepository.commit();
+		timeToComplete = TimedCommit(this.spawngroupRepository);
+		System.out.println("SpawnGroups Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.aaabilitiesRepository);
+		System.out.println("AAAbilities Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.questRepository);
+		System.out.println("Quests Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.alignmentsRepository);
+		System.out.println("Alignments Save: " + timeToComplete);
 		
-		this.characterlistsRepository.commit();
-		this.npcspelllistsRepository.commit();
-		this.accountClaimsRepository.commit();
-		this.zonesRepository.commit();
-		this.craftRepository.commit();
-		this.worldRepository.commit();
-		this.godsRepository.commit();
-		this.fellowshipRepository.commit();
-		this.playerStateRepository.commit();
+		timeToComplete = TimedCommit(this.characterlistsRepository);
+		System.out.println("CharacterLists Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.npcspelllistsRepository);
+		System.out.println("NPCSpellLists Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.accountClaimsRepository);
+		System.out.println("AccountClaims Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.zonesRepository);
+		System.out.println("Zones Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.craftRepository);
+		System.out.println("Crafts Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.worldRepository);
+		System.out.println("Worlds Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.godsRepository);
+		System.out.println("Gods Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.fellowshipRepository);
+		System.out.println("Fellowship Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.playerStateRepository);
+		System.out.println("PlayerState Save: " + timeToComplete);
 	}
 	
+	private <T> long TimedCommit(IRepository<T> repository) {
+		LocalDateTime datetime = LocalDateTime.now();
+		repository.commit();
+		LocalDateTime datetime2 = LocalDateTime.now();
+		return Duration.between(datetime, datetime2).toMillis();
+	}
+
 	@Override 
 	public IRepository<ISoliniaPlayer> getCharactersRepository()
 	{
