@@ -1,5 +1,7 @@
 package com.solinia.solinia.Models;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +22,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 	private int id;
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
+	private Timestamp lastUpdatedTime;
 
 	private String name;
 	private List<ISoliniaLootDropEntry> entries = new ArrayList<ISoliniaLootDropEntry>();	
@@ -32,6 +35,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 	@Override
 	public void setId(int id) {
 		this.id = id;
+		setLastUpdatedTimeNow();
 	}
 	
 	@Override
@@ -43,6 +47,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 	public void setPrimaryUUID(UUID uuid) {
 		// TODO Auto-generated method stub
 		this.primaryUUID = uuid;
+		setLastUpdatedTimeNow();
 	}
 	@Override
 	public UUID getSecondaryUUID() {
@@ -53,6 +58,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 	public void setSecondaryUUID(UUID uuid) {
 		// TODO Auto-generated method stub
 		this.secondaryUUID = uuid;
+		setLastUpdatedTimeNow();
 	}
 	
 	@Override
@@ -63,6 +69,7 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 	@Override
 	public void setName(String name) {
 		this.name = name;
+		setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -73,6 +80,28 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 	@Override
 	public void setEntries(List<ISoliniaLootDropEntry> entries) {
 		this.entries = entries;
+		setLastUpdatedTimeNow();
+	}
+	
+	@Override
+	public Timestamp getLastUpdatedTime() {
+		if (lastUpdatedTime == null)
+			setLastUpdatedTimeNow();
+		
+		return lastUpdatedTime;
+	}
+
+	@Override
+	public void setLastUpdatedTime(Timestamp lastUpdatedTime) {
+		this.lastUpdatedTime = lastUpdatedTime;
+	}
+	
+	@Override
+	public void setLastUpdatedTimeNow() {
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		//System.out.println("Set LastUpdatedTime on " + getId());
+		this.setLastUpdatedTime(nowtimestamp);
 	}
 
 	@Override
@@ -244,10 +273,13 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 				entry.setCount(count);
 			}
 			
-			break;		default:
+			break;		
+		default:
 			throw new InvalidLootDropSettingException(
 					"Invalid LootDrop setting. Valid Options are: name,remove,setallchance,setallitemchance,setallcount,setallitemminlevel,setallitemfireresist,setallitemcoldresist,setallitemmagicresist,setallitempoisonresist,setallitemdiseaseresist,setitemchance");
 		}
+		
+		setLastUpdatedTimeNow();
 	}
 
 	@Override

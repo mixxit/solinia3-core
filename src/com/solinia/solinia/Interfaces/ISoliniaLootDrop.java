@@ -1,5 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
@@ -26,5 +27,11 @@ public interface ISoliniaLootDrop extends IPersistable {
 	void editSetting(String setting, String value) throws InvalidLootDropSettingException, NumberFormatException, CoreStateInitException;
 
 	List<ISoliniaLootDropEntry> getEntriesForClass(ISoliniaClass classObj);
+
+	Timestamp getLastUpdatedTime();
+
+	void setLastUpdatedTime(Timestamp lastUpdatedTime);
+
+	void setLastUpdatedTimeNow();
 
 }

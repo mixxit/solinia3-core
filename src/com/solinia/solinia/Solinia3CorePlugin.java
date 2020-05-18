@@ -384,7 +384,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			loottablerepo.reload();
 
 			JsonLootDropRepository lootdroprepo = new JsonLootDropRepository();
-			lootdroprepo.setJsonFile(getDataFolder() + "/" + "lootdrops.json");
+			lootdroprepo.setJsonFile(getDataFolder() + "/" + "lootdrops");
 			lootdroprepo.reload();
 
 			JsonSpawnGroupRepository spawngrouprepo = new JsonSpawnGroupRepository();

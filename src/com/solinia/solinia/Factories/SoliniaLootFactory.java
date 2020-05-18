@@ -37,6 +37,7 @@ public class SoliniaLootFactory {
 		{
 			CreateLootDropItem(lootdrop.getId(), item.getItemid(), count, always, chance);
 		}
+		lootdrop.setLastUpdatedTimeNow();
 	}
 	
 	public static void CreateLootTable(String loottablename) throws CoreStateInitException {
@@ -86,6 +87,7 @@ public class SoliniaLootFactory {
 		lootdrop.setAlways(always);
 		lootdrop.setChance(chance);
 		StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid).getEntries().add(lootdrop);
+		StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropid).setLastUpdatedTimeNow();
 	}
 
 }
