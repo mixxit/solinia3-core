@@ -5128,9 +5128,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.setLastUpdatedTimeNow();
 
 	}
-
+	
 	@Override
-	public void clearTargetsAgainstMe() {
+	public void clearTargetsAgainstMeWithoutEffect(SpellEffectType invisibility) {
 		if (getBukkitPlayer() != null) {
 			try {
 				ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
@@ -5139,7 +5139,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 		}
 		this.setLastUpdatedTimeNow();
+	}
 
+	@Override
+	public void clearTargetsAgainstMe() {
+		clearTargetsAgainstMeWithoutEffect(null);
 	}
 
 	@Override
@@ -6094,5 +6098,4 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setBackStory(String backStory) {
 		this.backStory = backStory;
 	}
-
 }

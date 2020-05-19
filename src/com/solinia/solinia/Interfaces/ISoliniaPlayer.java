@@ -663,4 +663,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void cureVampirism();
 	String getBackStory();
 	void setBackStory(String backStory);
+	public void clearTargetsAgainstMeWithoutEffect(SpellEffectType invisibility);
 }

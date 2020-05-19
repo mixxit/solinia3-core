@@ -84,6 +84,7 @@ import com.solinia.solinia.Models.SoliniaCraftHolder;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.UniversalMerchant;
 import com.solinia.solinia.Utils.DropUtils;
 import com.solinia.solinia.Utils.EntityUtils;
@@ -730,7 +731,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (solplayer.getClassObj().isSneakFromCrouch()) {
 					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You sneak, hiding from enemies not currently engaged"));
-					solplayer.clearTargetsAgainstMe();
+					solplayer.clearTargetsAgainstMeWithoutEffect(SpellEffectType.Invisibility);
 				}
 			}
 		} catch (CoreStateInitException e) {

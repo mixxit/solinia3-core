@@ -60,6 +60,7 @@ import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
 import com.solinia.solinia.Utils.DebugUtils;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.SpecialEffectUtils;
@@ -235,16 +236,23 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public void forceClearTargetsAgainstMe(LivingEntity me) {
+	public void forceClearTargetsAgainstMeWithoutEffect(LivingEntity me,SpellEffectType spellEffectType) {
 		for (Player player : me.getWorld().getPlayers())
 		{
 			if (forceGetEntityTarget(player) == null)
 				continue;
 			
 			if (forceGetEntityTarget(player).getUniqueId().toString().equals(me.getUniqueId().toString()))
+			{
+				if (spellEffectType != null && EntityUtils.hasSpellEffectActive(forceGetEntityTarget(player), spellEffectType))
+					continue;
+				
 				forceSetEntityTarget(player,null);
+			}
 		}
 		
+		// TODO
+		// NPCs dont care about see invis for now
 		for(Entity entity : me.getNearbyEntities(25, 25, 25))
 		{
 			if (entity instanceof Creature)
@@ -252,11 +260,19 @@ public class EntityManager implements IEntityManager {
 				if (((Creature) entity).getTarget() != null)
 				if (((Creature) entity).getTarget().getUniqueId().toString().equals(me.getUniqueId().toString()))
 				{
+					if (spellEffectType != null && EntityUtils.hasSpellEffectActive(forceGetEntityTarget((Creature) entity), spellEffectType))
+						continue;
+					
 					forceSetEntityTarget(me,null);
 				}
 			}
 		}
 
+	}
+	
+	@Override
+	public void forceClearTargetsAgainstMe(LivingEntity me) {
+		forceClearTargetsAgainstMeWithoutEffect(me,null);
 	}
 	
 	@Override

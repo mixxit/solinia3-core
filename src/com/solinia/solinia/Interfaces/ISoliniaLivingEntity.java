@@ -307,6 +307,7 @@ public interface ISoliniaLivingEntity  {
 	public void sendHateList(LivingEntity recipient);
 
 	void clearTargetsAgainstMe();
+	void clearTargetsAgainstMeWithoutEffect(SpellEffectType effectType);
 
 	void setEntityTarget(LivingEntity target);
 

@@ -10873,9 +10873,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 	@Override
 	public void clearTargetsAgainstMe() {
+		clearTargetsAgainstMeWithoutEffect(null);
+	}
+	
+	@Override
+	public void clearTargetsAgainstMeWithoutEffect(SpellEffectType spellEffectType) {
 		try
 		{
-			StateManager.getInstance().getEntityManager().forceClearTargetsAgainstMe(this.getBukkitLivingEntity());
+			StateManager.getInstance().getEntityManager().forceClearTargetsAgainstMeWithoutEffect(this.getBukkitLivingEntity(),spellEffectType);
 		} catch (CoreStateInitException e)
 		{
 			
@@ -10988,14 +10993,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity() == null)
 			return false;
 		
-		try
-		{
-		return StateManager.getInstance().getEntityManager().hasEntityEffectType(this.getBukkitLivingEntity(),
-				type);
-		} catch (CoreStateInitException e)
-		{
-			return false;
-		}
+		return EntityUtils.hasSpellEffectActive(this.getBukkitLivingEntity(), type);
 	}
 	
 	@Override

@@ -180,6 +180,7 @@ public interface IEntityManager {
 	void setLastMeleeAttack(UUID uuid, Timestamp lasttimestamp);
 
 	void forceClearTargetsAgainstMe(LivingEntity me);
+	void forceClearTargetsAgainstMeWithoutEffect(LivingEntity me,SpellEffectType spellEffectType);
 
 	void forceSetEntityTarget(LivingEntity me, LivingEntity target);
 

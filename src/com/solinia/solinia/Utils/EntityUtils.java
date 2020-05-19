@@ -3601,4 +3601,15 @@ public class EntityUtils {
 		
 		return false;
 	}
+
+	public static boolean hasSpellEffectActive(LivingEntity bukkitLivingEntity, SpellEffectType type) {
+		try
+		{
+			return StateManager.getInstance().getEntityManager().hasEntityEffectType(bukkitLivingEntity,
+				type);
+		} catch (CoreStateInitException e)
+		{
+			return false;
+		}
+	}
 }
