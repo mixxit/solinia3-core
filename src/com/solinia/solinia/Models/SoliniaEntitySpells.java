@@ -126,6 +126,7 @@ public class SoliniaEntitySpells {
 			if (activeSpell.getSpellId() == soliniaSpell.getId() && activeSpell.getSourceUuid().equals(sourceEntity.getUniqueId()))
 			{
 				activeSpell.setTicksLeft(duration);
+				DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Ticks now" + duration);
 				return true;
 			}
 		}
@@ -160,6 +161,8 @@ public class SoliniaEntitySpells {
 				DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Failed to apply: " + result.b());
 				DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", this.getBukkitLivingEntity(), "Source spell Failed to apply: " + result.b());
 				return false;
+			} else {
+				DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Was valid effect");
 			}
 		} catch (CoreStateInitException e) {
 			return false;
@@ -173,7 +176,10 @@ public class SoliniaEntitySpells {
 			// 1 replace 
 			int stackableResponse = checkStackConflict(activeSpell.getSpell(),activeSpell.getSourceUuid(),soliniaSpell,getLivingEntity(),sourceEntity);
 			if(stackableResponse == -1)
+			{
+				DebugUtils.DebugLog("SoliniaEntitySpells", "addSpell", sourceEntity, "Stack conflict");
 				return false;
+			}
 			
 			if (stackableResponse == 1)
 			{

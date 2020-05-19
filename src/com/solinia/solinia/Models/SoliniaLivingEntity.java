@@ -1144,7 +1144,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
-	private boolean SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
+	@Override
+	public boolean SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
+			int inventory_slot, int resist_adjust) {
+		return SpellFinished(spell_id, spell_target, castingslot, mana_used,
+				inventory_slot, resist_adjust, false, -1);
+	}
+	
+	@Override
+	public boolean SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
 			int inventory_slot, int resist_adjust, boolean isproc, int level_override) {
 		
 		if (spell_target == null)

@@ -1124,6 +1124,7 @@ public class SoliniaActiveSpell {
 		case CastOnFadeEffectAlways:
 			return;
 		case ApplyEffect:
+			applyApplyEffect(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case DotCritDmgIncrease:
 			return;
@@ -1388,6 +1389,33 @@ public class SoliniaActiveSpell {
 		}
 	}
 
+	private void applyApplyEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+		
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		try {
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellEffect.getBase());
+			if (spell == null)
+				return;
+
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			ISoliniaLivingEntity targetSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			if (sourceSoliniaLivingEntity != null && targetSoliniaLivingEntity != null) {
+				sourceSoliniaLivingEntity.SpellFinished(spellEffect.getBase2(), targetSoliniaLivingEntity, CastingSlot.Item, 0, -1, spell.getResistDiff());
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
+		}
+	}
+
 	private void applyCureVampirism(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (!this.isSourcePlayer())
 			return;
@@ -1400,9 +1428,6 @@ public class SoliniaActiveSpell {
 			return;
 
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
-
-		if (sourceLivingEntity.getUniqueId().equals(getLivingEntity().getUniqueId()))
-			return;
 
 		try {
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);

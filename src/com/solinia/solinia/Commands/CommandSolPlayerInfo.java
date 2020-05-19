@@ -78,20 +78,6 @@ public class CommandSolPlayerInfo implements CommandExecutor {
 				
 				String details = ChatColor.GOLD + character.getFullNameWithTitle() + " " + charclass + " Level: " + character.getActualLevel() + " " + locked + ChatColor.RESET;
 				
-				String flags = "";
-				
-				for(String questFlag : character.getPlayerQuestFlags())
-				{
-					flags += questFlag.toUpperCase() + " ";
-				}
-
-				if (flags.length() > 32767)
-				{
-					flags = flags.substring(0, 32760) + "...";
-				}
-				details += "\n"+flags.trim();
-
-				
 				TextComponent tc2 = new TextComponent();
 				String changetext = "/copycharacter " + character.getId() + " " + sender.getName();
 				

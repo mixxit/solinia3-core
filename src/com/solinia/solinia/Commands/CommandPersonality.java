@@ -88,6 +88,31 @@ public class CommandPersonality implements CommandExecutor {
 					}
 					setBackstory(sender,response);
 				}
+			case "playerflags":
+				try
+				{
+					ISoliniaPlayer character = SoliniaPlayerAdapter.Adapt((Player)sender);
+					if (args.length > 1)
+					{
+						character = StateManager.getInstance().getConfigurationManager().getCharacterById(Integer.parseInt(args[1]));
+					}
+					String flags = "";
+					
+					for(String questFlag : character.getPlayerQuestFlags())
+					{
+						flags += questFlag.toUpperCase() + " ";
+					}
+	
+					if (flags.length() > 32767)
+					{
+						flags = flags.substring(0, 32760) + "...";
+					}
+					sender.sendMessage("\n"+flags.trim());
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+				break;
 			case "player":
 				if (args.length == 1)
 				{

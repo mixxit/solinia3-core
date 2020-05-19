@@ -514,4 +514,10 @@ public interface ISoliniaLivingEntity  {
 
 	public void cureVampirism();
 
+	boolean SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
+			int inventory_slot, int resist_adjust, boolean isproc, int level_override);
+
+	public boolean SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
+			int inventory_slot, int resist_adjust);
+
 }
