@@ -143,7 +143,7 @@ public class CommandPet implements CommandExecutor {
 			
 							if (mezExpiry != null) {
 								petLivingEntity.setAttackTarget(null);
-								player.sendMessage("You cannot send your pet to attack a mezzed player");
+								player.sendMessage("You cannot send your pet to attack a mezzed target");
 								return false;
 							}
 							

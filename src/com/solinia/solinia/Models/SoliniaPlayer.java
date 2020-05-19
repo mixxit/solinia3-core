@@ -5664,8 +5664,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getMentorLevel(),this.getActualLevel());
 
-			Bukkit.broadcastMessage("Awarding xp: " + experience);
-			
 			// try to share with group
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(getOwnerUUID());
 			if (group != null) {

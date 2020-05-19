@@ -208,6 +208,9 @@ public class PlayerUtils {
 			if (playersLevel < 50) {
 				return experience * 3d;
 			}
+			if (playersLevel < 60) {
+				return experience * 2d;
+			}
 			return experience;
 		} catch (CoreStateInitException e)
 		{

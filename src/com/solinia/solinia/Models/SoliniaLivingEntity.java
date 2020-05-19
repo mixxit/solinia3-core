@@ -7558,7 +7558,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							if (effectIdLookup > 0)
 							{
 								percentHP += Utils.getHighestAAEffectEffectTypeTuple((Player)playerEntity, SpellEffectType.PetMaxHP).a();
-								Bukkit.broadcastMessage("MAXHPPCT: " + percentHP);
 							}
 						}
 					}
