@@ -20,6 +20,7 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -65,9 +66,10 @@ public class CommandAA implements CommandExecutor {
 						if (solplayer.canPurchaseAlternateAdvancementRank(aaAbility, aarank)) {
 							TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.LIGHT_PURPLE + aaAbility.getName() + " Rank " + aarank.getPosition()
 							+ ChatColor.RESET + " Cost: " + ChatColor.YELLOW + aarank.getCost()
-							+ ChatColor.RESET + " AA points /aa buy " + aarank.getId()));
+							+ ChatColor.RESET + " AA " + ChatColor.LIGHT_PURPLE + "[Click to Buy]" + ChatColor.RESET));
+							tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/aa buy " + aarank.getId()));
 							String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()
-									+ ChatColor.RESET + System.lineSeparator() + aarank.getDescription() + ChatColor.RESET;
+									+ ChatColor.RESET + System.lineSeparator() + aarank.getDescription() + ChatColor.RESET + System.lineSeparator() + "Cost: " + aarank.getCost() + " AA points";
 							tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 									new ComponentBuilder(details).create()));
 							sender.spigot().sendMessage(tc);
