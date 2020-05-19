@@ -33,7 +33,12 @@ public class CommandPersonality implements CommandExecutor {
 		
 		if (args.length == 0)
 		{
-			sendCurrentPersonality(sender);
+			try {
+				sendPersonality(sender, SoliniaPlayerAdapter.Adapt((Player)sender).getId());
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return true;
 		}
 		
@@ -83,9 +88,26 @@ public class CommandPersonality implements CommandExecutor {
 					}
 					setBackstory(sender,response);
 				}
+			case "player":
+				if (args.length == 1)
+				{
+					try {
+						sendPersonality(sender, SoliniaPlayerAdapter.Adapt((Player)sender).getId());
+					} catch (CoreStateInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					sendPersonality(sender, Integer.parseInt(args[1]));
+				}
 			break;
 			default:
-				sendCurrentPersonality(sender);
+			try {
+				sendPersonality(sender, SoliniaPlayerAdapter.Adapt((Player)sender).getId());
+			} catch (CoreStateInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				break;
 		}
 		
@@ -260,9 +282,9 @@ public class CommandPersonality implements CommandExecutor {
 		}
 	}
 
-	private void sendCurrentPersonality(CommandSender sender) {
+	private void sendPersonality(CommandSender sender, int characterId) {
 		try {
-			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+			ISoliniaPlayer solPlayer = StateManager.getInstance().getConfigurationManager().getCharacterById(characterId);
 			solPlayer.getPersonality();
 			
 			sender.sendMessage(ChatColor.GOLD + "IDEALS" + ChatColor.RESET);

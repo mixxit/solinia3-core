@@ -1006,7 +1006,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				if ((triggerentity instanceof Player)) {
 					if (!handler.playerMeetsRequirements((Player) triggerentity)) {
 						((Player) triggerentity).sendMessage(ChatColor.GRAY
-								+ "[Hint] You do not meet the requirements to for a response. Either you are missing a quest step, have already completed this step");
+								+ "[Hint] You do not meet the requirements to for a response. Either you are missing a quest step, have already completed this step or missing something like the mod");
 						return;
 					}
 				}

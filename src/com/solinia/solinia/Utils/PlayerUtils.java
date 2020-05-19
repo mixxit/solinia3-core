@@ -27,6 +27,7 @@ import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaZone;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -438,9 +439,10 @@ public class PlayerUtils {
 			custom +
 			oath;
 		} else {
-			details += "To see more information /personality player " + solplayer.getId();
+			details += "To see more information:" + System.lineSeparator() + "/personality player " + solplayer.getId() + " [or click]";
 		}
 		
+		tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/personality player " + solplayer.getId()));
 		tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 		return new Tuple<String,TextComponent>(message,tc);
 	}
