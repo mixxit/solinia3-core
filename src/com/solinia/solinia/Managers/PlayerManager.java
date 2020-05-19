@@ -436,6 +436,11 @@ public class PlayerManager implements IPlayerManager {
 		return version;
 	}
 	
+	public void resetPlayerVersion(UUID uuid)
+	{
+		this.playerVersion.remove(uuid);
+	}
+	
 	public void setPlayerVersion(UUID uuid, String version)
 	{
 		this.playerVersion.put(uuid, version);

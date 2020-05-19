@@ -46,4 +46,5 @@ public interface IPlayerManager {
 	boolean hasValidMod(Player player);
 	List<Integer> getCharacterIdsOnline();
 	List<ISoliniaPlayer> getSoliniaPlayersOnline();
+	void resetPlayerVersion(UUID playerUUID);
 }

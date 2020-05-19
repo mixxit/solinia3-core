@@ -2078,6 +2078,9 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			
+			// Reset users mod version
+			StateManager.getInstance().getPlayerManager().resetPlayerVersion(event.getPlayer().getUniqueId());
+			
 			// Reset users Zone Packet
 			StateManager.getInstance().getPlayerManager().setPlayerLastZone(event.getPlayer(), -1);
 			
