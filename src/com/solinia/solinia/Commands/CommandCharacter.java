@@ -73,7 +73,7 @@ public class CommandCharacter implements CommandExecutor {
 					TextComponent tc = new TextComponent();
 					tc.setText("- " + ChatColor.LIGHT_PURPLE + character.getFullNameWithTitle() + ChatColor.RESET + " - ");
 					
-					Tuple<String,TextComponent> characterText = PlayerUtils.GetCharacterText(character, "", player.getName(), player.getWorld().getName(), "");
+					Tuple<String,TextComponent> characterText = PlayerUtils.GetCharacterText(character, "", player.getName(), player.getWorld().getName(), "",false);
 					
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getId();

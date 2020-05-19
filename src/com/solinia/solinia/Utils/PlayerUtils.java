@@ -359,7 +359,7 @@ public class PlayerUtils {
 
 		
 	}
-	public static Tuple<String,TextComponent> GetCharacterText(ISoliniaPlayer solplayer, String optionalhidden, String optionalplayername, String optionalworldname, String optionalzone) {
+	public static Tuple<String,TextComponent> GetCharacterText(ISoliniaPlayer solplayer, String optionalhidden, String optionalplayername, String optionalworldname, String optionalzone, boolean showPersonality) {
 		int lvl = (int) Math.floor(solplayer.getActualLevel());
 		int mentorLevel = (int)Math.floor(solplayer.getMentorLevel());
 		
@@ -425,15 +425,21 @@ public class PlayerUtils {
 		String details = 
 				ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + System.lineSeparator() + 
 				backstory +
-				inspiration + 
-		worship + 
-		ideal +
-		trait1 +
-		trait2 + 
-		bond +
-		flaw + 
-		custom +
-		oath;
+				inspiration;
+		
+		if (showPersonality)
+		{
+			details += worship + 
+			ideal +
+			trait1 +
+			trait2 + 
+			bond +
+			flaw + 
+			custom +
+			oath;
+		} else {
+			details += "To see more information /personality player " + solplayer.getId();
+		}
 		
 		tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create()));
 		return new Tuple<String,TextComponent>(message,tc);

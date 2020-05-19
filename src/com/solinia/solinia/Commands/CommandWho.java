@@ -71,7 +71,7 @@ public class CommandWho implements CommandExecutor {
 				if (solZone != null)
 					zone = solZone.getName();
 	        	
-	        	Tuple<String,TextComponent> characterText = PlayerUtils.GetCharacterText(solPlayer, hidden, currentplayer.getName(), currentplayer.getWorld().getName(), zone);
+	        	Tuple<String,TextComponent> characterText = PlayerUtils.GetCharacterText(solPlayer, hidden, currentplayer.getName(), currentplayer.getWorld().getName(), zone,false);
 	        	if (sender instanceof Player)
 	        	{
 	        		sender.spigot().sendMessage(characterText.b());
