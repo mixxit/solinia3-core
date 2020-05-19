@@ -238,11 +238,11 @@ public class EntityManager implements IEntityManager {
 	public void forceClearTargetsAgainstMe(LivingEntity me) {
 		for (Player player : me.getWorld().getPlayers())
 		{
-			if (forceGetEntityTarget(me) == null)
+			if (forceGetEntityTarget(player) == null)
 				continue;
 			
-			if (forceGetEntityTarget(me).getUniqueId().toString().equals(me.getUniqueId().toString()))
-				forceSetEntityTarget(me,null);
+			if (forceGetEntityTarget(player).getUniqueId().toString().equals(me.getUniqueId().toString()))
+				forceSetEntityTarget(player,null);
 		}
 		
 		for(Entity entity : me.getNearbyEntities(25, 25, 25))

@@ -728,9 +728,9 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) event.getPlayer());
 			if (solplayer.getClassObj() != null) {
 				if (solplayer.getClassObj().isSneakFromCrouch()) {
-					// too spammy, move ot action bar
 					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You sneak, hiding from enemies not currently engaged"));
+					solplayer.clearTargetsAgainstMe();
 				}
 			}
 		} catch (CoreStateInitException e) {
