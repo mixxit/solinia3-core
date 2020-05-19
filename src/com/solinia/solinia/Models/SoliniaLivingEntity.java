@@ -2172,6 +2172,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void InterruptSpell() {
 		// Interrupt casting
 					try {
+						StopSinging();
+						
 						CastingSpell castingSpell = StateManager.getInstance().getEntityManager().getCasting(getBukkitLivingEntity());
 						if (castingSpell != null) {
 							if (castingSpell.getSpell() != null && castingSpell.getSpell().getUninterruptable() == 0) {

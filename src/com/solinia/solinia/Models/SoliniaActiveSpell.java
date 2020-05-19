@@ -2615,8 +2615,8 @@ public class SoliniaActiveSpell {
 			return;
 
 		try {
-			ISoliniaLivingEntity sourceSolLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
-			sourceSolLivingEntity.InterruptSpell();
+			ISoliniaLivingEntity livingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+			livingEntity.InterruptSpell();
 
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp expiretimestamp = Timestamp.valueOf(datetime.plus(6, ChronoUnit.SECONDS));
@@ -2624,7 +2624,7 @@ public class SoliniaActiveSpell {
 			StateManager.getInstance().getEntityManager().addMezzed(getLivingEntity(), expiretimestamp);
 
 			if (getLivingEntity() instanceof Creature) {
-				sourceSolLivingEntity.setAttackTarget(null);
+				livingEntity.setAttackTarget(null);
 
 			}
 
