@@ -798,7 +798,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					ChatColor.YELLOW + "* You cannot gain or lose experience for a character that is marked as LOCKED");
 			return;
 		}
-
+		
 		Double level = (double) getActualLevel();
 
 		this.experience = experience;
@@ -826,10 +826,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					.sendMessage(ChatColor.RED + "* You lost experience (" + ipercenttolevel + "% into level)");
 		}
 		if (Double.compare(newlevel, level) > 0) {
-			String classname = "Hero";
-			if (getClassObj() != null)
-				classname = getClassObj().getName();
-
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
 
 			if (newlevel < 6)
@@ -5662,8 +5658,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void grantExperienceAndLoot(ISoliniaLivingEntity livingEntity) {
 		try {
-			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getMentorLevel());
+			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getMentorLevel(),this.getActualLevel());
 
+			Bukkit.broadcastMessage("Awarding xp: " + experience);
+			
 			// try to share with group
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(getOwnerUUID());
 			if (group != null) {

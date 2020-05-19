@@ -180,32 +180,32 @@ public class PlayerUtils {
 	}
 	
 
-	public static Double getExperienceRewardAverageForLevel(int level) {
+	public static Double getExperienceRewardAverageForLevel(int mobsLevel, int playersLevel) {
 		try
 		{
-			Double experience = (Math.pow(level, 2) * 10) * StateManager.getInstance().getConfigurationManager().getMaxLevel() - 1;
+			Double experience = (Math.pow(mobsLevel, 2) * 10) * StateManager.getInstance().getConfigurationManager().getMaxLevel() - 1;
 			experience = experience / 2;
 			if (experience < 1) {
 				experience = 1d;
 			}
 	
-			if (level < 10) {
+			if (playersLevel < 10) {
 				return experience * 6d;
 			}
 	
-			if (level < 20) {
+			if (playersLevel < 20) {
 				return experience * 5d;
 			}
 	
-			if (level < 30) {
+			if (playersLevel < 30) {
 				return experience * 5d;
 			}
 	
-			if (level < 40) {
+			if (playersLevel < 40) {
 				return experience * 4d;
 			}
 	
-			if (level < 50) {
+			if (playersLevel < 50) {
 				return experience * 3d;
 			}
 			return experience;

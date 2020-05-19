@@ -392,7 +392,7 @@ public class PlayerManager implements IPlayerManager {
 				{
 					Utils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(solPlayer.getPendingXp().longValue()), false);
 				} else {
-					Double xpReward = PlayerUtils.getExperienceRewardAverageForLevel(solPlayer.getMentorLevel()) / 30d;
+					Double xpReward = PlayerUtils.getExperienceRewardAverageForLevel(solPlayer.getMentorLevel(),solPlayer.getMentorLevel()) / 30d;
 					if (xpReward < 0)
 					{
 						xpReward = 1d;
