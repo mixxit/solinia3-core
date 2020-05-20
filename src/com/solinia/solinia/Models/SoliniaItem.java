@@ -722,10 +722,9 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		}
 		sender.sendMessage("- requiredweaponskilltype: " + ChatColor.GOLD + getRequiredWeaponSkillType() + ChatColor.RESET);
 		sender.sendMessage("- leatherrgbdecimal: " + ChatColor.GOLD + getLeatherRgbDecimal() + ChatColor.RESET + leathercolor + " See: https://bit.ly/2i02I8k");
-		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET);
+		sender.sendMessage("- reagent: " + ChatColor.GOLD + isReagent() + ChatColor.RESET + " neverdrop: " + ChatColor.GOLD + isNeverDrop() + ChatColor.RESET);
 		sender.sendMessage("- temporary: " + ChatColor.GOLD + isTemporary() + ChatColor.RESET + " - consumable: " + ChatColor.GOLD + isConsumable() + ChatColor.RESET);
-		sender.sendMessage("- consumablerequirenotquestflag: " + ChatColor.GOLD + getConsumableRequireNotQuestFlag() + ChatColor.RESET);
-		sender.sendMessage("- consumablerequirequestflag: " + ChatColor.GOLD + getConsumableRequireQuestFlag() + ChatColor.RESET);
+		sender.sendMessage("- consumablerequirenotquestflag: " + ChatColor.GOLD + getConsumableRequireNotQuestFlag() + ChatColor.RESET + " " + " consumablerequirequestflag: " + ChatColor.GOLD + getConsumableRequireQuestFlag() + ChatColor.RESET);
 		sender.sendMessage("- consumablerequireinzone: " + ChatColor.GOLD + this.getConsumableRequireInZone() + ChatColor.RESET);
 		sender.sendMessage("- bandage: " + ChatColor.GOLD + isBandage() + ChatColor.RESET + " languageprimer: " + ChatColor.GOLD + getLanguagePrimer() + ChatColor.RESET);
 		sender.sendMessage("- augmentation: " + ChatColor.GOLD + isAugmentation() + ChatColor.RESET + "- distiller: " + ChatColor.GOLD + isDistiller() + ChatColor.RESET);
@@ -753,9 +752,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("- skillmodtype3: " + ChatColor.GOLD + getSkillModType3().toString() + ChatColor.RESET + " skillmodvalue3: " + ChatColor.GOLD + getSkillModValue3() + ChatColor.RESET);
 		sender.sendMessage("- skillmodtype4: " + ChatColor.GOLD + getSkillModType4().toString() + ChatColor.RESET + " skillmodvalue4: " + ChatColor.GOLD + getSkillModValue4() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
-		sender.sendMessage("- equipmentslot: " + ChatColor.GOLD + getEquipmentSlot().name() + ChatColor.RESET);
-		sender.sendMessage("- itemtype: " + ChatColor.GOLD + getItemType().name() + ChatColor.RESET);
-		sender.sendMessage("----------------------------");
+		sender.sendMessage("- equipmentslot: " + ChatColor.GOLD + getEquipmentSlot().name() + ChatColor.RESET + " itemtype: " + ChatColor.GOLD + getItemType().name() + ChatColor.RESET);
 		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
 		sender.sendMessage("- bookauthor: " + ChatColor.GOLD + getBookAuthor() + ChatColor.RESET);
 		String allowedClassNames = "";
@@ -835,6 +832,9 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			break;
 		case "procrate":
 			setProcRate(Integer.parseInt(value));
+			break;
+		case "neverdrop":
+			setNeverDrop(Boolean.parseBoolean(value));
 			break;
 		case "dye":
 			setDye(Integer.parseInt(value));
