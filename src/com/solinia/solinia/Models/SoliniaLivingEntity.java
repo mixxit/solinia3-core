@@ -6519,6 +6519,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 				break;
 			}
+			default:
+				newbonus = spell.calcSpellEffectValue(effect, sourceEntity, targetEntity, sourceLevel, ticksleft, instrument_mod); // this is remaining
+				newbonus2 = effect.getBase2();
+				break;
 			}
 		
 		} catch (CoreStateInitException e)
