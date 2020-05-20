@@ -197,8 +197,6 @@ public interface ISoliniaLivingEntity  {
 
 	int getBindWound_SE();
 
-	int getAttackSpeed();
-
 	public void PetThink(Player playerOwner);
 
 	public void PetFastThink(Player playerOwner);
@@ -524,5 +522,7 @@ public interface ISoliniaLivingEntity  {
 	int getItemsRawAttack();
 
 	int CalcHaste();
+
+	int getHaste();
 
 }

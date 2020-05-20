@@ -105,7 +105,7 @@ public class SoliniaActiveSpell {
 			for (SpellEffect spellEffect : getSpell().getBaseSpellEffects()) {
 				ActiveSpellEffect activeSpellEffect = new ActiveSpellEffect(getSpell(), spellEffect,
 						solSource.getBukkitLivingEntity(), solOwner.getBukkitLivingEntity(),
-						solSource.getEffectiveLevel(true), getTicksLeft());
+						solSource.getEffectiveLevel(true), getTicksLeft(), solSource.getInstrumentMod(getSpell()));
 				activeSpellEffects.add(activeSpellEffect);
 			}
 		} catch (CoreStateInitException e) {

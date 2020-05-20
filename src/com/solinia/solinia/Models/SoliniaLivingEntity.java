@@ -64,6 +64,7 @@ import com.solinia.solinia.Utils.MythicMobsUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Utils.SpellUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -4135,7 +4136,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public float getAutoAttackTimerFrequencySeconds() {
 		float weaponDelayInSeconds = ((float)getMainWeaponDelay())/10F;
 		float onePercentWeaponDelay = weaponDelayInSeconds/100F;
-		float hastedWeaponDelay = onePercentWeaponDelay * (float)getAttackSpeed();
+		float hastedWeaponDelay = onePercentWeaponDelay * (float)getHaste();
 		float hastedWeaponDelayMinusDelay = hastedWeaponDelay - weaponDelayInSeconds;
 		
 		float frequency = weaponDelayInSeconds-hastedWeaponDelayMinusDelay;
@@ -4258,7 +4259,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		// TODO REUSE TIME AND HASTE MOD
 		int ReuseTime = 0;
-		//float HasteMod = getHaste() * 0.01f;
+		float HasteMod = getHaste() * 0.01f;
 		
 		SkillType skill_to_use = SkillType.None;
 		
@@ -6407,16 +6408,134 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return getSpellBonusesTuple(spellEffectType).a();
 	}
 	
+	// In EQEmu this gets done only once (ApplySpellsBonuses/NegateSpellBonuses), for now we should just work around it
 	@Override
 	public Tuple<Integer,Integer> getSpellBonusesTuple(SpellEffectType spellEffectType) {
 		int bonus = 0;
 		int bonus2 = 0;
 		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(), spellEffectType)) {
-			bonus += effect.getRemainingValue();
-			bonus2 += effect.getBase2();
+			Entity sentity = Bukkit.getEntity(effect.getSourceEntityUUID());
+			Entity tentity = Bukkit.getEntity(effect.getTargetEntityUUID());
+			
+			if (sentity == null || tentity == null)
+				continue;
+			
+			if (
+					!(sentity instanceof LivingEntity) ||
+					!(sentity instanceof LivingEntity)
+					)
+				continue;
+			
+			Tuple<Integer,Integer> spellBonuses = ApplySpellsBonuses(effect.getSpellId(), (LivingEntity)sentity, (LivingEntity)tentity,effect,effect.getSourceLevel(),effect.getTicksLeft(),effect.getInstrumentMod());
+			
+			bonus += spellBonuses.a();
+			bonus2 += spellBonuses.b();
 		}
 
 		return new Tuple<Integer,Integer>(bonus,bonus2);
+	}
+	
+	
+	
+	private Tuple<Integer,Integer> ApplySpellsBonuses(int spellId, LivingEntity sourceEntity, LivingEntity targetEntity, SpellEffect effect, int sourceLevel, int ticksleft, int instrument_mod) {
+		int newbonus = 0;
+		int newbonus2 = 0;
+		try
+		{
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
+			
+			int effectid = effect.getSpellEffectId();
+			int effect_value = spell.calcSpellEffectValue(effect, sourceEntity, targetEntity, sourceLevel, ticksleft, instrument_mod); // this is remaining
+			int base2 = effect.getBase2();
+			int max = effect.getMax();
+		
+			switch(effect.getSpellEffectType())
+			{
+				case AttackSpeed:
+				{
+					if ((effect_value - 100) > 0) { // Haste
+						if (newbonus < 0) break; // Slowed - Don't apply haste
+						if ((effect_value - 100) > newbonus) {
+							newbonus = effect_value - 100;
+						}
+					}
+				else if ((effect_value - 100) < 0) { // Slow
+						int real_slow_value = (100 - effect_value) * -1;
+						real_slow_value -= ((real_slow_value * GetSlowMitigation()/100));
+						if (real_slow_value < newbonus)
+							newbonus = real_slow_value;
+				}
+				break;
+			}
+	
+			case AttackSpeed2:
+			{
+				if ((effect_value - 100) > 0) { // Haste V2 - Stacks with V1 but does not Overcap
+					if (newbonus < 0) break; //Slowed - Don't apply haste2
+					if ((effect_value - 100) > newbonus) {
+						newbonus = effect_value - 100;
+					}
+				}
+				else if ((effect_value - 100) < 0) { // Slow
+					int real_slow_value = (100 - effect_value) * -1;
+					real_slow_value -= ((real_slow_value * GetSlowMitigation()/100));
+					if (real_slow_value < newbonus)
+						newbonus = real_slow_value;
+				}
+				break;
+			}
+	
+			case AttackSpeed3:
+			{
+				if (effect_value < 0){ //Slow
+					effect_value -= ((effect_value * GetSlowMitigation()/100));
+					if (effect_value < newbonus)
+						newbonus = effect_value;
+				}
+	
+				else if (effect_value > 0) { // Haste V3 - Stacks and Overcaps
+					if (effect_value > newbonus) {
+						newbonus = effect_value;
+					}
+				}
+				break;
+			}
+	
+			case AttackSpeed4:
+			{
+				// These don't generate the IMMUNE_ATKSPEED message and the icon shows up
+				// but have no effect on the mobs attack speed
+				if (getSpecialAbility(SpecialAbility.UNSLOWABLE) > 0)
+					break;
+	
+				if (effect_value < 0) //A few spells use negative values(Descriptions all indicate it should be a slow)
+					effect_value = effect_value * -1;
+	
+				if (effect_value > 0 && effect_value > newbonus) {
+					effect_value -= ((effect_value * GetSlowMitigation()/100));
+					if (effect_value > newbonus)
+						newbonus = effect_value;
+				}
+	
+				break;
+			}
+			}
+		
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return new Tuple<Integer,Integer>(newbonus,newbonus2);
+	}
+
+	private int GetSlowMitigation() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getHaste() {
+		return CalcHaste();
 	}
 	
 	@Override
@@ -6435,9 +6554,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		    inhib will only negate all other hastes if you don't have v1 (ex. VQ)
 		*/
 		// slow beats all! Besides a better inhibit
-		int Haste = 100;
+		int Haste = 0;
 		
-		int itembonusesHaste = getItemBonuses(SpellEffectType.AttackSpeed);
+		int itemHardSpeed = getMaxItemAttackSpeedPct();
+		if (itemHardSpeed > 100)
+			itemHardSpeed = itemHardSpeed - 100;
+		
+		int itembonusesHaste = getItemBonuses(SpellEffectType.AttackSpeed)+itemHardSpeed;
 		int spellbonusesHaste = getSpellBonuses(SpellEffectType.AttackSpeed);
 		int spellbonusesHaste2 = getSpellBonuses(SpellEffectType.AttackSpeed2);
 		int spellbonusesHaste3 = getSpellBonuses(SpellEffectType.AttackSpeed3);
@@ -6500,11 +6623,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		//h = mod_client_haste(h);
 		Haste = 100 + h;
 		return Haste;
-	}
-
-	@Override
-	public int getAttackSpeed() {
-		return CalcHaste();
 	}
 
 	@Override
@@ -11430,7 +11548,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
         String skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillType().name();
         String strmainweaponskill = "MainWeapSkill: " + skill;
 		targetMessage.sendMessage(runestr + " " + strmitigationac + " " + strtotalatk + " " + strmainweaponskill);
-		String strattackspeed = "AttackSpeedPct: " + ChatColor.GOLD+ getAttackSpeed() + "%" + ChatColor.RESET;
+		String strattackspeed = "AttackSpeedPct: " + ChatColor.GOLD+ getHaste() + "%" + ChatColor.RESET;
         
 		String strmainweaponattackratesec = "MainWeapAttkRate: " + ChatColor.GOLD+ getAutoAttackTimerFrequencySeconds() +"s"+ ChatColor.RESET;
 		targetMessage.sendMessage(strattackspeed + " " + strmainweaponattackratesec);
@@ -11767,10 +11885,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (!spell.isEffectInSpell(spellEffectType))
 						continue;
 					
-					if (spell.getSpellEffectBase(spellEffectType) > highest)
+					
+					Tuple<Integer,Integer> spellBonuses = ApplySpellsBonuses(spell.getId(), getBukkitLivingEntity(), getBukkitLivingEntity(),spell.getSpellEffect(spellEffectType),getMentorLevel(),0,0);
+					
+					if (spellBonuses.a() > highest)
 					{
-						highest = spell.getSpellEffectBase(spellEffectType);
-						highest2 = spell.getSpellEffectBase2(spellEffectType);
+						highest = spellBonuses.a();
+						highest2 = spellBonuses.b();
 					}
 				} catch (CoreStateInitException e) {
 					

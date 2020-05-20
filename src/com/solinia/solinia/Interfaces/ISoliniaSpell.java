@@ -1023,12 +1023,6 @@ public interface ISoliniaSpell extends IPersistable {
 
 	boolean isWeaponProc();
 
-	int calcSpellEffectValueFormula(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
-			int sourceLevel, int ticksLeft);
-
-	int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
-			int sourceLevel, int ticksleft, int instrument_mod);
-
 	boolean isBardSong();
 	
 	boolean isCure();
@@ -1122,5 +1116,11 @@ public interface ISoliniaSpell extends IPersistable {
 	boolean isCanBeMemorised();
 
 	void setCanBeMemorised(boolean canBeMemorised);
+
+	int calcSpellEffectValue(SpellEffect spellEffect, LivingEntity sourceEntity,
+			LivingEntity targetEntity, int sourceLevel, int ticksleft, int instrument_mod);
+
+	int calcSpellEffectValueFormula(SpellEffect spellEffect, LivingEntity sourceEntity, LivingEntity targetEntity,
+			int sourceLevel, int ticksleft);
 
 }
