@@ -143,7 +143,7 @@ public class CommandSpellBook implements CommandExecutor {
 			return;
 		}
 		
-		if (!item.isNeverDrop())
+		if (item.isNeverDrop())
 		{
 			solPlayer.getBukkitPlayer().sendMessage("This item is disabled");
 			return;
