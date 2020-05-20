@@ -1426,7 +1426,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// Some spells auto target self, if they don't have a target try to do that
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
 			if (spell != null) {
-				if (spell.isCanBeMemorised())
+				if (!spell.isCanBeMemorised())
 				{
 					getBukkitPlayer().sendMessage("* This spell cannot be memorised");
 					return;
