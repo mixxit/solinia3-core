@@ -4259,7 +4259,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		// TODO REUSE TIME AND HASTE MOD
 		int ReuseTime = 0;
-		float HasteMod = getHaste() * 0.01f;
+		//float HasteMod = getHaste() * 0.01f;
 		
 		SkillType skill_to_use = SkillType.None;
 		
