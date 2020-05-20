@@ -7369,7 +7369,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 								"NPC: " + npc.getName() + this.getBukkitLivingEntity().getUniqueId().toString()
 										+ " could not cast nuke as either my mana ratio was too low (" + !(manaR >= 10)
 										+ ") or i rolled badly roll failure: (" + nukeRoll + ")"
-												+ " or was not valid - valid: " + valid.a()
+												+ " or was not valid - valid: " + valid.a() + "["+valid.b()+"]"
 												+ " or has spell already " + hasSpellTargetActive);
 					}
 					break;

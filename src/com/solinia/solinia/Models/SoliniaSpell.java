@@ -4214,7 +4214,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 							ISoliniaNPC sourceNpc = StateManager.getInstance().getConfigurationManager()
 									.getNPC(solsourceEntity.getNpcid());
 							ISoliniaNPC targetNpc = StateManager.getInstance().getConfigurationManager()
-									.getNPC(solsourceEntity.getNpcid());
+									.getNPC(soltargetEntity.getNpcid());
 	
 							if (sourceNpc.getFactionid() > 0 && targetNpc.getFactionid() > 0) {
 								if (sourceNpc.getFactionid() == targetNpc.getFactionid())
