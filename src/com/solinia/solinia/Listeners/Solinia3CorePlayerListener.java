@@ -1674,6 +1674,12 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (event.getRawSlot() > 26) {
 
 				try {
+					if (event.getCurrentItem() == null || event.getCurrentItem().getType() == null)
+					{
+						event.getView().getPlayer().sendMessage("Merchants are not interested in this item [null type]");
+						Utils.CancelEvent(event);
+					}
+					
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 							.getItem(event.getCurrentItem());
 					if (item == null && !ItemStackUtils.getAllowedVanillaItemStacks().contains(event.getCurrentItem().getType())) {

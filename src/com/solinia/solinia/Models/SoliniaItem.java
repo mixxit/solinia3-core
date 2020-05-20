@@ -47,6 +47,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private String basename;
 	private int abilityid = 0;
 	private String lore;
+	private int attack = 0;
 	private int strength = 0;
 	private int stamina = 0;
 	private int agility = 0;
@@ -735,7 +736,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- hpregen: " + ChatColor.GOLD + getHpregen() + ChatColor.RESET + " mpregen: " + ChatColor.GOLD + getMpregen() + ChatColor.RESET);
 		sender.sendMessage("- ac: " + ChatColor.GOLD + getAC() + ChatColor.RESET + "hp: " + ChatColor.GOLD + getHp() + ChatColor.RESET + " mana: " + ChatColor.GOLD + getMana() + ChatColor.RESET);
-		sender.sendMessage("- damage: " + ChatColor.GOLD + getDefinedItemDamage() + ChatColor.RESET + " weapondelay: " + ChatColor.GOLD + getWeaponDelay() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
+		sender.sendMessage("- attack: " + this.getAttack() + " damage: " + ChatColor.GOLD + getDefinedItemDamage() + ChatColor.RESET + " weapondelay: " + ChatColor.GOLD + getWeaponDelay() + ChatColor.RESET + " baneundead: " + ChatColor.GOLD + getBaneUndead() + ChatColor.RESET);
 		sender.sendMessage("- abilityid: " + ChatColor.GOLD + getAbilityid() + ChatColor.RESET + " - weaponabilityid: " + ChatColor.GOLD + getWeaponabilityid() + ChatColor.RESET + " focuseffectid: " + ChatColor.GOLD + getFocusEffectId() + ChatColor.RESET);
 		sender.sendMessage("- attackspeedpct: " + ChatColor.GOLD + getAttackspeed() + "%" + ChatColor.RESET + " procrate: " + ChatColor.GOLD + getProcRate() + ChatColor.RESET);
 		sender.sendMessage("- strength: " + ChatColor.GOLD + getStrength() + ChatColor.RESET +
@@ -805,6 +806,9 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			break;
 		case "attackspeedpct":
 			setAttackspeed(Integer.parseInt(value));
+			break;
+		case "attack":
+			setAttack(Integer.parseInt(value));
 			break;
 		case "worth":
 			setWorth(Integer.parseInt(value));
@@ -1997,5 +2001,15 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setInspirationWorth(int inspirationWorth) {
 		this.inspirationWorth = inspirationWorth;
+	}
+
+	@Override
+	public int getAttack() {
+		return attack;
+	}
+
+	@Override
+	public void setAttack(int attack) {
+		this.attack = attack;
 	}
 }

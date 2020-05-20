@@ -434,4 +434,8 @@ public interface ISoliniaItem extends IPersistable {
 	int getInspirationWorth();
 
 	void setInspirationWorth(int inspirationWorth);
+
+	int getAttack();
+
+	void setAttack(int attack);
 }

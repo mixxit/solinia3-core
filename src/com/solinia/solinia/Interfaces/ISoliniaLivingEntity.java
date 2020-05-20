@@ -521,4 +521,6 @@ public interface ISoliniaLivingEntity  {
 	public boolean SpellFinished(int spell_id, ISoliniaLivingEntity spell_target, int castingslot, int mana_used,
 			int inventory_slot, int resist_adjust);
 
+	int getItemsRawAttack();
+
 }

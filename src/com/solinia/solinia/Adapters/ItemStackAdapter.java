@@ -400,6 +400,10 @@ public class ItemStackAdapter {
 			loretxt.add(ChatColor.WHITE + "Augmentation Slot Types: " + ChatColor.YELLOW + soliniaItem.getAcceptsAugmentationSlotType().name() + ChatColor.RESET);
 		}
 
+		if (soliniaItem.getAttack() > 0) {
+			resisttxt += "Attack: " + ChatColor.AQUA + soliniaItem.getAttack() + ChatColor.RESET + " ";
+		}
+		
 		if (!regentxt.equals("")) {
 			loretxt.add(regentxt);
 		}

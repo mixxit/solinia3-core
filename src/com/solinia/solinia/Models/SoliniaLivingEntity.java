@@ -5780,7 +5780,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	{
 		int attackRating = 0;
 		
-		int itemBonusesAtk = getItemBonuses(SpellEffectType.ATK); // todo
+		int itemBonusesAtk = getItemBonuses(SpellEffectType.ATK) + getItemsRawAttack(); // todo
 		int aabonusesAtk = getAABonuses(SpellEffectType.ATK); // todo
 		int spellbonusesAtk = getSpellBonuses(SpellEffectType.ATK);
 		
@@ -11654,6 +11654,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return getItemBonusesTuple(spellEffectType,SpellResistType.RESIST_NONE);
 	}
 	
+	@Override
+	public int getItemsRawAttack() {
+		int attack = 0;
+		for (ISoliniaItem item : this.getEquippedSoliniaItems()) {
+			if (item == null)
+				continue;
+			
+			if (item.getAttack() < 1)
+				continue;
+			
+			attack += item.getAttack();
+		}
+		return attack;
+	}
+	
 	public Tuple<Integer,Integer> getItemBonusesTuple(SpellEffectType spellEffectType, SpellResistType filterResistType)
 	{
 		List<ISoliniaItem> equippedItems = this.getEquippedSoliniaItems();
@@ -11668,7 +11683,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// item focus
 			for (ISoliniaItem item : equippedItems) {
 				TempItem = item;
-
+				
 				if (TempItem == null)
 					continue;
 				
