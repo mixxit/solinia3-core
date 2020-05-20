@@ -523,4 +523,6 @@ public interface ISoliniaLivingEntity  {
 
 	int getItemsRawAttack();
 
+	int CalcHaste();
+
 }

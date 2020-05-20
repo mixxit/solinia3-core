@@ -6418,42 +6418,93 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return new Tuple<Integer,Integer>(bonus,bonus2);
 	}
+	
+	@Override
+	public int CalcHaste()
+	{
+		/*  Tests: (based on results in newer char window)
+		    68 v1 + 46 item + 25 over + 35 inhib = 204%
+		    46 item + 5 v2 + 25 over + 35 inhib = 65%
+		    68 v1 + 46 item + 5 v2 + 25 over + 35 inhib = 209%
+		    75% slow + 35 inhib = 25%
+		    35 inhib = 65%
+		    75% slow = 25%
+		    Conclusions:
+		    the bigger effect in slow v. inhib wins
+		    slow negates all other hastes
+		    inhib will only negate all other hastes if you don't have v1 (ex. VQ)
+		*/
+		// slow beats all! Besides a better inhibit
+		int Haste = 100;
+		
+		int itembonusesHaste = getItemBonuses(SpellEffectType.AttackSpeed);
+		int spellbonusesHaste = getSpellBonuses(SpellEffectType.AttackSpeed);
+		int spellbonusesHaste2 = getSpellBonuses(SpellEffectType.AttackSpeed2);
+		int spellbonusesHaste3 = getSpellBonuses(SpellEffectType.AttackSpeed3);
+		int spellbonusesInhibitMelee = getSpellBonuses(SpellEffectType.AttackSpeed4);
+		
+		if (spellbonusesHaste < 0) {
+			if (-spellbonusesHaste <= spellbonusesInhibitMelee) {
+				Haste = 100 - spellbonusesInhibitMelee;
+			}
+			else {
+				Haste = 100 + spellbonusesHaste;
+			}
+			return Haste;
+		}
+		// No haste and inhibit, kills all other hastes
+		if (spellbonusesHaste == 0 && spellbonusesInhibitMelee > 0) {
+			Haste = 100 - spellbonusesInhibitMelee;
+			return Haste;
+		}
+		int h = 0;
+		int cap = 0;
+		int level = getMentorLevel();
+		// we know we have a haste spell and not slowed, no extra inhibit melee checks needed
+		if (spellbonusesHaste > 0) {
+			h += spellbonusesHaste - spellbonusesInhibitMelee;
+		}
+		if (spellbonusesHaste2 > 0 && level > 49) { // type 2 is capped at 10% and only available to 50+
+			h += spellbonusesHaste2 > 10 ? 10 : spellbonusesHaste2;
+		}
+		// 26+ no cap, 1-25 10
+		if (level > 25) { // 26+
+			h += itembonusesHaste;
+		}
+		else {   // 1-25
+			h += itembonusesHaste > 10 ? 10 : itembonusesHaste;
+		}
+		// 60+ 100, 51-59 85, 1-50 level+25
+		if (level > 59) { // 60+
+			cap = Utils.HASTE_CAP;
+		}
+		else if (level > 50) {  // 51-59
+			cap = 85;
+		}
+		else {   // 1-50
+			cap = level + 25;
+		}
+		
+		//cap = mod_client_haste_cap(cap);
+		if (h > cap) {
+			h = cap;
+		}
+		// 51+ 25 (despite there being higher spells...), 1-50 10
+		if (level > 50) { // 51+
+			h += spellbonusesHaste3 > 25 ? 25 : spellbonusesHaste3;
+		}
+		else {   // 1-50
+			h += spellbonusesHaste3 > 10 ? 10 : spellbonusesHaste3;
+		}
+		//h += ExtraHaste;	//GM granted haste.
+		//h = mod_client_haste(h);
+		Haste = 100 + h;
+		return Haste;
+	}
 
 	@Override
 	public int getAttackSpeed() {
-		int lowestAttackSpeedBuff = 100;
-		int highestAttackSpeedBuff = 100;
-
-		List<SpellEffectType> effectTypes = new ArrayList<SpellEffectType>();
-		effectTypes.add(SpellEffectType.AttackSpeed);
-		effectTypes.add(SpellEffectType.AttackSpeed2);
-		effectTypes.add(SpellEffectType.AttackSpeed3);
-		effectTypes.add(SpellEffectType.AttackSpeed4);
-
-		int maxItemAttackSpeed = getMaxItemAttackSpeedPct();
-
-		// Include item passive hastes but only if the item provides more than 1%
-		if (maxItemAttackSpeed > 100) {
-			if (maxItemAttackSpeed > highestAttackSpeedBuff)
-				highestAttackSpeedBuff = maxItemAttackSpeed;
-		}
-
-		// Takes into account slows (< 100 attackspeed)
-		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitLivingEntity(),
-				SpellEffectType.AttackSpeed)) {
-			if (effect.getRemainingValue() > 100) {
-				if (effect.getRemainingValue() > highestAttackSpeedBuff)
-					highestAttackSpeedBuff = effect.getRemainingValue();
-			} else {
-				if (effect.getRemainingValue() < lowestAttackSpeedBuff)
-					lowestAttackSpeedBuff = effect.getRemainingValue();
-			}
-		}
-
-		if (lowestAttackSpeedBuff < 100)
-			return lowestAttackSpeedBuff;
-
-		return highestAttackSpeedBuff;
+		return CalcHaste();
 	}
 
 	@Override

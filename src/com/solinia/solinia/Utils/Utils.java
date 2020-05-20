@@ -156,6 +156,8 @@ public class Utils {
 	public static final int DMG_RUNE = -6;
 
 	public static final int FRENZY_REUSETIME = 10;
+
+	public static final int HASTE_CAP = 200;
 	
 	public static boolean IsTradeskill(SkillType skill)
 	{
