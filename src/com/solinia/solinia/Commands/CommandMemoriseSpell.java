@@ -46,6 +46,9 @@ public class CommandMemoriseSpell implements CommandExecutor {
 					sender.sendMessage("That spell does not exist");
 					return false;
 				}
+				
+				if (!spell.isCanBeMemorised())
+					return false;
 	
 				if (!solPlayer.canUseSpell(spell))
 				{

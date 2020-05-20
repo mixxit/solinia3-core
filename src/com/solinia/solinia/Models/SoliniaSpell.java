@@ -46,6 +46,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	private UUID primaryUUID = UUID.randomUUID();
 	private UUID secondaryUUID = UUID.randomUUID();
 	private boolean ignoreSummonItemTemporaryCheck = false;
+	private boolean canBeMemorised = true;
 
 	@SerializedName("id")
 	@Expose
@@ -2724,7 +2725,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				+ ")" + ChatColor.RESET);
 		sender.sendMessage("- icon: " + ChatColor.GOLD + getIcon() + ChatColor.RESET + " " + " memicon: " + ChatColor.GOLD + getMemicon() + ChatColor.RESET);
 		sender.sendMessage("- new_icon: " + ChatColor.GOLD + getNewIcon() + ChatColor.RESET + " " + "- recourselink: " + ChatColor.GOLD + getRecourseLink() + ChatColor.RESET);
-		sender.sendMessage("- numbuseffect: " + ChatColor.GOLD + this.getNimbuseffect() + ChatColor.RESET);
+		sender.sendMessage("- numbuseffect: " + ChatColor.GOLD + this.getNimbuseffect() + ChatColor.RESET + " canbememorised: " + ChatColor.GOLD + this.isCanBeMemorised() + ChatColor.RESET);
 		sender.sendMessage(
 				"- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
 		SpellEffectIndex sei = Utils.getSpellEffectIndex(getSpellAffectIndex());
@@ -3196,6 +3197,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		case "skill":
 			this.setSkill(Integer.parseInt(value));
+			break;
+		case "canbememorised":
+			this.setCanBeMemorised(Boolean.parseBoolean(value));
 			break;
 		case "buffduration":
 			this.setBuffduration(Integer.parseInt(value));
@@ -6165,5 +6169,15 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public void setIgnoreSummonItemTemporaryCheck(boolean ignoreSummonItemTemporaryCheck) {
 		this.ignoreSummonItemTemporaryCheck = ignoreSummonItemTemporaryCheck;
+	}
+
+	@Override
+	public boolean isCanBeMemorised() {
+		return canBeMemorised;
+	}
+
+	@Override
+	public void setCanBeMemorised(boolean canBeMemorised) {
+		this.canBeMemorised = canBeMemorised;
 	}
 }

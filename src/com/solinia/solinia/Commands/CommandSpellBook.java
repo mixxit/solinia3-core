@@ -143,6 +143,12 @@ public class CommandSpellBook implements CommandExecutor {
 			return;
 		}
 		
+		if (!item.isNeverDrop())
+		{
+			solPlayer.getBukkitPlayer().sendMessage("This item is disabled");
+			return;
+		}
+		
 		if (solPlayer.getSpellBookItems().contains(item.getId()))
 		{
 			solPlayer.getBukkitPlayer().sendMessage("This spell is already in your spell book");

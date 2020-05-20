@@ -51,6 +51,9 @@ public class CommandScribeAllSpells implements CommandExecutor {
 					if (spell.getAllowedClasses().size() < 1)
 						continue;
 					
+					if (!spell.isCanBeMemorised())
+						continue;
+					
 					if (spell.isAASpell())
 						continue;
 					
