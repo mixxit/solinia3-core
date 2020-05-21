@@ -24,7 +24,7 @@ public class CommandFaction implements CommandExecutor {
 			
 			for (PlayerFactionEntry factionEntry : solPlayer.getFactionEntries())
 			{
-				sender.sendMessage(" * " + ChatColor.GOLD + factionEntry.getFaction().getName() + ChatColor.RESET + " - " + Utils.getFactionStandingType(factionEntry.getFactionId(), factionEntry.getValue()).name());
+				sender.sendMessage(" * " + ChatColor.GOLD + factionEntry.getFaction().getName() + ChatColor.RESET + " - " + Utils.getFactionStandingType(factionEntry.getValueAndBaseNoSpellCheck()).name());
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

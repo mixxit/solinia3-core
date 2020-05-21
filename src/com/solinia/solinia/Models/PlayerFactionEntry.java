@@ -17,7 +17,7 @@ public class PlayerFactionEntry {
 		this.factionId = factionId;
 	}
 	
-	public int getValueWithEffectsOnEntity(LivingEntity livingEntity, LivingEntity sourceFactionSpellEntity) {
+	private int getValueWithEffectsOnEntity(LivingEntity livingEntity, LivingEntity sourceFactionSpellEntity) {
 		int total = value;
 		try
 		{
@@ -50,6 +50,15 @@ public class PlayerFactionEntry {
 		this.value = value;
 	}
 	
+	public int getValueWithEffectsOnEntityAndBase(LivingEntity livingEntity, LivingEntity sourceFactionSpellEntity)
+	{
+		int value = getValueWithEffectsOnEntity(livingEntity, sourceFactionSpellEntity);
+		
+		if (getFaction() != null)
+			value += getFaction().getBase();
+		return value;
+	}
+	
 	public ISoliniaFaction getFaction()
 	{
 		try
@@ -59,5 +68,11 @@ public class PlayerFactionEntry {
 		{
 			return null;
 		}
+	}
+	public int getValueAndBaseNoSpellCheck() {
+		int value = getValue();
+		if (getFaction() != null)
+			value += getFaction().getBase();
+		return value;
 	}
 }

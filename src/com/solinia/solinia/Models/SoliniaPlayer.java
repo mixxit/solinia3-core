@@ -5817,7 +5817,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 						if (factionEntry.getValue() <= -1500) {
 							// If this is an enemy of the faction, grant positive faction
-							increaseFactionStanding(factionEntry.getFactionId(), 1);
+							increaseFactionStanding(factionEntry.getFactionId(), 5);
 						}
 					}
 				}

@@ -10073,10 +10073,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					
 					PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 					if (factionEntry != null && solPlayer != null) {
-						DebugUtils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",this.getBukkitLivingEntity(),"Found faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId() + " with standing: " + Utils.getFactionStandingType(factionEntry.getFactionId(),factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player)).name());
+						DebugUtils.DebugLog("SoliniaLivingEntity","doCheckForEnemies",this.getBukkitLivingEntity(),"Found faction entry for SoliniaPlayer: " + player.getName() + ":" + player.getUniqueId() + " with standing: " + Utils.getFactionStandingType(factionEntry.getValueWithEffectsOnEntityAndBase(this.getBukkitLivingEntity(), player)).name());
 						
-						switch (Utils.getFactionStandingType(factionEntry.getFactionId(),
-								factionEntry.getValueWithEffectsOnEntity(this.getBukkitLivingEntity(), player))) {
+						switch (Utils.getFactionStandingType(factionEntry.getValueWithEffectsOnEntityAndBase(this.getBukkitLivingEntity(), player))) {
 						case FACTION_THREATENLY:
 						case FACTION_SCOWLS:
 							if (RaycastUtils.isEntityInLineOfSight(this,solPlayer.getSoliniaLivingEntity(), true)) {

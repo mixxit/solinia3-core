@@ -919,8 +919,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) triggerentity);
 							PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 							if (factionEntry != null) {
-								switch (Utils.getFactionStandingType(factionEntry.getFactionId(),
-										factionEntry.getValueWithEffectsOnEntity(solentity.getBukkitLivingEntity(),
+								switch (Utils.getFactionStandingType(factionEntry.getValueWithEffectsOnEntityAndBase(solentity.getBukkitLivingEntity(),
 												solPlayer.getBukkitPlayer()))) {
 								case FACTION_THREATENLY:
 								case FACTION_SCOWLS:

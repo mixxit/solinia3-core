@@ -86,8 +86,8 @@ public class CommandConsider implements CommandExecutor {
 			
 			PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 			
-			int value = factionEntry.getValueWithEffectsOnEntity(le, (Player)sender);
-			FactionStandingType standing = Utils.getFactionStandingType(factionEntry.getFactionId(),value);
+			int value = factionEntry.getValueWithEffectsOnEntityAndBase(le, (Player)sender);
+			FactionStandingType standing = Utils.getFactionStandingType(value);
 			switch (standing)
 			{
 				case FACTION_ALLY:

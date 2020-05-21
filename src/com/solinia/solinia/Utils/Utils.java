@@ -4341,40 +4341,32 @@ public class Utils {
 		return false;
 	}
 
-	public static FactionStandingType getFactionStandingType(int factionId, int playerFactionValue) {
-		try {
-			ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager().getFaction(factionId);
-			if (faction != null)
-				playerFactionValue += faction.getBase();
-		} catch (CoreStateInitException e) {
-
-		}
-
-		if (playerFactionValue >= 1101) {
+	public static FactionStandingType getFactionStandingType(int playerFactionValueWithSpellsAndBase) {
+		if (playerFactionValueWithSpellsAndBase >= 1101) {
 			return FactionStandingType.FACTION_ALLY;
 		}
-		if (playerFactionValue >= 701 && playerFactionValue <= 1100) {
+		if (playerFactionValueWithSpellsAndBase >= 701 && playerFactionValueWithSpellsAndBase <= 1100) {
 			return FactionStandingType.FACTION_WARMLY;
 		}
-		if (playerFactionValue >= 401 && playerFactionValue <= 700) {
+		if (playerFactionValueWithSpellsAndBase >= 401 && playerFactionValueWithSpellsAndBase <= 700) {
 			return FactionStandingType.FACTION_KINDLY;
 		}
-		if (playerFactionValue >= 101 && playerFactionValue <= 400) {
+		if (playerFactionValueWithSpellsAndBase >= 101 && playerFactionValueWithSpellsAndBase <= 400) {
 			return FactionStandingType.FACTION_AMIABLE;
 		}
-		if (playerFactionValue >= 0 && playerFactionValue <= 100) {
+		if (playerFactionValueWithSpellsAndBase >= 0 && playerFactionValueWithSpellsAndBase <= 100) {
 			return FactionStandingType.FACTION_INDIFFERENT;
 		}
-		if (playerFactionValue >= -100 && playerFactionValue <= -1) {
+		if (playerFactionValueWithSpellsAndBase >= -100 && playerFactionValueWithSpellsAndBase <= -1) {
 			return FactionStandingType.FACTION_APPREHENSIVE;
 		}
-		if (playerFactionValue >= -700 && playerFactionValue <= -101) {
+		if (playerFactionValueWithSpellsAndBase >= -700 && playerFactionValueWithSpellsAndBase <= -101) {
 			return FactionStandingType.FACTION_DUBIOUS;
 		}
-		if (playerFactionValue >= -999 && playerFactionValue <= -701) {
+		if (playerFactionValueWithSpellsAndBase >= -999 && playerFactionValueWithSpellsAndBase <= -701) {
 			return FactionStandingType.FACTION_THREATENLY;
 		}
-		if (playerFactionValue <= -1000) {
+		if (playerFactionValueWithSpellsAndBase <= -1000) {
 			return FactionStandingType.FACTION_SCOWLS;
 		}
 		return FactionStandingType.FACTION_INDIFFERENT;
