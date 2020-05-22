@@ -1706,12 +1706,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		}
 	}
 
-	@Override
-	public int getNPCDefaultAtk() {
-		// TODO Auto-generated method stub
-		return (int) Math.ceil((getLevel()/7)*10);
-	}
-
 	private Tuple<Integer, Integer> calcNPCDamage() {
 		int AC_adjust=12;
 		int min_dmg = 0;
@@ -1926,6 +1920,30 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		}
 		
 		return (int) Math.round((getMaxDamage() - mindmg) / 1.9);
+	}
+	
+	@Override
+	public int getNPCDefaultAtk() {
+		// TODO Auto-generated method stub
+		int base = (int) Math.ceil((getLevel()/7)*10);
+		
+		if (isBoss()) {
+			base += Math.ceil(getLevel()/7);
+		}
+
+		if (isHeroic()) {
+			base += Math.ceil(getLevel()/7*0.5);
+		}
+
+		if (isRaidboss()) {
+			base += Math.ceil(getLevel()/7*2);
+		}
+
+		if (isRaidheroic()) {
+			base += Math.ceil(getLevel()/7*0.5);
+		}
+		
+		return base;
 	}
 	
 	@Override
