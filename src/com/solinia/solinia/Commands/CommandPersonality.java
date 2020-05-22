@@ -70,6 +70,7 @@ public class CommandPersonality implements CommandExecutor {
 					sendTraitChoices(sender);
 				else
 					setTraitChoice(sender,Integer.parseInt(args[1]));
+				break;
 			case "backstory":
 				if (args.length == 1)
 				{
@@ -88,6 +89,7 @@ public class CommandPersonality implements CommandExecutor {
 					}
 					setBackstory(sender,response);
 				}
+				break;
 			case "playerflags":
 				try
 				{

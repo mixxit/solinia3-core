@@ -1680,6 +1680,12 @@ public class Solinia3CorePlayerListener implements Listener {
 					Utils.CancelEvent(event);
 					return;
 				}
+				
+				if (event.getCurrentItem() == null)
+				{
+					Utils.CancelEvent(event);
+					return;
+				}
 
 				// Picking up merchant item
 				// event.getView().getPlayer().sendMessage("Picking up merchant item");

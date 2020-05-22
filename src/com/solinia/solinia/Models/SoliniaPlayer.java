@@ -5851,6 +5851,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setSpellLoadout(ConcurrentHashMap<String, SpellLoadout> spellLoadout) {
 		this.spellLoadout = spellLoadout;
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -5865,6 +5866,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		loadSpellLoadoutSlot(8,loadout.spell8);
 		
 		sendMemorisedSpellSlots();
+		this.setLastUpdatedTimeNow();
 	}
 
 	private void loadSpellLoadoutSlot(int spellSlot, int spellId) {
@@ -5967,6 +5969,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		setVampire(false);
 		updateMaxHp();
+		this.setLastUpdatedTimeNow();
 	}
 
 	@Override
@@ -5977,5 +5980,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void setBackStory(String backStory) {
 		this.backStory = backStory;
+		this.setLastUpdatedTimeNow();
 	}
 }
