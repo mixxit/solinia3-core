@@ -43,55 +43,37 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			}
 
 			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(targetmob);
-			solLivingEntity.sendStats(player);
 
-			player.sendMessage("GUID: " + targetmob.getUniqueId());
-			for (MetadataValue val : targetmob.getMetadata("mobname")) {
-				player.sendMessage("mobname tag: " + val.asString());
-			}
-
-			for (MetadataValue val : targetmob.getMetadata("npcid")) {
-				player.sendMessage("npcid tag: " + val.asString());
-			}
-			
-			player.sendMessage("IsNPC: " + solLivingEntity.isNPC());
-			
+			int npcid = 0;
 			if (solLivingEntity.isNPC())
 			{
-				player.sendMessage("NPCID: " + solLivingEntity.getNpcid());
+				npcid = solLivingEntity.getNpcid();
 			}
+			
+			String mobtag = "";
+			String npcidtag = "";
+			
+			for (MetadataValue val : targetmob.getMetadata("mobname"))
+				mobtag = "mobname tag: " + val.asString();
+
+			for (MetadataValue val : targetmob.getMetadata("npcid"))
+				npcidtag = "npcid tag: " + val.asString();
+			
+			player.sendMessage("GUID: " + targetmob.getUniqueId() + " IsNPC: " + solLivingEntity.isNPC() + " npcid: " + npcid);
+			player.sendMessage(mobtag + " " + npcidtag);
+			
 			player.sendMessage("EQUIPMENT");
 			for(ISoliniaItem solItem : solLivingEntity.getEquippedSoliniaItems())
 			{
 				player.sendMessage("SolItemId: " + solItem.getId() + " " + solItem.getDisplayname());
 			}
 			
-			player.sendMessage("METADATA");
-			if (solLivingEntity.getBukkitLivingEntity().hasMetadata("mobname"))
-			{
-				String metadata = "";
-				for (MetadataValue val : solLivingEntity.getBukkitLivingEntity().getMetadata("mobname")) {
-					metadata = val.asString();
-				}
-				
-				player.sendMessage("mobname: " + metadata);
-			}
 			
 			if (solLivingEntity.getSpawnPoint() == null)
 			{
 				player.sendMessage("spawnpoint: null");
 			} else {
 				player.sendMessage("spawnpoint: " + solLivingEntity.getSpawnPoint().getWorld().getName() + "," + solLivingEntity.getSpawnPoint().getX() + "," + solLivingEntity.getSpawnPoint().getY() + "," + solLivingEntity.getSpawnPoint().getZ());
-			}
-			
-			if (solLivingEntity.getBukkitLivingEntity().hasMetadata("mythicmob"))
-			{
-				String metadata = "";
-				for (MetadataValue val : solLivingEntity.getBukkitLivingEntity().getMetadata("mythicmob")) {
-					metadata = val.asString();
-				}
-				
-				player.sendMessage("mythicmob: " + metadata);
 			}
 			
 			if (solLivingEntity.getBukkitLivingEntity().hasMetadata("Faction"))
@@ -131,6 +113,9 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			player.sendMessage("Minecraft attack target: " + solLivingEntity.getAttackTarget());
 			if(player.isOp())
 			player.sendMessage("Can i see you: "+ solLivingEntity.checkLosFN(SoliniaLivingEntityAdapter.Adapt(player)));
+			
+			solLivingEntity.sendStats(player);
+
 			
 		} catch (CoreStateInitException e)
 		{

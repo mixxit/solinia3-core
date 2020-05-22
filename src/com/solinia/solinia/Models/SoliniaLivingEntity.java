@@ -4134,9 +4134,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public float getAutoAttackTimerFrequencySeconds() {
+		/*
 		float weaponDelayInSeconds = ((float)getMainWeaponDelay())/10F;
 		float onePercentWeaponDelay = weaponDelayInSeconds/100F;
-		float hastedWeaponDelay = onePercentWeaponDelay * (float)getHaste();
+		float haste = (float)getHaste();
+		Bukkit.broadcastMessage(weaponDelayInSeconds + " Haste is:" + haste);
+		float hastedWeaponDelay = onePercentWeaponDelay * haste;
 		float hastedWeaponDelayMinusDelay = hastedWeaponDelay - weaponDelayInSeconds;
 		
 		float frequency = weaponDelayInSeconds-hastedWeaponDelayMinusDelay;
@@ -4144,8 +4147,30 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			frequency = 0.10F;
 		
 		frequency = (float)(Math.round(frequency*100.0)/100.0);
+
+		if (frequency * 1000 < Utils.MinHastedDelay)
+			frequency = Utils.MinHastedDelay / 1000;
+
 		DebugUtils.DebugLog("SoliniaLivingEntity","getAutoAttackTimerFrequencySeconds",getBukkitLivingEntity(),"WeaponDelayInSeconds: " + weaponDelayInSeconds + " onePercentWeaponDelay: " + onePercentWeaponDelay + " hastedWeaponDelay: " + hastedWeaponDelay + " hastedWeaponDelayMinusDelay: " + hastedWeaponDelayMinusDelay + " frequency: " + frequency);
+		
 		return frequency;
+		*/
+		
+		float haste_mod = getHaste() * 0.01f;
+
+		int hhe = getItemBonuses(SpellEffectType.HundredHands) + getSpellBonuses(SpellEffectType.HundredHands);
+		float speed = 0;
+		float delay = 3500;
+
+		//we have a weapon, use its delay
+		delay = 100 * getMainWeaponDelay();
+
+		speed = delay / haste_mod;
+
+		// TODO do quiver haste
+		speed = (int)(speed + ((hhe / 1000.0f) * speed));
+		
+		return Math.max(Utils.MinHastedDelay,speed)/1000;
 	}
 
 	
