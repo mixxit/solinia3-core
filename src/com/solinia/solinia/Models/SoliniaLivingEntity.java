@@ -7618,14 +7618,19 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					{
 						case RESIST_FIRE:
 							effects += npc.getFR();
+							break;
 						case RESIST_COLD:
 							effects += npc.getCR();
+							break;
 						case RESIST_MAGIC:
 							effects += npc.getMR();
+							break;
 						case RESIST_DISEASE:
 							effects += npc.getDR();
+							break;
 						case RESIST_POISON:
 							effects += npc.getPR();
+							break;
 					}
 				}
 			}
