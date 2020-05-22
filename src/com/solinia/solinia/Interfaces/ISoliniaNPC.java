@@ -307,4 +307,6 @@ public interface ISoliniaNPC extends IPersistable {
 	int getCR();
 
 	int getFR();
+
+	int getNPCDefaultAccuracyRating();
 }

@@ -6320,7 +6320,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (isNPC()) {
 			ISoliniaNPC npc = getNPC();
 			if (npc != null)
-				tohit += npc.getAccuracyRating();
+				tohit += npc.getNPCDefaultAccuracyRating();
 		}
 		if (isPlayer()) {
 			double reduction = getIntoxication() / 2.0;

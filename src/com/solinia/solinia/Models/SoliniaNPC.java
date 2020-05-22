@@ -412,7 +412,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		sender.sendMessage("- hpregenrate: " + ChatColor.GOLD + getHpRegenRate() + ChatColor.RESET + " " + "manaregenrate: " + ChatColor.GOLD
 				+ getManaRegenRate() + ChatColor.RESET + " " + "mana: " + ChatColor.GOLD + getMana());
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " "
-				+ "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
+				+ "accuracyrating: " + ChatColor.GOLD + getNPCDefaultAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("- mindmg: " + ChatColor.GOLD + getMinDmg() + ChatColor.RESET + " "
 				+ "maxdmg: " + ChatColor.GOLD + getMaxDmg() + ChatColor.RESET);
 		sender.sendMessage("fireresist: " + ChatColor.GOLD + getFireresist() + ChatColor.RESET + 
@@ -1920,6 +1920,33 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		}
 		
 		return (int) Math.round((getMaxDamage() - mindmg) / 1.9);
+	}
+	
+	@Override
+	public int getNPCDefaultAccuracyRating() {
+		if (this.getAccuracyRating() > 0)
+			return this.getAccuracyRating();
+		
+		// TODO Auto-generated method stub
+		int base = (int) Math.ceil((getLevel()/7)*10);
+		
+		if (isBoss()) {
+			base += Math.ceil(getLevel()/7);
+		}
+
+		if (isHeroic()) {
+			base += Math.ceil(getLevel()/7*0.5);
+		}
+
+		if (isRaidboss()) {
+			base += Math.ceil(getLevel()/7*2);
+		}
+
+		if (isRaidheroic()) {
+			base += Math.ceil(getLevel()/7*0.5);
+		}
+		
+		return base;
 	}
 	
 	@Override
