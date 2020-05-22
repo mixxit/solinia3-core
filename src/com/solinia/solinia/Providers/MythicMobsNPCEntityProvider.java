@@ -276,7 +276,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		}
 
 		double hp = Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75);
-		double damage = Utils.getNPCDefaultDamage(npc);
+		double damage = npc.getMaxDamage();
 
 		if (npc.isHeroic()) {
 			hp += (Utils.getHeroicHPMultiplier() * npc.getLevel());

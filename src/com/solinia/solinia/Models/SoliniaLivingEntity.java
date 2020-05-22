@@ -4432,10 +4432,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int reuse = 0;
 		SkillType skill_type; // to avoid casting... even though it "would work"
 		int itemslot = InventorySlot.Feet;
-		/*if (IsNPC()) {
-			this.getNPC().dama
-			min_dmg = npc->GetMinDamage();
-		}*/
+		if (isNPC()) {
+			ISoliniaNPC npc = this.getNPC();
+			if (npc != null)
+			{
+				min_dmg = npc.getMinDamage();
+			}
+		}
 
 		switch (unchecked_type) {
 		case FlyingKick:
@@ -9674,7 +9677,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					my_hit.hand = InventorySlot.Primary;
 
 				if (isNPC())
-					my_hit.min_damage = 1;
+				{
+					ISoliniaNPC npc = this.getNPC();
+					if (npc != null)
+						my_hit.min_damage = 1;
+				}
 
 				doAttack(solOther, my_hit);
 				damage = my_hit.damage_done;

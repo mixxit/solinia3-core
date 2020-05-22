@@ -3969,22 +3969,6 @@ public class Utils {
 		return (int) Math.floor(calculatedhp);
 	}
 
-	public static int getMaxDamage(int level, int strength) {
-		// TODO Auto-generated method stub
-		double basedmg = ((level * 0.45) + 0.8);
-
-		double racestatbonus = strength + (level * 5);
-		double bonus = racestatbonus / 100;
-		double damagemlt = basedmg * bonus;
-		double newdmg = damagemlt;
-		double damagepct = newdmg / basedmg;
-
-		int maxDamage = (int) Math.floor(basedmg * damagepct);
-		if (maxDamage < 1)
-			maxDamage = 1;
-		return maxDamage;
-	}
-
 	public static SkillType getSkillType(Integer skill) {
 		switch (skill) {
 		case 0:
@@ -5523,27 +5507,6 @@ public class Utils {
 		loc.setDirection(difference);
 
 		return loc;
-	}
-
-	public static double getNPCDefaultDamage(ISoliniaNPC npc) {
-		int damage = Utils.getMaxDamage(npc.getLevel(), 75);
-		if (npc.isHeroic()) {
-			damage += (Utils.getHeroicDamageMultiplier() * npc.getLevel());
-		}
-
-		if (npc.isBoss()) {
-			damage += (Utils.getBossDamageMultiplier(npc.isHeroic()) * npc.getLevel());
-		}
-
-		if (npc.isRaidheroic()) {
-			damage += (Utils.getRaidHeroicDamageMultiplier() * npc.getLevel());
-		}
-
-		if (npc.isRaidboss()) {
-			damage += (Utils.getRaidBossDamageMultiplier() * npc.getLevel());
-		}
-
-		return damage;
 	}
 
 	public static double DistanceOverAggroLimit(LivingEntity attacker, LivingEntity aggroCheckEntity) {

@@ -31,6 +31,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
@@ -104,6 +105,9 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private int hpRegenRate = 0;
 	private int manaRegenRate = 0;
 	private int mana = 0;
+	
+	private int minDmg = 0;
+	private int maxDmg = 0;
 
 	@Override
 	public int getId() {
@@ -403,6 +407,8 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				+ getManaRegenRate() + ChatColor.RESET + " " + "mana: " + ChatColor.GOLD + getMana());
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " "
 				+ "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
+		sender.sendMessage("- mindmg: " + ChatColor.GOLD + getMinDmg() + ChatColor.RESET + " "
+				+ "maxdmg: " + ChatColor.GOLD + getMaxDmg() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
 		sender.sendMessage("- timefrom: " + ChatColor.GOLD + getTimefrom() + ChatColor.RESET +  "- timeto: " + ChatColor.GOLD + getTimeto() + ChatColor.RESET + " - randomspawn: "
@@ -795,6 +801,12 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			break;
 		case "mana":
 			setMana(Integer.parseInt(value));
+			break;
+		case "mindmg":
+			setMinDmg(Integer.parseInt(value));
+			break;
+		case "maxdmg":
+			setMaxDmg(Integer.parseInt(value));
 			break;
 		case "petcontrollable":
 			setPetControllable(Boolean.parseBoolean(value));
@@ -1863,18 +1875,86 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	@Override
 	public int getBaseDamage() {
-		Tuple<Integer,Integer> minmaxdmg = calcNPCDamage();
-		// This is also in getMinDamage()
-		return (int) Math.round((minmaxdmg.b() - minmaxdmg.a()) / 1.9);
+		int mindmg = getMinDmg();
+		if (mindmg < 1)
+		{
+			mindmg = calcNPCDamage().a();
+			
+			if (isBoss()) {
+				mindmg += (Utils.getBossHPMultiplier(isHeroic()) * mindmg);
+			}
+
+			if (isHeroic()) {
+				mindmg += (Utils.getHeroicHPMultiplier() * mindmg);
+			}
+
+			if (isRaidboss()) {
+				mindmg += (Utils.getRaidBossHPMultiplier() * mindmg);
+			}
+
+			if (isRaidheroic()) {
+				mindmg += (Utils.getRaidHeroicHPMultiplier() * mindmg);
+			}
+		}
+		
+		return (int) Math.round((getMaxDamage() - mindmg) / 1.9);
+	}
+	
+	@Override
+	public int getMaxDamage()
+	{
+		if(getMaxDmg() > 0){
+			return getMaxDmg();
+		} else {
+			int maxDamage = calcNPCDamage().b();
+			
+			if (isBoss()) {
+				maxDamage += (Utils.getBossHPMultiplier(isHeroic()) * maxDamage);
+			}
+
+			if (isHeroic()) {
+				maxDamage += (Utils.getHeroicHPMultiplier() * maxDamage);
+			}
+
+			if (isRaidboss()) {
+				maxDamage += (Utils.getRaidBossHPMultiplier() * maxDamage);
+			}
+
+			if (isRaidheroic()) {
+				maxDamage += (Utils.getRaidHeroicHPMultiplier() * maxDamage);
+			}
+			
+			return maxDamage;
+		}
 	}
 
 	@Override
 	public int getMinDamage() {
-		Tuple<Integer,Integer> minmaxdmg = calcNPCDamage();
+		int mindmg = getMinDmg();
+		if (mindmg < 1)
+		{
+			mindmg = calcNPCDamage().a();
+			
+			if (isBoss()) {
+				mindmg += (Utils.getBossHPMultiplier(isHeroic()) * mindmg);
+			}
+
+			if (isHeroic()) {
+				mindmg += (Utils.getHeroicHPMultiplier() * mindmg);
+			}
+
+			if (isRaidboss()) {
+				mindmg += (Utils.getRaidBossHPMultiplier() * mindmg);
+			}
+
+			if (isRaidheroic()) {
+				mindmg += (Utils.getRaidHeroicHPMultiplier() * mindmg);
+			}
+		}
+
+		int base_damage = (int)Math.round((getMaxDamage() - mindmg) / 1.9);
+		return mindmg - (int)Math.round(base_damage / 10.0);
 		
-		// this should be the same as getBaseDamage()
-		int base_damage = (int) Math.round((minmaxdmg.b() - minmaxdmg.a()) / 1.9);
-		return (int)(minmaxdmg.a() - Math.round(base_damage / 10.0));
 	}
 
 	@Override
@@ -1946,5 +2026,21 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	private void setMana(int mana) {
 		this.mana = mana;
+	}
+
+	public int getMinDmg() {
+		return minDmg;
+	}
+
+	public void setMinDmg(int minDmg) {
+		this.minDmg = minDmg;
+	}
+
+	public int getMaxDmg() {
+		return maxDmg;
+	}
+
+	public void setMaxDmg(int maxDmg) {
+		this.maxDmg = maxDmg;
 	}
 }
