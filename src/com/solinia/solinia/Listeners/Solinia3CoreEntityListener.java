@@ -35,6 +35,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.SoliniaLivingEntityHPRegenTickEvent;
 import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
@@ -65,6 +66,69 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		// No
 		Utils.CancelEvent(event);
+	}
+	
+	@EventHandler
+	public void onHPRegenTick(SoliniaLivingEntityHPRegenTickEvent event)
+	{
+			if (event.isCancelled())
+				return;
+			
+			Entity entity = Bukkit.getEntity(event.getUuid());
+			
+			if (entity == null)
+				return;
+			
+			if (entity.isDead())
+				return;
+			
+			if (!(entity instanceof LivingEntity))
+				return;
+			
+			try
+			{
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+			if (solLivingEntity == null)
+				return;
+
+			solLivingEntity.doHPRegenTick();
+			
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	@EventHandler
+	public void onMPRegenTick(SoliniaLivingEntityHPRegenTickEvent event)
+	{
+			if (event.isCancelled())
+				return;
+			
+			Entity entity = Bukkit.getEntity(event.getUuid());
+			
+			if (entity == null)
+				return;
+			
+			if (entity.isDead())
+				return;
+			
+			if (!(entity instanceof LivingEntity))
+				return;
+			
+			try
+			{
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+			if (solLivingEntity == null)
+				return;
+
+			solLivingEntity.doMPRegenTick();
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	// Needs to occur before anything else

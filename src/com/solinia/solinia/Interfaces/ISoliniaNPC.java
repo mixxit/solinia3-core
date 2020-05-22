@@ -291,4 +291,8 @@ public interface ISoliniaNPC extends IPersistable {
 	void setBanker(boolean isBanker);
 
 	SpellResistType getPetElementalTypeId();
+
+	int getNPCHPRegen();
+	int getNPCMPRegen();
+	int getNPCMana();
 }

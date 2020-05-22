@@ -6,14 +6,14 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerHPRegenTickEvent extends Event implements Cancellable {
+public class SoliniaLivingEntityHPRegenTickEvent extends Event implements Cancellable {
 	private boolean cancelled;
 	private static final HandlerList handlers = new HandlerList();
-	private UUID playerUuid;
+	private UUID Uuid;
 
-	public PlayerHPRegenTickEvent(UUID playerUuid) 
+	public SoliniaLivingEntityHPRegenTickEvent(UUID Uuid) 
     {
-		this.playerUuid = playerUuid;
+		this.Uuid = Uuid;
 		this.cancelled = false;
     }
 	
@@ -33,8 +33,8 @@ public class PlayerHPRegenTickEvent extends Event implements Cancellable {
         return handlers;
     }
     
-    public UUID getPlayerUuid()
+    public UUID getUuid()
     {
-    	return this.playerUuid;
+    	return this.Uuid;
     }
 }

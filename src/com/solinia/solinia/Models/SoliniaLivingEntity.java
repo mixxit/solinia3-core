@@ -7141,7 +7141,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		if (success) {
-			this.setMana(this.getMana() - spell.getActSpellCost(this));
+			this.increaseMana(-spell.getActSpellCost(this));
 		}
 
 		return success;
@@ -7539,29 +7539,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (npc.getClassid() < 1)
 				return;
 
-			this.setMana(this.getMana() + Utils.getDefaultNPCManaRegen(npc));
-
 			aiEngagedCastCheck(plugin, npc, castingAtEntity, this.getEffectiveLevel(true));
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
-
-	private void setMana(int amount) {
-		if (isPlayer())
-			return;
-
-		if (this.getNpcid() < 1)
-			return;
-
-		try {
-			ISoliniaNPC npc = getNPC();
-			if (npc == null)
-				return;
-			StateManager.getInstance().getEntityManager().setNPCMana(this.getBukkitLivingEntity(), npc, amount);
-		} catch (CoreStateInitException e) {
-			return;
 		}
 	}
 
@@ -8521,19 +8502,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			ISoliniaNPC npc = getNPC();
 			if (npc != null) {
-				if (npc.isBoss()) {
-					maxmana += (Utils.getBossMPRegenMultipler(npc.isHeroic()) * npc.getLevel());
-				}
-				if (npc.isHeroic()) {
-					maxmana += (Utils.getHeroicMPRegenMultipler() * npc.getLevel());
-				}
-
-				if (npc.isRaidboss()) {
-					maxmana += (Utils.getRaidBossMPRegenMultipler() * npc.getLevel());
-				}
-				if (npc.isRaidheroic()) {
-					maxmana += (Utils.getRaidHeroicMPRegenMultipler() * npc.getLevel());
-				}
+				maxmana += npc.getNPCMana();
 			}
 
 		}
@@ -10368,21 +10337,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (((Sittable) this.getBukkitLivingEntity()).isSitting())
 				((Sittable) this.getBukkitLivingEntity()).setSitting(false);
 		}
-
-		if (this.getBukkitLivingEntity().getHealth() < this.getBukkitLivingEntity()
-				.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-
-			// Pet regen is slow
-			if (this.getBukkitLivingEntity() != null && !this.getBukkitLivingEntity().isDead())
-			{
-				this.setHPChange(1, this.getBukkitLivingEntity());
-			}
-		}
-
-		// Mp Regen
-		if (this.getMana() < this.getMaxMP()) {
-			this.setMana(this.getMana() + 1);
-		}
 	}
 
 	@Override
@@ -11951,4 +11905,214 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return true;
 	}
 
+	@Override
+	public void doHPRegenTick() {
+		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
+			return;
+
+		int sleephpregen = 0;
+		// Sleep regen
+		if (getBukkitLivingEntity().isSleeping()) {
+			sleephpregen += 50;
+		}
+
+		// Hp and Mana Regen from Items
+		int hpregen = 0;
+		
+		if (this.isNPC())
+		{
+			ISoliniaNPC npc = this.getNPC();
+			if(npc != null)
+				hpregen += npc.getNPCHPRegen();
+		}
+
+		ISoliniaAAAbility hpaa = null;
+		try {
+			if (hasAaRanks()) {
+				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
+						.getAAbilitiesBySysname("INNATEREGENERATION")) {
+					if (!hasAAAbility(ability.getId()))
+						continue;
+
+					hpaa = ability;
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+
+		int aahpregenrank = 0;
+
+		if (hpaa != null) {
+			aahpregenrank = Utils.getRankPositionOfAAAbility(getBukkitLivingEntity(), hpaa);
+			hpregen += aahpregenrank;
+		}
+
+		hpregen += sleephpregen;
+
+		// Process HP Regeneration
+		if (hpregen > 0) {
+			if (!getBukkitLivingEntity().isDead())
+				setHPChange(hpregen, this.getBukkitLivingEntity());
+		}
+		this.setLastUpdatedTimeNow();
+
+
+	}
+
+	@Override
+	public void doMPRegenTick() {
+		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
+			return;
+
+		// Apply Crouch Mana Regen Bonus
+		int manaregen = 1;
+
+		if (this.isNPC())
+		{
+			ISoliniaNPC npc = this.getNPC();
+			if(npc != null)
+				manaregen += npc.getNPCMPRegen();
+		}
+		
+		int sleepmpregen = 0;
+		// Sleep regen
+		if (getBukkitLivingEntity().isSleeping()) {
+			sleepmpregen += 50;
+		}
+
+		manaregen += sleepmpregen;
+
+		// a players mana regen based on if they are meditating (sneaking)
+		manaregen += getMeditatingManaBonus();
+
+		ISoliniaAAAbility aa = null;
+		try {
+			if (hasAaRanks()) {
+				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
+						.getAAbilitiesBySysname("MENTALCLARITY")) {
+					if (!hasAAAbility(ability.getId()))
+						continue;
+
+					aa = ability;
+				}
+			}
+
+		} catch (CoreStateInitException e) {
+
+		}
+
+		int aamanaregenrank = 0;
+
+		if (aa != null) {
+			if (hasAaRanks())
+				aamanaregenrank = Utils.getRankPositionOfAAAbility(getBukkitLivingEntity(), aa);
+			manaregen += aamanaregenrank;
+		}
+
+		ISoliniaAAAbility emaa = null;
+		try {
+			if (hasAaRanks()) {
+				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
+						.getAAbilitiesBySysname("MENTALCLARITY")) {
+					if (!hasAAAbility(ability.getId()))
+						continue;
+
+					emaa = ability;
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+
+		int emaamanaregenrank = 0;
+
+		if (emaa != null) {
+			if (hasAaRanks())
+				emaamanaregenrank = Utils.getRankPositionOfAAAbility(getBukkitLivingEntity(), emaa);
+			manaregen += emaamanaregenrank;
+		}
+
+		increaseMana(manaregen);
+		
+		this.setLastUpdatedTimeNow();
+	}
+	
+	private int getMeditatingManaBonus() {
+		if (this.isPlayer())
+		{
+			ISoliniaPlayer solPlayer = getSoliniaPlayer();
+			if (solPlayer != null)
+			{
+				return solPlayer.getPlayerMeditatingManaBonus();
+			}		
+		}
+		return 0;
+	}
+
+	private void increaseMana(int amount) {
+		if (this.isPlayer())
+		{
+			ISoliniaPlayer solPlayer = getSoliniaPlayer();
+			if (solPlayer != null)
+			{
+				solPlayer.increasePlayerMana(amount);
+			}		
+		}
+		
+		if (this.getNpcid() < 1)
+			return;
+
+		try {
+			ISoliniaNPC npc = getNPC();
+			if (npc == null)
+				return;
+			
+			int currentMana = this.getMana();
+			
+			StateManager.getInstance().getEntityManager().setNPCMana(this.getBukkitLivingEntity(), npc, currentMana+amount);
+		} catch (CoreStateInitException e) {
+			return;
+		}
+		
+		
+	}
+
+	private boolean hasAAAbility(int id) {
+		if (!this.isPlayer())
+			return false;
+		
+		ISoliniaPlayer solPlayer = getSoliniaPlayer();
+		if (solPlayer != null)
+		{
+			return solPlayer.hasAAAbility(id);
+		}		
+		
+		return false;
+	}
+
+	public void setLastUpdatedTimeNow()
+	{
+		if (this.isPlayer())
+		{
+			ISoliniaPlayer solPlayer = getSoliniaPlayer();
+			if (solPlayer != null)
+			{
+				solPlayer.setLastUpdatedTimeNow();
+			}		
+		}
+	}
+
+	private boolean hasAaRanks() {
+		if (!this.isPlayer())
+			return false;
+		
+		ISoliniaPlayer solPlayer = getSoliniaPlayer();
+		if (solPlayer != null)
+		{
+			return solPlayer.hasAaRanks();
+		}		
+		
+		return false;
+	}
 }

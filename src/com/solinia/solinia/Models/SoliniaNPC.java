@@ -100,6 +100,10 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private long timeto = Utils.MAXDAYTICK;
 	private boolean isSocial = true;
 	private boolean isBanker = false;
+	
+	private int hpRegenRate = 0;
+	private int manaRegenRate = 0;
+	private int mana = 0;
 
 	@Override
 	public int getId() {
@@ -395,6 +399,8 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		sender.sendMessage(ChatColor.RED + "STATS" + ChatColor.RESET);
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET + " " + "ac: " + ChatColor.GOLD
 				+ getAC() + ChatColor.RESET + " " + "forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
+		sender.sendMessage("- hpregenrate: " + ChatColor.GOLD + getHpRegenRate() + ChatColor.RESET + " " + "manaregenrate: " + ChatColor.GOLD
+				+ getManaRegenRate() + ChatColor.RESET + " " + "mana: " + ChatColor.GOLD + getMana());
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " "
 				+ "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
@@ -780,6 +786,15 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			break;
 		case "forcedmaxhp":
 			setForcedMaxHp(Integer.parseInt(value));
+			break;
+		case "hpregenrate":
+			setHpRegenRate(Integer.parseInt(value));
+			break;
+		case "manaregenrate":
+			setManaRegenRate(Integer.parseInt(value));
+			break;
+		case "mana":
+			setMana(Integer.parseInt(value));
 			break;
 		case "petcontrollable":
 			setPetControllable(Boolean.parseBoolean(value));
@@ -1886,5 +1901,50 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		if (this.name.startsWith("SumEarth"))
 			return SpellResistType.RESIST_DISEASE;
 		return SpellResistType.RESIST_NONE;
+	}
+
+	@Override
+	public int getNPCHPRegen() {
+		if(this.getManaRegenRate() > 0)
+			return this.getHpRegenRate();
+		return Utils.getDefaultNPCHPRegen(this);
+	}
+	
+	@Override
+	public int getNPCMPRegen() {
+		if(this.getManaRegenRate() > 0)
+			return this.getManaRegenRate();
+		return Utils.getDefaultNPCManaRegen(this);
+	}
+	
+	@Override
+	public int getNPCMana() {
+		if(this.getMana() > 0)
+			return this.getMana();
+		return Utils.getDefaultNPCMana(this);
+	}
+	
+	private int getHpRegenRate() {
+		return hpRegenRate;
+	}
+
+	private void setHpRegenRate(int hpRegenRate) {
+		this.hpRegenRate = hpRegenRate;
+	}
+
+	private int getManaRegenRate() {
+		return this.manaRegenRate;
+	}
+	
+	private void setManaRegenRate(int manaRegenRate) {
+		this.manaRegenRate = manaRegenRate;
+	}
+
+	private int getMana() {
+		return mana;
+	}
+
+	private void setMana(int mana) {
+		this.mana = mana;
 	}
 }

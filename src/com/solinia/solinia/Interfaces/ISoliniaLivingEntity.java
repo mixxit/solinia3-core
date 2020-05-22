@@ -525,4 +525,8 @@ public interface ISoliniaLivingEntity  {
 
 	int getHaste();
 
+	public void doHPRegenTick();
+
+	public void doMPRegenTick();
+
 }

@@ -446,9 +446,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	SoliniaZone getFirstZone();
 
-	public void doHPRegenTick();
-	public void doMPRegenTick();
-
 	public void doEquipmentRegenTick(List<ISoliniaItem> items);
 
 	void whisper(String string);
@@ -664,4 +661,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	String getBackStory();
 	void setBackStory(String backStory);
 	public void clearTargetsAgainstMeWithoutEffect(SpellEffectType invisibility);
+	int getPlayerMeditatingManaBonus();
 }

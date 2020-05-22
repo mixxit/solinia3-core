@@ -98,6 +98,7 @@ import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellEffectIndex;
@@ -4927,17 +4928,36 @@ public class Utils {
 
 		return false;
 	}
+	
+	public static int getDefaultNPCHPRegen(SoliniaNPC npc) {
+		int baseHpRegen = (npc.getLevel() / 10)/2;
+		
+		if (npc.isBoss())
+			return npc.getLevel() / 8;
+		if (npc.isHeroic())
+			return npc.getLevel() / 9;
+		if (npc.isRaidboss())
+			return npc.getLevel() / 5;
+		if (npc.isRaidheroic())
+			return npc.getLevel() / 8;
+		return baseHpRegen;
+	}
 
 	public static Integer getDefaultNPCManaRegen(ISoliniaNPC npc) {
+		int baseMpRegen = npc.getLevel() / 35;
 		if (npc.isBoss())
-			return npc.getLevel() * Utils.getBossMPRegenMultipler(npc.isHeroic());
+			return npc.getLevel() / 15;
 		if (npc.isHeroic())
-			return npc.getLevel() * Utils.getHeroicMPRegenMultipler();
+			return npc.getLevel() / 25;
 		if (npc.isRaidboss())
-			return npc.getLevel() * Utils.getRaidBossMPRegenMultipler();
+			return npc.getLevel() / 3;
 		if (npc.isRaidheroic())
-			return npc.getLevel() * Utils.getRaidHeroicMPRegenMultipler();
-		return npc.getLevel() * 3;
+			return npc.getLevel() / 15;
+		return baseMpRegen;
+	}
+	
+	public static Integer getDefaultNPCMana(ISoliniaNPC npc) {
+		return getDefaultNPCManaRegen(npc) * 1500;
 	}
 
 	public static List<String> getSpecialisationSkills() {
@@ -5086,11 +5106,6 @@ public class Utils {
 		return 20;
 	}
 
-	public static int getHeroicMPRegenMultipler() {
-		// TODO Auto-generated method stub
-		return 10;
-	}
-
 	// Boss
 
 	public static float getBossRunSpeed() {
@@ -5114,15 +5129,6 @@ public class Utils {
 			return getHeroicHPMultiplier() * 2;
 	}
 
-	public static int getBossMPRegenMultipler(boolean heroicBoss) {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
-		if (heroicBoss)
-			return getHeroicMPRegenMultipler() * 6;
-		else
-			return getHeroicMPRegenMultipler() * 2;
-	}
-
 	// Raid Heroic
 
 	public static float getRaidHeroicRunSpeed() {
@@ -5138,11 +5144,6 @@ public class Utils {
 	public static int getRaidHeroicHPMultiplier() {
 		// TODO Auto-generated method stub
 		return 200;
-	}
-
-	public static int getRaidHeroicMPRegenMultipler() {
-		// TODO Auto-generated method stub
-		return 40;
 	}
 
 	// Raid Boss
@@ -5162,10 +5163,6 @@ public class Utils {
 		return 1000;
 	}
 
-	public static int getRaidBossMPRegenMultipler() {
-		// TODO Auto-generated method stub
-		return 200;
-	}
 
 	public static int getBaseInstrumentSoftCap() {
 		// TODO Auto-generated method stub
@@ -6694,4 +6691,5 @@ public class Utils {
 			return true;
 		return false;
 	}
+
 }
