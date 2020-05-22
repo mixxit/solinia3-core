@@ -433,3 +433,4 @@ Disarm, DisarmTraps, Divination, Dodge, DoubleAttack,DragonPunch, TailRake, Dual
 "skillmodvalue4":
 
 the amount of the value given from the skill mob type (number)
+
