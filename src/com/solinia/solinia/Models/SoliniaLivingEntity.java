@@ -7608,7 +7608,28 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return 25;
 			}
 		} else {
-			return 25 + getResistsFromActiveEffects(type);
+			int effects = getResistsFromActiveEffects(type);
+			if (isNPC())
+			{
+				ISoliniaNPC npc = this.getNPC();
+				if (npc != null)
+				{
+					switch(type)
+					{
+						case RESIST_FIRE:
+							effects += npc.getFR();
+						case RESIST_COLD:
+							effects += npc.getCR();
+						case RESIST_MAGIC:
+							effects += npc.getMR();
+						case RESIST_DISEASE:
+							effects += npc.getDR();
+						case RESIST_POISON:
+							effects += npc.getPR();
+					}
+				}
+			}
+			return effects;
 		}
 	}
 
