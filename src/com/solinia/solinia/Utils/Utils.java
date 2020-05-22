@@ -4940,6 +4940,19 @@ public class Utils {
 		return baseMpRegen;
 	}
 	
+	public static Integer getDefaultNPCResist(ISoliniaNPC npc) {
+		int base = 10 + (npc.getLevel() / 2);
+		if (npc.isBoss())
+			return 30 + (npc.getLevel() / 2);
+		if (npc.isHeroic())
+			return 20 + (npc.getLevel() / 2);
+		if (npc.isRaidboss())
+			return 10 + (npc.getLevel() * 2);
+		if (npc.isRaidheroic())
+			return 30 + (npc.getLevel() / 2);
+		return base;
+	}
+	
 	public static Integer getDefaultNPCMana(ISoliniaNPC npc) {
 		return getDefaultNPCManaRegen(npc) * 1500;
 	}

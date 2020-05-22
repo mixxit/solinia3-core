@@ -297,4 +297,14 @@ public interface ISoliniaNPC extends IPersistable {
 	int getNPCMana();
 
 	int getMaxDamage();
+
+	int getPR();
+
+	int getDR();
+
+	int getMR();
+
+	int getCR();
+
+	int getFR();
 }

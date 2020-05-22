@@ -108,6 +108,12 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	
 	private int minDmg = 0;
 	private int maxDmg = 0;
+	
+	private int fireresist;
+	private int diseaseresist;
+	private int coldresist;
+	private int poisonresist;
+	private int magicresist;
 
 	@Override
 	public int getId() {
@@ -409,11 +415,18 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				+ "accuracyrating: " + ChatColor.GOLD + getAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("- mindmg: " + ChatColor.GOLD + getMinDmg() + ChatColor.RESET + " "
 				+ "maxdmg: " + ChatColor.GOLD + getMaxDmg() + ChatColor.RESET);
+		sender.sendMessage("fireresist: " + ChatColor.GOLD + getFireresist() + ChatColor.RESET + 
+	    		" coldresist: " + ChatColor.GOLD + getColdresist() + ChatColor.RESET + 
+	    		" magicresist: " + ChatColor.GOLD + getMagicresist() + ChatColor.RESET + 
+	    		" poisonresist: " + ChatColor.GOLD + getPoisonresist() + ChatColor.RESET + 
+	    		" diseaseresist: " + ChatColor.GOLD + getDiseaseresist() + ChatColor.RESET)
+	    		;
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
 		sender.sendMessage("- timefrom: " + ChatColor.GOLD + getTimefrom() + ChatColor.RESET +  "- timeto: " + ChatColor.GOLD + getTimeto() + ChatColor.RESET + " - randomspawn: "
 				+ ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD
 				+ getChanceToRespawnOnDeath() + ChatColor.RESET);
+		
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
 		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: "
@@ -807,6 +820,21 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			break;
 		case "maxdmg":
 			setMaxDmg(Integer.parseInt(value));
+			break;
+		case "fireresist":
+			setFireresist(Integer.parseInt(value));
+			break;
+		case "coldresist":
+			setColdresist(Integer.parseInt(value));
+			break;
+		case "magicresist":
+			setMagicresist(Integer.parseInt(value));
+			break;
+		case "diseaseresist":
+			setDiseaseresist(Integer.parseInt(value));
+			break;
+		case "poisonresist":
+			setPoisonresist(Integer.parseInt(value));
 			break;
 		case "petcontrollable":
 			setPetControllable(Boolean.parseBoolean(value));
@@ -2042,5 +2070,76 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	public void setMaxDmg(int maxDmg) {
 		this.maxDmg = maxDmg;
+	}
+
+	private int getFireresist() {
+		return fireresist;
+	}
+
+	private void setFireresist(int fireresist) {
+		this.fireresist = fireresist;
+	}
+
+	private int getDiseaseresist() {
+		return diseaseresist;
+	}
+
+	private void setDiseaseresist(int diseaseresist) {
+		this.diseaseresist = diseaseresist;
+	}
+
+	private int getColdresist() {
+		return coldresist;
+	}
+
+	private void setColdresist(int coldresist) {
+		this.coldresist = coldresist;
+	}
+
+	private int getPoisonresist() {
+		return poisonresist;
+	}
+
+	private void setPoisonresist(int poisonresist) {
+		this.poisonresist = poisonresist;
+	}
+
+	private int getMagicresist() {
+		return magicresist;
+	}
+
+	private void setMagicresist(int magicresist) {
+		this.magicresist = magicresist;
+	}
+	
+	@Override
+	public int getFR() {
+		if(this.getFireresist() > 0)
+			return this.getFireresist();
+		return Utils.getDefaultNPCResist(this);
+	}
+	@Override
+	public int getCR() {
+		if(this.getColdresist() > 0)
+			return this.getColdresist();
+		return Utils.getDefaultNPCResist(this);
+	}
+	@Override
+	public int getMR() {
+		if(this.getMagicresist() > 0)
+			return this.getMagicresist();
+		return Utils.getDefaultNPCResist(this);
+	}
+	@Override
+	public int getDR() {
+		if(this.getDiseaseresist() > 0)
+			return this.getDiseaseresist();
+		return Utils.getDefaultNPCResist(this);
+	}
+	@Override
+	public int getPR() {
+		if(this.getPoisonresist() > 0)
+			return this.getPoisonresist();
+		return Utils.getDefaultNPCResist(this);
 	}
 }
