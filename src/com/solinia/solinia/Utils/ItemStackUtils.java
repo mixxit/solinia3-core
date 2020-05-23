@@ -736,6 +736,10 @@ public class ItemStackUtils {
 				if (soliniaItem.getMagicResist() > 0) {
 					resisttxt += ChatColor.WHITE + "MR: " + ChatColor.AQUA + soliniaItem.getMagicResist() + ChatColor.RESET + " ";
 				}
+				
+				if (soliniaItem.getDiseaseResist() > 0) {
+					resisttxt += ChatColor.WHITE + "DR: " + ChatColor.AQUA + soliniaItem.getDiseaseResist() + ChatColor.RESET + " ";
+				}
 
 				if (soliniaItem.getPoisonResist() > 0) {
 					resisttxt += ChatColor.WHITE + "PR: " + ChatColor.AQUA + soliniaItem.getPoisonResist() + ChatColor.RESET + " ";

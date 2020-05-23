@@ -347,6 +347,9 @@ public class ItemStackAdapter {
 		if (soliniaItem.getMagicResist() > 0) {
 			resisttxt += "MR: " + ChatColor.AQUA + soliniaItem.getMagicResist() + ChatColor.RESET + " ";
 		}
+		if (soliniaItem.getDiseaseResist() > 0) {
+			resisttxt += "DR: " + ChatColor.AQUA + soliniaItem.getDiseaseResist() + ChatColor.RESET + " ";
+		}
 
 		if (soliniaItem.getPoisonResist() > 0) {
 			resisttxt += "PR: " + ChatColor.AQUA + soliniaItem.getPoisonResist() + ChatColor.RESET + " ";
