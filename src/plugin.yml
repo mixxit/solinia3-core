@@ -19,6 +19,10 @@ commands:
     description: Mentors a player target
     usage: /mentor
     aliases: []
+  assist:
+    description: Assists a player target
+    usage: /assist
+    aliases: []
   unmentor:
     description: Stops mentoring
     usage: /unmentor

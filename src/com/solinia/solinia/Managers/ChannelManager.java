@@ -43,6 +43,9 @@ public class ChannelManager implements IChannelManager {
 					if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
 						continue;
 					
+					if (message.contains("%t"))
+						message = message.replace("%t", ""+source.getEntityTarget());
+					
 					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguageSkillType()))
 					{
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguageSkillType().name().toUpperCase() + "]"));
@@ -86,6 +89,9 @@ public class ChannelManager implements IChannelManager {
 					ISoliniaPlayer solTargetPlayer = SoliniaPlayerAdapter.Adapt(player);
 					if (solTargetPlayer.hasIgnored(source.getBukkitPlayer().getUniqueId()))
 						continue;
+					
+					if (message.contains("%t"))
+						message = message.replace("%t", ""+source.getEntityTarget());
 					
 					if (player.isOp() || source.getBukkitPlayer().isOp() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguageSkillType()))
 					{
@@ -176,6 +182,9 @@ public class ChannelManager implements IChannelManager {
 				
 			ChatUtils.SendHint(player, HINT.OOC_MESSAGE, message, false, itemStack);
 		}
+		if (message.contains("%t"))
+			message = message.replace("%t", ""+source.getEntityTarget());
+		
 		if (message.contains("itemlink") && itemStack != null && ItemStackUtils.IsSoliniaItem(itemStack))
 			message = message.replace("itemlink", "itemlink:"+ItemStackUtils.getSoliniaItemId(itemStack));
 		System.out.println(message);
@@ -413,6 +422,9 @@ public class ChannelManager implements IChannelManager {
 				{
 					continue;
 				}
+				
+				if (message.contains("%t"))
+					message = message.replace("%t", ""+source.getEntityTarget());
 
 				TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
 				tc = ChatUtils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
@@ -435,6 +447,9 @@ public class ChannelManager implements IChannelManager {
 		
 		if (message.contains("itemlink") && itemStack != null && ItemStackUtils.IsSoliniaItem(itemStack))
 			message = message.replace("itemlink", "itemlink:"+ItemStackUtils.getSoliniaItemId(itemStack));
+		
+		if (message.contains("%t"))
+			message = message.replace("%t", ""+source.getEntityTarget());
 		System.out.println(message);
 	}
 	
@@ -443,6 +458,9 @@ public class ChannelManager implements IChannelManager {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getLocation().distance(source.getBukkitLivingEntity().getLocation()) <= ChatUtils.GetLocalSayRange(source.getBukkitLivingEntity().getLocation().getWorld().getName()))
 			{
+				if (message.contains("%t"))
+					message = message.replace("%t", ""+source.getEntityTarget());
+				
 				TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
 				tc = ChatUtils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 				player.spigot().sendMessage(tc);
@@ -460,10 +478,16 @@ public class ChannelManager implements IChannelManager {
 				{
 					if (player.isOp() || (source.getLanguage() == null || source.getLanguage().equals(SkillType.UnknownTongue) || source.getLanguage().equals(SkillType.None) ||  source.isSpeaksAllLanguages() || SoliniaPlayerAdapter.Adapt(player).understandsLanguage(source.getLanguage())))
 					{
+						if (message.contains("%t"))
+							message = message.replace("%t", ""+source.getEntityTarget());
+
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message + " [" + source.getLanguage() + "]"));
 						tc = ChatUtils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
 					} else {
+						if (message.contains("%t"))
+							message = message.replace("%t", ""+source.getEntityTarget());
+
 						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.AQUA + source.getName() + " says '" + ChatUtils.garbleText(coremessage,SoliniaPlayerAdapter.Adapt(player).getLanguageLearnedPercent(source.getLanguage())) + "' (You do not fully understand this language) [" + source.getLanguage() + "]" + ChatColor.RESET));
 						tc = ChatUtils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 						player.spigot().sendMessage(tc);
@@ -485,6 +509,7 @@ public class ChannelManager implements IChannelManager {
 	@Override
 	public void sendToGlobalChannel(String name, String message, ItemStack itemStack) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
+			
 			TextComponent tc = new TextComponent(TextComponent.fromLegacyText(name + ": " + message));
 			tc = ChatUtils.decorateTextComponentsWithHovers(tc, itemStack, message.contains("itemlink"));
 			player.spigot().sendMessage(tc);

@@ -576,6 +576,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 	private void setupCommands() {
 		this.getCommand("bank").setExecutor(new CommandBank());
+		this.getCommand("assist").setExecutor(new CommandAssist());
 		this.getCommand("saydiscord").setExecutor(new CommandSayDiscord());
 		this.getCommand("createcharacterfull").setExecutor(new CommandCreateCharacterFull(this));
 		this.getCommand("createcharactershort").setExecutor(new CommandCreateCharacterShort(this));
