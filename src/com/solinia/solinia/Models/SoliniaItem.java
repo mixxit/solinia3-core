@@ -961,8 +961,8 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			setConsumableRequireQuestFlag(value);
 			break;
 		case "basename":
-			Material material = Material.valueOf(value.toUpperCase());
-			setBasename(material.name());
+			Material mat2 = Material.valueOf(value.toUpperCase());
+			setBasename(mat2.name());
 			break;
 		case "charisma":
 			setCharisma(Integer.parseInt(value));
