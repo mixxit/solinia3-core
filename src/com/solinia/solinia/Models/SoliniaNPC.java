@@ -74,6 +74,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private int merchantid;
 	private boolean upsidedown = false;
 	private int loottableid;
+	private int atk = 0;
 	private int raceid;
 	private int classid;
 	private boolean isRandomSpawn = false;
@@ -416,7 +417,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " "
 				+ "accuracyrating: " + ChatColor.GOLD + getNPCDefaultAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("- mindmg: " + ChatColor.GOLD + getMinDmg() + ChatColor.RESET + " "
-				+ "maxdmg: " + ChatColor.GOLD + getMaxDmg() + ChatColor.RESET);
+				+ "maxdmg: " + ChatColor.GOLD + getMaxDmg() + ChatColor.RESET+ " atk: " + ChatColor.GOLD + getAtk() + ChatColor.RESET);
 		sender.sendMessage("fireresist: " + ChatColor.GOLD + getFireresist() + ChatColor.RESET + 
 	    		" coldresist: " + ChatColor.GOLD + getColdresist() + ChatColor.RESET + 
 	    		" magicresist: " + ChatColor.GOLD + getMagicresist() + ChatColor.RESET + 
@@ -795,6 +796,10 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			break;
 		case "accuracyrating":
 			setAccuracyRating(Integer.parseInt(value));
+			requiresreload = false;
+			break;
+		case "atk":
+			setAtk(Integer.parseInt(value));
 			requiresreload = false;
 			break;
 		case "avoidancerating":
@@ -1953,6 +1958,9 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	
 	@Override
 	public int getNPCDefaultAtk() {
+		if (this.getAtk() > 0)
+			return this.getAtk();
+		
 		// TODO Auto-generated method stub
 		int base = (int) Math.ceil((getLevel()/7)*10);
 		
@@ -2188,5 +2196,13 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		if(this.getPoisonresist() > 0)
 			return this.getPoisonresist();
 		return NPCUtils.getDefaultNPCResist(this);
+	}
+
+	private int getAtk() {
+		return atk;
+	}
+
+	private void setAtk(int atk) {
+		this.atk = atk;
 	}
 }
