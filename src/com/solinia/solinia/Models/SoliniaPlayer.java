@@ -2631,7 +2631,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			int resistAllEffectId = SpellUtils.getEffectIdFromEffectType(SpellEffectType.ResistAll);
-			for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(resistAllEffectId)) {
+			for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(resistAllEffectId,true)) {
 				total += effect.getBase1();
 			}
 
@@ -2788,7 +2788,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId) {
+	public List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId, boolean enforceMentorLevelReq) {
 		List<SoliniaAARankEffect> effects = new ArrayList<SoliniaAARankEffect>();
 		if (ranks.size() == 0)
 			return effects;
@@ -2797,6 +2797,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			for (int rankId : ranks) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 				if (rank == null)
+					continue;
+				
+				if (enforceMentorLevelReq)
+				if (rank.getLevel_req() > this.getMentorLevel())
 					continue;
 				
 				for (SoliniaAARankEffect effect : rank.getEffects()) {
@@ -2867,7 +2871,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		List<ISoliniaAAAbility> abilities = new ArrayList<ISoliniaAAAbility>();
 
 		try {
-			for (SoliniaAARankEffect rankEffect : getRanksEffectsOfEffectType(effectId)) {
+			for (SoliniaAARankEffect rankEffect : getRanksEffectsOfEffectType(effectId,true)) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager()
 						.getAARank(rankEffect.getRankId());
 				if (rank != null) {

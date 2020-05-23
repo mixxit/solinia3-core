@@ -223,8 +223,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	void setPlayerQuestFlags(List<String> playerQuestFlags);
 	
-	List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId);
-
 	public boolean isMeditating();
 
 	public void setSkills(List<SoliniaPlayerSkill> skillCache);
@@ -662,4 +660,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	void setBackStory(String backStory);
 	public void clearTargetsAgainstMeWithoutEffect(SpellEffectType invisibility);
 	int getPlayerMeditatingManaBonus();
+	List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId, boolean enforceMentorLevelReq);
 }

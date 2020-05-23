@@ -448,9 +448,8 @@ public class SpellUtils {
 		try {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
 			for (SoliniaAARankEffect effect : player
-					.getRanksEffectsOfEffectType(SpellUtils.getEffectIdFromEffectType(effectType))) 
+					.getRanksEffectsOfEffectType(SpellUtils.getEffectIdFromEffectType(effectType),true)) 
 			{
-
 				// Everything else
 				if (enforceSpellCritFormula) {
 					int base = 0;
@@ -488,7 +487,7 @@ public class SpellUtils {
 			ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) bukkitLivingEntity);
 			int total = 0;
 			for (SoliniaAARankEffect effect : player
-					.getRanksEffectsOfEffectType(SpellUtils.getEffectIdFromEffectType(effectType))) {
+					.getRanksEffectsOfEffectType(SpellUtils.getEffectIdFromEffectType(effectType),true)) {
 				total += effect.getBase1();
 			}
 			return total;
@@ -587,7 +586,7 @@ public class SpellUtils {
 
 			ConcurrentHashMap<Integer, Integer> abilityMaxValue = new ConcurrentHashMap<Integer, Integer>();
 
-			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
+			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup,true)) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager()
 						.getAARank(effect.getRankId());
 
@@ -617,14 +616,14 @@ public class SpellUtils {
 			effectIdLookup = SpellUtils.getEffectIdFromEffectType(SpellEffectType.MaxHPChange);
 
 			if (effectIdLookup > 0) {
-				for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
+				for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup,true)) {
 					total += effect.getBase1();
 				}
 			}
 			effectIdLookup = SpellUtils.getEffectIdFromEffectType(SpellEffectType.TotalHP);
 
 			if (effectIdLookup > 0) {
-				for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup)) {
+				for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup, true)) {
 					total += effect.getBase1();
 				}
 			}
