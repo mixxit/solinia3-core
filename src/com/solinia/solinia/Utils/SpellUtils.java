@@ -238,7 +238,7 @@ public class SpellUtils {
 
 	public static int GetPotionEffectTickLength(PotionEffectType effectType) {
 		if (effectType == PotionEffectType.NIGHT_VISION) {
-			return 16 * 20;
+			return 30 * 20;
 		}
 
 		return 8 * 20;
