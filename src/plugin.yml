@@ -757,6 +757,7 @@ commands:
     aliases:
     - spell
     - spells
+    - sb
   target:
     description: Selects a target
     usage: /target entityname OR /target nearestnpc OR /target self OR /target 2 etc for group member no 2 OR /target pet for target pet

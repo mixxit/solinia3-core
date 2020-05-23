@@ -304,6 +304,9 @@ public class SoliniaEntitySpells {
 	
 	private int checkStackConflict(ISoliniaSpell activeSpell, UUID activeSpellSourceUuid, ISoliniaSpell newSpell, LivingEntity targetEntity, LivingEntity sourceEntity)
 	{
+		if (newSpell.getBuffduration() == 0)
+			return 0;
+		
 		boolean effect_match = true; // Figure out if we're identical in effects on all slots.
 		
 		if (activeSpell.getId() != newSpell.getId())
