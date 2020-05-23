@@ -223,10 +223,10 @@ public class SoliniaActiveSpell {
 					if (sendMessages) {
 						if (soliniaSpell.isBardSong())
 							ChatUtils.SendHint((LivingEntity) Bukkit.getEntity(getOwnerUuid()), HINT.CAST_ON_OTHER_SONG,
-									this.getLivingEntity().getName() + "^" + soliniaSpell.getCastOnOther(), true);
+									this.getLivingEntity().getCustomName() + "^" + soliniaSpell.getCastOnOther(), true);
 						else
 							ChatUtils.SendHint((LivingEntity) Bukkit.getEntity(getOwnerUuid()), HINT.CAST_ON_OTHER,
-									this.getLivingEntity().getName() + "^" + soliniaSpell.getCastOnOther(), true);
+									this.getLivingEntity().getCustomName() + "^" + soliniaSpell.getCastOnOther(), true);
 					}
 				}
 			}
