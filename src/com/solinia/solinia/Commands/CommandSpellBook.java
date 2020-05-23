@@ -22,8 +22,11 @@ import com.solinia.solinia.Models.PacketOpenSpellbook;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
+import com.solinia.solinia.Models.SpellbookPage;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.MathUtils;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -256,6 +259,8 @@ public class CommandSpellBook implements CommandExecutor {
 	private void performSpellBookSearch(ISoliniaPlayer solPlayer, String searchTerm) {
 		solPlayer.getBukkitPlayer().sendMessage("Matching Spells: ");
 
+		List<List<Integer>> spellBookItemPages = MathUtils.getPages(solPlayer.getSpellBookItems(), 16);
+		
 		for (int itemId : solPlayer.getSpellBookItems()) {
 			try
 			{
@@ -268,8 +273,31 @@ public class CommandSpellBook implements CommandExecutor {
 				if (!item.getDisplayname().toUpperCase().contains(searchTerm.toUpperCase()))
 					continue;
 				
-				tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/spellbook remove " + itemId));
+				tc.setText(ChatColor.LIGHT_PURPLE + item.getDisplayname());
+				
+				// FIND THE PAGE THE SPELL IS ON FOR QUICK SEARCH
+				int spellBookPage = 0;
+				int count = 0;
+				for(List<Integer> page : spellBookItemPages)
+				{
+					if (page.contains(item.getId()))
+					{
+						spellBookPage = count;
+						break;
+					}
+					count++;
+				}
+				
+				// DONE
+				
+				
+				TextComponent tcGotoPage = new TextComponent(ChatColor.AQUA + " [ Click to GOTO ]");
+				tcGotoPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/openspellbook " + spellBookPage));
+				tc.addExtra(tcGotoPage);
+
+				TextComponent tcRemove = new TextComponent(ChatColor.RED + " [ Click to Drop ]");
+				tcRemove.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/spellbook remove " + itemId));
+				tc.addExtra(tcRemove);
 				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
 						new ComponentBuilder(item.asJsonString()).create()));
 				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
