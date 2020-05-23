@@ -1852,7 +1852,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					// Dropping own item
 					// If trying to drop own item onto none solinia item complain
 					ItemStack item = event.getClickedInventory().getItem(event.getSlot());
-					if (item != null && !ItemStackUtils.IsSoliniaItem(item))
+					if (item != null && !ItemStackUtils.IsSoliniaItem(item) && !ItemStackUtils.getAllowedVanillaItemStacks().contains(item.getType()))
 					{
 						EntityUtils.CancelEvent(event);
 						event.getView().getPlayer().sendMessage("You are trying to place an item on something a merchant is not interested in");

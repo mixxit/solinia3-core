@@ -1406,9 +1406,6 @@ public class SoliniaActiveSpell {
 		
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
 		try {
-			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellEffect.getBase());
-			if (spell == null)
-				return;
 
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
 			if (sourceSoliniaLivingEntity != null && getLivingEntity() != null) {
@@ -1423,8 +1420,13 @@ public class SoliniaActiveSpell {
 					} catch (CoreStateInitException e)
 					{
 					} catch (SoliniaItemException e) {
-						double individualprice = ItemStackUtils.getWorthOfVanillaMaterial(itemStack);
-						sourceLivingEntity.sendMessage("Looking at each item you believe a single one is worth: " + individualprice + " 0 sols");
+						if (ItemStackUtils.getAllowedVanillaItemStacks().contains(itemStack.getType()))
+						{
+							double individualprice = ItemStackUtils.getWorthOfVanillaMaterial(itemStack);
+							sourceLivingEntity.sendMessage("Looking at each item you believe a single one is worth: " + individualprice + " 0 sols");
+						} else {
+							sourceLivingEntity.sendMessage("Looking at each item you believe a single one is worth: 0 sols");
+						}
 					}
 				} else {
 					sourceLivingEntity.sendMessage("Looking at each item you believe a single one is worth: 0 sols");
