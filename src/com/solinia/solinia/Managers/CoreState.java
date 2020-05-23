@@ -951,6 +951,9 @@ public class CoreState {
 		try
 		{
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
+			if (message.contains("%t") &&solplayer.getEntityTarget() != null)
+				message = message.replace("%t", ""+solplayer.getEntityTarget().getCustomName());
+
 	
 			ISoliniaGroup group = getGroupByMember(player.getUniqueId());
 			if (group == null) {

@@ -1,5 +1,6 @@
 package com.solinia.solinia.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,11 +41,11 @@ public class CommandAssist implements CommandExecutor {
 				player.sendMessage("You need to target an entity to assist it");
 				return true;
 			}
-
 			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(targetmob);
-			if (solLivingEntity.getAttackTarget() != null)
+			if (solLivingEntity.getEntityTarget() != null)
 			{
 				solPlayer.setEntityTarget(solLivingEntity.getEntityTarget());
+				player.sendMessage("Targetted: " + solLivingEntity.getEntityTarget().getCustomName());
 			}
 		} catch (CoreStateInitException e)
 		{
