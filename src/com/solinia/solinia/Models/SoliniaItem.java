@@ -808,7 +808,12 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			setAttack(Integer.parseInt(value));
 			break;
 		case "worth":
-			setWorth(Integer.parseInt(value));
+			int worth = Integer.parseInt(value);
+			ItemStack material = new ItemStack(Material.valueOf(getBasename().toUpperCase()));
+			if (ItemStackUtils.getAllowedVanillaItemStacks().contains(material.getType()))
+				if (ItemStackUtils.getWorthOfVanillaMaterial(material) > worth)
+					throw new InvalidItemSettingException("Item worth must be same or higher than vanilla price of " + worth);
+			setWorth(worth);
 			break;
 		case "inspirationworth":
 			setInspirationWorth(Integer.parseInt(value));

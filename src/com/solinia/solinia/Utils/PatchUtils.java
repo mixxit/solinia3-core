@@ -3,8 +3,11 @@ package com.solinia.solinia.Utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import com.solinia.solinia.Managers.StateManager;
 
@@ -24,7 +27,33 @@ import net.minecraft.server.v1_14_R1.TileEntityChest;
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
 	public static void Patcher() {
-		
+		try
+		{
+			System.out.println("Patching");
+			for (ISoliniaItem item : StateManager.getInstance().getConfigurationManager().getItems())
+			{
+				try
+				{
+				ItemStack material = new ItemStack(Material.valueOf(item.getBasename().toUpperCase()));
+				if (ItemStackUtils.getAllowedVanillaItemStacks().contains(material.getType()))
+				{
+					if (ItemStackUtils.getWorthOfVanillaMaterial(material) > item.getWorth())
+					{
+						System.out.println(item.getDisplayname() + " being updated to worth " + (int)Math.ceil(ItemStackUtils.getWorthOfVanillaMaterial(material)));
+						item.setWorth((int)Math.ceil(ItemStackUtils.getWorthOfVanillaMaterial(material)));
+					}
+				item.setLastUpdatedTimeNow();
+				}
+				} catch (IllegalArgumentException e)
+				{
+					
+				}
+					
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
 	}
 	
 	public Inventory listToInventory(NBTTagList nbttaglist) {
