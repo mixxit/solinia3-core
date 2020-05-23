@@ -2060,7 +2060,7 @@ public class SoliniaActiveSpell {
 
 	private void applyTossUpEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		EntityUtils.dismountEntity(getLivingEntity());
-		getLivingEntity().setVelocity(new Vector(0, 5, 0));
+		getLivingEntity().setVelocity(new Vector(0, 0.75, 0));
 
 		return;
 	}
