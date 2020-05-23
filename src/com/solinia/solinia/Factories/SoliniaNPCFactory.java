@@ -7,7 +7,7 @@ import com.solinia.solinia.Models.SoliniaNPC;
 
 public class SoliniaNPCFactory {
 
-	public static ISoliniaNPC CreateNPC(String name, int level, int raceid, int classid, int factionid) throws Exception {
+	public static ISoliniaNPC CreateNPC(String name, int level, int raceid, int classid, int factionid, boolean reloadProvider) throws Exception {
 		int lootTableId = 0;
 		try
 		{
@@ -26,7 +26,7 @@ public class SoliniaNPCFactory {
 		npc.setFactionid(factionid);
 		npc.setLoottableid(lootTableId);
 		
-		return StateManager.getInstance().getConfigurationManager().addNPC(npc);
+		return StateManager.getInstance().getConfigurationManager().addNPC(npc, reloadProvider);
 	}
 	
 	public static int CreateLootTableAndLootDrop(String name) throws CoreStateInitException, Exception
@@ -46,7 +46,7 @@ public class SoliniaNPCFactory {
 		return lootTableId;
 	}
 
-	public static ISoliniaNPC CreateNPCCopy(int npcid, String name) throws Exception {
+	public static ISoliniaNPC CreateNPCCopy(int npcid, String name, boolean reloadPlugin) throws Exception {
 		
 		ISoliniaNPC sourcenpc = StateManager.getInstance().getConfigurationManager().getNPC(npcid);
 		
@@ -103,7 +103,7 @@ public class SoliniaNPCFactory {
 		npc.setRoamer(sourcenpc.isRoamer());
 		npc.setUpsidedown(sourcenpc.isUpsidedown());
 		npc.setUsedisguise(sourcenpc.isUsedisguise());
-		return StateManager.getInstance().getConfigurationManager().addNPC(npc);
+		return StateManager.getInstance().getConfigurationManager().addNPC(npc,reloadPlugin);
 	}
 
 }

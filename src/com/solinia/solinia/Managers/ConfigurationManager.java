@@ -885,15 +885,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public void editNPC(int npcid, String setting, String value)
+	public boolean editNPC(int npcid, String setting, String value)
 			throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException {
 		boolean requiresReloadOfPlugin = getNPC(npcid).editSetting(setting, value);
-
-		if (!requiresReloadOfPlugin)
-			return;
-
-		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(npcid), true);
+		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(getNPC(npcid), false);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
+		return requiresReloadOfPlugin;
 	}
 	
 	@Override
@@ -984,10 +981,10 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public ISoliniaNPC addNPC(SoliniaNPC npc) {
+	public ISoliniaNPC addNPC(SoliniaNPC npc, boolean reloadProvider) {
 		this.npcRepository.add(npc);
 
-		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc, true);
+		SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc, reloadProvider);
 		Bukkit.getPluginManager().callEvent(soliniaevent);
 		return getNPC(npc.getId());
 	}

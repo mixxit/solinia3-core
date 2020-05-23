@@ -75,8 +75,9 @@ public class CommandCreateNpcCopy implements CommandExecutor {
 			
 			name = name.replace(" ", "_");
 		
-			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPCCopy(npcid,name);
+			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPCCopy(npcid,name, false);
 			sender.sendMessage("Created NPC Copy: " + npc.getId());
+			sender.sendMessage("You have updated a mythic mob npc, for changes to appear in game you will need to do /mm reload");
 		} catch (Exception e) {
 			sender.sendMessage(e.getMessage());
 		}

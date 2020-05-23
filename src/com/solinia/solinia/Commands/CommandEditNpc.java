@@ -104,8 +104,11 @@ public class CommandEditNpc implements CommandExecutor {
 			try
 			{
 			
-				StateManager.getInstance().getConfigurationManager().editNPC(npcid,setting,value);
 				sender.sendMessage("Updating setting on npc");
+				boolean requiresReload = StateManager.getInstance().getConfigurationManager().editNPC(npcid,setting,value);
+				if (requiresReload)
+					sender.sendMessage("The property you have editted on this npc requires you to type /mm reload when ready");
+				
 			} catch (java.io.IOException e)
 			{
 				sender.sendMessage("Failed to update NPC - If this was a request to change custom head data, the mojang servers may be unable to fetch the player skin, try the same command again in a few moments");

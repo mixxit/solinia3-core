@@ -914,46 +914,6 @@ public class Utils {
 		}
 	}
 
-	public static Location getLocationAroundCircle(Location center, double radius, double angleInRadian, double y) {
-		double x = center.getX() + radius * Math.cos(angleInRadian);
-		double z = center.getZ() + radius * Math.sin(angleInRadian);
-
-		Location loc = new Location(center.getWorld(), x, y, z);
-		Vector difference = center.toVector().clone().subtract(loc.toVector());
-		loc.setDirection(difference);
-
-		return loc;
-	}
-
-	public static void dispatchCommandLater(Plugin plugin, String command) {
-		final Plugin pluginToSend = plugin;
-		final CommandSender senderToSend = pluginToSend.getServer().getConsoleSender();
-		final String commandToSend = command;
-		new BukkitRunnable() {
-
-			@Override
-			public void run() {
-				pluginToSend.getServer().dispatchCommand(senderToSend, commandToSend);
-			}
-
-		}.runTaskLater(plugin, 10);
-	}
-
-	public static void dispatchCommandLater(Plugin plugin, CommandSender sender, String command) {
-		final Plugin pluginToSend = plugin;
-		final CommandSender senderToSend = sender;
-		final String commandToSend = command;
-		new BukkitRunnable() {
-
-			@Override
-			public void run() {
-				pluginToSend.getServer().dispatchCommand(senderToSend, commandToSend);
-			}
-
-		}.runTaskLater(plugin, 10);
-
-	}
-
 	public static String getHttpUrlAsString(String urlLink) {
 		try {
 			URL url = new URL(urlLink);

@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.solinia.solinia.Solinia3CorePlugin;
+import com.solinia.solinia.Utils.BukkitUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandGiveHead implements CommandExecutor {
@@ -80,7 +81,7 @@ public class CommandGiveHead implements CommandExecutor {
 				String data = link.html();
 				data = data.replaceAll("/give", "minecraft:give");
 				data = data.replaceAll("@p", playerName);
-				Utils.dispatchCommandLater(plugin, data);
+				BukkitUtils.dispatchCommandLater(plugin, data);
 				sender.sendMessage("Debug: " + data);
 				sender.sendMessage("Head sent to " + playerName);
 				return true;
@@ -103,7 +104,7 @@ public class CommandGiveHead implements CommandExecutor {
 				String data = link.html();
 				data = data.replaceAll("/give", "minecraft:give");
 				data = data.replaceAll("@p", playerName);
-				Utils.dispatchCommandLater(plugin, data);
+				BukkitUtils.dispatchCommandLater(plugin, data);
 				sender.sendMessage("Debug: " + data);
 				sender.sendMessage("Head sent to " + playerName);
 				return true;

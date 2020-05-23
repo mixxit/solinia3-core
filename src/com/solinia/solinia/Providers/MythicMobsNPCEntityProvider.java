@@ -23,6 +23,7 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.BukkitUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.NPCUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -76,7 +77,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 	
 	@Override
 	public void reloadProvider() {
-		Utils.dispatchCommandLater(StateManager.getInstance().getPlugin(), "mm reload");
+		BukkitUtils.dispatchCommandLater(StateManager.getInstance().getPlugin(), "mm reload");
 	}
 
 	private void writeNpcDefinition(String fileName, ISoliniaNPC npc) {
@@ -656,14 +657,14 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 	@Override
 	public void removeSpawnGroup(ISoliniaSpawnGroup spawngroup) {
-		Utils.dispatchCommandLater(StateManager.getInstance().getPlugin(),
+		BukkitUtils.dispatchCommandLater(StateManager.getInstance().getPlugin(),
 				"mm spawners delete SPAWNGROUPID_" + spawngroup.getId());
 		writeSpawnerDefinition("plugins/MythicMobs/Spawners/SPAWNGROUPID_" + spawngroup.getId() + ".yml", spawngroup);
 	}
 
 	@Override
 	public void spawnNPC(ISoliniaNPC npc, int amount, String world, int x, int y, int z) {
-		Utils.dispatchCommandLater(StateManager.getInstance().getPlugin(),
+		BukkitUtils.dispatchCommandLater(StateManager.getInstance().getPlugin(),
 				"mm mobs spawn NPCID_" + npc.getId() + " " + amount + " " + world + "," + x + "," + y + "," + z);
 	}
 

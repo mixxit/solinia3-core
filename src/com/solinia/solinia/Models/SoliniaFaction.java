@@ -116,10 +116,12 @@ public class SoliniaFaction implements ISoliniaFaction,IPersistable {
 			// Update all npcs of this faction (just change their name that should do it)
 			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs())
 			{
+				if (npc.getFactionid() == this.getId());
 				SoliniaNPCUpdatedEvent soliniaevent = new SoliniaNPCUpdatedEvent(npc, false);
 				Bukkit.getPluginManager().callEvent(soliniaevent);
 			}
 			
+			// Its expensive to reload all the npcs indivudally, so just do it at the end
 			StateManager.getInstance().getEntityManager().getNPCEntityProvider().reloadProvider();
 			
 			break;

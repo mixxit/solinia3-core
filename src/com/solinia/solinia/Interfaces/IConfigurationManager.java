@@ -292,7 +292,7 @@ public interface IConfigurationManager {
 
 	ISoliniaNPC getNPC(int Id);
 
-	void editNPC(int npcid, String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException;
+	boolean editNPC(int npcid, String setting, String value) throws InvalidNpcSettingException, NumberFormatException, CoreStateInitException, IOException;
 
 	List<ISoliniaNPCMerchant> getNPCMerchants();
 
@@ -317,8 +317,6 @@ public interface IConfigurationManager {
 	ISoliniaFaction addFaction(SoliniaFaction faction);
 
 	int getNextNPCId();
-
-	ISoliniaNPC addNPC(SoliniaNPC npc);
 
 	ISoliniaLootDrop getLootDrop(String lootdropname);
 
@@ -634,4 +632,6 @@ public interface IConfigurationManager {
 	IRepository<ISoliniaPatch> getPatchesRepo();
 
 	SoliniaMetrics getSoliniaMetrics();
+
+	ISoliniaNPC addNPC(SoliniaNPC npc, boolean reloadProvider);
 }
